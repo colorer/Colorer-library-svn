@@ -566,7 +566,7 @@ static char rg_tmpl[0x10] = "region";
       rg_tmpl[6] = '1';
       node->regione[i] = getNCRegion(el, DString(rg_tmpl));
 
-      rg_tmpl[6] = (i<0xA?i:i+7)+'0'; rg_tmpl[7] = 0;
+      rg_tmpl[6] = (i<0xA?i:i+7+32)+'0'; rg_tmpl[7] = 0;
       if (el->getType() == EL_BLOCKED &&
           el->child() && el->child()->getName() != null &&
           *el->child()->getName() == "start"){
@@ -578,7 +578,7 @@ static char rg_tmpl[0x10] = "region";
          node->regione[i] = getNCRegion(el->child()->next(), DString(rg_tmpl));
       };
     }else if (node->type == SNT_RE){
-      rg_tmpl[6] = (i<0xA?i:i+7)+'0'; rg_tmpl[7] = 0;
+      rg_tmpl[6] = (i<0xA?i:i+7+32)+'0'; rg_tmpl[7] = 0;
       node->regions[i] = getNCRegion(el, DString(rg_tmpl));
     };
   };
