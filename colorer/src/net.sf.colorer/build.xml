@@ -23,6 +23,7 @@
     <property name="temp.folder" value="${basedir}/temp.folder"/>
     <property name="plugin.destination" value="${basedir}/distr"/>
     <property name="build.result.folder" value="${basedir}"/>
+    <property name='eclipse.dir' value='../..'/>
     <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
   </target>
 
