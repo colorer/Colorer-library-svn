@@ -1,5 +1,9 @@
 
   You can compile version of the Library to use it with MacOS system.
 
-  You can find All the native code with required makefiles in src.zip/libnative
+  First, you need to download C++ sources of Colorer Library from
+    http://colorer.sf.net
+
+  Then you can compile the native part in
+    colorer/src/net.sf.colorer/libnative
   folder.
