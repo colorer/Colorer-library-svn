@@ -12,10 +12,10 @@
   by Alex Yackimoff (http://yackimoff.cjb.net)
      Denis Rybakov (den.rybakov@mail.ru)
 
-  Last changes - 19 Jan 2004
-  Last supported verision of Inno Setup - 4.1.0
+  Last changes - 21 Feb 2004
+  Last supported verision of Inno Setup - 4.1.7
 -->
-   <type name="iss" access="public">
+   <type name="iss">
 
       <import type="def"/>
       <import type="pascal"/>
@@ -145,7 +145,7 @@
             <word name="DefaultDirname"/>
             <word name="CodeFile"/>
 <!--ISX-->
-            <word name="CompressLevel"/>
+            <word name="InternalCompressLevel"/>
             <word name="DiskClusterSize"/>
             <word name="DiskSize"/>
             <word name="DiskSpanning"/>
@@ -232,6 +232,7 @@
             <word name="VersionInfoTextVersion"/>
             <word name="SetupIconFile"/>
             <word name="UninstallIconFile"/>
+            <word name="WizardImageStretch"/>
          </keywords>
       </scheme>
 
@@ -269,6 +270,7 @@
             <word name="Source"/>
             <word name="DestDir"/>
             <word name="Destname"/>
+            <word name="Excludes"/>
             <word name="CopyMode"/>
             <word name="Attribs"/>
             <word name="FontInstall"/>
@@ -302,6 +304,7 @@
             <word name="restartreplace"/>
             <word name="sharedfile"/>
             <word name="skipifsourcedoesntexist"/>
+            <word name="sortfilesbyextension"/>
             <word name="uninsneveruninstall"/>
          </keywords>
       </scheme>
@@ -554,6 +557,7 @@
       </scheme>
 
       <scheme name="issCodeSection">
+         <inherit scheme="issPrePro"/>
          <inherit scheme="pascal"/>
       </scheme>
 
