@@ -45,6 +45,7 @@ With help of:
          <regexp match="/\b\d[0-9a-fA-F]*\b/" region0="ntNumber"/>
          <regexp match="/\%\@[^\[]+/" region0="ntNumber"/>
          <regexp match="/\%(\d+|\*)/" region0="ntNumber"/>
+         <regexp match="/\%\~(f|d|p|n|x|s|a|t|z|(\$PATH\:)|dp|nx|(dp\$PATH\:)|ftza)?(\d+)/i" region0="ntNumber"/>
 <!-- Strings -->
          <regexp match="/\&#34;(\\.|[^\\&#34;])*?\&#34;/" region0="ntStr"/>
 <!--regexp match='/\%.*?\%/' region0="ntVarEnv"/-->
