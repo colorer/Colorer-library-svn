@@ -7,7 +7,7 @@
 
   <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
     <location link="gen/ant.hrc"/>
-    <filename weight='5'>/build\.xml/ix</filename>
+    <filename weight='5'>/\bbuild\.xml$/ix</filename>
     <firstline weight='5'>/&lt;project\b/s</firstline>
   </prototype>
 
@@ -43,12 +43,12 @@
 
   <prototype name="colorer5catalog" group="scripts" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
     <location link="gen/colorer5catalog.hrc"/>
-    <filename weight='5'>/catalog\.xml$/ix</filename>
+    <filename>/\bcatalog\.xml$/ix</filename>
     <firstline weight='5'>/DTD Colorer CATALOG/s</firstline>
   </prototype>
   <prototype name="xsd2hrc.custom" group="scripts" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
     <location link="gen/xsd2hrc.custom.hrc"/>
-    <filename weight='10'>/custom\..*?\.xml$/ix</filename>
+    <filename>/custom\..*?\.xml$/ix</filename>
     <firstline>/uri:colorer:custom/s</firstline>
   </prototype>
 
