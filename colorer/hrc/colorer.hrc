@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -84,6 +84,14 @@
   </prototype>
   <prototype name="css" group="inet" description="css">
     <location link="inet/css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+  <prototype name="html-css" group="inet" description="css for html">
+    <location link="inet/html-css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+  <prototype name="svg-css" group="inet" description="css for svg">
+    <location link="inet/svg-css.hrc"/>
     <filename>/\.(css)$/i</filename>
   </prototype>
   <prototype name="jsp" group="inet" description="jsp">
@@ -308,10 +316,6 @@
     <location link="scripts/rul.hrc"/>
     <filename>/\.rul$/i</filename>
   </prototype>
-  <prototype name="regexp" group="packages" description="regexp">
-    <location link="lib/regexp.hrc"/>
-    <filename>/\.regexp$/i</filename>
-  </prototype>
 
   <!--  rare languages  -->
   <prototype name="c1c" group="rare" description="1C">
@@ -445,7 +449,8 @@
   <prototype name="diff" group="other" description="Diff/Patch">
     <location link="misc/diff.hrc"/>
     <filename>/\.(diff.*|patch|rej(ect)?)$/i</filename>
-    <firstline weight='3'>/^(diff|Index|---|\+\+\+|\*\*\*)|diff/si</firstline>
+    <firstline weight='2'>/^(diff|Index|---|\+\+\+|\*\*\*)/si</firstline>
+    <firstline>/diff/i</firstline>
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
   </prototype>
@@ -459,9 +464,7 @@
     <filename>/(read\.?me|\.txt$|\.rus|install$)/i</filename>
   </prototype>
 
-  <prototype name="def" group="other" description="default type">
-    <location link="default.hrc"/>
-    <filename weight='1'>//</filename>
+  <prototype name="default" group="other" description="default type">
     <parameters>
       <!-- none,vertical,horizontal,both -->
       <param name="show-cross" value="none"/>
@@ -476,6 +479,23 @@
       -->
     </parameters>
   </prototype>
+  <type name="default"><scheme name='default'/></type>
+
+  <!--  packages  -->
+
+  <package name="def" group="other" description="core definitions">
+    <location link="default.hrc"/>
+  </package>
+  <package name="ole" group="packages" description="OLE Commons">
+    <location link="lib/ole.hrc"/>
+  </package>
+  <package name="regexp" group="packages" description="Regexp common library">
+    <location link="lib/regexp.hrc"/>
+  </package>
+  <package name="far" group="packages" description="FAR Manager common expressions">
+    <location link="lib/far.hrc"/>
+  </package>
+
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

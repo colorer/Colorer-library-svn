@@ -15,14 +15,15 @@
       to safely include html-tags into your meta-html language
     ]]></documentation><contributors><![CDATA[
       JULY <lubimovi@usa.net>
-      Evgeny Stepanischev <se@e-kazan.ru>
       Andrzej Novosiolov <andrzej@ukrnet.net>
-      Changes by Eugene Efremov <4mirror@mail.ru>
+      Evgeny Stepanischev <se@e-kazan.ru>
+      Eugene Efremov <4mirror@mail.ru>
     ]]></contributors></annotation>
 
     <import type="def"/>
     <import type="jScript"/>
     <import type="vbScript"/>
+    <!--import type="perl"/ -->
 
     <region name="htmlString" parent="String"/>
     <region name="htmlNumb" parent="Number"/>
@@ -33,11 +34,11 @@
     <region name="htmlTT" parent="Insertion"/>
 
     <region name="htmlTagBr" parent="OpenTag"/>
-    <region name="htmlOpenTag" parent="Keyword"/> 
+    <region name="htmlOpenTag" parent="Keyword"/>
     <region name="htmlCloseTag" parent="htmlOpenTag"/>
 
-    <region name="htmlUnknowTag" parent="Tag"/> 
-    <region name="htmlTagEqu" parent="Symbol"/> 
+    <region name="htmlUnknowTag" parent="Tag"/>
+    <region name="htmlTagEqu" parent="Symbol"/>
 
 
     <entity name="htmlscrStart" value="script [^&gt;]+ language\s*=\s*(?{q}[\x22\x27]?)"/>
@@ -117,6 +118,131 @@
         <word name="width"/>
         <word name="z-index"/>
       </keywords>
+    </scheme>
+
+    <scheme name="htmlParams">
+      <inherit scheme="htmlCoreParams"/>
+      <keywords ignorecase="yes" region="htmlParam">
+        <word name="abbr"/>
+        <word name="above"/>
+        <word name="accept-charset"/>
+        <word name="accept"/>
+        <word name="align"/>
+        <word name="alink"/>
+        <word name="alt"/>
+        <word name="archive"/>
+        <word name="axis"/>
+        <word name="background"/>
+        <word name="behavior"/>
+        <word name="below"/>
+        <word name="bgcolor"/>
+        <word name="border"/>
+        <word name="color"/>
+        <word name="cellpadding"/>
+        <word name="cellspacing"/>
+        <word name="char"/>
+        <word name="charoff"/>
+        <word name="charset"/>
+        <word name="checked"/>
+        <word name="cite"/>
+        <word name="clear"/>
+        <word name="code"/>
+        <word name="codebase"/>
+        <word name="codetype"/>
+        <word name="cols"/>
+        <word name="dynsrc"/>
+        <word name="loopdelay"/>
+        <word name="vrml"/>
+        <word name="controls"/>
+        <word name="challenge"/>
+        <word name="direction"/>
+        <word name="scroll"/>
+        <word name="scrollamount"/>
+        <word name="scrolldelay"/>
+        <word name="truespeed"/>
+        <word name="datafld"/>
+        <word name="dataformatas"/>
+        <word name="datasrc"/>
+        <word name="bordercolordark"/>
+        <word name="bordercolorlight"/>
+        <word name="datapagesize"/>
+        <word name="colspan"/>
+        <word name="compact"/>
+        <word name="content"/>
+        <word name="coords"/>
+        <word name="data"/>
+        <word name="datetime"/>
+        <word name="declare"/>
+        <word name="defer"/>
+        <word name="dir"/>
+        <word name="disabled"/>
+        <word name="enctype"/>
+        <word name="face"/>
+        <word name="for"/>
+        <word name="frame"/>
+        <word name="frameborder"/>
+        <word name="framespacing"/>
+        <word name="headers"/>
+        <word name="href"/>
+        <word name="hreflang"/>
+        <word name="hspace"/>
+        <word name="http-equiv"/>
+        <word name="id"/>
+        <word name="ismap"/>
+        <word name="label"/>
+        <word name="link"/>
+        <word name="loop"/>
+        <word name="longdesc"/>
+        <word name="mailto"/>
+        <word name="marginheight"/>
+        <word name="marginwidth"/>
+        <word name="maxlength"/>
+        <word name="media"/>
+        <word name="multiple"/>
+        <word name="nohref"/>
+        <word name="noresize"/>
+        <word name="noshade"/>
+        <word name="nowrap"/>
+        <word name="object"/>
+        <word name="onload"/>
+        <word name="onreset"/>
+        <word name="onselect"/>
+        <word name="onsubmit"/>
+        <word name="onunload"/>
+        <word name="profile"/>
+        <word name="prompt"/>
+        <word name="readonly"/>
+        <word name="top"/>
+        <word name="rel"/>
+        <word name="rev"/>
+        <word name="rows"/>
+        <word name="rowspan"/>
+        <word name="rules"/>
+        <word name="scheme"/>
+        <word name="scope"/>
+        <word name="scrolling"/>
+        <word name="scroll"/>
+        <word name="selected"/>
+        <word name="shape"/>
+        <word name="span"/>
+        <word name="src"/>
+        <word name="standby"/>
+        <word name="start"/>
+        <word name="summary"/>
+        <word name="tabindex"/>
+        <word name="target"/>
+        <word name="type"/>
+        <word name="url"/>
+        <word name="usemap"/>
+        <word name="valign"/>
+        <word name="value"/>
+        <word name="valuetype"/>
+        <word name="visibility"/>
+        <word name="version"/>
+        <word name="vlink"/>
+        <word name="vspace"/>
+      </keywords>
+
     </scheme>
 
     <scheme name="htmlCoreTags">
@@ -249,142 +375,20 @@
       <block start='/(STYLE)\s*=\s*([\x22\x27])/i' end="/(\y2)/" scheme="cssInsideBraces"
                region="HtString"/>
          -->
-         
+
       <block start="/~/" end="/~[\w\:\-]+\m/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
-         
-      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="css:RuleContent" 
-             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
+
+      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="html-css:AposRuleContent"
+             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart"
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
-             content-priority='low'
       />
-      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="css:RuleContent" 
-             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
+      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="html-css:QuotRuleContent"
+             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart"
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
-             content-priority='low'
       />
-         
-      <inherit scheme="htmlCoreParams"/>
-         
-      <keywords ignorecase="yes" region="htmlParam">
-        <word name="abbr"/>
-        <word name="above"/>
-        <word name="accept-charset"/>
-        <word name="accept"/>
-        <word name="align"/>
-        <word name="alink"/>
-        <word name="alt"/>
-        <word name="archive"/>
-        <word name="axis"/>
-        <word name="background"/>
-        <word name="behavior"/>
-        <word name="below"/>
-        <word name="bgcolor"/>
-        <word name="border"/>
-        <word name="color"/>
-        <word name="cellpadding"/>
-        <word name="cellspacing"/>
-        <word name="char"/>
-        <word name="charoff"/>
-        <word name="charset"/>
-        <word name="checked"/>
-        <word name="cite"/>
-        <word name="clear"/>
-        <word name="code"/>
-        <word name="codebase"/>
-        <word name="codetype"/>
-        <word name="cols"/>
-        <word name="dynsrc"/>
-        <word name="loopdelay"/>
-        <word name="vrml"/>
-        <word name="controls"/>
-        <word name="challenge"/>
-        <word name="direction"/>
-        <word name="scroll"/>
-        <word name="scrollamount"/>
-        <word name="scrolldelay"/>
-        <word name="truespeed"/>
-        <word name="datafld"/>
-        <word name="dataformatas"/>
-        <word name="datasrc"/>
-        <word name="bordercolordark"/>
-        <word name="bordercolorlight"/>
-        <word name="datapagesize"/>
-        <word name="colspan"/>
-        <word name="compact"/>
-        <word name="content"/>
-        <word name="coords"/>
-        <word name="data"/>
-        <word name="datetime"/>
-        <word name="declare"/>
-        <word name="defer"/>
-        <word name="dir"/>
-        <word name="disabled"/>
-        <word name="enctype"/>
-        <word name="face"/>
-        <word name="for"/>
-        <word name="frame"/>
-        <word name="frameborder"/>
-        <word name="framespacing"/>
-        <word name="headers"/>
-        <word name="href"/>
-        <word name="hreflang"/>
-        <word name="hspace"/>
-        <word name="http-equiv"/>
-        <word name="id"/>
-        <word name="ismap"/>
-        <word name="label"/>
-        <word name="link"/>
-        <word name="loop"/>
-        <word name="longdesc"/>
-        <word name="mailto"/>
-        <word name="marginheight"/>
-        <word name="marginwidth"/>
-        <word name="maxlength"/>
-        <word name="media"/>
-        <word name="multiple"/>
-        <word name="nohref"/>
-        <word name="noresize"/>
-        <word name="noshade"/>
-        <word name="nowrap"/>
-        <word name="object"/>
-        <word name="onload"/>
-        <word name="onreset"/>
-        <word name="onselect"/>
-        <word name="onsubmit"/>
-        <word name="onunload"/>
-        <word name="profile"/>
-        <word name="prompt"/>
-        <word name="readonly"/>
-        <word name="top"/>
-        <word name="rel"/>
-        <word name="rev"/>
-        <word name="rows"/>
-        <word name="rowspan"/>
-        <word name="rules"/>
-        <word name="scheme"/>
-        <word name="scope"/>
-        <word name="scrolling"/>
-        <word name="scroll"/>
-        <word name="selected"/>
-        <word name="shape"/>
-        <word name="span"/>
-        <word name="src"/>
-        <word name="standby"/>
-        <word name="start"/>
-        <word name="summary"/>
-        <word name="tabindex"/>
-        <word name="target"/>
-        <word name="type"/>
-        <word name="url"/>
-        <word name="usemap"/>
-        <word name="valign"/>
-        <word name="value"/>
-        <word name="valuetype"/>
-        <word name="visibility"/>
-        <word name="version"/>
-        <word name="vlink"/>
-        <word name="vspace"/>
-      </keywords>
+
+      <inherit scheme="htmlParams"/>
+
       <regexp match="/ \c (0x|\#)  [\da-fA-F]+ \b /ix" region="htmlNumb"/>
       <regexp match="/ \b [0-9\.]+ \%? /x" region="htmlNumb"/>
       <block start="/([\x22\x27])/" end="/\y1/" scheme="htmlString" region="htmlString"/>
@@ -395,18 +399,18 @@
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
-         
+
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix" 
+                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
-         
+
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
       <block start="/ (&lt;(script .*?) \%?~1 \&gt; ) /ix"
              end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
              region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
-         
+
       <block start="/(@\[[\.\?\=]?)/" end="/(\]@)/" scheme="GenoPro"
                 region="Insertion" region01="Symbol" region11="Symbol" region00="PairStart" region10="PairEnd"/>
     </scheme>
@@ -449,44 +453,45 @@
            to disable pair searching
       </documentation></annotation>
       <inherit scheme="htmlPairs"/>
-         
-      <block start="/(&lt;)\M([\w\:\-]+)/i" end="/(\/?&gt;)/" 
+
+      <block start="/(&lt;)\M([\w\:\-]+)/i" end="/(\/?&gt;)/"
              scheme="htmlCore" region="htmlUnknowParam"
-             region00="PairStart" region10="PairEnd" 
+             region00="PairStart" region10="PairEnd"
              region01="htmlTagBr" region11="htmlTagBr"/>
-      <block start="/(&lt;\/)\M([\w\:\-]+)&gt;/i" end="/(&gt;)/" 
+      <block start="/(&lt;\/)\M([\w\:\-]+)&gt;/i" end="/(&gt;)/"
              scheme="htmlCore" region="htmlUnknowParam"
-             region00="PairStart" region10="PairEnd" 
+             region00="PairStart" region10="PairEnd"
              region01="htmlTagBr" region11="htmlTagBr" priority="low"/>
     </scheme>
 
 
-      
+
     <scheme name="html">
 
       <inherit scheme="htmlScripts"/>
-         
-      <block start="/ (&lt;(style\b).*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i" 
-             scheme="css:css" region00="PairStrongStart" region10="PairStrongEnd" 
-             region01="htmlTagBr" region02="htmlOpenTag" 
+
+      <!-- EE: special css -->
+      <block start="/ (&lt;(style)\b.*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i"
+             scheme="html-css:css" region00="PairStrongStart" region10="PairStrongEnd"
+             region01="htmlTagBr" region02="htmlOpenTag"
              region11="htmlTagBr" region12="htmlOpenTag"
       />
 
       <regexp match="/ \b [0-9\.]+ /x" region0="htmlNumb"/>
-         
+
       <regexp match="/\M &lt; (h\d) [^&gt;]*? &gt; (?{HeaderOutline}.*?)  &lt; \/\1 &gt;/ix"/>
-         
+
       <!-- Template-toolkit support -->
       <regexp match="/\[\% .*? \%\]/x" region0="htmlTT"/>
       <!-- HTML::Template support -->
       <regexp match="/&lt;TMPL_\w+ .*? &gt;/x" region0="htmlTT"/>
 
       <inherit scheme="htmlTagCall"/>
-         
+
       <!-- comments -->
       <block start="/&lt;!--\s*\M#/" end="/--&gt;/" scheme="xssi" region="htmlComment" region00="PairStart" region10="PairEnd"/>
       <block start="/&lt;!--/" end="/--&gt;/" scheme="Comment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
-      <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment" 
+      <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment"
              region00="PairStart" region10="PairEnd" region="htmlDirective"/>
 
       <regexp match="/&amp;\#\d+\;/x" region="htmlParam"/>
