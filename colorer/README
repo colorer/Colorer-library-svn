@@ -1,5 +1,5 @@
 
-  Colorer-take5 Library. beta1a.
+  Colorer-take5 Library beta2.
 
   Copyright (c) Cail Lomecb (Igor Russkih) 1999-2003.
 
@@ -7,12 +7,11 @@
   provides services to parse text in editor in real-time and transform
   results into colored text.
 
-  This package contains binaries and source codes of the Colorer Library
-  and all it's service applications and scripts.
-
   For more information see 'index.html' in the 'doc' directory of
-  the Colorer package or visit
+  the Colorer Library package distribution or visit
     http://colorer.sf.net/
+  to find new versions and full documentation.
+
 
   Igor Russkih
     cail@nm.ru
