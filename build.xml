@@ -20,6 +20,10 @@
   <property name='library-dir' value='${build-dir}/${library-name}'/>
   <property name='library-zip' value='${build-dir}/${library-name}.zip'/>
 
+  <property name='library-linux-name' value='Colorer-take5-linux${distr-version}'/>
+  <property name='library-linux-dir' value='${build-dir}/${library-linux-name}'/>
+  <property name='library-linux-zip' value='${build-dir}/${library-linux-name}.zip'/>
+
   <property name='farplugin-name' value='FarColorer-take5${distr-version}'/>
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
@@ -32,6 +36,7 @@
 
   <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
                                       **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
+                                      **/*.txt, **/*.html, **/*.xsd, **/*.dtd,
                                       **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
   
 
@@ -70,7 +75,8 @@
 
     <property name='add.excludes' value='**/*.ilc, **/*.ild,
               **/*.ilf, **/*.ils, **/*.tds, **/*.map, **/*.o
-              **/colorer/colorer.exe, **/colorer/colorer
+              **/colorer/colorer.exe, **/colorer/colorer,
+              **/*.obj, **/*.lib, **/*.map, **/*.log, **/*.dll, **/*.asm,
               '/>
 
     <uptodate property="doc.javadoc.required" targetfile="doc/java/package-list">
@@ -91,6 +97,7 @@
 <echo>
   You can build Colorer-take5 library into three kinds of packages:
     ``ant library''         - full library distribution
+    ``ant library-linux''   - library unix package version
     ``ant eclipseplugin''   - Eclipse IDE plugin
     ``ant farplugin''       - FAR Manager plugin
 </echo>
@@ -242,12 +249,16 @@
       <fileset dir="bin" includes="**"/>
     </copy>
     <copy todir="${library-dir}">
-      <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='**/*.obj, **/*.lib, **/*.map, **/*.log, **/*.dll, **/*.asm, ${add.excludes}'/>
+      <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
       <fileset dir="." includes="doc/**" excludes='**/*.log'/>
     </copy>
     <copy todir='${library-dir}' includeemptydirs='false'>
       <fileset dir='.' includes='*' excludes='*.log'/>
     </copy>
+
+    <fixcrlf srcdir="${build-dir}/${library-name}" eol="lf"
+             includes="${fixcrlf-ext}"
+    />
 
     <zip destfile='${library-zip}'>
       <fileset dir='${build-dir}' includes='${library-name}/**'/>
@@ -255,6 +266,62 @@
 
   </target>
 
+
+  <target name="library-linux.clean" depends='init'>
+    <delete dir='${library-linux-dir}'/>
+    <delete file='${library-linux-zip}'/>
+    <antcall target='make.clean'>
+      <param name='make.dir' value='src/colorer'/>
+    </antcall>
+  </target>
+
+  <target name="library-linux" depends='init, xsd2hrc.distr, doc' description='Builds Colorer-take5 Library linux package'>
+    
+    <condition property="target">
+      <or>
+       <equals arg1="${platform}" arg2="gcc"/>
+       <equals arg1="${platform}" arg2="macos"/>
+      </or>
+    </condition>
+    <!--
+    <fail unless='target' message='To build linux distribution you must choose "gcc" or "macos" platform'/>
+    -->
+
+    <exec dir='src/colorer' executable='${make}' failonerror='true'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+      <env key='LIB' path='${native-libs}'/>
+    </exec>
+    <condition property="lib">
+      <or>
+        <available filepath="src/colorer" file="colorer"/>
+      </or>
+    </condition>
+    <fail unless='lib' message='Native executable library was not compiled'/>
+
+    <mkdir dir='${library-linux-dir}'/>
+
+    <copy todir="${library-linux-dir}/bin">
+      <fileset dir="src/colorer" includes="colorer.exe,colorer"/>
+      <fileset dir="bin" includes="**" excludes='**/farplugin/**/*, **/*.bat'/>
+    </copy>
+    <copy todir="${library-linux-dir}">
+      <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
+      <fileset dir="." includes="doc/**" excludes='**/*.log'/>
+    </copy>
+    <copy todir='${library-linux-dir}' includeemptydirs='false'>
+      <fileset dir='.' includes='*' excludes='*.log'/>
+    </copy>
+
+    <fixcrlf srcdir="${library-linux-dir}" eol="lf"
+             includes="${fixcrlf-ext}"
+    />
+
+    <zip destfile='${library-linux-zip}'>
+      <fileset dir='${build-dir}' includes='${library-linux-name}/**'/>
+    </zip>
+
+  </target>
 
   
   <target name="eclipseplugin.clean" depends='init'>
@@ -340,7 +407,7 @@
       <fileset dir='.' includes='LICENSE'/>
     </copy>
 
-    <fixcrlf srcdir="${build-dir}/${eclipseplugin-name}" eol="lf"
+    <fixcrlf srcdir="${eclipseplugin-dir}" eol="lf"
              includes="${fixcrlf-ext}"
     />
 
