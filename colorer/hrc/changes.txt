@@ -1,11 +1,11 @@
 
 
-  $Date$
+$Date$
 
   Fixes:
 
 
-2003/06/02 11:26:40
+Date: 2003/06/02 11:26:40
 
   Reorg:
     - Rare scripts were moved into the 'auto' directory
