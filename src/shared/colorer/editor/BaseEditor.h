@@ -70,11 +70,11 @@ public:
   /** Initial HRC type, used for parse processing.
       If changed during processing, all text information is invalidated.
   */
-  void setFileType(const String &fileType);
+  FileType *setFileType(const String &fileType);
   /** Tries to choose appropriate file type from HRC database
       using passed fileName and first line of text (if available through lineSource)
   */
-  void chooseFileType(const String *fileName);
+  FileType *chooseFileType(const String *fileName);
 
   /** Returns currently used HRC file type */
   FileType *getFileType();

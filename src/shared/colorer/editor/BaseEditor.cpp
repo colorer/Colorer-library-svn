@@ -97,11 +97,12 @@ void BaseEditor::setFileType(FileType *ftype){
   textParser->setFileType(currentFileType);
   invalidLine = 0;
 };
-void BaseEditor::setFileType(const String &fileType){
+FileType *BaseEditor::setFileType(const String &fileType){
   currentFileType = hrcParser->getFileType(&fileType);
   setFileType(currentFileType);
+  return currentFileType;
 }
-void BaseEditor::chooseFileType(const String *fileName){
+FileType *BaseEditor::chooseFileType(const String *fileName){
   if (lineSource == null){
     currentFileType = hrcParser->chooseFileType(fileName, null);
   }else{
@@ -118,6 +119,7 @@ void BaseEditor::chooseFileType(const String *fileName){
     currentFileType = hrcParser->chooseFileType(fileName, &textStart);
   };
   setFileType(currentFileType);
+  return currentFileType;
 }
 FileType *BaseEditor::getFileType(){
   return currentFileType;
