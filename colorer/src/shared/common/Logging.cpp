@@ -6,7 +6,7 @@
 
 static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
 
-static const char *toTrace[] = {"BaseEditor" };
+static const char *toTrace[] = {"BaseEditor", };
 
 static FILE *log = 0;
 
