@@ -6,8 +6,8 @@ TARGET = net_sf_colorer.dll
 all: $(TARGET)
 
 #shared_path=d:/projects/shared/
-shared_path=C:\Progra~1\colorer\src/shared/
-JAVA_INCLUDE=c:/vmj/jdk130.ibm/include/
+shared_path=e:/programs/devel/colorer/src/shared/
+JAVA_INCLUDE=E:/programs/java/j2sdk1.4.1_01/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
 
 obj_output=objs
