@@ -36,7 +36,7 @@
     <region name="Directive" parent="def:Directive" description='Directives, started with @ char'/>
     <region name="MediaType" parent="def:Keyword" description='Media type region'/>
 
-    <region name="TagName" parent="def:Keyword" />
+    <region name="TagName" parent="default" />
     <region name="PseudoElement" parent="def:KeywordStrong" />
     <region name="PseudoElementUnknown" parent="default" />
     
