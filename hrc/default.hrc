@@ -211,7 +211,7 @@
       <inherit scheme="RCS"/>
       <regexp  region="TODO">/[\!\?]{2,}/</regexp>
       <regexp  region="TODO">/[\w\-\_]{1,20} \s{,2} [\!\?]{2,}/x</regexp>
-      <regexp  region="TODO">/\b(FIXME|TODO|BUG|FIX)\b/x</regexp>
+      <regexp  region="TODO">/\b(FIXME|TODO|BUG|FIX)\b:?/xi</regexp>
 
     </scheme>
 

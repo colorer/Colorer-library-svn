@@ -26,13 +26,14 @@ $(obj_output_slash)net_sf_colorer.$(obj):
 	$(CPP) -D__int64='long long'  -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w $(CPPFLAGS) -s -O3 -c net_sf_colorer.cpp
 
 $(TARGET): *.cpp *.h $(objs)
-	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,net_sf_colorer.dll.base $(objs) $(LIBINC)
+	$(LINK) $(LIBFLAGS) -o temp.exe -Wl,--base-file,net_sf_colorer.dll.base $(objs) $(LIBINC)
 	$(DLLTOOL) -k -A -z net_sf_colorer.def  $(objs)
 	$(DLLTOOL) --dllname net_sf_colorer.dll --base-file net_sf_colorer.dll.base --output-exp net_sf_colorer.dll.exp --def net_sf_colorer.def
 	$(LINK) $(LIBFLAGS) -o $@ $(objs) net_sf_colorer.dll.exp $(LIBINC)
 	$(RM) net_sf_colorer.dll.base
 	$(RM) net_sf_colorer.dll.exp
 	$(RM) net_sf_colorer.def
+	$(RM) temp.exe
 
 clean:
 	$(RM) $(objs) $(TARGET) colorer.map

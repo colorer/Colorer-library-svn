@@ -18,11 +18,12 @@ LIBINC = -lwininet -lstdc++
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
 
 colorer.dll: $(objs)
-	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,colorer.dll.base $(objs) $(LIBINC)
+	$(LINK) $(LIBFLAGS) -o temp -Wl,--base-file,colorer.dll.base $(objs) $(LIBINC)
 	$(DLLTOOL) --dllname colorer.dll --base-file colorer.dll.base --output-exp colorer.dll.exp --def $(DEF)
 	$(LINK) $(LIBFLAGS) -o $@ $(objs) colorer.dll.exp $(LIBINC)
 	$(RM) colorer.dll.base
 	$(RM) colorer.dll.exp
+	$(RM) temp
 
 clean:
 	$(RM) $(objs)
