@@ -37,7 +37,7 @@
          <block start="/\b(let|local|with|struct|sig)\b/" end="/\b(end)\b/" scheme="sml"
            region01="Keyword" region00="PairStart"
            region10="Keyword" region11="PairEnd"/>
-         <regexp match="/^ \s* \M (fun|fn) \s+ (?{def:Function}[_\w]+)/ix"/>
+         <regexp match="/^ \s* \M (fun|fn) \s+ (?{def:Outlined}[_\w]+)/ix"/>
          <inherit scheme="c:String"/>
 <!-- Character constants  -->
          <regexp match="/ #&#34;( \\. | [^\\&#34;] )&#34; /x" region="String"/>
