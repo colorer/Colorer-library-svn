@@ -16,20 +16,22 @@
     with information, loaded from specified sources.
 
     If no path were passed to it's constructor,
-    it uses next search order of 'catalog.xml' file:
+    it uses next search order of the 'catalog.xml' file:
 
-    - global:
+    - win32 systems:
+      - image_start_dir, image_start_dir/../, image_start_dir/../../
       - \%COLORER5CATALOG%
       - \%HOME%/.colorer5catalog
       - \%HOMEPATH%/.colorer5catalog
-
-    - win32 systems:
       - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
-      - image_start_dir, image_start_dir/../, image_start_dir/../../
 
     - unix systems:
       - ./catalog.xml
       - ../catalog.xml
+      - ../../catalog.xml
+      - \%COLORER5CATALOG%
+      - \%HOME%/.colorer5catalog
+      - \%HOMEPATH%/.colorer5catalog
       - /usr/shared/colorer/catalog.xml
 
     @ingroup colorer
