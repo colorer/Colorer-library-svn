@@ -32,6 +32,7 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       };
       continue;
     };
+    if (argv[i][1] == 'l' && argv[i][2] == 'n') { ct.addLineNumbers(true); continue; };
     if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
     if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
 
@@ -118,6 +119,7 @@ void printError(){
        "  -ei<name>  Use input file encoding <name>\n"
        "  -eo<name>  Use output stream encoding <name>, also viewer encoding in w9x\n"
        "  -o<name>   Use file <name> as output stream\n"
+       "  -ln        Add line numbers into the colorized file\n"
        "  -db        Disable BOM(ZWNBSP) start symbol output in Unicode encodings\n"
        "  -dc        Disable information header in generator's output\n"
        "  -ds        Disable HTML symbol substitutions in generator's output\n"
