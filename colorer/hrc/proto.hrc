@@ -486,6 +486,16 @@
     <location link="rare/asm80.hrc"/>
     <filename>/\.a80$/i</filename>
   </prototype>
+  <prototype name="a51" group="rare" description="8051 asm">
+    <location link="rare/a51-5.hrc"/>
+    <filename>/\.a5(1|2)$/i</filename>
+  </prototype>
+  <prototype name="avr" group="rare" description="AVR asm">
+    <location link="rare/avr-5.hrc"/>
+    <filename>/\.(asm|inc|avr)$/i</filename>
+    <firstline>/^\s*;/</firstline>
+  </prototype>
+
 
   <!--  other types  -->
   <prototype name="filesbbs" group="other" description="files.bbs">
