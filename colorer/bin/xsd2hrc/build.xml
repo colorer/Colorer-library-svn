@@ -26,7 +26,7 @@
   </xmlcatalog>
 
 
-  
+
   <target name="all" description='Stub target'>
     <echo>Choose a required build target</echo>
   </target>
@@ -122,7 +122,7 @@
     </xslt>
   </target>
 
- 
+
   <target name="docbook" if='docbook-xsd-exists'>
     <xslt in='${docbook-xsd}' out='${hrc-path-auto}/docbook.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
@@ -180,6 +180,7 @@
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xslfo'/>
       <param name='allow-any-attr' expression='yes'/>
+      <param name='allow-unknown-elements' expression='yes'/>
     </xslt>
   </target>
   <target name="xslt">
@@ -201,7 +202,7 @@
   </target>
 
 
-  
+
   <target name="relaxng">
     <xslt in='schemas/relaxng.xsd' out='${hrc-path}/xml/relaxng.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
