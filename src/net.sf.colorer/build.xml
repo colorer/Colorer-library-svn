@@ -12,7 +12,8 @@
 	<target name="init" depends="properties">
 		<property name="plugin" value="net.sf.colorer"/>
 		<property name="version.suffix" value="_0.5.0"/>
-		<property name="full.name" value="EcliseColorer-take5${version.suffix}"/>
+		<property name="full.name" value="${plugin}${version.suffix}"/>
+		<property name="zip.name" value="EcliseColorer-take5${version.suffix}"/>
 		<property name="temp.folder" value="${basedir}/temp.folder"/>
 		<property name="plugin.destination" value="${basedir}/distr"/>
 		<property name="build.result.folder" value="${basedir}"/>
@@ -127,9 +128,10 @@
 		</delete>
 		<antcall target="zip.folder"/>
 		<delete dir="${temp.folder}"/>
+		<antcall target="clean"/>
 	</target>
 	<target name="zip.folder" depends="init">
-		<zip zipfile="${plugin.destination}/${full.name}.zip" basedir="${temp.folder}" filesonly="true" update="no" excludes="**/*.bin.log"/>
+		<zip zipfile="${plugin.destination}/${zip.name}.zip" basedir="${temp.folder}" filesonly="true" update="no" excludes="**/*.bin.log"/>
 	</target>
 
 </project>
