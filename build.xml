@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name='Colorer-take5' default="all" basedir=".">
+<project name='Colorer-take5' default="info" basedir=".">
 
   <description>
     This is the top-level buildfile, used by ANT tool (http://jakarta.apache.org/ant/)
@@ -29,6 +29,11 @@
   <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
   <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
   <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
+
+  <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
+                                      **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
+                                      **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
+  
 
 
 
@@ -80,10 +85,18 @@
 
     <available file='${doxygen}' property='doxygen-exists'/>
 
-    <available file='${eclipse.plugins}' type='dir' property='eclipse.plugins-exists'/>
+    <available file='${eclipse.dir}' type='dir' property='eclipse.plugins-exists'/>
 
   </target>
 
+  <target name="info" description='Shows help'>
+<echo>
+  You can build Colorer-take5 library into three kinds of packages:
+    ``ant library''         - full library distribution
+    ``ant eclipseplugin''   - Eclipse IDE plugin
+    ``ant farplugin''       - FAR Manager plugin
+</echo>
+  </target>
 
   <target name="all" depends='init' description='Builds all available packages: library, farplugin and eclipseplugin'>
     <splash/>
@@ -329,6 +342,10 @@
       <fileset dir='.' includes='LICENSE'/>
     </copy>
 
+    <fixcrlf srcdir="${build-dir}/${eclipseplugin-name}" eol="lf"
+             includes="${fixcrlf-ext}"
+    />
+
     <zip destfile='${eclipseplugin-zip}'>
       <fileset dir='${build-dir}/${eclipseplugin-name}'/>
     </zip>
@@ -350,7 +367,9 @@
       <os family='windows'/>
     </condition>
 
-    <fail unless='system' message='FarColorer plugin is available only on Windows system'/>
+    <fail unless='system'>
+    *********** FarColorer plugin is available only on Windows system
+    </fail>
 
     <exec dir='src/pcolorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
