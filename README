@@ -5,7 +5,7 @@
 
   Colorer  is  a  syntax  highlighting  and text parsing library, that
   provides services to parse text in editor in real time and transform
-  results into colored text.
+  results into a colored text.
 
   For more information see 'index.html' in the 'doc' directory of
   the Colorer Library package distribution or visit
