@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY php-script SYSTEM "php-script.hrc">
-<!ENTITY php-gen SYSTEM "php-gen.hrc">
+<!ENTITY php-script SYSTEM "php-script.xml">
+<!ENTITY php-gen SYSTEM "php-gen.xml">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
     xmlns:xinc="http://www.w3.org/2001/XInclude"

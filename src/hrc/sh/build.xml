@@ -14,14 +14,14 @@
  <dependset>
   <srcfilelist dir="${src}" files = "sh.bkt"/>
   <srcfilelist dir="${src}/.." files = "build.xml"/>
-  <targetfilelist dir="${bin}" files="sh-brackets.hrc"/>
+  <targetfilelist dir="${bin}" files="sh-brackets.xml"/>
  </dependset>
 </target>
 
 <target name="bkt" depends="bkt.check">
  <ant antfile="${util}" target="bracket">
   <property name="util.input" value="${src}/sh.bkt"/>
-  <property name="util.output" value="${bin}/sh-brackets.hrc"/>
+  <property name="util.output" value="${bin}/sh-brackets.xml"/>
  </ant>
 </target>
 
@@ -29,14 +29,14 @@
 
 <target name="hrc.check">
  <dependset>
-  <srcfilelist dir="${src}" files = "sh.hrc, sh-keywords.hrc"/>
-  <targetfilelist dir="${bin}" files="sh.hrc, sh-keywords.hrc"/>
+  <srcfilelist dir="${src}" files = "sh.hrc, sh-keywords.xml"/>
+  <targetfilelist dir="${bin}" files="sh.hrc, sh-keywords.xml"/>
  </dependset>
 </target>
 
 <target name="hrc" depends="bkt, hrc.check">
  <copy todir='${bin}'>
-   <fileset dir='${src}' includes='sh.hrc, sh-keywords.hrc'/>
+   <fileset dir='${src}' includes='sh.hrc, sh-keywords.xml'/>
  </copy>
 </target>
 
@@ -47,7 +47,7 @@
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="sh.hrc, sh-*.hrc"/>
+  <fileset dir="${bin}" includes="sh.hrc, sh-*.xml"/>
  </delete>
 </target>
 

@@ -1,5 +1,11 @@
 
 $Date$
+  New:
+    - HRC regexp fixes
+    - External xml entities now has a .xml extension.
+
+
+Date: 2004/09/27 05:55:36
 
   New:
     - SVG 1.0, PostScript, htc, parser, rdf, rss, xbl (Eugene Efremov)

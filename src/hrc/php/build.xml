@@ -29,7 +29,7 @@
 <!-- hrc-gen -->
 
 <target name="hrc-gen.check">
- <uptodate property="hrc-gen.check"  targetfile="${bin}/php-gen.hrc">
+ <uptodate property="hrc-gen.check"  targetfile="${bin}/php-gen.xml">
   <srcfiles dir="." includes="${src}/hrc-gen-creator.php, ${obj}/hrc-gen.php"/>
  </uptodate>
 </target>
@@ -37,21 +37,21 @@
 <target name="hrc-gen" depends="php-gen, hrc-gen.check" unless="hrc-gen.check">
  <echo level="info" message="Build php schemes"/>
  <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
-  <arg line='-q ${src}/hrc-gen-creator.php ${obj}/hrc-gen.php ${bin}/php-gen.hrc'/>
+  <arg line='-q ${src}/hrc-gen-creator.php ${obj}/hrc-gen.php ${bin}/php-gen.xml'/>
  </exec>
 </target>
 
 <!-- hrc-prot -->
 
 <target name="hrc-prot.check">
- <uptodate property="hrc-prot.check"  targetfile="${bin}/../proto-php.hrc">
+ <uptodate property="hrc-prot.check"  targetfile="${bin}/../proto-php.xml">
   <srcfiles dir="." includes="${src}/hrc-gen-prototype.php, ${obj}/hrc-gen.php"/>
  </uptodate>
 </target>
 
 <target name="hrc-prot" depends="php-gen, hrc-prot.check" unless="hrc-prot.check">
  <echo level="info" message="Build prototype"/>
- <exec executable="${path-to-php}/php" output="${bin}/../proto-php.hrc" failonerror='yes'>
+ <exec executable="${path-to-php}/php" output="${bin}/../proto-php.xml" failonerror='yes'>
   <arg line='-q ${src}/hrc-gen-prototype.php ${obj}/hrc-gen.php'/>
  </exec>
 </target>
@@ -60,15 +60,15 @@
 
 <target name="hrc.check">
  <dependset>
-  <srcfileset dir="${src}" includes="*.hrc"/>
-  <srcfileset dir="${obj}" includes="*.hrc"/>
+  <srcfileset dir="${src}" includes="*.hrc, *.xml"/>
+  <srcfileset dir="${obj}" includes="*.hrc, *.xml"/>
   <targetfilelist dir="${bin}" files="php.hrc"/>
  </dependset>
 </target>
 
 <target name="hrc" depends="hrc-gen, hrc.check">
  <copy todir='${bin}'>
-   <fileset dir='${src}' includes='php.hrc, php-script.hrc'/>
+   <fileset dir='${src}' includes='php.hrc, php-script.xml'/>
  </copy>
 </target>
 
@@ -83,8 +83,8 @@
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="php*.hrc"/>
-  <fileset dir="${bin}/.." includes="proto-php.hrc"/>
+  <fileset dir="${bin}" includes="php*.*"/>
+  <fileset dir="${bin}/.." includes="proto-php.xml"/>
  </delete>
 </target>
 
