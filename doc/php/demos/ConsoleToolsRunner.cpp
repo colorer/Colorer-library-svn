@@ -5,30 +5,31 @@
 /** Internal run action type */
 enum { JT_NOTHING, JT_REGTEST,
        JT_LIST_LOAD, JT_LIST_TYPES,
-       JT_VIEW, JT_GEN, JT_FORWARD } jobType;
+       JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
 
 /** Reads and parse command line */
 void init(ConsoleTools &ct, int argc, char*argv[]){
 
-  fprintf(stderr, "\ncolorer-take5 library\n");
-  fprintf(stderr, "copyright (c) 1999-2003 cail lomecb\n\n");
+  fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
+  fprintf(stderr, "Copyright (c) 1999-2003 Cail Lomecb <cail@nm.ru>\n\n");
 
   for(int i = 1; i < argc; i++){
     if (argv[i][0] != '-'){
       ct.setInputFileName(DString(argv[i]));
       continue;
     };
-    if (argv[i][1] == 'r') jobType = JT_REGTEST;
-    if (argv[i][1] == 'l') jobType = JT_LIST_TYPES;
-    if (argv[i][1] == 'l' && argv[i][2] == 'l') jobType = JT_LIST_LOAD;
-    if (argv[i][1] == 'f') jobType = JT_FORWARD;
-    if (argv[i][1] == 'v') jobType = JT_VIEW;
-    if (argv[i][1] == 'h') jobType = JT_GEN;
+    if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; };
+    if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
+    if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
+    if (argv[i][1] == 'f') { jobType = JT_FORWARD; continue; };
+    if (argv[i][1] == 'v') { jobType = JT_VIEW; continue; };
+    if (argv[i][1] == 'h' && argv[i][2] == 't') { jobType = JT_GEN_TOKENS; continue; };
+    if (argv[i][1] == 'h') { jobType = JT_GEN; continue; };
 
-    if (argv[i][1] == 'd' && argv[i][2] == 'c') ct.setCopyrightHeader(false);
-    if (argv[i][1] == 'd' && argv[i][2] == 'b') ct.setBomOutput(false);
-    if (argv[i][1] == 'd' && argv[i][2] == 's') ct.setHtmlEscaping(false);
-    if (argv[i][1] == 'd' && argv[i][2] == 'h') ct.setHtmlWrapping(false);
+    if (argv[i][1] == 'd' && argv[i][2] == 'c') { ct.setCopyrightHeader(false); continue; };
+    if (argv[i][1] == 'd' && argv[i][2] == 'b') { ct.setBomOutput(false); continue; };
+    if (argv[i][1] == 'd' && argv[i][2] == 's') { ct.setHtmlEscaping(false); continue; };
+    if (argv[i][1] == 'd' && argv[i][2] == 'h') { ct.setHtmlWrapping(false); continue; };
 
     if (argv[i][1] == 't' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
@@ -84,32 +85,33 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       };
       continue;
     };
-    if (argv[i][1]) fprintf(stderr, "\nUnknown option: %s\n", argv[i]+1);
+    if (argv[i][1]) fprintf(stderr, "WARNING: unknown option '-%s'\n", argv[i]+1);
   };
 };
 
 /** Prints usage. */
 void printError(){
   fprintf(stderr,
-       "use: colorer -(command) (parameters)  [<filename>]\n"
-       " commands:\n"
-       "  -l         lists all avaiable types\n"
-       "  -ll        lists and loads full hrc database\n"
-       "  -r         regexp tests\n"
-       "  -h         generates plain coloring from <filename> (uses 'rgb' hrd class)\n"
-       "  -v         view file <fname> (uses 'console' hrd class)\n"
-       "  -f         forward input file to output with selected encodings\n"
-       " parameters:\n"
-       "  -c<path>   use specified catalog.xml file\n"
-       "  -i<name>   loads specified hrd rules from catalog\n"
-       "  -t<type>   try to use type <type> instead of type autodetection\n"
-       "  -ei<name>  use input file encoding <name>\n"
-       "  -eo<name>  use output stream encoding <name>, also viewer encoding in w9x\n"
-       "  -o<name>   use file <name> as output stream\n"
-       "  -db        disable BOM(ZWNBSP) symbol output in unicode encodings\n"
-       "  -dc        disable information header in generator's output\n"
-       "  -ds        disable html symbols substitutions in generator's output\n"
-       "  -dh        disable html header and footer output\n"
+       "Usage: colorer -(command) (parameters)  [<filename>]\n"
+       " Commands:\n"
+       "  -l         Lists all available languages\n"
+       "  -ll        Lists and loads full HRC database\n"
+       "  -r         RE tests\n"
+       "  -h         Generates plain coloring from <filename> (uses 'rgb' hrd class)\n"
+       "  -ht        Generates plain coloring from <filename> using tokens output\n"
+       "  -v         Runs viewer on file <fname> (uses 'console' hrd class)\n"
+       "  -f         Forwards input file into output with specified encodings\n"
+       " Parameters:\n"
+       "  -c<path>   Uses specified 'catalog.xml' file\n"
+       "  -i<name>   Loads specified hrd rules from catalog\n"
+       "  -t<type>   Tries to use type <type> instead of type autodetection\n"
+       "  -ei<name>  Use input file encoding <name>\n"
+       "  -eo<name>  Use output stream encoding <name>, also viewer encoding in w9x\n"
+       "  -o<name>   Use file <name> as output stream\n"
+       "  -db        Disable BOM(ZWNBSP) start symbol output in Unicode encodings\n"
+       "  -dc        Disable information header in generator's output\n"
+       "  -ds        Disable HTML symbol substitutions in generator's output\n"
+       "  -dh        Disable HTML header and footer output\n"
   );
 };
 
@@ -118,7 +120,13 @@ void printError(){
 int main(int argc, char *argv[])
 {
   ConsoleTools ct;
-  init(ct, argc, argv);
+  try{
+    init(ct, argc, argv);
+  }catch(Exception e){
+    fprintf(stderr, e.getMessage()->getChars());
+    return -1;
+  };
+
   try{
     switch(jobType){
       case JT_REGTEST:
@@ -134,7 +142,10 @@ int main(int argc, char *argv[])
         ct.viewFile();
         break;
       case JT_GEN:
-        ct.genOutput();
+        ct.genOutput(false);
+        break;
+      case JT_GEN_TOKENS:
+        ct.genOutput(true);
         break;
       case JT_FORWARD:
         ct.forward();
@@ -166,7 +177,7 @@ int main(int argc, char *argv[])
  * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <ruiv@uic.nnov.ru>.
+ * Cail Lomecb <cail@nm.ru>.
  * Portions created by the Initial Developer are Copyright (C) 1999-2003
  * the Initial Developer. All Rights Reserved.
  *
