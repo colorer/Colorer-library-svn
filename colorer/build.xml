@@ -214,11 +214,11 @@
   </target>
 
 
-  <target name="xsd2hrc.distr" depends='init' description='Generates all required HRC files from their XML Schemas'>
+  <target name="xsd2hrc" depends='init' description='Generates all required HRC files from their XML Schemas'>
     <ant dir='bin/xsd2hrc' antfile='build.xml' target='distr'/>
   </target>
 
-  <target name="hrc.jar" depends='xsd2hrc.distr'>
+  <target name="hrc.jar" depends='xsd2hrc'>
 
     <mkdir dir='${target-dir}/hrc/auto/types'/>
 
@@ -263,7 +263,7 @@
   </target>
 
 
-  <target name="this.colorer" depends='init, xsd2hrc.distr' description='Builds binary executable and moves it into current working copy'>
+  <target name="this.colorer" depends='init, xsd2hrc' description='Builds binary executable and moves it into current working copy'>
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
@@ -281,8 +281,6 @@
     </copy>
   </target>
 
-
-
   <target name="library.clean" depends='init'>
     <delete dir='${library-dir}'/>
     <delete file='${library-zip}'/>
@@ -291,7 +289,7 @@
     </antcall>
   </target>
 
-  <target name="library" depends='init, xsd2hrc.distr, doc' description='Builds Colorer-take5 Library source distribution package'>
+  <target name="library" depends='init, xsd2hrc, doc' description='Builds Colorer-take5 Library source distribution package'>
 
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
@@ -314,7 +312,7 @@
     </copy>
     <copy todir="${library-dir}">
       <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
-      <fileset dir="." includes="doc/**" excludes='**/*.log, build.user.properties'/>
+      <fileset dir="." includes="doc/**" excludes='**/*.log, **/*.fo, **/*-merged'/>
     </copy>
     <copy todir='${library-dir}' includeemptydirs='false'>
       <fileset dir='.' includes='*' excludes='*.log, build.user.properties'/>
@@ -339,16 +337,16 @@
     </antcall>
   </target>
 
-  <target name="library-linux" depends='init, xsd2hrc.distr, doc' description='Builds Colorer-take5 Library linux package'>
+  <target name="library-linux" depends='init, xsd2hrc, doc' description='Builds Colorer-take5 Library linux package'>
 
     <mkdir dir='${library-linux-dir}'/>
 
     <copy todir="${library-linux-dir}/bin">
-      <fileset dir="bin" includes="**" excludes='farplugin/**, **/*.exe, **/*.bat'/>
+      <fileset dir="bin" includes="**" excludes='farplugin/**, **/*.exe, **/*.bat, **/*.*xsd, **/*.dtd'/>
     </copy>
     <copy todir="${library-linux-dir}">
       <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
-      <fileset dir="." includes="doc/**" excludes='**/*.log'/>
+      <fileset dir="." includes="doc/**" excludes='**/*.log, **/*.fo, **/*-merged'/>
     </copy>
     <copy todir='${library-linux-dir}' includeemptydirs='false'>
       <fileset dir='.' includes='LICENSE, README, catalog.xml' excludes='*.log'/>
@@ -531,7 +529,7 @@
     *********** ERROR! FarColorer plugin was not compiled
     </fail>
 
-    <move file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
+    <move failonerror='false' file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
     <copy todir='${this.far-dir}/bin'>
       <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
       <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
