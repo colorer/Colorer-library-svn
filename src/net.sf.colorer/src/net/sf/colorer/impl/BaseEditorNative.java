@@ -75,9 +75,15 @@ public class BaseEditorNative implements BaseEditor {
         return getFileType(iptr);
     }
 
-    public void setRegionMapper(String cls, String name) {
+    public void setRegionMapper(RegionMapper regionMapper) {
         checkActive();
-        setRegionMapper(iptr, cls, name);
+        setRegionMapper(iptr, regionMapper);
+        modifyEvent(iptr, 0);
+    }
+
+    public void setRegionMapper(String hrdClass, String hrdName) {
+        checkActive();
+        setRegionMapper(iptr, hrdClass, hrdName);
         modifyEvent(iptr, 0);
     }
 
@@ -261,7 +267,9 @@ public class BaseEditorNative implements BaseEditor {
 
     native void setRegionCompact(long iptr, boolean compact);
 
-    native void setRegionMapper(long iptr, String cls, String name);
+    native void setRegionMapper(long iptr, RegionMapper regionMapper);
+
+    native void setRegionMapper(long iptr, String hrdClass, String hrdName);
 
     native void addRegionHandler(long iptr, RegionHandler rh, Region filter);
 
