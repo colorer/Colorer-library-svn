@@ -12,7 +12,7 @@ import java.util.*;
  * @author irusskih
  *
  */
-class Test{
+class Test {
 
 public static void main(String[] arr){
 
