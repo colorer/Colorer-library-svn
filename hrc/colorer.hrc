@@ -304,6 +304,10 @@
     <firstline>/(REM)?\/\*/i</firstline>
     <firstline>/^# regina/i</firstline>
   </prototype>
+  <prototype name="ruby" group="rare" description="Ruby">
+    <location link="rare/ruby.hrc"/>
+    <filename>/\.(ru|ruby|rub)$/i</filename>
+  </prototype>
   <prototype name="sml" group="rare" description="StandardML">
     <location link="rare/sml.hrc"/>
     <filename>/\.(sml|ml|mli)$/i</filename>
