@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Colorer console tools documentation</title>
+<link href="styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='index.html'><img alt='back' src='images/back.png' width='40' height='18'/></a></div>
+
+<h1>Colorer Library console tools</h1>
+
+<p>Colorer library provides useful program, located at
+<code>colorer/bin/colorer.exe</code> (<code>colorer/bin/colorer</code> in unix systems),
+which allows you to use common features of the library. These are include:</p>
+<ul>
+<li>Listing and test loading of all available languages.</li>
+<li>Regular Expressions tests.</li>
+<li>Generating HTML markup of highlighted source files.</li>
+<li>Viewing highlighted files in console window (win32 only).</li>
+</ul>
+
+<h2>Listing Languages</h2>
+<p>To list all available types of syntax rules, run <code>colorer -l</code>
+command. This will print into standard output all supported computer languages
+and file types.
+If you want to test all colorer's database and load all types, run
+<code>colorer -ll</code>. This will take little more time to load and test
+HRC database. All errors, warnings and other messages you'll found in log file,
+specified in <code>catalog.xml</code> file.
+</p>
+
+<h2>Generating highlighted HTML sources</h2>
+<p>You can use Colorer to format you source files into HTML markup.
+This is useful when publishing sources on your web-site, or making
+documentation, based on source files. You can find generated examples
+of some sources on <a href="../index.html#Highlighting">start page</a> in section <em>Highlighting</em>.
+Also you can check <a href="http://colorer.sf.net/php/">Online HTML Generator</a>
+on colorer.sf.net site.
+</p>
+<p>To generate highlighted source of file <code>filename</code>, you have
+to run <code>colorer -h filename</code>. This will print generated HTML file
+into standard output. If you want to write this HTML into some file,
+you can specify this file with <code>-o</code> option. Also you can specify input
+and output character encodings (<code>-ei ENCNAME</code> and <code>-eo ENCNAME</code>)
+to read and write data. So, running
+<code>colorer -h -ei UTF-8 -eo UTF-16BE -o NAME.HTML yoursource.cpp</code>
+will cause to generate highlighted html of <code>yoursource.cpp</code> file with
+name <code>NAME.HTML</code>, using UTF-8 as input encoding and UTF-16BE as
+encoding of result file.
+</p>
+
+<h2>Viewing file in console window</h2>
+<p>To run internal colorer viewer you can run <code>colorer -v filename</code>.
+This should work only on win32 systems.
+Console viewer uses unicode versions of Win32 API, so it can view files with
+different character sets. In w9x systems colorer additionally uses output
+encoding parameter because they don't support unicode console output.
+Viewer supports standard navigation keys, but has minimal functionality.
+
+</p>
+
+<h2>Additional options</h2>
+<p>Colorer provides a set of different command line options, you can check all
+of them running <code>colorer</code> without any parameters.</p>
+
+<h3>Token generator</h3>
+<p>This option is similar with HTML generation more, except that
+generated HTML file defines all tokens not with colors, but with abstract
+css classes, which has name, equals to the name of appropriate token (Region).
+To use colorer in this more, you have to run <code>colorer -ht filename</code>
+</p>
+
+<h3>Type detection</h3>
+<p>By default, colorer tries automatically detect filetype. You can redefine
+used language with <code>-t</code> parameter. Use <code>-t name</code>,
+and colorer will use language <code>name</code> to highlight requiried file.</p>
+
+<h3>Catalog path specifing</h3>
+<p>You can specify custom path to <code>catalog.xml</code> file. This file
+contains references to all other library resources. By default, colorer
+tries to search this file in a set of <a href='api/catalogloc.html'>predefined locations</a>.
+</p>
+
+<h3>Highlighting styles selection</h3>
+<p>You can change color style, used to highlight source files.
+Colorer makes this through the HRD files set. You can change default
+used coloring style with <code>-i</code> option. Text viewer and HTML
+generator has different sets of HRD styles, you can find available style
+names in <code>catalog.xml</code> file.
+For example, specify <code>-i black</code> to activate black styled scheme
+of colors.
+</p>
+
+<h3>Customizing HTML output</h3>
+<p>There is a numerous options available, controlling HTML output.
+These are:</p>
+<ul>
+<li><code>-db</code> Disable <abbr title='Byte Order Mark'>BOM</abbr> insertion in start of output files when one of Unicode encodings is used.</li>
+<li><code>-dc</code> Disable informational header output in start of each HTML file.</li>
+<li><code>-ds</code> Disable HTML special symbols substitutions with entities.</li>
+<li><code>-dh</code> Disable HTML header and footer output (only tokenized text).</li>
+</ul>
+
+<h3>Simple forwarding</h3>
+<p>Last useful option of colorer tool is <code>-f</code> processing mode.
+With this command colorer simply forwards input file into the output one with
+optional encoding convertion.</p>
+
+</body>
+</html>

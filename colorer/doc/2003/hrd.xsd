@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://colorer.sf.net/2003/hrd"
+  targetNamespace="http://colorer.sf.net/2003/hrd"
+  elementFormDefault="qualified">
+
+  <xs:element name="hrd" type="hrd"/>
+
+  <xs:complexType name="hrd">
+    <xs:annotation><xs:documentation>
+      List of assigns between regions and their external properties.
+      These properties commonly include text decoration parameters,
+      such as color, style, font and so on...
+      Global color layering model can be chosen by the target application,
+      depending on its text presentation style, features and requirements.
+      In general, all transparent colors must inherit color value from its
+      parent schema color. If the current schema is a top-level, default
+      fore- and back-ground colors are used.
+      Default Colors could be stored in HRD, using standard default region
+      'def:Text', or could be requested by application from the GUI environment.
+    </xs:documentation></xs:annotation>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="assign" type='assign'/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name='assign'>
+    <xs:annotation><xs:documentation>
+      Single entry, describes region's properties.
+      If entry is specified more than one time, then used the latest
+      definition. This allows processing of several HRD files to
+      complete color description of target HRC regions.
+    </xs:documentation></xs:annotation>
+    <xs:attribute name="name" use="required">
+      <xs:annotation><xs:documentation>
+        Full qualified region name (a pair [type:name]).
+        Note, that if region has no HRD properties associations,
+        it inherits properties from its parent. If any of its
+        ancestors has no assigned properties, region visualization
+        must be skipped (it becomes fully transparent).
+      </xs:documentation></xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="\i\c*\:\i\c*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="fore" type="xs:token">
+      <xs:annotation><xs:documentation>
+        Foreground color. If missed, transparent color assumed.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="back" type="xs:token">
+      <xs:annotation><xs:documentation>
+        Background color. If missed, transparent color assumed.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="style" type="xs:token">
+      <xs:annotation><xs:documentation>
+        Style bits (bold, italic, underline).
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="stext" type="xs:string">
+      <xs:annotation><xs:documentation>
+        Text prefix mapping (foreground).
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="etext" type="xs:string">
+      <xs:annotation><xs:documentation>
+        Text prefix mapping (background).
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sback" type="xs:string">
+      <xs:annotation><xs:documentation>
+        Text Suffix mapping (foreground).
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="eback" type="xs:string">
+      <xs:annotation><xs:documentation>
+        Text Suffix mapping (background).
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

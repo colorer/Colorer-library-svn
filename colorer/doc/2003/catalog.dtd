@@ -1,0 +1,19 @@
+<!--   DTD description of colorer-take5 CATALOG format  -->
+
+<!ELEMENT catalog (hrc-sets, hrd-sets)>
+
+<!ELEMENT hrc-sets (location+)>
+<!ATTLIST hrc-sets
+  log-location CDATA #IMPLIED>
+
+<!ELEMENT hrd-sets (hrd*)>
+
+<!ELEMENT hrd (location+)>
+<!ATTLIST hrd
+  name        NMTOKEN #REQUIRED
+  class       NMTOKEN #REQUIRED
+  description CDATA   #IMPLIED>
+
+<!ELEMENT location EMPTY>
+<!ATTLIST location
+  link            CDATA #REQUIRED>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Colorer-take5 library features</title>
+<link href="../styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="../images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='../index.html'><img alt='back' src='../images/back.png' width='40' height='18'/></a></div>
+
+<h1>Colorer-take5 Library Features</h1>
+
+  <h2>Internal unicode support</h2>
+  <ul>
+    <li>Knows about UTF-8, UTF-16, UTF-16BE, UTF-32, UTF-32BE.</li>
+    <li>Any single-byte encodings support.</li>
+  </ul>
+
+  <h2>Different input data sources</h2>
+  <ul>
+    <li>File stream.</li>
+    <li>Zip stream.</li>
+    <li>Http stream (win32 only).</li>
+  </ul>
+
+  <h2>Central repository</h2>
+  <ul>
+    <li>All Colorer applications uses repository in <code>catalog.xml</code> file.</li>
+    <li>Automatic catalog.xml searching with environment
+        variables and standard locations.</li>
+    <li>Multiple HRC sources, directory HRC source.</li>
+    <li>HRD classes, names and descriptions.</li>
+    <li>Global logging file.</li>
+  </ul>
+
+  <h2>HRC language design</h2>
+  <ul>
+    <li>Separate type namespaces.</li>
+    <li>Free linking between schemas
+        (forward inheritance and switch references).</li>
+    <li>HRC Region information extension, region inheritance tree,
+        transparent HRC linking.</li>
+    <li>HRC Entities, <code>regexp</code> and <code>block</code> flexible
+        declarations using CDATA sections.</li>
+  </ul>
+
+<h1>Eclipse Colorer</h1>
+  <ul>
+    <li>Powerful and flexible outliner for all common languages.</li>
+    <li>Errors list is included into the outliner view.</li>
+    <li>Shortcuts for pairs matching.</li>
+    <li>Replace tabs with spaces option.</li>
+    <li>Soft linebreaks option.</li>
+    <li>Colored sources generation into HTML files.</li>
+  </ul>
+
+
+<h1>Colorer.exe</h1>
+
+  <ul>
+   <li>Console viewing with unicode characters (win32).</li>
+   <li>Colorized HTML output from rgb HRD color schemas.</li>
+   <li>Simple file forward with encoding conversion.</li>
+   <li>HTML and file output into stdout or specified file.</li>
+
+   <li>New output mode - tokenizer (-ht option). With this mode
+   colorer outputs target file with each token marked with
+   specific style (equals to the name of it's HRC region).
+   </li>
+
+   <li>HTML output mode uses font style information and
+       can format sources now with bold, italic, underline properties.
+   </li>
+
+  </ul>
+
+<h1>FAR Plugin</h1>
+ <ul>
+  <li>Top level highlight caching, parse on request (FAR >= 1.70).</li>
+  <li>File Encoding selection.</li>
+  <li>Color schemes dialog selection.</li>
+
+  <li>New prototype parameters handling - default-fore, default-back.
+      With this numeric properties you can change default text and background
+      color in any file type.
+  </li>
+  <li>If exception is ocurred while text processing, colorer stops
+      it's job and disables any further text coloring.</li>
+  <li>Paired constructions are searched now on all the text.</li>
+  <li>FAR command line prefix 'clr' allows to run internal colorer's
+      viewer and to view files with syntax highlighting.</li>
+  <li>Works with outlined text structure (functions and errors list at now).</li>
+
+  <li>Much faster performance (x2) was achieved int FAR's editor
+      because of previously used multiple requests of each FAR's line.
+      This makes great leak of cpu usage.
+      Also, effective method of line text requesting is used
+      in all possible actions.
+  </li>
+  <li>Internal Library text lines requests has changed to make
+      processing faster. Now, FAR plugin works faster because
+      less lines data requests.
+  </li>
+  <li>Structured presentation of created outliner.
+      All elements are displayed in tree, also, for each element,
+      prefix-char is shown.
+      You can collapse or extend tree with <code>Ctrl-Left/Right</code>.
+  </li>
+
+ </ul>
+
+</body>
+</html>

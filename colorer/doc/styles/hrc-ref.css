@@ -1,0 +1,47 @@
+
+span.xs_elem{ color: #662222; }
+span.xs_attr{ color: #226622; }
+span.xs_attrval{ color: #222299; }
+
+dl, dd{
+  margin: 2pt 0pt 2pt 8pt;
+}
+
+div.abstract p b{
+  font-size: 130%;
+  color: #303570;
+}
+
+pre.source{
+  border: solid 1pt #d8d8d8;
+  background:#f4f4f4;
+  margin: 10pt 10pt 10pt 10pt;
+  padding: 3pt 3pt 3pt 8pt;
+}
+
+div.xsdocwrap{
+  border: solid 1pt #d8d8d8;
+  background:#fbfbfb;
+  margin: 10pt 10pt 10pt 10pt;
+  padding: 3pt 3pt 3pt 8pt;
+}
+
+p.xsdocdecl a, p.xsdochead a{
+  text-decoration: none;
+}
+
+p.xsdocdecl{
+  font-weight: bold;
+  font-size: 110%;
+}
+
+p.xsdochead{
+  font-weight:bold;
+  font-size:100%;
+  margin: 3pt 3pt 3pt 15pt;
+}
+
+p.xsdoc{
+  margin: 3pt 0pt 8pt 20pt;
+  display: block;
+}
