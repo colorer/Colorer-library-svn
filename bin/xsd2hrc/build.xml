@@ -151,6 +151,15 @@
     </xslt>
   </target>
 
+  <target name="taglib">
+    <xslt in='schemas/web-jsptaglibrary_1_2.xsd' out='${hrc-path-auto}/taglib.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='taglib'/>
+      <param name='top-level-element' expression='taglib'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+    </xslt>
+  </target>
+
   <target name="wsc">
     <xslt in='schemas/wsc.xsd' out='${hrc-path}/xml/wsc.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
