@@ -102,10 +102,19 @@ void BaseEditor::setFileType(const String &fileType){
   setFileType(currentFileType);
 }
 void BaseEditor::chooseFileType(const String *fileName){
-  if (lineSource != null){
-    currentFileType = hrcParser->chooseFileType(fileName, lineSource->getLine(0));
-  }else{
+  if (lineSource == null){
     currentFileType = hrcParser->chooseFileType(fileName, null);
+  }else{
+    StringBuffer textStart();
+    int totalLenght = 0;
+    for(int i = 0; i < 4; i++){
+      String *iLine = lineSource->getLine(i);
+      if (iLine == null) break;
+      textStart.append(iLine);
+      totalLength += iLine->length();
+      if (totalLength > 500) break;
+    };
+    currentFileType = hrcParser->chooseFileType(fileName, &textStart);
   };
   setFileType(currentFileType);
 }
