@@ -26,15 +26,15 @@
 </scheme>
 
 <scheme name="heredoc">
- <block start="/^\M.*&lt;&lt;([&quot;]?)([a-zA-Z_][\w_]*)\1/" end="/^(\y2)$/"
+ <block start="/^\M.*&lt;&lt;([&quot;]?)((?{def:PairStart}[a-zA-Z_][\w_]*))\1/" end="/^((?{def:PairEnd}\y2))$/"
   scheme="hd.shell.is" region="HereDoc" priority="low"
   region11="HereDocName"
  />
- <block start="/^\M.*&lt;&lt;(`)([a-zA-Z_][\w_]*)\1/" end="/^(\y2)$/"
+ <block start="/^\M.*&lt;&lt;(`)((?{def:PairStart}[a-zA-Z_][\w_]*))\1/" end="/^((?{def:PairEnd}\y2))$/"
   scheme="hd.shell.is" region="SystemExec" priority="low"
   region11="HereDocName"
  />
- <block start="/^\M.*&lt;&lt;(&apos;)([a-zA-Z_][\w_]*)\1/" end="/^(\y2)$/"
+ <block start="/^\M.*&lt;&lt;(&apos;)((?{def:PairStart}[a-zA-Z_][\w_]*))\1/" end="/^((?{def:PairEnd}\y2))$/"
   scheme="hd.shell" region="HereDoc" priority="low"
   region11="HereDocName"
  />
