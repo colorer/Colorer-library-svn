@@ -62,7 +62,7 @@ InternalHandler ml = new InternalHandler();
 
     baseEditor = new BaseEditorNative(pf, new LineSource(){
       public String getLine(int lno){
-        if (text.getContent().getLineCount() < lno) return null;
+        if (text.getContent().getLineCount() <= lno) return null;
         String line = text.getContent().getLine(lno);       
         return line;
       }
