@@ -16,7 +16,10 @@
       <scheme name="Insertion">
         <block start="/(&lt;\%--)/" end="/(--\%\>)/" scheme="def:Comment"
                 region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
-        <inherit scheme='asp.vb:Insertion'/>
+        <inherit scheme='asp.vb:Insertion'>
+          <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
+          <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
+        </inherit>
       </scheme>
 
       <scheme name="TypeDeclaration">
