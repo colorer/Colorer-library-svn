@@ -401,7 +401,7 @@
 <!-- EE: move ~ to separated block (s{}{/... - '/' no regexp ) -->
    <block start="/((\=|\! \~) |
                   [^&lt;\]\}\)\+\-\w\s\/] |
-                  (\bif) | (\bunless) | (\bsplit) | ^ )
+                  (\bif) | (\bunless) | (\bsplit) | grep |^ )
                  \s*
                  ((\/))
                 /x"
