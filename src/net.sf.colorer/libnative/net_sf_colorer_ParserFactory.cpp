@@ -33,7 +33,6 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, j
     // Bad reference - just exit
     return;
   }
-  env->DeleteGlobalRef(jpf->jhp->jHRCParser);
   delete jpf;
 };
 
@@ -91,8 +90,8 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getHRDescription
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv *env, jobject obj, jlong iptr){
   JParserFactory *jpf = (JParserFactory*)iptr;
-  if (jpf == NULL){
-    return NULL;
+  if (jpf == null){
+    return null;
   }
   TRACE1("ParserFactory", "jhp:%d", jpf->jhp);
   return jpf->jhp->jHRCParser;
