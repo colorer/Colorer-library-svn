@@ -40,7 +40,7 @@
 </revision>
 </revhistory>
 <author>
-  <firstname>Igor</firstname><surname>Ruskih</surname>
+  <firstname>Igor</firstname><surname>Russkih</surname>
   <affiliation>
     <address>
       <email>cail at nm.ru</email>
@@ -48,13 +48,13 @@
   </affiliation>
 </author>
 
-<copyright><year>2003</year><holder>Igor Ruskih (Cail Lomecb)</holder></copyright>
+<copyright><year>2003</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
 
 <abstract><title>Abstract</title>
-<para>This reference defines syntax and semantic of
+<para>This reference defines syntax and semantics of the
 <acronym role='Highlighting Resource Codes'>HRC</acronym>
 language, used in Colorer-take5 Library to represent and describe
-syntax and lexical structure of target programming language.
+syntax and lexical structure of target programming languages.
 This description is used by library to
 parse and colourise text in editors or other systems.
 </para>
@@ -67,16 +67,16 @@ parse and colourise text in editors or other systems.
 
 <para>
 HRC is a script language, describing parse process of text files to produce
-syntax highlighting. It is based on XML language, and defines its
+syntax highlighting. It is based on XML markup, and defines its
 own XML vocabulary and structure.
 HRC language was developed to achieve most flexible and efficient process
 of describing programming language structure.
 </para>
 <para>
 Started nearly in year 1999, it was a simple XML-like structure, describing
-some common language construction. But later it has grown into
+some common language constructions. But later it has grown into
 the much more complex and powerful language, describing complex relations between
-different languages, syntax contexts.
+different languages and syntax contexts.
 </para>
 
 </section>
@@ -88,34 +88,42 @@ different languages, syntax contexts.
 <para>
 HRC language allows describing and storing syntax rules for numerous languages.
 All language descriptions are divided into two parts:
-<emphasis role='strong'>Informal</emphasis> part, used to describe
-this language properties, language choose rules (<literal>prototype</literal>),
+<emphasis role='strong'>informal</emphasis> part (used to describe different
+properties of the language, initial choose rules, service information
+- <literal>prototype</literal> element),
 and <emphasis role='strong'>Formal</emphasis> part, which defines
-syntax and semantic of target parsed language (<literal>type</literal>).
-Prototypes are used to determine, which type to apply to the currently opened
+syntax and semantics of the target parsed language (<literal>type</literal> element).
+Prototypes are used to determine, which type should be applied to the currently opened
 file, they define some internal application-dependent properties
-and other useful information about language.
+and other useful information about language. Because you may separate prototype
+definition from real language definition, full type loading only occurs
+when it is really requested by user. Also, all the prototype definitions,
+collected in one initial source file, allow user to see all languages, supported
+by the library and guarantee fast library's bootstrap.
 </para>
+
 <formalpara><title>Structure</title><para>
 Each HRC file contains declaration of one or more prototypes or
 one language type. Root XML content starts with <literal>hrc</literal>
-element, which contains all other definitions.
-</para>
+element, which contains all other HRC definitions.
 
 <x:schemaref uri="&fileref;" role='hrc'/>
 
-<para>
-Each HRC language object is defined using XML elements and attributes.
-You can find definition of HRC XML Syntax in <xref linkend='hrcxsd'/>.
-Each element in HRC can be documented with XML Schema-like standard 
-elements:
 </para>
 
-<x:schemaref uri="&fileref;" role='annotation'/>
 
 <para>
+Each HRC language object is defined using XML elements and attributes.
+You can find definition of the HRC XML Syntax in <xref linkend='hrcxsd'/>.
+</para>
+<para>
+Each element in a HRC file can be documented with XML Schema-like standard 
+elements:
+<x:schemaref uri="&fileref;" role='annotation'/>
+</para>
+<para>
 Annotation object can be used anywhere in HRC context to document
-and describe any of the HRC elements.
+and describe any of HRC elements.
 
 </para>
 </formalpara>
@@ -123,9 +131,9 @@ and describe any of the HRC elements.
 
 <section id='core.filetypes'><title>File Types</title>
 <para>Each language prototype requires definition of
-language name and description. These properties are used
+the language's name and description. These properties are used
 to determine language in context of other language definitions
-and in inter-languages linkage.
+and in inter-language linkage process.
 </para>
 
 
@@ -135,13 +143,13 @@ and in inter-languages linkage.
 
 <para>
 
-Each language must be chosen by library before starting syntax highlighting
+Each language must be chosen by the library before starting syntax highlighting
 process. This is made with help of <literal>firstline</literal> and <literal>filename</literal>
 parameters. Each matched instance of one of these parameters adds some additional
-weight to total language weight. This value is taken by default, or could be changed
-explicitly with <literal>weight</literal> attribute of these elements.
+weight to a total language weight (choosing probability). This value is taken by default,
+or can be changed explicitly with <literal>weight</literal> attribute of these elements.
 When total weights of all types are evaluated, first language with maximum
-weight is selected to assign to opened file.
+weight is selected to assign to the opening file.
 
 </para>
 
@@ -149,23 +157,66 @@ weight is selected to assign to opened file.
 <x:schemaref uri="&fileref;" role='firstline'/>
 
 <para>
-If any of these two operators is used more than one time, each its matched
-instance adds specified weight to the total language weight.
-
+If any of these two operators is used more than once, each its matched
+instance adds a specified weight to the total language weight.
 </para>
+
+<para>
+If real language definition is separated from the prototype and placed in
+other resource, it's location is pointed with <literal>location</literal>
+element. Real type loading is occur when the described type would be really
+requested.
+<x:schemaref uri="&fileref;" role='location'/>
+</para>
+
+<x:schemaref uri="&fileref;" role='parameters'/>
+</section>
+
+<section id='core.filetypes.package'><title>Packages</title>
+<para>
+You can define file type with a special meaning of an internal
+type, which is used by other types and is not visible to user.
+This role is managed by the <literal>package</literal> element:
+<x:schemaref uri="&fileref;" role='package'/>
+This element doesn't contains <literal>filename</literal> or
+<literal>firstline</literal> properties, because it doesn't directly maps
+to any language. As for the rest, all it's behaviour is like prototype's one.
+</para>
+
 </section>
 
 <section id='core.filetypes.type'><title>Types</title>
 <para>
-Each prototype defines its linkage with real file type, describing
+Each prototype (or package) defines its linkage with real file type, describing
 information, specific for the syntax parsing process. This information
 is stored in basic units, called <literal>type</literal>s.
 
-</para>
-
 <x:schemaref uri="&fileref;" role='type'/>
 
-<x:schemaref url="&fileref;" role='import'/>
+Each type defines it's own namespace, where different objects are reside.
+In the namespace of type each object must have unique
+identifier - system name, which is used to reference it from the other objects.
+If object must be referenced from the other type, it's fully
+qualified name is used in form of <literal>typename:objectname</literal>.
+But often there are too many inter-type links, so it is too tedious to use
+qualified names each time. To eliminate this, HRC language has
+an <literal>import</literal> statement. If used, it 'imports' all the
+object names from the imported type into the current one.
+There can be as much import statements, as needed. Unqualified name resolving
+occurs in order of their definition.
+
+<x:schemaref uri="&fileref;" role='import'/>
+
+For instance, you can write
+<programlisting>
+  &lt;import type='def'/>
+</programlisting>
+to import all definitions from the 'def' schema into the current one.
+Note, that if multiple imported types have equal local names,
+they will be resolved in order of import declarations.
+
+</para>
+
 
 <x:schemaref uri="&fileref;" role='region'/>
 

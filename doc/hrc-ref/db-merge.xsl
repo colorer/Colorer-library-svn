@@ -28,7 +28,14 @@ schema source or schema documentation
 
 
 <xsl:template match="x:schemaref[@role != '']">
-  <xsl:apply-templates select="document(@uri)/xs:schema/xs:complexType[@name=current()/@role]" mode="xsdoc"/>
+  <xsl:variable name='var' select='document(@uri)/xs:schema/xs:complexType[@name=current()/@role]'/>
+  <xsl:if test='not($var)'>
+    <xsl:message>
+[WARNING] Can't find type for documentation in
+          '<xsl:value-of select='@uri'/>', complexType='<xsl:value-of select='@role'/>'
+    </xsl:message>
+  </xsl:if>
+  <xsl:apply-templates select="$var" mode="xsdoc"/>
 </xsl:template>
 
 <xsl:template match="x:schemaref">

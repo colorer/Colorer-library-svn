@@ -11,12 +11,12 @@
 
  <xsl:variable name='ann' select='xs:*[1][self::xs:annotation]'/>
 
- <anchor id='type{@name}'/>
+ <anchor id='typedescr_{generate-id(/)}_{@name}'/>
  <para role='xsdocwrap'>
   <para role='xsdocdecl'>Element Name:
    <literal><xsl:value-of select='@name'/></literal>
    <xsl:if test='@name'>, type:
-   <link linkend='xsid{@name}'><literal><xsl:value-of select='@name'/></literal></link>
+   <link linkend='xsid_{generate-id(/)}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
    </xsl:if>
   </para>
   <para role='xsdoc'>
@@ -60,10 +60,10 @@
    <literal><xsl:value-of select='@name'/></literal>
    <xsl:choose>
     <xsl:when test='@type'>, type:
-    <link linkend='type{@type}'><literal><xsl:value-of select='@type'/></literal></link>
+    <link linkend='typedescr_{generate-id(/)}_{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
     <xsl:when test='@name'>, type:
-    <link linkend='xsid{@name}'><literal><xsl:value-of select='@name'/></literal></link>
+    <link linkend='xsid_{generate-id(/)}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
     </xsl:when>
    </xsl:choose>
   </para>
@@ -108,7 +108,7 @@
      <ulink url='http://www.w3.org/TR/xmlschema-2#{substring(@type, 4)}'><literal><xsl:value-of select='@type'/></literal></ulink>
     </xsl:when>
     <xsl:when test='@type'>, type:
-     <link linkend='xsid{@type}'><literal><xsl:value-of select='@type'/></literal></link>
+     <link linkend='xsid_{generate-id(/)}_{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
    </xsl:choose>
     <xsl:if test='@default'>, default:
