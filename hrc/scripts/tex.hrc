@@ -13,6 +13,7 @@
         Vasiliy Bublik <bublik@itam.nsc.ru>
         Sergei Remizov <remizov@mail.cplire.ru>
         Mike Golub     <golub@aha.ru>
+        Sergiy Zuban <sezal@ukr.net>
       ]]></contributors>
       </annotation>
 
@@ -84,6 +85,21 @@
 
       <scheme name="TeX">
          <inherit scheme="eqn"/>
+
+         <regexp match="/(\\)(verb\*?)([^\sa-zA-Z])(.*?)(\3)/" region1="Symb" 
+                 region2="Word" region3="Symb" region4="BooleanConstant" region5="Symb"/>  
+         <regexp match="/\M\\(?{Function}(label|(sub){0,2}section|(sub)?paragraph|appendix|part|chapter).*)/x"/>
+
+         <block  start="/\\begin\{comment\}/" end="/\\end\{comment\}/" scheme="Comment"
+                 region="Comment" region00="PairStart" region10="PairEnd"/>
+         
+         <block start="/((\\(begin)\s*\{(lstlisting)\})).*?(\{.*\})/" end="/(\\(end)\s*\{(lstlisting)\})/x"
+                scheme="empty" region="BooleanConstant"
+                region01="PairStart" region10="PairEnd"
+                region02="Word" region03="Word" region04="Label" 
+                region05="Text"
+                region11="Word" region12="Word" region13="Label"/>
+
          <block start="/(\\begin\s*\{)([\w]+)(\})/" end="/(\\end\s*\{)(\y2)(\})/x" scheme="TeX" region="Bracket" region00="PairStart" region10="PairEnd" region01="Word" region11="Word" region02="LargeBracket" region12="LargeBracket" region03="Word" region13="Word"/>
          <inherit scheme="quoters"/>
          <block start="/(\$\$)/" end="/(\$\$)/" scheme="Formula" region="Formula" region00="PairStart" region10="PairEnd" region01="Symb" region11="Symb"/>

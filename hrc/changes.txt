@@ -3,10 +3,11 @@
 $Date$
 
   New:
-    - JSP TagLib, OCaml
+    - JSP TagLib, OCaml, Sicstus Prolog
   Fixes:
     - SML, ada, modula2
     - Perl/HRC RE, php, html (Eugene Efremov)
+    - Tex
 
 
 
