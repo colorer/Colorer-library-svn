@@ -3,20 +3,24 @@
 
 Outliner::Outliner(const Region *searchRegion){
   this->searchRegion = searchRegion;
-};
+}
+
 Outliner::~Outliner(){
   for(int idx = 0; idx < outline.size(); idx++)
     delete outline.elementAt(idx);
-};
+}
+
 
 
 OutlineItem *Outliner::getItem(int idx){
   return outline.elementAt(idx);
-};
+}
+
 
 int Outliner::itemCount(){
   return outline.size();
-};
+}
+
 
 int Outliner::manageTree(Vector<int> &treeStack, int newLevel){
   while(treeStack.size() > 0 && newLevel < treeStack.lastElement())
@@ -27,13 +31,15 @@ int Outliner::manageTree(Vector<int> &treeStack, int newLevel){
   };
   if (newLevel == treeStack.lastElement()) return treeStack.size()-1;
   return 0;
-};
+}
+
 
 
 
 bool Outliner::isOutlined(const Region*region){
   return region->hasParent(searchRegion);
-};
+}
+
 
 void Outliner::startParsing(int lno){
   int new_size;
@@ -43,13 +49,16 @@ void Outliner::startParsing(int lno){
   };
   outline.setSize(new_size+1);
   curLevel = 0;
-};
+}
+
 void Outliner::endParsing(int lno){
   curLevel = 0;
-};
+}
+
 void Outliner::clearLine(int lno, String *line){
   lineIsEmpty = true;
-};
+}
+
 void Outliner::addRegion(int lno, String *line, int sx, int ex, const Region *region){
   if (!isOutlined(region)) return;
   String *itemLabel = null;
@@ -64,13 +73,16 @@ void Outliner::addRegion(int lno, String *line, int sx, int ex, const Region *re
   };
   delete itemLabel;
   lineIsEmpty = false;
-};
+}
+
 void Outliner::enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
   curLevel++;
-};
+}
+
 void Outliner::leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
   curLevel--;
-};
+}
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -419,7 +419,7 @@
       Context switch operator.
       Used to switch currently used context into the specified one.
       Context is switched, if RE pattern, placed in 'start' attribute,
-      is matches. Switched context is closed, then parser
+      is matches. Switched context is closed, when parser
       finds match of the 'end' RE.
     </xs:documentation></xs:annotation>
     <xs:sequence minOccurs="0">
