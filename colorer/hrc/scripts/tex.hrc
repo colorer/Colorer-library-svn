@@ -78,7 +78,19 @@
 
       <scheme name="Formula">
          <inherit scheme="eqn"/>
-         <block start="/\\left[\s]*              ((\\\{)|(\\lfloor)|(\\\})|(\\rfloor)|(\\lceil)|(\\rceil)               |(\\langle)|(\\rangle)|(\\backslash)|(\\\|)               |(\\uparrow)|(\\downarrow)|(\\updownarrow)               |(\\Uparrow)|(\\Downarrow)|(\\Updownarrow)               |[\.\(\[\/\|\)\]]{0,1})/x" end="/\\right[\s]*            ((\\\{)|(\\lfloor)|(\\\})|(\\rfloor)|(\\lceil)|(\\rceil)             |(\\langle)|(\\rangle)|(\\backslash)|(\\\|)             |(\\uparrow)|(\\downarrow)|(\\updownarrow)             |(\\Uparrow)|(\\Downarrow)|(\\Updownarrow)             |[\.\(\[\/\|\)\]]{0,1})/x" scheme="Formula" region="LargeBracket" region00="PairStart" region10="PairEnd"/>
+         <block start="/\\left[\s]*\b
+                      ((\\\{)|(\\lfloor)|(\\\})|(\\rfloor)|(\\lceil)|(\\rceil)|
+                      (\\langle)|(\\rangle)|(\\backslash)|(\\\|)|
+                      (\\uparrow)|(\\downarrow)|(\\updownarrow)|
+                      (\\Uparrow)|(\\Downarrow)|(\\Updownarrow)|
+                      [\.\(\[\/\|\)\]]{0,1})/x"
+                end="/\\right[\s]*
+                      ((\\\{)|(\\lfloor)|(\\\})|(\\rfloor)|(\\lceil)|(\\rceil)|
+                      (\\langle)|(\\rangle)|(\\backslash)|(\\\|)|
+                      (\\uparrow)|(\\downarrow)|(\\updownarrow)|
+                      (\\Uparrow)|(\\Downarrow)|(\\Updownarrow)|
+                      [\.\(\[\/\|\)\]]{0,1})/x"
+                scheme="Formula" region="LargeBracket" region00="PairStart" region10="PairEnd"/>
          <inherit scheme="quoters"/>
          <inherit scheme="Symbols"/>
       </scheme>
