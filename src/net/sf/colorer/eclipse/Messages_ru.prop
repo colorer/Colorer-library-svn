@@ -1,7 +1,7 @@
 init.error.title = Ошибка инициализации библиотеки Colorer-take5
 init.error.pf = Ошибка в инициализации native-части библиотеки Colorer. \
                 Причиной этого может быть отсутствующий или не найденный в \
-                путях загрузки файл jcolorer.dll (libjcolorer.so). \
+                путях загрузки файл net_sf_colorer.dll (libnet_sf_colorer.so). \
                 Или же, Colorer не может найти файл-каталог 'catalog.xml', \
                 необходимый для его работы, который должен находится \
                 в '%PLUGIN_DIR%/colorer/catalog.xml'
