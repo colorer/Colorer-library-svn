@@ -5,6 +5,7 @@ import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionDefine;
+import net.sf.colorer.handlers.RegionMapper;
 
 
 public interface BaseEditor {
@@ -44,8 +45,11 @@ public interface BaseEditor {
      */
     void setBackParse(int backParse);
 
-    /** Installs specified RegionMapper. */
-    void setRegionMapper(String cls, String name);
+    /** Installs specified external RegionMapper. */
+    void setRegionMapper(RegionMapper regionMapper);
+
+    /** Installs specified internal RegionMapper. */
+    void setRegionMapper(String hrdClass, String hrdName);
 
     /**
      * Adds specified RegionHandler object into the parse process.
