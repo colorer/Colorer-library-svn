@@ -146,7 +146,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml|ent)$/i</filename>
+    <filename>/\.(xml|ent|tld)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <parameters>
       <param name="show-cross" value="both"/>
