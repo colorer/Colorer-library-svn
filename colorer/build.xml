@@ -14,7 +14,7 @@
 
   <property name='build-dir' value='distr'/>
 
-  <property name='distr-version' value='.beta2'/>
+  <property name='distr-version' value='.version'/>
 
   <property name='hrcupdate-dir' value='${build-dir}/hrc-update'/>
 
@@ -33,7 +33,7 @@
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
-  <property name='eclipseplugin-version' value='_0.5.0'/>
+  <property name='eclipseplugin-version' value='_1.0.0'/>
   <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
   <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
   <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
@@ -455,6 +455,22 @@
     <zip destfile='${eclipseplugin-zip}'>
       <fileset dir='${build-dir}/${eclipseplugin-name}'/>
     </zip>
+
+    <mkdir dir='${build-dir}/update/features'/>
+    <mkdir dir='${build-dir}/update/plugins'/>
+    <zip destfile='${build-dir}/update/features/${eclipsedir-name}.jar'>
+      <fileset dir='src/net.sf.colorer' includes='feature.xml'/>
+      <fileset dir='doc' includes='MPL-1.1.html'/>
+      <fileset dir='doc/images' includes='logo-colorer.png'/>
+    </zip>
+    <zip destfile='${build-dir}/update/plugins/${eclipsedir-name}.jar'>
+      <fileset dir='${eclipseplugin-dir}'/>
+    </zip>
+    <copy todir='${build-dir}/update'>
+      <fileset dir='src/net.sf.colorer' includes='site.xml'/>
+    </copy>
+
+    
   </target>
 
 
