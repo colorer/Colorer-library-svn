@@ -20,8 +20,8 @@
 FileInputSource::FileInputSource(const String *basePath, FileInputSource *base){
   if (basePath->startsWith(DString("file://"))){
     baseLocation = new SString(basePath, 7, -1);
-  }else if (basePath->startsWith(DString("file:"))){
-    baseLocation = new SString(basePath, 5, -1);
+  }else if (basePath->startsWith(DString("file:/"))){
+    baseLocation = new SString(basePath, 6, -1);
   }else{
     if (isRelative(basePath) && base != null)
       baseLocation = getAbsolutePath(base->getLocation(), basePath);
