@@ -1,40 +1,30 @@
-#ifndef _COLORER_FEATURES_H_
-#define _COLORER_FEATURES_H_
+#ifndef _COLORER_LOGGING_H_
+#define _COLORER_LOGGING_H_
 
-/**
-  Default log-level
-*/
-#ifndef COLORER_FEATURE_LOGLEVEL
-  #define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_QUIET
-#endif
+#include"stdarg.h"
+#include"common/Features.h"
 
-/**
-  If defined, use dlmalloc memory management implementation
-*/
-#ifndef COLORER_FEATURE_USE_DL_MALLOC
-  #define COLORER_FEATURE_USE_DL_MALLOC TRUE
-#endif
+#define COLORER_FEATURE_LOGLEVEL_QUIET 0
+#define COLORER_FEATURE_LOGLEVEL_ERROR 1
+#define COLORER_FEATURE_LOGLEVEL_WARN  2
+#define COLORER_FEATURE_LOGLEVEL_TRACE 3
+#define COLORER_FEATURE_LOGLEVEL_INFO  4
+#define COLORER_FEATURE_LOGLEVEL_FULL  4
 
-/**
-  If defined, long-living classes use chunk allocation procedure
-*/
-#ifndef COLORER_FEATURE_USE_CHUNK_ALLOC
-  #define COLORER_FEATURE_USE_CHUNK_ALLOC TRUE
-#endif
+#define CLR_ERROR if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_ERROR) colorer_logger_error
 
-/**
-  If defined, HTTP InputSource is implemented.
-*/
-#ifndef COLORER_FEATURE_HTTPINPUTSOURCE
-  #define COLORER_FEATURE_HTTPINPUTSOURCE TRUE
-#endif
+#define CLR_WARN  if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_WARN) colorer_logger_warn
 
-/**
-  If defined, JAR InputSource is implemented.
-*/
-#ifndef COLORER_FEATURE_JARINPUTSOURCE
-  #define COLORER_FEATURE_JARINPUTSOURCE TRUE
-#endif
+#define CLR_TRACE if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_TRACE) colorer_logger_trace
+
+#define CLR_INFO  if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_INFO) colorer_logger_info
+
+void colorer_logger_error(const char *cname, const char *msg, ...);
+void colorer_logger_warn(const char *cname, const char *msg, ...);
+void colorer_logger_trace(const char *cname, const char *msg, ...);
+void colorer_logger_info(const char *cname, const char *msg, ...);
+
+void colorer_logger(int level, const char *cname, const char *msg, va_list v);
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
