@@ -319,6 +319,7 @@ void FarEditorSet::configure()
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
+  if (rDisabled) return 0;
   return getCurrentEditor()->editorInput(ir);
 }
 
