@@ -450,7 +450,6 @@
     <location link="misc/diff.hrc"/>
     <filename>/\.(diff.*|patch|rej(ect)?)$/i</filename>
     <firstline weight='2'>/^(diff|Index|---|\+\+\+|\*\*\*)/si</firstline>
-    <firstline>/diff/i</firstline>
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
   </prototype>
@@ -473,7 +472,7 @@
       <!-- top, bottom -->
       <param name="cross-zorder" value="bottom"/>
       <param name="maxlinelength" value="5000"/>
-      <param name="backparse" value="2000"/>
+      <param name="backparse" value="6000"/>
       <param name="fullback" value="yes"/>
       <!--
       <param name="default-fore" value="#E"/>
