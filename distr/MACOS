@@ -1,0 +1,5 @@
+
+  You can compile version of the Library to use it with MacOS system.
+
+  You can find All the native code with required makefiles in src.zip/libnative
+  folder.
