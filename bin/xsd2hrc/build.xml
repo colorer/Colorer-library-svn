@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <project name='XSD2HRC Module' default="all" basedir=".">
 
+  <property file='build.properties'/>
+
   <property name='hrc-path' value='../../hrc'/>
   <property name='hrc-path-auto' value='${hrc-path}/auto/gen'/>
 
