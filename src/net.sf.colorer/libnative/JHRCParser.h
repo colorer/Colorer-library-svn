@@ -42,16 +42,13 @@ public:
     if (jtype == null){
       jclass cFileType = env->FindClass("net/sf/colorer/FileType");
       jmethodID idFileTypeConstr = env->GetMethodID(cFileType, "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-printf("inn0\n");
-printf("inn %d %d %d\n", filetype->getName()->length(),filetype->getGroup()->length(),filetype->getDescription()->length());
-      jtype = env->NewObject(cFileType, idFileTypeConstr, filetype,
+      jtype = env->NewObject(cFileType, idFileTypeConstr, (jlong)filetype,
                           env->NewString(filetype->getName()->getWChars(), filetype->getName()->length()),
                           filetype->getGroup() ? env->NewString(filetype->getGroup()->getWChars(), filetype->getGroup()->length()) : null,
                           filetype->getDescription() ? env->NewString(filetype->getDescription()->getWChars(), filetype->getDescription()->length()) : null
                         );
       jtype = env->NewGlobalRef(jtype);
       fileTypes.put(filetype->getName(), jtype);
-printf("out\n");
     }
     return jtype;
   }
