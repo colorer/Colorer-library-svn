@@ -18,29 +18,9 @@
         language, based on regular expressions and scheme (context)
         structure.</li>
     <li>Colorer can be easily integrated into any target application.</li>
-  </ul>
 
-  <h2>Internal unicode support</h2>
-  <ul>
-    <li>Knows about UTF-8, UTF-16, UTF-16BE, UTF-32, UTF-32BE.</li>
+    <li>Internal unicode support: Knows about UTF-8, UTF-16, UTF-16BE, UTF-32, UTF-32BE.</li>
     <li>Any single-byte encodings support.</li>
-  </ul>
-
-  <h2>Different input data sources</h2>
-  <ul>
-    <li>File stream.</li>
-    <li>Zip stream.</li>
-    <li>Http stream (win32 only).</li>
-  </ul>
-
-  <h2>Central repository</h2>
-  <ul>
-    <li>All Colorer applications uses repository in <code>catalog.xml</code> file.</li>
-    <li>Automatic catalog.xml searching with environment
-        variables and standard locations.</li>
-    <li>Multiple HRC sources, directory HRC source.</li>
-    <li>HRD classes, names and descriptions.</li>
-    <li>Global logging file.</li>
   </ul>
 
   <h2>HRC language design</h2>
@@ -54,13 +34,25 @@
         declarations using CDATA sections.</li>
   </ul>
 
+  <h2>Central repository</h2>
+  <ul>
+    <li>All Colorer applications uses repository in <code>catalog.xml</code> file.</li>
+    <li>Automatic catalog.xml searching with environment
+        variables and standard locations.</li>
+    <li>Multiple HRC sources, directory HRC source.</li>
+    <li>HRD classes, names and descriptions.</li>
+    <li>Global logging file.</li>
+    <li>Different input data sources: File stream, Zip stream, Http stream (win32 only).</li>
+  </ul>
+
 <h1>Eclipse Colorer</h1>
+
   <ul>
     <li>Powerful and flexible outliner for all common languages.</li>
     <li>Errors list is included into the outliner view.</li>
     <li>Shortcuts for pairs matching.</li>
     <li>Replace tabs with spaces option.</li>
-    <li>Soft linebreaks option.</li>
+    <li>Soft linebreakes option.</li>
     <li>Colored sources generation into HTML files.</li>
   </ul>
 
@@ -73,13 +65,13 @@
    <li>Simple file forward with encoding conversion.</li>
    <li>HTML and file output into stdout or specified file.</li>
 
-   <li>New output mode - tokenizer (-ht option). With this mode
-   colorer outputs target file with each token marked with
-   specific style (equals to the name of it's HRC region).
+   <li>Tokenizer output mode (-ht option). With this mode
+       colorer outputs target file with each token marked with
+       specific style (equals to the name of it's HRC region).
    </li>
 
    <li>HTML output mode uses font style information and
-       can format sources now with bold, italic, underline properties.
+       can format sources with bold, italic and underline properties.
    </li>
 
   </ul>
@@ -90,7 +82,7 @@
   <li>File Encoding selection.</li>
   <li>Color schemes dialog selection.</li>
 
-  <li>New prototype parameters handling - default-fore, default-back.
+  <li>Prototype parameters handling - default-fore, default-back.
       With this numeric properties you can change default text and background
       color in any file type.
   </li>
