@@ -31,6 +31,10 @@ public:
   */
   FileType *getFileType();
 
+  /** Selects file type with it's extension and first lines
+  */
+  void chooseFileType(String *fname);
+
   /** Installs specified RegionMapper implementation.
       This class serves to request mapping of regions into
       real colors.

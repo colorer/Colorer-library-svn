@@ -447,8 +447,7 @@ FarEditor *FarEditorSet::getCurrentEditor(){
     int slash_idx = fnpath.lastIndexOf('\\');
     if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
     DString fn = DString(fnpath, slash_idx+1);
-    FileType *cft = hrcParser->chooseFileType(&fn, editor->getLine(0));
-    editor->setFileType(cft);
+    editor->chooseFileType(&fn);
     editor->setRegionMapper(regionMapper);
   };
   return editor;
