@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE catalog PUBLIC "-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
+  "http://colorer.sf.net/2003/catalog.dtd">
+
+<catalog xmlns="http://colorer.sf.net/2003/catalog"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://colorer.sf.net/2003/catalog
+                             http://colorer.sf.net/2003/catalog.xsd">
+
+  <hrc-sets>
+    <location link="hrc/colorer.hrc"/>
+    <location link="hrc/auto"/>
+  </hrc-sets>
+
+
+  <hrd-sets>
+    <hrd class="console" name="default" description="Aqua on blue">
+      <location link="hrd/console/default.hrd"/>
+    </hrd>
+    <hrd class="console" name="blue" description="Blue colors">
+      <location link="hrd/console/blue.hrd"/>
+    </hrd>
+    <hrd class="console" name="nc"  description="NC colors">
+      <location link="hrd/console/nc.hrd"/>
+    </hrd>
+    <hrd class="console" name="white" description="White colors">
+      <location link="hrd/console/white.hrd"/>
+    </hrd>
+    <hrd class="console" name="black"   description="Black colors">
+      <location link="hrd/console/black.hrd"/>
+    </hrd>
+    <hrd class="console" name="hack"  description="Matrix/Hack">
+      <location link="hrd/console/hack.hrd"/>
+    </hrd>
+    <hrd class="console" name="dnlike"  description="Gray a'la DN">
+      <location link="hrd/console/dnlike.hrd"/>
+    </hrd>
+    <hrd class="console" name="gray"   description="Light gray">
+      <location link="hrd/console/white.hrd"/>
+      <location link="hrd/console/gray.hrd"/>
+    </hrd>
+    <hrd class="console" name="xmastree" description="Xmas tree">
+      <location link="hrd/console/xmastree.hrd"/>
+    </hrd>
+    <hrd class="console" name="black_ay" description="Black from Alex Yaroslavsky">
+      <location link="hrd/console/contrib/black_ay.hrd"/>
+    </hrd>
+
+  </hrd-sets>
+
+</catalog>

@@ -24,5 +24,5 @@ colorer.dll: $(objs)
 	$(RM) colorer.dll.base
 	$(RM) colorer.dll.exp
 
-clear:
+clean:
 	$(RM) $(objs)

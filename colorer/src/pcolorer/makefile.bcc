@@ -12,5 +12,5 @@ LIBFLAGS = /Tpd $(objs) -L"C:\Program Files\Borland\bcc55\lib" c0d32.obj, colore
 colorer.dll: $(objs)
 	$(LINK) $(LIBFLAGS)
 
-clear:
+clean:
 	$(RM) $(objs) colorer.map colorer.il? colorer.tds
