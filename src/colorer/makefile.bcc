@@ -11,5 +11,5 @@ LIBFLAGS = c0x32.obj $(objs), $(TARGET) , , import32.lib cw32.lib wininet.lib
 
 !include makefile.core
 
-clear:
+clean:
 	$(RM) $(objs) colorer.map colorer.il? colorer.tds
