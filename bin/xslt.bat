@@ -27,11 +27,11 @@ goto loop
 rem Instant saxon 6.5.2
 rem saxon.exe -o %FOUT% %FIN% %FSS%  %PARS%
 
-rem Java saxon 7.2
-rem java net.sf.saxon.Transform -o %FOUT% %FIN% %FSS% %PARS%
+rem Java saxon 7.x
+java net.sf.saxon.Transform -o %FOUT% %FIN% %FSS% %PARS%
 
 rem XALAN
-java org.apache.xalan.xslt.Process -OUT %FOUT% -IN %FIN% -XSL %FSS% %PARS%
+rem java org.apache.xalan.xslt.Process -OUT %FOUT% -IN %FIN% -XSL %FSS% %PARS%
 
 rem XT
 rem xt %FIN% %FSS% %FOUT% %PARS%
