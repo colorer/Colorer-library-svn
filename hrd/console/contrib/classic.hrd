@@ -50,7 +50,7 @@
   <assign name="def:Label" fore="#D"/>
   <assign name="def:LabelStrong" fore="#1" back="#F"/>
 
-  <assign name="def:Insertion" fore="#B" back="#11"/>
+  <assign name="def:Insertion" fore="#B" back="#0"/>
 
   <assign name="def:Error" fore="#F" back="#4"/>
   <assign name="def:ErrorText" fore="#D"/>
