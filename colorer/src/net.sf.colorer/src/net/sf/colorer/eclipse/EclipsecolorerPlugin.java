@@ -81,7 +81,7 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
       }
       if (error) MessageDialog.openError(null, Messages.getString("init.error.title"),
                                          Messages.getString("init.error.pf")+
-                                         "\n" + e.getMessage());
+                                         "\n" + exc.getMessage());
     };
     // informs all the editors about ParserFactory reloading
     getPreferenceStore().firePropertyChangeEvent(PreferencePage.RELOAD_HRC, "", "");
