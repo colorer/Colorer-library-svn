@@ -1,12 +1,23 @@
 
   You can compile Colorer Library to use it on MacOSX system.
 
-  First, you need to download C++ sources of the Colorer Library from
-    http://sourceforge.net/project/showfiles.php?group_id=34855
+  1. You need to download C++ sources of the Colorer Library from
+     http://sourceforge.net/project/showfiles.php?group_id=34855
 
-  Then you can build full Eclipse plugin distribution with
-    ant -Dplatform=macos eclipseplugin
-  command.
+  Next, you need:
+
+  2. Ant (http://ant.apache.org/)
+  3. Xcode
+  4. JDK
+     a) jdk 1.4.2: http://connect.apple.com/, Downloads -> Java, Java Developper package
+     b) jdk 1.4.1: MacOSX SDK from Xcode Tools CD.
+
+  5. Check your makefile.macos:
+     Make sure your JAVA_INCLUDE path is correct.
+
+  6. You can build full Eclipse plugin distribution with
+        ant -Dplatform=macos eclipseplugin
+     command.
 
   Please read INSTALL file for more information.
 
