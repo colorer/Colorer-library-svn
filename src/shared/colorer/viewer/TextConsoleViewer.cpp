@@ -18,8 +18,9 @@ int topline, leftpos;
 leftpos = topline = 0;
 INPUT_RECORD ir;
 
-  HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
-  HANDLE hConI= GetStdHandle(STD_INPUT_HANDLE);
+  HANDLE hCon  = GetStdHandle(STD_OUTPUT_HANDLE);
+  HANDLE hConI = CreateFile("CONIN$", GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
+  if (hConI == INVALID_HANDLE_VALUE) return;
   SetConsoleMode(hConI, ENABLE_MOUSE_INPUT|ENABLE_WINDOW_INPUT);
 
   CONSOLE_SCREEN_BUFFER_INFO csbi;
