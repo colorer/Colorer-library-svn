@@ -122,6 +122,7 @@
   <target name="info" description='Shows help'>
 <echo>
   You can build Colorer-take5 library into four kinds of packages:
+    ``ant all''             - Builds all available packages
     ``ant library''         - Full library distribution
     ``ant library-linux''   - Library unix package version
     ``ant eclipseplugin''   - Eclipse IDE plugin
@@ -471,7 +472,7 @@
       <fileset dir='src/net.sf.colorer' includes='site.xml'/>
     </copy>
 
-    
+
   </target>
 
 
