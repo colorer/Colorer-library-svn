@@ -12,6 +12,7 @@ ConsoleTools::ConsoleTools(){
   htmlEscaping = true;
   bomOutput = true;
   htmlWrapping = true;
+  lineNumbers = false;
 
   typeDescription = null;
   inputFileName = outputFileName = null;
@@ -44,6 +45,9 @@ void ConsoleTools::setHtmlEscaping(bool use) { htmlEscaping = use; }
 void ConsoleTools::setBomOutput(bool use) { bomOutput = use; }
 
 void ConsoleTools::setHtmlWrapping(bool use) { htmlWrapping = use; }
+
+void ConsoleTools::addLineNumbers(bool add){ lineNumbers = add; }
+
 
 void ConsoleTools::setTypeDescription(const String &str) {
   delete typeDescription;
@@ -245,7 +249,7 @@ void ConsoleTools::forward(){
     if (outputFileName != null) outputFile = new FileWriter(outputFileName, outputEncodingIndex, bomOutput);
     else outputFile = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
   }catch(Exception &e){
-    fprintf(stderr, "can't open file '%s' for writing:\n", outputFileName->getChars());
+    fprintf(stderr, "can't open file '%s' for writing:", outputFileName->getChars());
     fprintf(stderr, e.getMessage()->getChars());
     return;
   };
@@ -324,7 +328,19 @@ void ConsoleTools::genOutput(bool useTokens){
       commonWriter->write(DString("'\n\n"));
     };
 
-    for(int i = 0; i < textLinesStore.getLineCount(); i++){
+    int lni = 0;
+    int lwidth = 1;
+    int lncount = textLinesStore.getLineCount();
+    for(lni = lncount/10; lni > 0; lni = lni/10, lwidth++);
+
+    for(int i = 0; i < lncount; i++){
+      if (lineNumbers){
+        int iwidth = 1;
+        for(lni = i/10; lni > 0; lni = lni/10, iwidth++);
+        for(lni = iwidth; lni < lwidth; lni++) commonWriter->write(0x0020);
+        commonWriter->write(SString(i));
+        commonWriter->write(DString(": "));
+      };
       if (useTokens){
         ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else if (useMarkup){

@@ -65,6 +65,8 @@ public:
   void setHRDName(const String &str);
   /// Sets linking datasource into this filename
   void setLinkSource(const String &str);
+  /// If true, result file will have line numbers before each line
+  void addLineNumbers(bool add);
 
 
   /** Regular Expressions tests.
@@ -107,6 +109,7 @@ private:
   bool htmlEscaping;
   bool bomOutput;
   bool htmlWrapping;
+  bool lineNumbers;
 
   int inputEncodingIndex;
   int outputEncodingIndex;
