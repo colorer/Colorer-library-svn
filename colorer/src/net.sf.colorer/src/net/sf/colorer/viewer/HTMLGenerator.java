@@ -84,7 +84,7 @@ public class HTMLGenerator {
       if (useLineNumbers){
         int iwidth = 1;
         for(lni = idx/10; lni > 0; lni = lni/10, iwidth++);
-        for(lni = iwidth; lni < lwidth; lni++) commonWriter.write(0x0020);
+        for(lni = iwidth; lni < lwidth; lni++) commonWriter.write(' ');
         commonWriter.write(String.valueOf(idx));
         commonWriter.write(": ");
       }

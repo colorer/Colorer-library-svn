@@ -23,7 +23,9 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
   WorkbenchOutliner errorsOutliner = null;
   WorkbenchOutliner activeOutliner = null;
   
-  
+  StructureModeAction structureModeAction = null;
+  ErrorsModeAction errorsModeAction = null;
+
   Thread backgroundUpdater = null;
   boolean outlineModified = true;
   long prevTime = 0;
@@ -31,8 +33,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
 
   class TreeAction extends Action{
     public TreeAction(){
-      super(Messages.getString("outline.tree"), ImageStore.getID("outline-tree"));
-      setToolTipText(Messages.getString("outline.tree.tooltip"));
+      super(Messages.get("outline.tree"), ImageStore.getID("outline-tree"));
+      setToolTipText(Messages.get("outline.tree.tooltip"));
       setHoverImageDescriptor(ImageStore.getID("outline-tree-hover"));
       setChecked(EclipsecolorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
     };
@@ -47,8 +49,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
   class SortAction extends Action{
     private ViewerSorter sorter = new WorkbenchViewerSorter();
     public SortAction(){
-      super(Messages.getString("outline.sort"), ImageStore.getID("outline-sort"));
-      setToolTipText(Messages.getString("outline.sort.tooltip"));
+      super(Messages.get("outline.sort"), ImageStore.getID("outline-sort"));
+      setToolTipText(Messages.get("outline.sort.tooltip"));
       setHoverImageDescriptor(ImageStore.getID("outline-sort-hover"));
       setChecked(EclipsecolorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Sort"));
       getTreeViewer().setSorter(isChecked() ? sorter : null);
@@ -64,45 +66,34 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
     }
   }
   
-  class OptionsAction extends Action {
-		MenuManager optionsMenu;
-		Action structure, errors;
-		Control page;
-		public OptionsAction(Control page) {
-      super(Messages.getString("outline.options"), ImageStore.getID("outline-options"));
-      setToolTipText(Messages.getString("outline.options.tooltip"));
-      
-		  this.page = page;
-      optionsMenu = new MenuManager();
-      structure = new Action(){
-        public void run(){
-          activeOutliner = structureOutliner;
-          update();
-        };
-      };
-      structure.setText(Messages.getString("outline.options.Structure"));
-      structure.setImageDescriptor(ImageStore.getID("outline-options-structure"));
-      optionsMenu.add(structure);
-      
-      errors = new Action(){
-        public void run(){
-          activeOutliner = errorsOutliner;
-          update();
-        };
-      };
-      errors.setText(Messages.getString("outline.options.Errors"));
-      errors.setImageDescriptor(ImageStore.getID("outline-options-errors"));
-      errors.setChecked(activeOutliner == errorsOutliner);
-      structure.setChecked(activeOutliner == structureOutliner);
-      optionsMenu.add(errors);
-		}
-		public void run() {
-      errors.setChecked(activeOutliner == errorsOutliner);
-      structure.setChecked(activeOutliner == structureOutliner);
-      Menu menu = optionsMenu.createContextMenu(page);
-      menu.setVisible(true);
-		}
-	}
+  class StructureModeAction extends Action {
+    StructureModeAction(){
+      this.setText(Messages.get("outline.options.Structure"));
+      this.setImageDescriptor(ImageStore.getID("outline-options-structure"));
+      setChecked(activeOutliner == structureOutliner);      
+    }
+    public void run(){
+      activeOutliner = structureOutliner;
+      errorsModeAction.setChecked(false);
+      setChecked(true);
+      update();
+    };
+  }
+  
+  class ErrorsModeAction extends Action {
+    ErrorsModeAction(){
+      setText(Messages.get("outline.options.Errors"));
+      setImageDescriptor(ImageStore.getID("outline-options-errors"));
+      setChecked(activeOutliner == errorsOutliner);
+    }
+    public void run(){
+      activeOutliner = errorsOutliner;
+      structureModeAction.setChecked(false);
+      setChecked(true);
+      update();
+    };
+  }
+  
 
 /*	class ClickAction extends Action {
 		public ClickAction() {
@@ -115,8 +106,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
 		}
 		public void run() {
 			MessageDialog.openInformation(null,
-				Messages.getString("Readme_Outline"),
-				Messages.getString("ReadmeOutlineActionExecuted"));
+				Messages.get("Readme_Outline"),
+				Messages.get("ReadmeOutlineActionExecuted"));
 		}
 	}
 */
@@ -225,8 +216,15 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
     if (toolBarManager != null) { 
       toolBarManager.add(new TreeAction());
       toolBarManager.add(new SortAction());
-      toolBarManager.add(new OptionsAction(getControl()));
     };
+    
+    IMenuManager menuManager = getSite().getActionBars().getMenuManager();
+    if (menuManager != null){
+      structureModeAction = new StructureModeAction();
+      errorsModeAction = new ErrorsModeAction();
+      menuManager.add(structureModeAction);
+      menuManager.add(errorsModeAction);
+    }
     
   	viewer.setContentProvider(new WorkbenchContentProvider());
   	viewer.setLabelProvider(new WorkbenchLabelProvider());

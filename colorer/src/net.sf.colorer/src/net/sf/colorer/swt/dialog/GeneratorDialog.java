@@ -67,7 +67,7 @@ public class GeneratorDialog {
 		final GridLayout gridLayout_2 = new GridLayout();
 		gridLayout_2.makeColumnsEqualWidth = true;
 		shell.setLayout(gridLayout_2);
-    shell.setText(Messages.get("title"));
+    shell.setText(GeneratorMessages.get("title"));
     shell.setSize(new Point(600,500));
     shell.setImage(ImageStore.getID("colorer_editor").createImage());
 		{
@@ -78,7 +78,7 @@ public class GeneratorDialog {
 				final Label label = new Label(composite, SWT.BORDER | SWT.SHADOW_NONE | SWT.WRAP);
 				label.setBackground(ResourceManager.getColor(SWT.COLOR_WHITE));
 				label.setFont(ResourceManager.getFont("", 16, SWT.BOLD));
-				label.setText(Messages.get("title-long"));
+				label.setText(GeneratorMessages.get("title-long"));
 			}
 		}
 		{
@@ -89,7 +89,7 @@ public class GeneratorDialog {
 			composite.setLayout(gridLayout);
 			{
 				fileList = new List(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
-				fileList.setToolTipText(Messages.get("tip-fileList"));
+				fileList.setToolTipText(GeneratorMessages.get("tip-fileList"));
 				final GridData gridData = new GridData(GridData.FILL_BOTH);
 				fileList.setLayoutData(gridData);
 			}
@@ -108,7 +108,7 @@ public class GeneratorDialog {
 						}
 					});
 					button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-					button.setText(Messages.get("select-all"));
+					button.setText(GeneratorMessages.get("select-all"));
 				}
 				{
 					final Button button = new Button(composite_1, SWT.NONE);
@@ -118,7 +118,7 @@ public class GeneratorDialog {
 						}
 					});
 					button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-					button.setText(Messages.get("deselect-all"));
+					button.setText(GeneratorMessages.get("deselect-all"));
 				}
 			}
 		}
@@ -134,7 +134,7 @@ public class GeneratorDialog {
 				gridLayout_1.marginHeight = 2;
 				group.setLayout(gridLayout_1);
 				group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				group.setText(Messages.get("group-file"));
+				group.setText(GeneratorMessages.get("group-file"));
 				{
 					final Composite composite_1 = new Composite(group, SWT.NONE);
 					composite_1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -146,8 +146,8 @@ public class GeneratorDialog {
 						final Label label = new Label(composite_1, SWT.NONE);
 						final GridData gridData = new GridData();
 						label.setLayoutData(gridData);
-						label.setToolTipText(Messages.get("targetDir.tip"));
-						label.setText(Messages.get("targetDir"));
+						label.setToolTipText(GeneratorMessages.get("targetDir.tip"));
+						label.setText(GeneratorMessages.get("targetDir"));
 					}
 					{
 						targetDirectory = new Text(composite_1, SWT.BORDER);
@@ -159,17 +159,17 @@ public class GeneratorDialog {
 						button.addSelectionListener(new SelectionAdapter() {
 							public void widgetSelected(SelectionEvent e) {
                 DirectoryDialog dialog = new DirectoryDialog (shell);
-                dialog.setMessage(Messages.get("targetDir.message"));
-                dialog.setText(Messages.get("targetDir.text"));
+                dialog.setMessage(GeneratorMessages.get("targetDir.message"));
+                dialog.setText(GeneratorMessages.get("targetDir.text"));
                 String pathName = dialog.open();
                 if (pathName != null){
                   targetDirectory.setText(pathName);
                 }
 							}
 						});
-						button.setToolTipText(Messages.get("targetDir.tip"));
+						button.setToolTipText(GeneratorMessages.get("targetDir.tip"));
 						button.setLayoutData(new GridData());
-						button.setText(Messages.get("targetDir.button"));
+						button.setText(GeneratorMessages.get("targetDir.button"));
 					}
 				}
 				{
@@ -184,7 +184,7 @@ public class GeneratorDialog {
 					{
 						final Label label = new Label(composite_1, SWT.NONE);
 						label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-						label.setText(Messages.get("prefix"));
+						label.setText(GeneratorMessages.get("prefix"));
 					}
 					{
 						prefix = new Text(composite_1, SWT.BORDER);
@@ -193,7 +193,7 @@ public class GeneratorDialog {
 					{
 						final Label label = new Label(composite_1, SWT.NONE);
 						label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-						label.setText(Messages.get("suffix"));
+						label.setText(GeneratorMessages.get("suffix"));
 					}
 					{
 						suffix = new Text(composite_1, SWT.BORDER);
@@ -209,26 +209,26 @@ public class GeneratorDialog {
 				gridLayout_1.makeColumnsEqualWidth = true;
 				group.setLayout(gridLayout_1);
 				group.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-				group.setText(Messages.get("group.processing"));
+				group.setText(GeneratorMessages.get("group.processing"));
 				{
 					useLineNumbers = new Button(group, SWT.CHECK);
-					useLineNumbers.setToolTipText(Messages.get("useLineNumbers.tip"));
-					useLineNumbers.setText(Messages.get("useLineNumbers"));
+					useLineNumbers.setToolTipText(GeneratorMessages.get("useLineNumbers.tip"));
+					useLineNumbers.setText(GeneratorMessages.get("useLineNumbers"));
 				}
 				{
 					infoHeader = new Button(group, SWT.CHECK);
-					infoHeader.setToolTipText(Messages.get("infoHeader.tip"));
-					infoHeader.setText(Messages.get("infoHeader"));
+					infoHeader.setToolTipText(GeneratorMessages.get("infoHeader.tip"));
+					infoHeader.setText(GeneratorMessages.get("infoHeader"));
 				}
 				{
 					htmlSubst = new Button(group, SWT.CHECK);
-					htmlSubst.setToolTipText(Messages.get("htmlSubst.tip"));
-					htmlSubst.setText(Messages.get("htmlSubst"));
+					htmlSubst.setToolTipText(GeneratorMessages.get("htmlSubst.tip"));
+					htmlSubst.setText(GeneratorMessages.get("htmlSubst"));
 				}
 				{
 					htmlHeaderFooter = new Button(group, SWT.CHECK);
-					htmlHeaderFooter.setToolTipText(Messages.get("htmlHeaderFooter.tip"));
-					htmlHeaderFooter.setText(Messages.get("htmlHeaderFooter"));
+					htmlHeaderFooter.setToolTipText(GeneratorMessages.get("htmlHeaderFooter.tip"));
+					htmlHeaderFooter.setText(GeneratorMessages.get("htmlHeaderFooter"));
 				}
 				{
 					final Composite composite_1 = new Composite(group, SWT.NONE);
@@ -239,7 +239,7 @@ public class GeneratorDialog {
 					composite_1.setLayout(gridLayout);
 					{
 						final Label label = new Label(composite_1, SWT.NONE);
-						label.setText(Messages.get("docLink"));
+						label.setText(GeneratorMessages.get("docLink"));
             label.setEnabled(false);
 					}
 					{
@@ -259,7 +259,7 @@ public class GeneratorDialog {
                 linkSource.setText(fileName);
 							}
 						});
-						button.setText(Messages.get("docLink.choose"));
+						button.setText(GeneratorMessages.get("docLink.choose"));
 					}
 				}
 				{
@@ -274,7 +274,7 @@ public class GeneratorDialog {
 					{
 						final Label label = new Label(composite_1, SWT.NONE);
 						label.setLayoutData(new GridData());
-						label.setText(Messages.get("enc.input"));
+						label.setText(GeneratorMessages.get("enc.input"));
             label.setEnabled(false);
 					}
 					{
@@ -293,7 +293,7 @@ public class GeneratorDialog {
 					{
 						final Label label = new Label(composite_1, SWT.NONE);
 						label.setLayoutData(new GridData());
-						label.setText(Messages.get("enc.output"));
+						label.setText(GeneratorMessages.get("enc.output"));
 					}
 					{
 						outputEncoding = new Combo(composite_1, SWT.READ_ONLY);
@@ -318,17 +318,17 @@ public class GeneratorDialog {
 				composite_1.setLayout(gridLayout);
 				{
 					hrdSchemaLabel = new Label(composite_1, SWT.NONE);
-					hrdSchemaLabel.setText(Messages.get("HRDSchema"));
+					hrdSchemaLabel.setText(GeneratorMessages.get("HRDSchema"));
 				}
 				{
 					hrdSchema = new Combo(composite_1, SWT.READ_ONLY);
 					hrdSchema.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					hrdSchema.setToolTipText(Messages.get("HRDSchema.tip"));
+					hrdSchema.setToolTipText(GeneratorMessages.get("HRDSchema.tip"));
 					{
 						useCSSclasses = new Button(composite_1, SWT.CHECK);
 						useCSSclasses.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL));
-						useCSSclasses.setToolTipText(Messages.get("cssClasses.tip"));
-						useCSSclasses.setText(Messages.get("cssClasses"));
+						useCSSclasses.setToolTipText(GeneratorMessages.get("cssClasses.tip"));
+						useCSSclasses.setText(GeneratorMessages.get("cssClasses"));
             useCSSclasses.addSelectionListener(new SelectionAdapter(){
               public void widgetSelected(SelectionEvent e) {
                 if (useCSSclasses.getSelection()){
@@ -355,7 +355,7 @@ public class GeneratorDialog {
 			{
 				final Button button = new Button(composite, SWT.CENTER);
 				button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				button.setText(Messages.get("close"));
+				button.setText(GeneratorMessages.get("close"));
         button.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent e) {
             if (runAction != null){
@@ -369,7 +369,7 @@ public class GeneratorDialog {
 				final GridData gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
         shell.setDefaultButton(button);
 				button.setLayoutData(gridData);
-				button.setText(Messages.get("generate"));
+				button.setText(GeneratorMessages.get("generate"));
         button.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent e) {
             if (runAction != null){
@@ -417,12 +417,12 @@ public class GeneratorDialog {
   /**
    * @param fileList The fileList to set - Vector with list of file paths
    */
-  public void setFileList(Vector fileList) {
-    this.fileList.removeAll();
-    for(int idx = 0; idx < fileList.size(); idx++){
-      this.fileList.add((String)fileList.elementAt(idx));
+  public void setFileList(final Vector list) {
+    fileList.removeAll();
+    for(int idx = 0; idx < list.size(); idx++){
+      fileList.add((String)list.elementAt(idx));
     }
-    this.fileList.select(0,this.fileList.getItemCount());
+    fileList.select(0, fileList.getItemCount());
   }
 
   /**

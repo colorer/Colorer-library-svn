@@ -119,8 +119,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   }
 
   void showPairError(){
-    MessageDialog.openInformation(null, Messages.getString("editor.pairerr.title"),
-                                             Messages.getString("editor.pairerr.msg"));
+    MessageDialog.openInformation(null, Messages.get("editor.pairerr.title"),
+                                             Messages.get("editor.pairerr.msg"));
   }
 
 
@@ -134,8 +134,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
   }
 
-  public void propertyChange(PropertyChangeEvent e)
-  {
+  public void propertyChange(PropertyChangeEvent e){
     if (textColorer == null) return;
     if (e != null && e.getProperty().equals(PreferencePage.RELOAD_HRC)){
       relinkColorer();
@@ -168,8 +167,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
       textColorer.setPairsPainter(!pairs.equals("PAIRS_NO"), pmode);
     };
 
-    if (e == null || e.getProperty().equals(PreferencePage.TEXT_FONT) &&
-        prefStore.contains(PreferencePage.TEXT_FONT) && !prefStore.isDefault(PreferencePage.TEXT_FONT)){
+    if (e == null || e.getProperty().equals(PreferencePage.TEXT_FONT)
+        && prefStore.contains(PreferencePage.TEXT_FONT) && !prefStore.isDefault(PreferencePage.TEXT_FONT)){
       FontData data = null;
       data = PreferenceConverter.getFontData(prefStore, PreferencePage.TEXT_FONT);
       if (textFont != null) textFont.dispose();

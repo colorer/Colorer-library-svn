@@ -1,12 +1,12 @@
-package net.sf.colorer.eclipse;
+package net.sf.colorer.swt.dialog;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class HRCMessages{
+public class GeneratorMessages{
   
-  static String RESOURCE_BUNDLE  = "net.sf.colorer.eclipse.HRCMessages";
+  static String RESOURCE_BUNDLE  = "net.sf.colorer.swt.dialog.Locale";
   static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
   
   public static String format(String key, Object[] args) {
