@@ -41,20 +41,15 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_impl_BaseEditorNative_init(JNIEnv *e
   };
   JBaseEditor *jbe = null;
   try{
-  //! printf("clr:beinit1\n");
     jbe_count++;
     jclass cPF = env->FindClass("net/sf/colorer/ParserFactory");
     jfieldID idIptr = env->GetFieldID(cPF, "iptr", "J");
     JParserFactory *parserFactory = (JParserFactory *)env->GetLongField(pf, idIptr);
     JavaLineSource *lineSource = new JavaLineSource(env, ls);
-  //! printf("clr:beinit2 pf:%p ls:%p\n", parserFactory, lineSource);
 
     jbe = new JBaseEditor(parserFactory, lineSource);
-  //! printf("clr:beinit3\n");
     jbe->jpf = env->NewGlobalRef(pf);
-  //! printf("clr:beinit4\n");
     jbe->lineSource = lineSource;
-  //! printf("clr:beinit5\n");
   }catch(Exception &e){
     throw_exc(env, e.getMessage()->getChars()); return 0;
   }
@@ -63,6 +58,8 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_impl_BaseEditorNative_init(JNIEnv *e
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_finalize(JNIEnv *env, jobject obj, jlong iptr){
   JBaseEditor *be = JBaseEditor::get(env, iptr);
+
+  if (be == null) return;
 
   int idx;
   for(idx = 0; idx < be->lrCache.size(); idx++)
@@ -124,7 +121,6 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_addRegionHandle
   jmethodID gnID = env->GetMethodID(env->GetObjectClass(filter), "getName", "()Ljava/lang/String;");
   jstring filter_name = (jstring)env->CallObjectMethod(filter, gnID);
   JWrapRegionHandler *jwrh = new JWrapRegionHandler(env, be->pf->jhp, rh, be->pf->getHRCParser()->getRegion(&JString(env, filter_name)));
-  be->regionHandlers.addElement(jwrh);
   be->addRegionHandler(jwrh);
 }
 
@@ -135,8 +131,7 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_removeRegionHan
     JWrapRegionHandler *check = be->regionHandlers.elementAt(idx);
     if (env->IsSameObject(check->regionHandler, rh)){
       be->removeRegionHandler(check);
-      be->regionHandlers.removeElementAt(idx);
-      idx--;
+      break;
     };
   };
 }
