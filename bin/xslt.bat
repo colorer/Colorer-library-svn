@@ -2,7 +2,7 @@
 rem Calls XSL transform of %1 throught %2 into %3 with parameters %4=%5 %6=%7 etc.
 
 
-SET PROC=XALAN
+rem SET PROC=XALAN
 SET FIN=%1
 SET FSS=%2
 SET FOUT=%3
