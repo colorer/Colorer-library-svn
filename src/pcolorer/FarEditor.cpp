@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<unicode/UnicodeTools.h>
 #include"FarEditor.h"
-#include"common/Logging.h"
+#include<common/Logging.h>
 
 FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 {
@@ -863,6 +863,7 @@ void FarEditor::addFARColor(int lno, int s, int e, int col)
   ec.StartPos = s;
   ec.EndPos = e-1;
   ec.Color = col;
+  CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
   info->EditorControl(ECTL_ADDCOLOR, &ec);
   CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
 }

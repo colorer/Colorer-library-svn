@@ -3,6 +3,12 @@
 
 #include"JParserFactory.h"
 
+static void throwPFException(JNIEnv *env, Exception &e)
+{
+    jclass cException = env->FindClass("net/sf/colorer/ParserFactoryException");
+    env->ThrowNew(cException, e.getMessage()->getChars());
+}
+
 extern "C" {
 
 JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobject obj, jstring catalogPath){
@@ -11,8 +17,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
     if (catalogPath == null) jpf = new JParserFactory(null);
     else jpf = new JParserFactory(&JString(env, catalogPath));
   }catch(Exception &e){
-    jclass cException = env->FindClass("net/sf/colorer/ParserFactoryException");
-    env->ThrowNew(cException, e.getMessage()->getChars());
+    throwPFException(env, e);
     return 0;
   };
   // HRCParser wrapper.
@@ -115,7 +120,13 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createTextParser(JNI
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createStyledMapper(JNIEnv *env, jobject obj, jlong iptr, jstring hrdClass, jstring hrdName){
   ParserFactory *pf = (JParserFactory*)iptr;
-  StyledHRDMapper *rm = pf->createStyledMapper(&JString(env, hrdClass), &JString(env, hrdName));
+  StyledHRDMapper *rm = null;
+  try{
+    rm = pf->createStyledMapper(&JString(env, hrdClass), &JString(env, hrdName));
+  }catch(ParserFactoryException &e){
+    throwPFException(env, e);
+    return 0;
+  }
 
   jclass jClass = env->FindClass("net/sf/colorer/handlers/RegionMapper");
   jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
@@ -125,7 +136,13 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createStyledMapper(J
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createTextMapper(JNIEnv *env, jobject obj, jlong iptr, jstring hrdName){
   ParserFactory *pf = (JParserFactory*)iptr;
-  TextHRDMapper *rm = pf->createTextMapper(&JString(env, hrdName));
+  TextHRDMapper *rm = null;
+  try{
+    rm = pf->createTextMapper(&JString(env, hrdName));
+  }catch(ParserFactoryException &e){
+    throwPFException(env, e);
+    return 0;
+  }
 
   jclass jClass = env->FindClass("net/sf/colorer/handlers/RegionMapper");
   jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
