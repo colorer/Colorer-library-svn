@@ -373,7 +373,7 @@
   <virtual scheme="perl.posix.liter.class" subst-scheme="unicode.charter"/>
  </inherit>
  <regexp match="/\\[CISDWcisdw]/" region0="SymbClass"/>   <!-- Классы символов -->
- <regexp match="/\&\#(x?%hex;+|\d+)\;/" region="def:Number"/>
+ <regexp match="/&amp;\#(x?%hex;+|\d+)\;/" region="def:Number"/>
  <regexp match="/\$/" region="def:String"/>
  <regexp match="/\[?~1\^/" region="def:String"/>
  <inherit scheme="std.base"/>
@@ -430,7 +430,7 @@
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
  />
- <regexp match="/\&\&\M[\{\[]/" region0="MetaSymb"/>
+ <regexp match="/&amp;&amp;\M[\{\[]/" region0="MetaSymb"/>
  <inherit scheme="std.class"/>
 </scheme>
 

@@ -15,6 +15,11 @@
   <prototype name="c" group="main" description="C">
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
+    <parameters>
+      <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
+      <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
+      <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
+    </parameters>
   </prototype>
   <prototype name="cpp" group="main" description="C++">
     <location link="base/cpp.hrc"/>
@@ -22,6 +27,10 @@
     <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
     <firstline>/\#include/</firstline>
     <firstline>/\#define|\#if/</firstline>
+    <parameters>
+      <param name="stl-defines" value="true" description="Use STL specific keywords"/>
+      <param name="afx-defines" value="true" description="Highlight MFC autogenerateg block"/>
+    </parameters>
   </prototype>
   <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
@@ -37,6 +46,9 @@
   <prototype name="java" group="main" description="Java">
     <location link="base/java.hrc"/>
     <filename>/\.(java|jav|jad)$/i</filename>
+    <parameters>
+      <param name="j2se-classes" value="true" description="Use some common used J2SE class names"/>
+    </parameters>
   </prototype>
   <prototype name="idl" group="main" description="IDL">
     <location link="base/idl.hrc"/>
@@ -468,17 +480,16 @@
     <filename weight='1'>//</filename>
     <parameters>
       <!-- none,vertical,horizontal,both -->
-      <param name="show-cross" value="none"/>
+      <param name="show-cross" value="none" description="Visibility of the cross (horizontal, vertical, both, none)"/>
       <!-- top, bottom -->
-      <param name="cross-zorder" value="bottom"/>
-      <param name="maxlinelength" value="5000"/>
-      <param name="backparse" value="6000"/>
-      <param name="fullback" value="yes"/>
-      <!--
-      <param name="default-fore" value="#E"/>
-      <param name="default-back" value="#1"/>
-      -->
+      <param name="cross-zorder" value="bottom" description="Position of the cross, which points out cursor position"/>
+      <param name="maxlinelength" value="5000" description="Maximum parsed length of line of the text"/>
+      <param name="backparse" value="6000" description="Number of lines, after which parser stops continous analysis. Infinite, if zero."/>
+      <param name="fullback" value="yes" description="If yes, draws background in inlined languages till end of the screen"/>
+      <param name="default-fore" value="" description="User-defined foreground color for this particular type"/>
+      <param name="default-back" value="" description="User-defined foreground color for this particular type"/>
     </parameters>
+
   </prototype>
   <type name="default"><scheme name='default'/></type>
 

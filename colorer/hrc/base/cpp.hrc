@@ -21,75 +21,75 @@
      - change regions routing
   ]]></contributors>
  </annotation>
-    
+
  <region name="KeywordSTL" parent="c:KeywordStdio"/>
  <region name="KeywordNamespace" parent="def:Prefix"/>
  <region name="ClassOutline" parent="c:StructOutline"/>
 
  <scheme name="Expression">
 
-  <annotation> 
+  <annotation>
    <documentation>
     Next blocks supported C++ templates
    </documentation>
    <appinfo> <todo> <![CDATA[
-    
+
     Блок #1.
-     
+
      It's ok.
-    
+
     Блок #2.
-     
-     Hа текущий момент : 
-     
+
+     Hа текущий момент :
+
      - Распознает и игнорирует конструкции типа a<<b<<c>>d и a<c && b>d.
-     
-     - Корректно работает с констукциями типа vector<void (*)(int, int)> 
+
+     - Корректно работает с констукциями типа vector<void (*)(int, int)>
        и vector<int*[],std::allocator<int*[]>>.
 
-     - Поддерживается только 6 уровней вложения. Я не знаю, вомзожна ли 
-       корректная рекурсия в регэкспах, а без нее бесконечное число 
+     - Поддерживается только 6 уровней вложения. Я не знаю, вомзожна ли
+       корректная рекурсия в регэкспах, а без нее бесконечное число
        вложений невозможно (впорчем, на практике 6 и уровней темплайтов
        не встречается).
-     
-     - К сожалению, обламывается при переносах: /s не работает. 
-     
-     - Глючит с  конструкциями типа a<b & b>s и if(b<c>d) - которые, 
+
+     - К сожалению, обламывается при переносах: /s не работает.
+
+     - Глючит с  конструкциями типа a<b & b>s и if(b<c>d) - которые,
        обычно, являются ошибками.
-    
-     Вывод: проблемной, требующей исправления, остается только /s. Возможна 
+
+     Вывод: проблемной, требующей исправления, остается только /s. Возможна
      ли вообще поддержка этой опции в рамках колорера?
-    
-   ]]> </todo> </appinfo> 
+
+   ]]> </todo> </appinfo>
   </annotation>
-  
+
   <!-- !!EE: Block #1 template support -->
   <block start="/(template)\s*(&lt;)/" end="/(&gt;)/" scheme="Expression"
-   region00="def:PairStart" region10="def:PairEnd" 
-   region01="c:KeywordANSI" region02="c:StructureSymbol" 
+   region00="def:PairStart" region10="def:PairEnd"
+   region01="c:KeywordANSI" region02="c:StructureSymbol"
    region11="c:StructureSymbol"
   />
-  
+
   <!-- !!EE: Block #2 template support -->
   <!-- Colorer 4:
   <block start="/([\w\s])?#1(&lt;)(&lt;)?!
-     ((([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)| 
+     ((([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)|
      (&lt;(([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)|
      (&lt;(([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)|
      (&lt;(([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)|
      (&lt;(([\w_\s\*\n\r,:])|(&amp;(&amp;)?!)|
      (&lt;(([\w_\s\*\n\r,:])|(&amp;(&amp;)?!))*&gt;)
-     )*&gt;))*&gt;))*&gt;))*&gt;))*&gt;)?=/xs" 
+     )*&gt;))*&gt;))*&gt;))*&gt;))*&gt;)?=/xs"
    end="/(&gt;)/" scheme="cpp"
-   region00="dpOpenStruct" region10="dpCloseStruct" 
-   region02="dSymbol2" region11="dSymbol2"/>-->   
+   region00="dpOpenStruct" region10="dpCloseStruct"
+   region02="dSymbol2" region11="dSymbol2"/>-->
    <!-- \(\)\[\] -->
-  <block scheme="Expression"> 
+  <block scheme="Expression">
    <start region0="def:PairStart" region2="c:StructureSymbol">
     <![CDATA[
      /([\w\s])?#1
       (<)(<)?!\M
-       ([\w_\s\*\(\)\[\],:]|&(&)?!|< 
+       ([\w_\s\*\(\)\[\],:]|&(&)?!|<
        ([\w_\s\*\(\)\[\],:]|&(&)?!|<
        ([\w_\s\*\(\)\[\],:]|&(&)?!|<
        ([\w_\s\*\(\)\[\],:]|&(&)?!|<
@@ -97,16 +97,16 @@
        ([\w_\s\*\(\)\[\],:]|&(&)?!)*
       >)*>)*>)*>)*>)*>
      /xs
-    ]]> 
+    ]]>
    </start>
-   <end region0="def:PairEnd" region1="c:StructureSymbol">/(&gt;)/</end> 
+   <end region0="def:PairEnd" region1="c:StructureSymbol">/(&gt;)/</end>
   </block>
-   
+
 <!--
     <![CDATA[
      /([\w\s])?#1
       (<)(<)?!
-      \M(([\w_\s\*\n\r,:]|&(&)?!)| 
+      \M(([\w_\s\*\n\r,:]|&(&)?!)|
       (<(([\w_\s\*\n\r,:]|&(&)?!)|
       (<(([\w_\s\*\n\r,:]|&(&)?!)|
       (<(([\w_\s\*\n\r,:]|&(&)?!)|
@@ -114,20 +114,18 @@
       (<(([\w_\s\*\n\r,:]|&(&)?!))*>)
       )*>))*>))*>))*>))*>
      /xs
-    ]]> 
+    ]]>
 
--->   
-    <!-- paired block -->
-  <block start="/(\/\/\{\{AFX.*)/" end="/(\/\/\}\}AFX.*)/" scheme="def:Comment"
-         region="def:CommentContent" region00="def:PairStart" region10="def:PairEnd" region01="def:Comment" region11="def:Comment"/>
+-->
+  <inherit scheme="AFX-block"/>
 
-         <!-- c++ keywords -->
-  
+  <!-- c++ keywords -->
+
   <!-- EE: now we don't need it...
-  regexp match="/^\s*(private|protected|public)(:)/" 
+  regexp match="/^\s*(private|protected|public)(:)/"
    region1="c:KeywordANSI" region2="c:Label"
   /-->
-  
+
   <keywords region="c:KeywordANSI">
    <word name="and"/>
    <word name="and_eq"/>
@@ -178,10 +176,20 @@
    <virtual scheme="c:Expression" subst-scheme="Expression"/>
   </inherit>
 
+  <inherit scheme="Keywords-STL"/>
+ </scheme>
+
+ <scheme name="AFX-block" if="afx-defines">
+  <!-- paired block -->
+  <block start="/(\/\/\{\{AFX.*)/" end="/(\/\/\}\}AFX.*)/" scheme="def:Comment"
+         region="def:CommentContent" region00="def:PairStart" region10="def:PairEnd" region01="def:Comment" region11="def:Comment"/>
+ </scheme>
+
+ <scheme name="Keywords-STL" if="stl-defines">
 <!-- !!EE (add keywords): STL  -->
   <keywords region="KeywordSTL">
    <word name="std" region="KeywordNamespace"/>
-   
+
    <word name="vector"/>
    <word name="list"/>
    <word name="set"/>
@@ -197,7 +205,7 @@
    <word name="array"/>
    <word name="valarray"/>
    <word name="biset"/>
-   
+
    <word name="char_traits"/>
    <word name="basic_string"/>
    <word name="npos" region="c:KeywordConstant"/>
@@ -222,7 +230,7 @@
    <word name="cerr"/>
    <word name="clog"/>
    <word name="cin"/>
-  
+
    <word name="iterator"/>
    <word name="const_iterator"/>
    <word name="input_iterator"/>
@@ -243,7 +251,7 @@
    <word name="allocator"/>
    <word name="auto_ptr"/>
    <word name="pair"/>
-   
+
    <!-- alogoritms -->
    <word name="for_each"/>
    <word name="find"/>
@@ -310,7 +318,7 @@
    <word name="lexicogarfical_compare"/>
    <word name="next_permutation"/>
    <word name="prev_permutation"/>
-   
+
    <word name="equal_to"/>
    <word name="not_equal_to"/>
    <word name="greater"/>
@@ -326,7 +334,7 @@
    <word name="divides"/>
    <word name="modulus"/>
    <word name="negate"/>
-   
+
    <word name="bind2nd"/>
    <word name="bind1st"/>
    <word name="mem_fun"/>
@@ -342,7 +350,7 @@
    <word name="pointer_to_binary_function"/>
    <word name="unary_negate"/>
    <word name="binary_negate"/>
-   
+
    <!-- stdexept -->
    <word name="exception"/>
    <word name="logic_error"/>
@@ -360,79 +368,79 @@
    <word name="failure"/>
   </keywords>
  </scheme>
- 
+
  <scheme name="Outlines">
-  <annotation> 
+  <annotation>
    <documentation>
      C++ outlines (function, classes).
    </documentation>
-  </annotation> 
+  </annotation>
 
   <!-- Colorer 4:
-  <regexp match='/^ \M \s* (typedef)?! (\w[\w_*&amp;&lt;&gt;,~:]+ \s 
+  <regexp match='/^ \M \s* (typedef)?! (\w[\w_*&amp;&lt;&gt;,~:]+ \s
    [\s\w_*&amp;&lt;&gt;,~\":]*?)? (([\:\w_*&amp;~]+?)|(operator..?)
-   (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sswitch)?~7 (\scatch)?~6 ) 
+   (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sswitch)?~7 (\scatch)?~6 )
    \s* (\([^\)]*?\) (\s*\:\s*[^;]*?)|([^;,&gt;]*?) ) | ( \([^\);]*?) ($|\{)/x'
     region3="cFunc"/>-->
- 
+
   <regexp><![CDATA[
-    /^ \M \s* (typedef)?! 
+    /^ \M \s* (typedef)?!
     (\w[\w_*&<>~,:]+ \s [\s\w_*&<>~\",:]*?)?
-    
-    (?{c:FuncOutline} 
-     ([\w_][\w_<*&,\s:>]*?\:\:)? ([\:\w_&*~<>]+?|operator..?) 
+
+    (?{c:FuncOutline}
+     ([\w_][\w_<*&,\s:>]*?\:\:)? ([\:\w_&*~<>]+?|operator..?)
     )
-    
+
     (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sswitch)?~7 (\scatch)?~6
-    \s* (\([^\)]*?\) (\s*\:\s*[^;]*?|[^;,<>]*?)  |  \([^\);]*?) 
+    \s* (\([^\)]*?\) (\s*\:\s*[^;]*?|[^;,<>]*?)  |  \([^\);]*?)
     ($|\{) /x
   ]]></regexp>
-<!--        
-   Ф'ция(...) дальше ": ..."      или не';,<'    или скобки переносятся   
+<!--
+   Ф'ция(...) дальше ": ..."      или не';,<'    или скобки переносятся
    (Это было описание предпоследней строки регэкспа)
 -->
 
   <!--Colorer 4:
-  <regexp match='/^ \M \s* ( ((typedef\s+)|(template\s*&lt;.*?&gt;\s*))? 
-   (struct)|(class)|(union) \s+ ([\w_]+) [\w_:\s]* &lt;?.*?&gt;?) 
+  <regexp match='/^ \M \s* ( ((typedef\s+)|(template\s*&lt;.*?&gt;\s*))?
+   (struct)|(class)|(union) \s+ ([\w_]+) [\w_:\s]* &lt;?.*?&gt;?)
    ((;)?~1$)|(\{)/x' region8="cFunc"/><!-->
-  
-  <regexp><![CDATA[
-    /^ \M \s* 
-    ((typedef\s+)|(template\s*<.*?>\s*))?
-    (class) \s+
-    (?{ClassOutline} 
-     [\:\w_&~<>]+ [\w_:<>\s]*? [^;]
-    )
-    ($|\{)/x
-  ]]></regexp>  
 
   <regexp><![CDATA[
-    /^ \M \s* 
+    /^ \M \s*
     ((typedef\s+)|(template\s*<.*?>\s*))?
-    (struct) \s+
-    (?{c:StructOutline} 
+    (class) \s+
+    (?{ClassOutline}
      [\:\w_&~<>]+ [\w_:<>\s]*? [^;]
     )
     ($|\{)/x
-  ]]></regexp>  
-  
+  ]]></regexp>
+
+  <regexp><![CDATA[
+    /^ \M \s*
+    ((typedef\s+)|(template\s*<.*?>\s*))?
+    (struct) \s+
+    (?{c:StructOutline}
+     [\:\w_&~<>]+ [\w_:<>\s]*? [^;]
+    )
+    ($|\{)/x
+  ]]></regexp>
+
   <inherit scheme="c:SharedOutlines"/>
  </scheme>
 
- 
+
  <scheme name="Operators">
-  <annotation> 
+  <annotation>
    <documentation>
     ANSI C++ keyword operators.
    </documentation>
    <appinfo> <todo> <![CDATA[
     Not realised now. See annotation/appinfo/todo at c:Operator for more...
-   ]]> </todo> </appinfo> 
+   ]]> </todo> </appinfo>
   </annotation>
   <inherit scheme="c:Operators"/>
  </scheme>
- 
+
  <scheme name="cpp">
   <inherit scheme="c:c">
    <virtual scheme="c:Operators" subst-scheme="Operators"/>

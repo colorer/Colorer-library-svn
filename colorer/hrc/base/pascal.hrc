@@ -17,7 +17,7 @@
     ]]></contributors>
    </annotation>
 
-   <type name="pascal" access="public">
+   <type name="pascal">
 
       <import type="def"/>
       <import type="asm"/>
