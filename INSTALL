@@ -1,5 +1,5 @@
 
-  Installation and building instructions for Colorer-take5 library.
+  Installation and building instructions for the Colorer-take5 library.
 
 
   1. Requirements
@@ -12,7 +12,7 @@
     b. Doxygen - documentation system for C++ sources (http://www.doxygen.org).
        Used to extract documentation from source files.
 
-    c. Apache ANT tool (http://jakarta.apache.org/ant/), version 1.5.1 or later.
+    c. Apache ANT tool (http://ant.apache.org), version 1.5.1 or later.
        Used to automate build process, describes tasks for documentation generation,
        compilation, xml transformations and creating redistributable archives.
 
@@ -47,19 +47,18 @@
        you must have:
           d.1. Some XSD files (MathML, DocBook, XHTML).
                http://www.w3.org/TR/MathML2/
-??               http://oasis-open.orb/...
+??               http://oasis-open.org/...
                http://www.w3.org/TR/xhtml1/
           d.2. Doxygen documentation generation tool (doxygen.exe on win32).
                http://www.doxygen.org
           d.3  Norman's Walsh DocBook XSL Transformations.
 ??               http://docbook-xsl.sourceforge.net
           d.4. Apache FOP processor.
-               http://fop.apache.org/
+               http://xml.apache.org/fop/
        If some of these resources are unavailable, you can tell colorer
-???       to ignore their tasks, with disabling '???fail-on-file-paths'
+       to ignore their tasks, with disabling 'fail-on-badpaths'
        property. In this case appropriate build tasks should be ignored.
        
-
 
   3. Installation
 

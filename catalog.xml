@@ -84,6 +84,9 @@
     <hrd class="rgb" name="hs" description="A'la HomeSite">
       <location link="hrd/rgb/hs.hrd"/>
     </hrd>
+    <hrd class="rgb" name="bred3" description="Bred3 colors">
+      <location link="hrd/rgb/contrib/bred3.hrd"/>
+    </hrd>
 
 
     <hrd class="text" name="tags" description="HTML italic, underline indention">

@@ -1,7 +1,7 @@
 
   Colorer-take5 Library beta2. $Date$
 
-  Copyright (c) Cail Lomecb (Igor Russkih) 1999-2003.
+  Copyright (c) Igor Russkih 1999-2003.
 
   Colorer  is  a  syntax  highlighting  and text parsing library, that
   provides services to parse text in editor in real time and transform
@@ -20,4 +20,4 @@
 
   Igor Russkih
     cail@nm.ru
-    http://www.uic.nnov.ru/~ruiv/
+    http://cail.nm.ru/
