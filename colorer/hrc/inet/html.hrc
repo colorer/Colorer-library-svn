@@ -414,17 +414,17 @@
 
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
+                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix" 
+                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix" 
              end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
+                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
-      <block start="/ (&lt;(script .*?) \%?~1 \&gt; ) /ix"
+      <block start="/ (&lt;(script .*?) [\%\/]?~1 \&gt; ) /ix"
              end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
              region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
          
