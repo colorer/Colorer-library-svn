@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -89,8 +90,18 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     }
 
     gd.setHRDSchema(hrdSchemas);
-    gd.setHRDSchema(EclipsecolorerPlugin.getDefault().getPreferenceStore().getString(PreferencePage.HRD_SET));
-    
+
+    IPreferenceStore ps = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+    gd.setPrefix(ps.getString("g.Prefix"));
+    gd.setSuffix(ps.getString("g.Suffix"));
+    gd.setHRDSchema(ps.getString("g.HRDSchema"));
+    gd.setHtmlHeaderFooter(ps.getBoolean("g.HtmlHeaderFooter"));
+    gd.setInfoHeader(ps.getBoolean("g.InfoHeader"));
+    gd.setUseLineNumbers(ps.getBoolean("g.UseLineNumbers"));
+    gd.setOutputEncoding(ps.getString("g.OutputEncoding"));
+    gd.setTargetDirectory(ps.getString("g.TargetDirectory"));
+    gd.setLinkSource(ps.getString("g.LinkSource"));
+
     gd.run(new GeneratorListener());
   }
   
@@ -98,6 +109,18 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     public void action(GeneratorDialog gd, int action) {
       switch(action){
         case GeneratorDialog.CLOSE_ACTION:
+          IPreferenceStore ps = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+          ps.setValue("g.Prefix", gd.getPrefix());
+          ps.setValue("g.Suffix", gd.getSuffix());
+          ps.setValue("g.HRDSchema", gd.getHRDSchema());
+          ps.setValue("g.HtmlHeaderFooter", gd.isHtmlHeaderFooter());
+          ps.setValue("g.InfoHeader", gd.isInfoHeader());
+          ps.setValue("g.UseLineNumbers", gd.isUseLineNumbers());
+          ps.setValue("g.OutputEncoding", gd.getOutputEncoding());
+          ps.setValue("g.TargetDirectory", gd.getTargetDirectory());
+          if (gd.getLinkSource() != null){
+            ps.setValue("g.LinkSource", gd.getLinkSource());
+          }
           gd.getShell().close();
           break;
           
@@ -118,7 +141,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
               ReaderLineSource rls = new ReaderLineSource(new FileReader(file));
               final String targetName = filePath + "/" + gd.getPrefix() + file.getName() + gd.getSuffix();
               Writer commonWriter = null;
-              if (gd.getOutputEncoding() == null){
+              if ("default".equals(gd.getOutputEncoding())){
                 commonWriter = new OutputStreamWriter(new FileOutputStream(targetName));
               }else{
                 commonWriter = new OutputStreamWriter(new FileOutputStream(targetName), gd.getOutputEncoding());
