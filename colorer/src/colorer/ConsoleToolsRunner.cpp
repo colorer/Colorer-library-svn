@@ -20,6 +20,7 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       ct.setInputFileName(DString(argv[i]));
       continue;
     };
+
     if (argv[i][1] == 'p'){
       jobType = JT_PROFILE;
       if (argv[i][2]){

@@ -1,5 +1,6 @@
 
 #include<colorer/viewer/TextLinesStore.h>
+#include<stdio.h>
 
 void TextLinesStore::replaceTabs(int lno){
   String *od = lines.elementAt(lno)->replace(DString("\t"), DString("    "));
@@ -26,43 +27,50 @@ void TextLinesStore::loadFile(const String *fileName, const String *inputEncodin
   if (this->fileName != null){
     freeFile();
   }
-  if (fileName == null) throw Exception(StringBuffer("can't find 'null' file"));
-  this->fileName = new SString(fileName);
-  InputSource *is = InputSource::newInstance(fileName);
 
-  const byte *data;
-  try{
-    data = is->openStream();
-  }catch (InputSourceException &e){
-    delete is;
-    throw e;
-  }
-
-  int len = is->length();
-
-  int ei = inputEncoding == null ? -1 : Encodings::getEncodingIndex(inputEncoding->getChars());
-  DString file(data, len, ei);
-  int length = file.length();
-  lines.ensureCapacity(length/30); // estimate number of lines
-
-  int i = 0;
-  int filepos = 0;
-  int prevpos = 0;
-  if (length && file[0] == 0xFEFF) filepos = prevpos = 1;
-  while(filepos < length+1){
-    if (filepos == length || file[filepos] == '\r' || file[filepos] == '\n'){
-      lines.addElement(new SString(&file, prevpos, filepos-prevpos));
+  if (fileName == null){
+    char line[256];
+    while(gets(line) != null){
+      lines.addElement(new SString(line));
       if (tab2spaces) replaceTabs(lines.size()-1);
-      if (filepos+1 < length && file[filepos] == '\r' && file[filepos+1] == '\n')
-        filepos++;
-      else if (filepos+1 < length && file[filepos] == '\n' && file[filepos+1] == '\r')
-        filepos++;
-      prevpos = filepos+1;
-      i++;
+    }
+  }else{
+    this->fileName = new SString(fileName);
+    InputSource *is = InputSource::newInstance(fileName);
+
+    const byte *data = null;
+    try{
+      data = is->openStream();
+    }catch (InputSourceException &e){
+      delete is;
+      throw e;
+    }
+    int len = is->length();
+
+    int ei = inputEncoding == null ? -1 : Encodings::getEncodingIndex(inputEncoding->getChars());
+    DString file(data, len, ei);
+    int length = file.length();
+    lines.ensureCapacity(length/30); // estimate number of lines
+
+    int i = 0;
+    int filepos = 0;
+    int prevpos = 0;
+    if (length && file[0] == 0xFEFF) filepos = prevpos = 1;
+    while(filepos < length+1){
+      if (filepos == length || file[filepos] == '\r' || file[filepos] == '\n'){
+        lines.addElement(new SString(&file, prevpos, filepos-prevpos));
+        if (tab2spaces) replaceTabs(lines.size()-1);
+        if (filepos+1 < length && file[filepos] == '\r' && file[filepos+1] == '\n')
+          filepos++;
+        else if (filepos+1 < length && file[filepos] == '\n' && file[filepos+1] == '\r')
+          filepos++;
+        prevpos = filepos+1;
+        i++;
+      };
+      filepos++;
     };
-    filepos++;
-  };
-  delete is;
+    delete is;
+  }
 };
 const String *TextLinesStore::getFileName(){
   return fileName;
