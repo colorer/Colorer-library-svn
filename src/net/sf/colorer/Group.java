@@ -1,34 +1,52 @@
-package net.sf.colorer.eclipse;
+package net.sf.colorer;
 
-import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.Vector;
 
-public class HRCMessages{
-  
-  static String RESOURCE_BUNDLE  = "net.sf.colorer.eclipse.HRCMessages";
-  static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
-  
-  public static String format(String key, Object[] args) {
-    return MessageFormat.format(get(key), args);
-  }
-  
-  public static String get(String key) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      return "!" + key + "!";
+
+/**
+ * Group tree container
+ * @author Igor Russkih
+ */
+public class Group {
+
+    String name;
+    Vector groups = new Vector();
+    Vector filetypes = new Vector();
+
+    Group(String name){
+        this.name = name;
     }
-  }
-  
-  public static String get(String key, String def) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      if (def != null) return def;
-      return "!" + key + "!";
+
+    Group searchGroup(Group g, String name){
+        if (g.getName().equals(name)) return g;
+        Group garr[] = g.getGroups();
+        for(int idx = 0; idx < garr.length; idx++){
+            Group gr = searchGroup(garr[idx], name);
+            if (gr != null) return gr;
+        }
+        return null;
     }
-  }
+
+    public Group searchGroup(String name){
+        return searchGroup(this, name);
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getDescription(){
+        return HRCMessages.get(name, name);
+    }
+
+    public Group[] getGroups(){
+        return (Group[])groups.toArray(new Group[0]);
+    }
+
+    public FileType[] getFileTypes(){
+        return (FileType[])filetypes.toArray(new FileType[0]);
+    }
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

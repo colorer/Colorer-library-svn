@@ -10,6 +10,9 @@ public class HRCParser{
   long iptr;
   static int count = 0;
 
+  Group rootGroups[];
+  Hashtable allGroups = new Hashtable();
+
   HRCParser(long _iptr){
     iptr = _iptr;
   }
@@ -26,6 +29,37 @@ public class HRCParser{
   }
   native Region getRegion(long iptr, String qname);
 
+  /**
+   * Returns tree of groups and types
+   */
+  public synchronized Group[] getGroups(){
+      if (rootGroups != null) return rootGroups;
+      Vector rg = new Vector();
+      for(Enumeration e = enumerateFileTypes(); e.hasMoreElements();){
+          FileType ft = (FileType)e.nextElement();
+          String ft_group = ft.getGroup();
+          int idx = ft_group.lastIndexOf('.');
+
+          Group gr = (Group)allGroups.get(ft_group);
+          if (gr == null){
+              gr = new Group(ft_group);
+              allGroups.put(ft_group, gr);
+              if (idx == -1){
+                  rg.addElement(gr);
+              }else{
+                  Group parent_gr = (Group)allGroups.get(ft_group.substring(0,idx));
+                  if (parent_gr == null){
+                      throw new RuntimeException("Invalid groups layout");
+                  }else{
+                      parent_gr.groups.addElement(gr);
+                  }
+              }
+          }
+          gr.filetypes.addElement(ft);
+      }
+      rootGroups = (Group[])rg.toArray(new Group[0]);
+      return rootGroups;
+  }
 
   /** Enumerates all available language types.
       Each element in enumeration contains reference to a

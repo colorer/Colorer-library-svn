@@ -17,31 +17,31 @@ import org.eclipse.swt.*;
  * files.
  */
 public class HRDEditorView extends ViewPart {
-	
+
   private Composite composite;
-  
-	private Action action1;
-	private Action action2;
-	private Action doubleClickAction;
 
-	/**
-	 * The view constructor.
-	 */
-	public HRDEditorView() {
-	}
+    private Action action1;
+    private Action action2;
+    private Action doubleClickAction;
 
-	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
-	 */
-	public void createPartControl(Composite parent) {
+    /**
+     * The view constructor.
+     */
+    public HRDEditorView() {
+    }
+
+    /**
+     * This is a callback that will allow us
+     * to create the viewer and initialize it.
+     */
+    public void createPartControl(Composite parent) {
 
     composite = createComposite(parent);
 
-		makeActions();
-		//hookContextMenu();
-		contributeToActionBars();
-	}
+        makeActions();
+        //hookContextMenu();
+        contributeToActionBars();
+    }
 
   Composite createComposite(Composite parent){
     Composite composite = new Composite(parent, SWT.NONE);
@@ -110,84 +110,84 @@ public class HRDEditorView extends ViewPart {
       final Button button = new Button(composite, SWT.NONE);
       button.setText("Save HRD As...");
     }
-    //  DESIGNER: Add controls before this line.    
+    //  DESIGNER: Add controls before this line.
     return composite;
   }
-  
+
   /*
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				HRDEditorView.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(composite);
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager("#PopupMenu");
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+            public void menuAboutToShow(IMenuManager manager) {
+                HRDEditorView.this.fillContextMenu(manager);
+            }
+        });
+        Menu menu = menuMgr.createContextMenu(composite);
     composite.setMenu(menu);
-		//getSite().registerContextMenu(menuMgr, viewer);
-	}
+        //getSite().registerContextMenu(menuMgr, viewer);
+    }
   */
 
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
-	}
+    private void contributeToActionBars() {
+        IActionBars bars = getViewSite().getActionBars();
+        fillLocalPullDown(bars.getMenuManager());
+        fillLocalToolBar(bars.getToolBarManager());
+    }
 
-	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(action1);
-		manager.add(new Separator());
-		manager.add(action2);
-	}
-  
+    private void fillLocalPullDown(IMenuManager manager) {
+        manager.add(action1);
+        manager.add(new Separator());
+        manager.add(action2);
+    }
+
   /*
-	private void fillContextMenu(IMenuManager manager) {
-		manager.add(action1);
-		manager.add(action2);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+    private void fillContextMenu(IMenuManager manager) {
+        manager.add(action1);
+        manager.add(action2);
+        // Other plug-ins can contribute there actions here
+        manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+    }
   */
-	
-	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(action1);
-		manager.add(action2);
-	}
 
-	private void makeActions() {
-		action1 = new Action() {
-			public void run() {
-				showMessage("Action 1 executed");
-			}
-		};
-		action1.setText("Action 1");
-		action1.setToolTipText("Action 1 tooltip");
-		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-		
-		action2 = new Action() {
-			public void run() {
-				showMessage("Action 2 executed");
-			}
-		};
-		action2.setText("Action 2");
-		action2.setToolTipText("Action 2 tooltip");
-		action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-	}
+    private void fillLocalToolBar(IToolBarManager manager) {
+        manager.add(action1);
+        manager.add(action2);
+    }
 
-	private void showMessage(String message) {
-		 MessageDialog.openInformation(
-			composite.getShell(),
-			"Sample View",
-			message);
-	}
+    private void makeActions() {
+        action1 = new Action() {
+            public void run() {
+                showMessage("Action 1 executed");
+            }
+        };
+        action1.setText("Action 1");
+        action1.setToolTipText("Action 1 tooltip");
+        action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+            getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 
-	/**
-	 * Passing the focus request to the viewer's control.
-	 */
-	public void setFocus() {
-		composite.setFocus();
-	}
+        action2 = new Action() {
+            public void run() {
+                showMessage("Action 2 executed");
+            }
+        };
+        action2.setText("Action 2");
+        action2.setToolTipText("Action 2 tooltip");
+        action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+                getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+    }
+
+    private void showMessage(String message) {
+         MessageDialog.openInformation(
+            composite.getShell(),
+            "Sample View",
+            message);
+    }
+
+    /**
+     * Passing the focus request to the viewer's control.
+     */
+    public void setFocus() {
+        composite.setFocus();
+    }
 }

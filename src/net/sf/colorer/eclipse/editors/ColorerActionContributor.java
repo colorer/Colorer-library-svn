@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import net.sf.colorer.*;
 import net.sf.colorer.eclipse.EclipsecolorerPlugin;
-import net.sf.colorer.eclipse.HRCMessages;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
 
@@ -31,15 +30,16 @@ public class ColorerActionContributor extends TextEditorActionContributor{
   public PairSelectContentAction pairSelectContentAction;
 
   class PairMatchAction extends Action{
-    PairMatchAction(){
-        super(Messages.get("pair.find"), ImageStore.EDITOR_PAIR_MATCH);
-      setActionDefinitionId("net.sf.colorer.eclipse.editors.pairmatch");
+      PairMatchAction(){
+          super(Messages.get("pair.find"), ImageStore.EDITOR_PAIR_MATCH);
+          setActionDefinitionId("net.sf.colorer.eclipse.editors.pairmatch");
           setToolTipText(Messages.get("pair.find.tooltip"));
-    }
-    public void run(){
-      activeEditor.matchPair();
-    }
+      }
+      public void run(){
+          activeEditor.matchPair();
+      }
   }
+
   class PairSelectAction extends Action{
     PairSelectAction(){
         super(Messages.get("pair.select"), ImageStore.EDITOR_PAIR_SELECT);
@@ -73,42 +73,48 @@ public class ColorerActionContributor extends TextEditorActionContributor{
   }
 
   class FileTypeActionMenu extends Action implements IMenuCreator{
-    class FileTypeAction extends Action{
-      FileType ftype;
-      FileTypeAction(FileType type){ super(type.getDescription()); ftype = type; }
-      public void run(){
-        if (activeEditor != null && activeEditor instanceof ColorerEditor){
-          ((ColorerEditor)activeEditor).setFileType(ftype);
-        }
+    
+      class FileTypeAction extends Action{
+          FileType ftype;
+          FileTypeAction(FileType type){
+              super(type.getDescription()); ftype = type;
+          }
+          public void run(){
+              if (activeEditor != null && activeEditor instanceof ColorerEditor){
+                  ((ColorerEditor)activeEditor).setFileType(ftype);
+              }
+          }
       }
-    }
-    private Menu filetypeList = null;
-    public FileTypeActionMenu(String label) {
-      super(label);
-      setMenuCreator(this);
-    }
-    public void run() {
-      ((ColorerEditor)activeEditor).chooseFileType();
-    };
 
-    Menu getMenuTree(Hashtable h, Menu root, String groupname){
-			Menu mgroup = (Menu)h.get(groupname);
-			String origname = groupname;
-			if (mgroup == null){
-			  int idx = groupname.lastIndexOf('.');
-			  if (idx != -1){
-			  	root = getMenuTree(h, root, groupname.substring(0, idx));
-			  	groupname = groupname.substring(idx+1, groupname.length());
-			  }
-			  MenuItem mitem = new MenuItem(root, SWT.CASCADE);
-			  mitem.setText(HRCMessages.get(origname, groupname));
-			  mgroup = new Menu(mitem);
-			  h.put(origname, mgroup);
-			  mitem.setMenu(mgroup);
-				mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
-			}
-			return mgroup;
-    }
+      private Menu filetypeList = null;
+      
+      public FileTypeActionMenu(String label) {
+          super(label);
+          setMenuCreator(this);
+      }
+
+      public void run() {
+          ((ColorerEditor)activeEditor).chooseFileType();
+      };
+
+      Menu getMenuTree(Hashtable h, Menu root, String groupname){
+          Menu mgroup = (Menu)h.get(groupname);
+          String origname = groupname;
+          if (mgroup == null){
+              int idx = groupname.lastIndexOf('.');
+              if (idx != -1){
+                  root = getMenuTree(h, root, groupname.substring(0, idx));
+                  groupname = groupname.substring(idx+1, groupname.length());
+              }
+              MenuItem mitem = new MenuItem(root, SWT.CASCADE);
+              mitem.setText(HRCMessages.get(origname, groupname));
+              mgroup = new Menu(mitem);
+              h.put(origname, mgroup);
+              mitem.setMenu(mgroup);
+              mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
+          }
+          return mgroup;
+      }
 
     public Menu getMenu(Control parent){
       if (filetypeList != null) filetypeList.dispose();
@@ -118,16 +124,15 @@ public class ColorerActionContributor extends TextEditorActionContributor{
       Hashtable groups = new Hashtable();
       for(Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
         FileType ftype = (FileType)e.nextElement();
-        //String ftgroup = pf.getFileTypeGroup(ftype);
-        //String ftdescription = pf.getFileTypeDescription(ftype);
 
         Menu mgroup = getMenuTree(groups, filetypeList, ftype.getGroup());
         FileTypeAction ft_action = new FileTypeAction(ftype);
         if (((ColorerEditor)activeEditor).getFileType().equals(ftype)){
-          mgroup.getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
-          if (mgroup.getParentItem().getParent().getParentItem() != null)
-            mgroup.getParentItem().getParent().getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
-          ft_action.setImageDescriptor(ImageStore.EDITOR_CUR_FILETYPE);
+            mgroup.getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
+            if (mgroup.getParentItem().getParent().getParentItem() != null){
+                mgroup.getParentItem().getParent().getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
+            }
+            ft_action.setImageDescriptor(ImageStore.EDITOR_CUR_FILETYPE);
         }
         item = new ActionContributionItem(ft_action);
         item.fill(mgroup, -1);
@@ -166,14 +171,14 @@ public ColorerActionContributor() {
 
 public void contributeToToolBar(IToolBarManager toolBarManager) {
     super.contributeToToolBar(toolBarManager);
-
+    
     toolBarManager.add(new Separator("net.sf.colorer.eclipse.editor.Separator"));
     toolBarManager.add(hrcupdateAction);
-  toolBarManager.add(filetypeAction);
+    toolBarManager.add(filetypeAction);
     toolBarManager.add(new Separator("net.sf.colorer.eclipse.editor.Separator1"));
-  toolBarManager.add(pairMatchAction);
-  toolBarManager.add(pairSelectAction);
-  toolBarManager.add(pairSelectContentAction);
+    toolBarManager.add(pairMatchAction);
+    toolBarManager.add(pairSelectAction);
+    toolBarManager.add(pairSelectContentAction);
 }
 
 public void dispose() {
