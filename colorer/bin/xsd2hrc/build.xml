@@ -3,7 +3,7 @@
 
   <property name='core-schemas' value='../../doc/2003'/>
   <property name='hrc-path' value='../../hrc'/>
-  <property name='hrc-path-auto' value='${hrc-path}/auto/types'/>
+  <property name='hrc-path-auto' value='${hrc-path}/auto/gen'/>
 
   <property name='custom' value='schemas-custom'/>
   
@@ -141,7 +141,7 @@
 
 
   <target name="xslfo">
-    <xslt in='schemas/xslfo.xsd' out='${hrc-path}/xml/xslfo.hrc' style='xsd2hrc.xsl'>
+    <xslt in='schemas/xslfo.xsd' out='${hrc-path-auto}/gen/xslfo.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xslfo'/>
       <param name='allow-any-attr' expression='yes'/>
@@ -156,6 +156,7 @@
     </xslt>
   </target>
   <target name="xslt2">
+    <echo>Not yet completed!!!</echo>
     <xslt in='schemas/xslt2.xsd' out='${hrc-path}/xml/xslt2.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xslt2'/>
@@ -217,10 +218,11 @@
   </target>
 
   <target name="xmlspec" description='XML Spec Markup Language'>
-    <xslt in='schemas/xmlspec.xsd' out='${hrc-path-auto}/../xmlspec.hrc' style='xsd2hrc.xsl'>
+    <echo>Not used yet</echo>
+    <xslt in='schemas/xmlspec.xsd' out='${hrc-path-auto}/xmlspec.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xmlspec'/>
-      <param name='include-prototype' expression='yes'/>
+      <!--param name='include-prototype' expression='yes'/-->
     </xslt>
   </target>
 
