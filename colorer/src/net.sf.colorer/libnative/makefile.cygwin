@@ -1,0 +1,34 @@
+#
+# Cygwin gcc
+#
+
+TARGET = net_sf_colorer.dll
+all: $(TARGET)
+
+shared_path=d:/projects/shared/
+JAVA_INCLUDE=d:/programs/java/jdk/include/
+JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
+
+obj_output=objs
+
+include $(shared_path)makefile.colorer.cygwin
+include makefile.core
+
+
+DLLMAIN=_DllMain@12
+
+LIBINC = -lwininet
+LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
+
+$(obj_output_slash)jcolorer.$(obj):
+	$(CPP) -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -s -O3 -c jcolorer.cpp
+
+$(TARGET): *.cpp *.h $(objs)
+	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,colorer.dll.base $(objs) $(LIBINC)
+	$(DLLTOOL) --dllname colorer.dll --base-file colorer.dll.base --output-exp colorer.dll.exp --def jcolorer.def
+	$(LINK) $(LIBFLAGS) -o $@ $(objs) colorer.dll.exp $(LIBINC)
+	$(RM) colorer.dll.base
+	$(RM) colorer.dll.exp
+
+clear:
+	$(RM) $(objs)
