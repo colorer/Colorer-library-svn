@@ -42,17 +42,17 @@
      <regexp match="/[\.\s]?#1(\*)[\.\;]?=/" region1="def:Keyword"/>
      <inherit scheme="package"/>
     </scheme>
-    
-    
+
+
     <scheme name="java">
-       <block start="/^ \s* (package) \s* \M ([\w\$\.]+)?/x" end="/\;/" 
+       <block start="/^ \s* (package) \s* \M ([\w\$\.]+)?/x" end="/\;/"
         scheme="package" region="def:Directive"
-        region01='def:Keyword' region02='PackageOutline' 
+        region01='def:Keyword' region02='PackageOutline'
         region10="def:SymbolStrong"
        />
-       <block start="/^ \s* (import) \s* \M ([\w\$\.\*]+)?/x" end="/\;/" 
+       <block start="/^ \s* (import) \s* \M ([\w\$\.\*]+)?/x" end="/\;/"
         scheme="import" region="def:Directive"
-        region01='def:Keyword' region02='ImportOutline' 
+        region01='def:Keyword' region02='ImportOutline'
         region10="def:SymbolStrong"
        />
     <!-- EE: end changed -->
@@ -77,7 +77,7 @@
        <block start="/(\{)/" end="/(\})/" scheme="TypeDeclaration"
               region00="def:SymbolStrong" region01="def:PairStart"
               region10="def:SymbolStrong" region11="def:PairEnd"/>
-       
+
        <!-- EE: ; -->
        <keywords region="def:Symbol">
         <symb name=";"/>
@@ -237,6 +237,16 @@
           <word name='short'/>
           <word name='void'/>
        </keywords>
+
+       <inherit scheme="Keywords-j2seClasses"/>
+
+       <regexp match="/\M \b (?{MethodOutline}[\:\w_*&amp;~]+?) \s* \( [^\)\(]*? \) [\w\s\{]*? $/x"/>
+       <!-- return new Object(...) -->
+       <regexp match="/^\s* \M \b ([\:\w_*&amp;~]+?\s+)+ (?{MethodOutline}[\:\w_*&amp;~]+?) \s* \( [^\)\(]*? \) \s* ; \s* $/x"/>
+
+    </scheme>
+
+    <scheme name="Keywords-j2seClasses" if="j2se-classes">
        <keywords region="def:ClassKeyword">
           <word name="AbstractMethoError"/>
           <word name="AccessException"/>
@@ -739,11 +749,6 @@
           <word name="ZipInputStream"/>
           <word name="ZipOutputStream"/>
        </keywords>
-
-       <regexp match="/\M \b (?{MethodOutline}[\:\w_*&amp;~]+?) \s* \( [^\)\(]*? \) [\w\s\{]*? $/x"/>
-       <!-- return new Object(...) -->
-       <regexp match="/^\s* \M \b ([\:\w_*&amp;~]+?\s+)+ (?{MethodOutline}[\:\w_*&amp;~]+?) \s* \( [^\)\(]*? \) \s* ; \s* $/x"/>
-
     </scheme>
 
   </type>

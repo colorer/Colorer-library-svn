@@ -20,7 +20,7 @@
            And many minor changes.
   ]]></contributors></annotation>
 
-  <type name="tcltk" access="public">
+  <type name="tcltk">
     <import type="def"/>
 
     <region name="tclString" parent="String"/>
@@ -121,14 +121,14 @@
                              (tcl_rcFileName)|(tcl_traceExec)|(tcl_version)|
                              (tcl_rcRsrcName)|(tcl_traceCompile)|
                              (tk_library)|(tk_patchLevel)|(argv0)|(argv)|(argc)|
-                             (tk_strictMotif)|(tk_version))\B/x" 
+                             (tk_strictMotif)|(tk_version))\B/x"
               region0="tclVar2"  region2="tclMainSymb" region3="tclVar2" />
-      <!-- Following variables has array type and needs 
+      <!-- Following variables has array type and needs
            the special handling -->
-      <block start="/(\$|\s?#1)(::)?((env)|(tcl_platform))(\()/" end="/(\))|$/" 
+      <block start="/(\$|\s?#1)(::)?((env)|(tcl_platform))(\()/" end="/(\))|$/"
              scheme="tcltkString" priority="low"
-             region="tclArrayNm" region00="tclSymb" region01="tclVar2" 
-             region02="tclMainSymb" region03="tclVar2" region06="def:PairStart" 
+             region="tclArrayNm" region00="tclSymb" region01="tclVar2"
+             region02="tclMainSymb" region03="tclVar2" region06="def:PairStart"
              region10="tclSymb" region11="def:PairEnd"/>
     </scheme>
 
@@ -147,18 +147,18 @@
     <scheme name="tcltkError">
       <keywords region="tclError">
         <symb name="("/> <symb name=")"/>
-        <symb name="{"/> <symb name="}"/> 
+        <symb name="{"/> <symb name="}"/>
         <symb name="["/> <symb name="]"/>
       </keywords>
     </scheme>
 
     <scheme name="tcltkNamespace">
       <inherit scheme="tcltkPredefinedVar"/>
-      <block start="/\$(\{)/" end="/(\})|$/" scheme="def:empty" 
-             region="tclVar2" region00="tclVar2" 
+      <block start="/\$(\{)/" end="/(\})|$/" scheme="def:empty"
+             region="tclVar2" region00="tclVar2"
              region01="tclSymb" region11="tclSymb"/>
-      <block start="/(::)?[\w]*((\())\m/" end="/(\))|$/" 
-             scheme="tcltkString" region="tclArrayNm" 
+      <block start="/(::)?[\w]*((\())\m/" end="/(\))|$/"
+             scheme="tcltkString" region="tclArrayNm"
              region01="tclMainSymb" region02="def:PairStart" region03="tclSymb"
              region10="tclSymb" region11="def:PairEnd"/>
       <regexp match="/(::)[\w]*/" region1="tclMainSymb"/>
@@ -166,13 +166,13 @@
 
     <scheme name="tcltkVar">
       <inherit scheme="tcltkPredefinedVar"/>
-      <block start="/\$(\{)/" end="/(\})|$/" scheme="def:empty" 
-             region="tclVar2" region00="tclVar2" region01="tclSymb" 
+      <block start="/\$(\{)/" end="/(\})|$/" scheme="def:empty"
+             region="tclVar2" region00="tclVar2" region01="tclSymb"
              region11="tclSymb"/>
-      <block start="/(\$)(::)?([\w]*)(\()/" end="/(\))|$/" scheme="tcltkString" 
-             priority="low" region="tclArrayNm" 
-             region00="tclSymb" region01="tclVar" region02="tclMainSymb" 
-             region03="tclVar" region04="def:PairStart" 
+      <block start="/(\$)(::)?([\w]*)(\()/" end="/(\))|$/" scheme="tcltkString"
+             priority="low" region="tclArrayNm"
+             region00="tclSymb" region01="tclVar" region02="tclMainSymb"
+             region03="tclVar" region04="def:PairStart"
              region10="tclSymb" region11="def:PairEnd"/>
       <block start="/\$(::)?[\w]*/" end="/\M([^\w])|$/" scheme="tcltkNamespace"
              region="tclVar" region00="tclVar" region01="tclMainSymb"/>
@@ -187,7 +187,7 @@
 
     <scheme name="tcltkSpec">
       <!-- Special characters -->
-      <regexp match="/((\\x[\da-fA-F]{1,2})\M([^\da-fA-F]|$))|(\\x([\da-fA-F]*)?[\da-fA-F]{2})/" 
+      <regexp match="/((\\x[\da-fA-F]{1,2})\M([^\da-fA-F]|$))|(\\x([\da-fA-F]*)?[\da-fA-F]{2})/"
               region2="tclChar" region4="tclChar" region5="tclError"/>
       <regexp match="/\\[\d]{1,3}/" region0="tclChar"/>
       <regexp match="/\\\s+$/" region0="tclError"/>
@@ -206,7 +206,7 @@
              region="tclString" region00="def:PairStart" region10="def:PairEnd"/>
 
       <!-- Linear comments -->
-      <block start="/\#/" end="/([^\\]?#1$)|([\\]\s+$)/" scheme="Comment" 
+      <block start="/\#/" end="/([^\\]?#1$)|([\\]\s+$)/" scheme="Comment"
              region="tclComment" region12="tclError"/>
 
       <!-- paired block for matching -->
@@ -215,26 +215,26 @@
       </inherit>
 
       <!-- Functions -->
-      <block start="/^\s*\M(proc)\s+/" 
+      <block start="/^\s*\M(proc)\s+/"
              end="/(proc\s+[\w:\$]+\m\s+(([\w]+)|([&quot;\{]?=)))|(\m[&quot;\{].*?$)?=|$/" scheme="tcltkNamespace"
              region="tclFunc" region01="tclBase" region13="tclVar" region14="tclMainSymb"/>
       <!-- !!! Selects some user defined functions as type function in text !!! -->
       <!-- You could enable this and disable next two blocks if you like -->
       <!--
-      <block start="/\M(::)?[\w]+?(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/" 
+      <block start="/\M(::)?[\w]+?(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/"
              scheme="tcltkNamespace" region="tclFunc"/>
-      <block start="/\M(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/" 
+      <block start="/\M(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/"
              scheme="tcltkNamespace" region="tclFunc"/>
       -->
-      <block start="/\M(::)?[\w]+?(::)[\w]*?/" end="/([\]};]?=)|(([^\w]?=)|$)/" 
+      <block start="/\M(::)?[\w]+?(::)[\w]*?/" end="/([\]};]?=)|(([^\w]?=)|$)/"
              scheme="tcltkNamespace"/>
-      <block start="/\M(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/" 
+      <block start="/\M(::)[\w]+?/" end="/([\]};]?=)|(([^\w]?=)|$)/"
              scheme="tcltkNamespace"/>
 
       <!-- Namespace definition -->
       <block start="/\M(namespace)\s+(eval)\s+/" end="/((namespace)\s+(eval)\s+[\w:\$]+\m\s+[&quot;\{]?=)|(\m[&quot;\{].*?$)?=|$/" scheme="tcltkNamespace"
              region="tclFunc" region01="tclBase" region02="tclWord"/>
-      
+
       <!-- Specials -->
       <block start="/(^|;?#1|\{?#1|\[?#1)\s*((set)|(variable))\s+\M(::)?[\w]/"
              end="/([\]};]?=)|(([^\w\(\$]?=)|$)/" scheme="tcltkNamespace" region="tclVar" region02="tclBase"/>
@@ -246,7 +246,7 @@
              region="tclVar" region02="tclBase" region03="tclNumb" region07="tclVar"/>
       <block start="/(^|;?#1|\{?#1|\[?#1)\s*(uplevel)(\s+((\\?\#)?([\d]+)|(\$[\w]+)))?/" end="/([;\]}])?=|$/" scheme="tcltk" priority="low"
              region02="tclBase" region03="tclNumb" region07="tclVar"/>
-      <regexp match="/(^|;?#1|\{?#1|\[?#1)\s*(foreach)\s+(([\w]+)|([&quot;\{]?=))/" 
+      <regexp match="/(^|;?#1|\{?#1|\[?#1)\s*(foreach)\s+(([\w]+)|([&quot;\{]?=))/"
               region0="tclVar" region2="tclBase"/>
       <regexp match="/\b((\s-)?#2[\w]+)/" region1="tclParam"/>
 
@@ -263,7 +263,7 @@
       <keywords region="tclString">
         <symb name="#"/>
       </keywords>
-      
+
       <inherit scheme="tcltkVar"/>
 
       <!-- !!! Additional parsing in srings !!! -->
