@@ -216,7 +216,7 @@ void FarEditorSet::configure()
     FarDialogItem fdi[] = {
       { DI_DOUBLEBOX,3,1,49,15,0,0,0,0,""},
 
-      { DI_CHECKBOX,6,3,0,0,FALSE,0,0,0,""},
+      { DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,""},
 
       { DI_TEXT,6,5,0,0,FALSE,0,0,0,""},
       { DI_EDIT,10,6,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
@@ -226,7 +226,7 @@ void FarEditorSet::configure()
       { DI_EDIT,10,10,25,5,FALSE,(DWORD)"clr_time",DIF_HISTORY,0,""},
       { DI_BUTTON,6,12,0,0,FALSE,0,0,0,""},    // reload
       { DI_BUTTON,26,12,0,0,FALSE,0,0,0,""},   // all
-      { DI_BUTTON,30,14,0,0,TRUE,0,0,TRUE,""}, // ok
+      { DI_BUTTON,30,14,0,0,FALSE,0,0,TRUE,""}, // ok
       { DI_BUTTON,38,14,0,0,FALSE,0,0,0,""},   // cancel
     }; // type, x1, y1, x2, y2, focus, sel, fl, def, data
 
