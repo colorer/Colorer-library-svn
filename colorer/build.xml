@@ -6,6 +6,8 @@
     It contains tasks, used to build and distribute Colorer-take5 library packages.
   </description>
 
+  <!-- Chance to redefine properties without changing default build.properties file -->
+  <property file='build.user.properties'/>
 
   <property file='build.properties'/>
 
@@ -22,7 +24,8 @@
 
   <property name='library-linux-name' value='Colorer-take5-linux${distr-version}'/>
   <property name='library-linux-dir' value='${build-dir}/${library-linux-name}'/>
-  <property name='library-linux-zip' value='${build-dir}/${library-linux-name}.zip'/>
+  <property name='library-linux-tar' value='${build-dir}/${library-linux-name}.tar'/>
+  <property name='library-linux-tar.bz2' value='${library-linux-tar}.bz2'/>
 
   <property name='farplugin-name' value='FarColorer-take5${distr-version}'/>
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
@@ -38,7 +41,15 @@
                                       **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
                                       **/*.txt, **/*.html, **/*.xsd, **/*.dtd,
                                       **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
-  
+
+  <property environment='env'/>
+  <property name='env.Path' value=''/>
+  <property name='env.LIB' value=''/>
+  <property name='native-path-add' value=''/>
+  <property name='native-libs-add' value=''/>
+  <property name='native-path' value='${env.Path}:${native-path-add}'/>
+  <property name='native-libs' value='${env.LIB}:${native-libs-add}'/>
+
 
   <xmlcatalog id="DTDs">
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -49,7 +60,7 @@
          location="doc/2003/catalog.dtd"/>
   </xmlcatalog>
 
-  
+
   <target name="init">
     <condition property='make' value='${vc.make}'><equals arg1='${platform}' arg2='vc'/></condition>
     <condition property='makefile' value='${vc.makefile}'><equals arg1='${platform}' arg2='vc'/></condition>
@@ -74,9 +85,11 @@
     </fail>
 
     <property name='add.excludes' value='**/*.ilc, **/*.ild,
-              **/*.ilf, **/*.ils, **/*.tds, **/*.map, **/*.o
-              **/colorer/colorer.exe, **/colorer/colorer,
+              **/*.ilf, **/*.ils, **/*.tds, **/*.map, **/*.o, **/*.exp
+              **/colorer/colorer.exe, **/colorer/colorer, **/warn_out
               **/*.obj, **/*.lib, **/*.map, **/*.log, **/*.dll, **/*.asm,
+              **/*.so, **/src.zip, **/colorer.jar,
+              **/build.user.properties
               '/>
 
     <uptodate property="doc.javadoc.required" targetfile="doc/java/package-list">
@@ -118,16 +131,16 @@
   <target name="make.clean">
     <exec dir='${make.dir}' executable='${make}'>
       <arg line='${makefile}'/>
-      <arg line='clear'/>
+      <arg line='clean'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
     </exec>
   </target>
 
-  
+
 
   <target name='install' depends='init' description='Installs Colorer-take5 Library'>
   </target>
-  
+
   <target name="doc.clean">
     <delete file='src\shared\colorer_doc\warn_out'/>
     <ant dir='doc/hrc-ref' antfile='build.xml' target='clean'/>
@@ -206,7 +219,7 @@
   <target name="hrcupdate" depends='init' description='Builds a package of the current HRC base'>
     <tstamp><format property="TODAY" pattern="yyyy-MM-dd"/></tstamp>
     <property name='hrcupdate-zip' value='${build-dir}/hrc-update.${TODAY}.zip'/>
-    
+
     <mkdir dir='${hrcupdate-dir}/hrc'/>
     <antcall target='hrc.jar'>
       <param name='target-dir' value='${hrcupdate-dir}'/>
@@ -229,6 +242,7 @@
   </target>
 
   <target name="library" depends='init, xsd2hrc.distr, doc' description='Builds Colorer-take5 Library source distribution package'>
+
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
@@ -250,10 +264,10 @@
     </copy>
     <copy todir="${library-dir}">
       <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
-      <fileset dir="." includes="doc/**" excludes='**/*.log'/>
+      <fileset dir="." includes="doc/**" excludes='**/*.log, build.user.properties'/>
     </copy>
     <copy todir='${library-dir}' includeemptydirs='false'>
-      <fileset dir='.' includes='*' excludes='*.log'/>
+      <fileset dir='.' includes='*' excludes='*.log, build.user.properties'/>
     </copy>
 
     <fixcrlf srcdir="${build-dir}/${library-name}" eol="lf"
@@ -276,54 +290,33 @@
   </target>
 
   <target name="library-linux" depends='init, xsd2hrc.distr, doc' description='Builds Colorer-take5 Library linux package'>
-    
-    <condition property="target">
-      <or>
-       <equals arg1="${platform}" arg2="gcc"/>
-       <equals arg1="${platform}" arg2="macos"/>
-      </or>
-    </condition>
-    <!--
-    <fail unless='target' message='To build linux distribution you must choose "gcc" or "macos" platform'/>
-    -->
-
-    <exec dir='src/colorer' executable='${make}' failonerror='true'>
-      <arg line='${makefile}'/>
-      <env key='Path' path='${native-path}:${java.library.path}'/>
-      <env key='LIB' path='${native-libs}'/>
-    </exec>
-    <condition property="lib">
-      <or>
-        <available filepath="src/colorer" file="colorer"/>
-      </or>
-    </condition>
-    <fail unless='lib' message='Native executable library was not compiled'/>
 
     <mkdir dir='${library-linux-dir}'/>
 
     <copy todir="${library-linux-dir}/bin">
-      <fileset dir="src/colorer" includes="colorer.exe,colorer"/>
-      <fileset dir="bin" includes="**" excludes='**/farplugin/**/*, **/*.bat'/>
+      <fileset dir="bin" includes="**" excludes='farplugin/**, **/*.exe, **/*.bat'/>
     </copy>
     <copy todir="${library-linux-dir}">
       <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
       <fileset dir="." includes="doc/**" excludes='**/*.log'/>
     </copy>
     <copy todir='${library-linux-dir}' includeemptydirs='false'>
-      <fileset dir='.' includes='*' excludes='*.log'/>
+      <fileset dir='.' includes='LICENSE, README, catalog.xml' excludes='*.log'/>
     </copy>
-
+    <copy todir='${library-linux-dir}' includeemptydirs='false'>
+      <fileset dir='src/libcolorer/linux' includes='*'/>
+    </copy>
     <fixcrlf srcdir="${library-linux-dir}" eol="lf"
              includes="${fixcrlf-ext}"
     />
-
-    <zip destfile='${library-linux-zip}'>
-      <fileset dir='${build-dir}' includes='${library-linux-name}/**'/>
-    </zip>
+    <tar destfile='${library-linux-tar.bz2}' compression='bzip2'>
+      <tarfileset dir='${library-linux-dir}' mode='755' includes='configure'/>
+      <tarfileset dir='${library-linux-dir}' includes='**/*' excludes='configure'/>
+    </tar>
 
   </target>
 
-  
+
   <target name="eclipseplugin.clean" depends='init'>
     <delete dir='${eclipseplugin-dir}'/>
     <delete file='${eclipseplugin-zip}'/>
@@ -388,7 +381,7 @@
     <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
       <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
     </copy>
-    
+
     <mkdir dir='${eclipseplugin-dir}/colorer'/>
     <antcall target='hrc.jar'>
       <param name='target-dir' value='${eclipseplugin-dir}/colorer'/>
@@ -400,9 +393,9 @@
     </copy>
 
     <copy todir='${eclipseplugin-dir}/colorer'>
-      <fileset dir='.' includes='README,catalog-eclipse.xml'/>
+      <fileset dir='.' includes='README'/>
+      <fileset dir='src/net.sf.colorer/distr' includes='catalog.xml'/>
     </copy>
-    <move file='${eclipseplugin-dir}/colorer/catalog-eclipse.xml' tofile='${eclipseplugin-dir}/colorer/catalog.xml'/>
     <copy todir='${eclipseplugin-dir}'>
       <fileset dir='.' includes='LICENSE'/>
     </copy>
@@ -452,16 +445,16 @@
       <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
       <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
     </copy>
-    
+
     <mkdir dir='${farplugin-dir}/hrd/console'/>
     <copy todir='${farplugin-dir}/hrd/console'>
       <fileset dir='hrd/console' includes='**'/>
     </copy>
 
     <copy todir='${farplugin-dir}'>
-      <fileset dir='.' includes='LICENSE,README,catalog-far.xml'/>
+      <fileset dir='.' includes='LICENSE,README'/>
+      <fileset dir='src/pcolorer' includes='catalog.xml'/>
     </copy>
-    <move file='${farplugin-dir}/catalog-far.xml' tofile='${farplugin-dir}/catalog.xml'/>
 
     <antcall target='hrc.jar'>
       <param name='target-dir' value='${farplugin-dir}'/>
