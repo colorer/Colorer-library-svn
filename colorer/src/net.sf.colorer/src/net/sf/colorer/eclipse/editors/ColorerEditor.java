@@ -22,6 +22,7 @@ import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineElement;
 import net.sf.colorer.eclipse.outline.WorkbenchOutliner;
+import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.action.IMenuManager;
@@ -141,6 +142,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
   }
   
     public void notifyReload() {
+        Logger.trace("ColorerEditor", "notifyReload()");
         relinkColorer();
     }
 
@@ -183,34 +185,36 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     }
   }
 
-  public Object getAdapter(Class key) {
-    if (key.equals(IContentOutlinePage.class)) {
-      IEditorInput input = getEditorInput();
-      if (input instanceof IFileEditorInput) {
-        if (contentOutliner != null) contentOutliner.detach();
-        contentOutliner = new ColorerContentOutlinePage();
-        contentOutliner.attach(structureOutline, errorsOutline);
-        contentOutliner.addDoubleClickListener(new IDoubleClickListener(){
-          public void doubleClick(DoubleClickEvent event) {
-            if (text == null || event.getSelection().isEmpty()) return;
-            OutlineElement el = (OutlineElement)((IStructuredSelection)event.getSelection()).getFirstElement();
-            text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.token.length());
-            text.showSelection();
-            textColorer.stateChanged();
-          }
-        });
-        return contentOutliner;
-      }
+    public Object getAdapter(Class key) {
+        if (key.equals(IContentOutlinePage.class)) {
+            IEditorInput input = getEditorInput();
+            if (input instanceof IFileEditorInput) {
+                if (contentOutliner != null) contentOutliner.detach();
+                contentOutliner = new ColorerContentOutlinePage();
+                contentOutliner.attach(structureOutline, errorsOutline);
+                contentOutliner.addDoubleClickListener(new IDoubleClickListener(){
+                    public void doubleClick(DoubleClickEvent event) {
+                        if (text == null || event.getSelection().isEmpty()) return;
+                        OutlineElement el = (OutlineElement)((IStructuredSelection)event.getSelection()).getFirstElement();
+                        text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.token.length());
+                        text.showSelection();
+                        textColorer.stateChanged();
+                    }
+                });
+                return contentOutliner;
+            }
+        }
+        return super.getAdapter(key);
     }
-    return super.getAdapter(key);
-  }
 
     public void dispose() {
         prefStore.removePropertyChangeListener(this);
         ColorerPlugin.getDefault().removeReloadListener(this);
-        if (textFont != null) textFont.dispose();
-            super.dispose();
+        if (textFont != null) {
+            textFont.dispose();
         }
+        super.dispose();
+    }
 
 }
 /* ***** BEGIN LICENSE BLOCK *****
