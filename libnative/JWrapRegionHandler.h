@@ -48,7 +48,7 @@ public:
     env->CallVoidMethod(regionHandler, clID, lno, env->NewString(line->getWChars(), line->length()));
   }
   void addRegion(int lno, String *line, int sx, int ex, const Region *region){
-    if (!region->hasParent(filter)) return;
+    if (filter != null && !region->hasParent(filter)) return;
     jobject jr = hrcParser->getRegion(env, region->getName());
     env->CallVoidMethod(regionHandler, arID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr);
   }
