@@ -370,6 +370,10 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, CXmlEl *elem)
 
     if (*tmpel->getName() == "inherit"){
       const String *nqSchemeName = tmpel->getParamValue(DString("scheme"));
+      if (nqSchemeName == null || nqSchemeName->length() == 0){
+        if (errorHandler != null) errorHandler->error(StringBuffer("empty scheme name in inheritance operator in scheme '")+scheme->schemeName+"'");
+          continue;
+      };
       next->type = SNT_INHERIT;
       next->schemeName = new SString(nqSchemeName);
       String *schemeName = qualifyForeignName(nqSchemeName, QNT_SCHEME, false);
@@ -455,7 +459,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, CXmlEl *elem)
         continue;
       };
       const String *schemeName = tmpel->getParamValue(DString("scheme"));
-      if (schemeName == null){
+      if (schemeName == null || schemeName->length() == 0){
         if (errorHandler != null) errorHandler->error(StringBuffer("block with bad scheme attribute in scheme '")+scheme->getName()+"'");
         delete startParam;
         delete endParam;

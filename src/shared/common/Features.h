@@ -2,7 +2,7 @@
 #define _COLORER_FEATURES_H_
 
 /**
-  If defined, long-living classes uses chunk allocation procedure
+  If defined, long-living classes use chunk allocation procedure
 */
 #define USE_CHUNK_ALLOC TRUE
 
