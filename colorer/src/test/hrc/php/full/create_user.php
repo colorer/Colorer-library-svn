@@ -3,7 +3,6 @@
 /*
  *	W-AGORA 4.0
  *	-----------
- *	$Id$
  *	Usage:		Create a new user for a site
  *	Author:		Marc Druilhe <mdruilhe@w-agora.com>
  */
