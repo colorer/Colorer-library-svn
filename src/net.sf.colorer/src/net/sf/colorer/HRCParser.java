@@ -2,26 +2,46 @@ package net.sf.colorer;
 
 import java.util.*;
 
+import net.sf.colorer.impl.Logger;
+
 /**
  * Abstract template of HRCParser class implementation. Defines basic operations
  * of loading and accessing HRC information.
  */
 public class HRCParser {
+    
     long iptr;
-
-    static int count = 0;
+    private boolean disposed = false;
 
     Group rootGroups[];
-
     Hashtable allGroups = new Hashtable();
 
     HRCParser(long _iptr) {
         iptr = _iptr;
+        Logger.trace("HRCParser", "init");
+    }
+
+    void checkActive() {
+        if (disposed) {
+            throw new RuntimeException("checkActive");
+        }
+    }
+    
+    public boolean isDisposed() {
+        return disposed;
+    }
+    
+    public void dispose() {
+        checkActive();
+        disposed = true;
+        finalize(iptr);
+        Logger.trace("HRCParser", "disposed");
     }
 
     protected void finalize() throws Throwable {
-        finalize(iptr);
-    }
+        if (disposed) return;
+        dispose();
+    };
 
     native void finalize(long iptr);
 

@@ -19,7 +19,7 @@ public class Logger {
             if (msg != null) {
                 print = msg.toString();
             }
-            System.out.println("["+comp+"] "+print);
+            System.out.println("[J]["+comp+"] "+print);
             if (ex != null) {
                 ex.printStackTrace(System.out);
             }
