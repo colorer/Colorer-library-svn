@@ -12,7 +12,7 @@
 <!--
 <xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/fo/docbook.xsl"/>
 -->
-<xsl:import href="file:/c:/install/xml/docbook-xsl/fo/docbook.xsl"/>
+<xsl:import href="@docbook-dir@/fo/docbook.xsl"/>
 
 
 <xsl:include href="fo-titlepage.xsl"/>

@@ -12,7 +12,7 @@ into it's logic
 -->
 
 <!--<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/xhtml/docbook.xsl"/>-->
-<xsl:import href="file:/c:/install/xml/docbook-xsl/xhtml/docbook.xsl"/>
+<xsl:import href="@docbook-dir@/xhtml/docbook.xsl"/>
 
 <xsl:include href="html-titlepage.xsl"/>
 
