@@ -217,7 +217,7 @@
       <!-- Functions -->
       <block start="/^\s*\M(proc)\s+/"
              end="/(proc\s+[\w:\$]+\m\s+(([\w]+)|([&quot;\{]?=)))|(\m[&quot;\{].*?$)?=|$/" scheme="tcltkNamespace"
-             region="tclFunc" region01="tclBase" region13="tclVar" region14="tclMainSymb"/>
+             region="tclFunc" region01="tclBase" region11="ProcOutline" region13="tclVar" region14="tclMainSymb"/>
       <!-- !!! Selects some user defined functions as type function in text !!! -->
       <!-- You could enable this and disable next two blocks if you like -->
       <!--
