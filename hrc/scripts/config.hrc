@@ -21,7 +21,7 @@ With help of:
          <inherit scheme="NetAddresses"/>
 <!-- Path -->
          <inherit scheme="Path"/>
-         <regexp match="/^\s* \M \[ (.*?) \]/x" region1="Function"/>
+         <xregexp match="/^\s* \M \[ (.*?) \]/x" region1="Function"/>
          <regexp match="/\%[\w\.]+\%/" region0="Var"/>
          <regexp match="/\{[\da-fA-F]{8}\-[\da-fA-F]{4}\-[\da-fA-F]{4}\-[\da-fA-F]{4}\-[\da-fA-F]{12}\}/" region0="Number"/>
          <regexp match="/\-[\w\s]{4,}?\-/" region0="String"/>
@@ -233,12 +233,12 @@ With help of:
 
       <scheme name="ConfCommonRight">
 <!-- Linear Comments -->
-         <block start="/(^|\s{1,}|^\s+);/" end="/$/" scheme="Comment" region="Comment"/>
-         <block start="/(^|\s{2,}|^\s+)\/\//" end="/$/" scheme="Comment" region="Comment"/>
-         <block start="/(^|\s{2,}|^\s+)\#/" end="/$/" scheme="Comment" region="Comment"/>
-         <regexp match="/(^|\s{3,})(&amp;&amp;.*$)/" region2="Comment"/>
-         <regexp match="/(^|\s{3,})(\*.*$)/" region2="Comment"/>
-         <inherit scheme="ConfCore"/>
+         <block start="/(\s+);/" end="/$/" scheme="Comment" region="Comment"/>
+         <block start="/(\s+)\/\//" end="/$/" scheme="Comment" region="Comment"/>
+         <block start="/(\s+)\#/" end="/$/" scheme="Comment" region="Comment"/>
+         <xregexp match="/(^|\s{3,})(&amp;&amp;.*$)/" region2="Comment"/>
+         <xregexp match="/(^|\s{3,})(\*.*$)/" region2="Comment"/>
+         <xinherit scheme="ConfCore"/>
       </scheme>
 
       <scheme name="ConfCommon">

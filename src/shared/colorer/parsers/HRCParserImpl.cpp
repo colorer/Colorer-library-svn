@@ -120,6 +120,9 @@ int HRCParserImpl::getRegionCount() {
 }
 
 const Region *HRCParserImpl::getRegion(int id) {
+  if (id < 0 || id >= regionNamesVector.size()){
+    return null;
+  }
   return regionNamesVector.elementAt(id);
 }
 
