@@ -77,8 +77,8 @@
   <assign name="def:Date" fore="#009797"/>
   <assign name="def:Time" fore="#8745a0"/>
 
-  <assign name="def:PairStart" fore="#a04040"/>
-  <assign name="def:PairEnd" fore="#a04040"/>
+  <assign name="def:PairStart" fore="#f0a0a0"/>
+  <assign name="def:PairEnd" fore="#f0a0a0"/>
   <assign name="def:PairStrongStart" fore="#880088"/>
   <assign name="def:PairStrongEnd" fore="#880088"/>
 

@@ -4,7 +4,7 @@
 <hrd xmlns="http://colorer.sf.net/2003/hrd">
 
   <assign name="def:Text"   fore="#000020" back="#f6f8ff"/>
-  <assign name="def:HorzCross" fore="#000000" back="#e1e0f2"/>
+  <assign name="def:HorzCross" fore="#000000" back="#e8e7f8"/>
   <assign name="def:VertCross" fore="#000000" back="#e1e0f2"/>
 
   <assign name="def:Number" fore="#008c00"/>
@@ -75,8 +75,8 @@
   <assign name="def:Date" fore="#009797"/>
   <assign name="def:Time" fore="#8745a0"/>
 
-  <assign name="def:PairStart" fore="#4040a0"/>
-  <assign name="def:PairEnd" fore="#4040a0"/>
+  <assign name="def:PairStart" fore="#d0d0ff"/>
+  <assign name="def:PairEnd" fore="#d0d0ff"/>
   <assign name="def:PairStrongStart" fore="#880088"/>
   <assign name="def:PairStrongEnd" fore="#880088"/>
 
