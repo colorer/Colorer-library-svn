@@ -23,7 +23,6 @@
     <import type="def"/>
     <import type="jScript"/>
     <import type="vbScript"/>
-    <import type="perl"/>
 
     <region name="htmlString" parent="String"/>
     <region name="htmlNumb" parent="Number"/>
@@ -47,7 +46,7 @@
     <region name='HeaderOutline' parent='def:Outlined' description='Header Element'/>
 
     <scheme name="xssi">
-      <block start="/(=)\s*&#34;/" end="/&#34;/" scheme="perlInterpolateString" region="String" region01="Symbol" region00="PairStart" region10="PairEnd"/>
+      <block start="/(=)\s*&#34;/" end="/&#34;/" scheme="perl:InterpolateString" region="String" region01="Symbol" region00="PairStart" region10="PairEnd"/>
       <keywords ignorecase="yes" region="htmlParam">
         <word name="cgi"/>
         <word name="cmd"/>
@@ -393,7 +392,7 @@
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
-             end="/%htmlscrEnd;/ix" scheme="perl" region00="PairStrongStart" region10="PairStrongEnd"/>
+             end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix" 

@@ -21,7 +21,7 @@
       <region name="PairEnd" parent="def:PairEnd"/>
 
       <scheme name="NestedComment">
-        <inherit scheme="Comment"/>
+        <inherit scheme="def:Comment"/>
         <block scheme="NestedComment" region="Comment">
           <start region="PairStart">/\(\*/</start>
           <end region="PairEnd">/\*\)/</end>

@@ -8,7 +8,6 @@
 
       <import type="def"/>
       <import type="html"/>
-      <import type="perl"/>
       <import type="jScript"/>
       <import type="vbScript"/>
 
@@ -24,8 +23,8 @@
       </scheme>
 
       <scheme name="mason_perl_1line">
-         <inherit scheme="perlBuildinVars"/>
-         <inherit scheme="perlVars"/>
+         <inherit scheme="perl:BuildinVars"/>
+         <inherit scheme="perl:Vars"/>
          <inherit scheme="CString"/>
       </scheme>
 
@@ -41,16 +40,16 @@
       <scheme name="mason_perl">
          <regexp match="/\#.*? \M (\%&gt;|$) /ix" region="Comment"/>
          <inherit scheme="masonInverseBlock"/>
-         <inherit scheme="perl">
-            <virtual scheme="perl" subst-scheme="mason_perl"/>
+         <inherit scheme="perl:perl">
+            <virtual scheme="perl:perl" subst-scheme="mason_perl"/>
          </inherit>
       </scheme>
 
       <scheme name="mason_html_ps">
          <inherit scheme="masonBlock"/>
-         <inherit scheme="perl">
-            <virtual scheme="perlMETA" subst-scheme="masonBlock"/>
-            <virtual scheme="perl" subst-scheme="mason_html_ps"/>
+         <inherit scheme="perl:perl">
+            <virtual scheme="perl:META" subst-scheme="masonBlock"/>
+            <virtual scheme="perl:perl" subst-scheme="mason_html_ps"/>
          </inherit>
       </scheme>
 
@@ -84,7 +83,7 @@
 
       <scheme name="masonScripts">
          <inherit scheme="htmlScripts">
-            <virtual scheme="perl" subst-scheme="mason_html_ps"/>
+            <virtual scheme="perl:perl" subst-scheme="mason_html_ps"/>
             <virtual scheme="jScript" subst-scheme="mason_html_js"/>
             <virtual scheme="vbScript" subst-scheme="mason_html_vbs"/>
          </inherit>
