@@ -19,7 +19,7 @@
     - /usr/share/colorer/catalog.xml
 
   In this case you can delete 'colorer' folder of the EclipseColorer
-  package, ant it will start to read configuration data from the global source.
+  package, and it will start to read configuration data from the global source.
 
 
   All files in this package are subject to the Mozilla Public License 1.1

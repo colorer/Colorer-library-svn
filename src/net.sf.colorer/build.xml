@@ -17,7 +17,7 @@
     <property name="temp.folder" value="${basedir}/temp.folder"/>
     <property name="plugin.destination" value="${basedir}/distr"/>
     <property name="build.result.folder" value="${basedir}"/>
-    <property name='eclipse.plugins' value='c:/Program files/Eclipse/plugins'/>
+    <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
   </target>
 
   <target name="properties" if="eclipse.running">
