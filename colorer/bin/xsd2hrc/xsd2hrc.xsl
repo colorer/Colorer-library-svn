@@ -177,7 +177,14 @@
         <region name="Enumeration"        parent="xml:Enumeration" description="Enumerated type values"/>
 
         <xsl:for-each select='$custom-type/c:outline/c:element[@name]'>
-          <region name="{@name}Outlined" parent="def:Outlined" description="{@description}"/>
+          <region name="{@name}Outlined" description="{@description}">
+            <xsl:attribute name='parent'>
+              <xsl:choose><xsl:when test='@parent'>
+                <xsl:value-of select='@parent'/>
+              </xsl:when><xsl:otherwise>def:Outlined</xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+          </region>
         </xsl:for-each>
         <xsl:call-template name='crlf'/>
         <entity name="ns-real-prefix" value="{$ns-real-prefix}"/>
