@@ -15,22 +15,25 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
     env->ThrowNew(cException, e.getMessage()->getChars());
     return 0;
   };
-  // HRCParser wrapper
+  // HRCParser wrapper.
   jpf->jhp = new JHRCParser();
   jpf->jhp->hrcParser = jpf->getHRCParser();
+  
   jclass jClass = env->FindClass("net/sf/colorer/HRCParser");
   jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
-  jpf->jHRCParser = env->NewGlobalRef(env->NewObject(jClass, jmInit, (jlong)jpf->jhp));
+  jpf->jhp->jHRCParser = env->NewGlobalRef(env->NewObject(jClass, jmInit, (jlong)jpf->jhp));
 
   return (jlong)jpf;
 };
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, jobject obj, jlong iptr){
-  printf("clr:ParserFactory finalize iptr:%d\n", (int)iptr);
+  TRACE1("ParserFactory", "finalize iptr:%d", (int)iptr);
   JParserFactory *jpf = (JParserFactory*)iptr;
-  if (jpf == null) return;
-  env->DeleteGlobalRef(jpf->jHRCParser);
-  delete jpf->jhp;
+  if (jpf == null){
+    // Bad reference - just exit
+    return;
+  }
+  env->DeleteGlobalRef(jpf->jhp->jHRCParser);
   delete jpf;
 };
 
@@ -44,7 +47,6 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateFileTypes
   ParserFactory *pf = (JParserFactory*)iptr;
   FileType *ft = pf->getHRCParser()->enumerateFileTypes(idx);
   if (ft == null) return null;
-//printf("%d %s\n", idx, ft->getName()->getChars());
   return env->NewString(ft->getName()->getWChars(), ft->getName()->length());
 };
 
@@ -89,7 +91,11 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getHRDescription
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv *env, jobject obj, jlong iptr){
   JParserFactory *jpf = (JParserFactory*)iptr;
-  return jpf->jHRCParser;
+  if (jpf == NULL){
+    return NULL;
+  }
+  TRACE1("ParserFactory", "jhp:%d", jpf->jhp);
+  return jpf->jhp->jHRCParser;
 };
 
 
