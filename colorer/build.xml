@@ -11,11 +11,14 @@
 
   <property name='distr.version' value='.beta2'/>
 
-  <property name='farplugin-dir' value='${build-dir}colorer-take5-farlight${distr.version}'/>
-  <property name='farplugin-zip' value='${farplugin-dir}.zip'/>
+  <property name='farplugin-name' value='colorer-take5-farlight${distr.version}'/>
+  <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
+  <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
   <property name='eclipseplugin.version' value='0.5.0'/>
-  <property name='eclipseplugin-dir' value='${build-dir}EclipseColorer-take5-${distr.version}'/>
+  <property name='eclipseplugin-name' value='EclipseColorer-take5-${distr.version}'/>
+  <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}'/>
+  <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
 
 
   <xmlcatalog id="DTDs">
@@ -44,8 +47,8 @@
 
 
   <target name="farplugin.clean">
-    <delete><fileset dir='${farplugin-dir}'/></delete>
-    <delete dir='${distr}' file='${farplugin-zip}'/>
+    <delete dir='${farplugin-dir}'/>
+    <delete file='${farplugin-zip}'/>
   </target>
 
   <target name="farplugin">
@@ -54,10 +57,17 @@
     <mkdir dir='${farplugin-dir}/hrc'/>
     <mkdir dir='${farplugin-dir}/hrd'/>
     <mkdir dir='${farplugin-dir}/hrd/console'/>
-    <copy />
+    <copy todir='${farplugin-dir}/bin'>
+      <fileset dir='bin/farplugin' includes='colorer.dll,
+               coloree.hlf,coloree.lng,colorer.hlf,
+               colorer.lng,colorer.map,shortcuts.reg'>
+      </fileset>
+    </copy>
+    <copy todir='${farplugin-dir}/hrd/console'>
+      <fileset dir='hrd/console' includes='**'/>
+    </copy>
   </target>
-
-cp -r bin/farplugin/*.*  %TARGET%/bin
+<!--
 cp -r hrc/auto  %TARGET%/hrc
 
 cd hrc
@@ -75,5 +85,5 @@ cp catalog-light.xml %TARGET%/catalog.xml
 cd %TARGET%\..
 zip -9 -r %TARGET_ZIP_NAME% %TARGET_NAME%
 
-
+-->
 </project>
