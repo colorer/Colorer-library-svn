@@ -2,7 +2,13 @@
 
 $Date$
 
+  New:
+    - JSP TagLib, OCaml
   Fixes:
+    - SML, ada, modula2
+
+
+
 
 
 Date: 2003/06/02 11:26:40
