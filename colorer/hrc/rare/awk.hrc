@@ -160,6 +160,7 @@
             <word name="asort"/>
             <word name="asorti"/>
             <word name="gsub"/>
+            <word name="gensub"/>
             <word name="index"/>
             <word name="length"/>
             <word name="match"/>

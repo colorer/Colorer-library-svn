@@ -1,26 +1,23 @@
-#ifndef _PCOLORER_H_
-#define _PCOLORER_H_
+package net.sf.colorer.eclipse.outline;
 
-#include<farplugin/plugin.hpp>
-#include<farplugin/farkeys.hpp>
+import java.util.Vector;
 
-/** FAR .lng file identifiers. */
-enum {
-  mName, mSetup, mTurnOff,
-  mCross, mPairs, mSyntax, mOldOutline,
-  mOk, mReload, mReloadAll, mCancel,
-  mCatalogFile, mHRDName, mMaxTime,
-  mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-  mListFunctions, mFindErrors, mSelectRegion,
-  mUpdateHighlight, mChooseEncoding, mConfigure,
-  mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
-  mGotcha, mChoose,
-  mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-  mFatal, mNeedColorer, mWait,
-  mSelectEncoding, mSelectHRD
-};
+import net.sf.colorer.Region;
+import net.sf.colorer.Scheme;
+import org.eclipse.ui.model.IWorkbenchAdapter;
 
-#endif
+public class OutlineSchemeElement extends OutlineElement{
+  
+  public Scheme scheme;
+  
+  public Vector elements = new Vector();
+  
+  public OutlineSchemeElement(IWorkbenchAdapter ad, int lno, int pos, int length, int level, String token, Region region, Vector elements) {
+    super(ad, lno, pos, length, level, token, region);
+    this.elements = elements;
+  }
+
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

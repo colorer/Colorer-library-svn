@@ -48,6 +48,7 @@ public:
   void setDrawCross(bool drawCross);
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
+  void setOutlineStyle(bool oldStyle);
   void setMaxTime(int maxTime);
 
   /** Editor action: pair matching.
@@ -97,6 +98,7 @@ private:
   int crossZOrder, horzCrossColor, vertCrossColor;
 
   bool drawPairs, drawSyntax;
+  bool oldOutline;
   int maxTime;
 
   int WindowSizeX;

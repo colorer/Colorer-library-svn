@@ -10,13 +10,15 @@
 "&Pairs"
 "S&yntax"
 
+"Classic ou&tline style"
+
 "&OK"
 "&Reload database"
 "&Load full database"
 "&Cancel"
 
 "c&atalog.xml file:"
-"Color &schema:"
+"Color sche&ma:"
 "T&ime before showing cancel dialog (msec):"
 
 "&1 List types"

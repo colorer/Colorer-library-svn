@@ -1,26 +1,17 @@
-#ifndef _PCOLORER_H_
-#define _PCOLORER_H_
+package net.sf.colorer.editor;
 
-#include<farplugin/plugin.hpp>
-#include<farplugin/farkeys.hpp>
+/**
+ * Listener of BaseEditor events
+ */
+public interface EditorListener {
+    /**
+     * Informs EditorListener object about text modification event.
+     * All the text becomes invalid after the specified line.
+     * @param topLine Topmost modified line of text.
+     */
+    void modifyEvent(int topLine);
 
-/** FAR .lng file identifiers. */
-enum {
-  mName, mSetup, mTurnOff,
-  mCross, mPairs, mSyntax, mOldOutline,
-  mOk, mReload, mReloadAll, mCancel,
-  mCatalogFile, mHRDName, mMaxTime,
-  mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-  mListFunctions, mFindErrors, mSelectRegion,
-  mUpdateHighlight, mChooseEncoding, mConfigure,
-  mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
-  mGotcha, mChoose,
-  mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-  mFatal, mNeedColorer, mWait,
-  mSelectEncoding, mSelectHRD
-};
-
-#endif
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<unicode/UnicodeTools.h>
 #include"FarEditor.h"
+#include"common/Logging.h"
 
 FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 {
@@ -34,6 +35,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   vertCrossColor = 0x0E;
 
   drawPairs = drawSyntax = true;
+  oldOutline = false;
   maxTime = 3000;
 
   newback = newfore = -1;
@@ -42,17 +44,15 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
   const Region *def_Outlined = pf->getHRCParser()->getRegion(&DString("def:Outlined"));
   const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
-  structOutliner = new Outliner(def_Outlined);
-  errorOutliner = new Outliner(def_Error);
-  baseEditor->addRegionHandler(structOutliner);
-  baseEditor->addRegionHandler(errorOutliner);
+  structOutliner = new Outliner(baseEditor, def_Outlined);
+  errorOutliner = new Outliner(baseEditor, def_Error);
 }
 
 FarEditor::~FarEditor(){
   delete cursorRegion;
-  delete baseEditor;
   delete structOutliner;
   delete errorOutliner;
+  delete baseEditor;
 }
 
 
@@ -190,6 +190,11 @@ void FarEditor::setDrawPairs(bool drawPairs)
 void FarEditor::setDrawSyntax(bool drawSyntax)
 {
   this->drawSyntax = drawSyntax;
+}
+
+void FarEditor::setOutlineStyle(bool oldStyle)
+{
+  this->oldOutline = oldStyle;
 }
 
 void FarEditor::setMaxTime(int maxTime)
@@ -626,19 +631,27 @@ const int FILTER_SIZE = 40;
         if (maxLevel < treeLevel) maxLevel = treeLevel;
         if (treeLevel > visibleLevel) continue;
 
-        int si = sprintf(menu[menu_size].Text, "%4d ", item->lno);
-        for(int lIdx = 0; lIdx < treeLevel; lIdx++){
-          menu[menu_size].Text[si++] = ' ';
-          menu[menu_size].Text[si++] = ' ';
-        };
-        const String *region = item->region->getName();
-        char cls = (char)Character::toLowerCase((*region)[region->indexOf(':')+1]);
-        si += sprintf(menu[menu_size].Text+si, "%c ", cls);
+        if (!oldOutline){
+          int si = sprintf(menu[menu_size].Text, "%4d ", item->lno);
+          for(int lIdx = 0; lIdx < treeLevel; lIdx++){
+            menu[menu_size].Text[si++] = ' ';
+            menu[menu_size].Text[si++] = ' ';
+          };
+          const String *region = item->region->getName();
+          char cls = (char)Character::toLowerCase((*region)[region->indexOf(':')+1]);
+          si += sprintf(menu[menu_size].Text+si, "%c ", cls);
 
-        int labelLength = item->token->length();
-        if (labelLength+si > 110) labelLength = 110;
-        strncpy(menu[menu_size].Text+si, item->token->getChars(outputEnc), labelLength);
-        menu[menu_size].Text[si+labelLength] = 0;
+          int labelLength = item->token->length();
+          if (labelLength+si > 110) labelLength = 110;
+          strncpy(menu[menu_size].Text+si, item->token->getChars(outputEnc), labelLength);
+          menu[menu_size].Text[si+labelLength] = 0;
+        }else{
+          String *line = getLine(item->lno);
+          int labelLength = line->length();
+          if (labelLength > 110) labelLength = 110;
+          strncpy(menu[menu_size].Text, line->getChars(outputEnc), labelLength);
+          menu[menu_size].Text[labelLength] = 0;
+        }
 
         *(OutlineItem**)(&menu[menu_size].Text[124]) = item;
         // set position on nearest top function
@@ -844,12 +857,14 @@ bool FarEditor::backDefault(int color){
 
 void FarEditor::addFARColor(int lno, int s, int e, int col)
 {
-EditorColor ec;
+  EditorColor ec;
+
   ec.StringNumber = lno;
   ec.StartPos = s;
   ec.EndPos = e-1;
   ec.Color = col;
   info->EditorControl(ECTL_ADDCOLOR, &ec);
+  CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
 }
 
 const char *FarEditor::GetMsg(int msg){

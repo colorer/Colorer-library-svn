@@ -229,8 +229,9 @@
 
       <scheme name="Pod">
          <inherit scheme="def:NetAddresses"/>
+         <regexp match="/^\s+$/" region0="def:Error"/>
          <regexp match="/^=(pod|cut)/" region0="PodSym"/>
-         <regexp match="/^=head[12]\s(.*)$/" region0="PodSym" region1="PodText"/>
+         <regexp match="/^=head[1234]\s(.*)$/" region0="PodSym" region1="PodText"/>
          <regexp match="/^=(item|back|end)/" region0="PodSym"/>
          <regexp match="/^=over\s+(\d+)/" region0="PodSym" region1="Numb"/>
          <regexp match="/[IBSCLFXZE]&lt;.*?&gt;/" region0="PodSel"/>
