@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://colorer.sf.net/2003/catalog"
+  targetNamespace="http://colorer.sf.net/2003/catalog"
+  elementFormDefault="qualified">
+
+  <xs:element name="catalog" type="catalog"/>
+
+  <xs:complexType name="catalog">
+    <xs:annotation><xs:documentation>
+      Describes all available Colorer Library resources.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="hrc-sets" type="hrc-sets"/>
+      <xs:element name="hrd-sets" type="hrd-sets"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hrc-sets">
+    <xs:annotation><xs:documentation>
+      Lists all installed root locations of HRC codes.
+      These locations are loaded when HRC bases are created.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="location" type="location" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="log-location" type="xs:string">
+      <xs:annotation><xs:documentation>
+        Path to the default library log file.
+        If missed, there is no logging.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="hrd-sets">
+    <xs:annotation><xs:documentation>
+      Lists all available HRD sets.
+      Each HRD Entry describes single color scheme,
+      used to represent colored text.
+      Note, that one Entry
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="hrd" type="hrd-entry" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hrd-entry">
+    <xs:annotation><xs:documentation>
+      Describes one HRD properties set.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="location" type="location" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="class" type="xs:NMTOKEN" use="required">
+      <xs:annotation><xs:documentation>
+        HRD class. Currently available 'console', 'rgb' and 'text' classes.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required">
+      <xs:annotation><xs:documentation>
+        Internal name of this set, used to referring from executable codes.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation><xs:documentation>
+        User-friendly description of this HRD set.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="location">
+    <xs:annotation><xs:documentation>
+      Single resource location. Path can be relative to the catalog location,
+      or absolute URI with or without URI schema specification.
+    </xs:documentation></xs:annotation>
+    <xs:attribute name="link" type="xs:string" use="required"/>
+  </xs:complexType>
+
+</xs:schema>

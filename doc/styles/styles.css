@@ -1,0 +1,104 @@
+
+body{
+  font-family: Verdana, Arial, helvetica, sans-serif;
+  font-size:10pt;
+  margin-left: 40pt;
+  margin-right: 60pt;
+  color:black;
+  background:white;
+  background-position: top left;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-image: url(../images/background.png);
+}
+
+/* base elements */
+b, i, em{
+  background:transparent;
+}
+p, div, ul, ol, dl, td{
+  font-size:10pt;
+  color:#000000;
+}
+p, blockquote{
+  margin-top:4pt;
+  margin-bottom:4pt;
+  xtext-align:justify;
+}
+code, pre, tt{
+  font-family: Lucida Console, Andale Mono, Courier New, Courier, monospace;
+  color:#202040;
+}
+
+code{ white-space: nowrap }
+
+strong{
+  color:#233961;
+  font-weight:bold;
+  background:transparent;
+}
+.small{
+  font: 80%;
+}
+
+div.back a:hover{ background : transparent }
+div.back{
+  /*position:fixed;*/
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+
+.sshot{
+  margin: 2pt 1pt 1pt 1pt;
+}
+
+li{}
+img{ border: none; }
+
+table{
+  margin-top: 8px;
+}
+th{
+  font-family: verdana, tahoma, arial, helvetica, sans-serif;
+  font-size:14pt;
+  background:#A0A0A0;
+  color:#000000;
+}
+dt{ font-weight: bold; }
+
+/* hyperlink */
+a{
+  xfont-weight:bold;
+}
+a[href]{
+  text-decoration: underline;
+}
+a:link {
+  color: #4045A7;
+  background: transparent;
+}
+a:visited {
+  color: #6075B1;
+  background: transparent;
+}
+a[href]:active {
+  color: #5369B1;
+  background: transparent;
+}
+a[href]:hover{
+  color: #5369E1;
+  background: #f2f2ff;
+  text-decoration: underline;
+}
+
+h1, h2, h3{ color: #303570; font-weight: normal; }
+h1, h2{ margin: 14pt 7pt 14pt 0pt; }
+h1{ font: 190%; text-align: center; }
+h2{ font: 150%; }
+h3{ font: 120%; margin: 14pt 4pt 8pt 4pt; }
+h4{ font: small-caps 100%; font-weight: bold; }
+
+.icon{
+  float:left;
+}

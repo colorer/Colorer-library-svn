@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Colorer Changes History</title>
+<link href="../styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="../images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='../index.html'><img alt='back' src='../images/back.png' width='40' height='18'/></a></div>
+
+<h1>Colorer-take5 Library Changes History</h1>
+
+<hr/>
+
+<h2>take5.beta1, 30 March 2003</h2>
+  <ul>
+    <li><a href='../api/classLineSource.html'>RegionHandler</a> interface
+    now receives a pointer to the currently parsed text line.
+    </li>
+    <li><a href='../api/classHRCParser.html'>HRCParser</a> interface
+    now can't load file types manually. This is done internally while
+    requesting information about file's type (loadFileType method is deprecated).
+    </li>
+  </ul>
+  <ul>
+    <li>More languages now have their own outliners.</li>
+    <li><a href='../hrc-ref/index.html'>HRC Language reference</a> is extended and filled with documentation.</li>
+  </ul>
+<h3>Eclipse Colorer 0.4.0</h3>
+  <ul>
+    <li>Powerful and flexible outliner for all common languages.</li>
+    <li>Errors list is included into the outliner view.</li>
+    <li>Shortcuts for pairs matching.</li>
+    <li>New &laquo;Eclipse&raquo;, &laquo;Navy&raquo; and &laquo;Neo&raquo; coloring schemas.</li>
+    <li>Replace tabs with spaces option now works fine.</li>
+    <li>Editor redraw operations is now works much faster, avoiding blinking.</li>
+    <li>Colored sources generation into HTML files (Available in the navigator's context menu).</li>
+  </ul>
+<h3>FAR Manager Colorer beta1a</h3>
+
+<hr/>
+
+<h2>take5.alpha3, 1 March 2003</h2>
+
+  <h3>Class changes</h3>
+  <ul>
+    <li><a href='../api/classBaseEditor.html'>BaseEditor</a> class becomes more independent. It is
+    based on <a href='../api/classParserFactory.html'>ParserFactory</a> class
+    and allows now to internally create and choose required <a href='../api/classRegionMapper.html'>RegionMapper</a>
+    classes. Also, there is no need now to load HRC FileType manually.
+    If not yet loaded, any <a href='../api/classFileType.html'>FileType</a>
+    class is loaded automatically, when passed to BaseEditor instance.
+    </li>
+    <li>Java language interface is now available. It uses Colorer through
+    JNI calls. It defines mappings of BaseEditor and ParserFactory classes.
+    Also simple <a href='http://www.eclipse.org'>Eclipse Platform</a> plugin were written to demonstrate Colorer's
+    abilities. It uses Eclipse's <abbr title='Standard Widget Toolkit'>SWT</abbr> API and can be used
+    also as independent application.
+    </li>
+    <li>Keywords sorting algorithm is replaced with simple quicksort method.
+    This makes good performance increase when keywords in HRC files were not sorted.</li>
+    <li>Some changes in the internal handlers structure.
+    <a href='../api/classLineSource.html'>LineSource</a> class must pass now
+    string pointer to parser, not DString object, as it was before.
+    Also, now it defines formal requirements of the lifetime of the returned string.
+    <a href='../api/classRegionHandler.html'>RegionHandler</a> interface provides now
+    references to currently parsed line of text. This makes easier installation
+    and structure of external installed handlers.
+    </li>
+    <li><a href='../api/classLineSource.html'>LineSource</a> class has now
+    two new methods - startJob and endJob. They are used to notify object
+    about start and end of line requests blocks.
+    </li>
+  </ul>
+  <h3>HRC changes</h3>
+  <ul>
+    <li><a href='../hrc-ref/index.html'>HRC Language Reference</a> is started.</li>
+    <li>Relax NG 1.0 schema is included.</li>
+    <li>XSLT 2.0 Draft schema is included (needs fixes).</li>
+    <li><code>weight</code> attribute of <code>firstline</code> and
+        <code>filename</code> RE matchers in prototype declaration
+        has floating point type now. This makes
+        type detection in some cases more flexible.</li>
+    <li>Automatic outlines generation option from xml schemas.
+        All standard languages were regenerated to include common
+        outline regions indention.
+    </li>
+    <li>XHTML syntax uses <code>Strict</code> module by default and <code>Transitional</code> as alternative.</li>
+    <li>DocBook now uses latest correct XSD descriptions version 1.0b1.</li>
+  </ul>
+
+<h3>Colorer.exe</h3>
+  <ul>
+    <li>HTML output mode uses font style information and
+        can format sources now with bold, italic, underline properties.
+    </li>
+  </ul>
+
+<h3>FAR Plugin</h3>
+  <ul>
+    <li><code>clr:</code> prefix allows to use double quotes in file name.</li>
+    <li>Much faster performance (x2) was achieved int FAR's editor
+        because of previously used multiple requests of each FAR's line.
+        This makes great leak of cpu usage.
+        Also, effective method of line text requesting is used
+        in all possible actions.
+    </li>
+    <li>Internal Library text lines requests has changed to make
+        processing faster. Now, FAR plugin works faster because
+        less lines data requests.
+    </li>
+    <li>Structured presentation of created outliner.
+        All elements are displayed in tree, also, for each element,
+        prefix-char is shown.
+        You can collapse or extend tree with <code>Ctrl-Left/Right</code>.
+    </li>
+
+  </ul>
+
+<hr/>
+
+<h2>take5.alpha2, 16 February 2003</h2>
+
+<h3>Class changes</h3>
+  <ul>
+    <li>Some classes renamed and moved into new locations.</li>
+    <li>Region associations behaviour changed.
+    Now, RegionDefine is abstract class, and it's subtypes inherits
+    and extends color or other region information.
+    LineRegion class knows nothing about real color information.
+    Now it contains reference to RegionDefine subclass (instead of
+    inheritance, as it was).
+    </li>
+  </ul>
+<h3>HRC changes</h3>
+  <ul>
+    <li>New style of file type detection is embedded.
+    Each type is detected with passed file name and first line of file's content.
+    But new behaviour takes into account filename matching and firstline matching
+    in equal rights. Each matching token has it's own weight, and required type
+    is selected as type with biggest summary weight.
+    Optionally, weight of filename or firstline matching token could be changed.
+    </li>
+  </ul>
+
+<h3>Colorer.exe</h3>
+  <ul>
+    <li>New output mode - tokenizer (-ht option). With this mode
+    colorer outputs target file with each token marked with
+    specific style (equals to the name of it's HRC region).
+    </li>
+  </ul>
+
+<h3>FAR Plugin</h3>
+  <ul>
+    <li>New prototype parameters handling - default-fore, default-back.
+    With this numeric properties you can change default text and background
+    color in any file type.
+    </li>
+    <li>If exception is ocurred while text processing, colorer stops
+        it's job and disables any further text coloring.</li>
+    <li>Paired constructions are searched now on all the text.</li>
+    <li>FAR command line prefix 'clr' allows to run internal colorer's
+        viewer and to view files with syntax highlighting.</li>
+    <li>Works with outlined text structure (functions and errors list at now).
+        </li>
+
+  </ul>
+
+<hr/>
+<h2>take5.alpha1, 30 January 2003</h2>
+
+<h3>Colorer.exe</h3>
+
+  <ul>
+   <li>Console viewing with unicode characters (win32).</li>
+   <li>Colorized HTML output from rgb HRD color schemas.</li>
+   <li>Simple file forward with encoding conversion.</li>
+   <li>HTML and file output into stdout or specified file.</li>
+  </ul>
+
+<h3>FAR Plugin</h3>
+ <ul>
+  <li>Top level highlight caching, parse on request (FAR >= 1.70).</li>
+  <li>File Encoding selection.</li>
+  <li>Color schemes dialog selection.</li>
+ </ul>
+
+</body>
+</html>

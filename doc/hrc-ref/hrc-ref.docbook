@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- PUBLIC "-//OASIS//DTD DocBook V4.2//EN" -->
+<!DOCTYPE article[
+<!ENTITY fileref "file:/d:/programs/devel/colorer/doc/2003/hrc.xsd">
+<!ENTITY hrdref "file:/d:/programs/devel/colorer/doc/2003/hrd.xsd">
+<!ENTITY catalogref "file:/d:/programs/devel/colorer/doc/2003/catalog.xsd">
+]>
+<article lang="en" xmlns:x="uri:custom:schema-db">
+
+<articleinfo>
+
+<releaseinfo>Colorer library HRC Reference take5.alpha3. March 2003</releaseinfo>
+<title>HRC Language Reference</title>
+
+<pubdate>30 March 2003</pubdate>
+
+<revhistory>
+<revision>
+  <revnumber>take5.beta1</revnumber>
+  <date>30 March 2003</date>
+  <revremark>(Available as
+    <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
+    <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
+    <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
+  </revremark>
+</revision>
+<revision>
+  <revnumber>take5.alpha3</revnumber>
+  <date>1 March 2003</date>
+</revision>
+<revision>
+  <revnumber>take5.alpha2</revnumber>
+  <date>30 January 2003</date>
+</revision>
+</revhistory>
+<author>
+  <firstname>Igor</firstname><surname>Ruskih</surname>
+  <affiliation>
+    <address>
+      <email>ruiv@uic.nnov.ru</email>
+    </address>
+  </affiliation>
+</author>
+
+<copyright><year>2003</year><holder>Igor Ruskih (Cail Lomecb)</holder></copyright>
+
+<abstract><title>Abstract</title>
+<para>This reference defines syntax and semantic of
+<acronym role='Highlighting Resource Codes'>HRC</acronym>
+language, used in Colorer-take5 Library to represent and describe
+syntax and lexical structure of target programming language.
+This description is used by library to
+parse and colourise text in editors or other systems.
+</para>
+</abstract>
+</articleinfo>
+
+
+<section id='introduction'>
+<title>Introduction</title>
+
+<para>
+HRC is a script language, describing parse process of text files to produce
+syntax highlighting. It is based on XML language, and defines its
+own XML vocabulary and structure.
+HRC language was developed to achieve most flexible and efficient process
+of describing programming language structure.
+</para>
+<para>
+Started nearly in year 1999, it was a simple XML-like structure, describing
+some common language construction. But later it has grown into
+the much more complex and powerful language, describing complex relations between
+different languages, syntax contexts.
+</para>
+
+</section>
+
+
+
+<section id='core'>
+<title>Core Syntax</title>
+<para>
+HRC language allows describing and storing syntax rules for numerous languages.
+All language descriptions are divided into two parts:
+<emphasis role='strong'>Informal</emphasis> part, used to describe
+this language properties, language choose rules (<literal>prototype</literal>),
+and <emphasis role='strong'>Formal</emphasis> part, which defines
+syntax and semantic of target parsed language (<literal>type</literal>).
+Prototypes are used to determine, which type to apply to the currently opened
+file, they define some internal application-dependent properties
+and other useful information about language.
+</para>
+<formalpara><title>Structure</title><para>
+Each HRC file contains declaration of one or more prototypes or
+one language type. Root XML content starts with <literal>hrc</literal>
+element, which contains all other definitions.
+</para>
+
+<x:schemaref uri="&fileref;" role='hrc'/>
+
+<para>
+Each HRC language object is defined using XML elements and attributes.
+You can find definition of HRC XML Syntax in <xref linkend='hrcxsd'/>.
+Each element in HRC can be documented with XML Schema-like standard 
+elements:
+</para>
+
+<x:schemaref uri="&fileref;" role='annotation'/>
+
+<para>
+Annotation object can be used anywhere in HRC context to document
+and describe any of the HRC elements.
+
+</para>
+</formalpara>
+
+
+<section id='core.filetypes'><title>File Types</title>
+<para>Each language prototype requires definition of
+language name and description. These properties are used
+to determine language in context of other language definitions
+and in inter-languages linkage.
+</para>
+
+
+<section id='core.filetypes.proto'><title>Prototypes</title>
+
+<x:schemaref uri="&fileref;" role='prototype'/>
+
+<para>
+
+Each language must be chosen by library before starting syntax highlighting
+process. This is made with help of <literal>firstline</literal> and <literal>filename</literal>
+parameters. Each matched instance of one of these parameters adds some additional
+weight to total language weight. This value is taken by default, or could be changed
+explicitly with <literal>weight</literal> attribute of these elements.
+When total weights of all types are evaluated, first language with maximum
+weight is selected to assign to opened file.
+
+</para>
+
+<x:schemaref uri="&fileref;" role='filename'/>
+<x:schemaref uri="&fileref;" role='firstline'/>
+
+<para>
+If any of these two operators is used more than one time, each its matched
+instance adds specified weight to the total language weight.
+
+</para>
+</section>
+
+<section id='core.filetypes.type'><title>Types</title>
+<para>
+Each prototype defines its linkage with real file type, describing
+information, specific for the syntax parsing process. This information
+is stored in basic units, called <literal>type</literal>s.
+
+</para>
+
+<x:schemaref uri="&fileref;" role='type'/>
+
+<x:schemaref url="&fileref;" role='import'/>
+
+<x:schemaref uri="&fileref;" role='region'/>
+
+<x:schemaref uri="&fileref;" role='entity'/>
+
+</section>
+
+</section>
+
+<section id='core.schemas'><title>Schemas</title>
+
+<x:schemaref uri="&fileref;" role='scheme'/>
+
+</section>
+
+<section id='core.namespaces'><title>Namespaces</title>
+<para>xxxxxx</para>
+</section>
+
+</section>
+
+<section id='schemesyntax'><title>Scheme syntax</title>
+
+
+<section id='schemesyntax.keywords'><title>Keyword lists</title>
+<x:schemaref uri="&fileref;" role='keywords'/>
+<x:schemaref uri="&fileref;" role='word'/>
+<x:schemaref uri="&fileref;" role='symb'/>
+<para>
+</para>
+</section>
+<section id='schemesyntax.re'><title>Regular Expressions</title>
+<x:schemaref uri="&fileref;" role='regexp'/>
+<para>
+</para>
+</section>
+<section id='schemesyntax.contextswitch'><title>Blocked context switch</title>
+<x:schemaref uri="&fileref;" role='block'/>
+
+<x:schemaref uri="&fileref;" role='blockInner'/>
+
+<para>
+</para>
+</section>
+
+<section id='schemesyntax.boundaries'><title>Scheme boundaries and priority</title>
+<para>
+</para>
+</section>
+
+</section>
+
+<section id='interscheme'><title>Inter-scheme links</title>
+
+<section id='interscheme.inheritance'><title>Inheritance</title>
+
+<x:schemaref uri="&fileref;" role='inherit'/>
+
+<x:schemaref uri="&fileref;" role='virtual'/>
+
+<para>
+</para>
+</section>
+
+<section id='interscheme.substitution'><title>Schemes substitutions</title>
+<para></para>
+</section>
+</section>
+
+
+
+<appendix id='hrcre'>
+<title>Regular Expressions syntax</title>
+
+<section id='hrcre.intro'><title>Introduction</title>
+<para>
+All work of the Colorer library and HRC language is based on the regular expressions (RE) usage.
+They allows you to create universal syntax rules of highlighting in HRC.
+</para>
+
+<para>
+Regular expressions consist of the set of characters.
+Some of these are simple, and some are special metacharacters.
+All metacharacters (escapes) are divided into three categories: first - zerolength (words boundaries and so on);
+second - class metacharacters (<literal>\w</literal>, <literal>\s</literal> <literal>.</literal>);
+and the third class is operators.
+RE operators could be applied to single character,
+to block, enwrapped in brackets or into other operators.
+You can use brackets to group any sequence of characters.
+Regular expressions in HRC Language are like Perl regexp in their base syntax.
+There are some differences in extended operators.
+</para>
+</section>
+
+<section id='hrcre.syntax'><title>Syntax</title>
+<para>
+All regexps must be in slashes <literal>/.../</literal>
+After the end slash there could be parameters:
+
+<itemizedlist>
+<listitem><simpara><literal>i</literal> - ignore symbol case</simpara></listitem>
+<listitem><simpara><literal>x</literal> - ignore direct spaces and crlf (for comfort)</simpara></listitem>
+<listitem><simpara><literal>s</literal> - suppose, that regexp is single line - it means, than '.' class should include \r\n symbols. </simpara></listitem>
+</itemizedlist>
+Each symbol in RE is linearly compared with the target string.
+Everything, that doesn't looks like metacharacters, means simple character.
+</para>
+</section>
+
+<section id='hrcre.meta'><title>Metacharacters</title>
+
+<table><title>Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><literal>^</literal></entry><entry>Match the beginning of the line</entry></row>
+<row><entry><literal>$</literal></entry><entry>Match the end of the line</entry></row>
+<row><entry><literal>.</literal></entry><entry>Match any character (except \r\n)</entry></row>
+<row><entry><literal>[...]</literal></entry><entry>Match characters in set</entry></row>
+<row><entry><literal>[^...]</literal></entry><entry>Match characters not in set.
+          Here all the operators are disabled, but you can
+          use other metacharacters,  and  range  operator:
+          a-z means all chars from first to second (a - z)</entry></row>
+<row><entry><literal>\#</literal></entry><entry>Next symbol '#' after slash (except a-z and 1-9)</entry></row>
+<row><entry><literal>\b</literal></entry><entry>Start of word</entry></row>
+<row><entry><literal>\B</literal></entry><entry>End of word</entry></row>
+<row><entry><literal>\xNN</literal></entry><entry><literal>NN</literal> - ASCII char (hex)</entry></row>
+<row><entry><literal>\n</literal></entry><entry>0x10 (lf)</entry></row>
+<row><entry><literal>\r</literal></entry><entry>0x13 (cr)</entry></row>
+<row><entry><literal>\t</literal></entry><entry>0x09 (tab)</entry></row>
+<row><entry><literal>\s</literal></entry><entry>tab/space/cr/lf</entry></row>
+<row><entry><literal>\S</literal></entry><entry>Non-space</entry></row>
+<row><entry><literal>\w</literal></entry><entry>Word symbol (chars, digits, _)</entry></row>
+<row><entry><literal>\W</literal></entry><entry>Non-word symbol</entry></row>
+<row><entry><literal>\d</literal></entry><entry>Digit</entry></row>
+<row><entry><literal>\D</literal></entry><entry>Non-Digit</entry></row>
+<row><entry><literal>\u</literal></entry><entry>Uppercase symbol</entry></row>
+<row><entry><literal>\l</literal></entry><entry>Lowercase symbol</entry></row>
+</tbody></tgroup></table>
+</section>
+
+<section id='hrcre.exmeta'><title>Extended metacharacter</title>
+<para>These metacharacters are incompatible with Perl</para>
+<table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><literal>\c</literal></entry><entry>means 'non-word before'</entry></row>
+<row><entry><literal>\N</literal></entry><entry>Link inside of regexp to one of its brackets.
+          <literal>N</literal>  - needed brackets pair.  This operator  works
+          only with non-operator symbols in a bracket.
+</entry></row>
+</tbody></tgroup></table>
+
+<para>And these could be disabled during compilaton as highlight-dependent</para>
+<table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of start start).</entry></row>
+<row><entry><literal>\m</literal></entry><entry>Change start of regexp</entry></row>
+<row><entry><literal>\M</literal></entry><entry>Change end of regexp</entry></row>
+<row><entry><literal>\yN</literal></entry><entry>Link  to  the   external  regexp (in End  to the Start param). N - requeried brackets pair.</entry></row>
+</tbody></tgroup></table>
+
+</section>
+
+
+<section id='hrcre.ops'><title>Operators</title>
+<para>
+Operators couldn't be used without some preceding character sequence.
+Each operator must be applied to the appropriate character,
+metacharacter, or block of their combination (enclosed with brackets).
+</para>
+
+<table><title>Operators</title><tgroup cols='2'><tbody>
+<row><entry><literal>( )</literal></entry><entry>Group and remember characters to form one pattern.</entry></row>
+<row><entry><literal>|</literal></entry><entry>Match previous or next pattern.</entry></row>
+<row><entry><literal>*</literal></entry><entry>Match previous pattern 0 or more times.</entry></row>
+<row><entry><literal>+</literal></entry><entry>Match previous pattern 1 or more times.</entry></row>
+<row><entry><literal>?</literal></entry><entry>Match previous pattern 0 or 1 times.</entry></row>
+<row><entry><literal>{n}</literal></entry><entry>Repeat n times.</entry></row>
+<row><entry><literal>{n,}</literal></entry><entry>Repeat n or more times.</entry></row>
+<row><entry><literal>{n,m}</literal></entry><entry>Repeat from n to m times.</entry></row>
+</tbody></tgroup></table>
+
+<para>
+If you'll add <literal>?</literal> after operator, it becomes nongreedy.
+For example <literal>*</literal> operator becomes nongreedy if placing <literal>*?</literal>
+Greedy operator tries to take as much in string, as it can.
+Nongreedy takes by minimum.
+</para>
+</section>
+
+
+<section id='hrcre.exops'><title>Extended operators</title>
+<table><title>Extended Operators</title><tgroup cols='2'><tbody>
+<row><entry><literal>?#N</literal></entry><entry>Look-behind. N - symbol count.</entry></row>
+<row><entry><literal>?~N</literal></entry><entry>Inverted Look-behind.</entry></row>
+<row><entry><literal>?=</literal></entry><entry>Look-ahead.</entry></row>
+<row><entry><literal>?!</literal></entry><entry>Inverted Look-ahead.</entry></row>
+</tbody></tgroup></table>
+<para>
+Note, that two last operators exist in Perl - in form of <literal>(?=foobar)</literal>.
+But colorer uses syntax <literal>(foobar)?=</literal>
+</para>
+</section>
+
+<section id='hrcre.examples'><title>Examples</title>
+<example><title>RE examples</title>
+<para>
+
+<variablelist>
+<varlistentry>
+<term><literal>/foobar/</literal></term>
+<listitem><para>will match "foobar", "foobar barfoo"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/ FOO bar /ix</literal></term>
+<listitem><para>will match "foobar" "FOOBAR" "foobar and two other foos"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/(foo)?bar/</literal></term>
+<listitem><para>will match "foobar", "bar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/^foobar$/</literal></term>
+<listitem><para>will match _only_ with "foobar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/([\d\.])+/</literal></term>
+<listitem><para>will match any number</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/(foo|bar)+/</literal></term>
+<listitem><para>will match "foofoofoobarfoobar", "bar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><literal>/f[obar]+r/</literal></term>
+<listitem><para>will match "foobar", "for", "far"</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para>
+</example>
+</section>
+
+</appendix>
+
+
+
+
+
+<appendix id='coding_rec'>
+<title>HRC Coding Recommendations</title>
+<para>
+Пока хочу сказать, что нужно править всю базу на предмет
+появившихся пространств имен. Так как раньше ничего этого не было,
+каждая схема именовалась со своим префиксом.
+И теперь это все надо убирать нафиг.
+Иными словами, в описании каждого типа файлов
+схемы нужно переименовывать, убирать префиксы и называть их нормальными
+именами.
+То же самое относится к использованию сущностей и определений регионов.
+</para>
+<para>
+По возможности не надо использовать функции импорта других типов,
+потому как это уменьшает читабельность.
+Исключением может быть только тип <type>def</type>, и случаи,
+когда очень много ссылок на объекты других типов.
+Намного понятней выглядит <literal>scheme='c:StringCore'</literal>
+чем просто <literal>scheme='StringCore'</literal>.
+</para>
+<warning><title>changes:</title>
+<para>
+Возможно, <literal>&lt;import&gt;</literal> я вообще уберу.
+</para>
+</warning>
+
+</appendix>
+
+<appendix id='catalog.xml'>
+<title>Format of <literal>catalog.xml</literal> file</title>
+<para>
+
+Catalog of all Colorer Library resources is a convenient way to
+unify creation and management of all the Colorer features.
+
+This catalog is stored in <literal>catalog.xml</literal> file,
+and mapped into the ParserFactory class.
+
+Catalog supports storing of all installed HRC modules, management
+of error logging and listing of available HRD sets.
+
+</para>
+<x:schemaref uri="&catalogref;" role='catalog'/>
+
+<x:schemaref uri="&catalogref;" role='hrc-sets'/>
+<x:schemaref uri="&catalogref;" role='hrd-sets'/>
+<x:schemaref uri="&catalogref;" role='hrd-entry'/>
+<x:schemaref uri="&catalogref;" role='location'/>
+
+<x:schemaref uri="&catalogref;"/>
+
+<para>
+</para>
+</appendix>
+
+<appendix id='hrd'>
+<title>Format of <literal>HRD</literal> color schemes</title>
+<para>
+<acronym role='Highlighting Resource Descriptions'>HRD</acronym>
+storage is used to assign each HRC Region with some editor-specific properties.
+Commonly, these include color and style information.
+HRD file consists of the list of the entries, each of them describing one
+HRC Region.
+
+</para>
+<x:schemaref uri="&hrdref;" role='hrd'/>
+
+<x:schemaref uri="&hrdref;" role='assign'/>
+
+<para>
+It is possible to maintain different HRD settings for different languages,
+or to compile them into one single HRD file.
+The former allows you to distribute recommended settings with each language,
+and the latter - to unify modifying and storing changed HRD settings with provided UI.
+
+</para>
+<x:schemaref uri="&hrdref;"/>
+
+<para>
+</para>
+</appendix>
+
+<appendix id='hrcxsd'>
+<title>XML Schema for HRC Language</title>
+<para>
+This XML Schema instance was automatically generated
+from original hrc.xsd source, available at
+<ulink url="http://colorer.sf.net/2003/hrc.xsd">http://colorer.sf.net/2003/hrc.xsd</ulink>.
+All comments and documentation tags were stripped to achieve more compact format.
+To use this schema in other, than informational purposes, use up-to-date
+version, available on the link above.
+</para>
+
+<x:schemaref role='' uri="&fileref;"/>
+
+</appendix>
+
+<bibliography id='bibliography'><title>References</title>
+ 
+ <bibliomixed id="xml-rec">
+ <abbrev>XML 1.0</abbrev>Tim Bray, Jean Paoli, and C. M. Sperberg-McQueen, Eve Maler, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/REC-xml">Extensible Markup Language (XML) 1.0 Second Edition</ulink></citetitle>.
+ W3C (World Wide Web Consortium), 2000.
+ </bibliomixed>
+ 
+ <bibliomixed id="xslt-rec">
+ <abbrev>XSLT 1.0</abbrev>James Clark, editor.
+ <citetitle><ulink url="http://www.w3.org/TR/xslt">XSL Transformations (XSLT) 1.0</ulink></citetitle>.
+ W3C (World Wide Web Consortium), 1999.
+ </bibliomixed>
+
+ <bibliomixed id="xmlschema-1">
+ <abbrev>W3C XML Schema Structures</abbrev>
+ Henry S. Thompson, David Beech, Murray Maloney, Noah Mendelsohn, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/xmlschema-1/">XML Schema Part 1: Structures</ulink></citetitle>.
+  W3C (World Wide Web Consortium), 2001.
+ </bibliomixed>
+
+ <bibliomixed id="xmlschema-2">
+ <abbrev>W3C XML Schema Datatypes</abbrev>Paul V. Biron, Ashok Malhotra, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes</ulink></citetitle>.
+  W3C (World Wide Web Consortium), 2001.
+ </bibliomixed>
+
+</bibliography>
+
+</article>

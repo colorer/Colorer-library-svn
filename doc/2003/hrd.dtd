@@ -1,0 +1,15 @@
+<!--   DTD description of colorer HRD format -->
+
+<!ELEMENT hrd (assign)*>
+
+<!ELEMENT assign EMPTY>
+<!ATTLIST assign
+  name  CDATA #REQUIRED
+  fore  CDATA #IMPLIED
+  back  CDATA #IMPLIED
+  style CDATA #IMPLIED
+  stext CDATA #IMPLIED
+  etext CDATA #IMPLIED
+  sback CDATA #IMPLIED
+  eback CDATA #IMPLIED
+>
