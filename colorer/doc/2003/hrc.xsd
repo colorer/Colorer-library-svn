@@ -58,7 +58,7 @@
 
   <xs:complexType name="hrc">
     <xs:annotation><xs:documentation>
-      Root of HRC file XML structure.
+      Root of the HRC file XML structure.
     </xs:documentation></xs:annotation>
     <xs:sequence>
       <xs:element name="annotation" type="annotation" minOccurs="0"/>
