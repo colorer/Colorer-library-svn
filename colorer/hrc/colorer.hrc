@@ -88,7 +88,7 @@
   </prototype>
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
-    <filename>/\.jsp$/i</filename>
+    <filename>/\.(jsp|jspf)$/i</filename>
   </prototype>
   <prototype name="php" group="inet" description="php">
     <location link="inet/php.hrc"/>
