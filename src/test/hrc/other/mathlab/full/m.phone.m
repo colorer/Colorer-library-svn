@@ -3,7 +3,6 @@ function phone(action)
 
 %   Author(s): Ned Gulley, 6-21-93
 %   Copyright 1988-2000 The MathWorks, Inc.
-%   $Revision$  $Date$
 
 persistent Fs tones t;
 if isempty(tones),

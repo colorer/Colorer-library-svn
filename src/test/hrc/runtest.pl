@@ -53,7 +53,8 @@ print FAILS "<pre>\n";
 close FAILS;
 
 foreach (@retlist){
-  chomp;
+  chomp $_;
+
   my $origname = "$validDir/$_";
   my $fname = "$currentDir/$_";
   print "Processing (".($testRuns+1)."/".($#retlist+1).") $_:\n";
@@ -61,7 +62,7 @@ foreach (@retlist){
   open FAILS, ">>$currentDir/fails.html";
   print FAILS "\n<b>$_</b>:</pre><pre>\n";
   close FAILS;
-  checkDir($fname);
+  checkDir($currentDir, $_);
 
   $cres = system "$colorer -h \"$_\" -dc -ln -o \"$fname.html\"";
 
@@ -126,10 +127,16 @@ sub collectDirs{
 }
 
 sub checkDir{
+  my $currentDir = shift @_;
   my $fname = shift @_;
   $fname =~ /^(.*?)\/[^\/]+$/;
   my $dir = $1;
-  if (!-d $dir){
-    mkdir $dir or die "can't create dir $dir";
+  if (!-d "$currentDir/$dir"){
+    my $dirs = "/";
+    foreach(split /\//, $dir){
+      $dirs .= $_;
+      mkdir $currentDir.$dirs;
+      $dirs .= "/";
+    }
   }
 }
