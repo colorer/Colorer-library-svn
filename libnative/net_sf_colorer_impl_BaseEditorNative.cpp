@@ -30,7 +30,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_impl_BaseEditorNative_init(JNIEnv *e
     return 0;
   };
 
-  printf("clr:BaseEditor init: %d\n", jbe_count+1);
+  TRACE1("BaseEditorNative", "init: %d", jbe_count+1);
 
   if (jbe_count == 0){
     cStyledRegion = (jclass)env->NewGlobalRef(env->FindClass("net/sf/colorer/handlers/StyledRegion"));
@@ -76,7 +76,7 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_finalize(JNIEnv
   };
   delete be;
   jbe_count--;
-  printf("clr:BaseEditor finalize: %d\n", jbe_count);
+  TRACE1("BaseEditorNative", "finalize: %d", jbe_count);
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionCompact(JNIEnv *env, jobject obj, jlong iptr, jboolean compact)
