@@ -10,6 +10,9 @@
     Credits: Claudio Fleiner (vim's syntax)
 
 $Log$
+Revision 1.4  2005/03/29 13:38:24  irusskih
+*** empty log message ***
+
 Revision 1.3  2005/02/22 09:06:27  irusskih
 home fixes 22.02
 
@@ -40,7 +43,7 @@ Initial revision
 
 
       <scheme name="m4_base">
-         <regexp match="/(dnl\B.*$)/" region="m4Comment"/>
+         <regexp match="/(dnl\b.*$)/" region="m4Comment"/>
          <regexp match="/\$\d+/" region="m4Var"/>
          <regexp match="/\$[@*#]/" region="m4Var"/>
          <block start="/(\[)/" end="/(\])/" scheme="m4_base" region01="PairStart" region11="PairEnd"/>

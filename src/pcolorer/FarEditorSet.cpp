@@ -13,6 +13,7 @@
 #define REG_CROSSDONTDRAW  "crossDontDraw"
 #define REG_PAIRSDONTDRAW  "pairsDontDraw"
 #define REG_SYNTAXDONTDRAW "syntaxDontDraw"
+#define REG_OLDOUTLINE     "oldOutlineView"
 
 FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
@@ -215,6 +216,7 @@ void FarEditorSet::configure()
       IDX_CROSS,
       IDX_PAIRS,
       IDX_SYNTAX,
+      IDX_OLDOUTLINE,
       IDX_CATALOG,
       IDX_CATALOG_EDIT,
       IDX_HRD,
@@ -228,7 +230,7 @@ void FarEditorSet::configure()
     };
 
     FarDialogItem fdi[] = {
-      { DI_DOUBLEBOX,3,1,49,17,0,0,0,0,""},
+      { DI_DOUBLEBOX,3,1,49,19,0,0,0,0,""},
 
       { DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,""},
 
@@ -236,16 +238,18 @@ void FarEditorSet::configure()
       { DI_CHECKBOX,19,5,0,0,FALSE,0,0,0,""},
       { DI_CHECKBOX,32,5,0,0,FALSE,0,0,0,""},
 
-      { DI_TEXT,6,7,0,0,FALSE,0,0,0,""},
-      { DI_EDIT,10,8,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
-      { DI_TEXT,6,9,0,0,FALSE,0,0,0,""},    // hrd
-      { DI_BUTTON,10,10,0,0,FALSE,0,0,0,""}, // hrd button
-      { DI_TEXT,6,11,0,0,FALSE,0,0,0,""},
-      { DI_EDIT,10,12,25,5,FALSE,(DWORD)"clr_time",DIF_HISTORY,0,""},
-      { DI_BUTTON,6,14,0,0,FALSE,0,0,0,""},    // reload
-      { DI_BUTTON,26,14,0,0,FALSE,0,0,0,""},   // all
-      { DI_BUTTON,30,16,0,0,FALSE,0,0,TRUE,""}, // ok
-      { DI_BUTTON,38,16,0,0,FALSE,0,0,0,""},   // cancel
+      { DI_CHECKBOX,6,7,0,0,FALSE,0,0,0,""},
+
+      { DI_TEXT,6,9,0,0,FALSE,0,0,0,""},
+      { DI_EDIT,10,10,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
+      { DI_TEXT,6,11,0,0,FALSE,0,0,0,""},    // hrd
+      { DI_BUTTON,12,12,0,0,FALSE,0,0,0,""}, // hrd button
+      { DI_TEXT,6,13,0,0,FALSE,0,0,0,""},
+      { DI_EDIT,10,14,25,5,FALSE,(DWORD)"clr_time",DIF_HISTORY,0,""},
+      { DI_BUTTON,6,16,0,0,FALSE,0,0,0,""},    // reload
+      { DI_BUTTON,26,16,0,0,FALSE,0,0,0,""},   // all
+      { DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,""}, // ok
+      { DI_BUTTON,38,18,0,0,FALSE,0,0,0,""},   // cancel
     }; // type, x1, y1, x2, y2, focus, sel, fl, def, data
 
     strcpy(fdi[IDX_BOX].Data, GetMsg(mSetup));
@@ -253,11 +257,16 @@ void FarEditorSet::configure()
     fdi[IDX_DISABLED].Selected = !rGetValue(hPluginRegistry, REG_DISABLED);
 
     strcpy(fdi[IDX_CROSS].Data, GetMsg(mCross));
-    strcpy(fdi[IDX_PAIRS].Data, GetMsg(mPairs));
-    strcpy(fdi[IDX_SYNTAX].Data, GetMsg(mSyntax));
     fdi[IDX_CROSS].Selected = !rGetValue(hPluginRegistry, REG_CROSSDONTDRAW);
+
+    strcpy(fdi[IDX_PAIRS].Data, GetMsg(mPairs));
     fdi[IDX_PAIRS].Selected = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
+
+    strcpy(fdi[IDX_SYNTAX].Data, GetMsg(mSyntax));
     fdi[IDX_SYNTAX].Selected = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
+
+    strcpy(fdi[IDX_OLDOUTLINE].Data, GetMsg(mOldOutline));
+    fdi[IDX_OLDOUTLINE].Selected = rGetValue(hPluginRegistry, REG_OLDOUTLINE);
 
     strcpy(fdi[IDX_CATALOG].Data, GetMsg(mCatalogFile));
     rGetValue(hPluginRegistry, REG_CATALOG, fdi[IDX_CATALOG_EDIT].Data, 512);
@@ -293,7 +302,7 @@ void FarEditorSet::configure()
     /*
      * Dialog activation
      */
-    int i = info->Dialog(info->ModuleNumber, -1, -1, 53, 19, "config", fdi, ARRAY_SIZE(fdi));
+    int i = info->Dialog(info->ModuleNumber, -1, -1, 53, 21, "config", fdi, ARRAY_SIZE(fdi));
 
     if (i == IDX_CANCEL || i == -1){
       return;
@@ -318,6 +327,7 @@ void FarEditorSet::configure()
     rSetValue(hPluginRegistry, REG_CROSSDONTDRAW, !fdi[IDX_CROSS].Selected);
     rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
     rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
+    rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
 
     rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 
@@ -517,6 +527,7 @@ FarEditor *FarEditorSet::getCurrentEditor(){
     editor->setDrawCross(drawCross);
     editor->setDrawPairs(drawPairs);
     editor->setDrawSyntax(drawSyntax);
+    editor->setOutlineStyle(oldOutline);
     editor->setMaxTime(rMaxTime);
   };
   return editor;
@@ -543,6 +554,7 @@ void FarEditorSet::readRegistry()
   drawCross = !rGetValue(hPluginRegistry, REG_CROSSDONTDRAW);
   drawPairs = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
   drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
+  oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
 
   rMaxTime = 3000;
   int len = rGetValue(hPluginRegistry, REG_MAXTIME, mt, 64);
@@ -555,6 +567,7 @@ void FarEditorSet::readRegistry()
     fe->setDrawPairs(drawPairs);
     fe->setDrawSyntax(drawSyntax);
     fe->setMaxTime(rMaxTime);
+    fe->setOutlineStyle(oldOutline);
   }
 }
 

@@ -9,6 +9,7 @@ shared_path=../shared/
 obj_output=objs
 
 include $(shared_path)makefile.colorer.cygwin
+include _dependencies.dep
 include makefile.core
 
 DEF=pcolorer.gcc.def

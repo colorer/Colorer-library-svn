@@ -5,9 +5,11 @@ shared_path=../shared/
 obj_output=objs
 
 #CPPFLAGS_CUSTOM = /Zi /debug
-#CPPFLAGS_CUSTOM = /Zi -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
+CPPFLAGS_CUSTOM =
+#-DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 
 include ../shared/makefile.colorer.vc
+include _dependencies.dep
 include makefile.core
 
 #/debug
