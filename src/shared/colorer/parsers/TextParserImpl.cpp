@@ -360,6 +360,10 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
     if (!res) matchend.s[0] = matchend.e[0] = len;
 
     int parent_len = len;
+    /*
+    BUG: <regexp match="/.{3}\M$/" region="def:Error" priority="low"/>
+    $ at the end of current schema
+    */
     if (lowContentPriority) len = matchend.s[0];
 
     int ret = LINE_NEXT;
