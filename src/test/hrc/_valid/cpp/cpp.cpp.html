@@ -1,0 +1,31 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: 
+ 1: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>ifdef</span><span style='color:#004a43; '> Test</span>
+ 2: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>error</span><span style='color:#004a43; '> Test </span><span style='color:#808030; '>:</span><span style='color:#808030; '>(</span>
+ 3: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>endif</span>
+ 4: 
+ 5: <span style='color:#800000; font-weight:bold; '>const</span> <span style='color:#800000; font-weight:bold; '>int</span> test<span style='color:#808030; '>=</span><span style='color:#008c00; '>12345</span><span style='color:#800080; '>;</span>
+ 6: 
+ 7: func<span style='color:#808030; '>(</span>
+ 8:     <span style='color:#800000; font-weight:bold; '>int</span> arg
+ 9:     <span style='color:#808030; '>)</span>
+10: <span style='color:#800080; '>{</span>
+11: <span style='color:#800080; '>}</span>
+12: 
+13: 
+14: 
+15: <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> ucl_rotr8<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> value<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>int</span> shift<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+16: <span style='color:#800000; font-weight:bold; '>extern</span> __inline__ <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> ucl_rotr8<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> value<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>int</span> shift<span style='color:#808030; '>)</span>
+17: <span style='color:#800080; '>{</span>
+18:     <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> result<span style='color:#800080; '>;</span>
+19: 
+20:     __asm__ __volatile__ <span style='color:#808030; '>(</span><span style='color:#0000e6; '>"movb %b1, %b0; rorb %b2, %b0"</span>
+21:                         <span style='color:#800080; '>:</span> <span style='color:#0000e6; '>"=a"</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span> <span style='color:#800080; '>:</span> <span style='color:#0000e6; '>"g"</span><span style='color:#808030; '>(</span>value<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"c"</span><span style='color:#808030; '>(</span>shift<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+22:     <span style='color:#800000; font-weight:bold; '>return</span> result<span style='color:#800080; '>;</span>
+23: <span style='color:#800080; '>}</span>
+24: 
+25: 
+26: <span style='color:#008000; '>0x2322</span><span style='color:#006600; '>u</span>
+27: <span style='color:#696969; '>//</span>
+28: 
+</pre></body></html>

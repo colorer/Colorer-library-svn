@@ -1,0 +1,598 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#800000; font-weight:bold; '>MODULE</span> ovl<span style='color:#808030; '>;</span>
+  1: <span style='color:#696969; '>(* Copyright (C) 1987 Jensen &amp; Partners International *)</span>
+  2: <span style='color:#800000; font-weight:bold; '>IMPORT</span> Lib<span style='color:#808030; '>,</span>Str<span style='color:#808030; '>,</span>FIO<span style='color:#808030; '>,</span>IO<span style='color:#808030; '>,</span>Storage<span style='color:#808030; '>;</span>
+  3: 
+  4: <span style='color:#800000; font-weight:bold; '>CONST</span>
+  5:   MaxOverlay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>9</span><span style='color:#808030; '>;</span>
+  6: 
+  7: <span style='color:#800000; font-weight:bold; '>TYPE</span>
+  8:   String <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>0..99</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+  9: 
+ 10:   tUnit <span style='color:#808030; '>=</span> <span style='color:#808030; '>RECORD</span>
+ 11:      Name<span style='color:#808030; '>:</span>String<span style='color:#808030; '>;</span>
+ 12:      Start<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+ 13:      StartSeg<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* == CARDINAL(Start DIV 16) *)</span>
+ 14:      Diff<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* in paras between new and old position *)</span>
+ 15:      Overlay<span style='color:#808030; '>:</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..</span>MaxOverlay<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 16:      UnitPadding<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1..128</span><span style='color:#808030; '>-</span><span style='color:#808030; '>(</span> SIZE<span style='color:#808030; '>(</span>String<span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>2</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span>
+ 17:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 18: 
+ 19:   tfix<span style='color:#808030; '>=</span><span style='color:#808030; '>RECORD</span>
+ 20:      locoff<span style='color:#808030; '>:</span>SHORTCARD<span style='color:#808030; '>;</span> <span style='color:#696969; '>(* high 4 bits = overlay number *)</span>
+ 21:      locseg<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 22:      target<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 23:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 24: 
+ 25:   texeheader <span style='color:#808030; '>=</span> <span style='color:#808030; '>RECORD</span>
+ 26:     magic <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 27:     sizemod512 <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 28:     sizediv512 <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 29:     numrelocitem <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 30:     headerparas <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 31:     heapminparas <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 32:     heapmaxparas <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 33:     initialss <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 34:     initialsp <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 35:     checksum <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 36:     initialip <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 37:     initialcs <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 38:     relocations <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 39:     ovrlay <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 40:     undocumented <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 41:     <span style='color:#696969; '>(* relocation items follow *)</span>
+ 42:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 43: 
+ 44:   Str4 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..3</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span> <span style='color:#808030; '>;</span>
+ 45: 
+ 46: 
+ 47: <span style='color:#800000; font-weight:bold; '>VAR</span>
+ 48:   exefile<span style='color:#808030; '>,</span>exefile1<span style='color:#808030; '>,</span>mapfile<span style='color:#808030; '>,</span>ovlfile<span style='color:#808030; '>,</span>newmapfile<span style='color:#808030; '>:</span>FIO<span style='color:#008c00; '>.</span>File<span style='color:#808030; '>;</span>
+ 49: 
+ 50:   nmap<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 51:   map<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1..300</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> tUnit<span style='color:#808030; '>;</span>
+ 52: 
+ 53:   ovlheaders<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>0..</span>MaxOverlay<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#808030; '>RECORD</span>
+ 54:     Alloc<span style='color:#808030; '>:</span>   LONGCARD<span style='color:#808030; '>;</span> <span style='color:#696969; '>(* total size *)</span>
+ 55:     Init<span style='color:#808030; '>:</span>    LONGCARD<span style='color:#808030; '>;</span> <span style='color:#696969; '>(* size of initialised part *)</span>
+ 56:     nifix<span style='color:#808030; '>:</span>   <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 57:     nefix<span style='color:#808030; '>:</span>   <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 58:     copyr<span style='color:#808030; '>:</span>   Str4 <span style='color:#808030; '>;</span>    <span style='color:#696969; '>(* used for checking overlay version *)</span>
+ 59:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 60: 
+ 61:   ovlfiles<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>0..</span>MaxOverlay<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 62: 
+ 63: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> GiveBuf<span style='color:#808030; '>(</span> f<span style='color:#808030; '>:</span>FIO<span style='color:#008c00; '>.</span>File <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 64: <span style='color:#800000; font-weight:bold; '>TYPE</span> buf <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>0..517</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span>
+ 65: <span style='color:#800000; font-weight:bold; '>VAR</span> bufp <span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>POINTER</span> <span style='color:#800000; font-weight:bold; '>TO</span> buf<span style='color:#808030; '>;</span>
+ 66: <span style='color:#808030; '>BEGIN</span>
+ 67:   Storage<span style='color:#008c00; '>.</span>ALLOCATE<span style='color:#808030; '>(</span>bufp<span style='color:#808030; '>,</span>SIZE<span style='color:#808030; '>(</span>buf<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 68:   FIO<span style='color:#008c00; '>.</span>AssignBuffer<span style='color:#808030; '>(</span>f<span style='color:#808030; '>,</span>bufp<span style='color:#808030; '>^</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 69: <span style='color:#808030; '>END</span> GiveBuf<span style='color:#808030; '>;</span>
+ 70: 
+ 71: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ReadHex<span style='color:#808030; '>(</span>s<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span>i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+ 72: <span style='color:#800000; font-weight:bold; '>VAR</span> res<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span> c<span style='color:#808030; '>:</span>SHORTCARD<span style='color:#808030; '>;</span>
+ 73: <span style='color:#808030; '>BEGIN</span>
+ 74:   res <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 75:   <span style='color:#808030; '>LOOP</span>
+ 76:     c <span style='color:#808030; '>:=</span> SHORTCARD<span style='color:#808030; '>(</span>s<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 77:     INC<span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 78:     <span style='color:#808030; '>CASE</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span>c<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>OF</span>
+ 79:       <span style='color:#0000e6; '>'A'</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#0000e6; '>'F'</span><span style='color:#808030; '>:</span> c <span style='color:#808030; '>:=</span> c <span style='color:#808030; '>-</span> <span style='color:#808030; '>(</span> SHORTCARD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'A'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#008c00; '>10</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+ 80:     <span style='color:#808030; '>|</span> <span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#0000e6; '>'9'</span><span style='color:#808030; '>:</span> c <span style='color:#808030; '>:=</span> c <span style='color:#808030; '>-</span> SHORTCARD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 81:     <span style='color:#800000; font-weight:bold; '>ELSE</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span>
+ 82:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 83:     res <span style='color:#808030; '>:=</span> res <span style='color:#808030; '>*</span> <span style='color:#008c00; '>16</span> <span style='color:#808030; '>+</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span> c <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 84:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 85:   <span style='color:#800000; font-weight:bold; '>RETURN</span> res<span style='color:#808030; '>;</span>
+ 86: <span style='color:#808030; '>END</span> ReadHex<span style='color:#808030; '>;</span>
+ 87: 
+ 88: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ReadMap<span style='color:#808030; '>;</span>
+ 89: <span style='color:#800000; font-weight:bold; '>CONST</span>
+ 90:   delim <span style='color:#808030; '>=</span> Str<span style='color:#008c00; '>.</span>CHARSET<span style='color:#808030; '>{</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+ 91: <span style='color:#800000; font-weight:bold; '>VAR</span>
+ 92:   done<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span> i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+ 93:   sname<span style='color:#808030; '>,</span>gname<span style='color:#808030; '>,</span>token<span style='color:#808030; '>,</span>line<span style='color:#808030; '>:</span>String<span style='color:#808030; '>;</span>
+ 94:   start<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+ 95: <span style='color:#808030; '>BEGIN</span>
+ 96:   nmap <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 97:   <span style='color:#808030; '>REPEAT</span>
+ 98:     FIO<span style='color:#008c00; '>.</span>RdStr<span style='color:#808030; '>(</span>mapfile<span style='color:#808030; '>,</span>line<span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+ 99:   <span style='color:#808030; '>UNTIL</span> <span style='color:#808030; '>(</span>line<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span><span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>line<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>>=</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>line<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>&lt;=</span><span style='color:#0000e6; '>'9'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+100:   <span style='color:#808030; '>LOOP</span>
+101:   <span style='color:#696969; '>(*  IO.WrStr(line);IO.WrLn; *)</span>
+102:     <span style='color:#808030; '>IF</span> Str<span style='color:#008c00; '>.</span>Length<span style='color:#808030; '>(</span>line<span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>60</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+103: 
+104:     Str<span style='color:#008c00; '>.</span>Item<span style='color:#808030; '>(</span> token<span style='color:#808030; '>,</span> line<span style='color:#808030; '>,</span> delim<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+105:     start <span style='color:#808030; '>:=</span> ReadHex<span style='color:#808030; '>(</span> token<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+106: 
+107:     Str<span style='color:#008c00; '>.</span>Item<span style='color:#808030; '>(</span> sname<span style='color:#808030; '>,</span> line<span style='color:#808030; '>,</span> delim<span style='color:#808030; '>,</span> <span style='color:#008c00; '>3</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+108: 
+109:     Str<span style='color:#008c00; '>.</span>Item<span style='color:#808030; '>(</span> gname<span style='color:#808030; '>,</span> line<span style='color:#808030; '>,</span> delim<span style='color:#808030; '>,</span> <span style='color:#008c00; '>5</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+110: 
+111:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span> Str<span style='color:#008c00; '>.</span>Compare<span style='color:#808030; '>(</span>gname<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'(none)'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+112:       gname <span style='color:#808030; '>:=</span> sname<span style='color:#808030; '>;</span>
+113:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+114: 
+115:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span> nmap <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span>
+116:     <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#808030; '>(</span> Str<span style='color:#008c00; '>.</span>Compare<span style='color:#808030; '>(</span>gname<span style='color:#808030; '>,</span>map<span style='color:#808030; '>[</span>nmap<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Name<span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span>
+117:     <span style='color:#800000; font-weight:bold; '>THEN</span>
+118:       INC<span style='color:#808030; '>(</span>nmap<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+119:       <span style='color:#808030; '>WITH</span> map<span style='color:#808030; '>[</span>nmap<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+120:         Name <span style='color:#808030; '>:=</span> gname<span style='color:#808030; '>;</span>
+121:         Start <span style='color:#808030; '>:=</span> start<span style='color:#808030; '>;</span>
+122:         StartSeg <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>start <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+123:         Overlay <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+124:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+125:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+126:     FIO<span style='color:#008c00; '>.</span>RdStr<span style='color:#808030; '>(</span>mapfile<span style='color:#808030; '>,</span>line<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+127:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+128:   map<span style='color:#808030; '>[</span>nmap<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> map<span style='color:#808030; '>[</span>nmap<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* sentinel *)</span>
+129: <span style='color:#808030; '>END</span> ReadMap<span style='color:#808030; '>;</span>
+130: 
+131: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> too_small_check<span style='color:#808030; '>;</span>
+132: <span style='color:#800000; font-weight:bold; '>VAR</span> i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+133: <span style='color:#808030; '>BEGIN</span>
+134:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>TO</span> nmap<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+135:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>StartSeg <span style='color:#808030; '>=</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>StartSeg <span style='color:#808030; '>)</span>
+136:     <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+137:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Name<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+138:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' too small !!'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+139:       IO<span style='color:#008c00; '>.</span>WrLn<span style='color:#808030; '>;</span>
+140:       HALT<span style='color:#808030; '>;</span>
+141:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+142:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+143: <span style='color:#808030; '>END</span> too_small_check<span style='color:#808030; '>;</span>
+144: 
+145: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ReadOvl<span style='color:#808030; '>;</span>
+146: <span style='color:#800000; font-weight:bold; '>VAR</span> c<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+147: 
+148:   <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> nextc<span style='color:#808030; '>;</span>
+149:   <span style='color:#808030; '>BEGIN</span>
+150:     c <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>RdChar<span style='color:#808030; '>(</span>ovlfile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+151:   <span style='color:#808030; '>END</span> nextc<span style='color:#808030; '>;</span>
+152: 
+153: <span style='color:#800000; font-weight:bold; '>VAR</span>
+154:     ovln<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+155:     name<span style='color:#808030; '>:</span>String<span style='color:#808030; '>;</span>
+156:     i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+157: <span style='color:#808030; '>BEGIN</span>
+158:   <span style='color:#808030; '>LOOP</span>
+159:     <span style='color:#808030; '>LOOP</span>
+160:       nextc<span style='color:#808030; '>;</span>
+161:       <span style='color:#808030; '>WHILE</span> c <span style='color:#808030; '>&lt;=</span> <span style='color:#0000e6; '>' '</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+162:         <span style='color:#808030; '>IF</span> c <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>1AH</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+163:         nextc<span style='color:#808030; '>;</span>
+164:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+165:       <span style='color:#808030; '>IF</span> c <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>';'</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#696969; '>(* comment *)</span>
+166:         <span style='color:#808030; '>WHILE</span> c <span style='color:#808030; '>>=</span> <span style='color:#0000e6; '>' '</span> <span style='color:#800000; font-weight:bold; '>DO</span> nextc <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+167:       <span style='color:#800000; font-weight:bold; '>ELSE</span>
+168:         <span style='color:#800000; font-weight:bold; '>EXIT</span> <span style='color:#808030; '>;</span>
+169:       <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+170:     <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+171:     <span style='color:#808030; '>IF</span> c <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>1AH</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+172: 
+173:     ovln <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+174: 
+175:     <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span> c <span style='color:#808030; '>>=</span> <span style='color:#0000e6; '>'0'</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> c <span style='color:#808030; '>&lt;=</span> <span style='color:#0000e6; '>'9'</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+176:       ovln <span style='color:#808030; '>:=</span> ovln<span style='color:#808030; '>*</span><span style='color:#008c00; '>10</span> <span style='color:#808030; '>+</span> ORD<span style='color:#808030; '>(</span>c<span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> ORD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+177:       nextc<span style='color:#808030; '>;</span>
+178:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+179: 
+180:     <span style='color:#808030; '>WHILE</span> c <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>' '</span> <span style='color:#800000; font-weight:bold; '>DO</span> nextc <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+181: 
+182:     i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+183:     <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span> c <span style='color:#808030; '>></span> <span style='color:#0000e6; '>' '</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+184:       name<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> c<span style='color:#808030; '>;</span>
+185:       INC<span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+186:       nextc<span style='color:#808030; '>;</span>
+187:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+188:     name<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+189: 
+190:     <span style='color:#696969; '>(* search table *)</span>
+191:     i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+192:     <span style='color:#808030; '>LOOP</span>
+193:       INC<span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+194:       <span style='color:#808030; '>IF</span> i <span style='color:#808030; '>></span> nmap <span style='color:#800000; font-weight:bold; '>THEN</span>
+195:         IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'Segment/group name '</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+196:         IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span>name<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+197:         IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' not found'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+198:         IO<span style='color:#008c00; '>.</span>WrLn<span style='color:#808030; '>;</span>
+199:         <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span>
+200:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+201:       <span style='color:#808030; '>WITH</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+202:         <span style='color:#808030; '>IF</span> Str<span style='color:#008c00; '>.</span>Compare<span style='color:#808030; '>(</span> Name<span style='color:#808030; '>,</span> name <span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+203:           Overlay <span style='color:#808030; '>:=</span> ovln<span style='color:#808030; '>;</span>
+204:           <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span>
+205:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+206:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+207:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+208:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+209: <span style='color:#808030; '>END</span> ReadOvl<span style='color:#808030; '>;</span>
+210: 
+211: <span style='color:#800000; font-weight:bold; '>VAR</span> newseg_in_exe<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+212: 
+213: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> newseg<span style='color:#808030; '>(</span> seg<span style='color:#808030; '>,</span>off<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+214: <span style='color:#800000; font-weight:bold; '>VAR</span> loc<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+215:     k<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+216: <span style='color:#808030; '>BEGIN</span>
+217:   loc <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>*</span>VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>seg<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>off<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+218:   k <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+219:   <span style='color:#696969; '>(* search for location segment = k *)</span>
+220:   <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span> k <span style='color:#808030; '>&lt;=</span> nmap <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> loc <span style='color:#808030; '>>=</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Start <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span> INC<span style='color:#808030; '>(</span>k<span style='color:#808030; '>)</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+221:   DEC<span style='color:#808030; '>(</span>k<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+222:   newseg_in_exe <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+223:   <span style='color:#800000; font-weight:bold; '>RETURN</span> seg <span style='color:#808030; '>-</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Diff<span style='color:#808030; '>;</span>
+224: <span style='color:#808030; '>END</span> newseg<span style='color:#808030; '>;</span>
+225: 
+226: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> hex<span style='color:#808030; '>(</span>n<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+227: <span style='color:#808030; '>BEGIN</span>
+228:   n <span style='color:#808030; '>:=</span> n <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+229:   <span style='color:#808030; '>IF</span> n <span style='color:#808030; '>></span> <span style='color:#008c00; '>9</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+230:     <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span> n <span style='color:#808030; '>+</span> ORD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'A'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#008c00; '>10</span> <span style='color:#808030; '>)</span>
+231:   <span style='color:#800000; font-weight:bold; '>ELSE</span>
+232:     <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span> n <span style='color:#808030; '>+</span> ORD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+233:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+234: <span style='color:#808030; '>END</span> hex<span style='color:#808030; '>;</span>
+235: 
+236: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> EditMap<span style='color:#808030; '>;</span>
+237: <span style='color:#800000; font-weight:bold; '>VAR</span> line<span style='color:#808030; '>:</span>String<span style='color:#808030; '>;</span>
+238:     i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+239:     seg<span style='color:#808030; '>,</span>off<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+240:     addr<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+241: <span style='color:#808030; '>BEGIN</span>
+242:   FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span>mapfile<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+243:   <span style='color:#808030; '>LOOP</span>
+244:     FIO<span style='color:#008c00; '>.</span>RdStr<span style='color:#808030; '>(</span>mapfile<span style='color:#808030; '>,</span>line<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+245:     newseg_in_exe <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+246:     <span style='color:#808030; '>IF</span> FIO<span style='color:#008c00; '>.</span>EOF <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+247:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span> line<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>' '</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> line<span style='color:#808030; '>[</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>':'</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+248:       seg <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>ReadHex<span style='color:#808030; '>(</span>line<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+249:       off <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>ReadHex<span style='color:#808030; '>(</span>line<span style='color:#808030; '>,</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+250:       seg <span style='color:#808030; '>:=</span> newseg<span style='color:#808030; '>(</span> seg<span style='color:#808030; '>,</span> off <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+251:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+252:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+253:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+254:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+255:     <span style='color:#800000; font-weight:bold; '>ELSIF</span> <span style='color:#808030; '>(</span> line<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>' '</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> line<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'H'</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+256:       addr <span style='color:#808030; '>:=</span> ReadHex<span style='color:#808030; '>(</span>line<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+257:       seg <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>addr <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+258:       off <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>addr<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+259:       seg <span style='color:#808030; '>:=</span> newseg<span style='color:#808030; '>(</span> seg<span style='color:#808030; '>,</span> off <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+260:       addr <span style='color:#808030; '>:=</span> LONGCARD<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#008c00; '>16</span> <span style='color:#808030; '>+</span> LONGCARD<span style='color:#808030; '>(</span>off<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> ReadHex<span style='color:#808030; '>(</span>line<span style='color:#808030; '>,</span><span style='color:#008c00; '>15</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+261:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+262:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+263:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+264:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+265:       seg <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>addr <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+266:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>11</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+267:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+268:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>9</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+269:       line<span style='color:#808030; '>[</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> hex<span style='color:#808030; '>(</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> seg <span style='color:#808030; '>:=</span> seg <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+270:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+271: <span style='color:#696969; '>(*    IF NOT newseg_in_exe THEN</span>
+272: <span style='color:#696969; '>      IO.WrStr(line);</span>
+273: <span style='color:#696969; '>      IO.WrLn;</span>
+274: <span style='color:#696969; '>      END;</span>
+275: <span style='color:#696969; '>*)</span>
+276:     <span style='color:#808030; '>IF</span> newseg_in_exe <span style='color:#800000; font-weight:bold; '>THEN</span>
+277:       <span style='color:#808030; '>IF</span> line<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+278:         FIO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span>newmapfile<span style='color:#808030; '>,</span>line<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+279:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+280:       FIO<span style='color:#008c00; '>.</span>WrLn<span style='color:#808030; '>(</span>newmapfile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+281:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+282:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+283: <span style='color:#808030; '>END</span> EditMap<span style='color:#808030; '>;</span>
+284: 
+285: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> PrintMap<span style='color:#808030; '>;</span>
+286: <span style='color:#800000; font-weight:bold; '>VAR</span> i<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+287: <span style='color:#808030; '>BEGIN</span>
+288:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>TO</span> nmap <span style='color:#800000; font-weight:bold; '>DO</span>
+289:     <span style='color:#808030; '>WITH</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+290:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' Start='</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>  IO<span style='color:#008c00; '>.</span>WrLngCard<span style='color:#808030; '>(</span>Start<span style='color:#808030; '>,</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+291:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' Diff='</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> IO<span style='color:#008c00; '>.</span>WrCard<span style='color:#808030; '>(</span>Diff<span style='color:#808030; '>,</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+292:       IO<span style='color:#008c00; '>.</span>WrCard<span style='color:#808030; '>(</span>Overlay<span style='color:#808030; '>,</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+293:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+294:       IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+295:       IO<span style='color:#008c00; '>.</span>WrLn<span style='color:#808030; '>;</span>
+296:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+297:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+298: <span style='color:#808030; '>END</span> PrintMap<span style='color:#808030; '>;</span>
+299: 
+300: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ChkRead<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>VAR</span> buf<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> count<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+301: <span style='color:#808030; '>BEGIN</span>
+302:   <span style='color:#808030; '>IF</span> FIO<span style='color:#008c00; '>.</span>RdBin<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> buf<span style='color:#808030; '>,</span> count <span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> count <span style='color:#800000; font-weight:bold; '>THEN</span>
+303:     IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'?? on read'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+304:     HALT<span style='color:#808030; '>;</span>
+305:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+306: <span style='color:#808030; '>END</span> ChkRead<span style='color:#808030; '>;</span>
+307: 
+308: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ChkRead1<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>VAR</span> buf<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> count<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+309: <span style='color:#808030; '>BEGIN</span>
+310:   <span style='color:#808030; '>IF</span> FIO<span style='color:#008c00; '>.</span>RdBin<span style='color:#808030; '>(</span> exefile1<span style='color:#808030; '>,</span> buf<span style='color:#808030; '>,</span> count <span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> count <span style='color:#800000; font-weight:bold; '>THEN</span>
+311:     IO<span style='color:#008c00; '>.</span>WrStr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'?? on read'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+312:     HALT<span style='color:#808030; '>;</span>
+313:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+314: <span style='color:#808030; '>END</span> ChkRead1<span style='color:#808030; '>;</span>
+315: 
+316: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Copy<span style='color:#808030; '>(</span>src<span style='color:#808030; '>,</span>dst<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> count<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+317: <span style='color:#800000; font-weight:bold; '>VAR</span> amount<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> actual<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+318:     buf<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>0..</span><span style='color:#008c00; '>0FFFH</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> SHORTCARD<span style='color:#808030; '>;</span>
+319:     res<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+320: <span style='color:#808030; '>BEGIN</span>
+321:   res <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+322:   <span style='color:#808030; '>WHILE</span> count <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+323:     amount <span style='color:#808030; '>:=</span> count<span style='color:#808030; '>;</span>
+324:     <span style='color:#808030; '>IF</span> amount <span style='color:#808030; '>></span> SIZE<span style='color:#808030; '>(</span>buf<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+325:       amount <span style='color:#808030; '>:=</span> SIZE<span style='color:#808030; '>(</span>buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+326:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+327:     actual <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>RdBin<span style='color:#808030; '>(</span> src<span style='color:#808030; '>,</span> buf<span style='color:#808030; '>,</span> amount <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+328:     <span style='color:#808030; '>IF</span> actual <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+329:       FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> dst<span style='color:#808030; '>,</span> buf<span style='color:#808030; '>,</span> actual <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+330:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+331:     DEC<span style='color:#808030; '>(</span>count<span style='color:#808030; '>,</span>amount<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+332:     INC<span style='color:#808030; '>(</span>res<span style='color:#808030; '>,</span>actual<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+333:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+334:   <span style='color:#800000; font-weight:bold; '>RETURN</span> res<span style='color:#808030; '>;</span>
+335: <span style='color:#808030; '>END</span> Copy<span style='color:#808030; '>;</span>
+336: 
+337: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> LongCopy<span style='color:#808030; '>(</span>src<span style='color:#808030; '>,</span>dst<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> count<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+338: <span style='color:#800000; font-weight:bold; '>VAR</span> junk<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+339: <span style='color:#808030; '>BEGIN</span>
+340:   <span style='color:#808030; '>WHILE</span> count <span style='color:#808030; '>></span> <span style='color:#008c00; '>8000H</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+341:     junk <span style='color:#808030; '>:=</span> Copy<span style='color:#808030; '>(</span>src<span style='color:#808030; '>,</span>dst<span style='color:#808030; '>,</span><span style='color:#008c00; '>8000H</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+342:     DEC<span style='color:#808030; '>(</span>count<span style='color:#808030; '>,</span><span style='color:#008c00; '>8000H</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+343:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+344:   junk <span style='color:#808030; '>:=</span> Copy<span style='color:#808030; '>(</span> src<span style='color:#808030; '>,</span>dst<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+345: <span style='color:#808030; '>END</span> LongCopy<span style='color:#808030; '>;</span>
+346: 
+347: 
+348: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> resetexe<span style='color:#808030; '>;</span>
+349: <span style='color:#800000; font-weight:bold; '>VAR</span> filename<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..255</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+350: <span style='color:#808030; '>BEGIN</span>
+351:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.exe'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+352:   exefile <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Create<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+353: <span style='color:#808030; '>END</span> resetexe<span style='color:#808030; '>;</span>
+354: 
+355: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> MakeFix<span style='color:#808030; '>(</span> k<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> loc<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span> j<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> target<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> internalfix<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+356: <span style='color:#800000; font-weight:bold; '>VAR</span>
+357:    tmp<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+358:    fix<span style='color:#808030; '>:</span>tfix<span style='color:#808030; '>;</span>
+359: <span style='color:#808030; '>BEGIN</span>
+360:   <span style='color:#696969; '>(*</span>
+361: <span style='color:#696969; '>  IO.WrStr('k='); IO.WrCard(k,1);</span>
+362: <span style='color:#696969; '>  IO.WrStr('j='); IO.WrCard(j,1);</span>
+363: <span style='color:#696969; '></span>
+364: <span style='color:#696969; '>  IO.WrStr( ' map[k].Overlay=' ); IO.WrCard( ORD(map[k].Overlay),1 );</span>
+365: <span style='color:#696969; '>  IO.WrStr( ' map[j].Overlay=' ); IO.WrCard( ORD(map[j].Overlay),1 );</span>
+366: <span style='color:#696969; '>  IO.WrStr( ' loc=' ); IO.WrLngCard( loc, 1 );</span>
+367: <span style='color:#696969; '>  IO.WrStr( ' target=' ); IO.WrCard( target, 1 );</span>
+368: <span style='color:#696969; '>  IO.WrLn;</span>
+369: <span style='color:#696969; '>  *)</span>
+370:   <span style='color:#808030; '>IF</span> internalfix <span style='color:#800000; font-weight:bold; '>THEN</span>
+371:     <span style='color:#808030; '>IF</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+372:       <span style='color:#808030; '>IF</span> map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+373:         <span style='color:#800000; font-weight:bold; '>RETURN</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* overlay 0 requires only internal fixups to itself *)</span>
+374:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+375:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+376:     INC<span style='color:#808030; '>(</span> ovlheaders<span style='color:#808030; '>[</span>map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>nifix <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+377:     tmp <span style='color:#808030; '>:=</span> j<span style='color:#808030; '>;</span> j <span style='color:#808030; '>:=</span> k<span style='color:#808030; '>;</span> k <span style='color:#808030; '>:=</span> tmp<span style='color:#808030; '>;</span>
+378:   <span style='color:#800000; font-weight:bold; '>ELSE</span>
+379:     <span style='color:#808030; '>IF</span> map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+380:     <span style='color:#808030; '>IF</span> map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>=</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+381:     INC<span style='color:#808030; '>(</span> ovlheaders<span style='color:#808030; '>[</span>map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>nefix <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+382:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+383: 
+384:   fix<span style='color:#008c00; '>.</span>locoff <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span> SHORTCARD<span style='color:#808030; '>(</span>loc<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>16</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>*</span>SHORTCARD<span style='color:#808030; '>(</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+385:   fix<span style='color:#008c00; '>.</span>locseg <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>loc <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+386:   fix<span style='color:#008c00; '>.</span>target <span style='color:#808030; '>:=</span> target<span style='color:#808030; '>;</span>
+387:   FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> ovlfiles<span style='color:#808030; '>[</span>map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Overlay<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> fix<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>fix<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+388: 
+389: <span style='color:#808030; '>END</span> MakeFix<span style='color:#808030; '>;</span>
+390: 
+391: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Main<span style='color:#808030; '>;</span>
+392: <span style='color:#800000; font-weight:bold; '>VAR</span>
+393:   exe<span style='color:#808030; '>:</span>texeheader<span style='color:#808030; '>;</span>
+394:   dummy<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+395:   i<span style='color:#808030; '>,</span>j<span style='color:#808030; '>,</span>k<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+396:   hsize<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+397:   filename<span style='color:#808030; '>:</span>String<span style='color:#808030; '>;</span>
+398:   ext<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..3</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+399:   pad<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..15</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> SHORTCARD<span style='color:#808030; '>;</span>
+400:   padsize<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+401:   copysize<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+402:   target<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+403:   internalfix<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+404:   fixlocabs<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+405:   fsize<span style='color:#808030; '>:</span>LONGCARD<span style='color:#808030; '>;</span>
+406:   hpage<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+407:   fix<span style='color:#808030; '>:</span>tfix<span style='color:#808030; '>;</span>
+408:   exefix<span style='color:#808030; '>:</span><span style='color:#808030; '>RECORD</span> off<span style='color:#808030; '>,</span>seg<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+409:   file<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+410: 
+411: <span style='color:#808030; '>BEGIN</span>
+412:   ChkRead<span style='color:#808030; '>(</span> exe<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>exe<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+413:   hsize <span style='color:#808030; '>:=</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>exe<span style='color:#008c00; '>.</span>headerparas<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+414: 
+415:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> MaxOverlay <span style='color:#800000; font-weight:bold; '>DO</span>
+416:     ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+417:     <span style='color:#808030; '>WITH</span> ovlheaders<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+418:       Alloc <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+419:       Init <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+420:       nifix <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+421:       nefix <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+422:       copyr <span style='color:#808030; '>:=</span> <span style='color:#0000e6; '>'JPI'</span> <span style='color:#808030; '>;</span>
+423:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+424:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+425: 
+426:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> <span style='color:#008c00; '>15</span> <span style='color:#800000; font-weight:bold; '>DO</span> pad<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+427: 
+428:   <span style='color:#696969; '>(* Now read through exe file redistributing segments *)</span>
+429:   FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> hsize <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+430:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>TO</span> nmap <span style='color:#800000; font-weight:bold; '>DO</span>
+431:     <span style='color:#808030; '>WITH</span> map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+432:       <span style='color:#808030; '>WITH</span> ovlheaders<span style='color:#808030; '>[</span>Overlay<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+433:         file <span style='color:#808030; '>:=</span> ovlfiles<span style='color:#808030; '>[</span>Overlay<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+434:         <span style='color:#808030; '>IF</span> file <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+435:            ext <span style='color:#808030; '>:=</span> <span style='color:#0000e6; '>'.ov '</span><span style='color:#808030; '>;</span>
+436:            ext<span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span> Overlay<span style='color:#808030; '>+</span>ORD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+437:            Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> ext <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+438:            file <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Create<span style='color:#808030; '>(</span> filename <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+439:            ovlfiles<span style='color:#808030; '>[</span>Overlay<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> file<span style='color:#808030; '>;</span>
+440:            FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> pad<span style='color:#808030; '>,</span> <span style='color:#008c00; '>16</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+441:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+442:         padsize <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>Start<span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>Alloc<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>;</span>
+443:         FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> pad<span style='color:#808030; '>,</span> padsize <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+444:         INC<span style='color:#808030; '>(</span> Init<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span> padsize<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+445:         INC<span style='color:#808030; '>(</span> Alloc<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>padsize<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+446:         Diff <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>Start <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>Alloc <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+447:         copysize <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>map<span style='color:#808030; '>[</span>i<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Start<span style='color:#808030; '>-</span>Start<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+448:         INC<span style='color:#808030; '>(</span> Init<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span> Copy<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> file<span style='color:#808030; '>,</span> copysize <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+449:         INC<span style='color:#808030; '>(</span> Alloc <span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>copysize<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+450:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+451:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+452:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+453: 
+454:   <span style='color:#696969; '>(* OK. We now have the overlay files, so work out the fixups *)</span>
+455: 
+456: 
+457:   <span style='color:#696969; '>(* First allocate buffers for overlays *)</span>
+458:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> MaxOverlay <span style='color:#800000; font-weight:bold; '>DO</span>
+459:     <span style='color:#808030; '>IF</span> ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+460:       GiveBuf<span style='color:#808030; '>(</span> ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+461:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+462:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+463: 
+464:   <span style='color:#808030; '>FOR</span> internalfix <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span> <span style='color:#800000; font-weight:bold; '>TO</span> <span style='color:#800000; font-weight:bold; '>TRUE</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+465:     FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile1<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>exe<span style='color:#008c00; '>.</span>relocations<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+466:     <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>TO</span> exe<span style='color:#008c00; '>.</span>numrelocitem <span style='color:#800000; font-weight:bold; '>DO</span>
+467:       ChkRead1<span style='color:#808030; '>(</span> exefix<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>exefix<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+468:       fixlocabs <span style='color:#808030; '>:=</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>exefix<span style='color:#008c00; '>.</span>off<span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>*</span>VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>exefix<span style='color:#008c00; '>.</span>seg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+469:       FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> hsize<span style='color:#808030; '>+</span>fixlocabs<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+470:       ChkRead<span style='color:#808030; '>(</span> target<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>target<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+471: 
+472:       k <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+473:       <span style='color:#696969; '>(* search for location segment = k *)</span>
+474:       <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span> k <span style='color:#808030; '>&lt;=</span> nmap <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> fixlocabs <span style='color:#808030; '>>=</span> map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Start <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span> INC<span style='color:#808030; '>(</span>k<span style='color:#808030; '>)</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+475:       DEC<span style='color:#808030; '>(</span>k<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+476: 
+477:   <span style='color:#696969; '>(*</span>
+478: <span style='color:#696969; '>          IO.WrCard(target,1);</span>
+479: <span style='color:#696969; '>          IO.WrStr(' at ');</span>
+480: <span style='color:#696969; '>          IO.WrLngCard(fixlocabs,1);</span>
+481: <span style='color:#696969; '>          IO.WrLn;</span>
+482: <span style='color:#696969; '>  *)</span>
+483: 
+484:       j <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+485:       <span style='color:#808030; '>LOOP</span> <span style='color:#696969; '>(* search for target segment = j *)</span>
+486:         INC<span style='color:#808030; '>(</span>j<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+487:         <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span> j <span style='color:#808030; '>></span> nmap <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#808030; '>(</span> target <span style='color:#808030; '>&lt;</span> map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>StartSeg <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+488:           DEC<span style='color:#808030; '>(</span>j<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+489:           MakeFix<span style='color:#808030; '>(</span> k<span style='color:#808030; '>,</span> fixlocabs <span style='color:#808030; '>-</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>map<span style='color:#808030; '>[</span>k<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Diff<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>
+490:                    j<span style='color:#808030; '>,</span> target <span style='color:#808030; '>-</span> map<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Diff<span style='color:#808030; '>,</span> internalfix <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+491:           <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span>
+492:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+493:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+494:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+495:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+496: 
+497:   <span style='color:#696969; '>(* Phew ! *)</span>
+498:   <span style='color:#696969; '>(* Now save the headers *)</span>
+499: 
+500:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> MaxOverlay <span style='color:#800000; font-weight:bold; '>DO</span>
+501:     <span style='color:#808030; '>WITH</span> ovlheaders<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+502:       file <span style='color:#808030; '>:=</span> ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+503:       <span style='color:#808030; '>IF</span> file <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+504:         FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+505:         FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> ovlheaders<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>16</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+506:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+507:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+508:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+509: 
+510: 
+511:   <span style='color:#696969; '>(* Now rewrite exe file *)</span>
+512: 
+513:   resetexe<span style='color:#808030; '>;</span>
+514:   hpage <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span> <span style='color:#008c00; '>4</span><span style='color:#808030; '>*</span>ovlheaders<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>nifix <span style='color:#808030; '>+</span> SIZE<span style='color:#808030; '>(</span>texeheader<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> <span style='color:#008c00; '>511</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>512</span><span style='color:#808030; '>;</span>
+515:   hsize <span style='color:#808030; '>:=</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>hpage <span style='color:#808030; '>*</span> <span style='color:#008c00; '>512</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+516: 
+517:   FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span><span style='color:#008c00; '>512</span><span style='color:#808030; '>*</span>hpage<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+518:   file <span style='color:#808030; '>:=</span> ovlfiles<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+519:   FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> <span style='color:#008c00; '>16</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+520:   LongCopy<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> exefile<span style='color:#808030; '>,</span> ovlheaders<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Init <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+521: 
+522:   FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+523: 
+524:   exe<span style='color:#008c00; '>.</span>numrelocitem <span style='color:#808030; '>:=</span> ovlheaders<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>nifix<span style='color:#808030; '>;</span>
+525:   exe<span style='color:#008c00; '>.</span>headerparas <span style='color:#808030; '>:=</span> hpage<span style='color:#808030; '>*</span><span style='color:#008c00; '>32</span><span style='color:#808030; '>;</span>
+526:   exe<span style='color:#008c00; '>.</span>relocations <span style='color:#808030; '>:=</span> SIZE<span style='color:#808030; '>(</span>texeheader<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+527:   exe<span style='color:#008c00; '>.</span>initialcs <span style='color:#808030; '>:=</span> newseg<span style='color:#808030; '>(</span>exe<span style='color:#008c00; '>.</span>initialcs<span style='color:#808030; '>,</span>exe<span style='color:#008c00; '>.</span>initialip<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+528:   exe<span style='color:#008c00; '>.</span>initialss <span style='color:#808030; '>:=</span> newseg<span style='color:#808030; '>(</span>exe<span style='color:#008c00; '>.</span>initialss<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+529:   fsize <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Size<span style='color:#808030; '>(</span>exefile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+530:   exe<span style='color:#008c00; '>.</span>sizemod512 <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>fsize<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>512</span><span style='color:#808030; '>;</span>
+531:   exe<span style='color:#008c00; '>.</span>sizediv512 <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>fsize<span style='color:#808030; '>+</span><span style='color:#008c00; '>511</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>512</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+532: 
+533:   FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> exe<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>texeheader<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+534:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>TO</span> ovlheaders<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>nifix <span style='color:#800000; font-weight:bold; '>DO</span>
+535:     dummy <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>RdBin<span style='color:#808030; '>(</span> file<span style='color:#808030; '>,</span> fix<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>fix<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+536:     fixlocabs <span style='color:#808030; '>:=</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>fix<span style='color:#008c00; '>.</span>locoff<span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>*</span>VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>fix<span style='color:#008c00; '>.</span>locseg<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+537: 
+538: 
+539:     FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> hsize<span style='color:#808030; '>+</span>fixlocabs<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+540:     FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> fix<span style='color:#008c00; '>.</span>target<span style='color:#808030; '>,</span> <span style='color:#008c00; '>2</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+541:   <span style='color:#696969; '>(*</span>
+542: <span style='color:#696969; '>  IO.WrStr('Repatch at');</span>
+543: <span style='color:#696969; '>  IO.WrLngCard( hsize+fixlocabs,1 );</span>
+544: <span style='color:#696969; '>  IO.WrStr(' value ');</span>
+545: <span style='color:#696969; '>  IO.WrCard( </span><span style='color:#ffffff; background:#808000; '>fix.target, 1 );</span><span style='color:#696969; '></span>
+546: <span style='color:#696969; '>  IO.WrLn;</span>
+547: <span style='color:#696969; '>  *)</span>
+548:     FIO<span style='color:#008c00; '>.</span>Seek<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>texeheader<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> <span style='color:#808030; '>(</span>i<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#008c00; '>4</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+549:     exefix<span style='color:#008c00; '>.</span>off <span style='color:#808030; '>:=</span> VAL<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>,</span>fix<span style='color:#008c00; '>.</span>locoff<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+550:     exefix<span style='color:#008c00; '>.</span>seg <span style='color:#808030; '>:=</span> fix<span style='color:#008c00; '>.</span>locseg<span style='color:#808030; '>;</span>
+551:     FIO<span style='color:#008c00; '>.</span>WrBin<span style='color:#808030; '>(</span> exefile<span style='color:#808030; '>,</span> exefix<span style='color:#808030; '>,</span> SIZE<span style='color:#808030; '>(</span>exefix<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+552:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+553: 
+554:   <span style='color:#696969; '>(* close buffered ovl files *)</span>
+555:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> MaxOverlay <span style='color:#800000; font-weight:bold; '>DO</span>
+556:     <span style='color:#808030; '>IF</span> ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+557:       FIO<span style='color:#008c00; '>.</span>Close<span style='color:#808030; '>(</span> ovlfiles<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+558:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+559:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+560: 
+561: <span style='color:#808030; '>END</span> Main<span style='color:#808030; '>;</span>
+562: 
+563: <span style='color:#800000; font-weight:bold; '>VAR</span> filename<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..255</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+564: 
+565: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> init<span style='color:#808030; '>;</span>
+566: <span style='color:#800000; font-weight:bold; '>VAR</span>
+567:   renname <span style='color:#808030; '>:</span> FIO<span style='color:#008c00; '>.</span>PathStr <span style='color:#808030; '>;</span>
+568: <span style='color:#808030; '>BEGIN</span>
+569:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.exe'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+570:   exefile <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Open<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* no buffering because random access *)</span>
+571:   exefile1 <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Open<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> GiveBuf<span style='color:#808030; '>(</span>exefile1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+572:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.ovl'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+573:   ovlfile <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Open<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> GiveBuf<span style='color:#808030; '>(</span>ovlfile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+574:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.map'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+575:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> renname<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.omp'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+576:   FIO<span style='color:#008c00; '>.</span>Erase<span style='color:#808030; '>(</span>renname<span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+577:   FIO<span style='color:#008c00; '>.</span>Rename<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>,</span>renname<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+578:   mapfile <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Open<span style='color:#808030; '>(</span>renname<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> GiveBuf<span style='color:#808030; '>(</span>mapfile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+579:   newmapfile <span style='color:#808030; '>:=</span> FIO<span style='color:#008c00; '>.</span>Create<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> GiveBuf<span style='color:#808030; '>(</span>newmapfile<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+580: <span style='color:#808030; '>END</span> init<span style='color:#808030; '>;</span>
+581: 
+582: <span style='color:#808030; '>BEGIN</span>
+583:   init<span style='color:#808030; '>;</span>
+584:   ReadMap<span style='color:#808030; '>;</span>
+585:   ReadOvl<span style='color:#808030; '>;</span>
+586:   too_small_check<span style='color:#808030; '>;</span>
+587:   Main<span style='color:#808030; '>;</span>
+588: <span style='color:#696969; '>(*  PrintMap; *)</span>
+589:   EditMap<span style='color:#808030; '>;</span>
+590:   Str<span style='color:#008c00; '>.</span>Concat<span style='color:#808030; '>(</span> filename<span style='color:#808030; '>,</span> Lib<span style='color:#008c00; '>.</span>CommandLine<span style='color:#808030; '>^</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'.ov0'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+591:   FIO<span style='color:#008c00; '>.</span>Erase<span style='color:#808030; '>(</span>filename<span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+592:   FIO<span style='color:#008c00; '>.</span>Close<span style='color:#808030; '>(</span>newmapfile<span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+593: <span style='color:#808030; '>END</span> ovl<span style='color:#808030; '>.</span>
+594: 
+595: 
+596: 

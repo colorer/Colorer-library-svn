@@ -1,0 +1,200 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>// Dies ist ein Script, um Wetterdaten im "grd" Format su lesen</span>
+  1: <span style='color:#696969; '>// und einem Partikel Objekt zuzuweisen</span>
+  2: 
+  3: 
+  4: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> <span style='color:#800000; font-weight:bold; '>int</span> getDataWord<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>int</span> $fid<span style='color:#808030; '>)</span>
+  5: <span style='color:#808030; '>{</span>
+  6: <span style='color:#800000; font-weight:bold; '>global</span>    <span style='color:#800000; font-weight:bold; '>int</span>    $readFromOd<span style='color:#808030; '>;</span>
+  7: <span style='color:#800000; font-weight:bold; '>int</span>    $value<span style='color:#808030; '>;</span>
+  8: 
+  9:     if <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>$readFromOd<span style='color:#808030; '>)</span> <span style='color:#808030; '>{</span>
+ 10:         fgetword<span style='color:#808030; '>(</span> $fid<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 11:         $readFromOd <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+ 12:     <span style='color:#808030; '>}</span>
+ 13:     $value <span style='color:#808030; '>=</span> fgetword<span style='color:#808030; '>(</span> $fid<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 14:     $readFromOd <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>$readFromOd<span style='color:#808030; '>=</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>8</span> <span style='color:#808030; '>?</span> <span style='color:#008c00; '>0</span> <span style='color:#808030; '>:</span> $readFromOd<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 15:     return<span style='color:#808030; '>(</span> $value<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 16: <span style='color:#808030; '>}</span>
+ 17: 
+ 18: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> wetter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+ 19: <span style='color:#808030; '>{</span>
+ 20: <span style='color:#800000; font-weight:bold; '>global</span>    <span style='color:#800000; font-weight:bold; '>int</span>    $readFromOd<span style='color:#808030; '>;</span>    <span style='color:#696969; '>// Anzahl der Worte, die per Pipe von "od"</span>
+ 21:                 <span style='color:#696969; '>// gelesen wurden. Jedes 9. wird uebersprungen.</span>
+ 22: 
+ 23: <span style='color:#800000; font-weight:bold; '>int</span>    $dataWordSize <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>;</span>
+ 24: <span style='color:#800000; font-weight:bold; '>int</span>    $gridResX <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v1 wetterRaster`</span><span style='color:#808030; '>;</span>
+ 25: <span style='color:#800000; font-weight:bold; '>int</span>    $gridResY <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v2 wetterRaster`</span><span style='color:#808030; '>;</span>
+ 26: <span style='color:#800000; font-weight:bold; '>int</span>    $dataSlots <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v1 wetterSlotAnz`</span><span style='color:#808030; '>;</span>
+ 27: <span style='color:#800000; font-weight:bold; '>int</span>    $dataGroups <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v1 wetterGrpAnz`</span><span style='color:#808030; '>;</span>
+ 28: 
+ 29: <span style='color:#800000; font-weight:bold; '>int</span>    $readSlot <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intSliderGrp -q -v wetterReadSlot`</span><span style='color:#808030; '>;</span>        <span style='color:#696969; '>// welcher Slot soll gelesen werden</span>
+ 30: <span style='color:#800000; font-weight:bold; '>int</span>    $readDataGroup <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intSliderGrp -q -v wetterReadGrp`</span> <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>    <span style='color:#696969; '>// welche Datengruppe soll gelesen werden</span>
+ 31: 
+ 32: <span style='color:#800000; font-weight:bold; '>int</span>    $dSlotSize <span style='color:#808030; '>=</span> $dataWordSize <span style='color:#808030; '>*</span> $gridResX <span style='color:#808030; '>*</span> $gridResY<span style='color:#808030; '>;</span>
+ 33: <span style='color:#800000; font-weight:bold; '>int</span>    $dGroupSize <span style='color:#808030; '>=</span> $dSlotSize <span style='color:#808030; '>*</span> $dataSlots<span style='color:#808030; '>;</span>
+ 34: <span style='color:#800000; font-weight:bold; '>int</span>    $readOffset <span style='color:#808030; '>=</span> $readDataGroup <span style='color:#808030; '>*</span> $dGroupSize <span style='color:#808030; '>+</span> $readSlot <span style='color:#808030; '>*</span> $dSlotSize<span style='color:#808030; '>;</span>
+ 35: 
+ 36: <span style='color:#800000; font-weight:bold; '>float</span>    $pSpacing <span style='color:#808030; '>=</span> <span style='color:#008000; '>.1</span><span style='color:#808030; '>;</span>        <span style='color:#696969; '>// Spacing fuer das Partikel Objekt</span>
+ 37: 
+ 38: <span style='color:#800000; font-weight:bold; '>string</span>    $dataFile <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`textFieldButtonGrp -q -text wetterDataFile`</span><span style='color:#808030; '>;</span>
+ 39: 
+ 40: <span style='color:#800000; font-weight:bold; '>string</span>    $pipeCmd <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"od -v -s "</span> <span style='color:#808030; '>+</span> $dataFile <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>" "</span> <span style='color:#808030; '>+</span> $readOffset <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"."</span><span style='color:#808030; '>;</span>
+ 41: 
+ 42: <span style='color:#800000; font-weight:bold; '>float</span>    $pLX <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>$gridResX <span style='color:#808030; '>*</span> $pSpacing<span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> $pSpacing<span style='color:#808030; '>)</span> <span style='color:#808030; '>/</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>;</span>
+ 43: <span style='color:#800000; font-weight:bold; '>float</span>    $pLY <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>$gridResY <span style='color:#808030; '>*</span> $pSpacing<span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> $pSpacing<span style='color:#808030; '>)</span> <span style='color:#808030; '>/</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>;</span>
+ 44: 
+ 45: <span style='color:#696969; '>// Entsprechendes Partikel Objekt herstellen</span>
+ 46: 
+ 47: <span style='color:#800000; font-weight:bold; '>string</span> $pObjectName<span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`particle -grs $pSpacing -ll (-$pLX) 0 (-$pLY) -ur $pLX 0 $pLY`</span><span style='color:#808030; '>;</span>
+ 48: addAttr <span style='color:#808030; '>-</span>ln <span style='color:#0000e6; '>"rgbPP"</span> <span style='color:#808030; '>-</span>dt vectorArray $pObjectName<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 49: addAttr <span style='color:#808030; '>-</span>ci true <span style='color:#808030; '>-</span>ln <span style='color:#0000e6; '>"rgbVPP0"</span> <span style='color:#808030; '>-</span>sn <span style='color:#0000e6; '>"rgbVPP0"</span> <span style='color:#808030; '>-</span>dt <span style='color:#0000e6; '>"doubleArray"</span> $pObjectName<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 50: 
+ 51: <span style='color:#800000; font-weight:bold; '>string</span> $arrayMapNode <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`arrayMapper -target $pObjectName[1] -destAttr rgbPP -inputV rgbVPP0 -type ramp`</span><span style='color:#808030; '>;</span>
+ 52: 
+ 53: $readFromOd <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 54: <span style='color:#800000; font-weight:bold; '>int</span> $fid <span style='color:#808030; '>=</span> popen<span style='color:#808030; '>(</span> $pipeCmd<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"r"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 55: <span style='color:#800000; font-weight:bold; '>int</span> $dSlotWords <span style='color:#808030; '>=</span> $gridResX <span style='color:#808030; '>*</span> $gridResY<span style='color:#808030; '>;</span>
+ 56: <span style='color:#696969; '>//int $dSlotWords = 1000;</span>
+ 57: <span style='color:#800000; font-weight:bold; '>float</span>    $value<span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 58: <span style='color:#800000; font-weight:bold; '>float</span>    $minVal <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1000</span><span style='color:#808030; '>;</span>
+ 59: <span style='color:#800000; font-weight:bold; '>float</span>    $maxVal <span style='color:#808030; '>=</span> <span style='color:#808030; '>-</span><span style='color:#008c00; '>1000</span><span style='color:#808030; '>;</span>
+ 60: <span style='color:#800000; font-weight:bold; '>float</span>    $q<span style='color:#808030; '>;</span>
+ 61: <span style='color:#800000; font-weight:bold; '>string</span> $xxx<span style='color:#808030; '>;</span>
+ 62: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Anfang Lesen ... "</span> <span style='color:#808030; '>+</span> `system<span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"date"</span><span style='color:#808030; '>)</span>` <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 63: 
+ 64: for <span style='color:#808030; '>(</span> $i<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#808030; '>;</span> $i<span style='color:#808030; '>&lt;</span>$dSlotWords <span style='color:#808030; '>;</span> $i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>{</span>
+ 65:     $value<span style='color:#808030; '>[</span>$i<span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> getDataWord<span style='color:#808030; '>(</span> $fid<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 66: $maxVal <span style='color:#808030; '>=</span> max<span style='color:#808030; '>(</span> $maxVal<span style='color:#808030; '>,</span> $value<span style='color:#808030; '>[</span>$i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 67: $minVal <span style='color:#808030; '>=</span> min<span style='color:#808030; '>(</span> $minVal<span style='color:#808030; '>,</span> $value<span style='color:#808030; '>[</span>$i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 68: <span style='color:#808030; '>}</span>
+ 69: pclose<span style='color:#808030; '>(</span> $fid<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 70: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Ende Lesen ... "</span> <span style='color:#808030; '>+</span> `system<span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"date"</span><span style='color:#808030; '>)</span>` <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 71: 
+ 72: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"Min Temp: "</span> <span style='color:#808030; '>+</span> $minVal <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 73: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"Max Temp: "</span> <span style='color:#808030; '>+</span> $maxVal <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 74: $v <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>$maxVal<span style='color:#808030; '>-</span>$minVal<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 75: for <span style='color:#808030; '>(</span> $i<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#808030; '>;</span> $i<span style='color:#808030; '>&lt;</span>$dSlotWords <span style='color:#808030; '>;</span> $i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>{</span>
+ 76: $q <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>$value<span style='color:#808030; '>[</span>$i<span style='color:#808030; '>]</span><span style='color:#808030; '>-</span>$minVal<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>$v<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 77: $xxx <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#0000e6; '>" "</span> <span style='color:#808030; '>+</span> $q<span style='color:#808030; '>;</span>
+ 78: <span style='color:#808030; '>}</span>
+ 79: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Ende Konvertieren ... "</span> <span style='color:#808030; '>+</span> `system<span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"date"</span><span style='color:#808030; '>)</span>` <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 80: select <span style='color:#808030; '>-</span>r $pObjectName<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 81: 
+ 82: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span> $dSlotWords <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>" Elemente\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 83: $tmp <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"setAttr \".rgbVPP0\" -type \"doubleArray\" "</span> <span style='color:#808030; '>+</span> $dSlotWords <span style='color:#808030; '>+</span> $xxx<span style='color:#808030; '>;</span>
+ 84: eval<span style='color:#808030; '>(</span> $tmp<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 85: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Ende zuweisen ... "</span> <span style='color:#808030; '>+</span> `system<span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"date"</span><span style='color:#808030; '>)</span>` <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 86: 
+ 87: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"Min Temp: "</span> <span style='color:#808030; '>+</span> $minVal <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 88: <span style='color:#800000; font-weight:bold; '>print</span><span style='color:#808030; '>(</span> <span style='color:#0000e6; '>"Max Temp: "</span> <span style='color:#808030; '>+</span> $maxVal <span style='color:#808030; '>+</span> <span style='color:#0000e6; '>"\n"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 89: 
+ 90: <span style='color:#808030; '>}</span>
+ 91: 
+ 92: 
+ 93: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> wetterFenster<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+ 94: <span style='color:#808030; '>{</span>
+ 95: 
+ 96:     if <span style='color:#808030; '>(</span><span style='color:#0000e6; '>`window -exists wFenster`</span><span style='color:#808030; '>)</span> deleteUI wFenster<span style='color:#808030; '>;</span>
+ 97: 
+ 98:     window <span style='color:#808030; '>-</span>t <span style='color:#0000e6; '>"Wetter Daten"</span> wFenster<span style='color:#808030; '>;</span>
+ 99:         columnLayout<span style='color:#808030; '>;</span>
+100:             separator <span style='color:#808030; '>-</span>h <span style='color:#008c00; '>10</span><span style='color:#808030; '>;</span>
+101:             intFieldGrp <span style='color:#808030; '>-</span>numberOfFields <span style='color:#008c00; '>2</span>
+102:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Raster"</span>
+103:                 <span style='color:#808030; '>-</span>v1 <span style='color:#008c00; '>109</span>
+104:                 <span style='color:#808030; '>-</span>v2 <span style='color:#008c00; '>109</span>
+105:                 wetterRaster<span style='color:#808030; '>;</span>
+106:             intFieldGrp <span style='color:#808030; '>-</span>numberOfFields <span style='color:#008c00; '>1</span>
+107:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Anzahl Gruppen"</span>
+108:                 <span style='color:#808030; '>-</span>v1 <span style='color:#008c00; '>7</span>
+109:                 <span style='color:#808030; '>-</span>cc <span style='color:#0000e6; '>"wetterUpdateEnables"</span>
+110:                 wetterGrpAnz<span style='color:#808030; '>;</span>
+111:             intFieldGrp <span style='color:#808030; '>-</span>numberOfFields <span style='color:#008c00; '>1</span>
+112:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Anzahl Slots"</span>
+113:                 <span style='color:#808030; '>-</span>v1 <span style='color:#008c00; '>49</span>
+114:                 <span style='color:#808030; '>-</span>cc <span style='color:#0000e6; '>"wetterUpdateEnables"</span>
+115:                 wetterSlotAnz<span style='color:#808030; '>;</span>
+116:             textFieldButtonGrp
+117:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Daten File"</span>
+118:                 <span style='color:#808030; '>-</span>text <span style='color:#0000e6; '>"WETTER/dm3mo.dat"</span>
+119:                 <span style='color:#808030; '>-</span>buttonLabel <span style='color:#0000e6; '>"Browse..."</span>
+120:                 <span style='color:#808030; '>-</span>buttonCommand <span style='color:#0000e6; '>"wetterFileBrowse"</span>
+121:                 wetterDataFile<span style='color:#808030; '>;</span>
+122:             separator <span style='color:#808030; '>-</span>h <span style='color:#008c00; '>20</span><span style='color:#808030; '>;</span>
+123:             intSliderGrp
+124:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Lese Gruppe .."</span>
+125:                 <span style='color:#808030; '>-</span>field true
+126:                 <span style='color:#808030; '>-</span>value <span style='color:#008c00; '>1</span>
+127:                 <span style='color:#808030; '>-</span>min <span style='color:#008c00; '>1</span>
+128:                 <span style='color:#808030; '>-</span>max <span style='color:#008c00; '>1</span>
+129:                 wetterReadGrp<span style='color:#808030; '>;</span>
+130:             intSliderGrp
+131:                 <span style='color:#808030; '>-</span>label <span style='color:#0000e6; '>"Slot"</span>
+132:                 <span style='color:#808030; '>-</span>field true
+133:                 <span style='color:#808030; '>-</span>value <span style='color:#008c00; '>49</span>
+134:                 <span style='color:#808030; '>-</span>min <span style='color:#008c00; '>1</span>
+135:                 <span style='color:#808030; '>-</span>max <span style='color:#008c00; '>1</span>
+136:                 wetterReadSlot<span style='color:#808030; '>;</span>
+137:             separator <span style='color:#808030; '>-</span>h <span style='color:#008c00; '>20</span><span style='color:#808030; '>;</span>
+138:         <span style='color:#800000; font-weight:bold; '>setParent</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>;</span>
+139:         rowLayout <span style='color:#808030; '>-</span>numberOfColumns <span style='color:#008c00; '>2</span>
+140:             <span style='color:#808030; '>-</span>columnAttach <span style='color:#008c00; '>1</span> <span style='color:#0000e6; '>"left"</span> <span style='color:#008c00; '>20</span>
+141:             <span style='color:#808030; '>-</span>columnAttach <span style='color:#008c00; '>2</span> <span style='color:#0000e6; '>"left"</span> <span style='color:#008c00; '>240</span>
+142:             <span style='color:#808030; '>-</span>width <span style='color:#008c00; '>600</span><span style='color:#808030; '>;</span>
+143:             button
+144:                 <span style='color:#808030; '>-</span>align <span style='color:#0000e6; '>"center"</span>
+145:                 <span style='color:#808030; '>-</span>l <span style='color:#0000e6; '>"Load Data"</span>
+146:                 <span style='color:#808030; '>-</span>c <span style='color:#0000e6; '>"wetter"</span>
+147:                 <span style='color:#808030; '>-</span>w <span style='color:#008c00; '>100</span>
+148:                 wetterGoButton<span style='color:#808030; '>;</span>
+149:             button
+150:                 <span style='color:#808030; '>-</span>align <span style='color:#0000e6; '>"center"</span>
+151:                 <span style='color:#808030; '>-</span>l <span style='color:#0000e6; '>"Cancel"</span>
+152:                 <span style='color:#808030; '>-</span>c <span style='color:#0000e6; '>"wetterExit"</span>
+153:                 <span style='color:#808030; '>-</span>w <span style='color:#008c00; '>100</span>
+154:                 wetterExitButton<span style='color:#808030; '>;</span>
+155: 
+156: 
+157:     wetterUpdateEnables<span style='color:#808030; '>;</span>
+158:     showWindow<span style='color:#808030; '>;</span>
+159: <span style='color:#808030; '>}</span>
+160: 
+161: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> wetterUpdateEnables<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+162: <span style='color:#808030; '>{</span>
+163: <span style='color:#800000; font-weight:bold; '>int</span>    $v<span style='color:#808030; '>;</span>
+164:     if <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>$v <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v1 wetterGrpAnz`</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>{</span>
+165:         intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>en true <span style='color:#808030; '>-</span>max $v wetterReadGrp<span style='color:#808030; '>;</span>
+166:         if <span style='color:#808030; '>(</span>$v <span style='color:#808030; '>&lt;</span> <span style='color:#0000e6; '>`intSliderGrp -q -v wetterReadGrp`</span><span style='color:#808030; '>)</span>
+167:             intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>v $v wetterReadGrp<span style='color:#808030; '>;</span>
+168:     <span style='color:#808030; '>}</span> else
+169:         intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>en false <span style='color:#808030; '>-</span>max <span style='color:#008c00; '>1</span> wetterReadGrp<span style='color:#808030; '>;</span>
+170: 
+171:     if <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>$v <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`intFieldGrp -q -v1 wetterSlotAnz`</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>{</span>
+172:         intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>en true <span style='color:#808030; '>-</span>max $v wetterReadSlot<span style='color:#808030; '>;</span>
+173:         if <span style='color:#808030; '>(</span>$v <span style='color:#808030; '>&lt;</span> <span style='color:#0000e6; '>`intSliderGrp -q -v wetterReadSlot`</span><span style='color:#808030; '>)</span>
+174:             intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>v $v wetterReadSlot<span style='color:#808030; '>;</span>
+175:     <span style='color:#808030; '>}</span> else
+176:         intSliderGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>en false <span style='color:#808030; '>-</span>max <span style='color:#008c00; '>1</span> wetterReadSlot<span style='color:#808030; '>;</span>
+177: <span style='color:#808030; '>}</span>
+178: 
+179: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> wetterFileBrowse<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+180: <span style='color:#808030; '>{</span>
+181: <span style='color:#800000; font-weight:bold; '>string</span>    $wDataName<span style='color:#808030; '>;</span>
+182:     $wDataName <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>`fileDialog`</span><span style='color:#808030; '>;</span>
+183:     textFieldButtonGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>text $wDataName wetterDataFile<span style='color:#808030; '>;</span>
+184: <span style='color:#696969; '>//    fileBrowser( "wetterSetDataFile", "Set Name", "", 0);</span>
+185: <span style='color:#808030; '>}</span>
+186: 
+187: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> <span style='color:#800000; font-weight:bold; '>int</span> wetterSetDataFile<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>string</span> $wetterDataFile<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>string</span> $wetterMode<span style='color:#808030; '>)</span>
+188: <span style='color:#808030; '>{</span>
+189:     textFieldButtonGrp <span style='color:#808030; '>-</span>e <span style='color:#808030; '>-</span>text $wetterDataFile wetterDataFile<span style='color:#808030; '>;</span>
+190:     return true<span style='color:#808030; '>;</span>
+191: <span style='color:#808030; '>}</span>
+192: 
+193: <span style='color:#800000; font-weight:bold; '>global</span> <span style='color:#800000; font-weight:bold; '>proc</span> wetterExit<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+194: <span style='color:#808030; '>{</span>
+195:     deleteUI wFenster<span style='color:#808030; '>;</span>
+196: <span style='color:#808030; '>}</span>
+197: 
+</pre></body></html>

@@ -1,0 +1,14 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: For  i <span style='color:#808030; '>=</span> IDD_VERFIRST<span style='color:#800080; '>;</span> i <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> IDD_VERLAST<span style='color:#800080; '>;</span>  i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span>
+ 1: BeginFor
+ 2:     <span style='color:#400000; '>GetDlgItemText</span> <span style='color:#808030; '>(</span> hdlg<span style='color:#808030; '>,</span> i<span style='color:#808030; '>,</span> szResult<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>sizeof</span><span style='color:#808030; '>(</span>szResult<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 3:     <span style='color:#400000; '>lstrcpy</span> <span style='color:#808030; '>(</span> <span style='color:#808030; '>&amp;</span>szGetName<span style='color:#808030; '>[</span>cchRoot<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> szResult <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 4:     fRet <span style='color:#808030; '>=</span> <span style='color:#400000; '>VerQueryValue</span> <span style='color:#808030; '>(</span> lpvMem<span style='color:#808030; '>,</span> szGetName<span style='color:#808030; '>,</span> <span style='color:#808030; '>(</span><span style='color:#603000; '>LPVOID</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span>lszVer<span style='color:#808030; '>,</span> <span style='color:#808030; '>&amp;</span>cchVer <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 5:     If  fRet <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> cchVer <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> lszVer
+ 6:     Then
+ 7:         <span style='color:#696969; '>// Replace dialog item text with version info</span>
+ 8:         <span style='color:#400000; '>lstrcpy</span> with <span style='color:#808030; '>(</span> szResult<span style='color:#808030; '>,</span> lszVer <span style='color:#808030; '>)</span> <span style='color:#800080; '>;</span>
+ 9:         <span style='color:#400000; '>SetDlgItemText</span> with <span style='color:#808030; '>(</span> hdlg<span style='color:#808030; '>,</span> i<span style='color:#808030; '>,</span> szResult <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+10:     EndIf
+11: EndFor
+</pre></body></html>

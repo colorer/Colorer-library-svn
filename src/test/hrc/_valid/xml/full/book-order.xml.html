@@ -1,0 +1,85 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#004a43; '>&lt;?</span><span style='color:#004a43; '>xml</span> <span style='color:#004a43; '>version</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>"1.0"</span> <span style='color:#004a43; '>encoding</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ISO-8859-1"</span> <span style='color:#004a43; '>standalone</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"yes"</span><span style='color:#004a43; '>?></span>
+ 1: 
+ 2: <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>DOCTYPE</span> <span style='color:#004a43; '>Order</span> <span style='color:#a65700; '>[</span>
+ 3: 
+ 4: <span style='color:#696969; '>&lt;!--</span><span style='color:#696969; '></span>
+ 5: <span style='color:#696969; '>    A DTD for a real on-line order system wouldn't look</span>
+ 6: <span style='color:#696969; '>    very much like this, though it would be natural for</span>
+ 7: <span style='color:#696969; '>    such systems to use valid XML.</span>
+ 8: <span style='color:#696969; '>--></span>
+ 9:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Order</span> <span style='color:#808030; '>(</span>Customer<span style='color:#44aadd; '>,</span>Manifest<span style='color:#44aadd; '>,</span>Receipt<span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+10:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ATTLIST</span> <span style='color:#004a43; '>Order</span> <span style='color:#004a43; '>xmlns</span> <span style='color:#800000; font-weight:bold; '>CDATA</span> <span style='color:#800000; font-weight:bold; '>#FIXED</span> <span style='color:#0000e6; '>"</span><span style='color:#0000e6; '>http://www.example.com/myschema.xml</span><span style='color:#0000e6; '>"</span><span style='color:#004a43; '>></span>
+11: 
+12:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Customer</span> <span style='color:#808030; '>(</span>Name<span style='color:#44aadd; '>,</span> Cardnum<span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+13:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Name</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+14:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Cardnum</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+15: 
+16:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Manifest</span> <span style='color:#808030; '>(</span>Item<span style='color:#44aadd; '>*</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+17: 
+18:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Item</span> <span style='color:#808030; '>(</span>ID<span style='color:#44aadd; '>,</span>Title<span style='color:#44aadd; '>,</span>Quantity<span style='color:#44aadd; '>,</span>UnitPrice<span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+19:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>ID</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+20:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Title</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+21:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Quantity</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+22:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>UnitPrice</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+23: 
+24:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Receipt</span> <span style='color:#808030; '>(</span>Subtotal<span style='color:#44aadd; '>,</span>Tax<span style='color:#44aadd; '>,</span>Total<span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+25:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Subtotal</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+26:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Tax</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+27:     <span style='color:#004a43; '>&lt;!</span><span style='color:#004a43; '>ELEMENT</span> <span style='color:#004a43; '>Total</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>#PCDATA</span><span style='color:#808030; '>)</span><span style='color:#004a43; '>></span>
+28: 
+29: <span style='color:#a65700; '>]</span><span style='color:#004a43; '>></span>
+30: 
+31: <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Order</span><span style='color:#a65700; '>></span>
+32:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Customer</span><span style='color:#a65700; '>></span>
+33:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Name</span><span style='color:#a65700; '>></span>Bill Buckram<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Name</span><span style='color:#a65700; '>></span>
+34:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Cardnum</span><span style='color:#a65700; '>></span>234 234 234 234<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Cardnum</span><span style='color:#a65700; '>></span>
+35:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Customer</span><span style='color:#a65700; '>></span>
+36:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Manifest</span><span style='color:#a65700; '>></span>
+37:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+38:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>209<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>
+39:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+40:         Duke: A Biography of the Java Evangelist
+41:         <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+42:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>1<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>
+43:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>$10.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>
+44:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+45:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+46:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>208<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>
+47:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+48:         100% Pure: Making Cross Platform Deployment a Reality
+49:         <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+50:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>1<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>
+51:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>$10.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>
+52:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+53:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+54:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>204<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>
+55:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+56:         Making the Transition from C++ to the Java(tm) Language
+57:         <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+58:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>1<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>
+59:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>$10.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>
+60:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+61:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+62:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>202<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>
+63:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>Web Servers for Fun and Profit<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+64:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>1<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>
+65:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>$10.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>
+66:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+67:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+68:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>210<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>ID</span><span style='color:#a65700; '>></span>
+69:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+70:         I Think Not: Dukes Likeness to the Federation Insignia
+71:         <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Title</span><span style='color:#a65700; '>></span>
+72:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>1<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Quantity</span><span style='color:#a65700; '>></span>
+73:         <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>$10.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>UnitPrice</span><span style='color:#a65700; '>></span>
+74:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Item</span><span style='color:#a65700; '>></span>
+75:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Manifest</span><span style='color:#a65700; '>></span>
+76:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Receipt</span><span style='color:#a65700; '>></span>
+77:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Subtotal</span><span style='color:#a65700; '>></span>$53.75<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Subtotal</span><span style='color:#a65700; '>></span>
+78:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Tax</span><span style='color:#a65700; '>></span>$4.43<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Tax</span><span style='color:#a65700; '>></span>
+79:     <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>Total</span><span style='color:#a65700; '>></span>$58.18<span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Total</span><span style='color:#a65700; '>></span>
+80:     <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Receipt</span><span style='color:#a65700; '>></span>
+81: <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>Order</span><span style='color:#a65700; '>></span>
+82: 
+</pre></body></html>

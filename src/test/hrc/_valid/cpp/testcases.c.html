@@ -1,0 +1,420 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> first thing</span>
+  1: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* First we will test the comments */</span><span style='color:#800000; font-weight:bold; '>if</span>
+  2: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* There should be no if that is commented */</span><span style='color:#800000; font-weight:bold; '>if</span>
+  3: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>// End of line comment</span>
+  4: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** Documentation comment */</span><span style='color:#800000; font-weight:bold; '>if</span>
+  5: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* multiple</span>
+  6: <span style='color:#696969; '> line</span>
+  7: <span style='color:#696969; '>          comment</span>
+  8: <span style='color:#696969; '>   */</span><span style='color:#800000; font-weight:bold; '>if</span>
+  9: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/**</span>
+ 10: <span style='color:#3f5fbf; '> multiple</span>
+ 11: <span style='color:#3f5fbf; '> line</span>
+ 12: <span style='color:#3f5fbf; '>    doc comment</span>
+ 13: <span style='color:#3f5fbf; '>   */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 14: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*</span>
+ 15: <span style='color:#696969; '> * nice</span>
+ 16: <span style='color:#696969; '> * looking</span>
+ 17: <span style='color:#696969; '> * comment</span>
+ 18: <span style='color:#696969; '> */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 19: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>// /* end of line comment */ more comment</span>
+ 20: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>// /* end of line comment</span>
+ 21: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>// end of line comment */ more comment</span>
+ 22: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*back to*/</span><span style='color:#696969; '>/*back*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 23: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*back to*/</span><span style='color:#696969; '>//back</span>
+ 24: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/**/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 25: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/***/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 26: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 27: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/*****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 28: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/******/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 29: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 30: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* **/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 31: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* ***/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 32: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* ****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 33: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 34: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** **/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 35: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** ***/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 36: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** ****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 37: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/*** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 38: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/**** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 39: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* * */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 40: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* ** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 41: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** * */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 42: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** ** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 43: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*  * */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 44: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*  ** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 45: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/**  * */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 46: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/**  ** */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 47: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* * ** *** **** / // /// //// */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 48: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#3f5fbf; '>/** * ** *** **** / // /// //// */</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 49: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*/*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 50: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*/**/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 51: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*/***/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 52: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*/****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 53: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*//*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 54: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*//**/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 55: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*//***/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 56: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*//****/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 57: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*\*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 58: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/*\\*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 59: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>/* *</span><span style='color:#ffffff; background:#808000; '>??</span><span style='color:#696969; '>/*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+ 60: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#696969; '>// the next line should not be a comment \</span>
+ 61: <span style='color:#800000; font-weight:bold; '>if</span>
+ 62: 
+ 63: <span style='color:#696969; '>/* c and c++ keywords */</span>
+ 64: <span style='color:#800000; font-weight:bold; '>auto</span>
+ 65: <span style='color:#800000; font-weight:bold; '>break</span>
+ 66: <span style='color:#800000; font-weight:bold; '>case</span>
+ 67: <span style='color:#800000; font-weight:bold; '>const</span>
+ 68: <span style='color:#800000; font-weight:bold; '>continue</span>
+ 69: <span style='color:#800000; font-weight:bold; '>default</span>
+ 70: <span style='color:#800000; font-weight:bold; '>do</span>
+ 71: <span style='color:#800000; font-weight:bold; '>else</span>
+ 72: <span style='color:#800000; font-weight:bold; '>enum</span>
+ 73: <span style='color:#800000; font-weight:bold; '>extern</span>
+ 74: <span style='color:#800000; font-weight:bold; '>for</span>
+ 75: <span style='color:#008484; '>goto</span>
+ 76: <span style='color:#800000; font-weight:bold; '>if</span>
+ 77: <span style='color:#800000; font-weight:bold; '>register</span>
+ 78: <span style='color:#800000; font-weight:bold; '>return</span>
+ 79: <span style='color:#800000; font-weight:bold; '>sizeof</span>
+ 80: <span style='color:#800000; font-weight:bold; '>static</span>
+ 81: <span style='color:#800000; font-weight:bold; '>struct</span>
+ 82: <span style='color:#800000; font-weight:bold; '>switch</span>
+ 83: <span style='color:#800000; font-weight:bold; '>typedef</span>
+ 84: <span style='color:#800000; font-weight:bold; '>union</span>
+ 85: <span style='color:#800000; font-weight:bold; '>volatile</span>
+ 86: <span style='color:#800000; font-weight:bold; '>while</span>
+ 87: 
+ 88: catch
+ 89: class
+ 90: const_cast
+ 91: delete
+ 92: dynamic_cast
+ 93: friend
+ 94: <span style='color:#800000; font-weight:bold; '>inline</span>
+ 95: mutable
+ 96: namespace
+ 97: new
+ 98: operator
+ 99: overload
+100: private
+101: protected
+102: public
+103: reinterpret_cast
+104: static_cast
+105: template
+106: <span style='color:#800000; font-weight:bold; '>this</span>
+107: try
+108: virtual
+109: 
+110: bool
+111: <span style='color:#800000; font-weight:bold; '>char</span>
+112: <span style='color:#800000; font-weight:bold; '>double</span>
+113: <span style='color:#800000; font-weight:bold; '>float</span>
+114: <span style='color:#800000; font-weight:bold; '>int</span>
+115: <span style='color:#800000; font-weight:bold; '>long</span>
+116: <span style='color:#800000; font-weight:bold; '>short</span>
+117: <span style='color:#800000; font-weight:bold; '>signed</span>
+118: <span style='color:#800000; font-weight:bold; '>unsigned</span>
+119: <span style='color:#800000; font-weight:bold; '>void</span>
+120: 
+121: <span style='color:#696969; '>/* pp test (no if should be in a pp or comment) */</span>
+122: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>include</span>
+123: <span style='color:#004a43; '>#include_next</span>
+124: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span>
+125: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>undef</span>
+126: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>if</span>
+127: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>ifdef</span>
+128: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>ifndef</span>
+129: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>else</span>
+130: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>elif</span>
+131: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>endif</span>
+132: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>line</span>
+133: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>pragma</span>
+134: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>error</span>
+135: <span style='color:#800000; font-weight:bold; '>if</span>
+136: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> 1 </span><span style='color:#696969; '>//comment</span>
+137: <span style='color:#800000; font-weight:bold; '>if</span>
+138: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#696969; '>//comment</span>
+139: <span style='color:#800000; font-weight:bold; '>if</span>
+140: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#696969; '>/*comment*/</span>
+141: <span style='color:#800000; font-weight:bold; '>if</span>
+142: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> </span><span style='color:#696969; '>/*comment*/</span><span style='color:#004a43; '> 1</span>
+143: <span style='color:#800000; font-weight:bold; '>if</span>
+144: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#696969; '>/*comment*/</span><span style='color:#004a43; '>1</span>
+145: <span style='color:#800000; font-weight:bold; '>if</span>
+146: <span style='color:#004a43; '># </span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> 1</span><span style='color:#696969; '>// a space after the hash</span>
+147: <span style='color:#800000; font-weight:bold; '>if</span>
+148: <span style='color:#004a43; '> #</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> 1 </span><span style='color:#696969; '>// a space before the hash</span>
+149: <span style='color:#800000; font-weight:bold; '>if</span>
+150: <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>=</span>define <span style='color:#696969; '>// using a trigraph to represent the hash</span>
+151:    <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>=</span> define <span style='color:#008c00; '>1</span>  <span style='color:#696969; '>// really nasty</span>
+152: <span style='color:#800000; font-weight:bold; '>if</span>
+153: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> something </span><span style='color:#696969; '>/*multiple line */</span><span style='color:#004a43; '> \</span>
+154: <span style='color:#004a43; '>     4</span>
+155: <span style='color:#800000; font-weight:bold; '>if</span>
+156: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> aString </span><span style='color:#0000e6; '>"A string with escape sequences</span><span style='color:#0f69ff; '>\n</span><span style='color:#0f69ff; '>\r</span><span style='color:#0f69ff; '>\t</span><span style='color:#0f69ff; '>\\</span><span style='color:#0f69ff; '>\"</span><span style='color:#0000e6; '>"</span>
+157: <span style='color:#800000; font-weight:bold; '>if</span>
+158: <span style='color:#004a43; '>#defineNo space after keyword</span>
+159: <span style='color:#800000; font-weight:bold; '>if</span>
+160: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> stuff </span><span style='color:#696969; '>/*how about using a trigraph to get to the next line?*/</span><span style='color:#004a43; '> </span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>/</span>
+161:   <span style='color:#008c00; '>1</span> <span style='color:#696969; '>// should be part of define stuff.</span>
+162: <span style='color:#800000; font-weight:bold; '>if</span>
+163: <span style='color:#696969; '>/* Lets try some weird stuff to try and confuse it with trigraphs */</span>
+164: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> </span><span style='color:#004a43; '>line</span><span style='color:#004a43; '> \\</span>
+165: <span style='color:#004a43; '>1 </span><span style='color:#696969; '>// still in define (somebody correct me if the pp does something different here)</span>
+166: <span style='color:#800000; font-weight:bold; '>if</span>
+167: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> a </span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#004a43; '>\</span>
+168: <span style='color:#004a43; '>line</span><span style='color:#004a43; '> </span><span style='color:#696969; '>// still in define</span>
+169: <span style='color:#800000; font-weight:bold; '>if</span>
+170: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '>\</span>
+171: <span style='color:#004a43; '> many </span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>/</span>
+172:  multiple \
+173:  lines
+174: <span style='color:#800000; font-weight:bold; '>if</span>
+175: 
+176: <span style='color:#696969; '>/* Characters */</span>
+177: <span style='color:#0000e6; '>'a'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'b'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'c'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'d'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'x'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'y'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'z'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'1'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'2'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'9'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'0'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'A'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'B'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'C'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'D'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'X'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Y'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Z'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>,</span>
+178: <span style='color:#0000e6; '>'!'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'@'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'#'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'$'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'%'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'^'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'&amp;'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'*'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'('</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>')'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'{'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'}'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'?'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'='</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'+'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'|'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'~'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'`'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'"'</span><span style='color:#808030; '>,</span>
+179: <span style='color:#696969; '>// escape sequences</span>
+180: <span style='color:#0000e6; '>'\a'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\b'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\f'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\n'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\r'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\t'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\v'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\''</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\"'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\?'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\\'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\0'</span><span style='color:#808030; '>,</span>
+181: <span style='color:#0000e6; '>'\1'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\2'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\03'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\12'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\012'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\111'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\222'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\333'</span><span style='color:#808030; '>,</span>
+182: <span style='color:#0000e6; '>'\xFF'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\x12'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\x00'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\xDB'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\X00'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\XFF'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'\XDB'</span>
+183: <span style='color:#696969; '>// trigraphs including escape sequence trigraphs</span>
+184: <span style='color:#0000e6; '>'??-'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??='</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??('</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??)'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??/0'</span><span style='color:#808030; '>,</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'??/xDB'</span><span style='color:#808030; '>,</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'??/XDB'</span><span style='color:#808030; '>,</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'??/012'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??/'</span><span style='color:#0000e6; '>','</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>''</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??&lt;'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??>'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??!'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'??-'</span>
+185: 
+186: <span style='color:#696969; '>/* Strings */</span>
+187: <span style='color:#0000e6; '>"hello"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"abcxyz123890ABCXYZ,   !@#$%^&amp;*(){}?+=|~`'"</span><span style='color:#808030; '>,</span>
+188: <span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>\a</span><span style='color:#0f69ff; '>\b</span><span style='color:#0f69ff; '>\f</span><span style='color:#0f69ff; '>\n</span><span style='color:#0f69ff; '>\r</span><span style='color:#0f69ff; '>\t</span><span style='color:#0f69ff; '>\v</span><span style='color:#0f69ff; '>\'</span><span style='color:#0f69ff; '>\"</span><span style='color:#0f69ff; '>\?</span><span style='color:#0f69ff; '>\\</span><span style='color:#0f69ff; '>\0</span><span style='color:#0000e6; '>"</span><span style='color:#808030; '>,</span>
+189: <span style='color:#696969; '>// if you are wondering about why some of the following are valid, consider</span>
+190: <span style='color:#696969; '>// "\xFFF" = '\xFF' + 'F'</span>
+191: <span style='color:#696969; '>// "\29" = '\2' + '9'</span>
+192: <span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>\1</span><span style='color:#0f69ff; '>\2</span><span style='color:#0f69ff; '>\03</span><span style='color:#0f69ff; '>\12</span><span style='color:#0f69ff; '>\012</span><span style='color:#0f69ff; '>\111</span><span style='color:#0f69ff; '>\222</span><span style='color:#0f69ff; '>\333</span><span style='color:#0f69ff; '>\x000</span><span style='color:#0f69ff; '>\xFFF</span><span style='color:#0f69ff; '>\0</span><span style='color:#0000e6; '>8</span><span style='color:#0f69ff; '>\2</span><span style='color:#0000e6; '>9</span><span style='color:#0f69ff; '>\444</span><span style='color:#0000e6; '>"</span><span style='color:#808030; '>,</span>
+193: <span style='color:#0000e6; '>"??-??=??(??)??'??&lt;??>??!??-??a??b??{??}??"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"?"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"??"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"???"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"??A"</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>"??/xDB??/0??/012??/"</span><span style='color:#808030; '>,</span>
+194: <span style='color:#0000e6; '>"string that </span><span style='color:#0f69ff; '>\</span><span style='color:#0000e6; '></span>
+195: <span style='color:#0000e6; '>spans ??</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+196: <span style='color:#0000e6; '>multiple </span><span style='color:#0f69ff; '>\</span><span style='color:#0000e6; '></span>
+197: <span style='color:#0000e6; '>lines"</span><span style='color:#808030; '>,</span>
+198: 
+199: <span style='color:#696969; '>/* Identifiers */</span>
+200: <span style='color:#3f5fbf; '>/**/</span>identifier<span style='color:#3f5fbf; '>/**/</span>
+201: <span style='color:#3f5fbf; '>/**/</span>a0b1c2d3e4f5g<span style='color:#3f5fbf; '>/**/</span>
+202: <span style='color:#3f5fbf; '>/**/</span>h6i7j8k9l0mno<span style='color:#3f5fbf; '>/**/</span>
+203: <span style='color:#3f5fbf; '>/**/</span>pqrstuvwxyz<span style='color:#3f5fbf; '>/**/</span>
+204: <span style='color:#3f5fbf; '>/**/</span>ABCDEFGHIJK<span style='color:#3f5fbf; '>/**/</span>
+205: <span style='color:#3f5fbf; '>/**/</span>LMNOPQRSTUVWXYZ<span style='color:#3f5fbf; '>/**/</span>
+206: <span style='color:#3f5fbf; '>/**/</span>dollar<span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>$ign</span><span style='color:#3f5fbf; '>/**/</span>
+207: <span style='color:#3f5fbf; '>/**/</span>under_score<span style='color:#3f5fbf; '>/**/</span>
+208: <span style='color:#3f5fbf; '>/**/</span>_begin_under_score<span style='color:#3f5fbf; '>/**/</span>
+209: 
+210: <span style='color:#696969; '>/* operators and separators */</span>
+211: <span style='color:#808030; '>+</span><span style='color:#808030; '>+</span>operand<span style='color:#800080; '>;</span>
+212: <span style='color:#808030; '>-</span><span style='color:#808030; '>-</span>operand<span style='color:#800080; '>;</span>
+213: expression1<span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+214: expression1<span style='color:#808030; '>*</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+215: expression1<span style='color:#808030; '>/</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+216: expression1<span style='color:#808030; '>%</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+217: expression1<span style='color:#808030; '>+</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+218: expression1<span style='color:#808030; '>-</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+219: expression1<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span>shift_value<span style='color:#800080; '>;</span>
+220: expression1<span style='color:#808030; '>></span><span style='color:#808030; '>></span><span style='color:#808030; '>=</span>shift_value<span style='color:#800080; '>;</span>
+221: expression1<span style='color:#808030; '>&amp;</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+222: expression1<span style='color:#808030; '>^</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+223: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span>'<span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+224: expression1<span style='color:#808030; '>|</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+225: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#808030; '>=</span>expression2<span style='color:#800080; '>;</span>
+226: <span style='color:#808030; '>!</span>operand
+227: <span style='color:#808030; '>~</span>operand
+228: <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>-</span>operand
+229: expression1<span style='color:#808030; '>+</span>expression2
+230: expression1<span style='color:#808030; '>-</span>expression2
+231: expression1<span style='color:#808030; '>*</span>expression2
+232: expression1<span style='color:#808030; '>/</span>expression2
+233: expression1<span style='color:#808030; '>%</span>expression2
+234: expression1<span style='color:#808030; '>&amp;</span>expression2
+235: expression1<span style='color:#808030; '>|</span>expression2
+236: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span>expression2
+237: expression1<span style='color:#808030; '>^</span>expression2
+238: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span>'expression2
+239: expression1<span style='color:#808030; '>></span><span style='color:#808030; '>></span>shift_value
+240: expression1<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>&lt;</span>shift_value
+241: expression1<span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>expression2
+242: expression1<span style='color:#808030; '>|</span><span style='color:#808030; '>|</span>expression2
+243: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#808030; '>|</span>expression2
+244: expression1<span style='color:#808030; '>|</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span>expression2
+245: expression1<span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span>expression2
+246: expression1<span style='color:#808030; '>&lt;</span>expression2
+247: expression1<span style='color:#808030; '>></span>expression2
+248: expression1<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span>expression2
+249: expression1<span style='color:#808030; '>></span><span style='color:#808030; '>=</span>expression2
+250: expression1<span style='color:#808030; '>=</span><span style='color:#808030; '>=</span>expression2
+251: expression1<span style='color:#808030; '>!</span><span style='color:#808030; '>=</span>expression2
+252: expression<span style='color:#800080; '>?</span>expression1<span style='color:#800080; '>:</span>expression2
+253: 
+254: <span style='color:#808030; '>+</span><span style='color:#808030; '>+</span> operand<span style='color:#800080; '>;</span>
+255: <span style='color:#808030; '>-</span><span style='color:#808030; '>-</span> operand<span style='color:#800080; '>;</span>
+256: expression1 <span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+257: expression1 <span style='color:#808030; '>*</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+258: expression1 <span style='color:#808030; '>/</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+259: expression1 <span style='color:#808030; '>%</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+260: expression1 <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+261: expression1 <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+262: expression1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> shift_value<span style='color:#800080; '>;</span>
+263: expression1 <span style='color:#808030; '>></span><span style='color:#808030; '>></span><span style='color:#808030; '>=</span> shift_value<span style='color:#800080; '>;</span>
+264: expression1 <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+265: expression1 <span style='color:#808030; '>^</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+266: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span>'<span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+267: expression1 <span style='color:#808030; '>|</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+268: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> expression2<span style='color:#800080; '>;</span>
+269: <span style='color:#808030; '>!</span> operand
+270: <span style='color:#808030; '>~</span> operand
+271: <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>-</span>operand
+272: expression1 <span style='color:#808030; '>+</span> expression2
+273: expression1 <span style='color:#808030; '>-</span> expression2
+274: expression1 <span style='color:#808030; '>*</span> expression2
+275: expression1 <span style='color:#808030; '>/</span> expression2
+276: expression1 <span style='color:#808030; '>%</span> expression2
+277: expression1 <span style='color:#808030; '>&amp;</span> expression2
+278: expression1 <span style='color:#808030; '>|</span> expression2
+279: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span> expression2
+280: expression1 <span style='color:#808030; '>^</span> expression2
+281: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span>' expression2
+282: expression1 <span style='color:#808030; '>></span><span style='color:#808030; '>></span> shift_value
+283: expression1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>&lt;</span> shift_value
+284: expression1 <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> expression2
+285: expression1 <span style='color:#808030; '>|</span><span style='color:#808030; '>|</span> expression2
+286: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#808030; '>|</span> expression2
+287: expression1 <span style='color:#808030; '>|</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span> expression2
+288: expression1 <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>!</span> expression2
+289: expression1 <span style='color:#808030; '>&lt;</span> expression2
+290: expression1 <span style='color:#808030; '>></span> expression2
+291: expression1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> expression2
+292: expression1 <span style='color:#808030; '>></span><span style='color:#808030; '>=</span> expression2
+293: expression1 <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> expression2
+294: expression1 <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> expression2
+295: expression <span style='color:#800080; '>?</span> expression1 <span style='color:#800080; '>:</span> expression2
+296: 
+297: <span style='color:#696969; '>/* separators */</span>
+298: <span style='color:#808030; '>(</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>[</span> <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>(</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>]</span> <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>)</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>{</span> <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>&lt;</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>}</span> <span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>></span> <span style='color:#800080; '>;</span> <span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span> <span style='color:#808030; '>-</span><span style='color:#808030; '>></span>
+299: <span style='color:#696969; '>// each separator should be its own token</span>
+300: <span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>[</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>(</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>]</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>)</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>{</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>&lt;</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>}</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>></span><span style='color:#800080; '>;</span><span style='color:#808030; '>,</span><span style='color:#808030; '>.</span><span style='color:#808030; '>-</span><span style='color:#808030; '>></span>
+301: 
+302: 
+303: <span style='color:#696969; '>/* Integer Literals */</span>
+304: <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>2</span> <span style='color:#008c00; '>3</span> <span style='color:#008c00; '>4</span> <span style='color:#008c00; '>99</span> <span style='color:#008c00; '>1370000</span>
+305: <span style='color:#008c00; '>2</span><span style='color:#006600; '>l</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>L</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>u</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>U</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>ul</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>Ul</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>UL</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>uL</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>lu</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>Lu</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>lU</span> <span style='color:#008c00; '>2</span><span style='color:#006600; '>LU</span>
+306: <span style='color:#008000; '>0x0</span> <span style='color:#008000; '>0x1</span> <span style='color:#008000; '>0x2</span> <span style='color:#008000; '>0xA</span> <span style='color:#008000; '>0xa</span> <span style='color:#008000; '>0xf</span> <span style='color:#008000; '>0xF</span> <span style='color:#008000; '>0x100</span> <span style='color:#008000; '>0xdeadbeef</span>
+307: <span style='color:#008000; '>0x4</span><span style='color:#006600; '>l</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>u</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>U</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>ul</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>Ul</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>UL</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>uL</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>lu</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>Lu</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>lU</span> <span style='color:#008000; '>0x4</span><span style='color:#006600; '>LU</span>
+308: <span style='color:#008c00; '>01</span> <span style='color:#008c00; '>02</span> <span style='color:#008c00; '>03</span> <span style='color:#008c00; '>04</span> <span style='color:#008c00; '>0453222</span> <span style='color:#008c00; '>032</span>
+309: <span style='color:#008c00; '>07</span><span style='color:#006600; '>l</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>L</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>u</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>U</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>ul</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>Ul</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>UL</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>uL</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>lu</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>Lu</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>lU</span> <span style='color:#008c00; '>07</span><span style='color:#006600; '>LU</span>
+310: 
+311: <span style='color:#696969; '>/* Float Literals */</span>
+312: <span style='color:#008000; '>0e0</span> <span style='color:#008000; '>.0</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span> <span style='color:#008000; '>0.0</span> <span style='color:#008000; '>0.0e0</span> <span style='color:#008000; '>0.e0</span> <span style='color:#008000; '>.0e0</span> <span style='color:#008000; '>0.0e-0</span> <span style='color:#008000; '>0.0e88</span>
+313: <span style='color:#008000; '>1e1</span> <span style='color:#008000; '>.1</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span> <span style='color:#008000; '>1.1</span> <span style='color:#008000; '>1.1e1</span> <span style='color:#008000; '>1.e1</span> <span style='color:#008000; '>.1e1</span> <span style='color:#008000; '>1.1e-1</span> <span style='color:#008000; '>3.141592654</span> <span style='color:#008000; '>6.022e-22</span>
+314: <span style='color:#008000; '>1.79769313486231570e+308</span> <span style='color:#008000; '>4.94065645841246544e-324</span>
+315: <span style='color:#008000; '>1.0</span> <span style='color:#008000; '>0.1</span> <span style='color:#008000; '>1.1</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>.</span> <span style='color:#008000; '>.3</span> <span style='color:#008000; '>4e10</span> <span style='color:#008000; '>4.e23</span> <span style='color:#008000; '>8.3e88</span> <span style='color:#008000; '>2.1e-3</span> <span style='color:#008000; '>2E2</span>
+316: <span style='color:#008000; '>0e0</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>0.0e0</span><span style='color:#006600; '>F</span> <span style='color:#008000; '>0.0e-0</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>1.1e1</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>3.141592654</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>6.022e-22</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>3.40282347e+38</span><span style='color:#006600; '>f</span> <span style='color:#008000; '>1.40239846e-45</span><span style='color:#006600; '>f</span>
+317: <span style='color:#008000; '>0e0</span><span style='color:#006600; '>l</span> <span style='color:#008000; '>0.0e0</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>0.0e-0</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>1.1e1</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>3.141592654</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>6.022e-22</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>3.40282347e+38</span><span style='color:#006600; '>L</span> <span style='color:#008000; '>1.40239846e-45</span><span style='color:#006600; '>L</span>
+318: 
+319: <span style='color:#696969; '>/* Errors</span>
+320: <span style='color:#696969; '> *</span>
+321: <span style='color:#696969; '> * Anything after this has some sort of error associated with it.</span>
+322: <span style='color:#696969; '> * Since there is no standard definition of what an error is or how</span>
+323: <span style='color:#696969; '> * recovery after errors should be done, there is no standard way to</span>
+324: <span style='color:#696969; '> * display errors.  However, if one of the errors gets reported as</span>
+325: <span style='color:#696969; '> * valid that is a problem.</span>
+326: <span style='color:#696969; '> */</span>
+327: 
+328: <span style='color:#696969; '>/* Comment Errors */</span>
+329: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#696969; '>/*This is not a comment*/</span><span style='color:#800000; font-weight:bold; '>if</span>
+330: <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#696969; '>//This is not a comment</span>
+331: <span style='color:#800000; font-weight:bold; '>if</span>
+332: 
+333: <span style='color:#696969; '>/* pp errors (no if should be in a pp or comment) */</span>
+334: <span style='color:#800000; font-weight:bold; '>if</span>
+335: <span style='color:#004a43; '>#notdefined This should be an </span><span style='color:#004a43; '>error</span><span style='color:#004a43; '> </span><span style='color:#696969; '>/* with a */</span><span style='color:#004a43; '> comment in the middle of it \</span>
+336: <span style='color:#004a43; '>      extending to multiple lines</span><span style='color:#808030; '>.</span><span style='color:#004a43; '> </span><span style='color:#696969; '>// heck a comment here too.</span>
+337: <span style='color:#800000; font-weight:bold; '>if</span>
+338: <span style='color:#004a43; '>#net</span>
+339: <span style='color:#800000; font-weight:bold; '>if</span>
+340: <span style='color:#004a43; '>#something </span><span style='color:#696969; '>// comment</span>
+341: <span style='color:#800000; font-weight:bold; '>if</span>
+342: <span style='color:#004a43; '>#frog </span><span style='color:#696969; '>/* comment */</span>
+343: <span style='color:#800000; font-weight:bold; '>if</span>
+344: <span style='color:#004a43; '>#bugs</span><span style='color:#696969; '>// comment</span>
+345: <span style='color:#800000; font-weight:bold; '>if</span>
+346: <span style='color:#004a43; '>#logs</span><span style='color:#696969; '>/* comment */</span>
+347: <span style='color:#800000; font-weight:bold; '>if</span>
+348: identifier <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>#define</span> A pp statement cannot go here
+349: <span style='color:#800000; font-weight:bold; '>if</span>
+350: 
+351: <span style='color:#696969; '>/* Character Errors */</span>
+352: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'string'</span><span style='color:#3f5fbf; '>/**/</span>
+353: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\A'</span><span style='color:#3f5fbf; '>/**/</span>
+354: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\N'</span><span style='color:#3f5fbf; '>/**/</span>
+355: <span style='color:#3f5fbf; '>/**/</span>'unclosed<span style='color:#3f5fbf; '>/**/</span>
+356: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>''</span>'unclosed<span style='color:#3f5fbf; '>/**/</span>
+357: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\'</span>closed'<span style='color:#3f5fbf; '>/**/</span>
+358: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\'</span>unclosed<span style='color:#3f5fbf; '>/**/</span>
+359: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\8'</span><span style='color:#3f5fbf; '>/**/</span>
+360: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\29'</span><span style='color:#3f5fbf; '>/**/</span>
+361: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\444'</span><span style='color:#3f5fbf; '>/**/</span>
+362: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\1111'</span><span style='color:#3f5fbf; '>/**/</span>
+363: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\xFFF'</span><span style='color:#3f5fbf; '>/**/</span>
+364: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\xGG'</span><span style='color:#3f5fbf; '>/**/</span>
+365: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\x000'</span><span style='color:#3f5fbf; '>/**/</span>
+366: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\x111'</span><span style='color:#3f5fbf; '>/**/</span>
+367: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'??a'</span><span style='color:#3f5fbf; '>/**/</span>
+368: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'??"'</span><span style='color:#3f5fbf; '>/**/</span>
+369: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'??}'</span><span style='color:#3f5fbf; '>/**/</span>
+370: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'??/'</span>closed'<span style='color:#3f5fbf; '>/**/</span>
+371: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'??/'</span>unclosed<span style='color:#3f5fbf; '>/**/</span>
+372: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'??/444'</span><span style='color:#3f5fbf; '>/**/</span>
+373: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\uFFF'</span><span style='color:#3f5fbf; '>/**/</span>
+374: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\uFFFFF'</span><span style='color:#3f5fbf; '>/**/</span>
+375: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\uu'</span><span style='color:#3f5fbf; '>/**/</span>
+376: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>'\u0'</span><span style='color:#3f5fbf; '>/**/</span>
+377: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\uFFFF'</span><span style='color:#3f5fbf; '>/**/</span>
+378: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\u1234'</span><span style='color:#3f5fbf; '>/**/</span>
+379: <span style='color:#3f5fbf; '>/**/</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'\u0000'</span><span style='color:#3f5fbf; '>/**/</span>
+380: 
+381: <span style='color:#696969; '>/* String Errors */</span>
+382: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>\A</span><span style='color:#0000e6; '>"</span><span style='color:#3f5fbf; '>/**/</span>
+383: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>\N</span><span style='color:#0000e6; '>"</span><span style='color:#3f5fbf; '>/**/</span>
+384: <span style='color:#3f5fbf; '>/**/</span><span style='color:#0000e6; '>"unclosed/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+385: <span style='color:#0000e6; '>/**/"</span>\<span style='color:#0000e6; '>"unclosed/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+386: <span style='color:#0000e6; '>/**/"</span>\<span style='color:#008c00; '>8</span><span style='color:#0000e6; '>"/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+387: <span style='color:#0000e6; '>/**/"</span>\xGG<span style='color:#0000e6; '>"/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+388: <span style='color:#0000e6; '>/**/"</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>/</span><span style='color:#0000e6; '>"unclosed/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+389: <span style='color:#0000e6; '>/**/"</span><span style='color:#800080; '>?</span><span style='color:#800080; '>?</span><span style='color:#808030; '>/</span><span style='color:#008c00; '>8</span><span style='color:#0000e6; '>"/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+390: <span style='color:#0000e6; '></span>
+391: <span style='color:#0000e6; '>/* Identifier Errors *</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+392: <span style='color:#0000e6; '>/**/1cannot_start_with_number/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+393: <span style='color:#0000e6; '>/**/$cannot_start_with_dollar/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+394: <span style='color:#0000e6; '>/**/weird`character/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+395: <span style='color:#0000e6; '>/**/weird#character/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+396: <span style='color:#0000e6; '>/**/weird??=character/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+397: <span style='color:#0000e6; '>/**/weird@character/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+398: <span style='color:#0000e6; '></span>
+399: <span style='color:#0000e6; '>/* Integer Literal Errors *</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+400: <span style='color:#0000e6; '>/**/08/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+401: <span style='color:#0000e6; '>/**/09/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+402: <span style='color:#0000e6; '>/**/0xg/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+403: <span style='color:#0000e6; '>/**/0xG/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+404: <span style='color:#0000e6; '></span>
+405: <span style='color:#0000e6; '>/* Float Literal Errors *</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+406: <span style='color:#0000e6; '>/**/0f/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+407: <span style='color:#0000e6; '>/**/0F/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+408: <span style='color:#0000e6; '>/**/1f/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+409: <span style='color:#0000e6; '>/**/0e/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+410: <span style='color:#0000e6; '>/**/88.8e/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+411: <span style='color:#0000e6; '>/**/1.3d/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+412: <span style='color:#0000e6; '>/**/1.3D/**</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+413: <span style='color:#0000e6; '></span>
+414: <span style='color:#0000e6; '>/* Comment at end intentionall</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>y</span><span style='color:#0000e6; '></span>
+415: <span style='color:#0000e6; '> * left open. *</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+416: <span style='color:#0000e6; '>/*</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span><span style='color:#0000e6; '></span>
+417: <span style='color:#0000e6; '></span>
+</pre></body></html>

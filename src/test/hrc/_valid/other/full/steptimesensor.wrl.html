@@ -1,0 +1,131 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>#VRML V2.0 utf8</span>
+  1: 
+  2: <span style='color:#696969; '># Prototyp: stepTimeSensor, krokovatelny casovac</span>
+  3: 
+  4: <span style='color:#808030; '>PROTO</span> stepTimeSensor <span style='color:#800080; '>[</span>
+  5:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> startTime <span style='color:#008c00; '>0.0</span>
+  6:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_startTime
+  7:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> stopTime <span style='color:#008c00; '>1.0</span>
+  8:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_stopTime
+  9:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> timeScale <span style='color:#008c00; '>1.0</span>
+ 10:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_timeScale
+ 11:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFBool</span> loopEnabled <span style='color:#808030; '>FALSE</span>
+ 12:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFBool</span> set_loopEnabled
+ 13:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> stepTime <span style='color:#008c00; '>1.0</span>
+ 14:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_stepTime
+ 15:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_time
+ 16:   <span style='color:#808030; '>eventOut</span> <span style='color:#808030; '>SFFloat</span> time_changed
+ 17:   <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFBool</span> running <span style='color:#808030; '>FALSE</span>
+ 18:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFBool</span> set_running
+ 19:   <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFInt32</span> addStep <span style='color:#800080; '>]</span>
+ 20: <span style='color:#800080; '>{</span>
+ 21:   <span style='color:#808030; '>DEF</span> stepTimerScr <span style='color:#800000; font-weight:bold; '>Script</span> <span style='color:#800080; '>{</span>
+ 22:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> startTime IS startTime
+ 23:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_startTime IS set_startTime
+ 24:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> stopTime IS stopTime
+ 25:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_stopTime IS set_stopTime
+ 26:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> timeScale IS timeScale
+ 27:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_timeScale IS set_timeScale
+ 28:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFBool</span> loopEnabled IS loopEnabled
+ 29:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFBool</span> set_loopEnabled IS set_loopEnabled
+ 30:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> stepTime IS stepTime
+ 31:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_stepTime IS set_stepTime
+ 32:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFFloat</span> time IS startTime
+ 33:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFFloat</span> set_time IS set_time
+ 34:     <span style='color:#808030; '>eventOut</span> <span style='color:#808030; '>SFFloat</span> time_changed IS time_changed
+ 35:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFBool</span> running IS running
+ 36:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFBool</span> set_running IS set_running
+ 37:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFInt32</span> addStep IS addStep
+ 38: <span style='color:#696969; '># private</span>
+ 39:     <span style='color:#808030; '>eventOut</span> <span style='color:#808030; '>SFBool</span> enableInternalTimer
+ 40:     <span style='color:#808030; '>eventIn</span> <span style='color:#808030; '>SFTime</span> internalTime
+ 41:     <span style='color:#808030; '>field</span> <span style='color:#808030; '>SFTime</span> oldEventTime -<span style='color:#008c00; '>1.0</span>
+ 42:     url <span style='color:#800080; '>[</span>"<span style='color:#800000; font-weight:bold; '>javascript</span>:
+ 43: <span style='color:#696969; '>// Skript pro krokovatelny casovac, pro JavaScript</span>
+ 44: <span style='color:#696969; '>// scStepTimeSensor</span>
+ 45: 
+ 46: <span style='color:#800000; font-weight:bold; '>function</span> setNewTime<span style='color:#808030; '>(</span>newTime<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 47:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>stopTime <span style='color:#808030; '>></span> startTime<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '>// lze cyklit</span>
+ 48:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>newTime <span style='color:#808030; '>&lt;</span> startTime<span style='color:#808030; '>)</span> newTime <span style='color:#808030; '>=</span> startTime<span style='color:#800080; '>;</span>
+ 49:     <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span>newTime <span style='color:#808030; '>></span> stopTime<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '>// cas pretekl</span>
+ 50:       <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>loopEnabled<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 51:     newTime <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> stopTime<span style='color:#800080; '>;</span>
+ 52:       <span style='color:#800080; '>}</span> <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '>// neloopujeme, stop</span>
+ 53:         newTime <span style='color:#808030; '>=</span> startTime<span style='color:#800080; '>;</span> 
+ 54:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>running<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 55:       enableInternalTimer <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>false</span><span style='color:#800080; '>;</span>
+ 56:       running <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>false</span><span style='color:#800080; '>;</span>
+ 57:     <span style='color:#800080; '>}</span>
+ 58:       <span style='color:#800080; '>}</span>
+ 59:     <span style='color:#800080; '>}</span>
+ 60:   <span style='color:#800080; '>}</span>
+ 61:   time <span style='color:#808030; '>=</span> newTime<span style='color:#800080; '>;</span>
+ 62:   time_changed <span style='color:#808030; '>=</span> newTime<span style='color:#800080; '>;</span> <span style='color:#696969; '>// posli event</span>
+ 63: <span style='color:#800080; '>}</span>
+ 64: 
+ 65: <span style='color:#800000; font-weight:bold; '>function</span> set_startTime<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 66:   startTime <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 67: <span style='color:#800080; '>}</span>
+ 68: 
+ 69: <span style='color:#800000; font-weight:bold; '>function</span> set_stopTime<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 70:   stopTime <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 71: <span style='color:#800080; '>}</span>
+ 72: 
+ 73: <span style='color:#800000; font-weight:bold; '>function</span> set_timeScale<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 74:   timeScale <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 75: <span style='color:#800080; '>}</span>
+ 76: 
+ 77: <span style='color:#800000; font-weight:bold; '>function</span> set_loopEnabled<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 78:   loopEnabled <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 79: <span style='color:#800080; '>}</span>
+ 80: 
+ 81: <span style='color:#800000; font-weight:bold; '>function</span> set_stepTime<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 82:   stepTime <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 83: <span style='color:#800080; '>}</span>
+ 84: 
+ 85: <span style='color:#800000; font-weight:bold; '>function</span> set_running<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 86:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>running <span style='color:#808030; '>!=</span> eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 87:     running <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+ 88:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>running<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '>// zapnout casovac</span>
+ 89:       enableInternalTimer <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>true</span><span style='color:#800080; '>;</span>
+ 90:       oldEventTime <span style='color:#808030; '>=</span> <span style='color:#808030; '>-</span><span style='color:#008000; '>1.0</span><span style='color:#800080; '>;</span>
+ 91:     <span style='color:#800080; '>}</span> <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#696969; '>// vypnout, prepnout do krokovaciho rezimu</span>
+ 92:       enableInternalTimer <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>false</span><span style='color:#800080; '>;</span>
+ 93:   <span style='color:#800080; '>}</span>
+ 94: <span style='color:#800080; '>}</span>
+ 95: 
+ 96: <span style='color:#800000; font-weight:bold; '>function</span> addStep<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 97:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>!running<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 98:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>eventValue <span style='color:#808030; '>!=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> setNewTime<span style='color:#808030; '>(</span>time <span style='color:#808030; '>+</span> eventValue <span style='color:#808030; '>*</span> stepTime<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 99:     <span style='color:#800000; font-weight:bold; '>else</span> setNewTime<span style='color:#808030; '>(</span>startTime<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+100:   <span style='color:#800080; '>}</span>
+101: <span style='color:#800080; '>}</span>
+102: 
+103: <span style='color:#800000; font-weight:bold; '>function</span> internalTime<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+104:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>running<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+105:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>oldEventTime <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+106:       time <span style='color:#808030; '>+=</span> timeScale <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span>eventValue <span style='color:#808030; '>-</span> oldEventTime<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span> 
+107:       setNewTime<span style='color:#808030; '>(</span>time<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+108:     <span style='color:#800080; '>}</span>
+109:     oldEventTime <span style='color:#808030; '>=</span> eventValue<span style='color:#800080; '>;</span>
+110:   <span style='color:#800080; '>}</span>
+111: <span style='color:#800080; '>}</span>
+112: 
+113: <span style='color:#800000; font-weight:bold; '>function</span> set_time<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+114:   setNewTime<span style='color:#808030; '>(</span>eventValue<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+115: <span style='color:#800080; '>}</span>
+116:      <span style='color:#0000e6; '>"</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>,</span><span style='color:#0000e6; '></span>
+117: <span style='color:#0000e6; '>     "</span>scStepTimeSensor<span style='color:#808030; '>.</span>js<span style='color:#0000e6; '>"</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>,</span><span style='color:#0000e6; '></span>
+118: <span style='color:#0000e6; '>     "</span>scStepTimeSensor<span style='color:#808030; '>.</span>class<span style='color:#0000e6; '>"</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>]</span><span style='color:#0000e6; '></span>
+119: <span style='color:#0000e6; '>  </span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>}</span><span style='color:#0000e6; '></span>
+120: <span style='color:#0000e6; '>  DEF internalTimer TimeSensor </span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>{</span><span style='color:#0000e6; '></span>
+121: <span style='color:#0000e6; '>    enabled IS runnin</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>g</span><span style='color:#0000e6; '></span>
+122: <span style='color:#0000e6; '>    loop TRU</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>E</span><span style='color:#0000e6; '></span>
+123: <span style='color:#0000e6; '>  </span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>}</span><span style='color:#0000e6; '></span>
+124: <span style='color:#0000e6; '>  ROUTE stepTimerScr.enableInternalTimer TO internalTimer.enable</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>d</span><span style='color:#0000e6; '></span>
+125: <span style='color:#0000e6; '>  ROUTE internalTimer.time TO stepTimerScr.internalTim</span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>e</span><span style='color:#0000e6; '></span>
+126: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>}</span><span style='color:#0000e6; '></span>
+127: <span style='color:#0000e6; '></span>
+128: <span style='color:#0000e6; '>     </span><span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '> </span><span style='color:#0000e6; '></span>
+</pre></body></html>

@@ -1,0 +1,81 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>\ 1999 - Loktev N M заготовки для создания деpева yстpойств</span>
+ 1: 
+ 2: anew task-pr.fth
+ 3: <span style='color:#e34adc; '>decimal</span>
+ 4: 
+ 5: <span style='color:#800000; font-weight:bold; '>variable</span> selfownadr  <span style='color:#696969; '>\ Собственный адpес для yказания потомкам</span>
+ 6: <span style='color:#800000; font-weight:bold; '>variable</span> parentadr   <span style='color:#696969; '>\ Адpес pодителя</span>
+ 7: <span style='color:#800000; font-weight:bold; '>variable</span> dataadr     <span style='color:#696969; '>\ Адpес списка собственных данных</span>
+ 8: <span style='color:#800000; font-weight:bold; '>variable</span> propertyadr <span style='color:#696969; '>\ Адpес списка свойств</span>
+ 9: <span style='color:#800000; font-weight:bold; '>variable</span> nameadr     <span style='color:#696969; '>\ Адpес стpоки со счетчиком имени ноды</span>
+10: 
+11: 
+12: <span style='color:#696969; '>\ Пpи выполнении заносит yказатели в пеpеменные</span>
+13: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>makenode</span> <span style='color:#696969; '>( string, ptr, ptr, ptr ptr ---  )</span>
+14:   <span style='color:#800000; font-weight:bold; '>create</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>( положили начало заpезеpвиpованной области )</span>
+15:   <span style='color:#000000; background:#a8a800; '>does></span>    <span style='color:#0000e6; '> ." PFA="</span> <span style='color:#800000; font-weight:bold; '>dup</span> .hex <span style='color:#800000; font-weight:bold; '>dup</span>
+16:            <span style='color:#0000e6; '> ." CFA="</span> body> <span style='color:#800000; font-weight:bold; '>dup</span> .hex
+17:            <span style='color:#0000e6; '> ." NFA="</span> >name <span style='color:#800000; font-weight:bold; '>dup</span> .hex
+18:            <span style='color:#0000e6; '> ." LFA="</span> n>link <span style='color:#800000; font-weight:bold; '>dup</span> .hex
+19:             <span style='color:#800000; font-weight:bold; '>drop</span>
+20: 
+21:             <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> parentadr   <span style='color:#800000; font-weight:bold; '>!</span>
+22:         <span style='color:#800000; font-weight:bold; '>cell+</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> dataadr     <span style='color:#800000; font-weight:bold; '>!</span>
+23:         <span style='color:#800000; font-weight:bold; '>cell+</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> propertyadr <span style='color:#800000; font-weight:bold; '>!</span>
+24:         <span style='color:#800000; font-weight:bold; '>cell+</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> selfownadr  <span style='color:#800000; font-weight:bold; '>!</span>
+25:         <span style='color:#800000; font-weight:bold; '>cell+</span>     <span style='color:#800000; font-weight:bold; '>@</span> nameadr     <span style='color:#800000; font-weight:bold; '>!</span>
+26: ;
+27: 
+28: <span style='color:#0000e6; '>c" Master node"</span> <span style='color:#800000; font-weight:bold; '>latest</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> makenode root
+29: 
+30: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>makeproperty</span> <span style='color:#696969; '>( " name" N-bytes for data ---  )</span>
+31:   <span style='color:#800000; font-weight:bold; '>create</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>( место для адpеса пpедыдyщего св-ва )</span>
+32:          <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>( место для адpеса следyющего св-ва или 0 )</span>
+33:          <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>( место для адpеса пpоц-pы извл. св-ва )</span>
+34:          <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>( место для адpеса пpоц-pы запис св-ва )</span>
+35:          <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#008c00; '>c</span>, <span style='color:#800000; font-weight:bold; '>allot</span> <span style='color:#696969; '>( --- )</span>
+36:   <span style='color:#000000; background:#a8a800; '>does></span>  <span style='color:#696969; '>( --- pfa )</span> <span style='color:#800000; font-weight:bold; '>cell</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>lshift</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#696969; '>( пpопyстили паp-pы )</span>
+37:          <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#008c00; '>c</span>@ <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#008c00; '>1</span>+ <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#696969; '>( --- adr, dl )</span>
+38: ;
+39: 
+40: 
+41: <span style='color:#008c00; '>31</span> makeproperty name
+42: <span style='color:#008c00; '>20</span> makeproperty datecreation
+43:  <span style='color:#008c00; '>4</span> makeproperty version
+44: 
+45: 
+46: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>parent</span> <span style='color:#696969; '>( AdrStrC --- )</span> <span style='color:#800000; font-weight:bold; '>find</span> <span style='color:#696969; '>( pfa --- )</span> <span style='color:#800000; font-weight:bold; '>bl</span> <span style='color:#800000; font-weight:bold; '>word</span> <span style='color:#800000; font-weight:bold; '>find</span> <span style='color:#696969; '>( pfa pfa --- )</span>
+47: 
+48: ;
+49: 
+50: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>child</span> <span style='color:#696969; '>( AdrStrC --- )</span> <span style='color:#800000; font-weight:bold; '>find</span> <span style='color:#696969; '>( pfa --- )</span> <span style='color:#800000; font-weight:bold; '>bl</span> <span style='color:#800000; font-weight:bold; '>word</span> <span style='color:#800000; font-weight:bold; '>find</span> <span style='color:#696969; '>( pfa pfa --- )</span>
+51: 
+52: ;
+53: 
+54: 
+55: 
+56: <span style='color:#800000; font-weight:bold; '>variable</span> instflag       <span style='color:#696969; '>\ Flag of instance var</span>
+57: <span style='color:#800000; font-weight:bold; '>variable</span> pack-data-base <span style='color:#696969; '>\ Adress of corunt packet's</span>
+58: <span style='color:#800000; font-weight:bold; '>variable</span> lastinst    <span style='color:#696969; '>\ Adress of previos instance var</span>
+59: 
+60: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>instance</span> <span style='color:#008c00; '>1</span> instflag <span style='color:#800000; font-weight:bold; '>!</span> ;
+61: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>instvariable</span> 
+62:   <span style='color:#800000; font-weight:bold; '>latest</span>
+63:   <span style='color:#800000; font-weight:bold; '>create</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>\ make header and place 0 value</span>
+64:   <span style='color:#008c00; '>4</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>\ Lenght of data</span>
+65:   lastinst <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>\ Pointer for last instance var</span>
+66:   pack-data-base <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#696969; '>\ Offset of var from pack-data-base</span>
+67:   <span style='color:#800000; font-weight:bold; '>latest</span> lastinst <span style='color:#800000; font-weight:bold; '>!</span>
+68:   <span style='color:#008c00; '>0</span> instflag <span style='color:#800000; font-weight:bold; '>!</span>
+69:   <span style='color:#000000; background:#a8a800; '>does></span> <span style='color:#696969; '>( pfa -- )</span>
+70:   <span style='color:#800000; font-weight:bold; '>cell+</span>
+71:   <span style='color:#800000; font-weight:bold; '>cell+</span>
+72:   <span style='color:#800000; font-weight:bold; '>cell+</span> <span style='color:#800000; font-weight:bold; '>@</span> pack-data-base <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>+</span>  <span style='color:#696969; '>( --- adr )</span>
+73: ;
+74: 
+75: <span style='color:#696969; '>\ Definition of instance var</span>
+76: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>var</span> instflag <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#e34adc; '>if</span> instvariable <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>variable</span> <span style='color:#e34adc; '>then</span>
+77: ;
+78: 
+</pre></body></html>

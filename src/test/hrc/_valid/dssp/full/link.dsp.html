@@ -1,0 +1,353 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#004a43; '>PROGRAM $IBM-DVK</span> USE SYSTEM <span style='color:#074726; '>B16</span> <span style='color:#0000e6; '>."</span>
+  1: <span style='color:#0000e6; '>Работа с дисками DEC-машин по линии связи RS-232 - УПО"</span> <span style='color:#696969; '>[."</span>
+  2: <span style='color:#696969; '>Используются библиотечные программы: RS232.DSP SCRWORK1.DSP MENU4.DSP</span>
+  3: <span style='color:#696969; '> Вызов: PDP</span>
+  4: <span style='color:#696969; '>При вводе имени IBM-файла допускается задавать символы * и ?.</span>
+  5: <span style='color:#696969; '>При вводе имени PDP-файла посылка пустой строки означает выдачу на экран</span>
+  6: <span style='color:#696969; '>директория диска и возможность выбора из него нужного имени"]</span>
+  7: 
+  8:      <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR  AIBUF</span>  <span style='color:#696969; '>[адрес буфера ввода]</span>
+  9:      <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR  AOBUF</span>  <span style='color:#696969; '>[адрес буфера вывода]</span>
+ 10:      <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  COMIN</span>  <span style='color:#696969; '>[полученная команда]</span>
+ 11:      <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  COMOUT</span> <span style='color:#696969; '>[команда для передачи]</span>
+ 12:           <span style='color:#074726; '>VAR  DLIBL</span>  <span style='color:#696969; '>[длина введенного блока]</span>
+ 13:           <span style='color:#074726; '>VAR  DLOBL</span>  <span style='color:#696969; '>[длина блока для вывода]</span>
+ 14:      <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  YBL</span>    <span style='color:#696969; '>[признак: 1 - блок получен; 0 - нет]</span>
+ 15:           <span style='color:#074726; '>VAR  KSUM</span>   <span style='color:#696969; '>[контрольная сумма]</span>
+ 16: <span style='color:#008c00; '>100</span>      <span style='color:#074726; '>VALUE LBUF</span>   <span style='color:#696969; '>[длина буферов ввода и вывода]</span>
+ 17: LBUF <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR IBUF</span>   <span style='color:#696969; '>[буфер ввода]</span>
+ 18: LBUF <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR OBUF</span>   <span style='color:#696969; '>[буфер вывода]</span>
+ 19: <span style='color:#008c00; '>100</span>  <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR DNAM</span>   <span style='color:#696969; '>[имена существующих дисководов]</span>
+ 20:      <span style='color:#074726; '>BYTE</span>  <span style='color:#074726; '>VAR NDISC</span>  <span style='color:#696969; '>[количество существующих дисководов]</span>
+ 21: 
+ 22: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>40</span> <span style='color:#074726; '>STRING IBFNAME</span><span style='color:#0000e6; '> "*.DSP"</span> <span style='color:#074726; '>!</span> IBFNAME
+ 23: EMPTY 0FF00 <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR [SegDATA]</span> PFILE <span style='color:#696969; '>[файл с PDP]</span>
+ 24: <span style='color:#074726; '>LONG</span>        <span style='color:#074726; '>VAR LFIL</span>  <span style='color:#696969; '>[длина файла]</span>
+ 25: 
+ 26: <span style='color:#696969; '>[добавление и исправление к сетевым программам]</span>
+ 27: <span style='color:#800000; font-weight:bold; '>COPYW LOB LOB0</span>
+ 28: : LOB <span style='color:#696969; '>[b]</span> <span style='color:#074726; '>C</span> LOB0 KSUM + <span style='color:#074726; '>!</span> KSUM <span style='color:#696969; '>[]</span> ;
+ 29: : LIW <span style='color:#696969; '>[]</span> LIB LIB <span style='color:#074726; '>SWB</span> + <span style='color:#696969; '>[w]</span> ;
+ 30: : LOW <span style='color:#696969; '>[w]</span> <span style='color:#074726; '>C</span> LOB <span style='color:#074726; '>SWB</span> LOB <span style='color:#696969; '>[]</span> ;
+ 31: : LIS <span style='color:#696969; '>[a,l]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> LIS1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+ 32:   : LIS1 <span style='color:#696969; '>[a]</span> LIB <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+ 33: : LOS <span style='color:#696969; '>[a,l]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> LOS1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+ 34:   : LOS1 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> @B LOB <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+ 35: 
+ 36: <span style='color:#074726; '>B10</span>
+ 37: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MM.I</span>    <span style='color:#008c00; '>7</span> <span style='color:#074726; '>!</span> MM.I
+ 38: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MM.J</span>   <span style='color:#008c00; '>30</span> <span style='color:#074726; '>!</span> MM.J
+ 39: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MM.LI</span>   <span style='color:#008c00; '>9</span> <span style='color:#074726; '>!</span> MM.LI
+ 40: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MM.LJT</span> <span style='color:#008c00; '>42</span> <span style='color:#074726; '>!</span> MM.LJT
+ 41: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MM.LJV</span>  <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> MM.LJV
+ 42: 
+ 43: <span style='color:#074726; '>B16</span>
+ 44: :: : PDP <span style='color:#696969; '>[]</span> <span style='color:#696969; '>[LINIT 0 LOB]</span> PDP1 DELWIND <span style='color:#696969; '>[]</span> ;
+ 45:    : PDP1 <span style='color:#696969; '>[]</span><span style='color:#0000e6; '> "ДССП PDP (С ФС) &lt;--> ДССП IBM"</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span>
+ 46:      '' PV1 '' TV1 '' <span style='color:#074726; '>NOP</span> MM.I MM.J MM.LI MM.LJT MM.LJV GLBMENU <span style='color:#696969; '>[]</span> ;
+ 47:    : PV1 <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span> PDPDIR   <span style='color:#008c00; '>2</span> CN.<span style='color:#074726; '>D</span>-I    <span style='color:#008c00; '>3</span> CT.<span style='color:#074726; '>D</span>-I    <span style='color:#008c00; '>4</span> CN.I-<span style='color:#074726; '>D</span>    <span style='color:#008c00; '>5</span> CT.I-<span style='color:#074726; '>D</span>
+ 48:      <span style='color:#008c00; '>6</span> NEWDISK  <span style='color:#008c00; '>7</span> SHDVKFIL  <span style='color:#008c00; '>8</span> SHIBMFIL  <span style='color:#008c00; '>9</span> SETPORT  <span style='color:#800000; font-weight:bold; '>ELSE NOP</span> <span style='color:#696969; '>[]</span> ;
+ 49:    : TV1 <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Каталог PDP"</span>
+ 50:                 <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Копирование двоичного  файла с PDP на IBM"</span>
+ 51:                 <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Копирование текстового файла с PDP на IBM"</span>
+ 52:                 <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Копирование двоичного  файла с IBM на PDP"</span>
+ 53:                 <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Копирование текстового файла с IBM на PDP"</span>
+ 54:                 <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Выбор дисковода на PDP-машине"</span>
+ 55:                 <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "Показ текстового файла на ДВК"</span>
+ 56:                 <span style='color:#008c00; '>8</span><span style='color:#0000e6; '> "Показ текстового файла на IBM"</span>
+ 57:                 <span style='color:#008c00; '>9</span><span style='color:#0000e6; '> "Выбор порта COMi"</span>
+ 58:            <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> <span style='color:#696969; '>[A,L]</span> ;
+ 59: : SETPORT <span style='color:#696969; '>[]</span> ;
+ 60: 
+ 61: <span style='color:#696969; '>[формат блока, передаваемого по линии связи:</span>
+ 62: <span style='color:#696969; '> &lt;команда (1б)> &lt;длина (2б)> &lt;информация (Nб)> &lt;контр.сумма (1б)> ]</span>
+ 63: 
+ 64: <span style='color:#696969; '>[ввод блока с линии в память с адреса AIBUF]</span>
+ 65: : INBLOCK <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> YBL <span style='color:#008c00; '>4</span> LOB LIB <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 INBL0 7 LERR</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> RESTART</span> <span style='color:#696969; '>[]</span> ;
+ 66:   : INBL0 <span style='color:#696969; '>[]</span> LIB <span style='color:#074726; '>!</span> COMIN  LIW <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> DLIBL AIBUF <span style='color:#074726; '>E2</span> LIS LIB <span style='color:#696969; '>[KS]</span>
+ 67:     DLIBL 0FF <span style='color:#074726; '>&amp;</span> DLIBL <span style='color:#074726; '>SWB</span> 0FF <span style='color:#074726; '>&amp;</span> + COMIN + AIBUF DLIBL KS 0FF <span style='color:#074726; '>&amp;</span>
+ 68:     <span style='color:#696969; '>[KS,KS']</span> <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> INBL1 NOK!</span> <span style='color:#696969; '>[]</span> ;
+ 69:  : INBL1 <span style='color:#696969; '>[]</span> OK! <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> YBL <span style='color:#696969; '>[]</span> ;
+ 70:  : OK! <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>1</span> LOB <span style='color:#696969; '>[]</span> ;
+ 71:  : NOK! <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>2</span> LOB <span style='color:#696969; '>[]</span> ;
+ 72:  : KS <span style='color:#696969; '>[ks0,a,l]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> KS1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[KS]</span> ;
+ 73:    : KS1 <span style='color:#696969; '>[ks,a]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C3</span> + <span style='color:#074726; '>E3</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[ks',a+1]</span> ;
+ 74: 
+ 75: <span style='color:#696969; '>[передача блока (AOBUF,DLOBL) в линию]</span>
+ 76: : OUTBLOCK <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> OBL1</span> <span style='color:#696969; '>[]</span> ;
+ 77:   : OBL1 <span style='color:#696969; '>[]</span> LIB  <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 EX  2 OBL2  4 OBL2  7 LERR</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> RESTART</span> <span style='color:#696969; '>[]</span> ;
+ 78:   : OBL2 <span style='color:#696969; '>[]</span> OK! <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> KSUM COMOUT LOB DLOBL LOW AOBUF DLOBL LOS KSUM LOB <span style='color:#696969; '>[]</span> ;
+ 79: 
+ 80:   : ERRR <span style='color:#008c00; '>4</span> <span style='color:#074726; '>!</span> CLFON 0F <span style='color:#074726; '>!</span> CLKANT 0F <span style='color:#074726; '>!</span> CLTXT '' ERRRT
+ 81:     <span style='color:#696969; '>[''P]</span> MM.I MM.LI + <span style='color:#008c00; '>4</span>+ <span style='color:#696969; '>[=I]</span>
+ 82:     MM.J <span style='color:#008c00; '>3</span>-               <span style='color:#696969; '>[=J]</span>
+ 83:     <span style='color:#008c00; '>5</span>                     <span style='color:#696969; '>[=LI]</span>
+ 84:     <span style='color:#008c00; '>2</span>+ MM.LJT MM.LJV + <span style='color:#008c00; '>3</span>+ <span style='color:#696969; '>[=LJ]</span> GENINF <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>5</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> BELL</span> <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>D</span> DELWIND ;
+ 85:     : ERRRT <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 4 "Ошибка диска! Нажмите любую клавишу."</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+ 86: 
+ 87:  : WAITI '' WAITIT WINFORM <span style='color:#696969; '>[]</span> ;
+ 88:  : WAITIT <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 4 "Идет процесс обмена информацией"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+ 89: 
+ 90:  : WAITS '' WAITST WINFORM <span style='color:#696969; '>[]</span> ;
+ 91:  : WAITST <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 4 "Процесс считывания/сохранения файла"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+ 92: 
+ 93:  : WINFORM <span style='color:#696969; '>[''P]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span>
+ 94:    MM.I <span style='color:#008c00; '>2</span>- MM.J <span style='color:#008c00; '>3</span>- MM.LI <span style='color:#008c00; '>2</span>+ MM.LJT MM.LJV + <span style='color:#008c00; '>3</span>+ GENINF <span style='color:#696969; '>[]</span> ;
+ 95: 
+ 96: <span style='color:#696969; '>[прием строки с линии и запись ее на диск]</span>
+ 97: : STOD <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> DERR ABEND</span> @WIBUF <span style='color:#696969; '>[L]</span> <span style='color:#008c00; '>0</span> ' IBUF <span style='color:#074726; '>!</span> AIBUF <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> STOD1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+ 98:   : STOD1 <span style='color:#696969; '>[L]</span> INBLOCK YBL <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> STOD2</span> <span style='color:#696969; '>[L']</span> ;
+ 99:   : STOD2 <span style='color:#696969; '>[L]</span> AIBUF DLIBL OS CH  DLIBL - <span style='color:#696969; '>[L-DLIBL]</span> <span style='color:#074726; '>C</span> EX0 <span style='color:#696969; '>[L']</span> ;
+100:   : ABEND <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>7</span> LOB <span style='color:#696969; '>[]</span> ;
+101:   : @WIBUF <span style='color:#008c00; '>0</span> IBUF <span style='color:#008c00; '>1</span> IBUF <span style='color:#074726; '>SWB</span> + <span style='color:#696969; '>[w]</span> ;
+102: 
+103: <span style='color:#696969; '>[чтение строки с диска и передача ее в линию;</span>
+104: <span style='color:#696969; '> в буфере ввода длина строки (2б)]</span>
+105: : STOL <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> DERR ABEND1</span>  <span style='color:#008c00; '>0</span> ' OBUF <span style='color:#074726; '>!</span> AOBUF
+106:   @WIBUF <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>C</span> LBUF <span style='color:#074726; '>/</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> 1+</span> <span style='color:#696969; '>[L,NBL]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> STOL1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+107:   : STOL1 <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>C</span> LBUF <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> DLOBL AOBUF DLOBL IS CH OUTBLOCK
+108:     <span style='color:#696969; '>[L]</span> DLOBL - <span style='color:#696969; '>[L']</span> ;
+109:   : ABEND1 <span style='color:#696969; '>[]</span> LIB <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '>  4 ABEND</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> <span style='color:#696969; '>[]</span> ;
+110: 
+111: <span style='color:#696969; '>[выбор дисковода]</span>
+112: : NEWDISK <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>4</span> <span style='color:#074726; '>!</span> COMOUT <span style='color:#696969; '>[дай список дисков]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> DLOBL OUTBLOCK
+113:   <span style='color:#008c00; '>0</span> ' IBUF <span style='color:#074726; '>!</span> AIBUF  INBLOCK  AIBUF DLIBL  <span style='color:#008c00; '>0</span> ' DNAM <span style='color:#074726; '>!SB</span>
+114:   DLIBL -<span style='color:#008c00; '>3</span> SHT <span style='color:#074726; '>!</span> NDISC NE1 <span style='color:#696969; '>[]</span> ;
+115:   <span style='color:#696969; '>[меню выбора дисковода]</span>
+116:   : NE1 <span style='color:#696969; '>[]</span><span style='color:#0000e6; '> "Дисководы"</span>
+117:     '' PV2 '' TV2 '' <span style='color:#074726; '>NOP</span> <span style='color:#008c00; '>5</span> 0A NDISC <span style='color:#008c00; '>10</span> <span style='color:#074726; '>MIN</span> <span style='color:#008c00; '>9</span> <span style='color:#008c00; '>0</span> NDISC GLBMEN2 <span style='color:#696969; '>[]</span> ;
+118:   : TV2 <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>1</span>- <span style='color:#008c00; '>3</span> SHT ' DNAM <span style='color:#008c00; '>8</span> <span style='color:#696969; '>[a,8]</span> ;
+119:   : PV2 <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>1</span>- <span style='color:#008c00; '>3</span> SHT ' DNAM <span style='color:#074726; '>!</span> AOBUF <span style='color:#008c00; '>8</span> <span style='color:#074726; '>!</span> DLOBL <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> COMOUT OUTBLOCK
+120:     LIB <span style='color:#008c00; '>1</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> LERR</span> DELWIND <span style='color:#696969; '>[]</span> ;
+121: 
+122:   <span style='color:#696969; '>[установка на файл A,L]</span>
+123:   : SFIL <span style='color:#696969; '>[A,L]</span> !SOBUF <span style='color:#008c00; '>41</span> <span style='color:#074726; '>!</span> COMOUT <span style='color:#008c00; '>0</span> ' OBUF <span style='color:#074726; '>!</span> AOBUF
+124:     OUTBLOCK LIB <span style='color:#008c00; '>1</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> LERR</span> <span style='color:#696969; '>[]</span> ;
+125: 
+126:     : !SOBUF <span style='color:#696969; '>[A,L]</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>0</span> ' OBUF <span style='color:#074726; '>!SB</span>  <span style='color:#074726; '>!</span> DLOBL <span style='color:#696969; '>[]</span> ;
+127:     : !WOBUF <span style='color:#696969; '>[w]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> OBUF <span style='color:#074726; '>SWB</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> OBUF <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>2</span> <span style='color:#074726; '>!</span> DLOBL <span style='color:#696969; '>[]</span> ;
+128: 
+129: <span style='color:#696969; '>[взять длину файла]</span>
+130: : GDLFIL <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>44</span> WCALLFS <span style='color:#696969; '>[L]</span> ;
+131: <span style='color:#696969; '>[открыть файл]</span>
+132: : OPFIL  <span style='color:#696969; '>[]</span>  <span style='color:#008c00; '>42</span> CALLFS <span style='color:#696969; '>[]</span> ;
+133: <span style='color:#696969; '>[открыть файл]</span>
+134: : WOPFIL <span style='color:#696969; '>[]</span>  4A CALLFS <span style='color:#696969; '>[]</span> ;
+135: <span style='color:#696969; '>[закрыть файл]</span>
+136: : CLFIL  <span style='color:#696969; '>[]</span>  <span style='color:#008c00; '>43</span> CALLFS <span style='color:#696969; '>[]</span> ;
+137: <span style='color:#696969; '>[обрезать файл]</span>
+138: : CUTFIL <span style='color:#696969; '>[]</span>  4B CALLFS <span style='color:#696969; '>[]</span> ;
+139: 
+140: <span style='color:#696969; '>[обратиться к команде файловой системы]</span>
+141: : CALLFS <span style='color:#696969; '>[kop]</span> <span style='color:#074726; '>!</span> COMOUT <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> DLOBL OUTBLOCK LIB <span style='color:#008c00; '>1</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> LERR</span> <span style='color:#696969; '>[]</span> ;
+142: 
+143: <span style='color:#696969; '>[обратиттся к команде файловой системы и получить одно слово]</span>
+144: : WCALLFS <span style='color:#696969; '>[kop]</span> CALLFS <span style='color:#008c00; '>0</span> ' IBUF <span style='color:#074726; '>!</span> AIBUF INBLOCK @WIBUF <span style='color:#696969; '>[W]</span> ;
+145: 
+146: <span style='color:#696969; '>[получить строку с диска длиной l и записать ее по адресу a]</span>
+147: : GSTR <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> !WOBUF <span style='color:#008c00; '>47</span> <span style='color:#074726; '>!</span> COMOUT <span style='color:#008c00; '>0</span> ' OBUF <span style='color:#074726; '>!</span> AOBUF
+148:   OUTBLOCK <span style='color:#696969; '>[a,l]</span> LBUF <span style='color:#074726; '>/</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> 1+</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> GST1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+149:   : GST1 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> AIBUF INBLOCK DLIBL + <span style='color:#696969; '>[a+DLIBL]</span> ;
+150: 
+151: <span style='color:#696969; '>[показ файла на экране]</span>
+152: USE $SCRWORK
+153: 
+154: <span style='color:#696969; '>[показ DVK - файла]</span>
+155: : SHDVKFIL <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> LERR SFERRR</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> ESCR WSCOFF</span>
+156:   VVNOMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> SHDFL1 DD</span> <span style='color:#696969; '>[]</span> ;
+157: : SHDFL1 <span style='color:#696969; '>[a,l]</span> CT10 <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>19</span> <span style='color:#008c00; '>50</span> <span style='color:#074726; '>SAVEWIN</span> CLS SCON <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> ESCR WSCOFF</span>
+158:   <span style='color:#008c00; '>0</span> ' PFILE LFIL <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> KOI-ALT <span style='color:#074726; '>TOS</span> SCOFF <span style='color:#696969; '>[]</span> CONT <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>D</span> <span style='color:#074726; '>LOADWIN</span> <span style='color:#696969; '>[]</span> ;
+159: 
+160: : SFERRR WSCOFF ERRR ;
+161: : WSCOFF SCOFF <span style='color:#074726; '>LOADWIN</span> ;
+162: 
+163: <span style='color:#696969; '>[показ IBM-файла]</span>
+164: : SHIBMFIL <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> DERR SFERRR</span> VVNAMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> SHIFL1 DD</span> <span style='color:#696969; '>[]</span> ;
+165: : SHIFL1 <span style='color:#696969; '>[a,l]</span> SAVESCR CLS <span style='color:#008c00; '>0</span> ' COMBUF <span style='color:#696969; '>[A,L,AT]</span><span style='color:#0000e6; '> "TYPE "</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>!SB</span> <span style='color:#696969; '>[A,L,AT]</span>
+166:   <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>5</span> + <span style='color:#074726; '>!SB</span> <span style='color:#074726; '>E3</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>5</span> + TEXEC <span style='color:#696969; '>[]</span> CONT <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>D</span> <span style='color:#074726; '>LOADWIN</span> <span style='color:#696969; '>[]</span> ;
+167: 
+168: MLPATHNAME <span style='color:#008c00; '>5</span> + <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR COMBUF</span> <span style='color:#696969; '>[буфер для формирования команды]</span>
+169: : CONT <span style='color:#074726; '>CR</span><span style='color:#0000e6; '> ."               *$ Нажмите любую клавишу для продолжения $*"</span> ;
+170: 
+171: <span style='color:#696969; '>[перекодировка КОИ-8 -> АЛЬТЕРНАТИВНАЯ]</span>
+172: : KOI-ALT <span style='color:#696969; '>[a,l]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> KO1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+173:   : KO1 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> @B  0C0 0FF <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> KO2</span>  <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+174:     : KO2 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> @B 0C0 - TALT <span style='color:#696969; '>[a,c]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[a]</span> ;
+175: 
+176: <span style='color:#696969; '>[перекодировка АЛЬТЕРНАТИВНАЯ -> КОИ-8]</span>
+177: : ALT-KOI <span style='color:#696969; '>[a,l]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ALT1</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+178:   : ALT1 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> @B <span style='color:#696969; '>[a,k]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>80</span> 0AF <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ALT2 ALT3</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+179:     : ALT2 <span style='color:#696969; '>[a,k]</span> <span style='color:#008c00; '>80</span> - TKOI1 <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[a]</span> ;
+180:     : ALT3 <span style='color:#696969; '>[a,k]</span> <span style='color:#074726; '>C</span> <span style='color:#008000; '>0E0</span> 0EF <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ALT4 D</span> <span style='color:#696969; '>[a]</span> ;
+181:       : ALT4 <span style='color:#696969; '>[a,k]</span> <span style='color:#008000; '>0E0</span> - TKOI2 <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[a]</span> ;
+182: 
+183: <span style='color:#074726; '>B10</span>
+184: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST TALT</span>
+185: <span style='color:#008c00; '>238</span> <span style='color:#008c00; '>160</span> <span style='color:#008c00; '>161</span> <span style='color:#008c00; '>230</span> <span style='color:#008c00; '>164</span> <span style='color:#008c00; '>165</span> <span style='color:#008c00; '>228</span> <span style='color:#008c00; '>163</span> <span style='color:#008c00; '>229</span> <span style='color:#008c00; '>168</span> <span style='color:#008c00; '>169</span> <span style='color:#008c00; '>170</span> <span style='color:#008c00; '>171</span> <span style='color:#008c00; '>172</span> <span style='color:#008c00; '>173</span> <span style='color:#008c00; '>174</span>
+186: <span style='color:#008c00; '>175</span> <span style='color:#008c00; '>239</span> <span style='color:#008c00; '>224</span> <span style='color:#008c00; '>225</span> <span style='color:#008c00; '>226</span> <span style='color:#008c00; '>227</span> <span style='color:#008c00; '>166</span> <span style='color:#008c00; '>162</span> <span style='color:#008c00; '>236</span> <span style='color:#008c00; '>235</span> <span style='color:#008c00; '>167</span> <span style='color:#008c00; '>232</span> <span style='color:#008c00; '>237</span> <span style='color:#008c00; '>233</span> <span style='color:#008c00; '>231</span> <span style='color:#008c00; '>234</span>
+187: <span style='color:#008c00; '>158</span> <span style='color:#008c00; '>128</span> <span style='color:#008c00; '>129</span> <span style='color:#008c00; '>150</span> <span style='color:#008c00; '>132</span> <span style='color:#008c00; '>133</span> <span style='color:#008c00; '>148</span> <span style='color:#008c00; '>131</span> <span style='color:#008c00; '>149</span> <span style='color:#008c00; '>136</span> <span style='color:#008c00; '>137</span> <span style='color:#008c00; '>138</span> <span style='color:#008c00; '>139</span> <span style='color:#008c00; '>140</span> <span style='color:#008c00; '>141</span> <span style='color:#008c00; '>142</span>
+188: <span style='color:#008c00; '>143</span> <span style='color:#008c00; '>159</span> <span style='color:#008c00; '>144</span> <span style='color:#008c00; '>145</span> <span style='color:#008c00; '>146</span> <span style='color:#008c00; '>147</span> <span style='color:#008c00; '>134</span> <span style='color:#008c00; '>130</span> <span style='color:#008c00; '>156</span> <span style='color:#008c00; '>155</span> <span style='color:#008c00; '>135</span> <span style='color:#008c00; '>152</span> <span style='color:#008c00; '>157</span> <span style='color:#008c00; '>153</span> <span style='color:#008c00; '>151</span> <span style='color:#008c00; '>219</span> ;
+189: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST TKOI1</span>
+190: <span style='color:#008c00; '>225</span> <span style='color:#008c00; '>226</span> <span style='color:#008c00; '>247</span> <span style='color:#008c00; '>231</span> <span style='color:#008c00; '>228</span> <span style='color:#008c00; '>229</span> <span style='color:#008c00; '>246</span> <span style='color:#008c00; '>250</span> <span style='color:#008c00; '>233</span> <span style='color:#008c00; '>234</span> <span style='color:#008c00; '>235</span> <span style='color:#008c00; '>236</span> <span style='color:#008c00; '>237</span> <span style='color:#008c00; '>238</span> <span style='color:#008c00; '>239</span> <span style='color:#008c00; '>240</span>
+191: <span style='color:#008c00; '>242</span> <span style='color:#008c00; '>243</span> <span style='color:#008c00; '>244</span> <span style='color:#008c00; '>245</span> <span style='color:#008c00; '>230</span> <span style='color:#008c00; '>232</span> <span style='color:#008c00; '>227</span> <span style='color:#008c00; '>254</span> <span style='color:#008c00; '>251</span> <span style='color:#008c00; '>253</span> <span style='color:#008c00; '>255</span> <span style='color:#008c00; '>249</span> <span style='color:#008c00; '>248</span> <span style='color:#008c00; '>252</span> <span style='color:#008c00; '>224</span> <span style='color:#008c00; '>241</span>
+192: <span style='color:#008c00; '>193</span> <span style='color:#008c00; '>194</span> <span style='color:#008c00; '>215</span> <span style='color:#008c00; '>199</span> <span style='color:#008c00; '>196</span> <span style='color:#008c00; '>197</span> <span style='color:#008c00; '>214</span> <span style='color:#008c00; '>218</span> <span style='color:#008c00; '>201</span> <span style='color:#008c00; '>202</span> <span style='color:#008c00; '>203</span> <span style='color:#008c00; '>204</span> <span style='color:#008c00; '>205</span> <span style='color:#008c00; '>206</span> <span style='color:#008c00; '>207</span> <span style='color:#008c00; '>208</span> ;
+193: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST TKOI2</span>
+194: <span style='color:#008c00; '>210</span> <span style='color:#008c00; '>211</span> <span style='color:#008c00; '>212</span> <span style='color:#008c00; '>213</span> <span style='color:#008c00; '>198</span> <span style='color:#008c00; '>200</span> <span style='color:#008c00; '>195</span> <span style='color:#008c00; '>222</span> <span style='color:#008c00; '>219</span> <span style='color:#008c00; '>221</span> <span style='color:#008c00; '>233</span> <span style='color:#008c00; '>217</span> <span style='color:#008c00; '>216</span> <span style='color:#008c00; '>220</span> <span style='color:#008c00; '>192</span> <span style='color:#008c00; '>209</span> ;
+195: 
+196: <span style='color:#074726; '>B16</span>
+197: <span style='color:#696969; '>[копирование двоичного файла с PDP на IBM]</span>
+198: : CN.<span style='color:#074726; '>D</span>-I <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> LERR ERRR</span>  <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span>  VVNOMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CN1 DD</span> <span style='color:#696969; '>[]</span> ;
+199:   : CN1 <span style='color:#696969; '>[a,l]</span> WAITI SFIL OPFIL GDLFIL <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>!</span> LFIL <span style='color:#008c00; '>0</span> ' PFILE LFIL GSTR CLFIL
+200:     DELWIND VVNAMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CN2 DD</span> <span style='color:#696969; '>[]</span> ;
+201:     : CN2 <span style='color:#696969; '>[a,l]</span> WAITS CONNECT CH  WOPEN CH
+202:       <span style='color:#008c00; '>0</span> ' PFILE LFIL OS CH CLOSE CH DELWIND <span style='color:#696969; '>[]</span> ;
+203: 
+204: <span style='color:#696969; '>[ввод имени файла IBM]</span>
+205: : VVNAMF <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 24</span> '' TV4  <span style='color:#008c00; '>8</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>20</span> GENVVOD IBFNAME
+206:   IBFNAME <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> DD*.*</span> <span style='color:#696969; '>[A,L]</span> SEL <span style='color:#696969; '>[A,L]</span> ;
+207:   : TV4 <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>D</span><span style='color:#0000e6; '> "Введите имя файла IBM"</span> <span style='color:#696969; '>[A,L]</span> ;
+208:   : <span style='color:#074726; '>DD</span>*.<span style='color:#074726; '>*</span> <span style='color:#074726; '>DD</span><span style='color:#0000e6; '> "*.DSP"</span> ;
+209: 
+210:  <span style='color:#696969; '>[ввод имени файла PDP]</span>
+211:  : VVNOMF <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 25</span> '' TV3  <span style='color:#008c00; '>8</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>20</span> GENVVOD PBFNAME
+212:    PBFNAME <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> DDPDIR0</span> ;
+213:    : TV3 <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>D</span><span style='color:#0000e6; '> "Введите имя файла DVK"</span> <span style='color:#696969; '>[A,L]</span> ;
+214:    : DDPDIR0 <span style='color:#074726; '>DD</span> PDPDIR0 ;
+215: 
+216: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>40</span> <span style='color:#074726; '>STRING PBFNAME</span>
+217: 
+218: <span style='color:#696969; '>[копирование текстового файла с PDP на IBM]</span>
+219: : CT.<span style='color:#074726; '>D</span>-I <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> LERR ERRR</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span>
+220:   VVNOMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CT1 DD</span> <span style='color:#696969; '>[]</span> ;
+221:   : CT1 <span style='color:#696969; '>[a,l]</span> CT10 VVNAMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CT2 DD</span> <span style='color:#696969; '>[]</span> ;
+222: <span style='color:#696969; '>[CT10 - ввод текстового файла в буфер]</span>
+223: : CT10 <span style='color:#696969; '>[a,l]</span> WAITI
+224:   SFIL  OPFIL GDLFIL <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>!</span> LFIL <span style='color:#008c00; '>0</span> ' PFILE LFIL GSTR CLFIL DELWIND <span style='color:#696969; '>[]</span> ;
+225:   : CT2 <span style='color:#696969; '>[a,l]</span> WAITS CONNECT CH  WOPEN CH
+226:     <span style='color:#008c00; '>0</span> ' PFILE LFIL KOI-ALT <span style='color:#008c00; '>0</span> ' PFILE LFIL <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> CT3</span> <span style='color:#074726; '>D</span> CLOSE CH DELWIND <span style='color:#696969; '>[]</span> ;
+227:   : CT3 <span style='color:#696969; '>[a]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> 0A <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> CT4</span> OB CH <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+228:   : CT4 <span style='color:#696969; '>[]</span> 0D OB CH <span style='color:#696969; '>[]</span> ;
+229: 
+230: <span style='color:#696969; '>[копирование текстового файла с IBM на DEC]</span>
+231: : CT.I-<span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> LERR ERRR</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span>
+232:   VVNAMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CNN2 DD</span> <span style='color:#696969; '>[]</span> ;
+233:   : CNN2 <span style='color:#696969; '>[a,l]</span> WAITS CONNECT CH  OPEN CH <span style='color:#008c00; '>0</span> ' PFILE  LENB CH <span style='color:#074726; '>!</span> LFIL
+234:     LFIL <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> CNN3</span> <span style='color:#074726; '>D</span> CLOSE CH <span style='color:#008c00; '>0</span> ' PFILE LFIL ALT-KOI DELWIND
+235:     VVNOMF <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CNN1 DD</span> <span style='color:#696969; '>[]</span> ;
+236:     : CNN1 <span style='color:#696969; '>[A,L]</span> WAITI SFIL WOPFIL  <span style='color:#008c00; '>0</span> ' PFILE LFIL SSTR
+237:       CLFIL CUTFIL DELWIND <span style='color:#696969; '>[]</span> ;
+238:  : CNN3 <span style='color:#696969; '>[a]</span> IB CH <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 0D CNN4 1A CNN4 9 CNN6</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> CNN5</span> <span style='color:#696969; '>[a']</span> ;
+239:  : CNN4 <span style='color:#696969; '>[a,0D]</span> <span style='color:#074726; '>D</span> LFIL <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!</span> LFIL <span style='color:#696969; '>[a]</span> ;
+240:  : CNN5 <span style='color:#696969; '>[a,k]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[a+1]</span> ;
+241:  : CNN6 <span style='color:#696969; '>[a,9]</span> <span style='color:#074726; '>D</span> #   CNN5 <span style='color:#696969; '>[a+1]</span> ;
+242: 
+243: <span style='color:#696969; '>[передача строки в линию поблочно для записи на диск]</span>
+244: : SSTR <span style='color:#696969; '>[A,L]</span> <span style='color:#074726; '>C</span> LBUF <span style='color:#074726; '>/</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> 1+</span> <span style='color:#696969; '>[A,L,NBL]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SSTR1</span> <span style='color:#074726; '>DD</span> <span style='color:#696969; '>[]</span> ;
+245:   : SSTR1 <span style='color:#696969; '>[A,L]</span> <span style='color:#074726; '>C</span> LBUF <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> DLOBL <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!</span> AOBUF <span style='color:#696969; '>[A,L]</span>
+246:     <span style='color:#008c00; '>48</span> <span style='color:#074726; '>!</span> COMOUT OUTBLOCK  LIB <span style='color:#008c00; '>1</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> LERR</span>
+247:     <span style='color:#696969; '>[A,L]</span> DLOBL - <span style='color:#696969; '>[A,L']</span> <span style='color:#074726; '>E2</span> DLOBL + <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[A',L']</span> ;
+248: 
+249: <span style='color:#696969; '>[копирование двоичного файла с IBM на DEC]</span>
+250: : CN.I-<span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( XORD YORD )</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> LERR ERRR</span>
+251:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 2</span> <span style='color:#008c00; '>2</span> <span style='color:#074726; '>!</span> YORD <span style='color:#008c00; '>2</span> <span style='color:#074726; '>!</span> XORD<span style='color:#0000e6; '> "*.*"</span> SEL <span style='color:#696969; '>[a,l]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CTN2 DD</span> <span style='color:#696969; '>[]</span> ;
+252:   : CTN2 <span style='color:#696969; '>[a,l]</span> WAITS CONNECT CH  OPEN CH
+253:     <span style='color:#008c00; '>0</span> ' PFILE LENB CH <span style='color:#074726; '>!</span> LFIL LFIL IS CH CLOSE CH DELWIND
+254:     VVNOMF <span style='color:#696969; '>[f]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CTN1 D</span> <span style='color:#696969; '>[]</span> ;
+255:     : CTN1 <span style='color:#696969; '>[A,L]</span> WAITI SFIL WOPFIL <span style='color:#008c00; '>0</span> ' PFILE LFIL SSTR
+256:       CLFIL CUTFIL DELWIND <span style='color:#696969; '>[]</span> ;
+257: 
+258: :: <span style='color:#074726; '>TRAP LERR</span> <span style='color:#074726; '>NOP</span>
+259: 
+260: <span style='color:#008c00; '>10</span> %IF
+261: <span style='color:#696969; '>[*********   PDP DIR ***********]</span>
+262: <span style='color:#074726; '>B10</span>
+263: : PDPDIR PDPDIR0 <span style='color:#074726; '>DD</span> <span style='color:#696969; '>[]</span> ;
+264: 
+265: <span style='color:#696969; '>[PDPDIR0 - получение списка имен файлов на ДВК]</span>
+266: : PDPDIR0 <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> NOF NOP</span> <span style='color:#008c00; '>0</span> CALLFS <span style='color:#074726; '>!0</span> QFILES MFS0 MFS1 MFS2 MFS3 <span style='color:#696969; '>[A,L]</span> ;
+267: 
+268: <span style='color:#696969; '>[**********************************************]</span>
+269: 
+270: <span style='color:#696969; '>[MFS0 - поиск первого вхождения, если нет - NOF]</span>
+271: : MFS0 <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> ' IBUF <span style='color:#074726; '>!</span> AIBUF INBLOCK DLIBL <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> NOF</span> <span style='color:#696969; '>[]</span> ;
+272: 
+273: <span style='color:#696969; '>[MFS1 - просмотр директория, заполнение данных]</span>
+274: : MFS1 <span style='color:#696969; '>[]</span> MQFILES <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> MFS11</span> <span style='color:#696969; '>[]</span> ;
+275: 
+276: <span style='color:#696969; '>[MFS2 - сортировка имен файлов методом пузырька]</span>
+277: : MFS2 <span style='color:#696969; '>[]</span> QFILES <span style='color:#074726; '>C</span> <span style='color:#008c00; '>1</span>- <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> MFS20</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+278: 
+279: <span style='color:#696969; '>[MFS3 - выдача меню ]</span>
+280: : MFS3 <span style='color:#696969; '>[]</span><span style='color:#0000e6; '> " Выберите файл"</span> '' MFS3P '' MFS3T <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>14</span> <span style='color:#008c00; '>27</span> <span style='color:#008c00; '>10</span> L1PFILE <span style='color:#008c00; '>10</span> + <span style='color:#008c00; '>0</span> QFILES
+281:   GLBMEN2 <span style='color:#696969; '>[]</span> NOMFILE AFNAME <span style='color:#696969; '>[Aname]</span> <span style='color:#074726; '>SP</span> <span style='color:#074726; '>C2</span> L1PFILE <span style='color:#074726; '>SRCHB</span> <span style='color:#696969; '>[Aname,Lname]</span> ;
+282: 
+283: <span style='color:#696969; '>[**********************************************]</span>
+284: <span style='color:#074726; '>B10</span>
+285: <span style='color:#696969; '>[MFS11 - заполнение массива с файловыми именами]</span>
+286: : MFS11 <span style='color:#696969; '>[]</span> <span style='color:#696969; '>[заполненный DTA]</span>  QFILES L1PFILE <span style='color:#074726; '>*</span> <span style='color:#696969; '>[index]</span>
+287:   <span style='color:#074726; '>!1+</span> QFILES <span style='color:#696969; '>[]</span> QFILES <span style='color:#074726; '>!</span> FLSPTR <span style='color:#696969; '>[]</span> MFS2NAME <span style='color:#696969; '>[]</span> SRCHNXT <span style='color:#696969; '>[]</span> ;
+288: 
+289: <span style='color:#696969; '>[MFS2NAME - пересылка имени]</span>
+290: : MFS2NAME <span style='color:#696969; '>[]</span> <span style='color:#074726; '>SP</span> QFILES AFNAME L1PFILE !!<span style='color:#074726; '>!MB</span> <span style='color:#696969; '>[]</span>
+291:   AIBUF <span style='color:#696969; '>[Адрес имени]</span> DLIBL <span style='color:#696969; '>[A,L]</span> QFILES AFNAME <span style='color:#074726; '>!SB</span> <span style='color:#696969; '>[]</span> ;
+292: 
+293: <span style='color:#074726; '>B16</span>
+294: <span style='color:#696969; '>[SRCHNXT - поиск следующего входа и заполнение DTA, выход если нет]</span>
+295: : SRCHNXT <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> ' IBUF <span style='color:#074726; '>!</span> AIBUF INBLOCK DLIBL EX0 <span style='color:#696969; '>[]</span> ;
+296: 
+297: <span style='color:#696969; '>[**********************************************]</span>
+298: <span style='color:#074726; '>B10</span>
+299: <span style='color:#696969; '>[MFS20 - булыжник тонет (последнее по алфавиту имя) на глубину fdeep]</span>
+300: : MFS20 <span style='color:#696969; '>[fdeep]</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>1</span>- <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> MFS21</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>1</span>- <span style='color:#696969; '>[fdeep-1]</span> ;
+301: 
+302: <span style='color:#696969; '>[MFS21 - упорядочение двух имен с глубины cdeep и cdeep-1]</span>
+303: : MFS21 <span style='color:#696969; '>[cdeep]</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[cdeep+1]</span> CMP-<span style='color:#008c00; '>1</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> XCHG-1</span> <span style='color:#696969; '>[cdeep+1]</span> ;
+304: 
+305: <span style='color:#696969; '>[CMP-1 - сравнение i-го и i-1-го имени, 1-упорядочены, 0-иначе]</span>
+306: : CMP-<span style='color:#008c00; '>1</span> <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>C2</span> AFNAME <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>1</span>- AFNAME <span style='color:#696969; '>[i,1,Ai,Ai-1]</span>
+307:   L1PFILE <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> CMP12</span> <span style='color:#074726; '>DD</span> <span style='color:#696969; '>[i,1/0]</span> ;
+308: : CMP12 <span style='color:#696969; '>[1,Ai,Ai-1]</span> <span style='color:#074726; '>C</span> @B #  <span style='color:#074726; '>=</span> EX+
+309:   <span style='color:#074726; '>C2</span> @B <span style='color:#074726; '>C2</span> @B - <span style='color:#800000; font-weight:bold; '>BRS</span><span style='color:#004a43; '> CMP13 NOP EX</span> <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[,,]</span> ;
+310: : CMP13 <span style='color:#074726; '>T0</span> <span style='color:#074726; '>E3</span> <span style='color:#696969; '>[0,*,*]</span> EX ;
+311: 
+312: <span style='color:#696969; '>[XCHG-1 - обмен i-го и i-1-го имени]</span>
+313: : XCHG-<span style='color:#008c00; '>1</span> <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>C</span> FLSPTR <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>1</span>- FLSPTR <span style='color:#074726; '>C3</span> <span style='color:#074726; '>!</span> FLSPTR <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!</span> FLSPTR <span style='color:#696969; '>[i]</span> ;
+314: 
+315: <span style='color:#696969; '>[**********************************************]</span>
+316: <span style='color:#074726; '>B10</span>
+317: <span style='color:#696969; '>[MFS3P - выбрано i-е имя файла]</span>
+318: : MFS3P <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>!</span> NOMFILE DELWIND <span style='color:#696969; '>[]</span> ;
+319: 
+320: <span style='color:#696969; '>[ WORD VAR NOMFILE ]</span>
+321: : MFS3T <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>!</span> NOMFILE <span style='color:#696969; '>[]</span><span style='color:#0000e6; '> "                    "</span> #  <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> !!<span style='color:#074726; '>!MB</span> <span style='color:#696969; '>[A,L]</span>
+322:   NOMFILE AFNAME L1PFILE <span style='color:#696969; '>[A,L,Aname,Lname]</span> <span style='color:#074726; '>C4</span> <span style='color:#008c00; '>4</span>+ <span style='color:#074726; '>!SB</span> <span style='color:#696969; '>[A,L]</span> ;
+323: 
+324: <span style='color:#696969; '>[**********************************************]</span>
+325: <span style='color:#696969; '>[AFNAME - получение адреса имени файла в FLSNAME для файла i]</span>
+326: : AFNAME <span style='color:#696969; '>[i]</span> FLSPTR ' FLSNAME <span style='color:#696969; '>[A]</span> ;
+327: <span style='color:#696969; '>[**********************************************]</span>
+328: 
+329: <span style='color:#074726; '>B10</span> <span style='color:#696969; '>[ДАННЫЕ]</span>
+330: <span style='color:#696969; '>[MQFILES - максимально допустимое число файлов]</span>
+331: <span style='color:#008c00; '>200</span> <span style='color:#074726; '>VALUE MQFILES</span>
+332: 
+333: <span style='color:#696969; '>[QFILES - текущее число обрабатываемых или найденных имен файлов]</span>
+334: <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR QFILES</span>
+335: 
+336: <span style='color:#696969; '>[L1PFILE - число байтов, отводимое под один файл]</span>
+337: <span style='color:#696969; '>[7 - длина имени]</span>
+338: <span style='color:#008c00; '>7</span> <span style='color:#074726; '>VALUE L1PFILE</span> <span style='color:#696969; '>[только имя]</span> ;
+339: 
+340: <span style='color:#696969; '>[FLSNAME - вектор, где хранятся имена файлов, всего QFILES &lt; MQFILES,</span>
+341: <span style='color:#696969; '>           на каждый файл отводится L1PFILE (от 0)]</span>
+342: MQFILES L1PFILE <span style='color:#074726; '>*</span> <span style='color:#074726; '>BYTE</span> <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>VCTR FLSNAME</span>
+343: 
+344: <span style='color:#696969; '>[FLSPTR - вектор, где хранятся указатели на FLSNAME -</span>
+345: <span style='color:#696969; '>          используетс и при сортировке и при доступе (1 .. QFILES)]</span>
+346: <span style='color:#074726; '>WORD</span> MQFILES <span style='color:#074726; '>VCTR FLSPTR</span>
+347: %FI
+348: 
+349: <span style='color:#074726; '>UNDEF</span>
+350: 
+</pre></body></html>

@@ -1,0 +1,155 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>(***************************************************</span>
+  1: <span style='color:#696969; '>ssssssssssssssssssssssssssssssssss</span>
+  2: <span style='color:#696969; '>ssssssssssssssssssssssssssssssssss</span>
+  3: <span style='color:#696969; '>***************************************************)</span>
+  4: 
+  5: <span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span> вырезать в test<span style='color:#808030; '>.</span>pas <span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span><span style='color:#808030; '>*</span> <span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span><span style='color:#808030; '>-</span>
+  6: 
+  7:   <span style='color:#800000; font-weight:bold; '>if</span> Pos<span style='color:#808030; '>(</span>ReplaceDialog1<span style='color:#808030; '>.</span>FindText<span style='color:#808030; '>,</span>  Memo1<span style='color:#808030; '>.</span><span style='color:#bb7977; '>Text</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+  8: 
+  9: 
+ 10: <span style='color:#800000; font-weight:bold; '>program</span> Test_Colors<span style='color:#800080; '>;</span>
+ 11: 
+ 12: <span style='color:#696969; '>{</span>
+ 13: <span style='color:#696969; '>Добавить в список зарезервированных слов Delphi (Pascal.Hrc):</span>
+ 14: <span style='color:#696969; '>  cdecl</span>
+ 15: <span style='color:#696969; '>  stdcall</span>
+ 16: <span style='color:#696969; '>  pascal</span>
+ 17: <span style='color:#696969; '>  register</span>
+ 18: <span style='color:#696969; '>  safecall</span>
+ 19: <span style='color:#696969; '>  default</span>
+ 20: <span style='color:#696969; '>  nodefault</span>
+ 21: <span style='color:#696969; '>  message</span>
+ 22: <span style='color:#696969; '>  read</span>
+ 23: <span style='color:#696969; '>  write</span>
+ 24: <span style='color:#696969; '>}</span>
+ 25: 
+ 26: <span style='color:#696969; '>{ Приколы с asm-блоком в Pascal'e</span>
+ 27: <span style='color:#696969; '>  Пишу, потому что сам Borland выделяет правильно! :-) }</span>
+ 28: <span style='color:#800000; font-weight:bold; '>procedure</span> TestAsmBlock1<span style='color:#800080; '>;</span> <span style='color:#696969; '>{проверка asm-блока}</span>
+ 29: <span style='color:#800000; font-weight:bold; '>begin</span>
+ 30:   <span style='color:#800000; font-weight:bold; '>asm</span>
+ 31: <span style='color:#e34adc; '>   loop1:</span>   <span style='color:#696969; '>{это метка}</span>
+ 32: <span style='color:#e34adc; '>   @@loop2:</span> <span style='color:#696969; '>{это метка}</span>
+ 33: <span style='color:#e34adc; '>   @loop:</span>   <span style='color:#696969; '>{это тоже метка, а цветом не выделилась}</span>
+ 34: <span style='color:#808030; '>;</span>      <span style='color:#800000; font-weight:bold; '>inc</span> <span style='color:#000080; '>dx</span>      <span style='color:#696969; '>{эта строка НЕ закомметирована, а цветом выделяется}</span>
+ 35:                    <span style='color:#696969; '>{здесь ';' - "пустой" оператор}</span>
+ 36: <span style='color:#696969; '>//      inc dx      эта строка закомметирована, цветом не выделяется</span>
+ 37:     <span style='color:#800000; font-weight:bold; '>mov</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>1</span>       <span style='color:#696969; '>{это комметарий в asm-блоке, цветом не выделяется}</span>
+ 38:     <span style='color:#800000; font-weight:bold; '>int</span> <span style='color:#008000; '>16h</span>
+ 39:     <span style='color:#800000; font-weight:bold; '>or</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#000080; '>ah</span>
+ 40:     <span style='color:#800000; font-weight:bold; '>je</span> <span style='color:#e34adc; '>@end</span>         <span style='color:#696969; '>{здесь '@end' метка, а не зарезервированное слово}</span>
+ 41:     <span style='color:#800000; font-weight:bold; '>jmp</span> <span style='color:#e34adc; '>@loop</span>
+ 42: <span style='color:#e34adc; '>   @end:</span>            <span style='color:#696969; '>{это та же метка}</span>
+ 43:     <span style='color:#800000; font-weight:bold; '>mov</span> Variable<span style='color:#808030; '>,</span> <span style='color:#008c00; '>2</span>
+ 44:  <span style='color:#800000; font-weight:bold; '> end</span><span style='color:#800080; '>;</span>
+ 45:   WriteLn<span style='color:#808030; '>(</span>Variable<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 46: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+ 47: 
+ 48: <span style='color:#800000; font-weight:bold; '>procedure</span> TestAsmBlock21<span style='color:#800080; '>;</span> <span style='color:#696969; '>{еще примерчик}</span>
+ 49: <span style='color:#800000; font-weight:bold; '>begin</span>
+ 50:   <span style='color:#800000; font-weight:bold; '>if</span> Variable <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 51:   <span style='color:#800000; font-weight:bold; '>begin</span>
+ 52:     Variable <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
+ 53:     <span style='color:#800000; font-weight:bold; '>asm</span>
+ 54: <span style='color:#e34adc; '>     @loop:</span>
+ 55:       <span style='color:#800000; font-weight:bold; '>mov</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>int</span> <span style='color:#008000; '>16h</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>{так тоже можно писать, а выделяется неправильно}</span>
+ 56:       <span style='color:#800000; font-weight:bold; '>or</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#000080; '>ah</span>
+ 57:       <span style='color:#800000; font-weight:bold; '>je</span> <span style='color:#e34adc; '>@end</span>
+ 58:       <span style='color:#800000; font-weight:bold; '>jmp</span> <span style='color:#e34adc; '>@loop</span>
+ 59: <span style='color:#e34adc; '>     @end:</span>
+ 60:    <span style='color:#800000; font-weight:bold; '> end</span>            <span style='color:#696969; '>{здесь после 'end' - ';' не обязательна, но это конец блока}</span>
+ 61:   <span style='color:#800000; font-weight:bold; '>end</span> <span style='color:#800000; font-weight:bold; '>else</span>         <span style='color:#696969; '>{это пошел уже не asm-блок}</span>
+ 62:     Variable <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>
+ 63:   Inc<span style='color:#808030; '>(</span>Variable<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span> WriteLn<span style='color:#808030; '>(</span>Variable<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 64: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+ 65: 
+ 66: <span style='color:#800000; font-weight:bold; '>procedure</span> TestAsmBlock22<span style='color:#800080; '>;</span> <span style='color:#696969; '>{та же процедурка с маленьким изменением}</span>
+ 67: <span style='color:#800000; font-weight:bold; '>begin</span>
+ 68:   <span style='color:#800000; font-weight:bold; '>if</span> Variable <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 69:   <span style='color:#800000; font-weight:bold; '>begin</span>
+ 70:     Variable <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
+ 71:     <span style='color:#800000; font-weight:bold; '>asm</span>
+ 72: <span style='color:#e34adc; '>     @loop:</span>
+ 73:       <span style='color:#800000; font-weight:bold; '>mov</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>1</span>
+ 74:       <span style='color:#800000; font-weight:bold; '>int</span> <span style='color:#008000; '>16h</span>
+ 75:       <span style='color:#800000; font-weight:bold; '>or</span> <span style='color:#000080; '>ah</span><span style='color:#808030; '>,</span> <span style='color:#000080; '>ah</span>
+ 76:       <span style='color:#800000; font-weight:bold; '>je</span> <span style='color:#e34adc; '>@end</span>
+ 77:       <span style='color:#800000; font-weight:bold; '>jmp</span> <span style='color:#e34adc; '>@loop</span>
+ 78: <span style='color:#e34adc; '>     @end:</span>
+ 79:    <span style='color:#800000; font-weight:bold; '> end</span>           <span style='color:#696969; '>{это тоже конец блока}</span>
+ 80:   <span style='color:#800000; font-weight:bold; '>end</span> <span style='color:#800000; font-weight:bold; '>else</span>
+ 81:     Variable <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>
+ 82:   Inc<span style='color:#808030; '>(</span>Variable<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span> WriteLn<span style='color:#808030; '>(</span>Variable<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 83: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+ 84: 
+ 85: <span style='color:#800000; font-weight:bold; '>begin</span>
+ 86:   Ch <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>#32</span><span style='color:#800080; '>;</span>  <span style='color:#696969; '>{это символ пробела}</span>
+ 87:   Ch <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>#$20</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>{это тоже символ пробела, но он не выделился}</span>
+ 88:   f <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008000; '>4.93e33</span><span style='color:#800080; '>;</span>
+ 89:   i <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>$3fa33</span><span style='color:#800080; '>;</span>
+ 90:   i <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>$3fa33</span><span style='color:#800080; '>;</span>   <span style='color:#696969; '>// ? :=</span>
+ 91:   i <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>23</span><span style='color:#808030; '>..</span><span style='color:#008c00; '>33</span><span style='color:#800080; '>;</span>
+ 92:   i <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>984</span><span style='color:#800080; '>;</span>
+ 93:   <span style='color:#008000; '>5.4</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span>  <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>$3Fg</span>
+ 94:   <span style='color:#008000; '>5.4</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span>
+ 95:   <span style='color:#800000; font-weight:bold; '>safecall</span> <span style='color:#008c00; '>23</span>
+ 96:   <span style='color:#696969; '>// from tst.asm</span>
+ 97:   <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span>  <span style='color:#008000; '>.1</span>
+ 98:   <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span> <span style='color:#008000; '>.1</span>         <span style='color:#696969; '>// &lt;?</span>
+ 99:   <span style='color:#008c00; '>1</span><span style='color:#808030; '>..</span><span style='color:#008c00; '>1</span>
+100:   <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span> <span style='color:#808030; '>..</span><span style='color:#808030; '>..</span><span style='color:#008000; '>.1</span><span style='color:#808030; '>..</span><span style='color:#008000; '>.1</span>
+101:   <span style='color:#008c00; '>0</span><span style='color:#808030; '>..</span><span style='color:#008000; '>.1e2</span>
+102:   <span style='color:#008000; '>1.1</span><span style='color:#808030; '>.</span><span style='color:#008000; '>1e-1</span>
+103:   <span style='color:#808030; '>)</span><span style='color:#008000; '>.3</span>
+104: <span style='color:#008000; '>.3</span> <span style='color:#008000; '>.3</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+105: <span style='color:#008c00; '>3</span><span style='color:#808030; '>.</span>
+106: <span style='color:#008c00; '>3</span><span style='color:#808030; '>.</span><span style='color:#808030; '>(</span>dfd<span style='color:#808030; '>)</span>
+107:     <span style='color:#008000; '>3e3</span>
+108: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#808030; '>.</span>
+109: 
+110: 
+111: 
+112: <span style='color:#696969; '>// Tested on Colorer 2.8</span>
+113: 
+114: <span style='color:#696969; '>//  БАГИ с "end"</span>
+115: 
+116:  <span style='color:#800000; font-weight:bold; '>begin</span>
+117: 
+118:     <span style='color:#800000; font-weight:bold; '>asm</span>
+119:         <span style='color:#800000; font-weight:bold; '>xor</span> <span style='color:#000080; '>eax</span><span style='color:#808030; '>,</span><span style='color:#000080; '>eax</span>
+120:         <span style='color:#696969; '>// sdffffdsfdfds</span>
+121: <span style='color:#800000; font-weight:bold; '> end</span><span style='color:#800080; '>;</span>
+122:   <span style='color:#696969; '>//</span>
+123:  <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+124:   <span style='color:#696969; '>//</span>
+125: 
+126: <span style='color:#800000; font-weight:bold; '>begin</span>
+127:  <span style='color:#800000; font-weight:bold; '>asm</span>
+128:      <span style='color:#800000; font-weight:bold; '>xor</span> <span style='color:#000080; '>ax</span><span style='color:#808030; '>,</span><span style='color:#000080; '>ax</span>
+129:      <span style='color:#696969; '>//  xor ax,ax</span>
+130: <span style='color:#800000; font-weight:bold; '> end</span><span style='color:#800080; '>;</span>
+131: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+132: 
+133: 
+134: <span style='color:#696969; '>// А ЗДЕСЬ ВСЕ ОК. Какая то зависимость от отступа ( при сдвиге "end" влево/вправо ).</span>
+135: 
+136:  <span style='color:#800000; font-weight:bold; '>begin</span>
+137: 
+138:     <span style='color:#800000; font-weight:bold; '>asm</span>
+139:         <span style='color:#800000; font-weight:bold; '>xor</span> <span style='color:#000080; '>eax</span><span style='color:#808030; '>,</span><span style='color:#000080; '>eax</span>
+140:         <span style='color:#696969; '>// sdffffdsfdfds</span>
+141:  <span style='color:#800000; font-weight:bold; '> end</span><span style='color:#800080; '>;</span>
+142: 
+143:  <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+144: 
+145: 
+146: <span style='color:#800000; font-weight:bold; '>begin</span>
+147:  <span style='color:#800000; font-weight:bold; '>asm</span>
+148:      <span style='color:#800000; font-weight:bold; '>xor</span> <span style='color:#000080; '>ax</span><span style='color:#808030; '>,</span><span style='color:#000080; '>ax</span>
+149:      <span style='color:#696969; '>//  xor ax,ax</span>
+150:  <span style='color:#800000; font-weight:bold; '> end</span><span style='color:#800080; '>;</span>
+151: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+152: 
+</pre></body></html>

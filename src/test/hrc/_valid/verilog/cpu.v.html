@@ -1,0 +1,966 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>/* ***********************************************************************</span>
+  1: <span style='color:#696969; '>  The Free IP Project</span>
+  2: <span style='color:#696969; '>  Free-RISC8 -- Verilog 8-bit Microcontroller</span>
+  3: <span style='color:#696969; '>  (c) 1999, The Free IP Project and Thomas Coonan</span>
+  4: <span style='color:#696969; '></span>
+  5: <span style='color:#696969; '></span>
+  6: <span style='color:#696969; '>  FREE IP GENERAL PUBLIC LICENSE</span>
+  7: <span style='color:#696969; '>  TERMS AND CONDITIONS FOR USE, COPYING, DISTRIBUTION, AND MODIFICATION</span>
+  8: <span style='color:#696969; '></span>
+  9: <span style='color:#696969; '>  1.  You may copy and distribute verbatim copies of this core, as long</span>
+ 10: <span style='color:#696969; '>      as this file, and the other associated files, remain intact and</span>
+ 11: <span style='color:#696969; '>      unmodified.  Modifications are outlined below.  </span>
+ 12: <span style='color:#696969; '>  2.  You may use this core in any way, be it academic, commercial, or</span>
+ 13: <span style='color:#696969; '>      military.  Modified or not.  </span>
+ 14: <span style='color:#696969; '>  3.  Distribution of this core must be free of charge.  Charging is</span>
+ 15: <span style='color:#696969; '>      allowed only for value added services.  Value added services</span>
+ 16: <span style='color:#696969; '>      would include copying fees, modifications, customizations, and</span>
+ 17: <span style='color:#696969; '>      inclusion in other products.</span>
+ 18: <span style='color:#696969; '>  4.  If a modified source code is distributed, the original unmodified</span>
+ 19: <span style='color:#696969; '>      source code must also be included (or a link to the Free IP web</span>
+ 20: <span style='color:#696969; '>      site).  In the modified source code there must be clear</span>
+ 21: <span style='color:#696969; '>      identification of the modified version.</span>
+ 22: <span style='color:#696969; '>  5.  Visit the Free IP web site for additional information.</span>
+ 23: <span style='color:#696969; '>      </span><span style='color:#5555dd; '>http://www.free-ip.com</span><span style='color:#696969; '></span>
+ 24: <span style='color:#696969; '></span>
+ 25: <span style='color:#696969; '>*********************************************************************** */</span>
+ 26: 
+ 27: <span style='color:#800000; font-weight:bold; '>module cpu</span> <span style='color:#808030; '>(</span>
+ 28:    clk<span style='color:#808030; '>,</span>
+ 29:    reset<span style='color:#808030; '>,</span>
+ 30:    
+ 31:    paddr<span style='color:#808030; '>,</span>
+ 32:    pdata<span style='color:#808030; '>,</span>
+ 33:    portain<span style='color:#808030; '>,</span>
+ 34:    portbout<span style='color:#808030; '>,</span>
+ 35:    portcout<span style='color:#808030; '>,</span>
+ 36:    
+ 37:    expdin<span style='color:#808030; '>,</span>
+ 38:    expdout<span style='color:#808030; '>,</span>
+ 39:    expaddr<span style='color:#808030; '>,</span>
+ 40:    expread<span style='color:#808030; '>,</span>
+ 41:    expwrite<span style='color:#808030; '>,</span>
+ 42:    
+ 43:    debugw<span style='color:#808030; '>,</span>
+ 44:    debugpc<span style='color:#808030; '>,</span>
+ 45:    debuginst<span style='color:#808030; '>,</span>
+ 46:    debugstatus
+ 47: <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 48: 
+ 49: <span style='color:#696969; '>// Basic Core I/O.</span>
+ 50: <span style='color:#800000; font-weight:bold; '>input</span>        clk<span style='color:#800000; font-weight:bold; '>;</span>
+ 51: <span style='color:#800000; font-weight:bold; '>input</span>        reset<span style='color:#800000; font-weight:bold; '>;</span>
+ 52: 
+ 53: <span style='color:#696969; '>// Program memory interface</span>
+ 54: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    paddr<span style='color:#800000; font-weight:bold; '>;</span>
+ 55: <span style='color:#800000; font-weight:bold; '>input</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>11</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    pdata<span style='color:#800000; font-weight:bold; '>;</span>
+ 56: 
+ 57: <span style='color:#696969; '>// Basic I/O Ports</span>
+ 58: <span style='color:#800000; font-weight:bold; '>input</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portain<span style='color:#800000; font-weight:bold; '>;</span>
+ 59: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portbout<span style='color:#800000; font-weight:bold; '>;</span>
+ 60: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portcout<span style='color:#800000; font-weight:bold; '>;</span>
+ 61: 
+ 62: <span style='color:#696969; '>// Expansion Interface</span>
+ 63: <span style='color:#800000; font-weight:bold; '>input</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    expdin<span style='color:#800000; font-weight:bold; '>;</span>        <span style='color:#696969; '>// Data from expansion circuits TO the PIC Core</span>
+ 64: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    expdout<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Data to the expansion circuits FROM the PIC Core</span>
+ 65: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    expaddr<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// File address</span>
+ 66: <span style='color:#800000; font-weight:bold; '>output</span>        expread<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Active high read signal (read FROM expansion circuit)</span>
+ 67: <span style='color:#800000; font-weight:bold; '>output</span>        expwrite<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Active high write signal (write TO expansion circuit)</span>
+ 68: 
+ 69: <span style='color:#696969; '>// Debugging</span>
+ 70: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    debugw<span style='color:#800000; font-weight:bold; '>;</span>
+ 71: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    debugpc<span style='color:#800000; font-weight:bold; '>;</span>
+ 72: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>11</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    debuginst<span style='color:#800000; font-weight:bold; '>;</span>
+ 73: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    debugstatus<span style='color:#800000; font-weight:bold; '>;</span>
+ 74: 
+ 75: <span style='color:#696969; '>// Register declarations for outputs</span>
+ 76: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    paddr<span style='color:#800000; font-weight:bold; '>;</span>
+ 77: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portbout<span style='color:#800000; font-weight:bold; '>;</span>
+ 78: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portcout<span style='color:#800000; font-weight:bold; '>;</span>
+ 79: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    expdout<span style='color:#800000; font-weight:bold; '>;</span>
+ 80: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    expaddr<span style='color:#800000; font-weight:bold; '>;</span>
+ 81: <span style='color:#800000; font-weight:bold; '>reg</span>        expread<span style='color:#800000; font-weight:bold; '>;</span>
+ 82: <span style='color:#800000; font-weight:bold; '>reg</span>        expwrite<span style='color:#800000; font-weight:bold; '>;</span>
+ 83: 
+ 84: <span style='color:#696969; '>// This should be set to the ROM location where our restart vector is.</span>
+ 85: <span style='color:#696969; '>// As set here, we have 512 words of program space.</span>
+ 86: <span style='color:#696969; '>//</span>
+ 87: <span style='color:#800000; font-weight:bold; '>parameter</span> RESET_VECTOR <span style='color:#808030; '>=</span> <span style='color:#008c00; '>11'h7FF</span><span style='color:#800000; font-weight:bold; '>;</span>
+ 88: 
+ 89: <span style='color:#800000; font-weight:bold; '>parameter</span>    INDF_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h0</span><span style='color:#808030; '>,</span>
+ 90:         TMR0_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h1</span><span style='color:#808030; '>,</span>
+ 91:         PCL_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h2</span><span style='color:#808030; '>,</span>
+ 92:         STATUS_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h3</span><span style='color:#808030; '>,</span>
+ 93:         FSR_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h4</span><span style='color:#808030; '>,</span>
+ 94:         PORTA_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h5</span><span style='color:#808030; '>,</span>
+ 95:         PORTB_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h6</span><span style='color:#808030; '>,</span>
+ 96:         PORTC_ADDRESS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>3'h7</span><span style='color:#800000; font-weight:bold; '>;</span>
+ 97: 
+ 98: <span style='color:#696969; '>// *********  Special internal registers</span>
+ 99: 
+100: <span style='color:#696969; '>// Instruction Register</span>
+101: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>11</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    inst<span style='color:#800000; font-weight:bold; '>;</span>
+102: 
+103: <span style='color:#696969; '>// Program Counter</span>
+104: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    pc<span style='color:#808030; '>,</span> pc_in<span style='color:#800000; font-weight:bold; '>;</span>
+105: 
+106: <span style='color:#696969; '>// Stack Registers and Stack "levels" register.</span>
+107: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    stacklevel<span style='color:#800000; font-weight:bold; '>;</span>
+108: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    stack1<span style='color:#800000; font-weight:bold; '>;</span>
+109: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    stack2<span style='color:#800000; font-weight:bold; '>;</span>
+110: 
+111: <span style='color:#696969; '>// W Register</span>
+112: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    w<span style='color:#800000; font-weight:bold; '>;</span>
+113: 
+114: <span style='color:#696969; '>// The STATUS register (#3) is 8 bits wide, however, we only currently use 2 bits</span>
+115: <span style='color:#696969; '>// of it; the C and Z bit.</span>
+116: <span style='color:#696969; '>//</span>
+117: <span style='color:#696969; '>// bit 0  -  C</span>
+118: <span style='color:#696969; '>// bit 2  -  Z</span>
+119: <span style='color:#696969; '>//</span>
+120: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    status<span style='color:#800000; font-weight:bold; '>;</span>
+121: 
+122: <span style='color:#696969; '>// The FSR register is the pointer register used for Indirect addressing (e.g. using INDF).</span>
+123: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    fsr<span style='color:#800000; font-weight:bold; '>;</span>
+124: 
+125: <span style='color:#696969; '>// Timer 0</span>
+126: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    tmr0<span style='color:#800000; font-weight:bold; '>;</span>
+127: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    prescaler<span style='color:#800000; font-weight:bold; '>;</span>
+128: 
+129: <span style='color:#696969; '>// Option Register</span>
+130: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    option<span style='color:#800000; font-weight:bold; '>;</span>
+131: 
+132: <span style='color:#696969; '>// Tristate Control registers. We do not neccessarily support bidirectional ports, but</span>
+133: <span style='color:#696969; '>//    will save a place for these registers and the TRIS instruction.  Use for debug.</span>
+134: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    trisa<span style='color:#800000; font-weight:bold; '>;</span>
+135: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    trisb<span style='color:#800000; font-weight:bold; '>;</span>
+136: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    trisc<span style='color:#800000; font-weight:bold; '>;</span>
+137: 
+138: <span style='color:#696969; '>// I/O Port registers</span>
+139: <span style='color:#696969; '>//</span>
+140: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    porta<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Input PORT</span>
+141: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portb<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Output PORT</span>
+142: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    portc<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Output PORT</span>
+143: 
+144: <span style='color:#696969; '>// ********** Instruction Related signals ******</span>
+145: 
+146: <span style='color:#800000; font-weight:bold; '>reg</span>         skip<span style='color:#800000; font-weight:bold; '>;</span>  <span style='color:#696969; '>// When HI force a NOP (all zeros) into inst</span>
+147: 
+148: <span style='color:#696969; '>// Derive special sub signals from inst register</span>
+149: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    k<span style='color:#800000; font-weight:bold; '>;</span>
+150: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>4</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    fsel<span style='color:#800000; font-weight:bold; '>;</span>
+151: <span style='color:#800000; font-weight:bold; '>wire</span>        d<span style='color:#800000; font-weight:bold; '>;</span>
+152: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    b<span style='color:#800000; font-weight:bold; '>;</span>
+153: 
+154: <span style='color:#696969; '>// ********** File Address ************</span>
+155: <span style='color:#696969; '>//</span>
+156: <span style='color:#696969; '>// This is the 7-bit Data Address that includes the lower 5-bit fsel, the</span>
+157: <span style='color:#696969; '>// FSR bits and any indirect addressing.</span>
+158: <span style='color:#696969; '>// Use this bus to address the Register File as well as all special registers, etc.</span>
+159: <span style='color:#696969; '>//</span>
+160: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    fileaddr<span style='color:#800000; font-weight:bold; '>;</span>
+161: 
+162: <span style='color:#696969; '>// Address Selects</span>
+163: <span style='color:#800000; font-weight:bold; '>reg</span>        specialsel<span style='color:#800000; font-weight:bold; '>;</span>
+164: <span style='color:#800000; font-weight:bold; '>reg</span>        regfilesel<span style='color:#800000; font-weight:bold; '>;</span>
+165: <span style='color:#800000; font-weight:bold; '>reg</span>        expsel<span style='color:#800000; font-weight:bold; '>;</span>
+166: 
+167: <span style='color:#696969; '>// ******  Instruction Decoder Outputs **************</span>
+168: 
+169: <span style='color:#696969; '>// Write enable for the actual ZERO and CARRY bits within the status register.</span>
+170: <span style='color:#696969; '>// Generated by the Instruction Decoder.</span>
+171: <span style='color:#696969; '>//</span>
+172: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    aluasel<span style='color:#800000; font-weight:bold; '>;</span>
+173: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    alubsel<span style='color:#800000; font-weight:bold; '>;</span>
+174: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    aluop<span style='color:#800000; font-weight:bold; '>;</span>
+175: 
+176: <span style='color:#800000; font-weight:bold; '>wire</span>        zwe<span style='color:#800000; font-weight:bold; '>;</span>
+177: <span style='color:#800000; font-weight:bold; '>wire</span>        cwe<span style='color:#800000; font-weight:bold; '>;</span>
+178: 
+179: <span style='color:#800000; font-weight:bold; '>wire</span>        isoption<span style='color:#800000; font-weight:bold; '>;</span>
+180: <span style='color:#800000; font-weight:bold; '>wire</span>        istris<span style='color:#800000; font-weight:bold; '>;</span>
+181: 
+182: <span style='color:#800000; font-weight:bold; '>wire</span>        fwe<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// High if any "register" is being written to at all.</span>
+183: <span style='color:#800000; font-weight:bold; '>wire</span>        wwe<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Write Enable for the W register.  Produced by Instruction Decoder.</span>
+184: 
+185: <span style='color:#696969; '>// *************  Internal Busses, mux connections, etc.  ********************</span>
+186: 
+187: <span style='color:#696969; '>// Bit decoder bits.  </span>
+188: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    bd<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Final decoder value after any polarity inversion.</span>
+189: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    bdec<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// e.g. "Bit Decoded"</span>
+190: <span style='color:#800000; font-weight:bold; '>wire</span>        bdpol<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Polarity bit for the bit test operations.</span>
+191: 
+192: <span style='color:#696969; '>// Data in and out of the and out of the register file</span>
+193: <span style='color:#696969; '>//</span>
+194: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    regfilein<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Input into Register File, is connected to the dbus.</span>
+195: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    regfileout<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Path leaving the register file, goes to SBUS Mux</span>
+196: <span style='color:#800000; font-weight:bold; '>reg</span>        regfilewe<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Write Enable</span>
+197: <span style='color:#800000; font-weight:bold; '>reg</span>        regfilere<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// Read Enable</span>
+198: 
+199: <span style='color:#696969; '>//</span>
+200: <span style='color:#696969; '>// The dbus (Destination Bus) comes out of the ALU.  It is available to all</span>
+201: <span style='color:#696969; '>// writable registers.</span>
+202: <span style='color:#696969; '>//</span>
+203: <span style='color:#696969; '>// The sbus (Source Bus) comes from all readable registers as well as the output</span>
+204: <span style='color:#696969; '>// of the Register File.  It is one of the primary inputs into the ALU muxes.</span>
+205: <span style='color:#696969; '>//</span>
+206: <span style='color:#696969; '>// The (Expansion Bus) is another potential source.  See the 'exp' signals.</span>
+207: <span style='color:#696969; '>//</span>
+208: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    dbus<span style='color:#800000; font-weight:bold; '>;</span>
+209: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    sbus<span style='color:#800000; font-weight:bold; '>;</span>
+210: 
+211: 
+212: <span style='color:#696969; '>// ALU Signals</span>
+213: <span style='color:#696969; '>//</span>
+214: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    alua<span style='color:#800000; font-weight:bold; '>;</span>
+215: <span style='color:#800000; font-weight:bold; '>reg</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    alub<span style='color:#800000; font-weight:bold; '>;</span>
+216: <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    aluout<span style='color:#800000; font-weight:bold; '>;</span>
+217: <span style='color:#800000; font-weight:bold; '>wire</span>        alucout<span style='color:#800000; font-weight:bold; '>;</span>
+218: <span style='color:#800000; font-weight:bold; '>wire</span>           aluz<span style='color:#800000; font-weight:bold; '>;</span>
+219: 
+220: <span style='color:#696969; '>// ALU A and B mux selects.</span>
+221: <span style='color:#696969; '>//</span>
+222: <span style='color:#800000; font-weight:bold; '>parameter</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    ALUASEL_W    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>,</span>
+223:         ALUASEL_SBUS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b01</span><span style='color:#808030; '>,</span>
+224:         ALUASEL_K    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b10</span><span style='color:#808030; '>,</span>
+225:         ALUASEL_BD    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b11</span><span style='color:#800000; font-weight:bold; '>;</span>
+226:         
+227: <span style='color:#800000; font-weight:bold; '>parameter</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    ALUBSEL_W    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>,</span>
+228:         ALUBSEL_SBUS    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b01</span><span style='color:#808030; '>,</span>
+229:         ALUBSEL_K    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b10</span><span style='color:#808030; '>,</span>
+230:         ALUBSEL_1    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b11</span><span style='color:#800000; font-weight:bold; '>;</span>
+231: 
+232: <span style='color:#696969; '>// ALU Operation codes.</span>
+233: <span style='color:#696969; '>//        </span>
+234: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_ADD  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0000</span><span style='color:#800000; font-weight:bold; '>;</span>
+235: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_SUB  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b1000</span><span style='color:#800000; font-weight:bold; '>;</span>
+236: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_AND  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0001</span><span style='color:#800000; font-weight:bold; '>;</span>
+237: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_OR   <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0010</span><span style='color:#800000; font-weight:bold; '>;</span>
+238: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_XOR  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0011</span><span style='color:#800000; font-weight:bold; '>;</span>
+239: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_COM  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0100</span><span style='color:#800000; font-weight:bold; '>;</span>
+240: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_ROR  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0101</span><span style='color:#800000; font-weight:bold; '>;</span>
+241: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_ROL  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0110</span><span style='color:#800000; font-weight:bold; '>;</span>
+242: <span style='color:#800000; font-weight:bold; '>parameter</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> ALUOP_SWAP <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0111</span><span style='color:#800000; font-weight:bold; '>;</span>
+243: 
+244: 
+245: <span style='color:#696969; '>// Instantiate each of our subcomponents</span>
+246: <span style='color:#696969; '>//</span>
+247: <span style='color:#800000; font-weight:bold; '>reg</span>s  regs <span style='color:#808030; '>(</span>
+248:    <span style='color:#808030; '>.</span>clk        <span style='color:#808030; '>(</span>clk<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+249:    <span style='color:#808030; '>.</span>reset    <span style='color:#808030; '>(</span>reset<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+250:    <span style='color:#808030; '>.</span>we      <span style='color:#808030; '>(</span>regfilewe<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+251:    <span style='color:#808030; '>.</span>re        <span style='color:#808030; '>(</span>regfilere<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+252:    <span style='color:#808030; '>.</span>bank    <span style='color:#808030; '>(</span>fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+253:    <span style='color:#808030; '>.</span>location    <span style='color:#808030; '>(</span>fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+254:    <span style='color:#808030; '>.</span>din        <span style='color:#808030; '>(</span>regfilein<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+255:    <span style='color:#808030; '>.</span>dout    <span style='color:#808030; '>(</span>regfileout<span style='color:#808030; '>)</span>
+256: <span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+257: 
+258: <span style='color:#696969; '>// Instatiate the ALU.</span>
+259: <span style='color:#696969; '>//</span>
+260: alu alu  <span style='color:#808030; '>(</span>
+261:    <span style='color:#808030; '>.</span>op         <span style='color:#808030; '>(</span>aluop<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+262:    <span style='color:#808030; '>.</span>a          <span style='color:#808030; '>(</span>alua<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+263:    <span style='color:#808030; '>.</span>b          <span style='color:#808030; '>(</span>alub<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+264:    <span style='color:#808030; '>.</span>y          <span style='color:#808030; '>(</span>aluout<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+265:    <span style='color:#808030; '>.</span>cin        <span style='color:#808030; '>(</span>status<span style='color:#008c00; '>[0]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+266:    <span style='color:#808030; '>.</span>cout       <span style='color:#808030; '>(</span>alucout<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+267:    <span style='color:#808030; '>.</span>zout       <span style='color:#808030; '>(</span>aluz<span style='color:#808030; '>)</span>
+268: <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+269: 
+270: <span style='color:#696969; '>// Instantiate the Instruction Decoder.  This is really just a lookup table.</span>
+271: <span style='color:#696969; '>// Given the instruction, generate all the signals we need.  </span>
+272: <span style='color:#696969; '>//</span>
+273: <span style='color:#696969; '>// For example, each instruction implies a specific ALU operation.  Some of</span>
+274: <span style='color:#696969; '>// these are obvious such as the ADDW uses an ADD alu op.  Less obvious is</span>
+275: <span style='color:#696969; '>// that a mov instruction uses an OR op which lets us do a simple copy.</span>
+276: <span style='color:#696969; '>// </span>
+277: <span style='color:#696969; '>// Data has to funnel through the ALU, which sometimes makes for contrived</span>
+278: <span style='color:#696969; '>// ALU ops.</span>
+279: <span style='color:#696969; '>//</span>
+280: <span style='color:#800000; font-weight:bold; '>wire</span>        idecwwe<span style='color:#800000; font-weight:bold; '>;</span>
+281: <span style='color:#800000; font-weight:bold; '>wire</span>        idecfwe<span style='color:#800000; font-weight:bold; '>;</span>
+282: <span style='color:#800000; font-weight:bold; '>wire</span>        ideczwe<span style='color:#800000; font-weight:bold; '>;</span>
+283: <span style='color:#800000; font-weight:bold; '>wire</span>        ideccwe<span style='color:#800000; font-weight:bold; '>;</span>
+284: 
+285: idec idec <span style='color:#808030; '>(</span>
+286:    <span style='color:#808030; '>.</span>inst     <span style='color:#808030; '>(</span>inst<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+287:    <span style='color:#808030; '>.</span>aluasel  <span style='color:#808030; '>(</span>aluasel<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+288:    <span style='color:#808030; '>.</span>alubsel  <span style='color:#808030; '>(</span>alubsel<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+289:    <span style='color:#808030; '>.</span>aluop    <span style='color:#808030; '>(</span>aluop<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+290:    <span style='color:#808030; '>.</span>wwe      <span style='color:#808030; '>(</span>idecwwe<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+291:    <span style='color:#808030; '>.</span>fwe      <span style='color:#808030; '>(</span>idecfwe<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+292:    <span style='color:#808030; '>.</span>zwe      <span style='color:#808030; '>(</span>ideczwe<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+293:    <span style='color:#808030; '>.</span>cwe      <span style='color:#808030; '>(</span>ideccwe<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+294:    <span style='color:#808030; '>.</span>bdpol    <span style='color:#808030; '>(</span>bdpol<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+295:    <span style='color:#808030; '>.</span>option   <span style='color:#808030; '>(</span>isoption<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+296:    <span style='color:#808030; '>.</span>tris     <span style='color:#808030; '>(</span>istris<span style='color:#808030; '>)</span>
+297: <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+298: 
+299: <span style='color:#696969; '>// Wire decoder enables to enables in at this module.  I did this because at</span>
+300: <span style='color:#696969; '>// one time I had another global 'enable' that was ANDed in, but I removed that.</span>
+301: <span style='color:#696969; '>//</span>
+302: <span style='color:#800000; font-weight:bold; '>assign</span> wwe <span style='color:#808030; '>=</span> idecwwe<span style='color:#800000; font-weight:bold; '>;</span>
+303: <span style='color:#800000; font-weight:bold; '>assign</span> fwe <span style='color:#808030; '>=</span> idecfwe<span style='color:#800000; font-weight:bold; '>;</span>
+304: <span style='color:#800000; font-weight:bold; '>assign</span> zwe <span style='color:#808030; '>=</span> ideczwe<span style='color:#800000; font-weight:bold; '>;</span>
+305: <span style='color:#800000; font-weight:bold; '>assign</span> cwe <span style='color:#808030; '>=</span> ideccwe<span style='color:#800000; font-weight:bold; '>;</span>
+306: 
+307: <span style='color:#696969; '>// *********** Debug ****************</span>
+308: <span style='color:#800000; font-weight:bold; '>assign</span>    debugw <span style='color:#808030; '>=</span> w<span style='color:#800000; font-weight:bold; '>;</span>
+309: <span style='color:#800000; font-weight:bold; '>assign</span>    debugpc <span style='color:#808030; '>=</span> pc<span style='color:#800000; font-weight:bold; '>;</span>
+310: <span style='color:#800000; font-weight:bold; '>assign</span>    debuginst <span style='color:#808030; '>=</span> inst<span style='color:#800000; font-weight:bold; '>;</span>
+311: <span style='color:#800000; font-weight:bold; '>assign</span>    debugstatus <span style='color:#808030; '>=</span> status<span style='color:#800000; font-weight:bold; '>;</span>
+312: 
+313: <span style='color:#696969; '>// *********** REGISTER FILE Addressing ****************</span>
+314: <span style='color:#696969; '>//</span>
+315: <span style='color:#696969; '>// We implement the following:</span>
+316: <span style='color:#696969; '>//    - The 5-bit fsel address is within a "BANK" which is 32 bytes.</span>
+317: <span style='color:#696969; '>//    - The FSR bits 6:5 are the BANK select, so there are 4 BANKS, a </span>
+318: <span style='color:#696969; '>//      total of 128 bytes.  Minus the 8 special registers, that's </span>
+319: <span style='color:#696969; '>//      really 120 bytes.</span>
+320: <span style='color:#696969; '>//    - The INDF register is for indirect addressing.  Referencing INDF</span>
+321: <span style='color:#696969; '>//      uses FSR as the pointer.  Therefore, using INDF/FSR you address</span>
+322: <span style='color:#696969; '>//      7-bits of memory.</span>
+323: <span style='color:#696969; '>// We DO NOT currently implement the PAGE for program (e.g. STATUS register</span>
+324: <span style='color:#696969; '>// bits 6:5)</span>
+325: <span style='color:#696969; '>//</span>
+326: <span style='color:#696969; '>// The fsel address *may* be zero in which case, we are to do indirect</span>
+327: <span style='color:#696969; '>// addressing, using FSR register as the 8-bit pointer.</span>
+328: <span style='color:#696969; '>//</span>
+329: <span style='color:#696969; '>// Otherwise, use the 5-bits of FSEL (from the Instruction itself) and </span>
+330: <span style='color:#696969; '>// 2 bank bits from the FSR register (bits 6:5).</span>
+331: <span style='color:#696969; '>//</span>
+332: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>fsel or fsr or status</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+333:    <span style='color:#800000; font-weight:bold; '>if</span> (fsel <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> INDF_ADDRESS) <span style='color:#800000; font-weight:bold; '>begin</span>
+334:       <span style='color:#696969; '>// The INDEX register is addressed.  There really is no INDEX register.</span>
+335:       <span style='color:#696969; '>// Use the FSR as an index, e.g. the FSR contents are the fsel.</span>
+336:       <span style='color:#696969; '>//</span>
+337:       fileaddr <span style='color:#808030; '>=</span> fsr<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+338:    <span style='color:#800000; font-weight:bold; '>end</span>
+339:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+340:       <span style='color:#696969; '>// Use FSEL field and status bank select bits</span>
+341:       <span style='color:#696969; '>//</span>
+342:       fileaddr <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>status<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> fsel<span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+343:    <span style='color:#800000; font-weight:bold; '>end</span>
+344: <span style='color:#800000; font-weight:bold; '>end</span>
+345: 
+346: <span style='color:#696969; '>// Write Enable to Register File.  </span>
+347: <span style='color:#696969; '>// Assert this when the general fwe (write enable to *any* register) is true AND Register File</span>
+348: <span style='color:#696969; '>//    address range is specified.</span>
+349: <span style='color:#696969; '>//  </span>
+350: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>regfilesel or fwe</span>)
+351:    <span style='color:#800000; font-weight:bold; '>reg</span>filewe <span style='color:#808030; '>=</span> regfilesel <span style='color:#808030; '>&amp;</span> fwe<span style='color:#800000; font-weight:bold; '>;</span>
+352: 
+353: <span style='color:#696969; '>// Read Enable (this if nothing else, helps in debug.)</span>
+354: <span style='color:#696969; '>// Assert if Register File address range is specified AND the ALU is actually using some</span>
+355: <span style='color:#696969; '>//    data off the SBUS.</span>
+356: <span style='color:#696969; '>//   </span>
+357: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>regfilesel or aluasel or alubsel</span>)
+358:    <span style='color:#800000; font-weight:bold; '>reg</span>filere <span style='color:#808030; '>=</span> regfilesel <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>aluasel <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ALUASEL_SBUS<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span>alubsel <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ALUBSEL_SBUS<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+359: 
+360: <span style='color:#696969; '>// *********** Address Decodes **************</span>
+361: <span style='color:#696969; '>//</span>
+362: <span style='color:#696969; '>// Generate 3 selects: specialsel, regfilesel and expsel</span>
+363: <span style='color:#696969; '>//</span>
+364: <span style='color:#696969; '>// ** NOTE:    Must change this whenever more or few expansion addresses are</span>
+365: <span style='color:#696969; '>//        added or removed from the memory map.  Otherwise, the dbus mux</span>
+366: <span style='color:#696969; '>//         won't be controlled properly!</span>
+367: <span style='color:#696969; '>//</span>
+368: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>fileaddr</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+369:    casex (fileaddr) <span style='color:#696969; '>// synopsys full_case parallel_case</span>
+370:       <span style='color:#696969; '>// This shouldn't really change.</span>
+371:       <span style='color:#696969; '>//</span>
+372:       <span style='color:#008c00; '>7</span>'bXX00XXX<span style='color:#808030; '>:</span> <span style='color:#696969; '>// The SPECIAL Registers are lower 8 addresses, in ALL BANKS</span>
+373:          <span style='color:#800000; font-weight:bold; '>begin</span>
+374:             specialsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+375:             regfilesel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+376:             expsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+377:          <span style='color:#800000; font-weight:bold; '>end</span>
+378:          
+379:       <span style='color:#696969; '>// Adjust this case as EXPANSION locations change!</span>
+380:       <span style='color:#696969; '>//</span>
+381:       <span style='color:#008c00; '>7</span>'b11111XX<span style='color:#808030; '>:</span> <span style='color:#696969; '>// EXPANSION Registers are the top (4) addresses</span>
+382:          <span style='color:#800000; font-weight:bold; '>begin</span>
+383:             specialsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+384:             regfilesel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+385:             expsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+386:          <span style='color:#800000; font-weight:bold; '>end</span>
+387:          
+388:       <span style='color:#696969; '>// Assume everything else must be the Register File..</span>
+389:       <span style='color:#696969; '>//</span>
+390:       default<span style='color:#808030; '>:</span>
+391:          <span style='color:#800000; font-weight:bold; '>begin</span>
+392:             specialsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+393:             regfilesel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+394:             expsel    <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+395:          <span style='color:#800000; font-weight:bold; '>end</span>
+396:    endcase
+397: <span style='color:#800000; font-weight:bold; '>end</span>
+398:   
+399: 
+400: <span style='color:#696969; '>// *********** Expansion Interface **************</span>
+401: 
+402: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>dbus</span>)
+403:    expdout <span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+404:    
+405: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>fileaddr</span>)
+406:    expaddr <span style='color:#808030; '>=</span> fileaddr<span style='color:#808030; '>;</span>
+407: 
+408: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>expsel or aluasel or alubsel</span>)
+409:    expread <span style='color:#808030; '>=</span> expsel <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>aluasel <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ALUASEL_SBUS<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span>alubsel <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ALUBSEL_SBUS<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+410: 
+411: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>expsel or fwe</span>)
+412:    expwrite <span style='color:#808030; '>=</span> expsel <span style='color:#808030; '>&amp;</span> fwe<span style='color:#808030; '>;</span>
+413: 
+414: 
+415: <span style='color:#696969; '>//</span>
+416: <span style='color:#696969; '>// *********** SBUS **************</span>
+417: <span style='color:#696969; '>// The sbus (Source Bus) is the output of a multiplexor that takes</span>
+418: <span style='color:#696969; '>// inputs from the Register File, and all other special registers</span>
+419: <span style='color:#696969; '>// and input ports.  The Source Bus then, one of the inputs to the ALU</span>
+420: 
+421: 
+422: <span style='color:#696969; '>// First MUX selects from all the special regsiters</span>
+423: <span style='color:#696969; '>//</span>
+424: always @<span style='color:#808030; '>(</span>fsel or fsr or tmr0 or pc or status
+425:          or porta or portb or portc or <span style='color:#800000; font-weight:bold; '>reg</span>fileout or expdin
+426:          or specialsel or regfilesel or expsel) begin
+427:          
+428:    <span style='color:#696969; '>// For our current mix of registers and peripherals, only the first 8 addresses</span>
+429:    <span style='color:#696969; '>// are "special" registers (e.g. not in the Register File).  As more peripheral</span>
+430:    <span style='color:#696969; '>// registers are added, they must be muxed into this MUX as well.</span>
+431:    <span style='color:#696969; '>//</span>
+432:    <span style='color:#696969; '>// We currently prohibit tristates.</span>
+433:    <span style='color:#696969; '>//</span>
+434:    <span style='color:#696969; '>//</span>
+435:    if <span style='color:#808030; '>(</span>specialsel<span style='color:#808030; '>)</span> begin
+436:       <span style='color:#696969; '>// Special register</span>
+437:       case <span style='color:#808030; '>(</span>fsel<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>// synopsys parallel_case full_case</span>
+438:          <span style='color:#008c00; '>3'h0</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> fsr<span style='color:#800000; font-weight:bold; '>;</span>
+439:          <span style='color:#008c00; '>3'h1</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> tmr0<span style='color:#808030; '>;</span>
+440:          <span style='color:#008c00; '>3'h2</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> pc<span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+441:          <span style='color:#008c00; '>3'h3</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> status<span style='color:#808030; '>;</span>
+442:          <span style='color:#008c00; '>3'h4</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> fsr<span style='color:#808030; '>;</span>
+443:          <span style='color:#008c00; '>3'h5</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> porta<span style='color:#808030; '>;</span> <span style='color:#696969; '>// PORTA is an input-only port</span>
+444:          <span style='color:#008c00; '>3'h6</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> portb<span style='color:#808030; '>;</span> <span style='color:#696969; '>// PORTB is an output-only port</span>
+445:          <span style='color:#008c00; '>3'h7</span><span style='color:#808030; '>:</span>    sbus <span style='color:#808030; '>=</span> portc<span style='color:#808030; '>;</span> <span style='color:#696969; '>// PORTC is an output-only port</span>
+446:       endcase
+447:    end
+448:    else <span style='color:#800000; font-weight:bold; '>begin</span>
+449:       <span style='color:#696969; '>//</span>
+450:       <span style='color:#696969; '>// Put whatever address equation is neccessary here.  Remember to remove unnecessary</span>
+451:       <span style='color:#696969; '>// memory elements from Register File (regs.v).  It'll still work, but they'd be</span>
+452:       <span style='color:#696969; '>// wasted flip-flops.</span>
+453:       <span style='color:#696969; '>//</span>
+454:       <span style='color:#800000; font-weight:bold; '>if</span> (expsel) <span style='color:#800000; font-weight:bold; '>begin</span>
+455:          sbus <span style='color:#808030; '>=</span> expdin<span style='color:#808030; '>;</span>
+456:       <span style='color:#800000; font-weight:bold; '>end</span>
+457:       <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+458:          <span style='color:#800000; font-weight:bold; '>if</span> (regfilesel) <span style='color:#800000; font-weight:bold; '>begin</span>
+459:             <span style='color:#696969; '>// Final Priority is Choose the register file</span>
+460:             sbus <span style='color:#808030; '>=</span> regfileout<span style='color:#808030; '>;</span>
+461:          <span style='color:#800000; font-weight:bold; '>end</span>
+462:          <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+463:             sbus <span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+464:          <span style='color:#800000; font-weight:bold; '>end</span>
+465:       <span style='color:#800000; font-weight:bold; '>end</span>
+466:    <span style='color:#800000; font-weight:bold; '>end</span>
+467: end
+468: 
+469: <span style='color:#696969; '>// ************** DBUS ******</span>
+470: <span style='color:#696969; '>//  The Destination bus is just the output of the ALU.</span>
+471: <span style='color:#696969; '>//</span>
+472: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>aluout</span>)
+473:    dbus <span style='color:#808030; '>=</span> aluout<span style='color:#808030; '>;</span>
+474: 
+475: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>dbus</span>)
+476:    <span style='color:#800000; font-weight:bold; '>reg</span>filein <span style='color:#808030; '>=</span> dbus<span style='color:#800000; font-weight:bold; '>;</span>
+477:    
+478: <span style='color:#696969; '>// Drive the ROM address bus straight from the PC_IN bus</span>
+479: <span style='color:#696969; '>//</span>
+480: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>pc_in</span>)
+481:    paddr <span style='color:#808030; '>=</span> pc_in<span style='color:#808030; '>;</span>
+482: 
+483: 
+484: <span style='color:#696969; '>// Define sub-signals out of inst</span>
+485: <span style='color:#696969; '>//</span>
+486: <span style='color:#800000; font-weight:bold; '>assign</span> k <span style='color:#808030; '>=</span>     inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#800000; font-weight:bold; '>;</span>
+487: <span style='color:#800000; font-weight:bold; '>assign</span> fsel  <span style='color:#808030; '>=</span> inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#800000; font-weight:bold; '>;</span>
+488: <span style='color:#800000; font-weight:bold; '>assign</span> d     <span style='color:#808030; '>=</span> inst<span style='color:#008c00; '>[5]</span><span style='color:#800000; font-weight:bold; '>;</span>
+489: <span style='color:#800000; font-weight:bold; '>assign</span> b     <span style='color:#808030; '>=</span> inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span><span style='color:#800000; font-weight:bold; '>;</span>
+490: 
+491: <span style='color:#696969; '>// Bit Decoder.</span>
+492: <span style='color:#696969; '>//</span>
+493: <span style='color:#696969; '>// Simply take the 3-bit b field in the PIC instruction and create the</span>
+494: <span style='color:#696969; '>// expanded 8-bit decoder field, which is used as a mask.</span>
+495: <span style='color:#696969; '>//</span>
+496: 
+497: 
+498: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>b</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+499:    <span style='color:#800000; font-weight:bold; '>case</span> <span style='color:#800000; font-weight:bold; '>(</span>b<span style='color:#800000; font-weight:bold; '>)</span> <span style='color:#696969; '>// synopsys parallel_case</span>
+500:       <span style='color:#008c00; '>3'b000</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00000001</span><span style='color:#800000; font-weight:bold; '>;</span>
+501:       <span style='color:#008c00; '>3'b001</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00000010</span><span style='color:#800000; font-weight:bold; '>;</span>
+502:       <span style='color:#008c00; '>3'b010</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00000100</span><span style='color:#800000; font-weight:bold; '>;</span>
+503:       <span style='color:#008c00; '>3'b011</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00001000</span><span style='color:#800000; font-weight:bold; '>;</span>
+504:       <span style='color:#008c00; '>3'b100</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00010000</span><span style='color:#800000; font-weight:bold; '>;</span>
+505:       <span style='color:#008c00; '>3'b101</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b00100000</span><span style='color:#800000; font-weight:bold; '>;</span>
+506:       <span style='color:#008c00; '>3'b110</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b01000000</span><span style='color:#800000; font-weight:bold; '>;</span>
+507:       <span style='color:#008c00; '>3'b111</span><span style='color:#800000; font-weight:bold; '>:</span> bdec = <span style='color:#008c00; '>8'b10000000</span><span style='color:#800000; font-weight:bold; '>;</span>
+508:    <span style='color:#800000; font-weight:bold; '>endcase</span>
+509: <span style='color:#800000; font-weight:bold; '>end</span>
+510: 
+511: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>bdec or bdpol</span>)
+512:    bd <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>bdpol<span style='color:#808030; '>)</span> <span style='color:#808030; '>?</span> <span style='color:#808030; '>~</span>bdec <span style='color:#808030; '>:</span> bdec<span style='color:#808030; '>;</span>
+513: 
+514: <span style='color:#696969; '>// Instruction regsiter usually get the ROM data as its input, but</span>
+515: <span style='color:#696969; '>// sometimes for branching, the skip signal must cause a NOP.</span>
+516: <span style='color:#696969; '>//</span>
+517: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+518:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+519:       inst <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>12'h000</span><span style='color:#808030; '>;</span>
+520:    <span style='color:#800000; font-weight:bold; '>end</span>
+521:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+522:       <span style='color:#800000; font-weight:bold; '>if</span> (skip <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+523:          inst <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>12'b000000000000</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>// FORCE NOP</span>
+524:       <span style='color:#800000; font-weight:bold; '>end</span>
+525:       <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+526:          inst <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> pdata<span style='color:#808030; '>;</span>
+527:       <span style='color:#800000; font-weight:bold; '>end</span>
+528:    <span style='color:#800000; font-weight:bold; '>end</span>
+529: <span style='color:#800000; font-weight:bold; '>end</span>
+530: 
+531: <span style='color:#696969; '>// SKIP signal.</span>
+532: <span style='color:#696969; '>//</span>
+533: <span style='color:#696969; '>// We want to insert the NOP instruction for the following conditions:</span>
+534: <span style='color:#696969; '>//    GOTO,CALL and RETLW instructions (All have inst[11:10] = 2'b10</span>
+535: <span style='color:#696969; '>//    BTFSS instruction when aluz is HI  (</span>
+536: <span style='color:#696969; '>//    BTFSC instruction when aluz is LO</span>
+537: <span style='color:#696969; '>//</span>
+538: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>inst or aluz</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+539:    casex (<span style='color:#808030; '>{</span>inst<span style='color:#808030; '>,</span> aluz<span style='color:#808030; '>}</span>) <span style='color:#696969; '>// synopsys parallel_case</span>
+540:       <span style='color:#008c00; '>13'b10??</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>    <span style='color:#696969; '>// A GOTO, CALL or RETLW instructions</span>
+541:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+542:          
+543:       <span style='color:#008c00; '>13</span>'b0110_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_1<span style='color:#808030; '>:</span>    <span style='color:#696969; '>// BTFSC instruction and aluz == 1</span>
+544:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+545:     
+546:       <span style='color:#008c00; '>13</span>'b0111_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_0<span style='color:#808030; '>:</span>    <span style='color:#696969; '>// BTFSS instruction and aluz == 0</span>
+547:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+548:       
+549:       <span style='color:#008c00; '>13</span>'b0010_11<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_1<span style='color:#808030; '>:</span>    <span style='color:#696969; '>// DECFSZ instruction and aluz == 1</span>
+550:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+551:     
+552:       <span style='color:#008c00; '>13</span>'b0011_11<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_1<span style='color:#808030; '>:</span>    <span style='color:#696969; '>// INCFSZ instruction and aluz == 1</span>
+553:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span><span style='color:#808030; '>;</span>
+554:     
+555:       default<span style='color:#808030; '>:</span>
+556:          skip <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+557:    endcase
+558: <span style='color:#800000; font-weight:bold; '>end</span>
+559: 
+560: <span style='color:#696969; '>// 4:1 Data MUX into alua</span>
+561: <span style='color:#696969; '>//</span>
+562: <span style='color:#696969; '>//</span>
+563: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>aluasel or w or sbus or k or bd</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+564:    <span style='color:#800000; font-weight:bold; '>case</span> <span style='color:#800000; font-weight:bold; '>(</span>aluasel<span style='color:#800000; font-weight:bold; '>)</span> <span style='color:#696969; '>// synopsys parallel_case</span>
+565:       <span style='color:#008c00; '>2'b00</span><span style='color:#800000; font-weight:bold; '>:</span> alua = w<span style='color:#800000; font-weight:bold; '>;</span>
+566:       <span style='color:#008c00; '>2'b01</span><span style='color:#800000; font-weight:bold; '>:</span> alua = sbus<span style='color:#800000; font-weight:bold; '>;</span>
+567:       <span style='color:#008c00; '>2'b10</span><span style='color:#800000; font-weight:bold; '>:</span> alua = k<span style='color:#800000; font-weight:bold; '>;</span>
+568:       <span style='color:#008c00; '>2'b11</span><span style='color:#800000; font-weight:bold; '>:</span> alua = bd<span style='color:#800000; font-weight:bold; '>;</span>
+569:    <span style='color:#800000; font-weight:bold; '>endcase</span>
+570: <span style='color:#800000; font-weight:bold; '>end</span>
+571: 
+572: <span style='color:#696969; '>// 4:1 Data MUX into alub</span>
+573: <span style='color:#696969; '>//</span>
+574: <span style='color:#696969; '>//</span>
+575: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>alubsel or w or sbus or k</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+576:    <span style='color:#800000; font-weight:bold; '>case</span> <span style='color:#800000; font-weight:bold; '>(</span>alubsel<span style='color:#800000; font-weight:bold; '>)</span> <span style='color:#696969; '>// synopsys parallel_case</span>
+577:       <span style='color:#008c00; '>2'b00</span><span style='color:#800000; font-weight:bold; '>:</span> alub = w<span style='color:#800000; font-weight:bold; '>;</span>
+578:       <span style='color:#008c00; '>2'b01</span><span style='color:#800000; font-weight:bold; '>:</span> alub = sbus<span style='color:#800000; font-weight:bold; '>;</span>
+579:       <span style='color:#008c00; '>2'b10</span><span style='color:#800000; font-weight:bold; '>:</span> alub = k<span style='color:#800000; font-weight:bold; '>;</span>
+580:       <span style='color:#008c00; '>2'b11</span><span style='color:#800000; font-weight:bold; '>:</span> alub = <span style='color:#008c00; '>8'b00000001</span><span style='color:#800000; font-weight:bold; '>;</span>
+581:    <span style='color:#800000; font-weight:bold; '>endcase</span>
+582: <span style='color:#800000; font-weight:bold; '>end</span>
+583: 
+584: <span style='color:#696969; '>// W Register</span>
+585: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+586:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+587:       w <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+588:    <span style='color:#800000; font-weight:bold; '>end</span>
+589:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+590:       <span style='color:#800000; font-weight:bold; '>if</span> (wwe) <span style='color:#800000; font-weight:bold; '>begin</span>
+591:          w <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+592:       <span style='color:#800000; font-weight:bold; '>end</span>
+593:    <span style='color:#800000; font-weight:bold; '>end</span>   
+594: <span style='color:#800000; font-weight:bold; '>end</span>
+595: 
+596: <span style='color:#696969; '>// ************ Writes to various Special Registers (fsel between 0 and 7)</span>
+597: 
+598: <span style='color:#696969; '>// INDF Register (Register #0)</span>
+599: <span style='color:#696969; '>//</span>
+600: <span style='color:#696969; '>//    Not a real register.  This is the Indirect Addressing mode register.</span>
+601: <span style='color:#696969; '>//    See the regfileaddr logic.</span>
+602: 
+603: <span style='color:#696969; '>// TMR0 Register (Register #1)</span>
+604: <span style='color:#696969; '>//</span>
+605: <span style='color:#696969; '>//    Timer0 is currently only a free-running timer clocked by the main system clock.</span>
+606: <span style='color:#696969; '>//</span>
+607: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+608:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+609:       tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+610:    <span style='color:#800000; font-weight:bold; '>end</span>
+611:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+612:       <span style='color:#696969; '>// See if the status register is actually being written to</span>
+613:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> TMR0_ADDRESS)) <span style='color:#800000; font-weight:bold; '>begin</span>
+614:          <span style='color:#696969; '>// Yes, so just update the register from the dbus</span>
+615:          tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+616:       <span style='color:#800000; font-weight:bold; '>end</span>
+617:       <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+618:          <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span>option<span style='color:#008c00; '>[5]</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+619:             <span style='color:#696969; '>// OPTION[3]  -  Assigns prescaler to either WDT or TIMER0.  We don't implement WDT.</span>
+620:             <span style='color:#696969; '>//               If this bit is 0, then use the prescaler.  If 1 then increment.</span>
+621:             <span style='color:#696969; '>//</span>
+622:             <span style='color:#696969; '>// Mask off the prescaler value based on desired divide ratio.</span>
+623:             <span style='color:#696969; '>// Whenever this is zero, then that is our divided pulse.  Increment</span>
+624:             <span style='color:#696969; '>// the final timer value when it's zero.</span>
+625:             <span style='color:#696969; '>//</span>
+626:             casex (option<span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>) <span style='color:#696969; '>// synopsys parallel_case full_case</span>
+627:                <span style='color:#008c00; '>4</span>'b1XXX<span style='color:#808030; '>:</span> tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+628:                <span style='color:#008c00; '>4'b0000</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00000001</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+629:                <span style='color:#008c00; '>4'b0001</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00000011</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+630:                <span style='color:#008c00; '>4'b0010</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00000111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+631:                <span style='color:#008c00; '>4'b0011</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00001111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+632:                <span style='color:#008c00; '>4'b0100</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00011111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+633:                <span style='color:#008c00; '>4'b0101</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b00111111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+634:                <span style='color:#008c00; '>4'b0110</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b01111111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+635:                <span style='color:#008c00; '>4'b0111</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span><span style='color:#808030; '>|</span>(prescaler <span style='color:#808030; '>&amp;</span> <span style='color:#008c00; '>8'b11111111</span>)) tmr0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> tmr0 <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+636:             endcase            
+637:          <span style='color:#800000; font-weight:bold; '>end</span>
+638:       <span style='color:#800000; font-weight:bold; '>end</span>
+639:    <span style='color:#800000; font-weight:bold; '>end</span>
+640: <span style='color:#800000; font-weight:bold; '>end</span>
+641: 
+642: <span style='color:#696969; '>// The prescaler is always counting from 00 to FF whenever OPTION[5] is cleared (e.g. T0CS)</span>
+643: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+644:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+645:       prescaler <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+646:    <span style='color:#800000; font-weight:bold; '>end</span>
+647:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+648:       <span style='color:#800000; font-weight:bold; '>if</span> (<span style='color:#808030; '>~</span>option<span style='color:#008c00; '>[5]</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+649:          prescaler <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> prescaler <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+650:       <span style='color:#800000; font-weight:bold; '>end</span>
+651:    <span style='color:#800000; font-weight:bold; '>end</span>
+652: <span style='color:#800000; font-weight:bold; '>end</span>
+653: 
+654: <span style='color:#696969; '>// PCL Register (Register #2)</span>
+655: <span style='color:#696969; '>//</span>
+656: <span style='color:#696969; '>//    PC Lower 8 bits.  This is handled in the PC section below...</span>
+657: 
+658: 
+659: <span style='color:#696969; '>// STATUS Register (Register #3)</span>
+660: <span style='color:#696969; '>//</span>
+661: <span style='color:#800000; font-weight:bold; '>parameter</span> STATUS_RESET_VALUE <span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h18</span><span style='color:#800000; font-weight:bold; '>;</span>
+662: 
+663: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+664:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+665:       status <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> STATUS_RESET_VALUE<span style='color:#808030; '>;</span>
+666:    <span style='color:#800000; font-weight:bold; '>end</span>
+667:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+668:       <span style='color:#696969; '>// See if the status register is actually being written to</span>
+669:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> STATUS_ADDRESS)) <span style='color:#800000; font-weight:bold; '>begin</span>
+670:          <span style='color:#696969; '>// Yes, so just update the register from the dbus</span>
+671:          status <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+672:       <span style='color:#800000; font-weight:bold; '>end</span>
+673:       <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+674:          <span style='color:#696969; '>// Update status register on a bit-by-bit basis.</span>
+675:          <span style='color:#696969; '>//</span>
+676:          <span style='color:#696969; '>// For the carry and zero flags, each instruction has its own rule as</span>
+677:          <span style='color:#696969; '>// to whether to update this flag or not.  The instruction decoder is</span>
+678:          <span style='color:#696969; '>// providing us with an enable for C and Z.  Use this to decide whether</span>
+679:          <span style='color:#696969; '>// to retain the existing value, or update with the new alu status output.</span>
+680:          <span style='color:#696969; '>//</span>
+681:          status <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>
+682:             status<span style='color:#008c00; '>[7]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 7: Undefined.. (maybe use for debugging)</span>
+683:             status<span style='color:#008c00; '>[6]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 6: Program Page, HI bit</span>
+684:             status<span style='color:#008c00; '>[5]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 5: Program Page, LO bit</span>
+685:             status<span style='color:#008c00; '>[4]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 4: Time Out bit (not implemented at this time)</span>
+686:             status<span style='color:#008c00; '>[3]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 3: Power Down bit (not implemented at this time)</span>
+687:             (zwe) <span style='color:#808030; '>?</span> aluz <span style='color:#808030; '>:</span> status<span style='color:#008c00; '>[2]</span><span style='color:#808030; '>,</span>    <span style='color:#696969; '>// BIT 2: Z</span>
+688:             status<span style='color:#008c00; '>[1]</span><span style='color:#808030; '>,</span>            <span style='color:#696969; '>// BIT 1: DC</span>
+689:             (cwe) <span style='color:#808030; '>?</span> alucout <span style='color:#808030; '>:</span> status<span style='color:#008c00; '>[0]</span>    <span style='color:#696969; '>// BIT 0: C</span>
+690:          <span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+691:       <span style='color:#800000; font-weight:bold; '>end</span>
+692:    <span style='color:#800000; font-weight:bold; '>end</span>
+693: <span style='color:#800000; font-weight:bold; '>end</span>
+694: 
+695: <span style='color:#696969; '>// FSR Register  (Register #4)</span>
+696: <span style='color:#696969; '>//            </span>
+697: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+698:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+699:       fsr <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+700:    <span style='color:#800000; font-weight:bold; '>end</span>
+701:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+702:       <span style='color:#696969; '>// See if the status register is actually being written to</span>
+703:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> FSR_ADDRESS)) <span style='color:#800000; font-weight:bold; '>begin</span>
+704:          fsr <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+705:       <span style='color:#800000; font-weight:bold; '>end</span>
+706:    <span style='color:#800000; font-weight:bold; '>end</span>
+707: <span style='color:#800000; font-weight:bold; '>end</span>
+708: 
+709: <span style='color:#696969; '>// OPTION Register</span>
+710: <span style='color:#696969; '>//</span>
+711: <span style='color:#696969; '>// The special OPTION instruction should move W into the OPTION register.</span>
+712: <span style='color:#696969; '>//</span>
+713: <span style='color:#800000; font-weight:bold; '>parameter</span> OPTION_RESET_VALUE <span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h3F</span><span style='color:#800000; font-weight:bold; '>;</span>
+714: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+715:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+716:       option <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> OPTION_RESET_VALUE<span style='color:#808030; '>;</span>
+717:    <span style='color:#800000; font-weight:bold; '>end</span>
+718:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+719:       <span style='color:#800000; font-weight:bold; '>if</span> (isoption)
+720:          option <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+721:    <span style='color:#800000; font-weight:bold; '>end</span>   
+722: <span style='color:#800000; font-weight:bold; '>end</span>
+723: 
+724: <span style='color:#696969; '>// PORTA Input Port   (Register #5)</span>
+725: <span style='color:#696969; '>//</span>
+726: <span style='color:#696969; '>// Register anything on the module's porta input on every single clock.</span>
+727: <span style='color:#696969; '>//</span>
+728: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>)
+729:    if <span style='color:#808030; '>(</span>reset<span style='color:#808030; '>)</span> porta <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+730:    else       porta <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> portain<span style='color:#808030; '>;</span>
+731: 
+732: <span style='color:#696969; '>// PORTB Output Port  (Register #6)</span>
+733: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+734:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+735:       portb <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+736:    <span style='color:#800000; font-weight:bold; '>end</span>
+737:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+738:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PORTB_ADDRESS) <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>~</span>istris) <span style='color:#800000; font-weight:bold; '>begin</span>
+739:          portb <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+740:       <span style='color:#800000; font-weight:bold; '>end</span>
+741:    <span style='color:#800000; font-weight:bold; '>end</span>   
+742: <span style='color:#800000; font-weight:bold; '>end</span>
+743: 
+744: <span style='color:#696969; '>// Connect the output ports to the register output.</span>
+745: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>portb</span>)
+746:    portbout <span style='color:#808030; '>=</span> portb<span style='color:#808030; '>;</span>
+747:    
+748: <span style='color:#696969; '>// PORTC Output Port  (Register #7)</span>
+749: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+750:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+751:       portc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>;</span>
+752:    <span style='color:#800000; font-weight:bold; '>end</span>
+753:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+754:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PORTC_ADDRESS) <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>~</span>istris) <span style='color:#800000; font-weight:bold; '>begin</span>
+755:          portc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+756:       <span style='color:#800000; font-weight:bold; '>end</span>
+757:    <span style='color:#800000; font-weight:bold; '>end</span>   
+758: <span style='color:#800000; font-weight:bold; '>end</span>
+759: 
+760: <span style='color:#696969; '>// Connect the output ports to the register output.</span>
+761: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>portc</span>)
+762:    portcout <span style='color:#808030; '>=</span> portc<span style='color:#808030; '>;</span>
+763:  
+764: <span style='color:#696969; '>// TRIS Registers</span>
+765: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+766:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+767:       trisa <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'hff</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>// Default is to tristate them</span>
+768:    <span style='color:#800000; font-weight:bold; '>end</span>
+769:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+770:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PORTA_ADDRESS) <span style='color:#808030; '>&amp;</span> istris) <span style='color:#800000; font-weight:bold; '>begin</span>
+771:          trisa <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+772:       <span style='color:#800000; font-weight:bold; '>end</span>
+773:    <span style='color:#800000; font-weight:bold; '>end</span>   
+774: <span style='color:#800000; font-weight:bold; '>end</span>
+775: 
+776: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+777:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+778:       trisb <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'hff</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>// Default is to tristate them</span>
+779:    <span style='color:#800000; font-weight:bold; '>end</span>
+780:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+781:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PORTB_ADDRESS) <span style='color:#808030; '>&amp;</span> istris) <span style='color:#800000; font-weight:bold; '>begin</span>
+782:          trisb <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+783:       <span style='color:#800000; font-weight:bold; '>end</span>
+784:    <span style='color:#800000; font-weight:bold; '>end</span>   
+785: <span style='color:#800000; font-weight:bold; '>end</span>
+786: 
+787: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+788:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+789:       trisc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'hff</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>// Default is to tristate them</span>
+790:    <span style='color:#800000; font-weight:bold; '>end</span>
+791:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+792:       <span style='color:#800000; font-weight:bold; '>if</span> (fwe <span style='color:#808030; '>&amp;</span> specialsel <span style='color:#808030; '>&amp;</span> (fileaddr<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PORTC_ADDRESS) <span style='color:#808030; '>&amp;</span> istris) <span style='color:#800000; font-weight:bold; '>begin</span>
+793:          trisc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> dbus<span style='color:#808030; '>;</span>
+794:       <span style='color:#800000; font-weight:bold; '>end</span>
+795:    <span style='color:#800000; font-weight:bold; '>end</span>   
+796: <span style='color:#800000; font-weight:bold; '>end</span>
+797:   
+798: 
+799: <span style='color:#696969; '>// ********** PC AND STACK *************************</span>
+800: <span style='color:#696969; '>//</span>
+801: <span style='color:#696969; '>// There are 4 ways to change the PC.  They are:</span>
+802: <span style='color:#696969; '>//    GOTO  101k_kkkk_kkkk</span>
+803: <span style='color:#696969; '>//    CALL  1001_kkkk_kkkk</span>
+804: <span style='color:#696969; '>//    RETLW 1000_kkkk_kkkk</span>
+805: <span style='color:#696969; '>//    MOVF  0010_0010_0010  (e.g. a write to reg #2)</span>
+806: <span style='color:#696969; '>//    MOVWF 0000_0010_0010  (write from W to reg #2)</span>
+807: <span style='color:#696969; '>//</span>
+808: <span style='color:#696969; '>// Remember that the skip instructions work by inserting</span>
+809: <span style='color:#696969; '>// a NOP instruction or not into program stream and don't</span>
+810: <span style='color:#696969; '>// change the PC.</span>
+811: <span style='color:#696969; '>//</span>
+812: 
+813: 
+814: <span style='color:#696969; '>// Implmenent PC</span>
+815: <span style='color:#696969; '>//</span>
+816: <span style='color:#696969; '>// Seperate the PC_IN input bus into PC from the sequential register so that we</span>
+817: <span style='color:#696969; '>// can feed the PC_IN bus into the PRAM address input.</span>
+818: 
+819: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>)
+820:    if <span style='color:#808030; '>(</span>reset<span style='color:#808030; '>)</span> pc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> RESET_VECTOR<span style='color:#808030; '>;</span>
+821:    else       pc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> pc_in<span style='color:#808030; '>;</span>
+822: 
+823: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>inst or stacklevel or status or stack1 or stack2 or pc or dbus</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+824:    casex (<span style='color:#808030; '>{</span>inst<span style='color:#808030; '>,</span> stacklevel<span style='color:#808030; '>}</span>) <span style='color:#696969; '>// synopsys parallel_case</span>
+825:       <span style='color:#008c00; '>14'b101?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>status<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>       inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>    <span style='color:#696969; '>// GOTO</span>
+826:       <span style='color:#008c00; '>14</span>'b1001_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>status<span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>,</span> inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>    <span style='color:#696969; '>// CALL</span>
+827:       <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_00<span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> stack1<span style='color:#808030; '>;</span>                <span style='color:#696969; '>// RETLW</span>
+828:       <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_01<span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> stack1<span style='color:#808030; '>;</span>                <span style='color:#696969; '>// RETLW</span>
+829:       <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_10<span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> stack2<span style='color:#808030; '>;</span>                <span style='color:#696969; '>// RETLW</span>
+830:       <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_11<span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> stack2<span style='color:#808030; '>;</span>                <span style='color:#696969; '>// RETLW</span>
+831:       <span style='color:#008c00; '>14'b00?</span>0_0010_0010_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span> pc_in <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>pc<span style='color:#808030; '>[</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> dbus<span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>        <span style='color:#696969; '>// MOVF or MOVWF where f=PC</span>
+832:       default<span style='color:#808030; '>:</span>
+833:          pc_in <span style='color:#808030; '>=</span> pc <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+834:    endcase
+835: <span style='color:#800000; font-weight:bold; '>end</span>
+836: 
+837: 
+838: <span style='color:#696969; '>// Implement STACK1 and STACK2 registers</span>
+839: <span style='color:#696969; '>//</span>
+840: <span style='color:#696969; '>// The Stack registers are only fed from the PC itself!</span>
+841: <span style='color:#696969; '>//</span>
+842: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+843:    <span style='color:#800000; font-weight:bold; '>if</span> (reset) <span style='color:#800000; font-weight:bold; '>begin</span>
+844:       stack1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>9'h000</span><span style='color:#808030; '>;</span>
+845:    <span style='color:#800000; font-weight:bold; '>end</span>
+846:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+847:       <span style='color:#696969; '>// CALL instruction</span>
+848:       <span style='color:#800000; font-weight:bold; '>if</span> (inst<span style='color:#808030; '>[</span><span style='color:#008c00; '>11</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b1001</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+849:          <span style='color:#800000; font-weight:bold; '>case</span> <span style='color:#800000; font-weight:bold; '>(</span>stacklevel<span style='color:#800000; font-weight:bold; '>)</span> <span style='color:#696969; '>// synopsys parallel_case</span>
+850:             <span style='color:#008c00; '>2'b00</span><span style='color:#800000; font-weight:bold; '>:</span>
+851:                <span style='color:#696969; '>// No previous CALLs </span>
+852:                begin
+853:                   stack1 <span style='color:#800000; font-weight:bold; '>&lt;=</span> pc<span style='color:#800000; font-weight:bold; '>;</span>
+854:                end
+855:             <span style='color:#008c00; '>2'b01</span><span style='color:#800000; font-weight:bold; '>:</span>
+856:                <span style='color:#696969; '>// ONE previous CALL </span>
+857:                begin
+858:                   stack2 <span style='color:#800000; font-weight:bold; '>&lt;=</span> pc<span style='color:#800000; font-weight:bold; '>;</span>
+859:                end
+860:             <span style='color:#008c00; '>2'b10</span><span style='color:#800000; font-weight:bold; '>:</span>
+861:                <span style='color:#696969; '>// TWO previous CALLs -- This is illegal on the 16C5X! </span>
+862:                begin
+863:                   $display <span style='color:#800000; font-weight:bold; '>(</span>"Too many CALLs!!"<span style='color:#800000; font-weight:bold; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+864:                end
+865:             <span style='color:#008c00; '>2'b11</span><span style='color:#800000; font-weight:bold; '>:</span> 
+866:                begin
+867:                   $display <span style='color:#800000; font-weight:bold; '>(</span>"Too many CALLs!!"<span style='color:#800000; font-weight:bold; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+868:                end
+869:          <span style='color:#800000; font-weight:bold; '>endcase</span>
+870:       <span style='color:#800000; font-weight:bold; '>end</span>
+871:    <span style='color:#800000; font-weight:bold; '>end</span>
+872: <span style='color:#800000; font-weight:bold; '>end</span>
+873: 
+874: <span style='color:#696969; '>// Write to stacklevel</span>
+875: <span style='color:#696969; '>//</span>
+876: <span style='color:#696969; '>// The stacklevel register keeps track of the current stack depth.  On this</span>
+877: <span style='color:#696969; '>// puny processor, there are only 2 levels (you could fiddle with this and</span>
+878: <span style='color:#696969; '>// increase the stack depth).  There are two stack registers, stack1 and stack2.</span>
+879: <span style='color:#696969; '>// The stack1 register is used first (e.g. the first time a call is performed),</span>
+880: <span style='color:#696969; '>// then stack2.  As CALLs are done, stacklevel increments.  Conversely, as</span>
+881: <span style='color:#696969; '>// RETs are done, stacklevel goes down. </span>
+882: 
+883: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+884:    <span style='color:#800000; font-weight:bold; '>if</span> (reset <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b1</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+885:       stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// On reset, there should be no CALLs in progress</span>
+886:    <span style='color:#800000; font-weight:bold; '>end</span>
+887:    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>begin</span>
+888:       casex (<span style='color:#808030; '>{</span>inst<span style='color:#808030; '>,</span> stacklevel<span style='color:#808030; '>}</span>) <span style='color:#696969; '>// synopsys parallel_case</span>
+889:          <span style='color:#696969; '>// Call instructions</span>
+890:          <span style='color:#008c00; '>14</span>'b1001_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_00<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b01</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// Record 1st CALL</span>
+891:          <span style='color:#008c00; '>14</span>'b1001_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_01<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b10</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// Record 2nd CALL</span>
+892:          <span style='color:#008c00; '>14</span>'b1001_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_10<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b10</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// Already 2! Ignore</span>
+893:          <span style='color:#008c00; '>14</span>'b1001_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_11<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// {shouldn't happen}</span>
+894: 
+895:          <span style='color:#696969; '>// Return instructions</span>
+896:          <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_00<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// {shouldn't happen}</span>
+897:          <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_01<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b00</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// Go back to no CALL in progress</span>
+898:          <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_10<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b01</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// Go back to 1 CALL in progress</span>
+899:          <span style='color:#008c00; '>14</span>'b1000_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_<span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>_11<span style='color:#808030; '>:</span> stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2'b10</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// {shouldn't happen} sort of like, Go back to 2 calls in progress</span>
+900:          default<span style='color:#808030; '>:</span>
+901:             stacklevel <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> stacklevel<span style='color:#808030; '>;</span>
+902:       endcase
+903:    <span style='color:#800000; font-weight:bold; '>end</span>
+904: <span style='color:#800000; font-weight:bold; '>end</span>
+905: 
+906: <span style='color:#696969; '>// *******  Debug Stuff  ******** //</span>
+907: <span style='color:#696969; '>//</span>
+908: <span style='color:#696969; '>// The following is NOT synthesizable.  This code simply allows you to see the ASCII name</span>
+909: <span style='color:#696969; '>// for the instruction in the INST register while in a waveform viewer.</span>
+910: <span style='color:#696969; '>//</span>
+911: <span style='color:#696969; '>// synopsys translate_off</span>
+912: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>8</span>*<span style='color:#008c00; '>8</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> inst_string<span style='color:#800000; font-weight:bold; '>;</span>
+913: 
+914: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>inst</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+915:    casex (inst)
+916:       <span style='color:#008c00; '>12</span>'b0000_0000_0000<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "NOP     "<span style='color:#808030; '>;</span>
+917:       <span style='color:#008c00; '>12</span>'b0000_001X_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "MOVWF   "<span style='color:#808030; '>;</span>
+918:       <span style='color:#008c00; '>12</span>'b0000_0100_0000<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "CLRW    "<span style='color:#808030; '>;</span>
+919:       <span style='color:#008c00; '>12</span>'b0000_011X_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "CLRF    "<span style='color:#808030; '>;</span>
+920:       <span style='color:#008c00; '>12</span>'b0000_10XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "SUBWF   "<span style='color:#808030; '>;</span>
+921:       <span style='color:#008c00; '>12</span>'b0000_11XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "DECF    "<span style='color:#808030; '>;</span>
+922:       <span style='color:#008c00; '>12</span>'b0001_00XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "IORWF   "<span style='color:#808030; '>;</span>
+923:       <span style='color:#008c00; '>12</span>'b0001_01XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "ANDWF   "<span style='color:#808030; '>;</span>
+924:       <span style='color:#008c00; '>12</span>'b0001_10XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "XORWF   "<span style='color:#808030; '>;</span>
+925:       <span style='color:#008c00; '>12</span>'b0001_11XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "ADDWF   "<span style='color:#808030; '>;</span>
+926:       <span style='color:#008c00; '>12</span>'b0010_00XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "MOVF    "<span style='color:#808030; '>;</span>
+927:       <span style='color:#008c00; '>12</span>'b0010_01XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "COMF    "<span style='color:#808030; '>;</span>
+928:       <span style='color:#008c00; '>12</span>'b0010_10XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "INCF    "<span style='color:#808030; '>;</span>
+929:       <span style='color:#008c00; '>12</span>'b0010_11XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "DECFSZ  "<span style='color:#808030; '>;</span>
+930:       <span style='color:#008c00; '>12</span>'b0011_00XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "RRF     "<span style='color:#808030; '>;</span>
+931:       <span style='color:#008c00; '>12</span>'b0011_01XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "RLF     "<span style='color:#808030; '>;</span>
+932:       <span style='color:#008c00; '>12</span>'b0011_10XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "SWAPF   "<span style='color:#808030; '>;</span>
+933:       <span style='color:#008c00; '>12</span>'b0011_11XX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "INCFSZ  "<span style='color:#808030; '>;</span>
+934: 
+935:       <span style='color:#696969; '>// *** Bit-Oriented File Register Operations</span>
+936:       <span style='color:#008c00; '>12</span>'b0100_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "BCF     "<span style='color:#808030; '>;</span>
+937:       <span style='color:#008c00; '>12</span>'b0101_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "BSF     "<span style='color:#808030; '>;</span>
+938:       <span style='color:#008c00; '>12</span>'b0110_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "BTFSC   "<span style='color:#808030; '>;</span>
+939:       <span style='color:#008c00; '>12</span>'b0111_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "BTFSS   "<span style='color:#808030; '>;</span>
+940: 
+941:       <span style='color:#696969; '>// *** Literal and Control Operations</span>
+942:       <span style='color:#008c00; '>12</span>'b0000_0000_0010<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "OPTION  "<span style='color:#808030; '>;</span>
+943:       <span style='color:#008c00; '>12</span>'b0000_0000_0011<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "SLEEP   "<span style='color:#808030; '>;</span>
+944:       <span style='color:#008c00; '>12</span>'b0000_0000_0100<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "CLRWDT  "<span style='color:#808030; '>;</span>
+945:       <span style='color:#008c00; '>12</span>'b0000_0000_0101<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "TRIS    "<span style='color:#808030; '>;</span>
+946:       <span style='color:#008c00; '>12</span>'b0000_0000_0110<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "TRIS    "<span style='color:#808030; '>;</span>
+947:       <span style='color:#008c00; '>12</span>'b0000_0000_0111<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "TRIS    "<span style='color:#808030; '>;</span>
+948:       <span style='color:#008c00; '>12</span>'b1000_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "RETLW   "<span style='color:#808030; '>;</span>
+949:       <span style='color:#008c00; '>12</span>'b1001_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "CALL    "<span style='color:#808030; '>;</span>
+950:       <span style='color:#008c00; '>12</span>'b101X_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "GOTO    "<span style='color:#808030; '>;</span>
+951:       <span style='color:#008c00; '>12</span>'b1100_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "MOVLW   "<span style='color:#808030; '>;</span>
+952:       <span style='color:#008c00; '>12</span>'b1101_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "IORLW   "<span style='color:#808030; '>;</span>
+953:       <span style='color:#008c00; '>12</span>'b1110_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "ANDLW   "<span style='color:#808030; '>;</span>
+954:       <span style='color:#008c00; '>12</span>'b1111_XXXX_XXXX<span style='color:#808030; '>:</span> inst_string <span style='color:#808030; '>=</span> "XORLW   "<span style='color:#808030; '>;</span>
+955: 
+956:       default<span style='color:#808030; '>:</span>            inst_string <span style='color:#808030; '>=</span> "<span style='color:#808030; '>-</span>XXXXXX<span style='color:#808030; '>-</span>"<span style='color:#808030; '>;</span>
+957:    endcase
+958: <span style='color:#800000; font-weight:bold; '>end</span>
+959:    
+960: <span style='color:#696969; '>// synopsys translate_on</span>
+961: 
+962: endmodule
+963: 
+</pre></body></html>

@@ -1,0 +1,27 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>/*</span>
+ 1: <span style='color:#696969; '>   Проблема с выделением(подсветкой) "скобок"</span>
+ 2: <span style='color:#696969; '></span>
+ 3: <span style='color:#696969; '>  начало: "create or replace package (.)* is"</span>
+ 4: <span style='color:#696969; '>            здесь надо еще исключть вариант:</span>
+ 5: <span style='color:#696969; '>                 "create or replace package body (.)* is"</span>
+ 6: <span style='color:#696969; '>  конец:   end </span>
+ 7: <span style='color:#696969; '>*/</span>
+ 8: 
+ 9: <span style='color:#800000; font-weight:bold; '>create or replace package </span><span style='color:#000000; background:#ffffff; '>TTT</span><span style='color:#800000; font-weight:bold; '> is</span>
+10: 
+11: <span style='color:#696969; '>-- ...</span>
+12: 
+13: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#808030; '>;</span>
+14: 
+15: 
+16: <span style='color:#800000; font-weight:bold; '>create</span>
+17: <span style='color:#800000; font-weight:bold; '>or</span> <span style='color:#800000; font-weight:bold; '>replace</span> <span style='color:#800000; font-weight:bold; '>package</span> TTT <span style='color:#800000; font-weight:bold; '>is</span>
+18: 
+19: <span style='color:#696969; '>-- ...С переводом строки уже не работает, хотя указано: create(\s)*or(\s)*replace...</span>
+20: 
+21: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#808030; '>;</span>
+22: 
+23: 
+24: 
+</pre></body></html>

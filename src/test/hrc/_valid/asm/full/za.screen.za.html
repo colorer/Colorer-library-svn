@@ -1,0 +1,308 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>; screen.za</span>
+  1: <span style='color:#696969; '>; Работа с видеобуфером</span>
+  2: <span style='color:#696969; '>; 02.09.2000</span>
+  3: 
+  4: <span style='color:#004a43; '>COMMENT</span><span style='color:#696969; '> -----------------------------------------------Требует-</span>
+  5: <span style='color:#696969; '></span>
+  6: <span style='color:#696969; '>Требует:</span>
+  7: <span style='color:#696969; '></span>
+  8: <span style='color:#696969; '>* FONT_4x8 - адрес шрифта 4x8 (специальный формат, с</span>
+  9: <span style='color:#696969; '>             выравниванием на #100</span>
+ 10: <span style='color:#696969; '>* FONT_8x8 - адрес шрифта 8x8 (специальный формат, с</span>
+ 11: <span style='color:#696969; '>             выравниванием на #100</span>
+ 12: <span style='color:#696969; '>* cfg_COL_MAIN - атрибуты экрана</span>
+ 13: <span style='color:#696969; '></span>
+ 14: <span style='color:#696969; '>---------------------------------------------------------------</span>
+ 15: 
+ 16: <span style='color:#004a43; '>COMMENT</span><span style='color:#696969; '> ----------------------------------------------Содержит-</span>
+ 17: <span style='color:#696969; '></span>
+ 18: <span style='color:#696969; '>* scr_Pos2Scr: Макрос преобразует координаты в адрес экрана.</span>
+ 19: <span style='color:#696969; '>      d  - координата Y (0-23);</span>
+ 20: <span style='color:#696969; '>      e  - координата X (0-31).</span>
+ 21: <span style='color:#696969; '>  Возвращает: de - адрес экрана, соответствующий X и Y,</span>
+ 22: <span style='color:#696969; '>              a  - изменен.</span>
+ 23: <span style='color:#696969; '></span>
+ 24: <span style='color:#696969; '>* scr_Pos2Attr: Макрос преобразует координаты в адрес области</span>
+ 25: <span style='color:#696969; '>                атрибутов.</span>
+ 26: <span style='color:#696969; '>      d  - координата Y (0-23);</span>
+ 27: <span style='color:#696969; '>      e  - координата X (0-31).</span>
+ 28: <span style='color:#696969; '>  Возвращает: de - адрес экрана, соответствующий X и Y,</span>
+ 29: <span style='color:#696969; '>              a  - изменен.</span>
+ 30: <span style='color:#696969; '></span>
+ 31: <span style='color:#696969; '>* scr_Scr2Attr: Макрос преобразует адрес экрана в адрес области</span>
+ 32: <span style='color:#696969; '>                атрибутов.</span>
+ 33: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 34: <span style='color:#696969; '>  Возвращает: de - полученный адрес атрибутов, a - изменен.</span>
+ 35: <span style='color:#696969; '></span>
+ 36: <span style='color:#696969; '>* scr_AddrDn: Макрос получает адрес экрана на одну пиксельную</span>
+ 37: <span style='color:#696969; '>              линейку ниже заданного.</span>
+ 38: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 39: <span style='color:#696969; '>  Возвращает: de - полученный адрес экрана, a  - изменен.</span>
+ 40: <span style='color:#696969; '></span>
+ 41: <span style='color:#696969; '>* scr_AddrUp: Макрос получает адрес экрана на одну пиксельную</span>
+ 42: <span style='color:#696969; '>              линейку выше заданного.</span>
+ 43: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 44: <span style='color:#696969; '>  Возвращает: de - полученный адрес экрана, a  - изменен.</span>
+ 45: <span style='color:#696969; '></span>
+ 46: <span style='color:#696969; '>* scr_AddrDn8: Макрос получает адрес экрана на одно знакоместо</span>
+ 47: <span style='color:#696969; '>               ниже заданного.</span>
+ 48: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 49: <span style='color:#696969; '>  Возвращает: de - полученный адрес экрана, a  - изменен.</span>
+ 50: <span style='color:#696969; '></span>
+ 51: <span style='color:#696969; '>* scr_AddrUp8: Макрос получает адрес экрана на одну пиксельную</span>
+ 52: <span style='color:#696969; '>               линейку выше заданного.</span>
+ 53: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 54: <span style='color:#696969; '>  Возвращает: de - полученный адрес экрана, a  - изменен.</span>
+ 55: <span style='color:#696969; '></span>
+ 56: <span style='color:#696969; '>* scr_Clear: Очистка экрана в соответствии с атрибутами.</span>
+ 57: <span style='color:#696969; '></span>
+ 58: <span style='color:#696969; '>* scr_Print8x8: Печать ASCIIZ-строки на экране в режиме 8x8.</span>
+ 59: <span style='color:#696969; '>      ix - адрес строки;</span>
+ 60: <span style='color:#696969; '>      bc - координаты экрана (см. scr_Pos2Scr).</span>
+ 61: <span style='color:#696969; '>  Возвращает: a - 0, ix - последний элемент строки (0)</span>
+ 62: <span style='color:#696969; '>              hl,de,b - изменены.</span>
+ 63: <span style='color:#696969; '></span>
+ 64: <span style='color:#696969; '>* scr_SymOut8x8: Печать символа на экране в режиме 8x8</span>
+ 65: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 66: <span style='color:#696969; '>      a  - код символа.</span>
+ 67: <span style='color:#696969; '>  Возвращает: hl,bc,a - измемены.</span>
+ 68: <span style='color:#696969; '></span>
+ 69: <span style='color:#696969; '>* scr_Print4x8: Печать ASCIIZ-строки на экране в режиме 4x8.</span>
+ 70: <span style='color:#696969; '>      ix - адрес строки;</span>
+ 71: <span style='color:#696969; '>      bc - координаты экрана (см. scr_Pos2Scr).</span>
+ 72: <span style='color:#696969; '>  Возвращает: a - 0, ix - последний элемент строки (0)</span>
+ 73: <span style='color:#696969; '>              hl,de,bc - изменены.</span>
+ 74: <span style='color:#696969; '></span>
+ 75: <span style='color:#696969; '>* scr_SymOut4x8: Печать символа на экране в режиме 4x8</span>
+ 76: <span style='color:#696969; '>      de - адрес экрана;</span>
+ 77: <span style='color:#696969; '>      c  - маска символа (%11110000 или %00001111);</span>
+ 78: <span style='color:#696969; '>      a  - код символа.</span>
+ 79: <span style='color:#696969; '>  Возвращает: hl,bc,a - измемены.</span>
+ 80: <span style='color:#696969; '></span>
+ 81: <span style='color:#696969; '>---------------------------------------------------------------</span>
+ 82: 
+ 83: <span style='color:#e34adc; '>scr_Pos2Scr</span><span style='color:#e34adc; '>       MAC</span>
+ 84:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+ 85:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00000111</span>
+ 86:                   <span style='color:#44aadd; '>rrca</span>
+ 87:                   <span style='color:#44aadd; '>rrca</span>
+ 88:                   <span style='color:#44aadd; '>rrca</span>
+ 89:                   <span style='color:#44aadd; '>add</span>   <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>e</span>
+ 90:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+ 91:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+ 92:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00011000</span>
+ 93:                   <span style='color:#44aadd; '>or</span>    <span style='color:#008000; '>#40</span> <span style='color:#696969; '>;#C0</span>
+ 94:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+ 95:                   <span style='color:#004a43; '>ENDM</span>
+ 96: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+ 97: 
+ 98: <span style='color:#e34adc; '>scr_Pos2Attr</span><span style='color:#e34adc; '>      MAC</span>
+ 99:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+100:                   <span style='color:#44aadd; '>rrca</span>
+101:                   <span style='color:#44aadd; '>rrca</span>
+102:                   <span style='color:#44aadd; '>rrca</span>
+103:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+104:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%11100000</span>
+105:                   <span style='color:#44aadd; '>or</span>    <span style='color:#000080; '>e</span>
+106:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+107:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+108:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00000011</span>
+109:                   <span style='color:#44aadd; '>or</span>    <span style='color:#008000; '>#58</span> <span style='color:#696969; '>;#D8</span>
+110:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+111:                   <span style='color:#004a43; '>ENDM</span>
+112: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+113: 
+114: <span style='color:#e34adc; '>scr_Scr2Attr</span><span style='color:#e34adc; '>      MAC</span>
+115:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+116:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00011000</span>
+117:                   <span style='color:#44aadd; '>rrca</span>
+118:                   <span style='color:#44aadd; '>rrca</span>
+119:                   <span style='color:#44aadd; '>rrca</span>
+120:                   <span style='color:#44aadd; '>or</span>    <span style='color:#008000; '>#58</span> <span style='color:#696969; '>;#D8</span>
+121:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+122:                   <span style='color:#004a43; '>ENDM</span>
+123: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+124: 
+125: <span style='color:#e34adc; '>scr_AddrDn</span><span style='color:#e34adc; '>        MAC</span>
+126:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+127:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+128:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00000111</span>
+129:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>nz</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>12</span>
+130:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>e</span>
+131:                   <span style='color:#44aadd; '>add</span>   <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#20</span>
+132:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+133:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>c</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>6</span>
+134:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+135:                   <span style='color:#44aadd; '>sub</span>   <span style='color:#008000; '>#08</span>
+136:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+137:                   <span style='color:#004a43; '>ENDM</span>
+138: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+139: 
+140: <span style='color:#e34adc; '>scr_AddrUp</span><span style='color:#e34adc; '>        MAC</span>
+141:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+142:                   <span style='color:#44aadd; '>dec</span>   <span style='color:#000080; '>d</span>
+143:                   <span style='color:#44aadd; '>and</span>   <span style='color:#005b00; '>%00000111</span>
+144:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>nz</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>12</span>
+145:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>e</span>
+146:                   <span style='color:#44aadd; '>sub</span>   <span style='color:#008000; '>#20</span>
+147:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+148:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>c</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>6</span>
+149:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+150:                   <span style='color:#44aadd; '>add</span>   <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#08</span>
+151:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+152:                   <span style='color:#004a43; '>ENDM</span>
+153: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+154: 
+155: <span style='color:#e34adc; '>scr_AddrDn8</span><span style='color:#e34adc; '>       MAC</span>
+156:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>e</span>
+157:                   <span style='color:#44aadd; '>add</span>   <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#20</span>
+158:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+159:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>nc</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>6</span>
+160:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+161:                   <span style='color:#44aadd; '>add</span>   <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#08</span>
+162:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+163:                   <span style='color:#004a43; '>ENDM</span>
+164: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+165: 
+166: <span style='color:#e34adc; '>scr_AddrUp8</span><span style='color:#e34adc; '>       MAC</span>
+167:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>e</span>
+168:                   <span style='color:#44aadd; '>sub</span>   <span style='color:#008000; '>#20</span>
+169:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+170:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>nc</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>$</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>6</span>
+171:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+172:                   <span style='color:#44aadd; '>sub</span>   <span style='color:#008000; '>#08</span>
+173:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+174:                   <span style='color:#004a43; '>ENDM</span>
+175: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+176: 
+177: <span style='color:#e34adc; '>scr_Clear</span><span style='color:#e34adc; '>         PROC</span>
+178:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>hl</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#5AFF</span> <span style='color:#696969; '>;#DAFF</span>
+179:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>de</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#5AFE</span> <span style='color:#696969; '>;#DAFE</span>
+180:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>bc</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#02FF</span>
+181:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span>cfg_COL_MAIN<span style='color:#808030; '>)</span>
+182:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+183:                   <span style='color:#44aadd; '>lddr</span>
+184:                   <span style='color:#44aadd; '>dec</span>   <span style='color:#000080; '>hl</span>
+185:                   <span style='color:#44aadd; '>dec</span>   <span style='color:#000080; '>e</span>
+186:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>c</span>
+187:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>bc</span><span style='color:#808030; '>,</span><span style='color:#008000; '>#17FF</span>
+188:                   <span style='color:#44aadd; '>lddr</span>
+189:                   <span style='color:#44aadd; '>ret</span>
+190: <span style='color:#e34adc; '>scr_Clear</span><span style='color:#e34adc; '>         ENDP</span>
+191: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+192: 
+193: <span style='color:#e34adc; '>scr_Print4x8</span><span style='color:#e34adc; '>      PROC</span>
+194:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>b</span>
+195:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>c</span>
+196:                   scr_Pos2Scr
+197:                   <span style='color:#44aadd; '>bit</span>   <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#000080; '>c</span> <span style='color:#696969; '>;Чет/нечет? Нужно для маски</span>
+198:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>c</span><span style='color:#808030; '>,</span><span style='color:#005b00; '>%00001111</span> <span style='color:#696969; '>;Для четных столбцов</span>
+199:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#44aadd; '>z</span><span style='color:#808030; '>,</span><span style='color:#e34adc; '>@1</span>
+200:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>c</span><span style='color:#808030; '>,</span><span style='color:#005b00; '>%11110000</span> <span style='color:#696969; '>;Для нечетных столбцов</span>
+201: <span style='color:#e34adc; '>@1</span><span style='color:#e34adc; '>:</span>               <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>ix</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;a = очередной символ строки</span>
+202:                   <span style='color:#44aadd; '>or</span>    <span style='color:#000080; '>a</span>
+203:                   <span style='color:#44aadd; '>ret</span>   <span style='color:#44aadd; '>z</span> <span style='color:#696969; '>;Возврат, если a=0</span>
+204:                   <span style='color:#44aadd; '>call  </span><span style='color:#808030; '>scr_SymOut4x8</span> <span style='color:#696969; '>;Вывод символа</span>
+205:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>ix</span>
+206:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>c</span>      <span style='color:#696969; '>;\</span>
+207:                   <span style='color:#44aadd; '>jp    </span><span style='color:#808030; '>p,@1</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>2</span> <span style='color:#696969; '>;- Проверим старший бит c</span>
+208:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>c</span><span style='color:#808030; '>,</span><span style='color:#005b00; '>%00001111</span>
+209:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>e</span> <span style='color:#696969; '>;Следующий адрес экрана</span>
+210:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#e34adc; '>@1</span>
+211: <span style='color:#e34adc; '>scr_Print4x8</span><span style='color:#e34adc; '>      ENDP</span>
+212: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+213: 
+214: <span style='color:#e34adc; '>scr_Print8x8</span><span style='color:#e34adc; '>      PROC</span>
+215:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>b</span>
+216:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>e</span><span style='color:#808030; '>,</span><span style='color:#000080; '>c</span>
+217:                   scr_Pos2Scr
+218:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>ix</span><span style='color:#808030; '>)</span>
+219:                   <span style='color:#44aadd; '>or</span>    <span style='color:#000080; '>a</span>
+220:                   <span style='color:#44aadd; '>ret</span>   <span style='color:#44aadd; '>z</span>
+221:                   <span style='color:#44aadd; '>call  </span><span style='color:#808030; '>scr_SymOut8x8</span>
+222:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>e</span>
+223:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>ix</span>
+224:                   <span style='color:#44aadd; '>jr</span>    <span style='color:#e34adc; '>scr_Print8x8</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>3</span>
+225: <span style='color:#e34adc; '>scr_Print8x8</span><span style='color:#e34adc; '>      ENDP</span>
+226: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+227: 
+228: <span style='color:#e34adc; '>scr_SymOut8x8</span><span style='color:#e34adc; '>     PROC</span>
+229:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>h</span><span style='color:#808030; '>,</span><span style='color:#808030; '>HIGH</span> FONT_8x8 <span style='color:#696969; '>;Д.б. выравнен на 256!</span>
+230:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>l</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+231:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>c</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span>
+232:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>b</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>8</span>
+233: <span style='color:#e34adc; '>@1</span><span style='color:#e34adc; '>:</span>               <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;Не разлинеиваем - и так быстро</span>
+234:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+235:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+236:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+237:                   <span style='color:#44aadd; '>djnz  </span><span style='color:#808030; '>@1</span>
+238:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>c</span>
+239:                   <span style='color:#44aadd; '>ret</span>
+240: <span style='color:#e34adc; '>scr_SymOut8x8</span><span style='color:#e34adc; '>     ENDP</span>
+241: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+242: 
+243: <span style='color:#e34adc; '>scr_SymOut4x8</span><span style='color:#e34adc; '>     PROC</span>
+244:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>h</span><span style='color:#808030; '>,</span><span style='color:#808030; '>HIGH</span> FONT_4x8 <span style='color:#696969; '>;Д.б. выравнен на 256!</span>
+245:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>l</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span> <span style='color:#696969; '>;hl = FONT_4x8</span>
+246:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>b</span><span style='color:#808030; '>,</span><span style='color:#000080; '>d</span> <span style='color:#696969; '>;Сохраним de</span>
+247:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;a = содержимое видеобуфера</span>
+248:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;\</span>
+249:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>    <span style='color:#696969; '>; Наложение на экран по маске</span>
+250:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;/</span>
+251:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span> <span style='color:#696969; '>;Отразим изменение на экране</span>
+252:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+253:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+254:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>;Разлинеено для скорости</span>
+255:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+256:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+257:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+258:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+259:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+260:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+261:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+262:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+263:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+264:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+265:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+266:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+267:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+268:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+269:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+270:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+271:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+272:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+273:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+274:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+275:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+276:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+277:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+278:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+279:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+280:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+281:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+282:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+283:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+284:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+285:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+286:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+287:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+288:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+289:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+290:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+291:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+292:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+293:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+294:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>h</span>
+295:                   <span style='color:#44aadd; '>inc</span>   <span style='color:#000080; '>d</span>
+296:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>a</span><span style='color:#808030; '>,</span><span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span>
+297:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+298:                   <span style='color:#44aadd; '>and</span>   <span style='color:#000080; '>c</span>
+299:                   <span style='color:#44aadd; '>xor</span>   <span style='color:#808030; '>(</span><span style='color:#000080; '>hl</span><span style='color:#808030; '>)</span>
+300:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#808030; '>(</span><span style='color:#000080; '>de</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#000080; '>a</span>
+301:                   <span style='color:#44aadd; '>ld</span>    <span style='color:#000080; '>d</span><span style='color:#808030; '>,</span><span style='color:#000080; '>b</span> <span style='color:#696969; '>;Восстановим de</span>
+302:                   <span style='color:#44aadd; '>ret</span>
+303: <span style='color:#e34adc; '>scr_SymOut4x8</span><span style='color:#e34adc; '>     ENDP</span>
+304: <span style='color:#696969; '>;-------------------------------------------------------------;</span>
+305: 
+</pre></body></html>

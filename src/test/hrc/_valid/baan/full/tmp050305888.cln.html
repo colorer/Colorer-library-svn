@@ -1,0 +1,1041 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+   0: <span style='color:#bb7977; font-weight:bold; '>declaration</span><span style='color:#808030; '>:</span>    
+   1:     <span style='color:#004a43; '>#include</span> <span style='color:#0000e6; '>"itfzzzcommon"</span>
+   2:     <span style='color:#004a43; '>#include</span> <span style='color:#0000e6; '>"itfzzyerrors"</span>
+   3:     <span style='color:#004a43; '>#include</span> <span style='color:#0000e6; '>"itfzzzoasis"</span>
+   4:     <span style='color:#004a43; '>#include</span> <span style='color:#0000e6; '>"itfzzttest"</span>
+   5:     <span style='color:#004a43; '>#include</span> <span style='color:#0000e6; '>"itfzzydomains"</span>
+   6: 
+   7:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll000m01
+   8:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll003m01
+   9:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll007m00
+  10:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll007m01
+  11:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll009
+  12:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll021m01
+  13:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll021m01
+  14:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll039m01
+  15:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll064m01
+  16:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll154
+  17:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll171
+  18:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdll259
+  19:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdllbw
+  20:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdllefiltr
+  21:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdllperiod
+  22:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdllprofil
+  23:     <span style='color:#004a43; '>#pragma</span> used dll otfzzzdlltable
+  24: 
+  25:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str200 fileName
+  26:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str20 oasis<span style='color:#008c00; '>.</span>ver
+  27:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftvs doc<span style='color:#008c00; '>.</span>type
+  28:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftf form<span style='color:#008c00; '>.</span>type
+  29:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>id efilter<span style='color:#008c00; '>.</span>group
+  30:     
+  31:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfper period
+  32:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>year year
+  33:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>id assur<span style='color:#008c00; '>.</span>part
+  34:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str200 assur<span style='color:#008c00; '>.</span>part<span style='color:#008c00; '>.</span>desc
+  35:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>id cumul<span style='color:#008c00; '>.</span>part
+  36:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str200 cumul<span style='color:#008c00; '>.</span>part<span style='color:#008c00; '>.</span>desc
+  37:     <span style='color:#800000; font-weight:bold; '>extern</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str200 efilter<span style='color:#008c00; '>.</span>group<span style='color:#008c00; '>.</span>dsc
+  38: 
+  39:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz003    <span style='color:#696969; '>| Работники</span>
+  40:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz024    <span style='color:#696969; '>| Условия труда</span>
+  41:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz026
+  42:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz040    <span style='color:#696969; '>| Адреса работников</span>
+  43:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz087    <span style='color:#696969; '>| Инвалидность работников    </span>
+  44:     <span style='color:#800000; font-weight:bold; '>table</span>    ttfzzz095    <span style='color:#696969; '>| Виды стажей</span>
+  45: 
+  46: <span style='color:#bb7977; font-weight:bold; '>before.program</span><span style='color:#808030; '>:</span>
+  47: <span style='color:#696969; '>|    execute(get.defaults)</span>
+  48:     <span style='color:#005fd2; '>efilter.setDefault</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  49: <span style='color:#bb7977; font-weight:bold; '>form.all</span><span style='color:#808030; '>:</span>
+  50:     <span style='color:#bb7977; font-weight:bold; '>init.form</span><span style='color:#808030; '>:</span>
+  51:         <span style='color:#808030; '>get.screen.defaults</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  52: <span style='color:#696969; '>|        execute(cont.process) | !!!!!!!</span>
+  53: <span style='color:#bb7977; font-weight:bold; '>field.efilter.group:</span>
+  54:     <span style='color:#bb7977; font-weight:bold; '>after.input</span><span style='color:#808030; '>:</span>
+  55:         <span style='color:#808030; '>display</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"efilter.group.dsc"</span><span style='color:#808030; '>)</span>
+  56: <span style='color:#bb7977; font-weight:bold; '>field.efilter.group.dsc:</span>
+  57:     <span style='color:#bb7977; font-weight:bold; '>before.display</span><span style='color:#808030; '>:</span>    
+  58:         efilter<span style='color:#008c00; '>.</span>group<span style='color:#008c00; '>.</span>dsc<span style='color:#808030; '>=</span><span style='color:#005fd2; '>grp.desc.byID</span><span style='color:#808030; '>(</span>efilter<span style='color:#008c00; '>.</span>group<span style='color:#808030; '>)</span>    
+  59: <span style='color:#bb7977; font-weight:bold; '>field.assur.part:</span>
+  60:     <span style='color:#bb7977; font-weight:bold; '>after.input</span><span style='color:#808030; '>:</span>
+  61:         <span style='color:#808030; '>display</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"assur.part.desc"</span><span style='color:#808030; '>)</span>
+  62: <span style='color:#bb7977; font-weight:bold; '>field.assur.part.desc:</span>
+  63:     <span style='color:#bb7977; font-weight:bold; '>before.display</span><span style='color:#808030; '>:</span>
+  64:         assur<span style='color:#008c00; '>.</span>part<span style='color:#008c00; '>.</span>desc<span style='color:#808030; '>=</span><span style='color:#005fd2; '>nalc.name</span><span style='color:#808030; '>(</span>assur<span style='color:#008c00; '>.</span>part<span style='color:#808030; '>)</span>
+  65: 
+  66: <span style='color:#bb7977; font-weight:bold; '>field.cumul.part:</span>
+  67:     <span style='color:#bb7977; font-weight:bold; '>after.input</span><span style='color:#808030; '>:</span>
+  68:         <span style='color:#808030; '>display</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"cumul.part.desc"</span><span style='color:#808030; '>)</span>
+  69: <span style='color:#bb7977; font-weight:bold; '>field.cumul.part.desc:</span>
+  70:     <span style='color:#bb7977; font-weight:bold; '>before.display</span><span style='color:#808030; '>:</span>
+  71:         cumul<span style='color:#008c00; '>.</span>part<span style='color:#008c00; '>.</span>desc<span style='color:#808030; '>=</span><span style='color:#005fd2; '>nalc.name</span><span style='color:#808030; '>(</span>cumul<span style='color:#008c00; '>.</span>part<span style='color:#808030; '>)</span>
+  72: <span style='color:#bb7977; font-weight:bold; '>choice.cont.process</span><span style='color:#808030; '>:</span>
+  73:     <span style='color:#bb7977; font-weight:bold; '>on.choice</span><span style='color:#808030; '>:</span>
+  74:         <span style='color:#005fd2; '>tab.setLevelParams</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+  75:        <span style='color:#800000; font-weight:bold; '> if</span> doc<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>tfzzz<span style='color:#008c00; '>.</span>pftvs<span style='color:#008c00; '>.</span>inds <span style='color:#800000; font-weight:bold; '>then</span>
+  76:             <span style='color:#808030; '>message</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Поле Тип документа: для текущей версии допустимо только значение ИНДС"</span><span style='color:#808030; '>)</span>
+  77:             <span style='color:#808030; '>choice.again</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  78:        <span style='color:#800000; font-weight:bold; '> endif</span>
+  79:        <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#808030; '>etol</span><span style='color:#808030; '>(</span>period<span style='color:#808030; '>)</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+  80:             <span style='color:#808030; '>message</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Поле Период: должно быть указано значение"</span><span style='color:#808030; '>)</span>
+  81:             <span style='color:#808030; '>choice.again</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  82:        <span style='color:#800000; font-weight:bold; '> endif</span>
+  83:        <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#800000; font-weight:bold; '>not</span> year <span style='color:#800000; font-weight:bold; '>then</span>
+  84:             <span style='color:#808030; '>message</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Поле Год: должно быть указано значение"</span><span style='color:#808030; '>)</span>
+  85:             <span style='color:#808030; '>choice.again</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  86:        <span style='color:#800000; font-weight:bold; '> endif</span>
+  87:         <span style='color:#800000; font-weight:bold; '>long</span> startTime
+  88:         startTime<span style='color:#808030; '>=</span><span style='color:#808030; '>time.num</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  89:         writeOasisFile<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  90:         <span style='color:#005fd2; '>showCurrentError</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+  91:         alert<span style='color:#808030; '>(</span><span style='color:#808030; '>time.num</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>-</span>startTime<span style='color:#808030; '>)</span>
+  92:         <span style='color:#800000; font-weight:bold; '>stop</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>| !!!!!!!!!</span>
+  93: <span style='color:#bb7977; font-weight:bold; '>functions</span><span style='color:#808030; '>:</span>
+  94: 
+  95: 
+  96: tdate     work<span style='color:#008c00; '>.</span>date
+  97: tdate     lBdate<span style='color:#808030; '>,</span> lEdate
+  98: <span style='color:#800000; font-weight:bold; '>long</span>     curr1<span style='color:#808030; '>,</span> curr2
+  99: <span style='color:#800000; font-weight:bold; '>domain</span>     tfzzz<span style='color:#008c00; '>.</span>str15 strahnum
+ 100: bool     isNotOtm
+ 101: 
+ 102: 
+ 103: <span style='color:#800000; font-weight:bold; '>function</span> writeOasisFile<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 104:     <span style='color:#005fd2; '>prof.init</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+ 105:     <span style='color:#800000; font-weight:bold; '>long</span> all all<span style='color:#808030; '>=</span>grp<span style='color:#008c00; '>.</span>size<span style='color:#008c00; '>.</span>byID<span style='color:#808030; '>(</span>efilter<span style='color:#008c00; '>.</span>group<span style='color:#808030; '>)</span>
+ 106:     work<span style='color:#008c00; '>.</span>date <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>get.work.date</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+ 107:     get<span style='color:#008c00; '>.</span>zzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>dates<span style='color:#808030; '>(</span>year<span style='color:#808030; '>,</span> period<span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span> lEdate<span style='color:#808030; '>)</span>
+ 108: 
+ 109:     OAS_FILE<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"oasis.txt"</span><span style='color:#808030; '>)</span>
+ 110:     OAS_REC<span style='color:#808030; '>(</span>O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"ЗГЛВ"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"04.00"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 111:     OAS_REC<span style='color:#808030; '>(</span>O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"РБТД"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"РБТД"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.pf.reg.num</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>14</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.comp.name</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>100</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 112:     OAS_REC<span style='color:#808030; '>(</span>O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"ПАЧК"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>D<span style='color:#808030; '>(</span>work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 113:     OAS_REC<span style='color:#808030; '>(</span>O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"ТИПД"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#808030; '>enum.descr$</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"tfzzz.pftvs"</span><span style='color:#808030; '>,</span>doc<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>doc<span style='color:#008c00; '>.</span>count<span style='color:#808030; '>(</span>doc<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 114:     curr1 <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span>
+ 115:     <span style='color:#800000; font-weight:bold; '>long</span> count
+ 116:     count<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 117:     <span style='color:#004a43; '>select</span> tfzzz003.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz011<span style='color:#808030; '>,</span> tfzzz003 <span style='color:#004a43; '>where</span>
+ 118:         tfzzz011._index1<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>efilter.group</span><span style='color:#808030; '>}</span>    
+ 119:         <span style='color:#004a43; '>and</span>
+ 120:         tfzzz003._index1<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>tfzzz011.entrempl<span style='color:#808030; '>}</span>
+ 121:     <span style='color:#004a43; '>selectdo</span>
+ 122:        <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#005fd2; '>empl.in.group</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> efilter<span style='color:#008c00; '>.</span>group<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 123:             inc<span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span> 
+ 124:             <span style='color:#005fd2; '>set.sb.msg</span><span style='color:#808030; '>(</span><span style='color:#808030; '>str$</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span><span style='color:#808030; '>&amp;</span><span style='color:#0000e6; '>" из "</span><span style='color:#808030; '>&amp;</span><span style='color:#808030; '>str$</span><span style='color:#808030; '>(</span>all<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 125:             isNotOtm <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span> convertTypeCorr<span style='color:#808030; '>(</span>form<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>otm <span style='color:#808030; '>)</span>
+ 126:             strahnum <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>get.empl.pfin</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+ 127:             strahnum<span style='color:#808030; '>(</span><span style='color:#008c00; '>12</span><span style='color:#808030; '>;</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>" "</span>
+ 128:             <span style='color:#696969; '>| огранизация перебора в функции ProcessInterval всех инвалидностей и неинвалидностей.</span>
+ 129:             tdate left
+ 130:             left  <span style='color:#808030; '>=</span> DR_MIN_DATE
+ 131: 
+ 132:            <span style='color:#800000; font-weight:bold; '> if</span> tfzzz003<span style='color:#008c00; '>.</span>emplid <span style='color:#808030; '>=</span> <span style='color:#008c00; '>13</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 133:                 tfzzz003<span style='color:#008c00; '>.</span>emplid <span style='color:#808030; '>=</span> tfzzz003<span style='color:#008c00; '>.</span>emplid
+ 134:            <span style='color:#800000; font-weight:bold; '> endif</span>
+ 135: 
+ 136:            <span style='color:#800000; font-weight:bold; '> repeat</span> <span style='color:#696969; '>| этот цикл - по комкам инвалидностей. </span>
+ 137:                    <span style='color:#696969; '>| комок инвалидностей - это период времени, не содержащий неинавалидностей.</span>
+ 138:                 bool found
+ 139:                 found<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>false</span>
+ 140:                 <span style='color:#004a43; '>select</span> <span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz087
+ 141:                 <span style='color:#004a43; '>where</span> _index2  <span style='color:#696969; '>| целиком правее точки left</span>
+ 142:                   <span style='color:#004a43; '>inrange</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>left</span><span style='color:#808030; '>}</span>
+ 143:                   <span style='color:#004a43; '>and</span>      <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 144:                   <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> _index2
+ 145:                 <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+ 146:                 <span style='color:#004a43; '>selectdo</span> 
+ 147:                     <span style='color:#696969; '>| нашли один некий интервал целиком справа от точки left</span>
+ 148:                     found<span style='color:#808030; '>=</span><span style='color:#008c00; '>1</span> 
+ 149: 
+ 150:                     <span style='color:#696969; '>| т.к изначально left=0 то леввее этого интервала точно неинавлид</span>
+ 151:                     <span style='color:#696969; '>| => в диапазоне [left;    tfzzz087.invafrom] - НЕИНВАЛИД</span>
+ 152:                     tdate lStart 
+ 153:                     lStart <span style='color:#808030; '>=</span> tfzzz087<span style='color:#008c00; '>.</span>invafrom
+ 154:                        ProcessInterval<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>left<span style='color:#808030; '>,</span>lStart<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>| период где НЕИНВАЛИД</span>
+ 155: 
+ 156:                     <span style='color:#696969; '>| надо найти правый край (lStop)</span>
+ 157:                     <span style='color:#696969; '>| это сложнее т.к. может быть несколько индвалидностей налеплено вместе.</span>
+ 158:                     <span style='color:#696969; '>| ищем правый край, отодвигая вправо переменную lStop</span>
+ 159:                     tdate lStop
+ 160:                     lStop <span style='color:#808030; '>=</span>  tfzzz087<span style='color:#008c00; '>.</span>invato
+ 161:                    <span style='color:#800000; font-weight:bold; '> repeat</span>
+ 162:                         <span style='color:#800000; font-weight:bold; '>long</span> cont
+ 163:                         cont <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span>    
+ 164:                         <span style='color:#800000; font-weight:bold; '>long</span> xxx
+ 165:                         xxx <span style='color:#808030; '>=</span> lStop <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span>
+ 166:                         <span style='color:#004a43; '>select</span> <span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz087
+ 167:                         <span style='color:#004a43; '>where</span> _index2  <span style='color:#696969; '>| перекрывает точку lStop</span>
+ 168:                           <span style='color:#004a43; '>inrange</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>lStart</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>xxx</span><span style='color:#808030; '>}</span>
+ 169:                             <span style='color:#004a43; '>and</span>    <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>lStop</span> <span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 170:                           <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> _index2
+ 171:                         <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+ 172:                         <span style='color:#004a43; '>selectdo</span>
+ 173:                             lStop <span style='color:#808030; '>=</span> tfzzz087<span style='color:#008c00; '>.</span>invato
+ 174:                         <span style='color:#004a43; '>selectempty</span>
+ 175:                             cont<span style='color:#808030; '>=</span><span style='color:#008c00; '>1</span> <span style='color:#696969; '>| всё, не нашли, правее двигать некуда, выходим.</span>
+ 176:                         <span style='color:#004a43; '>endselect</span>
+ 177:                    <span style='color:#800000; font-weight:bold; '> until </span>cont<span style='color:#808030; '>=</span><span style='color:#008c00; '>1</span>
+ 178:                 <span style='color:#004a43; '>selectempty</span>
+ 179:                     found<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 180:                 <span style='color:#004a43; '>endselect</span>
+ 181:                <span style='color:#800000; font-weight:bold; '> if</span> found <span style='color:#800000; font-weight:bold; '>then</span> 
+ 182:                        ProcessInterval<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>,</span>lStart<span style='color:#808030; '>,</span>lStop<span style='color:#808030; '>)</span> <span style='color:#696969; '>| период где ИНВАЛИД</span>
+ 183:                        left <span style='color:#808030; '>=</span> lStop <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span> <span style='color:#696969; '>| вот так! дальше будем искать следующий комок </span>
+ 184:                    <span style='color:#800000; font-weight:bold; '>else</span>                     
+ 185:                     <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>| выход из repeat</span>
+ 186:                <span style='color:#800000; font-weight:bold; '> endif</span>
+ 187:            <span style='color:#800000; font-weight:bold; '> until </span>left<span style='color:#808030; '>></span>lEdate
+ 188:             <span style='color:#696969; '>| тут надо вызвать еще раз, для остатка оси времени и типа=неинвалид</span>
+ 189:             ProcessInterval<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>left<span style='color:#808030; '>,</span>DR_MAX_DATE<span style='color:#808030; '>)</span> <span style='color:#696969; '>| период где НЕИНВАЛИД</span>
+ 190: 
+ 191:             inc<span style='color:#808030; '>(</span>curr1<span style='color:#808030; '>)</span> 
+ 192: 
+ 193:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 194:     <span style='color:#004a43; '>endselect</span>
+ 195:     OAS_FILE_END
+ 196:     <span style='color:#005fd2; '>server2client</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"oasis.txt"</span><span style='color:#808030; '>,</span> fileName<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+ 197:     <span style='color:#005fd2; '>prof.toFile</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"oasis.profile.csv"</span><span style='color:#808030; '>)</span>
+ 198: <span style='color:#808030; '>}</span>
+ 199: 
+ 200: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>long</span> doc<span style='color:#008c00; '>.</span>count<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftvs dType<span style='color:#808030; '>,</span> tdate work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 201:     <span style='color:#800000; font-weight:bold; '>long</span> count
+ 202:     count <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span>
+ 203:     <span style='color:#004a43; '>select</span> tfzzz003.emplid 
+ 204:     <span style='color:#004a43; '>from</span>    tfzzz003
+ 205:     <span style='color:#004a43; '>selectdo</span>
+ 206:        <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#005fd2; '>efilter.matches</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 207:             inc<span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span>
+ 208:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 209:     <span style='color:#004a43; '>endselect</span>
+ 210:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span>
+ 211: <span style='color:#808030; '>}</span>
+ 212: 
+ 213: <span style='color:#696969; '>| когда оттестирую, заменю тут всё на дефайны</span>
+ 214: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>void</span> get<span style='color:#008c00; '>.</span>zzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>dates<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> yr<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfper period<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ref</span> tdate lBdate<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ref</span> tdate lEdate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 215:   <span style='color:#800000; font-weight:bold; '>on</span> <span style='color:#800000; font-weight:bold; '>case</span> period                                                           
+ 216:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jnsp<span style='color:#808030; '>:</span> lBdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span> lEdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>09</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>30</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|01.01-30.09</span>
+ 217:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>apsp<span style='color:#808030; '>:</span> lBdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>04</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span> lEdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>09</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>30</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|01.04-30.09</span>
+ 218:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>apdc<span style='color:#808030; '>:</span> lBdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>04</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span> lEdate<span style='color:#808030; '>=</span><span style='color:#808030; '>date.to.num</span><span style='color:#808030; '>(</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>12</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>31</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|01.04-31.12</span>
+ 219: 
+ 220:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jnmc<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>quarter <span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|1 квартал</span>
+ 221:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>apju<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>quarter <span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|2 квартал</span>
+ 222:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jlsp<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>quarter <span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|3 квартал</span>
+ 223:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>okdc<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>quarter <span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|4 квартал</span>
+ 224: 
+ 225:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jnju<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>halfyear<span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|1 полугодие</span>
+ 226:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jldc<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>halfyear<span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|2 полугодие</span>
+ 227: 
+ 228:     <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pfper<span style='color:#008c00; '>.</span>jndc<span style='color:#808030; '>:</span> <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>getTypedPeriodId<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pert<span style='color:#008c00; '>.</span>year    <span style='color:#808030; '>,</span>yr<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span>lBdate<span style='color:#808030; '>,</span>lEdate<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>break</span> <span style='color:#696969; '>|весь год</span>
+ 229:   <span style='color:#800000; font-weight:bold; '>endcase</span>           
+ 230: <span style='color:#808030; '>}</span>
+ 231: 
+ 232: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>long</span> getTypedPeriodId<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pert eKind<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> lYear<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> lPerNo<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 233:     <span style='color:#800000; font-weight:bold; '>long</span> type 
+ 234:     type <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>calc.period.type</span><span style='color:#808030; '>(</span>eKind<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>)</span>
+ 235:     type <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>calc.period.id</span><span style='color:#808030; '>(</span>type<span style='color:#808030; '>,</span>lYear<span style='color:#808030; '>,</span> lPerNo<span style='color:#808030; '>)</span>
+ 236:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>type<span style='color:#808030; '>)</span>
+ 237: <span style='color:#808030; '>}</span>
+ 238:                                           
+ 239: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> convertTypeFormStr<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftf form<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 240:     <span style='color:#800000; font-weight:bold; '>on</span> <span style='color:#800000; font-weight:bold; '>case</span> form<span style='color:#008c00; '>.</span>type
+ 241:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>isx  <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>convertStr<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>isx<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 242:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>pens <span style='color:#808030; '>:</span>    
+ 243:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>pkorr<span style='color:#808030; '>:</span>
+ 244:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>potm <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>convertStr<span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>pens<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 245:     <span style='color:#800000; font-weight:bold; '>endcase</span>
+ 246:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>convertStr<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>empty</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 247: <span style='color:#808030; '>}</span>
+ 248: 
+ 249: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftf ConvertTypeCorr<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftf form<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 250:     <span style='color:#800000; font-weight:bold; '>on</span> <span style='color:#800000; font-weight:bold; '>case</span> form<span style='color:#008c00; '>.</span>type
+ 251:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>korr  <span style='color:#808030; '>:</span>    
+ 252:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>pkorr <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>korr<span style='color:#808030; '>)</span>
+ 253:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>otm   <span style='color:#808030; '>:</span>
+ 254:      <span style='color:#800000; font-weight:bold; '>case</span> tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>potm  <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz<span style='color:#008c00; '>.</span>pftf<span style='color:#008c00; '>.</span>otm<span style='color:#808030; '>)</span>
+ 255:     <span style='color:#800000; font-weight:bold; '>endcase</span>
+ 256:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>empty</span><span style='color:#808030; '>)</span>
+ 257: <span style='color:#808030; '>}</span>
+ 258: 
+ 259: 
+ 260: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> convertStr<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pftf type<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 261:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#808030; '>etol</span><span style='color:#808030; '>(</span>type<span style='color:#808030; '>)</span> <span style='color:#808030; '>?</span> <span style='color:#808030; '>enum.descr$</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"tfzzz.pftf"</span><span style='color:#808030; '>,</span>type<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span>
+ 262: <span style='color:#808030; '>}</span>
+ 263: 
+ 264: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> ConvertKTZL<span style='color:#808030; '>(</span>bool invalid<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 265:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>trim$<span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplpfct<span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>(</span>invalid<span style='color:#808030; '>?</span> <span style='color:#0000e6; '>"ИВ"</span><span style='color:#808030; '>:</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 266: <span style='color:#808030; '>}</span>
+ 267: 
+ 268: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> ConvertAddr<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 269:     <span style='color:#004a43; '>select</span>    tfzzz040.<span style='color:#808030; '>*</span>
+ 270:     <span style='color:#004a43; '>from</span>    tfzzz040
+ 271:     <span style='color:#004a43; '>where</span>    tfzzz040._index2 <span style='color:#004a43; '>inrange</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> DR_MIN_LONG<span style='color:#808030; '>,</span> DR_MIN_DATE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>work.date</span><span style='color:#808030; '>}</span>
+ 272:                              <span style='color:#004a43; '>and</span>     <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz003.emplid</span><span style='color:#808030; '>,</span> DR_MAX_LONG<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>work.date</span><span style='color:#808030; '>,</span>  DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 273:     <span style='color:#004a43; '>and</span> tfzzz040.addrtype <span style='color:#004a43; '>in</span> <span style='color:#808030; '>(</span> tfzzz.addrtype.mpr <span style='color:#808030; '>,</span> tfzzz.addrtype.mprog <span style='color:#808030; '>)</span>
+ 274:     <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz040.addrtype <span style='color:#004a43; '>desc</span>
+ 275:     <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+ 276:     <span style='color:#004a43; '>selectdo</span>
+ 277:      <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#808030; '>sprintf$</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s"</span><span style='color:#808030; '>,</span>
+ 278:          trim$<span style='color:#808030; '>(</span>cvtCntry<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 279:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrindx<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 280:          trim$<span style='color:#808030; '>(</span>cvtRegion<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 281:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrrion<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 282:          trim$<span style='color:#808030; '>(</span>cvtCity<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 283:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrnapu<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 284:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrstrt<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 285:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrhous<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 286:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrkrps<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 287:          trim$<span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrflat<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 288:     <span style='color:#004a43; '>selectempty</span>
+ 289:            <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#808030; '>sprintf$</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>",,,,,,,,,"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 290:     <span style='color:#004a43; '>endselect</span>
+ 291:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span>
+ 292: <span style='color:#808030; '>}</span>
+ 293: 
+ 294: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> cvtRegion<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 295:    <span style='color:#800000; font-weight:bold; '> if</span> tfzzz040<span style='color:#008c00; '>.</span>addrregn<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"077"</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 296:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"МОСКВА Г"</span><span style='color:#808030; '>)</span>
+ 297:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 298:    <span style='color:#800000; font-weight:bold; '> if</span> tfzzz040<span style='color:#008c00; '>.</span>addrregn<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"078"</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 299:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"САНКТ-ПЕТЕРБУРГ Г"</span><span style='color:#808030; '>)</span>
+ 300:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 301:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrregn<span style='color:#808030; '>)</span>
+ 302: <span style='color:#808030; '>}</span>
+ 303: 
+ 304: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> cvtCity<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 305:    <span style='color:#800000; font-weight:bold; '> if</span> tfzzz040<span style='color:#008c00; '>.</span>addrregn<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"077"</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 306:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span>
+ 307:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 308:    <span style='color:#800000; font-weight:bold; '> if</span> tfzzz040<span style='color:#008c00; '>.</span>addrregn<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"078"</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 309:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span>
+ 310:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 311:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz040<span style='color:#008c00; '>.</span>addrrion<span style='color:#808030; '>)</span>
+ 312: <span style='color:#808030; '>}</span>
+ 313: 
+ 314: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> cvtCntry<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 315:     <span style='color:#800000; font-weight:bold; '>domain</span> tcccty country
+ 316:     country <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>get.empl.citizenship.country</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span>
+ 317:     <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#808030; '>(</span> country<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"RUS"</span> <span style='color:#808030; '>?</span> <span style='color:#0000e6; '>""</span> <span style='color:#808030; '>:</span> country <span style='color:#808030; '>)</span>
+ 318: <span style='color:#808030; '>}</span>
+ 319: 
+ 320: 
+ 321: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>void</span> processInterval<span style='color:#808030; '>(</span>Bool inv<span style='color:#808030; '>,</span> TDate date<span style='color:#008c00; '>.</span>f<span style='color:#808030; '>,</span> TDate date<span style='color:#008c00; '>.</span>t<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 322:     TDate    d1<span style='color:#808030; '>,</span> d2
+ 323: 
+ 324:    <span style='color:#800000; font-weight:bold; '> if</span> date<span style='color:#008c00; '>.</span>f <span style='color:#808030; '>></span><span style='color:#808030; '>=</span> date<span style='color:#008c00; '>.</span>t <span style='color:#800000; font-weight:bold; '>then</span>
+ 325:         <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#696969; '>| прочь, неправильные интервалы!</span>
+ 326:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 327: 
+ 328:     <span style='color:#005fd2; '>intersect.ranges</span><span style='color:#808030; '>(</span>date<span style='color:#008c00; '>.</span>f<span style='color:#808030; '>,</span>date<span style='color:#008c00; '>.</span>t<span style='color:#808030; '>,</span> lBdate<span style='color:#808030; '>,</span> lEdate<span style='color:#808030; '>,</span> d1<span style='color:#808030; '>,</span> d2<span style='color:#808030; '>)</span>
+ 329:    <span style='color:#800000; font-weight:bold; '> if</span> d1<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>and</span> d2<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 330:         <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#696969; '>| нет пересечения с отчетным периодом, прочь!</span>
+ 331:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 332: 
+ 333:     OAS_REC<span style='color:#808030; '>(</span>
+ 334:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"ИНДС"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 1</span>
+ 335:       O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>curr1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 2</span>
+ 336:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>convertTypeFormStr<span style='color:#808030; '>(</span>form<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 3</span>
+ 337:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>convertStr<span style='color:#808030; '>(</span>ConvertTypeCorr<span style='color:#808030; '>(</span>form<span style='color:#008c00; '>.</span>type<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 4          </span>
+ 338:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>strahnum<span style='color:#808030; '>,</span><span style='color:#008c00; '>14</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 5</span>
+ 339:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#808030; '>str$</span><span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.table.number</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 6</span>
+ 340:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.employee.fio</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> <span style='color:#008c00; '>11</span><span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 7</span>
+ 341:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.employee.fio</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> <span style='color:#008c00; '>12</span><span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 8</span>
+ 342:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.employee.fio</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> <span style='color:#008c00; '>13</span><span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 9</span>
+ 343:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>convertGender<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 10</span>
+ 344:       O<span style='color:#008c00; '>.</span>D<span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.empl.bdate</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 11</span>
+ 345:       O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>year<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>                       <span style='color:#696969; '>| 12</span>
+ 346:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>isNotOtm <span style='color:#808030; '>?</span> ConvertKTZL<span style='color:#808030; '>(</span>inv<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#696969; '>| 13</span>
+ 347:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>isNotOtm <span style='color:#808030; '>?</span> <span style='color:#0000e6; '>"0"</span>             <span style='color:#808030; '>:</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#008c00; '>4</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#696969; '>| 14</span>
+ 348:       O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>isNotOtm <span style='color:#808030; '>?</span> ConvertAddr<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>   <span style='color:#808030; '>:</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>200</span><span style='color:#808030; '>)</span> <span style='color:#696969; '>| 15</span>
+ 349:     <span style='color:#808030; '>)</span>
+ 350: 
+ 351:    <span style='color:#800000; font-weight:bold; '> if</span> isNotOtm <span style='color:#800000; font-weight:bold; '>then</span> 
+ 352:         curr2 <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span>
+ 353:         payings <span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> lBDate<span style='color:#808030; '>,</span> lEdate<span style='color:#808030; '>,</span> d1<span style='color:#808030; '>,</span> d2<span style='color:#808030; '>,</span> assur<span style='color:#008c00; '>.</span>part<span style='color:#808030; '>,</span> cumul<span style='color:#008c00; '>.</span>part<span style='color:#808030; '>)</span>
+ 354: <span style='color:#696969; '>|        variant1 (tfzzz003.emplid, d1, d2)</span>
+ 355: <span style='color:#696969; '>|        variant23(tfzzz003.emplid, d1, d2)</span>
+ 356:         variantMaxa<span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> d1<span style='color:#808030; '>,</span> d2<span style='color:#808030; '>)</span>
+ 357:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 358: <span style='color:#808030; '>}</span>
+ 359: 
+ 360: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> convertGender<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 361:     <span style='color:#800000; font-weight:bold; '>String</span> gstr<span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+ 362:     gstr <span style='color:#808030; '>=</span> <span style='color:#808030; '>enum.descr$</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"tfzzz.gender"</span><span style='color:#808030; '>,</span><span style='color:#005fd2; '>get.employee.gender</span><span style='color:#808030; '>(</span>tfzzz003<span style='color:#008c00; '>.</span>emplid<span style='color:#808030; '>,</span> work<span style='color:#008c00; '>.</span>date<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 363:    <span style='color:#800000; font-weight:bold; '> if</span> gstr<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"Н"</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 364: <span style='color:#696969; '>|        message("Сообщение: для работника с кодом "&amp;str$(tfzzz003.emplid)&amp;" нет данных о поле") !!!!!!! @@@@@@@@@@@</span>
+ 365:         gstr<span style='color:#808030; '>=</span><span style='color:#0000e6; '>" "</span>
+ 366:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 367:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>gstr<span style='color:#808030; '>)</span>
+ 368: <span style='color:#808030; '>}</span>
+ 369: 
+ 370: <span style='color:#800000; font-weight:bold; '>table</span> ttfzzz007
+ 371: <span style='color:#800000; font-weight:bold; '>table</span> ttfzzz006
+ 372: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@params</span>
+ 373: <span style='color:#696969; '>|  rep.* - отчетный период</span>
+ 374: <span style='color:#696969; '>|  pfis.* - период формирования индивидуальных сведений</span>
+ 375: <span style='color:#696969; '>|  assurPart - страховая часть</span>
+ 376: <span style='color:#696969; '>|  cumulPart - накопительная часть</span>
+ 377: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 378: <span style='color:#696969; '>| by Max Belugin 10.12.2002 16:33:20</span>
+ 379: <span style='color:#800000; font-weight:bold; '>function</span> payings<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate rep<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> TDate rep<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>,</span> TDate pfis<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> TDate pfis<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> assurPart<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> cumulPart<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 380:     <span style='color:#800000; font-weight:bold; '>double</span> days 
+ 381:     days<span style='color:#808030; '>=</span>temporaryIllnessDays<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> assurPart<span style='color:#808030; '>,</span> rep<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> rep<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>)</span>    
+ 382:     <span style='color:#800000; font-weight:bold; '>double</span> allLeaveDays 
+ 383:     allLeaveDays<span style='color:#808030; '>=</span>leaveDays<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> rep<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> rep<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>)</span>
+ 384:     
+ 385:     OAS_REC<span style='color:#808030; '>(</span>
+ 386:         <span style='color:#696969; '>|&lt;ТПЗП6>    Тип записи    Строка    4</span>
+ 387:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"НЧСЛ"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+ 388:         <span style='color:#696969; '>|&lt;БНЧСЛ>    База для начислений страховых взносов    Действительное число    15.2</span>
+ 389:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> 
+ 390:         <span style='color:#696969; '>|&lt;СЧПФ>    Сумма начисленного взноса на страховую часть пенсии    Действительное число    15.2</span>
+ 391:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>ChPF<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> pfis<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> pfis<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>,</span> assurPart<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 392:         <span style='color:#696969; '>|&lt;НЧПФ>    Сумма начисленного взноса на накопительную часть пенсии    Действительное число    15.2</span>
+ 393:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>ChPF<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> pfis<span style='color:#008c00; '>.</span>first<span style='color:#808030; '>,</span> pfis<span style='color:#008c00; '>.</span>last<span style='color:#808030; '>,</span> cumulPart<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 394:         <span style='color:#696969; '>|&lt;ДВЗПФ>    Сумма начисленного взноса по дополнительному тарифу    Действительное число    15.2</span>
+ 395:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 396:         <span style='color:#696969; '>|&lt;ВНДН>    Период работы по временной нетрудоспособности - месяцев    Целое число    2</span>
+ 397:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>days\<span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 398:         <span style='color:#696969; '>|&lt;ВНМСЦ>    Период работы по временной нетрудоспособности - дней    Целое число    2</span>
+ 399:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>days<span style='color:#808030; '>/</span><span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 400:         <span style='color:#696969; '>|&lt;АОДН>    Отпуск без сохранения содержания - месяцев    Целое число    2</span>
+ 401:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>allLeaveDays\<span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 402:         <span style='color:#696969; '>|&lt;АОМСЦ>    Отпуск без сохранения содержания - дней    Целое число    2    )</span>
+ 403:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span><span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>allLeaveDays<span style='color:#808030; '>/</span><span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 404:      <span style='color:#808030; '>)</span>
+ 405: <span style='color:#808030; '>}</span>
+ 406: <span style='color:#696969; '>|&lt;СЧПФ> - сумма по полям &lt;Сумма> таблицы tfzzz022, по работнику, для </span>
+ 407: <span style='color:#696969; '>|  которого формируется данная запись индивидуальных сведений, периодам </span>
+ 408: <span style='color:#696969; '>|  непрерывной работы, попадающим в период формирования индивидуальных </span>
+ 409: <span style='color:#696969; '>|  сведений, периодам выплат, попадающим в период формирования индивидуальных </span>
+ 410: <span style='color:#696969; '>|  сведений, и коду налога, соответствующего значению параметра запроса </span>
+ 411: <span style='color:#696969; '>|  &lt;Страховая часть>.</span>
+ 412: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 413: <span style='color:#696969; '>| by Max Belugin 10.12.2002 16:17:58</span>
+ 414: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>double</span> ChPF<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> tax<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 415:     <span style='color:#800000; font-weight:bold; '>double</span> result<span style='color:#808030; '>,</span> cur
+ 416:     result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 417:     <span style='color:#800000; font-weight:bold; '>table</span> ttfzzz022
+ 418:     <span style='color:#800000; font-weight:bold; '>long</span> curPeriod
+ 419:     <span style='color:#004a43; '>select</span> tfzzz022.summ:<span style='color:#005fd2; '>cur</span><span style='color:#808030; '>,</span> tfzzz022.pern:<span style='color:#005fd2; '>curPeriod</span> <span style='color:#004a43; '>from</span> tfzzz022<span style='color:#808030; '>,</span> tfzzz027 <span style='color:#004a43; '>where</span>
+ 420:         <span style='color:#696969; '>| по работнику, для которого формируется данная запись </span>
+ 421:         <span style='color:#696969; '>| индивидуальных сведений,</span>
+ 422:         tfzzz022._index1<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> tfzzz027.pwpwbdat<span style='color:#808030; '>}</span>
+ 423:         <span style='color:#004a43; '>and</span>
+ 424:         <span style='color:#696969; '>| периодам </span>
+ 425:         <span style='color:#696969; '>|  непрерывной работы, попадающим в период формирования </span>
+ 426:         <span style='color:#696969; '>| индивидуальных сведений</span>
+ 427:         tfzzz027._index2 <span style='color:#004a43; '>inrange</span> 
+ 428:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> DR_MIN_DATE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 429:             <span style='color:#004a43; '>and</span>
+ 430:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 431:         <span style='color:#004a43; '>and</span>
+ 432:         <span style='color:#696969; '>| коду налога, соответствующего значению параметра запроса </span>
+ 433:         <span style='color:#696969; '>|  &lt;Страховая часть></span>
+ 434:         tfzzz022.nalc<span style='color:#808030; '>=</span>:<span style='color:#005fd2; '>tax</span>
+ 435:     <span style='color:#004a43; '>selectdo</span>
+ 436:         <span style='color:#696969; '>| периодам выплат, попадающим в период формирования индивидуальных </span>
+ 437:         <span style='color:#696969; '>| сведений</span>
+ 438:         TDate curBeg<span style='color:#808030; '>,</span> curEnd
+ 439:         <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>curPeriod<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span> curBeg<span style='color:#808030; '>,</span> curEnd<span style='color:#808030; '>)</span>
+ 440:        <span style='color:#800000; font-weight:bold; '> if</span> curEnd<span style='color:#808030; '>></span><span style='color:#808030; '>=</span>first <span style='color:#800000; font-weight:bold; '>and</span> curBeg<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span>last <span style='color:#800000; font-weight:bold; '>then</span>
+ 441:             inc<span style='color:#808030; '>(</span>result<span style='color:#808030; '>,</span> cur<span style='color:#808030; '>)</span>
+ 442:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 443:     <span style='color:#004a43; '>endselect</span>
+ 444:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>
+ 445: <span style='color:#808030; '>}</span>
+ 446: 
+ 447: <span style='color:#696969; '>|</span>
+ 448: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 449: <span style='color:#696969; '>| by Max Belugin 10.12.2002 17:05:22</span>
+ 450: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>long</span> illnessDays<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> period<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 451:     TDate first 
+ 452:     TDate last
+ 453:     <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span>period<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span> first<span style='color:#808030; '>,</span> last<span style='color:#808030; '>)</span>
+ 454:     <span style='color:#800000; font-weight:bold; '>long</span> result
+ 455:     result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 456:     <span style='color:#800000; font-weight:bold; '>long</span> was
+ 457:     <span style='color:#696969; '>|количество записей в непрерывном по датам наборе записей </span>
+ 458:     <span style='color:#696969; '>|(периоде больничного) в таблице tfzzz007 по основному рабочему </span>
+ 459:     <span style='color:#696969; '>|месту работника, виду времени, соответствующему значениям, </span>
+ 460:     <span style='color:#696969; '>|указанным в полях &lt;Вид времени> записей таблицы tfzzz259, </span>
+ 461:     <span style='color:#696969; '>|имеющих значение поля &lt;Тип отпуска> - &lt;Временная нетрудоспособность>, </span>
+ 462:     <span style='color:#696969; '>|с признаком &lt;Верхний уровень> и датой, попадающей в отчетный период. </span>
+ 463:     <span style='color:#696969; '>|Начало периода суммирования календарных дней определяется </span>
+ 464:     <span style='color:#696969; '>|как максимальная из дат:</span>
+ 465:     <span style='color:#696969; '>|        дата начала периода &lt;ПЕРИОД_ПУСТ>,</span>
+ 466:     <span style='color:#696969; '>|        первая дата периода больничного;</span>
+ 467:     <span style='color:#696969; '>|    Окончание периода суммирования календарных дней по одному документу определяется как минимальная из дат:</span>
+ 468:     <span style='color:#696969; '>|        дата окончания периода &lt;ПЕРИОД_ПУСТ>,</span>
+ 469:     <span style='color:#696969; '>|        последняя дата периода больничного.</span>
+ 470:     <span style='color:#800000; font-weight:bold; '>long</span> skipDate
+ 471:     skipDate<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 472:     TBool prevWasIllness
+ 473:     prevWasIllness<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>false</span>
+ 474:     <span style='color:#800000; font-weight:bold; '>long</span> prevDate
+ 475:     prevDate<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 476:     TBool hasIllness
+ 477:     hasIllness<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>false</span>
+ 478:     <span style='color:#800000; font-weight:bold; '>long</span> wpID<span style='color:#808030; '>,</span> dummy
+ 479:     <span style='color:#004a43; '>select</span> 
+ 480:         tfzzz026.wp_id:<span style='color:#005fd2; '>wpID</span><span style='color:#808030; '>,</span>tfzzz026.wp_vid:<span style='color:#005fd2; '>dummy</span><span style='color:#808030; '>,</span> tfzzz026.wp_crdat:<span style='color:#005fd2; '>dummy</span><span style='color:#808030; '>,</span>
+ 481:         tfzzz026.wp_andat:<span style='color:#005fd2; '>dummy</span>
+ 482:     <span style='color:#004a43; '>from</span> tfzzz026 <span style='color:#004a43; '>where</span>
+ 483:         tfzzz026._index2<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>}</span>
+ 484:         <span style='color:#004a43; '>and</span>
+ 485:         tfzzz026._index4 <span style='color:#004a43; '>inrange</span> 
+ 486:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> DR_MIN_DATE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 487:             <span style='color:#004a43; '>and</span>
+ 488:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 489:     <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz026._index4
+ 490:     <span style='color:#004a43; '>selectdo</span>
+ 491:         <span style='color:#004a43; '>select</span> tfzzz006.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz006 <span style='color:#004a43; '>where</span>  
+ 492:             tfzzz006._index1<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>wpid</span><span style='color:#808030; '>,</span>:<span style='color:#005fd2; '>period</span><span style='color:#808030; '>}</span>
+ 493:         <span style='color:#004a43; '>selectdo</span>
+ 494:             <span style='color:#004a43; '>select</span> tfzzz007.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz007  <span style='color:#004a43; '>where</span>     
+ 495:                 tfzzz007._index2 <span style='color:#004a43; '>inrange</span> 
+ 496:                     <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz006.id_tab</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span> 
+ 497:                     <span style='color:#004a43; '>and</span>
+ 498:                     <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz006.id_tab</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span> 
+ 499:             <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz007._index2
+ 500:             <span style='color:#004a43; '>selectdo</span>
+ 501:                <span style='color:#800000; font-weight:bold; '> if</span> cb2b<span style='color:#808030; '>(</span>tfzzz007<span style='color:#008c00; '>.</span>tb_high<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 502: 
+ 503:                <span style='color:#800000; font-weight:bold; '> if</span> prevDate<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>tfzzz007<span style='color:#008c00; '>.</span>tb_data <span style='color:#800000; font-weight:bold; '>then</span>
+ 504:                     prevDate<span style='color:#808030; '>=</span>tfzzz007<span style='color:#008c00; '>.</span>tb_data
+ 505:                     prevWasIllness<span style='color:#808030; '>=</span>hasIllness
+ 506:                     hasIllness<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>false</span>
+ 507:                <span style='color:#800000; font-weight:bold; '> endif</span>
+ 508:                <span style='color:#800000; font-weight:bold; '> if</span> tfzzz007<span style='color:#008c00; '>.</span>tb_data<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>skipDate <span style='color:#800000; font-weight:bold; '>then</span>
+ 509:                     hasIllness<span style='color:#808030; '>=</span>isIllnessDay<span style='color:#808030; '>(</span>tfzzz007<span style='color:#008c00; '>.</span>tb_v_cod<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>or</span>
+ 510:                         <span style='color:#808030; '>(</span>isVyhodnoj<span style='color:#808030; '>(</span>wpid<span style='color:#808030; '>,</span> tfzzz007<span style='color:#008c00; '>.</span>tb_data<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>and</span>  prevWasIllness<span style='color:#808030; '>)</span>
+ 511:                    <span style='color:#800000; font-weight:bold; '> if</span> hasIllness <span style='color:#800000; font-weight:bold; '>then</span>
+ 512:                         skipDate<span style='color:#808030; '>=</span>tfzzz007<span style='color:#008c00; '>.</span>tb_data
+ 513:                         inc<span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>
+ 514:                    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 515:                <span style='color:#800000; font-weight:bold; '> endif</span>
+ 516:                 
+ 517:                <span style='color:#800000; font-weight:bold; '> endif</span>
+ 518:             <span style='color:#004a43; '>endselect</span>    
+ 519:         <span style='color:#004a43; '>endselect</span>
+ 520:     <span style='color:#004a43; '>endselect</span>
+ 521:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>    
+ 522: <span style='color:#808030; '>}</span>
+ 523: <span style='color:#696969; '>|</span>
+ 524: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 525: <span style='color:#696969; '>| by Max Belugin 10.12.2002 18:01:12</span>
+ 526: <span style='color:#800000; font-weight:bold; '>function</span> TBool isIllnessDay<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str<span style='color:#008c00; '>.</span>id<span style='color:#008c00; '>.8</span> timeKind<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 527:     <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr dummy
+ 528:     <span style='color:#004a43; '>select</span> tfzzz259.pfvidvr:<span style='color:#005fd2; '>dummy</span> <span style='color:#004a43; '>from</span> tfzzz259 <span style='color:#004a43; '>where</span>
+ 529:         tfzzz259._index1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>tfzzz.pfvr.boln<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>timeKind</span><span style='color:#808030; '>}</span>
+ 530:     <span style='color:#004a43; '>selectdo</span>
+ 531:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+ 532:     <span style='color:#004a43; '>endselect</span>
+ 533:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>)</span>
+ 534: <span style='color:#808030; '>}</span>
+ 535: <span style='color:#696969; '>|</span>
+ 536: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 537: <span style='color:#696969; '>| by Max Belugin 10.12.2002 18:10:47</span>
+ 538: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>long</span> temporaryIllnessDays<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> assurPart<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 539:     <span style='color:#800000; font-weight:bold; '>long</span> result result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 540:     <span style='color:#005fd2; '>forPeriodsBetween.begin</span><span style='color:#808030; '>(</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>first<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>last<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 541:    <span style='color:#800000; font-weight:bold; '> while</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#005fd2; '>ForPeriodsBetween.isEnd</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> 
+ 542:         TDate curFirst<span style='color:#808030; '>,</span> curLast
+ 543:         <span style='color:#005fd2; '>get.period.dates</span><span style='color:#808030; '>(</span><span style='color:#005fd2; '>prd.id</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span> curFirst<span style='color:#808030; '>,</span> curLast<span style='color:#808030; '>)</span>
+ 544:        <span style='color:#800000; font-weight:bold; '> if</span> hasNoHrens<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> curFirst<span style='color:#808030; '>,</span> curLast<span style='color:#808030; '>,</span> assurPart<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 545:             inc<span style='color:#808030; '>(</span>result<span style='color:#808030; '>,</span> illnessDays<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> <span style='color:#005fd2; '>prd.id</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 546:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 547:         <span style='color:#005fd2; '>ForPeriodsBetween.next</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+ 548:    <span style='color:#800000; font-weight:bold; '> endwhile</span>
+ 549:     <span style='color:#005fd2; '>ForPeriodsBetween.end</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+ 550:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>
+ 551: <span style='color:#808030; '>}</span>
+ 552: 
+ 553: <span style='color:#696969; '>|</span>
+ 554: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 555: <span style='color:#696969; '>| by Max Belugin 11.12.2002 12:34:38</span>
+ 556: <span style='color:#800000; font-weight:bold; '>function</span> TBool hasNoHrens<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> tax<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 557:     <span style='color:#800000; font-weight:bold; '>return</span> is0<span style='color:#808030; '>(</span>ChPF<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> first<span style='color:#808030; '>,</span> last<span style='color:#808030; '>,</span> tax<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 558: <span style='color:#808030; '>}</span>
+ 559: 
+ 560: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>long</span> leaveDays<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> first<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 561:     <span style='color:#800000; font-weight:bold; '>long</span> result
+ 562:     result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 563:     <span style='color:#800000; font-weight:bold; '>long</span> skipDate
+ 564:     skipDate<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 565:     <span style='color:#800000; font-weight:bold; '>long</span> wpID<span style='color:#808030; '>,</span> dummy
+ 566:     <span style='color:#800000; font-weight:bold; '>long</span> firstPeriod firstPeriod<span style='color:#808030; '>=</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>first<span style='color:#808030; '>)</span>
+ 567:     <span style='color:#800000; font-weight:bold; '>long</span> lastPeriod lastPeriod<span style='color:#808030; '>=</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>last<span style='color:#808030; '>)</span>
+ 568:     <span style='color:#004a43; '>select</span> 
+ 569:         tfzzz026.wp_id:<span style='color:#005fd2; '>wpID</span><span style='color:#808030; '>,</span>tfzzz026.wp_vid:<span style='color:#005fd2; '>dummy</span><span style='color:#808030; '>,</span> tfzzz026.wp_crdat:<span style='color:#005fd2; '>dummy</span><span style='color:#808030; '>,</span>
+ 570:         tfzzz026.wp_andat:<span style='color:#005fd2; '>dummy</span>
+ 571:     <span style='color:#004a43; '>from</span> tfzzz026 <span style='color:#004a43; '>where</span>
+ 572:         tfzzz026._index2<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>}</span>
+ 573:         <span style='color:#004a43; '>and</span>
+ 574:         tfzzz026._index4 <span style='color:#004a43; '>inrange</span> 
+ 575:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> DR_MIN_DATE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 576:             <span style='color:#004a43; '>and</span>
+ 577:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 578:     <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz026._index4
+ 579:     <span style='color:#004a43; '>selectdo</span>
+ 580:         <span style='color:#004a43; '>select</span> tfzzz006.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz006 <span style='color:#004a43; '>where</span>
+ 581:             tfzzz006._index1 <span style='color:#004a43; '>inrange</span> 
+ 582:                 <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>wpid</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>firstPeriod</span><span style='color:#808030; '>}</span>
+ 583:                 <span style='color:#004a43; '>and</span>
+ 584:                 <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>wpid</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>lastPeriod</span><span style='color:#808030; '>}</span>
+ 585:         <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz006._index1
+ 586:         <span style='color:#004a43; '>selectdo</span>
+ 587:             <span style='color:#004a43; '>select</span> tfzzz007.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz007  <span style='color:#004a43; '>where</span>     
+ 588:                 tfzzz007._index2 <span style='color:#004a43; '>inrange</span> 
+ 589:                     <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz006.id_tab</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span> 
+ 590:                     <span style='color:#004a43; '>and</span>
+ 591:                     <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz006.id_tab</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span> 
+ 592:                 <span style='color:#004a43; '>and</span>
+ 593:                 tfzzz007.tb_high<span style='color:#808030; '>=</span>CB_TRUE
+ 594:             <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz007._index2
+ 595:             <span style='color:#004a43; '>selectdo</span>
+ 596:                 <span style='color:#696969; '>|if cb2b(tfzzz007.tb_high) then</span>
+ 597:                    <span style='color:#800000; font-weight:bold; '> if</span> tfzzz007<span style='color:#008c00; '>.</span>tb_data<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>skipDate <span style='color:#800000; font-weight:bold; '>then</span>
+ 598:                        <span style='color:#800000; font-weight:bold; '> if</span> isLeaveDay<span style='color:#808030; '>(</span>tfzzz007<span style='color:#008c00; '>.</span>tb_v_cod<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 599:                             skipDate<span style='color:#808030; '>=</span>tfzzz007<span style='color:#008c00; '>.</span>tb_data
+ 600:                             inc<span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>
+ 601:                        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 602:                    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 603:                 <span style='color:#696969; '>|endif</span>
+ 604:             <span style='color:#004a43; '>endselect</span>
+ 605:         <span style='color:#004a43; '>endselect</span>
+ 606:     <span style='color:#004a43; '>endselect</span>
+ 607:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>        
+ 608: <span style='color:#808030; '>}</span>
+ 609: <span style='color:#800000; font-weight:bold; '>function</span> TBool isLeaveDay<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>str<span style='color:#008c00; '>.</span>id<span style='color:#008c00; '>.8</span> timeKind<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 610:     <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr dummy
+ 611:     <span style='color:#004a43; '>select</span> tfzzz259.pfvidvr:<span style='color:#005fd2; '>dummy</span> <span style='color:#004a43; '>from</span> tfzzz259 <span style='color:#004a43; '>where</span>
+ 612:         tfzzz259._index1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>tfzzz.pfvr.adm<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>timeKind</span><span style='color:#808030; '>}</span>
+ 613:     <span style='color:#004a43; '>selectdo</span>
+ 614:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+ 615:     <span style='color:#004a43; '>endselect</span>
+ 616:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>)</span>
+ 617: <span style='color:#808030; '>}</span>
+ 618: 
+ 619: <span style='color:#696969; '>|</span>
+ 620: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 621: <span style='color:#696969; '>| by Max Belugin 12.12.2002 15:34:04</span>
+ 622: <span style='color:#800000; font-weight:bold; '>function</span> TBool isVyhodnoj<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> wp<span style='color:#808030; '>,</span> TDate aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 623:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"isVyhodnoj"</span><span style='color:#808030; '>)</span>
+ 624:     <span style='color:#800000; font-weight:bold; '>long</span> days
+ 625:     <span style='color:#800000; font-weight:bold; '>double</span> hours
+ 626:     ghis<span style='color:#008c00; '>.</span>fundForDate<span style='color:#808030; '>(</span>wp<span style='color:#808030; '>,</span> aDate<span style='color:#808030; '>,</span> days<span style='color:#808030; '>,</span> hours<span style='color:#808030; '>)</span>
+ 627:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"isVyhodnoj"</span><span style='color:#808030; '>)</span>
+ 628:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>days<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>and</span> is0<span style='color:#808030; '>(</span>hours<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 629: <span style='color:#808030; '>}</span>
+ 630: 
+ 631: <span style='color:#696969; '>|</span>
+ 632: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 633: <span style='color:#696969; '>| by Max Belugin 12.12.2002 16:48:57</span>
+ 634: <span style='color:#800000; font-weight:bold; '>function</span> variantMaxa<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 635:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"variantMaxa"</span><span style='color:#808030; '>)</span>
+ 636:     <span style='color:#004a43; '>select</span> tfzzz026.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz026 <span style='color:#004a43; '>where</span>
+ 637:         tfzzz026._index2<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>}</span>
+ 638:         <span style='color:#004a43; '>and</span>
+ 639:         tfzzz026._index4 <span style='color:#004a43; '>inrange</span> 
+ 640:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> DR_MIN_DATE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 641:             <span style='color:#004a43; '>and</span>
+ 642:             <span style='color:#808030; '>{</span>CB_TRUE<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>,</span> DR_MAX_DATE<span style='color:#808030; '>}</span>
+ 643:     <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz026._index4
+ 644:     <span style='color:#004a43; '>selectdo</span>
+ 645:         variantByWP<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> _max<span style='color:#808030; '>(</span>first<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_crdat<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> _min<span style='color:#808030; '>(</span>last<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_andat<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 646:     <span style='color:#004a43; '>endselect</span>    
+ 647:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"variantMaxa"</span><span style='color:#808030; '>)</span>
+ 648: <span style='color:#808030; '>}</span>
+ 649: <span style='color:#696969; '>|</span>
+ 650: <span style='color:#696969; '>| вызывает handlePeriod(wp,begDate, endDate, leaveKind, false)</span>
+ 651: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 652: <span style='color:#696969; '>| by Max Belugin 12.12.2002 15:55:34</span>
+ 653: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>extern</span> variantByWP<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 654:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"variant4_byWP"</span><span style='color:#808030; '>)</span>    
+ 655:     <span style='color:#800000; font-weight:bold; '>long</span> firstPeriod firstPeriod<span style='color:#808030; '>=</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>first<span style='color:#808030; '>)</span>
+ 656:     <span style='color:#800000; font-weight:bold; '>long</span> lastPeriod lastPeriod<span style='color:#808030; '>=</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>last<span style='color:#808030; '>)</span>    
+ 657:     TDate currentRange<span style='color:#008c00; '>.</span>start
+ 658:     <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr currentRange<span style='color:#008c00; '>.</span>leaveKind
+ 659:     <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr currentDay<span style='color:#008c00; '>.</span>leaveKind
+ 660:     currentDay<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>empty</span>
+ 661:     currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 662:     TDate skipDate skipDate<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 663:     TDate prevDate prevDate<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>    
+ 664:     TBool prevWasLeave
+ 665:     prevWasLeave<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>false</span>
+ 666:     TBool wasLeaves
+ 667:     <span style='color:#004a43; '>select</span> tfzzz007.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz026<span style='color:#808030; '>,</span>tfzzz006<span style='color:#808030; '>,</span> tfzzz007  <span style='color:#004a43; '>where</span>     
+ 668:         tfzzz026._index2<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>}</span>
+ 669:         <span style='color:#004a43; '>and</span>
+ 670:         tfzzz006._index1<span style='color:#808030; '>=</span><span style='color:#808030; '>{</span>tfzzz026.wp_id<span style='color:#808030; '>}</span>
+ 671: <span style='color:#696969; '>|        and</span>
+ 672: <span style='color:#696969; '>|        tfzzz006._index1 inrange</span>
+ 673: <span style='color:#696969; '>|            {tfzzz026.wp_id,:firstPeriod}</span>
+ 674: <span style='color:#696969; '>|            and</span>
+ 675: <span style='color:#696969; '>|            {tfzzz026.wp_id,:lastPeriod}</span>
+ 676:         <span style='color:#004a43; '>and</span>
+ 677:         tfzzz007._index2 <span style='color:#004a43; '>inrange</span> 
+ 678:             <span style='color:#808030; '>{</span>tfzzz006.id_tab<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span> 
+ 679:             <span style='color:#004a43; '>and</span>
+ 680:             <span style='color:#808030; '>{</span>tfzzz006.id_tab<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span> 
+ 681:         <span style='color:#004a43; '>and</span>
+ 682:         tfzzz007.tb_high<span style='color:#808030; '>=</span>CB_TRUE
+ 683:     <span style='color:#696969; '>|@todo:index12</span>
+ 684:     <span style='color:#004a43; '>order</span> <span style='color:#004a43; '>by</span> tfzzz007.tb_data <span style='color:#696969; '>| tfzzz007._index12 | tfzzz007.tb_data</span>
+ 685:     <span style='color:#004a43; '>selectdo</span>
+ 686:         <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"v4_body"</span><span style='color:#808030; '>)</span>
+ 687:         <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr curLeaveKind
+ 688:         curLeaveKind<span style='color:#808030; '>=</span>leaveKindByTimeKind<span style='color:#808030; '>(</span>tfzzz007<span style='color:#008c00; '>.</span>tb_v_cod<span style='color:#808030; '>)</span>
+ 689:        <span style='color:#800000; font-weight:bold; '> if</span> curLeaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>boln <span style='color:#800000; font-weight:bold; '>then</span>
+ 690:             curLeaveKind<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>empty</span>
+ 691:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 692:        <span style='color:#800000; font-weight:bold; '> if</span> tfzzz007<span style='color:#008c00; '>.</span>tb_data<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>prevDate <span style='color:#800000; font-weight:bold; '>then</span>
+ 693:             TBool isHoliday             
+ 694:             isHoliday<span style='color:#808030; '>=</span>isVyhodnoj<span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_id<span style='color:#808030; '>,</span> tfzzz007<span style='color:#008c00; '>.</span>tb_data<span style='color:#808030; '>)</span>
+ 695:            <span style='color:#800000; font-weight:bold; '> if</span> currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 696:                 currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>=</span>tfzzz007<span style='color:#008c00; '>.</span>tb_data
+ 697:             <span style='color:#800000; font-weight:bold; '>else</span>
+ 698:                <span style='color:#800000; font-weight:bold; '> if</span> currentDay<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>currentRange<span style='color:#008c00; '>.</span>leaveKind <span style='color:#800000; font-weight:bold; '>then</span>
+ 699:                     handlePeriod<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>,</span> prevDate<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> 
+ 700:                         currentRange<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>)</span>
+ 701:                     currentrange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 702:                     currentRange<span style='color:#008c00; '>.</span>leaveKind <span style='color:#808030; '>=</span> currentDay<span style='color:#008c00; '>.</span>leaveKind
+ 703:                     currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>=</span>prevDate
+ 704:                <span style='color:#800000; font-weight:bold; '> endif</span>
+ 705:            <span style='color:#800000; font-weight:bold; '> endif</span>
+ 706:            <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#800000; font-weight:bold; '>not</span> isHoliday <span style='color:#800000; font-weight:bold; '>then</span>
+ 707:                 currentDay<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>=</span>curLeaveKind
+ 708:            <span style='color:#800000; font-weight:bold; '> endif</span>
+ 709:         <span style='color:#800000; font-weight:bold; '>else</span>
+ 710:            <span style='color:#800000; font-weight:bold; '> if</span> curLeaveKind<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span>currentDay<span style='color:#008c00; '>.</span>leaveKind <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>not</span> isHoliday <span style='color:#800000; font-weight:bold; '>then</span>
+ 711:                 currentDay<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>empty</span>
+ 712:            <span style='color:#800000; font-weight:bold; '> endif</span>
+ 713:        <span style='color:#800000; font-weight:bold; '> endif </span>               
+ 714:         <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"v4_body"</span><span style='color:#808030; '>)</span>
+ 715:         prevDate<span style='color:#808030; '>=</span>tfzzz007<span style='color:#008c00; '>.</span>tb_data
+ 716:         wasLeaves<span style='color:#808030; '>=</span>wasLeaves <span style='color:#800000; font-weight:bold; '>or</span> currentRange<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span><span style='color:#800000; font-weight:bold; '>empty</span>
+ 717:     <span style='color:#004a43; '>endselect</span>
+ 718:     
+ 719:    <span style='color:#800000; font-weight:bold; '> if</span> currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span> <span style='color:#696969; '>| if currentRange.start&lt;>0 and wasLeaves then</span>
+ 720:         handlePeriod<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> currentRange<span style='color:#008c00; '>.</span>start<span style='color:#808030; '>,</span> prevDate<span style='color:#808030; '>,</span> 
+ 721:             currentRange<span style='color:#008c00; '>.</span>leaveKind<span style='color:#808030; '>)</span>
+ 722:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 723:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"variant4_byWP"</span><span style='color:#808030; '>)</span>    
+ 724: <span style='color:#808030; '>}</span>
+ 725: 
+ 726: 
+ 727: <span style='color:#004a43; '>#define</span> FLAG1
+ 728: <span style='color:#808030; '>^</span> <span style='color:#808030; '>(</span>  OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"САМОЛЕТ"</span> 
+ 729: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"СПЕЦАВ"</span> 
+ 730: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ИТСИСП"</span> 
+ 731: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ИТСМАВ"</span> 
+ 732: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ИНСПЕКТ"</span> 
+ 733: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ЛЕТИСП"</span><span style='color:#808030; '>)</span>
+ 734: 
+ 735: <span style='color:#004a43; '>#define</span> FLAG2
+ 736: <span style='color:#808030; '>^</span>    OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ЗП80РК"</span>
+ 737: 
+ 738: <span style='color:#004a43; '>#define</span> FLAG3
+ 739: <span style='color:#808030; '>^</span> <span style='color:#808030; '>(</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ЗП81СМ"</span>
+ 740: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ЗП81ГД"</span>
+ 741: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ХИРУРГСМ"</span>
+ 742: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ХИРУРГД"</span>
+ 743: <span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>or</span> OIVL<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ЗП80ПД"</span><span style='color:#808030; '>)</span>
+ 744: 
+ 745: 
+ 746: <span style='color:#800000; font-weight:bold; '>function</span> handlePeriod<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr leaveKind<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 747: 
+ 748:    <span style='color:#800000; font-weight:bold; '> if</span> leaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>adm <span style='color:#800000; font-weight:bold; '>then</span>
+ 749:         <span style='color:#800000; font-weight:bold; '>return</span>
+ 750:    <span style='color:#800000; font-weight:bold; '> endif </span>   
+ 751:     
+ 752:     tbool was1 
+ 753:     tbool was2 
+ 754:     tbool was3
+ 755: 
+ 756:     <span style='color:#004a43; '>select</span> <span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz026 <span style='color:#004a43; '>where</span>
+ 757:     _index6 <span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>}</span> 
+ 758:     <span style='color:#004a43; '>and</span>
+ 759:     tfzzz026.wp_crdat <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> :<span style='color:#005fd2; '>last</span>
+ 760:     <span style='color:#004a43; '>and</span>
+ 761:     tfzzz026.wp_andat <span style='color:#808030; '>></span><span style='color:#808030; '>=</span> :<span style='color:#005fd2; '>first</span>
+ 762:     <span style='color:#004a43; '>selectdo</span>
+ 763:         was1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_vid <span style='color:#808030; '>=</span> CB_TRUE<span style='color:#808030; '>)</span>
+ 764:         was2 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>false</span>        
+ 765:         was3 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>false</span>        
+ 766: 
+ 767:         <span style='color:#696969; '>| 2я часть недержания - 1</span>
+ 768:         <span style='color:#004a43; '>select</span>  tfzzz024.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span>    tfzzz058<span style='color:#808030; '>,</span> tfzzz024
+ 769:         <span style='color:#004a43; '>where</span>     tfzzz058._index1<span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_prid1</span><span style='color:#808030; '>}</span>
+ 770:             <span style='color:#004a43; '>and</span> tfzzz058.pnplwcnd <span style='color:#004a43; '>refers</span> <span style='color:#004a43; '>to</span> tfzzz024 <span style='color:#696969; '>| линк на 024</span>
+ 771:             <span style='color:#004a43; '>and</span> tfzzz024.c_lb_pfc <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> ""
+ 772:         <span style='color:#004a43; '>selectdo</span>
+ 773:            was2<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>true</span>    
+ 774:         <span style='color:#004a43; '>endselect</span>
+ 775:     
+ 776:         <span style='color:#696969; '>| 2я часть недержания - 2</span>
+ 777:         <span style='color:#004a43; '>select</span> tfzzz095.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz095<span style='color:#808030; '>,</span> tfzzz156 <span style='color:#004a43; '>where</span> 
+ 778:           tfzzz156._index1 <span style='color:#004a43; '>inrange</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_id</span><span style='color:#808030; '>,</span> DR_MIN_LONG<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 779:                               <span style='color:#004a43; '>and</span>  <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_id</span><span style='color:#808030; '>,</span> DR_MAX_LONG<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span>
+ 780:             <span style='color:#004a43; '>and</span> tfzzz156.smagstzh <span style='color:#004a43; '>refers</span> <span style='color:#004a43; '>to</span> tfzzz095    <span style='color:#696969; '>| Виды стажей</span>
+ 781:             <span style='color:#004a43; '>and</span> tfzzz095.rctpvsbs <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> ""
+ 782:         <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+ 783:         <span style='color:#004a43; '>selectdo</span>
+ 784:            was3<span style='color:#808030; '>=</span><span style='color:#800000; font-weight:bold; '>true</span>
+ 785:         <span style='color:#004a43; '>endselect</span>
+ 786: 
+ 787:        <span style='color:#800000; font-weight:bold; '> if</span> was1 <span style='color:#800000; font-weight:bold; '>or</span> was2 <span style='color:#800000; font-weight:bold; '>or</span> was3 <span style='color:#800000; font-weight:bold; '>then</span> 
+ 788:             handlePeriodOld<span style='color:#808030; '>(</span>_max<span style='color:#808030; '>(</span>first<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_crdat<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> _min<span style='color:#808030; '>(</span>last<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_andat<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> leaveKind<span style='color:#808030; '>,</span> was1<span style='color:#808030; '>,</span> was2<span style='color:#808030; '>,</span> was3<span style='color:#808030; '>)</span>
+ 789:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 790: 
+ 791:         <span style='color:#696969; '>| по просьбам Маш</span>
+ 792:        <span style='color:#800000; font-weight:bold; '> if</span> leaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>deti <span style='color:#800000; font-weight:bold; '>or</span> leaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>dekr <span style='color:#800000; font-weight:bold; '>then</span>
+ 793:             <span style='color:#800000; font-weight:bold; '>break</span>
+ 794:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 795: 
+ 796:     <span style='color:#004a43; '>endselect</span>
+ 797: 
+ 798: <span style='color:#808030; '>}</span>
+ 799: 
+ 800: <span style='color:#696969; '>|</span>
+ 801: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 802: <span style='color:#696969; '>| by Max Belugin 12.12.2002 16:52:24</span>
+ 803: <span style='color:#800000; font-weight:bold; '>function</span> handlePeriodOld<span style='color:#808030; '>(</span>TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>domain</span> tfzzz<span style='color:#008c00; '>.</span>pfvr leaveKind<span style='color:#808030; '>,</span> tbool was1<span style='color:#808030; '>,</span> tbool was2<span style='color:#808030; '>,</span> tbool was3<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 804:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"handlePeriod"</span><span style='color:#808030; '>)</span>
+ 805:     TDate  NCPR     
+ 806:     TDate  KNPR      
+ 807:     <span style='color:#800000; font-weight:bold; '>String</span> TOOS<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>  
+ 808:     <span style='color:#800000; font-weight:bold; '>String</span> OUUS<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>  
+ 809:     <span style='color:#800000; font-weight:bold; '>String</span> OITS<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>
+ 810:     <span style='color:#800000; font-weight:bold; '>long</span>   DCC1
+ 811:     <span style='color:#800000; font-weight:bold; '>long</span>   DCC2
+ 812:     <span style='color:#800000; font-weight:bold; '>String</span> DCC3<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>
+ 813:     <span style='color:#800000; font-weight:bold; '>String</span> OIVL<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>
+ 814:     <span style='color:#800000; font-weight:bold; '>long</span>   DSV1
+ 815:     <span style='color:#800000; font-weight:bold; '>long</span>   DSV2
+ 816:     <span style='color:#800000; font-weight:bold; '>double</span> DSV3
+ 817:     <span style='color:#800000; font-weight:bold; '>String</span> KPSP<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span> 
+ 818:     <span style='color:#696969; '>| 3</span>
+ 819:     NCPR <span style='color:#808030; '>=</span> <span style='color:#808030; '>max</span><span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_crdat<span style='color:#808030; '>,</span> first<span style='color:#808030; '>)</span> 
+ 820:     <span style='color:#696969; '>| 4</span>
+ 821:     KNPR <span style='color:#808030; '>=</span> <span style='color:#808030; '>min</span><span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_andat<span style='color:#808030; '>,</span> last <span style='color:#808030; '>)</span> 
+ 822:     <span style='color:#696969; '>| 5</span>
+ 823:     TOOS <span style='color:#808030; '>=</span> was2 <span style='color:#808030; '>?</span> tfzzz024<span style='color:#008c00; '>.</span>terusl   <span style='color:#808030; '>:</span> <span style='color:#0000e6; '>""</span>
+ 824:     <span style='color:#696969; '>| 6</span>
+ 825:     OUUS<span style='color:#808030; '>=</span>  was2 <span style='color:#808030; '>?</span> tfzzz024<span style='color:#008c00; '>.</span>c_lb_pfc <span style='color:#808030; '>:</span> <span style='color:#0000e6; '>""</span>
+ 826:     <span style='color:#696969; '>| 7</span>
+ 827:     OITS<span style='color:#808030; '>=</span>  was3 <span style='color:#808030; '>?</span> tfzzz095<span style='color:#008c00; '>.</span>pfoist   <span style='color:#808030; '>:</span> <span style='color:#0000e6; '>""</span>
+ 828:     <span style='color:#696969; '>| 8,9</span>
+ 829:     <span style='color:#800000; font-weight:bold; '>double</span> kdst<span style='color:#808030; '>,</span> klwc<span style='color:#808030; '>,</span> kdstDiv30
+ 830:     kdst <span style='color:#808030; '>=</span> getKDST<span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_staff<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_id<span style='color:#808030; '>,</span> NCPR<span style='color:#808030; '>,</span> KNPR<span style='color:#808030; '>)</span> 
+ 831:     <span style='color:#800000; font-weight:bold; '>long</span> years <span style='color:#808030; '>,</span>months<span style='color:#808030; '>,</span> days
+ 832:     PFSeniority<span style='color:#808030; '>(</span>first<span style='color:#808030; '>,</span> last<span style='color:#808030; '>,</span> years <span style='color:#808030; '>,</span>months<span style='color:#808030; '>,</span> days<span style='color:#808030; '>)</span>
+ 833: 
+ 834:     klwc <span style='color:#808030; '>=</span> KLWCh<span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_staff<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_id<span style='color:#808030; '>,</span>NCPR<span style='color:#808030; '>,</span> KNPR<span style='color:#808030; '>)</span> <span style='color:#696969; '>| можно ли тут так передавать empl и wp ?</span>
+ 835:     DCC1<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 836:     DCC2<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 837:     <span style='color:#004a43; '>#define</span> notVodolaz  <span style='color:#808030; '>(</span>trim$<span style='color:#808030; '>(</span>OITS<span style='color:#808030; '>)</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span><span style='color:#0000e6; '>"ВОДОЛАЗ"</span><span style='color:#808030; '>)</span>
+ 838:    <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#808030; '>(</span>was2 <span style='color:#800000; font-weight:bold; '>or</span> was3<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#808030; '>isSpace</span><span style='color:#808030; '>(</span>OUUS<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 839:         DCC1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>min</span><span style='color:#808030; '>(</span>months<span style='color:#808030; '>,</span> <span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>notVodolaz <span style='color:#808030; '>?</span> <span style='color:#808030; '>(</span>kdst<span style='color:#808030; '>/</span><span style='color:#008c00; '>30</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> klwc<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 840:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 841:    <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#808030; '>(</span>was2 <span style='color:#800000; font-weight:bold; '>or</span> was3<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#808030; '>isSpace</span><span style='color:#808030; '>(</span>OUUS<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 842:         DCC2 <span style='color:#808030; '>=</span> <span style='color:#808030; '>min</span><span style='color:#808030; '>(</span>days  <span style='color:#808030; '>,</span> <span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>notVodolaz <span style='color:#808030; '>?</span> <span style='color:#808030; '>(</span>kdst\<span style='color:#008c00; '>30</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> frac<span style='color:#808030; '>(</span>klwc<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#008c00; '>60.0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+ 843:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 844:     <span style='color:#696969; '>| 10</span>
+ 845:     DCC3<span style='color:#808030; '>=</span><span style='color:#0000e6; '>""</span>
+ 846:    <span style='color:#800000; font-weight:bold; '> if</span> leaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>dekr <span style='color:#800000; font-weight:bold; '>then</span>
+ 847:         DCC3<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ДЕКРЕТ"</span>
+ 848: <span style='color:#696969; '>|        alert(dcc3)</span>
+ 849:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 850:    <span style='color:#800000; font-weight:bold; '> if</span> leaveKind<span style='color:#808030; '>=</span>tfzzz<span style='color:#008c00; '>.</span>pfvr<span style='color:#008c00; '>.</span>deti <span style='color:#800000; font-weight:bold; '>then</span>
+ 851:         DCC3<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"ДЕТИ"</span>
+ 852:     <span style='color:#696969; '>|    alert(dcc3)</span>
+ 853:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 854:     <span style='color:#696969; '>| 11</span>
+ 855:     OIVL <span style='color:#808030; '>=</span> getOIVL<span style='color:#808030; '>(</span>first<span style='color:#808030; '>,</span>last<span style='color:#808030; '>)</span>
+ 856:     <span style='color:#696969; '>| 12,13</span>
+ 857:    <span style='color:#800000; font-weight:bold; '> if</span> FLAG1 <span style='color:#800000; font-weight:bold; '>or</span> FLAG2 <span style='color:#800000; font-weight:bold; '>then</span>
+ 858:         <span style='color:#800000; font-weight:bold; '>double</span> klwc1
+ 859:         klwc1 <span style='color:#808030; '>=</span> KLWCh1<span style='color:#808030; '>(</span>tfzzz026<span style='color:#008c00; '>.</span>wp_staff<span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_id<span style='color:#808030; '>,</span>NCPR<span style='color:#808030; '>,</span> KNPR<span style='color:#808030; '>)</span>
+ 860:        <span style='color:#800000; font-weight:bold; '> if</span> FLAG1 <span style='color:#800000; font-weight:bold; '>or</span> FLAG2 <span style='color:#800000; font-weight:bold; '>then</span> 
+ 861:             DSV1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>klwc1<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> 
+ 862:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 863:        <span style='color:#800000; font-weight:bold; '> if</span> FLAG1 <span style='color:#800000; font-weight:bold; '>then</span> 
+ 864:             DSV2 <span style='color:#808030; '>=</span> <span style='color:#808030; '>round</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0.6</span><span style='color:#808030; '>*</span><span style='color:#808030; '>(</span>klwc1<span style='color:#808030; '>-</span><span style='color:#808030; '>round</span><span style='color:#808030; '>(</span>klwc1<span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> 
+ 865:        <span style='color:#800000; font-weight:bold; '> endif</span>
+ 866:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 867:     <span style='color:#696969; '>| 14</span>
+ 868:     KPSP <span style='color:#808030; '>=</span> <span style='color:#005fd2; '>string.value.byID</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"tfzzz019"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"pos_kslp"</span><span style='color:#808030; '>,</span> tfzzz026<span style='color:#008c00; '>.</span>wp_dp_ps<span style='color:#808030; '>)</span>
+ 869:     <span style='color:#696969; '>| 15</span>
+ 870:     DSV3<span style='color:#808030; '>=</span><span style='color:#008c00; '>0.0</span>
+ 871:    <span style='color:#800000; font-weight:bold; '> if</span> FLAG3 <span style='color:#800000; font-weight:bold; '>then</span> 
+ 872:         <span style='color:#004a43; '>select</span> tfzzz058.pnplstav:<span style='color:#005fd2; '>DSV3</span> <span style='color:#004a43; '>from</span>    tfzzz058
+ 873:         <span style='color:#004a43; '>where</span>     tfzzz058._index1<span style='color:#808030; '>=</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_prid1</span><span style='color:#808030; '>}</span>
+ 874:         <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+ 875:         <span style='color:#004a43; '>selectdo</span>
+ 876:         <span style='color:#004a43; '>endselect</span>
+ 877:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 878: 
+ 879:     OAS_REC<span style='color:#808030; '>(</span>
+ 880:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"СТАЖ"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 1</span>
+ 881:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>curr2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>  <span style='color:#696969; '>| 2</span>
+ 882:         O<span style='color:#008c00; '>.</span>D<span style='color:#808030; '>(</span>NCPR<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 3</span>
+ 883:         O<span style='color:#008c00; '>.</span>D<span style='color:#808030; '>(</span>KNPR<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 4          </span>
+ 884:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>TOOS<span style='color:#808030; '>,</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 5</span>
+ 885:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>OUUS<span style='color:#808030; '>,</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 6</span>
+ 886:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>OITS<span style='color:#808030; '>,</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 7</span>
+ 887:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>DCC1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 8</span>
+ 888:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>DCC2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 9</span>
+ 889:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>DCC3<span style='color:#808030; '>,</span><span style='color:#008c00; '>9</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 10</span>
+ 890:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>OIVL<span style='color:#808030; '>,</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#696969; '>| 11</span>
+ 891:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>DSV1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 12</span>
+ 892:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>DSV2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>   <span style='color:#696969; '>| 13</span>
+ 893:         O<span style='color:#008c00; '>.</span>S<span style='color:#808030; '>(</span>KPSP<span style='color:#808030; '>,</span><span style='color:#008c00; '>20</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#696969; '>| 14</span>
+ 894:         O<span style='color:#008c00; '>.</span>N<span style='color:#808030; '>(</span>DSV3<span style='color:#808030; '>)</span>    <span style='color:#696969; '>| 15</span>
+ 895:     <span style='color:#808030; '>)</span>
+ 896:     inc<span style='color:#808030; '>(</span>curr2<span style='color:#808030; '>)</span>
+ 897:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"handlePeriod"</span><span style='color:#808030; '>)</span>
+ 898: <span style='color:#808030; '>}</span>
+ 899: 
+ 900: 
+ 901: <span style='color:#696969; '>|</span>
+ 902: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 903: <span style='color:#696969; '>| by Max Belugin 12.12.2002 17:38:10</span>
+ 904: <span style='color:#800000; font-weight:bold; '>function</span> PFSeniority<span style='color:#808030; '>(</span>TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ref</span> <span style='color:#800000; font-weight:bold; '>long</span> y<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>ref</span> <span style='color:#800000; font-weight:bold; '>long</span> m<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ref</span> <span style='color:#800000; font-weight:bold; '>long</span> d<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 905:     <span style='color:#696969; '>|?    Гн Мн Дн - дата начала периода,</span>
+ 906:     <span style='color:#800000; font-weight:bold; '>long</span> first<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>,</span> first<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>,</span> first<span style='color:#008c00; '>.</span>d
+ 907:     <span style='color:#808030; '>num.to.date</span><span style='color:#808030; '>(</span>first<span style='color:#808030; '>,</span> first<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>,</span> first<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>,</span> first<span style='color:#008c00; '>.</span>d<span style='color:#808030; '>)</span>
+ 908:     <span style='color:#696969; '>|?    Гк Мк Дк - дата конца периода,</span>
+ 909:     <span style='color:#800000; font-weight:bold; '>long</span> last<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>,</span> last<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>,</span> last<span style='color:#008c00; '>.</span>d
+ 910:     <span style='color:#808030; '>num.to.date</span><span style='color:#808030; '>(</span>last<span style='color:#808030; '>,</span> last<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>,</span> last<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>,</span> last<span style='color:#008c00; '>.</span>d<span style='color:#808030; '>)</span>
+ 911: <span style='color:#696969; '>|    |?    Г М Д - календарно отработанное время.</span>
+ 912: <span style='color:#696969; '>|    long y, m, d</span>
+ 913:     <span style='color:#696969; '>|?    Д=Дк-Дн</span>
+ 914:     d<span style='color:#808030; '>=</span>last<span style='color:#008c00; '>.</span>d<span style='color:#808030; '>-</span>first<span style='color:#008c00; '>.</span>d
+ 915:     <span style='color:#696969; '>| если Д&lt;0 </span>
+ 916:    <span style='color:#800000; font-weight:bold; '> if</span> d<span style='color:#808030; '>&lt;</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 917:         <span style='color:#696969; '>| то Д=Д+30 </span>
+ 918:         inc<span style='color:#808030; '>(</span>d<span style='color:#808030; '>,</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>)</span>
+ 919:         <span style='color:#696969; '>| Мк=Мк-1</span>
+ 920:         dec<span style='color:#808030; '>(</span>last<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>)</span>
+ 921:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 922:     <span style='color:#696969; '>|?    М= Мк-Мн</span>
+ 923:     m<span style='color:#808030; '>=</span>last<span style='color:#008c00; '>.</span>m<span style='color:#808030; '>-</span>first<span style='color:#008c00; '>.</span>m
+ 924:     <span style='color:#696969; '>|если М&lt;0</span>
+ 925:    <span style='color:#800000; font-weight:bold; '> if</span> m<span style='color:#808030; '>&lt;</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 926:         <span style='color:#696969; '>|то М=М+12</span>
+ 927:         inc<span style='color:#808030; '>(</span>m<span style='color:#808030; '>,</span> <span style='color:#008c00; '>12</span><span style='color:#808030; '>)</span>
+ 928:         <span style='color:#696969; '>|Гк=Гк-1</span>
+ 929:         dec<span style='color:#808030; '>(</span>last<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>)</span>
+ 930:    <span style='color:#800000; font-weight:bold; '> endif</span>
+ 931:     <span style='color:#696969; '>|?    Г=Гк-Гн</span>
+ 932:     y<span style='color:#808030; '>=</span>last<span style='color:#008c00; '>.</span>y<span style='color:#808030; '>-</span>first<span style='color:#008c00; '>.</span>y
+ 933:     <span style='color:#696969; '>|?    Д=Д+1</span>
+ 934:     inc<span style='color:#808030; '>(</span>d<span style='color:#808030; '>)</span>
+ 935:     <span style='color:#696969; '>|    если Д>=30</span>
+ 936:    <span style='color:#800000; font-weight:bold; '> if</span> d<span style='color:#808030; '>></span><span style='color:#808030; '>=</span><span style='color:#008c00; '>30</span> <span style='color:#800000; font-weight:bold; '>then</span>
+ 937:         <span style='color:#696969; '>|    то Д=0</span>
+ 938:         d<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 939:         <span style='color:#696969; '>|    М=М+1</span>
+ 940:         inc<span style='color:#808030; '>(</span>m<span style='color:#808030; '>)</span>
+ 941:    <span style='color:#800000; font-weight:bold; '> endif </span>   
+ 942: <span style='color:#808030; '>}</span>
+ 943: 
+ 944: 
+ 945: <span style='color:#696969; '>|?    &lt;КЛВЧ> - сумма по полям &lt;Время> tfzzz156, для записей по </span>
+ 946: <span style='color:#696969; '>|текущему коду работника, рабочего места, виду стажа, в записи </span>
+ 947: <span style='color:#696969; '>|о котором в поле tfzzz095.pfst стоит значение &lt;ДА>, и датам с </span>
+ 948: <span style='color:#696969; '>|&lt;НЧПР> по &lt;КНПР>.</span>
+ 949: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 950: <span style='color:#696969; '>| by Max Belugin 12.12.2002 17:57:02</span>
+ 951: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>double</span> KLWCh<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> wp<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 952:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"KLWCh"</span><span style='color:#808030; '>)</span>
+ 953:     <span style='color:#800000; font-weight:bold; '>double</span> result result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 954:     <span style='color:#004a43; '>select</span> SUM<span style='color:#808030; '>(</span>tfzzz156.smagtime<span style='color:#808030; '>)</span>:<span style='color:#005fd2; '>result</span> <span style='color:#004a43; '>from</span> tfzzz095<span style='color:#808030; '>,</span> tfzzz156 <span style='color:#004a43; '>where</span>
+ 955:         tfzzz095.pfst<span style='color:#808030; '>=</span>CB_TRUE
+ 956:         <span style='color:#004a43; '>and</span>
+ 957:         tfzzz156._index1 <span style='color:#004a43; '>inrange</span> 
+ 958:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>wp</span><span style='color:#808030; '>,</span> tfzzz095.rctpid<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 959:             <span style='color:#004a43; '>and</span>
+ 960:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>wp</span><span style='color:#808030; '>,</span> tfzzz095.rctpid<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span>
+ 961:     <span style='color:#004a43; '>selectdo</span>
+ 962:     <span style='color:#004a43; '>endselect</span>         
+ 963:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"KLWCh"</span><span style='color:#808030; '>)</span>
+ 964:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>    
+ 965: <span style='color:#808030; '>}</span>
+ 966: 
+ 967: 
+ 968: 
+ 969: <span style='color:#696969; '>|?    &lt;КЛВЧ1> - сумма по полям &lt;Время> tfzzz156, для записей по </span>
+ 970: <span style='color:#696969; '>|текущему коду работника, рабочего места, виду стажа, в записи </span>
+ 971: <span style='color:#696969; '>|о котором в поле tfzzz095.rctpinvs стоит значение &lt;ДА>, и датам с </span>
+ 972: <span style='color:#696969; '>|&lt;НЧПР> по &lt;КНПР>.</span>
+ 973: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+ 974: <span style='color:#696969; '>| by Max Belugin 12.12.2002 17:57:02</span>
+ 975: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>double</span> KLWCh1<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> wp<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 976:     <span style='color:#800000; font-weight:bold; '>double</span> result result<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 977:     <span style='color:#004a43; '>select</span> SUM<span style='color:#808030; '>(</span>tfzzz156.smagtime<span style='color:#808030; '>)</span>:<span style='color:#005fd2; '>result</span> <span style='color:#004a43; '>from</span> tfzzz095<span style='color:#808030; '>,</span> tfzzz156 <span style='color:#004a43; '>where</span>
+ 978:         tfzzz095.rctpinvs<span style='color:#808030; '>=</span>CB_TRUE
+ 979:         <span style='color:#004a43; '>and</span>
+ 980:         tfzzz156._index1 <span style='color:#004a43; '>inrange</span> 
+ 981:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>wp</span><span style='color:#808030; '>,</span> tfzzz095.rctpid<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 982:             <span style='color:#004a43; '>and</span>
+ 983:             <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>empl</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>wp</span><span style='color:#808030; '>,</span> tfzzz095.rctpid<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span>
+ 984:     <span style='color:#004a43; '>selectdo</span>
+ 985:     <span style='color:#004a43; '>endselect</span>         
+ 986:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span>
+ 987: <span style='color:#808030; '>}</span>
+ 988: 
+ 989: 
+ 990: <span style='color:#696969; '>|?  &lt;ОИВЛ> - значение поля tfzzz095.rctpvsbs для записи о виде стажа, </span>
+ 991: <span style='color:#696969; '>|по которому у работника по текущему рабочему месту существуют данные </span>
+ 992: <span style='color:#696969; '>| в таблице tfzzz156 на период с &lt;НЧПР> по &lt;КНПР>, и в записи о котором </span>
+ 993: <span style='color:#696969; '>| в поле "Входит в выслугу" стоит значение "ДА".</span>
+ 994: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>String</span> getOIVL<span style='color:#808030; '>(</span>tdate first<span style='color:#808030; '>,</span> tdate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 995: 
+ 996:     <span style='color:#004a43; '>select</span> tfzzz095.<span style='color:#808030; '>*</span> <span style='color:#004a43; '>from</span> tfzzz095<span style='color:#808030; '>,</span> tfzzz156 <span style='color:#004a43; '>where</span> 
+ 997:       tfzzz156._index1 <span style='color:#004a43; '>inrange</span> <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_id</span><span style='color:#808030; '>,</span> DR_MIN_LONG<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>first</span><span style='color:#808030; '>}</span>
+ 998:                           <span style='color:#004a43; '>and</span>  <span style='color:#808030; '>{</span>:<span style='color:#005fd2; '>tfzzz026.wp_staff</span><span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>tfzzz026.wp_id</span><span style='color:#808030; '>,</span> DR_MAX_LONG<span style='color:#808030; '>,</span> :<span style='color:#005fd2; '>last</span><span style='color:#808030; '>}</span>
+ 999:         <span style='color:#004a43; '>and</span> tfzzz156.smagstzh <span style='color:#004a43; '>refers</span> <span style='color:#004a43; '>to</span> tfzzz095    <span style='color:#696969; '>| Виды стажей</span>
+1000:         <span style='color:#004a43; '>and</span> tfzzz095.rctpinvs <span style='color:#808030; '>=</span> CB_TRUE
+1001:     <span style='color:#004a43; '>as</span> <span style='color:#004a43; '>set</span> <span style='color:#004a43; '>with</span> 1 <span style='color:#004a43; '>rows</span>
+1002:     <span style='color:#004a43; '>selectdo</span>
+1003:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz095<span style='color:#008c00; '>.</span>rctpvsbs<span style='color:#808030; '>)</span>
+1004:     <span style='color:#004a43; '>endselect</span>
+1005:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>""</span><span style='color:#808030; '>)</span>
+1006: <span style='color:#808030; '>}</span>
+1007: 
+1008: <span style='color:#696969; '>|</span>
+1009: <span style='color:#696969; '>|</span><span style='color:#7f9fbf; font-weight:bold; '>@created</span><span style='color:#696969; '> </span>
+1010: <span style='color:#696969; '>| by Max Belugin 13.12.2002 13:05:27</span>
+1011: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#800000; font-weight:bold; '>double</span> getKDST<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>long</span> empl<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>long</span> wp<span style='color:#808030; '>,</span> TDate first<span style='color:#808030; '>,</span> TDate last<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+1012:     <span style='color:#005fd2; '>prof.begPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"getKDST"</span><span style='color:#808030; '>)</span>
+1013:     <span style='color:#696969; '>|    &lt;ФРВ> - фонд рабочего времени в днях по табелю за период с </span>
+1014:     <span style='color:#696969; '>|&lt;НЧПР> по &lt;КНПР>.</span>
+1015:     <span style='color:#800000; font-weight:bold; '>long</span> FRV 
+1016:     FRV<span style='color:#808030; '>=</span><span style='color:#005fd2; '>tb.workingDaysByDates</span><span style='color:#808030; '>(</span>wp<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>""</span><span style='color:#808030; '>,</span> first<span style='color:#808030; '>,</span> last<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>)</span>
+1017:     <span style='color:#696969; '>|    &lt;КВЧ> - сумма по полям &lt;Время> tfzzz156, для записей по текущему </span>
+1018:     <span style='color:#696969; '>|коду работника, рабочего места, виду стажа, в записи о котором в поле </span>
+1019:     <span style='color:#696969; '>|tfzzz095.pfst стоит значение &lt;ДА>, и датам с &lt;НЧПР> по &lt;КНПР>.</span>
+1020:     <span style='color:#800000; font-weight:bold; '>double</span> KVCh 
+1021:     KVCh<span style='color:#808030; '>=</span>KLWCh<span style='color:#808030; '>(</span>empl<span style='color:#808030; '>,</span> wp<span style='color:#808030; '>,</span> first<span style='color:#808030; '>,</span> last<span style='color:#808030; '>)</span>    
+1022:    <span style='color:#800000; font-weight:bold; '> if</span> is0<span style='color:#808030; '>(</span>KVCh<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
+1023:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+1024:    <span style='color:#800000; font-weight:bold; '> endif</span>
+1025:     <span style='color:#696969; '>|    &lt;КДПР> - количество календарных дней периода с &lt;НЧПР> по &lt;КНПР>.</span>
+1026:     <span style='color:#800000; font-weight:bold; '>long</span> KDPR    
+1027:     KDPR<span style='color:#808030; '>=</span>last<span style='color:#808030; '>-</span>first<span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span>
+1028:     <span style='color:#696969; '>| ?    &lt;КДСТ> - равно КДПР - (ФРВ - КВЧ/24), если (ФРВ - КВЧ/24) > 0, в </span>
+1029:     <span style='color:#696969; '>|противном случае КДСТ равно КДПР, где</span>
+1030:    <span style='color:#800000; font-weight:bold; '> if</span> <span style='color:#808030; '>(</span>FRV<span style='color:#808030; '>-</span>KVCh<span style='color:#808030; '>/</span><span style='color:#008c00; '>24</span><span style='color:#808030; '>)</span><span style='color:#808030; '>></span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
+1031:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>KDPR <span style='color:#808030; '>-</span> <span style='color:#808030; '>(</span>FRV <span style='color:#808030; '>-</span> KVCh<span style='color:#808030; '>/</span><span style='color:#008c00; '>24</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+1032:    <span style='color:#800000; font-weight:bold; '> endif</span>
+1033:     <span style='color:#005fd2; '>prof.endPiece</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"getKDST"</span><span style='color:#808030; '>)</span>
+1034:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>KDPR<span style='color:#808030; '>)</span>
+1035: <span style='color:#808030; '>}</span>
+1036: 
+1037: 
+1038: 
+</pre></body></html>

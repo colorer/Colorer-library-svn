@@ -1,0 +1,287 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>\ Resolve path device procedure LNM 04-11-1999 based on IEEE 1275-1994</span>
+  1: <span style='color:#0000e6; '>." Resolve path device procedure"</span>
+  2: include? task-aw.fth        aw.fth
+  3: include? task-showdevs.fth  showdevs.fth
+  4: <span style='color:#800000; font-weight:bold; '>forth</span> <span style='color:#000000; background:#a8a800; '>definitions</span> anew task-rp.fth <span style='color:#e34adc; '>decimal</span>
+  5: 
+  6: <span style='color:#008c00; '>255</span> <span style='color:#800000; font-weight:bold; '>value</span> sizestr
+  7: <span style='color:#008c00; '>0</span> string emptystr    <span style='color:#696969; '>\ Empty string for varios needs</span>
+  8: sizestr string shead <span style='color:#696969; '>\ String for head of sourse string</span>
+  9: sizestr string stail <span style='color:#696969; '>\ String for tail of sourse string</span>
+ 10: sizestr string path_name <span style='color:#696969; '>\ Target full alias name</span>
+ 11: sizestr string arguments <span style='color:#696969; '>\ Arguments string</span>
+ 12: <span style='color:#008c00; '>31</span>      string unit_addr
+ 13: <span style='color:#008c00; '>31</span>      string node_name <span style='color:#696969; '>\ The current node name</span>
+ 14: 
+ 15: <span style='color:#800000; font-weight:bold; '>variable</span> targetnode <span style='color:#696969; '>\ Pnode of finded name</span>
+ 16: <span style='color:#800000; font-weight:bold; '>variable</span> active-package  <span style='color:#008c00; '>0</span> active-package <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ Current active package</span>
+ 17: <span style='color:#800000; font-weight:bold; '>variable</span> parentnode
+ 18: 2variable ptail      <span style='color:#696969; '>\ Pointer to tail string</span>
+ 19: 2variable phead      <span style='color:#696969; '>\ Pointer to head string</span>
+ 20: 2variable paliasargs <span style='color:#696969; '>\ Pointer to string alias arguments</span>
+ 21: <span style='color:#800000; font-weight:bold; '>variable</span> unit_phys <span style='color:#008c00; '>0</span> unit_phys <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ Physical adress of unit</span>
+ 22: 
+ 23: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>findalias</span> <span style='color:#696969; '>( Adr Len -- AdrAlias LenAlias 0 | 1 )</span>
+ 24:     aliashandle <span style='color:#800000; font-weight:bold; '>@</span> getPhandleProperty <span style='color:#696969; '>( Adr Len 0 | 1 )</span> ;
+ 25: 
+ 26: <span style='color:#696969; '>\ Concatenate 2 string and 1 symbol to shead string</span>
+ 27: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>conc2str&amp;symb</span> <span style='color:#696969; '>( AStr1 LStr1 AStr2 LStr2 Symb -- A L )</span> { symb -- }
+ 28:     <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#696969; '>( AStr2 LStr2 AStr1 LStr1 )</span>
+ 29:     shead st! <span style='color:#696969; '>\ Story count in shead</span>
+ 30:     shead <span style='color:#800000; font-weight:bold; '>2dup</span> <span style='color:#800000; font-weight:bold; '>+</span> symb <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#008c00; '>c</span>! <span style='color:#696969; '>( AStr2 LStr2 Ash Lsh )</span>
+ 31:     <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#696969; '>( AStr2 LStr2 Ash Lsh Lnew )</span>
+ 32:     <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#008c00; '>c</span>! <span style='color:#696969; '>( AStr2 LStr2 Ash Lsh )</span> <span style='color:#696969; '>\ Story new len in shead</span>
+ 33:     <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>move</span> <span style='color:#696969; '>( ( Story content of alias_shead )</span> shead <span style='color:#696969; '>( A L )</span> ;
+ 34: 
+ 35: <span style='color:#696969; '>\ 4.3.1.A.3 Change alias by real name</span>
+ 36: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>workwithalias</span> <span style='color:#696969; '>( AdrAlias LenAlias )</span>
+ 37:     paliasargs <span style='color:#008c00; '>2</span>@ <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>\ Not empty args of alias</span>
+ 38:     <span style='color:#696969; '>( AdrAlias LenAlias AdrAlArg LenAlArg LenAlArg )</span>
+ 39:     <span style='color:#e34adc; '>if</span>  <span style='color:#696969; '>\ 3-ii Alias args is not empty</span>
+ 40:         <span style='color:#696969; '>\ 3-ii-a</span>
+ 41:         <span style='color:#0000e6; '>ascii /</span> right-split <span style='color:#696969; '>( AdrAlHead LenAlhead AdrAlTail LenAltail )</span>
+ 42:         <span style='color:#696969; '>\ 3-ii-b</span>
+ 43:         <span style='color:#0000e6; '>ascii :</span> right-split <span style='color:#696969; '>( AdrAlHead LenAlhead AdrAlTail LenAltail ADeadArg LDeadArg )</span>
+ 44:         <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#696969; '>( AdrAlHead LenAlhead AdrAlTail LenAltail  )</span>
+ 45:         <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#696969; '>\ AliasHead length</span>
+ 46:         <span style='color:#e34adc; '>if</span>  <span style='color:#696969; '>\ 3-ii-c concatenate (alias_head,"/",Alias_tail)</span>
+ 47:             <span style='color:#0000e6; '>ascii /</span> conc2str&amp;symb <span style='color:#696969; '>( A L )</span>
+ 48:         <span style='color:#e34adc; '>else</span> 
+ 49:             <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#696969; '>( AdrAlTail LenAltail )</span>
+ 50:         <span style='color:#e34adc; '>then</span>
+ 51:         <span style='color:#696969; '>( A L )</span> paliasargs <span style='color:#008c00; '>2</span>@ <span style='color:#0000e6; '>ascii :</span> conc2str&amp;symb
+ 52:         <span style='color:#696969; '>\ 3-ii-d concatinate aliastail : aliasargs</span>
+ 53:     <span style='color:#e34adc; '>then</span>  <span style='color:#696969; '>( AdrAlias' LenAlias' )</span> ;
+ 54: 
+ 55: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>setroot</span> <span style='color:#696969; '>\ cr ." I must set root active package !!!!"</span>
+ 56:     roothandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> active-package <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>(  )</span> ;
+ 57: 
+ 58: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>copynode</span> <span style='color:#696969; '>( -- )</span> nodehandle <span style='color:#007997; '>@nt</span> creanode <span style='color:#007997; '>@nt</span> sizenode <span style='color:#800000; font-weight:bold; '>move</span> ;
+ 59: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>copydata</span> <span style='color:#696969; '>( -- )</span> nodehandle <span style='color:#007997; '>@nt</span> <span style='color:#800000; font-weight:bold; '>dup</span> adrinstdata <span style='color:#007997; '>@nt</span> <span style='color:#800000; font-weight:bold; '>swap</span> leninstdata <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Adr Dl )</span>
+ 60:     <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>here</span> <span style='color:#800000; font-weight:bold; '>-rot</span> altovoc <span style='color:#800000; font-weight:bold; '>code></span> <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#800000; font-weight:bold; '>false</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( adr )</span>
+ 61:     creanode <span style='color:#007997; '>@nt</span> adrinstdata <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( ( Copy and store adrinsdata )</span> ;
+ 62: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>copyproperty</span> <span style='color:#696969; '>( -- )</span>
+ 63:     <span style='color:#008c00; '>0</span> creanode <span style='color:#007997; '>@nt</span> prophandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ No property in created instance before copying's</span>
+ 64:     nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Phandle )</span>
+ 65:     creanode <span style='color:#800000; font-weight:bold; '>@</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( Phandle )</span>
+ 66:     <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>>code</span> prophandle <span style='color:#696969; '>( Phandle AdrPtrChainProp )</span>
+ 67:     <span style='color:#e34adc; '>begin</span>
+ 68:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>(  )</span>
+ 69:     <span style='color:#e34adc; '>while</span>
+ 70:         <span style='color:#696969; '>\ >code</span>
+ 71:         <span style='color:#800000; font-weight:bold; '>code></span> ptrprop>valprop <span style='color:#696969; '>( Av Lv An Ln )</span>
+ 72: <span style='color:#696969; '>\        @nt dup cell+ dup cell+ swap @nt count rot count</span>
+ 73:         <span style='color:#696969; '>\ cr 2dup type space 3 pick 3 pick type</span>
+ 74:         <span style='color:#007997; '>property</span> <span style='color:#696969; '>(  .s key drop )</span>
+ 75:     <span style='color:#e34adc; '>repeat</span> <span style='color:#800000; font-weight:bold; '>drop</span>
+ 76:     <span style='color:#696969; '>( Phandle )</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( -- )</span> ;
+ 77: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>resolvelinks</span> <span style='color:#696969; '>( -- )</span>
+ 78:     nodehandle <span style='color:#800000; font-weight:bold; '>@</span> creanode <span style='color:#007997; '>@nt</span> <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ Story phandle of prototype</span>
+ 79:     <span style='color:#008c00; '>0</span> creanode <span style='color:#007997; '>@nt</span> childhandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ No child on new created instance</span>
+ 80:     <span style='color:#008c00; '>0</span> creanode <span style='color:#007997; '>@nt</span> siblinghandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ No sibling on new created instance</span>
+ 81:     <span style='color:#008c00; '>0</span> creanode <span style='color:#007997; '>@nt</span> ihandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ No instance on new created instance</span>
+ 82:     <span style='color:#696969; '>\ creanode @ dup p.node</span>
+ 83:     <span style='color:#696969; '>( >code @ p.node insinchainsibling (  )</span> ;
+ 84: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>copyfromprototype</span> <span style='color:#696969; '>( -- )</span>
+ 85: <span style='color:#696969; '>\   ."  Go "</span>
+ 86:     copynode
+ 87: <span style='color:#696969; '>\   ."  node "</span>
+ 88:     copydata
+ 89: <span style='color:#696969; '>\   ."  Data "</span>
+ 90:     copyproperty
+ 91: <span style='color:#696969; '>\   ."  Property "</span>
+ 92:     resolvelinks
+ 93: <span style='color:#696969; '>\   ."  Links "</span>
+ 94: <span style='color:#696969; '>\    creanode @ p.node   key drop</span>
+ 95:     <span style='color:#696969; '>(   )</span> ;
+ 96: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>first-component</span> <span style='color:#696969; '>( Adr Dl )</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#800000; font-weight:bold; '>>number</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( N )</span> ;
+ 97: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>setmy-unit</span> <span style='color:#696969; '>( -- )</span>
+ 98:     unit_addr <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( L )</span> <span style='color:#008c00; '>0</span>=
+ 99:     <span style='color:#e34adc; '>if</span> <span style='color:#0000e6; '> s" reg"</span> get-my-property <span style='color:#800000; font-weight:bold; '>false</span> <span style='color:#800000; font-weight:bold; '>=</span>
+100:         <span style='color:#e34adc; '>if</span>  <span style='color:#696969; '>( Adr Dl )</span>
+101:             first-component my-unit <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.e.1.i</span>
+102:         <span style='color:#e34adc; '>else</span>
+103:             <span style='color:#008c00; '>0</span> my-unit <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.e.1.ii</span>
+104:         <span style='color:#e34adc; '>then</span>
+105:     <span style='color:#e34adc; '>else</span>
+106:         unit_phys <span style='color:#800000; font-weight:bold; '>@</span> my-unit <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.e.2</span>
+107:     <span style='color:#e34adc; '>then</span> ;
+108: 
+109: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>crinst</span> <span style='color:#696969; '>\ Create new instance, add it to instance chain, and set various fields</span>
+110:     makeinstnode <span style='color:#696969; '>\ 4.3.2.a</span>
+111: <span style='color:#696969; '>\    ."  Crea "</span>
+112:     copyfromprototype <span style='color:#696969; '>\ cr ." Save new arguments!"</span>
+113:     <span style='color:#696969; '>( ."  Inst. of " node_name type )</span> <span style='color:#008c00; '>40</span> space.to.column
+114:     arguments <span style='color:#696969; '>( A L )</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>here</span> placeinvoc <span style='color:#696969; '>( Ahere )</span> <span style='color:#800000; font-weight:bold; '>code></span> <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span>
+115:     creanode <span style='color:#007997; '>@nt</span> adrarguments <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.b cr ." 4.3.2.b"</span>
+116:     parentnode <span style='color:#800000; font-weight:bold; '>@</span> creanode <span style='color:#007997; '>@nt</span> parenthandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.c Set my-parent field Story parent ihandle Story parent ihandle</span>
+117:     creanode <span style='color:#800000; font-weight:bold; '>@</span> parentnode <span style='color:#007997; '>@nt</span> childhandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ NEW added in BM - Store child field in parentnode</span>
+118:     <span style='color:#696969; '>\ cr ." 4.3.2.c Set my-parent field"</span>
+119:     creanode <span style='color:#800000; font-weight:bold; '>@</span> parentnode <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ 4.3.2.d cr ." 4.3.2.d"</span>
+120:     setmy-unit <span style='color:#696969; '>( ( 4.3.2.d )</span> ;
+121: 
+122: <span style='color:#696969; '>\ 4.3.6. Node name match</span>
+123: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>afternamecomma</span> <span style='color:#696969; '>( -- )</span>  node_name<span style='color:#0000e6; '> s" name"</span> get-my-property <span style='color:#0000e6; '>ascii ,</span>
+124:     left-split  <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#800000; font-weight:bold; '>compare</span> <span style='color:#800000; font-weight:bold; '>not</span> ;
+125: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>namecompare</span> <span style='color:#696969; '>( Al Ll AN LN )</span> <span style='color:#800000; font-weight:bold; '>compare</span> <span style='color:#007997; '>br0</span> <span style='color:#800000; font-weight:bold; '>true</span> afternamecomma <span style='color:#696969; '>( T/F )</span> ;
+126: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>2dropfalse</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#800000; font-weight:bold; '>false</span> ;
+127: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>nocomma</span> <span style='color:#696969; '>( Al Ll Ar Lr )</span> <span style='color:#800000; font-weight:bold; '>2drop</span><span style='color:#0000e6; '> s" name"</span> get-my-property
+128:     <span style='color:#007997; '>br0</span> namecompare 2dropfalse ;
+129: 
+130: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>iscomma</span> <span style='color:#696969; '>( Al Ll Ar Lr )</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#800000; font-weight:bold; '>2drop</span> node_name<span style='color:#0000e6; '> s" name"</span> get-my-property <span style='color:#800000; font-weight:bold; '>drop</span>
+131:     <span style='color:#800000; font-weight:bold; '>compare</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#696969; '>( T/F )</span> ;
+132: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>prov_vender</span>  <span style='color:#696969; '>( -- T/F )</span>
+133:     node_name <span style='color:#696969; '>( Adr Dl )</span> <span style='color:#0000e6; '>ascii ,</span> left-split <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#007997; '>br0</span> nocomma iscomma <span style='color:#696969; '>( T/F )</span> ;
+134: 
+135: <span style='color:#696969; '>\ 4.3.5. Wildcard math</span>
+136: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>contnoempty</span> <span style='color:#696969; '>( -- )</span> node_name <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#008c00; '>0</span>= unit_addr <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#008c00; '>0</span>= <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>not</span> ;
+137: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>noempty</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" reg"</span> get-my-property <span style='color:#007997; '>br0</span> 2dropfalse contnoempty ;
+138: 
+139: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>withemptynode</span> <span style='color:#696969; '>( AN LN )</span> <span style='color:#800000; font-weight:bold; '>2drop</span><span style='color:#0000e6; '> s" name"</span> get-my-property <span style='color:#800000; font-weight:bold; '>-rot</span> <span style='color:#800000; font-weight:bold; '>2drop</span>
+140:     <span style='color:#007997; '>br0</span> prov_vender <span style='color:#800000; font-weight:bold; '>false</span> ;
+141: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>wildeq?</span> <span style='color:#696969; '>( -- T/F )</span> node_name <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#007997; '>br0</span> withemptynode noempty ;
+142: 
+143: <span style='color:#696969; '>\ 4.3.4. Exact match</span>
+144: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>cmp_phys</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" reg"</span> get-my-property
+145:     <span style='color:#e34adc; '>if</span><span style='color:#0000e6; '> abort" No adres defined"</span> <span style='color:#e34adc; '>else</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#800000; font-weight:bold; '>>number</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span>
+146:     unit_phys <span style='color:#800000; font-weight:bold; '>=</span> <span style='color:#696969; '>( T/F )</span> ;
+147: 
+148: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>nuempty?</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" name"</span> get-my-property
+149:     <span style='color:#007997; '>br0</span> cmp_phys <span style='color:#800000; font-weight:bold; '>false</span> <span style='color:#696969; '>( T/F )</span> ;
+150: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>exactemptynode</span> <span style='color:#696969; '>( -- )</span> unit_addr <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#007997; '>br0</span> nuempty? cmp_phys ;
+151: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>exactmatch</span> <span style='color:#696969; '>( -- )</span> node_name <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#007997; '>br0</span> exactemptynode prov_vender <span style='color:#696969; '>( T/F )</span> ;
+152: 
+153: <span style='color:#696969; '>\ 4.3.3. Matching child node</span>
+154: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>recursivefindmatch</span> <span style='color:#696969; '>( False -- T/F )</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>swap</span> norealize
+155:     <span style='color:#800000; font-weight:bold; '>swap</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( T/F )</span> ;
+156: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>findwildmatch</span> <span style='color:#696969; '>( False -- T/F )</span> norealize <span style='color:#007997; '>ex</span> ;
+157: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>findexactmatch</span> <span style='color:#696969; '>( False -- T/F )</span> norealize <span style='color:#007997; '>ex</span> ;
+158: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>rpfindwildmatch</span> <span style='color:#007997; '>rp</span> findwildmatch <span style='color:#696969; '>( T/F )</span> ;
+159: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>contmatchchild</span> <span style='color:#696969; '>( -- )</span> <span style='color:#008c00; '>0</span> <span style='color:#007997; '>rp</span> findexactmatch <span style='color:#696969; '>( T/F )</span>
+160:     <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#007997; '>if0</span> rpfindwildmatch <span style='color:#696969; '>( T/F )</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#007997; '>if0</span> recursivefindmatch <span style='color:#696969; '>( T/F )</span> ;
+161: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>exmetphys</span> <span style='color:#696969; '>( Xt T )</span> <span style='color:#800000; font-weight:bold; '>drop</span> unit_addr <span style='color:#800000; font-weight:bold; '>rot</span> <span style='color:#800000; font-weight:bold; '>execute</span> unit_phys <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( Rezult )</span> ;
+162: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>execdecodeunit</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" decode-unit"</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> find-method
+163:     <span style='color:#696969; '>( False | Xt True )</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#007997; '>if0</span> exmetphys <span style='color:#696969; '>( T/F )</span> ;
+164: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>matchchild</span> <span style='color:#696969; '>( -- )</span> unit_addr <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( len )</span>
+165:     <span style='color:#007997; '>br0</span> execdecodeunit contmatchchild <span style='color:#696969; '>( T/F )</span> ;
+166: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>initocrugenie</span> <span style='color:#696969; '>( -- )</span> <span style='color:#008c00; '>0</span> parentnode <span style='color:#800000; font-weight:bold; '>!</span> emptystr arguments st!
+167:     emptystr unit_addr st! <span style='color:#696969; '>(  )</span> ;
+168: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>?root</span> <span style='color:#696969; '>( A L -- T | F )</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#008c00; '>c</span>@ <span style='color:#0000e6; '>ascii /</span> <span style='color:#800000; font-weight:bold; '>=</span> <span style='color:#696969; '>( T | F )</span> ;
+169: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>exchangealiasbyvalue</span> <span style='color:#696969; '>( AdrAlias LenAlias )</span>
+170:     <span style='color:#800000; font-weight:bold; '>2swap</span> <span style='color:#800000; font-weight:bold; '>2drop</span> workwithalias <span style='color:#696969; '>( AValAlias LValAlias )</span>
+171:     ptail <span style='color:#008c00; '>2</span>@ <span style='color:#0000e6; '>ascii /</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#e34adc; '>if</span> conc2str&amp;symb <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( A' L' )</span> ;
+172: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>extractalias</span> <span style='color:#696969; '>( A L )</span>
+173:     <span style='color:#0000e6; '>ascii /</span> left-split <span style='color:#696969; '>( AdrL LenL AdrR LenR )</span> ptail <span style='color:#008c00; '>2</span>! <span style='color:#696969; '>\ 4.3.1.A.1</span>
+174:     <span style='color:#0000e6; '>ascii :</span> left-split <span style='color:#696969; '>( AdrAlN LenAlN AdrAlArg LenAlArg )</span> <span style='color:#696969; '>\ 4.3.1.A.2</span>
+175:     paliasargs <span style='color:#008c00; '>2</span>! <span style='color:#696969; '>\ Store string's arguments for alias</span>
+176:     <span style='color:#800000; font-weight:bold; '>2dup</span> findalias <span style='color:#696969; '>( AdrAlias LenAlias 1 | 0 )</span> <span style='color:#800000; font-weight:bold; '>not</span>
+177:     <span style='color:#e34adc; '>if</span> exchangealiasbyvalue <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( A' L' )</span> ;
+178: 
+179: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>findchildnode</span> <span style='color:#696969; '>( -- T/F )</span>
+180:     nodehandle <span style='color:#007997; '>@nt</span> <span style='color:#696969; '>( Phandle )</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Phandle )</span>
+181:     <span style='color:#e34adc; '>begin</span>
+182:        <span style='color:#0000e6; '> s" name"</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> getPhandleProperty <span style='color:#696969; '>( A L F | T )</span> <span style='color:#800000; font-weight:bold; '>not</span>
+183:         <span style='color:#e34adc; '>if</span>  <span style='color:#696969; '>\ cr 2dup type </span>
+184:             node_name <span style='color:#800000; font-weight:bold; '>compare</span> <span style='color:#008c00; '>0</span>&lt;> <span style='color:#696969; '>( False if equ )</span>
+185:         <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>true</span>
+186:         <span style='color:#e34adc; '>then</span>
+187:         <span style='color:#696969; '>( Phandle Flag )</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#800000; font-weight:bold; '>>code</span> siblinghandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#696969; '>( Phandle Flag )</span>
+188:     <span style='color:#e34adc; '>while</span>
+189:         <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#800000; font-weight:bold; '>>code</span> siblinghandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Phandle' )</span>
+190:     <span style='color:#e34adc; '>repeat</span> <span style='color:#696969; '>( Phandle' F/T )</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#800000; font-weight:bold; '>swap</span> targetnode <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( T/F )</span> ;
+191: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>creacall</span> creanode <span style='color:#800000; font-weight:bold; '>@</span> $call-method <span style='color:#696969; '>(  )</span> ;
+192: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>execopen</span>  <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" OPEN"</span> creacall <span style='color:#696969; '>(  )</span> ;
+193: 
+194: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gototargetnode</span> <span style='color:#696969; '>( -- )</span> targetnode <span style='color:#800000; font-weight:bold; '>@</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> crinst <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>\ In final node Len=0</span>
+195:     <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>if</span> execopen <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>(  )</span> ;
+196: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>razbornode</span> <span style='color:#696969; '>( A L )</span>
+197:     <span style='color:#0000e6; '>ascii /</span> left-split <span style='color:#696969; '>( 2Component 2PathName )</span> <span style='color:#800000; font-weight:bold; '>2swap</span>
+198:     <span style='color:#0000e6; '>ascii :</span> left-split <span style='color:#696969; '>( 2PathName 2NodeAdr 2Arguments )</span> <span style='color:#800000; font-weight:bold; '>2swap</span>
+199:     <span style='color:#0000e6; '>ascii @</span> left-split <span style='color:#696969; '>( 2PathName 2Arguments 2NodeName 2Unit_Adr )</span>
+200:     unit_addr st! <span style='color:#696969; '>( 2PathName 2Arguments 2NodeName )</span>
+201:     node_name st! <span style='color:#696969; '>( 2PathName 2Arguments )</span>
+202:     arguments st! <span style='color:#696969; '>( 2PathName )</span> <span style='color:#696969; '>( Aost Lost )</span> ;
+203: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>inode</span> creanode <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Inode )</span> <span style='color:#696969; '>( norealize )</span> ;
+204: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>fullotkat</span> <span style='color:#696969; '>( 2PathName )</span> inode <span style='color:#696969; '>( Phandle )</span>
+205:     <span style='color:#e34adc; '>begin</span> <span style='color:#696969; '>( Phandle )</span> <span style='color:#696969; '>\ map .s key drop</span>
+206:        <span style='color:#0000e6; '> s" CLOSE"</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> $call-method
+207:         <span style='color:#696969; '>\ dup here - allot \ Release memory assigned for this node !!!</span>
+208:         <span style='color:#800000; font-weight:bold; '>>code</span> parenthandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( Parent )</span>
+209:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>not</span>
+210:     <span style='color:#e34adc; '>until</span> <span style='color:#696969; '>( False )</span> ;
+211: 
+212: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gobynodefrompath</span> <span style='color:#696969; '>( A L )</span>
+213:     razbornode
+214:     findchildnode <span style='color:#696969; '>( 2PathName T/F )</span>
+215:     <span style='color:#e34adc; '>if</span>   gototargetnode <span style='color:#800000; font-weight:bold; '>true</span> <span style='color:#696969; '>\ 4.3.1.K</span>
+216:     <span style='color:#e34adc; '>else</span> fullotkat <span style='color:#696969; '>\ 4.3.1.L</span>
+217:     <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( A L )</span> ;
+218: <span style='color:#800000; font-weight:bold; '>defer</span> execfinalnode ' <span style='color:#800000; font-weight:bold; '>noop</span> <span style='color:#800000; font-weight:bold; '>is</span> execfinalnode
+219: <span style='color:#800000; font-weight:bold; '>variable</span> oldnode <span style='color:#696969; '>\ Node  before beginig procedure, for restoring in crash finding</span>
+220: <span style='color:#800000; font-weight:bold; '>variable</span> oldinst <span style='color:#696969; '>\ Inode before beginig procedure, for restoring in crash finding</span>
+221: 
+222: <span style='color:#696969; '>\ Path resolve procedure 4.3.1 Variant 2</span>
+223: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>shpath</span> <span style='color:#800000; font-weight:bold; '>2dup</span> path_name st! <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Full path="</span> <span style='color:#800000; font-weight:bold; '>2dup</span> <span style='color:#800000; font-weight:bold; '>type</span> ;
+224: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>contgopath</span> <span style='color:#696969; '>( Adr Len )</span> shpath <span style='color:#800000; font-weight:bold; '>true</span> <span style='color:#696969; '>\ Special initial flag</span>
+225:     <span style='color:#e34adc; '>begin</span>
+226:         <span style='color:#800000; font-weight:bold; '>drop</span> gobynodefrompath <span style='color:#696969; '>( Adr Len T/F )</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#800000; font-weight:bold; '>over</span> <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#800000; font-weight:bold; '>or</span>
+227:     <span style='color:#e34adc; '>until</span> <span style='color:#696969; '>( Adr False )</span>
+228:     <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>2drop</span> execfinalnode inode <span style='color:#696969; '>( Inode )</span> <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>2drop</span> <span style='color:#696969; '>(  )</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>(  )</span> ;
+229: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>extalias</span>
+230:     <span style='color:#696969; '>( Adr Len XtFinalExec -- Inode )</span> <span style='color:#800000; font-weight:bold; '>is</span> execfinalnode <span style='color:#696969; '>( Adr Len )</span>
+231:     nodehandle <span style='color:#800000; font-weight:bold; '>@</span> oldnode <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ Saving node</span>
+232:     inode oldinst <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>\ Saving Inode</span>
+233:     ?root <span style='color:#e34adc; '>if</span> setroot <span style='color:#e34adc; '>else</span> extractalias <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Adr Len )</span>
+234:     ?root <span style='color:#e34adc; '>if</span> setroot <span style='color:#008c00; '>1</span>- <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#008c00; '>1</span>+ <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Adr Len ( 4.3.1.b )</span> ;
+235: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gobypath</span> <span style='color:#696969; '>( A L )</span> extalias active-package <span style='color:#800000; font-weight:bold; '>@</span>
+236:     <span style='color:#e34adc; '>if</span> contgopath <span style='color:#696969; '>( ( 4.3.1.c )</span> <span style='color:#e34adc; '>else</span> 2dropfalse <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( F | Inode )</span> ;
+237: 
+238: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>open-dev</span> <span style='color:#696969; '>( Adr Len )</span> <span style='color:#000000; background:#a8a800; '>[']</span> execopen gobypath <span style='color:#696969; '>(  )</span> ;
+239: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>find-dev</span> <span style='color:#696969; '>( Adr Len )</span> <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>noop</span>     gobypath <span style='color:#696969; '>(  )</span> ;
+240: 
+241: <span style='color:#008c00; '>31</span> string ispmethod <span style='color:#696969; '>\ Name of method that will be executed on last node</span>
+242: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>execispmethod</span> <span style='color:#696969; '>( -- )</span> ispmethod creacall <span style='color:#696969; '>(  )</span> ;
+243: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>execute-device-method</span> <span style='color:#696969; '>( Am Lm Ap Lp )</span> <span style='color:#800000; font-weight:bold; '>2swap</span> ispmethod st! <span style='color:#696969; '>( Ap Lp )</span>
+244:     <span style='color:#000000; background:#a8a800; '>[']</span> execispmethod gobypath <span style='color:#696969; '>(  )</span> ;
+245: 
+246: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>begin-package</span> <span style='color:#696969; '>( arg-str, arg-len, reg-str, reg-len, dev-str, dev-len -- )</span>
+247:     open-dev    <span style='color:#696969; '>( arg-str, arg-len, reg-str, reg-len )</span>
+248:     <span style='color:#007997; '>new-device</span>  <span style='color:#696969; '>( arg-str, arg-len, reg-str, reg-len )</span>
+249:     set-args creanewvoc <span style='color:#696969; '>( -- )</span> ;
+250: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>savenode</span>       norealize ;
+251: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>delnode</span>        norealize ;
+252: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>deleteinstance</span> norealize ;
+253: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>selectparent</span>   <span style='color:#696969; '>( norealize )</span>
+254:                  nodehandle <span style='color:#800000; font-weight:bold; '>@</span> parenthandle <span style='color:#800000; font-weight:bold; '>>code</span> <span style='color:#800000; font-weight:bold; '>@</span>
+255:                  <span style='color:#696969; '>\ cr ."  Parent =" .s</span>
+256:                  <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#800000; font-weight:bold; '>-></span> <span style='color:#007997; '>my-self</span>
+257:                  <span style='color:#800000; font-weight:bold; '>>code</span> parenthandle <span style='color:#800000; font-weight:bold; '>@</span> parentnode <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( -- )</span> ;
+258: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>close-dev</span>      norealize ;
+259: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>finish-device</span> <span style='color:#696969; '>( -- )</span>
+260: <span style='color:#696969; '>\    s" name" creanode @ getPhandleProperty ( A L F | T )</span>
+261: <span style='color:#696969; '>\    ."  Property taken"</span>
+262: <span style='color:#696969; '>\    if delnode else 2drop savenode then</span>
+263: <span style='color:#696969; '>\    deleteinstance</span>
+264:     <span style='color:#800000; font-weight:bold; '>forth</span> <span style='color:#696969; '>( previous )</span> <span style='color:#000000; background:#a8a800; '>definitions</span> <span style='color:#696969; '>\ set Forth as main vocabulary</span>
+265: <span style='color:#696969; '>\    order vocs key drop</span>
+266:     selectparent <span style='color:#696969; '>(  )</span> ;
+267: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>end-package</span> <span style='color:#696969; '>( -- )</span>
+268:     <span style='color:#007997; '>finish-device</span>
+269:     <span style='color:#000000; background:#a8a800; '>previous</span> <span style='color:#696969; '>\ set Forth as main vocabulary</span>
+270:     close-dev <span style='color:#696969; '>(  )</span> ;
+271: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>bprp</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> s" bus:120,123456/espdma@f,400000"</span>
+272: <span style='color:#696969; '>\ /sp@f,800000</span>
+273:     <span style='color:#000000; background:#a8a800; '>[']</span> execopen gobypath <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>(  )</span> ;
+274: <span style='color:#696969; '>\ options/openprom</span>
+275: <span style='color:#696969; '>\ Для пpовеpки пpавильности изменения значения свойства</span>
+276: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>er</span> <span style='color:#696969; '>(  )</span><span style='color:#0000e6; '> s" /espdma@f,400000/esp@f,800000"</span><span style='color:#0000e6; '> s" SDDEV"</span> <span style='color:#007997; '>property</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>(  )</span> ;
+277: 
+278: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>.name</span> <span style='color:#696969; '>( Pnode )</span> <span style='color:#800000; font-weight:bold; '>space</span> <span style='color:#800000; font-weight:bold; '>space</span>
+279:    <span style='color:#0000e6; '> s" name"</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> getPhandleProperty <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>type</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Pnode )</span> ;
+280: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>ls</span> <span style='color:#696969; '>( -- )</span> nodehandle <span style='color:#007997; '>@nt</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span>
+281:     <span style='color:#e34adc; '>if</span> .name <span style='color:#696969; '>( Phandle )</span>
+282:         <span style='color:#e34adc; '>begin</span> <span style='color:#800000; font-weight:bold; '>>code</span> siblinghandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>while</span> .name <span style='color:#e34adc; '>repeat</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>(  )</span>
+283:     <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span> <span style='color:#800000; font-weight:bold; '>cr</span> <span style='color:#696969; '>( -- )</span> ;
+284: 
+</pre></body></html>

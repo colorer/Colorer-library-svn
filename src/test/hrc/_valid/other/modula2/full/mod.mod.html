@@ -1,0 +1,994 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>(* Copyright (C) 1987 Jensen &amp; Partners International *)</span>
+  1: 
+  2: <span style='color:#696969; '>(*$S-,R-,I-*)</span>
+  3: <span style='color:#800000; font-weight:bold; '>IMPLEMENTATION</span> <span style='color:#800000; font-weight:bold; '>MODULE</span> FIO<span style='color:#808030; '>;</span>
+  4: 
+  5: <span style='color:#800000; font-weight:bold; '>FROM</span> Str    <span style='color:#800000; font-weight:bold; '>IMPORT</span> CHARSET<span style='color:#808030; '>,</span>Length<span style='color:#808030; '>,</span>Compare<span style='color:#808030; '>,</span>IntToStr<span style='color:#808030; '>,</span>CardToStr<span style='color:#808030; '>,</span>RealToStr<span style='color:#808030; '>,</span>
+  6:                    StrToInt<span style='color:#808030; '>,</span>StrToCard<span style='color:#808030; '>,</span>StrToReal<span style='color:#808030; '>,</span>Copy<span style='color:#808030; '>;</span>
+  7: <span style='color:#800000; font-weight:bold; '>FROM</span> <span style='color:#800000; font-weight:bold; '>SYSTEM</span> <span style='color:#800000; font-weight:bold; '>IMPORT</span> Seg<span style='color:#808030; '>,</span>Ofs<span style='color:#808030; '>,</span>Registers<span style='color:#808030; '>,</span>CarryFlag<span style='color:#808030; '>;</span>
+  8: 
+  9: <span style='color:#800000; font-weight:bold; '>IMPORT</span> AsmLib<span style='color:#808030; '>;</span>
+ 10: 
+ 11: 
+ 12: <span style='color:#800000; font-weight:bold; '>CONST</span>
+ 13:   TrueStr   <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'TRUE'</span><span style='color:#808030; '>;</span>
+ 14:   MaxHandle <span style='color:#808030; '>=</span> MaxOpenFiles<span style='color:#808030; '>+</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>;</span>
+ 15: 
+ 16: <span style='color:#696969; '>(*$V-*)</span>
+ 17: 
+ 18: <span style='color:#800000; font-weight:bold; '>TYPE</span>
+ 19:   FileInf   <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>POINTER</span> <span style='color:#800000; font-weight:bold; '>TO</span> BufRec<span style='color:#808030; '>;</span>
+ 20: <span style='color:#800000; font-weight:bold; '>VAR</span>
+ 21:   IOR    <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* MSDOS result value *)</span>
+ 22: 
+ 23:   BufInf <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..</span>MaxHandle<span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> FileInf<span style='color:#808030; '>;</span>
+ 24: 
+ 25: 
+ 26: <span style='color:#800000; font-weight:bold; '>CONST</span>
+ 27:   ErrMsg2  <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'file not found'</span><span style='color:#808030; '>;</span>
+ 28:   ErrMsg3  <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'path not found'</span><span style='color:#808030; '>;</span>
+ 29:   ErrMsg4  <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'too many open files'</span><span style='color:#808030; '>;</span>
+ 30:   ErrMsg5  <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'access denied'</span><span style='color:#808030; '>;</span>
+ 31:   ErrMsg6  <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'invalid handle'</span><span style='color:#808030; '>;</span>
+ 32:   ErrMsg15 <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'invalid drive'</span><span style='color:#808030; '>;</span>
+ 33:   ErrMsg16 <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'current directory'</span><span style='color:#808030; '>;</span>
+ 34:   ErrMsg17 <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'different device'</span><span style='color:#808030; '>;</span>
+ 35:   ErrMsgDiskFull <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'disk full'</span><span style='color:#808030; '>;</span>
+ 36: 
+ 37: 
+ 38: 
+ 39: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ErrorCheckNamed <span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>VAR</span> r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+ 40:                             str   <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+ 41:                             name  <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 42: <span style='color:#800000; font-weight:bold; '>VAR</span>
+ 43:   s  <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..100</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+ 44:   ns <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..3</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+ 45:   sp <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>POINTER</span> <span style='color:#800000; font-weight:bold; '>TO</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..79</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+ 46: 
+ 47:   <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> AddErr<span style='color:#808030; '>(</span>es<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 48:   <span style='color:#808030; '>BEGIN</span>
+ 49:     Str<span style='color:#008c00; '>.</span>Append<span style='color:#808030; '>(</span>s<span style='color:#808030; '>,</span>es<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 50:   <span style='color:#808030; '>END</span> AddErr<span style='color:#808030; '>;</span>
+ 51: 
+ 52: <span style='color:#808030; '>BEGIN</span>
+ 53:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+ 54:      <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+ 55:        IOR <span style='color:#808030; '>:=</span> AX<span style='color:#808030; '>;</span>
+ 56:        <span style='color:#808030; '>IF</span> IOcheck <span style='color:#800000; font-weight:bold; '>THEN</span>
+ 57:          s <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 58:          Copy<span style='color:#808030; '>(</span>s<span style='color:#808030; '>,</span>str<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 59:          AddErr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' : '</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 60:          <span style='color:#808030; '>CASE</span> IOR <span style='color:#800000; font-weight:bold; '>OF</span>
+ 61:          <span style='color:#008c00; '>2</span> <span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg2<span style='color:#808030; '>)</span>            <span style='color:#808030; '>|</span>
+ 62:          <span style='color:#008c00; '>3</span> <span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg3<span style='color:#808030; '>)</span>            <span style='color:#808030; '>|</span>
+ 63:          <span style='color:#008c00; '>4</span> <span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg4<span style='color:#808030; '>)</span>            <span style='color:#808030; '>|</span>
+ 64:          <span style='color:#008c00; '>5</span> <span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg5<span style='color:#808030; '>)</span>            <span style='color:#808030; '>|</span>
+ 65:          <span style='color:#008c00; '>6</span> <span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg6<span style='color:#808030; '>)</span>            <span style='color:#808030; '>|</span>
+ 66:          <span style='color:#008c00; '>15</span><span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg15<span style='color:#808030; '>)</span>           <span style='color:#808030; '>|</span>
+ 67:          <span style='color:#008c00; '>16</span><span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg16<span style='color:#808030; '>)</span>           <span style='color:#808030; '>|</span>
+ 68:          <span style='color:#008c00; '>17</span><span style='color:#808030; '>:</span>   sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsg17<span style='color:#808030; '>)</span>           <span style='color:#808030; '>|</span>
+ 69:          DiskFull<span style='color:#808030; '>:</span> sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ErrMsgDiskFull<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span>
+ 70:          <span style='color:#800000; font-weight:bold; '>ELSE</span>  AddErr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'MSDOS error # '</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span>
+ 71:                ns<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span>IOR <span style='color:#800000; font-weight:bold; '>DIV</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>48</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 72:                ns<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span>IOR <span style='color:#800000; font-weight:bold; '>MOD</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>48</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 73:                ns<span style='color:#808030; '>[</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 74:                sp <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>ns<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 75:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 76:          AddErr<span style='color:#808030; '>(</span>sp<span style='color:#808030; '>^</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 77:          <span style='color:#808030; '>IF</span> name<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>#</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+ 78:            AddErr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>' ('</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 79:            AddErr<span style='color:#808030; '>(</span>name<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 80:            AddErr<span style='color:#808030; '>(</span><span style='color:#0000e6; '>')'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 81:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 82:          Lib<span style='color:#008c00; '>.</span>FatalError<span style='color:#808030; '>(</span>s<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 83:        <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 84:      <span style='color:#800000; font-weight:bold; '>ELSE</span>
+ 85:        IOR <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 86:      <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 87:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 88: <span style='color:#808030; '>END</span> ErrorCheckNamed<span style='color:#808030; '>;</span>
+ 89: 
+ 90: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ErrorCheck<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>VAR</span> r<span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span> str<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 91: <span style='color:#808030; '>BEGIN</span>
+ 92:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> r<span style='color:#008c00; '>.</span>Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+ 93:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span>str<span style='color:#808030; '>,</span>CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 94:   <span style='color:#800000; font-weight:bold; '>ELSE</span>
+ 95:     IOR <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 96:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+ 97: <span style='color:#808030; '>END</span> ErrorCheck<span style='color:#808030; '>;</span>
+ 98: 
+ 99: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> IOresult <span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+100: <span style='color:#808030; '>BEGIN</span>
+101:   <span style='color:#800000; font-weight:bold; '>RETURN</span> IOR<span style='color:#808030; '>;</span>
+102: <span style='color:#808030; '>END</span> IOresult<span style='color:#808030; '>;</span>
+103: 
+104: 
+105: 
+106: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Write<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> Count<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+107: <span style='color:#800000; font-weight:bold; '>VAR</span> r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+108: <span style='color:#808030; '>BEGIN</span>
+109:   <span style='color:#808030; '>IF</span> Count <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+110:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+111:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+112:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+113:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>40H</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>(* file write *)</span>
+114:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+115:     CX <span style='color:#808030; '>:=</span> Count<span style='color:#808030; '>;</span>
+116:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+117:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>AX <span style='color:#808030; '>#</span> CX<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+118:       AX <span style='color:#808030; '>:=</span> DiskFull<span style='color:#808030; '>;</span>
+119:       Flags <span style='color:#808030; '>:=</span> BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+120:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+121:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Write'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+122:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+123: <span style='color:#808030; '>END</span> Write<span style='color:#808030; '>;</span>
+124: 
+125: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Flush<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+126: <span style='color:#800000; font-weight:bold; '>VAR</span> x <span style='color:#808030; '>:</span> FileInf<span style='color:#808030; '>;</span>
+127:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+128:   conv <span style='color:#808030; '>:</span> <span style='color:#808030; '>RECORD</span>
+129:            <span style='color:#808030; '>CASE</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#800000; font-weight:bold; '>OF</span>
+130:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>TRUE</span>  <span style='color:#808030; '>:</span> lo<span style='color:#808030; '>,</span>hi<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+131:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>FALSE</span> <span style='color:#808030; '>:</span> long <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>;</span>
+132:            <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+133:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+134: <span style='color:#808030; '>BEGIN</span>
+135:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>&lt;=</span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+136:     x <span style='color:#808030; '>:=</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+137:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>x <span style='color:#808030; '>#</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+138:       <span style='color:#808030; '>WITH</span> x<span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+139:         <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>></span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span>
+140:           Write<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buffer<span style='color:#808030; '>,</span>RWPos <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+141:         <span style='color:#800000; font-weight:bold; '>ELSIF</span> RWPos <span style='color:#808030; '>&lt;</span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#696969; '>(* last was read, move DOS pointer back *)</span>
+142:           conv<span style='color:#008c00; '>.</span>long <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>(</span>RWPos<span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>(</span>EOB<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+143:           <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+144:             CX <span style='color:#808030; '>:=</span> conv<span style='color:#008c00; '>.</span>hi<span style='color:#808030; '>;</span>
+145:             DX <span style='color:#808030; '>:=</span> conv<span style='color:#008c00; '>.</span>lo<span style='color:#808030; '>;</span>
+146:             AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4201H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* seek relative *)</span>
+147:             BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+148:             Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+149:             ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Flush'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+150:           <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+151:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+152:         RWPos <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+153:         EOB   <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+154:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+155:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+156:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+157: <span style='color:#808030; '>END</span> Flush<span style='color:#808030; '>;</span>
+158: 
+159: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Truncate<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+160: <span style='color:#800000; font-weight:bold; '>VAR</span> r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+161: <span style='color:#808030; '>BEGIN</span>
+162:   Flush<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+163:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+164:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>40H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* file write *)</span>
+165:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+166:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+167:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+168:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Truncate'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+169:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+170: <span style='color:#808030; '>END</span> Truncate<span style='color:#808030; '>;</span>
+171: 
+172: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Read<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> Count<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+173: <span style='color:#800000; font-weight:bold; '>VAR</span> r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+174: <span style='color:#808030; '>BEGIN</span>
+175:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+176:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+177:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+178:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3FH</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* file read *)</span>
+179:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+180:     CX <span style='color:#808030; '>:=</span> Count<span style='color:#808030; '>;</span>
+181:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+182:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Read'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+183:     <span style='color:#808030; '>IF</span> IOR <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+184:       <span style='color:#800000; font-weight:bold; '>RETURN</span> AX<span style='color:#808030; '>;</span>
+185:     <span style='color:#800000; font-weight:bold; '>ELSE</span>
+186:       <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+187:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+188:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+189: <span style='color:#808030; '>END</span> Read<span style='color:#808030; '>;</span>
+190: 
+191: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrStr<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+192: <span style='color:#800000; font-weight:bold; '>VAR</span> Count <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+193: <span style='color:#808030; '>BEGIN</span>
+194:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+195:   Count <span style='color:#808030; '>:=</span> Str<span style='color:#008c00; '>.</span>Length<span style='color:#808030; '>(</span> Buf <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+196:   WrBin<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buf<span style='color:#808030; '>,</span>Count <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+197: <span style='color:#808030; '>END</span> WrStr<span style='color:#808030; '>;</span>
+198: 
+199: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrLn<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+200: <span style='color:#800000; font-weight:bold; '>TYPE</span> a <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#808030; '>[</span> <span style='color:#008c00; '>0..1</span> <span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+201: <span style='color:#808030; '>BEGIN</span>
+202:   WrStr<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span> a<span style='color:#808030; '>(</span> CHR<span style='color:#808030; '>(</span> <span style='color:#008c00; '>13</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>CHR<span style='color:#808030; '>(</span> <span style='color:#008c00; '>10</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+203: <span style='color:#808030; '>END</span> WrLn<span style='color:#808030; '>;</span>
+204: 
+205: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdChar<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File <span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+206: <span style='color:#800000; font-weight:bold; '>VAR</span> c <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+207: <span style='color:#808030; '>BEGIN</span>
+208:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+209:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>&lt;=</span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span> <span style='color:#808030; '>#</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+210:     <span style='color:#808030; '>WITH</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+211:       <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>&lt;</span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span>
+212:         c <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>(</span>Buffer<span style='color:#808030; '>[</span> RWPos <span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+213:         INC<span style='color:#808030; '>(</span>RWPos<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+214:         EOF <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>c <span style='color:#808030; '>=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>26</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+215:         <span style='color:#800000; font-weight:bold; '>RETURN</span> c<span style='color:#808030; '>;</span>
+216:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+217:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+218:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+219:   <span style='color:#808030; '>IF</span> RdBin<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>c<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+220:     OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+221:     c  <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>26</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+222:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+223:   EOF <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>c <span style='color:#808030; '>=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>26</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+224:   <span style='color:#800000; font-weight:bold; '>RETURN</span> c<span style='color:#808030; '>;</span>
+225: <span style='color:#808030; '>END</span> RdChar<span style='color:#808030; '>;</span>
+226: 
+227: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdStr<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+228: <span style='color:#800000; font-weight:bold; '>VAR</span>
+229:   i<span style='color:#808030; '>,</span>h <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+230:   c   <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+231: <span style='color:#808030; '>BEGIN</span>
+232:   i  <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+233:   h  <span style='color:#808030; '>:=</span> HIGH<span style='color:#808030; '>(</span> Buf <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+234:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+235:   <span style='color:#808030; '>LOOP</span>
+236:      <span style='color:#808030; '>IF</span> i <span style='color:#808030; '>></span> h <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+237:      c <span style='color:#808030; '>:=</span> RdChar<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+238:      <span style='color:#808030; '>IF</span> c <span style='color:#808030; '>=</span> CHR<span style='color:#808030; '>(</span> <span style='color:#008c00; '>26</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+239:        Buf<span style='color:#808030; '>[</span> i <span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+240:        EOF <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+241:        <span style='color:#800000; font-weight:bold; '>RETURN</span><span style='color:#808030; '>;</span>
+242:      <span style='color:#800000; font-weight:bold; '>ELSIF</span> c <span style='color:#808030; '>=</span> CHR<span style='color:#808030; '>(</span> <span style='color:#008c00; '>13</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+243:        Buf<span style='color:#808030; '>[</span> i <span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+244:        <span style='color:#800000; font-weight:bold; '>RETURN</span><span style='color:#808030; '>;</span>
+245:      <span style='color:#800000; font-weight:bold; '>ELSIF</span> c <span style='color:#808030; '>#</span> CHR<span style='color:#808030; '>(</span> <span style='color:#008c00; '>10</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+246:        Buf<span style='color:#808030; '>[</span> i <span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> c<span style='color:#808030; '>;</span>
+247:        INC<span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+248:      <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+249:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+250: <span style='color:#808030; '>END</span> RdStr<span style='color:#808030; '>;</span>
+251: 
+252: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdItem<span style='color:#808030; '>(</span> F <span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+253: <span style='color:#800000; font-weight:bold; '>VAR</span> c <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span> i<span style='color:#808030; '>,</span>L <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+254: <span style='color:#808030; '>BEGIN</span>
+255:   i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+256:   <span style='color:#808030; '>LOOP</span>
+257:     c <span style='color:#808030; '>:=</span> RdChar<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+258:     <span style='color:#808030; '>IF</span> <span style='color:#800000; font-weight:bold; '>NOT</span> OK <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#800000; font-weight:bold; '>NOT</span> <span style='color:#808030; '>(</span>c <span style='color:#800000; font-weight:bold; '>IN</span> Separators<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+259:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+260:   L <span style='color:#808030; '>:=</span> HIGH<span style='color:#808030; '>(</span> S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+261:   <span style='color:#808030; '>LOOP</span>
+262:     <span style='color:#808030; '>IF</span> <span style='color:#800000; font-weight:bold; '>NOT</span> OK <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#808030; '>(</span> c <span style='color:#800000; font-weight:bold; '>IN</span> Separators <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+263:     S<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> c<span style='color:#808030; '>;</span>
+264:     INC<span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+265:     <span style='color:#808030; '>IF</span> i <span style='color:#808030; '>></span> L <span style='color:#800000; font-weight:bold; '>THEN</span>
+266:       <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span>
+267:     <span style='color:#800000; font-weight:bold; '>ELSE</span>
+268:       c <span style='color:#808030; '>:=</span> RdChar<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+269:       <span style='color:#808030; '>IF</span> c <span style='color:#808030; '>=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>26</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+270:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+271:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+272:   <span style='color:#808030; '>IF</span> i <span style='color:#808030; '>&lt;=</span> L <span style='color:#800000; font-weight:bold; '>THEN</span> S<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> 0C<span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+273: <span style='color:#808030; '>END</span> RdItem<span style='color:#808030; '>;</span>
+274: 
+275: 
+276: <span style='color:#696969; '>(*$V+*)</span>
+277: 
+278: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrStrAdj<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> S<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+279: <span style='color:#800000; font-weight:bold; '>VAR</span>
+280:   L <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+281:   a <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>;</span>
+282: <span style='color:#808030; '>BEGIN</span>
+283:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+284:   L  <span style='color:#808030; '>:=</span> Str<span style='color:#008c00; '>.</span>Length<span style='color:#808030; '>(</span> S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+285:   a  <span style='color:#808030; '>:=</span> ABS<span style='color:#808030; '>(</span> Length <span style='color:#808030; '>)</span> <span style='color:#808030; '>-</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>(</span> L <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+286:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>a <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> ChopOff <span style='color:#800000; font-weight:bold; '>THEN</span>
+287:     L <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>ABS<span style='color:#808030; '>(</span>Length<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+288:     <span style='color:#808030; '>IF</span> L<span style='color:#808030; '>></span>HIGH<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+289:       L <span style='color:#808030; '>:=</span> HIGH<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+290:     <span style='color:#800000; font-weight:bold; '>ELSE</span>
+291:       S<span style='color:#808030; '>[</span>L<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+292:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+293:     <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span>L<span style='color:#808030; '>></span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span> DEC<span style='color:#808030; '>(</span>L<span style='color:#808030; '>)</span> <span style='color:#808030; '>;</span> S<span style='color:#808030; '>[</span>L<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#0000e6; '>'?'</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+294:     OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+295:     a  <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+296:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+297:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>a <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> WrCharRep<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>,</span>a <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+298:   WrStr<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+299:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>Length <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>a <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> WrCharRep<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>,</span>a <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+300: <span style='color:#808030; '>END</span> WrStrAdj<span style='color:#808030; '>;</span>
+301: 
+302: <span style='color:#696969; '>(*$V-*)</span>
+303: 
+304: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrChar<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+305: <span style='color:#808030; '>BEGIN</span>
+306:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+307:   WrBin<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>V<span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+308: <span style='color:#808030; '>END</span> WrChar<span style='color:#808030; '>;</span>
+309: 
+310: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrCharRep<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CHAR</span> <span style='color:#808030; '>;</span> Count<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+311: <span style='color:#800000; font-weight:bold; '>VAR</span>
+312:   S   <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+313:   i<span style='color:#808030; '>,</span>j <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+314: <span style='color:#808030; '>BEGIN</span>
+315:   <span style='color:#808030; '>WHILE</span> Count<span style='color:#808030; '>></span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+316:     i <span style='color:#808030; '>:=</span> SIZE<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>;</span>
+317:     <span style='color:#808030; '>IF</span> i <span style='color:#808030; '>></span> Count <span style='color:#800000; font-weight:bold; '>THEN</span> i <span style='color:#808030; '>:=</span> Count <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+318:     DEC<span style='color:#808030; '>(</span>Count<span style='color:#808030; '>,</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+319:     j <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+320:     <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span>j <span style='color:#808030; '>&lt;</span> i<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span> S<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> V<span style='color:#808030; '>;</span> INC<span style='color:#808030; '>(</span>j<span style='color:#808030; '>)</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+321:     OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+322:     WrBin<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>j <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+323:     <span style='color:#808030; '>IF</span> <span style='color:#800000; font-weight:bold; '>NOT</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+324:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+325: <span style='color:#808030; '>END</span> WrCharRep<span style='color:#808030; '>;</span>
+326: 
+327: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrBool<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+328: <span style='color:#808030; '>BEGIN</span>
+329:   <span style='color:#808030; '>IF</span> V <span style='color:#800000; font-weight:bold; '>THEN</span>
+330:     WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>TrueStr<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+331:   <span style='color:#800000; font-weight:bold; '>ELSE</span>
+332:     WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'FALSE'</span><span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+333:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+334: <span style='color:#808030; '>END</span> WrBool<span style='color:#808030; '>;</span>
+335: 
+336: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrShtInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>SHORTINT</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+337: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+338: <span style='color:#808030; '>BEGIN</span>
+339:   IntToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+340:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+341: <span style='color:#808030; '>END</span> WrShtInt<span style='color:#808030; '>;</span>
+342: 
+343: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+344: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+345: <span style='color:#808030; '>BEGIN</span>
+346:   IntToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+347:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+348: <span style='color:#808030; '>END</span> WrInt<span style='color:#808030; '>;</span>
+349: 
+350: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrLngInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+351: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+352: <span style='color:#808030; '>BEGIN</span>
+353:   IntToStr<span style='color:#808030; '>(</span> V<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+354:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+355: <span style='color:#808030; '>END</span> WrLngInt<span style='color:#808030; '>;</span>
+356: 
+357: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrShtCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> SHORTCARD<span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+358: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+359: <span style='color:#808030; '>BEGIN</span>
+360:   CardToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> LONGCARD<span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+361:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+362: <span style='color:#808030; '>END</span> WrShtCard<span style='color:#808030; '>;</span>
+363: 
+364: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+365: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+366: <span style='color:#808030; '>BEGIN</span>
+367:   CardToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> LONGCARD<span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+368:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+369: <span style='color:#808030; '>END</span> WrCard<span style='color:#808030; '>;</span>
+370: 
+371: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrLngCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+372: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+373: <span style='color:#808030; '>BEGIN</span>
+374:   CardToStr<span style='color:#808030; '>(</span> V<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+375:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+376: <span style='color:#808030; '>END</span> WrLngCard<span style='color:#808030; '>;</span>
+377: 
+378: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrShtHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> SHORTCARD<span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+379: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+380: <span style='color:#808030; '>BEGIN</span>
+381:   CardToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> LONGCARD<span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+382:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+383: <span style='color:#808030; '>END</span> WrShtHex<span style='color:#808030; '>;</span>
+384: 
+385: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+386: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+387: <span style='color:#808030; '>BEGIN</span>
+388:   CardToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> LONGCARD<span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+389:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+390: <span style='color:#808030; '>END</span> WrHex<span style='color:#808030; '>;</span>
+391: 
+392: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrLngHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+393: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+394: <span style='color:#808030; '>BEGIN</span>
+395:   CardToStr<span style='color:#808030; '>(</span> V<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+396:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+397: <span style='color:#808030; '>END</span> WrLngHex<span style='color:#808030; '>;</span>
+398: 
+399: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrReal<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>REAL</span><span style='color:#808030; '>;</span> Precision<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+400: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+401: <span style='color:#808030; '>BEGIN</span>
+402:   RealToStr<span style='color:#808030; '>(</span> VAL<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>LONGREAL</span><span style='color:#808030; '>,</span>V <span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>Precision<span style='color:#808030; '>,</span>Eng<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+403:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+404: <span style='color:#808030; '>END</span> WrReal<span style='color:#808030; '>;</span>
+405: 
+406: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrLngReal<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> V<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGREAL</span><span style='color:#808030; '>;</span> Precision<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span> Length<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+407: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+408: <span style='color:#808030; '>BEGIN</span>
+409:   RealToStr<span style='color:#808030; '>(</span> V<span style='color:#808030; '>,</span>Precision<span style='color:#808030; '>,</span>Eng<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+410:   <span style='color:#808030; '>IF</span> OK <span style='color:#800000; font-weight:bold; '>THEN</span> WrStrAdj<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S<span style='color:#808030; '>,</span>Length <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+411: <span style='color:#808030; '>END</span> WrLngReal<span style='color:#808030; '>;</span>
+412: 
+413: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdBool<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+414: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+415: <span style='color:#808030; '>BEGIN</span>
+416:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+417:   <span style='color:#800000; font-weight:bold; '>RETURN</span> Compare<span style='color:#808030; '>(</span>S<span style='color:#808030; '>,</span>TrueStr<span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+418: <span style='color:#808030; '>END</span> RdBool<span style='color:#808030; '>;</span>
+419: 
+420: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdShtInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>SHORTINT</span><span style='color:#808030; '>;</span>
+421: <span style='color:#800000; font-weight:bold; '>VAR</span>
+422:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+423:   i <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>;</span>
+424: <span style='color:#808030; '>BEGIN</span>
+425:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+426:   i  <span style='color:#808030; '>:=</span> StrToInt<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+427:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>>=</span> <span style='color:#808030; '>-</span><span style='color:#008c00; '>80H</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;=</span> <span style='color:#008c00; '>7FH</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+428:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>SHORTINT</span><span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+429: <span style='color:#808030; '>END</span> RdShtInt<span style='color:#808030; '>;</span>
+430: 
+431: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>;</span>
+432: <span style='color:#800000; font-weight:bold; '>VAR</span>
+433:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+434:   i <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>;</span>
+435: <span style='color:#808030; '>BEGIN</span>
+436:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+437:   i  <span style='color:#808030; '>:=</span> StrToInt<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+438:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>>=</span> <span style='color:#808030; '>-</span><span style='color:#008c00; '>8000H</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;=</span> <span style='color:#008c00; '>7FFFH</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+439:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+440: <span style='color:#808030; '>END</span> RdInt<span style='color:#808030; '>;</span>
+441: 
+442: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdLngInt<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGINT</span><span style='color:#808030; '>;</span>
+443: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+444: <span style='color:#808030; '>BEGIN</span>
+445:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+446:   <span style='color:#800000; font-weight:bold; '>RETURN</span> StrToInt<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+447: <span style='color:#808030; '>END</span> RdLngInt<span style='color:#808030; '>;</span>
+448: 
+449: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdShtCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> SHORTCARD<span style='color:#808030; '>;</span>
+450: <span style='color:#800000; font-weight:bold; '>VAR</span>
+451:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+452:   i <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+453: <span style='color:#808030; '>BEGIN</span>
+454:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+455:   i  <span style='color:#808030; '>:=</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+456:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>0FFH</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+457:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>SHORTINT</span><span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+458: <span style='color:#808030; '>END</span> RdShtCard<span style='color:#808030; '>;</span>
+459: 
+460: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+461: <span style='color:#800000; font-weight:bold; '>VAR</span>
+462:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+463:   i <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+464: <span style='color:#808030; '>BEGIN</span>
+465:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+466:   i  <span style='color:#808030; '>:=</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+467:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>10000H</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+468:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+469: <span style='color:#808030; '>END</span> RdCard<span style='color:#808030; '>;</span>
+470: 
+471: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdLngCard<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+472: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+473: <span style='color:#808030; '>BEGIN</span>
+474:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+475:   <span style='color:#800000; font-weight:bold; '>RETURN</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+476: <span style='color:#808030; '>END</span> RdLngCard<span style='color:#808030; '>;</span>
+477: 
+478: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdShtHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> SHORTCARD<span style='color:#808030; '>;</span>
+479: <span style='color:#800000; font-weight:bold; '>VAR</span>
+480:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+481:   i <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+482: <span style='color:#808030; '>BEGIN</span>
+483:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+484:   i  <span style='color:#808030; '>:=</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+485:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>0FFH</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+486:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>SHORTINT</span><span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+487: <span style='color:#808030; '>END</span> RdShtHex<span style='color:#808030; '>;</span>
+488: 
+489: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+490: <span style='color:#800000; font-weight:bold; '>VAR</span>
+491:   S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+492:   i <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+493: <span style='color:#808030; '>BEGIN</span>
+494:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+495:   i  <span style='color:#808030; '>:=</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+496:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>10000H</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+497:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>INTEGER</span><span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+498: <span style='color:#808030; '>END</span> RdHex<span style='color:#808030; '>;</span>
+499: 
+500: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdLngHex<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+501: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+502: <span style='color:#808030; '>BEGIN</span>
+503:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+504:   <span style='color:#800000; font-weight:bold; '>RETURN</span> StrToCard<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span><span style='color:#008c00; '>16</span><span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+505: <span style='color:#808030; '>END</span> RdLngHex <span style='color:#808030; '>;</span>
+506: 
+507: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdReal<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>REAL</span><span style='color:#808030; '>;</span>
+508: <span style='color:#800000; font-weight:bold; '>VAR</span>
+509:   S   <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+510:   r<span style='color:#808030; '>,</span>a <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGREAL</span><span style='color:#808030; '>;</span>
+511: <span style='color:#808030; '>BEGIN</span>
+512:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+513:   r  <span style='color:#808030; '>:=</span> StrToReal<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+514:   a  <span style='color:#808030; '>:=</span> ABS<span style='color:#808030; '>(</span> r <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+515:   OK <span style='color:#808030; '>:=</span> OK <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>a <span style='color:#808030; '>>=</span> <span style='color:#008c00; '>1.2E-38</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>a <span style='color:#808030; '>&lt;=</span> <span style='color:#008c00; '>3.4E38</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+516:   <span style='color:#800000; font-weight:bold; '>RETURN</span> VAL<span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>REAL</span><span style='color:#808030; '>,</span>r <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+517: <span style='color:#808030; '>END</span> RdReal<span style='color:#808030; '>;</span>
+518: 
+519: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdLngReal<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>LONGREAL</span><span style='color:#808030; '>;</span>
+520: <span style='color:#800000; font-weight:bold; '>VAR</span> S <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0..80</span><span style='color:#808030; '>]</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+521: <span style='color:#808030; '>BEGIN</span>
+522:   RdItem<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>S <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+523:   <span style='color:#800000; font-weight:bold; '>RETURN</span> StrToReal<span style='color:#808030; '>(</span> S<span style='color:#808030; '>,</span>OK <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+524: <span style='color:#808030; '>END</span> RdLngReal<span style='color:#808030; '>;</span>
+525: 
+526: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> WrBin<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> Count<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+527: <span style='color:#800000; font-weight:bold; '>VAR</span> i <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+528: <span style='color:#808030; '>BEGIN</span>
+529:   OK <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+530:   i  <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+531:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>></span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#808030; '>(</span>BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+532:     Write<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buf<span style='color:#808030; '>,</span>Count <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+533:     OK <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>IOR <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+534:   <span style='color:#800000; font-weight:bold; '>ELSE</span>
+535:     <span style='color:#808030; '>WITH</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+536:       <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>&lt;=</span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#696969; '>(* last was read *)</span>
+537:         Flush<span style='color:#808030; '>(</span>F<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+538:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+539:       i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+540:       <span style='color:#808030; '>WHILE</span> Count <span style='color:#808030; '>></span> i <span style='color:#800000; font-weight:bold; '>DO</span>
+541:         <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span>RWPos <span style='color:#808030; '>&lt;</span> BufSize<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> Count <span style='color:#808030; '>></span> i <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+542:           Buffer<span style='color:#808030; '>[</span> RWPos <span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> SHORTCARD<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+543:           INC<span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+544:           INC<span style='color:#808030; '>(</span> RWPos <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+545:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+546:         <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>=</span> BufSize <span style='color:#800000; font-weight:bold; '>THEN</span>
+547:           Write<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buffer<span style='color:#808030; '>,</span>BufSize <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+548:           RWPos <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+549:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+550:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+551:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+552:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+553: <span style='color:#808030; '>END</span> WrBin<span style='color:#808030; '>;</span>
+554: 
+555: 
+556: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RdBin<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>;</span> Count<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+557: <span style='color:#800000; font-weight:bold; '>VAR</span> i<span style='color:#808030; '>,</span>h<span style='color:#808030; '>,</span>j <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+558: <span style='color:#808030; '>BEGIN</span>
+559:   i   <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+560:   OK  <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+561:   EOF <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+562:   <span style='color:#808030; '>IF</span> Count <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+563:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>></span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>OR</span> <span style='color:#808030; '>(</span>BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+564:       i  <span style='color:#808030; '>:=</span> Read<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buf<span style='color:#808030; '>,</span>Count <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+565:       OK <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>IOR<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+566:     <span style='color:#800000; font-weight:bold; '>ELSE</span>
+567:       <span style='color:#808030; '>WITH</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+568:         <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>></span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#696969; '>(* Last was write *)</span> Flush<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+569:         i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+570:         <span style='color:#808030; '>LOOP</span>
+571:           <span style='color:#808030; '>IF</span> Count <span style='color:#808030; '>=</span> i <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+572:           <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>>=</span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span>
+573:             EOB   <span style='color:#808030; '>:=</span> Read<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buffer<span style='color:#808030; '>,</span>BufSize <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+574:             OK    <span style='color:#808030; '>:=</span> <span style='color:#808030; '>(</span>IOR<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+575:             RWPos <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+576:             <span style='color:#808030; '>IF</span> EOB<span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#800000; font-weight:bold; '>EXIT</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+577:           <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+578:           <span style='color:#808030; '>WHILE</span> <span style='color:#808030; '>(</span>RWPos <span style='color:#808030; '>&lt;</span> EOB<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>Count <span style='color:#808030; '>></span> i<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+579:             Buf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>(</span>Buffer<span style='color:#808030; '>[</span> RWPos <span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+580:             INC<span style='color:#808030; '>(</span> i <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+581:             INC<span style='color:#808030; '>(</span> RWPos <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+582:           <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+583:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+584:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+585:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+586:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span> EOF <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+587:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+588:   <span style='color:#800000; font-weight:bold; '>RETURN</span> i<span style='color:#808030; '>;</span>
+589: <span style='color:#808030; '>END</span> RdBin<span style='color:#808030; '>;</span>
+590: 
+591: 
+592: 
+593: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> GetName<span style='color:#808030; '>(</span>name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> fn<span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+594: <span style='color:#808030; '>BEGIN</span>
+595:   Copy<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>,</span>name<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+596:   fn<span style='color:#808030; '>[</span>SIZE<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+597: <span style='color:#808030; '>END</span> GetName<span style='color:#808030; '>;</span>
+598: 
+599: 
+600: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Open<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span>
+601: <span style='color:#800000; font-weight:bold; '>VAR</span>
+602:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+603:   fn<span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+604: <span style='color:#808030; '>BEGIN</span>
+605:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+606:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+607:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+608:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+609:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+610:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3D02H</span><span style='color:#808030; '>;</span>   <span style='color:#696969; '>(* open for read and write *)</span>
+611:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+612:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>AX <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+613:       <span style='color:#696969; '>(* access denied *)</span>
+614:       AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3D00H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* open for read *)</span>
+615:       Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+616:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+617:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Open'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+618:     <span style='color:#808030; '>IF</span> IOR <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+619:       <span style='color:#808030; '>IF</span> AX <span style='color:#808030; '>&lt;=</span> MaxHandle <span style='color:#800000; font-weight:bold; '>THEN</span> BufInf<span style='color:#808030; '>[</span>AX<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+620:       <span style='color:#800000; font-weight:bold; '>RETURN</span> AX<span style='color:#808030; '>;</span>
+621:     <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+622:     <span style='color:#800000; font-weight:bold; '>RETURN</span> MAX<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+623:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+624: <span style='color:#808030; '>END</span> Open<span style='color:#808030; '>;</span>
+625: 
+626: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Exists<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+627: <span style='color:#800000; font-weight:bold; '>VAR</span> d <span style='color:#808030; '>:</span> DirEntry<span style='color:#808030; '>;</span>
+628:     r <span style='color:#808030; '>:</span> Registers <span style='color:#808030; '>;</span>
+629:     b <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#808030; '>;</span>
+630: <span style='color:#808030; '>BEGIN</span>
+631:   r<span style='color:#008c00; '>.</span>AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>2F00H</span> <span style='color:#808030; '>;</span>      <span style='color:#696969; '>(* save DTA *)</span>
+632:   Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+633:   b <span style='color:#808030; '>:=</span> ReadFirstEntry<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>FileAttr<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>,</span>d<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+634:   r<span style='color:#008c00; '>.</span>AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1A00H</span> <span style='color:#808030; '>;</span>
+635:   r<span style='color:#008c00; '>.</span>DS <span style='color:#808030; '>:=</span> r<span style='color:#008c00; '>.</span>ES <span style='color:#808030; '>;</span>
+636:   r<span style='color:#008c00; '>.</span>DX <span style='color:#808030; '>:=</span> r<span style='color:#008c00; '>.</span>BX <span style='color:#808030; '>;</span>
+637:   Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>          <span style='color:#696969; '>(* restore DTA *)</span>
+638:   <span style='color:#800000; font-weight:bold; '>RETURN</span> b<span style='color:#808030; '>;</span>
+639: <span style='color:#808030; '>END</span> Exists<span style='color:#808030; '>;</span>
+640: 
+641: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Append<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span>
+642: <span style='color:#800000; font-weight:bold; '>VAR</span> F <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+643: <span style='color:#808030; '>BEGIN</span>
+644:   F <span style='color:#808030; '>:=</span> Open<span style='color:#808030; '>(</span> Name <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+645:   Seek<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Size<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+646:   <span style='color:#800000; font-weight:bold; '>RETURN</span> F<span style='color:#808030; '>;</span>
+647: <span style='color:#808030; '>END</span> Append<span style='color:#808030; '>;</span>
+648: 
+649: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Create<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span>
+650: <span style='color:#800000; font-weight:bold; '>VAR</span>
+651:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+652:   fn<span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+653: <span style='color:#808030; '>BEGIN</span>
+654:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+655:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+656:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+657:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+658:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+659:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3CH</span><span style='color:#808030; '>;</span>
+660:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* Create, open for read and write *)</span>
+661:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Create'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+662:     <span style='color:#808030; '>IF</span> IOR <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+663:       <span style='color:#808030; '>IF</span> AX <span style='color:#808030; '>&lt;=</span> MaxHandle <span style='color:#800000; font-weight:bold; '>THEN</span> BufInf<span style='color:#808030; '>[</span>AX<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+664:       <span style='color:#800000; font-weight:bold; '>RETURN</span> AX<span style='color:#808030; '>;</span>
+665:     <span style='color:#808030; '>END</span> <span style='color:#808030; '>;</span>
+666:     <span style='color:#800000; font-weight:bold; '>RETURN</span> MAX<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+667:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+668: <span style='color:#808030; '>END</span> Create<span style='color:#808030; '>;</span>
+669: 
+670: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Close<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+671: <span style='color:#800000; font-weight:bold; '>VAR</span>
+672:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+673:   x <span style='color:#808030; '>:</span> FileInf<span style='color:#808030; '>;</span>
+674: <span style='color:#808030; '>BEGIN</span>
+675:   Flush<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+676:   <span style='color:#808030; '>IF</span> F <span style='color:#808030; '>&lt;=</span> MaxHandle <span style='color:#800000; font-weight:bold; '>THEN</span>
+677:     BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>;</span>
+678:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+679:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+680:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+681:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3EH</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* close file *)</span>
+682:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+683:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Close'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+684:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+685: <span style='color:#808030; '>END</span> Close<span style='color:#808030; '>;</span>
+686: 
+687: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> GetPos<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+688: <span style='color:#800000; font-weight:bold; '>VAR</span>
+689:   r    <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+690:   x    <span style='color:#808030; '>:</span> FileInf<span style='color:#808030; '>;</span>
+691:   conv <span style='color:#808030; '>:</span> <span style='color:#808030; '>RECORD</span>
+692:            <span style='color:#808030; '>CASE</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#800000; font-weight:bold; '>OF</span>
+693:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>TRUE</span>  <span style='color:#808030; '>:</span> lo<span style='color:#808030; '>,</span>hi<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+694:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>FALSE</span> <span style='color:#808030; '>:</span> long <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+695:            <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+696:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+697: <span style='color:#808030; '>BEGIN</span>
+698:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+699:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+700:     DX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+701:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4201H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* seek relative *)</span>
+702:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+703:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+704:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'GetPos'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+705:     conv<span style='color:#008c00; '>.</span>lo <span style='color:#808030; '>:=</span> AX<span style='color:#808030; '>;</span>
+706:     conv<span style='color:#008c00; '>.</span>hi <span style='color:#808030; '>:=</span> DX<span style='color:#808030; '>;</span>
+707:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>&lt;=</span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+708:       x <span style='color:#808030; '>:=</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+709:       <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>x <span style='color:#808030; '>#</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+710:         <span style='color:#808030; '>WITH</span> x<span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+711:           <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>></span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span>
+712:             INC<span style='color:#808030; '>(</span>conv<span style='color:#008c00; '>.</span>long<span style='color:#808030; '>,</span>VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>RWPos<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+713:           <span style='color:#800000; font-weight:bold; '>ELSIF</span> RWPos <span style='color:#808030; '>&lt;</span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span>
+714:             DEC<span style='color:#808030; '>(</span>conv<span style='color:#008c00; '>.</span>long<span style='color:#808030; '>,</span>VAL<span style='color:#808030; '>(</span>LONGCARD<span style='color:#808030; '>,</span>EOB<span style='color:#808030; '>-</span>RWPos<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+715:           <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+716:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+717:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+718:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+719:     <span style='color:#800000; font-weight:bold; '>RETURN</span> conv<span style='color:#008c00; '>.</span>long<span style='color:#808030; '>;</span>
+720:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+721: <span style='color:#808030; '>END</span> GetPos<span style='color:#808030; '>;</span>
+722: 
+723: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Seek<span style='color:#808030; '>(</span> F <span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> pos<span style='color:#808030; '>:</span>LONGCARD <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+724: <span style='color:#800000; font-weight:bold; '>VAR</span>
+725:   EOBpos <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+726:   r    <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+727:   conv <span style='color:#808030; '>:</span> <span style='color:#808030; '>RECORD</span>
+728:            <span style='color:#808030; '>CASE</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#800000; font-weight:bold; '>OF</span>
+729:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>TRUE</span>  <span style='color:#808030; '>:</span> lo<span style='color:#808030; '>,</span>hi<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+730:             <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>FALSE</span> <span style='color:#808030; '>:</span> long <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+731:            <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+732:          <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+733: 
+734: <span style='color:#808030; '>BEGIN</span>
+735:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F<span style='color:#808030; '>&lt;=</span>MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span><span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+736:     <span style='color:#808030; '>WITH</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+737:       <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>EOB<span style='color:#808030; '>></span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>RWPos<span style='color:#808030; '>&lt;=</span>EOB<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+738:         <span style='color:#696969; '>(* there are read bytes in the buffer *)</span>
+739:         <span style='color:#696969; '>(* find out where we are in the file *)</span>
+740:         <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+741:           CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span> DX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+742:           AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4201H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* seek relative *)</span>
+743:           BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+744:           Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Seek'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+745:           conv<span style='color:#008c00; '>.</span>lo <span style='color:#808030; '>:=</span> AX<span style='color:#808030; '>;</span> conv<span style='color:#008c00; '>.</span>hi <span style='color:#808030; '>:=</span> DX<span style='color:#808030; '>;</span> EOBpos <span style='color:#808030; '>:=</span> conv<span style='color:#008c00; '>.</span>long<span style='color:#808030; '>;</span>
+746:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+747:         <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>pos<span style='color:#808030; '>>=</span>EOBpos<span style='color:#808030; '>-</span>LONGCARD<span style='color:#808030; '>(</span>EOB<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>pos<span style='color:#808030; '>&lt;</span>EOBpos<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+748:           <span style='color:#696969; '>(* we can seek within the buffer *)</span>
+749:           RWPos <span style='color:#808030; '>:=</span> EOB <span style='color:#808030; '>-</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>(</span>EOBpos<span style='color:#808030; '>-</span>pos<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+750:           <span style='color:#800000; font-weight:bold; '>RETURN</span><span style='color:#808030; '>;</span>
+751:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+752:       <span style='color:#800000; font-weight:bold; '>ELSE</span>
+753:         <span style='color:#808030; '>IF</span> RWPos <span style='color:#808030; '>></span> EOB <span style='color:#800000; font-weight:bold; '>THEN</span> <span style='color:#696969; '>(* last was write, bring DOS up to date *)</span>
+754:           Write<span style='color:#808030; '>(</span> F<span style='color:#808030; '>,</span>Buffer<span style='color:#808030; '>,</span>RWPos <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+755:         <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+756:       <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+757:       <span style='color:#696969; '>(* the buffer contents are finished with now *)</span>
+758:       RWPos <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+759:       EOB <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+760:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+761:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+762:   <span style='color:#696969; '>(* we haven't done an in-buffer seek - so get DOS to do it for us *)</span>
+763:   conv<span style='color:#008c00; '>.</span>long <span style='color:#808030; '>:=</span> pos<span style='color:#808030; '>;</span>
+764:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+765:     CX <span style='color:#808030; '>:=</span> conv<span style='color:#008c00; '>.</span>hi<span style='color:#808030; '>;</span>
+766:     DX <span style='color:#808030; '>:=</span> conv<span style='color:#008c00; '>.</span>lo<span style='color:#808030; '>;</span>
+767:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4200H</span><span style='color:#808030; '>;</span> <span style='color:#696969; '>(* seek absolute *)</span>
+768:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+769:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+770:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Seek'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+771:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+772: <span style='color:#808030; '>END</span> Seek<span style='color:#808030; '>;</span>
+773: 
+774: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Size<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+775: <span style='color:#800000; font-weight:bold; '>VAR</span>
+776:   r     <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+777:   conv1<span style='color:#808030; '>,</span>
+778:   conv2 <span style='color:#808030; '>:</span> <span style='color:#808030; '>RECORD</span>
+779:             <span style='color:#808030; '>CASE</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span> <span style='color:#800000; font-weight:bold; '>OF</span>
+780:              <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>TRUE</span>  <span style='color:#808030; '>:</span> lo<span style='color:#808030; '>,</span>hi<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+781:              <span style='color:#808030; '>|</span> <span style='color:#800000; font-weight:bold; '>FALSE</span> <span style='color:#808030; '>:</span> long <span style='color:#808030; '>:</span> LONGCARD<span style='color:#808030; '>;</span>
+782:             <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+783:           <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+784: 
+785: <span style='color:#808030; '>BEGIN</span>
+786:   Flush<span style='color:#808030; '>(</span> F <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+787:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+788:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+789:     DX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+790:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4201H</span><span style='color:#808030; '>;</span>   <span style='color:#696969; '>(* seek relative *)</span>
+791:     BX <span style='color:#808030; '>:=</span> F<span style='color:#808030; '>;</span>
+792:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+793:     conv1<span style='color:#008c00; '>.</span>hi <span style='color:#808030; '>:=</span> DX<span style='color:#808030; '>;</span>
+794:     conv1<span style='color:#008c00; '>.</span>lo <span style='color:#808030; '>:=</span> AX<span style='color:#808030; '>;</span>
+795:     CX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+796:     DX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+797:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4202H</span><span style='color:#808030; '>;</span>   <span style='color:#696969; '>(* seek relative to end *)</span>
+798:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+799:     conv2<span style='color:#008c00; '>.</span>hi <span style='color:#808030; '>:=</span> DX<span style='color:#808030; '>;</span>
+800:     conv2<span style='color:#008c00; '>.</span>lo <span style='color:#808030; '>:=</span> AX<span style='color:#808030; '>;</span>
+801:     CX <span style='color:#808030; '>:=</span> conv1<span style='color:#008c00; '>.</span>hi<span style='color:#808030; '>;</span>
+802:     DX <span style='color:#808030; '>:=</span> conv1<span style='color:#008c00; '>.</span>lo<span style='color:#808030; '>;</span>
+803:     AX <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4200H</span><span style='color:#808030; '>;</span>   <span style='color:#696969; '>(* seek absolute *)</span>
+804:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+805:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Size'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+806:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+807:   <span style='color:#800000; font-weight:bold; '>RETURN</span> conv2<span style='color:#008c00; '>.</span>long<span style='color:#808030; '>;</span>
+808: <span style='color:#808030; '>END</span> Size<span style='color:#808030; '>;</span>
+809: 
+810: 
+811: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Erase<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span><span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+812: <span style='color:#800000; font-weight:bold; '>VAR</span>
+813:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+814:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+815: <span style='color:#808030; '>BEGIN</span>
+816:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+817:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+818:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+819:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+820:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>41H</span><span style='color:#808030; '>;</span>
+821:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+822:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>AX <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+823:       Flags <span style='color:#808030; '>:=</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+824:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+825:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Erase'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+826:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+827: <span style='color:#808030; '>END</span> Erase<span style='color:#808030; '>;</span>
+828: 
+829: 
+830: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> Rename<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>newname<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+831: <span style='color:#800000; font-weight:bold; '>VAR</span>
+832:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+833:   fn<span style='color:#808030; '>,</span>fn2<span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+834: <span style='color:#808030; '>BEGIN</span>
+835:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+836:   GetName<span style='color:#808030; '>(</span>newname<span style='color:#808030; '>,</span>fn2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+837:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+838:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+839:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+840:     ES <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+841:     DI <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+842:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>56H</span><span style='color:#808030; '>;</span>
+843:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+844:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'Rename'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+845:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+846: <span style='color:#808030; '>END</span> Rename<span style='color:#808030; '>;</span>
+847: 
+848: 
+849: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ReadFirstEntry <span style='color:#808030; '>(</span> DirName <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>;</span>
+850:                            Attr    <span style='color:#808030; '>:</span> FileAttr<span style='color:#808030; '>;</span>
+851:                            <span style='color:#800000; font-weight:bold; '>VAR</span> D   <span style='color:#808030; '>:</span> DirEntry<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+852: <span style='color:#800000; font-weight:bold; '>VAR</span>
+853:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+854:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+855: <span style='color:#808030; '>BEGIN</span>
+856:   GetName<span style='color:#808030; '>(</span>DirName<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+857:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+858:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1AH</span><span style='color:#808030; '>;</span>
+859:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>D<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+860:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>D<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+861:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>    <span style='color:#696969; '>(* set DTA *)</span>
+862:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4EH</span><span style='color:#808030; '>;</span>
+863:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+864:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+865:     CL <span style='color:#808030; '>:=</span> SHORTCARD<span style='color:#808030; '>(</span>Attr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+866:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+867:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>AX <span style='color:#808030; '>=</span> <span style='color:#008c00; '>18</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+868:       IOR <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+869:       <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+870:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+871:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'ReadFirstEntry'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+872:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+873:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+874: <span style='color:#808030; '>END</span> ReadFirstEntry<span style='color:#808030; '>;</span>
+875: 
+876: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ReadNextEntry<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>VAR</span> D<span style='color:#808030; '>:</span> DirEntry<span style='color:#808030; '>)</span> <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>BOOLEAN</span><span style='color:#808030; '>;</span>
+877: <span style='color:#800000; font-weight:bold; '>VAR</span>
+878:   r <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+879: <span style='color:#808030; '>BEGIN</span>
+880:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+881:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>1AH</span><span style='color:#808030; '>;</span>
+882:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>D<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+883:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>D<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+884:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>    <span style='color:#696969; '>(* set DTA *)</span>
+885:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>4FH</span><span style='color:#808030; '>;</span>
+886:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+887:     <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>BITSET<span style='color:#808030; '>{</span>CarryFlag<span style='color:#808030; '>}</span> <span style='color:#808030; '>*</span> Flags<span style='color:#808030; '>)</span> <span style='color:#808030; '>#</span> BITSET<span style='color:#808030; '>{</span><span style='color:#808030; '>}</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span>AX <span style='color:#808030; '>=</span> <span style='color:#008c00; '>18</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+888:       IOR <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+889:       <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+890:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+891:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'ReadNextEntry'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+892:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+893:   <span style='color:#800000; font-weight:bold; '>RETURN</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+894: <span style='color:#808030; '>END</span> ReadNextEntry<span style='color:#808030; '>;</span>
+895: 
+896: 
+897: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> ChDir<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+898: <span style='color:#800000; font-weight:bold; '>VAR</span>
+899:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+900:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+901: <span style='color:#808030; '>BEGIN</span>
+902:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+903:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+904:     <span style='color:#808030; '>IF</span> fn<span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>':'</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+905:       AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0EH</span><span style='color:#808030; '>;</span>
+906:       DL <span style='color:#808030; '>:=</span> SHORTCARD<span style='color:#808030; '>(</span>CAP<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>-</span>SHORTCARD<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'A'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+907:       Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+908:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+909:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+910:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+911:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3BH</span><span style='color:#808030; '>;</span>
+912:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+913:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'ChDir'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+914:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+915: <span style='color:#808030; '>END</span> ChDir<span style='color:#808030; '>;</span>
+916: 
+917: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> MkDir<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+918: <span style='color:#800000; font-weight:bold; '>VAR</span>
+919:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+920:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+921: <span style='color:#808030; '>BEGIN</span>
+922:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+923:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+924:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+925:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+926:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>39H</span><span style='color:#808030; '>;</span>
+927:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+928:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'MkDir'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+929:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+930: <span style='color:#808030; '>END</span> MkDir<span style='color:#808030; '>;</span>
+931: 
+932: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> RmDir<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+933: <span style='color:#800000; font-weight:bold; '>VAR</span>
+934:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+935:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+936: <span style='color:#808030; '>BEGIN</span>
+937:   GetName<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+938:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+939:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+940:     DX <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+941:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>3AH</span><span style='color:#808030; '>;</span>
+942:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+943:     ErrorCheckNamed<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'RmDir'</span><span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+944:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+945: <span style='color:#808030; '>END</span> RmDir<span style='color:#808030; '>;</span>
+946: 
+947: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> GetDir<span style='color:#808030; '>(</span>drive<span style='color:#808030; '>:</span> SHORTCARD<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> Name<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>CHAR</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+948: <span style='color:#800000; font-weight:bold; '>VAR</span>
+949:   r  <span style='color:#808030; '>:</span> Registers<span style='color:#808030; '>;</span>
+950:   fn <span style='color:#808030; '>:</span> PathStr<span style='color:#808030; '>;</span>
+951: <span style='color:#808030; '>BEGIN</span>
+952:   <span style='color:#808030; '>WITH</span> r <span style='color:#800000; font-weight:bold; '>DO</span>
+953:     DS <span style='color:#808030; '>:=</span> Seg<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+954:     SI <span style='color:#808030; '>:=</span> Ofs<span style='color:#808030; '>(</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+955:     DL <span style='color:#808030; '>:=</span> drive<span style='color:#808030; '>;</span>
+956:     AH <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>47H</span><span style='color:#808030; '>;</span>
+957:     Lib<span style='color:#008c00; '>.</span>Dos<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+958:     ErrorCheck<span style='color:#808030; '>(</span>r<span style='color:#808030; '>,</span><span style='color:#0000e6; '>'GetDir'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+959:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+960:   Copy<span style='color:#808030; '>(</span>Name<span style='color:#808030; '>,</span>fn<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+961: <span style='color:#808030; '>END</span> GetDir<span style='color:#808030; '>;</span>
+962: 
+963: 
+964: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> InitBufInf<span style='color:#808030; '>;</span>
+965: <span style='color:#800000; font-weight:bold; '>VAR</span> i <span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>CARDINAL</span><span style='color:#808030; '>;</span>
+966: <span style='color:#808030; '>BEGIN</span>
+967:   <span style='color:#808030; '>FOR</span> i <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>TO</span> MaxHandle <span style='color:#800000; font-weight:bold; '>DO</span> BufInf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>NIL</span><span style='color:#808030; '>;</span> <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+968: <span style='color:#808030; '>END</span> InitBufInf<span style='color:#808030; '>;</span>
+969: 
+970: <span style='color:#800000; font-weight:bold; '>PROCEDURE</span> AssignBuffer<span style='color:#808030; '>(</span>F<span style='color:#808030; '>:</span> File<span style='color:#808030; '>;</span> <span style='color:#800000; font-weight:bold; '>VAR</span> Buf<span style='color:#808030; '>:</span> <span style='color:#800000; font-weight:bold; '>ARRAY</span> <span style='color:#800000; font-weight:bold; '>OF</span> <span style='color:#800000; font-weight:bold; '>BYTE</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+971: <span style='color:#808030; '>BEGIN</span>
+972:   <span style='color:#808030; '>IF</span> <span style='color:#808030; '>(</span>F <span style='color:#808030; '>&lt;=</span> MaxHandle<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#808030; '>(</span> HIGH<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span> <span style='color:#808030; '>></span> SIZE<span style='color:#808030; '>(</span>BufRec<span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>THEN</span>
+973:     BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span> <span style='color:#808030; '>:=</span> ADR<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+974:     <span style='color:#808030; '>WITH</span> BufInf<span style='color:#808030; '>[</span>F<span style='color:#808030; '>]</span><span style='color:#808030; '>^</span> <span style='color:#800000; font-weight:bold; '>DO</span>
+975:       RWPos   <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+976:       EOB     <span style='color:#808030; '>:=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+977:       BufSize <span style='color:#808030; '>:=</span> HIGH<span style='color:#808030; '>(</span>Buf<span style='color:#808030; '>)</span><span style='color:#808030; '>-</span>SIZE<span style='color:#808030; '>(</span>BufRec<span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>;</span>
+978:     <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+979:   <span style='color:#808030; '>END</span><span style='color:#808030; '>;</span>
+980: <span style='color:#808030; '>END</span> AssignBuffer<span style='color:#808030; '>;</span>
+981: 
+982: 
+983: <span style='color:#808030; '>BEGIN</span>
+984:   Eng     <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+985:   IOcheck <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+986:   OK      <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>TRUE</span><span style='color:#808030; '>;</span>
+987:   ChopOff <span style='color:#808030; '>:=</span> <span style='color:#800000; font-weight:bold; '>FALSE</span><span style='color:#808030; '>;</span>
+988:   Separators <span style='color:#808030; '>:=</span> CHARSET<span style='color:#808030; '>{</span>CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>9</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>13</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>CHR<span style='color:#808030; '>(</span><span style='color:#008c00; '>26</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>' '</span><span style='color:#808030; '>}</span><span style='color:#808030; '>;</span>
+989:   InitBufInf<span style='color:#808030; '>;</span>
+990: <span style='color:#808030; '>END</span> FIO<span style='color:#808030; '>.</span>
+991: 
+992: 

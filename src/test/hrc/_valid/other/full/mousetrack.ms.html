@@ -1,0 +1,151 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>-- This script is a basic test to show how to use the new functions added</span>
+  1: <span style='color:#696969; '>-- when "MouseTrak.dlx" is placed in you plugins directory.</span>
+  2: 
+  3: <span style='color:#696969; '>-- Steps</span>
+  4: <span style='color:#696969; '>--    1. Create a Sphere</span>
+  5: <span style='color:#696969; '>--    2. Create a cylinder with a small radius (Hair Like)</span>
+  6: <span style='color:#696969; '>--    3. Run the MouseTrack.ms script</span>
+  7: <span style='color:#696969; '>--    4. Choose "Spray" in the Moustrack utility</span>
+  8: <span style='color:#696969; '>--    5. Then under Geometry Spray choose "pick Surface" </span>
+  9: <span style='color:#696969; '>--    6. Choose the Sphere</span>
+ 10: <span style='color:#696969; '>--    7. Then hit "Pick spray geometry"</span>
+ 11: <span style='color:#696969; '>--    8. and choose the cylinder</span>
+ 12: <span style='color:#696969; '>--    9. Now as you move the mouse over the sphere pressing the left mouse button,</span>
+ 13: <span style='color:#696969; '>--    it will draw cylinders on the sphere.</span>
+ 14: 
+ 15: <span style='color:#696969; '>--Script and plugin code by John Wainwright.</span>
+ 16: 
+ 17:     
+ 18: 
+ 19: 
+ 20: 
+ 21: utility mesh_painter <span style='color:#0000e6; '>"Mesh Painter"</span>
+ 22: <span style='color:#808030; '>(</span>
+ 23:     checkbutton spray <span style='color:#0000e6; '>"Spray"</span> tooltip<span style='color:#808030; '>:</span><span style='color:#0000e6; '>"Spray geometry over surface"</span> offset<span style='color:#808030; '>:</span><span style='color:#808030; '>[</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> across<span style='color:#808030; '>:</span><span style='color:#008c00; '>3</span>
+ 24:     checkbutton sel <span style='color:#0000e6; '>"Select"</span> tooltip<span style='color:#808030; '>:</span><span style='color:#0000e6; '>"Select faces by painting"</span>
+ 25:     checkbutton sculpt <span style='color:#0000e6; '>"Sculpt"</span> tooltip<span style='color:#808030; '>:</span><span style='color:#0000e6; '>"Sculpt mesh surface"</span> offset<span style='color:#808030; '>:</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>
+ 26:     
+ 27:     rollout spray_ro <span style='color:#0000e6; '>"Geometry Spray"</span>
+ 28:     <span style='color:#808030; '>(</span>
+ 29:         local surf<span style='color:#808030; '>,</span> geom
+ 30:         pickbutton pick_surf <span style='color:#0000e6; '>"Pick surface"</span>
+ 31:         pickbutton pick_geom <span style='color:#0000e6; '>"Pick spray geometry"</span>
+ 32:         checkbutton do_spray <span style='color:#0000e6; '>"Spray"</span>
+ 33:         
+ 34:         fn spray_track msg ir obj faceNum shift ctrl alt <span style='color:#808030; '>=</span>
+ 35:         <span style='color:#808030; '>(</span>
+ 36:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseMove and ir <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> undefined then
+ 37:             <span style='color:#808030; '>(</span>
+ 38:                 local b <span style='color:#808030; '>=</span> copy geom pos<span style='color:#808030; '>:</span>ir<span style='color:#808030; '>.</span>pos
+ 39:                 b<span style='color:#808030; '>.</span>dir <span style='color:#808030; '>=</span> ir<span style='color:#808030; '>.</span>dir
+ 40:             <span style='color:#808030; '>)</span>
+ 41:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseAbort then ok else #continue
+ 42:         <span style='color:#808030; '>)</span>
+ 43: 
+ 44:         <span style='color:#800000; font-weight:bold; '>on</span> pick_surf picked obj <span style='color:#800000; font-weight:bold; '>do</span> surf <span style='color:#808030; '>=</span> obj
+ 45:         <span style='color:#800000; font-weight:bold; '>on</span> pick_geom picked obj <span style='color:#800000; font-weight:bold; '>do</span> geom <span style='color:#808030; '>=</span> obj
+ 46:         <span style='color:#800000; font-weight:bold; '>on</span> do_spray changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+ 47:         <span style='color:#808030; '>(</span>
+ 48:             mouseTrack <span style='color:#800000; font-weight:bold; '>on</span><span style='color:#808030; '>:</span>surf trackCallBack<span style='color:#808030; '>:</span>spray_track
+ 49:             do_spray<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+ 50:         <span style='color:#808030; '>)</span>
+ 51:     <span style='color:#808030; '>)</span>
+ 52:     
+ 53:     rollout sel_ro <span style='color:#0000e6; '>"Face Select"</span>
+ 54:     <span style='color:#808030; '>(</span>
+ 55:         local surf
+ 56:         pickbutton pick_surf <span style='color:#0000e6; '>"Pick surface"</span>
+ 57:         checkbutton do_sel <span style='color:#0000e6; '>"Select"</span> tooltip<span style='color:#808030; '>:</span><span style='color:#0000e6; '>"press &lt;alt> key to subtract from selection"</span>
+ 58:         
+ 59:         fn sel_track msg ir obj faceNum shift ctrl alt <span style='color:#808030; '>=</span>
+ 60:         <span style='color:#808030; '>(</span>
+ 61:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseMove and faceNum <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> undefined then
+ 62:             <span style='color:#808030; '>(</span>
+ 63:                 if not alt then
+ 64:                     setFaceSelection obj #<span style='color:#808030; '>(</span>faceNum<span style='color:#808030; '>)</span> keep<span style='color:#808030; '>:</span>true
+ 65:                 else
+ 66:                 <span style='color:#808030; '>(</span>
+ 67:                     local s <span style='color:#808030; '>=</span> getFaceSelection obj<span style='color:#808030; '>,</span>
+ 68:                           i <span style='color:#808030; '>=</span> findItem s faceNum
+ 69:                     if i <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> then setFaceSelection obj <span style='color:#808030; '>(</span>deleteItem s i<span style='color:#808030; '>)</span>
+ 70:                 <span style='color:#808030; '>)</span>
+ 71:                 update obj
+ 72:             <span style='color:#808030; '>)</span>
+ 73:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseAbort then ok else #continue
+ 74:         <span style='color:#808030; '>)</span>
+ 75: 
+ 76:         <span style='color:#800000; font-weight:bold; '>on</span> pick_surf picked obj <span style='color:#800000; font-weight:bold; '>do</span> surf <span style='color:#808030; '>=</span> obj
+ 77:         <span style='color:#800000; font-weight:bold; '>on</span> do_sel changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+ 78:         <span style='color:#808030; '>(</span>
+ 79:             if classOf surf<span style='color:#808030; '>.</span>baseObject <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> editable_mesh then convertToMesh surf
+ 80:             select surf
+ 81:             max modify mode
+ 82:             subObjectLevel <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+ 83:             mouseTrack <span style='color:#800000; font-weight:bold; '>on</span><span style='color:#808030; '>:</span>surf trackCallBack<span style='color:#808030; '>:</span>sel_track
+ 84:             do_sel<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+ 85:         <span style='color:#808030; '>)</span>
+ 86:     <span style='color:#808030; '>)</span>
+ 87:     
+ 88:     rollout sculpt_ro <span style='color:#0000e6; '>"Sculpt Surface"</span>
+ 89:     <span style='color:#808030; '>(</span>
+ 90:         local surf<span style='color:#808030; '>,</span> last_face
+ 91:         pickbutton pick_surf <span style='color:#0000e6; '>"Pick surface"</span>
+ 92:         checkbutton do_sculpt <span style='color:#0000e6; '>"Sculpt"</span> tooltip<span style='color:#808030; '>:</span><span style='color:#0000e6; '>"drag to pull; &lt;shift>-drag push surface"</span>
+ 93:         
+ 94:         fn sculpt_track msg ir obj faceNum shift ctrl alt <span style='color:#808030; '>=</span>
+ 95:         <span style='color:#808030; '>(</span>
+ 96:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseMove and faceNum <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> undefined and faceNum <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> last_face then
+ 97:             <span style='color:#808030; '>(</span>
+ 98:                 local f <span style='color:#808030; '>=</span> getFace obj faceNum<span style='color:#808030; '>,</span> dir <span style='color:#808030; '>=</span> if shift then <span style='color:#808030; '>-</span>ir<span style='color:#808030; '>.</span>dir else ir<span style='color:#808030; '>.</span>dir
+ 99:                 setVert obj f<span style='color:#808030; '>.</span>x <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>getVert obj f<span style='color:#808030; '>.</span>x<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> dir <span style='color:#808030; '>*</span> <span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span>
+100:                 setVert obj f<span style='color:#808030; '>.</span>y <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>getVert obj f<span style='color:#808030; '>.</span>y<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> dir <span style='color:#808030; '>*</span> <span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span>
+101:                 setVert obj f<span style='color:#808030; '>.</span>z <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>getVert obj f<span style='color:#808030; '>.</span>z<span style='color:#808030; '>)</span> <span style='color:#808030; '>+</span> dir <span style='color:#808030; '>*</span> <span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span>
+102:                 last_face <span style='color:#808030; '>=</span> faceNum
+103:                 update obj
+104:             <span style='color:#808030; '>)</span>
+105:             if msg <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> #mouseAbort then ok else #continue
+106:         <span style='color:#808030; '>)</span>
+107: 
+108:         <span style='color:#800000; font-weight:bold; '>on</span> pick_surf picked obj <span style='color:#800000; font-weight:bold; '>do</span> surf <span style='color:#808030; '>=</span> obj
+109:         <span style='color:#800000; font-weight:bold; '>on</span> do_sculpt changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+110:         <span style='color:#808030; '>(</span>
+111:             if classOf surf<span style='color:#808030; '>.</span>baseObject <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> editable_mesh then convertToMesh surf
+112:             last_face <span style='color:#808030; '>=</span> undefined
+113:             mouseTrack <span style='color:#800000; font-weight:bold; '>on</span><span style='color:#808030; '>:</span>surf trackCallBack<span style='color:#808030; '>:</span>sculpt_track
+114:             do_sculpt<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+115:         <span style='color:#808030; '>)</span>
+116:     <span style='color:#808030; '>)</span>
+117:     
+118:     <span style='color:#800000; font-weight:bold; '>on</span> spray changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+119:     <span style='color:#808030; '>(</span>
+120:         sel<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> sculpt<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+121:         removeRollout sel_ro
+122:         removeRollout sculpt_ro
+123:         <span style='color:#808030; '>(</span>if state then addRollout else removeRollout<span style='color:#808030; '>)</span> spray_ro
+124:     <span style='color:#808030; '>)</span>
+125:     
+126:     <span style='color:#800000; font-weight:bold; '>on</span> sel changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+127:     <span style='color:#808030; '>(</span>
+128:         spray<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> sculpt<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+129:         removeRollout spray_ro
+130:         removeRollout sculpt_ro
+131:         <span style='color:#808030; '>(</span>if state then addRollout else removeRollout<span style='color:#808030; '>)</span> sel_ro
+132:     <span style='color:#808030; '>)</span>
+133:     
+134:     <span style='color:#800000; font-weight:bold; '>on</span> sculpt changed state <span style='color:#800000; font-weight:bold; '>do</span> 
+135:     <span style='color:#808030; '>(</span>
+136:         spray<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> sel<span style='color:#808030; '>.</span>checked <span style='color:#808030; '>=</span> false
+137:         removeRollout spray_ro
+138:         removeRollout sel_ro
+139:         <span style='color:#808030; '>(</span>if state then addRollout else removeRollout<span style='color:#808030; '>)</span> sculpt_ro
+140:     <span style='color:#808030; '>)</span>
+141:     
+142:     <span style='color:#800000; font-weight:bold; '>on</span> mesh_painter close <span style='color:#800000; font-weight:bold; '>do</span> 
+143:     <span style='color:#808030; '>(</span>
+144:         removeRollout spray_ro
+145:         removeRollout sel_ro
+146:         removeRollout sculpt_ro
+147:     <span style='color:#808030; '>)</span>
+148: <span style='color:#808030; '>)</span>
+</pre></body></html>
