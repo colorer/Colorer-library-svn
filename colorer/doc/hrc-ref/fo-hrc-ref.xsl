@@ -4,17 +4,16 @@
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!--
-This stylesheet is used to transform merged hrc-ref
-docbook version into the result XSL-FO form.
-It imports docbook.xsl stylesheet and introduce some changes into it's logic.
+ This stylesheet is used to transform merged hrc-ref
+ docbook version into the result XSL-FO form.
+ It imports docbook.xsl stylesheet and introduce some changes into it's logic.
 -->
-
-<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/fo/docbook.xsl"/>
 
 <!--
-<xsl:include href="xsdprint.xsl"/>
-<xsl:include href="-xsdoc.xsl"/>
+<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/fo/docbook.xsl"/>
 -->
+<xsl:import href="file:/c:/install/xml/docbook-xsl/fo/docbook.xsl"/>
+
 
 <xsl:include href="fo-titlepage.xsl"/>
 

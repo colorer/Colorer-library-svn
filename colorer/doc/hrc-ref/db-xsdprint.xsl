@@ -5,8 +5,6 @@
 
 <!-- Cloned from James Clark rng spec stylesheets -->
 
-<xsl:strip-space elements="xs:*"/>
-
 <xsl:template name="value">
   <xsl:param name="id" select="''"/>
   <xsl:choose>

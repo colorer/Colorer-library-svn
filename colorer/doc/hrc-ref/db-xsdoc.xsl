@@ -3,9 +3,6 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 >
 
-<xsl:strip-space elements="xs:*"/>
-
-
 <xsl:template match="*" mode="xsdoc"/>
 
 <xsl:template match="xs:annotation" mode="xsdoc"/>
