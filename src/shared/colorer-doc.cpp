@@ -7,14 +7,14 @@
       their content (except StringBuffer class), and serves
       as unicode wrappers over different data sources.
       SString is a static wrapper, it does not depends
-      on and external source, and stores string chars in
-      internal buffer.
-      DString is a dynamic wrapper, which serves  only as a shell
-      for external character data. It can wraps over characters
-      in any single byte enconding, over any of unicode encondings.
+      on any external source, and stores string chars in
+      an internal buffer.
+      DString is a dynamic wrapper, which serves only as a shell
+      for the external character data. It can wraps over characters
+      in any single byte enconding, or over any of unicode encondings.
 
       All character information can be accessed through the Character
-      class and it's static methods. All of them works with unicode
+      class and it's static methods. All of them work with unicode
       character in two-byte form (wchar). Note, that surrogates are not supported.
       All character properties are stored internally in
       two-stage tables, generated from Unicode database by perl
@@ -23,13 +23,14 @@
 
 /** @addtogroup common Common interfaces
       Common classes, exception and service classes.
-      Common abstract primitives and basic definitions.
+      Common abstract primitives, basic definitions,
+      global compilation ruling definitions.
 */
 
 /** @addtogroup common_io IO core interfaces
       @ingroup common
-      Classes and interfaces, used as abstraction input-output layer.
-      These includes base InputSource interface, which is redefined by
+      Classes and interfaces, which implements an abstraction of input-output layer.
+      These includes base InputSource interface, which is extended by
       couple of classes, used to provide access to different URL schemas.
 */
 
@@ -43,15 +44,17 @@
     @addtogroup colorer_editor Editor
       @ingroup colorer
       Common editor abstraction classes.
-      Implements most client editor functionality, linked with
-      colorer library parsers calls and processing.
+      Implements most client's editor functionality, linked with
+      colorer library parser's calls and processing.
+      Serves as facade for the complex relations of the internal
+      parsing objects.
 */
 
 /**
     @addtogroup colorer_handlers Handlers
       @ingroup colorer
       Different service handlers classes and interfaces.
-      They are used to recieve and store information, passed
+      They are used to recieve and store an information, passed
       from text parsers.
 */
 
@@ -108,17 +111,17 @@
 
   @par
   In order, to compile the library, you have to include a dependencies file.
-  By default, this file is already generated and included into the making process.
+  By default, this file is already generated and included into a making process.
 
   @par
-  But, if you change structure of source codes, or make other changes, which
-  creates new/deletes old dependencies, you have to regenerate dependencies
+  But, if you've changed structure of source codes, or made other changes, which
+  create new/delete old dependencies, you have to regenerate dependencies
   file (/src/shared/_dependencies.dep)
 
   @par
   You can do this simply with
   <code>make -f _makefile.deps</code> call.
-  This runs gcc in precompilation and dependencies generation mode.
+  This command runs gcc in precompilation and dependencies generation mode.
   After this perl script links all generated *.d files into one <code>_dependencies.dep</code>,
   and you can start your standard compilation process.
 

@@ -2,8 +2,11 @@
 #include<common/io/InputSource.h>
 
 #include<common/io/FileInputSource.h>
-#include<common/io/HTTPInputSource.h>
 #include<common/io/JARInputSource.h>
+
+#if COLORER_FEATURE_HTTPINPUTSOURCE
+#include<common/io/HTTPInputSource.h>
+#endif
 
 String *InputSource::getAbsolutePath(const String*basePath, const String*relPath){
   int root_pos = basePath->lastIndexOf('/');
@@ -22,9 +25,11 @@ InputSource *InputSource::newInstance(const String *path){
 
 InputSource *InputSource::newInstance(const String *path, InputSource *base){
   if (path == null) throw InputSourceException(DString("InputSource::newInstance: path is null"));
+#if COLORER_FEATURE_HTTPINPUTSOURCE
   if (path->startsWith(DString("http://"))){
     return new HTTPInputSource(path, null);
   };
+#endif
   if (path->startsWith(DString("jar:"))){
     return new JARInputSource(path, base);
   };

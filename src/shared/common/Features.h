@@ -1,27 +1,17 @@
-#ifndef _COLORER_COMMON_H_
-#define _COLORER_COMMON_H_
+#ifndef _COLORER_FEATURES_H_
+#define _COLORER_FEATURES_H_
+
+/**
+  If defined, long-living classes uses chunk allocation procedure
+*/
+#define USE_CHUNK_ALLOC TRUE
+
+/**
+  If defined, HTTP InputSource is implemented.
+*/
+#define COLORER_FEATURE_HTTPINPUTSOURCE TRUE
 
 
-/// system dependent byte
-typedef unsigned char byte;
-/// system dependent word
-typedef unsigned short word;
-/// system dependent double byte
-typedef unsigned int dword;
-
-/// macro - number of elements in array
-#define ARRAY_SIZE(a) (sizeof(a)/sizeof(*(a)))
-
-/// null pointer
-#define null (0)
-
-#define TRUE  1
-#define FALSE 0
-
-#include<common/Features.h>
-
-#include<unicode/String.h>
-#include<common/MemoryChunks.h>
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

@@ -34,9 +34,6 @@ const byte *HTTPInputSource::openStream()
 {
   if (stream != null) throw InputSourceException(StringBuffer("openStream(): source stream already opened: '")+baseLocation+"'");
 
-#ifdef __unix__
-  throw InputSourceException(DString("not avaiable in unix version"));
-#endif
 #ifdef _WIN32
   const int blockSize = 0x1000;
   Vector<byte*> streamVector;
