@@ -202,6 +202,7 @@ ParserFactory::~ParserFactory(){
   delete catalog;
   delete hrcParser;
   delete catalogPath;
+  delete catalogFIS;
   delete fileErrorHandler;
 };
 
