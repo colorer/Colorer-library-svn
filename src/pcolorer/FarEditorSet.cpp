@@ -283,6 +283,7 @@ void FarEditorSet::configure()
     if (i == 8) reloadBase();
     if (i == 9){
       reloadBase();
+      if (rDisabled) return;
       const char *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
       for(int idx = 0;; idx++){
         FileType *type = hrcParser->enumerateFileTypes(idx);

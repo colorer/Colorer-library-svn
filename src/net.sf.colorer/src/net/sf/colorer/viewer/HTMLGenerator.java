@@ -72,7 +72,7 @@ public class HTMLGenerator {
     };
               
     if (useInfoHeader){
-      commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType()+"'\n\n");
+      commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType().getName()+"'\n\n");
     };
   
     int lni = 0;

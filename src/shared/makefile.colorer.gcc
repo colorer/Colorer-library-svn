@@ -2,7 +2,7 @@
 # gcc makefile
 
 CPP     = gcc
-LINK    = gcc
+LINK    = g++
 RM      = @rm -f
 obj     = o
 DLLTOOL = @dlltool
