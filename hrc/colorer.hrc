@@ -178,6 +178,9 @@
     <location link="xml/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
   </prototype>
+  <prototype name="xlink" group="xml" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
+    <location link="xml/xlink.hrc"/>
+  </prototype>
   <prototype name="wsc" group="xml" description="wsc">
     <location link="xml/wsc.hrc"/>
     <filename>/\.wsc$/i</filename>
