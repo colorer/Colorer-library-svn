@@ -4,12 +4,13 @@ all: colorer.dll
 shared_path=../shared/
 obj_output=objs
 
-#CPPFLAGS_CUSTOM = /Zi  /debug
-#CPPFLAGS_CUSTOM = -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
+#CPPFLAGS_CUSTOM = /Zi /debug
+#CPPFLAGS_CUSTOM = /Zi -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 
 include ../shared/makefile.colorer.vc
 include makefile.core
 
+#/debug
 LIBFLAGS = $(objs) /map /out:colorer.dll /DLL /def:pcolorer.def wininet.lib kernel32.lib user32.lib advapi32.lib /nologo /subsystem:console
 
 colorer.dll: $(objs)

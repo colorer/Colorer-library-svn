@@ -7,6 +7,7 @@
 /** FAR .lng file identifiers. */
 enum {
   mName, mSetup, mTurnOff,
+  mCross, mPairs, mSyntax,
   mOk, mReload, mReloadAll, mCancel,
   mCatalogFile, mHRDName, mMaxTime,
   mListTypes, mMatchPair, mSelectBlock, mSelectPair,
