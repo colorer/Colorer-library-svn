@@ -467,6 +467,7 @@
   </prototype>
 
   <prototype name="default" group="other" description="default type">
+    <filename>//</filename>
     <parameters>
       <!-- none,vertical,horizontal,both -->
       <param name="show-cross" value="none"/>
