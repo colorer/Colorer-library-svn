@@ -14,7 +14,7 @@ include makefile.core
 DEF=pcolorer.gcc.def
 DLLMAIN=_DllMain@12
 
-LIBINC = -lwininet
+LIBINC = -lwininet -lstdc++
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
 
 colorer.dll: $(objs)
