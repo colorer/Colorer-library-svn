@@ -81,6 +81,9 @@
     <hrd class="rgb" name="fmx" description="FMX">
       <location link="hrd/rgb/contrib/fmx.hrd"/>
     </hrd>
+    <hrd class="rgb" name="hs" description="A'la HomeSite">
+      <location link="hrd/rgb/hs.hrd"/>
+    </hrd>
 
 
     <hrd class="text" name="tags" description="HTML italic, underline indention">
