@@ -146,6 +146,7 @@ String *ParserFactory::searchPath()
   // /usr/share/colorer/catalog.xml
 #ifdef __unix__
   paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
+  paths.addElement(new SString("/usr/local/share/colorer/catalog.xml"));
 #endif
 #ifdef _WIN32
   // %SYSTEMROOT%/.colorer5catalog

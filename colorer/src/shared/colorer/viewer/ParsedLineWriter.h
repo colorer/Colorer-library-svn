@@ -98,11 +98,13 @@ public:
         textWriter->write(line, pos, l1->start - pos);
         pos = l1->start;
       };
-      writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), true);
+      if (docLinkHash->size() > 0)
+        writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), true);
       writeStart(markupWriter, l1->styled());
       textWriter->write(line, pos, end - l1->start);
       writeEnd(markupWriter, l1->styled());
-      writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), false);
+      if (docLinkHash->size() > 0)
+        writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), false);
       pos += end - l1->start;
     };
     if (pos < line->length()){

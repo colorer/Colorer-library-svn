@@ -32,7 +32,8 @@
       - \%COLORER5CATALOG%
       - \%HOME%/.colorer5catalog
       - \%HOMEPATH%/.colorer5catalog
-      - /usr/shared/colorer/catalog.xml
+      - /usr/share/colorer/catalog.xml
+      - /usr/local/share/colorer/catalog.xml
 
   @note
     - \%NAME% - Environment variable of the current process.
