@@ -149,7 +149,7 @@
       <regexp priority="low" region="URL"><![CDATA[
        /\b ((https?|ftp|news|nntp|wais|wysiwyg|gopher|javascript|castanet|about)
            \:\/\/  | (www|ftp|fido[0-9]*)\.)
-           [\@\%\:\+\w\.\/\~\?\-\*=_#&;]+\b\/?/ix]]>
+           [\[\]\@\%\:\+\w\.\/\~\?\-\*=_#&;]+\b\/?/ix]]>
       </regexp>
     </scheme>
 

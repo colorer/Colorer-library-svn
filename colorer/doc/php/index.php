@@ -13,7 +13,8 @@
 </div>
 
 <h2>Colorer-take5 HTML generator</h2>
-<p>This is the web-form interface to the new Colorer-take5 Library.<br/>
+<p>This is a web interface to the Colorer-take5 Library.<br/>
+It uses newly released <a href='../index.html'>Colorer-take5.beta2</a> version.<br/>
 It produces highlighted source text through the web interface.</p>
 
 <form enctype="multipart/form-data" action="generator.php" method="post">
@@ -53,6 +54,9 @@ It produces highlighted source text through the web interface.</p>
     <option value='neo'>neo</option>
     <option value='eclipse'>eclipse</option>
     <option value='grayscale'>grayscale</option>
+    <option value='fmx'>FMX</option>
+    <option value='hs'>HomeSite</option>
+    <option value='bred3'>Bred3</option>
     <option value='tags'>html tags</option>
     <option value='tokens'>tokenize</option>
   </select>

@@ -9,7 +9,7 @@
     <filename>/\.sc$/i</filename>
     <location link="types/csql.hrc"/>
   </prototype>
-  <prototype name="cppsql" group="database" description="EmbeddedSQL for C">
+  <prototype name="cppsql" group="database" description="EmbeddedSQL for C++">
     <filename>/\.(ecpp)$/i</filename>
     <location link="types/cppsql.hrc"/>
   </prototype>
