@@ -1,7 +1,9 @@
 
+#if COLORER_FEATURE_HTTPINPUTSOURCE
 #ifdef _WIN32
 #include<windows.h>
 #include<wininet.h>
+#endif
 #endif
 
 #ifndef DWORD_PTR
@@ -34,6 +36,7 @@ const byte *HTTPInputSource::openStream()
 {
   if (stream != null) throw InputSourceException(StringBuffer("openStream(): source stream already opened: '")+baseLocation+"'");
 
+#if COLORER_FEATURE_HTTPINPUTSOURCE
 #ifdef _WIN32
   const int blockSize = 0x1000;
   Vector<byte*> streamVector;
@@ -76,6 +79,7 @@ const byte *HTTPInputSource::openStream()
 
   InternetCloseHandle(iurl);
   InternetCloseHandle(ihandle);
+#endif
 #endif
   return stream;
 };
