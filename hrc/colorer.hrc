@@ -41,6 +41,8 @@
   <prototype name="idl" group="main" description="IDL">
     <location link="main/idl.hrc"/>
     <filename>/\.(hvs|(i|o)dl)$/i</filename>
+    <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
+    <firstline>/\#include/</firstline>
   </prototype>
   <prototype name="pascal" group="main" description="Pascal">
     <location link="main/pascal.hrc"/>
@@ -431,10 +433,6 @@
     <location link="misc/messages.hrc"/>
     <filename>/\.(msg|eml|pkt|pms|nws)$/i</filename>
     <firstline>/^FROM/i</firstline>
-    <parameters>
-      <param name="default-fore" value="#E"/>
-      <param name="default-back" value="#1"/>
-    </parameters>
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
@@ -452,6 +450,10 @@
       <param name="maxlinelength" value="7000"/>
       <param name="backparse" value="0"/>
       <param name="fullback" value="yes"/>
+      <!--
+      <param name="default-fore" value="#E"/>
+      <param name="default-back" value="#1"/>
+      -->
     </parameters>
   </prototype>
 </hrc>
