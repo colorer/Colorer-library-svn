@@ -66,26 +66,26 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_removeRegionHan
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative
  * Method:    setFileType
- * Signature: (JLjava/lang/String;)V
+ * Signature: (JLnet/sf/colorer/FileType;)V
  */
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setFileType
-  (JNIEnv *, jobject, jlong, jstring);
-
-/*
- * Class:     net_sf_colorer_impl_BaseEditorNative
- * Method:    chooseFileType
- * Signature: (JLjava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileType
-  (JNIEnv *, jobject, jlong, jstring);
+  (JNIEnv *, jobject, jlong, jobject);
 
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative
  * Method:    getFileType
- * Signature: (J)Ljava/lang/String;
+ * Signature: (J)Lnet/sf/colorer/FileType;
  */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_sf_colorer_impl_BaseEditorNative
+ * Method:    chooseFileType
+ * Signature: (JLjava/lang/String;)Lnet/sf/colorer/FileType;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileType
+  (JNIEnv *, jobject, jlong, jstring);
 
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative

@@ -10,6 +10,14 @@ extern "C" {
 /* Inaccessible static: count */
 /*
  * Class:     net_sf_colorer_HRCParser
+ * Method:    finalize
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_HRCParser_finalize
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_sf_colorer_HRCParser
  * Method:    getRegion
  * Signature: (JLjava/lang/String;)Lnet/sf/colorer/Region;
  */
@@ -18,11 +26,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion
 
 /*
  * Class:     net_sf_colorer_HRCParser
- * Method:    finalize
- * Signature: (J)V
+ * Method:    enumerateFileTypes
+ * Signature: (JI)Lnet/sf/colorer/FileType;
  */
-JNIEXPORT void JNICALL Java_net_sf_colorer_HRCParser_finalize
-  (JNIEnv *, jobject, jlong);
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_enumerateFileTypes
+  (JNIEnv *, jobject, jlong, jint);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,6 @@
 package net.sf.colorer.eclipse.editors;
 
-import net.sf.colorer.ParserFactory;
-import net.sf.colorer.Region;
+import net.sf.colorer.*;
 import net.sf.colorer.eclipse.*;
 import net.sf.colorer.eclipse.outline.*;
 
@@ -32,7 +31,7 @@ import org.eclipse.jface.viewers.*;
 
 public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
 
-	ISourceViewer sourceViewer;
+    ISourceViewer sourceViewer;
   IPreferenceStore prefStore;
   TextColorer textColorer;
   StyledText text;
@@ -52,20 +51,20 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     }
   }
   TabReplacer tabReplacer = new TabReplacer();
-  
-	public ColorerEditor() {
-		super();
+
+    public ColorerEditor() {
+        super();
     prefStore = EclipsecolorerPlugin.getDefault().getPreferenceStore();
     prefStore.addPropertyChangeListener(this);
     WorkbenchChainedTextFontFieldEditor.startPropagate(prefStore, PreferencePage.TEXT_FONT);
-		setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
-	}
+        setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
+    }
 
-	public void createPartControl(Composite parent){
-		super.createPartControl(parent);
+    public void createPartControl(Composite parent){
+        super.createPartControl(parent);
     text = getSourceViewer().getTextWidget();
     relinkColorer();
-	};
+    };
   /** Selects filetype according to file name and first line of content
    */
   public void chooseFileType(){
@@ -74,12 +73,12 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   }
   /** Selects file's type according to the passed type name
    */
-  public void setFileType(String type){
+  public void setFileType(FileType type){
     textColorer.setFileType(type);
     text.redraw();
   }
   /** Returns currently used file type */
-  public String getFileType(){
+  public FileType getFileType(){
     return textColorer.getFileType();
   }
   /** Reloads coloring highlighting in this editor */
@@ -102,15 +101,15 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   }
   /** Tries to match paired construction */
   public void matchPair(){
-	  if (!textColorer.matchPair()){
-	    showPairError();
-	  }
+      if (!textColorer.matchPair()){
+        showPairError();
+      }
   }
   /** Selects paired construction */
   public void selectPair(){
-	  if (!textColorer.selectPair()){
-	    showPairError();
-	  }
+      if (!textColorer.selectPair()){
+        showPairError();
+      }
   }
   /** Selects content of paired construction */
   public void selectContentPair(){
@@ -123,8 +122,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     MessageDialog.openInformation(null, Messages.getString("editor.pairerr.title"),
                                              Messages.getString("editor.pairerr.msg"));
   }
-  
-    
+
+
   protected void editorContextMenuAboutToShow(IMenuManager parentMenu) {
     super.editorContextMenuAboutToShow(parentMenu);
     if (!textColorer.pairAvailable()) return;
@@ -158,14 +157,14 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     if (e == null || e.getProperty().equals(PreferencePage.SPACES_FOR_TABS)){
       if (prefStore.getBoolean(PreferencePage.SPACES_FOR_TABS))
         text.addVerifyListener(tabReplacer);
-      else text.removeVerifyListener(tabReplacer);  
+      else text.removeVerifyListener(tabReplacer);
     }
 
     if (e == null || e.getProperty().equals(PreferencePage.PAIRS_MATCH)){
       String pairs = prefStore.getString(PreferencePage.PAIRS_MATCH);
       int pmode = TextColorer.HLS_XOR;
       if (pairs.equals("PAIRS_OUTLINE")) pmode = TextColorer.HLS_OUTLINE;
-	  if (pairs.equals("PAIRS_OUTLINE2")) pmode = TextColorer.HLS_OUTLINE2;
+      if (pairs.equals("PAIRS_OUTLINE2")) pmode = TextColorer.HLS_OUTLINE2;
       textColorer.setPairsPainter(!pairs.equals("PAIRS_NO"), pmode);
     };
 
@@ -201,11 +200,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     return super.getAdapter(key);
   }
 
-	public void dispose() {
+    public void dispose() {
     prefStore.removePropertyChangeListener(this);
     if (textFont != null) textFont.dispose();
-		super.dispose();
-	}
+        super.dispose();
+    }
 
 }
 /* ***** BEGIN LICENSE BLOCK *****

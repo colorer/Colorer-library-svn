@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
+import net.sf.colorer.FileType;
 import net.sf.colorer.LineSource;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.editor.BaseEditor;
@@ -19,7 +20,7 @@ import net.sf.colorer.impl.BaseEditorNative;
  * http://colorer.sf.net/
  */
 public class JColoredTextArea extends JTextArea{
-  
+
   private Hashtable colorsHash = new Hashtable();
   private BaseEditor baseEditor = null;
 
@@ -29,7 +30,7 @@ public class JColoredTextArea extends JTextArea{
    */
   public JColoredTextArea(){
     super();
-    
+
     LineSource lineSource = new LineSource(){
       public String getLine(int lno){
         String line = null;
@@ -37,7 +38,7 @@ public class JColoredTextArea extends JTextArea{
           int start = getLineStartOffset(lno);
           int end = getLineEndOffset(lno);
           line = getText(start, end-start);
-        }catch(BadLocationException e){};  
+        }catch(BadLocationException e){};
         return line;
       };
     };
@@ -45,7 +46,7 @@ public class JColoredTextArea extends JTextArea{
     baseEditor = new BaseEditorNative(pf, lineSource);
     baseEditor.setRegionCompact(true);
     updateParameters();
-    
+
 /*    LineStyleListener lineStyleListener = new LineStyleListener(){
       public void lineGetStyle(LineStyleEvent e){
         updateParameters();
@@ -85,18 +86,18 @@ public class JColoredTextArea extends JTextArea{
     text.addLineStyleListener(lineStyleListener);
     text.addExtendedModifyListener(extendedModifyListener);
     text.addControlListener(controlListener);
-    
-  	ScrollBar sb = text.getVerticalBar();
+
+    ScrollBar sb = text.getVerticalBar();
     if (sb != null){
       sb.addSelectionListener(new SelectionListener() {
         public void widgetSelected(SelectionEvent e) {
           updateParameters();
         };
         public void widgetDefaultSelected(SelectionEvent e) {}
-      }); 	
+      });
     };
   */
-//    getUI().      
+//    getUI().
   };
 
 
@@ -112,7 +113,7 @@ public class JColoredTextArea extends JTextArea{
   /**
    * Selects and installs coloring style (filetype) according
    * to filename string and current first line of text.
-   * 
+   *
    * @param filename File name to be used to autodetect filetype
    */
   public void chooseFileType(String filename){
@@ -121,18 +122,18 @@ public class JColoredTextArea extends JTextArea{
     try{
       String fline = getText(0, count-1);
       baseEditor.chooseFileType(filename);
-    }catch(BadLocationException e){};  
+    }catch(BadLocationException e){};
   };
-  
+
   /**
    * Selects and installs specified file type.
-   * 
+   *
    * @param typename Name or description of HRC filetype.
    */
-  public void setFileType(String typename){
-  	baseEditor.setFileType(typename);
+  public void setFileType(FileType typename){
+    baseEditor.setFileType(typename);
   };
-  
+
   /**
    * Changes style/color scheme into one, specified with 'name' paramenter
    * @param name Name of color scheme (HRD name)
@@ -141,14 +142,14 @@ public class JColoredTextArea extends JTextArea{
     baseEditor.setRegionMapper("rgb", name);
     StyledRegion sr = (StyledRegion)baseEditor.getBackground();
     setForeground(getColor(sr.bfore, sr.fore));
-    setBackground(getColor(sr.bback, sr.back));    
+    setBackground(getColor(sr.bback, sr.back));
   };
 
   public void paint(Graphics g){
     int idx = 0;
     super.paint(g);
   };
-  
+
   private Color getColor(boolean has, int rgb){
     if (!has){
       return null;
@@ -158,9 +159,9 @@ public class JColoredTextArea extends JTextArea{
       color = new Color(rgb>>16, (rgb>>8)&0xFF, rgb&0xFF);
       colorsHash.put(new Integer(rgb), color);
     }
-    return color; 
+    return color;
   };
-  
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
