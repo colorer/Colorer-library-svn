@@ -9,15 +9,17 @@
 
   <property name='build-dir' value='distr'/>
 
-  <property name='distr.version' value='.beta2'/>
+  <property name='distr-version' value='.beta2'/>
 
-  <property name='farplugin-name' value='FarColorer-take5${distr.version}'/>
+  <property name='hrcupdate-dir' value='${build-dir}/hrc-update'/>
+
+  <property name='farplugin-name' value='FarColorer-take5${distr-version}'/>
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
-  <property name='eclipseplugin.version' value='_0.5.0'/>
-  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin.version}'/>
-  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin.version}'/>
+  <property name='eclipseplugin-version' value='_0.5.0'/>
+  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
+  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
   <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
   <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
 
@@ -60,6 +62,7 @@
     <ant dir='bin/xsd2hrc' antfile='build.xml' target='distr'/>
   </target>
 
+
   <target name="hrc.jar" depends='xsd2hrc.distr'>
     <mkdir dir='${target-dir}/hrc'/>
     <mkdir dir='${target-dir}/hrc/auto'/>
@@ -82,8 +85,29 @@
         <filter token='ink=' value='link="jar:types/auto.jar!'/>
       </filterset>
     </copy>
+  </target>
+
+  <target name="hrcupdate.clean">
+    <delete><fileset dir='${build-dir}/..' includes='hrc-update*'/></delete>
+    <delete dir='${hrcupdate-dir}'/>
+  </target>
+
+  <target name="hrcupdate">
+    <tstamp><format property="TODAY" pattern="yyyy-MM-dd"/></tstamp>
+    <property name='hrcupdate-zip' value='${build-dir}/hrc-update.${TODAY}.zip'/>
+    
+    <mkdir dir='${hrcupdate-dir}/hrc'/>
+    <antcall target='hrc.jar'>
+      <param name='target-dir' value='${hrcupdate-dir}'/>
+    </antcall>
+    <copy file='hrc/changes.txt' todir='${hrcupdate-dir}'/>
+
+    <zip destfile='${hrcupdate-zip}'>
+      <fileset dir='${hrcupdate-dir}'/>
+    </zip>
 
   </target>
+
 
   
   <target name="eclipseplugin.clean">
