@@ -33,7 +33,7 @@
             name="%ColorerEditor.cpp"
             default="true"
             icon="icons/cpp.gif"
-            extensions="c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs,mak,makefile"
+            extensions="c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor.Cpp">
@@ -42,7 +42,7 @@
             name="%ColorerEditor.scripts"
             default="true"
             icon="icons/scripts.gif"
-            extensions="awk,bat,bbj,dbm,diff,dpk,dpr,ini,patch,pls,pm,prg,pro,project,properties,prop,pro,props,reg,sources,txt,xom"
+            extensions="awk,bat,bbj,dbm,diff,dpk,dpr,ini,patch,pls,pm,prg,pro,project,properties,prop,pro,props,reg,sources,txt,xom,mak,makefile"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor.Scripts">
