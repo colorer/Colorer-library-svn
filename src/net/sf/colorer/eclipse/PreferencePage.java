@@ -31,8 +31,6 @@ public class PreferencePage extends FieldEditorPreferencePage
   public final static String USE_BACK = "USE_BACK";
   public final static String PAIRS_MATCH = "PAIRS_MATCH";
 
-  public static final String RELOAD_HRC = "RELOAD_HRC";
-  
   Combo hrdSets;
   Vector hrdSetsList;
   
