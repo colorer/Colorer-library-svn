@@ -1,8 +1,0 @@
-ModelGroup tasks
-ModelGroup types
-
-SimpleType boolean = string
-SimpleType string = string
-SimpleType restring = string
-SimpleType rplstring = string
-                         
