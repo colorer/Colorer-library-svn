@@ -3,6 +3,8 @@
 
 #include<common/Exception.h>
 
+#define DEFAULT_VECTOR_CAPACITY 20
+
 /** Ordered sequence of objects.
     Each object has it's ordinal position.
     @ingroup common
@@ -84,7 +86,7 @@ private:
 template<class T> Vector<T>::Vector(){
   csize = 0;
   incrementSize = 0;
-  asize = 10;
+  asize = DEFAULT_VECTOR_CAPACITY;
   array = new T[asize];
 };
 template<class T> Vector<T>::Vector(int initsize, int incrementSize){

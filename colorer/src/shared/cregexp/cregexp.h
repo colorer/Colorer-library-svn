@@ -140,6 +140,8 @@ public:
   SRegInfo();
   ~SRegInfo();
 
+#include<common/MemoryOperator.h>
+
   EOps op;
   union{
     EMetaSymbols metaSymbol;

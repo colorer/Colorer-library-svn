@@ -123,22 +123,22 @@ bool Exp = false, ExpSign = true, sign = false;
           flt += r;
           i--;
         };
-        if (ExpSign)  Numr = Numr*pow(10,flt);
-        if (!ExpSign) Numr = Numr/pow(10,flt);
+        if (ExpSign)  Numr = Numr * pow(10.0, flt);
+        if (!ExpSign) Numr = Numr / pow(10.0, flt);
       };
       *res = Numr;
       break;
   };
   if (sign) *res = -(*res);
   return true;
-};
+}
 
 bool UnicodeTools::getNumber(const String *pstr, int *res){
   double dres;
   if (getNumber(pstr, &dres)) *res = (int)dres;
   else return false;
   return true;
-};
+}
 
 int UnicodeTools::getNumber(const String *pstr)
 {
@@ -150,7 +150,7 @@ int r = 1, num = 0;
     r *= 10;
   };
   return num;
-};
+}
 
 int UnicodeTools::getHex(wchar c)
 {
@@ -159,7 +159,7 @@ int UnicodeTools::getHex(wchar c)
   if (c >= 'a'-'0' && c <= 'f'-'0') c -= 0x27;
   else if (c > 9) return -1;
   return c;
-};
+}
 int UnicodeTools::getHexNumber(const String *pstr)
 {
 int r = 0, num = 0;
@@ -171,7 +171,7 @@ int r = 0, num = 0;
     r += 4;
   };
   return num;
-};
+}
 
 DString *UnicodeTools::getCurlyContent(const String &str, int pos)
 {
@@ -189,7 +189,7 @@ DString *UnicodeTools::getCurlyContent(const String &str, int pos)
   };
   if (lpos == str.length()) return null;
   return new DString(&str, pos+1, lpos-pos-1);
-};
+}
 wchar UnicodeTools::getEscapedChar(const String &str, int pos, int &retPos)
 {
 retPos = pos;
@@ -215,7 +215,7 @@ retPos = pos;
     return str[pos+1];
   };
   return str[pos];
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

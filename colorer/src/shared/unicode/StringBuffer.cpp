@@ -6,7 +6,7 @@ StringBuffer::StringBuffer():SString("")
   delete[] wstr;
   alloc = 20;
   wstr = new wchar[alloc];
-};
+}
 StringBuffer::StringBuffer(const char *string, int s, int l)
               :SString(DString(string, s, l)){ alloc = length(); };
 StringBuffer::StringBuffer(const String *cstring, int s, int l)
@@ -18,7 +18,7 @@ StringBuffer &StringBuffer::append(const String *string){
   if (string == null)
     return append(DString("null"));
   return append(*string);
-};
+}
 StringBuffer &StringBuffer::append(const String &string){
   int len_new = len+string.length();
   if (alloc > len_new){
@@ -36,22 +36,22 @@ StringBuffer &StringBuffer::append(const String &string){
   };
   len = len_new;
   return *this;
-};
+}
 StringBuffer &StringBuffer::operator+(const String &string){
   return append(string);
-};
+}
 StringBuffer &StringBuffer::operator+(const String *string){
   return append(string);
-};
+}
 StringBuffer &StringBuffer::operator+(const char *string){
   return append(DString(string));
-};
+}
 StringBuffer &StringBuffer::operator+=(const char *string){
   return operator+(DString(string));
-};
+}
 StringBuffer &StringBuffer::operator+=(const String &string){
   return operator+(string);
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -5,7 +5,8 @@
 
 /**
     Hashtable template class, stores nullable objects.
-    Assumes, that stored objects can be nullable.
+    Assumes, that stored objects can be nullable (so, null object
+    is returned, when no match is found).
     @todo Normal enumerator.
     @ingroup common
 */
@@ -24,6 +25,24 @@ public:
       if (he->hash == hash && *he->key == *key)
         return he->value;
     return null;
+  };
+
+  /** Starts internal hashtable enumeration procedure.
+      Returns first element value in a sequence, or null, if hashtable is empty.
+  */
+  T enumerate() const{
+    T * retval = enumerate_int();
+    if (retval == null) return null;
+    return *retval;
+  };
+  /** Returns the next value object with current enumeration procedure.
+      If hashtable state is changed, and next() call occurs, exception
+      is thrown.
+  */
+  T next() const{
+    T *retval = next_int();
+    if (retval == null) return null;
+    return *retval;
   };
 };
 
@@ -48,6 +67,20 @@ public:
       if (he->hash == hash && *he->key == *key)
         return &he->value;
     return null;
+  };
+
+  /** Starts internal hashtable enumeration procedure.
+      Returns first element value in a sequence, or null, if hashtable is empty
+  */
+  T *enumerate() const{
+    return enumerate_int();
+  };
+  /** Returns the next value object with current enumeration procedure.
+      If hashtable state is changed, and next() call occurs, exception
+      is thrown.
+  */
+  T *next() const{
+    return next_int();
   };
 };
 

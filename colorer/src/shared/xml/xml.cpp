@@ -4,7 +4,7 @@
 #include<unicode/UnicodeTools.h>
 #include<xml/xmlstrings.h>
 
-CXmlEl::CXmlEl()
+CXmlEl::CXmlEl() : params(5, 0.9)
 {
   eparent= 0;
   enext  = 0;
@@ -21,9 +21,8 @@ CXmlEl::~CXmlEl()
   if (echild) echild->destroyLevel();
   if (name) delete name;
   if (content) delete content;
-  for (int i = 0; i < params.size(); i++){
-    delete params.get(params.key(i));
-  };
+  for (const String* st = params.enumerate(); st != null; st = params.next())
+    delete st;
 };
 CXmlEl *CXmlEl::createNew(ElType type, CXmlEl *parent, CXmlEl *after)
 {
@@ -240,7 +239,7 @@ const String* CXmlEl::getParamName(int no)
 };
 const String* CXmlEl::getParamValue(int no)
 {
-  return params.get(params.key(no));;
+  return params.get(params.key(no));
 };
 const String* CXmlEl::getParamValue(const String &par)
 {

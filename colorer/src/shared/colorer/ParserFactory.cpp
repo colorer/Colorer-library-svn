@@ -193,12 +193,12 @@ ParserFactory::ParserFactory(const String *catalogPath){
   init();
 };
 ParserFactory::~ParserFactory(){
-  for(int i1 = 0; i1 < hrdLocations.size(); i1++){
-    const String *hrd_class = hrdLocations.key(i1);
-    Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.get(hrd_class);
-    for(int i2 = 0; hrdClass != null && i2 < hrdClass->size(); i2++){
-      const String *hrd_name = hrdClass->key(i2);
-      delete hrdClass->get(hrd_name);
+  for(Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.enumerate();
+      hrdClass;
+      hrdClass = hrdLocations.next())
+  {
+    for(Vector<const String*> *hrd_name = hrdClass->enumerate();hrd_name ; hrd_name = hrdClass->next()){
+      delete hrd_name;
     };
     delete hrdClass;
   };
@@ -213,7 +213,7 @@ const char *ParserFactory::getVersion(){
 #ifndef __TIMESTAMP__
 #define __TIMESTAMP__ "01.09.2003"
 #endif
-  return "Colorer-take5 Library b2 "__TIMESTAMP__;
+  return "Colorer-take5 Library beta2 "__TIMESTAMP__;
 };
 
 

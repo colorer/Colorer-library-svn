@@ -45,16 +45,17 @@ friend class FileTypeImpl;
   Vector<FileTypeImpl*>    fileTypeVector;
 
   Hashtable<SchemeImpl*>   schemeHash;
-  Vector<SchemeImpl*>      schemeVector;
 
   Vector<const Region*>    regionNamesVector;
   Hashtable<const Region*> regionNamesHash;
-  Hashtable<String*>      schemeEntitiesHash;
+  Hashtable<String*>       schemeEntitiesHash;
 
   String *versionName;
 
   FileTypeImpl *parseType;
   InputSource *curInputSource;
+  bool structureChanged;
+  bool updateStarted;
 
   ErrorHandler *errorHandler;
 

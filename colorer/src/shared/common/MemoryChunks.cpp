@@ -1,51 +1,45 @@
-#ifndef _COLORER_CHARACTERCLASS_H_
-#define _COLORER_CHARACTERCLASS_H_
+#include<common/Vector.h>
+#include<memory.h>
+#include<stdio.h>
 
-#include<unicode/String.h>
-#include<unicode/BitArray.h>
+#include<common/MemoryChunks.h>
 
-/** Character classes store implementation.
-    - CharacterClass allows to store enumerations of characters in compact
-      form (two-stage bit-field tables).
-    - This class supports logical operations over it's instances,
-      char category -> enumeration conversion.
-    @ingroup unicode
-*/
-class CharacterClass{
-private:
-  BitArray **infoIndex;
-public:
-  CharacterClass();
-  CharacterClass(const CharacterClass &);
-  ~CharacterClass();
+static Vector<byte*> chunks;
+static byte *currentChunk = null;
+static int currentChunkAlloc = 0;
 
-  static CharacterClass *createCharClass(const String &ccs, int pos, int *retPos);
+static int allocCount = 0;
 
-  void addChar(wchar);
-  void clearChar(wchar);
-  void addRange(wchar, wchar);
-  void clearRange(wchar, wchar);
-
-  void addCategory(ECharCategory);
-  void addCategory(const char *);
-  void addCategory(const String &);
-  void clearCategory(ECharCategory);
-  void clearCategory(const char *);
-  void clearCategory(const String &);
-
-  void addClass(const CharacterClass &);
-  void clearClass(const CharacterClass &);
-  void intersectClass(const CharacterClass &);
-  void clear();
-  void fill();
-
-  bool inClass(wchar c) const;
-
-#include<common/MemoryOperator.h>
-
+void *chunk_alloc(size_t size){
+  if (size >= CHUNK_SIZE+4) throw Exception(DString("Too big memory request"));
+  if (chunks.size() == 0){
+    currentChunk = new byte[CHUNK_SIZE];
+    chunks.addElement(currentChunk);
+    currentChunkAlloc = 0;
+  };
+  size = ((size-1) | 0x3) + 1; // 4-byte aling
+  if (currentChunkAlloc+size > CHUNK_SIZE){
+    currentChunk = new byte[CHUNK_SIZE];
+    chunks.addElement(currentChunk);
+    currentChunkAlloc = 0;
+  };
+  void *retVal = (void*)(currentChunk+currentChunkAlloc);
+  currentChunkAlloc += size;
+  allocCount++;
+//  printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks.size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
+  return retVal;
 };
 
-#endif
+void chunk_free(void *ptr){
+  if (ptr == null) return;
+  allocCount--;
+  if (allocCount == 0){
+    for(int idx = 0; idx < chunks.size(); idx++)
+      delete[] chunks.elementAt(idx);
+  };
+//  printf("cf:%d, ", allocCount);
+};
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

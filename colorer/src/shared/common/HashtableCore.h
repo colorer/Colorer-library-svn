@@ -5,7 +5,7 @@
 #include<unicode/String.h>
 
 #define DEFAULT_LOAD_FACTOR 0.75
-#define DEFAULT_CAPACITY    10
+#define DEFAULT_CAPACITY    20
 
 /**
     Hashtable Entry.
@@ -49,17 +49,31 @@ public:
 
   /** Puts object into hashtable.
       If such a key already exists, object is replaced.
+      @return true, if object is replaced, false, if new object is inserted.
   */
   bool put(const String *key, T value);
   /** Removes object from hashtable.
       If there is no record, associated with @c key, method does nothing.
+      @return true, if object was removed
   */
   bool remove(const String *key);
 
   /** Enumerates hashtable keys.
-      @param index Internal index. Have to be less, than #size()
+      @param index Internal index. Must be less, than #size()
   */
   const String *key(int index) const;
+
+  /** Starts internal hashtable enumeration procedure on keys.
+      @return First element's key value in a sequence, or null, if hashtable is empty.
+  */
+  String *enumerateKey() const;
+  /** Returns the next key object with current enumeration procedure.
+      If hashtable state is changed, and nextkey() call occurs, exception
+      is thrown. Note, that internal enumeration counter is one for
+      keys and values methods - so, each of them iterates one sequence.
+  */
+  String *nextkey() const;
+
   /** Clears hashtable.
       Deletes all objects, stored in it.
   */
@@ -68,16 +82,24 @@ public:
   */
   int size() const;
 protected:
+
+  T *enumerate_int() const;
+  T *next_int() const;
+
   int csize;
   int capacity;
   double loadFactor;
   HashEntry<T> **bucket;
   void rehash();
   HashtableCore &operator=(HashtableCore&);
+  mutable HashEntry<T> *enum_he;
+  mutable int enum_bno;
 };
 
 template<class T> HashtableCore<T>::HashtableCore(){
   csize = 0;
+  enum_he = null;
+  enum_bno = -1;
   capacity = DEFAULT_CAPACITY;
   loadFactor = DEFAULT_LOAD_FACTOR;
   bucket = new HashEntry<T>*[capacity];
@@ -98,6 +120,7 @@ template<class T> HashtableCore<T>::~HashtableCore(){
 };
 
 template<class T> bool HashtableCore<T>::put(const String *key, T value){
+  enum_bno = -1;
   int hash = key->hashCode();
   int bno = (hash&0x7FFFFFFF) % capacity;
   for(HashEntry<T> *he = bucket[bno]; he != null; he = he->next){
@@ -125,6 +148,7 @@ template<class T> bool HashtableCore<T>::remove(const String *key){
         he_prev->next = he->next;
       delete he;
       csize--;
+      enum_bno = -1;
       return true;
     };
     he_prev = he;
@@ -149,7 +173,7 @@ template<class T> void HashtableCore<T>::rehash(){
   csize = new_csize;
   capacity = new_capacity;
   bucket = new_bucket;
-};
+}
 
 template<class T> const String* HashtableCore<T>::key(int index) const{
   if (index < 0 || index > csize) return null;
@@ -159,7 +183,67 @@ template<class T> const String* HashtableCore<T>::key(int index) const{
       index--;
     };
   return null;
-};
+}
+
+
+template<class T> T *HashtableCore<T>::enumerate_int() const{
+  for(enum_bno = 0; enum_bno < capacity; enum_bno++){
+    if(bucket[enum_bno] != null){
+      enum_he = bucket[enum_bno];
+      return &enum_he->value;
+    };
+  };
+  enum_he = null;
+  enum_bno = -2;
+  return null;
+}
+template<class T> String *HashtableCore<T>::enumerateKey() const{
+  for(enum_bno = 0; enum_bno < capacity; enum_bno++){
+    if(bucket[enum_bno] != null){
+      enum_he = bucket[enum_bno];
+      return enum_he->key;
+    };
+  };
+  enum_he = null;
+  enum_bno = -2;
+  return null;
+}
+
+template<class T> T *HashtableCore<T>::next_int() const{
+  if (enum_bno == -1)
+    throw Exception(DString("Hashtable enumeration fault - object change detected"));
+  if (enum_bno < 0) // == -2
+    throw Exception(DString("Hashtable enumeration fault - end was reached"));
+  if (enum_he != null && enum_he->next != null){
+    enum_he = enum_he->next;
+    return &enum_he->value;
+  };
+  for(enum_bno = enum_bno+1; enum_bno < capacity; enum_bno++)
+    if(bucket[enum_bno] != null){
+      enum_he = bucket[enum_bno];
+      return &enum_he->value;
+    };
+  enum_bno = -2;
+  return null;
+}
+template<class T> String *HashtableCore<T>::nextkey() const{
+  if (enum_bno == -1)
+    throw Exception(DString("Hashtable enumeration fault - object change detected"));
+  if (enum_bno < 0) // == -2
+    throw Exception(DString("Hashtable enumeration fault - end was reached"));
+  if (enum_he != null && enum_he->next != null){
+    enum_he = enum_he->next;
+    return enum_he->key;
+  };
+  for(enum_bno = enum_bno+1; enum_bno < capacity; enum_bno++){
+    if(bucket[enum_bno] != null){
+      enum_he = bucket[enum_bno];
+      return enum_he->key;
+    };
+  };
+  enum_bno = -2;
+  return null;
+}
 
 template<class T> void HashtableCore<T>::clear(){
   for(int i = 0; i < capacity; i++){
@@ -169,6 +253,7 @@ template<class T> void HashtableCore<T>::clear(){
       delete thisent;
     };
     bucket[i] = null;
+    enum_bno = -1;
   };
   csize = 0;
 };

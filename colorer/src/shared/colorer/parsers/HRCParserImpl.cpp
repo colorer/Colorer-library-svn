@@ -5,11 +5,13 @@
 
 
 HRCParserImpl::HRCParserImpl()
- : fileTypeHash(200), fileTypeVector(150), schemeHash(600), schemeVector(600, 100)
+ : fileTypeHash(200), fileTypeVector(150), schemeHash(4000),
+   regionNamesHash(1000), regionNamesVector(1000, 200)
 {
   parseType = null;
   versionName = null;
   errorHandler = null;
+  updateStarted = false;
 };
 
 HRCParserImpl::~HRCParserImpl()
@@ -17,14 +19,14 @@ HRCParserImpl::~HRCParserImpl()
   int idx;
   for(idx = 0; idx < fileTypeVector.size(); idx++)
     delete fileTypeVector.elementAt(idx);
-  for(idx = 0; idx < schemeVector.size(); idx++)
-    delete schemeVector.elementAt(idx);
+  for(SchemeImpl *scheme = schemeHash.enumerate(); scheme; scheme = schemeHash.next()){
+    delete scheme;
+  };
   for(idx = 0; idx < regionNamesVector.size(); idx++)
     delete regionNamesVector.elementAt(idx);
-
-  for(idx = 0; idx < schemeEntitiesHash.size(); idx++)
-    delete schemeEntitiesHash.get(schemeEntitiesHash.key(idx));
-
+  for(String *se = schemeEntitiesHash.enumerate(); se; se = schemeEntitiesHash.next()){
+    delete se;
+  };
   delete versionName;
 };
 
@@ -39,28 +41,39 @@ void HRCParserImpl::loadSource(InputSource *is){
     if (errorHandler != null) errorHandler->error(StringBuffer("Can't open stream for type without location attribute"));
     return;
   };
+  const byte *data = is->openStream();
   try{
-    const byte *data = is->openStream();
     parseHRC(data, is->length());
-    is->closeStream();
-  }catch(InputSourceException &e){
-    if (errorHandler != null) errorHandler->fatalError(StringBuffer("Can't open source stream: ")+e.getMessage());
-  }catch(HRCParserException &e){
-    if (errorHandler != null) errorHandler->fatalError(StringBuffer(e.getMessage())+" ["+is->getLocation()+"]");
-    is->closeStream();
   }catch(Exception &e){
-    if (errorHandler != null) errorHandler->fatalError(StringBuffer(e.getMessage())+" ["+is->getLocation()+"]");
     is->closeStream();
-  }catch(...){
-    if (errorHandler != null) errorHandler->fatalError(StringBuffer("Unknown exception while parsing: ")+(is!=null?is->getLocation():null));
+    throw e;
   };
   curInputSource = istemp;
 };
 
 void HRCParserImpl::loadFileType(FileType *filetype){
   if (filetype == null) return;
-  if (((FileTypeImpl*)filetype)->typeLoaded) return;
-  loadSource(((FileTypeImpl*)filetype)->inputSource);
+
+  FileTypeImpl *thisType = (FileTypeImpl*)filetype;
+  if (thisType->typeLoaded || thisType->loadBroken) return;
+
+  try{
+
+    loadSource(thisType->inputSource);
+
+  }catch(InputSourceException &e){
+    if (errorHandler != null) errorHandler->fatalError(StringBuffer("Can't open source stream: ")+e.getMessage());
+    thisType->loadBroken = true;
+  }catch(HRCParserException &e){
+    if (errorHandler != null) errorHandler->fatalError(StringBuffer(e.getMessage())+" ["+thisType->inputSource->getLocation()+"]");
+    thisType->loadBroken = true;
+  }catch(Exception &e){
+    if (errorHandler != null) errorHandler->fatalError(StringBuffer(e.getMessage())+" ["+thisType->inputSource->getLocation()+"]");
+    thisType->loadBroken = true;
+  }catch(...){
+    if (errorHandler != null) errorHandler->fatalError(StringBuffer("Unknown exception while loading ")+thisType->inputSource->getLocation());
+    thisType->loadBroken = true;
+  };
 };
 
 
@@ -136,6 +149,10 @@ void HRCParserImpl::parseHRC(const byte *data, int len)
       addPrototype(elem);
       continue;
     };
+    if (*elem->getName() == "package"){
+      addPrototype(elem);
+      continue;
+    };
     if (*elem->getName() == "type"){
       addType(elem);
       continue;
@@ -164,7 +181,7 @@ void HRCParserImpl::addPrototype(CXmlEl *elem)
   type->name = new SString(typeName);
   type->description = new SString(typeDescription);
   if (typeGroup != null) type->group = new SString(typeGroup);
-//  bool autoLoad = false;
+  if (*elem->getName() == "package") type->isPackage = true;
 
   for(CXmlEl *content = elem->child(); content != null; content = content->next()){
     if (*content->getName() == "location"){
@@ -263,7 +280,7 @@ void HRCParserImpl::addType(CXmlEl *elem)
       String *qname2 = qualifyForeignName(regionParent, QNT_DEFINE, true);
       if (regionNamesHash.get(qname1) != null){
         if (errorHandler != null) errorHandler->warning(StringBuffer("Duplicate region '") + qname1 + "' definition in type '"+parseType->getName()+"'");
-        continue;
+        continue;//
       };
 
       const Region *region = new Region(qname1, regionDescr, getRegion(qname2), regionNamesVector.size());
@@ -335,10 +352,8 @@ void HRCParserImpl::addScheme(CXmlEl *elem)
       if (errorHandler != null) errorHandler->warning(StringBuffer("unknown access type in scheme '")+scheme->schemeName+"'");
     };
   };
-  addSchemeNodes(scheme, elem->child());
   schemeHash.put(scheme->schemeName, scheme);
-  schemeVector.addElement(scheme);
-//  if (contextHandler != null) contextHandler->startScheme(scheme->schemeName, elem);
+  addSchemeNodes(scheme, elem->child());
 };
 
 void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, CXmlEl *elem)
@@ -569,48 +584,54 @@ static char rg_tmpl[0x10] = "region";
 
 void HRCParserImpl::updateLinks()
 {
-  for(int si = 0; si < schemeVector.size(); si++){
-    SchemeImpl *scheme = schemeVector.elementAt(si);
-    if (!scheme->fileType->loadDone) continue;
-    FileTypeImpl *old_parseType = parseType;
-    parseType = scheme->fileType;
-    for (int sni = 0; sni < scheme->nodes.size(); sni++){
-      SchemeNode *snode = scheme->nodes.elementAt(sni);
-      if (snode->schemeName != null && (snode->type == SNT_SCHEME || snode->type == SNT_INHERIT) && snode->scheme == null){
-        SString tmpName(snode->schemeName); // recursive name change!
-        String *schemeName = qualifyForeignName(&tmpName, QNT_SCHEME, true);
-        if (snode->scheme != null){
-          delete schemeName;
-          continue; // already was here
-        };
-        if (schemeName != null){
-          snode->scheme = schemeHash.get(schemeName);
+  structureChanged = true;
+  if (updateStarted) return;
+  updateStarted = true;
+  while(structureChanged){
+    structureChanged = false;
+    for(SchemeImpl *scheme = schemeHash.enumerate(); scheme != null; scheme = schemeHash.next()){
+      if (!scheme->fileType->loadDone) continue;
+      FileTypeImpl *old_parseType = parseType;
+      parseType = scheme->fileType;
+      for (int sni = 0; sni < scheme->nodes.size(); sni++){
+        SchemeNode *snode = scheme->nodes.elementAt(sni);
+        if (snode->schemeName != null && (snode->type == SNT_SCHEME || snode->type == SNT_INHERIT) && snode->scheme == null){
+          String *schemeName = qualifyForeignName(snode->schemeName, QNT_SCHEME, true);
+          if (schemeName != null){
+            snode->scheme = schemeHash.get(schemeName);
+          }else{
+            if (errorHandler != null) errorHandler->error(StringBuffer("cannot resolve scheme name '")+snode->schemeName+"' in scheme '"+scheme->schemeName+"'");
+          };
           delete snode->schemeName;
-          snode->schemeName = schemeName;
-        }else{
-          if (errorHandler != null) errorHandler->error(StringBuffer("cannot resolve scheme name '")+snode->schemeName+"' in scheme '"+scheme->schemeName+"'");
+          snode->schemeName = null; //!!!schemeName;
+        };
+        if (snode->type == SNT_INHERIT){
+          for(int vti = 0; vti < snode->virtualEntryVector.size(); vti++){
+            VirtualEntry *vt = snode->virtualEntryVector.elementAt(vti);
+            if (vt->virtScheme == null && vt->virtSchemeName != null){
+              String *vsn = qualifyForeignName(vt->virtSchemeName, QNT_SCHEME, true);
+              if (vsn) vt->virtScheme = schemeHash.get(vsn);
+              if (!vsn) if (errorHandler != null) errorHandler->error(StringBuffer("cannot virtualize scheme '")+vt->virtSchemeName+"' in scheme '"+scheme->schemeName+"'");
+              delete vsn;
+              delete vt->virtSchemeName;
+              vt->virtSchemeName = null;
+            };
+            if (vt->substScheme == null && vt->substSchemeName != null){
+              String *vsn = qualifyForeignName(vt->substSchemeName, QNT_SCHEME, true);
+              if (vsn) vt->substScheme = schemeHash.get(vsn);
+              else if (errorHandler != null) errorHandler->error(StringBuffer("cannot virtualize using subst-scheme scheme '")+vt->substSchemeName+"' in scheme '"+scheme->schemeName+"'");
+              delete vsn;
+              delete vt->substSchemeName;
+              vt->substSchemeName = null;
+            };
+          };
         };
       };
-      if (snode->type == SNT_INHERIT){
-        for(int vti = 0; vti < snode->virtualEntryVector.size(); vti++){
-          VirtualEntry *vt = snode->virtualEntryVector.elementAt(vti);
-          if (vt->virtScheme == null){
-            String *vsn = qualifyForeignName(vt->virtSchemeName, QNT_SCHEME, true);
-            if (vsn) vt->virtScheme = schemeHash.get(vsn);
-            if (!vsn) if (errorHandler != null) errorHandler->error(StringBuffer("cannot virtualize scheme '")+vt->virtSchemeName+"' in scheme '"+scheme->schemeName+"'");
-            delete vsn;
-          };
-          if (vt->substScheme == null){
-            String *vsn = qualifyForeignName(vt->substSchemeName, QNT_SCHEME, true);
-            if (vsn) vt->substScheme = schemeHash.get(vsn);
-            else if (errorHandler != null) errorHandler->error(StringBuffer("cannot virtualize using subst-scheme scheme '")+vt->substSchemeName+"' in scheme '"+scheme->schemeName+"'");
-            delete vsn;
-          };
-        };
-      };
+      parseType = old_parseType;
+      if (structureChanged) break;
     };
-    parseType = old_parseType;
   };
+  updateStarted = false;
 };
 
 

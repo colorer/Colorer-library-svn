@@ -90,7 +90,7 @@ void KeywordList::substrIndex(){
 
 
 
-SchemeNode::SchemeNode(){
+SchemeNode::SchemeNode() : virtualEntryVector(5){
   type = SNT_EMPTY;
   schemeName = null;
   scheme = null;
