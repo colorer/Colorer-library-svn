@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * Simple test routine, used to test Colorer library working.
- * 
+ *
  * @author irusskih
  *
  */
@@ -19,7 +19,7 @@ public static void main(String[] arr){
   /* Initial parser factory is created from one of the predefined locations
    * It is used to created low-level parse objects and to associate them with
    * data files (HRC, HRD)
-   */ 
+   */
   ParserFactory pf = new ParserFactory();
 
   /*
@@ -43,9 +43,9 @@ public static void main(String[] arr){
    * Enumerating all language types, available in the current HRC database,
    * compiling and loading them into our editor object
    */
-  for(Enumeration e = pf.enumerateFileTypes(); e.hasMoreElements();){
-    String type = (String)e.nextElement();
-    System.out.println("loading: "+type);
+  for(Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
+    FileType type = (FileType)e.nextElement();
+    System.out.println("loading: " + type);
     be.setFileType(type);
   };
 

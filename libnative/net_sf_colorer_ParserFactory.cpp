@@ -30,6 +30,7 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, j
   JParserFactory *jpf = (JParserFactory*)iptr;
   if (jpf == null) return;
   env->DeleteGlobalRef(jpf->jHRCParser);
+  delete jpf->jhp;
   delete jpf;
 };
 

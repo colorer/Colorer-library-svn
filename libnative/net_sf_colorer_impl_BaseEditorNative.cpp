@@ -86,27 +86,31 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionCompac
 }
 
 
-JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setFileType(JNIEnv *env, jobject obj, jlong iptr, jstring typeName)
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setFileType(JNIEnv *env, jobject obj, jlong iptr, jobject filetype)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  be->setFileType(JString(env, typeName));
+  jclass cFileType = env->FindClass("net/sf/colorer/FileType");
+  jfieldID id_iptr = env->GetFieldID(cFileType, "iptr", "J");
+  FileType *ft = (FileType*)env->GetLongField(filetype, id_iptr);
+  be->setFileType(ft);
 }
 
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileType(JNIEnv *env, jobject obj, jlong iptr, jstring filename)
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileType(JNIEnv *env, jobject obj, jlong iptr, jstring filename)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->chooseFileType(&JString(env, filename));
   FileType *filetype = be->getFileType();
-  const String *ftname = filetype->getName();
-  return env->NewString(ftname->getWChars(), ftname->length());
+  jobject jft = be->pf->jhp->getFileType(env, filetype);
+  return jft;
 }
 
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType(JNIEnv *env, jobject obj, jlong iptr)
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  FileType *ft = be->getFileType();
-  if (ft == null) return null;
-  return env->NewString(ft->getName()->getWChars(), ft->getName()->length());
+  FileType *filetype = be->getFileType();
+  if (filetype == null) return null;
+  jobject jft = be->pf->jhp->getFileType(env, filetype);
+  return jft;
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper(JNIEnv *env, jobject obj, jlong iptr, jstring cls, jstring name)

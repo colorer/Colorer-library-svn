@@ -3,7 +3,7 @@ package net.sf.colorer.eclipse.editors;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import net.sf.colorer.ParserFactory;
+import net.sf.colorer.*;
 import net.sf.colorer.eclipse.EclipsecolorerPlugin;
 import net.sf.colorer.eclipse.HRCMessages;
 import net.sf.colorer.eclipse.ImageStore;
@@ -62,21 +62,21 @@ public class ColorerActionContributor extends TextEditorActionContributor
     }
   }
 
-	class UpdateAction extends Action {
-	public UpdateAction(String label) {
-	        super(label);
-	    }
-	    public void run() {
-	        if (activeEditor != null && activeEditor instanceof ColorerEditor){
-	            EclipsecolorerPlugin.getDefault().reloadParserFactory();
-	        }
-	    }
-	}
+  class UpdateAction extends Action {
+    public UpdateAction(String label) {
+      super(label);
+    }
+    public void run() {
+      if (activeEditor != null && activeEditor instanceof ColorerEditor){
+        EclipsecolorerPlugin.getDefault().reloadParserFactory();
+      }
+    }
+  }
 
   class FileTypeActionMenu extends Action implements IMenuCreator{
     class FileTypeAction extends Action{
-      String ftype;
-      FileTypeAction(String type, String label){ super(label); ftype = type; }
+      FileType ftype;
+      FileTypeAction(FileType type){ super(type.getDescription()); ftype = type; }
       public void run(){
         if (activeEditor != null && activeEditor instanceof ColorerEditor){
           ((ColorerEditor)activeEditor).setFileType(ftype);
@@ -91,43 +91,43 @@ public class ColorerActionContributor extends TextEditorActionContributor
     public void run() {
       ((ColorerEditor)activeEditor).chooseFileType();
     };
-    
+
     Menu getMenuTree(Hashtable h, Menu root, String groupname){
-			Menu mgroup = (Menu)h.get(groupname);
-			String origname = groupname;
-			if (mgroup == null){
-			  int idx = groupname.lastIndexOf('.');
-			  if (idx != -1){
-			  	root = getMenuTree(h, root, groupname.substring(0, idx));
-			  	groupname = groupname.substring(idx+1, groupname.length());
-			  }
-			  MenuItem mitem = new MenuItem(root, SWT.CASCADE);
-			  mitem.setText(HRCMessages.getString(origname, groupname));
-			  mgroup = new Menu(mitem);
-			  h.put(origname, mgroup);
-			  mitem.setMenu(mgroup);
-				mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
-			}
-			return mgroup;
+      Menu mgroup = (Menu)h.get(groupname);
+      String origname = groupname;
+      if (mgroup == null){
+        int idx = groupname.lastIndexOf('.');
+        if (idx != -1){
+          root = getMenuTree(h, root, groupname.substring(0, idx));
+          groupname = groupname.substring(idx+1, groupname.length());
+        }
+        MenuItem mitem = new MenuItem(root, SWT.CASCADE);
+        mitem.setText(HRCMessages.getString(origname, groupname));
+        mgroup = new Menu(mitem);
+        h.put(origname, mgroup);
+        mitem.setMenu(mgroup);
+        mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
+      }
+      return mgroup;
     }
-    
+
     public Menu getMenu(Control parent){
       if (filetypeList != null) filetypeList.dispose();
       filetypeList = new Menu(parent);
       ActionContributionItem item;
       ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
       Hashtable groups = new Hashtable();
-      for(Enumeration e = pf.enumerateFileTypes(); e.hasMoreElements();){
-        String ftype = (String)e.nextElement();
-        String ftgroup = pf.getFileTypeGroup(ftype);
-        String ftdescription = pf.getFileTypeDescription(ftype);
+      for(Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
+        FileType ftype = (FileType)e.nextElement();
+        //String ftgroup = pf.getFileTypeGroup(ftype);
+        //String ftdescription = pf.getFileTypeDescription(ftype);
 
-        Menu mgroup = getMenuTree(groups, filetypeList, ftgroup);
-        FileTypeAction ft_action = new FileTypeAction(ftype, ftdescription);
+        Menu mgroup = getMenuTree(groups, filetypeList, ftype.getGroup());
+        FileTypeAction ft_action = new FileTypeAction(ftype);
         if (((ColorerEditor)activeEditor).getFileType().equals(ftype)){
           mgroup.getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
-		      if (mgroup.getParentItem().getParent().getParentItem() != null)
-		        mgroup.getParentItem().getParent().getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
+          if (mgroup.getParentItem().getParent().getParentItem() != null)
+            mgroup.getParentItem().getParent().getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
           ft_action.setImageDescriptor(ImageStore.EDITOR_CUR_FILETYPE);
         }
         item = new ActionContributionItem(ft_action);

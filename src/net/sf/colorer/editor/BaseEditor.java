@@ -14,12 +14,14 @@ public interface BaseEditor {
   */
   void setRegionCompact(boolean compact);
 
-  /** Changes used file type*/
-  void setFileType(String typename);
+  /** Changes used file type */
+  public void setFileType(FileType typeName);
+
   /** Chooses filetype according to the filename and first line of text */
-  String chooseFileType(String fname);
+  public FileType chooseFileType(String fname);
+
   /** Returns Currently selected file type */
-  String getFileType();
+  public FileType getFileType();
 
   /** Specifies number of lines, for which parser
       would be able to run continual processing without
@@ -30,7 +32,7 @@ public interface BaseEditor {
   void setBackParse(int backParse);
 
   /** Installs specified RegionMapper. */
-  void setRegionMapper(String cls, String name);
+  public void setRegionMapper(String cls, String name);
 
   /** Adds specified RegionHandler object into the parse process.
    * @param filter If not null, handler would be activated only if
@@ -44,11 +46,11 @@ public interface BaseEditor {
   void removeRegionHandler(RegionHandler rh);
 
   /** Current Background Region (def:Text) */
-  RegionDefine getBackground();
+  public RegionDefine getBackground();
   /** Current Vertical Rule (def:VertCross) */
-  RegionDefine getVertCross();
+  public RegionDefine getVertCross();
   /** Current Horizontal Rule (def:HorzCross) */
-  RegionDefine getHorzCross();
+  public RegionDefine getHorzCross();
 
   /** Searches and creates pair match object.
       Returned object can be used later in the pair search methods.
@@ -66,7 +68,7 @@ public interface BaseEditor {
   /** Searches pair match in currently visible text.
       @param pm Unmatched pair match
   */
-  void searchLocalPair(PairMatch pm);
+  public void searchLocalPair(PairMatch pm);
 
   /** Searches pair match in all available text, possibly,
       making additional processing.

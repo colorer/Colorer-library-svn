@@ -34,30 +34,6 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getVersion
 
 /*
  * Class:     net_sf_colorer_ParserFactory
- * Method:    enumerateFileTypes
- * Signature: (JI)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateFileTypes
-  (JNIEnv *, jobject, jlong, jint);
-
-/*
- * Class:     net_sf_colorer_ParserFactory
- * Method:    getFileTypeDescription
- * Signature: (JLjava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeDescription
-  (JNIEnv *, jobject, jlong, jstring);
-
-/*
- * Class:     net_sf_colorer_ParserFactory
- * Method:    getFileTypeGroup
- * Signature: (JLjava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeGroup
-  (JNIEnv *, jobject, jlong, jstring);
-
-/*
- * Class:     net_sf_colorer_ParserFactory
  * Method:    enumerateHRDClasses
  * Signature: (JI)Ljava/lang/String;
  */

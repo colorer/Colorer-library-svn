@@ -27,12 +27,12 @@ public final static int HLS_OUTLINE = 2;
 public final static int HLS_OUTLINE2 = 3;
 
 private ColorManager cm;
-   
+
 ParserFactory pf = null;
 BaseEditor baseEditor = null;
 StyledText text = null;
 boolean fullBackground = false;
-  
+
 boolean vertCross = false;
 boolean horzCross = false;
 RegionDefine vertCrossColor = null;
@@ -47,32 +47,32 @@ boolean pairsHighlighting = true;
 boolean backParserDelay = false;
 
 InternalHandler ml = new InternalHandler();
-  
+
   /**
    * Common TextColorer creation constructor.
    * Creates TextColorer object, which is to be attached to the StyledText widget.
-   * 
+   *
    * @param pf Parser factory, used to create all coloring text parsers.
    * @param cm Color Manager, used to store cached color objects
   */
   public TextColorer(ParserFactory pf, ColorManager cm){
     this.pf = pf;
     this.cm = cm;
-    
+
     setFullBackground(false);
     setCross(false, false);
 
     baseEditor = new BaseEditorNative(pf, new LineSource(){
       public String getLine(int lno){
         if (text.getContent().getLineCount() <= lno) return null;
-        String line = text.getContent().getLine(lno);       
+        String line = text.getContent().getLine(lno);
         return line;
       }
     });
     baseEditor.setRegionCompact(true);
   }
 
-  /** 
+  /**
    * Installs this highlighter into the specified StyledText object.
    * Client can manually call detach() method, then wants to destroy this object.
    */
@@ -95,7 +95,7 @@ InternalHandler ml = new InternalHandler();
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.addSelectionListener(ml);
     updateViewport();
-    
+
     new Thread(){
       public void run(){
         //setPriority(Thread.NORM_PRIORITY-1);
@@ -118,14 +118,14 @@ InternalHandler ml = new InternalHandler();
               //System.out.println(System.currentTimeMillis());
               baseEditor.idleJob(80);
               //redrawFrom(text.getLineAtOffset(text.getCaretOffset()));
-            } 
+            }
           });
         };
       };
     }.start();
   }
 
-  /** 
+  /**
    *  Removes this object from the corresponding StyledText widget.
    *  Object can't be used after this call, until another attach.
    *  This method is called automatically, when StyledText widget is disposed
@@ -147,30 +147,30 @@ InternalHandler ml = new InternalHandler();
     if (sb != null) sb.removeSelectionListener(ml);
     baseEditor = null;
   }
-  
+
   /**
    * Selects and installs coloring style (filetype) according
    * to filename string and current first line of text.
    * @param filename File name to be used to autodetect filetype
    */
-  public String chooseFileType(String filename){
+  public FileType chooseFileType(String filename){
     return baseEditor.chooseFileType(filename);
   }
-  
+
   /**
    * Selects and installs specified file type.
    * @param typename Name or description of HRC filetype.
    */
-  public void setFileType(String typename){
-  	baseEditor.setFileType(typename);
+  public void setFileType(FileType typename){
+    baseEditor.setFileType(typename);
   }
   /**
    * Returns currently used file type.
    */
-  public String getFileType(){
+  public FileType getFileType(){
     return baseEditor.getFileType();
   }
-  
+
   /**
    * Changes style/coloring scheme into the specified.
    * @param name Name of color scheme (HRD name).
@@ -195,7 +195,7 @@ InternalHandler ml = new InternalHandler();
       System.out.println("font!");
     };
     */
-    setCross(vertCross, horzCross);      
+    setCross(vertCross, horzCross);
   };
 
   /**
@@ -219,7 +219,7 @@ InternalHandler ml = new InternalHandler();
     if (horzCross) horzCrossColor = baseEditor.getHorzCross();
     if (vertCross) vertCrossColor = baseEditor.getVertCross();
   }
-  
+
   /** Paint paired constructions or not.
    * @param paint Paint Matched pairs or not.
    * @param style One of TextColorer.HLS_XOR, TextColorer.HLS_OUTLINE or TextColorer.HLS_OUTLINE2
@@ -336,7 +336,7 @@ InternalHandler ml = new InternalHandler();
     redrawFrom(lno);
     stateChanged();
   }
-  
+
   void updateViewport(){
     baseEditor.lineCountEvent(text.getLineCount());
     int start = 0;
@@ -349,7 +349,7 @@ InternalHandler ml = new InternalHandler();
     int end = start + text.getClientArea().height / text.getLineHeight();
     baseEditor.visibleTextEvent(start, end-start+2);
   }
-  
+
   void pairDraw(GC gc, StyledRegion sr, int start, int end) {
     if (start > text.getCharCount() || end > text.getCharCount()) return;
     if (gc != null) {
@@ -360,7 +360,7 @@ InternalHandler ml = new InternalHandler();
           int resultColor = sr.fore ^ cm.getColor(text.getBackground());
           if (text.getLineAtOffset(text.getCaretOffset()) == text.getLineAtOffset(start) &&
               horzCross && horzCrossColor != null && ((StyledRegion)horzCrossColor).bback)
-		        resultColor = sr.fore ^ ((StyledRegion)horzCrossColor).back;
+                resultColor = sr.fore ^ ((StyledRegion)horzCrossColor).back;
           Color color = cm.getColor(sr.bfore, resultColor);
           gc.setBackground(color);
           gc.setXORMode(true);
@@ -469,11 +469,11 @@ InternalHandler ml = new InternalHandler();
       LineRegion[] lr = baseEditor.getLineRegions(lno);
       for(int idx = 0;idx < lr.length; idx++){
         StyledRegion rdef = (StyledRegion)lr[idx].rdef;
-        if (lr[idx].end == -1 && rdef != null) 
+        if (lr[idx].end == -1 && rdef != null)
           e.lineBackground = cm.getColor(rdef.bback, rdef.back);
       }
     }
-   
+
     public void paintControl(PaintEvent e) {
       stateChanged();
       if (!pairsHighlighting) return;
