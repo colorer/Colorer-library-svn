@@ -45,10 +45,17 @@ public:
     return cur_prior;
   };
 protected:
+  /// is prototype component loaded
   bool protoLoaded;
+  /// is type component loaded
   bool typeLoaded;
+  /// is type references fully resolved
   bool loadDone;
+  /// is initial type load failed
+  bool loadBroken;
+
   String *name, *group, *description;
+  bool isPackage;
   HRCParserImpl *hrcParser;
   SchemeImpl *baseScheme;
   SchemeAccessType accessType;
@@ -60,7 +67,8 @@ protected:
 
   FileTypeImpl(HRCParserImpl *hrcParser){
     this->hrcParser = hrcParser;
-    protoLoaded = typeLoaded = loadDone = false;
+    protoLoaded = typeLoaded = loadDone = loadBroken = false;
+    isPackage = false;
     name = group = description = null;
     baseScheme = null;
     inputSource = null;
@@ -73,10 +81,10 @@ protected:
     int idx;
     for (idx = 0; idx < chooserVector.size(); idx++)
       delete chooserVector.elementAt(idx);
-    for (idx = 0; idx < parametersHash.size(); idx++)
-      delete parametersHash.get(parametersHash.key(idx));
     for (idx = 0; idx < importVector.size(); idx++)
       delete importVector.elementAt(idx);
+    for (String *s = parametersHash.enumerate(); s!=null; s = parametersHash.next())
+      delete s;
   };
 };
 #endif

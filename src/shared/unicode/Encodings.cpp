@@ -6,7 +6,7 @@ UnsupportedEncodingException::UnsupportedEncodingException(){};
 UnsupportedEncodingException::UnsupportedEncodingException(const String& msg){
   message = new StringBuffer("UnsupportedEncodingException: ");
   message->append(msg);
-};
+}
 
 const int Encodings::ENC_UTF8_BOM    = 0xBFBBEF;
 const int Encodings::ENC_UTF16_BOM   = 0xFEFF;
@@ -32,15 +32,15 @@ static int bomArraySize[5] = { 3, 2, 2, 4, 4 };
 byte* Encodings::getEncodingBOM(int encoding){
   if (encoding >= -1 || encoding < -6) throw UnsupportedEncodingException(DString("getEncodingBOM was called for bad encoding"));
   return bomArray[-encoding-2];
-};
+}
 
 int Encodings::getEncodingBOMSize(int encoding){
   if (encoding >= -1 || encoding < -6) throw UnsupportedEncodingException(DString("getEncodingBOM was called for bad encoding"));
   return bomArraySize[-encoding-2];
-};
+}
 int Encodings::isMultibyteEncoding(int encoding){
   return (encoding < -1);
-};
+}
 
 int Encodings::getEncodingIndex(const char *enc){
   if (!enc) return -1;
@@ -49,23 +49,23 @@ int Encodings::getEncodingIndex(const char *enc){
     return arr_idxEncodings[i].pos;
   };
   return -1;
-};
+}
 const char* Encodings::getEncodingName(int enc){
   if (enc >= encNamesNum || enc < -6 || enc == -1) return null;
   for(int i = 0; i < encAliasesNum; i++)
     if (arr_idxEncodings[i].pos == enc)
       return arr_idxEncodings[i].name;
   return null;
-};
+}
 int Encodings::getEncodingNamesNum(){
   return encNamesNum;
-};
+}
 int Encodings::getDefaultEncodingIndex(){
   return defEncodingIdx;
-};
+}
 const char *Encodings::getDefaultEncodingName(){
   return defEncoding;
-};
+}
 
 int Encodings::toBytes(int encoding, wchar wc, byte *dest){
   if (encoding < -6 || encoding == -1 || encoding >= encNamesNum)
@@ -128,17 +128,17 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
   };
   throw UnsupportedEncodingException(SString(encoding));
   return 0;
-};
+}
 
 // no checks for encoding index validness!!!!
 char Encodings::toChar(int eidx, wchar c){
 //  if (eidx < 0 || eidx >= encNamesNum) throw UnsupportedEncodingException(SString(eidx));
   return TO_CHAR(eidx, c);
-};
+}
 wchar Encodings::toWChar(int eidx, char c){
 //  if (eidx < 0 || eidx >= encNamesNum) throw UnsupportedEncodingException(SString(eidx));
   return TO_WCHAR(eidx, c);
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -9,11 +9,11 @@
 CharacterClass::CharacterClass(){
   infoIndex = new BitArray*[256];
   memset(infoIndex, 0, 256*sizeof(*infoIndex));
-};
+}
 CharacterClass::~CharacterClass(){
   clear();
   delete[] infoIndex;
-};
+}
 /**
   Creates CharacterClass object from regexp character class syntax.
   Extensions (comparing to Perl):
@@ -21,7 +21,7 @@ CharacterClass::~CharacterClass(){
 */
 CharacterClass *CharacterClass::createCharClass(const String &ccs, int pos, int *retPos)
 {
-CharacterClass *cc = new CharacterClass;
+CharacterClass *cc = new CharacterClass();
 CharacterClass cc_temp;
 bool inverse = false;
 wchar prev_char = BAD_WCHAR;
@@ -167,7 +167,7 @@ wchar prev_char = BAD_WCHAR;
   };
   delete cc;
   return null;
-};
+}
 
 void CharacterClass::addChar(wchar c){
   BitArray *tablePos = infoIndex[c>>8];
@@ -176,24 +176,24 @@ void CharacterClass::addChar(wchar c){
     infoIndex[c>>8] = tablePos;
   };
   tablePos->setBit(c&0xFF);
-};
+}
 void CharacterClass::clearChar(wchar c){
   BitArray *tablePos = infoIndex[c>>8];
   if (!tablePos) return;
   tablePos->clearBit(c&0xFF);
-};
+}
 void CharacterClass::addRange(wchar s, wchar e){
   for(int ti = s>>8; ti <= e>>8; ti++){
     if (!infoIndex[ti]) infoIndex[ti] = new BitArray();
     infoIndex[ti]->addRange((ti == s>>8)?s&0xFF:0, (ti == e>>8)?e&0xFF:0xFF);
   };
-};
+}
 void CharacterClass::clearRange(wchar s, wchar e){
   for(int ti = s>>8; ti <= e>>8; ti++){
     if (!infoIndex[ti]) infoIndex[ti] = new BitArray();
     infoIndex[ti]->clearRange(ti == s>>8?s&0xFF:0, ti == e>>8?e&0xFF:0xFF);
   };
-};
+}
 
 void CharacterClass::addCategory(ECharCategory cat){
   if (!cat || cat >= CHAR_CATEGORY_LAST) return;
@@ -207,17 +207,17 @@ void CharacterClass::addCategory(ECharCategory cat){
     };
     tablePos->addBitArray((char*)(arr_idxCharCategory+pos), 8*4);
   };
-};
+}
 void CharacterClass::addCategory(const String &cat){
   for(int pos = 0; pos < ARRAY_SIZE(char_category_names); pos++){
     int ci;
     for(ci = 0; ci < cat.length() && cat[ci] == char_category_names[pos][ci]; ci++);
     if (ci == cat.length()) addCategory(ECharCategory(pos));
   };
-};
+}
 void CharacterClass::addCategory(const char *cat){
   addCategory(DString(cat));
-};
+}
 
 void CharacterClass::clearCategory(ECharCategory cat){
   if (!cat || cat >= CHAR_CATEGORY_LAST) return;
@@ -231,36 +231,36 @@ void CharacterClass::clearCategory(ECharCategory cat){
     };
     tablePos->clearBitArray((char*)(arr_idxCharCategory+pos), 8*4);
   };
-};
+}
 void CharacterClass::clearCategory(const String &cat){
   for(int pos = 0; pos < ARRAY_SIZE(char_category_names); pos++){
     int ci;
     for(ci = 0; ci < cat.length() && cat[ci] == char_category_names[pos][ci]; ci++);
     if (ci == cat.length()) clearCategory(ECharCategory(pos));
   };
-};
+}
 void CharacterClass::clearCategory(const char *cat){
   clearCategory(DString(cat));
-};
+}
 
 void CharacterClass::addClass(const CharacterClass &cclass){
   for(int p = 0; p < 256; p++){
     if (!infoIndex[p]) infoIndex[p] = new BitArray();
     infoIndex[p]->addBitArray(cclass.infoIndex[p]);
   };
-};
+}
 void CharacterClass::intersectClass(const CharacterClass &cclass){
   for(int p = 0; p < 256; p++){
     if (infoIndex[p])
       infoIndex[p]->intersectBitArray(cclass.infoIndex[p]);
   };
-};
+}
 
 void CharacterClass::clearClass(const CharacterClass &cclass){
   for(int p = 0; p < 256; p++)
     if (infoIndex[p])
       infoIndex[p]->clearBitArray(cclass.infoIndex[p]);
-};
+}
 
 void CharacterClass::clear(){
   for(int i = 0; i < 256; i++)
@@ -268,19 +268,19 @@ void CharacterClass::clear(){
       delete infoIndex[i];
       infoIndex[i] = 0;
     };
-};
+}
 void CharacterClass::fill(){
   for(int i = 0; i < 256; i++){
     if (!infoIndex[i]) infoIndex[i] = new BitArray();
     infoIndex[i]->addRange(0,0xFF);
   };
-};
+}
 
 bool CharacterClass::inClass(wchar c) const{
   BitArray *tablePos = infoIndex[c>>8];
   if (!tablePos) return false;
   return tablePos->getBit(c&0xFF);
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

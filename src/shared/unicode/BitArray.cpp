@@ -6,25 +6,25 @@ BitArray::BitArray(int size){
   array = 0;
   this->size = size/8/4+1;
   if (size % 8 == 0 && size/8%4 == 0) this->size--;
-};
+}
 BitArray::~BitArray(){
   if (array && int(array) != 1) delete[] array;
-};
+}
 void BitArray::createArray(bool set){
   array = new int[size];
   memset(array, set?0xFF:0, size*sizeof(int));
-};
+}
 
 void BitArray::setBit(int pos){
   if (!array) createArray();
   if (int(array) == 1) return;
   array[pos>>5] |= 1 << (pos&0x1f);
-};
+}
 void BitArray::clearBit(int pos){
   if (!array) return;
   if (int(array) == 1) createArray(true);
   array[pos>>5] &= ~(1 << (pos&0x1f));
-};
+}
 void BitArray::addRange(int s, int e){
   if (int(array) == 1) return;
   if (!array) createArray();
@@ -46,7 +46,7 @@ void BitArray::addRange(int s, int e){
     delete[] array;
     array = (int*)1;
   };
-};
+}
 void BitArray::clearRange(int s, int e){
   if (!array) return;
   if (int(array) == 1) createArray(true);
@@ -68,7 +68,7 @@ void BitArray::clearRange(int s, int e){
     delete[] array;
     array = (int*)0;
   };
-};
+}
 void BitArray::addBitArray(BitArray* ba){
   if (int(array) == 1) return;
   if (!ba || !ba->array) return;
@@ -79,7 +79,7 @@ void BitArray::addBitArray(BitArray* ba){
   if (!array) createArray();
   for(int i = 0; i < size; i++)
     array[i] |= ba->array[i];
-};
+}
 void BitArray::clearBitArray(BitArray* ba){
   if (array == null) return;
   if (ba == null || ba->array == null) return;
@@ -91,7 +91,7 @@ void BitArray::clearBitArray(BitArray* ba){
   };
   for(int i = 0; i < size; i++)
     array[i] &= ~ba->array[i];
-};
+}
 void BitArray::intersectBitArray(BitArray*ba){
   if (array == null) return;
   if (ba == null || ba->array == null){
@@ -103,7 +103,7 @@ void BitArray::intersectBitArray(BitArray*ba){
   if (int(array) == 1) createArray(true);
   for(int i = 0; i < size; i++)
     array[i] &= ba->array[i];
-};
+}
 
 
 void BitArray::addBitArray(char *bits, int size){
@@ -111,19 +111,19 @@ void BitArray::addBitArray(char *bits, int size){
   if (!array) createArray();
   for(int i = 0; i < size && i < this->size*4;i++)
     ((char*)array)[i] |= bits[i];
-};
+}
 void BitArray::clearBitArray(char *bits, int size){
   if (!array) return;
   if (int(array) == 1) createArray(true);
   for(int i = 0; i < size && i < this->size*4;i++)
     ((char*)array)[i] &= ~bits[i];
-};
+}
 
 bool BitArray::getBit(int pos){
   if (!array) return false;
   if (int(array) == 1) return true;
   return (array[pos>>5] & (1<<(pos&0x1f))) != 0;
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

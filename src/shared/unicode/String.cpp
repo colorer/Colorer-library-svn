@@ -19,7 +19,8 @@ unsigned int i1, i2;
     c2++;
   };
   return 0;
-};
+}
+
 extern "C" int strnicmp(const char *c1, const char *c2, unsigned int len)
 {
 unsigned int i1, i2;
@@ -35,7 +36,7 @@ unsigned int i1, i2;
     len--;
   };
   return 0;
-};
+}
 #endif
 
 
@@ -43,65 +44,74 @@ StringIndexOutOfBoundsException::StringIndexOutOfBoundsException(){};
 StringIndexOutOfBoundsException::StringIndexOutOfBoundsException(const String& msg){
   message = new StringBuffer("StringIndexOutOfBoundsException: ");
   message->append(msg);
-};
+}
 
 
 
 String::String(){
   ret_char_val = null;
   ret_wchar_val = null;
-};
+}
 String::~String(){
   delete[] ret_char_val;
   delete[] ret_wchar_val;
-};
+}
 
 bool String::operator==(const String &str) const{
   if (str.length() != length()) return false;
   for(int i = 0; i < str.length(); i++)
     if (str[i] != (*this)[i]) return false;
   return true;
-};
+}
+
 bool String::operator==(const char *str) const{
   return operator==(DString(str));
-};
+}
+
 bool String::operator!=(const String &str) const{
   if (str.length() != this->length()) return true;
   for(int i = 0; i < str.length(); i++)
     if (str[i] != (*this)[i]) return true;
   return false;
-};
+}
+
 bool String::operator!=(const char *str) const{
   return operator!=(DString(str));
-};
+}
+
 bool String::operator>(const String &str) const{
   for(int i = 0; i < str.length() && i < this->length(); i++)
     if ((*this)[i] < str[i] ) return false;
   if (this->length() > str.length()) return true;
   return false;
-};
+}
+
 bool String::operator<(const String &str) const{
   for(int i = 0; i < str.length() && i < this->length(); i++){
     if ((*this)[i] > str[i]) return false;
   };
   if (this->length() < str.length()) return true;
   return false;
-};
+}
+
 
 bool String::equals(const String *str) const{
   if (str == null) return false;
   return this->operator==(*str);
-};
+}
+
 bool String::equals(const char *str) const{
   return operator==(DString(str));
-};
+}
+
 bool String::equalsIgnoreCase(const String *str) const{
   if (!str || str->length() != length()) return false;
   for(int i = 0; i < str->length(); i++)
     if (Character::toLowerCase((*str)[i]) != Character::toLowerCase((*this)[i]) ||
         Character::toUpperCase((*str)[i]) != Character::toUpperCase((*this)[i])) return false;
   return true;
-};
+}
+
 int String::compareTo(const String &str) const{
   int i;
   int sl = str.length();
@@ -114,7 +124,8 @@ int String::compareTo(const String &str) const{
   if (i < sl) return -1;
   if (i < l) return 1;
   return 0;
-};
+}
+
 int String::compareToIgnoreCase(const String &str) const{
   int i;
   int sl = str.length();
@@ -127,14 +138,16 @@ int String::compareToIgnoreCase(const String &str) const{
   if (i < sl) return -1;
   if (i < l) return 1;
   return 0;
-};
+}
+
 
 int String::getWChars(wchar **chars) const{
   *chars = new wchar[length()];
   for(int i = 0; i < length(); i++)
     (*chars)[i] = (*this)[i];
   return length();
-};
+}
+
 int String::getBytes(byte **bytes, int encoding) const{
   if (encoding == -1) encoding = Encodings::getDefaultEncodingIndex();
   int len = length();
@@ -161,22 +174,26 @@ int String::getBytes(byte **bytes, int encoding) const{
   };
   (*bytes)[cpos] = 0;
   return cpos;
-};
+}
+
 const char *String::getChars(int encoding) const{
   delete ret_char_val;
   getBytes((byte**)&ret_char_val, encoding);
   return ret_char_val;
-};
+}
+
 const wchar *String::getWChars() const{
   delete ret_wchar_val;
   getWChars((wchar**)&ret_wchar_val);
   return ret_wchar_val;
-};
+}
+
 int String::indexOf(wchar wc, int pos) const{
   int idx;
   for(idx = pos; idx < this->length() && (*this)[idx] != wc; idx++);
   return idx == this->length()?-1:idx;
-};
+}
+
 int String::indexOf(const String &str, int pos) const{
   int thislen = this->length();
   int strlen = str.length();
@@ -188,7 +205,8 @@ int String::indexOf(const String &str, int pos) const{
     if (idx2 == strlen) return idx;
   };
   return -1;
-};
+}
+
 int String::indexOfIgnoreCase(const String &str, int pos) const{
   int thislen = this->length();
   int strlen = str.length();
@@ -200,14 +218,16 @@ int String::indexOfIgnoreCase(const String &str, int pos) const{
     if (idx2 == strlen) return idx;
   };
   return -1;
-};
+}
+
 int String::lastIndexOf(wchar wc, int pos) const{
   int idx;
   if (pos == -1) pos = this->length();
   if (pos > this->length()) return -1;
   for(idx = pos; idx > 0 && (*this)[idx-1] != wc; idx--);
   return idx == 0?-1:idx-1;
-};
+}
+
 int String::lastIndexOf(const String &str, int pos) const{
   if (pos == -1) pos = this->length();
   int str_len = str.length();
@@ -220,7 +240,8 @@ int String::lastIndexOf(const String &str, int pos) const{
     if (idx2 != -1) return idx-1;
   };
   return -1;
-};
+}
+
 bool String::startsWith(const String &str, int pos) const{
   int thislen = this->length();
   int strlen = str.length();
@@ -229,7 +250,8 @@ bool String::startsWith(const String &str, int pos) const{
     if (str[idx] != (*this)[pos+idx]) return false;
   };
   return true;
-};
+}
+
 String *String::replace(const String &pattern, const String &newstring) const{
   int copypos = 0;
   int epos = 0;
@@ -250,14 +272,14 @@ String *String::replace(const String &pattern, const String &newstring) const{
   };
   if (epos > copypos) newname->append(DString(name, copypos, epos-copypos));
   return newname;
-};
+}
+
 int String::hashCode() const{
   int hc = 0;
   for(int i = 0; i < length(); i++)
     hc = 31 * hc + (*this)[i];
   return hc;
-};
-
+}
 
 /*
 String String::toLowerCase()

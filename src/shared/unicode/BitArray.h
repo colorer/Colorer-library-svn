@@ -37,6 +37,9 @@ public:
   void clearBitArray(char*, int);
   /** Returns bit value at position @c pos. */
   bool getBit(int pos);
+
+#include<common/MemoryOperator.h>
+
 private:
   int *array;
   int size;

@@ -5,9 +5,8 @@
 
 TextHRDMapper::TextHRDMapper(){};
 TextHRDMapper::~TextHRDMapper(){
-  int idx;
-  for(idx = 0; idx < regionDefines.size(); idx++){
-    const TextRegion *rd = TextRegion::cast(regionDefines.get(regionDefines.key(idx)));
+  for(RegionDefine *rdef = regionDefines.enumerate(); rdef; rdef=regionDefines.next()){
+    const TextRegion *rd = TextRegion::cast(rdef);
     delete rd->stext; delete rd->etext;
     delete rd->sback; delete rd->eback;
     delete rd;
@@ -74,10 +73,9 @@ void TextHRDMapper::saveRegionMappings(Writer *writer) const
   writer->write(DString("<?xml version=\"1.0\"?>\n\
 <!DOCTYPE hrd SYSTEM \"../hrd.dtd\">\n\n\
 <hrd>\n"));
-  for(int i = 0; i <= regionDefines.size(); i++){
-
-    const TextRegion *rdef = TextRegion::cast(regionDefines.get(regionDefines.key(i)));
-    writer->write(StringBuffer("  <define name='")+regionDefines.key(i)+"'");
+  for(String *key = regionDefines.enumerateKey(); key; key=regionDefines.nextkey()){
+    const TextRegion *rdef = TextRegion::cast(regionDefines.get(key));
+    writer->write(StringBuffer("  <define name='")+key+"'");
     if (rdef->stext != null) writer->write(StringBuffer(" stext='")+rdef->stext+"'");
     if (rdef->etext != null) writer->write(StringBuffer(" etext='")+rdef->etext+"'");
     if (rdef->sback != null) writer->write(StringBuffer(" sback='")+rdef->sback+"'");

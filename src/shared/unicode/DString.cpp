@@ -14,7 +14,7 @@ DString& DString::operator=(const DString &cstring){
       stream_wstr[wi] = cstring.stream_wstr[wi];
   };
   return *this;
-};
+}
 
 DString::DString(const byte *stream, int size, int def_encoding){
   start = 0;
@@ -106,7 +106,7 @@ DString::DString(const byte *stream, int size, int def_encoding){
   }else if(type == ST_CHAR && encodingIdx == -1){
     encodingIdx = Encodings::getDefaultEncodingIndex();
   };
-};
+}
 
 DString::DString(const char *string, int s, int l, int encoding){
   type = ST_CHAR;
@@ -120,7 +120,7 @@ DString::DString(const char *string, int s, int l, int encoding){
   };
   encodingIdx = encoding;
   if (encodingIdx == -1) encodingIdx = Encodings::getDefaultEncodingIndex();
-};
+}
 DString::DString(const wchar *string, int s, int l){
   type = ST_UTF16;
   wstr = string;
@@ -129,7 +129,7 @@ DString::DString(const wchar *string, int s, int l){
   if (s < 0 || len < -1) throw Exception(DString("bad string constructor parameters"));
   if (len == -1)
     for(len = 0; wstr[len+s]; len++);
-};
+}
 DString::DString(const w4char *string, int s, int l){
   type = ST_UTF32;
   w4str = string;
@@ -138,7 +138,7 @@ DString::DString(const w4char *string, int s, int l){
   if (s < 0 || len < -1) throw Exception(DString("bad string constructor parameters"));
   if (len == -1)
     for(len = 0; w4str[len+s]; len++);
-};
+}
 DString::DString(const String *cstring, int s, int l){
   type = ST_CSTRING;
   cstr = cstring;
@@ -148,7 +148,7 @@ DString::DString(const String *cstring, int s, int l){
     throw Exception(DString("bad string constructor parameters"));
   if (len == -1)
     len = cstring->length() - start;
-};
+}
 DString::DString(const String &cstring, int s, int l){
   type = ST_CSTRING;
   cstr = &cstring;
@@ -158,15 +158,15 @@ DString::DString(const String &cstring, int s, int l){
     throw Exception(DString("bad string constructor parameters"));
   if (len == -1)
     len = cstring.length() - start;
-};
+}
 DString::DString(){
   type = ST_CHAR;
   len = 0;
   start = 0;
-};
+}
 DString::~DString(){
   if (type == ST_UTF8) delete[] stream_wstr;
-};
+}
 
 wchar DString::operator[](int i) const{
   if (start+i >= 0 && i < len) switch(type){
@@ -186,10 +186,10 @@ wchar DString::operator[](int i) const{
       return (wchar)(((w4str[start+i]&0xFF)<<24) + ((w4str[start+i]&0xFF00)<<8) + ((w4str[start+i]&0xFF0000)>>8) + ((w4str[start+i]&0xFF000000)>>24));
   };
   throw StringIndexOutOfBoundsException(SString(i));
-};
+}
 int DString::length() const{
   return len;
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

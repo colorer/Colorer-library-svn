@@ -1,7 +1,7 @@
 ######################
 # cygwin gcc makefile
 
-CPP     = @gcc
+CPP     = gcc
 LINK    = @gcc
 RM      = @rm -f
 obj     = o

@@ -75,6 +75,7 @@ public:
   /** @deprecated For debug purposes only. */
   static int sizeofTables();
 };
+
 #endif
 
 /* ***** BEGIN LICENSE BLOCK *****

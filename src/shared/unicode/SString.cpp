@@ -8,34 +8,34 @@ void SString::construct(const String *cstring, int s, int l){
   wstr = new wchar[l];
   for(len = 0; len < l; len++)
     wstr[len] = (*cstring)[s+len];
-};
+}
 
 SString::SString(const String *cstring, int s, int l){
   construct(cstring, s, l);
-};
+}
 SString::SString(const String &cstring, int s, int l){
   construct(&cstring, s, l);
-};
+}
 SString::SString(char *str, int enc){
   DString ds(str, 0, -1, enc);
   construct(&ds, 0, ds.length());
-};
+}
 SString::SString(int no){
   char text[40];
   sprintf(text, "%d", no);
   construct(&DString(text), 0, -1);
-};
+}
 SString::~SString(){
   if(wstr) delete[] wstr;
-};
+}
 
 wchar SString::operator[](int i) const{
   if (i >= len) throw StringIndexOutOfBoundsException(SString(i));
   return wstr[i];
-};
+}
 int SString::length() const{
   return len;
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

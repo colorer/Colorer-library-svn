@@ -13,7 +13,7 @@ coreobjects = $(unzipobjects) \
               $(obj_output_slash)String.$(obj) $(obj_output_slash)DString.$(obj) $(obj_output_slash)SString.$(obj) $(obj_output_slash)StringBuffer.$(obj) \
               $(obj_output_slash)UnicodeTools.$(obj) $(obj_output_slash)Encodings.$(obj)  \
               \
-              $(obj_output_slash)Exception.$(obj)\
+              $(obj_output_slash)Exception.$(obj) $(obj_output_slash)MemoryChunks.$(obj)\
               \
               $(obj_output_slash)InputSource.$(obj) $(obj_output_slash)FileInputSource.$(obj)\
               $(obj_output_slash)HTTPInputSource.$(obj) $(obj_output_slash)JARInputSource.$(obj)\
@@ -67,6 +67,8 @@ $(obj_output_slash)UnicodeTools.$(obj):
 
 $(obj_output_slash)Exception.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)common/Exception.cpp
+$(obj_output_slash)MemoryChunks.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/MemoryChunks.cpp
 
 $(obj_output_slash)Writer.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)common/io/Writer.cpp

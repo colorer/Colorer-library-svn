@@ -31,9 +31,9 @@ ConsoleTools::~ConsoleTools(){
   delete outputFileName;
   delete inputFileName;
 
-  for(int i = 0; i < docLinkHash->size(); i++){
-    delete docLinkHash->get(docLinkHash->key(i));
-  };
+  for(String*st = docLinkHash->enumerate(); st; st = docLinkHash->next())
+    delete st;
+  delete docLinkHash;
 }
 
 
@@ -97,7 +97,7 @@ void ConsoleTools::setLinkSource(const String &str){
   CXmlEl *linkSourceTree = new CXmlEl();
   linkSourceTree->parse(stream, linkSource->length());
   linkSource->closeStream();
-  
+
   CXmlEl *elem = linkSourceTree;
 
   while(elem = elem->next()){

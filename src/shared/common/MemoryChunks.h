@@ -1,49 +1,10 @@
-#ifndef _COLORER_CHARACTERCLASS_H_
-#define _COLORER_CHARACTERCLASS_H_
+#ifndef _COLORER_MEMORYCHUNKS_
+#define _COLORER_MEMORYCHUNKS_
 
-#include<unicode/String.h>
-#include<unicode/BitArray.h>
+#define CHUNK_SIZE 1024*1024*2
 
-/** Character classes store implementation.
-    - CharacterClass allows to store enumerations of characters in compact
-      form (two-stage bit-field tables).
-    - This class supports logical operations over it's instances,
-      char category -> enumeration conversion.
-    @ingroup unicode
-*/
-class CharacterClass{
-private:
-  BitArray **infoIndex;
-public:
-  CharacterClass();
-  CharacterClass(const CharacterClass &);
-  ~CharacterClass();
-
-  static CharacterClass *createCharClass(const String &ccs, int pos, int *retPos);
-
-  void addChar(wchar);
-  void clearChar(wchar);
-  void addRange(wchar, wchar);
-  void clearRange(wchar, wchar);
-
-  void addCategory(ECharCategory);
-  void addCategory(const char *);
-  void addCategory(const String &);
-  void clearCategory(ECharCategory);
-  void clearCategory(const char *);
-  void clearCategory(const String &);
-
-  void addClass(const CharacterClass &);
-  void clearClass(const CharacterClass &);
-  void intersectClass(const CharacterClass &);
-  void clear();
-  void fill();
-
-  bool inClass(wchar c) const;
-
-#include<common/MemoryOperator.h>
-
-};
+void *chunk_alloc(size_t size);
+void chunk_free(void *ptr);
 
 #endif
 

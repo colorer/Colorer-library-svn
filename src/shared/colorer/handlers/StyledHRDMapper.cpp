@@ -5,9 +5,8 @@
 
 StyledHRDMapper::StyledHRDMapper(){};
 StyledHRDMapper::~StyledHRDMapper(){
-  for(int idx = 0; idx < regionDefines.size(); idx++){
-    delete regionDefines.get(regionDefines.key(idx));
-  };
+  for(RegionDefine *rd = regionDefines.enumerate(); rd;rd = regionDefines.next())
+    delete rd;
 };
 
 void StyledHRDMapper::loadRegionMappings(InputSource *is)
@@ -57,10 +56,10 @@ void StyledHRDMapper::saveRegionMappings(Writer *writer) const
   writer->write(DString("<?xml version=\"1.0\"?>\n\
 <!DOCTYPE hrd SYSTEM \"../hrd.dtd\">\n\n\
 <hrd>\n"));
-  for(int i = 0; i <= regionDefines.size(); i++){
-    const StyledRegion *rdef = StyledRegion::cast(regionDefines.get(regionDefines.key(i)));
+  for(String *key = regionDefines.enumerateKey(); key; key=regionDefines.nextkey()){
+    const StyledRegion *rdef = StyledRegion::cast(regionDefines.get(key));
     char temporary[256];
-    writer->write(StringBuffer("  <define name='")+regionDefines.key(i)+"'");
+    writer->write(StringBuffer("  <define name='")+key+"'");
     if (rdef->bfore){
       sprintf(temporary, " fore=\"#%06x\"", rdef->fore);
       writer->write(DString(temporary));

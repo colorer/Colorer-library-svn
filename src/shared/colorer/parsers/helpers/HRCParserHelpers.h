@@ -36,6 +36,9 @@ public:
   void swapWith(KeywordInfo *kwi);
   KeywordInfo();
   ~KeywordInfo();
+
+#include<common/MemoryOperator.h>
+
 };
 
 /** List of keywords.
@@ -52,6 +55,9 @@ public:
   ~KeywordList();
   void sortList();
   void substrIndex();
+
+#include<common/MemoryOperator.h>
+
 };
 
 /** One entry of 'inherit' element virtualization content.
@@ -71,6 +77,9 @@ public:
     delete virtSchemeName;
     delete substSchemeName;
   };
+
+#include<common/MemoryOperator.h>
+
 };
 
 enum SchemeNodeType { SNT_EMPTY, SNT_RE, SNT_SCHEME, SNT_KEYWORDS, SNT_INHERIT };
@@ -99,6 +108,8 @@ public:
   CRegExp *start, *end;
   bool lowPriority, lowContentPriority;
 
+#include<common/MemoryOperator.h>
+
   SchemeNode();
   ~SchemeNode();
 };
@@ -116,6 +127,9 @@ class SchemeImpl : public Scheme{
 public:
   const String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
+
+#include<common/MemoryOperator.h>
+
 protected:
   String *schemeName;
   Vector<SchemeNode*> nodes;

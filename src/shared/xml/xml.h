@@ -142,6 +142,7 @@ public:
   virtual CXmlEl *fFirst();
   /** Moving in full tree hierarchy */
   virtual CXmlEl *fLast();
+
 protected:
   /** for derived classes */
   virtual bool init();
