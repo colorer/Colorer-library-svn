@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    Pascal/Delphi Syntax
-With help of:
-    Vladimir Tarasov <tsoftgroup@chat.ru>
-    Vadim Lopushansky <NotaBene@dak.uame.com.ua>
-    Timur Safin <timur@lanit.ru> completed Delphi4/5 support
-    Vadim Zenko <vzhome@nm.ru>
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+   <annotation>
+    <documentation>
+       Pascal/Delphi/Delphi.Net Syntax
+    </documentation>
+    <contributors><![CDATA[
+     Vladimir Tarasov <tsoftgroup@chat.ru>
+     Vadim V. Lopushansky <pult@ukr.net>
+     Timur Safin <timur@lanit.ru> completed Delphi4/5 support
+     Vadim Zenko <vzhome@nm.ru>
+    ]]></contributors>
+   </annotation>
+
    <type name="pascal" access="public">
 
       <import type="def"/>
@@ -20,11 +28,13 @@ With help of:
       <region name="pSymb" parent="Symbol"/>
       <region name="pWord" parent="Keyword"/>
       <region name="pWord2" parent="Keyword"/>
+      <region name="pConst" parent="Constant"/>
       <region name="pType" parent="TypeKeyword"/>
+      <region name="pNetUnsafeWord" parent="pWord"/>
+      <region name="pNetUnsafeType" parent="pType"/>
       <region name="pOther" parent="Directive"/>
       <region name="pNumb" parent="Number"/>
       <region name="pGUID" parent="Parameter"/>
-
 
       <scheme name="PasAsm">
 <!-- Comments -->
@@ -57,6 +67,7 @@ With help of:
 <!-- Symbols -->
          <keywords region="pSymb">
             <symb name="="/>
+            <symb name="@"/>
             <symb name="^"/>
             <symb name="+"/>
             <symb name="&lt;"/>
@@ -91,28 +102,33 @@ With help of:
             <word name="in"/>
             <word name="is"/>
             <word name="mod"/>
-            <word name="nil"/>
             <word name="not"/>
             <word name="of"/>
             <word name="or"/>
             <word name="out"/>
             <word name="shl"/>
             <word name="shr"/>
-            <word name="string"/>
             <word name="threadvar"/>
             <word name="var"/>
             <word name="xor"/>
+         </keywords>
+         <keywords ignorecase="yes" region="pConst">
+            <word name="False"/>
+            <word name="True"/>
+            <word name="nil"/>
+            <word name="null"/>
          </keywords>
          <keywords ignorecase="yes" region="pType">
 <!-- Types -->
             <word name="AnsiChar"/>
             <word name="AnsiString"/>
-            <word name="BooleanConstant"/>
+            <word name="Boolean"/>
             <word name="Byte"/>
             <word name="ByteBool"/>
             <word name="Cardinal"/>
             <word name="Comp"/>
             <word name="Currency"/>
+            <word name="DWord"/>
             <word name="Integer"/>
             <word name="LongBool"/>
             <word name="LongInt"/>
@@ -120,9 +136,7 @@ With help of:
             <word name="OleVariant"/>
             <word name="OpenString"/>
             <word name="PAnsiChar"/>
-            <word name="PChar"/>
             <word name="PWideChar"/>
-            <word name="Pointer"/>
             <word name="ShortInt"/>
             <word name="ShortString"/>
             <word name="SmallInt"/>
@@ -139,19 +153,30 @@ With help of:
             <word name="extended"/>
             <word name="int64"/>
             <word name="real"/>
-            <word name="real46"/>
             <word name="single"/>
+            <word name="string"/>
             <word name="text"/>
+            <word name="UINT"/>
          </keywords>
+
+         <!-- .Net  -->
+         <keywords ignorecase="yes" region="pNetUnsafeType">
+            <word name="PChar"/>
+            <word name="Pointer"/>
+            <word name="real48"/>
+         </keywords>
+
       </scheme>
 
       <scheme name="pasProperty">
          <inherit scheme="PasCore"/>
          <keywords ignorecase="yes" region="pWord">
+            <!-- <word name="deprecated"/> -->
             <word name="default"/>
             <word name="implements"/>
             <word name="index"/>
             <word name="nodefault"/>
+            <!-- <word name="platform"/> -->
             <word name="read"/>
             <word name="readonly"/>
             <word name="stored"/>
@@ -169,9 +194,48 @@ With help of:
          </keywords>
       </scheme>
 
+      <!-- class definition keywords -->
+      <scheme name="pasClass">
+         <inherit scheme="pascal"/>
+         <keywords ignorecase="yes" region="pWord">
+
+            <word name="private"/>
+            <word name="protected"/>
+            <word name="public"/>
+            <word name="published"/>
+
+            <word name="dynamic"/>
+            <word name="override"/>
+            <word name="reintroduce"/>
+            <word name="virtual"/>
+
+            <word name="default"/>
+            <word name="message"/>
+
+            <!-- .Net -->
+            <word name="strict"/>
+            <word name="helper"/>
+            <word name="sealed"/>
+            <word name="final"/>
+            <word name="static"/>
+         </keywords>
+      </scheme>
+
+      <scheme name="pasRecord">
+         <inherit scheme="pascalwocase"/>
+         <!-- .Net -->
+         <keywords ignorecase="yes" region="pWord">
+            <word name="private"/>
+            <word name="protected"/>
+            <word name="public"/>
+            <word name="strict"/>
+            <word name="sealed"/>
+         </keywords>
+      </scheme>
+
       <scheme name="pascalwocase">
 <!-- paired -->
-         <block start="/\b(record)\b/i" end="/\b(end)\b/i" scheme="pascalwocase" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
+         <block start="/\b((packed\s+?)??record)\b/i" end="/\b(end)\b/i" scheme="pasRecord" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(begin|package|library|implementation|object)\b/i" end="/\b(end)\b/i" scheme="pascal" region00="pWord2" region01="PairStart" region10="pWord2" region11="PairEnd"/>
 <!--
   VADIM:
@@ -179,7 +243,11 @@ With help of:
   не согласен.
 -->
          <block start="/\=\s*(interface|dispinterface) \s*\M (\(|\/|\{|$)/ix" end="/\b(end)\b/i" scheme="pascal" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(class) \s*\M (\(|\/|\{|$)/ix" end="/\b(end)\b/i" scheme="pascal" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
+         <block start="/\b(class) \s*\M (\(|\/|\{|$)/ix" end="/\b(end)\b/i" scheme="pasClass" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
+
+         <!-- .Net  -->
+         <block start="/\b(class\s+?(sealed|helper)) \s*\M /ix" end="/\b(end)\b/i" scheme="pasClass" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
+
          <block start="/\b(try)\b/i" end="/\b(end)\b/i" scheme="pascal" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(repeat)\b/ix" end="/\b(until)\b/ix" scheme="pascal" region00="pWord2" region10="pWord2" region01="PairStart" region11="PairEnd"/>
          <block start="/\(\*(\$HPPEMIT)\s\'/i" end="/$|\'\s\*\)/" scheme="Comment" region="pComment" region01="pOther"/>
@@ -189,7 +257,9 @@ With help of:
          </inherit>
 
          <block start="/\b(asm)\b/i" end="/(\s|^)(end)/i" scheme="PasAsm" region00="pWord" region10="pWord" region01="PairStart" region12="PairEnd"/>
+
          <block start="/\b(property)\b/i" end="/(;)/" scheme="pasProperty" region01="pWord" region10="pSymb"/>
+
          <block start="/\b(external|exports)\b/i" end="/(;)/i" scheme="pasExport" region01="pWord" region10="pSymb"/>
 <!-- Functions list -->
          <regexp match="/^ \s* \M (class\s+)? (procedure|function|constructor|destructor) \s+ (?{Function}[_\w\.]+)/ix"/>
@@ -197,27 +267,30 @@ With help of:
          <regexp match="/(\.)(\w+)/" region1="pSymb"/>
 <!-- Words -->
          <keywords ignorecase="yes" region="pWord">
-            <word name="absolute"/>
             <word name="abstract"/>
             <word name="asm"/>
             <word name="assembler"/>
             <word name="automated"/>
             <word name="begin" region="Error"/>
+            <word name="break"/>
             <word name="case"/>
             <word name="cdecl"/>
             <word name="class"/>
             <word name="constructor"/>
             <word name="contains"/>
+            <word name="continue"/>
 <!--Word name="default"-->
+            <word name="deprecated"/>
             <word name="destructor"/>
             <word name="dispid"/>
             <word name="dispinterface"/>
             <word name="do"/>
             <word name="downto"/>
-            <word name="dynamic"/>
             <word name="else"/>
             <word name="end" region="Error"/>
             <word name="except"/>
+            <word name="exit"/>
+            <word name="experimental"/> <!-- .Net -->
             <word name="export"/>
             <word name="exports"/>
             <word name="external"/>
@@ -237,26 +310,21 @@ With help of:
             <word name="interrupt"/>
             <word name="label"/>
             <word name="library"/>
-            <word name="message"/>
             <word name="near"/>
             <word name="object"/>
             <word name="on"/>
+            <word name="operator"/> <!-- .Net  -->
             <word name="overload"/>
-            <word name="override"/>
             <word name="package"/>
             <word name="packed"/>
             <word name="pascal"/>
-            <word name="private"/>
+            <word name="platform"/>
             <word name="procedure"/>
             <word name="program"/>
 <!--Word name="property"-->
-            <word name="protected"/>
-            <word name="public"/>
-            <word name="published"/>
             <word name="raise"/>
 <!--Word name="readonly"-->
             <word name="record"/>
-            <word name="reintroduce"/>
             <word name="repeat"/>
             <word name="requires"/>
             <word name="resident"/>
@@ -275,10 +343,13 @@ With help of:
             <word name="unit"/>
             <word name="until"/>
             <word name="uses"/>
-            <word name="virtual"/>
             <word name="while"/>
             <word name="with"/>
 <!--Word name="writeonly"-->
+         </keywords>
+         <!-- .Net -->
+         <keywords ignorecase="yes" region="pNetUnsafeWord">
+            <word name="absolute"/>
          </keywords>
       </scheme>
 
