@@ -15,14 +15,14 @@ include $(shared_path)makefile.colorer.gcc
 include makefile.core
 
 
-LIBINC = 
+LIBINC = -lstdc++
 LIBFLAGS = 
 
 $(obj_output_slash)net_sf_colorer.$(obj):
 	$(CC) -fPIC -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -o $@ -s -O3 -c net_sf_colorer.cpp
 
 $(TARGET): *.cpp *.h $(objs)
-	$(LINK) -bundle -o libnet_sf_colorer.jnilib $(objs)
+	$(LINK) -bundle -o libnet_sf_colorer.jnilib $(objs) $(LIBINC)
 
 clean:
 	$(RM) $(objs)
