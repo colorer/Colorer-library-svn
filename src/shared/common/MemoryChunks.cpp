@@ -7,7 +7,7 @@
 /**
   @ingroup common @{
 */
-#if USE_DL_MALLOC
+#if COLORER_FEATURE_USE_DL_MALLOC
 extern "C"{
   void *dlmalloc(size_t size);
   void dlfree(void *ptr);
