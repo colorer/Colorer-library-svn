@@ -51,7 +51,7 @@
 *
 * If you have these packages, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
     </echo>
     <fail if='fail-on-badpaths'>
