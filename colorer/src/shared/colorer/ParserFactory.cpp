@@ -220,10 +220,10 @@ ParserFactory::~ParserFactory(){
 };
 
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "30.08.2004"
+#define __TIMESTAMP__ "01.12.2004"
 #endif
 const char *ParserFactory::getVersion(){
-  return "Colorer-take5 Library beta3 "__TIMESTAMP__;
+  return "Colorer-take5 Library beta4 "__TIMESTAMP__;
 };
 
 
@@ -268,15 +268,16 @@ HRCParser* ParserFactory::getHRCParser(){
         if (dir != INVALID_HANDLE_VALUE){
           while(true){
             if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)){
+              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+ffd.cFileName), catalogFIS);
               try{
-                InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+ffd.cFileName), catalogFIS);
                 hrcParser->loadSource(dfis);
                 delete dfis;
               }catch(Exception &e){
                 if (fileErrorHandler != null){
-                  fileErrorHandler->fatalError(DString("Can't load hrc: "));
+                  fileErrorHandler->fatalError(StringBuffer("Can't load hrc: ") + dfis->getLocation());
                   fileErrorHandler->fatalError(*e.getMessage());
                 };
+                delete dfis;
               };
             };
             if (FindNextFile(dir, &ffd) == FALSE) break;

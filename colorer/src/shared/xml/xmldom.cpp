@@ -37,6 +37,10 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
   entitiesHash.put(&DString("quot"), new SString("\""));
   entitiesHash.put(&DString("apos"), new SString("\'"));
 
+  if (length == 0){
+    throw ParseException(DString("Empty document"), 0, 0);
+  }
+
   doc = newDocument();
   doc->line = 0;
   doc->pos = 0;
