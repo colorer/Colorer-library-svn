@@ -11,20 +11,24 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta3 library HRC Reference. February 2005</releaseinfo>
+<releaseinfo>Colorer-take5 beta4 library HRC Reference. April 2005</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>19 February 2005</pubdate>
+<pubdate>28??? April 2005</pubdate>
 
 <revhistory>
 <revision>
   <revnumber>take5.beta4</revnumber>
-  <date>19 February 2005</date>
+  <date>28??? April 2005</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
   </revremark>
+</revision>
+<revision>
+  <revnumber>take5.beta4(draft)</revnumber>
+  <date>19 February 2005</date>
 </revision>
 <revision>
   <revnumber>take5.beta3</revnumber>
@@ -502,7 +506,7 @@ Such a behaviour allows you to define overlapped tokens, where next token parse 
 somewere in the middle of the previous. In such a case color definitions occur in the order they are
 parsed.
 </para>
-<section><title>priority</title>
+<section id="priority"><title>priority</title>
 <para>
 Additional selection rules are applied to a usecase, where return occurs from
 an inner scheme to its caller scheme (via <literal>end</literal> tag of the 
@@ -521,7 +525,7 @@ When reviewing nested <literal>block</literal> tags, <literal>priority</literal>
 relates to the inner object's <literal>start</literal> tag.
 </para>
 </section>
-<section><title>content-priority</title>
+<section id="content-priority"><title>content-priority</title>
 <para>
 Often it is required to define a behavior of an element dynamically, depending on
 usage context. With <literal>priority</literal> attribute it is impossible to change
@@ -536,6 +540,34 @@ to change their priority to <literal>low</literal>, no matter the value of their
 particular <literal>priority</literal> attribute. 
 </para>
 </section>
+
+<section id="inner-region"><title>inner-region</title>
+<para>
+While defining scheme context switch there is a possibility to set a default region,
+used for all called scheme content. This region will be used as a "background" for
+all other regions, defined in that scheme.
+It is possible to manage boundaries this region will use while instantiation.
+In a normal case all the scheme's content including its <literal>start</literal>
+and <literal>end</literal> attributes is handled inside of this default region.
+Therefore the region starts where <literal>start</literal> token starts, and
+ends where <literal>end</literal> token ends.
+</para>
+<para>
+Sometimes it is required to change this behaviour and handle <literal>start</literal>
+and <literal>end</literal> tokens (and all the regions they instantiate) outside of
+called scheme default region. This could be achieved with <literal>inner-region</literal>
+attribute with <literal>"yes"</literal> value.
+When defined it tells parser to include start/end regions outside of called scheme,
+and to change called scheme default region boundaries. In this case they start at
+the end of <literal>start</literal> token and ends just before <literal>end</literal>
+token area.
+</para>
+<para>
+Inner region feature could be used to implement special wrapped areas and in general
+can affect special background color treatment.
+</para>
+</section>
+
 </section>
 
 </section>
@@ -937,7 +969,17 @@ version, available on the link above.
 </appendix>
 
 <appendix id='history'><title>History of the changes</title>
-<itemizedlist><title>take5.beta4, 19 February 2005</title>
+
+<itemizedlist><title>take5.beta4, 28??? April 2005</title>
+<listitem><para>
+New <xref linkend="inner-region"/> attribute description.
+</para></listitem>
+<listitem><para>
+Minor HRD schema clarifications.
+</para></listitem>
+</itemizedlist>
+
+<itemizedlist><title>take5.beta4(draft), 19 February 2005</title>
 <listitem><para>
 Clarification of <literal>regexp</literal> and <literal>block</literal> regions usage.
 </para></listitem>
@@ -947,8 +989,8 @@ Clarification of <literal>regexp</literal> and <literal>block</literal> regions 
 <listitem><para>
 "HRC Language Coding Conventions" section was added.
 </para></listitem>
-
 </itemizedlist>
+
 </appendix>
 
 

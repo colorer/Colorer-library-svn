@@ -431,7 +431,25 @@
     <xs:attribute name="scheme" type="QName" use="required"/>
     <xs:attribute name="priority" type="priority" default="normal"/>
     <xs:attribute name="content-priority" type="priority" default="normal"/>
+    <xs:attribute name="inner-region" default="no">
+      <xs:annotation><xs:documentation>
+        Defines if this scheme region to be located inside of
+        the start/end region edges. In this case all the block's regions
+        are located outside of the scheme region.
+        By default ("no" value) scheme region is a background region
+        for all this block's start/end regions, and wraps them all.
+      </xs:documentation></xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="regionXX"/>
+  </xs:complexType>
 
+  <xs:attributeGroup name="regionXX">
     <xs:attribute name="region" type="QName"/>
     <xs:attribute name="region00" type="QName"/>
     <xs:attribute name="region01" type="QName"/>
@@ -465,7 +483,7 @@
     <xs:attribute name="region1d" type="QName"/>
     <xs:attribute name="region1e" type="QName"/>
     <xs:attribute name="region1f" type="QName"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:complexType name="blockInner">
     <xs:annotation><xs:documentation>

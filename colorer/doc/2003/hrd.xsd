@@ -14,11 +14,15 @@
       such as color, style, font and so on...
       Global color layering model can be chosen by the target application,
       depending on its text presentation style, features and requirements.
-      In general, all transparent colors must inherit color value from its
-      parent schema color. If the current schema is a top-level, default
+      In general, all transparent colors inherit color value from its
+      parent schema fill color. If the current schema is a top-level, default
       fore- and back-ground colors are used.
       Default Colors can be stored in HRD, using standard default region
       'def:Text', or can be requested by application from the GUI environment.
+      Note that color properties are requested from Region's parent (in HRC structure)
+      if this region is not declared in HRD. However if region was declared but misses
+      some properties, they are requested from underlying schema fill region which
+      is determined in runtime.
     </xs:documentation></xs:annotation>
     <xs:sequence minOccurs="0" maxOccurs="unbounded">
       <xs:element name="assign" type='assign'/>
