@@ -13,7 +13,7 @@
     </documentation><contributors><![CDATA[
        Zini nAlexei <zn@zn.mldnet.com>
        Kirill Hryapin <kx@mail.ru>
-       Ondrej Brablc <far@brablc.com>
+       Ondrej Brablc <colorer@brablc.com>
     ]]></contributors></annotation>
 
     <import type="def"/>
@@ -307,21 +307,23 @@
       <inherit scheme="DecNumber"/>
       <block start="/&#34;/" end="/&#34;/" scheme="StringCore" region="String"/>
       <block start="/'/" end="/'/" scheme="String2Core" region="String"/>
-        
+
       <!-- Linear Comments-->
       <block start="/\/\/|\#/" end="/$/" scheme="Comment" region="Comment" priority="low"/>
       <block start="/\/\*/" end="/\*\//" scheme="Comment"
                region="Comment" region00="PairStart" region10="PairEnd"/>
-        
+
       <!-- here-doc support // added by kx -->
       <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1);$/" scheme="c:String"
                region="CommentDoc" region00="PairStart" region10="PairEnd" region01="Keyword" region11="Keyword"/>
-        
+
       <!-- variable highlighting // added by kx -->
       <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>
 
       <regexp match="/^\M \s* \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
-      <regexp match="/^\M \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+<!-- Brablc BEGIN -->
+      <regexp match="/^\M \s* (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+<!-- Brablc END -->
 
 
       <inherit scheme="PairedBrackets">
@@ -343,7 +345,7 @@
         <word name="case-folded"/>
         <word name="case-folding"/>
       </keywords>
-        
+
       <keywords region="Keyword" ignorecase="yes">
         <word name="break"/>
         <word name="case"/>
@@ -794,6 +796,9 @@
         <word name="is_float"/>
         <word name="is_int"/>
         <word name="is_link"/>
+<!-- Brablc BEGIN -->
+        <word name="is_numeric"/>
+<!-- Brablc END -->
         <word name="is_object"/>
         <word name="is_readable"/>
         <word name="is_string"/>

@@ -9,7 +9,7 @@
       <annotation><documentation>
         HP OpenVMS DCL (Digital Command-line Language)
       </documentation><contributors><![CDATA[
-        Maintained by Ondrej Brablc <far@brablc.com>
+        Maintained by Ondrej Brablc <colorer@brablc.com>
       ]]></contributors></annotation>
 
       <import type="def"/>
