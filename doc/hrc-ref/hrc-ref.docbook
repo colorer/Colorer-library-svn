@@ -11,15 +11,15 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta3 library HRC Reference. September 2003</releaseinfo>
+<releaseinfo>Colorer-take5 beta3 library HRC Reference. January 2004</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>30 October 2003</pubdate>
+<pubdate>30 January 2004</pubdate>
 
 <revhistory>
 <revision>
   <revnumber>take5.beta3</revnumber>
-  <date>30 October 2003</date>
+  <date>30 January 2003</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
@@ -52,7 +52,7 @@
   </affiliation>
 </author>
 
-<copyright><year>2003</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
+<copyright><year>2003</year><year>2004</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
 
 <abstract><title>Abstract</title>
 <para>This reference defines syntax and semantics of the
@@ -60,7 +60,7 @@
 language, used in Colorer-take5 Library to represent and describe
 syntax and lexical structure of target programming languages.
 This description is used by library to
-parse and colourise text in editors or other systems.
+parse and colorize text in editors or other systems.
 </para>
 </abstract>
 </articleinfo>
@@ -82,7 +82,15 @@ some common language constructions. But later it has grown into
 the much more complex and powerful language, describing complex relations between
 different languages and syntax contexts.
 </para>
-
+<para>
+HRC is based on Regular Expressions, which allows achieving flexible recognition
+of text elements, lexemes and tokens. But Regular Expressions (RE) allows
+recognition of rather limited syntax constructions, and often it is needed to describe
+more complex languages. Because this, HRC language uses special construction, named
+&quot;scheme&quot;, which allows to describe more powerful, recursive class of
+languages (context free) and in combination with RE brings HRC to strong
+declarative language.
+</para>
 </section>
 
 
@@ -119,7 +127,7 @@ element, which contains all other HRC definitions.
 <para>
 Each HRC language object is defined using XML elements and attributes.
 You can find definition of the HRC XML Syntax in <xref linkend='hrcxsd'/>.
-For instance, mostly all HRC definitions starts with the next syntax:
+For instance, mostly all HRC definitions start with the next syntax:
 <programlisting><![CDATA[
 <?xml version="1.0">
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -164,6 +172,27 @@ and in inter-language linkage process.
 
 <section id='core.filetypes.proto'><title>Prototypes</title>
 
+<para>
+Prototypes are declared with <literal>&lt;prototype&gt;</literal> elements.
+For instance:
+
+<programlisting><![CDATA[
+  <prototype name="cpp" group="main" description="C++">
+    <location link="base/cpp.hrc"/>
+    <filename>/\.(cpp|cxx|cc|hpp|h)$/i</filename>
+    <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
+    <firstline>/\#include/</firstline>
+    <firstline>/\#define|\#if/</firstline>
+  </prototype>
+]]>
+</programlisting>
+
+declares "C++" language and it properties. These are language's group,
+description, location of HRC file with language's syntax declaration;
+RE mask, used to identify this type by file name extension,
+and one or more masks, used to identify type by file's first line.
+</para>
+
 <x:schemaref uri="&fileref;" role='prototype'/>
 
 <para>
@@ -188,8 +217,8 @@ instance adds a specified weight to the total language weight.
 
 <para>
 If real language definition is separated from the prototype and placed in
-other resource, it's location is pointed with <literal>location</literal>
-element. Real type loading occurs when the described type would be really
+other resource, it location is pointed with <literal>location</literal>
+element. Real type loading occurs when the described type will be really
 requested.
 <x:schemaref uri="&fileref;" role='location'/>
 </para>
@@ -197,16 +226,30 @@ requested.
 <x:schemaref uri="&fileref;" role='parameters'/>
 </section>
 
+
 <section id='core.filetypes.package'><title>Packages</title>
 <para>
 You can define file type with a special meaning of the internal
 type, which is used by other types and is not visible to user.
 This role is managed by the <literal>package</literal> element:
+
 <x:schemaref uri="&fileref;" role='package'/>
-This element doesn't contains <literal>filename</literal> or
-<literal>firstline</literal> properties because it doesn't directly maps
+
+This element doesn't contain <literal>filename</literal> or
+<literal>firstline</literal> properties because it doesn't directly map
 to any file type or language.
-As for the rest, all it's behaviour is like prototype's one.
+As for the rest, all its behavior is like prototype's one.
+For example:
+
+<programlisting><![CDATA[
+  <package name="def" group="packages" description="core definitions">
+    <location link="default.hrc"/>
+  </package>
+  <package name="regexp" group="packages" description="Regexp common library">
+    <location link="lib/regexp.hrc"/>
+  </package>
+]]>
+</programlisting>
 </para>
 
 </section>
@@ -221,9 +264,9 @@ is stored in basic units, called <literal>type</literal>s.
 <x:schemaref uri="&fileref;" role='type'/>
 
 Normally, each type must be defined in a separate file, which contains
-this type and optionally it's prototype (if there is no this prototype
+this type and optionally its prototype (if there is no this prototype
 definition in the global repository).
-This allows to load each file only once, when required type is really requested
+This allows each file to be loaded only once, when required type is really requested
 by the user.
 
 </para>
@@ -234,13 +277,13 @@ by the user.
 
 <section id='core.namespaces'><title>Namespaces</title>
 <para>
-Each type defines it's own namespace, where different objects are reside.
-In this namespace each object must have unique
-identifier (name), which is used to reference to it from other objects.
-Uniquness is only requeried for objects of the same type. So, you can create
+Each type defines its own namespace, where different objects are resided.
+Each object must have unique identifier (name) in this namespace,
+which is used to reference to it from other objects.
+Uniqueness is only required for objects of the same type. So, you can create
 objects of different types with the same name and there will be no conflicts.
 
-If object must be referenced from the other type, it's fully
+If object must be referenced from the other type, its fully
 qualified name is used in form of <literal>typename:objectname</literal>.
 But often there are too many inter-type links, so it is too tedious to use
 qualified names each time. To eliminate this, HRC language has
@@ -270,50 +313,95 @@ they would be resolved in order of import declarations.
 <para>
 
 Scheme is a common construction in the HRC language, used to express and
-describe syntax of the target languages. Each scheme represents syntax
-context, wich contains different syntax elements, matched in order
+describe syntax of target languages. Each scheme represents syntax
+context, which contains different syntax elements, matched in order
 of text analysis. For example, scheme for "C++" language contains different
 keywords, string and number tokens, comments, and others.
 To describe all the information, required to be highlighted, <literal>region</literal>
 objects are used. Each region defines some syntactically meaningful element.
-This element always has a name and sometimes a reference to it's parent region
+This element always has a name and sometimes a reference to its parent region
 (if exists). When parsed, source text is described in terms of these regions.
-This description contains groups of the regions with specified positions and lenghts.
-</para>
-<para>
-It the next stage of the text processing, each region is associated with some
-handler. For example, handler can assign color and font style information to
-each of the regions, or can produce some operations over these structures.
+This description contains groups of the regions with specified positions and lengths.
 </para>
 
 <para>
+In the next stage of the text processing, each region is associated with some
+handler. For example, a handler can assign color and font style information to
+the each of the regions, or can produce some operations over these structures.
+</para>
 
-Each region is defined with the <literal>region</literal> element:
+<para>
+Each region is defined using a <literal>region</literal> element:
 <x:schemaref uri="&fileref;" role='region'/>
+</para>
 
+<para>
+Scheme is a common construction in the HRC language, which contains
+syntax definition of the described programming language. Each element in
+scheme, while parsing, creates one or more syntax regions which are used to highlight
+parsed text. Resulting parse information contains not only a list of the regions,
+it also contains a recursive scheme tree, which shows overall text structure.
+</para>
 
-
-<x:schemaref uri="&fileref;" role='entity'/>
+<para>
+Each type can define as much schemes, as needed, provided that all of them
+have names, unique in this type scope. Scheme is defined using
+<literal>scheme</literal> element:
 
 <x:schemaref uri="&fileref;" role='scheme'/>
 
+Each type must have one scheme, called "base scheme" - this scheme is
+required to be declared in each type. Only types, declared as
+<literal>package</literal> can ignore this requirement because they are never used
+as top level types.
+Each base scheme must have local (unqualified) name equal to its type name.
+Base scheme in each type is used as an entry point for parse process.
+Sample type definition:
+<programlisting><![CDATA[
+  <type name="somelang">
+    <region name="Keyword" description="This language's keyword"/>
+    <scheme name="somelang">
+      <keywords region="Keyword">
+        <word name='word1'/><word name='word2'/>
+        <word name='otherkeyword'/>
+      </keywords>
+      <regexp match="/other(keyword)?/i" region="Keyword"/>
+    </scheme>
+  </type>
+]]></programlisting>
+
+The next sections will describe different types of syntax elements,
+available in the HRC language.
 </para>
 
 <section id='schemesyntax.keywords'><title>Keyword lists</title>
+<para>
+This common and often used syntax construction describes a list
+of keywords with similar properties.
 <x:schemaref uri="&fileref;" role='keywords'/>
 <x:schemaref uri="&fileref;" role='word'/>
 <x:schemaref uri="&fileref;" role='symb'/>
+</para>
 <para>
+Each element in this list can define its own region assignment or
+derive the global one, defined in <literal>keywords</literal> element.
+Symbols never checks for characters surrounding them, while words only can matches
+if they are surrounded by not-word symbols. These word dividers can be redefined
+using <literal>worddiv</literal> attribute of <literal>keywords</literal> element.
 </para>
 </section>
+
 <section id='schemesyntax.re'><title>Regular Expressions</title>
 <x:schemaref uri="&fileref;" role='regexp'/>
 <para>
 
 see <xref linkend='hrcre'/>
 
+<x:schemaref uri="&fileref;" role='entity'/>
+
 </para>
 </section>
+
 <section id='schemesyntax.contextswitch'><title>Blocked context switch</title>
 <x:schemaref uri="&fileref;" role='block'/>
 
@@ -355,7 +443,7 @@ see <xref linkend='hrcre'/>
 <section id='hrcre.intro'><title>Introduction</title>
 <para>
 All work of the Colorer library and HRC language is based on the regular expressions (RE) usage.
-They allows you to create universal syntax rules of highlighting in HRC.
+They allow you to create universal syntax rules of highlighting in HRC.
 </para>
 
 <para>
@@ -364,7 +452,7 @@ Some of these are simple, and some are special metacharacters.
 All metacharacters (escapes) are divided into three categories: first - zerolength (words boundaries and so on);
 second - class metacharacters (<literal>\w</literal>, <literal>\s</literal> <literal>.</literal>);
 and the third class is operators.
-RE operators could be applied to single character,
+RE operators can be applied to single character,
 to block, enwrapped in brackets or into other operators.
 You can use brackets to group any sequence of characters.
 Regular expressions in HRC Language are like Perl regexp in their base syntax.
@@ -374,8 +462,8 @@ There are some differences in extended operators.
 
 <section id='hrcre.syntax'><title>Syntax</title>
 <para>
-All regexps must be in slashes <literal>/.../</literal>
-After the end slash there could be parameters:
+All regexps must be in slashes <literal>/.../</literal>.
+After the end slash there can be the next parameters:
 
 <itemizedlist>
 <listitem><simpara><literal>i</literal> - ignore symbol case</simpara></listitem>
@@ -428,13 +516,13 @@ Everything, that doesn't looks like metacharacters, means simple character.
 </entry></row>
 </tbody></tgroup></table>
 
-<para>And these could be disabled during regexp module
+<para>And these can be disabled during regexp module
       compilaton as highlight-dependent</para>
 <table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of start start).</entry></row>
 <row><entry><literal>\m</literal></entry><entry>Changes start of regexp</entry></row>
 <row><entry><literal>\M</literal></entry><entry>Changes end of regexp</entry></row>
-<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - requeried brackets pair, name - named bracket.</entry></row>
+<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - required brackets pair, name - named bracket.</entry></row>
 </tbody></tgroup></table>
 
 </section>
@@ -442,7 +530,7 @@ Everything, that doesn't looks like metacharacters, means simple character.
 
 <section id='hrcre.ops'><title>Operators</title>
 <para>
-Operators couldn't be used without some preceding character sequence.
+Operators can't be used without some preceding character sequence.
 Each operator must be applied to the appropriate character,
 metacharacter, or block of their combination (enclosed with brackets).
 </para>

@@ -244,7 +244,7 @@
   <xs:complexType name="firstline">
     <xs:annotation><xs:documentation>
       Defines Regular Expression, used to identify programming language
-      by its starting content. First line could be used, or some small
+      by its starting content. First line can be used, or some small
       part of text. This entry has less default weight against
       filename one.
     </xs:documentation></xs:annotation>
@@ -329,10 +329,10 @@
   <xs:complexType name="entity">
     <xs:annotation><xs:documentation>
       HRC Entity definition. Entities are some form of macro-definitions,
-      they lately could be used in regular expressions syntax to make
-      them more simple. Each entity consists of Entity name and
+      they lately can be used in regular expressions syntax to make
+      them simpler. Each entity consists of Entity name and
       Entity content, which would be substituted into regular expression,
-      when parser finds entity reference. Each entity could be referenced
+      when parser finds entity reference. Each entity can be referenced
       with %entityname; syntax.
     </xs:documentation></xs:annotation>
     <xs:attribute name="name" type="xs:NCName" use="required">
@@ -350,7 +350,7 @@
   <xs:complexType name="region">
     <xs:annotation><xs:documentation>
       Definition of basic syntax region - text range with assigned
-      syntax meaning. Later, these regions could be mapped into
+      syntax meaning. Later, these regions can be mapped into
       required color information and displayed on screen.
     </xs:documentation></xs:annotation>
     <xs:attribute name="name" type="xs:NCName" use="required">
@@ -361,7 +361,7 @@
     <xs:attribute name="parent" type="QName">
       <xs:annotation><xs:documentation>
         Region's parent reference. If region has parent,
-        its properties could be inherited from this one.
+        its properties can be inherited from this one.
         Also region inheritance creates tree structure of HRC Regions.
       </xs:documentation></xs:annotation>
     </xs:attribute>
@@ -392,8 +392,8 @@
 
   <xs:simpleType name="priority">
     <xs:annotation><xs:documentation>
-      Priority of any token could be normal (default) and low.
-      Low-priority tokens can't shift down its called scheme close token.
+      Priority of any token can be normal and low.
+      Low-priority tokens can't shift down its closing token from called scheme.
     </xs:documentation></xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="low"/>
@@ -491,7 +491,7 @@
       Inheritance substitution element.
       While inheriting one scheme in another, it is possible
       to redefine inner inherited schemes with some others.
-      This could be used to change inherited language behavior.
+      This can be used to change inherited language behavior.
     </xs:documentation></xs:annotation>
     <xs:attribute name="scheme" type="QName" use="required">
       <xs:annotation><xs:documentation>
