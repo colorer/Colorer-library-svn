@@ -49,7 +49,7 @@
 *     MathML :  ${mathml-xsd}
 * If you have these files, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
 </echo>
 <fail if='fail-on-badpaths'>
@@ -65,7 +65,7 @@
 *     DocBook:  ${docbook-xsd}
 * If you have these files, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
 </echo>
 <fail if='fail-on-badpaths'>
@@ -81,7 +81,7 @@
 *     XHTML  :  ${xhtml-xsd-dir}/xhtml1-*.xsd
 * If you have these files, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
 </echo>
 <fail if='fail-on-badpaths'>
