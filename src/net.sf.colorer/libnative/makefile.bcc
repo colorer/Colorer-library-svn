@@ -24,5 +24,5 @@ LIBFLAGS = /Tpd  -M -m -L"C:\Program Files\Borland\bcc55\lib" c0d32.obj $(objs),
 $(TARGET): $(objs)
 	$(LINK) $(LIBFLAGS)
 
-clear:
+clean:
 	$(RM) $(objs) net_sf_colorer.ilc net_sf_colorer.ild net_sf_colorer.ilf net_sf_colorer.ils net_sf_colorer.map net_sf_colorer.tds
