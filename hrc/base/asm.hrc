@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<!--
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+  <type name="asm" access="public">
+  <annotation><documentation>
     Assembler Syntax v2.0
-With help of:
+  </documentation><contributors><![CDATA[
     KiLL Zlotnikoff <e1a29df@quake.ru>
     Ilgar Veliev <sigma@ntgres.pssr.ru>
     Dmitriy Volkov <werewolf@atnet.ru>
@@ -11,14 +17,7 @@ With help of:
     Nosov Konstantin <k_nosov@chat.ru>
     NASM has a WWW page at http://www.cryogen.com/Nasm
     Alexander Voronenko <Alexander.Voronenko@p47.f100.n452.z2.fidonet.org>
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5"
-     xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc ../hrc.xsd">
-
-  <type name="asm" access="public">
+  ]]></contributors></annotation>
 
     <import type="def"/>
 
