@@ -35,8 +35,6 @@
                                       **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
   
 
-
-
   <xmlcatalog id="DTDs">
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
          location="doc/2003/hrc.dtd"/>
