@@ -4,19 +4,26 @@
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-<!--
-   AutoIt 2.x Script Syntax description
-Created by:
-   Peter Valach <pvalach@gmx.net>
-Versions tested:
-   Colorer 3.0
-   AutoIt 2.32
-Updated by:
-   Valerie Ivanov <vi@ippe.obninsk.ru>
-   for AutoIt 2.42
--->
    <type name="AutoIt">
-
+      <annotation>
+         <documentation><![CDATA[
+           AutoIt 2.x Script Syntax description
+           <filename>/\.(ml|mli|mlp)$/i</filename>
+         ]]></documentation>
+         <contributors>
+           Created by:
+              Peter Valach &lt;pvalach@gmx.net&gt;
+           Versions tested:
+              Colorer 3.0
+              AutoIt 2.32
+           Updated by:
+              Valerie Ivanov &lt;vi@ippe.obninsk.ru&gt;
+              for AutoIt 2.42
+           Updated by:
+              Eugene Kotlyarov http://ekot.narod.ru/far
+              for AutoIt 2.64
+         </contributors>
+      </annotation>
       <import type="def"/>
 
       <region name="aiComment" parent="Comment"/>
@@ -81,20 +88,34 @@ Updated by:
             <word name="BlockInput"/>
             <word name="Break"/>
             <word name="DetectHiddenText"/>
-            <word name="Exit"/>
-            <word name="EndRepeat"/>
             <word name="EnvAdd"/>
+            <word name="EnvDiv"/>
+            <word name="EnvMult"/>
+            <word name="EndRepeat"/>
             <word name="EnvSub"/>
+            <word name="Exit"/>
             <word name="FileAppend"/>
+            <word name="FileCopy"/>
+            <word name="FileDelete"/>
+            <word name="FileCreateDir"/>
             <word name="FileReadLine"/>
+            <word name="FileRemoveDir"/>
+            <word name="FileSelectFile"/>
             <word name="Gosub"/>
             <word name="Goto"/>
+            <word name="HideAutoItDebug"/>
             <word name="HideAutoItWin"/>
+            <word name="IfInString"/>
+            <word name="IfNotInString"/>
             <word name="IfWinExist"/>
             <word name="IfWinNotExist"/>
             <word name="IfWinActive"/>
             <word name="IfWinNotActive"/>
             <word name="IfEqual"/>
+            <word name="IfGreater"/>
+            <word name="IfGreaterOrEqual"/>
+            <word name="IfLess"/>
+            <word name="IfLessOrEqual"/>
             <word name="IfNotEqual"/>
             <word name="IfExist"/>
             <word name="IfNotExist"/>
@@ -120,18 +141,32 @@ Updated by:
             <word name="Send"/>
             <word name="ShutDown"/>
             <word name="Sleep"/>
+            <word name="SetBatchLines"/>
+            <word name="SetCapsLockState"/>
             <word name="SetKeyDelay"/>
             <word name="SetEnv"/>
+            <word name="SetStoreCapsLockMode"/>
             <word name="SetTitleMatchMode"/>
             <word name="SetWinDelay"/>
             <word name="SplashTextOn"/>
             <word name="SplashTextOff"/>
+            <word name="StringGetPos"/>
+            <word name="StringLeft"/>
+            <word name="StringLen"/>
+            <word name="StringMid"/>
+            <word name="StringReplace"/>
+            <word name="StringRight"/>
+            <word name="StringTrimLeft"/>
+            <word name="StringTrimRight"/>
             <word name="WinGetActiveTitle"/>
             <word name="WinKill"/>
+            <word name="WinMinimizeAllUnder"/>
+            <word name="WinMinimizeAllUndo"/>
             <word name="WinWait"/>
             <word name="WinWaitClose"/>
             <word name="WinWaitActive"/>
             <word name="WinWaitNotActive"/>
+            <word name="WinGetActiveStats"/>
             <word name="WinHide"/>
             <word name="WinShow"/>
             <word name="WinRestore"/>
@@ -145,7 +180,6 @@ Updated by:
             <word name="WinGetActiveTitle"/>
          </keywords>
       </scheme>
-
    </type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
