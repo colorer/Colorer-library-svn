@@ -1,25 +1,24 @@
 package net.sf.colorer.impl;
 
+import java.util.Vector;
+
 import net.sf.colorer.*;
 import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.PairMatch;
 import net.sf.colorer.handlers.*;
 
 public class BaseEditorNative implements BaseEditor {
     /** internal native object */
     private long iptr;
-    
     private boolean disposed = false;
-
     private int wStart, wSize;
-
     private int lineCount;
-
     private Region defPairStart = null;
-
     private Region defPairEnd = null;
+    private Vector editorListeners = new Vector(); 
 
-    native Region getRegion(final long iptr, final String qname);
+    //native Region getRegion(final long iptr, final String qname);
 
     public BaseEditorNative(ParserFactory pf, LineSource lineSource) {
         iptr = init(pf, lineSource);
@@ -91,10 +90,18 @@ public class BaseEditorNative implements BaseEditor {
         checkActive();
         addRegionHandler(iptr, rh, filter);
     }
-
     public void removeRegionHandler(RegionHandler rh) {
         checkActive();
         removeRegionHandler(iptr, rh);
+    }
+
+    public void addEditorListener(EditorListener el) {
+        checkActive();
+        editorListeners.add(el);
+    }
+    public void removeEditorListener(EditorListener el) {
+        checkActive();
+        editorListeners.remove(el);
     }
 
     public RegionDefine getBackground() {
@@ -143,7 +150,6 @@ public class BaseEditorNative implements BaseEditor {
             ;
             return pm;
         }
-        ;
         return null;
     }
 
@@ -240,6 +246,9 @@ public class BaseEditorNative implements BaseEditor {
 
     public void modifyEvent(int topLine) {
         checkActive();
+        for (int idx = editorListeners.size()-1; idx >= 0; idx--) {
+            ((EditorListener)editorListeners.elementAt(idx)).modifyEvent(topLine);
+        }
         modifyEvent(iptr, topLine);
     }
 

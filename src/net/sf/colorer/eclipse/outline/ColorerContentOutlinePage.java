@@ -165,7 +165,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
         if (activeOutliner != null){
             activeOutliner.removeListener(this);
             if (textColorer != null){
-                textColorer.removeRegionHandler(activeOutliner.getRegionHandler());
+                activeOutliner.detachOutliner(textColorer);
             }
             if (activeAction != null){
                 activeAction.setChecked(false);
@@ -177,7 +177,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
             activeOutliner.addListener(this);
             activeOutliner.clear();
             if (textColorer != null){
-                textColorer.addRegionHandler(activeOutliner.getRegionHandler());
+                activeOutliner.attachOutliner(textColorer);
             }
             activeAction.setChecked(true);
             textColorer.modifyEvent(textColorer.getVisibleStart());

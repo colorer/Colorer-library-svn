@@ -9,8 +9,8 @@ public class OutlineElement extends OutlineItem implements IAdaptable{
   
   IWorkbenchAdapter ad = null;
   
-  public OutlineElement(IWorkbenchAdapter ad, int lno, int pos, int level, String token, Region region) {
-    super(lno, pos, level, token, region);	
+  public OutlineElement(IWorkbenchAdapter ad, int lno, int pos, int length, int level, String token, Region region) {
+    super(lno, pos, length, level, token, region);	
     this.ad = ad;
   }
   

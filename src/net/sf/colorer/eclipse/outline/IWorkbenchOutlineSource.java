@@ -2,8 +2,8 @@ package net.sf.colorer.eclipse.outline;
 
 import org.eclipse.core.runtime.IAdaptable;
 
-import net.sf.colorer.RegionHandler;
 import net.sf.colorer.editor.IOutlineSource;
+import net.sf.colorer.swt.TextColorer;
 
 /**
  * Interface for possible Colorer Editor outliners
@@ -19,7 +19,18 @@ public interface IWorkbenchOutlineSource extends IOutlineSource, IAdaptable {
 
     void setSorting(boolean sorting);
     
-    RegionHandler getRegionHandler();
+    /**
+     * Attaches the outliner, specified by this interface
+     * to the editor, causing this outliner to recieve
+     * parse information.
+     * @param editor
+     */
+    void attachOutliner(TextColorer editor);
+    
+    /**
+     * Detaches the outliner, specified by this interface
+     */
+    void detachOutliner(TextColorer editor);
 
 }
 /* ***** BEGIN LICENSE BLOCK *****

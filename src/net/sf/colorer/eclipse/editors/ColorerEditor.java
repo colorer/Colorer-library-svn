@@ -1,17 +1,5 @@
 package net.sf.colorer.eclipse.editors;
 
-import org.eclipse.swt.custom.*;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-
 import net.sf.colorer.FileType;
 import net.sf.colorer.HRCParser;
 import net.sf.colorer.ParserFactory;
@@ -20,7 +8,7 @@ import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
-import net.sf.colorer.eclipse.outline.OutlineElement;
+import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
 
@@ -32,7 +20,20 @@ import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IColorerReloadListener, IPropertyChangeListener{
 
@@ -68,8 +69,8 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
               if (text == null || event.getSelection().isEmpty()){
                   return;
               }
-              OutlineElement el = (OutlineElement)((IStructuredSelection)event.getSelection()).getFirstElement();
-              text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.token.length());
+              OutlineItem el = (OutlineItem)((IStructuredSelection)event.getSelection()).getFirstElement();
+              text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.length);
               text.showSelection();
               textColorer.stateChanged();
           }

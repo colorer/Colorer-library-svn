@@ -1,5 +1,8 @@
 package net.sf.colorer.eclipse.outline;
 
+import java.util.Stack;
+import java.util.Vector;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
@@ -7,8 +10,10 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
 import net.sf.colorer.Scheme;
+import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.impl.Logger;
+import net.sf.colorer.swt.TextColorer;
 
 
 /**
@@ -16,34 +21,77 @@ import net.sf.colorer.impl.Logger;
  */
 public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, IWorkbenchAdapter, IAdaptable {
 
+    Vector listeners = new Vector();
+    Vector regionsList = new Vector();
+    
+    Vector cList = regionsList;
+    
+    boolean changed = false;
+    int modifiedLine = -1;
+    int curLevel;
+    
+
     public Region getFilter() {
         return null;
     }
     
     public void clear() {
-        
+        regionsList.clear();
     }
 
     public void startParsing(int lno) {
+        curLevel = 0;
+        cList = regionsList;
     }
 
     public void endParsing(int lno) {
+        curLevel = 0;
+        if (changed) {
+            notifyUpdate();
+            changed = false;
+        }
     }
 
     public void clearLine(int lno, String line) {
     }
 
     public void addRegion(int lno, String line, int sx, int ex, Region region) {
-        Logger.trace("ParseTree", sx+"-"+ex+": "+line);
+        if (Logger.TRACE) {
+            Logger.trace("ParseTree", sx+"-"+ex+": "+line);
+        }
+
+        cList.addElement(new OutlineElement(this, lno, sx, ex-sx, curLevel, null, region));
+        changed = true;
     }
 
-    public void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    Stack schemeStack = new Stack();
+    
+    public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
+        curLevel++;
+        Vector elements = new Vector();
+        OutlineSchemeElement scheme_el = new OutlineSchemeElement(this, lno, sx, ex-sx, curLevel, scheme, region, elements);
+        cList.addElement(scheme_el);
+        schemeStack.push(cList);
+        cList = elements;
     }
-    public void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    public void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
+        curLevel--;
+        cList = (Vector)schemeStack.pop();
+    }
+
+    public void modifyEvent(int topLine) {
+        clear();
+        changed = true;
     }
 
     public Object[] getChildren(Object o) {
-        return null;
+        if (o == this) {
+            return regionsList.toArray();
+        }
+        if (o instanceof OutlineSchemeElement) { 
+            return ((OutlineSchemeElement)o).elements.toArray();
+        }
+        return new Object[] {};
     }
 
     public ImageDescriptor getImageDescriptor(Object object) {
@@ -51,7 +99,11 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     }
 
     public String getLabel(Object o) {
-        return null;
+        if (o instanceof OutlineSchemeElement) {
+            StringBuffer scheme = ((OutlineSchemeElement)o).token;
+            return "scheme: " + scheme;
+        }
+        return ((OutlineItem)o).region.getName();
     }
 
     public Object getParent(Object o) {
@@ -69,14 +121,27 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     }
     public void setSorting(boolean sorting) {
     }
-    public RegionHandler getRegionHandler(){
-        return this;
+
+    public void attachOutliner(TextColorer editor) {
+        editor.getBaseEditor().addRegionHandler(this, null);
+    }
+    public void detachOutliner(TextColorer editor) {
+        editor.getBaseEditor().removeRegionHandler(this);
     }
 
     public void addListener(OutlineListener listener) {
+        listeners.addElement(listener);
     }
+
     public void removeListener(OutlineListener listener) {
+        listeners.removeElement(listener);
     }
+    
+    protected void notifyUpdate(){
+        for (int idx = 0; idx < listeners.size(); idx++)
+            ((OutlineListener) listeners.elementAt(idx)).notifyUpdate();
+    }
+
     
 }
 /* ***** BEGIN LICENSE BLOCK *****

@@ -5,26 +5,25 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import net.sf.colorer.Region;
-import net.sf.colorer.RegionHandler;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.editor.Outliner;
-import net.sf.colorer.impl.Logger;
+import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 /**
  * Default outliner, used to filter parse stream for the specified
- * HRC Region.
+ * HRC Region. Extends default Outliner, implements workbench adapter
+ * to work as outliner in eclipse environment.
  */
 public class WorkbenchOutliner extends Outliner
         implements IWorkbenchAdapter, IWorkbenchOutlineSource
 {
     Hashtable iconsHash = new Hashtable();
     Vector listeners = new Vector();
-    boolean changed = true;
     boolean hierarchy = true;
 
     public WorkbenchOutliner(Region filter) {
@@ -44,34 +43,47 @@ public class WorkbenchOutliner extends Outliner
         notifyUpdate();
     }
     public void setSorting(boolean sorting) {
+        //nop
     }
     
-    public RegionHandler getRegionHandler(){
-        return this;
+    public void attachOutliner(TextColorer editor) {
+        attachOutliner(editor.getBaseEditor());
+    }
+    
+    public void detachOutliner(TextColorer editor) {
+        detachOutliner(editor.getBaseEditor());
     }
 
-    public OutlineItem createItem(int lno, int sx, int curLevel, String itemLabel, Region region) {
-        return new OutlineElement(this, lno, sx, curLevel, itemLabel, region);
+
+    public OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
+        return new OutlineElement(this, lno, sx, length, curLevel, itemLabel, region);
     }
 
+    public void modifyEvent(int topLine) {
+        super.modifyEvent(topLine);
+    }
+    
     public void startParsing(int lno) {
-        Logger.trace("WorkbenchOutliner", "startParsing("+lno+"):"+this);
+        /*
+        if (Logger.TRACE) {
+            Logger.trace("WorkbenchOutliner", "startParsing("+lno+"):"+this);
+        }
+        */
         super.startParsing(lno);
-        changed = true;
     }
 
     public void endParsing(int lno) {
-        Logger.trace("WorkbenchOutliner", "endParsing("+lno+"):"+this);
-        super.endParsing(lno);
-        if (changed) {
-            notifyUpdate();
+        /*
+        if (Logger.TRACE) {
+            Logger.trace("WorkbenchOutliner", "endParsing("+lno+"):"+this);
         }
+        */
+        super.endParsing(lno);
     };
     
-    void notifyUpdate(){
+    protected void notifyUpdate(){
         for (int idx = 0; idx < listeners.size(); idx++)
             ((OutlineListener) listeners.elementAt(idx)).notifyUpdate();
-        changed = false;
     }
 
     // represents root of Outline structure
@@ -89,8 +101,7 @@ public class WorkbenchOutliner extends Outliner
             if (object == this) {
                 for (int idx = 0; idx < itemCount(); idx++)
                     elements.addElement(getItem(idx));
-            }
-            ;
+            };
         } else {
             if (object == this) {
                 int flevel = 0x100000;

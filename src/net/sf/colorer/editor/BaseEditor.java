@@ -66,6 +66,16 @@ public interface BaseEditor {
      * Removes previously added region handler.
      */
     void removeRegionHandler(RegionHandler rh);
+    
+    /**
+     * Adds specified EditorListener object into parse process.
+     */
+    void addEditorListener(EditorListener el);
+
+    /**
+     * Removes previously added EditorListener object.
+     */
+    void removeEditorListener(EditorListener el);
 
     /** Current Background Region (def:Text) */
     RegionDefine getBackground();

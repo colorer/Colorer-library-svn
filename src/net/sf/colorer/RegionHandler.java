@@ -66,7 +66,7 @@ public interface RegionHandler {
         @param region Scheme Region information (background)
         @param scheme Additional Scheme information
     */
-    void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme);
+    void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme);
 
     /** Informs handler about leaveing specified scheme.
         Parameter <code>region</code> is used to specify
@@ -81,7 +81,7 @@ public interface RegionHandler {
         @param region Scheme Region information (background)
         @param scheme Additional Scheme information
     */
-    void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme);
+    void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme);
 
 
 }

@@ -9,14 +9,6 @@ extern "C" {
 #endif
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative
- * Method:    getRegion
- * Signature: (JLjava/lang/String;)Lnet/sf/colorer/Region;
- */
-JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getRegion
-  (JNIEnv *, jobject, jlong, jstring);
-
-/*
- * Class:     net_sf_colorer_impl_BaseEditorNative
  * Method:    init
  * Signature: (Lnet/sf/colorer/ParserFactory;Lnet/sf/colorer/LineSource;)J
  */
