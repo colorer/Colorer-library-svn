@@ -306,6 +306,9 @@
    <block start="/(\{)/" end="/(\})/" scheme="c"
           region00="SymbolStrong" region01="PairStart" region10="SymbolStrong" region11="PairEnd"/>
 
+   <block start="/(\bBegin\b)/" end="/(\bEnd\b)/" scheme="c"
+          region00="SymbolStrong" region01="PairStart" region10="SymbolStrong" region11="PairEnd"/>
+
    <!-- thanx to andrei somsikov for bug -->
    <block start="/(\b_?_?asm)\s*?(\{|$)/" end="/(\})/" scheme="AsmCode"
           region01="AsmCode" region02="StructureSymbol" region10="StructureSymbol" region00="def:PairStart" region11="def:PairEnd"/>
