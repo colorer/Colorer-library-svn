@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    sdml scripts
+With help of:
+
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+   <type name="sdml" access="public">
+
+      <import type="def"/>
+
+
+
+      <scheme name="sdml">
+         <inherit scheme="StandardString"/>
+         <inherit scheme="CHexNumber"/>
+         <inherit scheme="FloatNumber"/>
+         <block start="/&lt;!--/" end="/--&gt;/" scheme="Comment" region="Comment" region00="PairStart" region10="PairEnd"/>
+         <keywords ignorecase="yes" region="Keyword">
+            <word name="Sdml"/>
+            <word name="/Sdml"/>
+            <word name="Info"/>
+            <word name="/Info&gt;"/>
+            <word name="Defines"/>
+            <word name="/Defines"/>
+            <word name="Body"/>
+            <word name="/Body"/>
+            <word name="Block"/>
+            <word name="El"/>
+            <word name="/El"/>
+            <word name="Genre"/>
+            <word name="Style"/>
+            <word name="Artist"/>
+            <word name="Author"/>
+            <word name="Title"/>
+            <word name="Comments"/>
+            <word name="/Comments"/>
+            <word name="Path"/>
+            <symb name="/"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

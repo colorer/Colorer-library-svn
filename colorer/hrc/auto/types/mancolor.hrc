@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    samples and HRC description
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+   <type name="mancolorer" access="public">
+
+      <import type="def"/>
+      <import type="asm"/>
+      <import type="c"/>
+      <import type="perl"/>
+      <import type="asp.vb"/>
+
+
+      <scheme name="mancolorer">
+         <inherit scheme="def:NetAddresses"/>
+         <inherit scheme="def:Date"/>
+         <inherit scheme="def:Time"/>
+         <inherit scheme="def:Number"/>
+
+         <regexp match="/\b(0x[\da-fA-F]*?([^\s\W\da-fA-F]).*?)\b/i" region="def:Error"/>
+         <regexp match="/\b([01]+b)\b/i" region="def:NumberBin"/>
+         <regexp match="/\b(\d[\da-fA-F]+h)\b/i" region="def:NumberHex"/>
+<!-- c/c++ comments -->
+         <block start="/\/\//" end="/$/" region="def:Comment" scheme="def:Comment"/>
+         <inherit scheme="cNestedComment"/>
+         <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="perlPod" region="plPod" region10="plPodSym"/>
+<!-- block structures -->
+         <inherit scheme="c:String"/>
+         <block start="/\b(?{StringEdge}q(?{chr}\W))/" end="/(?{StringEdge}\y{chr})/" scheme="perlInterpolateString" region="plString"/>
+         <block start="/\b\M ((?{plStringEdge}(s|tr|y) (?{chr}[^\w\s])))/x" end="/(?{plStringEdge}\y{chr} [mgeioxcds]*)/x" scheme="perlSubstBlock" region="plString" region01="PairStart" region10="PairEnd"/>
+         <block start="/&lt;&lt;(?{plWord}[^\s;\x22]+)/" end="/^(?{plWord}\y{plWord})$/" scheme="perlInterpolateString" region="plString"/>
+         <regexp match="/function/i" region="Function"/>
+         <regexp match="/some type/i" region="TypeKeyword"/>
+         <regexp match="/constant/i" region="Constant"/>
+         <regexp match="/Boolean/i" region="BooleanConstant"/>
+         <regexp match="/Identifier/i" region="Identifier"/>
+         <regexp match="/Label:/i" region="Label"/>
+         <regexp match="/LabelStrong:/i" region="LabelStrong"/>
+         <regexp match="/debug info/i" region="Debug"/>
+         <regexp match="/Identifier/i" region="Identifier"/>
+         <block start="/(?{Keyword}This is an Asm)\s*?\{/" end="/\}/" scheme="asm"/>
+         <block start="/And C...\s*?\{/" end="/\}/" scheme="c" region00="Keyword" region10="Keyword"/>
+         <block start="/(And look here - html)\s*?(\(\*)/i" end="/(\*\))/" scheme="asp.vb" region01="StringEdge" region02="StringEdge" region10="StringEdge"/>
+      </scheme>
+
+   </type>
+</hrc>

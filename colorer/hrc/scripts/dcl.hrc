@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+   <type name="dcl" access="public">
+      <annotation><documentation>
+        HP OpenVMS DCL (Digital Command-line Language)
+      </documentation><contributors><![CDATA[
+        Maintained by Ondrej Brablc <far@brablc.com>
+      ]]></contributors></annotation>
+
+      <import type="def"/>
+
+      <region name='SubroutineOutline' parent='def:Outlined'/>
+      <region name='LabelOutline' parent='def:Outlined'/>
+
+      <region name="dclString" parent="String"/>
+      <region name="dclComment" parent="Comment"/>
+      <region name="dclSymb" parent="Symbol"/>
+      <region name="dclWord" parent="Keyword"/>
+      <region name="dclOther" parent="Keyword"/>
+      <region name="dclNumb" parent="Number"/>
+      <region name="dclFunc" parent="URL"/>
+      <region name="dclSymbol" parent="Number"/>
+      <region name="dclLogical" parent="Number"/>
+      <region name="dclFirstChar" parent="ErrorText"/>
+      <region name="dclLabel" parent="Label"/>
+
+      <scheme name="dclSQL">
+         <inherit scheme="sql:sql"/>
+      </scheme>
+
+      <scheme name="dcl">
+<!-- Paired block -->
+         <block start="/(then)\s*$/i" end="/(endif)\s*$/i" scheme="dcl" region00="dclWord" region01="def:PairStart" region10="dclWord" region11="def:PairEnd" priority="low"/>
+         <block start="/\s* \b ((?{SubroutineOutline}[\w_^:]+ ))\: \s* (subroutine)+/ix" end="/(endsubroutine)\s*$/i" scheme="dcl" region00="dclWord" region01="dclLabel" region02="def:PairStart" region10="dclWord" region11="def:PairEnd" priority="low"/>
+         <block start="/(\s*sql)\s*$/i" end="/^(\$)/x" scheme="dclSQL" region01="dclWord" region11="dclFirstChar" region="dclSQL" priority="low"/>
+         <block start="/!/" end="/$/" scheme="Comment" region="Comment" priority="low"/>
+
+<!-- Numbers -->
+         <regexp match="/\b([0-9\.]+([eE][-+]?\d+)?)\b/" region0="dclNumb"/>
+         <regexp match="/\b(0[xX][\da-fA-F]+)\b/" region0="dclNumb"/>
+
+<!-- Strings -->
+         <regexp match="/(&#34;((\\.)|[^\\&#34;])*?&#34;)/" region0="dclString"/>
+         <regexp match="/(''\w+')/" region0="dclSymbol"/>
+         <regexp match="/(f\$[\w_]+)/i" region0="dclFunc"/>
+         <regexp match="/([\w_]+\$[\w_]+)/" region0="dclLogical"/>
+         <regexp match="/(\w{3}[_\$]\w{3}:)/" region0="dclLogical"/>
+         <regexp match="/(\.[\w]+\.)/" region0="dclWord"/>
+
+<!-- Other -->
+         <regexp match="/\s* \b ((?{LabelOutline}[\w_]+ ))\: \s* $/x" region1="dclLabel"/>
+         <regexp match="/^\${1}/" region0="dclFirstChar"/>
+
+<!-- Symbols -->
+         <keywords region="dclSymb">
+            <symb name=";"/>
+            <symb name="="/>
+            <symb name="+"/>
+            <symb name="-"/>
+            <symb name="/"/>
+            <symb name="*"/>
+            <symb name="&amp;"/>
+            <symb name="|"/>
+            <symb name="^"/>
+            <symb name="("/>
+            <symb name=")"/>
+            <symb name="["/>
+            <symb name="]"/>
+            <symb name=","/>
+            <symb name=":"/>
+            <symb name="?"/>
+            <symb name="!"/>
+            <symb name="~"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+            <symb name="%"/>
+            <symb name="{"/>
+            <symb name="}"/>
+            <symb name="@"/>
+         </keywords>
+<!-- Key words-->
+         <keywords ignorecase="yes" region="dclWord">
+            <word name="."/>
+            <word name="APPEND"/>
+            <word name="ATTACH"/>
+            <word name="CALL"/>
+            <word name="CD"/>
+            <word name="CLS"/>
+            <word name="CLOSE"/>
+            <word name="CO"/>
+            <word name="COMMIT"/>
+            <word name="COPY"/>
+            <word name="CREATE"/>
+            <word name="DATE"/>
+            <word name="DEASSIGN"/>
+            <word name="DEFAULT"/>
+            <word name="DEFINE"/>
+            <word name="DELETE"/>
+            <word name="DEVICE"/>
+            <word name="DIR"/>
+            <word name="DO"/>
+            <word name="ECHO"/>
+            <word name="ELSE"/>
+            <word name="ELSIF"/>
+            <word name="END"/>
+            <word name="ENDIF"/>
+            <word name="ENDSUBROUTINE"/>
+            <word name="EOF"/>
+            <word name="ERROR"/>
+            <word name="EXIT"/>
+            <word name="EXPAND"/>
+            <word name="GET_SYMBOL"/>
+            <word name="GOTO"/>
+            <word name="HELP"/>
+            <word name="HOME"/>
+            <word name="IF"/>
+            <word name="IMAGE"/>
+            <word name="INCLUDE"/>
+            <word name="LOGOUT"/>
+            <word name="LOOP"/>
+            <word name="MC"/>
+            <word name="MMS"/>
+            <word name="MODULE"/>
+            <word name="ON"/>
+            <word name="OPEN"/>
+            <word name="PRINT"/>
+            <word name="PROCEDURE"/>
+            <word name="PROGRAM"/>
+            <word name="PROMPT"/>
+            <word name="PUT"/>
+            <word name="PURGE"/>
+            <word name="QUEUE"/>
+            <word name="READ"/>
+            <word name="RENAME"/>
+            <word name="RETURN"/>
+            <word name="RUN"/>
+            <word name="SD"/>
+            <word name="SELECT"/>
+            <word name="SET"/>
+            <word name="SET_SYMBOL"/>
+            <word name="SH"/>
+            <word name="SHOW"/>
+            <word name="SL"/>
+            <word name="SM"/>
+            <word name="SPAWN"/>
+            <word name="SQL"/>
+            <word name="SS"/>
+            <word name="STATUS"/>
+            <word name="SU"/>
+            <word name="SUBROUTINE"/>
+            <word name="SUBMIT"/>
+            <word name="SV"/>
+            <word name="THEN"/>
+            <word name="TO"/>
+            <word name="TYPE"/>
+            <word name="WAIT"/>
+            <word name="WARNING"/>
+            <word name="WRITE"/>
+         </keywords>
+<!-- Other key words-->
+         <keywords ignorecase="yes" region="dclParams">
+            <word name="/END_OF_FILE"/>
+            <word name="/APPEND"/>
+            <word name="/READ"/>
+            <word name="/WRITE"/>
+            <word name="/PRIVILEGES"/>
+            <word name="/PROCESS"/>
+            <word name="/OUTPUT"/>
+            <word name="/NOWAIT"/>
+            <word name="/WAIT"/>
+            <word name="/JOB"/>
+            <word name="/GROUP"/>
+         </keywords>
+      </scheme>
+   </type>
+</hrc>

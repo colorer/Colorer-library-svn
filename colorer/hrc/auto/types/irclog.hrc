@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+   IRC Logs - for easier reading ;)
+   Written by berk <berk@nm.ru>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+   <type name="irclog" access="public">
+
+      <import type="def"/>
+
+
+
+      <scheme name="irclog">
+<!-- Server messages -->
+         <regexp match="/\M(\*\*\*.*$)/" region1="Comment"/>
+<!-- Join/split messages -->
+         <regexp match="/^ .*? (has (joined|quit|left).*?$)/ix" region="Parameter"/>
+<!-- Nick highlight -->
+<!-- TODO: need to use only non-whitespace chars within <> -->
+         <regexp match="/(&lt;.*?&gt;)/i" region="String"/>
+<!-- Time marker -->
+         <inherit scheme="Time"/>
+         <inherit scheme="Date"/>
+<!-- Standard stuff: web/email/paths -->
+         <inherit scheme="NetAddresses"/>
+         <inherit scheme="Path"/>
+      </scheme>
+
+   </type>
+</hrc>

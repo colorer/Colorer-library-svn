@@ -1,0 +1,21 @@
+
+TARGET=colorer.exe
+all: $(TARGET)
+
+shared_path=../shared/
+obj_output=objs
+
+#for profiler usage
+#CPPFLAGS_CUSTOM = /Zi
+#LIB_DEBUG = /debug /incremental:no
+CPPFLAGS_CUSTOM =
+LIB_DEBUG = /incremental:no
+
+include ../shared/makefile.colorer.vc
+
+LIBFLAGS = $(objs) $(LIB_DEBUG) /map /fixed:no /out:$(TARGET) /nologo /subsystem:console wininet.lib
+
+include makefile.core
+
+clear:
+	$(RM) $(objs) vc70.pdb colorer.pdb colorer.exp

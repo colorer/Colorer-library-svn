@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    Дмитрий Иоффе <dsioffe@da.ru>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+   <type name="picasm" access="public">
+
+      <import type="def"/>
+      <import type="asm"/>
+
+
+
+      <scheme name="picasm">
+         <inherit scheme="asm_core"/>
+<!-- asm keywords -->
+         <keywords ignorecase="yes" region="asmDefinition">
+            <word name="constant"/>
+            <word name="#define"/>
+            <word name="end"/>
+            <word name="equ"/>
+            <word name="error"/>
+            <word name="errorlevel"/>
+            <word name="include"/>
+            <word name="list"/>
+            <word name="messg"/>
+            <word name="nolist"/>
+            <word name="org"/>
+            <word name="page"/>
+            <word name="processor"/>
+            <word name="radix"/>
+            <word name="set"/>
+            <word name="space"/>
+            <word name="subtitle"/>
+            <word name="title"/>
+            <word name="#undefine"/>
+            <word name="variable"/>
+            <word name="else"/>
+            <word name="endif"/>
+            <word name="endw"/>
+            <word name="if"/>
+            <word name="ifdef"/>
+            <word name="ifndef"/>
+            <word name="while"/>
+            <word name="__badram"/>
+            <word name="cblock"/>
+            <word name="__config"/>
+            <word name="da"/>
+            <word name="data"/>
+            <word name="db"/>
+            <word name="de"/>
+            <word name="dt"/>
+            <word name="dw"/>
+            <word name="endc"/>
+            <word name="fill"/>
+            <word name="__idlocs"/>
+            <word name="__maxram"/>
+            <word name="res"/>
+            <word name="endm"/>
+            <word name="exitm"/>
+            <word name="expand"/>
+            <word name="local"/>
+            <word name="macro"/>
+            <word name="noexpand"/>
+            <word name="bankisel"/>
+            <word name="banksel"/>
+            <word name="code"/>
+            <word name="extern"/>
+            <word name="global"/>
+            <word name="idata"/>
+            <word name="pagesel"/>
+            <word name="udata"/>
+            <word name="udata_acs"/>
+            <word name="udata_ovr"/>
+            <word name="udata_shr"/>
+         </keywords>
+         <keywords ignorecase="yes" region="asmMnemonics">
+            <word name="BYTE"/>
+            <word name="DWORD"/>
+            <word name="FWORD"/>
+            <word name="near"/>
+            <word name="offset"/>
+            <word name="short"/>
+            <word name="ptr"/>
+            <word name="QWORD"/>
+            <word name="returns"/>
+            <word name="WORD"/>
+         </keywords>
+         <keywords ignorecase="yes" region="asmMnemonics">
+            <word name="ADDLW"/>
+            <word name="ADDWF"/>
+            <word name="ADDLW"/>
+            <word name="ANDWF"/>
+            <word name="BCF"/>
+            <word name="BSF"/>
+            <word name="BTFSC"/>
+            <word name="BTFSS"/>
+            <word name="CALL"/>
+            <word name="CLRF"/>
+            <word name="CLRW"/>
+            <word name="CLRWDT"/>
+            <word name="COMF"/>
+            <word name="DECF"/>
+            <word name="DECFSZ"/>
+            <word name="INCF"/>
+            <word name="INCFSZ"/>
+            <word name="IORLW"/>
+            <word name="IORWF"/>
+            <word name="GOTO"/>
+            <word name="MOVF"/>
+            <word name="MOVLW"/>
+            <word name="MOVWF"/>
+            <word name="NOP"/>
+            <word name="OPTION"/>
+            <word name="RETFIE"/>
+            <word name="RETLW"/>
+            <word name="RETURN"/>
+            <word name="RLF"/>
+            <word name="RRF"/>
+            <word name="SLEEP"/>
+            <word name="SUBLW"/>
+            <word name="SUBWF"/>
+            <word name="SWAPF"/>
+            <word name="TRIS"/>
+            <word name="XORLW"/>
+            <word name="XORWF"/>
+         </keywords>
+<!-- asm registers -->
+         <keywords ignorecase="yes" region="asmRegister">
+            <word name="indf"/>
+            <word name="tmr0"/>
+            <word name="tmr2"/>
+            <word name="tmr1l"/>
+            <word name="tmr1h"/>
+            <word name="pcl"/>
+            <word name="status"/>
+            <word name="fsr"/>
+            <word name="porta"/>
+            <word name="trisa"/>
+            <word name="portb"/>
+            <word name="trisb"/>
+            <word name="portc"/>
+            <word name="trisc"/>
+            <word name="portd"/>
+            <word name="trisd"/>
+            <word name="porte"/>
+            <word name="trise"/>
+            <word name="pclath"/>
+            <word name="intcon"/>
+            <word name="pir1"/>
+            <word name="pir2"/>
+            <word name="pie1"/>
+            <word name="pie2"/>
+            <word name="t1con"/>
+            <word name="t2con"/>
+            <word name="sspbuf"/>
+            <word name="sspcon"/>
+            <word name="ccpr1l"/>
+            <word name="ccpr1h"/>
+            <word name="ccpr2l"/>
+            <word name="ccpr2h"/>
+            <word name="ccp1con"/>
+            <word name="ccp2con"/>
+            <word name="rcsta"/>
+            <word name="txreg"/>
+            <word name="rcreg"/>
+            <word name="option_reg"/>
+            <word name="pcon"/>
+            <word name="pr2"/>
+            <word name="sspadd"/>
+            <word name="sspstat"/>
+            <word name="txsta"/>
+            <word name="spbrg"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

@@ -1,0 +1,24 @@
+
+TARGET=colorer
+all: $(TARGET)
+	perl _makefile.deps.pl
+	$(RM) -f *.d *.o .0
+
+#generate dependencies:
+CPPFLAGS_CUSTOM=-MD -E
+
+shared_path=../shared/
+obj_output=.
+
+include makefile.colorer.gcc
+
+LIBINC = -lc -lm
+LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
+
+colorer:: $(coreobjects)
+	$(CPP) $(CPPFLAGS) $(shared_path)../colorer/ConsoleToolsRunner.cpp
+	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditor.cpp
+	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditorSet.cpp
+
+clear:
+	$(RM) $(objs)

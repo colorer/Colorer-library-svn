@@ -1,0 +1,16 @@
+
+all: colorer.dll
+
+shared_path=../shared/
+obj_output=objs
+
+!include $(shared_path)makefile.colorer.bcc
+!include makefile.core
+
+LIBFLAGS = /Tpd $(objs) c0d32.obj, colorer.dll, ,import32.lib wininet.lib cw32.lib
+
+colorer.dll: $(objs)
+	$(LINK) $(LIBFLAGS)
+
+clear:
+	$(RM) $(objs) colorer.map colorer.il? colorer.tds

@@ -1,0 +1,126 @@
+
+DOXYGEN=D:\programs\devel\doxygen\bin\doxygen.exe
+
+doc:
+	cd $(shared_path)colorer_doc
+	$(DOXYGEN) colorer.doxygen.cfg
+
+coreobjects = $(unzipobjects) \
+              $(obj_output_slash)xml.$(obj)       \
+              $(obj_output_slash)cregexp.$(obj)    \
+              \
+              $(obj_output_slash)BitArray.$(obj) $(obj_output_slash)Character.$(obj) $(obj_output_slash)CharacterClass.$(obj) \
+              $(obj_output_slash)String.$(obj) $(obj_output_slash)DString.$(obj) $(obj_output_slash)SString.$(obj) $(obj_output_slash)StringBuffer.$(obj) \
+              $(obj_output_slash)UnicodeTools.$(obj) $(obj_output_slash)Encodings.$(obj)  \
+              \
+              $(obj_output_slash)Exception.$(obj)\
+              \
+              $(obj_output_slash)InputSource.$(obj) $(obj_output_slash)FileInputSource.$(obj)\
+              $(obj_output_slash)HTTPInputSource.$(obj) $(obj_output_slash)JARInputSource.$(obj)\
+              $(obj_output_slash)Writer.$(obj) $(obj_output_slash)StreamWriter.$(obj) $(obj_output_slash)FileWriter.$(obj)\
+              \
+              $(obj_output_slash)ParserFactory.$(obj)   \
+              \
+              $(obj_output_slash)ErrorHandlerWriter.$(obj)      \
+              $(obj_output_slash)FileErrorHandler.$(obj)         \
+              $(obj_output_slash)LineRegionsCompactSupport.$(obj) \
+              $(obj_output_slash)LineRegionsSupport.$(obj)         \
+              $(obj_output_slash)RegionMapperImpl.$(obj)            \
+              $(obj_output_slash)StyledHRDMapper.$(obj)              \
+              $(obj_output_slash)TextHRDMapper.$(obj)                 \
+              \
+              $(obj_output_slash)BaseEditor.$(obj) $(obj_output_slash)Outliner.$(obj)\
+              $(obj_output_slash)HRCParserImpl.$(obj) $(obj_output_slash)HRCParserHelpers.$(obj) \
+              $(obj_output_slash)TextParserImpl.$(obj) $(obj_output_slash)TextParserHelpers.$(obj) \
+              $(obj_output_slash)ConsoleTools.$(obj) $(obj_output_slash)TextConsoleViewer.$(obj) $(obj_output_slash)TextLinesStore.$(obj)
+
+
+.cpp.$(obj):
+	$(CPP) $(CPPFLAGS) $*.cpp
+
+
+$(obj_output_slash)xml.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)xml/xml.cpp
+$(obj_output_slash)cregexp.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)cregexp/cregexp.cpp
+
+
+$(obj_output_slash)BitArray.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/BitArray.cpp
+$(obj_output_slash)Character.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/Character.cpp
+$(obj_output_slash)CharacterClass.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/CharacterClass.cpp
+$(obj_output_slash)DString.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/DString.cpp
+$(obj_output_slash)Encodings.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/Encodings.cpp
+$(obj_output_slash)SString.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/SString.cpp
+$(obj_output_slash)String.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/String.cpp
+$(obj_output_slash)StringBuffer.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/StringBuffer.cpp
+$(obj_output_slash)UnicodeTools.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)unicode/UnicodeTools.cpp
+
+
+$(obj_output_slash)Exception.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/Exception.cpp
+
+$(obj_output_slash)Writer.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/Writer.cpp
+$(obj_output_slash)StreamWriter.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/StreamWriter.cpp
+$(obj_output_slash)FileWriter.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/FileWriter.cpp
+
+$(obj_output_slash)InputSource.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/InputSource.cpp
+$(obj_output_slash)FileInputSource.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/FileInputSource.cpp
+$(obj_output_slash)JARInputSource.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/JARInputSource.cpp
+$(obj_output_slash)HTTPInputSource.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/HTTPInputSource.cpp
+
+$(obj_output_slash)ParserFactory.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/ParserFactory.cpp
+
+$(obj_output_slash)ErrorHandlerWriter.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/ErrorHandlerWriter.cpp
+$(obj_output_slash)FileErrorHandler.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/FileErrorHandler.cpp
+$(obj_output_slash)LineRegionsCompactSupport.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/LineRegionsCompactSupport.cpp
+$(obj_output_slash)LineRegionsSupport.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/LineRegionsSupport.cpp
+$(obj_output_slash)RegionMapperImpl.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/RegionMapperImpl.cpp
+$(obj_output_slash)StyledHRDMapper.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/StyledHRDMapper.cpp
+$(obj_output_slash)TextHRDMapper.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/handlers/TextHRDMapper.cpp
+
+$(obj_output_slash)BaseEditor.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/editor/BaseEditor.cpp
+$(obj_output_slash)Outliner.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/editor/Outliner.cpp
+
+$(obj_output_slash)ConsoleTools.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/viewer/ConsoleTools.cpp
+$(obj_output_slash)TextConsoleViewer.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/viewer/TextConsoleViewer.cpp
+$(obj_output_slash)TextLinesStore.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/viewer/TextLinesStore.cpp
+
+
+$(obj_output_slash)HRCParserImpl.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/HRCParserImpl.cpp
+$(obj_output_slash)HRCParserHelpers.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/helpers/HRCParserHelpers.cpp
+
+$(obj_output_slash)TextParserImpl.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/TextParserImpl.cpp
+$(obj_output_slash)TextParserHelpers.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/helpers/TextParserHelpers.cpp

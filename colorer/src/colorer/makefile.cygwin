@@ -1,0 +1,18 @@
+
+TARGET=colorer.exe
+all: $(TARGET)
+
+CYGWIN=-mno-cygwin
+
+shared_path=../shared/
+obj_output=objs
+
+include ../shared/makefile.colorer.cygwin
+
+LIBINC = -lwininet
+LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
+
+include makefile.core
+
+clear:
+	$(RM) $(objs)
