@@ -6,12 +6,13 @@
 #include<colorer/RegionHandler.h>
 #include<colorer/editor/OutlineItem.h>
 
-/** Used to create, store and maintain
-    lists of different special regions.
-    These can include functions, methods, fields,
-    classes, errors and so on.
-    @ingroup colorer_editor
-*/
+/**
+ * Used to create, store and maintain
+ * lists of different special regions.
+ * These can include functions, methods, fields,
+ * classes, errors and so on.
+ * @ingroup colorer_editor
+ */
 class Outliner : public RegionHandler {
 public:
   /** Creates outliner object, that searches stream for

@@ -550,7 +550,7 @@
     <move failonerror='false' file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
     <copy todir='${this.far-dir}/bin'>
       <fileset dir='src/pcolorer/farfiles' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
-      <fileset dir='src/pcolorer' includes='colorer.dll,colorer.map'/><!-- colorer.map -->
+      <fileset dir='src/pcolorer' includes='colorer.dll,colorer.map,vc70.pdb'/><!-- colorer.map -->
     </copy>
   </target>
 

@@ -3,11 +3,12 @@
 
 #include<colorer/Region.h>
 
-/** Item in outliner's list.
-    Contans all the information about single
-    structured token with specified type (region reference).
-    @ingroup colorer_editor
-*/
+/**
+ * Item in outliner's list.
+ * Contans all the information about single
+ * structured token with specified type (region reference).
+ * @ingroup colorer_editor
+ */
 class OutlineItem {
 public:
   /** Line number */
