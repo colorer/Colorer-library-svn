@@ -53,6 +53,8 @@ private:
   void addRegion(int lno, int sx, int ex, const Region* region);
   void enterScheme(int lno, int sx, int ex, const Region* region);
   void leaveScheme(int lno, int sx, int ex, const Region* region);
+  void enterScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
+  void leaveScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
 
   int searchKW(const SchemeNode *node, int no, int lowLen, int hiLen);
   int searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen);

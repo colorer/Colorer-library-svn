@@ -249,7 +249,9 @@ void HRCParserImpl::addPrototype(Element *elem)
             continue;
           };
           type->paramVector.addElement(new SString(name));
-          type->paramDescriptionHash.put(name, new SString(descr));
+          if (descr != null){
+            type->paramDescriptionHash.put(name, new SString(descr));
+          }
           type->paramDefaultHash.put(name, new SString(value));
         };
       };
@@ -521,6 +523,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->schemeName = new SString(schemeName);
       next->lowPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       next->lowContentPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("content-priority")));
+      next->innerRegion = DString("yes").equals(((Element*)tmpel)->getAttribute(DString("inner-region")));
       next->type = SNT_SCHEME;
       next->start = new CRegExp(startParam);
       next->start->setPositionMoves(false);

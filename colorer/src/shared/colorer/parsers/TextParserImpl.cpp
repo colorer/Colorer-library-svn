@@ -65,6 +65,9 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
 
   if (mode == TPM_CACHE_READ || mode == TPM_CACHE_UPDATE) {
     parent = cache->searchLine(from, &forward);
+    if (parent != null){
+      CLR_TRACE("TPCache", "searchLine() parent:%s,%d-%d", parent->scheme->getName()->getChars(), parent->sline, parent->eline);
+    }
   }
   cachedLineNo = from;
   cachedParent = parent;
@@ -99,15 +102,13 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
       colorize(null, false);
     };
 
-    if (parent != cache){
-      parent->eline = gy;
-    };
+    if (updateCache){
+      if (parent != cache){
+        parent->eline = gy;
+      };
+    }
     if (parent != cache && gy < gy2){
-      for (i = 0; i < matchend.cMatch; i++)
-        addRegion(gy, matchend.s[i], matchend.e[i], parent->clender->regione[i]);
-      for (i = 0; i < matchend.cnMatch; i++)
-        addRegion(gy, matchend.ns[i], matchend.ne[i], parent->clender->regionen[i]);
-      leaveScheme(gy, matchend.s[0], matchend.e[0], parent->clender->region);
+      leaveScheme(gy, &matchend, parent->clender);
     };
     gx = matchend.e[0];
 
@@ -147,6 +148,42 @@ void TextParserImpl::leaveScheme(int lno, int sx, int ex, const Region* region){
   if (region != null) picked = region;
 };
 
+
+void TextParserImpl::enterScheme(int lno, SMatches *match, const SchemeNode *schemeNode)
+{
+  int i;
+
+  if (schemeNode->innerRegion == false){
+    enterScheme(lno, match->s[0], match->e[0], schemeNode->region);
+  }
+
+  for (i = 0; i < match->cMatch; i++)
+    addRegion(lno, match->s[i], match->e[i], schemeNode->regions[i]);
+  for (i = 0; i < match->cnMatch; i++)
+    addRegion(lno, match->ns[i], match->ne[i], schemeNode->regionsn[i]);
+
+  if (schemeNode->innerRegion == true){
+    enterScheme(lno, match->e[0], match->e[0], schemeNode->region);
+  }
+}
+
+void TextParserImpl::leaveScheme(int lno, SMatches *match, const SchemeNode *schemeNode)
+{
+  int i;
+
+  if (schemeNode->innerRegion == true){
+    leaveScheme(gy, match->s[0], match->s[0], schemeNode->region);
+  }
+
+  for (i = 0; i < match->cMatch; i++)
+    addRegion(gy, match->s[i], match->e[i], schemeNode->regione[i]);
+  for (i = 0; i < match->cnMatch; i++)
+    addRegion(gy, match->ns[i], match->ne[i], schemeNode->regionen[i]);
+
+  if (schemeNode->innerRegion == false){
+    leaveScheme(gy, match->s[0], match->e[0], schemeNode->region);
+  }
+}
 
 void TextParserImpl::fillInvisibleSchemes(ParseCache *ch)
 {
@@ -276,7 +313,6 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
 
         SString *backLine = new SString(str);
         if (updateCache){
-          CLR_TRACE("TextParserImpl", "searchRE: updating cache 1");
           ResF = forward;
           ResP = parent;
           if (forward){
@@ -302,8 +338,6 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
           OldCacheF->backLine = backLine;
         };
 
-        CLR_TRACE("TextParserImpl", "scheme matched2");
-
         int ogy = gy;
 
         SchemeImpl *o_scheme = baseScheme;
@@ -313,26 +347,16 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         DString *o_str;
         schemeNode->end->getBackTrace((const String**)&o_str, &o_match);
 
-        CLR_TRACE("TextParserImpl", "scheme matched4");
-
         baseScheme = ssubst;
         schemeStart = gx;
         schemeNode->end->setBackTrace(backLine, &match);
 
-        enterScheme(no, match.s[0], match.e[0], schemeNode->region);
-        for (i = 0; i < match.cMatch; i++)
-          addRegion(no, match.s[i], match.e[i], schemeNode->regions[i]);
-        for (i = 0; i < match.cnMatch; i++)
-          addRegion(no, match.ns[i], match.ne[i], schemeNode->regionsn[i]);
+        enterScheme(no, &match, schemeNode);
 
         colorize(schemeNode->end, schemeNode->lowContentPriority);
 
         if (gy < gy2){
-          for (i = 0; i < matchend.cMatch; i++)
-            addRegion(gy, matchend.s[i], matchend.e[i], schemeNode->regione[i]);
-          for (i = 0; i < matchend.cnMatch; i++)
-            addRegion(gy, matchend.ns[i], matchend.ne[i], schemeNode->regionen[i]);
-          leaveScheme(gy, matchend.s[0], matchend.e[0], schemeNode->region);
+          leaveScheme(gy, &matchend, schemeNode);
         };
         gx = matchend.e[0];
 
@@ -342,7 +366,6 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         baseScheme = o_scheme;
 
         if (updateCache){
-          CLR_TRACE("TextParserImpl", "searchRE: updating cache 2");
           if (ogy == gy){
             delete OldCacheF;
             if (ResF) ResF->next = null;
