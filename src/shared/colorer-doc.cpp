@@ -180,7 +180,6 @@
       - image_start_dir
       - image_start_dir/../
       - image_start_dir/../../
-      <br> &nbsp;&nbsp;(image_start_dir - directory, where current image is started)
 
   @section unix Unix Systems
       - ./catalog.xml
@@ -188,7 +187,8 @@
       - ../../catalog.xml
       - /usr/shared/colorer/catalog.xml
   @note
-    \%NAME% Means Environment variable of current process.
+    \%NAME% - Environment variable of the current process.<br/>
+    image_start_dir - Directory, where current image was started.
 */
 
 /**
