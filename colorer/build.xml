@@ -145,9 +145,9 @@
     <antcall target='eclipseplugin'/>
   </target>
 
-  <target name="clean" depends='init, library.clean, farplugin.clean, eclipseplugin.clean, hrcupdate.clean, doc.clean'
+  <target name="clean" depends='init, library.clean, farplugin.clean, eclipseplugin.clean, hrc.clean, hrcupdate.clean, doc.clean'
           description='Cleans all the temporary files'>
-    <delete dir='${build-dir}'/>
+
   </target>
 
   <target name="make.clean">
@@ -215,20 +215,25 @@
     </fail>
   </target>
 
-
-  <target name="xsd2hrc" depends='init' description='Generates all required HRC files from their XML Schemas'>
-    <ant dir='bin/xsd2hrc' antfile='build.xml' target='distr'/>
+  <target name="hrc" depends='init' description='Generates all required HRC files'>
+    <ant dir='src/hrc' antfile='build.xml' target='all'/>
   </target>
 
-  <target name="hrc.jar" depends='xsd2hrc'>
+  <target name="hrc.clean" depends='init' description='Cleans all the generated HRC files'>
+    <ant dir='src/hrc' antfile='build.xml' target='clean'/>
+  </target>
+
+  <target name="hrc.jar" depends='hrc'>
 
     <mkdir dir='${target-dir}/hrc/auto/types'/>
 
     <zip destfile='${target-dir}/hrc/common.jar'>
-      <fileset dir='hrc' includes='**/*' excludes='changes.txt, colorer.hrc, auto, auto/**/*'/>
+      <fileset dir='hrc' includes='**/*' excludes='changes.txt, proto*.hrc, auto, auto/**/*'/>
     </zip>
-    <copy file='hrc/colorer.hrc' tofile='${target-dir}/hrc/colorer.hrc'  overwrite='true'/>
-    <replace file="${target-dir}/hrc/colorer.hrc" token='link="' value='link="jar:common.jar!'/>
+    <copy todir='${target-dir}/hrc/'  overwrite='true'>
+      <fileset dir='hrc/' includes='proto*.hrc'/>
+    </copy>
+    <replace file="${target-dir}/hrc/proto.hrc" token='link="' value='link="jar:common.jar!'/>
 
     <zip destfile='${target-dir}/hrc/auto/types/auto.jar'>
       <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*'/>
@@ -262,7 +267,7 @@
   </target>
 
 
-  <target name="this.colorer" depends='init, xsd2hrc' description='Builds binary executable and moves it into current working copy'>
+  <target name="this.colorer" depends='init, hrc' description='Builds binary executable and moves it into current working copy'>
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
@@ -288,7 +293,7 @@
     </antcall>
   </target>
 
-  <target name="library" depends='init, xsd2hrc, doc' description='Builds Colorer-take5 Library source distribution package'>
+  <target name="library" depends='init, hrc, doc' description='Builds Colorer-take5 Library source distribution package'>
 
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
@@ -336,12 +341,12 @@
     </antcall>
   </target>
 
-  <target name="library-linux" depends='init, xsd2hrc, doc' description='Builds Colorer-take5 Library linux package'>
+  <target name="library-linux" depends='init, hrc, doc' description='Builds Colorer-take5 Library linux package'>
 
     <mkdir dir='${library-linux-dir}'/>
 
     <copy todir="${library-linux-dir}/bin">
-      <fileset dir="bin" includes="**" excludes='farplugin/**, **/*.exe, **/*.bat, **/*.*xsd, **/*.dtd'/>
+      <fileset dir="bin" includes="**" excludes='**/*.exe, **/*.bat'/>
     </copy>
     <copy todir="${library-linux-dir}">
       <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='${add.excludes}'/>
@@ -506,7 +511,7 @@
     <mkdir dir='${farplugin-dir}/bin'/>
 
     <copy todir='${farplugin-dir}/bin'>
-      <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
+      <fileset dir='src/pcolorer/farfiles' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
       <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
     </copy>
 
@@ -549,8 +554,8 @@
 
     <move failonerror='false' file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
     <copy todir='${this.far-dir}/bin'>
-      <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
-      <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
+      <fileset dir='src/pcolorer/farfiles' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
+      <fileset dir='src/pcolorer' includes='colorer.dll,colorer.map'/><!-- colorer.map -->
     </copy>
   </target>
 
