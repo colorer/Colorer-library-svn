@@ -407,27 +407,21 @@
     </scheme>
 
     <scheme name="StringValue">
-      <!-- Strings -->
-      <block start="/([&quot;&apos;])/" end="/(\y1)/"
-       scheme="StringValue-content" region="def:String"
-       region00="def:StringEdge" region10="def:StringEdge"
-       region01="def:PairStart" region11="def:PairEnd"
-      />
+      <inherit scheme='StringValueQuot'/>
+      <inherit scheme='StringValueApos'/>
     </scheme>
     <scheme name="StringValueQuot">
-      <!-- Strings -->
-      <block start="/(&quot;)/" end="/(\y1)/"
-       scheme="StringValue-content" region="def:String"
-       region00="def:StringEdge" region10="def:StringEdge"
-       region01="def:PairStart" region11="def:PairEnd"
+      <regexp match="/((&quot;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&quot;))/" 
+       region="def:String"
+       region1="def:StringEdge" region4="def:StringEdge"
+       region2="def:PairStart" region5="def:PairEnd"
       />
     </scheme>
     <scheme name="StringValueApos">
-      <!-- Strings -->
-      <block start="/(&apos;)/" end="/(\y1)/"
-       scheme="StringValue-content" region="def:String"
-       region00="def:StringEdge" region10="def:StringEdge"
-       region01="def:PairStart" region11="def:PairEnd"
+      <regexp match="/((&apos;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&apos;))/" 
+       region="def:String"
+       region1="def:StringEdge" region4="def:StringEdge"
+       region2="def:PairStart" region5="def:PairEnd"
       />
     </scheme>
 
