@@ -207,6 +207,8 @@
   <prototype name="Clipper" group="database" description="Clipper">
     <location link="db/clipper.hrc"/>
     <filename>/\.(ch|prg)$/i</filename>
+    <firstline>/\#include/</firstline>
+    <firstline>/\#define|\#if/</firstline>
   </prototype>
   <prototype name="foxpro" group="database" description="FoxPro">
     <location link="db/foxpro.hrc"/>
