@@ -106,6 +106,29 @@ String *ParserFactory::searchPath()
   Vector<String*> paths;
   TextLinesStore tls;
 
+
+#ifdef __unix__
+  paths.addElement(new SString("./catalog.xml"));
+  paths.addElement(new SString("../catalog.xml"));
+  paths.addElement(new SString("../../catalog.xml"));
+#endif
+#ifdef _WIN32
+  // image_path/  image_path/..  image_path/../..
+  char cname[256];
+  HMODULE hmod;
+  hmod = GetModuleHandle("colorer");
+  if (hmod == null) hmod = GetModuleHandle(null);
+  int len = GetModuleFileName(hmod, cname, 256) - 1;
+  DString module(cname, 0, len);
+  int pos[3];
+  pos[0] = module.lastIndexOf('\\');
+  pos[1] = module.lastIndexOf('\\', pos[0]);
+  pos[2] = module.lastIndexOf('\\', pos[1]);
+  for(int idx = 0; idx < 3; idx++)
+    if (pos[idx] >= 0)
+      paths.addElement(&(new StringBuffer(DString(module, 0, pos[idx])))->append(DString("\\catalog.xml")));
+#endif
+
   // %COLORER5CATALOG%
   char *c = getenv("COLORER5CATALOG");
   if (c != null) paths.addElement(new SString(c));
@@ -122,12 +145,8 @@ String *ParserFactory::searchPath()
 
   // /usr/share/colorer/catalog.xml
 #ifdef __unix__
-  paths.addElement(new SString("./catalog.xml"));
-  paths.addElement(new SString("../catalog.xml"));
-  paths.addElement(new SString("../../catalog.xml"));
   paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
 #endif
-
 #ifdef _WIN32
   // %SYSTEMROOT%/.colorer5catalog
   c = getenv("SYSTEMROOT");
@@ -136,21 +155,6 @@ String *ParserFactory::searchPath()
     tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
     if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
   }catch(InputSourceException &e){};
-
-  // image_path/  image_path/..  image_path/../..
-  char cname[256];
-  HMODULE hmod;
-  hmod = GetModuleHandle("colorer");
-  if (hmod == null) hmod = GetModuleHandle(null);
-  int len = GetModuleFileName(hmod, cname, 256) - 1;
-  DString module(cname, 0, len);
-  int pos[3];
-  pos[0] = module.lastIndexOf('\\');
-  pos[1] = module.lastIndexOf('\\', pos[0]);
-  pos[2] = module.lastIndexOf('\\', pos[1]);
-  for(int idx = 0; idx < 3; idx++)
-    if (pos[idx] >= 0)
-      paths.addElement(&(new StringBuffer(DString(module, 0, pos[idx])))->append(DString("\\catalog.xml")));
 #endif
 
   String *right_path = null;
