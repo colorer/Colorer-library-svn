@@ -607,8 +607,9 @@ void HRCParserImpl::updateLinks()
           }else{
             if (errorHandler != null) errorHandler->error(StringBuffer("cannot resolve scheme name '")+snode->schemeName+"' in scheme '"+scheme->schemeName+"'");
           };
+          delete schemeName;
           delete snode->schemeName;
-          snode->schemeName = null; //!!!schemeName;
+          snode->schemeName = null;
         };
         if (snode->type == SNT_INHERIT){
           for(int vti = 0; vti < snode->virtualEntryVector.size(); vti++){

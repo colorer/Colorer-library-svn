@@ -1,11 +1,13 @@
 
 #include<stdio.h>
+#include<stdlib.h>
 #include<colorer/viewer/ConsoleTools.h>
 
 /** Internal run action type */
-enum { JT_NOTHING, JT_REGTEST,
+enum { JT_NOTHING, JT_REGTEST, JT_PROFILE,
        JT_LIST_LOAD, JT_LIST_TYPES,
        JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
+int profileLoops = 1;
 
 /** Reads and parse command line */
 void init(ConsoleTools &ct, int argc, char*argv[]){
@@ -16,6 +18,13 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
   for(int i = 1; i < argc; i++){
     if (argv[i][0] != '-'){
       ct.setInputFileName(DString(argv[i]));
+      continue;
+    };
+    if (argv[i][1] == 'p'){
+      jobType = JT_PROFILE;
+      if (argv[i][2]){
+        profileLoops = atoi(argv[i]+2);
+      };
       continue;
     };
     if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; };
@@ -110,6 +119,7 @@ void printError(){
        "  -h         Generates plain coloring from <filename> (uses 'rgb' hrd class)\n"
        "  -ht        Generates plain coloring from <filename> using tokens output\n"
        "  -v         Runs viewer on file <fname> (uses 'console' hrd class)\n"
+       "  -p<n>      Runs parser in profile mode (if <n> specified, makes <n> loops)\n"
        "  -f         Forwards input file into output with specified encodings\n"
        " Parameters:\n"
        "  -c<path>   Uses specified 'catalog.xml' file\n"
@@ -143,6 +153,9 @@ int main(int argc, char *argv[])
     switch(jobType){
       case JT_REGTEST:
         ct.RETest();
+        break;
+      case JT_PROFILE:
+        ct.profile(profileLoops);
         break;
       case JT_LIST_LOAD:
         ct.listTypes(true);

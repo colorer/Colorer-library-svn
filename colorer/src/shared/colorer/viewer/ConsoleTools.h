@@ -76,6 +76,14 @@ public:
   */
   void RETest();
 
+  /** Runs parser in profile mode. Does everything, -h makes, but
+      makes possible repeat loops and produces no output.
+      Prints into standard output number of msecs, used.
+
+      @param loopCount Number of times to repeat file's parsing.
+  */
+  void profile(int loopCount);
+
   /** Lists all available HRC types and
       optionally tries to load them.
   */

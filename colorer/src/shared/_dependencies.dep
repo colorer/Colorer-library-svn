@@ -720,6 +720,9 @@ $(obj_output_slash)ioapi.$(obj): $(unzipdir)contrib/minizip/ioapi.c \
  $(unzipdir)contrib/minizip/ioapi.h
 
 
+$(obj_output_slash)malloc.$(obj): $(shared_path)misc/malloc.c \
+  
+
 $(obj_output_slash)uncompr.$(obj): $(unzipdir)uncompr.c $(unzipdir)zlib.h \
  $(unzipdir)zconf.h
 

@@ -75,7 +75,6 @@ protected:
   bool isPackage;
   HRCParserImpl *hrcParser;
   SchemeImpl *baseScheme;
-  SchemeAccessType accessType;
 
   Vector<FileTypeChooser*> chooserVector;
   Hashtable<String*> paramDefaultHash;

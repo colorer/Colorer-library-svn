@@ -1,4 +1,6 @@
 
+#include<time.h>
+
 #include<colorer/ParserFactory.h>
 #include<colorer/editor/BaseEditor.h>
 #include<colorer/viewer/TextLinesStore.h>
@@ -206,6 +208,34 @@ FileType *ConsoleTools::selectType(HRCParser *hrcParser, String *fline){
   if (typeDescription == null || type == null)
     type = hrcParser->chooseFileType(inputFileName, fline, 0);
   return type;
+}
+
+void ConsoleTools::profile(int loopCount){
+  clock_t msecs;
+
+  // parsers factory
+  ParserFactory pf(catalogPath);
+  // Source file text lines store.
+  TextLinesStore textLinesStore;
+  textLinesStore.loadFile(inputFileName, inputEncoding, true);
+  // Base editor to make primary parse
+  BaseEditor baseEditor(&pf, &textLinesStore);
+  // HRD RegionMapper linking
+  if (hrdName == null) hrdName = new DString("default");
+  baseEditor.setRegionMapper(&DString("console"), hrdName);
+  FileType *type = selectType(pf.getHRCParser(), textLinesStore.getLine(0));
+  type->getBaseScheme();
+  baseEditor.setFileType(type);
+
+  msecs = clock();
+  while(loopCount--){
+    baseEditor.modifyLineEvent(0);
+    baseEditor.lineCountEvent(textLinesStore.getLineCount());
+    baseEditor.validate(-1);
+  };
+  msecs = clock() - msecs;
+
+  printf("%d\n", (msecs*1000)/CLOCKS_PER_SEC );
 }
 
 void ConsoleTools::viewFile(){

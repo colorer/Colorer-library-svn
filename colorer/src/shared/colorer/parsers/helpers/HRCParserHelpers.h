@@ -115,8 +115,6 @@ public:
 };
 
 
-enum SchemeAccessType { SAT_PRIVATE, SAT_PUBLIC };
-
 /** Scheme storage implementation.
     Manages the vector of SchemeNode's.
     @ingroup colorer_parsers
@@ -133,12 +131,10 @@ public:
 protected:
   String *schemeName;
   Vector<SchemeNode*> nodes;
-  SchemeAccessType accessType;
   FileTypeImpl *fileType;
 
   SchemeImpl(const String *sn){
     schemeName = new SString(sn);
-    accessType = SAT_PRIVATE;
     fileType = null;
   };
   ~SchemeImpl(){
