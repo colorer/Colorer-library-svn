@@ -2,26 +2,24 @@
 <project default="main" basedir=".">
 
   <xmlcatalog id="DTDs">
-      <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
-           location="docbook/docbookx.dtd"/>
-      <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-           location="web-app_2_2.dtd"/>
-      <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-           location="doc/2003/hrc.dtd"/>
-      <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
-           location="doc/2003/hrd.dtd"/>
-      <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-           location="doc/2003/catalog.dtd"/>
+    <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
+         location="docbook/docbookx.dtd"/>
+    <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+         location="web-app_2_2.dtd"/>
+    <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
+         location="../2003/hrc.dtd"/>
+    <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
+         location="../2003/hrd.dtd"/>
+    <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
+         location="../2003/catalog.dtd"/>
   </xmlcatalog>
 
   <property name='db-dir' value='c:/install/xml/docbook-xsl'/>
   <property name='fop-dir' value='c:/install/xml/fop-0.20.5rc2'/>
-  <path >
-  </path>
-  
+
 
   <target name="main" description='Generate all HRCREF versions' depends='merge,html,pdf'>
-    <echo>Choose build target</echo>
+    <echo>Choose requeried build target</echo>
   </target>
 
   <target name="merge">
@@ -56,6 +54,9 @@
     <xslt in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref.xsl'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
+  </target>
+
+  <target name="all" depends='html,pdf'>
   </target>
 
 </project>

@@ -16,7 +16,7 @@ into it's logic
 
 <xsl:include href="html-titlepage.xsl"/>
 
-<xsl:output method='xml' encoding="KOI8-r"/>
+<xsl:output method='html' encoding="KOI8-r"/>
 
 
 <xsl:param name="html.stylesheet">../styles/styles.css ../styles/hrc-ref.css</xsl:param>
