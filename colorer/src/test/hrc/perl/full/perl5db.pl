@@ -40,10 +40,6 @@ $header = "perl5db.pl version $VERSION";
 # (for subroutines defined outside of the package DB). In fact the same is
 # true if $deep is not defined.
 #
-# $Log$
-# Revision 1.1  2005/01/11 08:50:07  irusskih
-# HRC test framework
-#
 
 #
 # At start reads $rcfile that may set important options.  This file

@@ -4,8 +4,6 @@
 # Originally by Mark Stosberg mark@summersault.com for the skatepark.org website
 # inspired by sumsearch by Chris Hardie <chris@summersault.com>
 
-# $Header$
-
 =pod
 
 =head1 NAME
