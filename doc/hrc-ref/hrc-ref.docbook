@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!-- PUBLIC "-//OASIS//DTD DocBook V4.2//EN" -->
 <!DOCTYPE article[
-<!ENTITY fileref "file:/d:/programs/devel/colorer/doc/2003/hrc.xsd">
-<!ENTITY hrdref "file:/d:/programs/devel/colorer/doc/2003/hrd.xsd">
-<!ENTITY catalogref "file:/d:/programs/devel/colorer/doc/2003/catalog.xsd">
+<!--<!ENTITY colorerloc "file:/d:/programs/devel/colorer">-->
+<!ENTITY colorerloc "file:/c:/progra~1/colorer">
+<!ENTITY fileref "&colorerloc;/doc/2003/hrc.xsd">
+<!ENTITY hrdref "&colorerloc;/doc/2003/hrd.xsd">
+<!ENTITY catalogref "&colorerloc;/doc/2003/catalog.xsd">
 ]>
 <article lang="en" xmlns:x="uri:custom:schema-db">
 

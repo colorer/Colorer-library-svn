@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project default="main" basedir=".">
+
+  <xmlcatalog id="DTDs">
+      <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
+           location="docbook/docbookx.dtd"/>
+      <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+           location="web-app_2_2.dtd"/>
+      <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
+           location="doc/2003/hrc.dtd"/>
+      <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
+           location="doc/2003/hrd.dtd"/>
+      <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
+           location="doc/2003/catalog.dtd"/>
+  </xmlcatalog>
+
+  <property name='db-dir' value='c:/install/xml/docbook-xsl'/>
+  <property name='fop-dir' value='c:/install/xml/fop-0.20.5rc2'/>
+  <path >
+  </path>
+  
+
+  <target name="main" description='Generate all HRCREF versions' depends='merge,html,pdf'>
+    <echo>Choose build target</echo>
+  </target>
+
+  <target name="merge">
+    <xslt in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl'>
+      <xmlcatalog refid="DTDs"/>
+    </xslt>
+  </target>
+
+  <target name="pdf" depends='merge'>
+    <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${db-dir}/template/titlepage.xsl'>
+      <xmlcatalog refid="DTDs"/>
+    </xslt>
+    <xslt in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref.xsl'>
+      <xmlcatalog refid="DTDs"/>
+    </xslt>
+    <java classname="org.apache.fop.apps.Fop" fork="true" failonerror='true'>
+      <arg value="hrc-ref.fo"/>
+      <arg value="hrc-ref.pdf"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement location="${fop-dir}/build/fop.jar"/>
+        <pathelement location="${fop-dir}/lib/avalon-framework-cvs-20020806.jar"/>
+        <pathelement location="${fop-dir}/lib/batik.jar"/>
+      </classpath>
+   </java>
+  </target>
+
+  <target name="html" depends='merge'>
+    <xslt in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${db-dir}/template/titlepage.xsl'>
+      <xmlcatalog refid="DTDs"/>
+    </xslt>
+    <xslt in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref.xsl'>
+      <xmlcatalog refid="DTDs"/>
+    </xslt>
+  </target>
+
+</project>
