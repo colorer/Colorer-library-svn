@@ -2,6 +2,11 @@
 #define _COLORER_FEATURES_H_
 
 /**
+  If defined, use dlmalloc memory management implementation
+*/
+#define USE_DL_MALLOC TRUE
+
+/**
   If defined, long-living classes use chunk allocation procedure
 */
 #define USE_CHUNK_ALLOC TRUE

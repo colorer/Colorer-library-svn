@@ -1,11 +1,32 @@
 #include<common/Vector.h>
 #include<memory.h>
 #include<stdio.h>
+#include<time.h>
 
 #include<common/MemoryChunks.h>
 /**
   @ingroup common @{
 */
+#if USE_DL_MALLOC
+extern "C"{
+  void *dlmalloc(size_t size);
+  void dlfree(void *ptr);
+}
+
+void *operator new(size_t size){
+  return dlmalloc(size);
+};
+void operator delete(void *ptr){
+  return dlfree(ptr);
+};
+
+void *operator new[](size_t size){
+  return dlmalloc(size);
+};
+void operator delete[](void *ptr){
+  return dlfree(ptr);
+};
+#endif
 
 /**
   List of currently allocated memory chunks with size CHUNK_SIZE
@@ -48,7 +69,8 @@ void *chunk_alloc(size_t size){
   void *retVal = (void*)(currentChunk+currentChunkAlloc);
   currentChunkAlloc += size;
   allocCount++;
-//  printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks.size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
+  //printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks.size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
+  //printf("calloc\t%d\n", clock());
   return retVal;
 };
 
@@ -58,6 +80,7 @@ void *chunk_alloc(size_t size){
 */
 void chunk_free(void *ptr){
   if (ptr == null) return;
+  //printf("cfree\t%d\n", clock());
   allocCount--;
   if (allocCount == 0){
     for(int idx = 0; idx < chunks.size(); idx++){

@@ -276,7 +276,8 @@ String *String::replace(const String &pattern, const String &newstring) const{
 
 int String::hashCode() const{
   int hc = 0;
-  for(int i = 0; i < length(); i++)
+  int len = length();
+  for(int i = 0; i < len; i++)
     hc = 31 * hc + (*this)[i];
   return hc;
 }

@@ -1,7 +1,6 @@
 #ifndef _COLORER_COMMON_H_
 #define _COLORER_COMMON_H_
 
-
 /// system dependent byte
 typedef unsigned char byte;
 /// system dependent word

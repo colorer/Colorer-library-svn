@@ -42,7 +42,10 @@ coreobjects = $(unzipobjects) \
               $(obj_output_slash)TextParserHelpers.$(obj)  \
               $(obj_output_slash)ConsoleTools.$(obj)        \
               $(obj_output_slash)TextConsoleViewer.$(obj)    \
-              $(obj_output_slash)TextLinesStore.$(obj)
+              $(obj_output_slash)TextLinesStore.$(obj)        \
+              \
+              $(obj_output_slash)malloc.$(obj)
+
 
 
 .cpp.$(obj):
@@ -136,3 +139,6 @@ $(obj_output_slash)TextParserImpl.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/TextParserImpl.cpp
 $(obj_output_slash)TextParserHelpers.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)colorer/parsers/helpers/TextParserHelpers.cpp
+
+$(obj_output_slash)malloc.$(obj):
+	$(CPP) $(CPPFLAGS) $(MALLOCFLAGS) $(shared_path)misc/malloc.c
