@@ -2,7 +2,7 @@
 <project name="net.sf.colorer" default="javadoc">
     
     <property name='doc.dir' value='doc/java'/>
-    <property name='eclipse.plugins' value='c:/Program files/Eclipse/plugins'/>
+    <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
 
     <target name="javadoc">
       <javadoc destdir="${doc.dir}"
