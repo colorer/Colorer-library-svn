@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.sf.colorer" default="build.jars" basedir=".">
+<project name="net.sf.colorer" default="zip.plugin" basedir=".">
 
 	<property name="bootclasspath" value=""/>
 	<property name="ws" value="win32"/>
@@ -11,11 +11,11 @@
 
 	<target name="init" depends="properties">
 		<property name="plugin" value="net.sf.colorer"/>
-		<property name="version.suffix" value="_0.4.0"/>
-		<property name="full.name" value="${plugin}${version.suffix}"/>
+		<property name="version.suffix" value="_0.5.0"/>
+		<property name="full.name" value="EcliseColorer-take5${version.suffix}"/>
 		<property name="temp.folder" value="${basedir}/temp.folder"/>
 		<property name="plugin.destination" value="${basedir}/distr"/>
-		<property name="build.result.folder" value="${basedir}/distr"/>
+		<property name="build.result.folder" value="${basedir}"/>
 	</target>
 
 	<target name="properties" if="eclipse.running">
@@ -36,6 +36,22 @@
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/colorer.jar" todir="${destination.temp.folder}/${full.name}"/>
+		<copy todir="${destination.temp.folder}/${full.name}">
+			<fileset dir="." includes="plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,toc.xml"/>
+			<fileset dir="." includes="icons/**/*.gif"/>
+			<fileset dir="${plugin.destination}" includes='ColorerDemo.bat,LINUX,MACOS,README,todo,whatsnew,ColorerDemo.sh'/>
+		</copy>
+		<mkdir dir="${destination.temp.folder}/${full.name}/os/win32/x86"/>
+		<mkdir dir="${destination.temp.folder}/${full.name}/os/linux/x86"/>
+
+		<available property='nativelib' file='libnative/net_sf_colorer.dll'/>
+		<fail unless='nativelib' message='native library is not compiled'/>
+		<copy todir="${destination.temp.folder}/${full.name}/os/win32/x86">
+			<fileset dir="libnative" includes="net_sf_colorer.dll"/>
+		</copy>
+		<copy todir="${destination.temp.folder}/${full.name}/os/linux/x86">
+			<fileset dir="libnative" includes="libnet_sf_colorer.so"/>
+		</copy>
 	</target>
 
 	<target name="colorer.jar" depends="init" unless="colorer.jar" description="Create jar: colorer.jar.">
@@ -55,10 +71,10 @@
 		<delete dir="${temp.folder}/colorer.jar.bin"/>
 	</target>
 
-	<target name="colorersrc.zip" depends="init" unless="colorer.jar">
+	<target name="src.zip" depends="init" unless="colorer.jar">
 		<mkdir dir="${build.result.folder}"/>
 		<zip zipfile="${build.result.folder}/src.zip" filesonly="false" update="no">
-			<fileset dir="." includes="src/**/*.java, plugin*, build.*, .*, libnative/*.h libnative/*.cpp libnative/make*"/>
+			<fileset dir="." includes="src/**/*.java, plugin*, build.*, .*, javadoc.xml"/>
 		</zip>
 	</target>
 
@@ -68,16 +84,13 @@
 	</target>
 
 	<target name="build.sources" depends="init">
-		<available property="colorersrc.zip" file="${build.result.folder}/colorersrc.zip"/>
-		<antcall target="colorersrc.zip"/>
+		<available property="src.zip" file="${build.result.folder}/src.zip"/>
+		<antcall target="src.zip"/>
 	</target>
-
-		<target name="build.zips" depends="init">
-		</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
-		<copy file="${build.result.folder}/colorersrc.zip" todir="${destination.temp.folder}/${full.name}"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/${full.name}"/>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
@@ -87,7 +100,7 @@
 
 	<target name="clean" depends="init" description="Clean the plug-in: net.sf.colorer of all the zips, jars and logs created.">
 		<delete file="${build.result.folder}/colorer.jar"/>
-		<delete file="${build.result.folder}/colorersrc.zip"/>
+		<delete file="${build.result.folder}/src.zip"/>
 		<delete file="${plugin.destination}/${full.name}.jar"/>
 		<delete file="${plugin.destination}/${full.name}.zip"/>
 		<delete dir="${temp.folder}"/>
