@@ -65,7 +65,7 @@
   <target name="src.zip" depends="init" unless="colorer.jar">
     <mkdir dir="${build.result.folder}"/>
     <zip zipfile="${build.result.folder}/src.zip" filesonly="false" update="no">
-      <fileset dir="." includes="src/**/*.java, plugin*, build.*, .*, javadoc.xml"/>
+      <fileset dir="." includes="src/**/*.java, src/**/*.prop*, src/**/*.htm*, plugin*, build.*, .*, javadoc.xml"/>
     </zip>
   </target>
 
