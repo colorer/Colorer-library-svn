@@ -15,7 +15,8 @@ import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.*;
 
 /**
- * StyledText listener with syntax highlighting using Colorer library.
+ * StyledText listener implementation
+ * with syntax highlighting support using Colorer library.
  * <a href='http://colorer.sf.net/'>http://colorer.sf.net/</a>
  */
 public class TextColorer{
@@ -49,9 +50,10 @@ InternalHandler ml = new InternalHandler();
   
   /**
    * Common TextColorer creation constructor.
-   * Creates TextColorer object, which is used to be attached to the StyledText widget.
-   * @param pf Parsers factory, used to create all coloring text parsers.
-   * @param cm Colors Manager, used to store cached color objects
+   * Creates TextColorer object, which is to be attached to the StyledText widget.
+   * 
+   * @param pf Parser factory, used to create all coloring text parsers.
+   * @param cm Color Manager, used to store cached color objects
   */
   public TextColorer(ParserFactory pf, ColorManager cm){
     this.pf = pf;

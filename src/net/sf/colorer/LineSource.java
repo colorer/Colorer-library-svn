@@ -1,7 +1,9 @@
 package net.sf.colorer;
 
-/** This interface is used to request text lines from current editor.
- *  Must return line with requested <code>lno</code>
+/** 
+ * Used to request text lines from current editor.
+ * Must return line with requested <code>lno</code>
+ * if some errors occurs, returns null value.
  */
 public interface LineSource{
   /** Line request method
