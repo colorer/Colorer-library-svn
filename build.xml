@@ -11,22 +11,23 @@
   <property name="javacVerbose" value="true"/>
   <property name="eclipse.dir" value="${ECLIPSE_HOME}"/>
 
+  <property name="plugin" value="net.sf.colorer"/>
+
+  <property name='eclipseplugin-version' value='_0.5.0'/>
+  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
+  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
+
+  <property name="version.suffix" value="${eclipseplugin-version}"/>
+  <property name="full.name" value="${plugin}${version.suffix}"/>
+  <property name="zip.name" value="${eclipseplugin-name}"/>
+  <property name="temp.folder" value="${basedir}/temp.folder"/>
+  <property name="plugin.destination" value="${basedir}/distr"/>
+  <property name="build.result.folder" value="${basedir}"/>
+  <property name='eclipse.dir' value='../..'/>
+  <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
+  <property name='eclipse.ver' value='2.1.0'/>
+
   <target name="init" depends="properties">
-    <property name="plugin" value="net.sf.colorer"/>
-
-    <property name='eclipseplugin-version' value='_0.5.0'/>
-    <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
-    <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
-
-    <property name="version.suffix" value="${eclipseplugin-version}"/>
-    <property name="full.name" value="${plugin}${version.suffix}"/>
-    <property name="zip.name" value="${eclipseplugin-name}"/>
-    <property name="temp.folder" value="${basedir}/temp.folder"/>
-    <property name="plugin.destination" value="${basedir}/distr"/>
-    <property name="build.result.folder" value="${basedir}"/>
-    <property name='eclipse.dir' value='../..'/>
-    <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
-    <property name='eclipse.ver' value='2.1.0'/>
 
     <path id='classpath'>
       <fileset dir="${eclipse.plugins}">
@@ -108,12 +109,12 @@
     <copy file="${temp.folder}/colorer.jar.bin.log" todir="${destination.temp.folder}/${full.name}"/>
   </target>
 
-  <target name="clean" depends="init" description="Clean the plug-in: net.sf.colorer of all the zips, jars and logs created.">
-    <delete file="${build.result.folder}/colorer.jar"/>
-    <delete file="${build.result.folder}/src.zip"/>
-    <delete file="${plugin.destination}/${full.name}.jar"/>
-    <delete file="${plugin.destination}/${full.name}.zip"/>
-    <delete dir="${temp.folder}"/>
+  <target name="clean" description="Clean the plug-in: net.sf.colorer of all the zips, jars and logs created.">
+    <delete file="${build.result.folder}/colorer.jar" failonerror='false'/>
+    <delete file="${build.result.folder}/src.zip" failonerror='false'/>
+    <delete file="${plugin.destination}/${full.name}.jar" failonerror='false'/>
+    <delete file="${plugin.destination}/${full.name}.zip" failonerror='false'/>
+    <delete dir="${temp.folder}" failonerror='false'/>
   </target>
 
   <target name="refresh" depends="init" if="eclipse.running">

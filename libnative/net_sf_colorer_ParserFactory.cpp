@@ -6,7 +6,7 @@
 extern "C" {
 
 JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobject obj, jstring catalogPath){
-  printf("clr:ParserFactory init\n");
+//  printf("clr:ParserFactory init\n");
   JParserFactory *jpf = null;
   try{
     if (catalogPath == null) jpf = new JParserFactory(null);

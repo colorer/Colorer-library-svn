@@ -1,3 +1,3 @@
-set path=C:\Program Files\Borland\bcc55\Bin;%path%
+set path=d:\Programs\devel\bcc55\bin;%path%
 
 make -f makefile.bcc
