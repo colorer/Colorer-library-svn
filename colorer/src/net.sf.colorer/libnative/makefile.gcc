@@ -18,12 +18,12 @@ LIBINC = -lc -lm -lstdc++
 LIBFLAGS = -shared -s -Wl,-soname,$(TARGET) $(FLAGS)
 
 $(obj_output_slash)net_sf_colorer.$(obj):
-  $(CC) -fPIC -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -o $@ -s -O3 -c net_sf_colorer.cpp
+	$(CC) -fPIC -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -o $@ -s -O3 -c net_sf_colorer.cpp
 
 $(TARGET): *.cpp *.h $(objs)
-  $(LINK) $(LIBFLAGS) -o $@ $(objs) $(LIBINC)
-  $(RM) colorer.dll.base
-  $(RM) colorer.dll.exp
+	$(LINK) $(LIBFLAGS) -o $@ $(objs) $(LIBINC)
+	$(RM) colorer.dll.base
+	$(RM) colorer.dll.exp
 
 clear:
-  $(RM) $(objs)
+	$(RM) $(objs)
