@@ -455,7 +455,7 @@
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
-    <filename>/(read\.?me|\.txt$|\.rus$)/i</filename>
+    <filename>/(read\.?me|\.txt$|\.rus|install$)/i</filename>
   </prototype>
 
   <prototype name="def" group="other" description="default type">
