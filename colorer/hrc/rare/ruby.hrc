@@ -15,6 +15,10 @@
     <region name="Keyword" parent="def:Keyword"/>
     <region name="Number" parent="def:Number"/>
 
+    <region name="ClassOutline" parent="def:Outlined"/>
+    <region name="AliasOutline" parent="def:Outlined"/>
+    
+
     <scheme name="String">
 
     </scheme>
@@ -27,12 +31,36 @@
       <inherit scheme="def:Number"/>
 
       <block start='/([\x22\x27\`])/' end='/\y1/' scheme="String" region='String'/>
+
+      <block start='/\%[Qqx](\{)/' end='/\}/' scheme="String" region='String'/>
+      <block start='/\%[Qqx](\[)/' end='/\]/' scheme="String" region='String'/>
+      <block start='/\%[Qqx](\()/' end='/\)/' scheme="String" region='String'/>
       <block start='/\%[Qqx](.)/' end='/\y1/' scheme="String" region='String'/>
+
+
+      <regexp match='/ (?{Keyword}alias) \s+ (?{AliasOutline}\S+ \s+ \S+)/x'/>
+      <regexp match='/\M class \s+ (?{ClassOutline}\S+)/x'/>
+
+      <block start='/(?{def:PairStart}(?{Keyword}def)) \s+ (\S+?) (\(.*?\))?/x' end='/\b(?{def:PairEnd}(?{Keyword}end))\b/' scheme='ruby'/>
+
+
+      <block start='/\b(case|class|while|until|for)\b/' end='/\b(end)\b/' scheme="ruby"
+             region00='Keyword' region10='Keyword'
+             region01='def:PairStart' region11='def:PairEnd'
+             />
+      <block start='/^\s*(if)\b/' end='/\b(end)\b/' scheme="ruby"
+             region00='Keyword' region10='Keyword'
+             region01='def:PairStart' region11='def:PairEnd'
+             />
 
       <inherit scheme="def:PairedBrackets">
         <virtual scheme='def:PairedBrackets' subst-scheme='ruby'/>
       </inherit>
 
+      <keywords region="def:Symbol">
+        <symb name='+'/><symb name='-'/><symb name='/'/><symb name='*'/><symb name='='/><symb name='!='/>
+        <symb name='.'/>
+      </keywords>
       <keywords region="Keyword">
         <word name="BEGIN"/>
         <word name="END"/>
