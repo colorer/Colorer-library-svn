@@ -124,13 +124,13 @@ public class ParserFactory {
     }
 
     public RegionMapper createStyledMapper(String classID, String nameID)
-            throws ParserFactoryException {
+    throws ParserFactoryException {
         checkActive();
         return createStyledMapper(iptr, classID, nameID);
     };
 
     public RegionMapper createTextMapper(String classID, String nameID)
-            throws ParserFactoryException {
+    throws ParserFactoryException {
         checkActive();
         return createTextMapper(iptr, nameID);
     };

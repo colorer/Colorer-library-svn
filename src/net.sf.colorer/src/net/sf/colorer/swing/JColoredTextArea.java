@@ -11,6 +11,7 @@ import net.sf.colorer.FileType;
 import net.sf.colorer.LineSource;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.BaseEditorNative;
 
@@ -22,7 +23,7 @@ import net.sf.colorer.impl.BaseEditorNative;
 public class JColoredTextArea extends JTextArea{
 
   private Hashtable colorsHash = new Hashtable();
-  private BaseEditor baseEditor = null;
+  private BaseEditor baseEditor;
 
   /**
    * Common StyledText creation constructor.
@@ -136,14 +137,15 @@ public class JColoredTextArea extends JTextArea{
 
   /**
    * Changes style/color scheme into one, specified with 'name' paramenter
+   * 
    * @param name Name of color scheme (HRD name)
    */
-  public void setColoringStyle(String name){
-    baseEditor.setRegionMapper("rgb", name);
-    StyledRegion sr = (StyledRegion)baseEditor.getBackground();
-    setForeground(getColor(sr.bfore, sr.fore));
-    setBackground(getColor(sr.bback, sr.back));
-  };
+    public void setColoringStyle(String name) throws IllegalArgumentException {
+        baseEditor.setRegionMapper("rgb", name);
+        StyledRegion sr = (StyledRegion) baseEditor.getBackground();
+        setForeground(getColor(sr.bfore, sr.fore));
+        setBackground(getColor(sr.bback, sr.back));
+    };
 
   public void paint(Graphics g){
     int idx = 0;
