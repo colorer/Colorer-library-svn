@@ -1,8 +1,13 @@
 
 $Date$
 
+  New:
+    - SVG 1.0 (Eugene Efremov)
+
   Fixes:
     - Lisp fixes, outline (Mykolas Juraitis)
+    - FAR manager and Common RE schemes (Eugene Efremov)
+
 
 
 

@@ -10,6 +10,7 @@
     <filename weight='5'>/build\.xml/ix</filename>
     <firstline weight='5'>/&lt;project\b/s</firstline>
   </prototype>
+
   <prototype name="xslfo" group="xml" description="xslfo 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="gen/xslfo.hrc"/>
     <filename>/\.(xslfo?|fo)$/i</filename>
@@ -34,6 +35,10 @@
   <prototype name="taglib" group="inet" description="JSP taglib">
     <location link="gen/taglib.hrc"/>
     <filename>/\.tld/i</filename>
+  </prototype>
+  <prototype name="svg" group="inet" description="svg" targetNamespace="http://www.w3.org/2000/svg">
+    <location link="gen/svg.hrc"/>
+    <filename>/\.svg/ix</filename>
   </prototype>
 
   <prototype name="colorer5catalog" group="scripts" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
