@@ -36,11 +36,11 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
       super(Messages.get("outline.tree"), ImageStore.getID("outline-tree"));
       setToolTipText(Messages.get("outline.tree.tooltip"));
       setHoverImageDescriptor(ImageStore.getID("outline-tree-hover"));
-      setChecked(EclipsecolorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
+      setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
     };
     public void run(){
       setChecked(isChecked());
-      EclipsecolorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Hierarchy", isChecked());
+      ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Hierarchy", isChecked());
       activeOutliner.setHierarchy(isChecked());
       update();
     }
@@ -52,7 +52,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
       super(Messages.get("outline.sort"), ImageStore.getID("outline-sort"));
       setToolTipText(Messages.get("outline.sort.tooltip"));
       setHoverImageDescriptor(ImageStore.getID("outline-sort-hover"));
-      setChecked(EclipsecolorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Sort"));
+      setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Sort"));
       getTreeViewer().setSorter(isChecked() ? sorter : null);
     };
     public void run(){
@@ -62,7 +62,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
           getTreeViewer().setSorter(isChecked() ? sorter : null);
         }
       });
-      EclipsecolorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Sort", isChecked());
+      ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Sort", isChecked());
     }
   }
   
@@ -126,7 +126,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
 
     activeOutliner.addListener(this);
 
-    activeOutliner.setHierarchy(EclipsecolorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
+    activeOutliner.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
     
     notifyUpdate();
     backgroundUpdater = new Thread(){

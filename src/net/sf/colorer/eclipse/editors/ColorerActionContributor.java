@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import net.sf.colorer.*;
-import net.sf.colorer.eclipse.EclipsecolorerPlugin;
+import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
 
@@ -67,7 +67,7 @@ public class ColorerActionContributor extends TextEditorActionContributor{
     }
     public void run() {
       if (activeEditor != null && activeEditor instanceof ColorerEditor){
-        EclipsecolorerPlugin.getDefault().reloadParserFactory();
+        ColorerPlugin.getDefault().reloadParserFactory();
       }
     }
   }
@@ -120,7 +120,7 @@ public class ColorerActionContributor extends TextEditorActionContributor{
       if (filetypeList != null) filetypeList.dispose();
       filetypeList = new Menu(parent);
       ActionContributionItem item;
-      ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+      ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
       Hashtable groups = new Hashtable();
       for(Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
         FileType ftype = (FileType)e.nextElement();
