@@ -15,6 +15,13 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="REworddiv">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value=".*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="REstring-or-null">
     <xs:union memberTypes="REstring">
       <xs:simpleType>
@@ -482,7 +489,7 @@
       </xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="priority" type="priority" default="low"/>
-    <xs:attribute name="worddiv" type="xs:string">
+    <xs:attribute name="worddiv" type="REworddiv">
       <xs:annotation><xs:documentation>
         Class of characters, used to search words edges.
       </xs:documentation></xs:annotation>
