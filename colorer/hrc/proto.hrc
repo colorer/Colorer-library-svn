@@ -517,7 +517,7 @@
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
-    <filename>/(read\.?me|\.txt$|\.rus|install$)/i</filename>
+    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install$)/i</filename>
     <filename>/\.spo/ix</filename>
   </prototype>
 
