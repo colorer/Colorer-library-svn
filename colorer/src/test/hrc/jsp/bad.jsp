@@ -9,7 +9,7 @@ sadf
 
 </script>	
 
-
+[ 1092620 ] Coloring issues:
 <script>
 <%= var %> (text)
 </script>
