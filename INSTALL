@@ -2,5 +2,23 @@
   Installation and building instructions for Colorer-take5 library.
 
 
-  Igor Russkih,
-  $Date$
+  1. Requirements
+
+    a. Sun JDK 1.4.1 or later.
+    b. XML and XSLT processors (included in JDK 1.4.1 distribution).
+    c. Apache ANT tool (http://jakarta.apache.org/ant/), version 1.5.1 or later.
+    d. Doxygen - documentation system for C++ sources (http://www.doxygen.org).
+    e. ANSI C++ compiler.
+       By default, build files includes support for
+       BCC5.5, VC6/VC7, CygWin, Linux/Unix GCC, MacOS GCC compilers
+
+
+  2. Building
+
+
+  3. Installation
+
+
+
+  Igor Russkih
+    cail@nm.ru
