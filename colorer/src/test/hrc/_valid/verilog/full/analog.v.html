@@ -1,0 +1,258 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>//title netlist for analog to digital converter</span>
+  1: <span style='color:#696969; '>// file adc_gate.v</span>
+  2: <span style='color:#696969; '>/*      This file demonstrates the following capabilities for SILOS III for</span>
+  3: <span style='color:#696969; '>    mixed analog and digital simulation:</span>
+  4: <span style='color:#696969; '>    -  passing analog values in module ports</span>
+  5: <span style='color:#696969; '>    -  modeling a simple analog comparator</span>
+  6: <span style='color:#696969; '>    -  modeling a simple digital to analog converter</span>
+  7: <span style='color:#696969; '>    -  nested `define macros (OVI 2.0 feature)</span>
+  8: <span style='color:#696969; '>    -  UDP primitives for D flip-flop and JK flip-flop</span>
+  9: <span style='color:#696969; '>*/</span>
+ 10: 
+ 11: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>!con</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>.ext=all</span>        <span style='color:#696969; '>// This is a switch to allow the SILOS III analog extensions</span>
+ 12: 
+ 13: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>`define</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>abs1(a)</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>(((a)&lt;0)?-(a):(a))</span>
+ 14: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>`define</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>close(a,b)</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>(`abs1(a-b)</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>&lt;</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>0.01)</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>?</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>1:0</span>
+ 15: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>`define</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>high</span>  <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'b1</span>                       
+ 16: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>`define</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>low</span>   <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>'b0</span>
+ 17: 
+ 18: <span style='color:#696969; '>// this module defines the stimulus and instantiates the circuit</span>
+ 19: 
+ 20: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>`timescale</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>1ns</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>/</span> <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>1ns</span>
+ 21: 
+ 22: <span style='color:#800000; font-weight:bold; '>module top</span><span style='color:#808030; '>;</span>
+ 23:     <span style='color:#800000; font-weight:bold; '>wire</span>     up<span style='color:#808030; '>,</span> down<span style='color:#800000; font-weight:bold; '>;</span>       
+ 24:     real  analog_in<span style='color:#808030; '>;</span>
+ 25:     <span style='color:#800000; font-weight:bold; '>wire</span> real  feedback<span style='color:#800000; font-weight:bold; '>;</span>
+ 26:     <span style='color:#800000; font-weight:bold; '>wire</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> count<span style='color:#800000; font-weight:bold; '>;</span>
+ 27:     <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> in<span style='color:#800000; font-weight:bold; '>;</span>
+ 28:     <span style='color:#800000; font-weight:bold; '>reg</span>     clock<span style='color:#800000; font-weight:bold; '>;</span>
+ 29:     <span style='color:#800000; font-weight:bold; '>wire</span>    down_up<span style='color:#800000; font-weight:bold; '>;</span>
+ 30:     <span style='color:#800000; font-weight:bold; '>wire</span>    enable<span style='color:#800000; font-weight:bold; '>;</span>
+ 31:     <span style='color:#800000; font-weight:bold; '>reg</span>     load_inputs<span style='color:#800000; font-weight:bold; '>;</span>
+ 32:     <span style='color:#800000; font-weight:bold; '>reg</span>     clear<span style='color:#800000; font-weight:bold; '>;</span>
+ 33:     integer counter_value<span style='color:#808030; '>;</span>
+ 34: 
+ 35:     comparator comp<span style='color:#808030; '>(</span>analog_in<span style='color:#808030; '>,</span>feedback<span style='color:#808030; '>,</span>up<span style='color:#808030; '>,</span>down<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 36:     dac dig2an<span style='color:#808030; '>(</span>feedback<span style='color:#808030; '>,</span> count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 37:     sr_flop_gate sr_flop<span style='color:#808030; '>(</span>up<span style='color:#808030; '>,</span> down<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 38:     counter_gate counter <span style='color:#808030; '>(</span>in<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>,</span> load_inputs<span style='color:#808030; '>,</span> count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 39: 
+ 40:     initial
+ 41:         <span style='color:#800000; font-weight:bold; '>begin</span>
+ 42:         clock <span style='color:#808030; '>=</span> 'b0<span style='color:#808030; '>;</span>
+ 43:         forever
+ 44:             <span style='color:#800000; font-weight:bold; '>begin</span>
+ 45:             #<span style='color:#008c00; '>2000</span> clock <span style='color:#808030; '>=</span> 'b1<span style='color:#808030; '>;</span>
+ 46:             #<span style='color:#008c00; '>2000</span> clock <span style='color:#808030; '>=</span> 'b0<span style='color:#808030; '>;</span>
+ 47:             #<span style='color:#008c00; '>500</span> clock <span style='color:#808030; '>=</span> 'b1<span style='color:#808030; '>;</span>
+ 48:             <span style='color:#800000; font-weight:bold; '>end</span>
+ 49:         <span style='color:#800000; font-weight:bold; '>end</span>
+ 50:     initial
+ 51:         fork
+ 52:                  in <span style='color:#808030; '>=</span> 'b0<span style='color:#808030; '>;</span>
+ 53: 
+ 54:                  clear <span style='color:#808030; '>=</span> 'b0<span style='color:#808030; '>;</span>
+ 55:             #<span style='color:#008c00; '>100</span> clear <span style='color:#808030; '>=</span> 'b1<span style='color:#808030; '>;</span>
+ 56: 
+ 57:                  load_inputs <span style='color:#808030; '>=</span> 'b1<span style='color:#808030; '>;</span>
+ 58:             #<span style='color:#008c00; '>1</span>   load_inputs <span style='color:#808030; '>=</span> 'b0<span style='color:#808030; '>;</span>
+ 59:             #<span style='color:#008c00; '>600</span> load_inputs <span style='color:#808030; '>=</span> 'b1<span style='color:#808030; '>;</span>
+ 60: 
+ 61:                  analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 62:             #1k  analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>;</span>
+ 63:             #30k analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 64:             #50k analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>8</span><span style='color:#808030; '>;</span>
+ 65:             #90k analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 66:             #130k analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>;</span>
+ 67:             #150k analog_in <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+ 68:             #180k $finish<span style='color:#808030; '>;</span>
+ 69:         join
+ 70:     always @count counter_value <span style='color:#808030; '>=</span> integer<span style='color:#808030; '>(</span>feedback*<span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 71: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+ 72: 
+ 73: <span style='color:#696969; '>// this module models an analog comparator</span>
+ 74: <span style='color:#800000; font-weight:bold; '>module comparator</span><span style='color:#808030; '>(</span>analog_in<span style='color:#808030; '>,</span>feedback<span style='color:#808030; '>,</span>up<span style='color:#808030; '>,</span>down<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>  <span style='color:#696969; '>// analog signals are passed in</span>
+ 75:     <span style='color:#800000; font-weight:bold; '>input</span> analog_in<span style='color:#808030; '>,</span>feedback<span style='color:#800000; font-weight:bold; '>;</span>
+ 76:     <span style='color:#800000; font-weight:bold; '>output</span> up<span style='color:#808030; '>,</span> down<span style='color:#800000; font-weight:bold; '>;</span>
+ 77:     real analog_in<span style='color:#808030; '>,</span>feedback<span style='color:#808030; '>;</span>                <span style='color:#696969; '>// ports (analog_in, feedback)</span>
+ 78:     <span style='color:#800000; font-weight:bold; '>reg</span> up<span style='color:#808030; '>,</span> down<span style='color:#800000; font-weight:bold; '>;</span>
+ 79:     always
+ 80:         <span style='color:#800000; font-weight:bold; '>begin</span>
+ 81:             @ (analog_in or feedback)<span style='color:#808030; '>;</span>
+ 82:             up <span style='color:#808030; '>=</span> `low<span style='color:#808030; '>;</span>
+ 83:             down <span style='color:#808030; '>=</span> `low<span style='color:#808030; '>;</span>
+ 84:             <span style='color:#800000; font-weight:bold; '>if</span> (!`close(analog_in<span style='color:#808030; '>,</span>feedback))
+ 85:                 <span style='color:#800000; font-weight:bold; '>begin</span>
+ 86:                 <span style='color:#800000; font-weight:bold; '>if</span> ( analog_in <span style='color:#808030; '>></span> feedback )
+ 87:                     up <span style='color:#808030; '>=</span> `high<span style='color:#808030; '>;</span>
+ 88:                 <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>if</span> ( analog_in <span style='color:#808030; '>&lt;</span> feedback )
+ 89:                     down <span style='color:#808030; '>=</span> `high<span style='color:#808030; '>;</span>
+ 90:                 <span style='color:#800000; font-weight:bold; '>end</span>
+ 91:         <span style='color:#800000; font-weight:bold; '>end</span>
+ 92: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+ 93: 
+ 94: <span style='color:#696969; '>//this module models a digital to analog converter</span>
+ 95: <span style='color:#800000; font-weight:bold; '>module dac</span><span style='color:#808030; '>(</span>feedback<span style='color:#808030; '>,</span> count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 96:     <span style='color:#800000; font-weight:bold; '>input</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> count<span style='color:#800000; font-weight:bold; '>;</span>
+ 97:     <span style='color:#800000; font-weight:bold; '>output</span> feedback<span style='color:#800000; font-weight:bold; '>;</span>
+ 98:     real feedback<span style='color:#808030; '>;</span>
+ 99:     initial
+100:         feedback <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+101:     always
+102:         @ <span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span> #<span style='color:#008c00; '>121</span> feedback <span style='color:#808030; '>=</span> real<span style='color:#808030; '>(</span>integer<span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> / <span style='color:#008c00; '>10</span><span style='color:#808030; '>.</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+103: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+104: 
+105: <span style='color:#696969; '>//  Gate level latching logic</span>
+106: <span style='color:#800000; font-weight:bold; '>module sr_flop_gate</span> <span style='color:#808030; '>(</span>up<span style='color:#808030; '>,</span> down<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+107:     <span style='color:#696969; '>// this module models latching circuitry at the gate level:</span>
+108:     supply1 vdd<span style='color:#808030; '>;</span>
+109:     <span style='color:#800000; font-weight:bold; '>input</span> up<span style='color:#808030; '>,</span> down<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> clear<span style='color:#800000; font-weight:bold; '>;</span>
+110:     <span style='color:#800000; font-weight:bold; '>output</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#800000; font-weight:bold; '>;</span>
+111:     <span style='color:#800000; font-weight:bold; '>wire</span> up<span style='color:#808030; '>,</span> down<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> clear<span style='color:#800000; font-weight:bold; '>;</span>
+112:     <span style='color:#800000; font-weight:bold; '>wire</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#800000; font-weight:bold; '>;</span>
+113:     and     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>320</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>280</span><span style='color:#808030; '>)</span> 
+114:         <span style='color:#808030; '>(</span>and1<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> up<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+115:         <span style='color:#808030; '>(</span>and2<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+116:         <span style='color:#808030; '>(</span>and3<span style='color:#808030; '>,</span> ff1_q<span style='color:#808030; '>,</span> ff2_qb<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+117:         <span style='color:#808030; '>(</span>down_up<span style='color:#808030; '>,</span> ff2_q<span style='color:#808030; '>,</span> ff1_qb<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+118:     and     #<span style='color:#008c00; '>330</span>
+119:         <span style='color:#808030; '>(</span>clock_d<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+120:     nor     #<span style='color:#008c00; '>150</span> nor1 <span style='color:#808030; '>(</span>enable<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> and3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+121:     
+122:     d_flip_flop     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>220</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>210</span><span style='color:#808030; '>)</span>
+123:             <span style='color:#808030; '>(</span>ff1_q<span style='color:#808030; '>,</span> clock_d<span style='color:#808030; '>,</span> and1<span style='color:#808030; '>,</span> vdd<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+124:             <span style='color:#808030; '>(</span>ff2_q<span style='color:#808030; '>,</span> clock_d<span style='color:#808030; '>,</span> and2<span style='color:#808030; '>,</span> vdd<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+125:     not     <span style='color:#808030; '>(</span>ff1_qb<span style='color:#808030; '>,</span>ff1_q<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+126:         <span style='color:#808030; '>(</span>ff2_qb<span style='color:#808030; '>,</span>ff2_q<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+127: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+128: 
+129: <span style='color:#696969; '>// ls191 up-down counter</span>
+130: <span style='color:#800000; font-weight:bold; '>module ls191</span> <span style='color:#808030; '>(</span>d<span style='color:#808030; '>,</span>b<span style='color:#808030; '>,</span>c<span style='color:#808030; '>,</span>a<span style='color:#808030; '>,</span> clk<span style='color:#808030; '>,</span> du<span style='color:#808030; '>,</span> ct<span style='color:#808030; '>,</span> ld<span style='color:#808030; '>,</span> od<span style='color:#808030; '>,</span> oc<span style='color:#808030; '>,</span> ob<span style='color:#808030; '>,</span> oa<span style='color:#808030; '>,</span> rco<span style='color:#808030; '>,</span> mo<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+131:     <span style='color:#800000; font-weight:bold; '>input</span> a<span style='color:#808030; '>,</span>b<span style='color:#808030; '>,</span>c<span style='color:#808030; '>,</span>d<span style='color:#808030; '>,</span>clk<span style='color:#808030; '>,</span>du<span style='color:#808030; '>,</span>ct<span style='color:#808030; '>,</span>ld<span style='color:#800000; font-weight:bold; '>;</span>
+132:     <span style='color:#800000; font-weight:bold; '>output</span> oa<span style='color:#808030; '>,</span>ob<span style='color:#808030; '>,</span>oc<span style='color:#808030; '>,</span>od<span style='color:#808030; '>,</span>rco<span style='color:#808030; '>,</span>mo<span style='color:#800000; font-weight:bold; '>;</span>
+133:     <span style='color:#800000; font-weight:bold; '>wire</span> clk<span style='color:#800000; font-weight:bold; '>;</span>
+134:     <span style='color:#800000; font-weight:bold; '>wire</span> a<span style='color:#808030; '>,</span>b<span style='color:#808030; '>,</span>c<span style='color:#808030; '>,</span>d<span style='color:#808030; '>,</span>du<span style='color:#808030; '>,</span>ct<span style='color:#808030; '>,</span>ld<span style='color:#800000; font-weight:bold; '>;</span>
+135:     <span style='color:#800000; font-weight:bold; '>wire</span> s0<span style='color:#808030; '>,</span> s1<span style='color:#808030; '>,</span> s2<span style='color:#808030; '>,</span> s3<span style='color:#800000; font-weight:bold; '>;</span>
+136:     <span style='color:#800000; font-weight:bold; '>wire</span> c0<span style='color:#808030; '>,</span> c1<span style='color:#808030; '>,</span> c2<span style='color:#808030; '>,</span> c3<span style='color:#800000; font-weight:bold; '>;</span>
+137:     
+138:     jk_flip_flop
+139:         <span style='color:#808030; '>(</span>q0<span style='color:#808030; '>,</span> ck<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>ct<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>ct<span style='color:#808030; '>,</span> s0<span style='color:#808030; '>,</span> c0<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+140:         <span style='color:#808030; '>(</span>q1<span style='color:#808030; '>,</span> ck<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d1<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d1<span style='color:#808030; '>,</span> s1<span style='color:#808030; '>,</span> c1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+141:         <span style='color:#808030; '>(</span>q2<span style='color:#808030; '>,</span> ck<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d2<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d2<span style='color:#808030; '>,</span> s2<span style='color:#808030; '>,</span> c2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+142:         <span style='color:#808030; '>(</span>q3<span style='color:#808030; '>,</span> ck<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d3<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>d3<span style='color:#808030; '>,</span> s3<span style='color:#808030; '>,</span> c3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+143:     not     <span style='color:#808030; '>(</span>q0n<span style='color:#808030; '>,</span>q0<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+144:         <span style='color:#808030; '>(</span>q1n<span style='color:#808030; '>,</span>q1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+145:         <span style='color:#808030; '>(</span>q2n<span style='color:#808030; '>,</span>q2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+146:         <span style='color:#808030; '>(</span>q3n<span style='color:#808030; '>,</span>q3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+147:     and     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>240</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>360</span><span style='color:#808030; '>)</span>
+148:         <span style='color:#808030; '>(</span>oa<span style='color:#808030; '>,</span> q0<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+149:         <span style='color:#808030; '>(</span>ob<span style='color:#808030; '>,</span> q1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+150:         <span style='color:#808030; '>(</span>oc<span style='color:#808030; '>,</span> q2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+151:         <span style='color:#808030; '>(</span>od<span style='color:#808030; '>,</span> q3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+152:     <span style='color:#696969; '>// rc output</span>
+153:     not     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>210</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>250</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>(</span>tcd<span style='color:#808030; '>,</span> tc<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+154:     nand    #<span style='color:#808030; '>(</span><span style='color:#008c00; '>200</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>240</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>(</span>rco<span style='color:#808030; '>,</span> clk<span style='color:#808030; '>,</span> ctnd<span style='color:#808030; '>,</span> tcd<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+155:     <span style='color:#696969; '>// tc output</span>
+156:     and     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>190</span><span style='color:#808030; '>)</span>
+157:         <span style='color:#808030; '>(</span>n53<span style='color:#808030; '>,</span> q0<span style='color:#808030; '>,</span> q1<span style='color:#808030; '>,</span> q2<span style='color:#808030; '>,</span> q3<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+158:         <span style='color:#808030; '>(</span>n54<span style='color:#808030; '>,</span>  q0n<span style='color:#808030; '>,</span> q1n<span style='color:#808030; '>,</span> q2n<span style='color:#808030; '>,</span> q3n<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+159:     <span style='color:#696969; '>//aoi   </span>
+160:     <span style='color:#800000; font-weight:bold; '>assign</span>  tc <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>~</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span><span style='color:#808030; '>~</span>du<span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span> n53<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span>du <span style='color:#808030; '>&amp;</span> n54<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+161:     and     #<span style='color:#008c00; '>330</span> <span style='color:#808030; '>(</span>mo<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>tc<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+162:     <span style='color:#696969; '>// other logic</span>
+163:     nor
+164:         <span style='color:#808030; '>(</span>cue<span style='color:#808030; '>,</span> du<span style='color:#808030; '>,</span> ct<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+165:         <span style='color:#808030; '>(</span>ce<span style='color:#808030; '>,</span> <span style='color:#808030; '>~</span>du<span style='color:#808030; '>,</span> ct<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+166:     nand    
+167:         <span style='color:#808030; '>(</span>s0<span style='color:#808030; '>,</span> ad<span style='color:#808030; '>,</span> ldnd<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+168:         <span style='color:#808030; '>(</span>c0<span style='color:#808030; '>,</span> s0<span style='color:#808030; '>,</span> ldne<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+169:         <span style='color:#808030; '>(</span>s1<span style='color:#808030; '>,</span> bd<span style='color:#808030; '>,</span> ldnd<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+170:         <span style='color:#808030; '>(</span>c1<span style='color:#808030; '>,</span> s1<span style='color:#808030; '>,</span> ldne<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+171:         <span style='color:#808030; '>(</span>s2<span style='color:#808030; '>,</span> cd<span style='color:#808030; '>,</span> ldnd<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+172:         <span style='color:#808030; '>(</span>c2<span style='color:#808030; '>,</span> s2<span style='color:#808030; '>,</span> ldne<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+173:         <span style='color:#808030; '>(</span>s3<span style='color:#808030; '>,</span> dd<span style='color:#808030; '>,</span> ldnd<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+174:         <span style='color:#808030; '>(</span>c3<span style='color:#808030; '>,</span> s3<span style='color:#808030; '>,</span> ldne<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+175:     
+176:     <span style='color:#696969; '>// aoi logic</span>
+177:     <span style='color:#800000; font-weight:bold; '>assign</span>  d1 <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>~</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>ce <span style='color:#808030; '>&amp;</span> q0n<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span> q0 <span style='color:#808030; '>&amp;</span> cue<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+178:     <span style='color:#800000; font-weight:bold; '>assign</span>  d2 <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>~</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>ce <span style='color:#808030; '>&amp;</span> q0n <span style='color:#808030; '>&amp;</span> q1n<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span>q0 <span style='color:#808030; '>&amp;</span> q1 <span style='color:#808030; '>&amp;</span> cue<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+179:     <span style='color:#800000; font-weight:bold; '>assign</span>  d3 <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>~</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>ce <span style='color:#808030; '>&amp;</span> q0n <span style='color:#808030; '>&amp;</span> q1n <span style='color:#808030; '>&amp;</span> q2n<span style='color:#808030; '>)</span> <span style='color:#808030; '>|</span> <span style='color:#808030; '>(</span>q0 <span style='color:#808030; '>&amp;</span> q1 <span style='color:#808030; '>&amp;</span> q2 <span style='color:#808030; '>&amp;</span> cue<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800000; font-weight:bold; '>;</span>
+180:     not
+181:          <span style='color:#808030; '>(</span>ck<span style='color:#808030; '>,</span> clk<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+182:     and     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>80</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>)</span>
+183:          <span style='color:#808030; '>(</span>ad<span style='color:#808030; '>,</span> a<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+184:         <span style='color:#808030; '>(</span>bd<span style='color:#808030; '>,</span> b<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+185:         <span style='color:#808030; '>(</span>cd<span style='color:#808030; '>,</span> c<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+186:         <span style='color:#808030; '>(</span>dd<span style='color:#808030; '>,</span> d<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+187:     not     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>130</span><span style='color:#808030; '>)</span>
+188:         <span style='color:#808030; '>(</span>ctnd<span style='color:#808030; '>,</span> ct<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+189:     not     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+190:         <span style='color:#808030; '>(</span>ldnd<span style='color:#808030; '>,</span> ld<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+191:     not     #<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+192:         <span style='color:#808030; '>(</span>ldne<span style='color:#808030; '>,</span> ld<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+193: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+194: 
+195: <span style='color:#696969; '>// 8-bit up/down counter</span>
+196: <span style='color:#800000; font-weight:bold; '>module counter_gate</span> <span style='color:#808030; '>(</span>in<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>,</span> load_inputs<span style='color:#808030; '>,</span> count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+197:     <span style='color:#800000; font-weight:bold; '>input</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>,</span> load_inputs<span style='color:#800000; font-weight:bold; '>;</span>
+198:     <span style='color:#800000; font-weight:bold; '>input</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> in<span style='color:#800000; font-weight:bold; '>;</span>
+199:     <span style='color:#800000; font-weight:bold; '>output</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> count<span style='color:#800000; font-weight:bold; '>;</span>
+200:     <span style='color:#800000; font-weight:bold; '>wire</span> ripple_clk<span style='color:#808030; '>,</span> enable<span style='color:#800000; font-weight:bold; '>;</span> 
+201:     <span style='color:#800000; font-weight:bold; '>wire</span> clock<span style='color:#808030; '>,</span> load_inputs<span style='color:#800000; font-weight:bold; '>;</span>
+202:     <span style='color:#800000; font-weight:bold; '>wire</span><span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> in<span style='color:#800000; font-weight:bold; '>;</span>
+203: 
+204:     ls191   ls191_1 <span style='color:#808030; '>(</span>in<span style='color:#008c00; '>[3]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[2]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[1]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[0]</span><span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> enable<span style='color:#808030; '>,</span> load_inputs<span style='color:#808030; '>,</span>
+205:          count<span style='color:#008c00; '>[3]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[2]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[1]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[0]</span><span style='color:#808030; '>,</span> ripple_clk<span style='color:#808030; '>,</span>foo<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+206:         ls191_2 <span style='color:#808030; '>(</span>in<span style='color:#008c00; '>[7]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[6]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[5]</span><span style='color:#808030; '>,</span>in<span style='color:#008c00; '>[4]</span><span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> down_up<span style='color:#808030; '>,</span> ripple_clk<span style='color:#808030; '>,</span> 
+207:         load_inputs<span style='color:#808030; '>,</span>  count<span style='color:#008c00; '>[7]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[6]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[5]</span><span style='color:#808030; '>,</span>count<span style='color:#008c00; '>[4]</span><span style='color:#808030; '>,</span> foo<span style='color:#808030; '>,</span>foo<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span> 
+208: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+209: 
+210: <span style='color:#696969; '>// d flip-flop udp primitive</span>
+211: <span style='color:#800000; font-weight:bold; '>primitive d_flip_flop</span> <span style='color:#808030; '>(</span>q<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> data<span style='color:#808030; '>,</span> set<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+212:     <span style='color:#800000; font-weight:bold; '>input</span> clock<span style='color:#808030; '>,</span> data<span style='color:#808030; '>,</span> set<span style='color:#808030; '>,</span> clear<span style='color:#800000; font-weight:bold; '>;</span>
+213:     <span style='color:#800000; font-weight:bold; '>output</span> q<span style='color:#800000; font-weight:bold; '>;</span>
+214:     <span style='color:#800000; font-weight:bold; '>reg</span> q<span style='color:#800000; font-weight:bold; '>;</span>
+215: 
+216:     table
+217:     <span style='color:#696969; '>//      clock   data    set     clear   q       q+</span>
+218:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span>       <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>?</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+219:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span>       x       <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+220:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span>       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+221:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>0</span>       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+222:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+223:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    x       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     x<span style='color:#808030; '>;</span>
+224:         f       <span style='color:#808030; '>?</span>       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#808030; '>-</span><span style='color:#808030; '>;</span>
+225:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span>       <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#808030; '>-</span><span style='color:#808030; '>;</span>
+226:     endtable
+227: <span style='color:#800000; font-weight:bold; '>endprimitive</span>
+228: 
+229: <span style='color:#696969; '>// jk flip-flop udp primitive</span>
+230: <span style='color:#800000; font-weight:bold; '>primitive jk_flip_flop</span> <span style='color:#808030; '>(</span>q<span style='color:#808030; '>,</span> clock<span style='color:#808030; '>,</span> j<span style='color:#808030; '>,</span>k<span style='color:#808030; '>,</span> set<span style='color:#808030; '>,</span> clear<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+231:     <span style='color:#800000; font-weight:bold; '>input</span> clock<span style='color:#808030; '>,</span> j<span style='color:#808030; '>,</span>k<span style='color:#808030; '>,</span> set<span style='color:#808030; '>,</span> clear<span style='color:#800000; font-weight:bold; '>;</span>
+232:     <span style='color:#800000; font-weight:bold; '>output</span> q<span style='color:#800000; font-weight:bold; '>;</span>
+233:     <span style='color:#800000; font-weight:bold; '>reg</span> q<span style='color:#800000; font-weight:bold; '>;</span>
+234:     initial  q <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1'b0</span><span style='color:#808030; '>;</span>
+235:     table
+236:     <span style='color:#696969; '>//      clock   jk      set     clear   q       q+</span>
+237:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>      <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>?</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+238:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>      x       <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+239:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>0</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+240:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>00</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+241:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>00</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span>x<span style='color:#808030; '>:</span>     x<span style='color:#808030; '>;</span>
+242:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>00</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+243:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>10</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+244:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>01</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+245:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>11</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+246:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>11</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span>x<span style='color:#808030; '>:</span>     x<span style='color:#808030; '>;</span>
+247:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#008c00; '>11</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>:</span>     <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+248:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    x<span style='color:#808030; '>?</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     x<span style='color:#808030; '>;</span>
+249:         <span style='color:#808030; '>(</span><span style='color:#008c00; '>01</span><span style='color:#808030; '>)</span>    <span style='color:#808030; '>?</span>x      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     x<span style='color:#808030; '>;</span>
+250:         f       <span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#808030; '>-</span><span style='color:#808030; '>;</span>
+251:         <span style='color:#808030; '>?</span>       <span style='color:#808030; '>?</span><span style='color:#808030; '>?</span>      <span style='color:#008c00; '>1</span>       <span style='color:#008c00; '>1</span>       <span style='color:#808030; '>:</span><span style='color:#808030; '>?</span><span style='color:#808030; '>:</span>     <span style='color:#808030; '>-</span><span style='color:#808030; '>;</span>
+252:     endtable
+253: <span style='color:#800000; font-weight:bold; '>endprimitive</span>
+254: 
+255: 
+</pre></body></html>

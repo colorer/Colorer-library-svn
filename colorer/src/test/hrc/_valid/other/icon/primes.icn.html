@@ -1,0 +1,50 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>#</span>
+ 1: <span style='color:#696969; '># (c) Victor Zhumatii, OSPU</span>
+ 2: <span style='color:#696969; '># Он╠┐ код ╟┬пе╔но │╩е╫ п┴о┬╫╠е ┌│┬лЪ ┬╫ол═ м│л╠м│ к┴│п╫ог┴Ъ─Ъм ме╫одЪм│</span>
+ 3: <span style='color:#696969; '>#</span>
+ 4: 
+ 5: <span style='color:#800000; font-weight:bold; '>procedure</span> randoms <span style='color:#808030; '>(</span>n<span style='color:#808030; '>,</span> k<span style='color:#808030; '>)</span> <span style='color:#696969; '># n times random in 1..k</span>
+ 6:      <span style='color:#800000; font-weight:bold; '>every</span> <span style='color:#008c00; '>1</span> to n <span style='color:#800000; font-weight:bold; '>do</span> <span style='color:#800000; font-weight:bold; '>suspend</span> <span style='color:#808030; '>?</span> k
+ 7: <span style='color:#800000; font-weight:bold; '>end</span>
+ 8: 
+ 9: <span style='color:#800000; font-weight:bold; '>procedure</span> pow<span style='color:#808030; '>(</span>a<span style='color:#808030; '>,</span> b<span style='color:#808030; '>,</span> modLimit<span style='color:#808030; '>)</span> <span style='color:#696969; '># long a^b version</span>
+10:     powers <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>list</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+11:     powers <span style='color:#808030; '>|</span><span style='color:#808030; '>|</span><span style='color:#808030; '>|</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span>a<span style='color:#808030; '>]</span> <span style='color:#696969; '># 0-╨ ┬╫епен═</span>
+12: 
+13:     <span style='color:#800000; font-weight:bold; '>while</span> <span style='color:#808030; '>(</span><span style='color:#008c00; '>2</span> <span style='color:#808030; '>^</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>*</span>powers <span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> b <span style='color:#800000; font-weight:bold; '>do</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '># ПокЪ дЪннЪ╨ ┬╫епен═ нЪм може╫ понЪдоб│╫═┬╨</span>
+14:         last <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> powers<span style='color:#808030; '>[</span><span style='color:#808030; '>*</span>powers<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+15:         powers <span style='color:#808030; '>|</span><span style='color:#808030; '>|</span><span style='color:#808030; '>|</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span><span style='color:#808030; '>(</span>last<span style='color:#808030; '>*</span>last<span style='color:#808030; '>)</span> <span style='color:#808030; '>%</span> modLimit<span style='color:#808030; '>]</span>
+16:     <span style='color:#800080; '>}</span>
+17:     res <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span> 
+18:     <span style='color:#696969; '>#-d-write("Required space for powers:", *powers)</span>
+19:     <span style='color:#800000; font-weight:bold; '>every</span> power <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#808030; '>!</span>powers <span style='color:#800000; font-weight:bold; '>do</span> <span style='color:#800080; '>{</span>
+20:         <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>b <span style='color:#808030; '>%</span> <span style='color:#008c00; '>2</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span> <span style='color:#800080; '>{</span>
+21:             res <span style='color:#808030; '>*</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> power<span style='color:#808030; '>;</span>
+22:             res <span style='color:#808030; '>%</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> modLimit<span style='color:#808030; '>;</span>
+23:         <span style='color:#800080; '>}</span>
+24:         b <span style='color:#808030; '>/</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+25:     <span style='color:#800080; '>}</span>
+26:     <span style='color:#800000; font-weight:bold; '>return</span> res
+27:     
+28: <span style='color:#800000; font-weight:bold; '>end</span>
+29: 
+30: <span style='color:#800000; font-weight:bold; '>procedure</span> isPrime<span style='color:#808030; '>(</span>p<span style='color:#808030; '>)</span> <span style='color:#696969; '>#p mayBePrime</span>
+31:     pows <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>set</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+32:     <span style='color:#800000; font-weight:bold; '>every</span> pows <span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>set</span><span style='color:#808030; '>(</span><span style='color:#808030; '>[</span>pow <span style='color:#808030; '>(</span>randoms<span style='color:#808030; '>(</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>,</span> p<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> p<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> p<span style='color:#808030; '>)</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span>
+33:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>*</span>pows <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>!</span>pows <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>then</span> <span style='color:#800000; font-weight:bold; '>return</span> p<span style='color:#808030; '>;</span>
+34: 
+35:     <span style='color:#696969; '># кЪждЪ╨ ┬╫епен═ ┬л╟┌Ъ┐н╠┼ ┌│┬ел ┌│┬лом 20 │з │н╫е┴вЪлЪ 1..p-1 по мод╟л╧ p</span>
+36:     <span style='color:#696969; '># поме╩Ъе╫┬╨ в множ┬╫во</span>
+37:     <span style='color:#696969; '># е┬л│ в множе┬╫ве е┬╫═ ╫ол═ко 1, ве┴н╟╫═ p</span>
+38: <span style='color:#800000; font-weight:bold; '>end</span>
+39: 
+40: <span style='color:#800000; font-weight:bold; '>procedure</span> main<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+41: <span style='color:#696969; '>#    every write ("Randoms:", randoms (10, 10))</span>
+42: <span style='color:#696969; '>#    write (pow(2, 10, 10))</span>
+43: <span style='color:#696969; '>#    every write(pow (randoms(20, 100-1), 100-1, 100))</span>
+44: <span style='color:#696969; '>#    every p := 1 to 100 do write (p, " --> ", isPrime(p+1000000000000000000) );</span>
+45:     base <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>10000000000000000000000000000000000000000000000000000000000000</span>
+46:     <span style='color:#800000; font-weight:bold; '>every</span> p <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> base <span style='color:#808030; '>+</span> <span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span> to <span style='color:#008c00; '>100</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>do</span> write <span style='color:#808030; '>(</span>isPrime<span style='color:#808030; '>(</span>p<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+47: <span style='color:#800000; font-weight:bold; '>end</span>
+</pre></body></html>

@@ -1,0 +1,332 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#0f69ff; '>-------------------------------------------------------------------------------</span>
+  1: <span style='color:#0f69ff; '>--</span>
+  2: <span style='color:#0f69ff; '>--   RCMENU.MS</span>
+  3: <span style='color:#0f69ff; '>--   This script adds new items to MAX's right click menu</span>
+  4: <span style='color:#0f69ff; '>--   By Ravi Karra [Kinetix]             ravi.karra@ktx.com</span>
+  5: <span style='color:#0f69ff; '>--     Commands added by Frank DeLise</span>
+  6: <span style='color:#0f69ff; '>--     Make sure you have MXSAgni.dlx file in MAX Plugins folder</span>
+  7: <span style='color:#0f69ff; '>--     Please refer to MXSAgni.doc for information on the functions in MXSAgni.dlx</span>
+  8: <span style='color:#0f69ff; '>--     Build 5-03-98 .1</span>
+  9: <span style='color:#0f69ff; '>-------------------------------------------------------------------------------</span>
+ 10: 
+ 11: <span style='color:#0f69ff; '>-- Array of all the menu items that are added</span>
+ 12: menu_items = #()
+ 13: 
+ 14: <span style='color:#0f69ff; '>--This function gets called when a menu item is selected</span>
+ 15: fn fnSelected item =
+ 16: (
+ 17:     case item of
+ 18:     (
+ 19:     "Edit CV's":(
+ 20:     
+ 21:     If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 22:         (
+ 23:         Max modify mode
+ 24:         subobjectlevel = <span style='color:#008c00; '>1</span>
+ 25:         )
+ 26:         else
+ 27:         (
+ 28:         if Querybox "Collapse" beep:yes then (
+ 29:             
+ 30:             local obj = $
+ 31:             Converttomesh $
+ 32:             select obj
+ 33:             Max modify mode
+ 34:             subobjectlevel = <span style='color:#008c00; '>1</span>
+ 35:             )
+ 36:         )    
+ 37:     )
+ 38:     
+ 39: 
+ 40:     
+ 41:     "Edit Vertices":(
+ 42:     
+ 43:     If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 44:         (
+ 45:         Max modify mode
+ 46:         subobjectlevel = <span style='color:#008c00; '>1</span>
+ 47:         )
+ 48:         else
+ 49:         (
+ 50:         if Querybox "Collapse" beep:yes then (
+ 51:             
+ 52:             local obj = $
+ 53:             Converttomesh $
+ 54:             select obj
+ 55:             Max modify mode
+ 56:             subobjectlevel = <span style='color:#008c00; '>1</span>
+ 57:             )
+ 58:         )    
+ 59:     )
+ 60:     
+ 61:     "Edit Faces":(
+ 62:         If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 63:         (
+ 64:         Max modify mode
+ 65:         subobjectlevel = <span style='color:#008c00; '>2</span>
+ 66:         )
+ 67:         else
+ 68:         (
+ 69:         if Querybox "Collapse" beep:yes then (
+ 70:             
+ 71:             local obj = $
+ 72:             Converttomesh $
+ 73:             select obj
+ 74:             Max modify mode
+ 75:             subobjectlevel = <span style='color:#008c00; '>2</span>
+ 76:             )
+ 77:         )    
+ 78: 
+ 79:         )
+ 80:     "Edit Edges":(
+ 81: 
+ 82:         If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 83:         (
+ 84:         Max modify mode
+ 85:         subobjectlevel = <span style='color:#008c00; '>3</span>
+ 86:         )
+ 87:         else
+ 88:         (
+ 89:         if Querybox "Collapse" beep:yes then (
+ 90:             
+ 91:             local obj = $
+ 92:             Converttomesh $
+ 93:             select obj
+ 94:             Max modify mode
+ 95:             subobjectlevel = <span style='color:#008c00; '>3</span>
+ 96:             )
+ 97:         )    
+ 98: 
+ 99:         )
+100:     
+101:     "Convert to Mesh":(
+102:     local obj = $
+103:     Converttomesh $
+104:     select obj
+105:     )
+106:     
+107:     "Convert to Nurbs":(
+108:     local obj = $
+109:     ConverttoNurbsSurface $
+110:     Select obj
+111:     )
+112:     
+113:     
+114:     "Convert to Nurbs Curve":(
+115:     local obj = $
+116:     ConverttoNurbsCurve $
+117:     select obj
+118:     )
+119:     
+120:     "Convert to Nurbs Surface":(
+121:         Local obj = $
+122:         ConverttoNurbsCurve obj
+123:         ConvertToNurbsSurface obj
+124:         Max Modify Mode
+125:         select obj
+126:         )
+127:         
+128:             
+129:     "Extrude": 
+130:         (
+131:             addModifier selection (Extrude amount:<span style='color:#008c00; '>30</span>)
+132:         )
+133:         "Cast Shadows:On":selection.castshadows = true
+134:         "Cast Shadows:Off":selection.castshadows = false
+135:         "Light Properties:":(
+136:     
+137:         Rollout LightRoll "Lights"
+138:         (
+139:     
+140: Group "Light Properties"
+141:         (
+142:         CheckBox LON "ON:"Checked:$.on
+143:         ColorPicker LC "Light Color:" color:$.color offset:[<span style='color:#008c00; '>50</span>,-<span style='color:#008c00; '>22</span>]
+144:         Spinner mt "Multiplier:" range:[-<span style='color:#008c00; '>50</span>,<span style='color:#008c00; '>50</span>,$.multiplier]width:<span style='color:#008c00; '>90</span> offset:[-<span style='color:#008c00; '>30</span>,<span style='color:#008c00; '>0</span>] 
+145:         Checkbox CS "CastShadows"checked:$.castshadows
+146:         Button upd "Update" Across:<span style='color:#008c00; '>3</span>
+147:         Button pst "Paste"
+148:         Button CL "Ok" width:<span style='color:#008c00; '>20</span> Align:#right 
+149:         
+150:         )
+151:         on upd pressed do
+152:         (
+153:         if isKindOf $ Light then
+154:             (            
+155:             lc.color = $.color
+156:             cs.checked = $.castshadows
+157:             mt.value = $.multiplier
+158:             lon.checked = $.on
+159:             )
+160:             Else
+161:             (
+162:             Messagebox "A Light needs to be selected!"
+163:             )
+164:         
+165: 
+166:         )
+167:             on pst pressed do
+168:         (
+169:         if isKindOf $ Light then
+170:             (            
+171:             $.color = lc.color 
+172:             $.castshadows = cs.checked 
+173:             $.multiplier = mt.value 
+174:             $.on = lon.checked 
+175:             )
+176:             Else
+177:             (
+178:             Messagebox "A Light needs to be selected!"
+179:             )
+180:         
+181: 
+182:         )
+183: 
+184:         
+185:     
+186:     On cl pressed do
+187:         (
+188:         CloseRolloutFloater NW 
+189:         )
+190:         on LC changed color do (
+191:         If isKindof $ Light then $.color = color
+192:         )
+193:         
+194:         on cs changed state do (
+195:             If isKindof $ Light then $.castshadows = state
+196:             )
+197:         on mt changed value do (
+198:             If isKindof $ Light then $.multiplier = value
+199:             ) 
+200:         on lon changed state do (
+201:             If isKindof $ Light then $.on = state
+202:             )
+203:         )
+204:         
+205:         If nw !=undefined then
+206:             (
+207:             RemoveRollout Lightroll NW
+208:             CloseRolloutFloater NW
+209:             NW = NewrolloutFloater "LightBoy" <span style='color:#008c00; '>200</span> <span style='color:#008c00; '>180</span>
+210:             Addrollout LightRoll NW
+211:             lightroll.lc = $.color
+212:             lightroll.cs = $.castshadows
+213:             lightroll.mt = $.multiplier
+214:             lightroll.lon = $.on
+215:             )
+216:             else
+217:             (
+218:             NW = NewrolloutFloater "LightBoy" <span style='color:#008c00; '>200</span> <span style='color:#008c00; '>180</span>
+219:             Addrollout LightRoll NW
+220:             )
+221:         )
+222:     )
+223:         
+224: )
+225: 
+226: <span style='color:#0f69ff; '>-- filter function for adding the menu items </span>
+227: fn flt_items = 
+228: (
+229:     -- Make sure to delete all the items in the array
+230:     while (menu_items.count > <span style='color:#008c00; '>0</span>) do deleteItem menu_items <span style='color:#008c00; '>1</span>    
+231:     
+232:     -- Add the menu item only if it is a shape object
+233:     if isKindOf $ Shape then
+234:     (
+235:         append menu_items "Convert to Nurbs Curve"
+236:         append menu_items "Convert to Nurbs Surface"
+237:     )
+238:     
+239:     -- Add all the generic menu items
+240:     --append menu_items  "Scale Twice"
+241:     --append menu_items  "Scale Half"
+242: 
+243: 
+244:     if isKindOf $ Light then
+245:     (
+246:         append menu_items "Cast Shadows:On"
+247:         append menu_items "Cast Shadows:Off"
+248:         append menu_items "Light Properties:"
+249:     )
+250:     
+251:     if Classof $ == Sphere then
+252:     (
+253:         append menu_items "Convert to Mesh"
+254:         append menu_items "Convert to Nurbs"
+255:     )
+256:     
+257:     if Classof $ == Box then
+258:     (
+259:         append menu_items "Convert to Mesh"
+260:         append menu_items "Convert to Nurbs"
+261:     )
+262:     if Classof $ == Cylinder then
+263:     (
+264:         append menu_items "Convert to Mesh"
+265:         append menu_items "Convert to Nurbs"
+266:     )
+267:     
+268:     if Classof $ == Torus then
+269:     (
+270:         append menu_items "Convert to Mesh"
+271:         append menu_items "Convert to Nurbs"
+272:     )
+273:     if Classof $ == Teapot then
+274:     (
+275:         append menu_items "Convert to Mesh"
+276:         append menu_items "Convert to Nurbs"
+277:     )
+278:     if Classof $ == Cone then
+279:     (
+280:         append menu_items "Convert to Mesh"
+281:         append menu_items "Convert to Nurbs"
+282:     )
+283:     if Classof $ == GeoSphere then
+284:     (
+285:         append menu_items "Convert to Mesh"
+286:         append menu_items "Convert to Nurbs"
+287:     )
+288:     if Classof $ == Tube then
+289:     (
+290:         append menu_items "Convert to Mesh"
+291:         append menu_items "Convert to Nurbs"
+292:     )
+293:     if Classof $ == Pyramid then
+294:     (
+295:         append menu_items "Convert to Mesh"
+296:         append menu_items "Convert to Nurbs"
+297:     )
+298:     if Classof $ == Prism then
+299:     (
+300:         append menu_items "Convert to Mesh"
+301:         append menu_items "Convert to Nurbs"
+302:     )
+303: 
+304:     
+305:     if classof $ == Editable_Mesh then
+306:     (
+307:     
+308:         append menu_items "Edit Vertices"
+309:         append menu_items "Edit Faces"
+310:         append menu_items "Edit Edges"
+311:         
+312:     )
+313:     If Classof $ == CV_surf then
+314:         (
+315:             append menu_items "Edit CV's"
+316:         )
+317: 
+318: 
+319: 
+320: )
+321: 
+322: 
+323: 
+324: 
+325: registerRightClickMenu menu_items fnSelected filter:flt_items
+326: 
+327: <span style='color:#0f69ff; '>--Uncomment the following to unRegister the right_click functions--</span>
+328: <span style='color:#0f69ff; '>--unregisterRightClickMenu fnSelected</span>
+329: 
+</pre></body></html>

@@ -1,0 +1,18 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: 
+ 1: Begin
+ 2: 
+ 3:  While  Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>ID <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 4:      BeginWhile
+ 5:        If  Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>ID <span style='color:#808030; '>=</span> <span style='color:#808030; '>=</span> InAudioCardCaps<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>wMid
+ 6:     Then
+ 7:      <span style='color:#400000; '>wsprintf</span> <span style='color:#808030; '>(</span> szMessage<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>%s</span><span style='color:#0f69ff; '>\0</span><span style='color:#0000e6; '>"</span><span style='color:#808030; '>,</span> Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Name <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 8:      <span style='color:#800000; font-weight:bold; '>break</span><span style='color:#800080; '>;</span>
+ 9:     Else
+10:         i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#800080; '>;</span>
+11:      EndIf
+12:  EndWhile
+13: 
+14: End
+15: 
+</pre></body></html>

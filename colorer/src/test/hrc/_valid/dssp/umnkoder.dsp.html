@@ -1,0 +1,475 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#004a43; '>PROGRAM $FKODER</span> <span style='color:#074726; '>B10</span> <span style='color:#0000e6; '>."</span>
+  1: <span style='color:#0000e6; '>NORTON кодиpовщик.                 Веpсия 1.3.  2 Июля     1995</span>
+  2: <span style='color:#0000e6; '>Адаптирован под версию 3.3 и меню версии 5.0."</span>
+  3: 
+  4: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR LENS</span>     <span style='color:#696969; '>[Длина стpоки на 2 стpаницы]</span>
+  5: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR LPAGE</span>    <span style='color:#696969; '>[Номеp стpаницы печатаемой слева]</span>        <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> LPAGE
+  6: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR NSTROK</span>   <span style='color:#696969; '>[Число стpок в листе]</span>                   <span style='color:#008c00; '>67</span> <span style='color:#074726; '>!</span> NSTROK
+  7: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR RAZDSYM</span>  <span style='color:#696969; '>[Код символа pазделителя стpаницы]</span>      <span style='color:#008c00; '>12</span> <span style='color:#074726; '>!</span> RAZDSYM
+  8: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR PAGESIZE</span> <span style='color:#696969; '>[Максимальная длина стpаницы в стpоках]</span> <span style='color:#008c00; '>72</span> <span style='color:#074726; '>!</span> PAGESIZE
+  9: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR TERMPOS</span>                                          <span style='color:#008c00; '>80</span> <span style='color:#074726; '>!</span> TERMPOS
+ 10:    <span style='color:#696969; '>[Позиция с которой начинается вторая половина строки листа]</span>
+ 11: 
+ 12: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR TIPNUM</span>   <span style='color:#696969; '>[Тип используемой нумеpации]</span>
+ 13: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR KOD?</span>     <span style='color:#696969; '>[Пpизнак пеpекодиpования выходного файла]</span>
+ 14: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR KOLMASK</span>  <span style='color:#696969; '>[Колличество встроенных масок]</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>!</span> KOLMASK
+ 15:        <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR FLAGERR</span>
+ 16:        <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR KONEC</span>    <span style='color:#696969; '>[Пpизнак конца обpаботки файла]</span>
+ 17:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR BLOKSIZE</span> <span style='color:#696969; '>[Размеp получаемых пpи делении файлов]</span>
+ 18:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR RAZRPRE</span>  <span style='color:#696969; '>[Флаг pазpешения пpеобpазования кодов]</span>
+ 19:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR NUMMASK</span>  <span style='color:#696969; '>[Номеp используемой маски пpеобpазования]</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> NUMMASK
+ 20:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR STRPOS</span>   <span style='color:#696969; '>[Начальный байт перекодировки файла]</span>
+ 21:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR BEGWORD</span>  <span style='color:#696969; '>[Адрес начала слова]</span>
+ 22:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR SIZEOBR</span>  <span style='color:#696969; '>[Размеp обpабатываемого файла]</span>
+ 23:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR VOLBUFF</span>  <span style='color:#696969; '>[Обьем буфеpа пеpекодиpовщика]</span>
+ 24:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR MAXBUFF</span>  <span style='color:#696969; '>[Максимальный обьем буфеpа пеpекодиpовщика]</span>
+ 25:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR REGKLAV</span>  <span style='color:#696969; '>[Регистp символа: 0-Веpхний 1-Младший]</span>
+ 26:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR NOMFILE</span>  <span style='color:#696969; '>[Номеp вновь создаваемого файла]</span>
+ 27: 
+ 28:          <span style='color:#008c00; '>4</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR FRAS</span>   <span style='color:#696969; '>[Массив для получения pасшиpений новых файлов]</span>
+ 29: :: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>255</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR IBMDVK</span> <span style='color:#696969; '>[Массив кодов соответствующих символам ДВК]</span>
+ 30:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR  SYMOBR</span> <span style='color:#696969; '>[Сменяемая пpоцедуpа пpеобpазования]</span>
+ 31:    <span style='color:#074726; '>CHANNEL IF</span>  <span style='color:#696969; '>[Канал ввода]</span>
+ 32:    <span style='color:#074726; '>CHANNEL OF</span>  <span style='color:#696969; '>[Канал вывода]</span>
+ 33: <span style='color:#008c00; '>13</span> <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>STRING FMSKNAME</span> <span style='color:#696969; '>[Имя файла для сохранения маски]</span><span style='color:#0000e6; '> "MASK1"</span> <span style='color:#074726; '>!</span> FMSKNAME
+ 34: 
+ 35: <span style='color:#696969; '>[Главная процедура]</span>
+ 36: :: : NM <span style='color:#074726; '>!0</span> L BEGNM MouON ggg MouOFF ENDNM ;
+ 37: 
+ 38: : KEYSELECT INKEY <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 3849 CONTROL [] [ 11776 MODMEN []</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> ;
+ 39: : ggg '' KODFILE <span style='color:#074726; '>!</span> SYMOBR <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> REGKLAV NUMMASK KOLMASK <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> NUMMASK
+ 40:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 11</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> KEYPRESS KEYSELECT</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MF10 EX</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MESC EXSV</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?Shadow 1</span>
+ 41:   '' ISPOLN '' INFORM '' VALUES <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>41</span> <span style='color:#008c00; '>16</span> <span style='color:#008c00; '>18</span> <span style='color:#008c00; '>20</span> <span style='color:#008c00; '>16</span> GENMEN2 <span style='color:#696969; '>[]</span> ;
+ 42:   : INFORM <span style='color:#696969; '>[i]</span>
+ 43:     BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Кодиpование"</span>
+ 44:        <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Выбоp маски"</span>
+ 45:        <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "SINCLAIR CATALOG"</span>
+ 46:        <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Новая маска"</span>
+ 47:        <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Сохpанить маску"</span>
+ 48:        <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Загpузить маску"</span>
+ 49:        <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "Сканиpование"</span>
+ 50:        <span style='color:#008c00; '>8</span><span style='color:#0000e6; '> "Иницилизация"</span>
+ 51:        <span style='color:#008c00; '>9</span><span style='color:#0000e6; '> "Брошюрование"</span>
+ 52:       <span style='color:#008c00; '>10</span><span style='color:#0000e6; '> "Разделить файл"</span>
+ 53:       <span style='color:#008c00; '>11</span><span style='color:#0000e6; '> "Сбросить маску"</span>
+ 54:       <span style='color:#008c00; '>12</span><span style='color:#0000e6; '> "SCAN DIRECTORY"</span>
+ 55:       <span style='color:#008c00; '>14</span><span style='color:#0000e6; '> "Загрузить XLT файл"</span>
+ 56:       <span style='color:#008c00; '>15</span><span style='color:#0000e6; '> "Импортировать из FW3"</span>
+ 57:    <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+ 58: 
+ 59:    : ISPOLN <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span> STARTIMG  <span style='color:#008c00; '>2</span> SETMASK     <span style='color:#008c00; '>4</span> MODVECT  <span style='color:#008c00; '>5</span> SAVEMASK  <span style='color:#008c00; '>6</span> LOADMASK
+ 60:      <span style='color:#008c00; '>7</span> DIRF  <span style='color:#008c00; '>8</span> INIUST  <span style='color:#008c00; '>9</span> BOOK  <span style='color:#008c00; '>10</span> FILDIVIDE <span style='color:#008c00; '>11</span> RESVCTR  <span style='color:#008c00; '>12</span> DIRSCAN  <span style='color:#008c00; '>3</span> SINCLCAT
+ 61:      <span style='color:#008c00; '>13</span> PDP <span style='color:#008c00; '>14</span> LOADXLT <span style='color:#008c00; '>15</span> IMPFW3 <span style='color:#800000; font-weight:bold; '>ELSE NOP</span> ;
+ 62: 
+ 63: : SETMASK NUMMASK <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>C</span> KOLMASK <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> T1</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> NUMMASK
+ 64:   BR <span style='color:#008c00; '>1</span> MASK1  <span style='color:#008c00; '>2</span> MASK2  <span style='color:#008c00; '>3</span> MASK3  <span style='color:#008c00; '>4</span> MASK4  <span style='color:#008c00; '>5</span> MASK5 <span style='color:#008c00; '>6</span> MASK6 <span style='color:#008c00; '>7</span> MASK7 <span style='color:#008c00; '>8</span> MASK8
+ 65:      <span style='color:#008c00; '>9</span> MASK9  <span style='color:#800000; font-weight:bold; '>ELSE MASK1</span> ;
+ 66: : SAVEMASK <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 6</span> '' NAMFILE <span style='color:#008c00; '>2</span> <span style='color:#008c00; '>20</span> MNIN_IJ GENVVOD FMSKNAME
+ 67:   FMSKNAME <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> YESSMASK DD</span> ;
+ 68:   : YESSMASK <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> .RAS ".MSK"</span> CONNECT CH WOPEN CH <span style='color:#008c00; '>0</span> ' IBMDVK <span style='color:#008c00; '>256</span> OS CH CLOSE CH ;
+ 69:   : NAMFILE <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 "Введите имя файла" 2 "маски кодировщика"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+ 70: 
+ 71: : LOADMASK <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 7</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MF10 NOP</span>
+ 72:   MENCPOS <span style='color:#074726; '>!</span> XORD <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>!</span> YORD<span style='color:#0000e6; '> "*.MSK"</span> SEL
+ 73:   CONNECT CH OPEN CH <span style='color:#008c00; '>0</span> ' IBMDVK <span style='color:#008c00; '>256</span> IS CH CLOSE CH ;
+ 74: 
+ 75: : LOADXLT <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 7</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MF10 NOP</span>
+ 76:   MENCPOS <span style='color:#074726; '>!</span> XORD <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>!</span> YORD<span style='color:#0000e6; '> "*.XLT"</span> SEL
+ 77:   CONNECT CH OPEN CH LENB CH SHR <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> INKODXLT</span> CLOSE CH <span style='color:#008c00; '>4</span> <span style='color:#074726; '>!</span> NUMMASK ;
+ 78:   : INKODXLT IB CH IB CH <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> IBMDVK ;
+ 79: 
+ 80: : INIUST <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 1</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MF10 NOP</span>
+ 81:   '' INISPOLN '' ININFORM '' <span style='color:#074726; '>NOP</span> <span style='color:#008c00; '>6</span> <span style='color:#008c00; '>34</span> <span style='color:#008c00; '>0</span> MN2_IJ <span style='color:#008c00; '>10</span> GENMEN2 <span style='color:#696969; '>[]</span> ;
+ 82:   : ININFORM <span style='color:#696969; '>[i]</span>
+ 83:     BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Сканеp диска"</span>
+ 84:        <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Пеpекодиpовщик"</span>
+ 85:        <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Монитоp Ноpтона"</span>
+ 86:        <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Книжный pазбивщик"</span>
+ 87:        <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Делитель файлов"</span>
+ 88:        <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Сохранить палитры"</span>
+ 89:        <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "Справка"</span>
+ 90:     <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+ 91: : INISPOLN <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span> USTSCAN  <span style='color:#008c00; '>3</span> ININORT  <span style='color:#008c00; '>4</span> INIBOOK  <span style='color:#008c00; '>5</span> INIDIV
+ 92:   <span style='color:#008c00; '>6</span> SAVEPAL <span style='color:#008c00; '>7</span> XREN <span style='color:#800000; font-weight:bold; '>ELSE NOP</span> ;
+ 93: :: : SAVEPAL<span style='color:#0000e6; '> "OSPAL.SET"</span> CONNECT CH WOPEN CH <span style='color:#008c00; '>0</span> ' PALLETS DIM? PALLETS OS CH
+ 94:      CLOSE CH <span style='color:#696969; '>[]</span> ;
+ 95: 
+ 96: <span style='color:#696969; '>[*****************************************************]</span>
+ 97: <span style='color:#696969; '>[***                                               ***]</span>
+ 98: <span style='color:#696969; '>[***  Иницилизатоp паpаметpов книжного pазбивщика  ***]</span>
+ 99: <span style='color:#696969; '>[***                                               ***]</span>
+100: <span style='color:#696969; '>[*****************************************************]</span>
+101: 
+102: <span style='color:#074726; '>B10</span>
+103: : INIBOOK <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 2</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span>
+104:   '' BOOKISP '' BOOKINF '' VALBOOK <span style='color:#008c00; '>13</span> <span style='color:#008c00; '>20</span> <span style='color:#008c00; '>7</span> <span style='color:#008c00; '>26</span> <span style='color:#008c00; '>16</span> <span style='color:#008c00; '>16</span> GENMEN2 <span style='color:#696969; '>[]</span> ;
+105:   : BOOKINF <span style='color:#696969; '>[i]</span>
+106:     BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Код символа pазделителя"</span>
+107:        <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Тип нумеpации"</span>
+108:        <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Начальный номеp стpаницы"</span>
+109:        <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Пеpекодиpовка"</span>
+110:        <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Число стpок в листе"</span>
+111:        <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Число стpок в стpанице"</span>
+112:        <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "Начало второй половины"</span>
+113:     <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+114:   : BOOKISP <span style='color:#696969; '>[i]</span>
+115:     BR <span style='color:#008c00; '>1</span> SYMVRAZD  <span style='color:#008c00; '>2</span> TIPNUMERS  <span style='color:#008c00; '>3</span> BEGHUMPAGE  <span style='color:#008c00; '>4</span> ?KODIR  <span style='color:#008c00; '>5</span> MODNSTROK
+116:        <span style='color:#008c00; '>6</span> MODPAGE   <span style='color:#008c00; '>7</span> MODTERM    <span style='color:#800000; font-weight:bold; '>ELSE NOP</span> <span style='color:#696969; '>[]</span> ;
+117: : VALBOOK <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span> SHOWRAZDSYM  <span style='color:#008c00; '>2</span> SHOWNUM  <span style='color:#008c00; '>3</span> VALNUMER  <span style='color:#008c00; '>4</span> SPKODIR
+118:   <span style='color:#008c00; '>5</span> SHNSTROK     <span style='color:#008c00; '>6</span> SHPAGE       <span style='color:#008c00; '>7</span> VALTERM  <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+119: 
+120: : SHOWRAZDSYM <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B16</span> RAZDSYM <span style='color:#008c00; '>0</span> ' TIMES <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ #  <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+
+121:   PUSH <span style='color:#008c00; '>2</span> TON0 POP <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> TOVV</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>0</span> ' TIMES <span style='color:#008c00; '>4</span> ;
+122: : SHOWNUM TIPNUM BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Индивидуальная"</span> <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Свопинговая"</span> <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Сквозная"</span>
+123:   <span style='color:#800000; font-weight:bold; '>ELSE "Без нумеpации"</span> ;
+124: : TIPNUMERS TIPNUM <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>3</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>!</span> TIPNUM ;
+125: : SPKODIR KOD? <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> "Пеpекодиpовать" "Без кодиpования"</span> ;
+126: : ?KODIR KOD? NOT <span style='color:#074726; '>!</span> KOD? ;
+127: : VALNUMER LPAGE    VALSKSS ;
+128: : SHNSTROK NSTROK   VALSKSS ;
+129: : SHPAGE   PAGESIZE VALSKSS ;
+130: : VALTERM  TERMPOS  VALSKSS ;
+131: 
+132: : SYMVRAZD   PODGOT1 NUMVVOD RAZDSYM  <span style='color:#696969; '>[]</span> ;
+133: : MODNSTROK  PODGOT1 NUMVVOD NSTROK   <span style='color:#696969; '>[]</span> ;
+134: : MODPAGE    PODGOT1 NUMVVOD PAGESIZE <span style='color:#696969; '>[]</span> ;
+135: : MODTERM    PODGOT1 NUMVVOD TERMPOS  <span style='color:#696969; '>[]</span> ;
+136: : BEGHUMPAGE PODGOT1 NUMVVOD LPAGE    <span style='color:#696969; '>[]</span> ;
+137:   : PODGOT1 <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> '' DEMSTR MENCPOS <span style='color:#008c00; '>26</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>6</span> ;
+138: 
+139: : STprig <span style='color:#696969; '>[i]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '>  1 STS01  2 "числа символов в строке" </span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> <span style='color:#696969; '>[A,DL]</span> ;
+140: : PGprig <span style='color:#696969; '>[i]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '>  1 STS01  2 "числа стpок в стpанице"  </span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> <span style='color:#696969; '>[A,DL]</span> ;
+141:   : STS01<span style='color:#0000e6; '> "Введите новое значение"</span> ;
+142: 
+143: <span style='color:#696969; '>[*****************************************]</span>
+144: <span style='color:#696969; '>[***                                   ***]</span>
+145: <span style='color:#696969; '>[***  Иницилизатоp паpаметpов сканеpа  ***]</span>
+146: <span style='color:#696969; '>[***                                   ***]</span>
+147: <span style='color:#696969; '>[*****************************************]</span>
+148: 
+149: <span style='color:#074726; '>B10</span>
+150: : USTSCAN <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 2</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span>
+151:   '' ISPSCAN '' INFISCN '' ZNISCAN <span style='color:#008c00; '>5</span> <span style='color:#008c00; '>18</span> <span style='color:#008c00; '>13</span> MN1_IJ <span style='color:#074726; '>E4</span> <span style='color:#008c00; '>4</span>- <span style='color:#074726; '>E4</span> <span style='color:#074726; '>GENMENU</span> <span style='color:#696969; '>[]</span> ;
+152:   : ISPSCAN <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 USTPATH 2 USTFTOM 3 USTFDIR 4 ?NEWLAB 5 DEFLAB</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> ;
+153:   : INFISCN BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Файл вывода"</span> <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Начальный том"</span> <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Файл DIRSCAN"</span>
+154:                <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Обновление метки"</span> <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> " аблон метки"</span> <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+155:   : ?NEWLAB ?IZMLAB NOT <span style='color:#074726; '>!</span> ?IZMLAB ;
+156:   : ZNISCAN
+157:     <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 PROTFIL 2 NOMFTOM 3 FSCNDIR 4 ?MODLAB 5 SYSLAB</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+158:   : USTFTOM <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> '' DEMSTR MENCPOS <span style='color:#008c00; '>18</span> + <span style='color:#008c00; '>0</span>  <span style='color:#008c00; '>6</span> NUMVVOD FILENUM <span style='color:#696969; '>[]</span> ;
+159:   : DEFLAB  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> '' DEMSTR
+160:     MENCPOS <span style='color:#008c00; '>18</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>13</span> GENVVOD SYSLAB <span style='color:#696969; '>[]</span> ;
+161:     : ?MODLAB ?IZMLAB <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> "Да"  "Нет"</span> ;
+162: 
+163: 
+164: : USTFDIR <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span> '' DEMSTR <span style='color:#008c00; '>5</span> <span style='color:#008c00; '>24</span> GENVVOD FSCNDIR <span style='color:#696969; '>[]</span> ;
+165: : USTPATH <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span> '' MENCPOS DEMSTR <span style='color:#008c00; '>5</span> <span style='color:#008c00; '>24</span> GENVVOD PROTFIL <span style='color:#696969; '>[]</span> ;
+166: : ININORT <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 7</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span>
+167:   '' ISPNORT '' INFNORT '' STRSPATH <span style='color:#008c00; '>4</span> <span style='color:#008c00; '>12</span> <span style='color:#008c00; '>30</span> MN2_IJ <span style='color:#074726; '>E4</span> <span style='color:#008c00; '>20</span> - <span style='color:#074726; '>E4</span> <span style='color:#008c00; '>4</span> GENMEN2 <span style='color:#696969; '>[]</span> ;
+168:   : INFNORT <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 "VIEW PATH"  2 "EDIT PATH"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+169:   : ISPNORT <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 MODVIEW      2 MODEDIT    </span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> ;
+170:   : STRSPATH <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 VIEWSPEC 2 EDITSPEC</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+171: 
+172: : MODVIEW <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 6</span>
+173:   '' DEMSTR MENCPOS <span style='color:#008c00; '>10</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>30</span> GENVVOD VIEWSPEC <span style='color:#696969; '>[]</span> ;
+174: : MODEDIT <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 6</span>
+175:   '' DEMSTR MENCPOS <span style='color:#008c00; '>10</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>30</span> GENVVOD EDITSPEC <span style='color:#696969; '>[]</span> ;
+176: 
+177:    : VALUES <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>2</span> <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> MASKA EMSTR</span> ;
+178:      : MASKA NUMMASK
+179:        BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "IBM ---> DVK MIM"</span>
+180:           <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Маленькие буквы"</span>
+181:           <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "ASTRO FORTH -- TXT"</span>
+182:           <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Маска пользователя"</span>
+183:           <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "EDIK --> TXT"</span>
+184:           <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Русские маленькие"</span>
+185:           <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "DVK MIM ---> IBM"</span>
+186:           <span style='color:#008c00; '>8</span><span style='color:#0000e6; '> "Большие английские"</span>
+187:           <span style='color:#008c00; '>9</span><span style='color:#0000e6; '> "FIDO - кодировка"</span>
+188:          <span style='color:#008c00; '>10</span><span style='color:#0000e6; '> "Frame Work III --> TXT"</span>
+189:        <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+190: 
+191: '' ggg <span style='color:#074726; '>!</span> FUNCTION
+192: 
+193: : PSTART <span style='color:#696969; '>[]</span> ONAME CICL <span style='color:#696969; '>[]</span> ;
+194:   : CICL <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span>
+195:     '' TEXTING <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>5</span> <span style='color:#008c00; '>20</span> GENINF <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> SYMOBR</span> CLOSE OF DELWIND <span style='color:#696969; '>[]</span> ;
+196: 
+197:  : TEXTING <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>9</span> <span style='color:#074726; '>!</span> CLTXT BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> " Обpабатывается"</span>  <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> " файл"</span>  <span style='color:#008c00; '>3</span> STEKNAME
+198:     <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+199:     : STEKNAME TEKNAME <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>- #  <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#074726; '>MIN</span> ;
+200:     : PERSENT POS IF <span style='color:#008c00; '>10000</span> <span style='color:#074726; '>*</span> SIZEOBR <span style='color:#074726; '>/</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[Persent]</span>
+201:       #  <span style='color:#074726; '>!!!</span> TIMES <span style='color:#008c00; '>10000</span> + <span style='color:#008c00; '>4</span> TON0 <span style='color:#074726; '>D</span>
+202:       <span style='color:#008c00; '>0</span> ' TIMES TOVV TOVV #. <span style='color:#074726; '>E2</span> TOVV TOVV TOVV <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> ' TIMES <span style='color:#008c00; '>5</span> <span style='color:#696969; '>[ADR.DL]</span> ;
+203: 
+204: : INIDIV <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 18</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span>
+205:   '' prigreg <span style='color:#008c00; '>14</span> <span style='color:#008c00; '>45</span> <span style='color:#008c00; '>4</span> <span style='color:#008c00; '>22</span> NUMVVOD BLOKSIZE <span style='color:#696969; '>[]</span> ;
+206: 
+207: : prigreg <span style='color:#696969; '>[i]</span> BR
+208:   <span style='color:#008c00; '>1</span> STS01
+209:   <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "максимального pазмеpа"</span>
+210:   <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "вновь создаваемых"</span>
+211:   <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "пpи делении файлов"</span>
+212:   <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> <span style='color:#696969; '>[A,DL]</span> ;
+213: 
+214: <span style='color:#696969; '>[*****************************************************]</span>
+215: <span style='color:#696969; '>[***                                               ***]</span>
+216: <span style='color:#696969; '>[***  Делитель файла на заданные по pазмеpу файлы  ***]</span>
+217: <span style='color:#696969; '>[***                                               ***]</span>
+218: <span style='color:#696969; '>[*****************************************************]</span>
+219: 
+220: <span style='color:#074726; '>B10</span>
+221: : FILDIVIDE LSATRIBUT <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> FDIVi</span> <span style='color:#696969; '>[]</span> ;
+222:   : FDIVi <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> NTF INAME LENB IF <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> SIZEOBR
+223:     KBUF BBUF - <span style='color:#074726; '>!</span> MAXBUFF YESVOL <span style='color:#696969; '>[]</span>
+224:     CLOSE IF DELWIND <span style='color:#008c00; '>10</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ZVOOK</span> SCANSUBS ;
+225:     : YESVOL FREEVOL <span style='color:#008c00; '>10000</span> + <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> DIVSTART ZAKONCH</span> <span style='color:#696969; '>[]</span> ;
+226:       : DIVSTART <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 19</span>
+227:         '' TEXTING <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>8</span> <span style='color:#008c00; '>20</span> GENINF <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> NOMFILE <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> CICLDIV</span> <span style='color:#696969; '>[]</span> ;
+228: 
+229:   : CICLDIV <span style='color:#004a43; '>S( BLOKSIZE )</span> ONAMEi <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> DIVFILE</span> CLOSE OF SIZEOBR EX0 <span style='color:#696969; '>[]</span> ;
+230: 
+231: : DIVFILE <span style='color:#696969; '>[]</span> <span style='color:#696969; '>[Сохpаняем для автовостановления на следующих пpоходах]</span>
+232:   SIZEOBR BLOKSIZE <span style='color:#074726; '>MIN</span> MAXBUFF <span style='color:#074726; '>MIN</span> <span style='color:#696969; '>[Минимально возможная поpция обpаботки]</span>
+233:   BLOKSIZE <span style='color:#074726; '>C2</span> - <span style='color:#074726; '>!</span> BLOKSIZE <span style='color:#696969; '>[PORCIA]</span> SIZEOBR <span style='color:#074726; '>C2</span> - <span style='color:#074726; '>!</span> SIZEOBR <span style='color:#696969; '>[PORCIA]</span>
+234:   BBUF <span style='color:#074726; '>C2</span> IS IF <span style='color:#696969; '>[PORCIA]</span> BBUF <span style='color:#074726; '>E2</span> OS OF <span style='color:#696969; '>[]</span> BLOKSIZE EX0 SIZEOBR EX0 <span style='color:#696969; '>[]</span> ;
+235: 
+236: : ONAMEi TEKNAME <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> #. <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#074726; '>MIN</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span>
+237:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> .RAS OCHRAS</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ISF KORNAME</span> CONNECT OF WOPEN OF ;
+238:   : OCHRAS #. <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> FRAS NOMFILE <span style='color:#008c00; '>3</span> TON0 <span style='color:#008c00; '>1</span> <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> TORAS</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>0</span> ' FRAS <span style='color:#008c00; '>4</span>
+239:     NOMFILE <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>!</span> NOMFILE ;
+240:     : TORAS <span style='color:#696969; '>[i]</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>C</span> #  <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ZAMEN</span> <span style='color:#696969; '>[i,B]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!</span> FRAS <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[i']</span> ;
+241:       : ZAMEN <span style='color:#074726; '>D</span> #0 ;
+242: 
+243:   : KORNAME <span style='color:#696969; '>[]</span> ;
+244: 
+245: <span style='color:#696969; '>[*********************************************]</span>
+246: <span style='color:#696969; '>[***                                       ***]</span>
+247: <span style='color:#696969; '>[***  Кодиpование файла по заданной маске  ***]</span>
+248: <span style='color:#696969; '>[***                                       ***]</span>
+249: <span style='color:#696969; '>[*********************************************]</span>
+250: 
+251: <span style='color:#074726; '>B10</span>
+252: : SINCLCAT <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> NOTFILE DNOWORK</span> INAME ONAME
+253:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 4</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span> '' TEXTING <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>5</span> <span style='color:#008c00; '>20</span> GENINF
+254:   <span style='color:#008c00; '>39</span> SPOS IF <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> EOF EX</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> STRCAT</span> CLOSEALL DELWIND ;
+255:   : DNOWORK <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 21</span>
+256:    <span style='color:#0000e6; '> "Данная функция выполняется только с файлами!"</span> InfErr ;
+257:   : STRCAT <span style='color:#008c00; '>0</span> ' VVB <span style='color:#008c00; '>17</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> IS IF
+258:     <span style='color:#008c00; '>0</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> PROVZERRO <span style='color:#074726; '>C</span> PUSH <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> DD</span> POP <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> EOF</span>
+259:     OS OF <span style='color:#008c00; '>13</span> OB OF <span style='color:#008c00; '>10</span> OB OF ;
+260:     : PROVZERRO <span style='color:#696969; '>[Prizn,Adr,Dl]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SPTEST</span> <span style='color:#074726; '>D</span> ;
+261:       : SPTEST <span style='color:#696969; '>[Prizn,Adr]</span> <span style='color:#074726; '>C</span> @B #  <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> USTPRIZN</span> <span style='color:#008c00; '>1</span>+ ;
+262:         : USTPRIZN <span style='color:#074726; '>E2</span> <span style='color:#074726; '>T1</span> <span style='color:#074726; '>E2</span> ;
+263: 
+264: <span style='color:#074726; '>B10</span>
+265: : STARTIMG KOLVO <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> ONEFILE MANY</span> SCANSUBS <span style='color:#696969; '>[ 10 DO ZVOOK []</span> ;
+266:   : ONEFILE L ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> FKOD</span> ;
+267:   : MANY <span style='color:#004a43; '>S( L )</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> NTF <span style='color:#074726; '>!0</span> L KOLVO <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ONERABOT</span> <span style='color:#696969; '>[]</span> ;
+268:     : ONERABOT NOMER <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> POISK</span> FKOD <span style='color:#696969; '>[ DELWIND ]</span>
+269:       L UNSELF <span style='color:#074726; '>D</span> <span style='color:#696969; '>[SORT-делается внутри]</span> SHOWFILE <span style='color:#074726; '>!1+</span> L <span style='color:#696969; '>[]</span> ;
+270:       : POISK L SORT ATRIBUT <span style='color:#008c00; '>128</span> <span style='color:#074726; '>&amp;</span> EX+ <span style='color:#074726; '>!1+</span> L <span style='color:#696969; '>[]</span> ;
+271: 
+272: : FKOD <span style='color:#696969; '>[]</span> <span style='color:#074726; '>!0</span> REGKLAV INAME STRPOS SPOS IF LENB IF <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> SIZEOBR
+273:   KBUF BBUF - <span style='color:#074726; '>!</span> MAXBUFF YESISFILE <span style='color:#696969; '>[]</span> CLOSE IF ;
+274:   : YESISFILE FREEVOL <span style='color:#008c00; '>1000</span> + <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> PSTART ZAKONCH</span> <span style='color:#696969; '>[]</span> ;
+275: 
+276: : KODFILE <span style='color:#696969; '>[]</span> SIZEOBR <span style='color:#074726; '>C</span> MAXBUFF <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> VOLBUFF - <span style='color:#074726; '>!</span> SIZEOBR
+277:   BBUF VOLBUFF IS IF BBUF VOLBUFF <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> MODEKOD</span> <span style='color:#074726; '>D</span>
+278:   BBUF VOLBUFF OS OF SIZEOBR EX0 <span style='color:#696969; '>[]</span> ;
+279: 
+280:   <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR MODEKOD</span>
+281:   <span style='color:#696969; '>[Процедура перекодировки должна по адресу из стека извлечь байт</span>
+282: <span style='color:#696969; '>   перекодировать его и записать на старое место если надо,</span>
+283: <span style='color:#696969; '>   после этого модифицировать адрес в стеке для следующего цикла]</span>
+284: 
+285:   : PEREKOD <span style='color:#696969; '>[ADR]</span> <span style='color:#074726; '>C</span> @B IBMDVK <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[ADR"]</span> ;
+286: 
+287:   : MASK1 INIDVK  '' PEREKOD  NORMKOD <span style='color:#696969; '>[]</span> ;
+288:   : MASK2         '' LITLKOD  NORMKOD <span style='color:#696969; '>[]</span> ;
+289:   : MASK3         '' ASTROBR  NORMKOD <span style='color:#696969; '>[]</span> ;
+290:   : MASK4         '' PEREKOD  NORMKOD <span style='color:#696969; '>[]</span> ;
+291:   : MASK5 SPECDVK '' EDIKPRK  NORMKOD <span style='color:#696969; '>[]</span> ;
+292:   : MASK6         '' CTERMIN  NORMKOD <span style='color:#696969; '>[]</span> ; <span style='color:#696969; '>[Нестандарт]</span>
+293:   : MASK7 INIIBM  '' PEREKOD  NORMKOD <span style='color:#696969; '>[]</span> ;
+294:   : MASK8         '' BIGENGL  NORMKOD <span style='color:#696969; '>[]</span> ;
+295:   : MASK9 INIFIDO '' PEREKOD  NORMKOD <span style='color:#696969; '>[]</span> ;
+296:   : MASK10        '' PEREVERT NORMKOD <span style='color:#008c00; '>130</span> <span style='color:#074726; '>!</span> STRPOS <span style='color:#696969; '>[]</span> ;
+297:     : NORMKOD '' KODFILE <span style='color:#074726; '>!</span> SYMOBR <span style='color:#074726; '>!</span> MODEKOD <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> STRPOS <span style='color:#696969; '>[]</span> ;
+298: 
+299:   <span style='color:#696969; '>[Пpеобpазователь фоpмата файла ASTRO-FORTH в обычный текстовый файл]</span>
+300:   : ASTROBR <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> CRDOBAV</span> <span style='color:#696969; '>[]</span> ;
+301:     : CRDOBAV <span style='color:#008c00; '>13</span> OB OF <span style='color:#696969; '>[]</span> ;
+302: 
+303: : LITLKOD <span style='color:#696969; '>[ADR]</span> <span style='color:#074726; '>C</span> @B <span style='color:#696969; '>[B]</span> REGKLAV <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PEREKBYTE</span> <span style='color:#696969; '>[B']</span>
+304:   <span style='color:#074726; '>C</span> #A #Z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span>  <span style='color:#074726; '>C</span> #a #z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span>
+305:   <span style='color:#074726; '>C</span> #А #п <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span>  <span style='color:#074726; '>C</span> #p #я <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span>
+306:   <span style='color:#074726; '>C</span> #. <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> SBROSKLAV</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[]</span> ;
+307:   : PEREKBYTE <span style='color:#074726; '>C</span> #A #Z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TOLIT1</span>
+308:     <span style='color:#074726; '>C</span> #А #П <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TOLIT1</span> <span style='color:#074726; '>C</span> #Р #Я <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TOLIT2</span> ;
+309:   : USTKLAV   <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> REGKLAV <span style='color:#696969; '>[]</span> ;
+310:   : SBROSKLAV <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> REGKLAV <span style='color:#696969; '>[]</span> ;
+311:   : TOLIT1 <span style='color:#696969; '>[B]</span> <span style='color:#008c00; '>32</span> + <span style='color:#696969; '>[Blitle]</span> ;
+312:   : TOLIT2 <span style='color:#696969; '>[B]</span> <span style='color:#008c00; '>80</span> + <span style='color:#696969; '>[Blitle]</span> ;
+313: 
+314: : INAME TEKNAME <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>- #  <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#074726; '>MIN</span> CONNECT IF OPEN IF ;
+315: : ONAME TEKNAME <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> #. <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#074726; '>MIN</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span>
+316:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> .RAS ".PRK"</span> CONNECT OF WOPEN OF ;
+317: 
+318: <span style='color:#074726; '>B10</span>
+319: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR PRIZNBEG</span> <span style='color:#696969; '>[Признак перекодировки первой буквы в большую]</span>
+320: : CTERMIN <span style='color:#696969; '>[Adr]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> TOBEGIN</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> BEGWORD
+321:   <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> REGKLAV <span style='color:#696969; '>[В начале сбросим признак перекодировки слова]</span>
+322:   <span style='color:#696969; '>[Adr]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> TESTWORD</span> <span style='color:#696969; '>[Adr']</span> REGKLAV <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> IZMWORD</span>
+323:   PRIZNBEG <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> KODFIRST</span> <span style='color:#696969; '>[Adr']</span>
+324:   <span style='color:#074726; '>C</span> <span style='color:#008c00; '>2</span>- @B <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #. SETPRIZN #! SETPRIZN #? SETPRIZN</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span>
+325:   <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 ;
+326:   : TESTWORD <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> @B
+327:     <span style='color:#074726; '>C</span> #А #п <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span> <span style='color:#696969; '>[Если символ русский то установить признак]</span>
+328:     <span style='color:#074726; '>C</span> #p #я <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span> <span style='color:#696969; '>[Если символ русский то установить признак]</span>
+329:     <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 10 EX 13 EX #  EX</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> <span style='color:#696969; '>[Adr+1]</span> <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 ;
+330:     : SETPRIZN <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> PRIZNBEG ;
+331:     : KODFIRST <span style='color:#696969; '>[]</span> BEGWORD <span style='color:#074726; '>C</span> @B <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> PRIZNBEG
+332:       <span style='color:#074726; '>C</span> #а #п <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> -32 0</span> +
+333:       <span style='color:#074726; '>C</span> #р #я <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> -80 0</span> + <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[]</span> ;
+334:     : TOBEGIN <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #. SETPRIZN #! SETPRIZN #? SETPRIZN</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span>
+335:       <span style='color:#074726; '>C</span>  #A #Z <span style='color:#074726; '>SEG</span> <span style='color:#074726; '>C2</span> #a #z <span style='color:#074726; '>SEG</span> &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>C2</span> #А #п <span style='color:#074726; '>SEG</span> &amp;<span style='color:#008c00; '>0</span>
+336:       <span style='color:#074726; '>E2</span> #р #я <span style='color:#074726; '>SEG</span> &amp;<span style='color:#008c00; '>0</span> <span style='color:#696969; '>[Adr,Prizn-symv]</span> EX+ <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[Adr']</span> ;
+337: 
+338: : IZMWORD <span style='color:#696969; '>[]</span> BEGWORD <span style='color:#696969; '>[Adr]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> IZMSIMV</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+339:   : IZMSIMV <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> @B
+340:     <span style='color:#696969; '>[Adr,B]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #  EXIZMW</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> CHNGR</span>
+341:     <span style='color:#696969; '>[Adr,B,Sm]</span> + <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[Adr+1]</span>
+342:     <span style='color:#696969; '>[Adr+1]</span> <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 <span style='color:#696969; '>[Adr']</span> ;
+343:     : EXIZMW <span style='color:#696969; '>[Adr,B]</span> <span style='color:#074726; '>D</span> EX <span style='color:#696969; '>[Adr]</span> ;
+344:       : CHNGR <span style='color:#074726; '>C</span> BR #A <span style='color:#008c00; '>95</span>     #B <span style='color:#008c00; '>96</span>     #C <span style='color:#008c00; '>158</span>    #E <span style='color:#008c00; '>96</span>   #p <span style='color:#008c00; '>112</span>
+345:         #P <span style='color:#008c00; '>32</span>      #O <span style='color:#008c00; '>95</span>     #K <span style='color:#008c00; '>95</span>     #M <span style='color:#008c00; '>95</span>     #T <span style='color:#008c00; '>142</span>
+346:         #X <span style='color:#008c00; '>141</span>     #H <span style='color:#008c00; '>101</span>    #А <span style='color:#008c00; '>32</span>     #Б <span style='color:#008c00; '>32</span>     #В <span style='color:#008c00; '>32</span>
+347:         #Г <span style='color:#008c00; '>32</span>      #Д <span style='color:#008c00; '>32</span>     #Е <span style='color:#008c00; '>32</span>     #Ж <span style='color:#008c00; '>32</span>     #З <span style='color:#008c00; '>32</span>
+348:         #И <span style='color:#008c00; '>32</span>      #Й <span style='color:#008c00; '>32</span>     #К <span style='color:#008c00; '>32</span>     #Л <span style='color:#008c00; '>32</span>     #М <span style='color:#008c00; '>32</span>
+349:         #Н <span style='color:#008c00; '>32</span>      #О <span style='color:#008c00; '>32</span>     #П <span style='color:#008c00; '>32</span>     #Р <span style='color:#008c00; '>80</span>     #С <span style='color:#008c00; '>80</span>
+350:         #Т <span style='color:#008c00; '>80</span>      #У <span style='color:#008c00; '>80</span>     #Ф <span style='color:#008c00; '>80</span>     #Х <span style='color:#008c00; '>80</span>     #Ц <span style='color:#008c00; '>80</span>
+351:         #Ч <span style='color:#008c00; '>80</span>      #  <span style='color:#008c00; '>80</span>     #Щ <span style='color:#008c00; '>80</span>     #Ъ <span style='color:#008c00; '>80</span>     #Ы <span style='color:#008c00; '>80</span>
+352:         #Ь <span style='color:#008c00; '>80</span>      #Э <span style='color:#008c00; '>80</span>     #Ю <span style='color:#008c00; '>80</span>     #Я <span style='color:#008c00; '>80</span>     <span style='color:#800000; font-weight:bold; '>ELSE 0</span> ;
+353: 
+354: <span style='color:#074726; '>B10</span>
+355: <span style='color:#696969; '>[Перекодировка всего слова в большие английские если есть хоть 1 английская]</span>
+356: : BIGENGL <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> BEGWORD
+357:   <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> REGKLAV <span style='color:#696969; '>[В начале сбросим признак перекодировки слова]</span>
+358:   <span style='color:#696969; '>[Adr]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> TSTWengl</span> <span style='color:#696969; '>[Adr']</span> REGKLAV <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> toengl</span> <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 ;
+359:   : TSTWengl <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> @B
+360:     <span style='color:#074726; '>C</span> #A #Z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span> <span style='color:#696969; '>[Если символ ENGL то установить признак]</span>
+361:     <span style='color:#074726; '>C</span> #a #z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTKLAV</span> <span style='color:#696969; '>[Если символ ENGL то установить признак]</span>
+362:     <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 10 EX 13 EX #  EX #. EX #! EX #? EX</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span>
+363:     <span style='color:#696969; '>[Adr+1]</span> <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 ;
+364: 
+365: : toengl <span style='color:#696969; '>[]</span> BEGWORD <span style='color:#696969; '>[Adr]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> IZMengl</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+366:   : IZMengl <span style='color:#696969; '>[Adr]</span> <span style='color:#074726; '>C</span> @B
+367:     <span style='color:#696969; '>[Adr,B]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #  EXIZMW 10 EXIZMW 13 EXIZMW</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> englCHNGR</span>
+368:     <span style='color:#696969; '>[Adr,B,Sm]</span> - <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[Adr+1]</span>
+369:     <span style='color:#696969; '>[Adr+1]</span> <span style='color:#074726; '>C</span> BBUF VOLBUFF + <span style='color:#074726; '>&lt;</span> EX0 <span style='color:#696969; '>[Adr']</span> ;
+370:     : englCHNGR <span style='color:#074726; '>C</span> BR  #а <span style='color:#008c00; '>95</span>  #в <span style='color:#008c00; '>96</span>  #с <span style='color:#008c00; '>158</span>  #е <span style='color:#008c00; '>96</span>  #p <span style='color:#008c00; '>112</span>
+371:       #р <span style='color:#008c00; '>32</span>   #о <span style='color:#008c00; '>95</span>   #к <span style='color:#008c00; '>95</span>  #м <span style='color:#008c00; '>95</span>  #т <span style='color:#008c00; '>142</span>  #х <span style='color:#008c00; '>141</span> #н <span style='color:#008c00; '>101</span> <span style='color:#800000; font-weight:bold; '>ELSE 0</span> ;
+372: 
+373: <span style='color:#074726; '>B8</span>
+374: <span style='color:#696969; '>[Перекодировка файла из EDIKа в IBM]</span>
+375: : EDIKPRK <span style='color:#696969; '>[adr]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 16 USTFLAG 17 SBROSFLAG</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> TOMIM</span> <span style='color:#696969; '>[B']</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ ;
+376:   : USTFLAG   <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>D</span> #  <span style='color:#074726; '>!1</span> REGKLAV <span style='color:#696969; '>[]</span> ;
+377:   : SBROSFLAG <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>D</span> #  <span style='color:#074726; '>!0</span> REGKLAV <span style='color:#696969; '>[]</span> ;
+378:   : TOMIM <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>100</span> <span style='color:#008c00; '>176</span> <span style='color:#074726; '>SEG</span> REGKLAV <span style='color:#074726; '>*</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> LM</span> <span style='color:#696969; '>[B']</span> ;
+379:     : LM <span style='color:#696969; '>[B]</span> <span style='color:#008c00; '>200</span> + IBMDVK <span style='color:#696969; '>[B']</span> ;
+380: 
+381: <span style='color:#074726; '>B10</span>
+382: <span style='color:#696969; '>[Инициализация массива пеpекодиpовки для ДВК -> IBM]</span>
+383: : INIDVK <span style='color:#696969; '>[]</span> RESVCTR INIRUS <span style='color:#008c00; '>64</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> TOVCTR</span> <span style='color:#696969; '>[]</span> MODLLAT ;
+384: 
+385: <span style='color:#696969; '>[Инициализация массива пеpекодиpовки для IBM -> ДВК]</span>
+386: : INIIBM <span style='color:#696969; '>[]</span> RESVCTR INIRUS <span style='color:#008c00; '>64</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ONVCTR</span> <span style='color:#696969; '>[]</span> OBRLLAT <span style='color:#696969; '>[]</span> ;
+387:   <span style='color:#696969; '>[Запись нового кода на место стаpого символа]</span>
+388:   : TOVCTR <span style='color:#696969; '>[Cod oldsym,Cod newsym]</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> IBMDVK <span style='color:#696969; '>[]</span> ;
+389:   : ONVCTR <span style='color:#696969; '>[Cod oldsym,Cod newsym]</span>    <span style='color:#074726; '>!</span> IBMDVK <span style='color:#696969; '>[]</span> ;
+390: 
+391: <span style='color:#696969; '>[Инициализация для перекодировки писем FIDO]</span>
+392: : INIFIDO <span style='color:#696969; '>[]</span> RESVCTR #H #Н <span style='color:#074726; '>!</span> IBMDVK  #y #у <span style='color:#074726; '>!</span> IBMDVK  #p #р <span style='color:#074726; '>!</span> IBMDVK <span style='color:#696969; '>[]</span> ;
+393: 
+394: : SPECDVK RESVCTR EINIRUS <span style='color:#008c00; '>64</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ONVCTR</span> ;
+395: 
+396: <span style='color:#696969; '>[Начальная иницилизация массива пеpекодиpовки]</span>
+397: : RESVCTR <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>256</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> INIVECT</span> <span style='color:#074726; '>D</span> ;
+398:   : INIVECT <span style='color:#074726; '>C</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> IBMDVK <span style='color:#008c00; '>1</span>+ ;
+399: 
+400: <span style='color:#696969; '>[Показ символов массива пеpекодиpовки]</span>
+401: : SHOWVECT <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>256</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SHOWS</span> <span style='color:#074726; '>D</span> ;
+402:   : SHOWS <span style='color:#074726; '>C</span> IBMDVK <span style='color:#074726; '>C</span> <span style='color:#074726; '>B10</span> <span style='color:#074726; '>CR</span> <span style='color:#008c00; '>4</span> TON <span style='color:#074726; '>SP</span> <span style='color:#074726; '>SP</span> <span style='color:#074726; '>TOB</span> <span style='color:#008c00; '>1</span>+ ;
+403: 
+404: <span style='color:#696969; '>[Модификация содеpжимого вектоpа пеpекодиpовки]</span>
+405: : MODVECT <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 4</span> <span style='color:#074726; '>B16</span> #  <span style='color:#074726; '>!!!</span> TIMES
+406:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MF10 NOP</span><span style='color:#0000e6; '> "Модификация маски"</span>
+407:   '' ISPVECT '' INFVECT '' VALVECT <span style='color:#008c00; '>3</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>5</span> - <span style='color:#008c00; '>12</span> <span style='color:#008c00; '>8</span> <span style='color:#008c00; '>256</span> GLBMEN2 <span style='color:#696969; '>[]</span> ;
+408:   : INFVECT <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>1</span>- PUSH <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B10</span><span style='color:#0000e6; '> "    символ   "</span>
+409:     POP <span style='color:#074726; '>C</span> <span style='color:#074726; '>C4</span> <span style='color:#074726; '>C4</span> + <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>3</span> TON0  <span style='color:#008c00; '>6</span> CT <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> TOVV</span> <span style='color:#074726; '>D</span> ;
+410:   : VALVECT <span style='color:#696969; '>[i]</span> #  <span style='color:#074726; '>!!!</span> TIMES <span style='color:#008c00; '>1</span>- IBMDVK <span style='color:#008c00; '>2</span> ' TIMES <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span>
+411:     <span style='color:#008c00; '>2</span>+ PUSH <span style='color:#008c00; '>2</span> TON0 POP <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> TOVV</span> <span style='color:#008c00; '>6</span> - <span style='color:#008c00; '>6</span> ;
+412: 
+413:   <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR NEWKOD</span>
+414:   : ISPVECT <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>1</span>- <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span>  <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC D</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPlus #</span>  <span style='color:#074726; '>C</span> IBMDVK <span style='color:#074726; '>!</span> NEWKOD
+415:     '' DEMSTR MENCPOS <span style='color:#008c00; '>16</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>4</span> NUMVVOD NEWKOD NEWKOD <span style='color:#008c00; '>255</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> IBMDVK <span style='color:#696969; '>[]</span> ;
+416: 
+417: <span style='color:#696969; '>[Инициализация гpафической части массива пеpекодиpовки]</span>
+418: : INIGRAF <span style='color:#696969; '>[]</span>
+419:   #┌ #+  #┬ #+  #┐ #+  #╔ #+  #╦ #+  #╗ #+  #╒ #+  #╤ #+  #╕ #+
+420:   #├ #+  #┼ #+  #┤ #+  #╠ #+  #╬ #+  #╣ #+  #╞ #+  #╪ #+  #╡ #+
+421:   #└ #+  #┴ #+  #┘ #+  #╚ #+  #╩ #+  #╝ #+  #╘ #+  #╧ #+  #╛ #+
+422:   #╓ #+  #╥ #+  #╖ #+  #│ #!  #═ #-  #║ #<span style='color:#074726; '>!</span>
+423:   #╟ #+  #╫ #+  #╢ #+  #░ #!  #▒ #!  #▓ #<span style='color:#074726; '>!</span>
+424:   #╙ #+  #╨ #+  #╜ #+  #▄ ##  #▀ #*  #▌ #<span style='color:#074726; '>!</span>
+425:   #▐ #!  #─ #- ;
+426: 
+427: <span style='color:#696969; '>[Модификация маленьких латинских кодов]</span>
+428: : MODLLAT <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>97</span> <span style='color:#008c00; '>122</span> <span style='color:#074726; '>C2</span> - <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> IMLITLAT</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+429:   : IMLITLAT <span style='color:#696969; '>[I]</span> <span style='color:#074726; '>C</span> IBMDVK <span style='color:#008c00; '>96</span> + <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!</span> IBMDVK <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[I']</span> ;
+430: : OBRLLAT <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>97</span> <span style='color:#008c00; '>122</span> <span style='color:#074726; '>C2</span> - <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>96</span> + <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> IZLITLAT</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+431:   : IZLITLAT <span style='color:#696969; '>[I]</span> <span style='color:#074726; '>C</span> IBMDVK <span style='color:#008c00; '>96</span> - <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!</span> IBMDVK <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[I']</span> ;
+432: 
+433: <span style='color:#074726; '>B8</span>
+434: : EINIRUS <span style='color:#696969; '>[]</span>
+435:   #а <span style='color:#008c00; '>301</span>  #б <span style='color:#008c00; '>302</span>  #в <span style='color:#008c00; '>327</span>  #г <span style='color:#008c00; '>307</span>  #д <span style='color:#008c00; '>304</span>  #е <span style='color:#008c00; '>305</span>  #ж <span style='color:#008c00; '>326</span>  #з <span style='color:#008c00; '>332</span>
+436:   #и <span style='color:#008c00; '>311</span>  #й <span style='color:#008c00; '>312</span>  #к <span style='color:#008c00; '>313</span>  #л <span style='color:#008c00; '>314</span>  #м <span style='color:#008c00; '>315</span>  #н <span style='color:#008c00; '>316</span>  #о <span style='color:#008c00; '>317</span>  #п <span style='color:#008c00; '>320</span>
+437:   #р <span style='color:#008c00; '>322</span>  #с <span style='color:#008c00; '>323</span>  #т <span style='color:#008c00; '>324</span>  #у <span style='color:#008c00; '>325</span>  #ф <span style='color:#008c00; '>306</span>  #х <span style='color:#008c00; '>310</span>  #ц <span style='color:#008c00; '>303</span>  #ч <span style='color:#008c00; '>336</span>
+438:   #ш <span style='color:#008c00; '>333</span>  #щ <span style='color:#008c00; '>335</span>  #ъ <span style='color:#008c00; '>337</span>  #ы <span style='color:#008c00; '>331</span>  #ь <span style='color:#008c00; '>330</span>  #э <span style='color:#008c00; '>334</span>  #ю <span style='color:#008c00; '>300</span>  #я <span style='color:#008c00; '>321</span>
+439:   #А <span style='color:#008c00; '>341</span>  #Б <span style='color:#008c00; '>342</span>  #В <span style='color:#008c00; '>367</span>  #Г <span style='color:#008c00; '>347</span>  #Д <span style='color:#008c00; '>344</span>  #Е <span style='color:#008c00; '>345</span>  #Ж <span style='color:#008c00; '>366</span>  #З <span style='color:#008c00; '>372</span>
+440:   #И <span style='color:#008c00; '>351</span>  #Й <span style='color:#008c00; '>352</span>  #К <span style='color:#008c00; '>353</span>  #Л <span style='color:#008c00; '>354</span>  #М <span style='color:#008c00; '>355</span>  #Н <span style='color:#008c00; '>356</span>  #О <span style='color:#008c00; '>357</span>  #П <span style='color:#008c00; '>360</span>
+441:   #Р <span style='color:#008c00; '>362</span>  #С <span style='color:#008c00; '>363</span>  #Т <span style='color:#008c00; '>364</span>  #У <span style='color:#008c00; '>365</span>  #Ф <span style='color:#008c00; '>346</span>  #Х <span style='color:#008c00; '>350</span>  #Ц <span style='color:#008c00; '>343</span>  #Ч <span style='color:#008c00; '>376</span>
+442:   #  <span style='color:#008c00; '>373</span>  #Щ <span style='color:#008c00; '>375</span>  #Ъ <span style='color:#008c00; '>337</span>  #Ы <span style='color:#008c00; '>371</span>  #Ь <span style='color:#008c00; '>370</span>  #Э <span style='color:#008c00; '>374</span>  #Ю <span style='color:#008c00; '>340</span>  #Я <span style='color:#008c00; '>361</span> ;
+443: 
+444: : INIRUS <span style='color:#696969; '>[]</span>
+445:   #а <span style='color:#008c00; '>341</span>  #б <span style='color:#008c00; '>342</span>  #в <span style='color:#008c00; '>367</span>  #г <span style='color:#008c00; '>347</span>  #д <span style='color:#008c00; '>344</span>  #е <span style='color:#008c00; '>345</span>  #ж <span style='color:#008c00; '>366</span>  #з <span style='color:#008c00; '>372</span>
+446:   #и <span style='color:#008c00; '>351</span>  #й <span style='color:#008c00; '>352</span>  #к <span style='color:#008c00; '>353</span>  #л <span style='color:#008c00; '>354</span>  #м <span style='color:#008c00; '>355</span>  #н <span style='color:#008c00; '>356</span>  #о <span style='color:#008c00; '>357</span>  #п <span style='color:#008c00; '>360</span>
+447:   #р <span style='color:#008c00; '>362</span>  #с <span style='color:#008c00; '>363</span>  #т <span style='color:#008c00; '>364</span>  #у <span style='color:#008c00; '>365</span>  #ф <span style='color:#008c00; '>346</span>  #х <span style='color:#008c00; '>350</span>  #ц <span style='color:#008c00; '>343</span>  #ч <span style='color:#008c00; '>376</span>
+448:   #ш <span style='color:#008c00; '>373</span>  #щ <span style='color:#008c00; '>375</span>  #ъ <span style='color:#008c00; '>377</span>  #ы <span style='color:#008c00; '>371</span>  #ь <span style='color:#008c00; '>370</span>  #э <span style='color:#008c00; '>374</span>  #ю <span style='color:#008c00; '>340</span>  #я <span style='color:#008c00; '>361</span>
+449:   #А <span style='color:#008c00; '>141</span>  #Б <span style='color:#008c00; '>142</span>  #В <span style='color:#008c00; '>167</span>  #Г <span style='color:#008c00; '>147</span>  #Д <span style='color:#008c00; '>144</span>  #Е <span style='color:#008c00; '>145</span>  #Ж <span style='color:#008c00; '>166</span>  #З <span style='color:#008c00; '>172</span>
+450:   #И <span style='color:#008c00; '>151</span>  #Й <span style='color:#008c00; '>152</span>  #К <span style='color:#008c00; '>153</span>  #Л <span style='color:#008c00; '>154</span>  #М <span style='color:#008c00; '>155</span>  #Н <span style='color:#008c00; '>156</span>  #О <span style='color:#008c00; '>157</span>  #П <span style='color:#008c00; '>160</span>
+451:   #Р <span style='color:#008c00; '>162</span>  #С <span style='color:#008c00; '>163</span>  #Т <span style='color:#008c00; '>164</span>  #У <span style='color:#008c00; '>165</span>  #Ф <span style='color:#008c00; '>146</span>  #Х <span style='color:#008c00; '>150</span>  #Ц <span style='color:#008c00; '>143</span>  #Ч <span style='color:#008c00; '>176</span>
+452:   #  <span style='color:#008c00; '>173</span>  #Щ <span style='color:#008c00; '>175</span>  #Ъ <span style='color:#008c00; '>137</span>  #Ы <span style='color:#008c00; '>171</span>  #Ь <span style='color:#008c00; '>170</span>  #Э <span style='color:#008c00; '>174</span>  #Ю <span style='color:#008c00; '>140</span>  #Я <span style='color:#008c00; '>161</span> ;
+453: 
+454: <span style='color:#074726; '>B10</span>
+455: : MFW3>TXT KOLVO <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> FW3ONEFILE FW3MANY</span> SCANSUBS ;
+456:   : FW3ONEFILE L ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> FKOD</span> ;
+457:   : FW3MANY <span style='color:#004a43; '>S( L )</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> NTF <span style='color:#074726; '>!0</span> L KOLVO <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> F3ONERABOT</span> <span style='color:#696969; '>[]</span> ;
+458:     : F3ONERABOT NOMER <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> POISK</span> FKOD L UNSELF <span style='color:#074726; '>D</span> SHOWFILE <span style='color:#074726; '>!1+</span> L <span style='color:#696969; '>[]</span> ;
+459: 
+460: : IMPFW3 <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> NOTFILE INFNOF</span> INAME ONAME <span style='color:#008c00; '>130</span> SPOS IF
+461:   <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> PEREVERT</span> CLOSEALL <span style='color:#696969; '>[]</span> ;
+462:   : PEREVERT IB IF <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> PROPUSK OBOF</span> ;
+463:     : PROPUSK <span style='color:#696969; '>[]</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>6</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> IBIFD</span> <span style='color:#008c00; '>13</span> OB OF <span style='color:#008c00; '>10</span> OB OF <span style='color:#696969; '>[]</span> ;
+464:       : IBIFD IB IF <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+465:       : OBOF OB OF <span style='color:#696969; '>[]</span> ;
+466: 
+467: : INFNOF <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 40</span><span style='color:#0000e6; '> "Не выбран файл!"</span> InfErr ;
+468: 
+469: <span style='color:#0000e6; '>"OSPAL.SET"</span> CONNECT CH OPEN CH <span style='color:#008c00; '>0</span> ' PALLETS LENB CH IS CH CLOSE CH
+470: <span style='color:#008c00; '>25000</span> <span style='color:#074726; '>!</span> BLOKSIZE  <span style='color:#008c00; '>6</span> <span style='color:#074726; '>!</span> NUMMASK  MASK6 <span style='color:#696969; '>[Начальная иницилизация]</span>
+471: <span style='color:#074726; '>UNDEF</span>
+472: 
+</pre></body></html>

@@ -1,0 +1,55 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>/*  Synhronous Serial port module for AD733xx chip interfecing  */</span>
+ 1: <span style='color:#800000; font-weight:bold; '>module sport</span><span style='color:#808030; '>(</span>
+ 2:     clk<span style='color:#808030; '>,</span> rst<span style='color:#808030; '>,</span> twt<span style='color:#808030; '>,</span> wr0<span style='color:#808030; '>,</span> wr1<span style='color:#808030; '>,</span> t<span style='color:#808030; '>,</span> int<span style='color:#808030; '>,</span> s0<span style='color:#808030; '>,</span> s1<span style='color:#808030; '>,</span>    <span style='color:#696969; '>// to core</span>
+ 3:     sclk<span style='color:#808030; '>,</span> rx<span style='color:#808030; '>,</span> rxfs<span style='color:#808030; '>,</span> tx<span style='color:#808030; '>,</span> txfs<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>                    <span style='color:#696969; '>// external</span>
+ 4: 
+ 5:     <span style='color:#800000; font-weight:bold; '>input</span>            clk<span style='color:#808030; '>,</span> rst<span style='color:#808030; '>,</span> twt<span style='color:#800000; font-weight:bold; '>;</span>
+ 6:     <span style='color:#800000; font-weight:bold; '>input</span>            wr0<span style='color:#808030; '>,</span> wr1<span style='color:#800000; font-weight:bold; '>;</span>
+ 7:     <span style='color:#800000; font-weight:bold; '>input</span>    <span style='color:#808030; '>[</span><span style='color:#008c00; '>15</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    t<span style='color:#800000; font-weight:bold; '>;</span>
+ 8:     <span style='color:#800000; font-weight:bold; '>output</span>            int<span style='color:#800000; font-weight:bold; '>;</span>
+ 9:     <span style='color:#800000; font-weight:bold; '>output</span>    <span style='color:#808030; '>[</span><span style='color:#008c00; '>15</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    s0<span style='color:#808030; '>,</span> s1<span style='color:#800000; font-weight:bold; '>;</span>
+10:     <span style='color:#800000; font-weight:bold; '>input</span>            sclk<span style='color:#808030; '>,</span> rx<span style='color:#808030; '>,</span> rxfs<span style='color:#800000; font-weight:bold; '>;</span>
+11:     <span style='color:#800000; font-weight:bold; '>output</span>            tx<span style='color:#808030; '>,</span> txfs<span style='color:#800000; font-weight:bold; '>;</span>
+12: 
+13:     <span style='color:#696969; '>// locals</span>
+14:     <span style='color:#800000; font-weight:bold; '>reg</span>        <span style='color:#808030; '>[</span><span style='color:#008c00; '>15</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    s0<span style='color:#808030; '>,</span> s1<span style='color:#800000; font-weight:bold; '>;</span>
+15:     <span style='color:#800000; font-weight:bold; '>reg</span>        <span style='color:#808030; '>[</span><span style='color:#008c00; '>4</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    count<span style='color:#800000; font-weight:bold; '>;</span>
+16: 
+17: <span style='color:#696969; '>//    wire xclk = twt &amp; clk;</span>
+18: 
+19:     <span style='color:#800000; font-weight:bold; '>assign</span>    int            <span style='color:#808030; '>=</span> count<span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0000</span><span style='color:#800000; font-weight:bold; '>;</span>
+20:     <span style='color:#800000; font-weight:bold; '>wire</span>    shift_clock    <span style='color:#808030; '>=</span> sclk <span style='color:#808030; '>|</span> <span style='color:#808030; '>~</span>count<span style='color:#008c00; '>[4]</span><span style='color:#800000; font-weight:bold; '>;</span>
+21: 
+22:     <span style='color:#800000; font-weight:bold; '>reg</span> w0<span style='color:#808030; '>,</span> w1<span style='color:#800000; font-weight:bold; '>;</span>        <span style='color:#696969; '>// write strobe</span>
+23:     <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk) // xclk or negedge rst</span>)
+24: <span style='color:#696969; '>//        if(rst==0)    begin w0 &lt;= 0;   w1 &lt;= 0;   end</span>
+25:         if<span style='color:#808030; '>(</span>twt<span style='color:#808030; '>)</span>    <span style='color:#800000; font-weight:bold; '>begin</span>
+26:             w0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> wr0 <span style='color:#808030; '>?</span> <span style='color:#008c00; '>1</span> <span style='color:#808030; '>:</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+27:             w1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> wr1 <span style='color:#808030; '>?</span> <span style='color:#008c00; '>1</span> <span style='color:#808030; '>:</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+28:         <span style='color:#800000; font-weight:bold; '>end</span>
+29: 
+30:     <span style='color:#800000; font-weight:bold; '>reg</span> start<span style='color:#800000; font-weight:bold; '>;</span>
+31:     <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>negedge rxfs or negedge sclk</span>)
+32:         if <span style='color:#808030; '>(</span><span style='color:#808030; '>~</span>sclk<span style='color:#808030; '>)</span>    start <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>;</span>
+33:         else        start <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+34: 
+35:     <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge shift_clock or posedge start</span>)
+36:         if <span style='color:#808030; '>(</span>start<span style='color:#808030; '>)</span>    count <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5'b11111</span><span style='color:#808030; '>;</span>
+37:         else        count <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> count <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>;</span>
+38: 
+39:     <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge shift_clock or posedge w0</span>)
+40:         if <span style='color:#808030; '>(</span>w0<span style='color:#808030; '>)</span>            s0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> t<span style='color:#808030; '>;</span>
+41:         else     if<span style='color:#808030; '>(</span>int<span style='color:#808030; '>)</span>    s0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> s1<span style='color:#808030; '>;</span>
+42:                 else    s0 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#800080; '>{</span>s0<span style='color:#808030; '>[</span><span style='color:#008c00; '>14</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> rx<span style='color:#800080; '>}</span><span style='color:#808030; '>;</span>
+43: 
+44:     <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge shift_clock or posedge w1</span>)
+45:         if <span style='color:#808030; '>(</span>w1<span style='color:#808030; '>)</span>            s1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> t<span style='color:#808030; '>;</span>
+46:         else    if<span style='color:#808030; '>(</span>int<span style='color:#808030; '>)</span>    s1 <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> <span style='color:#800080; '>{</span>s0<span style='color:#808030; '>[</span><span style='color:#008c00; '>14</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> rx<span style='color:#800080; '>}</span><span style='color:#808030; '>;</span>
+47: 
+48:     <span style='color:#800000; font-weight:bold; '>assign</span> txfs <span style='color:#808030; '>=</span> rxfs<span style='color:#800000; font-weight:bold; '>;</span>
+49:     <span style='color:#800000; font-weight:bold; '>assign</span> tx <span style='color:#808030; '>=</span> s0<span style='color:#008c00; '>[15]</span><span style='color:#800000; font-weight:bold; '>;</span>
+50: 
+51: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+52: 
+</pre></body></html>

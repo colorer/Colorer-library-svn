@@ -1,0 +1,415 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#004a43; '>PROGRAM $DUMP</span> <span style='color:#074726; '>B10</span> <span style='color:#0000e6; '>."</span>
+  1: <span style='color:#0000e6; '>[26-10-1994 16:00] Для запуска программы должны быть загружены пакеты:</span>
+  2: <span style='color:#0000e6; '>[10-10-1994 12:41] SCRWORK  - Примитивы работы с экраном</span>
+  3: <span style='color:#0000e6; '>[24- 8-1994 12:43] MENU4    - Пакет организации меню</span>
+  4: <span style='color:#0000e6; '>[23- 8-1994 16:51] MENUTIL4 - Утилиты для меню</span>
+  5: <span style='color:#0000e6; '>[21- 4-1994  9:56] GENHLP   - Выдача помощи</span>
+  6: <span style='color:#0000e6; '>[19- 4-1994  8:00] QCL      - Цветовой конфигуратор - избыточен</span>
+  7: <span style='color:#0000e6; '>[ 6- 4-1994 14:43] DIASXXXX - Дизассемблер - необязательно</span>
+  8: <span style='color:#0000e6; '>[ 5- 4-1994  7:59] [ 5- 4-1994  9:04] [25- 3-1994 15:01] 4005 байт</span>
+  9: <span style='color:#0000e6; '>[10-12-1993 10:48] Программа DUMP."</span>
+ 10: 
+ 11:        <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR BOXMEM</span>
+ 12: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR YDIA</span>
+ 13: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR XDIA</span>      <span style='color:#696969; '>[Координаты окна дизассемблера]</span>        <span style='color:#008c00; '>39</span> <span style='color:#074726; '>!</span> XDIA
+ 14: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR BASE</span>      <span style='color:#696969; '>[Система счисления при вводе]</span>          <span style='color:#008c00; '>16</span> <span style='color:#074726; '>!</span> BASE
+ 15: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLSYM</span>     <span style='color:#696969; '>[Цвет выводимой символьной части]</span>      <span style='color:#008c00; '>14</span> <span style='color:#074726; '>!</span> CLSYM
+ 16: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLMOD</span>     <span style='color:#696969; '>[Цвет модифицированного уже символа]</span>   <span style='color:#008c00; '>10</span> <span style='color:#074726; '>!</span> CLMOD
+ 17: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR DMLABEL</span>   <span style='color:#696969; '>[Адрес-метка для быстрого продвижения]</span>  <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> DMLABEL
+ 18: ::     <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR CHANGE</span>    <span style='color:#696969; '>[Признак изменений в режиме DUMP]</span>
+ 19: ::     <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR BATRVM</span>    <span style='color:#696969; '>[Переменная хранитель атрибута]</span>
+ 20: ::     <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR LABLATR</span>   <span style='color:#696969; '>[Переменная хранитель атрибута]</span>
+ 21:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR ADRUPS</span>    <span style='color:#696969; '>[Начальный адрес верхней строки в окне DUMPа]</span>
+ 22:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR ADRTEK</span>    <span style='color:#696969; '>[Текущий адрес DUMPа]</span>
+ 23:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR ADREND</span>    <span style='color:#696969; '>[Адрес конца  области DUMPа]</span>
+ 24:        <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR COMLEN</span>    <span style='color:#696969; '>[Длина дизасемблируемой команды]</span>
+ 25:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLSFON</span>    <span style='color:#696969; '>[Фон символа в симольной части]</span>     <span style='color:#008c00; '>11</span> <span style='color:#074726; '>!</span> CLSFON
+ 26:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLTTDIA</span>   <span style='color:#696969; '>[Текст в окне дизассемблера с КТ]</span>   <span style='color:#008c00; '>12</span> <span style='color:#074726; '>!</span> CLTTDIA
+ 27:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLTNDIA</span>   <span style='color:#696969; '>[Текст в окне дизассемблера без КТ]</span> <span style='color:#008c00; '>09</span> <span style='color:#074726; '>!</span> CLTNDIA
+ 28: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLTDUMP</span>   <span style='color:#696969; '>[Цвет символа]</span>                       <span style='color:#008c00; '>7</span> <span style='color:#074726; '>!</span> CLTDUMP
+ 29: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR TCLTDUMP</span>  <span style='color:#696969; '>[Цвет текущего символа]</span>             <span style='color:#008c00; '>12</span> <span style='color:#074726; '>!</span> TCLTDUMP
+ 30: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR TCLFDUMP</span>  <span style='color:#696969; '>[Цвет фона текущего символа]</span>         <span style='color:#008c00; '>7</span> <span style='color:#074726; '>!</span> TCLFDUMP
+ 31: ::     <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR FLAGZOOM</span>  <span style='color:#696969; '>[Флаг разрешения выдачи зуммера]</span>
+ 32: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR NABEGOBL</span>  <span style='color:#696969; '>[Конечный адрес области]</span>          <span style='color:#008c00; '>0</span>    <span style='color:#074726; '>!</span> NABEGOBL
+ 33: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR NAENDOBL</span>  <span style='color:#696969; '>[Начальный адрес области]</span>         <span style='color:#008c00; '>3840</span> <span style='color:#074726; '>!</span> NAENDOBL
+ 34: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR NNOVVAL</span>   <span style='color:#696969; '>[Вновь заносимое значение]</span>        <span style='color:#008c00; '>0</span>    <span style='color:#074726; '>!</span> NNOVVAL
+ 35: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR DCORNXU</span>   <span style='color:#696969; '>[Столбец верхнего левого угла]</span>       <span style='color:#008c00; '>3</span> <span style='color:#074726; '>!</span> DCORNXU
+ 36: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR DCORNYU</span>   <span style='color:#696969; '>[Строка  верхнего левого угла]</span>       <span style='color:#008c00; '>4</span> <span style='color:#074726; '>!</span> DCORNYU
+ 37: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR DCORNXD</span>   <span style='color:#696969; '>[Столбец нижнего правого угла]</span>      <span style='color:#008c00; '>61</span> <span style='color:#074726; '>!</span> DCORNXD
+ 38: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR DCORNYD</span>   <span style='color:#696969; '>[Строка  нижнего правого угла]</span>      <span style='color:#008c00; '>21</span> <span style='color:#074726; '>!</span> DCORNYD
+ 39: ::     <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR INFSTRD</span>   <span style='color:#696969; '>[Строка  нижнего правого угла]</span>
+ 40: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR ?ONSYMV</span>   <span style='color:#696969; '>[0-кодовый режим, 1-символьный режим]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> ?ONSYMV
+ 41: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span>  <span style='color:#074726; '>VAR PROVTRP</span>   <span style='color:#696969; '>[Проверка наличия точки останова]</span>
+ 42: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span>  <span style='color:#074726; '>VAR ACTHELP</span>   <span style='color:#696969; '>[Переменная обработчик выдачи подсказки]</span>
+ 43: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span>  <span style='color:#074726; '>VAR ALTHELP</span>   <span style='color:#696969; '>[Переменная выдачи альтернативной подсказки]</span>
+ 44: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span>  <span style='color:#074726; '>VAR ASSHELP</span>   <span style='color:#696969; '>[Выдачи подсказки по системе команд ассемблера]</span>
+ 45: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span>  <span style='color:#074726; '>VAR ALTKEYS</span>   <span style='color:#696969; '>[Переменная обработчик альтернативных клавиш]</span>
+ 46: 
+ 47: DEFINE? CODNUMB NOT %IF
+ 48: :: <span style='color:#074726; '>FIX</span>  <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR CODNUMB</span>  <span style='color:#696969; '>[Адрес размещения кода в памяти для дизассемблера]</span>
+ 49:                     %FI
+ 50: DEFINE? VVB NOT %IF :: <span style='color:#008c00; '>80</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR VVB</span>  <span style='color:#696969; '>[Служебная строка]</span> %FI
+ 51: DEFINE? NAMEHLP NOT %IF
+ 52: <span style='color:#008c00; '>80</span> <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>STRING NAMEHLP</span><span style='color:#0000e6; '> ""</span> <span style='color:#074726; '>!</span> NAMEHLP
+ 53:                     %FI
+ 54: 
+ 55: DEFINE? TMEMORY NOT %IF <span style='color:#008c00; '>20000</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR TMEMORY</span> %FI
+ 56: 
+ 57: DEFINE? NACHCOD NOT %IF
+ 58: :: <span style='color:#074726; '>FIX</span>  <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR NACHCOD</span>  <span style='color:#696969; '>[Адрес начала области размещения кода в памяти]</span>
+ 59: DEFINE? MEMORY %IF <span style='color:#008c00; '>0</span> ' MEMORY <span style='color:#074726; '>!</span> NACHCOD %FI
+ 60:                     %FI
+ 61: 
+ 62: DEFINE? NACHLO NOT %IF
+ 63: :: <span style='color:#074726; '>FIX</span>  <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR NACHALO</span> <span style='color:#696969; '>[Адрес начала области DUMPа-обычно не меньше чем</span>
+ 64: <span style='color:#696969; '>                          величина NACHCOD]</span>
+ 65:                    %FI
+ 66:    DEFINE? NOPKOD  %IF NOPKOD <span style='color:#074726; '>!</span> NNOVVAL %FI
+ 67: '' <span style='color:#074726; '>NOP</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> ACTHELP <span style='color:#074726; '>!</span> ALTHELP <span style='color:#074726; '>!</span> ASSHELP '' <span style='color:#074726; '>T0</span> <span style='color:#074726; '>!</span> PROVTRP
+ 68: DEFINE? DETEC   NOT %IF <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST DETEC</span> <span style='color:#008c00; '>0</span> ; %FI
+ 69: DEFINE? LONGCOM NOT %IF <span style='color:#800000; font-weight:bold; '>COPYW T1 LONGCOM</span> %FI
+ 70: DEFINE? PR      NOT %IF <span style='color:#800000; font-weight:bold; '>COPYW D  PR</span>      %FI
+ 71: 
+ 72: <span style='color:#696969; '>[ DEFINE? !VW NOT %IF :: : !VW !T ; %FI ]</span>
+ 73: DEFINE? !VW NOT %IF :: <span style='color:#800000; font-weight:bold; '>COPYW !T !VW</span> %FI
+ 74: 
+ 75: <span style='color:#696969; '>[Процедура дампирования области памяти]</span>
+ 76: :: : NDUMP <span style='color:#696969; '>[Адрес строки комментария,Длина,Adr of begin,Adr of end,Adr tek]</span>
+ 77:      <span style='color:#004a43; '>S( NPALLET DCORNYU BROW BCOL BASE@ )</span>
+ 78:      <span style='color:#074726; '>B16</span> ETXOFF <span style='color:#074726; '>!</span> ADRTEK <span style='color:#074726; '>!</span> ADREND <span style='color:#074726; '>!</span> NACHALO
+ 79:      PROVADRUPS <span style='color:#696969; '>[Записали и проверили адреса]</span>
+ 80:      <span style='color:#074726; '>HS</span> DCORNYU - <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> DCORNYD <span style='color:#074726; '>!</span> INFSTRD
+ 81:      <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SJust 1</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 17</span>  <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC DELWIND</span>
+ 82:      DCORNYD DCORNYU + <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!</span> BROW DCORNXU <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>!</span> BCOL
+ 83:      <span style='color:#008c00; '>72</span> <span style='color:#074726; '>!</span> DCORNXD <span style='color:#074726; '>!0</span> CHANGE <span style='color:#696969; '>[Изменений еще не было]</span>
+ 84:      NCUR <span style='color:#696969; '>[Погасили курсор]</span> DCORNYU <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>!</span> YDIA
+ 85:      <span style='color:#696969; '>[Adr,Dl]</span> DCORNXD DCORNXU - LJUST
+ 86:      '' DMPTEXT DCORNYU DCORNXU DCORNYD DCORNXD GLBINF  <span style='color:#008c00; '>17</span> SETPALL
+ 87:      DCORNYU <span style='color:#008c00; '>3</span>- DCORNXU DCORNXD <span style='color:#074726; '>C2</span> - SHR + #╦ CLFON CLKANT FORMSYMB RSYMB
+ 88:      DCORNYU <span style='color:#008c00; '>2</span>- DCORNXU DCORNXD <span style='color:#074726; '>C2</span> - SHR + #║ CLFON CLKANT FORMSYMB RSYMB
+ 89:      DCORNYU <span style='color:#008c00; '>1</span>- DCORNXU DCORNXD <span style='color:#074726; '>C2</span> - SHR + #╩ CLFON CLKANT FORMSYMB RSYMB
+ 90:      DCORNYU <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>!</span> DCORNYU
+ 91:      SHOWBASE SHOWLABEL ADRTEK DVIGAEM <span style='color:#696969; '>[К текущей ячейке]</span>
+ 92:      FIRSTSCR INFDIAS
+ 93:      SHOWTEK MOULIMIT MouON <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> SDV</span> MouFREE MouOFF DELWIND ;
+ 94:      <span style='color:#696969; '>[Проверка адреса на корректность]</span>
+ 95:      : PROVADRUPS <span style='color:#696969; '>[]</span> NACHALO <span style='color:#696969; '>[C]</span> ADREND <span style='color:#074726; '>C2</span> - <span style='color:#696969; '>[Voliume]</span> <span style='color:#008c00; '>15</span> &amp;<span style='color:#008c00; '>0</span> + <span style='color:#074726; '>!</span> ADREND
+ 96:        <span style='color:#696969; '>[AdrBeg]</span> <span style='color:#696969; '>[ADRTEK C2 - -16 &amp; 128 - MAX</span>
+ 97: <span style='color:#696969; '>       ADREND 16 HS * - 1- MIN ! ADRUPS]</span> ;
+ 98:      : MOULIMIT DCORNXU DCORNYU <span style='color:#008c00; '>1</span>- DCORNXD <span style='color:#008c00; '>2</span>+ DCORNYD <span style='color:#008c00; '>3</span>+ MouRANGE ;
+ 99:      : DMPTEXT BR
+100: <span style='color:#008c00; '>1</span> <span style='color:#0000e6; '> "      0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  Символьная форма"</span>
+101: INFSTRD
+102:   <span style='color:#0000e6; '> "    ESC F1 F2 F3 F5 F6 F7 F8 F9 F10 PgDn PgUp Enter Tab Insert    "</span>
+103: <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+104: 
+105:   : INFDIAS ADRTEK <span style='color:#074726; '>C</span> NACHCOD - <span style='color:#074726; '>!</span> CODNUMB @B <span style='color:#074726; '>C</span> LONGCOM <span style='color:#008c00; '>15</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>!</span> COMLEN
+106:     PR CLFON CODNUMB PROVTRP <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> CLTNDIA CLTTDIA</span>
+107:     YDIA XDIA <span style='color:#008c00; '>0</span> ' VVB <span style='color:#008c00; '>34</span> CLTOS <span style='color:#696969; '>[]</span> ;
+108:     DEFINE? DEMSTR NOT %IF :: : DEMSTR <span style='color:#074726; '>D</span> EMSTR ; %FI
+109: 
+110:   <span style='color:#696969; '>[Выдача экрана с кодами ячеек]</span>
+111:   : FIRSTSCR CLFON <span style='color:#008c00; '>4</span> SHT CLTDUMP &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>SWB</span> <span style='color:#074726; '>!</span> BATRVM
+112:     DCORNYU DCORNXU <span style='color:#008c00; '>6</span> + OPADRVM <span style='color:#696969; '>[Ptrvm]</span> ADRUPS
+113:     DCORNYD DCORNYU - <span style='color:#008c00; '>3</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> STRSHOW</span> <span style='color:#074726; '>DD</span> ;
+114:     : STRSHOW <span style='color:#696969; '>[Ptrvm,Adres]</span> DLABEL CLFON <span style='color:#008c00; '>4</span> SHT CLSYM &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>SWB</span> <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>98</span> +
+115:       <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>16</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> POSYM</span> <span style='color:#074726; '>DDD</span> <span style='color:#008c00; '>16</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ELEMSHOW</span> <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>64</span> + <span style='color:#074726; '>E2</span> ;
+116:       : POSYM <span style='color:#696969; '>[Atrib,AdrVm,AdrSourse]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C4</span> &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>C3</span> !VW <span style='color:#696969; '>[Записали символ]</span>
+117:         <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>E2</span> ;
+118: 
+119:   : ELEMSHOW <span style='color:#696969; '>[Ptrvm,Tadri]</span> <span style='color:#074726; '>C</span> @B -<span style='color:#008c00; '>4</span> SHT LEGALSYM <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>E2</span>
+120:     <span style='color:#074726; '>C</span> @B LEGALSYM <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>4</span>+ <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[Ptrvm+6,Tadri+1]</span> ;
+121:   : DLABEL <span style='color:#696969; '>[Ptrvm,Adress]</span> BATRVM
+122:     CLFON <span style='color:#008c00; '>4</span> SHT <span style='color:#008c00; '>12</span> &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>SWB</span> <span style='color:#074726; '>!</span> BATRVM
+123:     <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> NACHCOD - <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>4</span>- <span style='color:#074726; '>E2</span> #: BATRVM &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>C3</span> !VW
+124:     <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>E2</span>        <span style='color:#074726; '>C</span> LEGALSYM
+125:     <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>E2</span> -<span style='color:#008c00; '>4</span> SHT <span style='color:#074726; '>C</span> LEGALSYM
+126:     <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>E2</span> -<span style='color:#008c00; '>4</span> SHT <span style='color:#074726; '>C</span> LEGALSYM
+127:     <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>E2</span> -<span style='color:#008c00; '>4</span> SHT <span style='color:#074726; '>C</span> LEGALSYM <span style='color:#074726; '>DD</span> <span style='color:#074726; '>!</span> BATRVM <span style='color:#696969; '>[]</span> ;
+128: ::  : LEGALSYM <span style='color:#696969; '>[Ptrvm,Adr,Sym]</span> <span style='color:#008c00; '>15</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>9</span> <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> #0 #7</span> + BATRVM &amp;<span style='color:#008c00; '>0</span> <span style='color:#074726; '>C3</span> !VW
+129:       <span style='color:#696969; '>[Ptr,AdR]</span> ;
+130: 
+131: <span style='color:#696969; '>[Прокрутка окна на 1 строку вниз]</span>
+132: :: : WNDUP <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> MROLL <span style='color:#696969; '>[]</span> ;
+133: 
+134: <span style='color:#696969; '>[Прокрутка окна на 1 строку вверх]</span>
+135: : WNDDOWN <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>1</span> MROLL <span style='color:#696969; '>[]</span> ;
+136:   : MROLL <span style='color:#696969; '>[0 - UP, 1 - DOWN]</span> PUSH
+137:     DCORNYU DCORNXU DCORNYD <span style='color:#074726; '>C3</span> - <span style='color:#008c00; '>3</span>+ DCORNXD <span style='color:#074726; '>C3</span> - <span style='color:#008c00; '>2</span>+
+138:     CLFON CLTXT FORMATR <span style='color:#008c00; '>1</span> POP MouOFF <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> ROLLUP ROLLDN</span> MouON <span style='color:#696969; '>[]</span> ;
+139: 
+140:   : MASKLIT <span style='color:#008c00; '>223</span> <span style='color:#074726; '>&amp;</span> ;
+141: 
+142: : SCRDUHL MouFREE <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 41</span>
+143:   <span style='color:#008c00; '>140</span> NAMEHLP GENHELP MOULIMIT <span style='color:#696969; '>[]</span> ; '' SCRDUHL <span style='color:#074726; '>!</span> ACTHELP
+144:   <span style='color:#696969; '>[Опрос вводимых команд]</span>
+145:   : SDV <span style='color:#696969; '>[]</span> TRBMou <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> OBRMOUS OBRKEYB</span> <span style='color:#696969; '>[]</span> ;
+146:     : OBRMOUS <span style='color:#074726; '>D</span> MouPosI DCORNYD DCORNYU + <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> VERHDUMP NIZDUMP</span>
+147:       DEFPALL INFDIAS MouON <span style='color:#696969; '>[]</span> ;
+148: <span style='color:#074726; '>B16</span>   : NIZDUMP <span style='color:#696969; '>[]</span> MouPosJ DCORNXU - <span style='color:#696969; '>[Координата относительно края окна]</span>
+149:         0E <span style='color:#074726; '>C2</span> <span style='color:#074726; '>&lt;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> NOP</span>
+150:         <span style='color:#074726; '>C</span>  <span style='color:#008c00; '>0</span>  <span style='color:#008c00; '>4</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> BASEMOD</span>  <span style='color:#696969; '>[MOD BASE]</span>
+151:         <span style='color:#074726; '>C</span>  <span style='color:#008c00; '>5</span>  <span style='color:#008c00; '>9</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DEX</span>      <span style='color:#696969; '>[Exit-ESC]</span>
+152:         <span style='color:#074726; '>C</span> 0A 0C <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ACTHELP</span>  <span style='color:#696969; '>[F1-HELP]</span>
+153:         <span style='color:#074726; '>C</span> 0D 0F <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> OBLWORK</span>  <span style='color:#696969; '>[F2-AREA]</span>
+154:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>12</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> BASEMOD</span>  <span style='color:#696969; '>[F3-MOD BASE]</span>
+155:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>13</span> <span style='color:#008c00; '>15</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> USTADR</span>   <span style='color:#696969; '>[F5-UST ADRES]</span>
+156:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>16</span> <span style='color:#008c00; '>18</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TOLABEL</span>  <span style='color:#696969; '>[F6]</span>
+157:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>19</span> 1B <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ASSHELP</span>  <span style='color:#696969; '>[F7]</span>
+158:         <span style='color:#074726; '>C</span> 1C 1E <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> MODTRP</span>   <span style='color:#696969; '>[F8]</span>
+159:         <span style='color:#074726; '>C</span> 1F <span style='color:#008c00; '>21</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> MODDIAF</span>  <span style='color:#696969; '>[F9]</span>
+160:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>22</span> <span style='color:#008c00; '>25</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> AVTDIAS</span>  <span style='color:#696969; '>[F10]</span>
+161:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>26</span> 2A <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PAGEDNC</span>  <span style='color:#696969; '>[PageUp]</span>
+162:         <span style='color:#074726; '>C</span> 2B 2F <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PAGEUPC</span>  <span style='color:#696969; '>[PageDn]</span>
+163:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>30</span> <span style='color:#008c00; '>35</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> NORMODIF</span> <span style='color:#696969; '>[Enter - Модификация]</span>
+164:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>36</span> <span style='color:#008c00; '>39</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TABULYC</span>  <span style='color:#696969; '>[TAB]</span>
+165:         <span style='color:#074726; '>C</span> 3A 3F <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> INSSDIA</span>  <span style='color:#696969; '>[Insert]</span>
+166:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>40</span> <span style='color:#008c00; '>41</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> BEGSTRC</span>  <span style='color:#696969; '>[HOME]</span>
+167:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>42</span> <span style='color:#008c00; '>43</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DDSTEP</span>   <span style='color:#696969; '>[Down]</span>
+168:         <span style='color:#074726; '>C</span> <span style='color:#008c00; '>44</span> <span style='color:#008c00; '>45</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DUSTEP</span>   <span style='color:#696969; '>[Up]</span>
+169:           <span style='color:#008c00; '>46</span> <span style='color:#008c00; '>47</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ENDSTRC</span>  <span style='color:#696969; '>[END]</span> ;
+170:       DEFINE? DEX NOT %IF : DEX <span style='color:#074726; '>D</span> EX ; %FI
+171:       : VERHDUMP <span style='color:#696969; '>[]</span> MouPosJ DCORNXU - <span style='color:#696969; '>[Координата относительно края окна]</span>
+172:         <span style='color:#008c00; '>4</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>&lt;</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> USTADR NOUSTADR</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+173:         : NOUSTADR <span style='color:#008c00; '>5</span> - <span style='color:#074726; '>C</span> <span style='color:#074726; '>C</span> <span style='color:#696969; '>[Позиция относительно конца метки]</span>
+174:           <span style='color:#008c00; '>30</span> <span style='color:#074726; '>&lt;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> MouKOD MouSYM</span> <span style='color:#696969; '>[]</span> ;
+175:  : MouKOD <span style='color:#696969; '>[Pos]</span> <span style='color:#008c00; '>3</span> <span style='color:#074726; '>/</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[Nstr]</span> SHOWNORM <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> ?ONSYMV USTMOU ;
+176:    : USTMOU MouPosI DCORNYU - <span style='color:#008c00; '>4</span> SHT + <span style='color:#696969; '>[N-узла]</span>
+177:      ADRUPS + <span style='color:#696969; '>[новый адрес]</span> <span style='color:#074726; '>C</span> ADRTEK <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> NEWATEK DMODIF</span> <span style='color:#696969; '>[]</span> ;
+178:    : NEWATEK <span style='color:#696969; '>[AdrNew]</span> VYPSTEP ;
+179:    : DMODIF <span style='color:#696969; '>[]</span> <span style='color:#074726; '>D</span> NORMODIF <span style='color:#696969; '>[]</span> ;
+180:  : MouSYM <span style='color:#696969; '>[Pos]</span> SHOWNORM <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> ?ONSYMV <span style='color:#074726; '>C</span> <span style='color:#008c00; '>31</span> <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> OBRSYM D</span> SHOWTEK ;
+181:    : OBRSYM <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> ?ONSYMV <span style='color:#008c00; '>32</span> - USTMOU ;
+182: 
+183:     <span style='color:#696969; '>[Обработка клавиатуры]</span>
+184:     : OBRKEYB <span style='color:#696969; '>[cod]</span> BR
+185:       <span style='color:#008c00; '>4700</span> BEGSTRC  <span style='color:#696969; '>[Home]</span>
+186:       0F09 TABULYC  <span style='color:#696969; '>[Tab]</span>
+187:       <span style='color:#008c00; '>5100</span> PAGEDNC  <span style='color:#696969; '>[PageDn]</span>
+188:       1C0D NORMODIF <span style='color:#696969; '>[Enter]</span>
+189:       <span style='color:#008c00; '>4900</span> PAGEUPC  <span style='color:#696969; '>[PageUp]</span>
+190:       4F00 ENDSTRC  <span style='color:#696969; '>[End]</span>
+191:       4D00 DRSTEP   <span style='color:#696969; '>[Right]</span>
+192:       4B00 DLSTEP   <span style='color:#696969; '>[Left]</span>
+193:        11B EX       <span style='color:#696969; '>[Esc]</span>
+194:       <span style='color:#008c00; '>4800</span> DUSTEP   <span style='color:#696969; '>[Up]</span>
+195:       <span style='color:#008c00; '>5000</span> DDSTEP   <span style='color:#696969; '>[Down]</span>
+196: 
+197:       3B00 ACTHELP  <span style='color:#696969; '>[F1 - key Вызов помощи]</span>
+198:       3C00 OBLWORK  <span style='color:#696969; '>[F2 - key Вызов меню работы с областью]</span>
+199:       3D00 BASEMOD  <span style='color:#696969; '>[F3 - key Изменение системы счисления для ввода]</span>
+200:       3F00 USTADR   <span style='color:#696969; '>[F5 - key Ввод метки и движение к ней]</span>
+201:       <span style='color:#008c00; '>4000</span> TOLABEL  <span style='color:#696969; '>[F6 - key Передвижение к установленной метке]</span>
+202:       <span style='color:#008c00; '>4100</span> HELPF7   <span style='color:#696969; '>[F7 - key Вызов помощи по системе команд]</span>
+203:       <span style='color:#008c00; '>4200</span> MODTRP   <span style='color:#696969; '>[F8 - key Простановка контрольной точки]</span>
+204:       <span style='color:#008c00; '>4300</span> MODDIAF  <span style='color:#696969; '>[F9 - key Ввод имени файла протокола дизассемблирования]</span>
+205:       <span style='color:#008c00; '>4400</span> AVTDIAS  <span style='color:#696969; '>[F0 - auto deasm]</span>
+206:       <span style='color:#008c00; '>5200</span> INSSDIA  <span style='color:#696969; '>[INS - key Вывод строки дизассемблера в файл]</span>
+207:       <span style='color:#008c00; '>6300</span> HELPF6   <span style='color:#696969; '>[CntRlF6-key Вызов альтернативной помощи]</span>
+208:       <span style='color:#008c00; '>7700</span> CntrHOME
+209:       <span style='color:#008c00; '>7500</span> CntrEND
+210:       <span style='color:#800000; font-weight:bold; '>ELSE ALTVVOD</span> DEFPALL INFDIAS ;
+211:     : HELPF6 MouFREE ALTHELP MOULIMIT ;
+212:     : HELPF7 MouFREE ASSHELP MOULIMIT ;
+213:     : CntrHOME SHOWNORM NACHALO NACHCOD - DVIGAEM ;
+214:     : CntrEND  SHOWNORM ADREND DVIGAEM ;
+215: 
+216: <span style='color:#074726; '>B10</span>
+217: : OBLWORK <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC FIRDEL</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 5</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MHELP AREAHLP</span>
+218:  <span style='color:#0000e6; '> "    Заполнение области"</span>
+219:   '' IZMENEN '' OBLTEXT '' VALTEXT <span style='color:#008c00; '>4</span> <span style='color:#008c00; '>6</span> <span style='color:#008c00; '>6</span> <span style='color:#008c00; '>20</span> <span style='color:#008c00; '>6</span> GLBMENU DELWIND <span style='color:#696969; '>[]</span> ;
+220: : FIRDEL DELWIND DEFPALL FIRSTSCR SHOWTEK <span style='color:#696969; '>[]</span> ;
+221: : IZMENEN <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 6</span>
+222:   <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 VYPZAPL 2 INVALN 3 INABEG 4 INAEND 5 USTTRAP 6 SBRTRAP</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> ;
+223:   : USTTRAP <span style='color:#008c00; '>1</span> SETPOINT ;
+224:     : SETPOINT <span style='color:#008c00; '>0</span> ' TMEMORY NABEGOBL NAENDOBL <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SETVTRP</span> <span style='color:#074726; '>DDD</span>
+225:       <span style='color:#074726; '>!1</span> CHANGE MESC ;
+226:       : SETVTRP <span style='color:#696969; '>[adr]</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> !BI <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[adr']</span> ;
+227:   : SBRTRAP <span style='color:#008c00; '>0</span> SETPOINT ;
+228:   : AREAHLP <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 41</span> <span style='color:#008c00; '>138</span> NAMEHLP GENHELP ;
+229: 
+230: : OBLTEXT BR
+231:   <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Заполнить значением"</span>
+232:   <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "Вводимое значение -"</span>
+233:   <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "Начальный адрес   -"</span>
+234:   <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Конечный адрес    -"</span>
+235:   <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Заполнить ловушками"</span>
+236:   <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "Очистить ловушки"</span>
+237:   <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+238: : VALTEXT <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 3 AOBLBEG 4 AOBLEND 2 VNOSVAL</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+239: : AOBLBEG NABEGOBL STRWORD ;
+240: : AOBLEND NAENDOBL STRWORD ;
+241: : VNOSVAL NNOVVAL  STRBYTE ;
+242: :: : STRWORD SCLR VVODSTR <span style='color:#008c00; '>4</span> VAL>STR ;
+243: :: : STRBYTE SCLR VVODSTR <span style='color:#008c00; '>2</span> VAL>STR ;
+244: 
+245: 
+246: <span style='color:#696969; '>[Выдача сообщения о ходе заполнения]</span>
+247: : VYPZAPL <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 7</span> '' ZAPINFO <span style='color:#008c00; '>21</span> <span style='color:#008c00; '>33</span> <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>15</span> GENINF NABEGOBL NAENDOBL
+248:   <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> NACHCOD + <span style='color:#074726; '>E2</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> VZV DDD</span> DELWIND <span style='color:#074726; '>!1</span> CHANGE MESC ;
+249: ::  : ZAPINFO <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 "Заполняю память"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> ;
+250:    : VZV <span style='color:#696969; '>[ADR,DL]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> VPIS</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+251:      : VPIS <span style='color:#696969; '>[ADR]</span> NNOVVAL <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ ;
+252: 
+253: : INABEG PODGVVOD NUMVVOD NABEGOBL NABEGOBL NACHALO NACHCOD - <span style='color:#074726; '>MAX</span>
+254:   ADREND NACHCOD - <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> NABEGOBL <span style='color:#074726; '>!1</span> CHANGE ;
+255: : INAEND PODGVVOD NUMVVOD NAENDOBL NAENDOBL NACHALO NACHCOD - <span style='color:#074726; '>MAX</span>
+256:   ADREND NACHCOD - <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> NAENDOBL <span style='color:#074726; '>!1</span> CHANGE ;
+257: : INVALN PODGVVOD NUMVVOD NNOVVAL <span style='color:#074726; '>!1</span> CHANGE ;
+258:   : PODGVVOD '' DEMSTR MENCPOS <span style='color:#008c00; '>24</span> + <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>5</span>  ;
+259: 
+260: <span style='color:#696969; '>[Ввод значений байтов непосредственно с символьной клавиатуры]</span>
+261: : VODKBD <span style='color:#696969; '>[kod]</span> INKEY <span style='color:#008c00; '>255</span> <span style='color:#074726; '>&amp;</span> ADRTEK <span style='color:#074726; '>!TB</span> SHOWNORM ADRTEK <span style='color:#008c00; '>1</span>+
+262:   PROVEND SHOWTEK <span style='color:#074726; '>!1</span> CHANGE ;
+263: 
+264: <span style='color:#074726; '>B16</span>
+265: <span style='color:#696969; '>[Ввод нового значения байта с клавиатуры]</span>
+266: : TABULYC <span style='color:#696969; '>[]</span> SHOWNORM ?ONSYMV NOT <span style='color:#074726; '>!</span> ?ONSYMV SHOWTEK <span style='color:#696969; '>[]</span> ;
+267:   : SHOWNORM  ?ONSYMV <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> REKODSHOW RETEKSYMB</span> <span style='color:#696969; '>[]</span> ;
+268:   : SHOWTEK   ?ONSYMV <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> CTEKSHOW  TEKSYMB</span> <span style='color:#696969; '>[]</span> ;
+269:     : ALTVVOD ?ONSYMV <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> KODVVOD   VODKBD</span> <span style='color:#696969; '>[]</span> ;
+270: 
+271:   : TEKSYMB             SYMCOOR ADRTEK @B CLSFON TCLTDUMP FORMSYMB RSYMB <span style='color:#696969; '>[]</span> ;
+272:   : RETEKSYMB REKODSHOW SYMCOOR ADRTEK @B CLFON  CLSYM    FORMSYMB RSYMB <span style='color:#696969; '>[]</span> ;
+273: 
+274: : MODTRP <span style='color:#008c00; '>0</span> ' TMEMORY ADRTEK NACHCOD - <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> @BI NOT <span style='color:#074726; '>E3</span> <span style='color:#074726; '>E2</span> !BI INFDIAS
+275:   <span style='color:#074726; '>!1</span> CHANGE <span style='color:#696969; '>[]</span> ;
+276: 
+277: <span style='color:#074726; '>B16</span>
+278: : BEGSTRC <span style='color:#696969; '>[Home]</span> SHOWNORM ADRTEK    OPRUZ <span style='color:#074726; '>E2D</span> -   PROVEND SHOWTEK ;
+279: : ENDSTRC <span style='color:#696969; '>[End]</span>  SHOWNORM ADRTEK 0F OPRUZ <span style='color:#074726; '>E2D</span> - + PROVEND SHOWTEK ;
+280: : PAGEUPC <span style='color:#696969; '>[PageUp]</span>
+281:   ADRUPS <span style='color:#008c00; '>10</span> DCORNYD DCORNYU - <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>*</span> - NACHALO <span style='color:#074726; '>MAX</span> <span style='color:#074726; '>!</span> ADRUPS
+282:   ADRTEK <span style='color:#008c00; '>10</span> DCORNYD DCORNYU - <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>*</span> - NACHALO <span style='color:#074726; '>MAX</span> <span style='color:#074726; '>!</span> ADRTEK
+283:   FIRSTSCR SHOWTEK ;
+284: : PAGEDNC <span style='color:#696969; '>[PageDn]</span> ADREND ADRUPS ?STROK <span style='color:#074726; '>C</span> <span style='color:#696969; '>[SM]</span> ADRUPS +
+285:   ADREND <span style='color:#008c00; '>10</span> DCORNYD DCORNYU - <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>*</span> - <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> ADRUPS
+286:   ADRTEK + PROVEND FIRSTSCR SHOWTEK ;
+287:   : PROVEND ADREND <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> ADRTEK ;
+288:   <span style='color:#696969; '>[Всего имеется строк]</span>
+289:   : ?STROK - <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>10</span> <span style='color:#074726; '>/</span> <span style='color:#074726; '>D</span> DCORNYD DCORNYU - <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>MIN</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>*</span> ;
+290: 
+291: <span style='color:#074726; '>B10</span>
+292: DEFINE? UNDFKEY NOT %IF
+293: <span style='color:#074726; '>TRAP UNDFKEY</span> <span style='color:#074726; '>NOP</span>
+294:                     %FI
+295: <span style='color:#696969; '>[Выдача зумера пpи неправильном вводе]</span>
+296: :: : ZUMER FLAGZOOM <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> IGOGO</span> UNDFKEY ;
+297:      : IGOGO <span style='color:#008c00; '>4</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ZVOOK</span> ;
+298: 
+299: :: : KODVVOD <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> FLAGZOOM INKEY MASKLIT
+300:      <span style='color:#074726; '>C</span> <span style='color:#008c00; '>16</span> <span style='color:#008c00; '>25</span> <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DVIG-#0</span> <span style='color:#696969; '>[B]</span>
+301:      <span style='color:#074726; '>C</span> #A #F <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> DVIG-#A D</span> <span style='color:#696969; '>[B]</span> ;
+302:   <span style='color:#696969; '>[Модификация стаpого значения новым символом]</span>
+303:   : DVIG-#0 <span style='color:#696969; '>[B']</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>16</span> - VDVIGZN ;
+304:   : DVIG-#A <span style='color:#696969; '>[B']</span>   #7 - VDVIGZN ;
+305: ::  : VDVIGZN <span style='color:#696969; '>[Тетрада числа]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> FLAGZOOM
+306:       ADRTEK @B <span style='color:#696969; '>[Получили стаpое значение]</span>
+307:       <span style='color:#008c00; '>4</span> SHT &amp;<span style='color:#008c00; '>0</span> <span style='color:#696969; '>[Младшую тетраду числа соединили со стаpой старшей]</span>
+308:       ADRTEK <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[Записали новое значение на место стаpого]</span>
+309:       DTEKTOS <span style='color:#696969; '>[B]</span> NORMZVOOK <span style='color:#074726; '>!1</span> CHANGE ;
+310:       <span style='color:#696969; '>[Выдача писка пpи нормальном вводе]</span>
+311:       :: : NORMZVOOK <span style='color:#008c00; '>1000</span> <span style='color:#008c00; '>40</span> BEEP ;
+312: 
+313: <span style='color:#696969; '>[Вывод текущего положения]</span>
+314: : DTEKTOS <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B16</span> SHOWTEK SYMCOOR ADRTEK @B CLMOD <span style='color:#074726; '>SWB</span> &amp;<span style='color:#008c00; '>0</span> RSYMB <span style='color:#696969; '>[]</span> ;
+315: 
+316: : DLSTEP <span style='color:#696969; '>[]</span>  -<span style='color:#008c00; '>1</span> STEP ;
+317: : DRSTEP <span style='color:#696969; '>[]</span>   <span style='color:#008c00; '>1</span> STEP ;
+318: : DUSTEP <span style='color:#696969; '>[]</span> -<span style='color:#008c00; '>16</span> STEP ;
+319: : DDSTEP <span style='color:#696969; '>[]</span>  <span style='color:#008c00; '>16</span> STEP ;
+320:   : STEP <span style='color:#696969; '>[SM]</span> ADRTEK + NACHALO <span style='color:#074726; '>MAX</span> <span style='color:#696969; '>[NewAdr]</span> SPROVEND <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> VYPSTEP D</span> <span style='color:#696969; '>[]</span> ;
+321:     : SPROVEND <span style='color:#696969; '>[NewAdr]</span> <span style='color:#074726; '>C</span> ADREND <span style='color:#074726; '>></span> NOT <span style='color:#696969; '>[NewAdr,Sign]</span> ;
+322:     : VYPSTEP <span style='color:#696969; '>[NewAdr]</span> SHOWNORM ?ONSCREEN <span style='color:#074726; '>!</span> ADRTEK SHOWTEK <span style='color:#696969; '>[]</span> ;
+323:     : ?ONSCREEN <span style='color:#696969; '>[NewAdr]</span> ADRUPS <span style='color:#008c00; '>16</span> DCORNYD DCORNYU - <span style='color:#008c00; '>3</span>+ <span style='color:#074726; '>*</span> <span style='color:#008c00; '>1</span>- +
+324:       <span style='color:#074726; '>C2</span> <span style='color:#074726; '>&lt;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> UPROLL ?DOWNROLL</span> <span style='color:#696969; '>[NewAdr]</span> ;
+325:     : UPROLL <span style='color:#696969; '>[]</span> ADRUPS <span style='color:#008c00; '>16</span> + <span style='color:#074726; '>!</span> ADRUPS WNDUP
+326:       DCORNYD <span style='color:#008c00; '>2</span>+ <span style='color:#696969; '>[1- DCORNYU +]</span> DCORNXU <span style='color:#008c00; '>6</span> + OPADRVM ADRUPS
+327:       <span style='color:#008c00; '>16</span> DCORNYD DCORNYU - <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>*</span> + STRSHOW <span style='color:#074726; '>DD</span> ;
+328:     : ?DOWNROLL <span style='color:#074726; '>C</span> ADRUPS <span style='color:#074726; '>&lt;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DOWNROLL</span> ;
+329:       : DOWNROLL ADRUPS <span style='color:#008c00; '>16</span> - <span style='color:#074726; '>!</span> ADRUPS WNDDOWN
+330:         DCORNYU DCORNXU <span style='color:#008c00; '>6</span> + OPADRVM ADRUPS STRSHOW <span style='color:#074726; '>DD</span> ;
+331: 
+332: <span style='color:#696969; '>[Определение координат кодовой части байта]</span>
+333: : SYMCOOR OPRUZ <span style='color:#074726; '>E2</span> DCORNYU + <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>58</span> + <span style='color:#696969; '>[Nstr,Pstr]</span> ;
+334: <span style='color:#696969; '>[Определение координат символьной части байта]</span>
+335: : OPRCOORDUMP <span style='color:#696969; '>[]</span> OPRUZ <span style='color:#008c00; '>3</span> <span style='color:#074726; '>*</span> <span style='color:#008c00; '>09</span> + <span style='color:#074726; '>E2</span> DCORNYU + <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[Nstr,Pstr]</span> ;
+336:   <span style='color:#696969; '>[Определение по текущему адресу номера узла]</span>
+337:   : OPRUZ <span style='color:#696969; '>[]</span> ADRTEK ADRUPS - ABS <span style='color:#008c00; '>16</span> <span style='color:#074726; '>/</span> <span style='color:#696969; '>[Nstr,Pstr]</span> ;
+338: 
+339: <span style='color:#696969; '>[Отображение элемента как текущего]</span>
+340: : CTEKSHOW TCLFDUMP TCLTDUMP KODCLTOS <span style='color:#696969; '>[]</span> ;
+341: 
+342: <span style='color:#696969; '>[Отображение элемента как обычного]</span>
+343: : REKODSHOW CLFON CLTDUMP KODCLTOS <span style='color:#696969; '>[]</span> ;
+344:   : KODCLTOS OPRCOORDUMP ADRTEK @B STRBYTE CLTOS ;
+345: 
+346: <span style='color:#696969; '>[П/П модификации обычной выбранной ячейки]</span>
+347: : NORMODIF <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span> BASE <span style='color:#074726; '>!</span> BASE@
+348:   modif SHOWTEK DEFPALL <span style='color:#696969; '>[]</span> ;
+349:   <span style='color:#696969; '>[Процедура ввода числа]</span>
+350:   : modif <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 9</span>  ADRTEK EQU BOXMEM <span style='color:#696969; '>[содержимое ячейки]</span>
+351:     '' prigreg <span style='color:#008c00; '>21</span> <span style='color:#008c00; '>30</span> <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>24</span> NUMVVOD BOXMEM <span style='color:#696969; '>[]</span> <span style='color:#074726; '>!1</span> CHANGE <span style='color:#696969; '>[]</span> ;
+352:   :: : prigreg <span style='color:#696969; '>[i]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 "Введите новое значение"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> EMSTR</span> <span style='color:#696969; '>[A,DL]</span> ;
+353:   :: : STRVALUE <span style='color:#008c00; '>0</span> ' VVB BASE@ <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 2 8  8 3  10 3  16 2</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> 4</span> ;
+354: 
+355: <span style='color:#074726; '>B10</span>
+356: <span style='color:#696969; '>[Процедура установки заданного адреса дампа]</span>
+357: : USTADR <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B16</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 8</span>  <span style='color:#008c00; '>1234</span> <span style='color:#008c00; '>10</span> BEEP
+358:   '' prigadr <span style='color:#008c00; '>21</span> <span style='color:#008c00; '>30</span> <span style='color:#008c00; '>2</span> <span style='color:#008c00; '>28</span> NUMVVOD DMLABEL DEFPALL
+359:   <span style='color:#696969; '>[Здесь уже имеется адрес и нужно к нему двигаться]</span> TOLABEL <span style='color:#696969; '>[]</span> ;
+360:   : TOLABEL DMLABEL DVIGAEM <span style='color:#696969; '>[]</span> ;
+361:   : DVIGAEM <span style='color:#696969; '>[Adr]</span>
+362:     NACHCOD + <span style='color:#696969; '>[]</span> <span style='color:#074726; '>C</span> ADREND <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> ADRTEK <span style='color:#696969; '>[Проверили на выход за границу]</span>
+363:     NACHALO - -<span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#008c00; '>128</span> - NACHALO <span style='color:#074726; '>C</span> <span style='color:#074726; '>E3</span> + <span style='color:#074726; '>MAX</span>
+364:     ADREND <span style='color:#008c00; '>16</span> <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>7</span> - <span style='color:#074726; '>*</span> <span style='color:#008c00; '>1</span>- - <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> ADRUPS <span style='color:#696969; '>[скорректировали все адреса]</span>
+365:     FIRSTSCR SHOWLABEL
+366:     <span style='color:#696969; '>[Перерисовываем экран]</span> SHOWTEK ;
+367:   : STRADR DMLABEL STRWORD ;
+368:   : prigadr <span style='color:#696969; '>[i]</span> BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Введите требуемый вам HEX - "</span>
+369:                    <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "адрес области  дампирования."</span> <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> ;
+370: <span style='color:#696969; '>[Отображение значения метки]</span>
+371: : SHOWLABEL CLFON <span style='color:#008c00; '>13</span> DCORNYU <span style='color:#008c00; '>1</span>- DCORNXU STRADR #: <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> + <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ CLTOS <span style='color:#696969; '>[]</span> ;
+372: 
+373: <span style='color:#696969; '>[############## Изменение системы исчисления ##################]</span>
+374: <span style='color:#074726; '>B10</span>
+375:    <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR BL</span>   <span style='color:#696969; '>[Переменная для контроля изменений системы исчисления]</span>
+376: :: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR BCOL</span> <span style='color:#696969; '>[Колонка отображения системы исчисления]</span>
+377: :: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR BROW</span> <span style='color:#696969; '>[Строка отображения  системы исчисления]</span>
+378: 
+379: <span style='color:#696969; '>[Подпрограмма модификации системы исчисления]</span>
+380: :: : BASEMOD <span style='color:#696969; '>[]</span> BL <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>3</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> BL <span style='color:#696969; '>[i]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 0 2 1 8 2 10</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> 16</span> <span style='color:#074726; '>!</span> BASE SHOWBASE ;
+381: 
+382:    <span style='color:#696969; '>[Текст модификации системы]</span>
+383:    : INFBASE <span style='color:#696969; '>[i]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 0 "BIN" 1 "OCT" 2 "DEC"</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> "HEX"</span> <span style='color:#696969; '>[Alr,Dl]</span> ;
+384: :: : SHOWBASE CLFON <span style='color:#008c00; '>15</span> BROW BCOL
+385:      BASE <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 2 0 8 1 10 2</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> 3</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> BL INFBASE CLTOS ;
+386: 
+387: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>50</span> <span style='color:#074726; '>STRING FILEDIA</span> <span style='color:#696969; '>[Имя файла дизассемблирования]</span><span style='color:#0000e6; '> "DIAS-MEM.TXT"</span> <span style='color:#074726; '>!</span> FILEDIA
+388: :: : MODDIAF <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MESC NOP</span>
+389:      <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 3</span> '' INFDIAF <span style='color:#008c00; '>21</span> <span style='color:#008c00; '>15</span> <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>50</span> GENVVOD FILEDIA <span style='color:#696969; '>[]</span> ;
+390:      : INFDIAF <span style='color:#074726; '>D</span><span style='color:#0000e6; '> "Введите имя файла протокола дизассемблирования:"</span> ;
+391: 
+392: : INSSDIA OPENDIA OUDIAS CLOSE CH ;
+393:   : OPENDIA <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> NOF SOZDAT</span> FILEDIA CONNECT CH OPEN CH LENB CH SPOS CH ;
+394:   : SOZDAT WOPEN CH ;
+395:   : OUDIAS <span style='color:#008c00; '>0</span> ' VVB <span style='color:#008c00; '>40</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> + <span style='color:#074726; '>E2</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ISCSYMV</span> <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+
+396:     OS CH <span style='color:#008c00; '>2573</span> OW CH COMLEN ADRTEK NACHALO - + DETEC <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> 1+</span> DVIGAEM ;
+397:     : ISCSYMV <span style='color:#074726; '>C</span> @B #  <span style='color:#074726; '>=</span> EX0 <span style='color:#008c00; '>1</span>- ;
+398: 
+399: <span style='color:#074726; '>B16</span>
+400: : AVTDIAS OPENDIA <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> ONEDIAS</span> CLOSE CH ;
+401:   : ONEDIAS OUDIAS ADRTEK ADREND <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>></span> EX+ INFDIAS TTI <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ??ESC</span> ;
+402:     : ??ESC <span style='color:#074726; '>TRB</span> 1B <span style='color:#074726; '>=</span> EX+ <span style='color:#696969; '>[]</span> ;
+403: 
+404: MENUINIT <span style='color:#074726; '>UNDEF</span>
+405: <span style='color:#008c00; '>10</span> <span style='color:#074726; '>C</span> <span style='color:#696969; '>[1 - Отладка\ 0 - рабочая]</span>
+406: :: : STT<span style='color:#0000e6; '> "DUMP буфера редактора"</span> BBUF <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> NACHCOD KBUF <span style='color:#008c00; '>5</span> CT <span style='color:#074726; '>C3</span> - NDUMP ;
+407: <span style='color:#696969; '>[:: : STTN "DUMP буфера редактора" BBUF C ! NACHCOD KBUF 0 NDUMP ;]</span>
+408: %FI
+409: NOT %IF <span style='color:#004a43; '>CLEAR $DUMP</span> %FI
+410: <span style='color:#004a43; '>CLEAR $DUMP</span>
+411: MENUINIT
+412: 
+</pre></body></html>

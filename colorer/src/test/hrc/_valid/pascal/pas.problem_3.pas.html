@@ -1,0 +1,28 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>// для схемы: ...\hrc\main\pascal.hrc</span>
+ 1: <span style='color:#696969; '>//</span>
+ 2: <span style='color:#696969; '>// Проблема. Ключевое слово inherited не выделено как ключевое.</span>
+ 3: <span style='color:#696969; '>// Видно , что проблема в обрамляющих скобках...</span>
+ 4: <span style='color:#696969; '>//</span>
+ 5: <span style='color:#800000; font-weight:bold; '>class</span> <span style='color:#800000; font-weight:bold; '>function</span> F<span style='color:#808030; '>(</span>x<span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#800080; '>;</span>
+ 6: <span style='color:#800000; font-weight:bold; '>function</span> G<span style='color:#808030; '>(</span>x<span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#800080; '>;</span>
+ 7: <span style='color:#800000; font-weight:bold; '>class</span> <span style='color:#800000; font-weight:bold; '>procedure</span> P<span style='color:#808030; '>(</span>x<span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 8: <span style='color:#800000; font-weight:bold; '>procedure</span> Q<span style='color:#808030; '>(</span>x<span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 9: 
+10: <span style='color:#800000; font-weight:bold; '>function</span> TRect<span style='color:#808030; '>.</span>LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>:</span> IStream<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> TBool<span style='color:#800080; '>;</span>
+11: <span style='color:#800000; font-weight:bold; '>begin</span>
+12:     <span style='color:#800000; font-weight:bold; '>Result</span> <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span> <span style='color:#800000; font-weight:bold; '>inherited</span> LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>and</span>  <span style='color:#696969; '>// </span><span style='color:#ffffff; background:#808000; '>Problem !!!</span>
+13:               <span style='color:#696969; '>//^^^^^^^^^</span>
+14:               A<span style='color:#808030; '>.</span>LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>and</span> B<span style='color:#808030; '>.</span>LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span>
+15:     <span style='color:#800080; '>;</span>
+16: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+17: 
+18: 
+19: <span style='color:#800000; font-weight:bold; '>function</span> TRect<span style='color:#808030; '>.</span>LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>:</span> IStream<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> TBool<span style='color:#800080; '>;</span>
+20: <span style='color:#800000; font-weight:bold; '>begin</span>
+21:     <span style='color:#800000; font-weight:bold; '>Result</span> <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>inherited</span> LoadFromStream<span style='color:#808030; '>(</span>S<span style='color:#808030; '>)</span> <span style='color:#696969; '>// </span><span style='color:#ffffff; background:#808000; '>OK !!!</span>
+22:     <span style='color:#800080; '>;</span>        <span style='color:#696969; '>//^^^^^^^^</span>
+23: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>
+24: 
+25: 
+</pre></body></html>

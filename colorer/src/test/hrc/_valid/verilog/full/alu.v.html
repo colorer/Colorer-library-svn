@@ -1,0 +1,90 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: 
+ 1: <span style='color:#696969; '>/* ***********************************************************************</span>
+ 2: <span style='color:#696969; '>  The Free IP Project</span>
+ 3: <span style='color:#696969; '>  Free-RISC8 -- Verilog 8-bit Microcontroller</span>
+ 4: <span style='color:#696969; '>  (c) 1999, The Free IP Project and Thomas Coonan</span>
+ 5: <span style='color:#696969; '></span>
+ 6: <span style='color:#696969; '></span>
+ 7: <span style='color:#696969; '>  FREE IP GENERAL PUBLIC LICENSE</span>
+ 8: <span style='color:#696969; '>  TERMS AND CONDITIONS FOR USE, COPYING, DISTRIBUTION, AND MODIFICATION</span>
+ 9: <span style='color:#696969; '></span>
+10: <span style='color:#696969; '>  1.  You may copy and distribute verbatim copies of this core, as long</span>
+11: <span style='color:#696969; '>      as this file, and the other associated files, remain intact and</span>
+12: <span style='color:#696969; '>      unmodified.  Modifications are outlined below.  </span>
+13: <span style='color:#696969; '>  2.  You may use this core in any way, be it academic, commercial, or</span>
+14: <span style='color:#696969; '>      military.  Modified or not.  </span>
+15: <span style='color:#696969; '>  3.  Distribution of this core must be free of charge.  Charging is</span>
+16: <span style='color:#696969; '>      allowed only for value added services.  Value added services</span>
+17: <span style='color:#696969; '>      would include copying fees, modifications, customizations, and</span>
+18: <span style='color:#696969; '>      inclusion in other products.</span>
+19: <span style='color:#696969; '>  4.  If a modified source code is distributed, the original unmodified</span>
+20: <span style='color:#696969; '>      source code must also be included (or a link to the Free IP web</span>
+21: <span style='color:#696969; '>      site).  In the modified source code there must be clear</span>
+22: <span style='color:#696969; '>      identification of the modified version.</span>
+23: <span style='color:#696969; '>  5.  Visit the Free IP web site for additional information.</span>
+24: <span style='color:#696969; '>      </span><span style='color:#5555dd; '>http://www.free-ip.com</span><span style='color:#696969; '></span>
+25: <span style='color:#696969; '></span>
+26: <span style='color:#696969; '>*********************************************************************** */</span>
+27: <span style='color:#800000; font-weight:bold; '>module alu</span> <span style='color:#808030; '>(</span>
+28:    op<span style='color:#808030; '>,</span>
+29:    a<span style='color:#808030; '>,</span>
+30:    b<span style='color:#808030; '>,</span>
+31:    y<span style='color:#808030; '>,</span>
+32:    cin<span style='color:#808030; '>,</span>
+33:    cout<span style='color:#808030; '>,</span>
+34:    zout
+35: <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+36: 
+37: <span style='color:#800000; font-weight:bold; '>input</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>3</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    op<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// ALU Operation</span>
+38: <span style='color:#800000; font-weight:bold; '>input</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    a<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// 8-bit Input a</span>
+39: <span style='color:#800000; font-weight:bold; '>input</span>  <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    b<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// 8-bit Input b</span>
+40: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    y<span style='color:#800000; font-weight:bold; '>;</span>    <span style='color:#696969; '>// 8-bit Output</span>
+41: <span style='color:#800000; font-weight:bold; '>input</span>        cin<span style='color:#800000; font-weight:bold; '>;</span>
+42: <span style='color:#800000; font-weight:bold; '>output</span>        cout<span style='color:#800000; font-weight:bold; '>;</span>
+43: <span style='color:#800000; font-weight:bold; '>output</span>        zout<span style='color:#800000; font-weight:bold; '>;</span>
+44: 
+45: <span style='color:#696969; '>// Reg declarations for outputs</span>
+46: <span style='color:#800000; font-weight:bold; '>reg</span>        cout<span style='color:#800000; font-weight:bold; '>;</span>
+47: <span style='color:#800000; font-weight:bold; '>reg</span>        zout<span style='color:#800000; font-weight:bold; '>;</span>
+48: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    y<span style='color:#800000; font-weight:bold; '>;</span>
+49: 
+50: <span style='color:#696969; '>// Internal declarations</span>
+51: <span style='color:#800000; font-weight:bold; '>reg</span>        addercout<span style='color:#800000; font-weight:bold; '>;</span> <span style='color:#696969; '>// Carry out straight from the adder itself.</span>
+52:  
+53: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_ADD  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0000</span><span style='color:#800000; font-weight:bold; '>;</span>
+54: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_SUB  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b1000</span><span style='color:#800000; font-weight:bold; '>;</span>
+55: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_AND  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0001</span><span style='color:#800000; font-weight:bold; '>;</span>
+56: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_OR   <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0010</span><span style='color:#800000; font-weight:bold; '>;</span>
+57: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_XOR  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0011</span><span style='color:#800000; font-weight:bold; '>;</span>
+58: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_COM  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0100</span><span style='color:#800000; font-weight:bold; '>;</span>
+59: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_ROR  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0101</span><span style='color:#800000; font-weight:bold; '>;</span>
+60: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_ROL  <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0110</span><span style='color:#800000; font-weight:bold; '>;</span>
+61: <span style='color:#800000; font-weight:bold; '>parameter</span> ALUOP_SWAP <span style='color:#808030; '>=</span> <span style='color:#008c00; '>4'b0111</span><span style='color:#800000; font-weight:bold; '>;</span>
+62: 
+63: 
+64: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>a or b or cin or op</span>) <span style='color:#800000; font-weight:bold; '>begin</span>
+65:    <span style='color:#800000; font-weight:bold; '>case</span> <span style='color:#800000; font-weight:bold; '>(</span>op<span style='color:#800000; font-weight:bold; '>)</span> <span style='color:#696969; '>// synopsys parallel_case</span>
+66:       ALUOP_ADD<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = a + b<span style='color:#800000; font-weight:bold; '>;</span>
+67:       ALUOP_SUB<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = a - b<span style='color:#800000; font-weight:bold; '>;</span> <span style='color:#696969; '>// Carry out is really "borrow"</span>
+68:       ALUOP_AND<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> a &amp; b<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+69:       ALUOP_OR<span style='color:#800000; font-weight:bold; '>:</span>   <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> a | b<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+70:       ALUOP_XOR<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> a ^ b<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+71:       ALUOP_COM<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> ~a<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+72:       ALUOP_ROR<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span>a<span style='color:#008c00; '>[0]</span><span style='color:#800000; font-weight:bold; '>,</span> cin<span style='color:#800000; font-weight:bold; '>,</span> a[<span style='color:#008c00; '>7</span><span style='color:#800000; font-weight:bold; '>:</span><span style='color:#008c00; '>1</span>]<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+73:       ALUOP_ROL<span style='color:#800000; font-weight:bold; '>:</span>  <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span>a<span style='color:#008c00; '>[7]</span><span style='color:#800000; font-weight:bold; '>,</span> a[<span style='color:#008c00; '>6</span><span style='color:#800000; font-weight:bold; '>:</span><span style='color:#008c00; '>0</span>]<span style='color:#800000; font-weight:bold; '>,</span> cin<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+74:       ALUOP_SWAP<span style='color:#800000; font-weight:bold; '>:</span> <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> a[<span style='color:#008c00; '>3</span><span style='color:#800000; font-weight:bold; '>:</span><span style='color:#008c00; '>0</span>]<span style='color:#800000; font-weight:bold; '>,</span> a[<span style='color:#008c00; '>7</span><span style='color:#800000; font-weight:bold; '>:</span><span style='color:#008c00; '>4</span>]<span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+75:       <span style='color:#800000; font-weight:bold; '>default</span><span style='color:#800000; font-weight:bold; '>:</span>    <span style='color:#800000; font-weight:bold; '>{</span>addercout<span style='color:#800000; font-weight:bold; '>,</span>  y<span style='color:#800000; font-weight:bold; '>}</span>  = <span style='color:#800000; font-weight:bold; '>{</span><span style='color:#008c00; '>1'b0</span><span style='color:#800000; font-weight:bold; '>,</span> <span style='color:#008c00; '>8'h00</span><span style='color:#800000; font-weight:bold; '>}</span><span style='color:#800000; font-weight:bold; '>;</span>
+76:    <span style='color:#800000; font-weight:bold; '>endcase</span>
+77: <span style='color:#800000; font-weight:bold; '>end</span>
+78: 
+79: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>y</span>)
+80:    zout <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>y <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>8'h00</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+81: 
+82: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>addercout or op</span>)
+83:    if <span style='color:#808030; '>(</span>op <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ALUOP_SUB<span style='color:#808030; '>)</span> cout <span style='color:#808030; '>=</span> <span style='color:#808030; '>~</span>addercout<span style='color:#808030; '>;</span> <span style='color:#696969; '>// Invert adder's carry to get borrow</span>
+84:    else                 cout <span style='color:#808030; '>=</span>  addercout<span style='color:#808030; '>;</span>
+85:       
+86: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+87: 
+</pre></body></html>

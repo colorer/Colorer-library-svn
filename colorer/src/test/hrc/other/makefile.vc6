@@ -1,0 +1,30 @@
+
+CPP = @cl
+CPPFL = /nologo /O2 /c /W3 -I../shared/
+link = @link
+objs = icolorer.obj ccolorer.obj ccdata.obj cregexp.obj sgml.obj clocale.obj
+libs = /DLL /def:icolorer.def kernel32.lib advapi32.lib /nologo /subsystem:console /ALIGN:4096
+
+icolorer.dll: $(objs)
+	$(link) $(objs) $(libs)
+
+icolorer.obj: icolorer.cpp
+	$(CPP) $(CPPFL) icolorer.cpp
+
+ccdata.obj: ../shared/colorer/ccdata.cpp
+	$(CPP) $(CPPFL) ../shared/colorer/ccdata.cpp
+
+ccolorer.obj: ../shared/colorer/ccolorer.cpp
+	$(CPP) $(CPPFL) ../shared/colorer/ccolorer.cpp
+
+cregexp.obj: ../shared/regexp/cregexp.cpp
+	$(CPP) $(CPPFL) ../shared/regexp/cregexp.cpp
+
+clocale.obj: ../shared/regexp/clocale.cpp
+	$(CPP) $(CPPFL) ../shared/regexp/clocale.cpp
+
+sgml.obj: ../shared/sgml/sgml.cpp
+	$(CPP) $(CPPFL) ../shared/sgml/sgml.cpp
+
+clear:
+	@del $(objs)

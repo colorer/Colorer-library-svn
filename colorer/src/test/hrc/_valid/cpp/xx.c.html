@@ -1,0 +1,67 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#004a43; '>#sdf sadf asdf \\ sdf\\s \\</span>
+ 1: <span style='color:#004a43; '> a daf</span>
+ 2: 
+ 3: 
+ 4: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> CPTYP_SESSION   1   </span><span style='color:#696969; '>/* Server-router lost session with server.</span>
+ 5: <span style='color:#696969; '>                   Invalidate all pages associated with</span>
+ 6: <span style='color:#696969; '>                   server. */</span>
+ 7: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> CPTYP_OFLOW 2   </span><span style='color:#696969; '>/* Server overflowed Server-router's CPT</span>
+ 8: <span style='color:#696969; '>                   Invalidate all pages associated with</span>
+ 9: <span style='color:#696969; '>                   server. */</span>
+10: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> CPTYP_DATASET   3   </span><span style='color:#696969; '>/* Invalidate all pages associated with a</span>
+11: <span style='color:#696969; '>                   dataset (hash = dsid in this case). */</span>
+12: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> CPTYP_AGENT 4   </span><span style='color:#696969; '>/* Agent chooses to make connection</span>
+13: <span style='color:#696969; '>                   quiescent. */</span>
+14: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>define</span><span style='color:#004a43; '> CPTYP_BGARCOL   5   </span><span style='color:#696969; '>/* Server was garbage collecting dataset while</span>
+15: <span style='color:#696969; '>                   responding to request.  Client will</span>
+16: <span style='color:#696969; '>                   "distrust" all pages associated with that</span>
+17: <span style='color:#696969; '>                   dataset (hash = dsid in this case) until a</span>
+18: <span style='color:#696969; '>                   type 6 CPT indicates that garbage</span>
+19: <span style='color:#696969; '>                   collection is complete. */</span>
+20: <span style='color:#004a43; '># adf asdf </span><span style='color:#696969; '>/* adsfasfd asdf asd xx */</span><span style='color:#004a43; '> asdf\</span>
+21: <span style='color:#004a43; '>         ss                  s                       s</span>
+22: 
+23: 
+24: <span style='color:#004a43; '>#</span><span style='color:#004a43; '>include </span><span style='color:#800000; '>"</span><span style='color:#40015a; '>..\..\</span><span style='color:#40015a; '>sys\Perlin.hpp</span><span style='color:#800000; '>"</span>
+25: 
+26: <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> ucl_rotr8<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> value<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>int</span> shift<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+27: <span style='color:#800000; font-weight:bold; '>extern</span> __inline__ <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> ucl_rotr8<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> value<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>int</span> shift<span style='color:#808030; '>)</span>
+28: <span style='color:#800080; '>{</span>
+29:     <span style='color:#800000; font-weight:bold; '>unsigned</span> <span style='color:#800000; font-weight:bold; '>char</span> result<span style='color:#800080; '>;</span>
+30: 
+31:     __asm__ __volatile__ <span style='color:#808030; '>(</span><span style='color:#0000e6; '>"movb %b1, %b0; rorb %b2, %b0"</span>
+32:                         <span style='color:#800080; '>:</span> <span style='color:#0000e6; '>"=a"</span><span style='color:#808030; '>(</span>result<span style='color:#808030; '>)</span> <span style='color:#800080; '>:</span> <span style='color:#0000e6; '>"g"</span><span style='color:#808030; '>(</span>value<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"c"</span><span style='color:#808030; '>(</span>shift<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+33:     <span style='color:#800000; font-weight:bold; '>return</span> result<span style='color:#800080; '>;</span>
+34: <span style='color:#800080; '>}</span>
+35: 
+36: 
+37: <span style='color:#004a43; '>__asm</span><span style='color:#800080; '>{</span>
+38:   <span style='color:#800000; font-weight:bold; '>mov</span> <span style='color:#000080; '>eax</span><span style='color:#808030; '>,</span> <span style='color:#000080; '>edx</span> <span style='color:#696969; '>// asdfsafd</span>
+39:     <span style='color:#696969; '>/*  hi </span><span style='color:#ffffff; background:#808000; '>all !!!</span><span style='color:#696969; '> */</span>
+40: <span style='color:#696969; '>// };</span>
+41: <span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+42: 
+43: 
+44: xx
+45: 
+46: <span style='color:#696969; '>/*</span>
+47: <span style='color:#696969; '>  xxxxxxxxxxxxxxxxx</span>
+48: <span style='color:#696969; '>  xxxxxxxxxxxxxxxxx</span>
+49: <span style='color:#696969; '>*/</span>
+50: 
+51: <span style='color:#008c00; '>12</span>
+52: 
+53: <span style='color:#808030; '>(</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>55</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+54: 
+55: 
+56: <span style='color:#008c00; '>2</span>
+57: 
+58: <span style='color:#ffffff; background:#dd0000; font-weight:bold; font-style:italic; '>0x23dfes4</span>
+59: 
+60: <span style='color:#696969; '>/*</span>
+61: <span style='color:#696969; '>xxxxxxxxxxxxxxx</span>
+62: <span style='color:#696969; '>xxxxxxxxxxxxxxx</span>
+63: <span style='color:#696969; '>*/</span>xxxxxxxxxxxxxxx
+64: 
+</pre></body></html>

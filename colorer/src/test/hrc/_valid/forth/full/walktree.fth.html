@@ -1,0 +1,64 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>\ Walk by device's of tree in BootMon LNM 2000</span>
+ 1: <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Device tree parsing"</span>
+ 2: <span style='color:#800000; font-weight:bold; '>forth</span> <span style='color:#000000; background:#a8a800; '>definitions</span> <span style='color:#e34adc; '>decimal</span> anew task-walktree.fth
+ 3: <span style='color:#800000; font-weight:bold; '>defer</span> workfornode <span style='color:#696969; '>\ Work that must executed on node point</span>
+ 4: ' <span style='color:#800000; font-weight:bold; '>noop</span> <span style='color:#800000; font-weight:bold; '>is</span> workfornode 
+ 5: 
+ 6: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>ptrmethwork</span> <span style='color:#696969; '>( Phandle AdrM LM -- )</span>
+ 7:     <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#696969; '>( A L Phandle )</span> find-method <span style='color:#696969; '>( XtW 1 | endVoc 0 )</span>
+ 8:     <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>space</span> <span style='color:#800000; font-weight:bold; '>execute</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Phandle )</span> ;
+ 9: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>testonnode</span> <span style='color:#696969; '>( Phandle )</span><span style='color:#0000e6; '> s" TEST"</span> ptrmethwork <span style='color:#696969; '>( -- )</span> ;
+10: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagonnode</span> <span style='color:#696969; '>( Phandle )</span><span style='color:#0000e6; '> s" TEST"</span> ptrmethwork <span style='color:#696969; '>( -- )</span> ;
+11: ' testonnode <span style='color:#800000; font-weight:bold; '>value</span> ptstnode
+12: ' diagonnode <span style='color:#800000; font-weight:bold; '>value</span> ptdiagnode
+13: 
+14: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>endnode</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> ." /"</span><span style='color:#0000e6; '> s" name"</span> get-my-property <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>type</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>(  )</span> ;
+15: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>tagshows</span> <span style='color:#696969; '>( ChPhandle )</span> <span style='color:#800000; font-weight:bold; '>cr</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> endnode
+16:     workfornode <span style='color:#696969; '>( Phandle )</span> <span style='color:#800000; font-weight:bold; '>>code</span> siblinghandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( SiblHandle )</span> ;
+17: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>nodetarget-devs</span> <span style='color:#696969; '>( Phandle -- )</span>  
+18:     <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#800000; font-weight:bold; '>>code</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span>
+19:     <span style='color:#e34adc; '>if</span>  <span style='color:#e34adc; '>begin</span>
+20:             tagshows <span style='color:#800000; font-weight:bold; '>dup</span>
+21:             nodehandle <span style='color:#007997; '>@nt</span> ihandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>if</span> <span style='color:#696969; '>( showinst )</span> <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span>
+22:             <span style='color:#800000; font-weight:bold; '>not</span>
+23:         <span style='color:#e34adc; '>until</span> <span style='color:#800000; font-weight:bold; '>drop</span>
+24:     <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( Phandle -- )</span> ;
+25: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>walkbylevel</span> <span style='color:#696969; '>( Phandle )</span>
+26:     <span style='color:#e34adc; '>begin</span>  <span style='color:#696969; '>( Phandle )</span>
+27:         <span style='color:#800000; font-weight:bold; '>dup</span> chnglevelnode <span style='color:#696969; '>( Phandle )</span>
+28:         nodetarget-devs
+29:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>>code</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span>
+30:         <span style='color:#e34adc; '>if</span> <span style='color:#696969; '>\ Child are exists</span>
+31:             downtochild <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( Phandle )</span>
+32:         <span style='color:#e34adc; '>else</span> <span style='color:#696969; '>\ No child consist</span>
+33:             <span style='color:#800000; font-weight:bold; '>drop</span> siblingorup <span style='color:#696969; '>( Phandle )</span>
+34:         <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Phandle )</span>
+35:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>not</span>
+36:     <span style='color:#e34adc; '>until</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( -- )</span> ;
+37: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gotree</span> <span style='color:#696969; '>( -- )</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#008c00; '>0</span> leveltree <span style='color:#800000; font-weight:bold; '>!</span>
+38:     roothandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#696969; '>( ascii / emit )</span> walkbylevel nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( -- )</span> ;
+39: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>tsttree</span> <span style='color:#696969; '>( -- )</span> ptstnode <span style='color:#800000; font-weight:bold; '>is</span> workfornode gotree <span style='color:#696969; '>( -- )</span> ;
+40: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagtree</span> <span style='color:#696969; '>( -- )</span> ptdiagnode <span style='color:#800000; font-weight:bold; '>is</span> workfornode gotree <span style='color:#696969; '>( -- )</span> ;
+41: 
+42: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagnostic</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Device diagnostics..."</span> <span style='color:#800000; font-weight:bold; '>cr</span> diagtree <span style='color:#696969; '>( -- )</span> ;
+43: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>fulltest</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Full device diagnostics..."</span> <span style='color:#800000; font-weight:bold; '>cr</span> tsttree <span style='color:#696969; '>( -- )</span> ;
+44: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>startbm</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." BootMon v1.0a Russia Moscow SRISS 2000"</span>
+45:     use-nvramrc? <span style='color:#e34adc; '>if</span> execscript <span style='color:#e34adc; '>then</span>
+46:     initbootmon
+47:     diag-switch? <span style='color:#e34adc; '>if</span> diagnostic <span style='color:#e34adc; '>else</span> fulltest <span style='color:#e34adc; '>then</span>
+48:     selectIO
+49:     auto-boot?   <span style='color:#e34adc; '>if</span> gotoboot <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." I'm ready"</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( -- )</span> ;
+50: <span style='color:#696969; '>0 [IF]</span>
+51: <span style='color:#696969; '>HEX \ For testing setprop operations</span>
+52: <span style='color:#696969; '></span>
+53: <span style='color:#696969; '>20 STRING ZSTR </span>
+54: <span style='color:#696969; '>: TSP</span>
+55: <span style='color:#696969; '>    S" SELFTEST" ZSTR ST!</span>
+56: <span style='color:#696969; '>    ZSTR + 1+ 0 SWAP C!</span>
+57: <span style='color:#696969; '>    S" DISABLE NAVSEGDA" HERE 200 + SWAP MOVE</span>
+58: <span style='color:#696969; '>    10 HERE 200 + ZSTR DROP B41C SETPROP ;</span>
+59: <span style='color:#696969; '>DECIMAL</span>
+60: <span style='color:#696969; '>[THEN]</span>
+61: 
+</pre></body></html>

@@ -1,0 +1,412 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+  0: <span style='color:#696969; '>\ @(#) trace.fth 98/01/28 1.2</span>
+  1: <span style='color:#696969; '>\ TRACE ( &lt;name> -- , trace pForth word )</span>
+  2: <span style='color:#696969; '>\</span>
+  3: <span style='color:#696969; '>\ Single step debugger.</span>
+  4: <span style='color:#696969; '>\   TRACE  ( i*x &lt;name> -- , setup trace for Forth word )</span>
+  5: <span style='color:#696969; '>\   S      ( -- , step over )</span>
+  6: <span style='color:#696969; '>\   SM     ( many -- , step over many times )</span>
+  7: <span style='color:#696969; '>\   SD     ( -- , step down )</span>
+  8: <span style='color:#696969; '>\   G      ( -- , go to end of word )</span>
+  9: <span style='color:#696969; '>\   GD     ( n -- , go down N levels from current level, stop at end of this level )</span>
+ 10: <span style='color:#696969; '>\</span>
+ 11: <span style='color:#696969; '>\ This debugger works by emulating the inner interpreter of pForth.</span>
+ 12: <span style='color:#696969; '>\ It executes code and maintains a separate return stack for the</span>
+ 13: <span style='color:#696969; '>\ program under test.  Thus all primitives that operate on the return</span>
+ 14: <span style='color:#696969; '>\ stack, such as DO and R> must be trapped.  Local variables must</span>
+ 15: <span style='color:#696969; '>\ also be handled specially.  Several state variables are also</span>
+ 16: <span style='color:#696969; '>\ saved and restored to establish the context for the program being</span>
+ 17: <span style='color:#696969; '>\ tested.</span>
+ 18: <span style='color:#696969; '>\    </span>
+ 19: <span style='color:#696969; '>\ Copyright 1997 Phil Burk</span>
+ 20: 
+ 21: anew task-trace.fth
+ 22: 
+ 23: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>SPACE.TO.COLUMN</span>  <span style='color:#696969; '>( col -- )</span> out <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>spaces</span> ;
+ 24: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>IS.PRIMITIVE?</span> <span style='color:#696969; '>( xt -- flag , true if kernel primitive )</span>
+ 25:     <span style='color:#000000; background:#a8a800; '>[']</span> first_colon <span style='color:#800000; font-weight:bold; '>&lt;</span> ;
+ 26: 
+ 27: <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>value</span> TRACE-BEGWORD_IP <span style='color:#696969; '>\ Instruction pointer begining of words</span>
+ 28: <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>value</span> TRACE_IP         <span style='color:#696969; '>\ instruction pointer</span>
+ 29: <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>value</span> TRACE_LEVEL      <span style='color:#696969; '>\ level of descent for inner interpreter</span>
+ 30: <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>value</span> TRACE_LEVEL_MAX  <span style='color:#696969; '>\ maximum level of descent</span>
+ 31: 
+ 32: <span style='color:#000000; background:#a8a800; '>private</span>{
+ 33: 
+ 34: <span style='color:#696969; '>\ use fake return stack</span>
+ 35: <span style='color:#008c00; '>128</span> <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>constant</span> TRACE_RETURN_SIZE <span style='color:#696969; '>\ size of return stack in bytes</span>
+ 36: <span style='color:#800000; font-weight:bold; '>create</span> TRACE-RETURN-STACK TRACE_RETURN_SIZE <span style='color:#008c00; '>16</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>allot</span>
+ 37: <span style='color:#800000; font-weight:bold; '>variable</span> TRACE-RSP
+ 38: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.>R</span>     <span style='color:#696969; '>( n -- )</span> trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>cell-</span> <span style='color:#800000; font-weight:bold; '>dup</span> trace-rsp <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#800000; font-weight:bold; '>!</span> ;  <span style='color:#696969; '>\ *(--rsp) = n</span>
+ 39: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.R></span>     <span style='color:#696969; '>( -- n )</span> trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>cell+</span> trace-rsp <span style='color:#800000; font-weight:bold; '>!</span> ;  <span style='color:#696969; '>\ n = *rsp++</span>
+ 40: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.R@</span>     <span style='color:#696969; '>( -- n )</span> trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>@</span> ; <span style='color:#696969; '>\ n = *rsp</span>
+ 41: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RPICK</span>  <span style='color:#696969; '>( index -- n )</span> <span style='color:#800000; font-weight:bold; '>cells</span> trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>@</span> ; <span style='color:#696969; '>\ n = rsp[index]</span>
+ 42: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.0RP</span>    <span style='color:#696969; '>( -- n )</span> trace-return-stack trace_return_size <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#008c00; '>8</span> <span style='color:#800000; font-weight:bold; '>+</span> trace-rsp <span style='color:#800000; font-weight:bold; '>!</span> ;
+ 43: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RDROP</span>  <span style='color:#696969; '>( --  )</span> <span style='color:#800000; font-weight:bold; '>cell</span> trace-rsp <span style='color:#800000; font-weight:bold; '>+!</span> ;
+ 44: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RCHECK</span> <span style='color:#696969; '>( -- , abort if return stack out of range )</span>
+ 45:     trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> trace-return-stack <span style='color:#800000; font-weight:bold; '>u&lt;</span>
+ 46:    <span style='color:#0000e6; '> abort" TRACE return stack OVERFLOW!"</span>
+ 47:     trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> trace-return-stack trace_return_size <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#008c00; '>12</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>u></span>
+ 48:    <span style='color:#0000e6; '> abort" TRACE return stack UNDERFLOW!"</span> ;
+ 49: 
+ 50: <span style='color:#696969; '>\ save and restore several state variables</span>
+ 51: <span style='color:#008c00; '>10</span> <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>constant</span> TRACE_STATE_SIZE
+ 52: <span style='color:#800000; font-weight:bold; '>create</span> TRACE-STATE-<span style='color:#008c00; '>1</span> TRACE_STATE_SIZE <span style='color:#800000; font-weight:bold; '>allot</span>
+ 53: <span style='color:#800000; font-weight:bold; '>create</span> TRACE-STATE-<span style='color:#008c00; '>2</span> TRACE_STATE_SIZE <span style='color:#800000; font-weight:bold; '>allot</span>
+ 54: 
+ 55: <span style='color:#800000; font-weight:bold; '>variable</span> TRACE-STATE-PTR
+ 56: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SAVE++</span> <span style='color:#696969; '>( addr -- , save next thing )</span>
+ 57:     <span style='color:#800000; font-weight:bold; '>@</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>!</span>
+ 58:     <span style='color:#800000; font-weight:bold; '>cell</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>+!</span> ;
+ 59: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SAVE.STATE</span>  <span style='color:#696969; '>( -- )</span>
+ 60:     <span style='color:#800000; font-weight:bold; '>state</span> trace.save++
+ 61:     <span style='color:#800000; font-weight:bold; '>hld</span>   trace.save++
+ 62:     <span style='color:#800000; font-weight:bold; '>base</span>  trace.save++ ;
+ 63: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SAVE.STATE1</span>  <span style='color:#696969; '>( -- , save normal state )</span>
+ 64:     trace-state-<span style='color:#008c00; '>1</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>!</span>
+ 65:     trace.save.state ;
+ 66: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SAVE.STATE2</span>  <span style='color:#696969; '>( -- , save state of word being debugged )</span>
+ 67:     trace-state-<span style='color:#008c00; '>2</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>!</span>
+ 68:     trace.save.state ;
+ 69: 
+ 70: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RESTORE++</span> <span style='color:#696969; '>( addr -- , restore next thing )</span>
+ 71:     trace-state-ptr <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>!</span>
+ 72:     <span style='color:#800000; font-weight:bold; '>cell</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>+!</span> ;
+ 73: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RESTORE.STATE</span>  <span style='color:#696969; '>( -- )</span>
+ 74:     <span style='color:#800000; font-weight:bold; '>state</span> trace.restore++
+ 75:     <span style='color:#800000; font-weight:bold; '>hld</span>   trace.restore++
+ 76:     <span style='color:#800000; font-weight:bold; '>base</span>  trace.restore++ ;
+ 77: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RESTORE.STATE1</span>  <span style='color:#696969; '>( -- )</span>
+ 78:     trace-state-<span style='color:#008c00; '>1</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>!</span>
+ 79:     trace.restore.state ;
+ 80: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.RESTORE.STATE2</span>  <span style='color:#696969; '>( -- )</span>
+ 81:     trace-state-<span style='color:#008c00; '>2</span> trace-state-ptr <span style='color:#800000; font-weight:bold; '>!</span>
+ 82:     trace.restore.state ;
+ 83: 
+ 84: <span style='color:#696969; '>\ The implementation of these pForth primitives is specific to pForth.</span>
+ 85: <span style='color:#800000; font-weight:bold; '>variable</span> TRACE-LOCALS-PTR  <span style='color:#696969; '>\ point to top of local frame</span>
+ 86: 
+ 87: <span style='color:#696969; '>\ create a return stack frame for NUM local variables</span>
+ 88: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOCAL.ENTRY)</span>  <span style='color:#696969; '>( x0 x1 ... xn n -- )</span>  <span style='color:#808030; '>{</span><span style='color:#0000e6; '> num </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> lp </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> nothink </span><span style='color:#808030; '>}</span>
+ 89:     trace-locals-ptr <span style='color:#800000; font-weight:bold; '>@</span> trace.>r
+ 90:     trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> trace-locals-ptr <span style='color:#800000; font-weight:bold; '>!</span>
+ 91:     trace-rsp <span style='color:#800000; font-weight:bold; '>@</span>  num <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>-</span> trace-rsp <span style='color:#800000; font-weight:bold; '>!</span>  <span style='color:#696969; '>\ make room for locals</span>
+ 92:     trace-rsp <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>-></span> lp
+ 93:     num <span style='color:#008c00; '>0</span>
+ 94:     <span style='color:#e34adc; '>DO</span> lp <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#800000; font-weight:bold; '>cell</span> +-> lp  <span style='color:#696969; '>\ move data into locals frame on return stack</span>
+ 95:     <span style='color:#e34adc; '>LOOP</span> ;
+ 96:     
+ 97: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOCAL.EXIT)</span> <span style='color:#696969; '>( -- )</span>
+ 98:     trace-locals-ptr <span style='color:#800000; font-weight:bold; '>@</span>  trace-rsp <span style='color:#800000; font-weight:bold; '>!</span>
+ 99:     trace.r> trace-locals-ptr <span style='color:#800000; font-weight:bold; '>!</span> ;
+100: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOCAL@)</span> <span style='color:#696969; '>( l# -- n , fetch from local frame )</span>
+101:     trace-locals-ptr <span style='color:#800000; font-weight:bold; '>@</span>  <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>@</span> ;
+102: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(1_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>1</span> trace.(local@) ;
+103: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(2_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>2</span> trace.(local@) ;
+104: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(3_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>3</span> trace.(local@) ;
+105: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(4_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>4</span> trace.(local@) ;
+106: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(5_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>5</span> trace.(local@) ;
+107: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(6_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>6</span> trace.(local@) ;
+108: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(7_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>7</span> trace.(local@) ;
+109: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(8_LOCAL@)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>8</span> trace.(local@) ;
+110: 
+111: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOCAL!)</span> <span style='color:#696969; '>( n l# -- , store into local frame )</span>
+112:     trace-locals-ptr <span style='color:#800000; font-weight:bold; '>@</span>  <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>!</span> ;
+113: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(1_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>1</span> trace.(local!) ;
+114: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(2_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>2</span> trace.(local!) ;
+115: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(3_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>3</span> trace.(local!) ;
+116: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(4_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>4</span> trace.(local!) ;
+117: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(5_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>5</span> trace.(local!) ;
+118: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(6_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>6</span> trace.(local!) ;
+119: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(7_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>7</span> trace.(local!) ;
+120: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(8_LOCAL!)</span> <span style='color:#696969; '>( -- n )</span> <span style='color:#008c00; '>8</span> trace.(local!) ;
+121: 
+122: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOCAL+!)</span> <span style='color:#696969; '>( n l# -- , store into local frame )</span>
+123:     trace-locals-ptr <span style='color:#800000; font-weight:bold; '>@</span>  <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>cells</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>+!</span> ;
+124: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(?DO)</span>  { limit start ip -- ip' }
+125:     limit start <span style='color:#800000; font-weight:bold; '>=</span>
+126:     <span style='color:#e34adc; '>IF</span>  ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip <span style='color:#696969; '>\ BRANCH</span>
+127:     <span style='color:#e34adc; '>ELSE</span>
+128:         start trace.>r
+129:         limit trace.>r
+130:         <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip
+131:     <span style='color:#e34adc; '>THEN</span> ip ;
+132: 
+133: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(LOOP)</span>  <span style='color:#808030; '>{</span><span style='color:#0000e6; '> ip </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> limit indx </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> ip' </span><span style='color:#808030; '>}</span>
+134:     trace.r> <span style='color:#800000; font-weight:bold; '>-></span> limit
+135:     trace.r> <span style='color:#008c00; '>1</span>+ <span style='color:#800000; font-weight:bold; '>-></span> indx
+136:     limit indx <span style='color:#800000; font-weight:bold; '>=</span>
+137:     <span style='color:#e34adc; '>IF</span>
+138:         <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip
+139:     <span style='color:#e34adc; '>ELSE</span>
+140:         indx trace.>r
+141:         limit trace.>r
+142:         ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip
+143:     <span style='color:#e34adc; '>THEN</span>
+144:     ip ;
+145: 
+146: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.(+LOOP)</span>  <span style='color:#808030; '>{</span><span style='color:#0000e6; '> delta ip </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> limit indx oldindx </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> ip' </span><span style='color:#808030; '>}</span>
+147:     trace.r> <span style='color:#800000; font-weight:bold; '>-></span> limit
+148:     trace.r> <span style='color:#800000; font-weight:bold; '>-></span> oldindx
+149:     oldindx delta <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>-></span> indx
+150: <span style='color:#696969; '>\ /* Do indices cross boundary between LIMIT-1 and LIMIT ? */</span>
+151: <span style='color:#696969; '>\  if( ( (OldIndex - Limit) &amp; ((Limit-1) - NewIndex) &amp; 0x80000000 ) ||</span>
+152: <span style='color:#696969; '>\    ( (NewIndex - Limit) &amp; ((Limit-1) - OldIndex) &amp; 0x80000000 ) )</span>
+153:     oldindx limit <span style='color:#800000; font-weight:bold; '>-</span>    limit <span style='color:#008c00; '>1</span>-    indx <span style='color:#800000; font-weight:bold; '>-</span>  <span style='color:#800000; font-weight:bold; '>AND</span> $ <span style='color:#008c00; '>80000000</span> <span style='color:#800000; font-weight:bold; '>AND</span>
+154:        indx limit <span style='color:#800000; font-weight:bold; '>-</span>    limit <span style='color:#008c00; '>1</span>- oldindx <span style='color:#800000; font-weight:bold; '>-</span>  <span style='color:#800000; font-weight:bold; '>AND</span> $ <span style='color:#008c00; '>80000000</span> <span style='color:#800000; font-weight:bold; '>AND</span> <span style='color:#800000; font-weight:bold; '>OR</span>
+155:     <span style='color:#e34adc; '>IF</span>
+156:         <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip
+157:     <span style='color:#e34adc; '>ELSE</span>
+158:         indx trace.>r
+159:         limit trace.>r
+160:         ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip
+161:     <span style='color:#e34adc; '>THEN</span> ip ;
+162: 
+163: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.CHECK.IP</span>  {  ip -- }
+164:     ip <span style='color:#000000; background:#a8a800; '>[']</span> first_colon <span style='color:#800000; font-weight:bold; '>u&lt;</span>
+165:     ip <span style='color:#800000; font-weight:bold; '>here</span> <span style='color:#800000; font-weight:bold; '>u></span> <span style='color:#800000; font-weight:bold; '>OR</span>
+166:     <span style='color:#e34adc; '>IF</span>
+167:        <span style='color:#0000e6; '> ." TRACE - IP out of range = "</span> ip .hex <span style='color:#800000; font-weight:bold; '>cr</span> <span style='color:#800000; font-weight:bold; '>abort</span>
+168:     <span style='color:#e34adc; '>THEN</span> ;
+169: 
+170: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SHOW.IP</span> { ip -- <span style='color:#800000; font-weight:bold; '>,</span> print name <span style='color:#800000; font-weight:bold; '>and</span> offset }
+171:     ip <span style='color:#696969; '>( >code code> )</span> <span style='color:#696969; '>( code@ )</span> <span style='color:#800000; font-weight:bold; '>name></span> >name <span style='color:#800000; font-weight:bold; '>dup</span> id.
+172:     <span style='color:#800000; font-weight:bold; '>name></span> ip <span style='color:#800000; font-weight:bold; '>code></span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#008c00; '>4</span> <span style='color:#800000; font-weight:bold; '>/</span><span style='color:#0000e6; '> ."  +"</span> .<span style='color:#008c00; '>dec</span><span style='color:#0000e6; '> ." 's words"</span> ;
+173: 
+174: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SHOW.STACK</span> <span style='color:#808030; '>{</span><span style='color:#0000e6; '> </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> mdepth </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> </span><span style='color:#808030; '>}</span>
+175:     <span style='color:#800000; font-weight:bold; '>base</span> <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>>r</span>
+176:    <span style='color:#0000e6; '> ." &lt;"</span> <span style='color:#800000; font-weight:bold; '>base</span> <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#e34adc; '>decimal</span> <span style='color:#008c00; '>1</span> .r<span style='color:#0000e6; '> ." :"</span>
+177:     <span style='color:#800000; font-weight:bold; '>depth</span> <span style='color:#008c00; '>1</span> .r<span style='color:#0000e6; '> ." > "</span>
+178:     <span style='color:#800000; font-weight:bold; '>r></span> <span style='color:#800000; font-weight:bold; '>base</span> <span style='color:#800000; font-weight:bold; '>!</span>
+179:     <span style='color:#800000; font-weight:bold; '>depth</span> <span style='color:#008c00; '>5</span> <span style='color:#800000; font-weight:bold; '>min</span> <span style='color:#800000; font-weight:bold; '>-></span> mdepth
+180:     <span style='color:#800000; font-weight:bold; '>depth</span> mdepth  <span style='color:#800000; font-weight:bold; '>-</span>
+181:     <span style='color:#e34adc; '>IF</span>
+182:        <span style='color:#0000e6; '> ." ... "</span>  <span style='color:#696969; '>\ if we don't show entire stack</span>
+183:     <span style='color:#e34adc; '>THEN</span>
+184:     mdepth <span style='color:#008c00; '>0</span>
+185:     <span style='color:#e34adc; '>?DO</span>
+186:         mdepth i <span style='color:#008c00; '>1</span>+ <span style='color:#800000; font-weight:bold; '>-</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#800000; font-weight:bold; '>.</span>  <span style='color:#696969; '>\ show numbers in current base</span>
+187:     <span style='color:#e34adc; '>LOOP</span> ;
+188: 
+189: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.SHOW.NEXT</span> { ip -- }
+190:     >newline
+191:     ip trace.check.ip
+192: <span style='color:#696969; '>\ show word name and offset</span>
+193:    <span style='color:#0000e6; '> ." &lt;&lt;  "</span>
+194:     trace_ip trace.show.ip
+195:     <span style='color:#008c00; '>30</span> space.to.column
+196: <span style='color:#696969; '>\ show data stack</span>
+197:     trace.show.stack
+198:     <span style='color:#008c00; '>80</span> space.to.column<span style='color:#0000e6; '> ." ||   Next word - "</span>
+199:     trace_level <span style='color:#008c00; '>2</span>* <span style='color:#800000; font-weight:bold; '>spaces</span>
+200:     ip code@
+201:     <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip
+202: <span style='color:#696969; '>\ show primitive about to be executed</span>
+203:     <span style='color:#800000; font-weight:bold; '>dup</span> .xt <span style='color:#800000; font-weight:bold; '>space</span>
+204: <span style='color:#696969; '>\ trap any primitives that are followed by inline data</span>
+205:     <span style='color:#e34adc; '>CASE</span>
+206:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#800000; font-weight:bold; '>LITERAL</span>)  <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#800000; font-weight:bold; '>space</span> <span style='color:#008c00; '>255</span> <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>emit</span> <span style='color:#e34adc; '>ENDOF</span>
+207:         <span style='color:#000000; background:#a8a800; '>[']</span> (ALITERAL) <span style='color:#e34adc; '>OF</span> ip <span style='color:#008c00; '>a</span>@ <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#800000; font-weight:bold; '>space</span> <span style='color:#008c00; '>255</span> <span style='color:#800000; font-weight:bold; '>and</span> <span style='color:#800000; font-weight:bold; '>emit</span>  <span style='color:#e34adc; '>ENDOF</span>
+208: <span style='color:#000000; background:#a8a800; '>[ exists? (FLITERAL) [IF]</span> <span style='color:#800000; font-weight:bold; '>]</span>
+209:         <span style='color:#000000; background:#a8a800; '>[']</span> (FLITERAL) <span style='color:#e34adc; '>OF</span> ip <span style='color:#008c00; '>f</span>@ <span style='color:#008c00; '>f</span>. <span style='color:#e34adc; '>ENDOF</span>
+210: <span style='color:#000000; background:#a8a800; '>[ [THEN]</span> <span style='color:#800000; font-weight:bold; '>]</span>
+211:         <span style='color:#000000; background:#a8a800; '>[']</span> BRANCH     <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#008c00; '>4</span> <span style='color:#800000; font-weight:bold; '>/</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#e34adc; '>ENDOF</span>
+212:         <span style='color:#000000; background:#a8a800; '>[']</span> 0BRANCH    <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#008c00; '>4</span> <span style='color:#800000; font-weight:bold; '>/</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#e34adc; '>ENDOF</span>
+213:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>(.")</span>       <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>type</span><span style='color:#0000e6; '> .' "'</span> <span style='color:#e34adc; '>ENDOF</span>
+214:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#008c00; '>C</span>")       <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>type</span><span style='color:#0000e6; '> .' "'</span> <span style='color:#e34adc; '>ENDOF</span>
+215:         <span style='color:#000000; background:#a8a800; '>[']</span> (S")       <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>type</span><span style='color:#0000e6; '> .' "'</span> <span style='color:#e34adc; '>ENDOF</span>
+216:     <span style='color:#e34adc; '>ENDCASE</span>
+217:     <span style='color:#008c00; '>100</span> space.to.column<span style='color:#0000e6; '> ."  >> "</span> ;
+218: 
+219: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.DO.PRIMITIVE</span>  <span style='color:#808030; '>{</span><span style='color:#0000e6; '> ip xt </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> oldhere </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '>  ip' , perform code at ip </span><span style='color:#808030; '>}</span>
+220:     xt
+221:     <span style='color:#e34adc; '>CASE</span>
+222:         <span style='color:#008c00; '>0</span> <span style='color:#e34adc; '>OF</span> -<span style='color:#008c00; '>1</span> +-> trace_level  trace.r> <span style='color:#800000; font-weight:bold; '>-></span> ip <span style='color:#e34adc; '>ENDOF</span> <span style='color:#696969; '>\ EXIT</span>
+223:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#800000; font-weight:bold; '>CREATE</span>)   <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>cell-</span> body_offset <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#e34adc; '>ENDOF</span>
+224:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#800000; font-weight:bold; '>LITERAL</span>)  <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip <span style='color:#e34adc; '>ENDOF</span>
+225:         <span style='color:#000000; background:#a8a800; '>[']</span> (ALITERAL) <span style='color:#e34adc; '>OF</span> ip <span style='color:#008c00; '>a</span>@ <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip <span style='color:#e34adc; '>ENDOF</span>
+226: <span style='color:#000000; background:#a8a800; '>[ exists? (FLITERAL) [IF]</span> <span style='color:#800000; font-weight:bold; '>]</span>
+227:         <span style='color:#000000; background:#a8a800; '>[']</span> (FLITERAL) <span style='color:#e34adc; '>OF</span> ip <span style='color:#008c00; '>f</span>@ <span style='color:#008c00; '>1</span> floats +-> ip <span style='color:#e34adc; '>ENDOF</span>
+228: <span style='color:#000000; background:#a8a800; '>[ [THEN]</span> <span style='color:#800000; font-weight:bold; '>]</span>
+229:         <span style='color:#000000; background:#a8a800; '>[']</span> BRANCH     <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip <span style='color:#e34adc; '>ENDOF</span>
+230:         <span style='color:#000000; background:#a8a800; '>[']</span> 0BRANCH    <span style='color:#e34adc; '>OF</span> <span style='color:#008c00; '>0</span>= <span style='color:#e34adc; '>IF</span> ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip <span style='color:#e34adc; '>ELSE</span> <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip <span style='color:#e34adc; '>THEN</span> <span style='color:#e34adc; '>ENDOF</span>
+231:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>>R</span>         <span style='color:#e34adc; '>OF</span> trace.>r <span style='color:#e34adc; '>ENDOF</span>
+232:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>R></span>         <span style='color:#e34adc; '>OF</span> trace.r> <span style='color:#e34adc; '>ENDOF</span>
+233:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>R@</span>         <span style='color:#e34adc; '>OF</span> trace.r@ <span style='color:#e34adc; '>ENDOF</span>
+234:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>RDROP</span>      <span style='color:#e34adc; '>OF</span> trace.rdrop <span style='color:#e34adc; '>ENDOF</span>
+235:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#008c00; '>2</span>>R        <span style='color:#e34adc; '>OF</span> trace.>r trace.>r <span style='color:#e34adc; '>ENDOF</span>
+236:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>2R></span>        <span style='color:#e34adc; '>OF</span> trace.r> trace.r> <span style='color:#e34adc; '>ENDOF</span>
+237:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>2R@</span>        <span style='color:#e34adc; '>OF</span> trace.r@ <span style='color:#008c00; '>1</span> trace.rpick <span style='color:#e34adc; '>ENDOF</span>
+238:         <span style='color:#000000; background:#a8a800; '>[']</span> i          <span style='color:#e34adc; '>OF</span> <span style='color:#008c00; '>1</span> trace.rpick <span style='color:#e34adc; '>ENDOF</span>
+239:         <span style='color:#000000; background:#a8a800; '>[']</span> j          <span style='color:#e34adc; '>OF</span> <span style='color:#008c00; '>3</span> trace.rpick <span style='color:#e34adc; '>ENDOF</span>
+240:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#800000; font-weight:bold; '>LEAVE</span>)    <span style='color:#e34adc; '>OF</span> trace.rdrop trace.rdrop  ip <span style='color:#800000; font-weight:bold; '>@</span> +-> ip <span style='color:#e34adc; '>ENDOF</span>
+241:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#e34adc; '>LOOP</span>)     <span style='color:#e34adc; '>OF</span> ip trace.(<span style='color:#e34adc; '>loop</span>) <span style='color:#800000; font-weight:bold; '>-></span> ip  <span style='color:#e34adc; '>ENDOF</span>
+242:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#e34adc; '>+LOOP</span>)    <span style='color:#e34adc; '>OF</span> ip trace.(<span style='color:#e34adc; '>+loop</span>) <span style='color:#800000; font-weight:bold; '>-></span> ip  <span style='color:#e34adc; '>ENDOF</span>
+243:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#e34adc; '>DO</span>)       <span style='color:#e34adc; '>OF</span> trace.>r trace.>r <span style='color:#e34adc; '>ENDOF</span>
+244:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#e34adc; '>?DO</span>)      <span style='color:#e34adc; '>OF</span> ip trace.(<span style='color:#e34adc; '>?do</span>) <span style='color:#800000; font-weight:bold; '>-></span> ip <span style='color:#e34adc; '>ENDOF</span>
+245:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#800000; font-weight:bold; '>(.")</span>       <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>type</span>  ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>aligned</span> <span style='color:#800000; font-weight:bold; '>-></span> ip <span style='color:#e34adc; '>ENDOF</span>
+246:         <span style='color:#000000; background:#a8a800; '>[']</span> (<span style='color:#008c00; '>C</span>")       <span style='color:#e34adc; '>OF</span> ip  ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>aligned</span> <span style='color:#800000; font-weight:bold; '>-></span> ip <span style='color:#e34adc; '>ENDOF</span>
+247:         <span style='color:#000000; background:#a8a800; '>[']</span> (S")       <span style='color:#e34adc; '>OF</span> ip <span style='color:#800000; font-weight:bold; '>count</span>  ip <span style='color:#800000; font-weight:bold; '>count</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>aligned</span> <span style='color:#800000; font-weight:bold; '>-></span> ip <span style='color:#e34adc; '>ENDOF</span>
+248:         <span style='color:#000000; background:#a8a800; '>[']</span> (LOCAL.ENTRY) <span style='color:#e34adc; '>OF</span> trace.(local.entry) <span style='color:#e34adc; '>ENDOF</span>
+249:         <span style='color:#000000; background:#a8a800; '>[']</span> (LOCAL.EXIT) <span style='color:#e34adc; '>OF</span> trace.(local.exit) <span style='color:#e34adc; '>ENDOF</span>
+250:         <span style='color:#000000; background:#a8a800; '>[']</span> (LOCAL@)   <span style='color:#e34adc; '>OF</span> trace.(local@)   <span style='color:#e34adc; '>ENDOF</span>
+251:         <span style='color:#000000; background:#a8a800; '>[']</span> (1_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(1_local@) <span style='color:#e34adc; '>ENDOF</span>
+252:         <span style='color:#000000; background:#a8a800; '>[']</span> (2_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(2_local@) <span style='color:#e34adc; '>ENDOF</span>
+253:         <span style='color:#000000; background:#a8a800; '>[']</span> (3_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(3_local@) <span style='color:#e34adc; '>ENDOF</span>
+254:         <span style='color:#000000; background:#a8a800; '>[']</span> (4_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(4_local@) <span style='color:#e34adc; '>ENDOF</span>
+255:         <span style='color:#000000; background:#a8a800; '>[']</span> (5_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(5_local@) <span style='color:#e34adc; '>ENDOF</span>
+256:         <span style='color:#000000; background:#a8a800; '>[']</span> (6_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(6_local@) <span style='color:#e34adc; '>ENDOF</span>
+257:         <span style='color:#000000; background:#a8a800; '>[']</span> (7_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(7_local@) <span style='color:#e34adc; '>ENDOF</span>
+258:         <span style='color:#000000; background:#a8a800; '>[']</span> (8_LOCAL@) <span style='color:#e34adc; '>OF</span> trace.(8_local@) <span style='color:#e34adc; '>ENDOF</span>
+259:         <span style='color:#000000; background:#a8a800; '>[']</span> (LOCAL!)   <span style='color:#e34adc; '>OF</span> trace.(local!)   <span style='color:#e34adc; '>ENDOF</span>
+260:         <span style='color:#000000; background:#a8a800; '>[']</span> (1_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(1_local!) <span style='color:#e34adc; '>ENDOF</span>
+261:         <span style='color:#000000; background:#a8a800; '>[']</span> (2_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(2_local!) <span style='color:#e34adc; '>ENDOF</span>
+262:         <span style='color:#000000; background:#a8a800; '>[']</span> (3_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(3_local!) <span style='color:#e34adc; '>ENDOF</span>
+263:         <span style='color:#000000; background:#a8a800; '>[']</span> (4_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(4_local!) <span style='color:#e34adc; '>ENDOF</span>
+264:         <span style='color:#000000; background:#a8a800; '>[']</span> (5_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(5_local!) <span style='color:#e34adc; '>ENDOF</span>
+265:         <span style='color:#000000; background:#a8a800; '>[']</span> (6_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(6_local!) <span style='color:#e34adc; '>ENDOF</span>
+266:         <span style='color:#000000; background:#a8a800; '>[']</span> (7_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(7_local!) <span style='color:#e34adc; '>ENDOF</span>
+267:         <span style='color:#000000; background:#a8a800; '>[']</span> (8_LOCAL!) <span style='color:#e34adc; '>OF</span> trace.(8_local!) <span style='color:#e34adc; '>ENDOF</span>
+268:         <span style='color:#000000; background:#a8a800; '>[']</span> (LOCAL+!)  <span style='color:#e34adc; '>OF</span> trace.(local+!)  <span style='color:#e34adc; '>ENDOF</span>
+269:         <span style='color:#800000; font-weight:bold; '>>r</span> xt <span style='color:#800000; font-weight:bold; '>EXECUTE</span> <span style='color:#800000; font-weight:bold; '>r></span>
+270:     <span style='color:#e34adc; '>ENDCASE</span>
+271:     ip ;
+272: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.DO.NEXT</span>  <span style='color:#808030; '>{</span><span style='color:#0000e6; '> ip </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> xt oldhere </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '>  ip' , perform code at ip </span><span style='color:#808030; '>}</span>
+273:     ip trace.check.ip
+274: <span style='color:#696969; '>\ set context for word under test</span>
+275:     trace.save.state1
+276:     <span style='color:#800000; font-weight:bold; '>here</span> <span style='color:#800000; font-weight:bold; '>-></span> oldhere
+277:     trace.restore.state2
+278:     oldhere <span style='color:#008c00; '>256</span> <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>dp</span> <span style='color:#800000; font-weight:bold; '>!</span>
+279: <span style='color:#696969; '>\ get execution token</span>
+280:     ip code@ <span style='color:#800000; font-weight:bold; '>-></span> xt
+281:     <span style='color:#800000; font-weight:bold; '>cell</span> +-> ip
+282: <span style='color:#696969; '>\ execute token</span>
+283:     xt is.primitive?
+284:     <span style='color:#e34adc; '>IF</span>  <span style='color:#696969; '>\ primitive</span>
+285:         ip xt trace.do.primitive <span style='color:#800000; font-weight:bold; '>-></span> ip
+286:     <span style='color:#e34adc; '>ELSE</span> <span style='color:#696969; '>\ secondary</span>
+287:         trace_level trace_level_max <span style='color:#800000; font-weight:bold; '>&lt;</span>
+288:         <span style='color:#e34adc; '>IF</span>
+289:             ip trace.>r         <span style='color:#696969; '>\ threaded execution</span>
+290:             <span style='color:#008c00; '>1</span> +-> trace_level
+291:             xt codebase <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>-></span> ip
+292:         <span style='color:#e34adc; '>ELSE</span>
+293:             <span style='color:#696969; '>\ treat it as a primitive</span>
+294:             ip xt trace.do.primitive <span style='color:#800000; font-weight:bold; '>-></span> ip
+295:         <span style='color:#e34adc; '>THEN</span>        
+296:     <span style='color:#e34adc; '>THEN</span>
+297: <span style='color:#696969; '>\ restore original context</span>
+298:     trace.rcheck
+299:     trace.save.state2
+300:     trace.restore.state1
+301:     oldhere <span style='color:#800000; font-weight:bold; '>dp</span> <span style='color:#800000; font-weight:bold; '>!</span>
+302:     ip ;
+303: 
+304: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.NEXT</span> <span style='color:#808030; '>{</span><span style='color:#0000e6; '> ip </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> xt </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> ip' </span><span style='color:#808030; '>}</span>
+305:     trace_level <span style='color:#008c00; '>0</span>>
+306:     <span style='color:#e34adc; '>IF</span>
+307:         ip trace.do.next <span style='color:#800000; font-weight:bold; '>-></span> ip
+308:     <span style='color:#e34adc; '>THEN</span>
+309: 
+310:     trace_level <span style='color:#008c00; '>0</span>>  
+311:     <span style='color:#e34adc; '>IF</span>
+312:         ip trace.show.next
+313:     <span style='color:#e34adc; '>ELSE</span>
+314:        <span style='color:#0000e6; '> ." Finished."</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+315:     <span style='color:#e34adc; '>THEN</span>
+316:     ip
+317: ;
+318: 
+319: }<span style='color:#000000; background:#a8a800; '>private</span>
+320: 
+321: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE</span> <span style='color:#696969; '>( i*x &lt;name> -- i*x , setup trace environment )</span>
+322:     ' <span style='color:#800000; font-weight:bold; '>dup</span> is.primitive?
+323:     <span style='color:#e34adc; '>IF</span>
+324:         <span style='color:#800000; font-weight:bold; '>drop</span><span style='color:#0000e6; '> ." Sorry. You can't trace a primitive."</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+325:     <span style='color:#e34adc; '>ELSE</span>
+326:         <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>-></span> trace_level
+327:         trace_level <span style='color:#800000; font-weight:bold; '>-></span> trace_level_max
+328:         trace.0rp
+329:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>-></span> TRACE-BEGWORD_IP
+330:         <span style='color:#800000; font-weight:bold; '>>code</span> <span style='color:#800000; font-weight:bold; '>-></span> trace_ip
+331:         trace_ip trace.show.next
+332:         trace-stack off
+333:         trace.save.state2
+334:     <span style='color:#e34adc; '>THEN</span> ;
+335: 
+336: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>s</span> <span style='color:#696969; '>( -- , step over )</span>
+337:     trace_level <span style='color:#800000; font-weight:bold; '>-></span> trace_level_max
+338:     trace_ip trace.next <span style='color:#800000; font-weight:bold; '>-></span> trace_ip ;
+339: 
+340: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>sd</span> <span style='color:#696969; '>( -- , step down )</span>
+341:     trace_level <span style='color:#008c00; '>1</span>+ <span style='color:#800000; font-weight:bold; '>-></span> trace_level_max
+342:     trace_ip trace.next <span style='color:#800000; font-weight:bold; '>-></span> trace_ip ;
+343: 
+344: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>sm</span> <span style='color:#696969; '>( many -- , step many times )</span>
+345:     trace_level <span style='color:#800000; font-weight:bold; '>-></span> trace_level_max
+346:     <span style='color:#008c00; '>0</span>
+347:     <span style='color:#e34adc; '>?DO</span>
+348:         trace_ip trace.next <span style='color:#800000; font-weight:bold; '>-></span> trace_ip
+349:     <span style='color:#e34adc; '>LOOP</span> ;
+350: 
+351: <span style='color:#800000; font-weight:bold; '>defer</span> trace.user   <span style='color:#696969; '>( IP -- stop?  )</span>
+352: ' <span style='color:#008c00; '>0</span>= <span style='color:#800000; font-weight:bold; '>is</span> trace.user
+353: 
+354: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gd</span> <span style='color:#808030; '>{</span><span style='color:#0000e6; '> more_levels </span><span style='color:#800000; '>|</span><span style='color:#0f69ff; '> stop_level userflag </span><span style='color:#808030; '>--</span><span style='color:#0f69ff; '> </span><span style='color:#808030; '>}</span>
+355:     <span style='color:#800000; font-weight:bold; '>here</span> what's trace.user <span style='color:#800000; font-weight:bold; '>u&lt;</span>  <span style='color:#696969; '>\ has it been forgotten?</span>
+356:     <span style='color:#e34adc; '>IF</span>
+357:        <span style='color:#0000e6; '> ." Resetting TRACE.</span><span style='color:#ffffff; background:#808000; '>USER !!!</span><span style='color:#0000e6; '>"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+358:         <span style='color:#000000; background:#a8a800; '>[']</span> <span style='color:#008c00; '>0</span>= <span style='color:#800000; font-weight:bold; '>is</span> trace.user
+359:     <span style='color:#e34adc; '>THEN</span>
+360:     more_levels <span style='color:#008c00; '>0</span>&lt;
+361:     more_levels <span style='color:#008c00; '>10</span> <span style='color:#800000; font-weight:bold; '>></span>
+362:     <span style='color:#e34adc; '>IF</span>
+363:        <span style='color:#0000e6; '> ." GD level out of range (0-10), = "</span> more_levels <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+364:     <span style='color:#e34adc; '>ELSE</span>
+365:         trace_level more_levels <span style='color:#800000; font-weight:bold; '>+</span> <span style='color:#800000; font-weight:bold; '>-></span> trace_level_max
+366:         trace_level <span style='color:#008c00; '>1</span>- <span style='color:#800000; font-weight:bold; '>-></span> stop_level
+367:         <span style='color:#e34adc; '>BEGIN</span>
+368:             trace_ip trace.user <span style='color:#696969; '>\ call deferred user word</span>
+369:             <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#696969; '>\ leave flag for UNTIL</span>
+370:             <span style='color:#e34adc; '>IF</span>
+371:                <span style='color:#0000e6; '> ." TRACE.USER returned "</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span><span style='color:#0000e6; '> ." so stopping execution."</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+372:             <span style='color:#e34adc; '>ELSE</span>
+373:                 <span style='color:#800000; font-weight:bold; '>-></span> userflag <span style='color:#800000; font-weight:bold; '>drop</span>
+374: <span style='color:#696969; '>\                cr ." before=" .s</span>
+375:                 trace_ip 
+376:                 trace.next
+377:                 <span style='color:#800000; font-weight:bold; '>-></span> trace_ip
+378: <span style='color:#696969; '>\                   ." after="  .s key drop</span>
+379:                    userflag
+380:                 trace_level stop_level <span style='color:#800000; font-weight:bold; '>></span> <span style='color:#800000; font-weight:bold; '>not</span>
+381:             <span style='color:#e34adc; '>THEN</span>
+382:         <span style='color:#e34adc; '>UNTIL</span>
+383:         <span style='color:#800000; font-weight:bold; '>drop</span>
+384:     <span style='color:#e34adc; '>THEN</span> ;
+385: 
+386: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>g</span> <span style='color:#696969; '>( -- , execute until end of word )</span> <span style='color:#008c00; '>0</span> gd ;
+387: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>TRACE.HELP</span> <span style='color:#696969; '>( -- )</span>
+388:    <span style='color:#0000e6; '> ."   TRACE  ( i*x &lt;name> -- , setup trace for Forth word )"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+389:    <span style='color:#0000e6; '> ."   S      ( -- , step over )"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+390:    <span style='color:#0000e6; '> ."   SM     ( many -- , step over many times )"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+391:    <span style='color:#0000e6; '> ."   SD     ( -- , step down )"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+392:    <span style='color:#0000e6; '> ."   G      ( -- , go to end of word )"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+393:    <span style='color:#0000e6; '> ."   GD     ( n -- , go down N levels from current level,"</span> <span style='color:#800000; font-weight:bold; '>cr</span>
+394:    <span style='color:#0000e6; '> ."                   stop at end of this level )"</span> <span style='color:#800000; font-weight:bold; '>cr</span> ;
+395: <span style='color:#000000; background:#a8a800; '>privatize</span>
+396: 
+397: <span style='color:#696969; '>0 [IF]</span>
+398: <span style='color:#696969; '>variable var1 100 var1 !</span>
+399: <span style='color:#696969; '>: FOO  dup IF 1 + . THEN 77 var1 @ + . ;</span>
+400: <span style='color:#696969; '>: ZOO 29 foo 99 22 + . ;</span>
+401: <span style='color:#696969; '>: ROO 92 >r 1 r@ + . r> . ;</span>
+402: <span style='color:#696969; '>: MOO c" hello" count type ." This is a message." cr s" another message" type cr ;</span>
+403: <span style='color:#696969; '>: KOO 7 FOO ." DONE" ;</span>
+404: <span style='color:#696969; '>: TR.DO  4 0 DO i . LOOP ;</span>
+405: <span style='color:#696969; '>: TR.?DO  0 ?DO i . LOOP ;</span>
+406: <span style='color:#696969; '>: TR.LOC1 { aa bb } aa bb + . ;</span>
+407: <span style='color:#696969; '>: TR.LOC2 789 >r 4 5 tr.loc1 r> . ;</span>
+408: <span style='color:#696969; '>[THEN]</span>
+409: 
+</pre></body></html>

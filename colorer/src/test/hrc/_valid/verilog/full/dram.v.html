@@ -1,0 +1,92 @@
+<html><body style='color:#000000; background:#ffffff; '><pre>
+ 0: <span style='color:#696969; '>/* ***********************************************************************</span>
+ 1: <span style='color:#696969; '>  The Free IP Project</span>
+ 2: <span style='color:#696969; '>  Free-RISC8 -- Verilog 8-bit Microcontroller</span>
+ 3: <span style='color:#696969; '>  (c) 1999, The Free IP Project and Thomas Coonan</span>
+ 4: <span style='color:#696969; '></span>
+ 5: <span style='color:#696969; '></span>
+ 6: <span style='color:#696969; '>  FREE IP GENERAL PUBLIC LICENSE</span>
+ 7: <span style='color:#696969; '>  TERMS AND CONDITIONS FOR USE, COPYING, DISTRIBUTION, AND MODIFICATION</span>
+ 8: <span style='color:#696969; '></span>
+ 9: <span style='color:#696969; '>  1.  You may copy and distribute verbatim copies of this core, as long</span>
+10: <span style='color:#696969; '>      as this file, and the other associated files, remain intact and</span>
+11: <span style='color:#696969; '>      unmodified.  Modifications are outlined below.  </span>
+12: <span style='color:#696969; '>  2.  You may use this core in any way, be it academic, commercial, or</span>
+13: <span style='color:#696969; '>      military.  Modified or not.  </span>
+14: <span style='color:#696969; '>  3.  Distribution of this core must be free of charge.  Charging is</span>
+15: <span style='color:#696969; '>      allowed only for value added services.  Value added services</span>
+16: <span style='color:#696969; '>      would include copying fees, modifications, customizations, and</span>
+17: <span style='color:#696969; '>      inclusion in other products.</span>
+18: <span style='color:#696969; '>  4.  If a modified source code is distributed, the original unmodified</span>
+19: <span style='color:#696969; '>      source code must also be included (or a link to the Free IP web</span>
+20: <span style='color:#696969; '>      site).  In the modified source code there must be clear</span>
+21: <span style='color:#696969; '>      identification of the modified version.</span>
+22: <span style='color:#696969; '>  5.  Visit the Free IP web site for additional information.</span>
+23: <span style='color:#696969; '>      </span><span style='color:#5555dd; '>http://www.free-ip.com</span><span style='color:#696969; '></span>
+24: <span style='color:#696969; '></span>
+25: <span style='color:#696969; '>*********************************************************************** */</span>
+26: 
+27: <span style='color:#696969; '>// picdram stands for PIC "Data" RAM.</span>
+28: <span style='color:#696969; '>//</span>
+29: <span style='color:#696969; '>//</span>
+30: <span style='color:#696969; '>// Synchronous Data RAM, 8 bits wide, N words deep.</span>
+31: <span style='color:#696969; '>//</span>
+32: <span style='color:#696969; '>// ** Must support SYNCHRONOUS WRITEs and ASYNCHRONOUS READs **</span>
+33: <span style='color:#696969; '>//    This is so that we can do a Read/Modify/Write in one cycle which</span>
+34: <span style='color:#696969; '>//    is required to do something like this:</span>
+35: <span style='color:#696969; '>//</span>
+36: <span style='color:#696969; '>//       incf 0x20, f   // M[20] &lt;= M[20] + 1</span>
+37: <span style='color:#696969; '>//       incf 0x22, f   // M[22] &lt;= M[22] + 1</span>
+38: <span style='color:#696969; '>//       incf 0x18, f   // M[18] &lt;= M[18] + 1</span>
+39: <span style='color:#696969; '>//</span>
+40: <span style='color:#696969; '>// Replace with your actual memory model..</span>
+41: <span style='color:#696969; '>//</span>
+42: <span style='color:#800000; font-weight:bold; '>module dram</span> <span style='color:#808030; '>(</span>
+43:    clk<span style='color:#808030; '>,</span>
+44:    address<span style='color:#808030; '>,</span>
+45:    we<span style='color:#808030; '>,</span>
+46:    din<span style='color:#808030; '>,</span>
+47:    dout
+48: <span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+49: 
+50: <span style='color:#800000; font-weight:bold; '>input</span>        clk<span style='color:#800000; font-weight:bold; '>;</span>
+51: <span style='color:#800000; font-weight:bold; '>input</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>6</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    address<span style='color:#800000; font-weight:bold; '>;</span>
+52: <span style='color:#800000; font-weight:bold; '>input</span>        we<span style='color:#800000; font-weight:bold; '>;</span>
+53: <span style='color:#800000; font-weight:bold; '>input</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    din<span style='color:#800000; font-weight:bold; '>;</span>
+54: <span style='color:#800000; font-weight:bold; '>output</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    dout<span style='color:#800000; font-weight:bold; '>;</span>
+55: 
+56: <span style='color:#696969; '>// Number of data memory words.  This is somewhat tricky, since remember</span>
+57: <span style='color:#696969; '>// that lowest registers (e.g. special registers) are not really in this</span>
+58: <span style='color:#696969; '>// data memory at all, but are explicit registers at the top-level.  Also,</span>
+59: <span style='color:#696969; '>// the banking scheme has some of the other registers in each bank being</span>
+60: <span style='color:#696969; '>// mapped to the same physical registers.  The bottom line is that for</span>
+61: <span style='color:#696969; '>// the 16C57, you at most need to set this to 72.  Note we are reserving</span>
+62: <span style='color:#696969; '>// the last 2 words for our little "expansion circuit" so we really want</span>
+63: <span style='color:#696969; '>// only 70.</span>
+64: <span style='color:#696969; '>//</span>
+65: 
+66: <span style='color:#800000; font-weight:bold; '>parameter</span> word_depth <span style='color:#808030; '>=</span> <span style='color:#008c00; '>70</span><span style='color:#800000; font-weight:bold; '>;</span> <span style='color:#696969; '>// Maximum minus 2 words for expansion circuit demo</span>
+67: <span style='color:#696969; '>//parameter word_depth = 24;  // This would be like a 16C54 </span>
+68: 
+69: <span style='color:#696969; '>// reg [6:0]    address_latched; &lt;--- NO!  We need ASYNCHRONOUS READs</span>
+70: 
+71: <span style='color:#696969; '>// Instantiate the memory array itself.</span>
+72: <span style='color:#800000; font-weight:bold; '>reg</span> <span style='color:#808030; '>[</span><span style='color:#008c00; '>7</span><span style='color:#808030; '>:</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>    mem<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>:</span>word_depth<span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#800000; font-weight:bold; '>;</span>
+73: 
+74: <span style='color:#696969; '>// Latch address &lt;--- NO! </span>
+75: <span style='color:#696969; '>//always @(posedge clk)</span>
+76: <span style='color:#696969; '>//   address_latched &lt;= address;</span>
+77:    
+78: <span style='color:#696969; '>// READ</span>
+79: <span style='color:#696969; '>//assign dout = mem[address_latched];</span>
+80: 
+81: <span style='color:#696969; '>// ASYNCHRONOUS READ</span>
+82: <span style='color:#800000; font-weight:bold; '>assign</span> dout <span style='color:#808030; '>=</span> mem<span style='color:#008c00; '>[address]</span><span style='color:#800000; font-weight:bold; '>;</span>
+83: 
+84: <span style='color:#696969; '>// SYNCHRONOUS WRITE</span>
+85: <span style='color:#800000; font-weight:bold; '>always</span> @(<span style='color:#0000e6; '>posedge clk</span>)
+86:    if <span style='color:#808030; '>(</span>we<span style='color:#808030; '>)</span> mem<span style='color:#008c00; '>[address]</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>=</span> din<span style='color:#808030; '>;</span>
+87: 
+88: <span style='color:#800000; font-weight:bold; '>endmodule</span>
+89: 
+</pre></body></html>
