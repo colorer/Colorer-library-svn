@@ -17,9 +17,9 @@ HRCParserImpl::HRCParserImpl()
 HRCParserImpl::~HRCParserImpl()
 {
   int idx;
-  for(idx = 0; idx < fileTypeVector.size(); idx++)
-    delete fileTypeVector.elementAt(idx);
-  for(SchemeImpl *scheme = schemeHash.enumerate(); scheme; scheme = schemeHash.next()){
+  for(FileTypeImpl *ft = fileTypeHash.enumerate(); ft != null; ft = fileTypeHash.next())
+    delete ft;
+  for(SchemeImpl *scheme = schemeHash.enumerate(); scheme != null; scheme = schemeHash.next()){
     delete scheme;
   };
   for(idx = 0; idx < regionNamesVector.size(); idx++)
@@ -200,8 +200,6 @@ void HRCParserImpl::addPrototype(CXmlEl *elem)
         continue;
       };
       type->inputSource = InputSource::newInstance(locationLink, curInputSource);
-//      const String *typeLoad = content->getParamValue(DString("load"));
-//      if (typeLoad != null && *typeLoad == "auto") autoLoad = true;
     };
     if (*content->getName() == "filename" || *content->getName() == "firstline"){
       if (content->child() == null || content->child()->getType() != EL_PLAIN){
@@ -239,8 +237,9 @@ void HRCParserImpl::addPrototype(CXmlEl *elem)
 
   type->protoLoaded = true;
   fileTypeHash.put(typeName, type);
-  fileTypeVector.addElement(type);
-//  if (autoLoad) loadFileType(type);
+  if (!type->isPackage){
+    fileTypeVector.addElement(type);
+  };
 };
 
 void HRCParserImpl::addType(CXmlEl *elem)

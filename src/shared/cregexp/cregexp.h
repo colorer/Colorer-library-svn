@@ -163,7 +163,7 @@ public:
 };
 
 /** Regular Expression compiler and matcher.
-   Colorer regular expressions library cregexp.
+    Colorer regular expressions library cregexp.
 
 \par 1. Features.
 
@@ -193,8 +193,8 @@ public:
      - \\p{name} - named bracket reference.
      - (?{} pattern ) - no capturing bracket as (?: pattern ) in Perl.
    - Look Ahead/Backward:
-     - pattern?=  as Perl (?=pattern)
-     - pattern?!  as Perl (?!pattern)
+     - pattern?=  as Perl's (?=pattern)
+     - pattern?!  as Perl's (?!pattern)
      - pattern?#N - N symbols backward look for pattern
      - pattern?~N - N symbols backward look for no pattern
    - Colorer library extensions:
@@ -203,7 +203,7 @@ public:
 
 \par 1.3. Perl compatibility.
    - Modifiers //ismx
-   - \\ p{name} - back reference to named bracket (but not named property!)
+   - \\ p{name} - back reference to named bracket (but not named property as in Perl!)
    - No POSIX character classes support.
 
 
@@ -211,45 +211,78 @@ public:
 \par 2. Dislikes:
 
 \par 2.1. According to Unicode RE level 1 support:
-   - no surrogate symbols support,
-   - no string length changes on case mappings (only 1 <-> 1 mappings),
+   - No surrogate symbols support,
+   - No string length changes on case mappings (only 1 <-> 1 mappings),
 \par 2.2. Algorithmic problems:
-   - stack recursion implementation.
+   - Stack recursion implementation.
 
     @ingroup cregexp
 */
 class CRegExp
 {
 public:
-  /** Empty constructor */
+  /**
+    Empty constructor. No RE tree is builded with this constructor.
+    Use #setRE method to change pattern.
+  */
   CRegExp();
-  /** Constructs regular expression and compile it with @c text pattern */
+  /**
+    Constructs regular expression and compile it with @c text pattern.
+  */
   CRegExp(const String *text);
   ~CRegExp();
 
-  /** Is RE well-compiled */
-  bool   isOk();
-  /** Returns information about RE compilation error */
+  /**
+    Is compilied RE well-formed.
+  */
+  bool isOk();
+
+  /**
+    Returns information about RE compilation error.
+  */
   EError getError();
-  /** Tells RE parser, that it must make moves on tested string
-      while RE matching. */
-  bool   setPositionMoves(bool moves);
-  /** Returns count of named brackets. */
-  int    getBracketNo(const String *brname);
-  /** Returns named bracked name by it's index. */
+
+  /**
+    Tells RE parser, that it must make moves on tested string while RE matching.
+  */
+  bool setPositionMoves(bool moves);
+  /**
+    Returns count of named brackets.
+  */
+  int getBracketNo(const String *brname);
+  /**
+    Returns named bracked name by it's index.
+  */
   String *getBracketName(int no);
 #ifdef COLORERMODE
   bool setBackRE(CRegExp *bkre);
+  /**
+    Changes RE object, used for backreferences with named \y{} \Y{} operators.
+  */
   bool setBackTrace(const String *str, SMatches *trace);
+  /**
+    Returns current RE object, used for backreferences with \y \Y operators.
+  */
   bool getBackTrace(const String **str, SMatches **trace);
 #endif
-  /** Compiles specified regular expression. */
+  /**
+    Compiles specified regular expression and drops all
+    previous structures.
+  */
   bool setRE(const String *re);
 #ifdef NAMED_MATCHES_IN_HASH
+  /** Runs RE parser against input string @c str
+  */
   bool parse(const String *str, SMatches *mtch, SMatchHash *nmtch = null);
+  /** Runs RE parser against input string @c str
+  */
   bool parse(const String *str, int pos, int eol, SMatches *mtch, SMatchHash *nmtch = null, int soscheme = 0, int moves = -1);
 #else
+  /** Runs RE parser against input string @c str
+  */
   bool parse(const String *str, SMatches *mtch);
+  /** Runs RE parser against input string @c str
+  */
   bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 

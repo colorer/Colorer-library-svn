@@ -25,18 +25,18 @@
       - \%HOMEPATH%/.colorer5catalog
       - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
 
-    - unix systems:
+    - unix/macos systems:
       - ./catalog.xml
       - ../catalog.xml
       - ../../catalog.xml
-      - \%COLORER5CATALOG%
-      - \%HOME%/.colorer5catalog
-      - \%HOMEPATH%/.colorer5catalog
+      - \$COLORER5CATALOG
+      - \$HOME.colorer5catalog
+      - \$HOMEPATH.colorer5catalog
       - /usr/share/colorer/catalog.xml
       - /usr/local/share/colorer/catalog.xml
 
   @note
-    - \%NAME% - Environment variable of the current process.
+    - \%NAME%, \$NAME - Environment variable of the current process.
     - image_start_dir - Directory, where current image was started.
 
   @ingroup colorer

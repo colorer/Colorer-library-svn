@@ -89,8 +89,8 @@ void FarEditor::setFileType(FileType *ftype){
   baseEditor->setFileType(ftype);
 
   HRCParser *hrcParser = parserFactory->getHRCParser();
-  FileType *def = hrcParser->getFileType(&DString("def"));
-  if (def == null) throw Exception(DString("No 'def' file type found"));
+  FileType *def = hrcParser->getFileType(&DString("default"));
+  if (def == null) throw Exception(DString("No 'default' file type found"));
 
   int backparse = 2000;
   UnicodeTools::getNumber(def->getParameter(DString("backparse")), &backparse);

@@ -85,7 +85,7 @@
         but it's NOT valid CSS level 1 or 2!
        </documentation>
       </annotation>
-      <keywords region="def:DeprecatedKeyword" ignorecase="yes" worddiv='%css:worddiv;'>
+      <keywords region="def:DeprecatedKeyword" ignorecase="yes" worddiv='%css:worddiv-class;'>
         <word name="aliceBlue"/>
         <word name="antuqueWhite"/>
         <word name="aquamarine"/>

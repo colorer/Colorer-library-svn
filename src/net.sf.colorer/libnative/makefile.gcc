@@ -27,4 +27,4 @@ $(TARGET): *.cpp *.h $(objs)
 	$(RM) colorer.dll.exp
 
 clean:
-	$(RM) $(objs)
+	$(RM) $(objs) $(TARGET)

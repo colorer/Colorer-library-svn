@@ -41,7 +41,9 @@ friend class FileTypeImpl;
 
   enum QualifyNameType { QNT_DEFINE, QNT_SCHEME, QNT_ENTITY };
 
+  // types and packages
   Hashtable<FileTypeImpl*> fileTypeHash;
+  // types, not packages
   Vector<FileTypeImpl*>    fileTypeVector;
 
   Hashtable<SchemeImpl*>   schemeHash;

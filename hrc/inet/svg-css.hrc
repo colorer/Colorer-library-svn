@@ -37,7 +37,7 @@
 <type name="svg-css" access="public">
 
 <scheme name="PropertyNames">
- <keywords region="css:PropertyName" ignorecase="yes" worddiv='%css:worddiv;'>
+ <keywords region="css:PropertyName" ignorecase="yes" worddiv='%css:worddiv-class;'>
   <word name="clip-path"/> 
   <word name="clip-rule"/> 
   <word name="mask"/> 
@@ -244,7 +244,7 @@
   <documentation>
   </documentation>
  </annotation>
- <keywords region="css:baseColors" ignorecase="yes" worddiv='%css:worddiv;'>
+ <keywords region="css:baseColors" ignorecase="yes" worddiv='%css:worddiv-class;'>
   <word name="aliceblue"/>
   <word name="antiquewhite"/>
   <word name="aqua"/>
