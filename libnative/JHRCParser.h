@@ -62,6 +62,7 @@ public:
       for(jobject filetype = fileTypes.enumerate(); filetype != null; filetype = fileTypes.next()) {
         env->DeleteGlobalRef(filetype);
       }
+      env->DeleteGlobalRef(jHRCParser);
       delete this;
   }
 
