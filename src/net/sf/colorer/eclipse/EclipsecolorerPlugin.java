@@ -48,6 +48,16 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
 
     store.setDefault("Outline.Hierarchy", true);
     store.setDefault("Outline.Sort", false);
+    
+    store.setDefault("g.Prefix", "");
+    store.setDefault("g.Suffix", ".html");
+    store.setDefault("g.HRDSchema", store.getString(PreferencePage.HRD_SET));
+    store.setDefault("g.HtmlHeaderFooter", true);
+    store.setDefault("g.InfoHeader", true);
+    store.setDefault("g.UseLineNumbers", true);
+    store.setDefault("g.OutputEncoding", "default");
+    store.setDefault("g.TargetDirectory", "/");
+    store.setDefault("g.LinkSource", "");
 	}
 
 	/**

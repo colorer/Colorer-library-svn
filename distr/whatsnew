@@ -1,13 +1,2 @@
 
-  Makefiles for MacOS (thanks for tests and bugs to Marc-Antoine Parent)
-
-  Linux native library is included.
-
-  Bold Rectangle mode for paired elements.
-
-  File's type is now detected with several start lines analyze.
-
-  User-friendly language's grouping in filetype's menu.
-  
-  HTML Generator improvements. Now it can handle multiple
-  file selection.
+  Normal HTML Generator with Wizard and different settings.
