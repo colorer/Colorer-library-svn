@@ -8,24 +8,28 @@
   To install plugin into Eclipse you have to copy content of this directory
   into %ECLIPSE_HOME%/plugins directory.
 
-  This package contains plugin native library, compiled for win32 platform.
-  For Linux issues, read LINUX file.
-  For MacOS issues, read MACOS file.
+  This package contains plugin native library, compiled for win32 ant Linux
+  platforms. For Linux issues, read LINUX file.
+  To compile Colorer-take5 library to use with MacOSX systems, read MACOS file.
 
   If you are using Colorer with other tools/applications, you can specify
   path to the 'catalog.xml' file with one of the standard locations:
-    - %HOME%/.colorer5catalog
-    - %SYSTEMROOT%/.colorer5catalog
-  In this case when you delete 'colorer' folder of EclipseColorer
-  package, it will start to read global configuration data.
+    - %HOME%/.colorer5catalog (%HOMEPATH%/.colorer5catalog,  %SYSTEMROOT%/.colorer5catalog)
+    - %COLORER5CATALOG%
+    - /usr/share/colorer/catalog.xml
+
+  In this case you can delete 'colorer' folder of the EclipseColorer
+  package, ant it will start to read configuration data from the global source.
 
 
   All files in this package are subject to the Mozilla Public License 1.1
   You can find detailed description and license agreement on
     http://colorer.sf.net
 
-  For more information see 'index.html' in 'colorer/doc' directory.
+  For more information see 'index.html' in the 'doc' directory of
+  the Colorer Library package distribution or visit
+    http://colorer.sf.net/
 
 
   Thanks for using Colorer,
-    Cail Lomecb <cail@nm.ru>
+    Igor Russkih <cail@nm.ru>
