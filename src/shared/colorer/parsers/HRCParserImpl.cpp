@@ -143,6 +143,11 @@ void HRCParserImpl::parseHRC(const byte *data, int len)
       versionName = new SString(types->getParamValue(DString("version")));
   };
 
+  bool globalUpdateStarted = false;
+  if (!updateStarted){
+    globalUpdateStarted = true;
+    updateStarted = true;
+  };
   for (CXmlEl *elem = types->child(); elem; elem = elem->next()){
     if (!elem->getName()) continue;
     if (*elem->getName() == "prototype"){
@@ -159,7 +164,11 @@ void HRCParserImpl::parseHRC(const byte *data, int len)
     };
   };
   delete xmlBase;
-  updateLinks();
+  structureChanged = true;
+  if (globalUpdateStarted){
+    updateLinks();
+    updateStarted = false;
+  };
 };
 
 
@@ -584,9 +593,6 @@ static char rg_tmpl[0x10] = "region";
 
 void HRCParserImpl::updateLinks()
 {
-  structureChanged = true;
-  if (updateStarted) return;
-  updateStarted = true;
   while(structureChanged){
     structureChanged = false;
     for(SchemeImpl *scheme = schemeHash.enumerate(); scheme != null; scheme = schemeHash.next()){
@@ -631,7 +637,6 @@ void HRCParserImpl::updateLinks()
       if (structureChanged) break;
     };
   };
-  updateStarted = false;
 };
 
 
