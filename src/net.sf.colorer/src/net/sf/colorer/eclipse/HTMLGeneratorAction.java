@@ -90,7 +90,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     }
     gd.setFileList(fileList);
 
-    final ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+    final ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
     Vector hrdSchemas = new Vector();
     for(Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds.hasMoreElements();){
       final String hrd_name = (String)hrds.nextElement();
@@ -101,7 +101,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
 
     gd.setHRDSchema(hrdSchemas);
 
-    IPreferenceStore ps = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+    IPreferenceStore ps = ColorerPlugin.getDefault().getPreferenceStore();
     gd.setPrefix(ps.getString("g.Prefix"));
     gd.setSuffix(ps.getString("g.Suffix"));
     gd.setHRDSchema(ps.getString("g.HRDSchema"));
@@ -119,7 +119,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     public void action(GeneratorDialog gd, int action) {
       switch(action){
         case GeneratorDialog.CLOSE_ACTION:
-          IPreferenceStore ps = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+          IPreferenceStore ps = ColorerPlugin.getDefault().getPreferenceStore();
           ps.setValue("g.Prefix", gd.getPrefix());
           ps.setValue("g.Suffix", gd.getSuffix());
           ps.setValue("g.HRDSchema", gd.getHRDSchema());
@@ -163,7 +163,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
                 escapedWriter = commonWriter;
               }
               
-              ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+              ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
               HTMLGenerator hg = new HTMLGenerator(pf,rls,gd.getHRDSchema());
 
               hg.generate(commonWriter, escapedWriter,

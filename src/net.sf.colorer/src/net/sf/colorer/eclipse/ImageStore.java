@@ -9,7 +9,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 public class ImageStore {
 
-    static final URL BASE_URL = EclipsecolorerPlugin.getDefault().getBundle().getEntry("/");
+    static final URL BASE_URL = ColorerPlugin.getDefault().getBundle().getEntry("/");
 
     static Hashtable hash = new Hashtable();
 

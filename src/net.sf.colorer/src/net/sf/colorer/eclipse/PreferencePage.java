@@ -7,6 +7,7 @@ import net.sf.colorer.ParserFactory;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.SWT;
@@ -15,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.texteditor.WorkbenchChainedTextFontFieldEditor;
 
 public class PreferencePage extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage{
@@ -38,7 +38,7 @@ public class PreferencePage extends FieldEditorPreferencePage
   
   public PreferencePage(){
     super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
-    setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
+    setPreferenceStore(ColorerPlugin.getDefault().getPreferenceStore());
   }
 
   public void init(IWorkbench iworkbench){}
@@ -60,7 +60,7 @@ public class PreferencePage extends FieldEditorPreferencePage
   public void createFieldEditors(){
     Composite p = getFieldEditorParent();
     
-    addField(new WorkbenchChainedTextFontFieldEditor(TEXT_FONT, Messages.get(TEXT_FONT), p));
+    addField(new FontFieldEditor(TEXT_FONT, Messages.get(TEXT_FONT), p));
     addField(new BooleanFieldEditor(SPACES_FOR_TABS, Messages.get(SPACES_FOR_TABS), p));
     IntegerFieldEditor tabsnum = new IntegerFieldEditor(TAB_WIDTH, Messages.get(TAB_WIDTH), p);
     tabsnum.setValidRange(1, 16);
@@ -85,7 +85,7 @@ public class PreferencePage extends FieldEditorPreferencePage
     
     new Label(p, 0).setText(Messages.get(HRD_SET));
     
-    ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+    ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
     hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
     hrdSetsList = new Vector();
     for(Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds.hasMoreElements();){
