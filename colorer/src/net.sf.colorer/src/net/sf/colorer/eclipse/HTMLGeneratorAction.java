@@ -18,6 +18,7 @@ import net.sf.colorer.viewer.HTMLGenerator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -71,6 +72,11 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
       
       String fileLocation = null;
       
+      try{
+        if (obj instanceof IJavaElement){
+          obj = ((IJavaElement)obj).getCorrespondingResource();
+        }
+      }catch(Throwable e){}
       if (obj instanceof IResource) {
         IResource resource = (IResource)obj;
         if (resource == null || resource.getType() != IResource.FILE){
@@ -79,12 +85,6 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
         IFile iFile = (IFile) resource;
         fileLocation = iFile.getLocation().toString(); 
       }
-      /*
-      else if (obj instanceof org.eclipse.jdt.core.IJavaElement){
-        System.out.println(((org.eclipse.jdt.core.IJavaElement)obj).getElementName());        
-      }
-      */
-      
       if (fileLocation == null){
         continue;
       }
