@@ -6,7 +6,7 @@ TARGET = net_sf_colorer.dll
 all: $(TARGET)
 
 shared_path=../../shared/
-JAVA_INCLUDE=E:/programs/java/j2sdk1.4.1_01/include/
+JAVA_INCLUDE=$(JAVA_HOME)/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
 
 CYGWIN=-mno-cygwin
