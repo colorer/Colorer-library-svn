@@ -368,7 +368,7 @@
   </prototype>
   <prototype name="lisp" group="rare" description="Lisp">
     <location link="rare/lisp.hrc"/>
-    <filename>/\.(lsp|scm|elc|el)$/i</filename>
+    <filename>/\.(lsp|lisp|scm|elc|el)$/i</filename>
   </prototype>
   <prototype name="matlab" group="rare" description="MatLab">
     <location link="rare/matlab.hrc"/>

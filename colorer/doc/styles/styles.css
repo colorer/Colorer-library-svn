@@ -3,7 +3,7 @@ body{
   font-family: Verdana, Arial, helvetica, sans-serif;
   font-size:10pt;
   margin-left: 40pt;
-  margin-right: 60pt;
+  margin-right: 40pt;
   color:black;
   background:white;
   background-position: top left;
@@ -101,4 +101,27 @@ h4{ font: small-caps 100%; font-weight: bold; }
 
 .icon{
   float:left;
+}
+
+.newsdiv{
+  border: 1pt solid gray;
+  padding: 1pt 1pt 3pt 2pt;
+  width: 140pt;
+  margin-top: 40pt;
+}
+.newsheader{
+  font-weight: bold;
+  font-variant: small-caps;
+  font-size: 11pt;
+  color: #303570;
+  text-align: center;
+}
+.newsdate{
+  font-weight: bold;
+  color: #303570;
+  font-size: 8pt;
+}
+.newsline{
+  padding: 1pt 1pt 1pt 5pt;
+  font-size: 8pt;
 }
