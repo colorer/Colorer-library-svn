@@ -11,20 +11,24 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta2 library HRC Reference. September 2003</releaseinfo>
+<releaseinfo>Colorer-take5 beta3 library HRC Reference. September 2003</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>12 September 2003</pubdate>
+<pubdate>30 October 2003</pubdate>
 
 <revhistory>
 <revision>
-  <revnumber>take5.beta2</revnumber>
-  <date>12 September 2003</date>
+  <revnumber>take5.beta3</revnumber>
+  <date>30 October 2003</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
   </revremark>
+</revision>
+<revision>
+  <revnumber>take5.beta2</revnumber>
+  <date>12 September 2003</date>
 </revision>
 <revision>
   <revnumber>take5.beta1</revnumber>
@@ -66,7 +70,7 @@ parse and colourise text in editors or other systems.
 <title>Introduction</title>
 
 <para>
-HRC is a script language, describing parse process of text files to produce
+HRC is a script language, describing parse process of the text files to produce
 syntax highlighting. It is based on XML markup, and defines its
 own XML vocabulary and structure.
 HRC language was developed to achieve most flexible and efficient process
@@ -91,14 +95,14 @@ All language descriptions are divided into two parts:
 <emphasis role='strong'>informal</emphasis> part (used to describe different
 properties of the language, initial choose rules, service information
 - <literal>prototype</literal> element),
-and <emphasis role='strong'>Formal</emphasis> part, which defines
+and <emphasis role='strong'>formal</emphasis> part, which defines
 syntax and semantics of the target parsed language (<literal>type</literal> element).
 Prototypes are used to determine, which type should be applied to the currently opened
 file, they define some internal application-dependent properties
 and other useful information about language. Because you may separate prototype
 definition from real language definition, full type loading only occurs
-when it is really requested by user. Also, all the prototype definitions,
-collected in one initial source file, allow user to see all languages, supported
+when it is really requested by the user. Also, all the prototype definitions,
+collected in one initial source file, allow user to see list of languages, supported
 by the library and guarantee fast library's bootstrap.
 </para>
 
@@ -115,15 +119,36 @@ element, which contains all other HRC definitions.
 <para>
 Each HRC language object is defined using XML elements and attributes.
 You can find definition of the HRC XML Syntax in <xref linkend='hrcxsd'/>.
+For instance, mostly all HRC definitions starts with the next syntax:
+<programlisting><![CDATA[
+<?xml version="1.0">
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc
+                         http://colorer.sf.net/2003/hrc.xsd">
+  <annotation>
+   <documentation>
+   your documentation...
+   </documentation>
+  </annotation>
+
+  your definitions...
+
+</hrc>
+]]>
+</programlisting>
+
 </para>
+
 <para>
-Each element in a HRC file can be documented with XML Schema-like standard 
+Each element in HRC can be documented with XML Schema-like
 elements:
 <x:schemaref uri="&fileref;" role='annotation'/>
-</para>
-<para>
-Annotation object can be used anywhere in HRC context to document
-and describe any of HRC elements.
+
+Annotation object can be used anywhere in the HRC context to document
+and describe any of the HRC elements.
 
 </para>
 </formalpara>
@@ -132,7 +157,7 @@ and describe any of HRC elements.
 <section id='core.filetypes'><title>File Types</title>
 <para>Each language prototype requires definition of
 the language's name and description. These properties are used
-to determine language in context of other language definitions
+to determine language in context of the other language definitions
 and in inter-language linkage process.
 </para>
 
@@ -146,7 +171,7 @@ and in inter-language linkage process.
 Each language must be chosen by the library before starting syntax highlighting
 process. This is made with help of <literal>firstline</literal> and <literal>filename</literal>
 parameters. Each matched instance of one of these parameters adds some additional
-weight to a total language weight (choosing probability). This value is taken by default,
+weight to the total language weight (choosing probability). This value is taken by default,
 or can be changed explicitly with <literal>weight</literal> attribute of these elements.
 When total weights of all types are evaluated, first language with maximum
 weight is selected to assign to the opening file.
@@ -164,7 +189,7 @@ instance adds a specified weight to the total language weight.
 <para>
 If real language definition is separated from the prototype and placed in
 other resource, it's location is pointed with <literal>location</literal>
-element. Real type loading is occur when the described type would be really
+element. Real type loading occurs when the described type would be really
 requested.
 <x:schemaref uri="&fileref;" role='location'/>
 </para>
@@ -174,16 +199,18 @@ requested.
 
 <section id='core.filetypes.package'><title>Packages</title>
 <para>
-You can define file type with a special meaning of an internal
+You can define file type with a special meaning of the internal
 type, which is used by other types and is not visible to user.
 This role is managed by the <literal>package</literal> element:
 <x:schemaref uri="&fileref;" role='package'/>
 This element doesn't contains <literal>filename</literal> or
-<literal>firstline</literal> properties, because it doesn't directly maps
-to any language. As for the rest, all it's behaviour is like prototype's one.
+<literal>firstline</literal> properties because it doesn't directly maps
+to any file type or language.
+As for the rest, all it's behaviour is like prototype's one.
 </para>
 
 </section>
+
 
 <section id='core.filetypes.type'><title>Types</title>
 <para>
@@ -193,9 +220,26 @@ is stored in basic units, called <literal>type</literal>s.
 
 <x:schemaref uri="&fileref;" role='type'/>
 
+Normally, each type must be defined in a separate file, which contains
+this type and optionally it's prototype (if there is no this prototype
+definition in the global repository).
+This allows to load each file only once, when required type is really requested
+by the user.
+
+</para>
+</section>
+
+
+</section>
+
+<section id='core.namespaces'><title>Namespaces</title>
+<para>
 Each type defines it's own namespace, where different objects are reside.
-In the namespace of type each object must have unique
-identifier - system name, which is used to reference it from the other objects.
+In this namespace each object must have unique
+identifier (name), which is used to reference to it from other objects.
+Uniquness is only requeried for objects of the same type. So, you can create
+objects of different types with the same name and there will be no conflicts.
+
 If object must be referenced from the other type, it's fully
 qualified name is used in form of <literal>typename:objectname</literal>.
 But often there are too many inter-type links, so it is too tedious to use
@@ -211,35 +255,49 @@ For instance, you can write
 <programlisting>
   &lt;import type='def'/>
 </programlisting>
-to import all definitions from the 'def' schema into the current one.
+to import all definitions from the 'def' type into the current one.
 Note, that if multiple imported types have equal local names,
-they will be resolved in order of import declarations.
-
+they would be resolved in order of import declarations.
 </para>
-
-
-<x:schemaref uri="&fileref;" role='region'/>
-
-<x:schemaref uri="&fileref;" role='entity'/>
-
 </section>
 
 </section>
 
-<section id='core.schemas'><title>Schemas</title>
 
-<x:schemaref uri="&fileref;" role='scheme'/>
-
-</section>
-
-<section id='core.namespaces'><title>Namespaces</title>
-<para>xxxxxx</para>
-</section>
-
-</section>
 
 <section id='schemesyntax'><title>Scheme syntax</title>
 
+<para>
+
+Scheme is a common construction in the HRC language, used to express and
+describe syntax of the target languages. Each scheme represents syntax
+context, wich contains different syntax elements, matched in order
+of text analysis. For example, scheme for "C++" language contains different
+keywords, string and number tokens, comments, and others.
+To describe all the information, required to be highlighted, <literal>region</literal>
+objects are used. Each region defines some syntactically meaningful element.
+This element always has a name and sometimes a reference to it's parent region
+(if exists). When parsed, source text is described in terms of these regions.
+This description contains groups of the regions with specified positions and lenghts.
+</para>
+<para>
+It the next stage of the text processing, each region is associated with some
+handler. For example, handler can assign color and font style information to
+each of the regions, or can produce some operations over these structures.
+</para>
+
+<para>
+
+Each region is defined with the <literal>region</literal> element:
+<x:schemaref uri="&fileref;" role='region'/>
+
+
+
+<x:schemaref uri="&fileref;" role='entity'/>
+
+<x:schemaref uri="&fileref;" role='scheme'/>
+
+</para>
 
 <section id='schemesyntax.keywords'><title>Keyword lists</title>
 <x:schemaref uri="&fileref;" role='keywords'/>
@@ -251,6 +309,9 @@ they will be resolved in order of import declarations.
 <section id='schemesyntax.re'><title>Regular Expressions</title>
 <x:schemaref uri="&fileref;" role='regexp'/>
 <para>
+
+see <xref linkend='hrcre'/>
+
 </para>
 </section>
 <section id='schemesyntax.contextswitch'><title>Blocked context switch</title>
@@ -553,7 +614,7 @@ and the latter - to unify modifying and storing changed HRD settings with provid
 <title>XML Schema for HRC Language</title>
 <para>
 This XML Schema instance was automatically generated
-from original hrc.xsd source, available at
+from the original <literal>hrc.xsd</literal> source, available at
 <ulink url="http://colorer.sf.net/2003/hrc.xsd">http://colorer.sf.net/2003/hrc.xsd</ulink>.
 All comments and documentation tags were stripped to achieve more compact format.
 To use this schema in other, than informational purposes, use up-to-date
