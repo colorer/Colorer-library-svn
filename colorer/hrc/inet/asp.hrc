@@ -42,7 +42,6 @@
     <region name="Tag" parent="def:OpenTag"/>
     <region name="OpenTag" parent="Tag"/>
     <region name="CloseTag" parent="Tag"/>
-    <region name="Text" parent="def:default"/>
 
     <scheme name="targetLanguage"/>
 
@@ -66,10 +65,9 @@
     </documentation></annotation>
     <scheme name="InverseInsertion">
       <block start="/((\%&gt;))/" end="/((&lt;\%))/"
-       scheme="html" priority="low" region="Text"
+       scheme="html" priority="low" region="def:Text"
        region00="Insertion" region10="Insertion"
        region01="def:PairStart" region11="def:PairEnd"
-       region02="OpenTag"   region12="OpenTag"
       />
     </scheme>
 
