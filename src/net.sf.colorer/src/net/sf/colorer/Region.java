@@ -1,54 +1,74 @@
 package net.sf.colorer;
 
 /**
-  HRC Region implementation.
-  Contains information about HRC Region and it attributes:
-  <ul>
-    <li>name
-    <li>description
-    <li>parent
-  </ul>
-  @ingroup colorer
-*/
-public class Region{
-  long iptr;
-  String name;
-  String description;
-  Region parent;
-  int id;
-  
-  /** Full Qualified region name (<code>def:Text</code> for example) */
-  public String getName(){ return name; }
-  /** Region description */
-  public String getDescription(){ return description; }
-  /** Direct region ancestor (parent) */
-  public Region getParent(){ return parent; }
-  /** Quick access region id (incrementable) */
-  public int getID(){ return id; }
-  /** Checks if region has the specified parent in all of it's ancestors.
-      This method is useful to check if region has specified parent,
-      and use this information, as region type specification.
-      For example, <code>def:Comment</code> has <code>def:Syntax</code> parent,
-      so, some syntax checking can be made with it's content.
-  */
-  public boolean hasParent(Region region){
-    Region elem = this;
-    while(elem != null){
-      if (region == elem) return true;
-      elem = elem.getParent();
-    };
-    return false;
-  }
-  
-  public Region(String name, String descr, Region parent, int id){
-    this.name = name;
-    this.description = descr;
-    this.parent = parent;
-    this.id = id;
-  }
-  public String toString(){
-    return name;
-  }
+ * HRC Region implementation. Contains information about HRC Region and it
+ * attributes:
+ * <ul>
+ * <li>name
+ * <li>description
+ * <li>parent
+ * </ul>
+ * 
+ * @ingroup colorer
+ */
+public class Region {
+    long iptr;
+
+    String name;
+
+    String description;
+
+    Region parent;
+
+    int id;
+
+    /** Full Qualified region name (<code>def:Text</code> for example) */
+    public String getName() {
+        return name;
+    }
+
+    /** Region description */
+    public String getDescription() {
+        return description;
+    }
+
+    /** Direct region ancestor (parent) */
+    public Region getParent() {
+        return parent;
+    }
+
+    /** Quick access region id (incrementable) */
+    public int getID() {
+        return id;
+    }
+
+    /**
+     * Checks if region has the specified parent in all of it's ancestors. This
+     * method is useful to check if region has specified parent, and use this
+     * information, as region type specification. For example,
+     * <code>def:Comment</code> has <code>def:Syntax</code> parent, so, some
+     * syntax checking can be made with it's content.
+     */
+    public boolean hasParent(Region region) {
+        Region elem = this;
+        while (elem != null) {
+            if (region == elem)
+                return true;
+            elem = elem.getParent();
+        };
+        return false;
+    }
+
+    public Region(String name, String descr, Region parent, int id) {
+        this.name = name;
+        this.description = descr;
+        this.parent = parent;
+        this.id = id;
+    }
+
+    public String toString() {
+        return name;
+    }
 
 };
 /* ***** BEGIN LICENSE BLOCK *****
