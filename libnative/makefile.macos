@@ -25,5 +25,4 @@ $(TARGET): *.cpp *.h $(objs)
 	$(LINK) -bundle -o libnet_sf_colorer.jnilib $(objs) $(LIBINC)
 
 clean:
-	$(RM) $(objs)
-
+	$(RM) $(objs) $(TARGET)
