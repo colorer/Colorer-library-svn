@@ -38,7 +38,7 @@
           <xsl:apply-templates select="type|comment()"/>
         </xsl:when>
         <xsl:when test="count(./type) = 0">
-          <type name="{/hrc/scheme[@name = $root/hrc/type/@name]/@name}" access="public">
+          <type name="{/hrc/scheme[@name = $root/hrc/type/@name]/@name}">
             <xsl:call-template name='crlf'/>
             <import type="default"/>
             <xsl:apply-templates select="include"/>

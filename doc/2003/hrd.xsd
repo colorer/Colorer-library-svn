@@ -32,7 +32,7 @@
       definition is used. This allows several HRD files to be processed to
       complete color description of target HRC regions.
     </xs:documentation></xs:annotation>
-    <xs:attribute name="name" use="required">
+    <xs:attribute name="name" use="required" type="region-name">
       <xs:annotation><xs:documentation>
         Full qualified region name (a pair [type:name]).
         Note, that if region has no HRD properties associations,
@@ -40,11 +40,6 @@
         ancestors has no assigned properties, region visualization
         must be skipped (it becomes fully transparent).
       </xs:documentation></xs:annotation>
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:pattern value="\i\c*\:\i\c*"/>
-        </xs:restriction>
-      </xs:simpleType>
     </xs:attribute>
     <xs:attribute name="fore" type="color">
       <xs:annotation><xs:documentation>
@@ -56,7 +51,7 @@
         Background color. If missed, transparent color assumed.
       </xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="style" type="xs:token">
+    <xs:attribute name="style" type="style">
       <xs:annotation><xs:documentation>
         Style bits (bold, italic, underline).
       </xs:documentation></xs:annotation>
@@ -83,10 +78,22 @@
     </xs:attribute>
   </xs:complexType>
 
+  <xs:simpleType name="region-name">
+   <xs:restriction base="xs:string">
+    <xs:pattern value="\i\c*\:\i\c*"/>
+   </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="color">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="#[0-9A-Fa-f]{1,6}"/>
-    </xs:restriction>
+   <xs:restriction base="xs:string">
+    <xs:pattern value="#?[\dA-Fa-f]{1,6}"/>
+   </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="style">
+   <xs:restriction base="xs:string">
+    <xs:pattern value="[1-3]"/>
+   </xs:restriction>
   </xs:simpleType>
 
 </xs:schema>
@@ -111,6 +118,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

@@ -67,8 +67,15 @@
       <xsl:attribute name="name">
         <xsl:value-of select="$name"/>
         <xsl:if test="$custom-type-schemes/self::hrc:scheme[@name = $name]">-old</xsl:if>
+        
+        <!-- EE: support xmlss. Eliminate redefined elements -->
+        <xsl:for-each select="$custom-type/c:script-n-style/c:element">
+         <xsl:if test="$name = concat(@name, '-element')">-old-xmlss</xsl:if>
+        </xsl:for-each>
+      
       </xsl:attribute>
       <xsl:copy-of select="$content"/>
+
     </scheme>
   </xsl:template>
 
@@ -140,6 +147,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

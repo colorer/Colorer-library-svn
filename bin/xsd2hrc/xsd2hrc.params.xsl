@@ -35,11 +35,11 @@
 
   <!-- path to HRC catalog (colorer.hrc) -->
 
-  <xsl:param name="catalog-path" select="'../../hrc/colorer.hrc'"/>
+  <xsl:param name="catalog-path" select="'../../hrc/proto.hrc'"/>
 
   <!-- path to custom parser file -->
 
-  <xsl:param name="custom-defines" select="'schemas-custom/custom.default.xml'"/>
+  <xsl:param name="custom-defines" select="'custom.default.xml'"/>
 
   <!-- Use specified single top-level element
        If not specified, all global elements could be at top level of file.

@@ -22,6 +22,15 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- EE: entity is a separate type -->
+  <xs:simpleType name="REentity">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value=".*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
   <xs:simpleType name="REstring-or-null">
     <xs:union memberTypes="REstring">
       <xs:simpleType>
@@ -36,8 +45,8 @@
     <xs:annotation><xs:documentation>
       A pair of type name and valid XML name.
     </xs:documentation></xs:annotation>
-    <xs:restriction base="xs:string">
-      <!--<xs:pattern value="(\i\c*:)?\i\c*"/>-->
+    <xs:restriction base="xs:QName">
+      <xs:pattern value="(\i\c*:)?\i\c*"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -340,7 +349,8 @@
         HRC Entity name.
       </xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="value" type="xs:string" use="required">
+    <!-- EE: entity is a separate type -->
+    <xs:attribute name="value" type="REentity" use="required">
       <xs:annotation><xs:documentation>
         HRC Entity value, used to substitute entity in RE string.
       </xs:documentation></xs:annotation>
@@ -579,6 +589,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
