@@ -555,16 +555,17 @@
   </target>
 
 
-  <target name="this.eclipse" depends='init' description='Builds EclipseColorer plugin and updates it in working Eclipse instance'>
+  <target name="this.eclipse.build" depends='init' description='Builds EclipseColorer plugin inplace'>
     <ant dir='src/net.sf.colorer' antfile='build.xml' target='gather'>
       <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
     </ant>
-
     <exec dir='src/net.sf.colorer/libnative' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
     </exec>
+  </target>
 
+  <target name="this.eclipse" depends='this.eclipse.build' description='Builds EclipseColorer plugin and updates it in working Eclipse instance'>
     <copy todir='${eclipse.dir}/plugins/${eclipsedir-name}' overwrite='true'>
       <fileset dir="src/net.sf.colorer" includes='colorer.jar'/>
     </copy>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<project name="src.php" default="all" basedir=".">
+
+<property name="util" value="../../bin/ant/util.xml" description="ant utils location"/>
+<property name="this" value="../../src/php" description="this project location"/>
+
+<property name="path-to-php" value="" description="PHP executable path"/>
+
+<property name="src" value="src" description="this project sourse"/>
+<property name="bin" value="ready" description="this project binary|hrc"/>
+<property name="obj" value="objs" description="this project temp"/>
+
+<!-- php-gen -->
+
+<target name="php-gen.check">
+ <uptodate property="php-gen.check"  targetfile="${obj}/hrc-gen.php">
+  <srcfiles dir="${src}" includes="php.lst, parser.php"/>
+  <srcfiles dir="." includes="build.xml"/>
+ </uptodate>
+</target>
+
+<target name="php-gen" depends="php-gen.check" unless="php-gen.check">
+ <echo level="info" message="Build php base"/>
+ <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
+  <arg line='-q ${src}/parser.php php.lst ../${obj}/hrc-gen.php'/>
+ </exec>
+</target>
+
+<!-- hrc-gen -->
+
+<target name="hrc-gen.check">
+ <uptodate property="hrc-gen.check"  targetfile="${bin}/php-gen.hrc">
+  <srcfiles dir="." includes="${src}/hrc-gen-creator.php, ${obj}/hrc-gen.php"/>
+ </uptodate>
+</target>
+
+<target name="hrc-gen" depends="php-gen, hrc-gen.check" unless="hrc-gen.check">
+ <echo level="info" message="Build php schemes"/>
+ <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
+  <arg line='-q ${src}/hrc-gen-creator.php ../${obj}/hrc-gen.php ../${bin}/php-gen.hrc'/>
+ </exec>
+</target>
+
+<!-- hrc-prot -->
+
+<target name="hrc-prot.check">
+ <uptodate property="hrc-prot.check"  targetfile="${bin}/../proto-php.hrc">
+  <srcfiles dir="." includes="${src}/hrc-gen-prototype.php, ${obj}/hrc-gen.php"/>
+ </uptodate>
+</target>
+
+<target name="hrc-prot" depends="php-gen, hrc-prot.check" unless="hrc-prot.check">
+ <echo level="info" message="Build prototype"/>
+ <exec executable="${path-to-php}/php" output="${bin}/../proto-php.hrc" failonerror='yes'>
+  <arg line='-q ${src}/hrc-gen-prototype.php ../${obj}/hrc-gen.php'/>
+ </exec>
+</target>
+
+<!-- hrc -->
+
+<target name="hrc.check">
+ <dependset>
+  <srcfileset dir="${src}" includes="*.hrc"/>
+  <srcfileset dir="${obj}" includes="*.hrc"/>
+  <targetfilelist dir="${bin}" files="php.hrc"/>
+ </dependset>
+</target>
+
+<target name="hrc" depends="hrc-gen, hrc.check">
+ <copy todir='${bin}'>
+   <fileset dir='${src}' includes='php.hrc, php-script.hrc'/>
+ </copy>
+</target>
+
+<!-- final -->
+
+<target name="clearphp">
+ <delete file="php.out"/>
+</target>
+
+<target name="all" depends="hrc, hrc-prot, clearphp"/>
+
+<target name="clean">
+ <delete failonerror='false'>
+  <fileset dir="${obj}" includes="*.*"/>
+  <fileset dir="${bin}" includes="php*.hrc"/>
+  <fileset dir="${bin}/.." includes="proto-php.hrc"/>
+ </delete>
+</target>
+
+</project>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<custom xmlns="uri:colorer:custom">
+
+  <custom-type targetNamespace="http://www.w3.org/1999/XSL/Transform">
+    <prefix>xslt</prefix>
+    <prefix>xsl</prefix>
+    <prefix>xt</prefix>
+    <prefix>t</prefix>
+    <empty-prefix/>
+
+    <contributors>Cail Lomecb (c) 2002</contributors>
+
+    <top-level>
+      <element>stylesheet</element>
+      <element>transform</element>
+      <group>top-levelGroup</group>
+      <group>instructions</group>
+    </top-level>
+
+    <type xmlns="http://colorer.sf.net/2003/hrc">
+      <!--
+      XSLT language model can't be described it terms of XML Schema
+      because it must control instructions-group elements appearance
+      in result namespace elements.
+      This hack allows to use XSLT non-Schema model with HRC
+      -->
+      <scheme name="result-element-group-content">
+        <inherit scheme="instructions-group"/>
+        <inherit scheme="xml:content"/>
+      </scheme>
+      <scheme name="result-element-group">
+        <inherit scheme="result-element-group-old">
+          <virtual scheme="xml:content" subst-scheme="result-element-group-content"/>
+          <virtual scheme="xml:AttValue.content.stream" subst-scheme="avt-content-error"/>
+        </inherit>
+      </scheme>
+
+      <region name="avt-content" parent="def:Insertion" description="Attribute Value template insertion"/>
+      <region name="expr-content" parent="def:default"  description="Expression content"/>
+      <region name="expr-content-string" parent="def:StringEdge" description="String constant"/>
+      <region name="expr-content-variable" parent="def:StringContent" description="XSLT Variable"/>
+      <region name="expr-content-ops" parent="def:Operator" description="XSLT Operator"/>
+      <region name="expr-content-predicate" parent="def:Operator" description="Predicate"/>
+      <region name="expr-content-axis" parent="def:Keyword" description="XPath Axis"/>
+      <region name="expr-content-nodetype" parent="def:Keyword" description="Note type tests"/>
+      <region name="expr-content-function" parent="def:FunctionKeyword" description="Function call"/>
+      <region name="expr-content-nametest" parent="def:default" description="Name test"/>
+
+      <scheme name="pattern-content">
+        <block start="/\[/" end="/\]/" scheme="expr-content"
+               region="expr-content-predicate"
+               region00="PairStart" region10="PairEnd"/>
+        <keywords region="expr-content-ops" ignorecase="no">
+          <symb name="|"/>
+          <symb name="/"/>
+          <symb name="("/>
+          <symb name=")"/>
+        </keywords>
+        <keywords region="expr-content-axis">
+          <symb name="::"/>
+          <symb name="@"/>
+          <word name="attribute"/>
+          <word name="child"/>
+        </keywords>
+        <keywords region="expr-content-function">
+          <word name="id"/><word name="key"/>
+        </keywords>
+        <keywords region="expr-content-nodetype">
+          <word name="comment"/>
+          <word name="text"/>
+          <word name="processing-instruction"/>
+          <word name="node"/>
+        </keywords>
+        <regexp match="/\*|%xml:NCName;\:\*|%xml:QName;/" region="expr-content-nametest"/>
+        <inherit scheme="xml:Reference"/>
+        <inherit scheme="xml:badChar"/>
+      </scheme>
+
+      <scheme name="avt-content-error">
+        <inherit scheme="avt-content"/>
+      </scheme>
+      <scheme name="avt-content">
+        <block start="/\{/" end="/\}/" scheme="expr-content"
+               region="avt-content" region00="PairStart"
+               region10="PairEnd"/>
+      </scheme>
+
+
+      <scheme name="expr-content-string-quot"></scheme>
+      <scheme name="expr-content-string-apos"></scheme>
+
+      <scheme name="expr-content">
+        <inherit scheme="def:Number"/>
+        <block start="/\(/" end="/\)/" scheme="expr-content"
+               region="expr-content"
+               region00="PairStart" region10="PairEnd"/>
+        <block start="/\[/" end="/\]/" scheme="expr-content"
+               region="expr-content-predicate"
+               region00="PairStart" region10="PairEnd"/>
+        <block start="/(\'|&amp;apos;)/" end="/(\'|&amp;apos;)/"
+               scheme="expr-content-string-apos" priority="low"
+               region="expr-content-string" region00="PairStart" region10="PairEnd"/>
+        <block start='/(\"|&amp;quot;)/' end='/(\"|&amp;quot;)/'
+               scheme="expr-content-string-quot" priority="low"
+               region="expr-content-string" region00="PairStart" region10="PairEnd"/>
+
+        <regexp match="/\$%xml:QName;/" region="expr-content-variable"/>
+
+        <keywords region="expr-content-ops" ignorecase="no">
+          <symb name=","/>
+          <symb name="="/>
+          <symb name="!="/>
+          <symb name="&lt;"/>
+          <symb name=">"/>
+          <symb name="+"/>
+          <symb name="-"/>
+          <symb name="|"/>
+          <symb name="/"/>
+          <symb name="//"/>
+          <word name="or"/>
+          <word name="and"/>
+          <word name="div"/>
+          <word name="mod"/>
+        </keywords>
+
+        <keywords region="expr-content-axis">
+          <symb name="::"/>
+          <symb name="."/>
+          <symb name="@"/>
+          <word name="ancestor"/>
+          <word name="ancestor-or-self"/>
+          <word name="attribute"/>
+          <word name="child"/>
+          <word name="descendant"/>
+          <word name="descendant-or-self"/>
+          <word name="following"/>
+          <word name="following-sibling"/>
+          <word name="namespace"/>
+          <word name="parent"/>
+          <word name="preceding"/>
+          <word name="preceding-sibling"/>
+          <word name="self"/>
+        </keywords>
+
+        <keywords region="expr-content-nodetype">
+          <word name="comment"/>
+          <word name="text"/>
+          <word name="processing-instruction"/>
+          <word name="node"/>
+        </keywords>
+
+        <keywords region="expr-content-function">
+          <word name="last"/>
+          <word name="position"/>
+          <word name="count"/>
+          <word name="local-name"/>
+          <word name="namespace-uri"/>
+          <word name="name()"/>
+          <word name="id"/>
+
+          <word name="not"/>
+          <word name="boolean"/>
+          <word name="true"/>
+          <word name="false"/>
+          <word name="lang"/>
+
+          <word name="number"/>
+          <word name="sum"/>
+          <word name="floor"/>
+          <word name="ceiling"/>
+          <word name="round"/>
+
+          <word name="string"/>
+          <word name="starts-with"/>
+          <word name="contains"/>
+          <word name="string-length"/>
+          <word name="concat"/>
+          <word name="substring"/>
+          <word name="substring-before"/>
+          <word name="substring-after"/>
+          <word name="normalize-space"/>
+          <word name="translate"/>
+
+          <word name="document"/>
+          <word name="generate-id"/>
+          <word name="key"/>
+          <word name="format-number"/>
+          <word name="current"/>
+          <word name="unparsed-entity-uri"/>
+          <word name="system-property"/>
+        </keywords>
+
+        <regexp match="/\*|%xml:NCName;\:\*|%xml:QName;/" region="expr-content-nametest"/>
+        <inherit scheme="xml:Reference"/>
+        <inherit scheme="xml:badChar"/>
+      </scheme>
+
+      <scheme name="char-content">
+        <regexp match="/\b[%xml:Char;]\b/" priority="low"/>
+      </scheme>
+
+    </type>
+  </custom-type>
+
+</custom>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<custom xmlns="uri:colorer:custom">
+
+  <custom-type targetNamespace="">
+
+    <prefix>wsc</prefix>
+    <empty-prefix/>
+
+    <contributors>Cail Lomecb, Max Belugin</contributors>
+
+    <type xmlns="http://colorer.sf.net/2003/hrc">
+
+      <scheme name="perl-elementContent">
+        <inherit scheme="_hrc_int_elementContent">
+          <virtual scheme="xml:element" subst-scheme="def:empty"/>
+          <virtual scheme="xml:content.cdata.stream" subst-scheme="perl:perl"/>
+          <virtual scheme="xml:CDSect.content.stream" subst-scheme="perl:perl"/>
+          <virtual scheme="xml:Attribute.any" subst-scheme="scriptType-Attributes"/>
+        </inherit>
+      </scheme>
+      <scheme name="vbScript-elementContent">
+        <inherit scheme="_hrc_int_elementContent">
+          <virtual scheme="xml:element" subst-scheme="def:empty"/>
+          <virtual scheme="xml:content.cdata.stream" subst-scheme="vbScript:vbScript"/>
+          <virtual scheme="xml:CDSect.content.stream" subst-scheme="vbScript:vbScript"/>
+          <virtual scheme="xml:Attribute.any" subst-scheme="scriptType-Attributes"/>
+        </inherit>
+      </scheme>
+      <scheme name="jScript-elementContent">
+        <inherit scheme="_hrc_int_elementContent">
+          <virtual scheme="xml:element" subst-scheme="def:empty"/>
+          <virtual scheme="xml:content.cdata.stream" subst-scheme="jScript:jScript"/>
+          <virtual scheme="xml:CDSect.content.stream" subst-scheme="jScript:jScript"/>
+          <virtual scheme="xml:Attribute.any" subst-scheme="scriptType-Attributes"/>
+        </inherit>
+      </scheme>
+
+      <scheme name="script-elements">
+        <block start="/\M (&lt;(script [^&gt;]+ (perlscript[\d\.]*) [^&gt;]*) &gt;) /ix"
+              end="/&gt;/" scheme="perl-elementContent"/>
+        <block start="/\M (&lt;(script [^\&gt;]+ (j(ava)?script[\d\.]*) [^\&gt;]*) \&gt;) /ix"
+              end="/&gt;/" scheme="jScript-elementContent"/>
+        <block start="/\M (&lt;(script [^&gt;]+ (vbscript[\d\.]*) [^&gt;]*) &gt; ) /ix"
+               end="/&gt;/" scheme="vbScript-elementContent"/>
+      </scheme>
+
+
+      <scheme name="componentType-content">
+         <inherit scheme="script-elements"/>
+         <inherit scheme="componentType-content-old"/>
+      </scheme>
+      <scheme name="scriptType-content">
+         <inherit scheme="jScript:jScript"/>
+      </scheme>
+      <scheme name="scriptType-content-error">
+         <inherit scheme="scriptType-content"/>
+      </scheme>
+
+    </type>
+
+  </custom-type>
+
+</custom>
