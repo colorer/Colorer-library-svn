@@ -176,7 +176,7 @@
   </target>
 
   <target name="web-app">
-    <xslt in='schemas/web-app_2_3.xsd' out='${hrc-path}/inet/web-app.hrc' style='xsd2hrc.xsl'>
+    <xslt in='schemas/web-app_2_3.xsd' out='${hrc-path-auto}/web-app.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='web-app'/>
       <param name='top-level-element' expression='web-app'/>
