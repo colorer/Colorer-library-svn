@@ -51,6 +51,7 @@
 
   <assign name="def:Directive" fore="#004a43"/>
   <assign name="def:Parameter" fore="#074726"/>
+  <assign name="def:ParameterUnknown" fore="#274796"/>
 
   <assign name="def:Tag" fore="#5f5035"/>
   <assign name="def:OpenTag" fore="#a65700"/>
