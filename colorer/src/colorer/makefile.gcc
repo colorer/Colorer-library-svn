@@ -12,5 +12,5 @@ LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
 
 include makefile.core
 
-clear:
+clean:
 	$(RM) $(objs)
