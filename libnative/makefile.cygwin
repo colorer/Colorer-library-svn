@@ -32,6 +32,7 @@ $(TARGET): *.cpp *.h $(objs)
 	$(LINK) $(LIBFLAGS) -o $@ $(objs) net_sf_colorer.dll.exp $(LIBINC)
 	$(RM) net_sf_colorer.dll.base
 	$(RM) net_sf_colorer.dll.exp
+	$(RM) net_sf_colorer.def
 
 clear:
 	$(RM) $(objs)
