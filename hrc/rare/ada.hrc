@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    ada Syntax (for Colorer 4ever) (exts="/\.(ads|adb)$/i")
-With help of:
-    Eugene Kotlyarov 2:5058/26.9@fidonet.org ek@oris.ru  http://esk.nm.ru/far
--->
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
    <type name="ada" access="public">
+      <annotation>
+         <documentation><![CDATA[
+           Ada syntax
+           <filename>/\.(ads|adb|adc)$/i</filename>
+         ]]></documentation>
+         <contributors>
+           Eugene Kotlyarov 2:5058/26.9@fidonet.org http://ekot.narod.ru/far
+         </contributors>
+      </annotation>
 
-      <import type="def"/>
-
-      <region name="adaString" parent="String"/>
-      <region name="adaComment" parent="Comment"/>
-      <region name="adaDirective" parent="Directive"/>
-      <region name="adaSymb" parent="Symbol"/>
-      <region name="adaWord" parent="Keyword"/>
-      <region name="adaNumb" parent="Number"/>
-      <region name="adaFunction" parent="Function"/>
-
+      <region name="String" parent="def:String"/>
+      <region name="Symbol" parent="def:Symbol"/>
+      <region name="Keyword" parent="def:Keyword"/>
+      <region name="Number" parent="def:Number"/>
+      <region name="Function" parent="def:Function"/>
+      <region name="PairStart" parent="def:PairStart"/>
+      <region name="PairEnd" parent="def:PairEnd"/>
 
       <scheme name="ada">
 <!-- Comments -->
-         <regexp match="/(--.*$)/" region0="adaComment"/>
+         <block start="/--/" end="/$/" scheme="def:Comment" region="def:LineComment"/>
 <!-- paired -->
-         <block start="/(\()/" end="/(\))/" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <block start="/(\[)/" end="/(\])/" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <block start="/\b(begin)\b/i" end="/\b(end)\b/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <block start="/\b(if)\b/i" end="/\b(end\s+if)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <block start="/\b(case)\b/i" end="/\b(end\s+case)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <block start="/\b(loop)\b/i" end="/\b(end\s+loop)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
-         <regexp match="/(pragma\s+([A-Za-z_])+\s*(.*\))?;)/i" region0="adaDirective"/>
-         <regexp match="/\b(?{adaWord}procedure|function)\s+(?{adaFunction}[_\w]+)\s*/i"/>
+         <block start="/(\()/" end="/(\))/" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/(\[)/" end="/(\])/" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(begin)\b/i" end="/\b(end)\b/i" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(if)\b/i" end="/\b(end\s+if)/i" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(case)\b/i" end="/\b(end\s+case)/i" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(loop)\b/i" end="/\b(end\s+loop)/i" scheme="ada" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <regexp match="/(pragma\s+([A-Za-z_])+\s*(.*\))?;)/i" region0="def:Directive"/>
+         <regexp match="/\b(?{Keyword}procedure|function)\s+(?{Function}[_\w]+)\s*/i"/>
 <!-- character -->
-         <regexp match="/('.')/" region0="adaString"/>
+         <regexp match="/('.')/" region0="String"/>
 <!-- Strings -->
-         <regexp match="/(&#34;.*?&#34;)/" region0="adaString"/>
+         <regexp match="/(&#34;.*?&#34;)/" region0="String"/>
 <!-- Numbers  -->
 <!-- based -->
-         <regexp match="/[0-9_]+\#[0-9a-f_]+(\.([0-9a-f][_]?)+)?\#/i" region0="adaNumb"/>
+         <regexp match="/[0-9_]+\#[0-9a-f_]+(\.([0-9a-f][_]?)+)?\#/i" region0="Number"/>
 <!-- decimal  -->
-         <regexp match="/\b[0-9_]+(\.([0-9][_]?)+)?(E([\+]?|\-)([0-9][_]?)*)?\b/" region="adaNumb"/>
+         <regexp match="/\b[0-9_]+(\.([0-9][_]?)+)?(E([\+]?|\-)([0-9][_]?)*)?\b/" region="Number"/>
 <!-- Symbols -->
-         <keywords region="adaSymb">
+         <keywords region="Symbol">
             <symb name="&lt;"/>
             <symb name="=&gt;"/>
             <symb name="^"/>
@@ -68,7 +69,7 @@ With help of:
             <symb name="."/>
          </keywords>
 <!-- Common words -->
-         <keywords ignorecase="yes" region="adaWord">
+         <keywords ignorecase="yes" region="Keyword">
             <word name="abort"/>
             <word name="abs"/>
             <word name="abstract"/>
@@ -140,6 +141,5 @@ With help of:
             <word name="xor"/>
          </keywords>
       </scheme>
-
    </type>
 </hrc>

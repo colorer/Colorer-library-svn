@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    Standard ML Syntax (for Colorer 4ever)
-With help of:
-    Eugene Kotlyarov 2:5058/26.9@fidonet.org, ek@oris.ru
-    http://esk.nm.ru/far
--->
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
    <type name="sml" access="public">
+      <annotation>
+         <documentation><![CDATA[
+           Standard ML Syntax
+           <filename>/\.(sml|sig)$/i</filename>
+         ]]></documentation>
+         <contributors>
+           Eugene Kotlyarov 2:5058/26.9@fidonet.org http://ekot.narod.ru/far
+         </contributors>
+      </annotation>
 
-      <import type="def"/>
+      <region name="String" parent="def:String"/>
+      <region name="Comment" parent="def:Comment"/>
+      <region name="Symbol" parent="def:Symbol"/>
+      <region name="Keyword" parent="def:Keyword"/>
+      <region name="Number" parent="def:Number"/>
+      <region name="PairStart" parent="def:PairStart"/>
+      <region name="PairEnd" parent="def:PairEnd"/>
 
-      <region name="smlString" parent="String"/>
-      <region name="smlComment" parent="Comment"/>
-      <region name="smlDirective" parent="Directive"/>
-      <region name="smlSymb" parent="Symbol"/>
-      <region name="smlWord" parent="Keyword"/>
-      <region name="smlNumb" parent="Number"/>
-
-
+      <scheme name="NestedComment">
+        <inherit scheme="Comment"/>
+        <block scheme="NestedComment" region="Comment">
+          <start region="PairStart">/\(\*/</start>
+          <end region="PairEnd">/\*\)/</end>
+        </block>
+      </scheme>
       <scheme name="sml">
 <!-- Comments -->
-         <block start="/\(\*/" end="/\*\)/" scheme="Comment" region="smlComment" region00="PairStart" region10="PairEnd"/>
+         <block start="/\(\*/" end="/\*\)/" scheme="NestedComment" region="Comment" region00="PairStart" region10="PairEnd"/>
 <!-- paired -->
-         <block start="/(\()/" end="/(\))/" scheme="sml" region00="smlSymb" region01="PairStart" region10="smlSymb" region11="PairEnd"/>
-         <block start="/(\[)/" end="/(\])/" scheme="sml" region00="smlSymb" region01="PairStart" region10="smlSymb" region11="PairEnd"/>
-         <block start="/(\{)/" end="/(\})/" scheme="sml" region00="smlSymb" region01="PairStart" region10="smlSymb" region11="PairEnd"/>
-         <block start="/\b(let|local)\b/" end="/\b(in)\b/" scheme="sml" region00="smlSymb" region01="PairStart" region10="smlSymb" region11="PairEnd"/>
-         <block start="/\b(signature|while|local|structure)\b/" end="/\b(end)\b/" scheme="sml" region00="smlSymb" region01="PairStart" region10="smlSymb" region11="PairEnd"/>
-         <regexp match="/^ \s* \M (fun|fn) \s+ (?{Function}[_\w]+)/ix"/>
-         <inherit scheme="CString"/>
+         <block start="/(\()/" end="/(\))/" scheme="sml" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/(\[)/" end="/(\])/" scheme="sml" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/(\{)/" end="/(\})/" scheme="sml" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(let|local|with|struct|sig)\b/" end="/\b(end)\b/" scheme="sml"
+           region01="Keyword" region00="PairStart"
+           region10="Keyword" region11="PairEnd"/>
+         <regexp match="/^ \s* \M (fun|fn) \s+ (?{def:Function}[_\w]+)/ix"/>
+         <inherit scheme="c:String"/>
 <!-- Character constants  -->
-         <regexp match="/ #&#34;( \\. | [^\\&#34;] )&#34; /x" region="smlString"/>
+         <regexp match="/ #&#34;( \\. | [^\\&#34;] )&#34; /x" region="String"/>
 <!-- Integer constants  0 ~0 4 ~04 999999 0xffff -->
-         <regexp match="/\b(\d+ | 0x[\da-fA-F]+)\b/ix" region="smlNumb"/>
-<!-- Real constants  0.7 ~0.7 3.32E5 3E~7 ~3E~7 3e~7 ~3e~7 -->
-         <regexp match="/\b([0-9.]+([Ee][\~+]?\d+)?)\b/" region="smlNumb"/>
+         <regexp match="/\~?\b(\d+|0x[\da-fA-F]+)\b/" region="Number"/>
 <!-- Word constants  0w0 0w4 0w999999 0wxFFFF 0wx1ff -->
-         <regexp match="/\b(0w(\d+|x)[\da-fA-F]+)\b/x" region="smlNumb"/>
+         <regexp match="/\~?\b(0w[\d]+|0wx[\da-fA-F]+)\b/" region="Number"/>
+<!-- Real constants  0.7 ~0.7 3.32E5 3E~7 ~3E~7 3e~7 ~3e~7 -->
+         <regexp match="/\~?\b([0-9]+[\.]?[0-9]*(e[\~]?[\d]+)?)\b/i" region="Number"/>
 <!-- Symbols -->
-         <keywords region="smlSymb">
+         <keywords region="Symbol">
 <!-- reserved -->
             <symb name=","/>
             <symb name=":"/>
             <symb name=":&gt;"/>
             <symb name=";"/>
             <symb name="..."/>
-            <symb name="_"/>
             <symb name="|"/>
             <symb name="="/>
             <symb name="=&gt;"/>
@@ -55,8 +63,8 @@ With help of:
             <symb name="*"/>
 <!-- other -->
             <symb name="+"/>
+            <symb name="^"/>
             <symb name="-"/>
-            <symb name="~"/>
             <symb name="/"/>
             <symb name="("/>
             <symb name=")"/>
@@ -67,7 +75,7 @@ With help of:
             <symb name="&lt;"/>
             <symb name="&gt;"/>
          </keywords>
-         <keywords region="smlWord">
+         <keywords region="Keyword">
 <!-- reserved words -->
             <word name="abstype"/>
             <word name="and"/>
@@ -78,9 +86,11 @@ With help of:
             <word name="datatype"/>
             <word name="else"/>
             <word name="end"/>
+            <word name="eqtype"/>
             <word name="exception"/>
             <word name="fn"/>
             <word name="fun"/>
+            <word name="functor"/>
             <word name="handle"/>
             <word name="if"/>
             <word name="in"/>
@@ -102,9 +112,12 @@ With help of:
             <word name="then"/>
             <word name="type"/>
             <word name="val"/>
+            <word name="where"/>
             <word name="with"/>
             <word name="withtype"/>
             <word name="while"/>
+            <word name="SOME"/>
+            <word name="NONE"/>
 <!-- Built-in types -->
             <word name="array"/>
             <word name="bool"/>
@@ -119,47 +132,13 @@ With help of:
             <word name="word8"/>
             <word name="true"/>
             <word name="false"/>
-<!-- O'Caml only -->
-            <word name="assert"/>
-            <word name="asr"/>
-            <word name="begin"/>
-            <word name="class"/>
-            <word name="closed"/>
-            <word name="constraint"/>
-            <word name="done"/>
-            <word name="downto"/>
-            <word name="end"/>
-            <word name="external"/>
-            <word name="for"/>
-            <word name="function"/>
-            <word name="functor"/>
-            <word name="include"/>
-            <word name="inherit"/>
-            <word name="land"/>
-            <word name="lazy"/>
-            <word name="lor"/>
-            <word name="lsl"/>
-            <word name="lsr"/>
-            <word name="lxor"/>
-            <word name="match"/>
-            <word name="method"/>
-            <word name="mod"/>
-            <word name="module"/>
-            <word name="mutable"/>
-            <word name="new"/>
-            <word name="or"/>
-            <word name="parser"/>
-            <word name="private"/>
-            <word name="to"/>
-            <word name="try"/>
-            <word name="virtual"/>
-            <word name="when"/>
+<!-- SML.NET -->
+            <word name="exn"/>
+            <word name="heap"/>
+            <word name="object"/>
+            <word name="_classtype"/>
+            <word name="_interfacetype"/>
          </keywords>
-<!--   <regexp match="/[ \(\)]([A-Za-z'][0-9A-Za-z_']*)[ \(\)]/i"
-           region1="smlNumb">
-    <regexp match="/((,)|(:>)|(:)|(;)|(\.\.\.)|(\|)|(=>)|(=)|(->)|(#))/x"
-           region0="smlNumb"> -->
       </scheme>
-
    </type>
 </hrc>

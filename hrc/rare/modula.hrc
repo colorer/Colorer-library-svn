@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    Modula2 and Oberon2 Syntax (for Colorer 4ever)
-With help of:
-    Eugene Kotlyarov 2:5058/26.9@fidonet.org  ek@oris.ru
--->
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
    <type name="modula2" access="public">
+      <annotation>
+         <documentation><![CDATA[
+           Modula2 and Oberon2 Syntax
+           <filename>/\.(mod|ob2|odf|def)$/i</filename>
+           <firstline>/\(\*|MODULE|DEFINITION|IMPLEMENTATION|&lt;\*/</firstline>
+         ]]></documentation>
+         <contributors>
+           Eugene Kotlyarov 2:5058/26.9@fidonet.org http://ekot.narod.ru/far
+         </contributors>
+      </annotation>
 
-      <import type="def"/>
-      <import type="asm"/>
-
-      <region name="moString" parent="String"/>
-      <region name="moComment" parent="Comment"/>
-      <region name="modDirective" parent="Directive"/>
-      <region name="modSymb" parent="Symbol"/>
-      <region name="modWord" parent="Keyword"/>
-      <region name="modAsm" parent="Parameter"/>
-      <region name="moNumberb" parent="Number"/>
-
+      <region name="String" parent="def:String"/>
+      <region name="Symbol" parent="def:Symbol"/>
+      <region name="Keyword" parent="def:Keyword"/>
+      <region name="Number" parent="def:Number"/>
+      <region name="PairStart" parent="def:PairStart"/>
+      <region name="PairEnd" parent="def:PairEnd"/>
 
       <scheme name="modula2">
 <!-- Comments -->
-         <regexp match="/(&lt;\*.*?\*&gt;)/" region0="modDirective"/>
-         <block start="/\(\*/" end="/\*\)/" scheme="Comment" region="moComment" region00="PairStart" region10="PairEnd"/>
-         <block start="/&lt;\*/" end="/\*&gt;/" scheme="Comment" region="moComment" region00="PairStart" region10="PairEnd"/>
-         <regexp match="/(--.*$)/" region0="moComment"/>
+         <block start="/\(\*/" end="/\*\)/" scheme="def:Comment" region="def:Comment" region00="PairStart" region10="PairEnd"/>
+         <block start="/&lt;\*/" end="/\*&gt;/" scheme="def:Comment" region="def:Directive" region00="PairStart" region10="PairEnd"/>
+         <block start="/--/" end="/$/" scheme="def:Comment" region="def:LineComment"/>
 <!-- paired -->
-         <block start="/(\()/" end="/(\))/" scheme="modula2" region00="modSymb" region01="PairStart" region10="modSymb" region11="PairEnd"/>
-         <block start="/(\[)/" end="/(\])/" scheme="modula2" region00="modSymb" region01="PairStart" region10="modSymb" region11="PairEnd"/>
-         <block start="/\b(BEGIN|IF|LOOP|CASE|WHILE|FOR|RECORD|WITH|DEFINITION)\b/" end="/\b(END)\b/" scheme="modula2" region00="modSymb" region01="PairStart" region10="modSymb" region11="PairEnd"/>
-         <block start="/\b(REPEAT)\b/" end="/\b(UNTIL)\b/" scheme="modula2" region00="modSymb" region01="PairStart" region10="modSymb" region11="PairEnd"/>
-         <regexp match="/^ \s* \M (procedure|function) \s+ (?{Function}[_\w]+)/ix"/>
-         <block start="/\b(ASM)($|\W)/i" end="/(^|\s)(END)/i" scheme="baseasm" region="modAsm" region00="modWord" region01="PairStart" region10="modWord" region12="PairEnd"/>
+         <block start="/(\()/" end="/(\))/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/(\[)/" end="/(\])/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(BEGIN|IF|LOOP|CASE|WHILE|FOR|RECORD|WITH|DEFINITION)\b/" end="/\b(END)\b/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/\b(REPEAT)\b/" end="/\b(UNTIL)\b/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <regexp match="/^ \s* \M (procedure|function) (\s+\[.+\])? \s+ (?{def:Function}[_\w]+)/ix"/>
+         <block start="/\b(ASM)($|\W)/i" end="/(^|\s)(END)/i" scheme="asm:baseasm" region="def:Parameter" region00="Keyword" region01="PairStart" region10="Keyword" region12="PairEnd"/>
 <!-- Strings -->
-         <regexp match="/('.*?')/" region0="moString"/>
-         <regexp match="/(&#34;.*?&#34;)/" region0="moString"/>
+         <regexp match="/('.*?')/" region0="String"/>
+         <regexp match="/(&#34;.*?&#34;)/" region0="String"/>
 <!-- CHAR  -->
-         <regexp match="/\b(\d[\da-fA-F]+X)\b/" region0="moString"/>
+         <regexp match="/\b(\d[\da-fA-F]+X)\b/" region0="String"/>
 <!-- Numbers  -->
-         <regexp match="/\b(\d[\da-fA-F]+H)\b/" region0="moNumberb"/>
-         <regexp match="/\b([0-9.]+([ED][\-+]?\d+)?)\b/" region0="moNumberb"/>
+         <regexp match="/\b(\d[\da-fA-F]+H)\b/" region0="Number"/>
+         <regexp match="/\b([0-9.]+([ED][\-+]?\d+)?)\b/" region0="Number"/>
 <!-- symbols -->
-         <keywords region="modSymb">
+         <keywords region="Symbol">
             <symb name="&lt;="/>
             <symb name="&gt;="/>
             <symb name="^"/>
@@ -71,7 +70,7 @@ With help of:
             <symb name="{"/>
          </keywords>
 <!-- Common words -->
-         <keywords region="modWord">
+         <keywords region="Keyword">
             <word name="ASM"/>
             <word name="ARRAY"/>
             <word name="BEGIN"/>
@@ -144,6 +143,5 @@ With help of:
             <word name="NIL"/>
          </keywords>
       </scheme>
-
    </type>
 </hrc>
