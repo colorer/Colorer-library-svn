@@ -44,7 +44,9 @@
     <entity name="htmlscrStart" value="script [^&gt;]+ language\s*=\s*(?{q}[\x22\x27]?)"/>
     <entity name="htmlscrEnd" value="(?{htmlTagBr}&lt; \/ (?{htmlCloseTag}script) \&gt; )"/>
 
-    <region name='HeaderOutline' parent='def:Outlined' description='Header Element'/>
+    <region name='Header1Outline' parent='def:Outlined' description='Header1 Element'/>
+    <region name='Header2Outline' parent='def:Outlined' description='Header2 Element'/>
+    <region name='Header3Outline' parent='def:Outlined' description='Header3 Element'/>
 
     <scheme name="xssi">
       <block start="/(=)\s*&#34;/" end="/&#34;/" scheme="perl:InterpolateString" region="String" region01="Symbol" region00="PairStart" region10="PairEnd"/>
@@ -397,17 +399,17 @@
 
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\?]?~1 &gt;) /ix"
+                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
 
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\?]?~1 &gt;) /ix"
-             end="/%htmlscrEnd;/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"/>
+                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
+             end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
 
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\?]?~1 &gt;) /ix"
+                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
-      <block start="/ (&lt;(script .*?) [\%\?]?~1 \&gt; ) /ix"
+      <block start="/ (&lt;(script .*?) \%?~1 \&gt; ) /ix"
              end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
              region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
 
@@ -479,7 +481,9 @@
 
       <regexp match="/ \b [0-9\.]+ /x" region0="htmlNumb"/>
 
-      <regexp match="/\M &lt; (h\d) [^&gt;]*? &gt; (?{HeaderOutline}.*?)  &lt; \/\1 &gt;/ix"/>
+      <regexp match="/\M &lt; (h1) [^&gt;]*? &gt; (?{Header1Outline}.*?)  &lt; \/\1 &gt;/ix"/>
+      <regexp match="/\M &lt; (h2) [^&gt;]*? &gt; (?{Header2Outline}.*?)  &lt; \/\1 &gt;/ix"/>
+      <regexp match="/\M &lt; (h\d) [^&gt;]*? &gt; (?{Header3Outline}.*?)  &lt; \/\1 &gt;/ix"/>
 
       <!-- Template-toolkit support -->
       <regexp match="/\[\% .*? \%\]/x" region0="htmlTT"/>
