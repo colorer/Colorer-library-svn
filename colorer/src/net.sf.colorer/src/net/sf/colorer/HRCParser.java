@@ -10,15 +10,17 @@ import net.sf.colorer.impl.Logger;
  */
 public class HRCParser {
     
-    long iptr;
+    private long iptr;
     private boolean disposed = false;
+    private static int counter;
 
     Group rootGroups[];
     Hashtable allGroups = new Hashtable();
 
     HRCParser(long _iptr) {
         iptr = _iptr;
-        Logger.trace("HRCParser", "init");
+        counter++;
+        Logger.trace("HRCParser", "init: "+counter);
     }
 
     void checkActive() {
@@ -39,6 +41,8 @@ public class HRCParser {
     }
 
     protected void finalize() throws Throwable {
+        counter--;
+        Logger.trace("HRCParser", "finalize:"+counter);
         if (disposed) return;
         dispose();
     };
