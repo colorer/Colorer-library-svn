@@ -4,47 +4,59 @@
 #include<common/Exception.h>
 #include<colorer/handlers/RegionDefine.h>
 
-/** Contains information about region mapping into textual prefix/suffix.
-    These mappings are stored in HRD files.
-    @ingroup colorer_handlers
-*/
+/**
+ * Contains information about region mapping into textual prefix/suffix.
+ * These mappings are stored in HRD files.
+ * @ingroup colorer_handlers
+ */
 class TextRegion : public RegionDefine{
 public:
 
-  /** Text wrapping information.
-      Pointers are managed externally.
-  */
+  /**
+   * Text wrapping information.
+   * Pointers are managed externally.
+   */
   const String *stext, *etext, *sback, *eback;
 
-  /** Initial constructor */
+  /**
+   * Initial constructor
+   */
   TextRegion(const String*_stext, const String*_etext,
              const String*_sback, const String*_eback){
     stext = _stext;
     etext = _etext;
     sback = _sback;
     eback = _eback;
-  };
+  }
+
   TextRegion(){
     stext = etext = sback = eback = null;
-  };
-  /** Copy constructor.
-      Clones all values including region reference. */
+  }
+
+  /**
+   * Copy constructor.
+   * Clones all values including region reference
+   */
   TextRegion(const TextRegion &rd){
     operator=(rd);
-  };
-  ~TextRegion(){};
+  }
 
-  /** Static method, used to cast RegionDefine class into TextRegion class.
-      @throw Exception If casing is not available.
-  */
+  ~TextRegion(){}
+
+  /**
+   * Static method, used to cast RegionDefine class into TextRegion class.
+   * @throw Exception If casing is not available.
+   */
   static const TextRegion *cast(const RegionDefine *rd){
     if (rd == null) return null;
     const TextRegion *tr = (const TextRegion *)(rd);
     if (tr == null)  throw Exception(DString("Bad type cast exception into TextRegion"));
     return tr;
-  };
-  /** Assigns region define with it's parent values.
-      All fields are to be replaced, if they are null-ed.
+  }
+
+  /**
+   * Assigns region define with it's parent values.
+   * All fields are to be replaced, if they are null-ed.
   */
   void assignParent(const RegionDefine *_parent){
     const TextRegion *parent = TextRegion::cast(_parent);
@@ -52,16 +64,17 @@ public:
     if (stext == null || etext == null){
       stext = parent->stext;
       etext = parent->etext;
-    };
+    }
     if (sback == null || eback == null){
       sback = parent->sback;
       eback = parent->eback;
-    };
-  };
+    }
+  }
 
-  /** Direct assign of all passed @c rd values.
-      Do not assign region reference.
-  */
+  /**
+   * Direct assign of all passed @c rd values.
+   * Do not assign region reference.
+   */
   void setValues(const RegionDefine *_rd){
     if (_rd == null) return;
     const TextRegion *rd = TextRegion::cast(_rd);
@@ -69,12 +82,13 @@ public:
     etext = rd->etext;
     sback = rd->sback;
     eback = rd->eback;
-  };
+  }
 
   RegionDefine *clone() const{
     RegionDefine *rd = new TextRegion(*this);
     return rd;
-  };
+  }
+
 };
 
 #endif

@@ -6,20 +6,23 @@
 
 class Scheme;
 
-/** HRC FileType (or prototype) instance.
-    @ingroup colorer
-*/
+/**
+ * HRC FileType (or prototype) instance.
+ * @ingroup colorer
+ */
 class FileType{
 public:
 
-  /** Public name of file type (HRC 'name' attribute).
-      @return File type Name
-  */
+  /**
+   * Public name of file type (HRC 'name' attribute).
+   * @return File type Name
+   */
   virtual const String *getName() = 0;
 
-  /** Public group name of file type (HRC 'group' attribute).
-      @return File type Group
-  */
+  /**
+   * Public group name of file type (HRC 'group' attribute).
+   * @return File type Group
+   */
   virtual const String *getGroup() = 0;
 
   /** Public description of file type (HRC 'description' attribute).

@@ -1,11 +1,18 @@
 
 #include<colorer/editor/Outliner.h>
 
-Outliner::Outliner(const Region *searchRegion){
+Outliner::Outliner(BaseEditor *baseEditor, const Region *searchRegion){
   this->searchRegion = searchRegion;
+  modifiedLine = -1;
+  this->baseEditor = baseEditor;
+  baseEditor->addRegionHandler(this);
+  baseEditor->addEditorListener(this);
 }
 
 Outliner::~Outliner(){
+  baseEditor->removeRegionHandler(this);
+  baseEditor->removeEditorListener(this);
+
   for(int idx = 0; idx < outline.size(); idx++)
     delete outline.elementAt(idx);
 }
@@ -34,24 +41,29 @@ int Outliner::manageTree(Vector<int> &treeStack, int newLevel){
 }
 
 
-
-
 bool Outliner::isOutlined(const Region*region){
   return region->hasParent(searchRegion);
 }
 
-
-void Outliner::startParsing(int lno){
+void Outliner::modifyEvent(int topLine){
   int new_size;
   for(new_size = outline.size()-1; new_size >= 0; new_size--){
-    if (outline.elementAt(new_size)->lno < lno) break;
+    if (outline.elementAt(new_size)->lno < topLine) break;
     delete outline.elementAt(new_size);
   };
   outline.setSize(new_size+1);
+
+  modifiedLine = topLine;
+}
+
+void Outliner::startParsing(int lno){
   curLevel = 0;
 }
 
 void Outliner::endParsing(int lno){
+  if (modifiedLine < lno){
+    modifiedLine = lno+1;
+  }
   curLevel = 0;
 }
 
@@ -60,9 +72,10 @@ void Outliner::clearLine(int lno, String *line){
 }
 
 void Outliner::addRegion(int lno, String *line, int sx, int ex, const Region *region){
+  if (lno < modifiedLine) return;
   if (!isOutlined(region)) return;
-  String *itemLabel = null;
-  itemLabel = new DString(line, sx, ex-sx);
+
+  String *itemLabel = new DString(line, sx, ex-sx);
 
   if (lineIsEmpty){
     outline.addElement(new OutlineItem(lno, sx, curLevel, itemLabel, region));

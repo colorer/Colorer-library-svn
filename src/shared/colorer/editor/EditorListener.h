@@ -1,23 +1,18 @@
-#ifndef _COLORER_DEFAULTERRORHANDLER_H_
-#define _COLORER_DEFAULTERRORHANDLER_H_
-
-#include<colorer/ErrorHandler.h>
+#ifndef _COLORER_EDITORLISTENER_H_
+#define _COLORER_EDITORLISTENER_H_
 
 /**
- * Default implementation of ErrorHandler.
- * Implements all interface's methods and does nothing.
- *
- * @ingroup colorer_handlers
+ * Listener of BaseEditor events
  */
-class DefaultErrorHandler: public ErrorHandler
-{
+class EditorListener {
 public:
-  DefaultErrorHandler(){};
-  ~DefaultErrorHandler(){};
+  /**
+   * Informs EditorListener object about text modification event.
+   * All the text becomes invalid after the specified line.
+   * @param topLine Topmost modified line of text.
+   */
+  virtual void modifyEvent(int topLine) = 0;
 
-  void fatalError(const String &msg){};
-  void error(const String &msg){};
-  void warning(const String &msg){};
 };
 
 #endif

@@ -439,8 +439,14 @@ SRegInfo *next, *temp;
     // ( ... )
     if (expr[i] == '('){
       bool namedBracket = false;
-      // named bracket
-      if (expr.length() > i+2 && expr[i+1] == '?' && expr[i+2] == '{'){
+      // perl-like "uncaptured" brackets
+      if (expr.length() >= i+2 && expr[i+1] == '?' && expr[i+2] == ':'){
+        next->op = ReNamedBrackets;
+        next->param0 = -1;
+        namedBracket = true;
+        i += 3;
+      } else if (expr.length() > i+2 && expr[i+1] == '?' && expr[i+2] == '{'){
+        // named bracket
         next->op = ReNamedBrackets;
         namedBracket = true;
         String *s_curly = UnicodeTools::getCurlyContent(expr, i+2);

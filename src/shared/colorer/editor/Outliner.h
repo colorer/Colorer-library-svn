@@ -5,47 +5,55 @@
 #include<colorer/LineSource.h>
 #include<colorer/RegionHandler.h>
 #include<colorer/editor/OutlineItem.h>
+#include<colorer/editor/BaseEditor.h>
 
 /**
- * Used to create, store and maintain
- * lists of different special regions.
- * These can include functions, methods, fields,
- * classes, errors and so on.
+ * Used to create, store and maintain list or tree of different special regions.
+ * These can include functions, methods, fields, classes, errors and so on.
+ * Works as a filter on input editor stream.
+ *
  * @ingroup colorer_editor
  */
-class Outliner : public RegionHandler {
+class Outliner : public RegionHandler, public EditorListener {
 public:
-  /** Creates outliner object, that searches stream for
-      the specified type of region.
-      @param searchRegion Region type to search in parser's stream
-  */
-  Outliner(const Region *searchRegion);
+  /**
+   * Creates outliner object, that searches stream for
+   * the specified type of region. Outliner is deattached
+   * on its explicit destruction action.
+   *
+   * @param baseEditor Editor to attach this Outliner to.
+   * @param searchRegion Region type to search in parser's stream
+   */
+  Outliner(BaseEditor *baseEditor, const Region *searchRegion);
   ~Outliner();
 
-  /** Returns reference to item with specified ordinal
-      index in list of currently generated outline items.
-      Note, that pointer is correct only between subsequent
-      parser calls.
-  */
+  /**
+   * Returns reference to item with specified ordinal
+   * index in list of currently generated outline items.
+   * Note, that the returned pointer is vaild only between
+   * subsequent parser invocations.
+   */
   OutlineItem *getItem(int idx);
 
-  /** Total number of currently available outline items
-  */
-  int itemCount();
-
-  /** Static service method to make easy tree reconstruction
-      from created list of outline items. This list contains
-      unpacked level indexed of item's enclosure in scheme.
-      @param treeStack external Vector of integer, storing
-             temporary tree structure. Must not be changed
-             externally.
-      @param newLevel Unpacked level of item to be added into
-             the tree. This index is converted into packed one
-             and returned.
-      @return Packed index of item, which could be used to
-              reconstruct tree of outlined items.
-  */
+  /**
+   * Static service method to make easy tree reconstruction
+   * from created list of outline items. This list contains
+   * unpacked level indexed of item's enclosure in scheme.
+   * @param treeStack external Vector of integer, storing
+   *        temporary tree structure. Must not be changed
+   *        externally.
+   * @param newLevel Unpacked level of item to be added into
+   *        the tree. This index is converted into packed one
+   *        and returned.
+   * @return Packed index of item, which could be used to
+   *         reconstruct tree of outlined items.
+   */
   static int manageTree(Vector<int> &treeStack, int newLevel);
+
+  /**
+   * Total number of currently available outline items
+   */
+  int itemCount();
 
   void startParsing(int lno);
   void endParsing(int lno);
@@ -53,14 +61,17 @@ public:
   void addRegion(int lno, String *line, int sx, int ex, const Region *region);
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
+  void modifyEvent(int topLine);
 
 protected:
   bool isOutlined(const Region*region);
 
+  BaseEditor *baseEditor;
   const Region *searchRegion;
   Vector<OutlineItem*> outline;
   bool lineIsEmpty;
   int curLevel;
+  int modifiedLine;
 };
 
 #endif

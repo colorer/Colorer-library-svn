@@ -2,7 +2,7 @@
 #include<common/Logging.h>
 #include<colorer/editor/BaseEditor.h>
 
-#define IDLE_PARSE(time) (200+time*5)
+#define IDLE_PARSE(time) (100+time*4)
 
 ErrorHandler *eh;
 
@@ -150,6 +150,15 @@ void BaseEditor::removeRegionHandler(RegionHandler *rh){
   regionHandlers.removeElement(rh);
 }
 
+void BaseEditor::addEditorListener(EditorListener *el){
+  editorListeners.addElement(el);
+}
+
+void BaseEditor::removeEditorListener(EditorListener *el){
+  editorListeners.removeElement(el);
+}
+
+
 PairMatch *BaseEditor::getPairMatch(int lineNo, int linePos)
 {
   LineRegion *lrStart = getLineRegions(lineNo);
@@ -293,6 +302,9 @@ void BaseEditor::modifyEvent(int topLine){
   CLR_TRACE("BaseEditor", "modifyEvent:%d", topLine);
   if (invalidLine > topLine){
     invalidLine = topLine;
+    for(int idx = editorListeners.size()-1; idx >= 0; idx--){
+      editorListeners.elementAt(idx)->modifyEvent(topLine);
+    }
   }
 }
 
@@ -411,7 +423,9 @@ void BaseEditor::idleJob(int time)
 {
   if (time < 0) time = 0;
   if (time > 100) time = 100;
-  validate(invalidLine+IDLE_PARSE(time), false);
+  if (invalidLine < lineCount) {
+    validate(invalidLine+IDLE_PARSE(time), false);
+  }
 }
 
 

@@ -22,19 +22,24 @@ public:
   TextHRDMapper();
   ~TextHRDMapper();
 
-  /** Loads region defines from @c is InputSource
-  */
+  /**
+   * Loads region defines from @c is InputSource
+   */
   void  loadRegionMappings(InputSource *is);
-  /** Saves all loaded region defines into @c writer.
-      Note, that result document would not be equal
-      to input one, because there could be multiple input
-      documents.
-  */
+
+  /**
+   * Saves all loaded region defines into @c writer.
+   * Note, that result document would not be equal
+   * to input one, because there could be multiple input
+   * documents.
+   */
   void  saveRegionMappings(Writer *writer) const;
-  /** Changes specified region definition to @c rdnew
-      @param region Region full qualified name.
-      @param rdnew  New region definition to replace old one
-  */
+
+  /**
+   * Changes specified region definition to @c rdnew
+   * @param region Region full qualified name.
+   * @param rdnew  New region definition to replace old one
+   */
   void  setRegionDefine(const String &region, const RegionDefine *rdnew);
 };
 
