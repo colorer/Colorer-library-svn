@@ -12,6 +12,12 @@ public:
   HRCParser *hrcParser;
   jobject jHRCParser;
 
+  jobject getRegion(JNIEnv *env, int index){
+    const Region *nreg = hrcParser->getRegion(index);
+    if (nreg == null) return null;
+    getRegion(env, nreg->getName());
+  }
+
   jobject getRegion(JNIEnv *env, const String *regname){
     jobject reg = regions.get(regname);
     if (reg == null){
