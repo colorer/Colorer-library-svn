@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<custom xmlns="uri:colorer:custom">
+
+  <custom-type targetNamespace="http://www.w3.org/1999/xhtml">
+    <prefix>xhtml</prefix>
+    <prefix>xh</prefix>
+    <empty-prefix/>
+    <contributors>Cail Lomecb, Eugene Efremov</contributors>
+
+    <outline>
+      <element name='body' extract='fullElement' description='Body start'/>
+      <element name='h1' extract='tillNext' parent='html:Header1Outline' description='Header 1'/>
+      <element name='h2' extract='tillNext' parent='html:Header2Outline' description='Header 2'/>
+      <element name='h3' extract='tillNext' parent='html:Header3Outline' description='Header 2'/>
+    </outline>
+
+    <!-- xmlss -->
+    <script-n-style>
+     <element name="script">
+      <language name="perl" expr="perlscript"/>
+      <language name="jScript" expr="(ecma|j(ava)?)script"/>
+      <language name="vbScript" expr="vbscript"/>
+    <!--  <default name="jScript"/>-->
+     </element>
+     <attribute language="jScript" scheme-suffix="Script" region="def:default"/>
+     <element name="style">
+      <language name="html-css" expr="text\/css"/>
+    <!--  <default name="css"/>-->
+     </element>
+     <attribute language="html-css" scheme-suffix="RuleContent"/>
+    </script-n-style>
+
+    <references>html-entity:html-addref</references>
+
+    <type xmlns="http://colorer.sf.net/2003/hrc">
+
+     <!-- xmlss support -->
+     <scheme name="StyleSheet-content">
+      <inherit scheme="xmlss-html-css-attr"/>
+     </scheme>
+
+     <scheme name="Script-content">
+      <inherit scheme="xmlss-jScript-attr"/>
+     </scheme>
+
+
+    <!--
+  <type xmlns="http://colorer.sf.net/2003/hrc" xmlns:xinc="http://www.w3.org/2001/XInclude">
+
+   <xinc:include href="../../../src.inc/xmlss.hrc"/>
+
+   <scheme name="script-element">
+    <inherit scheme="xmlss-script">
+     <virtual scheme="xml:Attribute.any"
+      subst-scheme="CT-script-Attributes"/>
+    </inherit>
+   </scheme>
+   <scheme name="style-element">
+    <inherit scheme="xmlss-style">
+     <virtual scheme="xml:Attribute.any"
+      subst-scheme="CT-style-Attributes"/>
+    <virtual scheme="css:css" subst-scheme="html-css:css"/>
+    </inherit>
+   </scheme>
+
+   <scheme name="StyleSheet-content">
+    <inherit scheme="xmlss-style-attr">
+     <virtual scheme="css:QuotRuleContent" subst-scheme="html-css:QuotRuleContent"/>
+     <virtual scheme="css:AposRuleContent" subst-scheme="html-css:AposRuleContent"/>
+    </inherit>
+   </scheme>
+
+   <scheme name="Script-content">
+    <inherit scheme="xmlss-script-attr"/>
+   </scheme>-->
+     <!-- <scheme name="Script-content-error">
+         <inherit scheme="Script-content"/>
+      </scheme>-->
+
+      <scheme name="Color-content">
+         <annotation>
+            <documentation>
+      a color using sRGB: #RRGGBB as Hex values
+
+      There are also 16 widely known color names with their sRGB values:
+
+      Black  = #000000    Green  = #008000
+      Silver = #C0C0C0    Lime   = #00FF00
+      Gray   = #808080    Olive  = #808000
+      White  = #FFFFFF    Yellow = #FFFF00
+      Maroon = #800000    Navy   = #000080
+      Red    = #FF0000    Blue   = #0000FF
+      Purple = #800080    Teal   = #008080
+      Fuchsia= #FF00FF    Aqua   = #00FFFF
+
+      ...But any browsers support any other colors,
+      allow in scheme "html-css:Colors".
+      If you don't want this functionality, delete this inherit,
+      and uncomment next strings...
+
+            </documentation>
+         </annotation>
+         <inherit scheme="html-css:Colors"/>
+         <!--
+         <inherit scheme="css:NumericColors"/>
+         <inherit scheme="css:w3cColors"/>
+         -->
+      </scheme>
+
+
+      <region name="NumberSign" parent="def:NumberPrefix"/>
+      <region name="NumberPers" parent="def:NumberSuffix"/>
+      <region name="Length" parent="def:Number"/>
+      <entity name="sign" value="(?{NumberSign}[-+]?)"/>
+      <entity name="numb" value="(\d+(\.\d+)?(?{NumberPers}\%)|\d+)"/>
+      <entity name="spec" value="([1-9]?(\d+)?(?{def:Symbol}\*))"/>
+      <entity name="comm" value="(?{def:Symbol}\,)\s*"/>
+
+      <scheme name="Length-content">
+         <regexp region="Length" match="/%sign;%numb;/"/>
+      </scheme>
+
+
+      <scheme name="MultiLength-content">
+         <regexp region="Length"
+          match="/%sign;%numb;|%spec;/"
+         />
+      </scheme>
+      <scheme name="MultiLengths-content">
+         <annotation>
+            <documentation>
+          comma-separated list of MultiLength
+           </documentation>
+         </annotation>
+         <regexp region="Length"
+          match="/(%sign;%numb;|%spec;)(%comm;(%sign;%numb;|%spec;))*/"
+         />
+      </scheme>
+
+      <scheme name="Coords-content">
+         <annotation>
+            <documentation>
+      comma separated list of lengths
+            </documentation>
+         </annotation>
+         <regexp region="Length"
+          match="/%sign;%numb;(%comm;%sign;%numb;)*/"
+         />
+      </scheme>
+
+    </type>
+  </custom-type>
+</custom>

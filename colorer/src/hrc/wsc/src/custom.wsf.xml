@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<custom xmlns="uri:colorer:custom">
+
+  <custom-type targetNamespace="">
+
+    <prefix>wsf</prefix>
+    <empty-prefix/>
+
+    <contributors>Cail Lomecb, Max Belugin</contributors>
+
+    <type xmlns="http://colorer.sf.net/2003/hrc">
+
+      <scheme name="jobType-content">
+         <inherit scheme="wsc:script-elements"/>
+         <inherit scheme="jobType-content-old"/>
+      </scheme>
+      <scheme name="scriptType-content">
+         <inherit scheme="wsc:scriptType-content"/>
+      </scheme>
+      <scheme name="scriptType-content-error">
+         <inherit scheme="scriptType-content"/>
+      </scheme>
+
+    </type>
+
+  </custom-type>
+
+</custom>

@@ -1,0 +1,246 @@
+<language name="rdf" root="rdfRDF" xmlns="uri:colorer:cxs"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<scheme name="rdfRDF">
+ <element>
+  <uri>
+   <qname>rdf:RDF</qname>
+  </uri>
+  <attributes/>
+  
+  <content>
+   <zeroOrMore>
+    <inherit scheme="nodeElement"/>
+   </zeroOrMore>
+  </content>
+ </element>
+</scheme>
+
+
+
+<scheme name="nodeElement">
+ <element>
+  <uri>
+   <inherit scheme="nodeElementURIs"/>
+  </uri>
+  
+  <attributes>
+   <choice>
+    <inherit scheme="idAttr"/>
+    <inherit scheme="nodeIdAttr"/>
+    <inherit scheme="aboutAttr "/>
+   </choice>
+   <zeroOrMore>
+    <inherit scheme="propertyAttr"/>
+   </zeroOrMore>
+  </attributes>
+  
+  <content>
+   <zeroOrMore>   
+    <inherit scheme="propertyElt"/>
+   </zeroOrMore>
+  </content>
+ </element>
+</scheme>
+
+
+
+<scheme name="propertyAttr">
+ <attribute>
+  <uri>
+   <inherit scheme="propertyAttributeURIs"/>
+  </uri>
+  <content type="string"/>
+ </attribute>
+</scheme>
+
+
+
+<scheme name="propertyElt">
+ <choice>  
+  <inherit scheme="resourcePropertyElt"/> 
+  <inherit scheme="literalPropertyElt"/> 
+  <inherit scheme="parseTypeLiteralPropertyElt"/> 
+  <inherit scheme="parseTypeResourcePropertyElt"/> 
+  <inherit scheme="parseTypeCollectionPropertyElt"/> 
+  <inherit scheme="parseTypeOtherPropertyElt"/> 
+  <inherit scheme="emptyPropertyElt"/> 
+ </choice>
+</scheme>
+
+
+<scheme name="resourcePropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+   <inherit scheme="idAttr"/>    
+  </attributes>
+  
+  <content>
+   <zeroOrMore>   
+    <inherit scheme="propertyElt"/>
+   </zeroOrMore>
+  </content>
+ </element>
+</scheme>
+
+ 
+<scheme name="literalPropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+   <inherit scheme="idAttr"/>    
+   <inherit scheme="datatypeAttr"/>    
+  </attributes>
+  
+  <content type="string"/>
+ </element> 
+</scheme>
+
+ 
+<scheme name="parseTypeLiteralPropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+    <inherit scheme="idAttr"/>    
+   <require>
+    <inherit scheme="parseLiteral"/>
+   </require>
+  </attributes>
+  
+  <content>
+   <any/>
+  </content>
+ </element>  
+</scheme>
+ 
+
+<scheme name="parseTypeResourcePropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+    <inherit scheme="idAttr"/>    
+   <require>
+    <inherit scheme="parseResource"/>
+   </require>
+  </attributes>
+  
+  <content>
+   <zeroOrMore>   
+    <inherit scheme="propertyElt"/>
+   </zeroOrMore>
+  </content>
+ </element>   
+</scheme>
+ 
+<scheme name="parseTypeCollectionPropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+    <inherit scheme="idAttr"/>    
+   <require>
+    <inherit scheme="parseCollection"/>
+   </require>
+  </attributes>
+  
+  <content>
+   <zeroOrMore>   
+    <inherit scheme="nodeElement"/>
+   </zeroOrMore>
+  </content>
+ </element>    
+</scheme>
+
+ 
+<scheme name="parseTypeOtherPropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+    <inherit scheme="idAttr"/>    
+   <require>
+    <inherit scheme="parseOther"/>
+   </require>
+  </attributes>
+  
+  <content>
+   <zeroOrMore>   
+    <inherit scheme="propertyElt"/>
+   </zeroOrMore> 
+  </content> 
+ </element>      
+</scheme> 
+ 
+
+<scheme name="emptyPropertyElt">
+ <element>
+  <uri>
+   <inherit scheme="propertyElementURIs"/>
+  </uri>
+  <attributes>
+   <inherit scheme="idAttr"/>    
+   <choice>
+    <inherit scheme="resourceAttr"/>    
+    <inherit scheme="nodeIdAttr"/>    
+   </choice>
+   <zeroOrMore>
+    <inherit scheme="propertyAttr"/>
+   </zeroOrMore>
+  </attributes>
+  
+  <content/>
+ </element> 
+</scheme>
+ 
+
+
+
+<!-- excludies -->
+
+<scheme name="nodeElementURIs">
+ <anyURI>
+  <exclude>
+   <choice>
+    <inherit scheme="coreSyntaxTerms"/>
+    <qname>rdf:li</qname>
+    <inherit scheme="oldTerms"/>
+   </choice>
+  </exclude>
+ </anyURI>
+</scheme>
+
+<scheme name="propertyElementURIs">
+ <anyURI>
+  <exclude>
+   <choice>
+    <inherit scheme="coreSyntaxTerms"/>
+    <qname>rdf:Description</qname>
+    <inherit scheme="oldTerms"/>
+   </choice>
+  </exclude>
+ </anyURI>
+</scheme>
+
+<scheme name="propertyAttributeURIs">
+ <anyURI>
+  <exclude>
+   <choice>
+    <inherit scheme="coreSyntaxTerms"/>
+    <qname>rdf:Description</qname>
+    <qname>rdf:li</qname>
+    <inherit scheme="oldTerms"/>
+   </choice>
+  </exclude>
+ </anyURI>
+</scheme>

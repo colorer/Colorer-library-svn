@@ -1,0 +1,14 @@
+ModelGroup char-template
+ModelGroup template
+ModelGroup top-level
+
+AttrGroup top-level-atts 
+AttrGroup result-element-atts
+
+simpletype pattern = string
+SimpleType avt = string
+SimpleType char = xsl:char
+SimpleType expr = string
+
+Alias priority = decimal
+Alias qname = QName

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<project name="src.perl" default="all" basedir=".">
+
+<property name="util" value="../../bin/ant/util.xml" description="ant utils location"/>
+<property name="this" value="../../src/perl" description="this project location"/>
+
+<property name="src" value="src" description="this project sourse"/>
+<property name="bin" value="ready" description="this project binary|hrc"/>
+<property name="obj" value="objs" description="this project temp"/>
+
+
+<!-- packages.xml -->
+
+<target name="pack-xml.check">
+ <uptodate property="pack-xml.check"  targetfile="${obj}/packages.xml">
+  <srcfiles dir="." includes="${src}/xpack.pl, ${src}/packages.lst, build.xml"/>
+ </uptodate>
+</target>
+
+<target name="pack-xml" depends="pack-xml.check" unless="pack-xml.check">
+ <echo level="info" message="Create packages.xml"/>
+ <exec executable="perl" output="${obj}/packages.xml">
+  <arg line='${src}/xpack.pl ${src}/packages.lst'/>
+ </exec>
+</target>
+
+<!-- perl-genkeywords.hrc -->
+
+<target name="pack-hrc.check">
+ <dependset>
+  <srcfilelist dir="${src}" files = "plkey.xsl, plparam.xsl"/>
+  <srcfilelist dir="${obj}" files = "packages.xml"/>
+  <targetfilelist dir="${bin}" files="perl-genkeywords.hrc"/>
+ </dependset>
+</target>
+
+<target name="pack-hrc" depends="pack-xml, pack-hrc.check">
+ <xslt in="${obj}/packages.xml" out="${bin}/perl-genkeywords.hrc" style="${src}/plkey.xsl"/>
+</target>
+
+<!-- bracket -->
+
+<target name="bkt.check">
+ <dependset>
+  <srcfilelist dir="${src}" files = "perl.bkt"/>
+  <srcfilelist dir="." files = "build.xml"/>
+  <targetfilelist dir="${bin}" files="perl-brackets.hrc"/>
+ </dependset>
+</target>
+
+<target name="bkt" depends="bkt.check">
+ <ant antfile="${util}" target="bracket">
+  <property name="util.input" value="${src}/perl.bkt"/>
+  <property name="util.output" value="${bin}/perl-brackets.hrc"/>
+ </ant>
+</target>
+
+<!-- hrc-prot -->
+
+<target name="hrc-prot.check">
+ <dependset>
+  <srcfilelist dir="${src}" files = "plprot.xsl, plparam.xsl"/>
+  <srcfilelist dir="${obj}" files = "packages.xml"/>
+  <targetfilelist dir="${bin}/.." files="proto-perl.hrc"/>
+ </dependset>
+</target>
+
+<target name="hrc-prot" depends="pack-xml, hrc-prot.check">
+ <xslt in="${obj}/packages.xml" out="${bin}/../proto-perl.hrc" style="${src}/plprot.xsl"/>
+</target>
+
+<!-- hrc -->
+
+<target name="hrc" depends="pack-hrc, bkt">
+ <copy todir='${bin}'>
+   <fileset dir='${src}' includes='perl.hrc, perl-heredoc.hrc, perl-keywords.hrc'/>
+ </copy>
+</target>
+
+<!-- final -->
+
+<target name="all" depends="hrc, hrc-prot"/>
+
+<target name="clean">
+ <delete failonerror='false'>
+  <fileset dir="${obj}" includes="*.*"/>
+  <fileset dir="${bin}" includes="perl*.hrc"/>
+  <fileset dir="${bin}/.." includes="proto-perl.hrc"/>
+ </delete>
+</target>
+
+
+</project>
