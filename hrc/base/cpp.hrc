@@ -249,10 +249,10 @@ With help of:
    <word name="swap"/>
    <word name="iter_swap"/>
    <word name="swap_ranges"/>
-   <word name="replase"/>
-   <word name="replase_if"/>
-   <word name="replase_copy"/>
-   <word name="replase_copy_if"/>
+   <word name="replace"/>
+   <word name="replace_if"/>
+   <word name="replace_copy"/>
+   <word name="replace_copy_if"/>
    <word name="fill"/>
    <word name="fill_n"/>
    <word name="generate"/>
