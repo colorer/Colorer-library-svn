@@ -99,18 +99,23 @@ InternalHandler ml = new InternalHandler();
         //setPriority(Thread.NORM_PRIORITY-1);
         while(true){
           try{
-            sleep(2000);
+            sleep(300);
           }catch(InterruptedException e){}
           if (baseEditor == null || text == null) break;
           if (backParserDelay){
             backParserDelay = false;
+            try{
+              sleep(1500);
+            }catch(InterruptedException e){}
             continue;
           };
           Display.getDefault().syncExec(new Runnable(){
             public void run(){
               if (baseEditor == null || text == null) return;
               if (text.isDisposed()) return;
-              baseEditor.getLineRegions(text.getLineCount()-1);
+              //System.out.println(System.currentTimeMillis());
+              baseEditor.idleJob(80);
+              //redrawFrom(text.getLineAtOffset(text.getCaretOffset()));
             } 
           });
         };

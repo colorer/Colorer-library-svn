@@ -59,7 +59,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_impl_BaseEditorNative_init(JNIEnv *e
     throw_exc(env, e.getMessage()->getChars()); return 0;
   }
   return (jlong)jbe;
-};
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_finalize(JNIEnv *env, jobject obj, jlong iptr){
   JBaseEditor *be = JBaseEditor::get(env, iptr);
@@ -80,20 +80,20 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_finalize(JNIEnv
   delete be;
   jbe_count--;
   printf("clr:BaseEditor finalize: %d\n", jbe_count);
-};
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionCompact(JNIEnv *env, jobject obj, jlong iptr, jboolean compact)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->setRegionCompact(compact);
-};
+}
 
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setFileType(JNIEnv *env, jobject obj, jlong iptr, jstring typeName)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->setFileType(JString(env, typeName));
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileType(JNIEnv *env, jobject obj, jlong iptr, jstring filename)
 {
@@ -102,7 +102,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_chooseFileTy
   FileType *filetype = be->getFileType();
   const String *ftname = filetype->getName();
   return env->NewString(ftname->getWChars(), ftname->length());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType(JNIEnv *env, jobject obj, jlong iptr)
 {
@@ -110,13 +110,13 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType(
   FileType *ft = be->getFileType();
   if (ft == null) return null;
   return env->NewString(ft->getName()->getWChars(), ft->getName()->length());
-};
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper(JNIEnv *env, jobject obj, jlong iptr, jstring cls, jstring name)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->setRegionMapper(&JString(env, cls), &JString(env, name));
-};
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_addRegionHandler(JNIEnv *env, jobject obj, jlong iptr, jobject rh, jobject filter){
   JBaseEditor *be = JBaseEditor::get(env, iptr);
@@ -126,7 +126,8 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_addRegionHandle
   JWrapRegionHandler *jwrh = new JWrapRegionHandler(env, be->pf->jhp, rh, be->pf->getHRCParser()->getRegion(&JString(env, filter_name)));
   be->regionHandlers.addElement(jwrh);
   be->addRegionHandler(jwrh);
-};
+}
+
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_removeRegionHandler(JNIEnv *env, jobject obj, jlong iptr, jobject rh){
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   JWrapRegionHandler *jwrh = null;
@@ -138,25 +139,31 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_removeRegionHan
       idx--;
     };
   };
-};
+}
 
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getBackground(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   return createStyledRegion(env, be->rd_def_Text);
-};
+}
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getVertCross(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   return createStyledRegion(env, be->rd_def_VertCross);
-};
+}
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getHorzCross(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   return createStyledRegion(env, be->rd_def_HorzCross);
-};
+}
 
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setBackParse
+  (JNIEnv *env, jobject obj, jlong iptr, jint backParse)
+{
+  JBaseEditor *be = JBaseEditor::get(env, iptr);
+  be->setBackParse(backParse);
+}
 
 JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLineRegions(JNIEnv *env, jobject obj, jlong iptr, jint lno)
 {
@@ -209,16 +216,28 @@ JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLine
   be->lrCache.setElementAt((jobjectArray)env->NewGlobalRef(lrArray), lno);
   be->validLine = lno;
   return lrArray;
-};
+}
 
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_validate
+  (JNIEnv *env, jobject obj, jlong iptr, jint lno)
+{
+  JBaseEditor *be = JBaseEditor::get(env, iptr);
+  be->validate(lno);
+}
 
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_idleJob
+  (JNIEnv *env, jobject obj, jlong iptr, jint time)
+{
+  JBaseEditor *be = JBaseEditor::get(env, iptr);
+  be->idleJob(time);
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_modifyEvent(JNIEnv *env, jobject obj, jlong iptr, jint topLine)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->modifyEvent(topLine);
   if (be->validLine > topLine-1) be->validLine = topLine-1;
-};
+}
 
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_modifyLineEvent(JNIEnv *env, jobject obj, jlong iptr, jint line)
@@ -226,21 +245,21 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_modifyLineEvent
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->modifyLineEvent(line);
   if (be->validLine > line-1) be->validLine = line-1;
-};
+}
 
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_visibleTextEvent(JNIEnv *env, jobject obj, jlong iptr, jint wStart, jint wSize)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->visibleTextEvent(wStart, wSize);
-};
+}
 
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_lineCountEvent(JNIEnv *env, jobject obj, jlong iptr, jint newLineCount)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
   be->lineCountEvent(newLineCount);
-};
+}
 
 
 };
