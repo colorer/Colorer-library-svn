@@ -178,7 +178,7 @@
       </objectContribution>
    </extension>
 
-<!-- Eclipse Help Topic -->
+<!-- Eclipse Help Topic 
    <extension
          point="org.eclipse.help.toc">
       <toc
@@ -186,5 +186,6 @@
             primary="true">
       </toc>
    </extension>
+-->
 
 </plugin>
