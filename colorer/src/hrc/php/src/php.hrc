@@ -52,6 +52,9 @@
       <block start="/(&lt;\?(php\b)?)/" end="/(\?&gt;)/" scheme="phpScript"
                priority="low" content-priority="low"
                region="Insertion" region00="OpenTag" region10="OpenTag" region01="PairStart" region11="PairEnd"/>
+      <block start="/(&lt;script\s+language\s*=\s*(php|'php'|&quot;php&quot;)\s*&gt;)/" end="/(&lt;/script\s*&gt;)/" scheme="phpScript"
+               priority="low" content-priority="low"
+               region="Insertion" region00="OpenTag" region10="OpenTag" region01="PairStart" region11="PairEnd"/>
     </scheme>
 
 

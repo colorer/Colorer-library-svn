@@ -26,14 +26,19 @@
 
 <scheme name="StringCore">
  <inherit scheme="StringBaseCore"/>
- <!-- regexp match='/\\\\$/' region0="dError"/ -->
  <regexp match='/\\[^xX0-7]/' region0="StringContent"/>
  <regexp match='/\\$/' region0="StringContent"/>
  <regexp match='/\\(x|X)[\da-fA-F]{1,8}/' region0="StringContent"/>
  <regexp match='/\\[0-7]{1,12}/' region0="StringContent"/>
- <regexp match='/\{\$[^\}]+\}?/' region0="VarString"/>
- <regexp match='/\$\w+/' region0="VarString"/>
- <!-- regexp match='/[^\\\"]$/' region0="dError"/ -->
+ <block start="/\$\{/" end="/\}/"
+   scheme="Script" region="VarString"
+   region00="PairStart" region10="PairEnd"
+ />
+ <block start="/\{\$?=/" end="/\}/"
+   scheme="Script" region="VarString"
+   region00="PairStart" region10="PairEnd"
+ />
+ <regexp match='/\$\w+(\-&gt;\w+|\[[^\]]+\])?/' region0="VarString"/>
 </scheme>
 
 <!-- RPSE Regexp -->
@@ -174,8 +179,12 @@
       <inherit scheme="DecNumber"/>
 
       <!-- EE: support regexp -->
-      <block start="/&#34;/" end="/&#34;/" scheme="RegExp.String" region="String"/>
-      <block start="/'/" end="/'/" scheme="RegExp.StringBase" region="String"/>
+      <block start="/&#34;/" end="/&#34;/" scheme="RegExp.String" region="String"
+        region00="PairStart" region10="PairEnd"
+      />
+      <block start="/'/" end="/'/" scheme="RegExp.StringBase" region="String"
+        region00="PairStart" region10="PairEnd"
+      />
 
       <!-- Linear Comments-->
       <block start="/\/\/|\#/" end="/$/" scheme="Comment" region="Comment" priority="low"/>
@@ -184,17 +193,21 @@
 
 
 <!-- EE: changed -->
-         <block start="/(&lt;&lt;&lt;)([a-zA-Z_][\w_]*)(\s.*)?$/" end="/^(\y2)\M;$/"
+         <block start="/(&lt;&lt;&lt;)(\s*)?([a-zA-Z_][\w_]*)(\s.*)?$/" end="/^(\y3);?$/"
            scheme="StringCore" region="HereDoc"
-           region00="PairStart" region10="PairEnd" region03="def:Error"
-           region01="HereDocLt" region02="HereDocName" region11="HereDocName"
+           region00="PairStart" region10="PairEnd" region04="def:Error"
+           region01="HereDocLt" region03="HereDocName" region11="HereDocName"
+         />
+
+         <block start="/\$\{/" end="/\}/"
+           scheme="Script" region="Var"
+           region00="PairStart" region10="PairEnd"
          />
 
 <!-- EE add: System command -->
          <block start="/`/" end="/`/" scheme="StringCore"
           region="SystemExec" region00="String" region10="String"
          />
-         <!-- regexp match='/ ` ( (\\.) | [^\\"] )* ` /x' / -->
 
 <!-- EE add: posix regexp support (ereg\w*)|(spliti?)|(sql_regcase)-->
         <block start="/\b(ereg\w*|spliti?|sql_regcase)((\())/i"
@@ -207,20 +220,15 @@
 <!-- variable highlighting // added by kx -->
 <!-- EE add: 'this' -->
          <regexp match="/\B\S(this)\b/" region0="Var" region1="Keyword"/>
+         <regexp match="/(\B\$[\d][\w_]*?)\b/" region="def:Error"/>
          <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>
 <!-- EE add: variable for objects -->
          <regexp match='/(\-&gt;)(\s)*\w+((\w)*(\s)*\()?!/' region="Var" region1="Symbol" />
+         <regexp match='/(::)(\s)*\w+/' region="Var" region1="Symbol" />
 
-      <!-- here-doc support // added by kx
-      <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1);$/" scheme="c:String"
-               region="CommentDoc" region00="PairStart" region10="PairEnd" region01="Keyword" region11="Keyword"/>
-       -->
-      <!-- variable highlighting // added by kx
-      <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>-->
-
-      <regexp match="/\M \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
+      <regexp match="/^\M \s* \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
 <!-- Brablc BEGIN -->
-      <regexp match="/\M \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+      <regexp match="/^\M \s* (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
 <!-- Brablc END -->
 
 
@@ -235,9 +243,6 @@
             <symb name="="/><symb name="+"/>
             <symb name="-"/><symb name="/"/><symb name="*"/>
             <symb name="&amp;"/><symb name="|"/><symb name="^"/>
-            <!-- EE: this operators cannot used in this plase...
-            symb name="("/><symb name=")"/>
-            <symb name="["/><symb name="]"/ -->
             <symb name=","/><symb name="."/>
             <symb name="?" region="SymbolStrong"/>
             <symb name=":" region="SymbolStrong"/>
@@ -245,8 +250,6 @@
             <symb name="!"/><symb name="~"/>
             <symb name="&lt;"/><symb name="&gt;"/>
             <symb name="%"/>
-            <!-- EE: this operators cannot used in this plase...
-             symb name="{"/><symb name="}"/ -->
             <!-- EE: add word operators -->
             <word name="or"/>
             <word name="xor"/>
