@@ -220,7 +220,7 @@
 </scheme>
 
 <scheme name="posix.liter.bracket">
- <block start="/(\[\:)/" end="/(\:\])/" scheme="posix.liter.class"
+ <block start="/(\[\:) \M [\w&lt;&gt;\^]+?\:\]/x" end="/(\:\])/" scheme="posix.liter.class"
   region00="def:PairStart" region01="Quote"
   region10="def:PairEnd" region11="Quote" />
 </scheme>
