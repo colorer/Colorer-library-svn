@@ -1,0 +1,47 @@
+.Language=English,English
+
+"colorer"
+
+"colorer's settings"
+
+"‘olorer &enabled"
+
+"&OK"
+"&Reload database"
+"&Load full database"
+"&Cancel"
+
+"c&atalog.xml file:"
+"Color &schema:"
+"T&ime before showing cancel dialog (msec):"
+
+"&1 List types"
+"&2 Match pair"
+"&3 Select block"
+"&4 Select pair"
+"&5 Outliner list"
+"&6 Errors list"
+"&7 Select region"
+"&8 Update hilighting"
+"&9 Select encoding"
+"&C Configure"
+
+"Total %d types"
+"Select syntax"
+"Outliner [%s]"
+"Nothing found"
+"Gotcha"
+"Enter, Tab, Ctrl-Up/Down/Left/Right, [a-z:_]"
+
+"Reloading colorer..."
+"Problem with colorer"
+"Can't open file:"
+"Die"
+"Bad colorer version:"
+"Try anyway"
+"Fatal hrc base load error"
+"Need colorer"
+"Working (ESC to cancel)"
+
+"Select encoding"
+"Select color schema"
