@@ -33,6 +33,8 @@ Created by:
       <region name="tclParam" parent="Parameter"/>
       <region name="tclError" parent="Error"/>
 
+      <region name="NamespaceOutline" parent="def:Outlined"/>
+      <region name="ProcOutline" parent="def:Outlined"/>
 
       <scheme name="tcltkBase">
 <!-- base syntax -->
@@ -276,7 +278,9 @@ Created by:
             <virtual scheme="tcltkPairedBrackets" subst-scheme="tcltk"/>
          </inherit>
 <!-- Functions -->
-         <block start="/^\s*\M(proc)\s+/" end="/(proc\s+[\w:\$]+\m\s+(([\w]+)|([&#34;\{]?=)))|(\m[&#34;\{].*?$)?=|$/" scheme="tcltkNamespace" region="tclFunc" region01="tclBase" region13="tclVar" region14="tclMainSymb"/>
+
+         <block start="/^\s*\M(proc)\s+/" end="/(proc\s+(?{ProcOutline}[\w:\$]+)\m\s+(([\w]+)|([&#34;\{]?=)))|(\m[&#34;\{].*?$)?=|$/" scheme="tcltkNamespace" region="tclFunc" region01="tclBase" region13="tclVar" region14="tclMainSymb"/>
+
 <!-- !!! Selects some user defined functions as type function in text !!! -->
 <!-- You could enable this and disable next two blocks if you like -->
 <!--
@@ -288,7 +292,7 @@ Created by:
          <block start="/\M(::)?[\w]+?(::)[\w]*?/" end="/([\]\};]?=)|(([^\w]?=)|$)/" scheme="tcltkNamespace"/>
          <block start="/\M(::)[\w]+?/" end="/([\]\};]?=)|(([^\w]?=)|$)/" scheme="tcltkNamespace"/>
 <!-- Namespace definition -->
-         <block start="/\M(namespace)\s+(eval)\s+/" end="/((namespace)\s+(eval)\s+[\w:\$]+\m\s+[&#34;\{]?=)|(\m[&#34;\{].*?$)?=|$/" scheme="tcltkNamespace" region="tclFunc" region01="tclBase" region02="tclWord"/>
+         <block start="/\M(namespace)\s+(eval)\s+/" end="/((namespace)\s+(eval)\s+(?{NamespaceOutline}[\w:\$]+)\m\s+[&#34;\{]?=)|(\m[&#34;\{].*?$)?=|$/" scheme="tcltkNamespace" region="tclFunc" region01="tclBase" region02="tclWord"/>
 <!-- Specials -->
          <block start="/(^|;?#1|\{?#1|\[?#1)\s*(set|variable)\s+\M(::)?[\w]/" end="/([\]};]?=)|(([^\w\(\$]?=)|$)/" scheme="tcltkNamespace" region="tclVar" region02="tclBase"/>
          <block start="/(^|;?#1|\{?#1|\[?#1)\s*(append|lappend|incr)\s+\M(::)?[\w]/" end="/([\]};]?=)|(([^\w\(\$]?=)|$)/" scheme="tcltkNamespace" region="tclVar" region02="tclWord"/>
