@@ -105,4 +105,13 @@
     <filename>/\.mdl$/i</filename>
   </prototype>
 
+ <prototype name="m4" group="scripts.rare" description="M4">
+    <location link="types/m4.hrc"/>
+    <filename>/\.m4$/i</filename>
+  </prototype>
+  <prototype name="edif" group="scripts.rare" description="EDIF">
+    <location link="types/edif.hrc"/>
+    <filename>/\.ed(i?f|n|o)$/i</filename>
+  </prototype>
+
 </hrc>
