@@ -1,7 +1,50 @@
 package net.sf.colorer.handlers;
 
-public interface RegionMapper{
+import net.sf.colorer.Region;
 
+public class RegionMapper{
+
+    private long iptr;
+    
+    private RegionMapper(long iptr)
+    {
+        this.iptr = iptr;
+    }
+    
+    /**
+     * Searches mapped region define value.
+     * 
+     * @return Region define, associated with passed
+     * region parameter, or null if nothing found
+     */
+    RegionDefine getRegionDefine(Region region) {
+        return getRegionDefine(iptr, region);
+    }
+    
+    private native RegionDefine getRegionDefine(long iptr, Region region);
+
+    /**
+     * Searches mapped region define value with qualified name
+     */
+    RegionDefine getRegionDefine(String name) {
+        return getRegionDefine(iptr, name);
+    }
+    private native RegionDefine getRegionDefine(long iptr, String name);
+
+    /**
+     * Static factory method to retrieve RegionMapper object instance,
+     * associated with passed HRD class and name.
+     * 
+     * @param hrdClass Class of HRD descriptor
+     * @param hrdName Name of HRD descriptor
+     * @return Class instance
+     */
+    public static RegionMapper getRegionMapper(String hrdClass, String hrdName){
+        long iptr = getRegionMapper0(hrdClass, hrdName);
+        return new RegionMapper(iptr);
+    }
+    static native long getRegionMapper0(String hrdClass, String hrdName);
+    
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

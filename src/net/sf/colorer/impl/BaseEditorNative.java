@@ -218,6 +218,7 @@ public class BaseEditorNative implements BaseEditor {
 
     public LineRegion[] getLineRegions(int lno) {
         checkActive();
+        Logger.trace("BaseEditorNative", "getLineRegions:"+lno);
         return getLineRegions(iptr, lno);
     }
 

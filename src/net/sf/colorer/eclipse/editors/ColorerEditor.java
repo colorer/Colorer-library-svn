@@ -13,15 +13,14 @@ import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import net.sf.colorer.FileType;
+import net.sf.colorer.HRCParser;
 import net.sf.colorer.ParserFactory;
-import net.sf.colorer.Region;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineElement;
-import net.sf.colorer.eclipse.outline.WorkbenchOutliner;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
 
@@ -43,8 +42,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     StyledText text;
     Font textFont;
 
-    WorkbenchOutliner errorsOutline;
-    WorkbenchOutliner structureOutline;
     ColorerContentOutlinePage contentOutliner;
 
     class TabReplacer implements VerifyListener {
@@ -65,13 +62,26 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
       prefStore.addPropertyChangeListener(this);
       setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
+      contentOutliner = new ColorerContentOutlinePage();
+      contentOutliner.addDoubleClickListener(new IDoubleClickListener(){
+          public void doubleClick(DoubleClickEvent event) {
+              if (text == null || event.getSelection().isEmpty()){
+                  return;
+              }
+              OutlineElement el = (OutlineElement)((IStructuredSelection)event.getSelection()).getFirstElement();
+              text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.token.length());
+              text.showSelection();
+              textColorer.stateChanged();
+          }
+      });
     }
 
     public void createPartControl(Composite parent){
         super.createPartControl(parent);
-    text = getSourceViewer().getTextWidget();
-    relinkColorer();
-    };
+        text = getSourceViewer().getTextWidget();
+        relinkColorer();
+    }
+    
   /** Selects filetype according to file name and first line of content
    */
   public void chooseFileType(){
@@ -88,24 +98,28 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
   public FileType getFileType(){
     return textColorer.getFileType();
   }
-  /** Reloads coloring highlighting in this editor */
+
+  /**
+   * Reloads coloring highlighting in this editor
+   */
   public void relinkColorer(){
-    if (textColorer != null) textColorer.detach();
+    if (textColorer != null){
+        textColorer.detach();
+    }
     ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+    HRCParser hp = pf.getHRCParser();
+
     textColorer = new TextColorer(pf, ColorerPlugin.getDefault().getColorManager());
     textColorer.attach(text);
     textColorer.chooseFileType(getTitle());
 
-    Region outline_region = pf.getHRCParser().getRegion("def:Outlined");
-    structureOutline = new WorkbenchOutliner(outline_region);
-    textColorer.addRegionHandler(structureOutline);
-    Region error_region = pf.getHRCParser().getRegion("def:Error");
-    errorsOutline = new WorkbenchOutliner(error_region);
-    textColorer.addRegionHandler(errorsOutline);
-
-    if (contentOutliner != null) contentOutliner.attach(structureOutline, errorsOutline);
+    if (contentOutliner != null){
+        contentOutliner.attach(textColorer);
+        Logger.trace("ColorerEditor", "contentOutliner.attach()");
+    }
     propertyChange(null);
   }
+
   /** Tries to match paired construction */
   public void matchPair(){
       if (!textColorer.matchPair()){
@@ -189,18 +203,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         if (key.equals(IContentOutlinePage.class)) {
             IEditorInput input = getEditorInput();
             if (input instanceof IFileEditorInput) {
-                if (contentOutliner != null) contentOutliner.detach();
-                contentOutliner = new ColorerContentOutlinePage();
-                contentOutliner.attach(structureOutline, errorsOutline);
-                contentOutliner.addDoubleClickListener(new IDoubleClickListener(){
-                    public void doubleClick(DoubleClickEvent event) {
-                        if (text == null || event.getSelection().isEmpty()) return;
-                        OutlineElement el = (OutlineElement)((IStructuredSelection)event.getSelection()).getFirstElement();
-                        text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.token.length());
-                        text.showSelection();
-                        textColorer.stateChanged();
-                    }
-                });
                 return contentOutliner;
             }
         }

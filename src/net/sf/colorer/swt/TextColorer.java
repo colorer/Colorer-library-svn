@@ -41,6 +41,7 @@ public class TextColorer{
     int highlightStyle = HLS_XOR;
     PairMatch currentPair = null;
     int prevLine = 0;
+    int visibleStart, visibleEnd;  
     boolean lineHighlighting = true;
     boolean pairsHighlighting = true;
     boolean backParserDelay = false;
@@ -174,6 +175,13 @@ public class TextColorer{
   public FileType getFileType(){
     return baseEditor.getFileType();
   }
+  
+  /**
+   * Returns currently used ParserFactory object
+   */
+  public ParserFactory getParserFactory(){
+      return pf;
+  }
 
   /**
    * Changes style/coloring scheme into the specified.
@@ -279,6 +287,20 @@ public class TextColorer{
                            text.getOffsetAtLine(cp.sline)+cp.start.start);
     return true;
   }
+  
+  /**
+   * Returns visible text start line
+   */
+  public int getVisibleStart(){
+      return visibleStart;
+  }
+
+  /**
+   * Returns visible text end line
+   */
+  public int getVisibleEnd(){
+      return visibleEnd;
+  }
 
   /**
    * Installs specified handler into parse process.
@@ -334,7 +356,12 @@ public class TextColorer{
     }
   }
 
-  void modifyEvent(int lno){
+  /**
+   * Tells parser that there were some modifications
+   * in source text. Causes parser to reparse text again
+   * @param lno Modified line number
+   */
+  public void modifyEvent(int lno){
     updateViewport();
     baseEditor.modifyEvent(lno);
     redrawFrom(lno);
@@ -343,15 +370,15 @@ public class TextColorer{
 
   void updateViewport(){
     baseEditor.lineCountEvent(text.getLineCount());
-    int start = 0;
+    visibleStart = 0;
     try{
-      start = text.getTopIndex()-1;
+        visibleStart = text.getTopIndex()-1;
     }catch(Exception e){
       e.printStackTrace(System.out);
     }
-    if (start < 0) start = 0;
-    int end = start + text.getClientArea().height / text.getLineHeight();
-    baseEditor.visibleTextEvent(start, end-start+2);
+    if (visibleStart < 0) visibleStart = 0;
+    visibleEnd = visibleStart + text.getClientArea().height / text.getLineHeight();
+    baseEditor.visibleTextEvent(visibleStart, visibleEnd-visibleStart+2);
   }
 
   void pairDraw(GC gc, StyledRegion sr, int start, int end) {

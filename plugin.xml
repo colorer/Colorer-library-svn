@@ -42,7 +42,9 @@
             id="net.sf.colorer.eclipse.editors.ColorerEditor.XML">
       </editor>
    </extension>
-<!-- Preferences pages -->
+
+   <!-- Preferences pages -->
+
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -57,7 +59,9 @@
             id="net.sf.colorer.eclipse.FileTypePreferencePage">
       </page>
    </extension>
-<!-- HRD Editor view page 
+   
+   <!-- HRC Regions tree list View -->
+   
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -65,14 +69,13 @@
             id="colorer">
       </category>
       <view
-            name="Color schemas editor"
-            icon="icons/schema-view.gif"
+            name="HRC Regions Tree"
+            icon="icons/regions-tree-view.gif"
             category="colorer"
-            class="net.sf.colorer.eclipse.view.HRDEditorView"
-            id="net.sf.colorer.eclipse.view.HRDEditorView">
+            class="net.sf.colorer.eclipse.view.HRCRegionsTreeView"
+            id="net.sf.colorer.eclipse.view.HRCRegionsTreeView">
       </view>
    </extension>
--->
 <!-- Editor Commands  -->
    <extension
          point="org.eclipse.ui.commands">

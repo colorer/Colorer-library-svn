@@ -1,9 +1,26 @@
-package net.sf.colorer.handlers;
+package net.sf.colorer.eclipse.outline;
 
+import org.eclipse.core.runtime.IAdaptable;
 
-public class HRDRegionStore implements RegionMapper{
-  public HRDRegionStore(){
-  };
+import net.sf.colorer.RegionHandler;
+import net.sf.colorer.editor.IOutlineSource;
+
+/**
+ * Interface for possible Colorer Editor outliners
+ */
+public interface IWorkbenchOutlineSource extends IOutlineSource, IAdaptable {
+
+    /**
+     * Cleans out current outline elements.
+     */
+    void clear();
+
+    void setHierarchy(boolean hierarchy);
+
+    void setSorting(boolean sorting);
+    
+    RegionHandler getRegionHandler();
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

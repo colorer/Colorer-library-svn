@@ -52,6 +52,7 @@ outline.options=Меню
 outline.options.tooltip=Меню
 outline.options.Structure=Структура
 outline.options.Errors=Ошибки
+outline.options.ParseTree=Дерево разбора
 
 htmlgen.done=Генерация HTML завершена
 htmlgen.fault=Сбой во время генерации HTML

@@ -18,6 +18,8 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
   // HRCParser wrapper.
   jpf->jhp = new JHRCParser();
   jpf->jhp->hrcParser = jpf->getHRCParser();
+
+  CLR_TRACE("NSC:ParserFactory", "HRCParser:%d",jpf->jhp->hrcParser);
   
   jclass jClass = env->FindClass("net/sf/colorer/HRCParser");
   jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
@@ -27,7 +29,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
 };
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, jobject obj, jlong iptr){
-  TRACE1("ParserFactory", "finalize iptr:%d", (int)iptr);
+  CLR_TRACE("ParserFactory", "finalize iptr:%d", (int)iptr);
   JParserFactory *jpf = (JParserFactory*)iptr;
   if (jpf == null){
     // Bad reference - just exit
@@ -93,7 +95,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv 
   if (jpf == null){
     return null;
   }
-  TRACE1("ParserFactory", "jhp:%d", jpf->jhp);
+  CLR_TRACE("ParserFactory", "jhp:%d", jpf->jhp);
   return jpf->jhp->jHRCParser;
 };
 
