@@ -22,7 +22,7 @@
 <target name="php-gen" depends="php-gen.check" unless="php-gen.check">
  <echo level="info" message="Build php base"/>
  <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
-  <arg line='-q ${src}/parser.php php.lst ../${obj}/hrc-gen.php'/>
+  <arg line="-q ${src}/parser.php ${src}/php.lst ${obj}/hrc-gen.php"/>
  </exec>
 </target>
 
@@ -37,7 +37,7 @@
 <target name="hrc-gen" depends="php-gen, hrc-gen.check" unless="hrc-gen.check">
  <echo level="info" message="Build php schemes"/>
  <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
-  <arg line='-q ${src}/hrc-gen-creator.php ../${obj}/hrc-gen.php ../${bin}/php-gen.hrc'/>
+  <arg line='-q ${src}/hrc-gen-creator.php ${obj}/hrc-gen.php ${bin}/php-gen.hrc'/>
  </exec>
 </target>
 
@@ -52,7 +52,7 @@
 <target name="hrc-prot" depends="php-gen, hrc-prot.check" unless="hrc-prot.check">
  <echo level="info" message="Build prototype"/>
  <exec executable="${path-to-php}/php" output="${bin}/../proto-php.hrc" failonerror='yes'>
-  <arg line='-q ${src}/hrc-gen-prototype.php ../${obj}/hrc-gen.php'/>
+  <arg line='-q ${src}/hrc-gen-prototype.php ${obj}/hrc-gen.php'/>
  </exec>
 </target>
 
