@@ -484,16 +484,16 @@
 
   <!--  packages  -->
 
-  <package name="def" group="packages" description="core definitions">
+  <package name="def" description="core definitions">
     <location link="default.hrc"/>
   </package>
-  <package name="ole" group="packages" description="OLE Commons">
+  <package name="ole" description="OLE Commons">
     <location link="lib/ole.hrc"/>
   </package>
-  <package name="regexp" group="packages" description="Regexp common library">
+  <package name="regexp" description="Regexp common library">
     <location link="lib/regexp.hrc"/>
   </package>
-  <package name="far" group="packages" description="FAR Manager common expressions">
+  <package name="far" description="FAR Manager common expressions">
     <location link="lib/far.hrc"/>
   </package>
 
