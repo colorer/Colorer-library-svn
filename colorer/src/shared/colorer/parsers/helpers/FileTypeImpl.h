@@ -12,14 +12,31 @@ class FileTypeImpl : public FileType
   friend class HRCParserImpl;
   friend class TextParserImpl;
 public:
-  const String *getName() { return name; };
-  const String *getGroup() { return group; };
-  const String *getDescription() { return description; };
+  const String *getName() {
+    return name;
+  }
+  const String *getGroup() {
+    return group;
+  }
+  const String *getDescription() {
+    return description;
+  }
   Scheme *getBaseScheme() {
     if (!typeLoaded) hrcParser->loadFileType(this);
     return baseScheme;
-  };
-  const String *getParameter(const String &name) { return parametersHash.get(&name); };
+  }
+
+  const String *getParamValue(const String &name) {
+    const String *val = paramHash.get(&name);
+    if (val == null) return getParamDefaultValue(name);
+    return val;
+  }
+  const String *getParamDefaultValue(const String &name) {
+    return paramDefaultHash.get(&name);
+  }
+  void setParamValue(const String &name, const String *value){
+    paramHash.put(&name, new SString(value));
+  }
 
   /** Returns total priority, accordingly to all it's
       choosers (filename and firstline choosers).
@@ -41,9 +58,9 @@ public:
         cur_prior += ftc->getPrior();
       if (fileContent != null && ftc->isFileContent() && ftc->getRE()->parse(fileContent, &match))
         cur_prior += ftc->getPrior();
-    };
+    }
     return cur_prior;
-  };
+  }
 protected:
   /// is prototype component loaded
   bool protoLoaded;
@@ -61,7 +78,8 @@ protected:
   SchemeAccessType accessType;
 
   Vector<FileTypeChooser*> chooserVector;
-  Hashtable<String*> parametersHash;
+  Hashtable<String*> paramDefaultHash;
+  Hashtable<String*> paramHash;
   Vector<String*> importVector;
   InputSource *inputSource;
 
@@ -72,7 +90,8 @@ protected:
     name = group = description = null;
     baseScheme = null;
     inputSource = null;
-  };
+  }
+
   ~FileTypeImpl(){
     delete name;
     delete group;
@@ -83,10 +102,15 @@ protected:
       delete chooserVector.elementAt(idx);
     for (idx = 0; idx < importVector.size(); idx++)
       delete importVector.elementAt(idx);
-    for (String *s = parametersHash.enumerate(); s!=null; s = parametersHash.next())
+    String *s;
+    for (s = paramHash.enumerate(); s!=null; s = paramHash.next())
       delete s;
-  };
+    for (s = paramDefaultHash.enumerate(); s!=null; s = paramDefaultHash.next())
+      delete s;
+  }
+
 };
+
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

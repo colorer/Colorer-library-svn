@@ -48,7 +48,7 @@ BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
 BaseEditor::~BaseEditor(){
   textParser->breakParse();
   breakParse = true;
-  while(validationProcess);// wait until validation is finished
+  while(validationProcess); /// @todo wait until validation is finished
   if (internalRM) delete regionMapper;
   delete lrSupport;
   delete textParser;

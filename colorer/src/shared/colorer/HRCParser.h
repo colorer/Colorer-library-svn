@@ -8,9 +8,8 @@
 #include<colorer/Region.h>
 
 
-/**
-  Informs application about internal HRC parsing problems.
-  @ingroup colorer
+/** Informs application about internal HRC parsing problems.
+    @ingroup colorer
 */
 class HRCParserException : public Exception{
 public:
@@ -24,7 +23,7 @@ public:
 /** Abstract template of HRCParser class implementation.
     Defines basic operations of loading and accessing
     HRC information.
-  @ingroup colorer
+    @ingroup colorer
 */
 class HRCParser
 {
@@ -47,8 +46,7 @@ public:
   */
   virtual FileType *enumerateFileTypes(int index) = 0;
 
-  /**
-      @param name Requested type name.
+  /** @param name Requested type name.
       @return File type, or null, there are no type with specified name.
   */
   virtual FileType *getFileType(const String *name) = 0;

@@ -47,6 +47,7 @@ friend class FileTypeImpl;
   Vector<FileTypeImpl*>    fileTypeVector;
 
   Hashtable<SchemeImpl*>   schemeHash;
+  Hashtable<int>           disabledSchemes;
 
   Vector<const Region*>    regionNamesVector;
   Hashtable<const Region*> regionNamesHash;
