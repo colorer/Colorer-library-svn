@@ -17,7 +17,6 @@
       <import plugin="org.eclipse.ui.views"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui.ide" optional="true"/>
-      <import plugin="org.eclipse.jdt.core" optional="true"/>
       <import plugin="org.eclipse.jface.text" optional="true"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" optional="true"/>
       <import plugin="org.eclipse.ui.editors" optional="true"/>
@@ -80,7 +79,7 @@
             id="net.sf.colorer.eclipse.FileTypePreferencePage">
       </page>
    </extension>
-<!-- HRD Editor view page -->
+<!-- HRD Editor view page 
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -95,7 +94,7 @@
             id="net.sf.colorer.eclipse.view.HRDEditorView">
       </view>
    </extension>
-
+-->
 <!-- Editor Commands  -->
    <extension
          point="org.eclipse.ui.commands">
