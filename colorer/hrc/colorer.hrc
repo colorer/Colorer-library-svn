@@ -408,12 +408,12 @@
   <prototype name="rexx" group="rare" description="Rexx">
     <location link="rare/rexx.hrc"/>
     <filename>/\.(rex|cmd)$/i</filename>
-    <firstline>/(REM)?\/\*/i</firstline>
+    <firstline>/(REM)\/\*/i</firstline>
     <firstline>/^# regina/i</firstline>
   </prototype>
   <prototype name="ruby" group="rare" description="Ruby">
     <location link="rare/ruby.hrc"/>
-    <filename>/\.(rb|ruby)$/i</filename>
+    <filename>/\.(rb|rbw|ruby)$/i</filename>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
@@ -474,6 +474,7 @@
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
     <filename>/(read\.?me|\.txt$|\.rus|install$)/i</filename>
+    <filename>/\.spo/ix</filename>
   </prototype>
 
   <prototype name="default" group="other" description="default type">
