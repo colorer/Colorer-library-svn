@@ -75,7 +75,7 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
   }
   
   public void reloadParserFactory(){
-    try{  
+    try{
       catalogPath = Platform.asLocalURL(new URL(getDescriptor().getInstallURL(), "colorer/catalog.xml")).toExternalForm();
       if (catalogPath.startsWith("file:/")){
         catalogPath = catalogPath.substring(6);
