@@ -2,6 +2,13 @@
 #define _COLORER_FEATURES_H_
 
 /**
+  Default log-level
+*/
+#ifndef COLORER_FEATURE_LOGLEVEL
+  #define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_FULL
+#endif
+
+/**
   If defined, use dlmalloc memory management implementation
 */
 #ifndef COLORER_FEATURE_USE_DL_MALLOC
@@ -22,6 +29,9 @@
   #define COLORER_FEATURE_HTTPINPUTSOURCE TRUE
 #endif
 
+/**
+  If defined, JAR InputSource is implemented.
+*/
 #ifndef COLORER_FEATURE_JARINPUTSOURCE
   #define COLORER_FEATURE_JARINPUTSOURCE TRUE
 #endif
@@ -44,7 +54,7 @@
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

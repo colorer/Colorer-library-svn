@@ -229,7 +229,7 @@ void ConsoleTools::profile(int loopCount){
   while(loopCount--){
     baseEditor.modifyLineEvent(0);
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
-    baseEditor.validate(-1);
+    baseEditor.validate(-1, false);
   };
   msecs = clock() - msecs;
 
@@ -318,8 +318,6 @@ void ConsoleTools::genOutput(bool useTokens){
     // Choosing file type
     FileType *type = selectType(hrcParser, textLinesStore.getLine(0));
     baseEditor.setFileType(type);
-    // parsing all the text
-    baseEditor.validate(-1);
 
     //  writing result into HTML colored stream...
     const RegionDefine *rd = null;
@@ -418,7 +416,7 @@ void ConsoleTools::genOutput(bool useTokens){
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

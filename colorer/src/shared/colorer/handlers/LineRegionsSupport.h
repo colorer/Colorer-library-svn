@@ -16,48 +16,75 @@ public:
   LineRegionsSupport();
   ~LineRegionsSupport();
 
-  /** Resizes structures to mantain regions for @c lineCount lines.
-  */
+  /**
+   * Resizes structures to mantain regions for @c lineCount lines.
+   */
   void resize(int lineCount);
-  /** Drops all internal structures
-  */
+
+  /**
+   * Return current size of this line regions structure
+   */
+  int size();
+
+  /**
+   * Drops all internal structures
+   */
   void clear();
 
-  /** Sets start line position of line structures.
-      This position tells, that first line structure refers
-      not to first line of text, but to @c first parameter value.
-  */
+  /**
+   * Sets start line position of line structures.
+   * This position tells, that first line structure refers
+   * not to first line of text, but to @c first parameter value.
+   */
   void setFirstLine(int first);
-  /** Background region define, which is used to
-      fill transparent regions. If background is @c null,
-      then regions with transparent fields would leave these fields unfilled
-  */
+
+  /**
+   * Returns first line position, installed in this line structures.
+   */
+  int getFirstLine();
+
+  /**
+   * Background region define, which is used to
+   * fill transparent regions. If background is @c null,
+   * then regions with transparent fields would leave these fields unfilled
+   */
   void setBackground(const RegionDefine* back);
-  /** Tells handler to mark with special field
-      all Regions with specified ancestor.
-  */
+
+  /**
+   * Tells handler to mark with special field
+   * all Regions with specified ancestor.
+   */
   void setSpecialRegion(const Region *special);
-  /** Choose the source of RegionDefine definitions.
-      This source returns information about mapping
-      Region objects into RegionDefine objects.
-  */
+
+  /**
+   * Choose the source of RegionDefine definitions.
+   * This source returns information about mapping
+   * Region objects into RegionDefine objects.
+   */
   void setRegionMapper(const RegionMapper* rds);
 
-  /** Returns LineRegion object for @c lno line number.
-      This object is linked with all other stored @c LineRegion objects
-  */
+  /**
+   * Returns LineRegion object for @c lno line number.
+   * This object is linked with all other stored @c LineRegion objects
+   */
   LineRegion *getLineRegions(int lno) const;
 
-  /** RegionHandler implementation */
+  /**
+   * RegionHandler implementation
+   */
   void startParsing(int lno);
   void clearLine(int lno, String *line);
   void addRegion(int lno, String *line, int sx, int ex, const Region *region);
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
 protected:
-  /** Behaviour is redefined in derived classes
-  */
+  /**
+   * Behaviour is redefined in derived classes
+   */
   virtual void addLineRegion(int lno, LineRegion *lr);
+  int getLineIndex(int lno) const;
+  bool checkLine(int lno) const;
+
   Vector<LineRegion*> lineRegions;
   Vector<LineRegion*> schemeStack;
 
@@ -66,8 +93,8 @@ protected:
   const Region *special;
 
   LineRegion background;
-  int  firstLineNo;
-  int  lineCount;
+  int firstLineNo;
+  int lineCount;
 };
 
 #endif
@@ -89,7 +116,7 @@ protected:
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

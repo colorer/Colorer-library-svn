@@ -4,13 +4,13 @@
 #include<colorer/TextParser.h>
 #include<colorer/parsers/helpers/TextParserHelpers.h>
 
-/** Implementation of TextParser interface.
-    This is the base Colorer syntax parser, which
-    works with parsed internal HRC structure and colorize
-    text in target editor system.
-    @ingroup colorer_parsers
-*/
-
+/**
+ * Implementation of TextParser interface.
+ * This is the base Colorer syntax parser, which
+ * works with parsed internal HRC structure and colorisez
+ * text in a target editor system.
+ * @ingroup colorer_parsers
+ */
 class TextParserImpl : public TextParser
 {
 public:
@@ -22,7 +22,7 @@ public:
   void setLineSource(LineSource *lh);
   void setRegionHandler(RegionHandler *rh);
 
-  int  parse(int from, int num);
+  int  parse(int from, int num, TextParseMode mode);
   void breakParse();
   void clearCache();
 
@@ -33,8 +33,8 @@ private:
   SchemeImpl *baseScheme;
 
   bool breakParsing;
-  bool first, cacheHack;
-  bool drawing, parsing;
+  bool first, invisibleSchemesFilled;
+  bool drawing, updateCache;
   const Region *picked;
 
   ParseCache *cache;
@@ -49,7 +49,7 @@ private:
   LineSource *lineSource;
   RegionHandler *regionHandler;
 
-  void hack4regions(ParseCache *cache);
+  void fillInvisibleSchemes(ParseCache *cache);
   void addRegion(int lno, int sx, int ex, const Region* region);
   void enterScheme(int lno, int sx, int ex, const Region* region);
   void leaveScheme(int lno, int sx, int ex, const Region* region);
@@ -78,7 +78,7 @@ private:
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

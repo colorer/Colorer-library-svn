@@ -25,7 +25,15 @@
 23: <span style='color:#800080; '>}</span>
 24: 
 25: 
-26: <span style='color:#008000; '>0x2322</span><span style='color:#006600; '>u</span>
-27: <span style='color:#696969; '>//</span>
-28: 
+26:   <span style='color:#800000; font-weight:bold; '>for</span><span style='color:#808030; '>(</span>Num <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>Num <span style='color:#808030; '>&lt;</span> <span style='color:#808030; '>(</span>GDTSIZE<span style='color:#808030; '>></span><span style='color:#808030; '>></span><span style='color:#008c00; '>3</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>Num<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
+27:     <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>p<span style='color:#808030; '>[</span>Num<span style='color:#808030; '>*</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span> <span style='color:#808030; '>!</span>p<span style='color:#808030; '>[</span>Num<span style='color:#808030; '>*</span><span style='color:#008c00; '>2</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
+28:       sysSetDesc<span style='color:#808030; '>(</span>Num<span style='color:#808030; '>,</span>Lo<span style='color:#808030; '>,</span>Hi<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+29:       <span style='color:#800000; font-weight:bold; '>return</span> Num<span style='color:#800080; '>;</span>
+30:     <span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+31:   <span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+32:   <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#800080; '>;</span>
+33: 
+34: <span style='color:#008000; '>0x2322</span><span style='color:#006600; '>u</span>
+35: <span style='color:#696969; '>//</span>
+36: 
 </pre></body></html>

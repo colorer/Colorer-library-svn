@@ -82,6 +82,8 @@ public:
 };
 
 enum SchemeNodeType { SNT_EMPTY, SNT_RE, SNT_SCHEME, SNT_KEYWORDS, SNT_INHERIT };
+char*schemeNodeTypeNames[];
+
 typedef Vector<VirtualEntry*> VirtualEntryVector;
 
 /** Scheme node.
@@ -196,7 +198,7 @@ private:
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

@@ -11,20 +11,24 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta3 library HRC Reference. January 2004</releaseinfo>
+<releaseinfo>Colorer-take5 beta3 library HRC Reference. February 2005</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>30 January 2004</pubdate>
+<pubdate>19 February 2005</pubdate>
 
 <revhistory>
 <revision>
-  <revnumber>take5.beta3</revnumber>
-  <date>30 January 2003</date>
+  <revnumber>take5.beta4</revnumber>
+  <date>19 February 2005</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
   </revremark>
+</revision>
+<revision>
+  <revnumber>take5.beta3</revnumber>
+  <date>30 January 2004</date>
 </revision>
 <revision>
   <revnumber>take5.beta2</revnumber>
@@ -52,7 +56,7 @@
   </affiliation>
 </author>
 
-<copyright><year>2003</year><year>2004</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
+<copyright><year>2003</year><year>2004</year><year>2005</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
 
 <abstract><title>Abstract</title>
 <para>This reference defines syntax and semantics of the
@@ -407,31 +411,136 @@ using <literal>worddiv</literal> attribute of <literal>keywords</literal> elemen
 </section>
 
 <section id='schemesyntax.re'><title>Regular Expressions</title>
+<para>
+Regular expression tokens are used to create custom syntax elements.
+These elements are described with RE rules, which makes them very powerful
+and flexible. Each RE token can be used to create a number of different
+syntax regions (up to 16).
+</para>
+
 <x:schemaref uri="&fileref;" role='regexp'/>
+
 <para>
 
-see <xref linkend='hrcre'/>
+For details of colorer-take5 regular expressions syntax please see <xref linkend='hrcre'/>.
+This syntax is used in <literal>match</literal> attribute.
+Each <literal>&lt;regexp&gt;</literal> region can have a number of optional attributes -
+<literal>region0, region1, ... regionf</literal> (total 16 regions). A value of each attribute is a name
+of the corresponding syntax region, which will be used to highlight text.
+A number in attribute's name means corresponding bracket in a RE.
+<literal>region0</literal> means full matched range of the RE (this could be changed with
+<literal>\m</literal> and <literal>\M</literal> RE metasymbols).
+
+Regular Expression can also include named brackets in syntax of <literal>(?{name} ... )</literal>.
+In this case the name of the bracket itself is a name of corresponding syntax region.
+</para>
+
+<para>
+Each RE definition can include references to any predefined sequence of RE code.
+Such references are called <quote>entities</quote>. Entities are defined on a <literal>type</literal>
+level and have their own qualified namespace.
+To include entity's value into RE, special syntax of <literal>%entityname;</literal> is used.
+</para>
 
 <x:schemaref uri="&fileref;" role='entity'/>
 
+<para>
+
+Each RE has a defined priority attribute (by default it <literal>normal</literal>).
+This means normal RE priority over enwrapped syntax elements.
+Enwrapped element is an element, which waits to be matched from a top-level scheme in
+a parse sequence. <literal>low</literal> priority means that such a top-level element
+(such a <literal>end</literal> attribute of a <literal>block</literal> element) will
+be matched first, if there will be choice conflict between these two.
 </para>
+
 </section>
 
 <section id='schemesyntax.contextswitch'><title>Blocked context switch</title>
+<para>
+Although regular expressions is very powerful feature, their syntax doesn't allow
+to express some complex language constructions. First, this is due to general
+limitation of colorer's RE parser - single line of text scope. This means that
+no regular expression can work on multiple lines of the parsed text.
+Often programming languages have constructions which could be wrapped into
+each other unlimited number of times. This is also an area, where Regular Expression
+would not help much.
+</para>
+<para>
+To express much more complex syntax and allow to declare context-free grammar
+constructions, HRC defines a special token, named "block".
+
 <x:schemaref uri="&fileref;" role='block'/>
 
 <x:schemaref uri="&fileref;" role='blockInner'/>
 
-<para>
+Each block defines its <literal>start</literal> and <literal>end</literal>
+tags, each with a RE syntax already described.
+Everything enwrapped within these two marks will be highligted
+as a syntax of some other <literal>scheme</literal>, also pointed in this
+element's attribute.
 </para>
+<para>
+This means that using <literal>block</literal> attribute you can switch context
+between differen highligting schemas. This allows to define great number of syntax
+variations and particulars.
+</para>
+
 </section>
 
 <section id='schemesyntax.boundaries'><title>Scheme boundaries and priority</title>
 <para>
+Both regular expressions and block'ed scheme switches work in the same scheme context,
+and tested against text in order they were defined in HRC.
+This means that any conflict between multiple match possibilities is resolved according
+to order of RE, defined in HRC file. After RE match the parse position is increased by
+width of that RE. By default the width is from first matched symbol till last matched.
+However it is possible to redefine regular expression boundaries and therefore shift
+somehow parse position increase. This could be done with special <literal>\m</literal>
+(redefines RE start) and <literal>\M</literal> (redefines RE end) metasymbols.
+Such a behaviour allows you to define overlapped tokens, where next token parse starts
+somewere in the middle of the previous. In such a case color definitions occur in the order they are
+parsed.
 </para>
+<section><title>priority</title>
+<para>
+Additional selection rules are applied to a usecase, where return occurs from
+an inner scheme to its caller scheme (via <literal>end</literal> tag of the 
+<literal>block</literal> element).
+Information about relative position of the <literal>block</literal> element
+can't help here to determine, what to apply: <literal>end</literal> RE of the outer
+block, or a next regular expression/keyword/block, defined in the inner (called) scheme.
+To resolve such a conflict HRC defines a special attribute for <literal>regexp</literal>
+and <literal>block</literal> objects: <literal>priority</literal>.
+This attribute's default value is <literal>"normal"</literal>. When changed to
+<literal>low</literal> it tells Colorer not to take this object into account,
+when resolving conflicts upon exit from inner scheme.
+This means that <literal>end</literal> tag of the outer <literal>block</literal> element
+will be used instead of the object with lowered priority (when a conflict will occur).
+When reviewing nested <literal>block</literal> tags, <literal>priority</literal> attribute
+relates to the inner object's <literal>start</literal> tag.
+</para>
+</section>
+<section><title>content-priority</title>
+<para>
+Often it is required to define a behavior of an element dynamically, depending on
+usage context. With <literal>priority</literal> attribute it is impossible to change
+element's priority depending on called context. The element will always be the same
+priority. But it is possible to change whole scheme's definition priority (i.e. all
+it's elements priority) - using <literal>content-priority</literal> attribute of a
+<literal>block</literal> element.
+</para>
+<para>
+When changed into <literal>low</literal> it causes all the elements of that scheme
+to change their priority to <literal>low</literal>, no matter the value of their
+particular <literal>priority</literal> attribute. 
+</para>
+</section>
 </section>
 
 </section>
+
+
 
 <section id='interscheme'><title>Inter-scheme links</title>
 
@@ -451,6 +560,123 @@ see <xref linkend='hrcre'/>
 </section>
 
 
+<section id='coding.std'><title>HRC Language Coding Conventions</title>
+<para>
+Although HRC itself could be used in an arbitrary way, Colorer-take5
+library has a number of coding, naming and other conventions, which
+applies not to HRC syntax itself, but to the library which reads
+and parses output of an analizer.
+</para>
+
+<section id='coding.std.naming'><title>Object naming</title>
+<para>
+All regions in Colorer-take5 HRC database are going to be named in a same
+way: name starts with capital letter, each name-part also starts with capital
+letter. For instance: <literal>StringQuote</literal>. Any separate type or
+package is named in low-case letters with possible shortcuts, to make
+package name shorter. Any region in this case is addressed as
+<literal>def:StringQuote</literal>.
+</para>
+
+<para>
+Scheme names are going to be context dependent and could be used in any case.
+Dash or Dot delimiter is often used to make them looks better:
+<literal>&lt;scheme name="Comment.content"&gt;</literal> for instance.
+</para>
+
+<para>
+All files in file system storage should be placed in low-case with
+possible Dash or Dot delimiters. External XML entities should be used
+to simplify complex HRC files structure and make more easier autogenerated
+HRC files creation and integration. External entities should not have
+<literal>hrc</literal> extension. They should use a <literal>xml</literal>,
+as more compliant.
+</para>
+</section>
+
+<section id='coding.std.spec'><title>Default package</title>
+<para>
+Colorer-take5 defines special package type to declare general syntax
+regions framework, simplify HRC database support and
+decouple parse content and its presentation.
+The name of this package is <literal>def</literal>. It is placed in
+<literal>hrc/lib/default.hrc</literal>.
+The general purpose of this file is to declare a basic number of syntax
+regions, all other HRC regions should be inherited from this set.
+This allows to flexibly define HRD color highlighting rules to
+make them unique across all supported syntaxes and languages.
+Any HRC package can explicitly import and use them. Or it can
+declare its own syntax regions, derived from the defaults.
+</para>
+
+<section id='coding.std.spec.pairs'><title>Pair construction matching</title>
+<para>
+Colorer-take5 library itself (independently on HRC syntax) implements
+a number of extensions to make editing process more flexible. These are
+paired construction matching and file's structure/error list outlining.
+These features are implemented through the specially declared regions,
+which are mapped to more complex syntax region values.
+
+To declare a matching paired construction, package should instantiate
+regions with special <literal>def:PairStart</literal> and <literal>def:PairEnd</literal>.
+These regions parse layout should be properly enwrapped in a valid recursive sequence.
+Using this information Colorer-take5 library can make actions to provide user
+an ability to jump over text blocks in target language and highlight them during
+editing process.
+</para>
+</section>
+
+<section id='coding.std.spec.outline'><title>Outliner construction</title>
+<para>
+Another feature Colorer-take5 library can provide is a possibility to build
+a tree of some valuable syntax tokens with possibility to quickly navigate over
+them in editor. These tokens can represent programming language's functions, procedures,
+or any other logical structure of the text. While parsing such constructions are collected
+into a special outline container which can represent them to user in realtime or by request.
+Colorer-take5 editor implements two basic forms of outliner: functions and errors list.
+Any programming language can instantiate token with region equals or derived from
+<literal>def:Outlined</literal>. All tokens with this region are considered to be
+outliner-targeted tokens and collected while parsing. Outliner can also take into account
+information about parse tree structure to generate tree-like text outliners.
+Moreover, any language can provide special algorithmic support or logic to implement
+special outlined regions parsing and building valid outline tree.
+For instance EclipseColorer editor evaluates a name of each outlined region and searches
+an icon with such a name. If found, it uses this icon to customize outliner window
+items with graphic objects, not only text.
+</para>
+<para>
+Outliner can generally be setted up agains any region type. It works as a kind of filter,
+gathering from parser only required information. In such a way works Errors list, which
+collects regions, derived from <literal>def:Error</literal>. Each language uses this
+region to mark problems in text, it found during parsing.
+</para>
+
+</section>
+
+</section>
+
+<section id='coding.rec'><title>Coding Recommendations</title>
+<para>
+HRC database has long standing up history, many times its format,
+syntax and meaning were changed to reach more logic and formal structure.
+
+Because of this there are still some file type descriptions, which are
+not fully comply with general HRC conventions.
+These should not be supported in their current form, but should be reworked
+to be more complient with all HRC descriptions.
+In general these includes invalid package naming, invalid region/schemes naming.
+</para>
+<para>
+It is good point in HRC to have an <literal>import</literal> feature,
+which allows to use other package's objects in their unqualified names,
+but in general this feature should not be overused. It is much more convenient
+to use fully qualified regions and schemes names to explicitly show the package
+reusage/intersections.
+
+</para>
+</section>
+
+</section>
 
 <appendix id='hrcre'>
 <title>Regular Expressions syntax</title>
@@ -502,10 +728,13 @@ Everything, that doesn't looks like metacharacters, means simple character.
           use other metacharacters and range operator:
           a-z means all chars from first to second (a - z),
           <literal>[{ASSIGNED}-[{Lu}]-[{Ll}]]</literal> - unicode classes reference.
+          -[] - Class substraction.
+          &amp;&amp;[] - Class join (can be dropped).
+          |[] - Class intersection.
           </entry></row>
 <row><entry><literal>\#</literal></entry><entry>Next symbol '#' after slash (except a-z and 1-9)</entry></row>
-<row><entry><literal>\b</literal></entry><entry>Word break</entry></row>
-<row><entry><literal>\B</literal></entry><entry>No word break</entry></row>
+<row><entry><literal>\b</literal></entry><entry>Word break at this point</entry></row>
+<row><entry><literal>\B</literal></entry><entry>No word break at this point</entry></row>
 <row><entry><literal>\xHH</literal>, <literal>\x{HHHH}</literal></entry><entry><literal>HH, HHHH</literal> - character code (hex)</entry></row>
 <row><entry><literal>\n</literal></entry><entry>0x10 (lf)</entry></row>                                          
 <row><entry><literal>\r</literal></entry><entry>0x13 (cr)</entry></row>
@@ -531,14 +760,21 @@ Everything, that doesn't looks like metacharacters, means simple character.
 </entry></row>
 </tbody></tgroup></table>
 
-<para>And these can be disabled during regexp module
-      compilaton as highlight-dependent</para>
-<table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
-<row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of start start).</entry></row>
+<para>
+The next operators are only available in Colorer-take5 regexp module parser,
+when in compiled for Colorer library:
+</para>
+<table><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of <literal>start</literal> tag).</entry></row>
 <row><entry><literal>\m</literal></entry><entry>Changes start of regexp</entry></row>
 <row><entry><literal>\M</literal></entry><entry>Changes end of regexp</entry></row>
-<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - required brackets pair, name - named bracket.</entry></row>
+<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - required bracket pair, name - named bracket.</entry></row>
 </tbody></tgroup></table>
+
+<para>
+For more information about <literal>\m \M</literal> meaning see
+in <xref linkend="schemesyntax.boundaries"/>.
+</para>
 
 </section>
 
@@ -552,6 +788,8 @@ metacharacter, or block of their combination (enclosed with brackets).
 
 <table><title>Operators</title><tgroup cols='2'><tbody>
 <row><entry><literal>( )</literal></entry><entry>Group and remember characters to form one pattern.</entry></row>
+<row><entry><literal>(?{name} )</literal></entry><entry>Group and remember characters into the named group.</entry></row>
+<row><entry><literal>(?{} )</literal></entry><entry>Group and remember characters into the unnamed uncounted group.</entry></row>
 <row><entry><literal>|</literal></entry><entry>Match previous or next pattern.</entry></row>
 <row><entry><literal>*</literal></entry><entry>Match previous pattern 0 or more times.</entry></row>
 <row><entry><literal>+</literal></entry><entry>Match previous pattern 1 or more times.</entry></row>
@@ -564,18 +802,17 @@ metacharacter, or block of their combination (enclosed with brackets).
 <para>
 If you'll add <literal>?</literal> after operator, it becomes nongreedy.
 For example <literal>*</literal> operator becomes nongreedy if placing <literal>*?</literal>
-Greedy operator tries to take as much in string, as it can.
-Nongreedy takes by minimum.
+Greedy operator tries to take as much in string, as it can. Nongreedy takes by minimum.
 </para>
 </section>
 
 
 <section id='hrcre.exops'><title>Extended operators</title>
 <table><title>Extended Operators</title><tgroup cols='2'><tbody>
-<row><entry><literal>?#N</literal></entry><entry>Look-behind. N - symbol count.</entry></row>
-<row><entry><literal>?~N</literal></entry><entry>Inverted Look-behind.</entry></row>
+<row><entry><literal>?#N</literal></entry><entry>Look-behind. N - symbol number to look behind.</entry></row>
+<row><entry><literal>?~N</literal></entry><entry>Negative look-behind.</entry></row>
 <row><entry><literal>?=</literal></entry><entry>Look-ahead.</entry></row>
-<row><entry><literal>?!</literal></entry><entry>Inverted Look-ahead.</entry></row>
+<row><entry><literal>?!</literal></entry><entry>Negative Look-ahead.</entry></row>
 </tbody></tgroup></table>
 <para>
 Note, that two last operators exist in Perl - in form of <literal>(?=foobar)</literal>.
@@ -627,38 +864,6 @@ But colorer uses syntax <literal>(foobar)?=</literal>
 </para>
 </example>
 </section>
-
-</appendix>
-
-
-
-
-
-<appendix id='coding_rec'>
-<title>HRC Coding Recommendations</title>
-<para>
-Пока хочу сказать, что нужно править всю базу на предмет
-появившихся пространств имен. Так как раньше ничего этого не было,
-каждая схема именовалась со своим префиксом.
-И теперь это все надо убирать нафиг.
-Иными словами, в описании каждого типа файлов
-схемы нужно переименовывать, убирать префиксы и называть их нормальными
-именами.
-То же самое относится к использованию сущностей и определений регионов.
-</para>
-<para>
-По возможности не надо использовать функции импорта других типов,
-потому как это уменьшает читабельность.
-Исключением может быть только тип <type>def</type>, и случаи,
-когда очень много ссылок на объекты других типов.
-Намного понятней выглядит <literal>scheme='c:StringCore'</literal>
-чем просто <literal>scheme='StringCore'</literal>.
-</para>
-<warning><title>changes:</title>
-<para>
-Возможно, <literal>&lt;import&gt;</literal> я вообще уберу.
-</para>
-</warning>
 
 </appendix>
 
@@ -731,6 +936,22 @@ version, available on the link above.
 
 </appendix>
 
+<appendix id='history'><title>History of the changes</title>
+<itemizedlist><title>take5.beta4, 19 February 2005</title>
+<listitem><para>
+Clarification of <literal>regexp</literal> and <literal>block</literal> regions usage.
+</para></listitem>
+<listitem><para>
+"Scheme boundaries and priority" explained.
+</para></listitem>
+<listitem><para>
+"HRC Language Coding Conventions" section was added.
+</para></listitem>
+
+</itemizedlist>
+</appendix>
+
+
 <bibliography id='bibliography'><title>References</title>
  
  <bibliomixed id="xml-rec">
@@ -761,3 +982,38 @@ version, available on the link above.
 </bibliography>
 
 </article>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Colorer Library.
+   -
+   - The Initial Developer of the Original Code is
+   - Cail Lomecb <cail@nm.ru>.
+   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

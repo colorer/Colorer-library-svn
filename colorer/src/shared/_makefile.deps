@@ -1,11 +1,11 @@
-
 TARGET=colorer
+
 all: $(TARGET)
 	perl _makefile.deps.pl
-	$(RM) -f *.d *.o .0
+	rm -f *.d *.o .o
 
 #generate dependencies:
-CPPFLAGS_CUSTOM=-MD -E
+CPPFLAGS_CUSTOM=-MD -E -ID:/usr/local/cygwin/usr/include -ID:/usr/local/cygwin/usr/include/w32api  
 
 shared_path=../shared/
 obj_output=.
