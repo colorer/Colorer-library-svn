@@ -12,7 +12,8 @@ unzipobjects = $(obj_output_slash)adler32.$(obj) \
                $(obj_output_slash)infutil.$(obj)        \
                $(obj_output_slash)uncompr.$(obj)         \
                $(obj_output_slash)zutil.$(obj)            \
-               $(obj_output_slash)unzip.$(obj) $(obj_output_slash)ioapi.$(obj)
+               $(obj_output_slash)unzip.$(obj)             \
+               $(obj_output_slash)ioapi.$(obj)
 
 $(obj_output_slash)adler32.$(obj):
 	$(CPP) $(CPPFLAGS) $(unzipdir)adler32.c

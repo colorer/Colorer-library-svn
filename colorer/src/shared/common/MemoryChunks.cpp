@@ -3,13 +3,35 @@
 #include<stdio.h>
 
 #include<common/MemoryChunks.h>
+/**
+  @ingroup common @{
+*/
 
+/**
+  List of currently allocated memory chunks with size CHUNK_SIZE
+*/
 static Vector<byte*> chunks;
+
+/**
+  Pointer to the last allocated chunk
+*/
 static byte *currentChunk = null;
+
+/**
+  Currently used size of the last allocated chunk
+*/
 static int currentChunkAlloc = 0;
 
+/**
+  Number of allocation instances.
+*/
 static int allocCount = 0;
 
+/**
+  Allocates @c size number of bytes and returns valid pointer.
+  @param size Requested number of bytes.
+  @throw Exception If no more memory, Exception is thrown.
+*/
 void *chunk_alloc(size_t size){
   if (size >= CHUNK_SIZE+4) throw Exception(DString("Too big memory request"));
   if (chunks.size() == 0){
@@ -30,6 +52,10 @@ void *chunk_alloc(size_t size){
   return retVal;
 };
 
+/**
+  Deallocates previously allocated memory.
+  @param ptr Pointer, returned by @c chunk_alloc call.
+*/
 void chunk_free(void *ptr){
   if (ptr == null) return;
   allocCount--;
@@ -41,6 +67,10 @@ void chunk_free(void *ptr){
   };
 //  printf("cf:%d, ", allocCount);
 };
+
+/**
+  @}
+*/
 
 
 /* ***** BEGIN LICENSE BLOCK *****

@@ -1,5 +1,5 @@
 
-#ifdef USE_CHUNK_ALLOC
+#if USE_CHUNK_ALLOC
 
   void *operator new(size_t size){
     return chunk_alloc(size);
