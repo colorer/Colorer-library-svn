@@ -16,11 +16,15 @@
   </xmlcatalog>
 
   
+  <property name='core-schemas' value='../../doc/2003'/>
   <property name='hrc-path' value='../../hrc'/>
   <property name='hrc-path-auto' value='${hrc-path}/auto/types'/>
 
   <property name='custom' value='schemas-custom'/>
   
+  <!-- Path to the DocBook XSD -->
+  <!--property name='docbook-xsd-path' value='D:\programs\xml\docbook\docbook-xsd-1.0b1/docbook.xsd'/-->
+  <property name='docbook-xsd-path' value='c:/instal/xml/docbook-xsd/docbook.xsd'/>
 
   
   <target name="all" description='Stub target'>
@@ -28,8 +32,63 @@
   </target>
 
 
+  <target name="xmlschema">
+    <xslt in='schemas/XMLSchema.xsd' out='${hrc-path}/xml/xmlschema.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xmlschema'/>
+      <param name='custom-defines' expression='${custom}/custom.xsd.xml'/>
+    </xslt>
+  </target>
+
+  <target name="xml">
+    <echo>
+Building hrc/xml/xml.internal.hrc
+It must be included into basic hrc/xml/xml.hrc</echo>
+    <xslt in='schemas/xml.xsd' out='${hrc-path}/xml/xml.internal.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xml'/>
+    </xslt>
+  </target>
+
+
+
+  <target name="hrc">
+    <xslt in='${core-schemas}/hrc.xsd' out='${hrc-path}/scripts/hrc.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='hrc'/>
+      <param name='drop-annotations' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.hrc.xml'/>
+    </xslt>
+  </target>
+  <target name="hrd">
+    <xslt in='${core-schemas}/hrd.xsd' out='${hrc-path}/scripts/hrd.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='hrd'/>
+      <param name='drop-annotations' expression='yes'/>
+    </xslt>
+  </target>
+  <target name="colorer5catalog">
+    <xslt in='${core-schemas}/catalog.xsd' out='${hrc-path-auto}/colorer5catalog.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='colorer5catalog'/>
+    </xslt>
+  </target>
+
+
+  
+  <target name="docbook">
+    <xslt in='${docbook-xsd-path}' out='docbook.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='docbook'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.docbook.xml'/>
+    </xslt>
+    <zip basedir='.' includes="docbook.hrc" destfile="${hrc-path-auto}/docbook.jar"/>
+    <delete file='docbook.hrc'/>
+  </target>
+
   <target name="ant">
-    <xslt in='schemas/ant.auto.xsd' out='ant.hrc' style='xsd2hrc.xsl'>
+    <xslt in='schemas/ant.xsd' out='ant.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='ant'/>
       <param name='allow-any-attr' expression='yes'/>
@@ -38,6 +97,18 @@
     </xslt>
     <zip basedir='.' includes="ant.hrc" destfile="${hrc-path-auto}/ant.jar"/>
     <delete file='ant.hrc'/>
+  </target>
+
+
+
+
+  <target name="calcset">
+    <xslt in='schemas/calcset.xsd' out='${hrc-path-auto}/calcset.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='calcset'/>
+      <param name='allow-any-attr' expression='yes'/>
+      <param name='top-level-element' expression='calc'/>
+    </xslt>
   </target>
 
 </project>

@@ -63,7 +63,7 @@
     <xsl:call-template name="createScheme">
       <xsl:with-param name="name" select="concat($typename, '-content')"/>
       <xsl:with-param name="content">
-        <xsl:if test="xs:annotation/xs:documentation">
+        <xsl:if test="xs:annotation/xs:documentation and $drop-annotations = 'no'">
           <annotation><documentation>
             <xsl:value-of select="xs:annotation"/>
           </documentation></annotation>
