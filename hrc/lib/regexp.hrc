@@ -417,6 +417,11 @@
  <regexp match="/\~/" region0="SpecOperator"/>       <!-- спецсимволы -->
  <regexp match="/\\C/i" region0="SymbClass"/>    <!-- Классы символов -->
  <regexp match="/\\[mM]/i" region0="SpecOperator"/>  <!-- colorer operators -->
+
+ <!-- xml entities -->
+ <regexp match="/\\&amp;\#(x?%hex;+|\d+)\;/" region="def:Number"/>
+ <regexp match="/\\&amp;(%xml:NCName;)\;/" region="def:Number"/>
+
  <regexp match="/\\?&amp;/" region="def:Error"/>  <!-- Xml errors -->
  <inherit scheme="std.symbs"/>
 </scheme>

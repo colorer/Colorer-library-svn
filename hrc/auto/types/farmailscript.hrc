@@ -38,7 +38,7 @@
 
     <scheme name="farmailscript">
 <!-- Comments -->
-      <regexp match="/\W?#1(rem\s+).*/i" region0="fComment" region1="fCmd"/>
+      <regexp match="/(^\s*|\W?#1)(rem)(\s+.*)/i" region2="fCmd" region3="fComment"/>
       <regexp match="/\/\/.*/i" region0="fComment"/>
       <block start="/\/\*/" end="/\*\//" scheme="Comment" region="fComment" region00="PairStart" region10="PairEnd"/>
 <!-- Numbers  -->
@@ -105,6 +105,7 @@
         <word name="selend"/>
         <word name="setline"/>
         <word name="setpos"/>
+        <word name="sprintf"/>
         <word name="string"/>
         <word name="strlen"/>
         <word name="strlwr"/>
