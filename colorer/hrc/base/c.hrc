@@ -37,7 +37,7 @@
 
   <region name="Preproc" parent="def:Directive"/>
   <region name="PreprocSpec" parent="def:KeywordStrong"/>
-  <region name="PreprocWord" parent="def:DirectiveInternal"/> <!-- !!EE: def:Keyword -->
+  <region name="PreprocWord" parent="def:DirectiveContent"/> <!-- !!EE: def:Keyword -->
   <region name="AsmCode" parent="def:Directive"/>
 
   <region name="KeywordANSI" parent="def:Keyword"/>
