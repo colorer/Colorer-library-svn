@@ -52,7 +52,7 @@
     <region name="UnicodeChar" parent="def:Character"/>
     <region name="UnicodeCharContent" parent="def:CharacterContent"/>
 
-    <entity name='worddiv' value="[\s\,\}\{\x22\x27\:\;\(\)]"/>
+    <entity name='worddiv' value="(?{}$|[\s\,\}\{\x22\x27\:\;\(\)])"/>
 
     <scheme name="Colors">
       <inherit scheme="NumericColors"/>
