@@ -5,7 +5,7 @@
      xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <type name="css" access="public">
+  <type name="coldfusion" access="public">
 
     <annotation> 
      <documentation>
@@ -17,11 +17,47 @@
 
     <import type="def"/>
 
+    <region name='Tag' parent='def:Keyword' description='CF tag'/>
+
+
+    <scheme name='Tags'>
+      <inherit scheme='html:htmlCoreTags'/>
+
+      <keywords region='Tag' ignorecase='yes'>
+        <word name='CFAUTHENTICATE'/>
+        <word name='CFGRIDCOLUMN'/>
+        <word name='CFGRIDUPDATE'/>
+        <word name='CFINCLUDE'/>
+        <word name='CFINPUT'/>
+        <word name='CFMODULE'/>
+        <word name='CFOUTPUT'/>
+        <word name='CFPROCRESULT'/>
+        <word name='CFQUERY'/>
+        <word name='CFSCHEDULE'/>
+        <word name='CFTEXTINPUT'/>
+        <word name='CFDEFAULTCASE'/>
+        <word name='CFUPDATE'/>
+        <word name='CFEXECUTE'/>
+        <word name='CFQUERYPARAM'/>
+        <word name='CFARGUMENT'/>
+        <word name='CFFUNCTION'/>
+        <word name='CFINVOKEARGUMENT'/>
+        <word name='CFLOGINUSER'/>
+        <word name='CFLOGOUT'/>
+        <word name='CFRETURN'/>
+      </keywords>
+
+    </scheme>
 
     <scheme name="coldfusion">
 
-      <inherit scheme="html"/>
+      <inherit scheme="html:html">
+        <virtual scheme='html:htmlCoreTags' subst-scheme='Tags'/>
+      </inherit>
+
     </scheme>
+
+
 
   </type>
 </hrc>

@@ -123,16 +123,17 @@
 
          <!-- c++ keywords -->
   
-  <regexp match="/^\s*(private|protected|public)(:)/" 
+  <!-- EE: now we don't need it...
+  regexp match="/^\s*(private|protected|public)(:)/" 
    region1="c:KeywordANSI" region2="c:Label"
-  />
+  /-->
   
   <keywords region="c:KeywordANSI">
    <word name="and"/>
    <word name="and_eq"/>
    <word name="bitand"/>
    <word name="bitor"/>
-   <word name="bool"/>
+   <word name="bool" region="c:KeywordANSI.typenames"/>
    <word name="catch"/>
    <word name="compl"/>
    <word name="const_cast"/>
@@ -241,6 +242,7 @@
    <word name="raw_storage_iterator"/>
    <word name="allocator"/>
    <word name="auto_ptr"/>
+   <word name="pair"/>
    
    <!-- alogoritms -->
    <word name="for_each"/>
@@ -342,7 +344,7 @@
    <word name="binary_negate"/>
    
    <!-- stdexept -->
-   <word name="exeption"/>
+   <word name="exception"/>
    <word name="logic_error"/>
    <word name="domain_error"/>
    <word name="out_of_range"/>

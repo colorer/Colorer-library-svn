@@ -13,7 +13,7 @@
     </documentation><contributors><![CDATA[
         Zini nAlexei <zn@zn.mldnet.com>
         Kirill Hryapin <kx@mail.ru>
-        Ondrej Brablc <far@brablc.com>
+        Ondrej Brablc <colorer@brablc.com>
         Eugene Efremov <4mirror@mail.ru>:
          - correct strings and heredoc, new schemes for strings
          - add regexp support (PCRE and ROSIX)
@@ -32,7 +32,9 @@
 
     <!-- !!EE add -->
     <region name="HereDoc" parent="perl:HereDoc"/>
-    <region name="InternalInsertion" parent="def:Insertion"/>
+    <region name="HereDocName" parent="perl:HereDocName"/>
+    <region name="HereDocLt" parent="perl:HereDocLt"/>
+    <region name="SystemExec" parent="perl:SystemExec"/>
     <region name="VarString" parent="def:Var"/>
 
 
@@ -105,13 +107,13 @@
    php regexp for '' strings
   </documentation>
   <appinfo> <todo> <![CDATA[
-    Hижеприведенный блок может создавать проблемы с записями типа:
-    $str='| длинная
-    стока
+    This block can make problems with the text similar to this:
+    $str='| a long
+    string
     ';
-    если первый символ строки - ^\w\s. Рекомендется использовать here doc.
-    Решением проблемы может быть замена на блок, не распознающий
-    многострочных регекспов, либо поддержка /s в колорере.
+    if first symbol of string - ^\w\s. I recommend to use HERE DOC.
+    Solution of a problem can be replacement by the block which is 
+    not supported multistring regexps, or support /s in colorer.
   ]]> </todo> </appinfo> 
  </annotation> 
 
@@ -141,7 +143,7 @@
     $str="| длинная
     стока
     ";
-    если первый символ строки - ^\w\s. Рекомендется использовать here doc.
+    если первый символ строки - ^\w\s. Я рекомендую использовать here doc.
     Решением проблемы может быть замена на блок, не распознающий
     многострочных регекспов, либо поддержка /s в колорере.
   ]]> </todo> </appinfo> 
@@ -211,15 +213,15 @@
 
                
 <!-- EE: changed -->
-         <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1)\M;$/" 
+         <block start="/(&lt;&lt;&lt;)([a-zA-Z_][\w_]*)/" end="/^(\y2)\M;$/" 
            scheme="StringCore" region="HereDoc" 
            region00="PairStart" region10="PairEnd" 
-           region01="Keyword" region11="Keyword"
+           region01="HereDocLt" region02="HereDocName" region11="HereDocName"
          />
 
 <!-- EE add: System command -->
          <block start="/`/" end="/`/" scheme="StringCore" 
-          region="InternalInsertion" region00="String" region10="String"
+          region="SystemExec" region00="String" region10="String"
          />
          <!-- regexp match='/ ` ( (\\.) | [^\\"] )* ` /x' / -->
 
@@ -246,7 +248,9 @@
       <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>-->
 
       <regexp match="/^\M \s* \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
-      <regexp match="/^\M \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+<!-- Brablc BEGIN -->
+      <regexp match="/^\M \s* (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+<!-- Brablc END -->
 
 
       <inherit scheme="PairedBrackets">
@@ -291,7 +295,7 @@
       </keywords>
         
       <keywords region="Keyword" ignorecase="yes">
-        <word name="as"/> 	<!--EE move-->
+        <word name="as"/>  <!--EE move-->
         <word name="break"/>
         <word name="case"/>
         <word name="class"/>
@@ -300,7 +304,7 @@
         <word name="define"/>
         <word name="defined"/>
         <word name="do"/>
-        <word name="echo"/>	<!--EE move-->
+        <word name="echo"/> <!--EE move-->
         <word name="else"/>
         <word name="elseif"/>
         <word name="endif"/>
@@ -308,7 +312,7 @@
         <word name="extends"/>
         <word name="false"/>
         <word name="for"/>
-        <word name="foreach"/>	<!--EE move-->
+        <word name="foreach"/> <!--EE move-->
         <word name="function"/>
         <word name="floatval"/>
         <word name="global"/>
@@ -757,6 +761,9 @@
         <word name="is_float"/>
         <word name="is_int"/>
         <word name="is_link"/>
+<!-- Brablc BEGIN -->
+        <word name="is_numeric"/>
+<!-- Brablc END -->
         <word name="is_object"/>
         <word name="is_readable"/>
         <word name="is_string"/>
@@ -1405,7 +1412,7 @@
         <word name="xml_set_external_entity_ref_handler"/>
         <word name="xml_set_notation_decl_handler"/>
         <word name="xml_set_processing_instruction_handler"/>
-        <word name="xml_set_object"/>	<!-- EE add -->
+        <word name="xml_set_object"/> <!-- EE add -->
         <word name="xml_set_unparsed_entity_decl_handler"/>
       </keywords>
       <inherit scheme="DeprecatedKeywords"/>
@@ -1773,6 +1780,10 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>:
+   - Kirill Hryapin <kx@mail.ru>
+   - Ondrej Brablc <colorer@brablc.com>
+   - Zini nAlexei <zn@zn.mldnet.com>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

@@ -14,6 +14,10 @@
     <location link="types/spt.hrc"/>
     <filename>/\.spt$/i</filename>
   </prototype>
+  <prototype name="postscript" group="scripts.rare" description="PostScript">
+    <location link="types/postscript.hrc"/>
+    <filename>/\.ps$/i</filename>
+  </prototype>
   <prototype name="rtf" group="scripts.rare" description="RTF text">
     <location link="types/rtf.hrc"/>
     <filename>/\.rtf$/i</filename>
