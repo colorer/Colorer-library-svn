@@ -5,9 +5,11 @@
 TARGET = net_sf_colorer.dll
 all: $(TARGET)
 
-shared_path=d:/projects/shared/
-JAVA_INCLUDE=d:/programs/java/jdk/include/
+shared_path=e:/programs/devel/colorer/src/shared/
+JAVA_INCLUDE=E:/programs/java/j2sdk1.4.1_01/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
+
+CYGWIN=-mno-cygwin
 
 obj_output=objs
 
@@ -20,15 +22,16 @@ DLLMAIN=_DllMain@12
 LIBINC = -lwininet
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
 
-$(obj_output_slash)jcolorer.$(obj):
-	$(CPP) -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -s -O3 -c jcolorer.cpp
+$(obj_output_slash)net_sf_colorer.$(obj):
+	$(CPP) $(CPPFLAGS) -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -s -O3 -c net_sf_colorer.cpp
 
 $(TARGET): *.cpp *.h $(objs)
-	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,colorer.dll.base $(objs) $(LIBINC)
-	$(DLLTOOL) --dllname colorer.dll --base-file colorer.dll.base --output-exp colorer.dll.exp --def jcolorer.def
-	$(LINK) $(LIBFLAGS) -o $@ $(objs) colorer.dll.exp $(LIBINC)
-	$(RM) colorer.dll.base
-	$(RM) colorer.dll.exp
+	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,net_sf_colorer.dll.base $(objs) $(LIBINC)
+	$(DLLTOOL) -k -A -z net_sf_colorer.def  $(objs)
+	$(DLLTOOL) --dllname net_sf_colorer.dll --base-file net_sf_colorer.dll.base --output-exp net_sf_colorer.dll.exp --def net_sf_colorer.def
+	$(LINK) $(LIBFLAGS) -o $@ $(objs) net_sf_colorer.dll.exp $(LIBINC)
+	$(RM) net_sf_colorer.dll.base
+	$(RM) net_sf_colorer.dll.exp
 
 clear:
 	$(RM) $(objs)
