@@ -1,10 +1,4 @@
 
-DOXYGEN=D:\programs\devel\doxygen\bin\doxygen.exe
-
-doc:
-	cd $(shared_path)colorer_doc
-	$(DOXYGEN) colorer.doxygen.cfg
-
 coreobjects = $(unzipobjects) \
               $(obj_output_slash)xml.$(obj)       \
               $(obj_output_slash)cregexp.$(obj)    \

@@ -20,5 +20,5 @@ colorer:: $(coreobjects)
 	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditor.cpp
 	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditorSet.cpp
 
-clear:
+clean:
 	$(RM) $(objs)
