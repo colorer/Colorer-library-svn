@@ -1,6 +1,9 @@
 package net.sf.colorer.eclipse;
 
-import net.sf.colorer.swt.dialog.ResourceManager;
+import java.util.Enumeration;
+
+import net.sf.colorer.FileType;
+import net.sf.colorer.ParserFactory;
 
 import org.eclipse.jface.preference.*;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -15,6 +18,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class FileTypePreferencePage implements IWorkbenchPreferencePage{
 
   private Composite root;
+  private Tree typesTree;
+  private Button spacesAsTabs;
+  private Text spacesTabNumber;
+  private Combo hrdSchemas;
+  private Table typeProps;
 
   public FileTypePreferencePage(){
     //super(, FieldEditorPreferencePage.GRID);
@@ -25,32 +33,76 @@ public class FileTypePreferencePage implements IWorkbenchPreferencePage{
 
   Composite createComposite(Composite parent){
     Composite composite = new Composite(parent, SWT.NONE);
-    composite.setLayout(new GridLayout(2, false));
+    composite.setLayout(new GridLayout(3, false));
     {
-      final Tree tree = new Tree(composite, SWT.NONE);
-      tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+      typesTree = new Tree(composite, SWT.BORDER|SWT.CHECK);
+      typesTree.setLayoutData(new GridData(GridData.FILL_BOTH));
     }
     {
       final Composite comp = new Composite(composite, SWT.NONE);
-      comp.setLayout(new GridLayout(2, true));
-      comp.setLayoutData(new GridData(GridData.FILL_BOTH));
+      comp.setLayout(new GridLayout(2, false));
+      comp.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+      {
+        spacesAsTabs = new Button(comp, SWT.CHECK);
+        spacesAsTabs.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+        spacesAsTabs.setText("spaces as tabs");
+      }
+      {
+        final Label lb = new Label(comp, SWT.CHECK);
+        lb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        lb.setText("Spaces per tab:");
+      }
+      {
+        spacesTabNumber = new Text(comp, SWT.BORDER);
+        spacesTabNumber.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        spacesTabNumber.setText("4");
+      }
+      {
+        final Label lb = new Label(comp, SWT.CHECK);
+        lb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        lb.setText("Color schema:");
+      }
+      {
+        hrdSchemas = new Combo(comp, SWT.NONE|SWT.READ_ONLY);
+        hrdSchemas.setLayoutData(new GridData(GridData.FILL_BOTH));
+        hrdSchemas.add("<global>");
+        hrdSchemas.add("white");
+        hrdSchemas.select(0);
+      }
+      {
+        typeProps = new Table(comp, SWT.CHECK|SWT.BORDER|SWT.V_SCROLL|SWT.FULL_SELECTION|SWT.VERTICAL);
+        typeProps.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+        typeProps.setHeaderVisible(true);
+        typeProps.setLinesVisible(true);
+
+        TableColumn tc = new TableColumn(typeProps, SWT.LEFT);
+        tc.setText("Parameter");
+        tc.setWidth(70);
+        tc = new TableColumn(typeProps, SWT.LEFT);
+        tc.setText("Description");
+        tc.setWidth(200);
+        
+        ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+        
+        for (Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
+          FileType type = (FileType)e.nextElement();
+          new TableItem(typeProps, SWT.CHECK).setText(new String[]{type.getName(), type.getDescription()});
+        }
+          
+      }
     }
-    //  DESIGNER: Add controls before this line.    
     return composite;
   }
 
-
-  public void createFieldEditors(){
-    //Composite p = getFieldEditorParent();
-    
-  }
 
   public Point computeSize() {
     return new Point(300, 500);
   }
   
   public void createControl(Composite parent) {
-    root = createComposite(parent);
+    if (root == null){
+      root = createComposite(parent);
+    }
   }
 
   public boolean isValid() {
@@ -125,7 +177,7 @@ public class FileTypePreferencePage implements IWorkbenchPreferencePage{
   }
 
   public void setVisible(boolean visible) {
-    // TODO Auto-generated method stub
+    root.setVisible(visible);
   }
 }
 
