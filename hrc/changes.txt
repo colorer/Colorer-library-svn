@@ -2,6 +2,9 @@
 
   $Date$
 
+  Reorg:
+    - Rare scripts were moved into the 'auto' directory
+
   New:
     - ActionScript by Ralf Bokelberg
     - Quorum Atlantis by Vladimir Fonarev
@@ -16,4 +19,4 @@
     - sqlj, IDL, CPP, diff
     - VMS is renamed into DCL
     - C/C++, css, php (Eugene Efremov)
-
+    - z80asm/asm80 fix

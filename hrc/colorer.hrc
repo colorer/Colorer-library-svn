@@ -11,34 +11,28 @@
    </documentation>
   </annotation>
 
-  <!--  base languages  -->
-  <prototype name="c" group="base" description="c">
+  <!--  main languages  -->
+  <prototype name="c" group="main" description="C">
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
   </prototype>
-  <prototype name="cpp" group="base" description="c++">
+  <prototype name="cpp" group="main" description="C++">
     <location link="base/cpp.hrc"/>
     <filename>/\.(cpp|cxx|cc|hpp|h)$/i</filename>
     <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
     <firstline>/\#include/</firstline>
     <firstline>/\#define|\#if/</firstline>
   </prototype>
-  <prototype name="perl" group="base" description="perl">
-    <location link="base/perl.hrc"/>
-    <filename>/\.(pl[sx]?|pm|pod|cgi)$/i</filename>
-    <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
-    <firstline>/perl/i</firstline>
-  </prototype>
-  <prototype name="asm" group="base" description="assembler">
+  <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
     <filename>/\.(mac|asm|inc|i32)$/i</filename>
     <firstline>/^\s*;/</firstline>
   </prototype>
-
-  <!--  main languages  -->
-  <prototype name="csharp" group="main" description="C#">
-    <location link="main/csharp.hrc"/>
-    <filename>/\.cs$/i</filename>
+  <prototype name="perl" group="main" description="Perl">
+    <location link="base/perl.hrc"/>
+    <filename>/\.(pl[sx]?|pm|pod|cgi)$/i</filename>
+    <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
+    <firstline>/perl/i</firstline>
   </prototype>
   <prototype name="java" group="main" description="Java">
     <location link="main/java.hrc"/>
@@ -52,6 +46,10 @@
     <location link="main/pascal.hrc"/>
     <filename>/\.(\~?pas|dpr|dpk|inc|int)$/i</filename>
     <firstline>/^(\{|\/\/|resourcestring)/i</firstline>
+  </prototype>
+  <prototype name="csharp" group="main" description="C#">
+    <location link="main/csharp.hrc"/>
+    <filename>/\.cs$/i</filename>
   </prototype>
   <prototype name="jsnet" group="main" description="JS.NET">
     <location link="main/js.net.hrc"/>
@@ -82,6 +80,19 @@
     <filename>/\.[^p]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
   </prototype>
+  <prototype name="css" group="inet" description="css">
+    <location link="inet/css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+  <prototype name="jsp" group="inet" description="jsp">
+    <location link="inet/jsp.hrc"/>
+    <filename>/\.(jsp|jspf)$/i</filename>
+  </prototype>
+  <prototype name="php" group="inet" description="php">
+    <location link="inet/php.hrc"/>
+    <filename>/\.(php\d?|phtml|inc)$/i</filename>
+    <firstline>/^&lt;\?(php)/</firstline>
+  </prototype>
   <prototype name="xhtml-strict" group="inet" description="xhtml strict" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/xhtml-strict.hrc"/>
     <filename>/\.html?/ix</filename>
@@ -102,10 +113,6 @@
     <filename>/\.xhtml?/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Frameset/i</firstline>
-  </prototype>
-  <prototype name="css" group="inet" description="css">
-    <location link="inet/css.hrc"/>
-    <filename>/\.(css)$/i</filename>
   </prototype>
   <prototype name="asp.vb" group="inet" description="asp - VBScript">
     <location link="inet/asp.vb.hrc"/>
@@ -134,15 +141,6 @@
   <prototype name="vbScript" group="inet" description="VBScript">
     <location link="inet/vbscript.hrc"/>
     <filename>/\.(vbs)$/i</filename>
-  </prototype>
-  <prototype name="jsp" group="inet" description="jsp">
-    <location link="inet/jsp.hrc"/>
-    <filename>/\.(jsp|jspf)$/i</filename>
-  </prototype>
-  <prototype name="php" group="inet" description="php">
-    <location link="inet/php.hrc"/>
-    <filename>/\.(php\d?|phtml|inc)$/i</filename>
-    <firstline>/^&lt;\?(php)/</firstline>
   </prototype>
 
   <!--  xml types  -->
@@ -199,8 +197,8 @@
     <location link="db/foxpro.hrc"/>
     <filename>/\.(prg|spr|mpr)$/i</filename>
   </prototype>
-  <prototype name="sqlj" group="database" description="Java sql">
-    <location link="db/javasql.hrc"/>
+  <prototype name="sqlj" group="database" description="SQLJ (Java sql)">
+    <location link="db/sqlj.hrc"/>
     <filename>/\.sqlj$/i</filename>
   </prototype>
   <prototype name="paradox" group="database" description="Paradox">
@@ -213,13 +211,23 @@
   </prototype>
 
   <!--  scripts  -->
-  <prototype name="apache" group="scripts" description="Apache config">
-    <location link="scripts/apache.hrc"/>
-    <filename>/(httpd\.conf|srm\.conf|access\.conf|\.htaccess|apache\.conf)$/i</filename>
-  </prototype>
   <prototype name="Batch" group="scripts" description="Batch/Config.sys/NTcmd">
     <location link="scripts/batch.hrc"/>
     <filename>/\.(Cmd|Bat|nt|btm|sys)$/i</filename>
+  </prototype>
+  <prototype name="shell" group="scripts" description="sh/ksh/bash script">
+    <location link="scripts/sh.hrc"/>
+    <filename>/\.(sh)$/i</filename>
+    <firstline weight='2'>/^\#(!\s*.+sh\b|\#)/</firstline>
+  </prototype>
+  <prototype name="apache" group="scripts" description="Apache httpd.conf">
+    <location link="scripts/apache.hrc"/>
+    <filename>/(httpd\.conf|srm\.conf|access\.conf|\.htaccess|apache\.conf)$/i</filename>
+  </prototype>
+  <prototype name="config" group="scripts" description="Config, INI and CTL">
+    <location link="scripts/config.hrc"/>
+    <filename weight='1'>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
+    <firstline>/^[;\[\#]/</firstline>
   </prototype>
   <prototype name="hrc" group="scripts" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
     <location link="scripts/hrc.hrc"/>
@@ -232,40 +240,13 @@
     <location link="scripts/hrd.hrc"/>
     <filename>/\.hrd$/i</filename>
   </prototype>
-  <prototype name="config" group="scripts" description="Config, INI and CTL">
-    <location link="scripts/config.hrc"/>
-    <filename weight='1'>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
-    <firstline>/^[;\[\#]/</firstline>
-  </prototype>
   <prototype name="delphiform" group="scripts" description="Delphi form">
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
   </prototype>
-
-  <prototype name="rarscript" group="scripts.install" description="RAR Install Script">
-    <location link="scripts/rarscrpt.hrc"/>
-    <filename>/\.s$/i</filename>
-  </prototype>
-  <prototype name="nsi" group="scripts.install" description="Nullsoft Install Script">
-    <location link="scripts/nsi.hrc"/>
-    <filename>/\.ns(i|h)$/i</filename>
-  </prototype>
-  <prototype name="iss" group="scripts.install" description="InnoSetup script">
-    <location link="scripts/iss.hrc"/>
-    <filename>/\.iss$/i</filename>
-  </prototype>
-  <prototype name="isScripts" group="scripts.install" description="IS script">
-    <location link="scripts/rul.hrc"/>
-    <filename>/\.rul$/i</filename>
-  </prototype>
-
   <prototype name="javaProperties" group="scripts" description="Java properties">
     <location link="scripts/javaprop.hrc"/>
     <filename>/\.pro(p(erties)?)?$/i</filename>
-  </prototype>
-  <prototype name="farhelp" group="scripts" description="Far Help">
-    <location link="scripts/farhelp.hrc"/>
-    <filename>/\.hlf$/i</filename>
   </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
@@ -290,11 +271,6 @@
     <location link="scripts/resrc.hrc"/>
     <filename>/\.rc$/i</filename>
   </prototype>
-  <prototype name="shell" group="scripts" description="sh/ksh/bash script">
-    <location link="scripts/sh.hrc"/>
-    <filename>/\.(sh)$/i</filename>
-    <firstline weight='2'>/^\#(!\s*.+sh\b|\#)/</firstline>
-  </prototype>
   <prototype name="TeX" group="scripts" description="TeX">
     <location link="scripts/tex.hrc"/>
     <filename>/\.(tex|cls|sty|ltx)$/i</filename>
@@ -306,6 +282,23 @@
   <prototype name="vrml" group="scripts" description="VRML">
     <location link="scripts/vrml.hrc"/>
     <filename>/\.wrl$/i</filename>
+  </prototype>
+
+  <prototype name="rarscript" group="scripts.install" description="RAR Install Script">
+    <location link="scripts/rarscrpt.hrc"/>
+    <filename>/\.s$/i</filename>
+  </prototype>
+  <prototype name="nsi" group="scripts.install" description="Nullsoft Install Script">
+    <location link="scripts/nsi.hrc"/>
+    <filename>/\.ns(i|h)$/i</filename>
+  </prototype>
+  <prototype name="iss" group="scripts.install" description="InnoSetup script">
+    <location link="scripts/iss.hrc"/>
+    <filename>/\.iss$/i</filename>
+  </prototype>
+  <prototype name="isScripts" group="scripts.install" description="IS script">
+    <location link="scripts/rul.hrc"/>
+    <filename>/\.rul$/i</filename>
   </prototype>
 
   <!--  rare languages  -->
@@ -402,7 +395,7 @@
     <firstline>/^\#(!\s*.+(tcl|wi)sh\b)/</firstline>
   </prototype>
   <prototype name="turboProlog" group="rare" description="Turbo Prolog">
-    <location link="main/tprolog.hrc"/>
+    <location link="rare/tprolog.hrc"/>
     <filename>/\.tpl$/i</filename>
   </prototype>
   <prototype name="verilog" group="rare" description="Verilog HDL">
@@ -418,7 +411,7 @@
     <filename>/\.za$/i</filename>
   </prototype>
   <prototype name="asm80" group="rare" description="asm80">
-    <location link="rare/z80.hrc"/>
+    <location link="rare/asm80.hrc"/>
     <filename>/\.a80$/i</filename>
   </prototype>
 
