@@ -1,29 +1,13 @@
 <?xml version="1.0"?>
 <project name='XSD2HRC Module' default="all" basedir=".">
 
-  <property name='core-schemas' value='../../doc/2003'/>
   <property name='hrc-path' value='../../hrc'/>
   <property name='hrc-path-auto' value='${hrc-path}/auto/gen'/>
 
   <property name='custom' value='schemas-custom'/>
-  
-  
 
-  <!-- 
-       Paths to custom XSD definitions
-  -->
-  
-  <!--property name='xhtml-path' value='D:\usr\doc\w3.org\src'/-->
-  <property name='xhtml-path' value='c:\install\documentation\w3.org\src'/>
-  
-  <!--property name='docbook-xsd-path' value='D:\programs\xml\docbook\docbook-xsd-1.0b1/docbook.xsd'/-->
-  <property name='docbook-xsd-path' value='c:/instal/xml/docbook-xsd/docbook.xsd'/>
-  <property name='db-exists' value='true'/>
-    
-  <!--property name='mathml-xsd-path' value='D:\usr\doc\w3.org\REC\MathML\mathml2\mathml2.xsd'/-->
-  <property name='mathml-xsd-path' value='C:\install\documentation\w3.org\REC\MathML\mathml2\mathml2.xsd'/>
-  
 
+  <property name='core-schemas' value='../../doc/2003'/>
 
 
   <xmlcatalog id="DTDs">
@@ -39,6 +23,7 @@
     <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
          location="../../doc/2003/catalog.dtd"/>
   </xmlcatalog>
+
 
   
   <target name="all" description='Stub target'>
@@ -71,7 +56,7 @@
 
  
   <target name="docbook" unless='db-exists'>
-    <xslt in='${docbook-xsd-path}' out='${hrc-path-auto}/docbook.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${docbook-xsd}' out='${hrc-path-auto}/docbook.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='docbook'/>
       <param name='allow-unknown-elements' expression='yes'/>
@@ -90,7 +75,7 @@
   </target>
 
   <target name="mathml">
-    <xslt in='${mathml-xsd-path}' out='${hrc-path-auto}/mathml.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${mathml-xsd}' out='${hrc-path-auto}/mathml.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='mathml'/>
       <param name='allow-unknown-elements' expression='yes'/>
@@ -101,19 +86,19 @@
 
 
   <target name="xhtml">
-    <xslt in='${xhtml-path}/xhtml1-strict.xsd' out='${hrc-path}/inet/xhtml-strict.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-xsd-dir}/xhtml1-strict.xsd' out='${hrc-path}/inet/xhtml-strict.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-strict'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
     </xslt>
-    <xslt in='${xhtml-path}/xhtml1-transitional.xsd' out='${hrc-path}/inet/xhtml-trans.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-xsd-dir}/xhtml1-transitional.xsd' out='${hrc-path}/inet/xhtml-trans.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-trans'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
     </xslt>
-    <xslt in='${xhtml-path}/xhtml1-frameset.xsd' out='${hrc-path}/inet/xhtml-frameset.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-xsd-dir}/xhtml1-frameset.xsd' out='${hrc-path}/inet/xhtml-frameset.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-frameset'/>
       <param name='allow-unknown-elements' expression='yes'/>
