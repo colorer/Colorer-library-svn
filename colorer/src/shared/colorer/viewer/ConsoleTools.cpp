@@ -123,7 +123,7 @@ void ConsoleTools::setLinkSource(const String &str){
           if (l_scheme == null) l_scheme = scheme;
           if (token == null) continue;
           StringBuffer hkey(token);
-          if (l_scheme != null){
+          if (l_scheme != null && l_scheme.length() > 0){
             hkey.append(DString("--")).append(l_scheme);
           };
           docLinkHash->put(&hkey, new SString(&fullURL));

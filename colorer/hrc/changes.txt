@@ -4,9 +4,10 @@ $Date$
 
   New:
     - JSP TagLib, OCaml, Sicstus Prolog
+    - ESC.xml (Eugene Efremov)
   Fixes:
     - SML, ada, modula2
-    - Perl/HRC RE, php, html (Eugene Efremov)
+    - Perl/HRC RE, php, html, css (Eugene Efremov)
     - Tex
 
 
