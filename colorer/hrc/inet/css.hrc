@@ -690,7 +690,7 @@
     <scheme name="RulesList">
       <inherit scheme="Comment"/>
 
-      <regexp match="/^\M(?{RuleOutline}[\w\.\:][\*\s\,\.\:\[\]\#\.\w\-\*\=\x22\x27]+)/"/>
+      <regexp match="/^\M(?{RuleOutline}[\w\.\:][\|\*\s\,\.\:\[\]\#\.\w\-\*\=\x22\x27]+)/"/>
 
       <inherit scheme="TagNames"/>
 
