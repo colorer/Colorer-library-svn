@@ -54,7 +54,7 @@
  </dependset>
 </target>
 
-<target name="hrc" depends="xsd, hrc.check">
+<target name="hrc" depends="ent, xsd, hrc.check">
  <copy todir='${obj}'>
    <fileset dir='${src}' includes='custom.wml.xml'/>
  </copy>

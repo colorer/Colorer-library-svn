@@ -69,7 +69,7 @@
  <xs:attribute name="region1" type="QName" use="required"/>
  <xs:attribute name="scheme2" type="QName"/>
  <xs:attribute name="region2" type="QName"/>
- <xs:attributeGroup ref="blockattr"/>
+ <xs:attributeGroup ref="regionX"/>
 </xs:complexType>
 
 <xs:complexType name="name-block">
@@ -79,7 +79,7 @@
  </xs:sequence>
  <xs:attribute name="scheme" type="QName" use="required"/>
  <xs:attribute name="region" type="QName" use="required"/>
- <xs:attributeGroup ref="blockattr"/>
+ <xs:attributeGroup ref="regionX"/>
 </xs:complexType>
 
 <xs:complexType name="name">

@@ -54,7 +54,8 @@
   <!-- support xmlss - permission to '/' from $custom-type -->
   <xsl:variable name="root" select="/"/>
   <!-- support xmlss - key for find scripting elements -->
-  <xsl:key name="script" match="xs:element[@name = $custom-type/c:script-n-style/c:element/@name]" use="@name"/>
+  <xsl:key name="script" match="xs:element" use="@name"/>
+  
 
 
   <!-- possible used namespace prefixes -->
