@@ -137,12 +137,7 @@
 </echo>
   </target>
 
-  <target name="all" depends='init' description='Builds all available packages: library, farplugin and eclipseplugin'>
-    <splash/>
-    <antcall target='library'/>
-    <antcall target='library-linux'/>
-    <antcall target='farplugin'/>
-    <antcall target='eclipseplugin'/>
+  <target name="all" depends='init, library, farplugin, eclipseplugin, library-linux' description='Builds all available packages: library, farplugin and eclipseplugin'>
   </target>
 
   <target name="clean" depends='init, library.clean, farplugin.clean, eclipseplugin.clean, hrc.clean, hrcupdate.clean, doc.clean'
