@@ -181,8 +181,16 @@ wchar DString::operator[](int i) const{
     case ST_UTF8:
       return stream_wstr[start+i];
     case ST_UTF32:
+      // check for 4byte character - if so, return REPLACEMENT CHARACTER
+      if (w4str[start+i]>>16 != 0){
+        return 0xFFFD;
+      }
       return (wchar)w4str[start+i];
     case ST_UTF32_BE:
+      // check for 4byte character - if so, return REPLACEMENT CHARACTER
+      if (w4str[start+i]<<16 != 0){
+        return 0xFFFD;
+      }
       return (wchar)(((w4str[start+i]&0xFF)<<24) + ((w4str[start+i]&0xFF00)<<8) + ((w4str[start+i]&0xFF0000)>>8) + ((w4str[start+i]&0xFF000000)>>24));
   };
   throw StringIndexOutOfBoundsException(SString(i));
