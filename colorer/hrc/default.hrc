@@ -75,7 +75,7 @@
 
     <region name="Parameter" description="Parameter declaration"/>
     <region name="ParameterStrong" parent="Parameter" description="Special parameter"/>
-    <region name="ParameterUnknow" parent="ParameterStrong" description="Undefined parameter"/>
+    <region name="ParameterUnknown" parent="ParameterStrong" description="Undefined parameter"/>
 
     <region name="Tag" description="HTML tag"/>
     <region name="OpenTag" parent="Tag" description="Opening tag"/>

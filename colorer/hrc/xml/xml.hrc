@@ -80,7 +80,7 @@
     <region name="element.defined.start.name" parent="Keyword"/>
     <region name="element.defined.end.name"   parent="Keyword"/>
 
-    <region name="Attribute.name"         parent="ParameterUnknow"/>
+    <region name="Attribute.name"         parent="ParameterUnknown"/>
     <region name="Attribute.defined.name" parent="Parameter"/>
     <region name="Attribute.nsprefix"     parent="Prefix"/>
     <region name="Attribute.nscolon"      parent="SymbolStrong"/>
