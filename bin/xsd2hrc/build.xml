@@ -89,62 +89,54 @@
 
   
   <target name="docbook">
-    <xslt in='${docbook-xsd-path}' out='docbook.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${docbook-xsd-path}' out='${hrc-path-auto}/docbook.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='docbook'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.docbook.xml'/>
     </xslt>
-    <zip basedir='.' includes="docbook.hrc" destfile="${hrc-path-auto}/docbook.jar"/>
-    <delete file='docbook.hrc'/>
   </target>
 
   <target name="ant">
-    <xslt in='schemas/ant.xsd' out='ant.hrc' style='xsd2hrc.xsl'>
+    <xslt in='schemas/ant.xsd' out='${hrc-path-auto}/ant.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='ant'/>
       <param name='allow-any-attr' expression='yes'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.ant.xml'/>
     </xslt>
-    <zip basedir='.' includes="ant.hrc" destfile="${hrc-path-auto}/ant.jar"/>
-    <delete file='ant.hrc'/>
   </target>
 
   <target name="mathml">
-    <xslt in='${mathml-xsd-path}' out='mathml.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${mathml-xsd-path}' out='${hrc-path-auto}/mathml.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='mathml'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='allow-any-attr' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.mathml.xml'/>
     </xslt>
-    <zip basedir='.' includes="mathml.hrc" destfile="${hrc-path-auto}/mathml.jar"/>
-    <delete file='mathml.hrc'/>
   </target>
 
 
   <target name="xhtml">
-    <xslt in='${xhtml-path}/xhtml1-strict.xsd' out='xhtml-strict.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-path}/xhtml1-strict.xsd' out='${hrc-path}/inet/xhtml-strict.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-strict'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
     </xslt>
-    <xslt in='${xhtml-path}/xhtml1-transitional.xsd' out='xhtml-trans.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-path}/xhtml1-transitional.xsd' out='${hrc-path}/inet/xhtml-trans.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-trans'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
     </xslt>
-    <xslt in='${xhtml-path}/xhtml1-frameset.xsd' out='xhtml-frameset.hrc' style='xsd2hrc.xsl'>
+    <xslt in='${xhtml-path}/xhtml1-frameset.xsd' out='${hrc-path}/inet/xhtml-frameset.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-frameset'/>
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
     </xslt>
-    <zip basedir='.' includes="xhtml*.hrc" destfile="${hrc-path}/inet/xhtml.jar"/>
-    <delete><fileset dir='.' includes='xhtml*.hrc'/></delete>
   </target>
 
 
