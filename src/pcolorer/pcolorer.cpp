@@ -77,6 +77,10 @@ int WINAPI ProcessEditorEvent(int Event, void *Param)
 {
   return editorSet->editorEvent(Event, Param);
 };
+int WINAPI ProcessEditorInput(const INPUT_RECORD*ir)
+{
+  return editorSet->editorInput(ir);
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -5,7 +5,7 @@
 #include<fcntl.h>
 #include<time.h>
 
-#if defined __MSDOS__ || defined _WIN32
+#if defined _WIN32
 #include<io.h>
 #endif
 #if defined __unix__ || defined __GNUC__
@@ -13,9 +13,6 @@
 #endif
 #ifndef O_BINARY
 #define O_BINARY 0x0
-#endif
-#if defined __unix__
-extern "C" int ftime(struct timeb*tb);
 #endif
 
 #include<common/io/FileInputSource.h>

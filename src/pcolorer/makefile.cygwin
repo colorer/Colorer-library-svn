@@ -8,7 +8,7 @@ CYGWIN=-mno-cygwin
 shared_path=../shared/
 obj_output=objs
 
-include $(shared_path)makefile.colorer.gcc
+include $(shared_path)makefile.colorer.cygwin
 include makefile.core
 
 DEF=pcolorer.gcc.def

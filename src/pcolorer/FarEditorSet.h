@@ -27,8 +27,10 @@ public:
   /** Views current file with internal viewer */
   void viewFile(const String &path);
 
-  /** Dispatch editor event in currently opened editor */
+  /** Dispatch editor event in the opened editor */
   int  editorEvent(int Event, void *Param);
+  /** Dispatch editor input event in the opened editor */
+  int  editorInput(const INPUT_RECORD *ir);
 
 private:
   /** Returns current global error handler. */
