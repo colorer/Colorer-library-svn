@@ -9,7 +9,7 @@ obj_output=objs
 
 include ../shared/makefile.colorer.cygwin
 
-LIBINC = -lwininet
+LIBINC = -lwininet -lstdc++
 LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
 
 include makefile.core
