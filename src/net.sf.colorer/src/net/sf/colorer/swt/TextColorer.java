@@ -89,7 +89,6 @@ public class TextColorer{
     text.addLineBackgroundListener(ml);
     text.addPaintListener(ml);
     text.addVerifyListener(ml);
-    text.addExtendedModifyListener(ml);
     text.addControlListener(ml);
     text.addKeyListener(ml);
     text.addTraverseListener(ml);
@@ -141,7 +140,6 @@ public class TextColorer{
     text.removeLineBackgroundListener(ml);
     text.removePaintListener(ml);
     text.removeVerifyListener(ml);
-    text.removeExtendedModifyListener(ml);
     text.removeControlListener(ml);
     text.removeKeyListener(ml);
     text.removeTraverseListener(ml);
@@ -182,6 +180,14 @@ public class TextColorer{
   public ParserFactory getParserFactory(){
       return pf;
   }
+  
+  /**
+   * Returns current low-level BaseEditor object implementation
+   */
+  public BaseEditor getBaseEditor() {
+      return baseEditor;
+  }
+
 
   /**
    * Changes style/coloring scheme into the specified.
@@ -453,7 +459,7 @@ public class TextColorer{
 
 
 
-  class InternalHandler implements VerifyListener, ExtendedModifyListener, ControlListener, TextChangeListener,
+  class InternalHandler implements VerifyListener, ControlListener, TextChangeListener,
                     SelectionListener, MouseListener, KeyListener, DisposeListener,
                     LineStyleListener, LineBackgroundListener, PaintListener, TraverseListener{
 
@@ -514,16 +520,28 @@ public class TextColorer{
     public void verifyText(VerifyEvent e){
       baseEditor.modifyEvent(text.getLineAtOffset(e.start));
     }
+/*    
     public void modifyText(ExtendedModifyEvent e) {
-      modifyEvent(text.getLineAtOffset(e.start));
+      if (Logger.TRACE) {
+          Logger.trace("TextColorer", "modifyEvent:"+text.getLineAtOffset(e.start));
+      }
     }
-
+*/
     public void textChanged(TextChangedEvent event) {
+        if (Logger.TRACE) {
+            Logger.trace("TextColorer", "textChanged");
+        }
+        modifyEvent(text.getLineAtOffset(text.getCaretOffset()));
     }
+    
     public void textChanging(TextChangingEvent event) {
     }
+    
     // Used with complex text change events (tabbing, replacement, etc.)
     public void textSet(TextChangedEvent event) {
+        if (Logger.TRACE) {
+            Logger.trace("TextColorer", "textSet");
+        }
       modifyEvent(0);
     }
 

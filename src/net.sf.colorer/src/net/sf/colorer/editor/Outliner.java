@@ -11,23 +11,35 @@ import net.sf.colorer.Scheme;
  * filter out only required structure elements.
  *
  */
-public class Outliner implements RegionHandler{
+public class Outliner implements RegionHandler, EditorListener{
     protected Vector outline = new Vector();
     Region searchRegion = null;
     int curLevel = 0;
-    boolean lineIsEmpty = true;
+    int modifiedLine = -1;
+    private boolean changed = true;
+    private boolean lineIsEmpty = true;
 
     public Outliner(Region searchRegion) {
         this.searchRegion = searchRegion;
-    };
+    }
+    
+    public void attachOutliner(BaseEditor be) {
+        be.addRegionHandler(this, searchRegion);
+        be.addEditorListener(this);
+    }
 
+    public void detachOutliner(BaseEditor be) {
+        be.removeRegionHandler(this);
+        be.removeEditorListener(this);
+    }
+    
     public OutlineItem getItem(int idx) {
         return (OutlineItem) outline.elementAt(idx);
-    };
+    }
 
     public int itemCount() {
         return outline.size();
-    };
+    }
 
     public Region getFilter() {
         return searchRegion;
@@ -56,37 +68,56 @@ public class Outliner implements RegionHandler{
         outline.setSize(0);
     }
 
-    public OutlineItem createItem(int lno, int sx, int curLevel, String itemLabel, Region region) {
-        return new OutlineItem(lno, sx, curLevel, itemLabel, region);
-    };
+    public OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
+        return new OutlineItem(lno, sx, length, curLevel, itemLabel, region);
+    }
 
-    public void startParsing(int lno) {
+    protected void notifyUpdate() {}
+    
+    public void modifyEvent(int topLine) {
         int new_size;
         for (new_size = outline.size() - 1; new_size >= 0; new_size--) {
-            if (((OutlineItem) outline.elementAt(new_size)).lno < lno)
+            if (((OutlineItem) outline.elementAt(new_size)).lno < topLine)
                 break;
-        };
+        }
         outline.setSize(new_size + 1);
+        modifiedLine = topLine;
+        changed = true;
+    }
+    
+    public void startParsing(int lno) {
         curLevel = 0;
-    };
+    }
 
     public void endParsing(int lno) {
+        if (modifiedLine < lno){
+            modifiedLine = lno+1;
+        }
         curLevel = 0;
-    };
+        if (changed) {
+            notifyUpdate();
+            changed = false;
+        }
+    }
 
     public void clearLine(int lno, String line) {
         lineIsEmpty = true;
-    };
+    }
 
     public void addRegion(int lno, String line, int sx, int ex, Region region) {
-        if (!isOutlined(region))
+        if (lno < modifiedLine) {
             return;
+        }
+        if (!isOutlined(region)) {
+            return;
+        }
+
         String itemLabel = null;
         if (line != null)
             itemLabel = line.substring(sx, ex);
 
         if (lineIsEmpty) {
-            outline.addElement(createItem(lno, sx, curLevel, itemLabel, region));
+            outline.addElement(createItem(lno, sx, ex-sx, curLevel, itemLabel, region));
         } else {
             OutlineItem thisItem = (OutlineItem) outline.lastElement();
             if (itemLabel != null && thisItem.token != null && thisItem.lno == lno) {
@@ -95,19 +126,20 @@ public class Outliner implements RegionHandler{
                 thisItem.token.append(itemLabel);
             }
         }
-        ;
+        changed = true;
         lineIsEmpty = false;
-    };
+    }
 
-    public void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
         curLevel++;
-    };
+    }
 
-    public void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    public void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
         curLevel--;
-    };
+    }
 
-};
+}
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

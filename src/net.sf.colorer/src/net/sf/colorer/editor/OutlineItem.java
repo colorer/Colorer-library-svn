@@ -10,6 +10,8 @@ public class OutlineItem{
   public int lno;
   /** Position in line */
   public int pos;
+  /** Length of the item */
+  public int length;
   /** Level of enclosure */
   public int level;
   /** Item text */
@@ -24,9 +26,10 @@ public class OutlineItem{
   };
 
   /** Initializing constructor */
-  public OutlineItem(int lno, int pos, int level, String token, Region region){
+  public OutlineItem(int lno, int pos, int length, int level, String token, Region region){
     this.lno = lno;
     this.pos = pos;
+    this.length = length;
     this.level = level;
     this.region = region;
     this.token = null;

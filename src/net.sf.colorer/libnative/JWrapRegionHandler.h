@@ -30,8 +30,8 @@ public:
     epID = env->GetMethodID(jcRegionHandler, "endParsing", "(I)V");
     clID = env->GetMethodID(jcRegionHandler, "clearLine", "(ILjava/lang/String;)V");
     arID = env->GetMethodID(jcRegionHandler, "addRegion", "(ILjava/lang/String;IILnet/sf/colorer/Region;)V");
-    esID = env->GetMethodID(jcRegionHandler, "enterScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Lnet/sf/colorer/Scheme;)V");
-    lsID = env->GetMethodID(jcRegionHandler, "leaveScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Lnet/sf/colorer/Scheme;)V");
+    esID = env->GetMethodID(jcRegionHandler, "enterScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Ljava/lang/String;)V");
+    lsID = env->GetMethodID(jcRegionHandler, "leaveScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Ljava/lang/String;)V");
   };
   ~JWrapRegionHandler(){
     env->DeleteGlobalRef(regionHandler);
@@ -55,12 +55,12 @@ public:
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
     jobject jr = null;
     if (region != null) jr = hrcParser->getRegion(env, region->getName());
-    env->CallVoidMethod(regionHandler, esID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, null);
+    env->CallVoidMethod(regionHandler, esID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()));
   }
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
     jobject jr = null;
     if (region != null) jr = hrcParser->getRegion(env, region->getName());
-    env->CallVoidMethod(regionHandler, lsID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, null);
+    env->CallVoidMethod(regionHandler, lsID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()));
   }
 };
 

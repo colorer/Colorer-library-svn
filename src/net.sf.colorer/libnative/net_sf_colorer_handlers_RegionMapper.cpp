@@ -6,12 +6,12 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDef
   (JNIEnv *env, jobject obj, jlong iptr, jobject region)
 {
     RegionMapper *rm = (RegionMapper*)iptr;
-    
+
     jclass jClass = env->FindClass("net/sf/colorer/Region");
-    jmethodID jmInit = env->GetFieldID(jClass, "iptr");
+//    jmethodID jmInit = env->GetFieldID(jClass, "iptr");
 //    jobject object = env->Get(jClass, jmInit);
 
-    
+
     return null;
 }
 
