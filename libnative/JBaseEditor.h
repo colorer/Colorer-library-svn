@@ -1,8 +1,6 @@
 #ifndef _COLORER_JBASEEDITOR_H_
 #define _COLORER_JBASEEDITOR_H_
 
-#include<colorer/editor/BaseEditor.h>
-
 #include"JavaLineSource.h"
 #include"JParserFactory.h"
 #include"JWrapRegionHandler.h"
