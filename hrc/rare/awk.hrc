@@ -6,7 +6,7 @@
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
    <type name="awk" access="public">
       <!--
-          AWK Syntax description
+          AWK Syntax description (for GAWK 3.1.3) Oct 3 2003
       With help of:
           Valentin Skirdin <vskirdin@mail.ru>
       -->
@@ -26,7 +26,10 @@
       <region name="awkIOredir" parent="Keyword"/>
       <region name="awkArithmetic" parent="Keyword"/>
       <region name="awkStrFunc" parent="Keyword"/>
+      <region name="awkTimestampFunc" parent="Keyword"/>
       <region name="awkFunctions" parent="Keyword"/>
+      <region name="awkBitFunc" parent="Keyword"/>
+      <region name="awkStrTransFunc" parent="Keyword"/>
 
 
       <scheme name="awk">
@@ -81,54 +84,64 @@
          <keywords region="awkConst">
 <!-- built-in variables -->
             <word name="ARGC"/>
+            <word name="ARGIND"/>
             <word name="ARGV"/>
+            <word name="BINMODE"/>
+            <word name="CONVFMT"/>
             <word name="ENVIRON"/>
+            <word name="ERRNO"/>
+            <word name="FIELDWIDTHS"/>
             <word name="FILENAME"/>
             <word name="FNR"/>
             <word name="FS"/>
             <word name="IGNORECASE"/>
-            <word name="NR"/>
+            <word name="LINT"/>
             <word name="NF"/>
+            <word name="NR"/>
             <word name="OFMT"/>
             <word name="OFS"/>
             <word name="ORS"/>
+            <word name="PROCINFO"/>
+            <word name="RLENGTH"/>
             <word name="RS"/>
             <word name="RSTART"/>
-            <word name="RLENGTH"/>
+            <word name="RT"/>
             <word name="SUBSEP"/>
-            <word name="ARGIND"/>
-            <word name="CONVFMT"/>
-            <word name="FIELDWIDTHS"/>
+            <word name="TEXTDOMAIN"/>
          </keywords>
          <keywords region="awkControl">
 <!-- control statements -->
-            <word name="if"/>
-            <word name="else"/>
-            <word name="while"/>
-            <word name="do"/>
-            <word name="for"/>
-            <word name="in"/>
             <word name="break"/>
+            <word name="case"/>
             <word name="continue"/>
+            <word name="default"/>
             <word name="delete"/>
+            <word name="do"/>
+            <word name="else"/>
             <word name="exit"/>
+            <word name="for"/>
+            <word name="if"/>
+            <word name="in"/>
+            <word name="switch"/>
+            <word name="while"/>
          </keywords>
          <keywords region="awkIOstat">
 <!-- input/output statements -->
             <word name="close"/>
+            <word name="fflush"/>
             <word name="getline"/>
-            <word name="nextfile"/>
             <word name="next"/>
+            <word name="nextfile"/>
             <word name="prev"/>
             <word name="print"/>
-            <word name="printf"/>
             <word name="system"/>
+            <word name="printf"/>
          </keywords>
          <keywords region="awkIOredir">
 <!-- I/O redirection -->
+            <word name="/dev/stderr"/>
             <word name="/dev/stdin"/>
             <word name="/dev/stdot"/>
-            <word name="/dev/stderr"/>
          </keywords>
          <keywords region="awkArithmetic">
 <!-- pre-defined arithmetic functions -->
@@ -144,23 +157,45 @@
          </keywords>
          <keywords region="awkStrFunc">
 <!-- pre-defined string functions -->
+            <word name="asort"/>
+            <word name="asorti"/>
             <word name="gsub"/>
             <word name="index"/>
             <word name="length"/>
             <word name="match"/>
             <word name="split"/>
             <word name="sprintf"/>
+            <word name="strtonum"/>
             <word name="sub"/>
             <word name="substr"/>
-            <word name="systime"/>
-            <word name="strftime"/>
             <word name="tolower"/>
             <word name="toupper"/>
          </keywords>
+         <keywords region="awkTimestampFunc">
+<!-- pre-defined Timestamp functions -->
+            <word name="mktime"/>
+            <word name="strftime"/>
+            <word name="systime"/>
+         </keywords>
+         <keywords region="awkBitFunc">
+<!-- pre-defined Timestamp functions -->
+            <word name="and"/>
+            <word name="compl"/>
+            <word name="lshift"/>
+            <word name="or"/>
+            <word name="rshift"/>
+            <word name="xor"/>
+         </keywords>
+         <keywords region="awkStrTransFunc">
+<!-- pre-defined String-Translation functions -->
+            <word name="bindtextdomain"/>
+            <word name="dcgettext"/>
+            <word name="dcngettext"/>
+         </keywords>
          <keywords region="awkFunctions">
 <!-- Functions -->
-            <word name="function"/>
             <word name="func"/>
+            <word name="function"/>
             <word name="return"/>
          </keywords>
       </scheme>
