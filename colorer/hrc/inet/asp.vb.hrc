@@ -61,7 +61,7 @@
 
     <scheme name="cssProperty">
      <inherit scheme="Insertion"/>
-     <inherit scheme="css:cssProperty"/>
+     <inherit scheme="css:Property"/>
     </scheme>
     <scheme name="cssRuleContent"> 
      <inherit scheme="Insertion"/>
@@ -75,7 +75,7 @@
      <inherit scheme="css:RulesList">
       <virtual scheme="css:RulesList" subst-scheme="cssRulesList"/>
       <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
-      <virtual scheme="css:cssProperty" subst-scheme="cssProperty"/>
+      <virtual scheme="css:Property" subst-scheme="cssProperty"/>
      </inherit>
     </scheme>
     
@@ -113,7 +113,7 @@
         <virtual scheme="html:htmlCore" subst-scheme="htmlCore"/>
         <virtual scheme="html:htmlScripts" subst-scheme="htmlScripts"/>
         <virtual scheme="html:html" subst-scheme="html"/>
-        <virtual scheme="css:Property" subst-scheme="cssPropertyValue"/>
+        <virtual scheme="css:Property" subst-scheme="cssProperty"/>
         <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
         <virtual scheme="css:RulesList" subst-scheme="cssRulesList"/>
 <!--         <virtual scheme="def:Comment" subst-scheme="Comment"/> -->
