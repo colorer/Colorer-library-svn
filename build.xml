@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <project default="main" basedir=".">
 
+  <description>
+    This is the top-level buildfile, used by ANT tool (http://jakarta.apache.org/ant/)
+    It contains tasks, used to build and distribute different versions of
+    Colorer-take5 library packages.
+  </description>
+
   <xmlcatalog id="DTDs">
-      <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
-           location="docbook/docbookx.dtd"/>
-      <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-           location="web-app_2_2.dtd"/>
       <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
            location="doc/2003/hrc.dtd"/>
       <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
