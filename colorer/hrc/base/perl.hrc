@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    Perl Syntax Description
-With help of:
-    alexander smishlajev <als@turnhere.com>
-    JULY <lubimovi@usa.net>
-    Timur Safin <timur@lanit.ru>
-    cail: now using different schemes for
-          different paired limiters, fulll s()() support
-          needs complex variables parsing - using refs, hashs and lists
-          also to correct constructions as    s@  foo  @  @bar  @ix;
--->
+
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
 <hrc version="take5"
      xmlns="http://colorer.sf.net/2003/hrc"
@@ -18,30 +8,86 @@ With help of:
 
    <type name="perl" access="public">
 
-      <import type="def"/>
+<annotation>
+ <documentation>
+    Perl Syntax Description
+ </documentation>
 
-      <region name="plString" parent="String"/>
-      <region name="plStringEdge" parent="StringEdge"/>
-      <region name="plComment" parent="Comment"/>
-      <region name="plSymb" parent="Symbol"/>
-      <region name="plMainSymb" parent="SymbolStrong"/>
-      <region name="plWord" parent="Keyword"/>
-      <region name="plNumb" parent="Number"/>
-      <region name="plStream" parent="Path"/>
-      <region name="plRare" parent="CommentContent"/>
-      <region name="plSlash" parent="StringContent"/>
-      <region name="plVar" parent="Var"/>
-      <region name="plVar2" parent="VarStrong"/>
-      <region name="plPod" parent="CommentDoc"/>
-      <region name="plPodSym" parent="Symbol"/>
-      <region name="plPodText" parent="default"/>
-      <region name="plPodSel" parent="String"/>
+ <contributors>
+  <![CDATA[
+   alexander smishlajev <als@turnhere.com>
+   JULY <lubimovi@usa.net>
+   Timur Safin <timur@lanit.ru>
+   Cail Lomecb <cail@nm.ru>:
+       now using different schemes for                              
+       different paired limiters, fulll s()() support               
+       needs complex variables parsing - using refs, hashs and lists
+       also to correct constructions as    s@  foo  @  @bar  @ix;   
+   Eugene Efremov <4mirror@mail.ru>:
+     - add full regexp support
+     - add format support
+     - changed names for take5-like style
+     - any other fixs and addons...
+  ]]>
+ </contributors>
+
+ <appinfo><todo>
+ <![CDATA[
+  Возможные проблемы в реализации поддержки регулярных выражений: 
+ 
+  В колорере на текищий момент не существует возможности распознать 
+  ключ 'e' в конце регэкспа. По этому использется следущее 
+  соглашение:
+   * если используется запись вида s{}{},s()() и т.п то вторая скобка 
+   трактуется как код перл.
+   * если используется запись вида s///,s||| и т.п. то вторая строка 
+   трактуется как строка.
+   
+  Иными словами:
+ - выражения типа s{s1}{s2} (где '{' - скобка любого типа) трактуются как:
+   *s1* первая скобка - регулярное выражение;
+   *s2* вторая скобка - выражение на perl'е; 
+ - выражения типа s/s1/s2/ (где '/' - \W любого типа) тарктуются как:
+   *s1* первая скобка - регулярное выражение;
+   *s2* первая скобка - обычная perl-строка.
+ - выражения типа q{str},qw{str},qq{str} трактуются как строки.
+ - выражения типа m{str}, qr{str} etc. трактуются как регулярные выражения;  
+ ]]> 
+ </todo></appinfo>
+</annotation>
+
+      <!-- EE:  namespase modifed, import not need.
+      import type="def"/ -->
+
+      <region name="String" parent="def:String"/>
+      <region name="StringEdge" parent="def:StringEdge"/>
+      <region name="Comment" parent="def:Comment"/>
+      <region name="Symb" parent="def:Symbol"/>
+      <region name="MainSymb" parent="def:SymbolStrong"/>
+      <region name="Word" parent="def:Keyword"/>
+      <region name="Numb" parent="def:Number"/>
+      <region name="Stream" parent="def:Path"/>
+      <region name="Rare" parent="def:DeprecatedKeyword"/> 
+      <region name="Slash" parent="def:StringContent"/>
+      <region name="Var" parent="def:Var"/>
+      <region name="Var2" parent="def:VarStrong"/>
+      <region name="Pod" parent="def:CommentDoc"/>
+      <region name="PodSym" parent="def:Symbol"/>
+      <region name="PodText" parent="def:default"/>
+      <region name="PodSel" parent="def:String"/>
 
       <region name="SubOutline" parent="def:Outlined"/>
       <region name="PackageOutline" parent="def:Outlined"/>
+      
+      <!-- !!EE: new regions -->
+      <region name="EvalText" parent="def:Text"/>
+      <region name="ReModif" parent="regexp:SpecArea"/>
+      <region name="HereDoc" parent="String"/>
+      <region name="FormatDoc" parent="HereDoc"/>
+      
 
-      <scheme name="perlBuildinVars">
-         <keywords region="plVar">
+      <scheme name="BuildinVars">
+         <keywords region="Var">
             <word name="$&amp;"/>
             <word name="$&#34;"/>
             <word name="$'"/>
@@ -101,167 +147,837 @@ With help of:
             <word name="stdout"/>
             <word name="stderr"/>
          </keywords>
-         <regexp match="/\$\:\M[^\:]/x" region0="plVar"/>
+         <regexp match="/\$\:\M[^\:]/x" region0="Var"/>
       </scheme>
 
-      <scheme name="perlVarInt">
-         <regexp match="/ (::|')? \w+ /x" region1="plSymb"/>
+      <scheme name="VarInt">
+         <regexp match="/ (::|')? \w+ /x" region1="Symb"/>
       </scheme>
 
-      <scheme name="perlVars">
-         <regexp match="/\* [^\w\s\{\$\@\%\(]/x" region0="plVar"/>
-         <inherit scheme="perlBuildinVars"/>
+      <scheme name="Vars">
+         <regexp match="/\* [^\w\s\{\$\@\%\(]/x" region0="Var"/>
+         <inherit scheme="BuildinVars"/>
 <!-- dynamic scheme's end regexp - cool :)  -->
-         <block start="/[\@\%\*] \M [:'a-zA-Z]/x" end="//" scheme="perlVarInt" region="plVar"/>
-         <block start="/[\$\%\@\*]+ \#?(\{)/x" end="/(\})/" scheme="perlVarIntEx" region="plVar" region00="PairStart" region10="PairEnd" region01="SymbolStrong" region11="SymbolStrong"/>
-         <block start="/\$+ \#? \M [:'\w\$]/x" end="//" scheme="perlVarInt" region="plVar"/>
+         <block start="/[\@\%\*] \M [:'a-zA-Z]/x" end="//" scheme="VarInt" region="Var"/>
+         <block start="/[\$\%\@\*]+ \#?(\{)/x" end="/(\})/" scheme="VarIntEx" region="Var" region00="def:PairStart" region10="def:PairEnd" region01="def:SymbolStrong" region11="def:SymbolStrong"/>
+         <block start="/\$+ \#? \M [:'\w\$]/x" end="//" scheme="VarInt" region="Var"/>
       </scheme>
 
-      <scheme name="perlVarsEx">
-         <block start="/[\@\%\*] \M [:'\w]/x" end="//" scheme="perlVarInt" region="plVar2" priority="low"/>
-         <block start="/\$+ \#?\{/x" end="/\}/" scheme="perlVarInt" region="plVar2" region00="PairStart" region10="PairEnd" priority="low"/>
-         <block start="/\$+ \#? \M ['\w]/x" end="//" scheme="perlVarInt" region="plVar" priority="low"/>
+      <scheme name="VarsEx">
+         <block start="/[\@\%\*] \M [:'\w]/x" end="//" scheme="VarInt" region="Var2" priority="low"/>
+         <block start="/\$+ \#?\{/x" end="/\}/" scheme="VarInt" region="Var2" region00="def:PairStart" region10="def:PairEnd" priority="low"/>
+         <block start="/\$+ \#? \M ['\w]/x" end="//" scheme="VarInt" region="Var" priority="low"/>
       </scheme>
 
-      <scheme name="perlPod">
-         <inherit scheme="NetAddresses"/>
-         <regexp match="/^=(pod|cut)/" region0="plPodSym"/>
-         <regexp match="/^=head[12]\s(.*)$/" region0="plPodSym" region1="plPodText"/>
-         <regexp match="/^=(item|back|end)/" region0="plPodSym"/>
-         <regexp match="/^=over\s+(\d+)/" region0="plPodSym" region1="plNumb"/>
-         <regexp match="/[IBSCLFXZE]&lt;.*?&gt;/" region0="plPodSel"/>
+      <scheme name="Pod">
+         <inherit scheme="def:NetAddresses"/>
+         <regexp match="/^=(pod|cut)/" region0="PodSym"/>
+         <regexp match="/^=head[12]\s(.*)$/" region0="PodSym" region1="PodText"/>
+         <regexp match="/^=(item|back|end)/" region0="PodSym"/>
+         <regexp match="/^=over\s+(\d+)/" region0="PodSym" region1="Numb"/>
+         <regexp match="/[IBSCLFXZE]&lt;.*?&gt;/" region0="PodSel"/>
       </scheme>
 
-      <scheme name="perlBinNumb">
-         <regexp match="/\b 0[bB][01]+ /ix" region0="NumberBin"/>
+      <scheme name="BinNumb">
+         <regexp match="/\b 0[bB][01]+ /ix" region0="def:NumberBin"/>
       </scheme>
 
-      <scheme name="perlMETA"/>
+      <scheme name="META"/>
 
-      <scheme name="perlString">
-         <inherit scheme="perlMETA"/>
+      <scheme name="String">
+         <inherit scheme="META"/>
 <!-- Non-interpolated string ignore all escape-sequences except \' and \\ -->
-         <regexp match="/\\['\\\/]/" region0="plSlash"/>
+         <regexp match="/\\['\\\/]/" region0="Slash"/>
       </scheme>
 
-      <scheme name="perlInterpolateString">
-         <inherit scheme="perlMETA"/>
-         <inherit scheme="NetAddresses"/>
-         <regexp match="/\b0[xX][\da-fA-F]+\b/" region0="plNumb"/>
-         <inherit scheme="FloatNumber"/>
-         <inherit scheme="DecNumber"/>
-         <inherit scheme="perlBinNumb"/>
+      <!-- EE: New scheme -->
+      <scheme name="StringForRegExp">
+         <inherit scheme="META"/>
+         <inherit scheme="VarsEx"/>
+      </scheme>
+
+      <scheme name="InterpolateString">
+         <inherit scheme="META"/>
+         <inherit scheme="def:NetAddresses"/>
+         <regexp match="/\b0[xX][\da-fA-F]+\b/" region0="Numb"/>
+         <inherit scheme="def:FloatNumber"/>
+         <inherit scheme="def:DecNumber"/>
+         <inherit scheme="BinNumb"/>
 <!-- cail: problems with s@ foo @ bar @ix;
               @ix is not a list :(( -->
-         <inherit scheme="perlVarsEx"/>
-<!-- <inherit scheme="perlBuildinVars"/> -->
-         <regexp match="/\\[xX]0*[\da-fA-F]{1,2}/" region0="plSlash"/>
-         <regexp match="/\\[0-7]{1,3}/" region0="plSlash"/>
-         <regexp match="/\\[^xX0-7]/" region0="plSlash"/>
+         <inherit scheme="VarsEx"/>
+<!-- <inherit scheme="BuildinVars"/> -->
+         <regexp match="/\\[xX]0*[\da-fA-F]{1,2}/" region0="Slash"/>
+         <regexp match="/\\[0-7]{1,3}/" region0="Slash"/>
+         <regexp match="/\\c./" region0="Slash"/>
+         <regexp match="/\\[^xX0-7]/" region0="Slash"/>
       </scheme>
 
-      <scheme name="perlStrBr1">
-         <regexp match="/\\[\(\)]/" region0="plSlash"/>
-         <block scheme="perlStrBr1" start="/\(/" end="/\)/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="StrBr1">
+         <regexp match="/\\[\(\)]/" region0="Slash"/>
+         <block scheme="StrBr1" start="/\(/" end="/\)/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlStrBr2">
-         <regexp match="/\\[\{\}]/" region0="plSlash"/>
-         <block scheme="perlStrBr2" start="/\{/" end="/\}/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="StrBr2">
+         <regexp match="/\\[\{\}]/" region0="Slash"/>
+         <block scheme="StrBr2" start="/\{/" end="/\}/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlStrBr3">
-         <regexp match="/(\\[\[\]])/" region0="plSlash"/>
-         <block scheme="perlStrBr3" start="/\[/" end="/\]/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="StrBr3">
+         <regexp match="/(\\[\[\]])/" region0="Slash"/>
+         <block scheme="StrBr3" start="/\[/" end="/\]/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlStrBr4">
-         <regexp match="/(\\[&lt;\&gt;])/" region0="plSlash"/>
-         <block scheme="perlStrBr3" start="/&lt;/" end="/\&gt;/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="StrBr4">
+         <regexp match="/(\\[&lt;\&gt;])/" region0="Slash"/>
+         <block scheme="StrBr3" start="/&lt;/" end="/\&gt;/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlSubstComment">
+      <scheme name="SubstComment">
 <!-- are we need here  lowpriority="lowpriority" ??? -->
-         <regexp match="/(^\s*|\s{2,})(\#\s.*$)/" region0="plComment"/>
+         <regexp match="/(^\s*|\s{2,})(\#\s.*$)/" region0="Comment"/>
       </scheme>
 
-      <scheme name="perlSubstElements">
-         <inherit scheme="perlInterpolateString"/>
-         <inherit scheme="perlSubstComment"/>
+      <scheme name="SubstElements">
+         <inherit scheme="InterpolateString"/>
+         <inherit scheme="SubstComment"/>
       </scheme>
 
-      <scheme name="perlIntStrBr1">
-         <inherit scheme="perlSubstElements"/>
-         <block scheme="perlIntStrBr1" start="/\(/" end="/\)/" region00="PairStart" region10="PairEnd"/>
+      
+      <!-- EE!! include here pl1.modif.hrc (begin) -->
+
+<scheme name="RegExpString">
+ <inherit scheme="regexp:perl.regexp">
+  <virtual scheme="regexp:string" subst-scheme="StringForRegExp"/>
+  <virtual scheme="regexp:code" subst-scheme="perl"/>
+  <virtual scheme="regexp:perl.regexp" subst-scheme="RegExpString"/>
+ </inherit>
+</scheme>
+
+
+<scheme name="REIntStrBr1">
+   <inherit scheme="RegExpString"/>
+   <block scheme="REIntStrBr1" start="/\(/" end="/\)/"
+          region00="def:PairStart" region10="def:PairEnd"/>
+</scheme>
+<scheme name="REIntStrBr2">
+   <inherit scheme="RegExpString"/>
+   <block scheme="REIntStrBr2" start="/\{/" end="/\}/"
+          region00="def:PairStart" region10="def:PairEnd"/>
+</scheme>
+<scheme name="REIntStrBr3">
+   <inherit scheme="RegExpString"/>
+   <block scheme="REIntStrBr3" start="/\[/" end="/\]/"
+          region00="def:PairStart" region10="def:PairEnd"/>
+</scheme>
+<scheme name="REIntStrBr4">
+   <inherit scheme="RegExpString"/>
+   <block scheme="REIntStrBr3" start="/&lt;/" end="/\>/"
+          region00="def:PairStart" region10="def:PairEnd"/>
+</scheme>
+
+
+      <!-- EE!! include here pl1.modif.hrc (end) -->
+
+
+      <scheme name="IntStrBr1">
+         <inherit scheme="SubstElements"/>
+         <block scheme="IntStrBr1" start="/\(/" end="/\)/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlIntStrBr2">
-         <inherit scheme="perlSubstElements"/>
-         <block scheme="perlIntStrBr2" start="/\{/" end="/\}/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="IntStrBr2">
+         <inherit scheme="SubstElements"/>
+         <block scheme="IntStrBr2" start="/\{/" end="/\}/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlIntStrBr3">
-         <inherit scheme="perlSubstElements"/>
-         <block scheme="perlIntStrBr3" start="/\[/" end="/\]/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="IntStrBr3">
+         <inherit scheme="SubstElements"/>
+         <block scheme="IntStrBr3" start="/\[/" end="/\]/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlIntStrBr4">
-         <inherit scheme="perlSubstElements"/>
-         <block scheme="perlIntStrBr3" start="/&lt;/" end="/\&gt;/" region00="PairStart" region10="PairEnd"/>
+      <scheme name="IntStrBr4">
+         <inherit scheme="SubstElements"/>
+         <block scheme="IntStrBr3" start="/&lt;/" end="/\&gt;/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      <scheme name="perlSubstMiddle1">
-         <block start="/~ (s|tr|y) \s* \( /x" end="/\)/x" scheme="perlIntStrBr1" region10="plStringEdge"/>
-         <inherit scheme="perlSubstComment"/>
-         <regexp match="/\S+?/" region0="Error" priority="low"/>
+      
+      <!-- EE!! include here pl2.modif.hrc(begin) -->
+
+<!-- schemes to support
+     s(
+       foo
+     ) (
+       bar
+     )igx
+-->
+<!-- !!! EE: this change true for s/ .
+€бе®¤­лҐ §­ зҐ­Ёп б®еа ­Ґ­л. …б«Ё ®­® Ўг¤Ґв Ј«озЁвм - ­ ¤® Ёе ў®ббв ­®ўЁвм.
+!!! begin changed area
+-->
+<scheme name="SubstMiddle1">
+   <block start="/~ (s|(tr)|y) \s* \( /x" end="/\)/x"
+          scheme="REIntStrBr1" region10="StringEdge"/>
+   <inherit scheme="SubstComment"/>
+   <regexp match="/\S+?/" region0="def:Error" priority="low"/>
+</scheme>
+
+
+<scheme name="SubstBlock1">
+   <block start="/~ \M (s|(tr)|y) \s* \( /x" end="/\M\(/x"
+          scheme="SubstMiddle1" region10="StringEdge"/>
+   <!-- inherit scheme="REIntStrBr1"/ -->
+   <block start="/(\()/" end="/(\M\)([mgeioxs]*))/" scheme="perl" region="EvalText"
+   region00="StringEdge" region01="def:PairStart" 
+   region10="StringEdge" region11="def:PairEnd"/>
+</scheme>
+
+<scheme name="SubstMiddle2">
+   <block start="/~ (s|(tr)|y) \s* \{ /x" end="/\}/x"
+          scheme="REIntStrBr2" region10="StringEdge"/>
+   <inherit scheme="SubstComment"/>
+   <regexp match="/\S+/" region0="def:Error" priority="low"/>
+</scheme>
+<scheme name="SubstBlock2">
+   <block start="/~ \M (s|(tr)|y) \s* \{ /x" end="/\M\{/x"
+          scheme="SubstMiddle2" region10="StringEdge"/>
+   <!-- inherit scheme="REIntStrBr2"/ -->
+   <block start="/(\{)/" end="/(\M\}([mgeioxs]*))/" scheme="perl" region="EvalText"
+   region00="StringEdge" region01="def:PairStart" 
+   region10="StringEdge" region11="def:PairEnd"/>
+    
+</scheme>
+
+
+<scheme name="SubstMiddle3">
+   <block start="/~ (s|(tr)|y) \s* \[ /x" end="/\]/x"
+          scheme="REIntStrBr3" region10="StringEdge"/>
+   <inherit scheme="SubstComment"/>
+   <regexp match="/\S+/" region0="def:Error" priority="low"/>
+</scheme>
+<scheme name="SubstBlock3">
+   <block start="/~ \M (s|(tr)|y) \s* \[ /x" end="/\M\[/x"
+          scheme="SubstMiddle3" region10="StringEdge"/>
+   <!-- inherit scheme="REIntStrBr3"/ -->
+   <block start="/(\[)/" end="/(\M\]([mgeioxs]*))/" scheme="perl" region="EvalText"
+   region00="StringEdge" region01="def:PairStart" 
+   region10="StringEdge" region11="def:PairEnd"/>
+</scheme>
+
+<scheme name="SubstMiddle4">
+   <block start="/~ (s|(tr)|y) \s* &lt; /x" end="/\>/x"
+          scheme="REIntStrBr4" region10="StringEdge"/>
+   <inherit scheme="SubstComment"/>
+   <regexp match="/\S+/" region0="def:Error" priority="low"/>
+</scheme>
+<scheme name="SubstBlock4">
+   <block start="/~ \M (s|(tr)|y) \s* &lt; /x" end="/\M&lt;/x"
+          scheme="SubstMiddle4" region10="StringEdge"/>
+   <!-- inherit scheme="REIntStrBr4"/ -->
+   <block start="/(&lt;)/" end="/(\M\>([mgeioxs]*))/" scheme="perl" region="EvalText"
+   region00="StringEdge" region01="def:PairStart" 
+   region10="StringEdge" region11="def:PairEnd"/>
+</scheme>
+
+<scheme name="SubstBlock">
+   <block start="/~ (s|(tr)|y) ([^\w\s]) /x" end="/\y3/x"
+          scheme="RegExpString" region10="StringEdge"/>
+   
+   <block start="/~ (s|tr|y) \s+ (\w) /x" end="/\y3/x" 
+    scheme="RegExpString" region10="StringEdge"
+   />
+   <!-- May_be!!
+   <inherit scheme="InterpolateString"/>
+   -->
+   <inherit scheme="SubstElements"/>
+</scheme>
+      <!-- EE!! include here pl2.modif.hrc(end) -->
+
+      
+      <!-- EE!! cut here (begin)
+      <scheme name="SubstMiddle1">
+         <block start="/~ (s|tr|y) \s* \( /x" end="/\)/x" scheme="IntStrBr1" region10="StringEdge"/>
+         <inherit scheme="SubstComment"/>
+         <regexp match="/\S+?/" region0="def:Error" priority="low"/>
       </scheme>
 
-      <scheme name="perlSubstBlock1">
-         <block start="/~ \M (s|tr|y) \s* \( /x" end="/\(/x" scheme="perlSubstMiddle1" region10="plStringEdge"/>
-         <inherit scheme="perlIntStrBr1"/>
+      <scheme name="SubstBlock1">
+         <block start="/~ \M (s|tr|y) \s* \( /x" end="/\(/x" scheme="SubstMiddle1" region10="StringEdge"/>
+         <inherit scheme="IntStrBr1"/>
       </scheme>
 
-      <scheme name="perlSubstMiddle2">
-         <block start="/~ (s|tr|y) \s* \{ /x" end="/\}/x" scheme="perlIntStrBr2" region10="plStringEdge"/>
-         <inherit scheme="perlSubstComment"/>
-         <regexp match="/\S+/" region0="Error" priority="low"/>
+      <scheme name="SubstMiddle2">
+         <block start="/~ (s|tr|y) \s* \{ /x" end="/\}/x" scheme="IntStrBr2" region10="StringEdge"/>
+         <inherit scheme="SubstComment"/>
+         <regexp match="/\S+/" region0="def:Error" priority="low"/>
       </scheme>
 
-      <scheme name="perlSubstBlock2">
-         <block start="/~ \M (s|tr|y) \s* \{ /x" end="/\{/x" scheme="perlSubstMiddle2" region10="plStringEdge"/>
-         <inherit scheme="perlIntStrBr2"/>
+      <scheme name="SubstBlock2">
+         <block start="/~ \M (s|tr|y) \s* \{ /x" end="/\{/x" scheme="SubstMiddle2" region10="StringEdge"/>
+         <inherit scheme="IntStrBr2"/>
       </scheme>
 
-      <scheme name="perlSubstMiddle3">
-         <block start="/~ (s|tr|y) \s* \[ /x" end="/\]/x" scheme="perlIntStrBr3" region10="plStringEdge"/>
-         <inherit scheme="perlSubstComment"/>
-         <regexp match="/\S+/" region0="Error" priority="low"/>
+      <scheme name="SubstMiddle3">
+         <block start="/~ (s|tr|y) \s* \[ /x" end="/\]/x" scheme="IntStrBr3" region10="StringEdge"/>
+         <inherit scheme="SubstComment"/>
+         <regexp match="/\S+/" region0="def:Error" priority="low"/>
       </scheme>
 
-      <scheme name="perlSubstBlock3">
-         <block start="/~ \M (s|tr|y) \s* \[ /x" end="/\[/x" scheme="perlSubstMiddle3" region10="plStringEdge"/>
-         <inherit scheme="perlIntStrBr3"/>
+      <scheme name="SubstBlock3">
+         <block start="/~ \M (s|tr|y) \s* \[ /x" end="/\[/x" scheme="SubstMiddle3" region10="StringEdge"/>
+         <inherit scheme="IntStrBr3"/>
       </scheme>
 
-      <scheme name="perlSubstMiddle4">
-         <block start="/~ (s|tr|y) \s* &lt; /x" end="/\&gt;/x" scheme="perlIntStrBr4" region10="plStringEdge"/>
-         <inherit scheme="perlSubstComment"/>
-         <regexp match="/\S+/" region0="Error" priority="low"/>
+      <scheme name="SubstMiddle4">
+         <block start="/~ (s|tr|y) \s* &lt; /x" end="/\&gt;/x" scheme="IntStrBr4" region10="StringEdge"/>
+         <inherit scheme="SubstComment"/>
+         <regexp match="/\S+/" region0="def:Error" priority="low"/>
       </scheme>
 
-      <scheme name="perlSubstBlock4">
-         <block start="/~ \M (s|tr|y) \s* &lt; /x" end="/&lt;/x" scheme="perlSubstMiddle4" region10="plStringEdge"/>
-         <inherit scheme="perlIntStrBr4"/>
+      <scheme name="SubstBlock4">
+         <block start="/~ \M (s|tr|y) \s* &lt; /x" end="/&lt;/x" scheme="SubstMiddle4" region10="StringEdge"/>
+         <inherit scheme="IntStrBr4"/>
       </scheme>
 
-      <scheme name="perlSubstBlock">
-         <block start="/~ (s|tr|y) ([^\w\s]) /x" end="/\y2/x" scheme="perlSubstElements" region10="plStringEdge"/>
-         <block start="/~ (s|tr|y) \s+ (\w) /x" end="/\y2/x" scheme="perlSubstElements" region10="plStringEdge"/>
-         <inherit scheme="perlSubstElements"/>
+      <scheme name="SubstBlock">
+         <block start="/~ (s|tr|y) ([^\w\s]) /x" end="/\y2/x" scheme="SubstElements" region10="StringEdge"/>
+         <block start="/~ (s|tr|y) \s+ (\w) /x" end="/\y2/x" scheme="SubstElements" region10="StringEdge"/>
+         <inherit scheme="SubstElements"/>
+      </scheme>
+      - EE!! cut here (end) -->
+
+      <!-- EE: scheme for documet format -->
+      <scheme name="FormatText">
+       <inherit scheme="InterpolateString"/>
+       <regexp match="/([\@\^])(\*|[&lt;&gt;\|]+)/" 
+        region1="def:SymbolStrong" region2="def:Symbol"/>
+       <regexp match="/([\@\^])(\#+(\.\#+)?)/" 
+        region1="def:SymbolStrong" region2="def:VarStrong"/>
       </scheme>
 
-      <scheme name="perlExtKW">
-         <keywords region="plWord">
+      <scheme name="perl">
+<!-- linear comments -->
+         <block start="/;?\#/" end="/$/" region="Comment" scheme="def:Comment"/>
+<!-- Variables -->
+         <inherit scheme="Vars"/>
+         <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="Word"/>
+         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_']+) /x" region="Word"/>
+<!-- module::var -->
+         <regexp match="/\b\w[\w\d]*\s*::\s*\w[\w\d]*\b/" region="Word"/>
+<!-- perl 5.6.0 number-encoded strings -->
+         <regexp match="/\bv(\d+)(\.\d+)*\b/" region0="String"/>
+         <regexp match="/\b(\d+)(\.\d+){2,}\b/" region0="String"/>
+<!-- perl numbers  -->
+         <inherit scheme="BinNumb"/>
+         <regexp match="/\b0[xX][\da-fA-F_]+/" region0="Numb"/>
+         <regexp match="/\b\d[\d_]*\./" region0="Numb"/>
+         <regexp match="/\c[\d_]*\.?\d[\d_]*([eE][\-+]?[\d_]+)?/" region0="Numb"/>
+         <regexp match="/\b\d[\d_]+/" region0="Numb"/>
+<!-- strings -->
+         <block start="/`/" end="/`/" scheme="InterpolateString" region="String" region00="def:PairStart" region10="def:PairEnd"/>
+         <block start="/&#34;/" end="/&#34;/" scheme="InterpolateString" region="String" region00="def:PairStart" region10="def:PairEnd"/>
+         <block start="/'/" end="/'/" scheme="String" region="String" region00="def:PairStart" region10="def:PairEnd"/>
+<!-- cail: paired block for matching -->
+         <inherit scheme="def:PairedBrackets">
+            <virtual scheme="def:PairedBrackets" subst-scheme="perl"/>
+         </inherit>
+<!-- cail: this block cracks the constructions
+     $var = $var / $var / $var;
+     $var =~ / $var /;
+     if (/ $var /){};
+     and so on...
+
+     can't use ?regexp? - it conflicts with  $a = $b ? 1 : 2;
+     really ?this? is deprecated construction in perl5, so...
+   -->
+
+      
+<!-- EE: move ~ to separated block (s{}{/... - '/' no regexp ) -->
+      <!-- EE!! include here pl3.modif.hrc(begin) -->
+   <block start="/((\=|\! \~) |
+                  [^&lt;\]\}\)\+\-\w\s\/] |
+                  (\bif) | (\bunless) | (\bsplit) | ^ )
+                 \s*
+                 ((\/))
+                /x"
+          end="/(\y6([cmiogxes]*) )/x" scheme="RegExpString"
+          region="String" region01="Symb"
+          region06="StringEdge" region07="def:PairStart"
+          region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/([\)\}\]\>])?~2(~)
+                 \s*
+                 ((\/))
+                /x"
+          end="/(\y3([cmiogxes]*) )/x" scheme="RegExpString"
+          region="String" region01="Symb"
+          region03="StringEdge" region04="def:PairStart"
+          region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
+      <!-- EE!! include here pl3.modif.hrc(end) -->
+
+      
+   
+      <!-- EE!! cut here (begin) ->
+         <block start="/( [\=\!]\~ |
+                         [^&lt;\]\}\)\+\-\w\s\/] |
+                         \bif | \bunless | \bsplit | ~ | ^)
+                         \s* ((\/)) /x"
+                         end="/(\y2[cmiogxes]*)/x" scheme="RegExpString"
+                         region="String" region01="Symb" region02="StringEdge"
+                         region03="def:PairStart" region10="StringEdge" region11="def:PairEnd"/>
+      <!- EE!! cut here (end) -->
+
+<!-- formatted output -->
+         <block start="/^\s* \m (format)\s*(\s\w*)\s*(\=) /x" end="/^(\.)/" 
+          scheme="FormatText" region="FormatDoc" 
+          region01="Word" region02="Var" region03="Symb"
+          region00="def:PairStart" region10="def:PairEnd" region11="StringEdge"
+         />
+<!-- <<out -->
+         <block start="/&lt;&lt;\x22([a-zA-Z_][\w_]*)\x22/" end="/^(\y1)$/" scheme="InterpolateString" region="HereDoc" region00="def:PairStart" region10="def:PairEnd" region01="Word" region11="Word"/>
+         <block start="/&lt;&lt;'([a-zA-Z_][\w_]*)'/" end="/^(\y1)$/" scheme="def:Comment" region="HereDoc" region00="def:PairStart" region10="def:PairEnd" region01="Word" region11="Word"/>
+         <block start="/&lt;&lt;`([a-zA-Z_][\w_]*)`/" end="/^(\y1)$/" scheme="def:Comment" region="HereDoc" region00="def:PairStart" region10="def:PairEnd" region01="Word" region11="Word"/>
+         <block start="/&lt;&lt;([a-zA-Z_][\w_]*)/" end="/^(\y1)$/" scheme="InterpolateString" region="HereDoc" region00="def:PairStart" region10="def:PairEnd" region01="Word" region11="Word"/>
+         <block start="/&lt;&lt;\M([^\s\w_])/" end="/^$/" scheme="InterpolateString" region="HereDoc" region00="def:PairStart" region10="def:PairEnd" region01="Word" region11="Word"/>
+<!-- cail: perl in perl :)
+   <block start="/(eval)\s+<<'([^']+)'/i" end="/^(\y2)$/" scheme="def:Perl" region1="def:Inserts" region2="Word" region3="Word" region4="Word"-->
+<!-- pod stuff -->
+         <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="Pod" region="Pod" region10="PodSym"/>
+         <block start="/__(END|DATA)__/" end="/$NeVeReAcH^/" scheme="Pod" region="Pod"/>
+<!-- streams and globs with html </script> hack -->
+         <regexp match="/&lt;[^\s\/\%]*?\&gt;/i" region0="Stream"/>
+         <regexp match="/\B \- [ABCMORSTWXbcdefgkloprstuwxz]\b/x" region0="Word"/>
+         <regexp match="/x(\d+)/x" region0="Word" region1="Numb"/>
+
+
+         <inherit scheme="Keywords"/>
+         <inherit scheme="ExtKW"/>
+
+<!-- cail: regexps
+        in reallity  s'foo'bar' does no interpolation - but i thing this
+          isn't so important :)
+        currently this subst will not work in such cases:
+         s        # here we can't know which of schemes was called :(
+         {        #
+          foo
+         }        # but such form is works :)
+         {        #
+          bar
+         }ix;
+        but i think this is real perversion :)
+   -->
+
+      
+      <!-- EE!! include here pl4.modif.hrc (begin) -->
+   <block start="/\b\M(((s|(tr)|y) \s* \())/x" end="/(\)([mgeioxs]*))/x"
+          scheme="SubstBlock1" region="String"
+          region01="def:PairStart" region10="def:PairEnd"
+          region02="StringEdge" region11="StringEdge" region12="ReModif"/>
+   <block start="/\b\M(((s|(tr)|y) \s* \{))/x" end="/(\}([mgeioxs]*))/x"
+          scheme="SubstBlock2" region="String"
+          region01="def:PairStart" region10="def:PairEnd"
+          region02="StringEdge" region11="StringEdge" region12="ReModif"/>
+   <block start="/\b\M(((s|(tr)|y) \s* \[))/x" end="/(\]([mgeioxs]*))/x"
+          scheme="SubstBlock3" region="String"
+          region01="def:PairStart" region10="def:PairEnd"
+          region02="StringEdge" region11="StringEdge" region12="ReModif"/>
+   <block start="/\b\M(((s|(tr)|y) \s* &lt;))/x" end="/(\>([mgeioxs]*))/x"
+          scheme="SubstBlock4" region="String"
+          region01="def:PairStart" region10="def:PairEnd"
+          region02="StringEdge" region11="StringEdge" region12="ReModif"/>
+   <block start="/\b\M(((s|(tr)|y) \s* ([^\w\s])))/x" end="/(\y5([mgeioxs]*))/x"
+          scheme="SubstBlock" region="String"
+          region01="def:PairStart" region10="def:PairEnd"
+          region02="StringEdge" region11="StringEdge" region12="ReModif"/>
+
+   <!-- Timur: see `perldoc perlop`
+       "Quote and Quote-like Operators " -->
+<!-- EE bugfix(4 blocks): add [mgeioxs]* to end -->
+   <block start="/\b(qr\s*\()/" end="/(\)([mgeioxs]*))/" region="String" scheme="REIntStrBr1"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(qr\s*\{)/" end="/(\}([mgeioxs]*))/" region="String" scheme="REIntStrBr2"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(qr\s*\[)/" end="/(\]([mgeioxs]*))/" region="String" scheme="REIntStrBr3"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(qr\s*&lt;)/" end="/(\>([mgeioxs]*))/" region="String" scheme="REIntStrBr4"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+<!-- EE: change perlInterpolateString->perlRegExpString -->
+   <block start="/\b(qr\s*([^\w\s]))/" end="/(\y2([mgeioxs]*))/" region="String" scheme="RegExpString"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+
+   <block start="/\b(q[qx]\s*\()/" end="/(\))/" region="String" scheme="IntStrBr1"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q[qx]\s*\{)/" end="/(\})/" region="String" scheme="IntStrBr2"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q[qx]\s*\[)/" end="/(\])/" region="String" scheme="IntStrBr3"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q[qx]\s*&lt;)/" end="/(\>)/" region="String" scheme="IntStrBr4"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q[qx]\s*([^\w\s]))/" end="/(\y2)/" region="String" scheme="InterpolateString"
+          region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+
+   <block start="/\b(q(w)?\s*\()/" end="/(\))/" region="String" scheme="StrBr1"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q(w)?\s*\{)/" end="/(\})/" region="String" scheme="StrBr2"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q(w)?\s*\[)/" end="/(\])/" region="String" scheme="StrBr3"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q(w)?\s*&lt;)/" end="/(\>)/" region="String" scheme="StrBr4"
+          region00="StringEdge"  region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+   <block start="/\b(q(w)?\s*([^\w\s]))/" end="/(\y3)/" region="String" scheme="String"
+          region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd"/>
+
+          
+   <block start="/\b(m \s* \()/x" end="/(\)([cmiogxs]*))/" scheme="REIntStrBr1"
+          region="String" region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(m \s* \{)/x" end="/(\}([cmiogxs]*))/" scheme="REIntStrBr2"
+          region="String" region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(m \s* \[)/x" end="/(\]([cmiogxs]*))/" scheme="REIntStrBr3"
+          region="String" region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+   <block start="/\b(m \s* &lt;)/x" end="/(\>([cmiogxs]*))/" scheme="REIntStrBr4"
+          region="String" region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+<!-- EE: change perlInterpolateString->perlRegExpString -->
+   <block start="/\b(m \s* ([^\s\w]))/x" end="/(\y2([cmiogxs]*))/" scheme="RegExpString"
+          region="String" region00="StringEdge" region10="StringEdge"
+          region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
+      <!-- EE!! include here pl4.modif.hrc (end) -->
+
+      
+   
+      <!-- EE!! cut here (begin) 
+         <block start="/\b\M(((s|tr|y) \s* \())/x" end="/(\) [mgeioxs]*)/x" scheme="SubstBlock1" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+         <block start="/\b\M(((s|tr|y) \s* \{))/x" end="/(\} [mgeioxs]*)/x" scheme="SubstBlock2" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+         <block start="/\b\M(((s|tr|y) \s* \[))/x" end="/(\] [mgeioxs]*)/x" scheme="SubstBlock3" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+         <block start="/\b\M(((s|tr|y) \s* &lt;))/x" end="/(\&gt; [mgeioxs]*)/x" scheme="SubstBlock4" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+         <block start="/\b\M(((s|tr|y) \s* ([^\w\s])))/x" end="/(\y4 [mgeioxs]*)/x" scheme="SubstBlock" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+         <block start="/\b\M(((s|tr|y) \s+ (\w)))/x" end="/(\y4 [mgeioxs]*)/x" scheme="SubstBlock" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
+<!- Timur: see `perldoc perlop`
+       "Quote and Quote-like Operators " ->
+         <block start="/\b(q[wqxr]\s*\()/" end="/(\))/" region="String" scheme="IntStrBr1" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q[wqxr]\s*\{)/" end="/(\})/" region="String" scheme="IntStrBr2" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q[wqxr]\s*\[)/" end="/(\])/" region="String" scheme="IntStrBr3" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q[wqxr]\s*&lt;)/" end="/(\&gt;)/" region="String" scheme="IntStrBr4" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q[wqxr]\s*([^\s]))/" end="/(\y2)/" region="String" scheme="InterpolateString" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q(w)?\s*\()/" end="/(\))/" region="String" scheme="StrBr1" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q(w)?\s*\{)/" end="/(\})/" region="String" scheme="StrBr2" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q(w)?\s*\[)/" end="/(\])/" region="String" scheme="StrBr3" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q(w)?\s*&lt;)/" end="/(\&gt;)/" region="String" scheme="StrBr4" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(q(w)?\s*([^\w\s]))/" end="/(\y3)/" region="String" scheme="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(m \s* \()/x" end="/(\)[cmiogxs]*)/" scheme="IntStrBr1" region="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(m \s* \{)/x" end="/(\}[cmiogxs]*)/" scheme="IntStrBr2" region="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(m \s* \[)/x" end="/(\][cmiogxs]*)/" scheme="IntStrBr3" region="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(m \s* &lt;)/x" end="/(\&gt;[cmiogxs]*)/" scheme="IntStrBr4" region="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+         <block start="/\b(m \s* ([^\s\w]))/x" end="/(\y2[cmiogxs]*)/" scheme="InterpolateString" region="String" region00="StringEdge" region10="StringEdge" region01="def:PairStart" region11="def:PairEnd"/>
+      - EE!! cut here (end) -->
+<!-- Timur: hack against Ada maniacs -->
+         <regexp match="/\c(&amp;|\w+)'[\w_']+\b/" region0="Var"/>
+<!-- operators -->
+         <keywords region="Symb">
+            <symb name="!"/>
+            <symb name="~"/>
+            <symb name="\"/>
+            <symb name="+"/>
+            <symb name="-"/>
+            <symb name="."/>
+            <symb name="*"/>
+            <symb name="/"/>
+            <symb name=".."/>
+            <symb name="%"/>
+            <word name="lt"/>
+            <word name="gt"/>
+            <word name="le"/>
+            <word name="ge"/>
+            <word name="eq"/>
+            <word name="ne"/>
+            <word name="cmp"/>
+            <symb name="&amp;"/>
+            <symb name="|"/>
+            <symb name="^"/>
+            <symb name="?"/>
+            <symb name=":"/>
+            <symb name=","/>
+            <symb name="="/>
+            <word name="and"/>
+            <word name="not"/>
+            <word name="or"/>
+            <word name="xor"/>
+            <symb name="-&gt;"/>
+            <symb name="&gt;"/>
+            <symb name="&lt;"/>
+            <symb name=";" region="MainSymb"/>
+            <symb name="{" region="def:Error"/>
+            <symb name="}" region="def:Error"/>
+            <symb name="(" region="def:Error"/>
+            <symb name=")" region="def:Error"/>
+            <symb name="[" region="def:Error"/>
+            <symb name="]" region="def:Error"/>
+         </keywords>
+      
+         <!-- EE: labels -->
+         <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="def:Label"/>
+
+      </scheme>
+
+      <scheme name="VarIntEx">
+         <regexp match="/ (::|')? \w+ /x" region1="Symb"/>
+         <inherit scheme="perl"/>
+      </scheme>
+      
+      
+      
+      <scheme name="Keywords">
+<!-- base syntax -->
+         <keywords region="Word">
+            <word name="sub"/>
+            <word name="do"/>
+            <word name="return"/>
+            <word name="while"/>
+            <word name="until"/>
+            <word name="unless"/>
+            <word name="if"/>
+            <word name="else"/>
+            <word name="elsif"/>
+            <word name="foreach"/>
+            <word name="for"/>
+            <word name="continue"/>
+            <word name="next"/>
+            <word name="last"/>
+            <word name="redo"/>
+            <word name="goto" region="Rare"/>
+            <word name="our"/>
+            <word name="__DATA__" region="Rare"/>
+            <word name="__END__" region="Rare"/>
+            <word name="no"/>
+            <word name="use"/>
+            <word name="require"/>
+            <word name="package"/>
+            <word name="strict"/>
+            <word name="local"/>
+            <word name="my"/>
+<!-- functions -->
+            <word name="AUTOLOAD"/>
+            <word name="BEGIN"/>
+            <word name="INIT"/>
+            <word name="CHECK"/>
+            <word name="CORE"/>
+            <word name="DESTROY"/>
+            <word name="END"/>
+            <word name="SUPER"/>
+            <word name="UNIVERSAL"/>
+            <word name="abs"/>
+            <word name="accept"/>
+            <word name="alarm"/>
+            <word name="atan2"/>
+            <word name="bind"/>
+            <word name="binmode"/>
+            <word name="bless"/>
+            <word name="caller"/>
+            <word name="chdir"/>
+            <word name="chmod"/>
+            <word name="chomp"/>
+            <word name="chop"/>
+            <word name="chown"/>
+            <word name="chr"/>
+            <word name="chroot"/>
+            <word name="close"/>
+            <word name="closedir"/>
+            <word name="connect"/>
+            <word name="cos"/>
+            <word name="crypt"/>
+            <word name="dbmclose"/>
+            <word name="dbmopen"/>
+            <word name="defined"/>
+            <word name="delete"/>
+            <word name="die"/>
+            <word name="dump"/>
+            <word name="each"/>
+            <word name="endgrent"/>
+            <word name="endhostent"/>
+            <word name="endnetent"/>
+            <word name="endprotoent"/>
+            <word name="endpwent"/>
+            <word name="endservent"/>
+            <word name="eof"/>
+            <word name="eval"/>
+            <word name="exec"/>
+            <word name="exit"/>
+            <word name="exp"/>
+            <word name="fcntl"/>
+            <word name="fileno"/>
+            <word name="flock"/>
+            <word name="fork"/>
+            <word name="formline"/>
+            <word name="getc"/>
+            <word name="getgrent"/>
+            <word name="getgrgid"/>
+            <word name="getgrname"/>
+            <word name="gethostbyaddr"/>
+            <word name="gethostbyname"/>
+            <word name="gethostent"/>
+            <word name="getlogin"/>
+            <word name="getnetbyaddr"/>
+            <word name="getnetbyname"/>
+            <word name="getnetent"/>
+            <word name="getpeername"/>
+            <word name="getpgrp"/>
+            <word name="getppid"/>
+            <word name="getpriority"/>
+            <word name="getprotobyname"/>
+            <word name="getprotobynumber"/>
+            <word name="getprotoent"/>
+            <word name="getpwent"/>
+            <word name="getpwnam"/>
+            <word name="getpwuid"/>
+            <word name="getservbyname"/>
+            <word name="getservbyport"/>
+            <word name="getservent"/>
+            <word name="getsockname"/>
+            <word name="getsockopt"/>
+            <word name="glob"/>
+            <word name="gmtime"/>
+            <word name="grep"/>
+            <word name="hex"/>
+            <word name="index"/>
+            <word name="int"/>
+            <word name="ioctl"/>
+            <word name="join"/>
+            <word name="keys"/>
+            <word name="kill"/>
+            <word name="lc"/>
+            <word name="lcfirst"/>
+            <word name="length"/>
+            <word name="link"/>
+            <word name="listen"/>
+            <word name="localtime"/>
+            <word name="log"/>
+            <word name="lstat"/>
+            <word name="map"/>
+            <word name="mkdir"/>
+            <word name="msgctl"/>
+            <word name="msgget"/>
+            <word name="msgrcv"/>
+            <word name="msgsnd"/>
+            <word name="oct"/>
+            <word name="open"/>
+            <word name="opendir"/>
+            <word name="ord"/>
+            <word name="pack"/>
+            <word name="pipe"/>
+            <word name="pop"/>
+            <word name="pos"/>
+            <word name="print"/>
+            <word name="printf"/>
+            <word name="push"/>
+            <word name="quotemeta"/>
+            <word name="rand"/>
+            <word name="read"/>
+            <word name="readdir"/>
+            <word name="readline"/>
+            <word name="readlink"/>
+            <word name="recv"/>
+            <word name="ref"/>
+            <word name="rename"/>
+            <word name="reset"/>
+            <word name="reverse"/>
+            <word name="rewindir"/>
+            <word name="rindex"/>
+            <word name="rmdir"/>
+            <word name="scalar"/>
+            <word name="seek"/>
+            <word name="seekdir"/>
+            <word name="select"/>
+            <word name="semctl"/>
+            <word name="semgett"/>
+            <word name="semop"/>
+            <word name="send"/>
+            <word name="setgrent"/>
+            <word name="sethostent"/>
+            <word name="setnetent"/>
+            <word name="setpgrp"/>
+            <word name="setpriority"/>
+            <word name="setprotoent"/>
+            <word name="setpwent"/>
+            <word name="setservent"/>
+            <word name="setsockopt"/>
+            <word name="shift"/>
+            <word name="shmctl"/>
+            <word name="shmget"/>
+            <word name="shmread"/>
+            <word name="shmwrite"/>
+            <word name="shutdown"/>
+            <word name="sin"/>
+            <word name="sleep"/>
+            <word name="socket"/>
+            <word name="socketpair"/>
+            <word name="sort"/>
+            <word name="splice"/>
+            <word name="split"/>
+            <word name="sprintf"/>
+            <word name="sqrt"/>
+            <word name="srand"/>
+            <word name="stat"/>
+            <word name="study"/>
+            <word name="substr"/>
+            <word name="symlink"/>
+            <word name="syscall"/>
+            <word name="sysopen"/>
+            <word name="sysread"/>
+            <word name="system"/>
+            <word name="syswrite"/>
+            <word name="tell"/>
+            <word name="telldir"/>
+            <word name="tie"/>
+            <word name="untie"/>
+            <word name="exists"/>
+            <word name="rewinddir"/>
+            <word name="semget"/>
+            <word name="lock"/>
+            <word name="readpipe"/>
+            <word name="prototype"/>
+            <word name="sysseek"/>
+            <word name="getgrnam"/>
+            <word name="tied"/>
+            <word name="time"/>
+            <word name="times"/>
+            <word name="truncate"/>
+            <word name="uc"/>
+            <word name="ucfirst"/>
+            <word name="umask"/>
+            <word name="undef"/>
+            <word name="unlink"/>
+            <word name="unpack"/>
+            <word name="unshift"/>
+            <word name="utime"/>
+            <word name="values"/>
+            <word name="vec"/>
+            <word name="wait"/>
+            <word name="waitpid"/>
+            <word name="wantarray"/>
+            <word name="warn"/>
+            <word name="write"/>
+            <word name="x"/>
+         </keywords>
+      </scheme>
+      
+      <scheme name="ExtKW">
+         <keywords region="Word">
             <word name="Alias"/>
             <word name="AnyDBM_File"/>
             <word name="Archive::Tar"/>
@@ -942,384 +1658,6 @@ With help of:
             <word name="vars"/>
             <word name="warnings"/>
          </keywords>
-      </scheme>
-
-      <scheme name="perl">
-<!-- linear comments -->
-         <block start="/;?\#/" end="/$/" region="plComment" scheme="Comment"/>
-<!-- Variables -->
-         <inherit scheme="perlVars"/>
-         <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="plWord"/>
-         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_']+) /x" region="plWord"/>
-<!-- module::var -->
-         <regexp match="/\b\w[\w\d]*\s*::\s*\w[\w\d]*\b/" region="plWord"/>
-<!-- perl 5.6.0 number-encoded strings -->
-         <regexp match="/\bv(\d+)(\.\d+)*\b/" region0="plString"/>
-         <regexp match="/\b(\d+)(\.\d+){2,}\b/" region0="plString"/>
-<!-- perl numbers  -->
-         <inherit scheme="perlBinNumb"/>
-         <regexp match="/\b0[xX][\da-fA-F_]+/" region0="plNumb"/>
-         <regexp match="/\b\d[\d_]*\./" region0="plNumb"/>
-         <regexp match="/\c[\d_]*\.?\d[\d_]*([eE][\-+]?[\d_]+)?/" region0="plNumb"/>
-         <regexp match="/\b\d[\d_]+/" region0="plNumb"/>
-<!-- strings -->
-         <block start="/`/" end="/`/" scheme="perlInterpolateString" region="plString" region00="PairStart" region10="PairEnd"/>
-         <block start="/&#34;/" end="/&#34;/" scheme="perlInterpolateString" region="plString" region00="PairStart" region10="PairEnd"/>
-         <block start="/'/" end="/'/" scheme="perlString" region="plString" region00="PairStart" region10="PairEnd"/>
-<!-- cail: paired block for matching -->
-         <inherit scheme="PairedBrackets">
-            <virtual scheme="PairedBrackets" subst-scheme="perl"/>
-         </inherit>
-<!-- cail: this block cracks the constructions
-     $var = $var / $var / $var;
-     $var =~ / $var /;
-     if (/ $var /){};
-     and so on...
-
-     can't use ?regexp? - it conflicts with  $a = $b ? 1 : 2;
-     really ?this? is deprecated construction in perl5, so...
-   -->
-         <block start="/( [\=\!]\~ |
-                         [^&lt;\]\}\)\+\-\w\s\/] |
-                         \bif | \bunless | \bsplit | ~ | ^)
-                         \s* ((\/)) /x"
-                         end="/(\y2[cmiogxes]*)/x" scheme="perlInterpolateString"
-                         region="plString" region01="plSymb" region02="plStringEdge"
-                         region03="PairStart" region10="plStringEdge" region11="PairEnd"/>
-
-<!-- formatted output -->
-         <block start="/^\s* \m (format) \b/x" end="/^\./" scheme="perlInterpolateString" region="plString" region01="plWord" region00="PairStart" region10="PairEnd"/>
-<!-- <<out -->
-         <block start="/&lt;&lt;\x22([a-zA-Z_][\w_]*)\x22/" end="/^(\y1)$/" scheme="perlInterpolateString" region="plString" region00="PairStart" region10="PairEnd" region01="plWord" region11="plWord"/>
-         <block start="/&lt;&lt;'([a-zA-Z_][\w_]*)'/" end="/^(\y1)$/" scheme="Comment" region="plString" region00="PairStart" region10="PairEnd" region01="plWord" region11="plWord"/>
-         <block start="/&lt;&lt;`([a-zA-Z_][\w_]*)`/" end="/^(\y1)$/" scheme="Comment" region="plString" region00="PairStart" region10="PairEnd" region01="plWord" region11="plWord"/>
-         <block start="/&lt;&lt;([a-zA-Z_][\w_]*)/" end="/^(\y1)$/" scheme="perlInterpolateString" region="plString" region00="PairStart" region10="PairEnd" region01="plWord" region11="plWord"/>
-         <block start="/&lt;&lt;\M([^\s\w_])/" end="/^$/" scheme="perlInterpolateString" region="plString" region00="PairStart" region10="PairEnd" region01="plWord" region11="plWord"/>
-<!-- cail: perl in perl :)
-   <block start="/(eval)\s+<<'([^']+)'/i" end="/^(\y2)$/" scheme="Perl" region1="Inserts" region2="plWord" region3="plWord" region4="plWord"-->
-<!-- pod stuff -->
-         <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="perlPod" region="plPod" region10="plPodSym"/>
-         <block start="/__(END|DATA)__/" end="/$NeVeReAcH^/" scheme="perlPod" region="plPod"/>
-<!-- streams and globs with html </script> hack -->
-         <regexp match="/&lt;[^\s\/\%]*?\&gt;/i" region0="plStream"/>
-         <regexp match="/\B \- [ABCMORSTWXbcdefgkloprstuwxz]\b/x" region0="plWord"/>
-         <regexp match="/x(\d+)/x" region0="plWord" region1="plNumb"/>
-<!-- base syntax -->
-         <keywords region="plWord">
-            <word name="sub"/>
-            <word name="do"/>
-            <word name="return"/>
-            <word name="while"/>
-            <word name="until"/>
-            <word name="unless"/>
-            <word name="if"/>
-            <word name="else"/>
-            <word name="elsif"/>
-            <word name="foreach"/>
-            <word name="for"/>
-            <word name="continue"/>
-            <word name="next"/>
-            <word name="last"/>
-            <word name="redo"/>
-            <word name="goto" region="plRare"/>
-            <word name="our"/>
-            <word name="__DATA__" region="plRare"/>
-            <word name="__END__" region="plRare"/>
-            <word name="no"/>
-            <word name="use"/>
-            <word name="require"/>
-            <word name="package"/>
-            <word name="strict"/>
-            <word name="local"/>
-            <word name="my"/>
-<!-- functions -->
-            <word name="AUTOLOAD"/>
-            <word name="BEGIN"/>
-            <word name="INIT"/>
-            <word name="CHECK"/>
-            <word name="CORE"/>
-            <word name="DESTROY"/>
-            <word name="END"/>
-            <word name="SUPER"/>
-            <word name="UNIVERSAL"/>
-            <word name="abs"/>
-            <word name="accept"/>
-            <word name="alarm"/>
-            <word name="atan2"/>
-            <word name="bind"/>
-            <word name="binmode"/>
-            <word name="bless"/>
-            <word name="caller"/>
-            <word name="chdir"/>
-            <word name="chmod"/>
-            <word name="chomp"/>
-            <word name="chop"/>
-            <word name="chown"/>
-            <word name="chr"/>
-            <word name="chroot"/>
-            <word name="close"/>
-            <word name="closedir"/>
-            <word name="connect"/>
-            <word name="cos"/>
-            <word name="crypt"/>
-            <word name="dbmclose"/>
-            <word name="dbmopen"/>
-            <word name="defined"/>
-            <word name="delete"/>
-            <word name="die"/>
-            <word name="dump"/>
-            <word name="each"/>
-            <word name="endgrent"/>
-            <word name="endhostent"/>
-            <word name="endnetent"/>
-            <word name="endprotoent"/>
-            <word name="endpwent"/>
-            <word name="endservent"/>
-            <word name="eof"/>
-            <word name="eval"/>
-            <word name="exec"/>
-            <word name="exit"/>
-            <word name="exp"/>
-            <word name="fcntl"/>
-            <word name="fileno"/>
-            <word name="flock"/>
-            <word name="fork"/>
-            <word name="formline"/>
-            <word name="getc"/>
-            <word name="getgrent"/>
-            <word name="getgrgid"/>
-            <word name="getgrname"/>
-            <word name="gethostbyaddr"/>
-            <word name="gethostbyname"/>
-            <word name="gethostent"/>
-            <word name="getlogin"/>
-            <word name="getnetbyaddr"/>
-            <word name="getnetbyname"/>
-            <word name="getnetent"/>
-            <word name="getpeername"/>
-            <word name="getpgrp"/>
-            <word name="getppid"/>
-            <word name="getpriority"/>
-            <word name="getprotobyname"/>
-            <word name="getprotobynumber"/>
-            <word name="getprotoent"/>
-            <word name="getpwent"/>
-            <word name="getpwnam"/>
-            <word name="getpwuid"/>
-            <word name="getservbyname"/>
-            <word name="getservbyport"/>
-            <word name="getservent"/>
-            <word name="getsockname"/>
-            <word name="getsockopt"/>
-            <word name="glob"/>
-            <word name="gmtime"/>
-            <word name="grep"/>
-            <word name="hex"/>
-            <word name="index"/>
-            <word name="int"/>
-            <word name="ioctl"/>
-            <word name="join"/>
-            <word name="keys"/>
-            <word name="kill"/>
-            <word name="lc"/>
-            <word name="lcfirst"/>
-            <word name="length"/>
-            <word name="link"/>
-            <word name="listen"/>
-            <word name="localtime"/>
-            <word name="log"/>
-            <word name="lstat"/>
-            <word name="map"/>
-            <word name="mkdir"/>
-            <word name="msgctl"/>
-            <word name="msgget"/>
-            <word name="msgrcv"/>
-            <word name="msgsnd"/>
-            <word name="oct"/>
-            <word name="open"/>
-            <word name="opendir"/>
-            <word name="ord"/>
-            <word name="pack"/>
-            <word name="pipe"/>
-            <word name="pop"/>
-            <word name="pos"/>
-            <word name="print"/>
-            <word name="printf"/>
-            <word name="push"/>
-            <word name="quotemeta"/>
-            <word name="rand"/>
-            <word name="read"/>
-            <word name="readdir"/>
-            <word name="readline"/>
-            <word name="readlink"/>
-            <word name="recv"/>
-            <word name="ref"/>
-            <word name="rename"/>
-            <word name="reset"/>
-            <word name="reverse"/>
-            <word name="rewindir"/>
-            <word name="rindex"/>
-            <word name="rmdir"/>
-            <word name="scalar"/>
-            <word name="seek"/>
-            <word name="seekdir"/>
-            <word name="select"/>
-            <word name="semctl"/>
-            <word name="semgett"/>
-            <word name="semop"/>
-            <word name="send"/>
-            <word name="setgrent"/>
-            <word name="sethostent"/>
-            <word name="setnetent"/>
-            <word name="setpgrp"/>
-            <word name="setpriority"/>
-            <word name="setprotoent"/>
-            <word name="setpwent"/>
-            <word name="setservent"/>
-            <word name="setsockopt"/>
-            <word name="shift"/>
-            <word name="shmctl"/>
-            <word name="shmget"/>
-            <word name="shmread"/>
-            <word name="shmwrite"/>
-            <word name="shutdown"/>
-            <word name="sin"/>
-            <word name="sleep"/>
-            <word name="socket"/>
-            <word name="socketpair"/>
-            <word name="sort"/>
-            <word name="splice"/>
-            <word name="split"/>
-            <word name="sprintf"/>
-            <word name="sqrt"/>
-            <word name="srand"/>
-            <word name="stat"/>
-            <word name="study"/>
-            <word name="substr"/>
-            <word name="symlink"/>
-            <word name="syscall"/>
-            <word name="sysopen"/>
-            <word name="sysread"/>
-            <word name="system"/>
-            <word name="syswrite"/>
-            <word name="tell"/>
-            <word name="telldir"/>
-            <word name="tie"/>
-            <word name="untie"/>
-            <word name="exists"/>
-            <word name="rewinddir"/>
-            <word name="semget"/>
-            <word name="lock"/>
-            <word name="readpipe"/>
-            <word name="prototype"/>
-            <word name="sysseek"/>
-            <word name="getgrnam"/>
-            <word name="tied"/>
-            <word name="time"/>
-            <word name="times"/>
-            <word name="truncate"/>
-            <word name="uc"/>
-            <word name="ucfirst"/>
-            <word name="umask"/>
-            <word name="undef"/>
-            <word name="unlink"/>
-            <word name="unpack"/>
-            <word name="unshift"/>
-            <word name="utime"/>
-            <word name="values"/>
-            <word name="vec"/>
-            <word name="wait"/>
-            <word name="waitpid"/>
-            <word name="wantarray"/>
-            <word name="warn"/>
-            <word name="write"/>
-            <word name="x"/>
-         </keywords>
-         <inherit scheme="perlExtKW"/>
-<!-- cail: regexps
-        in reallity  s'foo'bar' does no interpolation - but i thing this
-          isn't so important :)
-        currently this subst will not work in such cases:
-         s        # here we can't know which of schemes was called :(
-         {        #
-          foo
-         }        # but such form is works :)
-         {        #
-          bar
-         }ix;
-        but i think this is real perversion :)
-   -->
-         <block start="/\b\M(((s|tr|y) \s* \())/x" end="/(\) [mgeioxs]*)/x" scheme="perlSubstBlock1" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <block start="/\b\M(((s|tr|y) \s* \{))/x" end="/(\} [mgeioxs]*)/x" scheme="perlSubstBlock2" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <block start="/\b\M(((s|tr|y) \s* \[))/x" end="/(\] [mgeioxs]*)/x" scheme="perlSubstBlock3" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <block start="/\b\M(((s|tr|y) \s* &lt;))/x" end="/(\&gt; [mgeioxs]*)/x" scheme="perlSubstBlock4" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <block start="/\b\M(((s|tr|y) \s* ([^\w\s])))/x" end="/(\y4 [mgeioxs]*)/x" scheme="perlSubstBlock" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <block start="/\b\M(((s|tr|y) \s+ (\w)))/x" end="/(\y4 [mgeioxs]*)/x" scheme="perlSubstBlock" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-<!-- Timur: see `perldoc perlop`
-       "Quote and Quote-like Operators " -->
-         <block start="/\b(q[wqxr]\s*\()/" end="/(\))/" region="plString" scheme="perlIntStrBr1" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q[wqxr]\s*\{)/" end="/(\})/" region="plString" scheme="perlIntStrBr2" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q[wqxr]\s*\[)/" end="/(\])/" region="plString" scheme="perlIntStrBr3" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q[wqxr]\s*&lt;)/" end="/(\&gt;)/" region="plString" scheme="perlIntStrBr4" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q[wqxr]\s*([^\s]))/" end="/(\y2)/" region="plString" scheme="perlInterpolateString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q(w)?\s*\()/" end="/(\))/" region="plString" scheme="perlStrBr1" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q(w)?\s*\{)/" end="/(\})/" region="plString" scheme="perlStrBr2" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q(w)?\s*\[)/" end="/(\])/" region="plString" scheme="perlStrBr3" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q(w)?\s*&lt;)/" end="/(\&gt;)/" region="plString" scheme="perlStrBr4" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(q(w)?\s*([^\w\s]))/" end="/(\y3)/" region="plString" scheme="perlString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(m \s* \()/x" end="/(\)[cmiogxs]*)/" scheme="perlIntStrBr1" region="plString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(m \s* \{)/x" end="/(\}[cmiogxs]*)/" scheme="perlIntStrBr2" region="plString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(m \s* \[)/x" end="/(\][cmiogxs]*)/" scheme="perlIntStrBr3" region="plString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(m \s* &lt;)/x" end="/(\&gt;[cmiogxs]*)/" scheme="perlIntStrBr4" region="plString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(m \s* ([^\s\w]))/x" end="/(\y2[cmiogxs]*)/" scheme="perlInterpolateString" region="plString" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
-<!-- Timur: hack against Ada maniacs -->
-         <regexp match="/\c(&amp;|\w+)'[\w_']+\b/" region0="plVar"/>
-<!-- operators -->
-         <keywords region="plSymb">
-            <symb name="!"/>
-            <symb name="~"/>
-            <symb name="\"/>
-            <symb name="+"/>
-            <symb name="-"/>
-            <symb name="."/>
-            <symb name="*"/>
-            <symb name="/"/>
-            <symb name=".."/>
-            <symb name="%"/>
-            <word name="lt"/>
-            <word name="gt"/>
-            <word name="le"/>
-            <word name="ge"/>
-            <word name="eq"/>
-            <word name="ne"/>
-            <word name="cmp"/>
-            <symb name="&amp;"/>
-            <symb name="|"/>
-            <symb name="^"/>
-            <symb name="?"/>
-            <symb name=":"/>
-            <symb name=","/>
-            <symb name="="/>
-            <word name="and"/>
-            <word name="not"/>
-            <word name="or"/>
-            <word name="xor"/>
-            <symb name="-&gt;"/>
-            <symb name="&gt;"/>
-            <symb name="&lt;"/>
-            <symb name=";" region="plMainSymb"/>
-            <symb name="{" region="Error"/>
-            <symb name="}" region="Error"/>
-            <symb name="(" region="Error"/>
-            <symb name=")" region="Error"/>
-            <symb name="[" region="Error"/>
-            <symb name="]" region="Error"/>
-         </keywords>
-      </scheme>
-
-      <scheme name="perlVarIntEx">
-         <regexp match="/ (::|')? \w+ /x" region1="plSymb"/>
-         <inherit scheme="perl"/>
       </scheme>
 
    </type>
