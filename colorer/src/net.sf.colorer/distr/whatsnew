@@ -8,3 +8,6 @@
   File's type is now detected with several start lines analyze.
 
   User-friendly language's grouping in filetype's menu.
+  
+  HTML Generator improvements. Now it can handle multiple
+  file selection.
