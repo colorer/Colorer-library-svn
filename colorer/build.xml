@@ -316,14 +316,12 @@
       <env key='Path' path='${native-path}:${java.library.path}'/>
     </exec>
 
-    <available property='lib' file='bin/farplugin/colorer.dll'/>
+    <available property='lib' file='src/pcolorer/colorer.dll'/>
     <fail unless='lib' message='FarColorer plugin was not compiled'/>
 
     <copy todir='${farplugin-dir}/bin'>
-      <fileset dir='bin/farplugin' includes='colorer.dll,
-               coloree.hlf,coloree.lng,colorer.hlf,
-               colorer.lng,shortcuts.reg'><!-- colorer.map -->
-      </fileset>
+      <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
+      <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
     </copy>
     
     <mkdir dir='${farplugin-dir}/hrd/console'/>
