@@ -294,8 +294,10 @@
       Each time at any position in the text only one schema is active.
       Its content is applied to the current text position.
       
-      When starting text parse process, scheme with name, equals
-      to its type name is used (base scheme of type).
+      When the text parsing process starts, the scheme is used 
+      whose name equals the name of the corresponding type
+      (the base scheme of the type).
+
     </xs:documentation></xs:annotation>
     <xs:sequence>
       <xs:element name="annotation" type="annotation" minOccurs="0"/>
