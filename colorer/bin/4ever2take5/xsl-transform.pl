@@ -4,8 +4,8 @@ $pathtake5 = "../../";
 
 $mask = '\b.+\.hr[dc]';
 
-mkdir $pathtake5."hrc";
-mkdir $pathtake5."hrd";
+mkdir $pathtake5."hrc", 0777;
+mkdir $pathtake5."hrd", 0777;
 
 parseRecurse($path4ever."hrd/");
 parseRecurse($path4ever."hrc/");
