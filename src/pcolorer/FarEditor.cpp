@@ -79,6 +79,10 @@ int len = 0;
 };
 
 
+void FarEditor::chooseFileType(String *fname){
+  FileType *ftype = baseEditor->chooseFileType(fname);
+  setFileType(ftype);
+};
 
 void FarEditor::setFileType(FileType *ftype){
   baseEditor->setFileType(ftype);
