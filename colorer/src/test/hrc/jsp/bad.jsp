@@ -10,6 +10,11 @@ sadf
 </script>	
 
 
+<script>
+<%= var %> (text)
+</script>
+
+
 <% if (true) { %> BUG <% } %>
 
 <script language="JavaScript" src="<%=ctx+"/nordlbit/js/tibase.js"%>" type="text/javascript"></script>
