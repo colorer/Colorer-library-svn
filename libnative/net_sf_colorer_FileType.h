@@ -17,10 +17,10 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_enumerateParameters
 
 /*
  * Class:     net_sf_colorer_FileType
- * Method:    getParameterDescription0
+ * Method:    getParameterDescription
  * Signature: (JLjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParameterDescription0
+JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParameterDescription
   (JNIEnv *, jobject, jlong, jstring);
 
 /*
