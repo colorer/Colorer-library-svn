@@ -8,7 +8,7 @@
                              http://colorer.sf.net/2003/catalog.xsd">
 
   <hrc-sets>
-    <location link="hrc/colorer.hrc"/>
+    <location link="hrc/proto.hrc"/>
     <location link="hrc/auto"/>
   </hrc-sets>
 
