@@ -9,7 +9,7 @@
   <xsl:param name="id" select="''"/>
   <xsl:choose>
     <xsl:when test="(parent::xs:complexType or parent::xs:complexType) and name() = 'name'">
-      <link linkend="type{.}"><xsl:value-of select="."/></link>
+      <link linkend="typedescr_{generate-id(/)}_{.}"><xsl:value-of select="."/></link>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="."/>
@@ -40,7 +40,7 @@
 
   <xsl:if test="self::xs:complexType[@name] or self::xs:simpleType[@name]">
   <!-- or self::xs:element[@name and not(@type)] -->
-    <anchor id='{$id}{@name}'/>
+    <anchor id='{$id}_{generate-id(/)}_{@name}'/>
   </xsl:if>
 
   <xsl:value-of select="$totalIndent"/>
