@@ -2,7 +2,7 @@
 <plugin
    id="net.sf.colorer"
    name="Eclipse Colorer Library Plug-in"
-   version="0.5.0"
+   version="0.6.0"
    provider-name="Cail Lomecb"
    class="net.sf.colorer.eclipse.EclipsecolorerPlugin">
 
