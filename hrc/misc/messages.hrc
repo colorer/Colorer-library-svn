@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-Messages highlighting for colorer
-    Changed by ANR Daemon, Hell Corp
-    <anrdaemon@hell.corp.mtu-net.ru>  2:5020/877.24@FIDO
-    honeyman <honeyman@uic.nnov.ru>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-    Changed by Artem Zankovich <z_artem@yahoo.com> (16.12.2001)
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-   <type name="messages" access="public">
+  <type name="messages" access="public">
+    <annotation><documentation><![CDATA[
+      Messages highlighting for colorer
+      Changed by ANR Daemon, Hell Corp
+      <anrdaemon@hell.corp.mtu-net.ru>  2:5020/877.24@FIDO
+      honeyman <honeyman@uic.nnov.ru>
+      Artem Zankovich <z_artem@yahoo.com> (16.12.2001, 09.06.2003)
+    ]]></documentation></annotation>
 
       <import type="def"/>
       <import type="text"/>
       <import type="html"/>
+      <import type="rtf"/>
 
       <region name="pktB" parent="Keyword"/>
       <region name="pktI" parent="Comment"/>
@@ -42,141 +46,104 @@ Messages highlighting for colorer
       <entity name="mesTE" value="^\M(\S|$)"/>
 
       <scheme name="messages_base">
-<!-- kludges -->
+         <!-- kludges -->
          <regexp match="/^(\x01.*$)/" region0="pktKludge"/>
          <regexp match="/^(SEEN-BY\:.*$)/" region0="pktKludge"/>
-<!-- uue code filter -->
+         <!-- uue code filter -->
          <regexp match="/(^\S{61,})/" region0="pktUUE"/>
-<!-- Quotes -->
+         <!-- Quotes -->
          <regexp match="/^\s?.[^\s&gt;]+(&gt;&gt;)+[^&gt;].*/" region="pktQuote2"/>
          <regexp match="/^\s?.[^\s\&gt;]+(&gt;)+.*/" region="pktQuote"/>
          <regexp match="/^\&gt;.*/" region="pktQuote"/>
-<!-- (C) by Honeyman starts-->
+         <!-- (C) by Honeyman starts-->
          <regexp match="/^(X\-FTN\-Origin\:)\s(.*)$/" region0="CommentContent" region2="pktQuote"/>
          <regexp match="/^(From\s\-)\s(.*)$/" region0="CommentContent" region2="Comment" region3="Comment"/>
          <regexp match="/^(Approved\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Cache\-Post\-Path\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Content\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-<!--regexp match="/^(Content\-.*?\b\:)\s(.*)$/" region0="CommentContent" region2="Comment"-->
          <regexp match="/^(Distribution\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Followup\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(In\-Reply\-To\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Lines\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-<!-- artem: sometimes MIME-Version is found -->
          <regexp match="/^(Mime\-Version\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(NNTP\-Posting\-.*?\b\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Newsgroups\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Organization\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Path\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-<!-- artem: multiline -->
+         <!-- artem: multiline -->
          <block start="/^(References\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
          <regexp match="/^(Reply\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Return\-Receipt\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Sender\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Xref\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-<!-- artem: multiline -->
+         <!-- artem: multiline -->
          <block start="/^(X\-[\w\-]+\:)/i" end="/%mesTE;/" scheme="NetEMail" region="Comment" region01="CommentContent"/>
-<!-- (C) by Honeyman ends-->
-<!-- artem: oбходитесь в Fido без From: и Subject:, обойдетесь и без To:
-  <regexp match="/\b(To\s*:)(.*)$/i" region0="Keyword" region2="String"/> -->
+         <!-- (C) by Honeyman ends-->
+         <!-- artem: oбходитесь в Fido без From: и Subject:, обойдетесь и без To:
+         <regexp match="/\b(To\s*:)(.*)$/i" region0="Keyword" region2="String"/> -->
          <block start="/^(To\:)/i" end="/%mesTE;/" scheme="NetEMail" region="Comment" region01="Keyword"/>
          <block start="/^(B?CC\:)/i" end="/%mesTE;/" scheme="NetEMail" region="Comment" region01="Keyword"/>
          <regexp match="/^(Date\:)(.*)$/i" region0="Keyword" region2="String"/>
          <block start="/^(From\:)/i" end="/%mesTE;/" scheme="NetAddresses" region="Comment" region01="Keyword"/>
          <block start="/^(Subject\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="Keyword"/>
-<!-- artem: applying mNetAddresses sheme causes too slow work when
-       many addresses are in Received: field -->
+         <block start="/^(Organization\:)/i" end="/%mesTE;/" scheme="NetAddresses" region="Comment" region01="Keyword"/>
+
+         <!-- artem: applying mNetAddresses sheme causes too slow work when
+                     many addresses are in Received: field -->
          <block start="/^(Received\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
-         <regexp match="/^(X\-Mailer\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Message\-Id\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(X\-UIDL\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Status\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
-<!-- cail: really it is better to use scheme "empty" -
-       it much faster than "Comment" :) -->
+         <!-- cail: really it is better to use scheme "empty" -
+                    it much faster than "Comment" :) -->
          <block start="/^(Content\-Type\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
-<!-- (C) by Artem Zankovich starts-->
-         <regexp match="/^(Content\-Transfer\-Encoding\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
-         <block start="/^(Content\-Disposition\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
-         <regexp match="/^(Content\-Description\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Content\-Language\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Content\-ID\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Mailing\-List\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+
+         <!-- (C) by Artem Zankovich starts-->
+         <block start="/^(Content\-[dD]isposition\:)/" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
+         <regexp match="/^(Content\-(transfer\-encoding|Description|Language|ID|Class)\:)(.*)$/i" region0="CommentContent" region3="Comment"/>
+         <regexp match="/^(Mailing\-[lL]ist\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Subscribed\-as\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Id\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Help\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Owner\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Subscribe\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Unsubscribe\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Archive\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(List-Post\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Errors\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Delivered\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(List\-(Id|Help|Owner|Subscribe|Unsubscribe|Archive|Post)\:)\s(.*)$/" region0="CommentContent" region3="Comment"/>
+         <regexp match="/^(Errors\-[tT]o\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Delivered\-[tT]o\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Delivery\-[dD]ate\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Envelope\-[tT]o\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
          <regexp match="/^(Precedence\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Disposition\-Notification\-To\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Auto\-Submitted\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Return\-Path\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
-<!-- (C) by Artem Zankovich ends-->
+         <regexp match="/^(Disposition\-[nN]otification\-[tT]o\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Auto\-[sS]ubmitted\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Return\-[pP]ath\:)(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Importance\:)(.*)$/i" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Thread\-(Topic|Index)\:)(.*)$/i" region0="CommentContent" region3="Comment"/>
+         <regexp match="/^(Resent\-(From|Date|To|Message\-Id|Reply\-To|Cc|Bcc)\:)(.*)$/i" region0="CommentContent" region3="Comment"/>
+         <regexp match="/^(User\-[aA]gent\:)(.*)$/" region0="CommentContent" region2="Comment"/>
+         <!-- Rarelly used RFC822 fields -->
+         <regexp match="/^(Keywords\:)(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Comments\:)(.*)$/" region0="CommentContent" region2="Comment"/>
+         <regexp match="/^(Encrypted\:)(.*)$/" region0="CommentContent" region2="Comment"/>
+         <!-- (C) by Artem Zankovich ends-->
       </scheme>
 
       <scheme name="messages_FTN">
-<!-- Http,EMail & Fido Addresses -->
+         <!-- Http,EMail & Fido Addresses -->
          <inherit scheme="NetAddresses"/>
          <inherit scheme="Apost"/>
          <inherit scheme="StandardString"/>
          <inherit scheme="DecNumber"/>
-<!-- tearline (Colorer 2.8+) -->
+         <!-- tearline (Colorer 2.8+) -->
          <regexp match="/(^\.\.\.\x20\M.*$)/" region0="pktTagL"/>
          <regexp match="/(^---\x20\M.*$)/" region0="pktTearL"/>
          <regexp match="/(^\x20?\*\x20Origin:\x20\M.*$)/" region0="pktOrigL"/>
-<!-- speedup by
-       Andrzej Novosiolov <andrzej.Novosiolov@p4.f201.n463.z2.fidonet.org> :)
-  -->
+         <!-- speedup by
+              Andrzej Novosiolov <andrzej.Novosiolov@p4.f201.n463.z2.fidonet.org> :)
+         -->
          <regexp match="/[A-Za-z\x80-\xFF][A-Za-z\x80-\xFF\s]+ \M ([\s;=+-*&amp;\|^\(\)\[\],\.\-!\~\%\{\}?_]|$)/x" region="Syntax"/>
-<!-- Style colors -->
-<!-- More powerful FOUR-stylecoded regexp :) -
-It not work.  :(
-ну извращенцы :)
-  <regexp match="/(#\*\/_)|(#\*_\/)|(#_\*\/)|(#\/\*_)|(#_\/\*)|(#\/_\*)|(\*#\/_)|(\*#_\/)|(\*_#\/)|(\*\/#_)|(\*_\/#)|(\*\/_#)|(\/#\*_)|(\/_\*#)|(\/\*#_)|(\/\*_#)|(\/#_\*)|(\/_#\*)|(_\/#\*)|(_#\/\*)|(_\/\*#)|(_#\*\/)|(_\*\/#)|(_\*#\/)[^\s][^\_\*\#\/]+[^\s](#\*\/_)|(#\*_\/)|(#_\*\/)|(#\/\*_)|(#_\/\*)|(#\/_\*)|(\*#\/_)|(\*#_\/)|(\*_#\/)|(\*\/#_)|(\*_\/#)|(\*\/_#)|(\/#\*_)|(\/_\*#)|(\/\*#_)|(\/\*_#)|(\/#_\*)|(\/_#\*)|(_\/#\*)|(_#\/\*)|(_\/\*#)|(_#\*\/)|(_\*\/#)|(_\*#\/)/"
-          region0="pktRBIU"/>
--->
-<!-- Triple stylecodes -
-too slow...
-  <regexp match="/(  \*\_\/ \S [^\*\_\/]+ \S \/\_\* )/x" region0="pktBIU"/>
-  <regexp match="/(  \_\*\/ \S [^\*\_\/]+ \S \/\*\_ )/x" region0="pktBIU"/>
-  <regexp match="/(  \_\/\* \S [^\*\_\/]+ \S \*\/\_ )/x" region0="pktBIU"/>
-  <regexp match="/(  \/\_\* \S [^\*\_\/]+ \S \*\_\/ )/x" region0="pktBIU"/>
-  <regexp match="/(  \/\*\_ \S [^\*\_\/]+ \S \_\*\/ )/x" region0="pktBIU"/>
-  <regexp match="/(  \*\/\_ \S [^\*\_\/]+ \S \_\/\* )/x" region0="pktBIU"/>
-
-  <regexp match="/(  \*\#\/ \S [^\*\#\/]+ \S \/\#\* )/x" region0="pktRBI"/>
-  <regexp match="/(  \#\*\/ \S [^\*\#\/]+ \S \/\*\# )/x" region0="pktRBI"/>
-  <regexp match="/(  \#\/\* \S [^\*\#\/]+ \S \*\/\# )/x" region0="pktRBI"/>
-  <regexp match="/(  \/\#\* \S [^\*\#\/]+ \S \*\#\/ )/x" region0="pktRBI"/>
-  <regexp match="/(  \/\*\# \S [^\*\#\/]+ \S \#\*\/ )/x" region0="pktRBI"/>
-  <regexp match="/(  \*\/\# \S [^\*\#\/]+ \S \#\/\* )/x" region0="pktRBI"/>
-
-  <regexp match="/(  \*\#\_ \S [^\*\#\_]+ \S \_\#\* )/x" region0="pktRBU"/>
-  <regexp match="/(  \#\*\_ \S [^\*\#\_]+ \S \_\*\# )/x" region0="pktRBU"/>
-  <regexp match="/(  \#\_\* \S [^\*\#\_]+ \S \*\_\# )/x" region0="pktRBU"/>
-  <regexp match="/(  \_\#\* \S [^\*\#\_]+ \S \*\#\_ )/x" region0="pktRBU"/>
-  <regexp match="/(  \_\*\# \S [^\*\#\_]+ \S \#\*\_ )/x" region0="pktRBU"/>
-  <regexp match="/(  \*\_\# \S [^\*\#\_]+ \S \#\_\* )/x" region0="pktRBU"/>
-
-  <regexp match="/(  \/\#\_ \S [^\/\_\#]+ \S \_\#\/ )/x" region0="pktRIU"/>
-  <regexp match="/(  \#\/\_ \S [^\/\_\#]+ \S \_\/\# )/x" region0="pktRIU"/>
-  <regexp match="/(  \#\_\/ \S [^\/\_\#]+ \S \/\_\# )/x" region0="pktRIU"/>
-  <regexp match="/(  \_\#\/ \S [^\/\_\#]+ \S \/\#\_ )/x" region0="pktRIU"/>
-  <regexp match="/(  \_\/\# \S [^\/\_\#]+ \S \#\/\_ )/x" region0="pktRIU"/>
-  <regexp match="/(  \/\_\# \S [^\/\_\#]+ \S \#\_\/ )/x" region0="pktRIU"/>
--->
-<!-- Binary stylecodes -->
+         <!-- Style colors -->
+         <!-- Binary stylecodes -->
          <regexp match="/((\/\*|\*\/)[^\s][^\_\*\#\/]+[^\s](\/\*|\*\/))/" region="pktBI"/>
          <regexp match="/((\_\*|\*\_)[^\s][^\_\*\#\/]+[^\s](\_\*|\*\_))/" region="pktBU"/>
          <regexp match="/((\/\_|\_\/)[^\s][^\_\*\#\/]+[^\s](\/\_|\_\/))/" region="pktIU"/>
          <regexp match="/((\#\*|\*\#)[^\s][^\_\*\#\/]+[^\s](\#\*|\*\#))/" region="pktRB"/>
          <regexp match="/((\#\/|\/\#)[^\s][^\_\*\#\/]+[^\s](\#\/|\/\#))/" region="pktRI"/>
          <regexp match="/((\#\/|\/\#)[^\s][^\_\*\#\/]+[^\s](\#\/|\/\#))/" region="pktRU"/>
-<!-- Unary stylecodes -->
+         <!-- Unary stylecodes -->
          <regexp match="/(  \* \S [^\*]+ \S \* )/x" region0="pktB"/>
          <regexp match="/(  \/ \S [^\/]+ \S \/ )/x" region0="pktI"/>
          <regexp match="/(  \_ \S [^\_]+ \S \_ )/x" region0="pktU"/>
@@ -184,9 +151,9 @@ too slow...
       </scheme>
 
       <scheme name="eml_body_text">
-<!-- prevent koi8 highlighting -->
+         <!-- prevent koi8 highlighting -->
          <regexp match="/\=[0-9a-fA-F]{2}/" region="default"/>
-<!-- Quotes -->
+         <!-- Quotes -->
          <regexp match="/^\s*(\w+)?(\&gt;\&gt;)+(([^\&gt;].*$)|$)/" region0="pktQuote2"/>
          <regexp match="/^\s*(\w+)?(\&gt;)+.*$/" region0="pktQuote"/>
          <inherit scheme="text"/>
@@ -197,43 +164,60 @@ too slow...
          <inherit scheme="messages_base"/>
       </scheme>
 
-      <scheme name="eml_body_html">
-         <inherit scheme="html"/>
-      </scheme>
-
       <scheme name="eml_message_html">
          <inherit scheme="messages_base"/>
-         <block start="/^$^/x" end="/\M^--/" scheme="eml_body_html"/>
+         <block start="/^$^/x" end="/\M^--/" scheme="html"/>
+      </scheme>
+
+      <scheme name="eml_message_rtf">
+        <inherit scheme="messages_base"/>
+        <block start="/^$^/x" end="/\M^--/" scheme="rtf"/>
+      </scheme>
+
+      <scheme name="eml_message_headers">
+         <inherit scheme="messages_base"/>
       </scheme>
 
       <scheme name="eml_message_multipart">
-         <block start="/^$^/x" end="/\M^--/" scheme="text"/>
          <inherit scheme="messages_base"/>
+         <block start="/^$^/x" end="/\M^--/" scheme="text"/>
       </scheme>
 
       <scheme name="eml_message_delivery">
-         <regexp match="/^(Reporting\-MTA\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Received\-From\-MTA\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Remote\-MTA\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Arrival\-Date\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Final\-Recipient\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Action\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Status\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Last\-Attempt\-Date\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <regexp match="/^(Original\-Recipient\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
-         <block start="/^(Diagnostic\-Code\:)/i" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
-         <inherit scheme="messages_base"/>
+        <regexp match="/^(Reporting\-MTA\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Received\-From\-MTA\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Remote\-MTA\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Arrival\-[dD]ate\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Final\-[rR]ecipient\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Action\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Status\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Last\-[aA]ttempt\-[dD]ate\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Original\-(Recipient|Envelope-Id)\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
+        <block  start="/^(Diagnostic\-[cC]ode\:)/" end="/%mesTE;/" scheme="empty" region="Comment" region01="CommentContent"/>
+        <inherit scheme="messages_base"/>
+      </scheme>
+
+      <scheme name="eml_disposition_notification">
+        <regexp match="/^(Reporting\-UA\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Final\-[rR]ecipient\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Original\-Message\-Id\:)\s(.*)$/i" region0="CommentContent" region2="Comment"/>
+        <regexp match="/^(Disposition\:)\s(.*)$/" region0="CommentContent" region2="Comment"/>
+        <inherit scheme="messages_base"/>
       </scheme>
 
       <scheme name="eml_message_other">
          <inherit scheme="messages_base"/>
+         <block start="/^$^/x" end="/\M^--/" scheme="empty"/>
       </scheme>
 
       <scheme name="messages">
          <block start="/\M^Content\-Type:\s+multipart/i" end="/^--/" scheme="eml_message_multipart"/>
          <block start="/\M^Content\-Type:\s+text\/plain/i" end="/^--/" scheme="eml_message_text"/>
          <block start="/\M^Content\-Type:\s+text\/html/i" end="/^--/" scheme="eml_message_html"/>
+         <block start="/\M^Content\-Type:\s+text\/richtext/i" end="/^--/" scheme="eml_message_rtf"/>
+         <block start="/\M^Content\-Type:\s+text\/rfc822\-headers/i" end="/^--/" scheme="eml_message_headers"/>
          <block start="/\M^Content\-Type:\s+message\/delivery\-status/i" end="/^--/" scheme="eml_message_delivery"/>
+         <block start="/\M^Content\-Type:\s+message\/disposition\-notification/i" end="/^--/" scheme="eml_disposition_notification"/>         
          <block start="/\M^Content\-Type:\s+./i" end="/^--/" scheme="eml_message_other" priority="low"/>
          <inherit scheme="messages_base"/>
          <inherit scheme="messages_FTN"/>
