@@ -3,7 +3,7 @@ package net.sf.colorer.editor;
 
 /**
  * Interface for outline objects, that can notify external container
- * about content changes 
+ * about content changes.
  */
 public interface IOutlineSource {
 

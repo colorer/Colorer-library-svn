@@ -1,5 +1,7 @@
 package net.sf.colorer.impl;
 
+import java.util.Hashtable;
+
 /**
  * Logging Service class
  */
@@ -7,14 +9,21 @@ public class Logger {
 
     public final static boolean TRACE = true;
     
-    public final static boolean ERRROR = true; 
+    public final static boolean ERROR = true; 
     
     public static void trace(String comp, Object msg) {
         trace(comp, msg, null);
     }
 
+    public static void error(String comp, Object msg) {
+        error(comp, msg, null);
+    }
+
     public static void trace(String comp, Object msg, Throwable ex) {
         if (TRACE) {
+            
+            if (filterout(comp)) return;
+            
             String print = "null";
             if (msg != null) {
                 print = msg.toString();
@@ -24,6 +33,34 @@ public class Logger {
                 ex.printStackTrace(System.out);
             }
         }
+    }
+
+    public static void error(String comp, Object msg, Throwable ex) {
+        if (ERROR) {
+            String print = "null";
+            if (msg != null) {
+                print = msg.toString();
+            }
+            System.out.println("[J]["+comp+"] "+print);
+            if (ex != null) {
+                ex.printStackTrace(System.out);
+            }
+        }
+    }
+    
+    private static boolean filterout(String comp) {
+        if (filter.get(comp) != null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    static Hashtable filter = new Hashtable();
+    
+    static {
+        filter.put("TextColorer", filter);
+        filter.put("ParseTree", filter);
     }
 
 }
