@@ -21,7 +21,6 @@
     ]]></contributors></annotation>
 
     <import type="def"/>
-    <import type="css"/>
     <import type="jScript"/>
     <import type="vbScript"/>
     <import type="perl"/>
@@ -254,11 +253,11 @@
          
       <block start="/~/" end="/~[\w\:\-]+\m/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
          
-      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="cssInsideBraces" 
+      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="css:RuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
       />
-      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="cssInsideBraces" 
+      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="css:RuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
       />
@@ -467,7 +466,7 @@
       <inherit scheme="htmlScripts"/>
          
       <block start="/ (&lt;(style).*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i" 
-             scheme="css" region00="PairStrongStart" region10="PairStrongEnd" 
+             scheme="css:css" region00="PairStrongStart" region10="PairStrongEnd" 
              region01="htmlTagBr" region02="htmlOpenTag" 
              region11="htmlTagBr" region12="htmlOpenTag"
       />
