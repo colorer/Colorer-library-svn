@@ -3,7 +3,7 @@
 <plugin
    id="net.sf.colorer"
    name="Eclipse Colorer Library Plugin"
-   version="0.6.0"
+   version="0.6.1"
    provider-name="Igor Russkih"
    class="net.sf.colorer.eclipse.EclipsecolorerPlugin">
 

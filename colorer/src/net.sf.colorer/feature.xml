@@ -2,7 +2,7 @@
 <feature
       id="net.sf.colorer"
       label="Eclipse Colorer"
-      version="0.6.0"
+      version="0.6.1"
       provider-name="Igor Russkih"
       image="logo-colorer.png">
 
@@ -64,9 +64,9 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
    <plugin
          id="net.sf.colorer"
-         download-size="1000"
-         install-size="1700"
-         version="0.6.0">
+         download-size="1300"
+         install-size="2000"
+         version="0.6.1">
    </plugin>
 
 </feature>
