@@ -762,7 +762,7 @@ const Region* HRCParserImpl::getNCRegion(CXmlEl *el, const String &tag){
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <ruiv@uic.nnov.ru>.
+ * Cail Lomecb <cail@nm.ru>.
  * Portions created by the Initial Developer are Copyright (C) 1999-2003
  * the Initial Developer. All Rights Reserved.
  *
