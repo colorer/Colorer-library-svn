@@ -58,7 +58,7 @@
          <regexp match="/^\s* &lt;!--/x" region0="Comment"/>
          <regexp match="/^\s* --&gt;/x" region0="Comment"/>
 <!-- Linear Comments-->
-         <block start="/\/\//" end="/\M(&lt;\/scr|$)/" scheme="jComment" region="Comment"/>
+         <block start="/\/\//" end="/\M(&lt;\/scr|$)/i" scheme="jComment" region="Comment"/>
          <block start="/\/\*/" end="/\*\//" scheme="jComment" region="Comment" region00="PairStart" region10="PairEnd"/>
          <regexp match="/^\M\s* function \s+ ([\w_]+) /x" region1="Function"/>
          <inherit scheme="PairedBrackets">
