@@ -306,7 +306,7 @@
   </prototype>
   <prototype name="ruby" group="rare" description="Ruby">
     <location link="rare/ruby.hrc"/>
-    <filename>/\.(ru|ruby|rub)$/i</filename>
+    <filename>/\.(rb|ruby)$/i</filename>
   </prototype>
   <prototype name="sml" group="rare" description="StandardML">
     <location link="rare/sml.hrc"/>

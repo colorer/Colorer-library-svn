@@ -46,6 +46,7 @@
 
   <assign name="def:Parameter" fore="#A"/>
   <assign name="def:ParameterStrong" fore="#D"/>
+  <assign name="def:ParameterUnknown" fore="#B"/>
 
   <assign name="def:Tag" fore="#7"/>
   <assign name="def:OpenTag" fore="#F"/>

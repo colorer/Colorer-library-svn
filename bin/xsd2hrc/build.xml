@@ -36,9 +36,7 @@
       <param name='allow-unknown-elements' expression='yes'/>
       <param name='custom-defines' expression='${custom}/custom.ant.xml'/>
     </xslt>
-    <zip basedir='.' includes="ant.hrc"
-         destfile="${hrc-path-auto}/ant.jar"
-    />
+    <zip basedir='.' includes="ant.hrc" destfile="${hrc-path-auto}/ant.jar"/>
     <delete file='ant.hrc'/>
   </target>
 
