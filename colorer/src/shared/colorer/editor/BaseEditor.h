@@ -6,6 +6,7 @@
 #include<colorer/handlers/LineRegionsSupport.h>
 #include<colorer/handlers/LineRegionsCompactSupport.h>
 
+#include<colorer/editor/EditorListener.h>
 #include<colorer/editor/PairMatch.h>
 
 /**
@@ -102,6 +103,16 @@ public:
    * Removes previously added RegionHandler object.
    */
   void removeRegionHandler(RegionHandler *rh);
+
+  /**
+   * Adds specified EditorListener object into parse process.
+   */
+  void addEditorListener(EditorListener *el);
+
+  /**
+   * Removes previously added EditorListener object.
+   */
+  void removeEditorListener(EditorListener *el);
 
   /**
    * Searches and creates pair match object in currently visible text.
@@ -239,6 +250,7 @@ private:
 
   FileType *currentFileType;
   Vector<RegionHandler*> regionHandlers;
+  Vector<EditorListener*> editorListeners;
 
   int backParse;
   // window area

@@ -62,6 +62,10 @@ public:
     return startRef;
   }
 
+  /**
+   * Sets a start region properties. Passed object is cloned to keep
+   * pair match properties consistent between parse stages
+   */
   void setStart(LineRegion *pair){
     if (start != null){
       delete start;
@@ -71,6 +75,10 @@ public:
     }
   }
 
+  /**
+   * Sets an end region properties. Passed object is cloned to keep
+   * pair match properties consistent between parse stages
+   */
   void setEnd(LineRegion *pair){
     if (end != null){
       delete end;

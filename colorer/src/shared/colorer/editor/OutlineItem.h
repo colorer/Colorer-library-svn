@@ -26,7 +26,8 @@ public:
   OutlineItem(){
     lno = pos = 0;
     token = null;
-  };
+  }
+
   /** Initializing constructor */
   OutlineItem(int lno, int pos, int level, String *token, const Region *region){
     this->lno = lno;
@@ -35,8 +36,9 @@ public:
     this->region = region;
     this->token = null;
     if (token != null) this->token = new StringBuffer(token);
-  };
-  ~OutlineItem(){ delete token; };
+  }
+
+  ~OutlineItem(){ delete token; }
 };
 
 #endif

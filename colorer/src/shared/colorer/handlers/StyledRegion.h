@@ -4,11 +4,12 @@
 #include<common/Exception.h>
 #include<colorer/handlers/RegionDefine.h>
 
-/** Contains information about region mapping into real colors.
-    These mappings are stored in HRD files and processed
-    by StyledHRDMapper class.
-    @ingroup colorer_handlers
-*/
+/**
+ * Contains information about region mapping into real colors.
+ * These mappings are stored in HRD files and processed
+ * by StyledHRDMapper class.
+ * @ingroup colorer_handlers
+ */
 class StyledRegion : public RegionDefine{
 public:
   static const int RD_BOLD;
@@ -34,19 +35,22 @@ public:
     fore = _fore;
     back = _back;
     style = _style;
-  };
+  }
+
   /** Empty constructor */
   StyledRegion(){
     bfore = bback = false;
     fore = back = 0;
     style = 0;
-  };
+  }
+
   /** Copy constructor.
       Clones all values including region reference. */
   StyledRegion(const StyledRegion &rd){
     operator=(rd);
-  };
-  ~StyledRegion(){};
+  }
+
+  ~StyledRegion(){}
 
   /** Static method, used to cast RegionDefine class into
       StyledRegion class.
@@ -57,7 +61,7 @@ public:
     const StyledRegion *sr = (const StyledRegion *)(rd);
     if (sr == null) throw Exception(DString("Bad type cast exception into StyledRegion"));
     return sr;
-  };
+  }
   /** Completes region define with it's parent values.
       The values only replaced, are these, which are empty
       in this region define. Style is replaced using OR operation.
@@ -68,13 +72,14 @@ public:
     if (!bfore){
       fore = parent->fore;
       bfore = parent->bfore;
-    };
+    }
     if (!bback){
       back = parent->back;
       bback = parent->bback;
-    };
+    }
     style = style | parent->style;
-  };
+  }
+
   void setValues(const RegionDefine *_rd){
     const StyledRegion *rd = StyledRegion::cast(_rd);
     fore  = rd->fore;
@@ -82,11 +87,12 @@ public:
     back  = rd->back;
     bback = rd->bback;
     style = rd->style;
-  };
+  }
+
   RegionDefine *clone() const {
     RegionDefine *rd = new StyledRegion(*this);
     return rd;
-  };
+  }
 };
 
 #endif

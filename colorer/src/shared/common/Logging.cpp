@@ -6,7 +6,10 @@
 
 static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
 
-static const char *toTrace[] = {"BaseEditor", };
+// BaseEditor, TextParserImpl, TPCache
+// ParserFactory, BaseEditorNative, NSC:JHRCParser:getRegion
+
+static const char *toTrace[] = {"FarEditor", };
 
 static FILE *log = 0;
 
@@ -74,7 +77,7 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
       found = true;
     }
   }
-  if (found){
+  if (!found){
     return;
   }
   //*/
