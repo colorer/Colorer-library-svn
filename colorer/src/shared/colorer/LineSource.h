@@ -31,6 +31,8 @@ public:
     Returns String class pointer, which incapsulates information
     about line with number <code>lno</code>.
     @note Returned pointer must be valid until next getLine method call.
+          If requested line can't be returned, fe there is no line with the passed
+          index, method must return null.
     @param lno Requested line number
     @return Unicode string, enwrapped into String class.
   */
