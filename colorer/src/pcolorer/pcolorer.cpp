@@ -9,14 +9,16 @@
 PluginStartupInfo Info;
 FarEditorSet *editorSet = null;
 
-/** Returns message from FAR current language.
-*/
+/**
+ * Returns message from FAR current language.
+ */
 const char *GetMsg(int msg){
   return(Info.GetMsg(Info.ModuleNumber, msg));
 };
 
-/** Plugin initialization and creation of editor set support class.
-*/
+/**
+ * Plugin initialization and creation of editor set support class.
+ */
 void WINAPI SetStartupInfo(const struct PluginStartupInfo *fei)
 {
   memset(&Info, 0, sizeof(Info));
@@ -25,8 +27,9 @@ void WINAPI SetStartupInfo(const struct PluginStartupInfo *fei)
   editorSet = new FarEditorSet(&Info);
 };
 
-/** Plugin strings in FAR interface.
-*/
+/**
+ * Plugin strings in FAR interface.
+ */
 void WINAPI GetPluginInfo(struct PluginInfo *Info)
 {
 static char* PluginMenuStrings;
@@ -41,15 +44,17 @@ static char* PluginMenuStrings;
   Info->CommandPrefix = "clr";
 };
 
-/** On FAR exit. Destroys all internal structures.
-*/
+/**
+ * On FAR exit. Destroys all internal structures.
+ */
 void WINAPI ExitFAR()
 {
   delete editorSet;
 };
 
-/** Open plugin configuration of actions dialog.
-*/
+/**
+ * Open plugin configuration of actions dialog.
+ */
 HANDLE WINAPI OpenPlugin(int OpenFrom, int Item)
 {
   if (OpenFrom == OPEN_EDITOR){
@@ -62,17 +67,19 @@ HANDLE WINAPI OpenPlugin(int OpenFrom, int Item)
   return INVALID_HANDLE_VALUE;
 };
 
-/** Configures plugin.
-*/
+/**
+ * Configures plugin.
+ */
 int WINAPI Configure(int ItemNumber)
 {
   editorSet->configure();
   return 1;
 };
 
-/** Processes FAR editor events and
-    makes text colorizing here.
-*/
+/**
+ * Processes FAR editor events and
+ * makes text colorizing here.
+ */
 int WINAPI ProcessEditorEvent(int Event, void *Param)
 {
   return editorSet->editorEvent(Event, Param);

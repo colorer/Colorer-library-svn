@@ -42,6 +42,13 @@ public:
   */
   void setRegionMapper(RegionMapper *rs);
 
+  /**
+   * Change editor properties. These overwrites default HRC settings
+   */
+  void setDrawCross(bool drawCross);
+  void setDrawPairs(bool drawPairs);
+  void setDrawSyntax(bool drawSyntax);
+  void setMaxTime(int maxTime);
 
   /** Editor action: pair matching.
   */
@@ -89,6 +96,9 @@ private:
   bool showVerticalCross, showHorizontalCross;
   int crossZOrder, horzCrossColor, vertCrossColor;
 
+  bool drawPairs, drawSyntax;
+  int maxTime;
+
   int WindowSizeX;
   int WindowSizeY;
   int farEncodingIndex, unicodeEncodingIndex;
@@ -108,6 +118,7 @@ private:
   Outliner *structOutliner;
   Outliner *errorOutliner;
 
+  void reloadTypeSettings();
   void enterHandler();
   void leaveHandler();
   int convert(const StyledRegion *rd);

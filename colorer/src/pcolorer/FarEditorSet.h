@@ -9,10 +9,11 @@
 
 #include"FarEditor.h"
 
-/** FAR Editors container.
-    Manages all library resources and creates FarEditor class instances.
-    @ingroup far_plugin
-*/
+/**
+ * FAR Editors container.
+ * Manages all library resources and creates FarEditor class instances.
+ * @ingroup far_plugin
+ */
 class FarEditorSet{
 public:
   /** Creates set and initialises it with PluginStartupInfo structure */
@@ -37,11 +38,12 @@ private:
   ErrorHandler *getErrorHandler();
   /** Returns currently active editor. */
   FarEditor *getCurrentEditor();
-  /** Reloads HRC database.
-      Drops all currently opened editors and their
-      internal structures. Prepares to work with newly
-      loaded database.
-  */
+  /**
+   * Reloads HRC database.
+   * Drops all currently opened editors and their
+   * internal structures. Prepares to work with newly
+   * loaded database.
+   */
   void reloadBase();
 
   /** Shows dialog of file type selection */
@@ -57,7 +59,6 @@ private:
   /** Disables all plugin processing */
   void disableColorer();
 
-
   Hashtable<FarEditor*> farEditorInstances;
   ParserFactory *parserFactory;
   RegionMapper *regionMapper;
@@ -66,10 +67,9 @@ private:
   PluginStartupInfo *info;
   HKEY hPluginRegistry;
 
-  int  farBackgroundColor;
-
   /** registry settings */
   bool rDisabled;
+  bool drawCross, drawPairs, drawSyntax;
   int  rMaxTime;
 };
 
