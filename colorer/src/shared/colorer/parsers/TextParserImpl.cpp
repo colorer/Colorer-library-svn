@@ -337,6 +337,11 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
     if (clearLine != gy){
       clearLine = gy;
       str = lineSource->getLine(gy);
+      if (str == null){
+        throw Exception(DString("null String passed into the parser"));
+        gy = gy2;
+        break;
+      };
       regionHandler->clearLine(gy, str);
     };
     // hack to include invisible regions in start of block
