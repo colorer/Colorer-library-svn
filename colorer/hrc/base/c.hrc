@@ -499,7 +499,7 @@
    <!-- Doxygen Comments -->
    <regexp match="/\/\*\*\//" region="def:CommentDoc"/>
    <block start="/\/\/\//" end="/$/" scheme="doxygen" region="def:CommentDoc"/>
-   <block start="/\/\*\*/" end="/\*\//" scheme="doxygen" region="def:CommentDoc"
+   <block start="/\/\*[\*\!]/" end="/\*\//" scheme="doxygen" region="def:CommentDoc"
           region00="def:PairStart" region10="def:PairEnd"/>
 
    <!-- Comments -->
