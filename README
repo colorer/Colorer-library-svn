@@ -1,0 +1,18 @@
+
+  Colorer Library take5.beta1
+  Copyright (c) Cail Lomecb (Igor Russkih) 1999-2003.
+
+  Colorer  is  a  syntax  highlighting  and text parsing library, that
+  provides services to parse text in editor in real-time and transform
+  results into colored text.
+
+  This package contains binaries and source codes of the Colorer Library
+  and all it's service applications and scripts.
+
+  For more information see 'index.html' in the 'doc' directory of
+  Colorer package or
+    http://colorer.sf.net/
+
+  Cail Lomecb
+    <ruiv@uic.nnov.ru> (cail@nm.ru)
+    http://www.uic.nnov.ru/~ruiv/
