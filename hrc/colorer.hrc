@@ -359,7 +359,7 @@
     <filename>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
     <firstline>/^[;\[\#]/</firstline>
   </prototype>
-  <prototype name="linkdef" group="scripts" description="link defines">
+  <prototype name="linkdef" group="scripts" description="Link Defines">
     <location link="scripts/def.hrc"/>
     <filename>/\.def$/i</filename>
   </prototype>
