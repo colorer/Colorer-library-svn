@@ -8,6 +8,7 @@
        By default, build files includes support for
        BCC5.5, VC6/VC7, CygWin, Linux/Unix GCC, MacOS GCC compilers.
        Used to build library binaries from source codes.
+       Generally, this is the main and sole requirement.
 
     b. Doxygen - documentation system for C++ sources (http://www.doxygen.org).
        Used to extract documentation from source files.
@@ -38,7 +39,9 @@
 
     b. Generally, before running ANT you have to configure build process
        to achieve proper generation and compilation. All configuration
-       is placed in global 'build.properties' file.
+       is placed in global 'build.properties' file. You can edit this
+       file directly, or create 'build.user.properties' file with
+       some properties, redefined there.
 
     c. First of all, you have to choose your platform for compilation of
        the native C++ libraries. You can do this with 'platform' property.
@@ -60,12 +63,20 @@
        property. In this case appropriate build tasks would be ignored.
        
     e. When building Eclipse plugin, you need to specify
-       'eclipse.dir' property, pointing to you eclipse installation directory.
-       Also, if building plugin's native part, you must have JAVA_HOME environment
-       variable pointing to your JDK installation.
+       'eclipse.dir' and eclipse.ws properties, pointing to you eclipse
+       installation directory and you eclipse windowing system.
+       Also, if building plugin's native part, you must have
+       JAVA_HOME environment variable pointing to your JDK installation.
 
 
   3. Installation
+
+    After build is finished, you'll get ready-to-use versions of Colorer-take5
+    library:
+      - FarColorer     - Extracted into the 'FAR/plugins' folder,
+      - EclipseColorer - Extracted into your 'eclipse/plugins' folder,
+      - Full Library   - Used as it is,
+      - Linux package  - ready to compile and install linux version.
 
 
   Igor Russkih
