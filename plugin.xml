@@ -24,7 +24,7 @@
             name="%ColorerEditor"
             default="true"
             icon="icons/colorer_editor.gif"
-            extensions="ada,as,asm,bas,dsl,f,inc,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
+            extensions="ada,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor">
@@ -79,37 +79,37 @@
             id="net.sf.colorer.eclipse.category">
       </category>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Reload HRC base"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.hrcupdate">
       </command>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Choose language"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.choosetype">
       </command>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Match Paired Structure"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairmatch">
       </command>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Select Pair"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairselect">
       </command>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Select Pair&apos;s Content"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairselectcontent">
       </command>
       <command
-			category="net.sf.colorer.eclipse.category"
+      category="net.sf.colorer.eclipse.category"
             name="Select Color Region"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.selectregion">
