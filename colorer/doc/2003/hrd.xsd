@@ -17,8 +17,8 @@
       In general, all transparent colors must inherit color value from its
       parent schema color. If the current schema is a top-level, default
       fore- and back-ground colors are used.
-      Default Colors could be stored in HRD, using standard default region
-      'def:Text', or could be requested by application from the GUI environment.
+      Default Colors can be stored in HRD, using standard default region
+      'def:Text', or can be requested by application from the GUI environment.
     </xs:documentation></xs:annotation>
     <xs:sequence minOccurs="0" maxOccurs="unbounded">
       <xs:element name="assign" type='assign'/>
@@ -28,8 +28,8 @@
   <xs:complexType name='assign'>
     <xs:annotation><xs:documentation>
       Single entry, describes region's properties.
-      If entry is specified more than one time, then used the latest
-      definition. This allows processing of several HRD files to
+      If an entry is specified more than one time, then the latest
+      definition is used. This allows several HRD files to be processed to
       complete color description of target HRC regions.
     </xs:documentation></xs:annotation>
     <xs:attribute name="name" use="required">
