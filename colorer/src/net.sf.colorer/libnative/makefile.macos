@@ -24,6 +24,6 @@ $(obj_output_slash)net_sf_colorer.$(obj):
 $(TARGET): *.cpp *.h $(objs)
 	$(LINK) -bundle -o libnet_sf_colorer.jnilib $(objs)
 
-clear:
+clean:
 	$(RM) $(objs)
 

@@ -34,5 +34,5 @@ $(obj_output_slash)net_sf_colorer.$(obj):
 $(TARGET): $(objs)
 	$(LINK) $(LIBFLAGS)
 
-clear:
+clean:
 	$(RM) $(objs)
