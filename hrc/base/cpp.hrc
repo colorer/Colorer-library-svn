@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+<type name="cpp" access="public">
+
+ <annotation>
+ <documentation>
     c++ syntax description
-With help of:
+ </documentation><contributors><![CDATA[
     Vladimir Tarasov <tsoftgroup@chat.ru>
     Timur Safin <timur@lanit.ru>
     cail: split into two schemes: c and cpp
 
-    Changed by Eugene Efremov <4mirror@mail.ru>:
+    Eugene Efremov <4mirror@mail.ru>:
      - split c/c++ outlines
      - add temlpates
      - add STL keywords
      - change regions routing
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-<type name="cpp" access="public">
-   
+  ]]></contributors>
+ </annotation>
+    
  <region name="KeywordSTL" parent="c:KeywordStdio"/>
  <region name="KeywordNamespace" parent="def:Prefix"/>
-  <region name="ClassOutline" parent="c:StructOutline"/>
+ <region name="ClassOutline" parent="c:StructOutline"/>
 
  <scheme name="Expression">
 
@@ -116,6 +122,11 @@ With help of:
          region="def:CommentContent" region00="def:PairStart" region10="def:PairEnd" region01="def:Comment" region11="def:Comment"/>
 
          <!-- c++ keywords -->
+  
+  <regexp match="/^\s*(private|protected|public)(:)/" 
+   region1="c:KeywordANSI" region2="c:Label"
+  />
+  
   <keywords region="c:KeywordANSI">
    <word name="and"/>
    <word name="and_eq"/>
@@ -160,6 +171,7 @@ With help of:
    <word name="__uuidof"/>
    <word name="__virtual_inheritance"/>
   </keywords>
+
 
   <inherit scheme="c:Expression">
    <virtual scheme="c:Expression" subst-scheme="Expression"/>
@@ -453,6 +465,9 @@ With help of:
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>:
+   - Timur Safin <timur@lanit.ru>
+   - Vladimir Tarasov <tsoftgroup@chat.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
