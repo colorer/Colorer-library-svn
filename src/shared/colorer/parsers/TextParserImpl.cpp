@@ -338,7 +338,7 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
       clearLine = gy;
       str = lineSource->getLine(gy);
       if (str == null){
-        throw Exception(DString("null String passed into the parser"));
+        throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
         gy = gy2;
         break;
       };
