@@ -13,7 +13,29 @@
 </div>
 
 <h1>Colorer-take5 demos page</h1>
-<p>This is the dynamically generated demos of Colorer Library take5.</p>
+
+<p>
+Colorer supports highlighting and editing capabilities of
+numerous programming languages, scripts and markups.
+These sets are stored in the internal language (XML-based HRC files),
+describing target's language syntax. HRC database is open and ready to
+modify and growth.
+</p>
+
+<h2>Static highlighting samples</h2>
+
+<table border='0'><tr>
+<td valign='middle'><img alt='sample' src='../images/sample.png' height='60' width='60'/></td>
+<td>
+<a href="../lang-list.html">List of supported languages</a><br/>
+<a href="../samples/BaseEditor.java.html">Java language with href doclinks</a><br/>
+<a href="../samples/ipo-errors.xsd.html">XML Schema with errors and W3C site references</a><br/>
+<a href="../samples/Unicode.html.html">XHTML in UTF-8</a>
+</td>
+</tr></table>
+
+
+<h2>Dynamically generated demos</h2>
 
 <form action='demos.php' method="get">
   <h3>Demo File:</h3>
@@ -46,6 +68,10 @@ for($i = 0; $i < count($list); $i++){
 <?
 if ($filename != ''){
     echo "<hr/>";
+
+    $filename = check($filename);
+    $hrd_color = check($hrd_color);
+
     $fpath = "./demos/".$filename;
     print("<h2><a name='$i'></a>filename:".$filename."</h2>");
     print("<pre>");

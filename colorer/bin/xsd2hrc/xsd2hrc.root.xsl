@@ -43,9 +43,12 @@
   </xsl:template>
 
   <xsl:template match="/xs:schema/xs:attributeGroup" mode="root">
-    <scheme name="{@name}-attributeGroup">
-      <xsl:apply-templates mode="include-attr"/>
-    </scheme>
+    <xsl:call-template name="createScheme">
+      <xsl:with-param name="name" select="concat(@name, '-attributeGroup')"/>
+      <xsl:with-param name="content">
+        <xsl:apply-templates mode="include-attr"/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="/xs:schema/xs:include" mode="root">
@@ -92,6 +95,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

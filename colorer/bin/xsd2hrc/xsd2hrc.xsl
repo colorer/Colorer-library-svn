@@ -17,6 +17,7 @@
   <xsl:include href="xsd2hrc.typedefs.xsl"/>
   <xsl:include href="xsd2hrc.root.xsl"/>
   <xsl:include href="xsd2hrc.root-elements.xsl"/>
+  <xsl:include href="xsd2hrc.xmlss.xsl"/>
 
 
   <xsl:output indent="yes"
@@ -28,7 +29,7 @@
   <xsl:strip-space elements="*"/>
 
   <!-- version -->
-  <xsl:variable name="version" select="'0.9'"/>
+  <xsl:variable name="version" select="'0.9.2'"/>
 
   <!-- path to prototype catalog -->
   <xsl:variable name="catalog" select="document($catalog-path)"/>
@@ -46,6 +47,14 @@
   <!-- path to custom defines catalog -->
   <xsl:variable name="custom-type" select="document($custom-defines)/c:custom/c:custom-type[@targetNamespace = $targetNamespace]"/>
   <xsl:variable name="custom-type-schemes" select="$custom-type/hrc:type/*"/>
+
+
+  <!-- Add referense (XML entities) support  -->
+  <xsl:variable name="add-new-references" select="$custom-type/c:references"/>
+  <!-- support xmlss - permission to '/' from $custom-type -->
+  <xsl:variable name="root" select="/"/>
+  <!-- support xmlss - key for find scripting elements -->
+  <xsl:key name="script" match="xs:element[@name = $custom-type/c:script-n-style/c:element/@name]" use="@name"/>
 
 
   <!-- possible used namespace prefixes -->
@@ -125,7 +134,9 @@
         <annotation>
          <documentation>
            XSLT Generated HRC scheme for language '<xsl:value-of select="$hrctype"/>'
-           from XML Schema with xsd2hrc.xsl version <xsl:value-of select="$version"/> (c) Cail Lomecb
+           from XML Schema with xsd2hrc.xsl version <xsl:value-of select="$version"/>
+            (C) 2002-03 Cail Lomecb
+            Portions copyright (C) 2004 Eugene Efremov
 
            Scheme parameters:
              targetNamespace             : <xsl:value-of select="$targetNamespace"/>
@@ -135,7 +146,9 @@
              allow-unknown-elements      : <xsl:value-of select="$allow-unknown-elements"/>
              allow-unknown-root-elements : <xsl:value-of select="$allow-unknown-root-elements"/>
              force-single-root           : <xsl:value-of select="$force-single-root"/>
+             add-new-references          : <xsl:value-of select="$add-new-references"/>
              default prefixes            : <xsl:value-of select="$nsprefix"/>
+
                you can change them with entity 'nsprefix'
 
          </documentation>
@@ -175,6 +188,7 @@
         <region name="AttValue.end"       parent="xml:AttValue.defined.end"/>
 
         <region name="Enumeration"        parent="xml:Enumeration" description="Enumerated type values"/>
+
 
         <xsl:for-each select='$custom-type/c:outline/c:element[@name]'>
           <region name="{@name}Outlined" description="{@description}">
@@ -223,6 +237,9 @@
           </inherit>
         </scheme>
 
+        <!-- EE: include xmlss content -->
+        <xsl:apply-templates select="$custom-type/c:script-n-style" mode="scriptdef"/>
+
         <xsl:copy-of select="$custom-type-schemes"/>
 
         <!-- Schema datatypes: -->
@@ -262,16 +279,34 @@
           </xsl:if>
         </scheme>
 
+
+        <!-- EE: add references -->
+        <xsl:if test="$add-new-references">
+         <scheme name="reference.content">
+          <inherit scheme="xml:reference.content"/>
+          <inherit scheme="{$add-new-references}"/>
+         </scheme>
+        </xsl:if>
+
+        <scheme name="{$hrctype}-root-addref">
+         <inherit scheme="{$hrctype}-root">
+          <xsl:if test="$add-new-references">
+           <virtual scheme="xml:reference.content" subst-scheme="reference.content"/>
+          </xsl:if>
+         </inherit>
+        </scheme>
+
+
         <scheme name="{$hrctype}">
           <xsl:choose>
             <xsl:when test="$force-single-root = 'yes'">
               <inherit scheme="xml:singleroot">
-                <virtual scheme="xml:element" subst-scheme="{$hrctype}-root"/>
+                <virtual scheme="xml:element" subst-scheme="{$hrctype}-root-addref"/>
               </inherit>
             </xsl:when>
             <xsl:otherwise>
               <inherit scheme="xml:xml">
-                <virtual scheme="xml:element" subst-scheme="{$hrctype}-root"/>
+                <virtual scheme="xml:element" subst-scheme="{$hrctype}-root-addref"/>
               </inherit>
             </xsl:otherwise>
           </xsl:choose>
@@ -304,6 +339,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

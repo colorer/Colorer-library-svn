@@ -70,26 +70,25 @@ parse and colorize text in editors or other systems.
 <title>Introduction</title>
 
 <para>
-HRC is a script language, describing parse process of the text files to produce
-syntax highlighting. It is based on XML markup, and defines its
-own XML vocabulary and structure.
-HRC language was developed to achieve most flexible and efficient process
-of describing programming language structure.
+HRC is a script language which is describes parsing process of text files
+to produce syntax highlighting. It is based on XML markup, and defines its
+own XML vocabulary and structure. HRC language is developed to achieve
+most flexible and efficient process of describing programming language structures.
 </para>
 <para>
 Started nearly in year 1999, it was a simple XML-like structure, describing
 some common language constructions. But later it has grown into
-the much more complex and powerful language, describing complex relations between
+the much more complex and powerful language with complex relations between
 different languages and syntax contexts.
 </para>
 <para>
-HRC is based on Regular Expressions, which allows achieving flexible recognition
+HRC is based on Regular Expressions, which allow to achieve flexible recognition
 of text elements, lexemes and tokens. But Regular Expressions (RE) allows
-recognition of rather limited syntax constructions, and often it is needed to describe
-more complex languages. Because this, HRC language uses special construction, named
-&quot;scheme&quot;, which allows to describe more powerful, recursive class of
-languages (context free) and in combination with RE brings HRC to strong
-declarative language.
+recognition of rather limited syntax constructions, and often it is needed to
+describe more complex languages. Because this, HRC language uses special
+construction, named &quot;scheme&quot;, which allows to describe more powerful,
+recursive class of languages (context free) and in combination with RE brings
+HRC to strong declarative language.
 </para>
 </section>
 
