@@ -51,7 +51,8 @@
           d.1. Some XSD files (MathML, DocBook, XHTML).
                http://www.w3.org/Math/XMLSchema/
                http://www.oasis-open.org/committees/docbook/xmlschema/1.0b1/
-               http://www.w3.org/TR/xhtml1/
+               http://www.w3.org/TR/xhtml1-schema/
+               By default, these files are linked to their online versions.
           d.2. Doxygen documentation generation tool (doxygen.exe on win32).
                http://www.doxygen.org
           d.3  Norman's Walsh DocBook XSL Transformations.
@@ -63,10 +64,22 @@
        In this case some of the build tasks would be ignored.
        
     e. When building Eclipse plugin, you need to specify
-       'eclipse.dir' and 'eclipse.ws' properties, pointing to your eclipse
-       installation directory and your Eclipse windowing system.
-       Also, when building plugin's native part, you must have
-       JAVA_HOME environment variable pointing to your JDK installation.
+       'eclipse.dir' property, pointing to your eclipse
+       installation directory. Also, when building plugin's native part,
+       you must have JAVA_HOME environment variable pointing to your JDK installation.
+
+    f. You can use the next targets with ANT:
+
+       ``ant library''         - Full library distribution.
+       ``ant library-linux''   - Library unix package version.
+       ``ant eclipseplugin''   - Eclipse IDE plugin.
+       ``ant farplugin''       - FAR Manager plugin.
+
+       ``hrcupdate''           - Builds zip with current HRC for separate distribution.
+       ``ant this.colorer''    - Builds binary executables and installs
+                                 them into the current working copy.
+       ``ant this.far''        - Builds far manager executables and installs
+                                 them into the FAR Manager folder.
 
 
   3. Installation
