@@ -8,7 +8,7 @@ obj  = obj
 
 obj_output_slash = $(obj_output)\\
 
-CPPFLAGS = -I$(shared_path) -I$(unzipdir) -n$(obj_output) -c -O2 -N- -RT- -w-rvl -w-pia -w-par -w-aus -w-inl $(CPPFLAGS_CUSTOM)
+CPPFLAGS = -I$(shared_path) -I$(unzipdir) -n$(obj_output) -c -O2 -N- -RT- -w-rvl -w-pia -w-par -w-aus -w-inl -w-hid $(CPPFLAGS_CUSTOM)
 
 
 !include $(shared_path)makefile.zlib

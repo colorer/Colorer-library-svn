@@ -12,7 +12,7 @@ HRCParserImpl::HRCParserImpl()
   versionName = null;
   errorHandler = null;
   updateStarted = false;
-};
+}
 
 HRCParserImpl::~HRCParserImpl()
 {
@@ -28,11 +28,11 @@ HRCParserImpl::~HRCParserImpl()
     delete se;
   };
   delete versionName;
-};
+}
 
 void HRCParserImpl::setErrorHandler(ErrorHandler *eh){
   errorHandler = eh;
-};
+}
 
 void HRCParserImpl::loadSource(InputSource *is){
   InputSource *istemp = curInputSource;
@@ -49,7 +49,7 @@ void HRCParserImpl::loadSource(InputSource *is){
     throw e;
   };
   curInputSource = istemp;
-};
+}
 
 void HRCParserImpl::loadFileType(FileType *filetype){
   if (filetype == null) return;
@@ -74,8 +74,7 @@ void HRCParserImpl::loadFileType(FileType *filetype){
     if (errorHandler != null) errorHandler->fatalError(StringBuffer("Unknown exception while loading ")+thisType->inputSource->getLocation());
     thisType->loadBroken = true;
   };
-};
-
+}
 
 FileType *HRCParserImpl::chooseFileType(const String *fileName, const String *firstLine, int typeNo)
 {
@@ -97,31 +96,34 @@ const double DELTA = 1e-6;
   };
   if (typeNo > 0) return null;
   return best;
-};
+}
 
 FileType *HRCParserImpl::getFileType(const String *name) {
   if (name == null) return null;
   return fileTypeHash.get(name);
-};
+}
+
 FileType *HRCParserImpl::enumerateFileTypes(int index) {
   if (index < fileTypeVector.size()) return fileTypeVector.elementAt(index);
   return null;
-};
+}
 
 int HRCParserImpl::getRegionCount() {
   return regionNamesVector.size();
-};
+}
+
 const Region *HRCParserImpl::getRegion(int id) {
   return regionNamesVector.elementAt(id);
-};
+}
+
 const Region* HRCParserImpl::getRegion(const String *name) {
   if (name == null) return null;
   return getNCRegion(name, false); // regionNamesHash.get(name);
-};
+}
 
 const String *HRCParserImpl::getVersion() {
   return versionName;
-};
+}
 
 
 // protected methods
@@ -169,7 +171,7 @@ void HRCParserImpl::parseHRC(const byte *data, int len)
     updateLinks();
     updateStarted = false;
   };
-};
+}
 
 
 void HRCParserImpl::addPrototype(CXmlEl *elem)
@@ -229,7 +231,7 @@ void HRCParserImpl::addPrototype(CXmlEl *elem)
             if (errorHandler != null) errorHandler->warning(StringBuffer("Bad parameter in prototype '")+typeName+"'");
             continue;
           };
-          type->parametersHash.put(name, new SString(value));
+          type->paramDefaultHash.put(name, new SString(value));
         };
       };
     };
@@ -240,12 +242,11 @@ void HRCParserImpl::addPrototype(CXmlEl *elem)
   if (!type->isPackage){
     fileTypeVector.addElement(type);
   };
-};
+}
 
 void HRCParserImpl::addType(CXmlEl *elem)
 {
   const String *typeName = elem->getParamValue(DString("name"));
-  const String *accessTypeName = elem->getParamValue(DString("access"));
 
   if (typeName == null){
     if (errorHandler != null) errorHandler->error(DString("Unnamed type found"));
@@ -260,13 +261,6 @@ void HRCParserImpl::addType(CXmlEl *elem)
   if (type->typeLoaded){
     if (errorHandler != null) errorHandler->warning(StringBuffer("type '")+typeName+"' is already loaded");
     return;
-  };
-  type->accessType = SAT_PRIVATE;
-  if (accessTypeName != null){
-    if (*accessTypeName == "public") type->accessType = SAT_PUBLIC;
-    else if (*accessTypeName != "private"){
-      if (errorHandler != null) errorHandler->warning(StringBuffer("Unknown access specifier in type '")+typeName+"'");
-    };
   };
   type->typeLoaded = true;
 
@@ -332,7 +326,7 @@ void HRCParserImpl::addType(CXmlEl *elem)
     if (errorHandler != null) errorHandler->warning(StringBuffer("type '")+typeName+"' has no default scheme");
   type->loadDone = true;
   parseType = o_parseType;
-};
+}
 
 void HRCParserImpl::addScheme(CXmlEl *elem)
 {
@@ -341,28 +335,30 @@ void HRCParserImpl::addScheme(CXmlEl *elem)
   if (qSchemeName == null){
     if (errorHandler != null) errorHandler->error(StringBuffer("bad scheme name in type '")+parseType->getName()+"'");
     return;
-  };
-  if (schemeHash.get(qSchemeName) != null){
+  }
+  if (schemeHash.get(qSchemeName) != null ||
+      disabledSchemes.get(qSchemeName) != 0){
     if (errorHandler != null) errorHandler->error(StringBuffer("duplicate scheme name '")+qSchemeName+"'");
     delete qSchemeName;
     return;
-  };
+  }
+
   SchemeImpl *scheme = new SchemeImpl(qSchemeName);
   delete qSchemeName;
   scheme->fileType = parseType;
 
-  const String *accessTypeName = elem->getParamValue(DString("access"));
-  scheme->accessType = parseType->accessType;
-  if (accessTypeName != null){
-    scheme->accessType = SAT_PRIVATE;
-    if (*accessTypeName == "public") scheme->accessType = SAT_PUBLIC;
-    else if (*accessTypeName != "private"){
-      if (errorHandler != null) errorHandler->warning(StringBuffer("unknown access type in scheme '")+scheme->schemeName+"'");
-    };
-  };
   schemeHash.put(scheme->schemeName, scheme);
+
+  const String *condIf = elem->getParamValue(DString("if"));
+  const String *condUnless = elem->getParamValue(DString("unless"));
+  if ((condIf != null && !DString("true").equals(parseType->getParamValue(*condIf))) ||
+      (condUnless != null && DString("true").equals(parseType->getParamValue(*condUnless)))){
+    //disabledSchemes.put(scheme->schemeName, 1);
+    return;
+  }
+
   addSchemeNodes(scheme, elem->child());
-};
+}
 
 void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, CXmlEl *elem)
 {
