@@ -8,7 +8,6 @@
 
   <property name='custom' value='schemas-custom'/>
 
-
   <property name='core-schemas' value='../../doc/2003'/>
 
 
@@ -29,14 +28,81 @@
 
   
   <target name="all" description='Stub target'>
-    <echo>Choose requeried build target</echo>
+    <echo>Choose a required build target</echo>
   </target>
 
   <target name='distr' description='All distribution targets'
-          depends='xmlschema,xml,ant,mathml,xhtml,xslfo,xslt,
+          depends='checkpaths,
+                   xmlschema,xml,ant,mathml,xhtml,xslfo,xslt,
                    relaxng,web-app,wsc,wsf,
                    hrc,hrd,colorer5catalog,calcset,esc,xsd2hrc.custom,
                    docbook'>
+  </target>
+
+
+
+  <target name='checkpaths.mathml' unless='mathml-xsd-exists'>
+<echo>
+* ************ WARNING !! ************
+* Can't find MathML external XML Schema files.
+* If you don't have it, you can't build HRC scheme:
+*     MathML :  ${mathml-xsd}
+* If you have these files, please fix 'build.properties'
+* file in colorer root directory and restart building.
+* You can ignore this build error, removing 'fail-on-badpaths'
+* property from the 'build.properties' file.
+</echo>
+<fail if='fail-on-badpaths'>
+******** Build stopped because of bad XSD paths.
+</fail>
+  </target>
+
+  <target name='checkpaths.docbook' unless='docbook-xsd-exists'>
+<echo>
+* ************ WARNING !! ************
+* Can't find DocBook external XML Schema files.
+* If you don't have it, you can't build HRC scheme:
+*     DocBook:  ${docbook-xsd}
+* If you have these files, please fix 'build.properties'
+* file in colorer root directory and restart building.
+* You can ignore this build error, removing 'fail-on-badpaths'
+* property from the 'build.properties' file.
+</echo>
+<fail if='fail-on-badpaths'>
+******** Build stopped because of bad XSD paths.
+</fail>
+  </target>
+
+  <target name='checkpaths.xhtml' unless='xhtml-xsd-exists'>
+<echo>
+* ************ WARNING !! ************
+* Can't find XHTML external XML Schema files.
+* If you don't have it, you can't build HRC scheme:
+*     XHTML  :  ${xhtml-xsd-dir}/xhtml1-*.xsd
+* If you have these files, please fix 'build.properties'
+* file in colorer root directory and restart building.
+* You can ignore this build error, removing 'fail-on-badpaths'
+* property from the 'build.properties' file.
+</echo>
+<fail if='fail-on-badpaths'>
+******** Build stopped because of bad XSD paths.
+</fail>
+  </target>
+
+  <target name='checkpaths'>
+    <echo>Checking paths to the external XSD resources</echo>
+    <available file='${mathml-xsd}' property='mathml-xsd-exists'/>
+    <available file='${docbook-xsd}' property='docbook-xsd-exists'/>
+    <condition property='xhtml-xsd-exists'>
+      <and>
+       <available file='${xhtml-xsd-dir}/xhtml1-strict.xsd'/>
+       <available file='${xhtml-xsd-dir}/xhtml1-transitional.xsd'/>
+       <available file='${xhtml-xsd-dir}/xhtml1-frameset.xsd'/>
+      </and>
+    </condition>
+    <antcall target='checkpaths.docbook'/>
+    <antcall target='checkpaths.xhtml'/>
+    <antcall target='checkpaths.mathml'/>
   </target>
 
 
@@ -57,7 +123,7 @@
   </target>
 
  
-  <target name="docbook" unless='db-exists'>
+  <target name="docbook" if='docbook-xsd-exists'>
     <xslt in='${docbook-xsd}' out='${hrc-path-auto}/docbook.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='docbook'/>
@@ -76,7 +142,7 @@
     </xslt>
   </target>
 
-  <target name="mathml">
+  <target name="mathml" if='mathml-xsd-exists'>
     <xslt in='${mathml-xsd}' out='${hrc-path-auto}/mathml.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='mathml'/>
@@ -87,7 +153,7 @@
   </target>
 
 
-  <target name="xhtml">
+  <target name="xhtml" if='xhtml-xsd-exists'>
     <xslt in='${xhtml-xsd-dir}/xhtml1-strict.xsd' out='${hrc-path}/inet/xhtml-strict.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xhtml-strict'/>
