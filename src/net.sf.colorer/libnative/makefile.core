@@ -1,7 +1,7 @@
 
 objs = $(obj_output_slash)net_sf_colorer.$(obj) $(coreobjects)
 
-NSC_PATH=../bin;../colorer.jar
+NSC_PATH=../colorer.jar
 
 JAVA_DEP=net_sf_colorer_ParserFactory.h net_sf_colorer_impl_BaseEditorNative.h net_sf_colorer_HRCParser.h net_sf_colorer_Region.h net_sf_colorer_FileType.h
 #JAVA_DEP=
