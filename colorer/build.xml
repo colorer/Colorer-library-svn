@@ -11,13 +11,14 @@
 
   <property name='distr.version' value='.beta2'/>
 
-  <property name='farplugin-name' value='colorer-take5-farlight${distr.version}'/>
+  <property name='farplugin-name' value='FarColorer-take5${distr.version}'/>
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
-  <property name='eclipseplugin.version' value='0.5.0'/>
-  <property name='eclipseplugin-name' value='EclipseColorer-take5-${distr.version}'/>
-  <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}'/>
+  <property name='eclipseplugin.version' value='_0.5.0'/>
+  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin.version}'/>
+  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin.version}'/>
+  <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
   <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
 
 
@@ -40,9 +41,63 @@
     <echo>Choose build target</echo>
   </target>
 
-  <target name="eclipseplugin.clean">
+  <target name="hrc.jar">
+    <mkdir dir='${target-dir}/hrc'/>
+    <mkdir dir='${target-dir}/hrc/auto'/>
+    <mkdir dir='${target-dir}/hrc/auto/types'/>
+
+    <zip destfile='${target-dir}/hrc/common.jar'>
+      <fileset dir='hrc' includes='**/*' excludes='changes.txt, colorer.hrc, auto, auto/**/*'/>
+    </zip>
+    <copy file='hrc/colorer.hrc' tofile='${target-dir}/hrc/colorer.hrc'>
+      <filterset begintoken='l' endtoken='"'>
+        <filter token='ink=' value='link="jar:common.jar!'/>
+      </filterset>
+    </copy>
+    <zip destfile='${target-dir}/hrc/auto/types/auto.jar'>
+      <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*'/>
+    </zip>
+    <copy todir='${target-dir}/hrc/auto'>
+      <fileset dir='hrc/auto' includes='*.hrc'/>
+      <filterset begintoken='l' endtoken='"'>
+        <filter token='ink=' value='link="jar:types/auto.jar!'/>
+      </filterset>
+    </copy>
+
   </target>
-  <target name="eclipseplugin">
+
+  
+  <target name="eclipseplugin.clean">
+    <delete dir='${eclipseplugin-dir}'/>
+    <delete file='${eclipseplugin-zip}'/>
+  </target>
+
+  <target name="eclipseplugin" description='Eclipse win32 distribution'>
+    <mkdir dir='${eclipseplugin-dir}'/>
+
+    <exec dir='src/net.sf.colorer/libnative' command='dir'/>
+    <exec dir='src/net.sf.colorer/libnative' executable='make' failonerror='true'>
+      <arg line='-f makefile.bcc'/>
+      <env key='PATH' path='C:\Program Files\Borland\bcc55\bin'/>
+    </exec>
+    <ant dir='src/net.sf.colorer' antfile='build.xml' target='gather'>
+      <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
+    </ant>
+    
+    <mkdir dir='${eclipseplugin-dir}/colorer'/>
+    <antcall target='hrc.jar'>
+      <param name='target-dir' value='${eclipseplugin-dir}/colorer'/>
+    </antcall>
+
+    <mkdir dir='${eclipseplugin-dir}/colorer/hrd'/>
+    <mkdir dir='${eclipseplugin-dir}/colorer/hrd/rgb'/>
+    <copy todir='${eclipseplugin-dir}/colorer/hrd/rgb'>
+      <fileset dir='hrd/rgb' includes='**'/>
+    </copy>
+
+    <zip destfile='${eclipseplugin-zip}'>
+      <fileset dir='${build-dir}/${eclipseplugin-name}'/>
+    </zip>
   </target>
 
 
@@ -54,41 +109,29 @@
   <target name="farplugin">
     <mkdir dir='${farplugin-dir}'/>
     <mkdir dir='${farplugin-dir}/bin'/>
-    <mkdir dir='${farplugin-dir}/hrc'/>
-    <mkdir dir='${farplugin-dir}/hrc/auto'/>
-    <mkdir dir='${farplugin-dir}/hrd'/>
-    <mkdir dir='${farplugin-dir}/hrd/console'/>
     <copy todir='${farplugin-dir}/bin'>
       <fileset dir='bin/farplugin' includes='colorer.dll,
                coloree.hlf,coloree.lng,colorer.hlf,
-               colorer.lng,colorer.map,shortcuts.reg'>
+               colorer.lng,shortcuts.reg'><!-- colorer.map -->
       </fileset>
     </copy>
+    <mkdir dir='${farplugin-dir}/hrd'/>
+    <mkdir dir='${farplugin-dir}/hrd/console'/>
     <copy todir='${farplugin-dir}/hrd/console'>
       <fileset dir='hrd/console' includes='**'/>
     </copy>
     <copy todir='${farplugin-dir}'>
-      <fileset dir='.' includes='LICENSE,README,catalog-light.xml'/>
+      <fileset dir='.' includes='LICENSE,README,catalog-far.xml'/>
     </copy>
-    <zip destfile='${farplugin-dir}/hrc/common.jar'>
-      <fileset dir='hrc' includes='**/*' excludes='changes.txt, colorer.hrc, auto, auto/**/*'/>
+    <move file='${farplugin-dir}/catalog-far.xml' tofile='${farplugin-dir}/catalog.xml'/>
+
+    <antcall target='hrc.jar'>
+      <param name='target-dir' value='${farplugin-dir}'/>
+    </antcall>
+    <zip destfile='${farplugin-zip}'>
+      <fileset dir='${farplugin-dir}'/>
     </zip>
-    <copy file='hrc/colorer.hrc' tofile='${farplugin-dir}/hrc/colorer.hrc'>
-      <filterset begintoken='l' endtoken='"'>
-        <filter token='ink=' value='link="jar:common.jar!'/>
-      </filterset>
-    </copy>
-    <zip destfile='${farplugin-dir}/hrc/auto/auto.jar'>
-      <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*'/>
-    </zip>
-    <copy todir='${farplugin-dir}/hrc/auto'>
-      <fileset dir='hrc/auto' includes='*.hrc'/>
-      <filterset begintoken='l' endtoken='"'>
-        <filter token='ink=' value='link="jar:auto.jar!'/>
-      </filterset>
-    </copy>
-    
-    <move file='${farplugin-dir}/catalog-light.xml' tofile='${farplugin-dir}/catalog.xml'/>
+
   </target>
 <!--
 cp -r hrc/auto  %TARGET%/hrc
