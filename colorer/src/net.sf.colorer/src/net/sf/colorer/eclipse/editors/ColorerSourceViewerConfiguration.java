@@ -3,7 +3,7 @@ package net.sf.colorer.eclipse.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.colorer.eclipse.EclipsecolorerPlugin;
+import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.PreferencePage;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -16,7 +16,7 @@ public class ColorerSourceViewerConfiguration extends SourceViewerConfiguration 
   public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
 	  List list = new ArrayList();
 	  // prefix[0] is either '\t' or ' ' x tabWidth, depending on useSpaces
-    IPreferenceStore prefStore = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+    IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
     int tabWidth = prefStore.getInt(PreferencePage.TAB_WIDTH);
     boolean useSpaces = prefStore.getBoolean(PreferencePage.SPACES_FOR_TABS);
 		for (int i= 0; i <= tabWidth; i++) {
@@ -40,7 +40,7 @@ public class ColorerSourceViewerConfiguration extends SourceViewerConfiguration 
 	}
 
 	public int getTabWidth(ISourceViewer sourceViewer) {
-		return EclipsecolorerPlugin.getDefault().getPreferenceStore().getInt(PreferencePage.TAB_WIDTH);
+		return ColorerPlugin.getDefault().getPreferenceStore().getInt(PreferencePage.TAB_WIDTH);
 	}
 
 	public ColorerSourceViewerConfiguration() {

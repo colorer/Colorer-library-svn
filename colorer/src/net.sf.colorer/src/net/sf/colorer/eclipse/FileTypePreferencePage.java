@@ -167,7 +167,7 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
 
     public FileTypePreferencePage(){
         //super(, FieldEditorPreferencePage.GRID);
-        setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(ColorerPlugin.getDefault().getPreferenceStore());
     }
     
     public void init(IWorkbench iworkbench){}
@@ -186,7 +186,7 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
     composite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
     composite.setLayout(new FillLayout(SWT.VERTICAL));
 
-    ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
+    ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
     typePropertiesProvider = new TypeParametersContentProvider();
     
     {

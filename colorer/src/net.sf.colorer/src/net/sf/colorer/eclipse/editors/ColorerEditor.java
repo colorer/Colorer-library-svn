@@ -1,9 +1,5 @@
 package net.sf.colorer.eclipse.editors;
 
-import net.sf.colorer.*;
-import net.sf.colorer.eclipse.*;
-import net.sf.colorer.eclipse.outline.*;
-
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
@@ -14,9 +10,17 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
-import org.eclipse.ui.texteditor.WorkbenchChainedTextFontFieldEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import net.sf.colorer.FileType;
+import net.sf.colorer.ParserFactory;
+import net.sf.colorer.Region;
+import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.Messages;
+import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
+import net.sf.colorer.eclipse.outline.OutlineElement;
+import net.sf.colorer.eclipse.outline.WorkbenchOutliner;
 import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.action.IMenuManager;
@@ -54,9 +58,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
 
     public ColorerEditor() {
       super();
-      prefStore = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+      prefStore = ColorerPlugin.getDefault().getPreferenceStore();
       prefStore.addPropertyChangeListener(this);
-      WorkbenchChainedTextFontFieldEditor.startPropagate(prefStore, PreferencePage.TEXT_FONT);
       setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
     }
 
@@ -84,8 +87,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   /** Reloads coloring highlighting in this editor */
   public void relinkColorer(){
     if (textColorer != null) textColorer.detach();
-    ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
-    textColorer = new TextColorer(pf, EclipsecolorerPlugin.getDefault().getColorManager());
+    ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+    textColorer = new TextColorer(pf, ColorerPlugin.getDefault().getColorManager());
     textColorer.attach(text);
     textColorer.chooseFileType(getTitle());
 
