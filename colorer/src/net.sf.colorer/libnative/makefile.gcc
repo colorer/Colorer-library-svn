@@ -4,7 +4,7 @@
 TARGET = libnet_sf_colorer.so
 all: $(TARGET)
 
-shared_path=/usr/share/colorer/src/shared/
+shared_path=../../shared/
 JAVA_INCLUDE=/usr/share/jdk/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)linux/
 
