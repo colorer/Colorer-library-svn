@@ -37,6 +37,8 @@ With help of:
       <region name="plPodText" parent="default"/>
       <region name="plPodSel" parent="String"/>
 
+      <region name="SubOutline" parent="def:Outlined"/>
+      <region name="PackageOutline" parent="def:Outlined"/>
 
       <scheme name="perlBuildinVars">
          <keywords region="plVar">
@@ -947,7 +949,8 @@ With help of:
          <block start="/;?\#/" end="/$/" region="plComment" scheme="Comment"/>
 <!-- Variables -->
          <inherit scheme="perlVars"/>
-         <regexp match="/\b(sub|package) \s+ \M (?{Function}[\w_']+) /x" region="plWord"/>
+         <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="plWord"/>
+         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_']+) /x" region="plWord"/>
 <!-- module::var -->
          <regexp match="/\b\w[\w\d]*\s*::\s*\w[\w\d]*\b/" region="plWord"/>
 <!-- perl 5.6.0 number-encoded strings -->
