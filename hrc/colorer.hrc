@@ -465,7 +465,7 @@
   </prototype>
 
   <prototype name="default" group="other" description="default type">
-    <filename>//</filename>
+    <filename weight='1'>//</filename>
     <parameters>
       <!-- none,vertical,horizontal,both -->
       <param name="show-cross" value="none"/>
