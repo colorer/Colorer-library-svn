@@ -171,7 +171,7 @@
       <scheme name="Pod">
          <inherit scheme="def:NetAddresses"/>
          <regexp match="/^=(pod|cut)/" region0="PodSym"/>
-         <regexp match="/^=head[12]\s(.*)$/" region0="PodSym" region1="PodText"/>
+         <regexp match="/^=head[1234]\s(.*)$/" region0="PodSym" region1="PodText"/>
          <regexp match="/^=(item|back|end)/" region0="PodSym"/>
          <regexp match="/^=over\s+(\d+)/" region0="PodSym" region1="Numb"/>
          <regexp match="/[IBSCLFXZE]&lt;.*?&gt;/" region0="PodSel"/>
@@ -459,7 +459,7 @@
 <!-- Variables -->
          <inherit scheme="Vars"/>
          <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="Word"/>
-         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_']+) /x" region="Word"/>
+         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_'\:]+) /x" region="Word"/>
 <!-- module::var -->
          <regexp match="/\b\w[\w\d]*\s*::\s*\w[\w\d]*\b/" region="Word"/>
 <!-- perl 5.6.0 number-encoded strings -->
