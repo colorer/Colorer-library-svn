@@ -4,213 +4,212 @@
   2: 
   3: <span style='color:#696969; '>%   Author(s): Ned Gulley, 6-21-93</span>
   4: <span style='color:#696969; '>%   Copyright 1988-2000 The MathWorks, Inc.</span>
-  5: <span style='color:#696969; '>%   </span><span style='color:#004a43; '>$Revision$</span><span style='color:#696969; '>  </span><span style='color:#004a43; '>$Date$</span>
-  6: 
-  7: <span style='color:#800000; font-weight:bold; '>persistent</span> Fs tones t<span style='color:#808030; '>;</span>
-  8: <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#bb7977; '>isempty</span><span style='color:#808030; '>(</span>tones<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
-  9:     <span style='color:#696969; '>% Generate DTMF tones:</span>
- 10:     Fs  <span style='color:#808030; '>=</span> 8000<span style='color:#808030; '>;</span>
- 11:     t   <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>799<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>Fs<span style='color:#808030; '>;</span>    <span style='color:#696969; '>% 800 samples at Fs</span>
- 12:     pit <span style='color:#808030; '>=</span> 2<span style='color:#808030; '>*</span><span style='color:#bb7977; '>pi</span><span style='color:#808030; '>*</span>t<span style='color:#808030; '>;</span>
- 13:     
- 14:     fc <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span>697 770 852 941<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 15:     fr <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span>1209 1336 1477<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span> 
- 16:     f  <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 17:     <span style='color:#800000; font-weight:bold; '>for</span> c<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>4<span style='color:#808030; '>,</span>
- 18:         <span style='color:#800000; font-weight:bold; '>for</span> r<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>3<span style='color:#808030; '>,</span>
- 19:             f <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span> f <span style='color:#808030; '>[</span>fc<span style='color:#808030; '>(</span>c<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>fr<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 20:         <span style='color:#800000; font-weight:bold; '>end</span>
- 21:     <span style='color:#800000; font-weight:bold; '>end</span>
- 22:     
- 23:     <span style='color:#800000; font-weight:bold; '>for</span> i<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span><span style='color:#bb7977; '>size</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>,</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
- 24:         tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>i<span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#bb7977; '>sum</span><span style='color:#808030; '>(</span><span style='color:#bb7977; '>sin</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span>pit<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>'</span> <span style='color:#808030; '>/</span> 4<span style='color:#808030; '>;</span>
- 25:     <span style='color:#800000; font-weight:bold; '>end</span>
- 26: <span style='color:#800000; font-weight:bold; '>end</span>
- 27: 
- 28: <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#bb7977; '>nargin</span><span style='color:#808030; '>&lt;</span>1<span style='color:#808030; '>,</span>
- 29:     action<span style='color:#808030; '>=</span><span style='color:#800080; '>'initialize'</span><span style='color:#808030; '>;</span>
- 30: <span style='color:#800000; font-weight:bold; '>end</span>
- 31: 
- 32: <span style='color:#800000; font-weight:bold; '>if</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'initialize'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
- 33:     figNumber<span style='color:#808030; '>=</span><span style='color:#bb7977; '>figure</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 34:         <span style='color:#800080; '>'Name'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'Phone Pad'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 35:         <span style='color:#800080; '>'NumberTitle'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 36:         <span style='color:#800080; '>'Backingstore'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 37:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 38:     axHndl1<span style='color:#808030; '>=</span><span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 39:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 40:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.32</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 41:         <span style='color:#800080; '>'Drawmode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'fast'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 42:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 43:     axHndl2<span style='color:#808030; '>=</span><span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 44:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 45:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.32</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 46:         <span style='color:#800080; '>'Drawmode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'fast'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 47:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 48: 
- 49:     <span style='color:#696969; '>%===================================</span>
- 50:     <span style='color:#696969; '>% Information for all buttons</span>
- 51:     labelColor<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.8</span> <span style='color:#008000; '>0.8</span> <span style='color:#008000; '>0.8</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 52:     top<span style='color:#808030; '>=</span><span style='color:#008000; '>0.85</span><span style='color:#808030; '>;</span>
- 53:     left<span style='color:#808030; '>=</span><span style='color:#008000; '>0.75</span><span style='color:#808030; '>;</span>
- 54:     bottom<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
- 55:     xLabelPos<span style='color:#808030; '>=</span><span style='color:#008000; '>0.75</span><span style='color:#808030; '>;</span>
- 56:     labelWid<span style='color:#808030; '>=</span><span style='color:#008000; '>0.20</span><span style='color:#808030; '>;</span>
- 57:     labelHt<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
- 58:     btnWid<span style='color:#808030; '>=</span><span style='color:#008000; '>0.20</span><span style='color:#808030; '>;</span>
- 59:     btnHt<span style='color:#808030; '>=</span><span style='color:#008000; '>0.08</span><span style='color:#808030; '>;</span>
- 60:     <span style='color:#696969; '>% Spacing between the button and the next command's label</span>
- 61:     spacing<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
- 62:     btnOffset<span style='color:#808030; '>=</span>0<span style='color:#808030; '>;</span>
- 63:     
- 64:     <span style='color:#696969; '>%====================================</span>
- 65:     <span style='color:#696969; '>% The CONSOLE frame</span>
- 66:     <span style='color:#696969; '>% Use the frame's userdata to hold the tones matrix</span>
- 67:     frmBorder<span style='color:#808030; '>=</span><span style='color:#008000; '>0.02</span><span style='color:#808030; '>;</span>
- 68:     yPos<span style='color:#808030; '>=</span>bottom<span style='color:#808030; '>-</span>frmBorder<span style='color:#808030; '>;</span>
- 69:     frmPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>left<span style='color:#808030; '>-</span>frmBorder yPos btnWid<span style='color:#808030; '>+</span>2<span style='color:#808030; '>*</span>frmBorder <span style='color:#008000; '>0.9</span><span style='color:#808030; '>+</span>2<span style='color:#808030; '>*</span>frmBorder<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 70:     frmHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 71:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'frame'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 72:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 73:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>frmPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 74:         <span style='color:#800080; '>'BackgroundColor'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.50</span> <span style='color:#008000; '>0.50</span> <span style='color:#008000; '>0.50</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 75: 
- 76:     <span style='color:#696969; '>%====================================</span>
- 77:     <span style='color:#696969; '>% The TONE buttons</span>
- 78:     <span style='color:#696969; '>%btnNumber=1;</span>
- 79:     <span style='color:#696969; '>%yLabelPos=0.90-(btnNumber-1)*(btnHt+labelHt+spacing);</span>
- 80:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>' Button No.'</span><span style='color:#808030; '>;</span>
- 81:     
- 82:     <span style='color:#800000; font-weight:bold; '>for</span> count<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>12<span style='color:#808030; '>,</span>
- 83:         btnPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>xLabelPos<span style='color:#808030; '>+</span><span style='color:#bb7977; '>rem</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>1<span style='color:#808030; '>,</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#808030; '>(</span>btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 84:                 top<span style='color:#808030; '>-</span><span style='color:#bb7977; '>floor</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#808030; '>(</span>btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span> btnWid<span style='color:#808030; '>/</span>3 btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
- 85:         <span style='color:#800000; font-weight:bold; '>if</span> count<span style='color:#808030; '>&lt;</span>10<span style='color:#808030; '>,</span>
- 86:             btnStr<span style='color:#808030; '>=</span>num2str<span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 87:         <span style='color:#800000; font-weight:bold; '>else</span>
- 88:             s <span style='color:#808030; '>=</span> <span style='color:#800080; '>'*0#'</span><span style='color:#808030; '>;</span>
- 89:             btnStr <span style='color:#808030; '>=</span> s<span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>9<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 90:         <span style='color:#800000; font-weight:bold; '>end</span>
- 91:         uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 92:             <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'pushbutton'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 93:             <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 94:             <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>btnPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 95:             <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>btnStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 96:             <span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>,</span>count<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
- 97:             <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'phone('</span><span style='color:#800080; '>'tone'</span><span style='color:#800080; '>')'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
- 98:     <span style='color:#800000; font-weight:bold; '>end</span>
- 99: 
-100:     <span style='color:#696969; '>%====================================</span>
-101:     <span style='color:#696969; '>% The SOUND button</span>
-102:     btnNumber<span style='color:#808030; '>=</span>2<span style='color:#808030; '>;</span>
-103:     yPos<span style='color:#808030; '>=</span>top<span style='color:#808030; '>-</span>3<span style='color:#808030; '>*</span>btnHt<span style='color:#808030; '>;</span>
-104:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Sound'</span><span style='color:#808030; '>;</span>
-105:     <span style='color:#696969; '>% Setting this checkbox will allow the sound to work</span>
-106:     
-107:     <span style='color:#696969; '>% Generic button information</span>
-108:     btnPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>left yPos<span style='color:#808030; '>-</span>btnHt btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
-109:     sndHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-110:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'checkbox'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-111:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-112:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>btnPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-113:         <span style='color:#800080; '>'Enable'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-114:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-115: 
-116:     <span style='color:#696969; '>%====================================</span>
-117:     <span style='color:#696969; '>% The INFO button</span>
-118:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Info'</span><span style='color:#808030; '>;</span>
-119:     callbackStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'phone('</span><span style='color:#800080; '>'info'</span><span style='color:#800080; '>')'</span><span style='color:#808030; '>;</span>
-120:     infoHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-121:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'push'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-122:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-123:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>left bottom<span style='color:#808030; '>+</span>btnHt<span style='color:#808030; '>+</span>spacing btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-124:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-125:         <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span>callbackStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-126: 
-127:     <span style='color:#696969; '>%====================================</span>
-128:     <span style='color:#696969; '>% The CLOSE button</span>
-129:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Close'</span><span style='color:#808030; '>;</span>
-130:     callbackStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'close(gcf)'</span><span style='color:#808030; '>;</span>
-131:     closeHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-132:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'push'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-133:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-134:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>left bottom btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-135:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-136:         <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span>callbackStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-137: 
-138:     <span style='color:#696969; '>% Initialize the plot with tone number 1</span>
-139:     <span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span>axHndl1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-140:     tone<span style='color:#808030; '>=</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-141:     plot1Hndl<span style='color:#808030; '>=</span><span style='color:#bb7977; '>plot</span><span style='color:#808030; '>(</span>t<span style='color:#808030; '>,</span>tone<span style='color:#808030; '>,</span><span style='color:#800080; '>'Erasemode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'background'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-142:     xlabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Time (sec)'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-143:     ylabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Signal'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-144:     title<span style='color:#808030; '>(</span><span style='color:#800080; '>'Time Response'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-145:     set<span style='color:#808030; '>(</span>axHndl1<span style='color:#808030; '>,</span><span style='color:#800080; '>'XLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>0 <span style='color:#008000; '>0.05</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'YLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>-</span>1 1<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-146:     <span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span>axHndl2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-147:     p <span style='color:#808030; '>=</span> psd<span style='color:#808030; '>(</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>256<span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>128<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-148:     f <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>127<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>128 <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span>Fs<span style='color:#808030; '>/</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-149:     f<span style='color:#808030; '>=</span>f<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-150:     p<span style='color:#808030; '>=</span>p<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-151:     plot2Hndl<span style='color:#808030; '>=</span><span style='color:#bb7977; '>semilogy</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>,</span>p<span style='color:#808030; '>,</span><span style='color:#800080; '>'Erasemode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'background'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-152:     xlabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Frequency (Hz)'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-153:     ylabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Signal Power'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-154:     title<span style='color:#808030; '>(</span><span style='color:#800080; '>'Spectrum'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-155:     set<span style='color:#808030; '>(</span>axHndl2<span style='color:#808030; '>,</span><span style='color:#800080; '>'XLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>0 2000<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-156: 
-157:     <span style='color:#696969; '>% Uncover the figure</span>
-158:     set<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>,</span><span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
-159:         <span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>frmHndl infoHndl closeHndl plot1Hndl plot2Hndl sndHndl<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-160: 
-161: <span style='color:#800000; font-weight:bold; '>elseif</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'tone'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
-162:     figNumber<span style='color:#808030; '>=</span>watchon<span style='color:#808030; '>;</span>
-163:     hndlList<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>,</span><span style='color:#800080; '>'Userdata'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-164:     frmHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-165:     infoHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-166:     closeHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-167:     plot1Hndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>4<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-168:     plot2Hndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>5<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-169:     sndHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>6<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-170:     <span style='color:#696969; '>%set([closeHndl infoHndl],'Enable','off');</span>
-171: 
-172:     <span style='color:#696969; '>% ====== Playback the tone here</span>
-173:     <span style='color:#696969; '>% Sampling rate is Fs Hz</span>
-174:     toneChoice<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>gco<span style='color:#808030; '>,</span><span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-175:     tone<span style='color:#808030; '>=</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>toneChoice<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-176:     <span style='color:#800000; font-weight:bold; '>if</span> get<span style='color:#808030; '>(</span>sndHndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'Value'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
-177:         sound<span style='color:#808030; '>(</span>tone<span style='color:#808030; '>,</span>Fs<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-178:     <span style='color:#800000; font-weight:bold; '>end</span>
-179:     p <span style='color:#808030; '>=</span> psd<span style='color:#808030; '>(</span>tone<span style='color:#808030; '>,</span>256<span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>128<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-180:     f <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>127<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>128 <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span>Fs<span style='color:#808030; '>/</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-181:     p<span style='color:#808030; '>=</span>p<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-182:     set<span style='color:#808030; '>(</span>plot1Hndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'YData'</span><span style='color:#808030; '>,</span>tone<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-183:     set<span style='color:#808030; '>(</span>plot2Hndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'Ydata'</span><span style='color:#808030; '>,</span>p<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-184:     <span style='color:#696969; '>% ====== End of playing tone</span>
-185: 
-186:     <span style='color:#696969; '>%set([closeHndl infoHndl],'Enable','on');</span>
-187:     watchoff<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+  5: 
+  6: <span style='color:#800000; font-weight:bold; '>persistent</span> Fs tones t<span style='color:#808030; '>;</span>
+  7: <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#bb7977; '>isempty</span><span style='color:#808030; '>(</span>tones<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+  8:     <span style='color:#696969; '>% Generate DTMF tones:</span>
+  9:     Fs  <span style='color:#808030; '>=</span> 8000<span style='color:#808030; '>;</span>
+ 10:     t   <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>799<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>Fs<span style='color:#808030; '>;</span>    <span style='color:#696969; '>% 800 samples at Fs</span>
+ 11:     pit <span style='color:#808030; '>=</span> 2<span style='color:#808030; '>*</span><span style='color:#bb7977; '>pi</span><span style='color:#808030; '>*</span>t<span style='color:#808030; '>;</span>
+ 12:     
+ 13:     fc <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span>697 770 852 941<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 14:     fr <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span>1209 1336 1477<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span> 
+ 15:     f  <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 16:     <span style='color:#800000; font-weight:bold; '>for</span> c<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>4<span style='color:#808030; '>,</span>
+ 17:         <span style='color:#800000; font-weight:bold; '>for</span> r<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>3<span style='color:#808030; '>,</span>
+ 18:             f <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span> f <span style='color:#808030; '>[</span>fc<span style='color:#808030; '>(</span>c<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>fr<span style='color:#808030; '>(</span>r<span style='color:#808030; '>)</span><span style='color:#808030; '>]</span> <span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 19:         <span style='color:#800000; font-weight:bold; '>end</span>
+ 20:     <span style='color:#800000; font-weight:bold; '>end</span>
+ 21:     
+ 22:     <span style='color:#800000; font-weight:bold; '>for</span> i<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span><span style='color:#bb7977; '>size</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>,</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 23:         tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>i<span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#bb7977; '>sum</span><span style='color:#808030; '>(</span><span style='color:#bb7977; '>sin</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span>pit<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>'</span> <span style='color:#808030; '>/</span> 4<span style='color:#808030; '>;</span>
+ 24:     <span style='color:#800000; font-weight:bold; '>end</span>
+ 25: <span style='color:#800000; font-weight:bold; '>end</span>
+ 26: 
+ 27: <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#bb7977; '>nargin</span><span style='color:#808030; '>&lt;</span>1<span style='color:#808030; '>,</span>
+ 28:     action<span style='color:#808030; '>=</span><span style='color:#800080; '>'initialize'</span><span style='color:#808030; '>;</span>
+ 29: <span style='color:#800000; font-weight:bold; '>end</span>
+ 30: 
+ 31: <span style='color:#800000; font-weight:bold; '>if</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'initialize'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+ 32:     figNumber<span style='color:#808030; '>=</span><span style='color:#bb7977; '>figure</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 33:         <span style='color:#800080; '>'Name'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'Phone Pad'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 34:         <span style='color:#800080; '>'NumberTitle'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 35:         <span style='color:#800080; '>'Backingstore'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 36:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'off'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 37:     axHndl1<span style='color:#808030; '>=</span><span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 38:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 39:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.32</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 40:         <span style='color:#800080; '>'Drawmode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'fast'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 41:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 42:     axHndl2<span style='color:#808030; '>=</span><span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 43:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 44:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.10</span> <span style='color:#008000; '>0.60</span> <span style='color:#008000; '>0.32</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 45:         <span style='color:#800080; '>'Drawmode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'fast'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 46:         <span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 47: 
+ 48:     <span style='color:#696969; '>%===================================</span>
+ 49:     <span style='color:#696969; '>% Information for all buttons</span>
+ 50:     labelColor<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.8</span> <span style='color:#008000; '>0.8</span> <span style='color:#008000; '>0.8</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 51:     top<span style='color:#808030; '>=</span><span style='color:#008000; '>0.85</span><span style='color:#808030; '>;</span>
+ 52:     left<span style='color:#808030; '>=</span><span style='color:#008000; '>0.75</span><span style='color:#808030; '>;</span>
+ 53:     bottom<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
+ 54:     xLabelPos<span style='color:#808030; '>=</span><span style='color:#008000; '>0.75</span><span style='color:#808030; '>;</span>
+ 55:     labelWid<span style='color:#808030; '>=</span><span style='color:#008000; '>0.20</span><span style='color:#808030; '>;</span>
+ 56:     labelHt<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
+ 57:     btnWid<span style='color:#808030; '>=</span><span style='color:#008000; '>0.20</span><span style='color:#808030; '>;</span>
+ 58:     btnHt<span style='color:#808030; '>=</span><span style='color:#008000; '>0.08</span><span style='color:#808030; '>;</span>
+ 59:     <span style='color:#696969; '>% Spacing between the button and the next command's label</span>
+ 60:     spacing<span style='color:#808030; '>=</span><span style='color:#008000; '>0.05</span><span style='color:#808030; '>;</span>
+ 61:     btnOffset<span style='color:#808030; '>=</span>0<span style='color:#808030; '>;</span>
+ 62:     
+ 63:     <span style='color:#696969; '>%====================================</span>
+ 64:     <span style='color:#696969; '>% The CONSOLE frame</span>
+ 65:     <span style='color:#696969; '>% Use the frame's userdata to hold the tones matrix</span>
+ 66:     frmBorder<span style='color:#808030; '>=</span><span style='color:#008000; '>0.02</span><span style='color:#808030; '>;</span>
+ 67:     yPos<span style='color:#808030; '>=</span>bottom<span style='color:#808030; '>-</span>frmBorder<span style='color:#808030; '>;</span>
+ 68:     frmPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>left<span style='color:#808030; '>-</span>frmBorder yPos btnWid<span style='color:#808030; '>+</span>2<span style='color:#808030; '>*</span>frmBorder <span style='color:#008000; '>0.9</span><span style='color:#808030; '>+</span>2<span style='color:#808030; '>*</span>frmBorder<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 69:     frmHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 70:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'frame'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 71:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 72:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>frmPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 73:         <span style='color:#800080; '>'BackgroundColor'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#008000; '>0.50</span> <span style='color:#008000; '>0.50</span> <span style='color:#008000; '>0.50</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 74: 
+ 75:     <span style='color:#696969; '>%====================================</span>
+ 76:     <span style='color:#696969; '>% The TONE buttons</span>
+ 77:     <span style='color:#696969; '>%btnNumber=1;</span>
+ 78:     <span style='color:#696969; '>%yLabelPos=0.90-(btnNumber-1)*(btnHt+labelHt+spacing);</span>
+ 79:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>' Button No.'</span><span style='color:#808030; '>;</span>
+ 80:     
+ 81:     <span style='color:#800000; font-weight:bold; '>for</span> count<span style='color:#808030; '>=</span>1<span style='color:#808030; '>:</span>12<span style='color:#808030; '>,</span>
+ 82:         btnPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>xLabelPos<span style='color:#808030; '>+</span><span style='color:#bb7977; '>rem</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>1<span style='color:#808030; '>,</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#808030; '>(</span>btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 83:                 top<span style='color:#808030; '>-</span><span style='color:#bb7977; '>floor</span><span style='color:#808030; '>(</span><span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>*</span><span style='color:#808030; '>(</span>btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>)</span> btnWid<span style='color:#808030; '>/</span>3 btnWid<span style='color:#808030; '>/</span>3<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+ 84:         <span style='color:#800000; font-weight:bold; '>if</span> count<span style='color:#808030; '>&lt;</span>10<span style='color:#808030; '>,</span>
+ 85:             btnStr<span style='color:#808030; '>=</span>num2str<span style='color:#808030; '>(</span>count<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 86:         <span style='color:#800000; font-weight:bold; '>else</span>
+ 87:             s <span style='color:#808030; '>=</span> <span style='color:#800080; '>'*0#'</span><span style='color:#808030; '>;</span>
+ 88:             btnStr <span style='color:#808030; '>=</span> s<span style='color:#808030; '>(</span>count<span style='color:#808030; '>-</span>9<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 89:         <span style='color:#800000; font-weight:bold; '>end</span>
+ 90:         uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 91:             <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'pushbutton'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 92:             <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 93:             <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>btnPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 94:             <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>btnStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 95:             <span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>,</span>count<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+ 96:             <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'phone('</span><span style='color:#800080; '>'tone'</span><span style='color:#800080; '>')'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+ 97:     <span style='color:#800000; font-weight:bold; '>end</span>
+ 98: 
+ 99:     <span style='color:#696969; '>%====================================</span>
+100:     <span style='color:#696969; '>% The SOUND button</span>
+101:     btnNumber<span style='color:#808030; '>=</span>2<span style='color:#808030; '>;</span>
+102:     yPos<span style='color:#808030; '>=</span>top<span style='color:#808030; '>-</span>3<span style='color:#808030; '>*</span>btnHt<span style='color:#808030; '>;</span>
+103:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Sound'</span><span style='color:#808030; '>;</span>
+104:     <span style='color:#696969; '>% Setting this checkbox will allow the sound to work</span>
+105:     
+106:     <span style='color:#696969; '>% Generic button information</span>
+107:     btnPos<span style='color:#808030; '>=</span><span style='color:#808030; '>[</span>left yPos<span style='color:#808030; '>-</span>btnHt btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+108:     sndHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+109:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'checkbox'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+110:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+111:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span>btnPos<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+112:         <span style='color:#800080; '>'Enable'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+113:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+114: 
+115:     <span style='color:#696969; '>%====================================</span>
+116:     <span style='color:#696969; '>% The INFO button</span>
+117:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Info'</span><span style='color:#808030; '>;</span>
+118:     callbackStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'phone('</span><span style='color:#800080; '>'info'</span><span style='color:#800080; '>')'</span><span style='color:#808030; '>;</span>
+119:     infoHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+120:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'push'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+121:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+122:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>left bottom<span style='color:#808030; '>+</span>btnHt<span style='color:#808030; '>+</span>spacing btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+123:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+124:         <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span>callbackStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+125: 
+126:     <span style='color:#696969; '>%====================================</span>
+127:     <span style='color:#696969; '>% The CLOSE button</span>
+128:     labelStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'Close'</span><span style='color:#808030; '>;</span>
+129:     callbackStr<span style='color:#808030; '>=</span><span style='color:#800080; '>'close(gcf)'</span><span style='color:#808030; '>;</span>
+130:     closeHndl<span style='color:#808030; '>=</span>uicontrol<span style='color:#808030; '>(</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+131:         <span style='color:#800080; '>'Style'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'push'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+132:         <span style='color:#800080; '>'Units'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'normalized'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+133:         <span style='color:#800080; '>'Position'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>left bottom btnWid btnHt<span style='color:#808030; '>]</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+134:         <span style='color:#800080; '>'String'</span><span style='color:#808030; '>,</span>labelStr<span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+135:         <span style='color:#800080; '>'Callback'</span><span style='color:#808030; '>,</span>callbackStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+136: 
+137:     <span style='color:#696969; '>% Initialize the plot with tone number 1</span>
+138:     <span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span>axHndl1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+139:     tone<span style='color:#808030; '>=</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+140:     plot1Hndl<span style='color:#808030; '>=</span><span style='color:#bb7977; '>plot</span><span style='color:#808030; '>(</span>t<span style='color:#808030; '>,</span>tone<span style='color:#808030; '>,</span><span style='color:#800080; '>'Erasemode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'background'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+141:     xlabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Time (sec)'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+142:     ylabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Signal'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+143:     title<span style='color:#808030; '>(</span><span style='color:#800080; '>'Time Response'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+144:     set<span style='color:#808030; '>(</span>axHndl1<span style='color:#808030; '>,</span><span style='color:#800080; '>'XLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>0 <span style='color:#008000; '>0.05</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'YLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>-</span>1 1<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+145:     <span style='color:#bb7977; '>axes</span><span style='color:#808030; '>(</span>axHndl2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+146:     p <span style='color:#808030; '>=</span> psd<span style='color:#808030; '>(</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>256<span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>128<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+147:     f <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>127<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>128 <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span>Fs<span style='color:#808030; '>/</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+148:     f<span style='color:#808030; '>=</span>f<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+149:     p<span style='color:#808030; '>=</span>p<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+150:     plot2Hndl<span style='color:#808030; '>=</span><span style='color:#bb7977; '>semilogy</span><span style='color:#808030; '>(</span>f<span style='color:#808030; '>,</span>p<span style='color:#808030; '>,</span><span style='color:#800080; '>'Erasemode'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'background'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+151:     xlabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Frequency (Hz)'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+152:     ylabel<span style='color:#808030; '>(</span><span style='color:#800080; '>'Signal Power'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+153:     title<span style='color:#808030; '>(</span><span style='color:#800080; '>'Spectrum'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+154:     set<span style='color:#808030; '>(</span>axHndl2<span style='color:#808030; '>,</span><span style='color:#800080; '>'XLim'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>0 2000<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+155: 
+156:     <span style='color:#696969; '>% Uncover the figure</span>
+157:     set<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>,</span><span style='color:#800080; '>'Visible'</span><span style='color:#808030; '>,</span><span style='color:#800080; '>'on'</span><span style='color:#808030; '>,</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>
+158:         <span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span>frmHndl infoHndl closeHndl plot1Hndl plot2Hndl sndHndl<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+159: 
+160: <span style='color:#800000; font-weight:bold; '>elseif</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'tone'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+161:     figNumber<span style='color:#808030; '>=</span>watchon<span style='color:#808030; '>;</span>
+162:     hndlList<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>,</span><span style='color:#800080; '>'Userdata'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+163:     frmHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+164:     infoHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+165:     closeHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>3<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+166:     plot1Hndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>4<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+167:     plot2Hndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>5<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+168:     sndHndl<span style='color:#808030; '>=</span>hndlList<span style='color:#808030; '>(</span>6<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+169:     <span style='color:#696969; '>%set([closeHndl infoHndl],'Enable','off');</span>
+170: 
+171:     <span style='color:#696969; '>% ====== Playback the tone here</span>
+172:     <span style='color:#696969; '>% Sampling rate is Fs Hz</span>
+173:     toneChoice<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>gco<span style='color:#808030; '>,</span><span style='color:#800080; '>'UserData'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+174:     tone<span style='color:#808030; '>=</span>tones<span style='color:#808030; '>(</span><span style='color:#808030; '>:</span><span style='color:#808030; '>,</span>toneChoice<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+175:     <span style='color:#800000; font-weight:bold; '>if</span> get<span style='color:#808030; '>(</span>sndHndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'Value'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+176:         sound<span style='color:#808030; '>(</span>tone<span style='color:#808030; '>,</span>Fs<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+177:     <span style='color:#800000; font-weight:bold; '>end</span>
+178:     p <span style='color:#808030; '>=</span> psd<span style='color:#808030; '>(</span>tone<span style='color:#808030; '>,</span>256<span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#808030; '>,</span>128<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+179:     f <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>0<span style='color:#808030; '>:</span>127<span style='color:#808030; '>)</span><span style='color:#808030; '>/</span>128 <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span>Fs<span style='color:#808030; '>/</span>2<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+180:     p<span style='color:#808030; '>=</span>p<span style='color:#808030; '>(</span>1<span style='color:#808030; '>:</span>63<span style='color:#808030; '>,</span>1<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+181:     set<span style='color:#808030; '>(</span>plot1Hndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'YData'</span><span style='color:#808030; '>,</span>tone<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+182:     set<span style='color:#808030; '>(</span>plot2Hndl<span style='color:#808030; '>,</span><span style='color:#800080; '>'Ydata'</span><span style='color:#808030; '>,</span>p<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+183:     <span style='color:#696969; '>% ====== End of playing tone</span>
+184: 
+185:     <span style='color:#696969; '>%set([closeHndl infoHndl],'Enable','on');</span>
+186:     watchoff<span style='color:#808030; '>(</span>figNumber<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+187: 
 188: 
-189: 
-190: <span style='color:#800000; font-weight:bold; '>elseif</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'info'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
-191:     ttlStr<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>gcf<span style='color:#808030; '>,</span><span style='color:#800080; '>'Name'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
-192:     hlpStr<span style='color:#808030; '>=</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>                                          
-193:         <span style='color:#808030; '>[</span><span style='color:#800080; '>' This window demonstrates the speed and     '</span>  
-194:          <span style='color:#800080; '>' utility of the "psd" command in the        '</span>  
-195:          <span style='color:#800080; '>' Signal Processing Toolbox.                 '</span>  
-196:          <span style='color:#800080; '>'                                            '</span>  
-197:          <span style='color:#800080; '>' The touch tone phone pad in the upper right'</span>  
-198:          <span style='color:#800080; '>' plays the actual tones used by a normal    '</span>  
-199:          <span style='color:#800080; '>' phone. The upper plot shows a sample of the'</span>  
-200:          <span style='color:#800080; '>' time response of the sound. The lower plot '</span>  
-201:          <span style='color:#800080; '>' shows the spectrum associated with the     '</span>  
-202:          <span style='color:#800080; '>' waveform.                                  '</span>  
-203:          <span style='color:#800080; '>'                                            '</span>  
-204:          <span style='color:#800080; '>' Notice that two tones are used to code each'</span>  
-205:          <span style='color:#800080; '>' number on the dial.                        '</span>  
-206:          <span style='color:#800080; '>'                                            '</span>  
-207:          <span style='color:#800080; '>' File name: phone.m                         '</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
-208:     helpfun<span style='color:#808030; '>(</span>ttlStr<span style='color:#808030; '>,</span>hlpStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>                              
-209: 
-210: <span style='color:#800000; font-weight:bold; '>end</span>    <span style='color:#696969; '>% if strcmp(action, ...</span>
-211: 
-212: <span style='color:#696969; '>% [EOF] phone.m</span>
-213: 
+189: <span style='color:#800000; font-weight:bold; '>elseif</span> strcmp<span style='color:#808030; '>(</span>action<span style='color:#808030; '>,</span><span style='color:#800080; '>'info'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+190:     ttlStr<span style='color:#808030; '>=</span>get<span style='color:#808030; '>(</span>gcf<span style='color:#808030; '>,</span><span style='color:#800080; '>'Name'</span><span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>
+191:     hlpStr<span style='color:#808030; '>=</span> <span style='color:#808030; '>.</span><span style='color:#808030; '>.</span><span style='color:#808030; '>.</span>                                          
+192:         <span style='color:#808030; '>[</span><span style='color:#800080; '>' This window demonstrates the speed and     '</span>  
+193:          <span style='color:#800080; '>' utility of the "psd" command in the        '</span>  
+194:          <span style='color:#800080; '>' Signal Processing Toolbox.                 '</span>  
+195:          <span style='color:#800080; '>'                                            '</span>  
+196:          <span style='color:#800080; '>' The touch tone phone pad in the upper right'</span>  
+197:          <span style='color:#800080; '>' plays the actual tones used by a normal    '</span>  
+198:          <span style='color:#800080; '>' phone. The upper plot shows a sample of the'</span>  
+199:          <span style='color:#800080; '>' time response of the sound. The lower plot '</span>  
+200:          <span style='color:#800080; '>' shows the spectrum associated with the     '</span>  
+201:          <span style='color:#800080; '>' waveform.                                  '</span>  
+202:          <span style='color:#800080; '>'                                            '</span>  
+203:          <span style='color:#800080; '>' Notice that two tones are used to code each'</span>  
+204:          <span style='color:#800080; '>' number on the dial.                        '</span>  
+205:          <span style='color:#800080; '>'                                            '</span>  
+206:          <span style='color:#800080; '>' File name: phone.m                         '</span><span style='color:#808030; '>]</span><span style='color:#808030; '>;</span>
+207:     helpfun<span style='color:#808030; '>(</span>ttlStr<span style='color:#808030; '>,</span>hlpStr<span style='color:#808030; '>)</span><span style='color:#808030; '>;</span>                              
+208: 
+209: <span style='color:#800000; font-weight:bold; '>end</span>    <span style='color:#696969; '>% if strcmp(action, ...</span>
+210: 
+211: <span style='color:#696969; '>% [EOF] phone.m</span>
+212: 
 </pre></body></html>
