@@ -9,6 +9,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion(JNIEnv *env, j
     return hp->getRegion(env, &JString(env, qname));
 };
 
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion(JNIEnv *env, jobject obj, jlong iptr, jint index) {
+    JHRCParser *hp = (JHRCParser*)iptr;
+    return hp->getRegion(env, index);
+};
+
 JNIEXPORT void JNICALL Java_net_sf_colorer_HRCParser_finalize(JNIEnv *env, jobject obj, jlong iptr) {
     JHRCParser *hp = (JHRCParser*)iptr;
     hp->finalize(env);
