@@ -1,14 +1,16 @@
 
-  You can compile version of the Library to use it on MacOSX system.
+  You can compile Colorer Library to use it on MacOSX system.
 
   First, you need to download C++ sources of the Colorer Library from
     http://sourceforge.net/project/showfiles.php?group_id=34855
 
   Then you can build full Eclipse plugin distribution with
     ant -Dplatform=macos eclipseplugin
-  command.
+  command. Read INSTALL file for more information.
 
   If you have no ANT or full JDK installed, you can compile only
   plugin's native part with
     make -f makefile.macos
-  in the 'colorer/src/net.sf.colorer/libnative' folder.
+  in the 'colorer/src/net.sf.colorer/libnative' folder and
+  place it into 'os/macosx/ppc' folder of the existing EclipseColorer
+  distribution package.
