@@ -166,6 +166,8 @@
         <xs:annotation><xs:documentation>
           Custom parameters, used to specify additional properties of this language type.
           These can include different language resources (icons, templates and so on).
+          Also these parameters could be referenced from schema declaration,
+          this allows to customize schemes loading process.
         </xs:documentation></xs:annotation>
         <xs:complexType>
           <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -176,6 +178,7 @@
               <xs:complexType>
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="value" type="xs:string" use="required"/>
+                <xs:attribute name="description" type="xs:string" use="optional"/>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
@@ -273,18 +276,7 @@
         HRC Language type name.
       </xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="access" type="access" default="private"/>
   </xs:complexType>
-
-  <xs:simpleType name="access">
-    <xs:annotation><xs:documentation>
-    Deprecated???
-    </xs:documentation></xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="public"/>
-      <xs:enumeration value="private"/>
-    </xs:restriction>
-  </xs:simpleType>
 
   <xs:complexType name="scheme">
     <xs:annotation><xs:documentation>
@@ -306,10 +298,23 @@
     </xs:sequence>
     <xs:attribute name="name" type="xs:NCName" use="required">
       <xs:annotation><xs:documentation>
-        HRC Scheme name.
+        HRC Scheme name. Unique in this type scope.
       </xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="access" type="access" default="private"/>
+    <xs:attribute name="if" type="xs:NCName" use="optional">
+      <xs:annotation><xs:documentation>
+        Load and use this scheme's content only if parameter,
+        to which references this attribute is truth.
+        In other case this scheme is used as an empty one.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="unless" type="xs:NCName" use="optional">
+      <xs:annotation><xs:documentation>
+        Load and use this scheme's content only if parameter,
+        to which references this attribute is not truth.
+        In other case this scheme is used as an empty one.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="import">
