@@ -34,5 +34,5 @@ $(TARGET): *.cpp *.h $(objs)
 	$(RM) net_sf_colorer.dll.exp
 	$(RM) net_sf_colorer.def
 
-clear:
+clean:
 	$(RM) $(objs) colorer.map
