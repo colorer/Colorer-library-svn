@@ -232,7 +232,7 @@
     </antcall>
   </target>
 
-  <target name="eclipseplugin" depends='init' description='Eclipse win32 distribution'>
+  <target name="eclipseplugin" depends='init' description='Eclipse plugin package'>
     <mkdir dir='${eclipseplugin-dir}'/>
 
     <exec dir='src/net.sf.colorer/libnative' executable='${make}' failonerror='true'>
