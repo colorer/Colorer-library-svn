@@ -199,9 +199,9 @@
       <regexp region="Directive"><![CDATA[
         /\$(Archive|Author|Date|Header|Id|Locker|Log|RCSfile|Revision|Source|State)(: .*?)?\$/]]>
       </regexp>
-      <regexp match="/^&lt;{7,}.*$/" region0="TODO"/>
-      <regexp match="/^={7,}$/" region0="TODO"/>
-      <regexp match="/^&gt;{7,}.*$/" region0="TODO"/>
+      <regexp match="/^&lt;{7,}.*$/" region="TODO"/>
+      <regexp match="/^={7,}$/" region="TODO"/>
+      <regexp match="/^&gt;{7,}.*$/" region="TODO"/>
     </scheme>
 
     <scheme name="Comment">
@@ -211,7 +211,7 @@
       <inherit scheme="RCS"/>
       <regexp  region="TODO">/[\!\?]{2,}/</regexp>
       <regexp  region="TODO">/[\w\-\_]{1,20} \s{,2} [\!\?]{2,}/x</regexp>
-      <regexp  region="TODO">/\b(FIXME|TODO|BUG|FIX)\b:?/xi</regexp>
+      <regexp  region="TODO">/\b((FIXME|TODO|BUG|FIX)\b:.*$)/xi</regexp>
 
     </scheme>
 
