@@ -16,6 +16,8 @@ public class ImageStore {
   public static final ImageDescriptor EDITOR_FILETYPE_A;
 
   public static final ImageDescriptor EDITOR_CUR_FILETYPE;
+  public static final ImageDescriptor EDITOR_CUR_GROUP;
+  public static final ImageDescriptor EDITOR_GROUP;
 
   public static final ImageDescriptor EDITOR_PAIR_MATCH;
   public static final ImageDescriptor EDITOR_PAIR_SELECT;
@@ -29,7 +31,10 @@ public class ImageStore {
     EDITOR_UPDATEHRC_A = createImageDescriptor(prefix + "updatehrc_a.gif");
     EDITOR_FILETYPE = createImageDescriptor(prefix + "filetype.gif");
     EDITOR_FILETYPE_A = createImageDescriptor(prefix + "filetype_a.gif");
-    EDITOR_CUR_FILETYPE = createImageDescriptor(prefix + "curfiletype.gif");
+    
+    EDITOR_CUR_FILETYPE = createImageDescriptor(prefix + "filetype/filetype.current.gif");
+  	EDITOR_CUR_GROUP = createImageDescriptor(prefix + "filetype/group.current.gif");
+	  EDITOR_GROUP = createImageDescriptor(prefix + "filetype/group.gif");
     
     EDITOR_PAIR_MATCH = createImageDescriptor(prefix + "pair-match.gif");
     EDITOR_PAIR_SELECT = createImageDescriptor(prefix + "pair-select.gif");
