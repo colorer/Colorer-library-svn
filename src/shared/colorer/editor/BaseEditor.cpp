@@ -105,13 +105,13 @@ void BaseEditor::chooseFileType(const String *fileName){
   if (lineSource == null){
     currentFileType = hrcParser->chooseFileType(fileName, null);
   }else{
-    StringBuffer textStart();
-    int totalLenght = 0;
+    StringBuffer textStart;
+    int totalLength = 0;
     for(int i = 0; i < 4; i++){
       String *iLine = lineSource->getLine(i);
       if (iLine == null) break;
       textStart.append(iLine);
-      textStart.append("\n");
+      textStart.append(DString("\n"));
       totalLength += iLine->length();
       if (totalLength > 500) break;
     };
