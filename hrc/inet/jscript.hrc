@@ -75,7 +75,7 @@
            <start region1="Symbol" region2="StringEdge" region3="PairStart">
             <![CDATA[
              /( [\=\!]\~ |
-             [^<\]\}\)\+\-\w\s\/\;] |
+             [^<\]\}\)\+\-\w\s\/\;\"\'] |
              \bif | ~)
              \s* ((\/))/x
             ]]>
