@@ -2,7 +2,10 @@
 #include<common/io/InputSource.h>
 
 #include<common/io/FileInputSource.h>
+
+#if COLORER_FEATURE_JARINPUTSOURCE
 #include<common/io/JARInputSource.h>
+#endif
 
 #if COLORER_FEATURE_HTTPINPUTSOURCE
 #include<common/io/HTTPInputSource.h>
@@ -30,9 +33,11 @@ InputSource *InputSource::newInstance(const String *path, InputSource *base){
     return new HTTPInputSource(path, null);
   };
 #endif
+#if COLORER_FEATURE_JARINPUTSOURCE
   if (path->startsWith(DString("jar:"))){
     return new JARInputSource(path, base);
   };
+#endif
   if (base != null){
     InputSource *is = base->createRelative(path);
     if (is != null) return is;

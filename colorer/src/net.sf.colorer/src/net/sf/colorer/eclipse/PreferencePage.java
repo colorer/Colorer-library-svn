@@ -6,7 +6,12 @@ import java.util.Vector;
 import net.sf.colorer.ParserFactory;
 
 import org.eclipse.jface.preference.*;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.texteditor.WorkbenchChainedTextFontFieldEditor;
@@ -27,12 +32,29 @@ public class PreferencePage extends FieldEditorPreferencePage
 
   public static final String RELOAD_HRC = "RELOAD_HRC";
   
+  Combo hrdSets;
+  Vector hrdSetsList;
+  
   public PreferencePage(){
     super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
     setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
   }
 
   public void init(IWorkbench iworkbench){}
+
+    public boolean performOk() {
+        if (hrdSetsList != null) {
+            getPreferenceStore().setValue(HRD_SET, (String)hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
+        }
+        super.performOk();
+        return true;
+    }
+    protected void performApply() {
+        if (hrdSetsList != null) {
+            getPreferenceStore().setValue(HRD_SET, (String)hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
+        }
+        super.performApply();
+    }
 
   public void createFieldEditors(){
     Composite p = getFieldEditorParent();
@@ -60,19 +82,20 @@ public class PreferencePage extends FieldEditorPreferencePage
     addField(new RadioGroupFieldEditor(PAIRS_MATCH,
              Messages.get(PAIRS_MATCH), 1, arrPairs, p));
     
+    new Label(p, 0).setText(Messages.get(HRD_SET));
+    
     ParserFactory pf = EclipsecolorerPlugin.getDefault().getParserFactory();
-    Vector radios = new Vector();
+    hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
+    hrdSetsList = new Vector();
     for(Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds.hasMoreElements();){
       String hrd_name = (String)hrds.nextElement();
       String hrd_descr = pf.getHRDescription("rgb", hrd_name);
-      radios.addElement(new String[]{ hrd_name, hrd_descr});
+      hrdSets.add(hrd_descr);
+      hrdSetsList.add(hrd_name);
+      if (getPreferenceStore().getString(HRD_SET).equals(hrd_name)) {
+          hrdSets.select(hrdSets.getItemCount()-1);
+      }
     }
-    String[][] sradios = new String[radios.size()][2];
-    for(int idx = 0; idx < radios.size(); idx++){
-      sradios[idx][0] = ((String[])radios.elementAt(idx))[1];
-      sradios[idx][1] = ((String[])radios.elementAt(idx))[0];
-    }
-    addField(new RadioGroupFieldEditor(HRD_SET, Messages.get(HRD_SET), 1, sradios, p));
     addField(new BooleanFieldEditor(USE_BACK, Messages.get(USE_BACK), p));
   }
 }

@@ -1,12 +1,12 @@
 #ifndef _COLORER_HRCPARSERIMPL_H_
 #define _COLORER_HRCPARSERIMPL_H_
 
-#include<xml/xml.h>
+#include<xml/xmldom.h>
 #include<cregexp/cregexp.h>
 #include<common/Vector.h>
 #include<common/Hashtable.h>
 #include<colorer/HRCParser.h>
-
+#include<unicode/UnicodeTools.h>
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 
 class FileTypeImpl;
@@ -60,17 +60,18 @@ friend class FileTypeImpl;
   bool structureChanged;
   bool updateStarted;
 
+  DocumentBuilder docbuilder;
   ErrorHandler *errorHandler;
 
   void loadFileType(FileType *filetype);
 
-  void parseHRC(const byte *data, int len);
-  void addPrototype(CXmlEl *elem);
-  void addType(CXmlEl *elem);
+  void parseHRC(InputSource *is);
+  void addPrototype(Element *elem);
+  void addType(Element *elem);
 
-  void addScheme(CXmlEl *elem);
-  void addSchemeNodes(SchemeImpl *scheme, CXmlEl *elem);
-  void loadRegions(SchemeNode *node, CXmlEl *el);
+  void addScheme(Element *elem);
+  void addSchemeNodes(SchemeImpl *scheme, Node *elem);
+  void loadRegions(SchemeNode *node, Element *el);
 
   String *qualifyOwnName(const String *name);
   bool checkNameExist(const String *name, FileTypeImpl *parseType, QualifyNameType qntype, bool logErrors);
@@ -78,7 +79,7 @@ friend class FileTypeImpl;
 
   void updateLinks();
   String *useEntities(const String *name);
-  const Region *getNCRegion(CXmlEl *el, const String &tag);
+  const Region *getNCRegion(Element *el, const String &tag);
   const Region *getNCRegion(const String *name, bool logErrors);
 };
 

@@ -45,8 +45,13 @@ public static void main(String[] arr){
    */
   for(Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();){
     FileType type = (FileType)e.nextElement();
-    System.out.println("loading: " + type);
+    System.out.println("loading: " + type.getDescription());
+    for(Enumeration pars = type.enumerateParameters(); pars.hasMoreElements();){
+      String pname = (String)pars.nextElement();
+      System.out.println("  param " + pname + " = " + type.getParamValue(pname));
+    }
     be.setFileType(type);
+
   };
 
 };

@@ -1,6 +1,6 @@
 
 coreobjects = $(unzipobjects) \
-              $(obj_output_slash)xml.$(obj)       \
+              $(obj_output_slash)xmldom.$(obj)       \
               $(obj_output_slash)cregexp.$(obj)    \
               \
               $(obj_output_slash)BitArray.$(obj)     \
@@ -52,8 +52,8 @@ coreobjects = $(unzipobjects) \
 	$(CPP) $(CPPFLAGS) $*.cpp
 
 
-$(obj_output_slash)xml.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)xml/xml.cpp
+$(obj_output_slash)xmldom.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)xml/xmldom.cpp
 $(obj_output_slash)cregexp.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)cregexp/cregexp.cpp
 

@@ -1,7 +1,6 @@
 #ifndef _COLORER_REGIONMAPPERIMPL_H_
 #define _COLORER_REGIONMAPPERIMPL_H_
 
-#include<xml/xml.h>
 #include<common/Vector.h>
 #include<common/Hashtable.h>
 #include<common/io/Writer.h>

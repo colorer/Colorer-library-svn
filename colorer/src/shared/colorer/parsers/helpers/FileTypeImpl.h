@@ -26,6 +26,17 @@ public:
     return baseScheme;
   }
 
+  const String *enumerateParameters(int idx) {
+    if (idx >= paramVector.size() || idx < 0){
+      return null;
+    }
+    return paramVector.elementAt(idx);
+  }
+
+  const String *getParameterDescription(const String &name) {
+    return paramDescriptionHash.get(&name);
+  }
+
   const String *getParamValue(const String &name) {
     const String *val = paramHash.get(&name);
     if (val == null) return getParamDefaultValue(name);
@@ -79,6 +90,8 @@ protected:
   Vector<FileTypeChooser*> chooserVector;
   Hashtable<String*> paramDefaultHash;
   Hashtable<String*> paramHash;
+  Hashtable<String*> paramDescriptionHash;
+  Vector<String*> paramVector;
   Vector<String*> importVector;
   InputSource *inputSource;
 
@@ -97,15 +110,25 @@ protected:
     delete description;
     delete inputSource;
     int idx;
-    for (idx = 0; idx < chooserVector.size(); idx++)
+    for (idx = 0; idx < chooserVector.size(); idx++){
       delete chooserVector.elementAt(idx);
-    for (idx = 0; idx < importVector.size(); idx++)
+    }
+    for (idx = 0; idx < importVector.size(); idx++){
       delete importVector.elementAt(idx);
+    }
+    for (idx = 0; idx < paramVector.size(); idx++){
+      delete paramVector.elementAt(idx);
+    }
     String *s;
-    for (s = paramHash.enumerate(); s!=null; s = paramHash.next())
+    for (s = paramHash.enumerate(); s!=null; s = paramHash.next()){
       delete s;
-    for (s = paramDefaultHash.enumerate(); s!=null; s = paramDefaultHash.next())
+    }
+    for (s = paramDefaultHash.enumerate(); s!=null; s = paramDefaultHash.next()){
       delete s;
+    }
+    for (s = paramDescriptionHash.enumerate(); s!=null; s = paramDescriptionHash.next()){
+      delete s;
+    }
   }
 
 };

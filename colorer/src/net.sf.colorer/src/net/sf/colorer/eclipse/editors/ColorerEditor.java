@@ -53,11 +53,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   TabReplacer tabReplacer = new TabReplacer();
 
     public ColorerEditor() {
-        super();
-    prefStore = EclipsecolorerPlugin.getDefault().getPreferenceStore();
-    prefStore.addPropertyChangeListener(this);
-    WorkbenchChainedTextFontFieldEditor.startPropagate(prefStore, PreferencePage.TEXT_FONT);
-        setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
+      super();
+      prefStore = EclipsecolorerPlugin.getDefault().getPreferenceStore();
+      prefStore.addPropertyChangeListener(this);
+      WorkbenchChainedTextFontFieldEditor.startPropagate(prefStore, PreferencePage.TEXT_FONT);
+      setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
     }
 
     public void createPartControl(Composite parent){

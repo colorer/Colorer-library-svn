@@ -22,29 +22,25 @@ void ParserFactory::init()
   const byte *stream = null;
   try{
     catalogFIS = InputSource::newInstance(catalogPath);
-    catalog = new CXmlEl();
-    stream = catalogFIS->openStream();
-  }catch(InputSourceException &e){
+    catalog = docbuilder.parse(catalogFIS);
+  }catch(Exception &e){
     throw ParserFactoryException(*e.getMessage());
   };
 
-  catalog->parse(stream, catalogFIS->length());
-  catalogFIS->closeStream();
-  CXmlEl *elem = catalog;
+  Node *elem = catalog->getDocumentElement();
 
-  while(elem = elem->next()){
-   if (elem == null || elem->getType() == EL_BLOCKED &&
-       elem->getName() && *elem->getName() == "catalog") break;
-  };
-  if (elem == null) throw ParserFactoryException(DString("bad catalog structure"));
+  if (elem == null || *elem->getNodeName() != "catalog"){
+    throw ParserFactoryException(DString("bad catalog structure"));
+  }
 
-  elem = elem->child();
+  elem = elem->getFirstChild();
   while(elem != null){
     // hrc locations
-    if (elem->getType() == EL_BLOCKED && elem->getName() && *elem->getName() == "hrc-sets"){
-      
-      const String *logLocation = elem->getParamValue(DString("log-location"));
-      
+    if (elem->getNodeType() == Node::ELEMENT_NODE &&
+        *elem->getNodeName() == "hrc-sets"){
+
+      const String *logLocation = ((Element*)elem)->getAttribute(DString("log-location"));
+
       if (logLocation != null){
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
         try{
@@ -59,29 +55,32 @@ void ParserFactory::init()
         fileErrorHandler = new DefaultErrorHandler();
       };
 
-      CXmlEl *loc = elem->child();
+      Node *loc = elem->getFirstChild();
       while(loc != null){
-        if (loc->getType() == EL_SINGLE && loc->getName() && *loc->getName() == "location"){
-          hrcLocations.addElement(loc->getParamValue(DString("link")));
+        if (loc->getNodeType() == Node::ELEMENT_NODE &&
+            *loc->getNodeName() == "location"){
+          hrcLocations.addElement(((Element*)loc)->getAttribute(DString("link")));
         };
-        loc = loc->next();
+        loc = loc->getNextSibling();
       };
     };
     // hrd locations
-    if (elem->getType() == EL_BLOCKED && elem->getName() && *elem->getName() == "hrd-sets"){
-      CXmlEl *hrd = elem->child();
+    if (elem->getNodeType() == Node::ELEMENT_NODE && *elem->getNodeName() == "hrd-sets"){
+      Node *hrd = elem->getFirstChild();
       while(hrd != null){
-        if (hrd->getType() == EL_BLOCKED && hrd->getName() && *hrd->getName() == "hrd"){
+        if (hrd->getNodeType() == Node::ELEMENT_NODE && *hrd->getNodeName() == "hrd"){
 
-          const String *hrd_class = hrd->getParamValue(DString("class"));
-          const String *hrd_name = hrd->getParamValue(DString("name"));
+          const String *hrd_class = ((Element*)hrd)->getAttribute(DString("class"));
+          const String *hrd_name = ((Element*)hrd)->getAttribute(DString("name"));
           if (hrd_class == null || hrd_name == null){
-            hrd = hrd->next();
+            hrd = hrd->getNextSibling();
             continue;
           };
 
-          const String *hrd_descr = hrd->getParamValue(DString("description"));
-          if (hrd_descr == null) hrd_descr = hrd_name;
+          const String *hrd_descr = ((Element*)hrd)->getAttribute(DString("description"));
+          if (hrd_descr == null){
+            hrd_descr = hrd_name;
+          }
           hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
 
           Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.get(hrd_class);
@@ -96,18 +95,18 @@ void ParserFactory::init()
             hrdClass->put(hrd_name, hrdLocV);
           };
 
-          CXmlEl *loc = hrd->child();
+          Node *loc = hrd->getFirstChild();
           while(loc != null){
-            if (loc->getType() == EL_SINGLE && loc->getName() && *loc->getName() == "location"){
-              hrdLocV->addElement(loc->getParamValue(DString("link")));
+            if (loc->getNodeType() == Node::ELEMENT_NODE && *loc->getNodeName() == "location"){
+              hrdLocV->addElement(((Element*)loc)->getAttribute(DString("link")));
             };
-            loc = loc->next();
+            loc = loc->getNextSibling();
           };
         };
-        hrd = hrd->next();
+        hrd = hrd->getNextSibling();
       };
     };
-    elem = elem->next();
+    elem = elem->getNextSibling();
   };
 };
 
@@ -213,17 +212,17 @@ ParserFactory::~ParserFactory(){
     };
     delete hrdClass;
   };
-  delete catalog;
+  docbuilder.free(catalog);
   delete hrcParser;
   delete catalogPath;
   delete catalogFIS;
   delete fileErrorHandler;
 };
 
-const char *ParserFactory::getVersion(){
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "30.01.2004"
+#define __TIMESTAMP__ "30.08.2004"
 #endif
+const char *ParserFactory::getVersion(){
   return "Colorer-take5 Library beta3 "__TIMESTAMP__;
 };
 

@@ -34,6 +34,14 @@ public:
   */
   virtual Scheme *getBaseScheme() = 0;
 
+  /** Enumerates all available parameters, defined in this file type.
+      @return Parameter name with index <code>idx</code> or <code>null</code>
+      if index is too large.
+  */
+  virtual const String *enumerateParameters(int idx) = 0;
+
+  virtual const String *getParameterDescription(const String &name) = 0;
+
   /** Returns parameter's value of this file type.
       Parameters are stored in prototypes as
       <pre>

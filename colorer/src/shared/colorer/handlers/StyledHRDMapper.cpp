@@ -1,7 +1,8 @@
 
 #include<stdio.h>
-#include<xml/xml.h>
 #include<colorer/handlers/StyledHRDMapper.h>
+#include<unicode/UnicodeTools.h>
+#include<xml/xmldom.h>
 
 StyledHRDMapper::StyledHRDMapper(){};
 StyledHRDMapper::~StyledHRDMapper(){
@@ -11,40 +12,38 @@ StyledHRDMapper::~StyledHRDMapper(){
 
 void StyledHRDMapper::loadRegionMappings(InputSource *is)
 {
-CXmlEl *hrdbase, *hbase;
+  DocumentBuilder docbuilder;
 
-  hbase = hrdbase = new CXmlEl();
-  const byte *data = is->openStream();
-  hbase->parse(data, is->length());
-  is->closeStream();
-
-  while((hrdbase = hrdbase->next()) != null)
-    if (!hrdbase || hrdbase->getType() == EL_BLOCKED && hrdbase->getName() && *hrdbase->getName() == "hrd") break;
-  if (!hrdbase){
-    delete hbase;
+  Document *hrdbase = docbuilder.parse(is);
+  Element *hbase = hrdbase->getDocumentElement();
+  if (*hbase->getNodeName() != "hrd"){
+    docbuilder.free(hrdbase);
     throw Exception(DString("Error loading HRD file"));
   };
 
-  for(CXmlEl *curel = hrdbase->child(); curel; curel = curel->next()){
-    if (curel->getName() && *curel->getName() == "assign"){
-      if (!curel->getParamValue(DString("name"))) continue;
-      const String *name = curel->getParamValue(DString("name"));
+  for(Node *curel = hbase->getFirstChild(); curel; curel = curel->getNextSibling()){
+    if (curel->getNodeType() == Node::ELEMENT_NODE && *curel->getNodeName() == "assign"){
+      const String *name = ((Element*)curel)->getAttribute(DString("name"));
+      if (name == null) continue;
 
-      if (regionDefines.get(name) != null) delete regionDefines.get(name);
+      if (regionDefines.get(name) != null){
+        delete regionDefines.get(name);
+      }
 
       int val = 0;
-      bool bfore = curel->getParamValue(DString("fore"), &val);
+      bool bfore = UnicodeTools::getNumber(((Element*)curel)->getAttribute(DString("fore")), &val);
       int fore = val;
-      bool bback = curel->getParamValue(DString("back"), &val);
+      bool bback = UnicodeTools::getNumber(((Element*)curel)->getAttribute(DString("back")), &val);
       int back = val;
       int style = 0;
-      if (curel->getParamValue(DString("style"), &val)) style = val;
-
+      if (UnicodeTools::getNumber(((Element*)curel)->getAttribute(DString("style")), &val)){
+        style = val;
+      }
       RegionDefine *rdef = new StyledRegion(bfore, bback, fore, back, style);
       regionDefines.put(name, rdef);
     };
   };
-  delete hbase;
+  docbuilder.free(hrdbase);
 };
 
 /** Writes all currently loaded region definitions into
