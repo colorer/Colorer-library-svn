@@ -6,7 +6,9 @@
 
   Then you can build full Eclipse plugin distribution with
     ant -Dplatform=macos eclipseplugin
-  command. Read INSTALL file for more information.
+  command.
+
+  Please read INSTALL file for more information.
 
   If you have no ANT or full JDK installed, you can compile only
   plugin's native part with
