@@ -20,9 +20,9 @@ obj_output_slash = $(obj_output)\\
 CPPFLAGS = -I$(shared_path) -I$(unzipdir)  /Fo$*.$(obj) /GX /nologo  /Ogtiyb2 /c /wd4101 /W3 $(CPPFLAGS_CUSTOM)
 
 # ms nmake faults to substitute $(shared_path) here :(
-include d:/projects/shared/makefile.zlib
-include d:/projects/shared/_dependencies.dep
-include d:/projects/shared/makefile.objs
+include ../../shared/makefile.zlib
+include ../../shared/_dependencies.dep
+include ../../shared/makefile.objs
 
 include makefile.core
 
