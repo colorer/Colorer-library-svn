@@ -9,6 +9,22 @@ extern "C" {
 #endif
 /*
  * Class:     net_sf_colorer_FileType
+ * Method:    enumerateParameters
+ * Signature: (JI)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_enumerateParameters
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     net_sf_colorer_FileType
+ * Method:    getParameterDescription0
+ * Signature: (JLjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParameterDescription0
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:     net_sf_colorer_FileType
  * Method:    getParamValue
  * Signature: (JLjava/lang/String;)Ljava/lang/String;
  */
@@ -26,9 +42,9 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParamDefaultValue
 /*
  * Class:     net_sf_colorer_FileType
  * Method:    setParamValue
- * Signature: (JLjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_setParamValue
+JNIEXPORT void JNICALL Java_net_sf_colorer_FileType_setParamValue
   (JNIEnv *, jobject, jlong, jstring, jstring);
 
 #ifdef __cplusplus

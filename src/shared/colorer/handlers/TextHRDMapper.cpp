@@ -1,6 +1,6 @@
 
 #include<stdio.h>
-#include<xml/xml.h>
+#include<xml/xmldom.h>
 #include<colorer/handlers/TextHRDMapper.h>
 
 TextHRDMapper::TextHRDMapper(){};
@@ -18,24 +18,19 @@ TextHRDMapper::~TextHRDMapper(){
 */
 void TextHRDMapper::loadRegionMappings(InputSource *is)
 {
-CXmlEl *hrdbase, *hbase;
+  DocumentBuilder docbuilder;
 
-  hbase = hrdbase = new CXmlEl();
-  const byte *data = is->openStream();
-  hbase->parse(data, is->length());
-  is->closeStream();
-
-  while((hrdbase = hrdbase->next()) != null)
-    if (!hrdbase || hrdbase->getType() == EL_BLOCKED && hrdbase->getName() && *hrdbase->getName() == "hrd") break;
-  if (!hrdbase){
-    delete hbase;
+  Document *hrdbase = docbuilder.parse(is);
+  Element *hbase = hrdbase->getDocumentElement();
+  if (*hbase->getNodeName() != "hrd"){
+    docbuilder.free(hrdbase);
     throw Exception(DString("Error loading HRD file"));
   };
 
-  for(CXmlEl *curel = hrdbase->child(); curel; curel = curel->next()){
-    if (curel->getName() && *curel->getName() == "assign"){
-      if (!curel->getParamValue(DString("name"))) continue;
-      const String *name = curel->getParamValue(DString("name"));
+  for(Node *curel = hbase->getFirstChild(); curel; curel = curel->getNextSibling()){
+    if (curel->getNodeType() == Node::ELEMENT_NODE && *curel->getNodeName() == "assign"){
+      const String *name = ((Element*)curel)->getAttribute(DString("name"));
+      if (name == null) continue;
 
       if (regionDefines.get(name) != null){
         const TextRegion *rd = TextRegion::cast(regionDefines.get(name));
@@ -48,20 +43,20 @@ CXmlEl *hrdbase, *hbase;
       const String *sback = null;
       const String *eback = null;
       const String *sval;
-      sval = curel->getParamValue(DString("stext"));
+      sval = ((Element*)curel)->getAttribute(DString("stext"));
       if (sval != null) stext = new SString(sval);
-      sval = curel->getParamValue(DString("etext"));
+      sval = ((Element*)curel)->getAttribute(DString("etext"));
       if (sval != null) etext = new SString(sval);
-      sval = curel->getParamValue(DString("sback"));
+      sval = ((Element*)curel)->getAttribute(DString("sback"));
       if (sval != null) sback = new SString(sval);
-      sval = curel->getParamValue(DString("eback"));
+      sval = ((Element*)curel)->getAttribute(DString("eback"));
       if (sval != null) eback = new SString(sval);
 
       RegionDefine *rdef = new TextRegion(stext, etext, sback, eback);
       regionDefines.put(name, rdef);
     };
   };
-  delete hbase;
+  docbuilder.free(hrdbase);
 };
 
 /** Writes all currently loaded region definitions into

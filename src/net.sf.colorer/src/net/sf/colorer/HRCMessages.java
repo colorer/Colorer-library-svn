@@ -1,42 +1,35 @@
-#ifndef _CXMLEDIT_
-#define _CXMLEDIT_
+package net.sf.colorer;
 
-#include<xml/xml.h>
+import java.text.MessageFormat;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-#define SP 1
-
-/** XML Parser class editable extention.
-    This class allows modifing the structure
-    of parsed XML tree.
-    @ingroup xml
-*/
-class CXmlEdit : public CXmlEl
-{
-protected:
-  bool isLoop(CXmlEdit *el, CXmlEdit *parent);
-public:
-  CXmlEdit();
-  ~CXmlEdit();
-
-  void setName(const String *newname);
-
-  // parameters add and change
-  bool addParam(const String *name, const String *val);
-  bool addParam(const String *name, int val);
-  bool addParam(const String *name, double val);
-  bool changeContent(const String *data);
-  bool removeParam(const String *name);
-
-  bool move(CXmlEdit *parent, CXmlEdit *after);
-  CXmlEdit *copyTree(CXmlEdit *el);
-
-  // saving tree into text
-  int getLevelSize(int lev);
-  int saveLevel(char *dest, int lev);
-};
-
-#endif
-
+public class HRCMessages{
+  
+  static String RESOURCE_BUNDLE  = HRCMessages.class.getName();
+  static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
+  
+  public static String format(String key, Object[] args) {
+    return MessageFormat.format(get(key), args);
+  }
+  
+  public static String get(String key) {
+    try {
+      return fgResourceBundle.getString(key);
+    } catch (MissingResourceException e) {
+      return "!" + key + "!";
+    }
+  }
+  
+  public static String get(String key, String def) {
+    try {
+      return fgResourceBundle.getString(key);
+    } catch (MissingResourceException e) {
+      if (def != null) return def;
+      return "!" + key + "!";
+    }
+  }
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

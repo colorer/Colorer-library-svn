@@ -25,6 +25,10 @@ SString::SString(int no){
   sprintf(text, "%d", no);
   construct(&DString(text), 0, -1);
 }
+SString::SString(){
+  wstr = null;
+  len = 0;
+}
 SString::~SString(){
   if(wstr) delete[] wstr;
 }

@@ -4,6 +4,8 @@ all: colorer.dll
 shared_path=../shared/
 obj_output=objs
 
+#CPPFLAGS_CUSTOM = /Zi  /debug
+
 include ../shared/makefile.colorer.vc
 include makefile.core
 
@@ -13,4 +15,4 @@ colorer.dll: $(objs)
 	$(LINK) $(LIBFLAGS)
 
 clean:
-	$(RM) $(objs) colorer.exp colorer.lib colorer.map
+	$(RM) $(objs) *.exp *.lib *.map *.pdb *.pdb

@@ -8,6 +8,7 @@
 #include<colorer/viewer/TextConsoleViewer.h>
 
 #include<colorer/viewer/ConsoleTools.h>
+#include<xml/xmldom.h>
 
 ConsoleTools::ConsoleTools(){
   copyrightHeader = true;
@@ -93,36 +94,33 @@ void ConsoleTools::setHRDName(const String &str) {
 void ConsoleTools::setLinkSource(const String &str){
   InputSource *linkSource = null;
   const byte *stream = null;
+  DocumentBuilder docbuilder;
+  Document *linkSourceTree = null;
   try{
     linkSource = InputSource::newInstance(&str);
-    stream = linkSource->openStream();
-  }catch(InputSourceException &e){
-    throw Exception(*e.getMessage());
+    linkSourceTree = docbuilder.parse(linkSource);
+  }catch(Exception &e){
+    docbuilder.free(linkSourceTree);
+    throw e;
   };
 
-  CXmlEl *linkSourceTree = new CXmlEl();
-  linkSourceTree->parse(stream, linkSource->length());
-  linkSource->closeStream();
+  Node *elem = linkSourceTree->getDocumentElement();
 
-  CXmlEl *elem = linkSourceTree;
+  if (*elem->getNodeName() != "doclinks"){
+    throw Exception(DString("Bad doclinks data file structure"));
+  }
 
-  while(elem = elem->next()){
-   if (elem == null || elem->getType() == EL_BLOCKED &&
-       elem->getName() && *elem->getName() == "doclinks") break;
-  };
-  if (elem == null) throw Exception(DString("Bad doclinks data file structure"));
-
-  elem = elem->child();
+  elem = elem->getFirstChild();
   while(elem != null){
-    if (elem->getType() == EL_BLOCKED && elem->getName() && *elem->getName() == "links"){
-      const String *url = elem->getParamValue(DString("url"));
-      const String *scheme = elem->getParamValue(DString("scheme"));
-      CXmlEl *eachLink = elem->child();
+    if (elem->getNodeType() == Node::ELEMENT_NODE && *elem->getNodeName() == "links"){
+      const String *url = ((Element*)elem)->getAttribute(DString("url"));
+      const String *scheme = ((Element*)elem)->getAttribute(DString("scheme"));
+      Node *eachLink = elem->getFirstChild();
       while(eachLink != null){
-        if (eachLink->getName() && *eachLink->getName() == "link"){
-          const String *l_url = eachLink->getParamValue(DString("url"));
-          const String *l_scheme = eachLink->getParamValue(DString("scheme"));
-          const String *token = eachLink->getParamValue(DString("token"));
+        if (*eachLink->getNodeName() == "link"){
+          const String *l_url = ((Element*)eachLink)->getAttribute(DString("url"));
+          const String *l_scheme = ((Element*)eachLink)->getAttribute(DString("scheme"));
+          const String *token = ((Element*)eachLink)->getAttribute(DString("token"));
           StringBuffer fullURL;
           if (url != null) fullURL.append(url);
           if (l_url != null) fullURL.append(l_url);
@@ -134,13 +132,13 @@ void ConsoleTools::setLinkSource(const String &str){
           };
           docLinkHash->put(&hkey, new SString(&fullURL));
         };
-        eachLink = eachLink->next();
+        eachLink = eachLink->getNextSibling();
       };
     };
-    elem = elem->next();
+    elem = elem->getNextSibling();
   };
   delete linkSource;
-  delete linkSourceTree;
+  docbuilder.free(linkSourceTree);
 }
 
 

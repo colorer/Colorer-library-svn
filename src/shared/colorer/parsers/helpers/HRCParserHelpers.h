@@ -1,7 +1,6 @@
 #ifndef _COLORER_HRCPARSERPELPERS_H_
 #define _COLORER_HRCPARSERPELPERS_H_
 
-#include<xml/xml.h>
 #include<cregexp/cregexp.h>
 
 #include<common/Vector.h>

@@ -1,7 +1,7 @@
 #ifndef _COLORER_PARSERFACTORY_H_
 #define _COLORER_PARSERFACTORY_H_
 
-#include<xml/xml.h>
+#include<xml/xmldom.h>
 #include<colorer/TextParser.h>
 #include<colorer/HRCParser.h>
 #include<colorer/handlers/DefaultErrorHandler.h>
@@ -118,7 +118,8 @@ private:
   Hashtable<Hashtable<Vector<const String*>*>*> hrdLocations;
   Hashtable<const String *>hrdDescriptions;
   HRCParser  *hrcParser;
-  CXmlEl *catalog;
+  DocumentBuilder docbuilder;
+  Document *catalog;
 
   ParserFactory(const ParserFactory&);
   void operator=(const ParserFactory&);

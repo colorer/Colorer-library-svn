@@ -10,6 +10,8 @@ class StringBuffer : public SString{
 public:
   /** Creates empty string buffer */
   StringBuffer();
+  /** Creates empty string buffer */
+  StringBuffer(int alloc);
   /** Creates string buffer with @c string */
   StringBuffer(const char *string, int s = 0, int l = -1);
   /** Creates string buffer with @c string */
@@ -19,10 +21,17 @@ public:
   /** Destructor */
   ~StringBuffer();
 
+  /** Changes the length of this StringBuffer */
+  void setLength(int newLength);
+
   /** Appends to this string buffer @c string */
   StringBuffer &append(const String &string);
   /** Appends to this string buffer @c string */
   StringBuffer &append(const String *string);
+
+  /** Appends to this string buffer @c string */
+  StringBuffer &append(wchar c);
+
   /** Appends to this string buffer @c string.
       C++ operator+ form.
       You can write: yourcall(StringBuffer("first")+"second"+third);

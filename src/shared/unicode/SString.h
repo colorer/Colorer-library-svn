@@ -26,9 +26,11 @@ public:
   int length() const;
 
 protected:
+  SString();
+  void construct(const String *cstring, int s, int l);
+
   wchar *wstr;
   int len;
-  void construct(const String *cstring, int s, int l);
 private:
   SString &operator=(SString &cstring);
 };
