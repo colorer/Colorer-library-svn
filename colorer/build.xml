@@ -65,6 +65,11 @@
 
     </fail>
 
+    <property name='add.excludes' value='**/*.ilc, **/*.ild,
+              **/*.ilf, **/*.ils, **/*.tds,, **/*.map
+              **/colorer/colorer.exe, **/colorer/colorer
+              '/>
+
     <uptodate property="doc.javadoc.required" targetfile="doc/java/package-list">
       <srcfiles dir= "src/net.sf.colorer/src" includes="**/*.java, **/*.html"/>
     </uptodate>
@@ -201,12 +206,16 @@
       <fileset dir="bin" includes="**"/>
     </copy>
     <copy todir="${library-dir}">
-      <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='**/*.obj, **/*.lib, **/*.map, **/*.log'/>
+      <fileset dir="." includes="hrc/**, hrd/**, src/**" excludes='**/*.obj, **/*.lib, **/*.map, **/*.log, ${add.excludes}'/>
       <fileset dir="." includes="doc/**" excludes='**/*.log'/>
     </copy>
     <copy todir='${library-dir}' includeemptydirs='false'>
       <fileset dir='.' includes='*' excludes='*.log'/>
     </copy>
+
+    <zip destfile='${library-zip}'>
+      <fileset dir='${build-dir}' includes='${library-name}/**'/>
+    </zip>
 
   </target>
 
