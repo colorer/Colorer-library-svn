@@ -13,7 +13,7 @@ public:
   DString &operator=(const DString &cstring);
 
   /** Creates string from byte stream with encoding autodetecting
-      @param stream Input raw byte stream
+      @param stream Input raw byte stream, can't be null.
       @param size Size of input buffer
       @param def_encoding Default encoding to be used, if no other
              variants found.
@@ -21,7 +21,7 @@ public:
   DString(const byte *stream, int size, int def_encoding = -1);
 
   /** String from single-byte character buffer.
-      @param string Character buffer.
+      @param string Character buffer, can't be null.
       @param s Start string position. Zero - create from start of buffer.
       @param l Length of created string. If -1, autodetects string length with
              last zero byte.
@@ -29,27 +29,31 @@ public:
              If -1, default encoding will be used.
   */
   DString(const char *string, int s = 0, int l = -1, int encoding = -1);
+
   /** String from unicode two-byte character buffer.
-      @param string Unicode character buffer.
+      @param string Unicode character buffer, can't be null.
       @param s Start string position. Zero - create from start of buffer.
       @param l Length of created string. If -1, autodetects string length with
              last zero char.
   */
   DString(const wchar *string, int s = 0, int l = -1);
+
   /** String from UCS4 four-byte character buffer.
-      @param string UCS4 unicode character buffer.
+      @param string UCS4 unicode character buffer, can't be null.
       @param s Starting string position. Zero - create from start of buffer.
       @param l Length of created string. If -1, autodetects string length with
              last zero char.
   */
   DString(const w4char *string, int s = 0, int l = -1);
+
   /** String from any @c String implementing interface.
-      @param cstring String class instance.
+      @param cstring String class instance, can't be null.
       @param s Starting string position.
       @param l Length of created string. If -1, autodetects string length with
              cstring.length() call.
   */
   DString(const String *cstring, int s = 0, int l = -1);
+
   /** String from any @c String implementing interface.
       @param cstring String class instance.
       @param s Starting string position.
@@ -57,6 +61,7 @@ public:
              cstring.length() call.
   */
   DString(const String &cstring, int s = 0, int l = -1);
+
   /** Empty String */
   DString();
   ~DString();
