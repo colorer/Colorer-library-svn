@@ -4,6 +4,6 @@ EXPORTS
    SetStartupInfo=SetStartupInfo@4
    GetPluginInfo=GetPluginInfo@4
    Configure=Configure@4
-   ;ProcessEditorInput=ProcessEditorInput@4
+   ProcessEditorInput=ProcessEditorInput@4
    ProcessEditorEvent=ProcessEditorEvent@8
    ExitFAR=ExitFAR@0

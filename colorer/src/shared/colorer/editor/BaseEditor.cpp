@@ -2,6 +2,7 @@
 #include<colorer/editor/BaseEditor.h>
 
 //#define LOG_DEBUG
+#define IDLE_PARSE(time) (200+time*5)
 
 ErrorHandler *eh;
 
@@ -241,10 +242,7 @@ void BaseEditor::searchGlobalPair(PairMatch *pm)
 
 
 LineRegion *BaseEditor::getLineRegions(int lno){
-  if (backParse > wSize && lno - invalidLine > backParse) return null;
-#ifdef LOG_DEBUG
-  eh->warning(StringBuffer("getLineRegions:")+SString(lno));
-#endif
+  if (backParse > 0 && lno - invalidLine > backParse) return null;
   validate(lno);
   return lrSupport->getLineRegions(lno);
 }
@@ -306,6 +304,13 @@ void BaseEditor::validate(int lno)
   eh->warning(StringBuffer("parsedone:")+SString(stopLine));
 #endif
   invalidLine = stopLine+1;
+}
+
+void BaseEditor::idleJob(int time)
+{
+  if (time < 0) time = 0;
+  if (time > 100) time = 100;
+  validate(invalidLine+IDLE_PARSE(time));
 }
 
 

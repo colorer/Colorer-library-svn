@@ -35,6 +35,7 @@ public:
   */
   void chooseFileType(String *fname);
 
+
   /** Installs specified RegionMapper implementation.
       This class serves to request mapping of regions into
       real colors.
@@ -68,8 +69,10 @@ public:
   */
   void selectEncoding();
 
-  /** Handle passed FAR editor event. */
+  /** Handle passed FAR editor event */
   int editorEvent(int event, void *param);
+  /** Dispatch editor input event */
+  int  editorInput(const INPUT_RECORD *ir);
 
 private:
   EditorInfo ei;
@@ -90,6 +93,7 @@ private:
   int WindowSizeY;
   int farEncodingIndex, unicodeEncodingIndex;
   bool inRedraw, inHandler, ignoreChange;
+  int idleCount;
 
   int prevLinePosition, blockTopPosition;
 

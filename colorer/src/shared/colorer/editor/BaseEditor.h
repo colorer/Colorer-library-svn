@@ -30,11 +30,11 @@ public:
   ~BaseEditor();
 
   /** This method informs handler about internal form of
-      requeried LineRegion lists, which returned after parse
+      requeried LineRegion lists, which is returned after the parsing
       process. Compact regions are guaranteed not to overlap
       with each other (this is achieved with more internal processing
-      and more extensive cpu use); non-compact regions are placed directly
-      as they created by TextParser and can be overlapped.
+      and more extensive cpu usage); non-compact regions are placed directly
+      as they created by the TextParser and can be overlapped.
       @note By default, if method is not called, regions are not compacted.
       @param compact Creates LineRegionsSupport (false) or LineRegionsCompactSupport (true)
              object to store lists of RegionDefine's
@@ -59,6 +59,8 @@ public:
   /** Specifies number of lines, for which parser
       would be able to run continual processing without
       highlight invalidation.
+      @param backParse Number of lines. If <= 0, dropped into default
+      value.
   */
   void setBackParse(int backParse);
 
@@ -89,7 +91,7 @@ public:
   void removeRegionHandler(RegionHandler *rh);
 
   /** Searches and creates pair match object.
-      Returned object could be lately used in pair search methods.
+      Returned object can be used later in the pair search methods.
       This object is valid only until reparse of it's line
       occured. After that event information about line region's
       references in it becomes invalid and, if used, can produce
@@ -136,17 +138,24 @@ public:
   */
   LineRegion *getLineRegions(int lno);
 
-  /** Validates current state of editor and runs parser, if needed.
+  /** Validates current state of the editor and runs parser, if needed.
       This method can be called periodically in background thread
       to make possible background parsing process.
       @param lno Line number, for which validation is requested.
-             If this number is in current visible window range,
-             the part of text is validated, which is requeried
-             for visual painting.
-             If this number is not in visible range, or equals to -1,
-             all the text is validated.
+             If this number is in the current visible window range,
+             the part of text is validated, which is required
+             for visual repaint.
+             If this number is equals to -1, all the text is validated.
+             If this number is not in visible range, optimal partial validation
+             is used
   */
   void validate(int lno);
+
+  /** Tries to do some parsing job while user is doing nothing.
+      @param time integer between 0 and 100, shows an abount of time,
+      available for this job.
+  */
+  void idleJob(int time);
 
   /** Informs BaseEditor object about text modification event.
       All the text becomes invalid after the specified line.

@@ -19,6 +19,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf){
   inRedraw = false;
   inHandler = false;
   ignoreChange = false;
+  idleCount = 0;
 
   ret_str = null;
   ret_strNumber = -1;
@@ -78,11 +79,11 @@ int len = 0;
   return ret_str;
 };
 
-
 void FarEditor::chooseFileType(String *fname){
   FileType *ftype = baseEditor->chooseFileType(fname);
   setFileType(ftype);
 };
+
 
 void FarEditor::setFileType(FileType *ftype){
   baseEditor->setFileType(ftype);
@@ -311,11 +312,25 @@ void FarEditor::selectEncoding(){
   delete[] menuElements;
   if (result != -1){
     unicodeEncodingIndex = result;
-    baseEditor->modifyEvent(0);
+//    baseEditor->modifyEvent(0);
   };
   ignoreChange = true;
 };
 
+int FarEditor::editorInput(const INPUT_RECORD *ir)
+{
+  if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0){
+    idleCount++;
+    if (idleCount > 10) idleCount = 10;
+//    printf("%d-", idleCount);
+    baseEditor->idleJob(idleCount*10);
+    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+//      printf("ddd, ", idleCount);
+  }else if(ir->EventType == KEY_EVENT){
+    idleCount = 0;
+  };
+  return 0;
+}
 int FarEditor::editorEvent(int event, void *param)
 {
   // ignore event

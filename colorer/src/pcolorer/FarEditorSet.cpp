@@ -315,7 +315,12 @@ void FarEditorSet::configure()
     disableColorer();
   };
 
-};
+}
+
+int FarEditorSet::editorInput(const INPUT_RECORD *ir)
+{
+  return getCurrentEditor()->editorInput(ir);
+}
 
 int FarEditorSet::editorEvent(int Event, void *Param)
 {

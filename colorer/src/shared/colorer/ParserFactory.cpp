@@ -211,9 +211,9 @@ ParserFactory::~ParserFactory(){
 
 const char *ParserFactory::getVersion(){
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "30.03.2003"
+#define __TIMESTAMP__ "01.09.2003"
 #endif
-  return "Colorer-take5 Library b1 "__TIMESTAMP__;
+  return "Colorer-take5 Library b2 "__TIMESTAMP__;
 };
 
 
