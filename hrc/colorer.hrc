@@ -489,8 +489,8 @@
       <param name="default-fore" value="" description="User-defined foreground color for this particular type"/>
       <param name="default-back" value="" description="User-defined foreground color for this particular type"/>
     </parameters>
-
   </prototype>
+
   <type name="default"><scheme name='default'/></type>
 
   <!--  packages  -->
