@@ -48,6 +48,7 @@
          <keywords region="OpenTag">
             <word name="c:set"/>
             <word name="c:out"/>
+            <word name="c:forEach"/>
             <word name="x:parse"/>
             <word name="x:transform"/>
             <word name="x:param"/>

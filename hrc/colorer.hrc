@@ -466,7 +466,7 @@
       <param name="show-cross" value="none"/>
       <!-- top, bottom -->
       <param name="cross-zorder" value="bottom"/>
-      <param name="maxlinelength" value="2000"/>
+      <param name="maxlinelength" value="5000"/>
       <param name="backparse" value="2000"/>
       <param name="fullback" value="yes"/>
       <!--
