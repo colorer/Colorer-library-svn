@@ -18,9 +18,9 @@
 #include<common/io/FileInputSource.h>
 
 FileInputSource::FileInputSource(const String *basePath, FileInputSource *base){
-printf("\n");
+//printf("\n");
   printf(basePath->getChars());
-printf("\n");
+//printf("\n");
   bool prefix = true;
   if (basePath->startsWith(DString("file://"))){
     baseLocation = new SString(basePath, 7, -1);
@@ -41,9 +41,9 @@ printf("\n");
     delete baseLocation;
     baseLocation = n_baseLocation;
   }
-  printf("\n");
-  printf(baseLocation->getChars());
-  printf("\n");
+//  printf("\n");
+//  printf(baseLocation->getChars());
+//  printf("\n");
   stream = null;
 };
 
