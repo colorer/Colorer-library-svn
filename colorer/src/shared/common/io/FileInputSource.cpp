@@ -18,10 +18,10 @@
 #include<common/io/FileInputSource.h>
 
 FileInputSource::FileInputSource(const String *basePath, FileInputSource *base){
-//printf("\n");
-//printf(basePath->getChars());
-//printf("\n");
-
+printf("\n");
+  printf(basePath->getChars());
+printf("\n");
+  bool prefix = true;
   if (basePath->startsWith(DString("file://"))){
     baseLocation = new SString(basePath, 7, -1);
   }else if (basePath->startsWith(DString("file:/"))){
@@ -33,9 +33,17 @@ FileInputSource::FileInputSource(const String *basePath, FileInputSource *base){
       baseLocation = getAbsolutePath(base->getLocation(), basePath);
     else
       baseLocation = new SString(basePath);
+    prefix = false;
   };
-//printf(baseLocation->getChars());
-//printf("\n");
+  if(prefix && (baseLocation->indexOf(':') == -1 || baseLocation->indexOf(':') > 10) && !baseLocation->startsWith(DString("/"))){
+    StringBuffer *n_baseLocation = new StringBuffer();
+    n_baseLocation->append(DString("/")).append(baseLocation);
+    delete baseLocation;
+    baseLocation = n_baseLocation;
+  }
+  printf("\n");
+  printf(baseLocation->getChars());
+  printf("\n");
   stream = null;
 };
 
