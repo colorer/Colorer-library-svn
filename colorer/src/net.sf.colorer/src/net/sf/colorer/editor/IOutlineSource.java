@@ -1,30 +1,16 @@
-package net.sf.colorer.handlers;
+package net.sf.colorer.editor;
 
-public class StyledRegion extends RegionDefine {
 
-    public final static int BOLD = 1;
-    public final static int ITALIC = 2;
-    public final static int UNDERLINE = 4;
-    public final static int STRIKEOUT = 8;
+/**
+ * Interface for outline objects, that can notify external container
+ * about content changes 
+ */
+public interface IOutlineSource {
 
-    /** Is region defines foreground mapping */
-    public boolean bfore;
-    /** Is region defines background mapping */
-    public boolean bback;
-    /** Foreground mapping */
-    public int fore;
-    /** Background mapping */
-    public int back;
-    /** Style mapping */
-    public int style;
+    void addListener(OutlineListener listener);
 
-    public StyledRegion(boolean bfore, boolean bback, int fore, int back, int style) {
-        this.bfore = bfore;
-        this.bback = bback;
-        this.fore = fore;
-        this.back = back;
-        this.style = style;
-    }
+    void removeListener(OutlineListener listener);
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

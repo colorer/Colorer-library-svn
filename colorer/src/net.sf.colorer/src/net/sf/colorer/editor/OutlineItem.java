@@ -2,6 +2,9 @@ package net.sf.colorer.editor;
 
 import net.sf.colorer.Region;
 
+/**
+ * Single item in the outliner tree.
+ */
 public class OutlineItem{
   /** Line number */
   public int lno;
@@ -19,6 +22,7 @@ public class OutlineItem{
     lno = pos = 0;
     token = null;
   };
+
   /** Initializing constructor */
   public OutlineItem(int lno, int pos, int level, String token, Region region){
     this.lno = lno;

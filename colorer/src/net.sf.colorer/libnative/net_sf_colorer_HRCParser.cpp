@@ -5,14 +5,16 @@
 extern "C" {
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion(JNIEnv *env, jobject obj, jlong iptr, jstring qname) {
-    JHRCParser *hp = (JHRCParser*)iptr;
-    return hp->getRegion(env, &JString(env, qname));
-};
+    JHRCParser *jhp = (JHRCParser*)iptr;
+    CLR_TRACE("NSC:getRegion", "jhp:%d", jhp);
+    return jhp->getRegion(env, &JString(env, qname));
+}
 
-JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion(JNIEnv *env, jobject obj, jlong iptr, jint index) {
-    JHRCParser *hp = (JHRCParser*)iptr;
-    return hp->getRegion(env, index);
-};
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegionByIndex(JNIEnv *env, jobject obj, jlong iptr, jint index) {
+    JHRCParser *jhp = (JHRCParser*)iptr;
+    CLR_TRACE("NSC:getRegionByIndex", "jhp:%d", jhp);
+    return jhp->getRegion(env, index);
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_HRCParser_finalize(JNIEnv *env, jobject obj, jlong iptr) {
     JHRCParser *hp = (JHRCParser*)iptr;

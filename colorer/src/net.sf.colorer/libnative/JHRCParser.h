@@ -13,9 +13,13 @@ public:
   jobject jHRCParser;
 
   jobject getRegion(JNIEnv *env, int index){
+    CLR_TRACE("NSC:JHRCParser:getRegion", "index:%d, hp=%d", index, hrcParser);
     const Region *nreg = hrcParser->getRegion(index);
-    if (nreg == null) return null;
-    getRegion(env, nreg->getName());
+    if (nreg == null){
+      return null;
+    }
+    CLR_TRACE("NSC:JHRCParser:getRegion", "region:%s", nreg->getName()->getChars());
+    return getRegion(env, nreg->getName());
   }
 
   jobject getRegion(JNIEnv *env, const String *regname){

@@ -12,14 +12,11 @@ package net.sf.colorer;
  * @ingroup colorer
  */
 public class Region {
+
     long iptr;
-
     String name;
-
     String description;
-
     Region parent;
-
     int id;
 
     /** Full Qualified region name (<code>def:Text</code> for example) */

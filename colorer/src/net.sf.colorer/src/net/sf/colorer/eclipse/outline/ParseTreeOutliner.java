@@ -1,26 +1,83 @@
 package net.sf.colorer.eclipse.outline;
 
-import net.sf.colorer.Region;
-import net.sf.colorer.editor.OutlineItem;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
-public class OutlineElement extends OutlineItem implements IAdaptable{
-  
-  IWorkbenchAdapter ad = null;
-  
-  public OutlineElement(IWorkbenchAdapter ad, int lno, int pos, int level, String token, Region region) {
-    super(lno, pos, level, token, region);	
-    this.ad = ad;
-  }
-  
-  public Object getAdapter(Class adapter) {
-  	if (adapter == IWorkbenchAdapter.class) return ad;
-  //	if (adapter == IPropertySource.class)
-  //		return new MarkElementProperties(this);
-  	return null;
-  }
+import net.sf.colorer.Region;
+import net.sf.colorer.RegionHandler;
+import net.sf.colorer.Scheme;
+import net.sf.colorer.editor.OutlineListener;
+import net.sf.colorer.impl.Logger;
 
+
+/**
+ * Object used to store parse tree and showup it in Outline view 
+ */
+public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, IWorkbenchAdapter, IAdaptable {
+
+    public Region getFilter() {
+        return null;
+    }
+    
+    public void clear() {
+        
+    }
+
+    public void startParsing(int lno) {
+    }
+
+    public void endParsing(int lno) {
+    }
+
+    public void clearLine(int lno, String line) {
+    }
+
+    public void addRegion(int lno, String line, int sx, int ex, Region region) {
+        Logger.trace("ParseTree", sx+"-"+ex+": "+line);
+    }
+
+    public void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    }
+    public void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+    }
+
+    public Object[] getChildren(Object o) {
+        return null;
+    }
+
+    public ImageDescriptor getImageDescriptor(Object object) {
+        return null;
+    }
+
+    public String getLabel(Object o) {
+        return null;
+    }
+
+    public Object getParent(Object o) {
+        return null;
+    }
+
+    public Object getAdapter(Class adapter) {
+        if (adapter == IWorkbenchAdapter.class){
+            return this;
+        }
+        return null;
+    }
+
+    public void setHierarchy(boolean hierarchy) {
+    }
+    public void setSorting(boolean sorting) {
+    }
+    public RegionHandler getRegionHandler(){
+        return this;
+    }
+
+    public void addListener(OutlineListener listener) {
+    }
+    public void removeListener(OutlineListener listener) {
+    }
+    
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
