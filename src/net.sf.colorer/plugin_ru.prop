@@ -1,0 +1,16 @@
+
+
+ColorerEditor=Редактор Colorer
+ColorerEditor.cpp=C++ Редактор Colorer
+ColorerEditor.scripts=Редактор Скриптов Colorer
+ColorerEditor.xml=XML Редактор Colorer 
+
+commands.category.name=Colorer Library Editor
+commands.category.description=Colorer Library
+commands=
+
+PreferenceTitle=Библиотека Colorer
+
+
+HTMLGenerator=Генератор HTML
+GenerateHTML=Сгеренировать HTML

@@ -1,0 +1,29 @@
+#
+# MacOS Darwin
+#
+
+TARGET = libnet_sf_colorer.jnilib
+all: $(TARGET)
+
+shared_path=../../shared/
+JAVA_INCLUDE=/System/Library/Frameworks/JavaVM.framework/Headers
+JAVA_INCLUDE_MD=$(JAVA_INCLUDE)
+
+obj_output=objs
+
+include $(shared_path)makefile.colorer.gcc
+include makefile.core
+
+
+LIBINC = 
+LIBFLAGS = 
+
+$(obj_output_slash)net_sf_colorer.$(obj):
+	$(CC) -fPIC -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -o $@ -s -O3 -c net_sf_colorer.cpp
+
+$(TARGET): *.cpp *.h $(objs)
+	$(LINK) -bundle -o libnet_sf_colorer.jnilib $(objs)
+
+clear:
+	$(RM) $(objs)
+
