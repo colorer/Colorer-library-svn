@@ -170,7 +170,7 @@
 
   @section hrcdatabase HRC database
   @par
-  I'm working on maintenance of HRC database with help of
+  I'm working on maintenance of the HRC database with help of
   many people. You can find their acknowledgements in corresponding
   HRC file headers. Most 'named' HRC's has their author's contact
   email or url.
