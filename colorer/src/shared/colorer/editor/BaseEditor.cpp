@@ -37,6 +37,8 @@ BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
   breakParse = false;
   validationProcess = false;
 
+  setRegionCompact(regionCompact);
+
   def_Text = hrcParser->getRegion(&DString("def:Text"));
   def_Syntax = hrcParser->getRegion(&DString("def:Syntax"));
   def_Special = hrcParser->getRegion(&DString("def:Special"));
@@ -57,7 +59,7 @@ BaseEditor::~BaseEditor(){
 }
 
 void BaseEditor::setRegionCompact(bool compact){
-  if (regionCompact != compact){
+  if (!lrSupport || regionCompact != compact){
     regionCompact = compact;
     remapLRS(true);
   };
