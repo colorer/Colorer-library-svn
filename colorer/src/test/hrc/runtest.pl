@@ -6,7 +6,7 @@
 
 $colorer  = 'D:\projects\colorer\bin\colorer.exe';
 
-$diff  = 'diff -U 1 ';
+$diff  = 'diff -U 1 -b';
 
 #%modes = (
 #  full  =>   ".",
@@ -59,7 +59,7 @@ foreach (@retlist){
   print "Processing (".($testRuns+1)."/".($#retlist+1).") $_:\n";
 
   open FAILS, ">>$currentDir/fails.html";
-  print FAILS "\n<b>$_</b>:\n";
+  print FAILS "\n<b>$_</b>:</pre><pre>\n";
   close FAILS;
   checkDir($fname);
 

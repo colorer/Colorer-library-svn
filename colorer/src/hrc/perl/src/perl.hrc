@@ -383,6 +383,12 @@
          />
          <block start="/&quot;/" end="/&quot;/" scheme="InterpolateStringf" region="String" region00="def:PairStart" region10="def:PairEnd"/>
          <block start="/&apos;/" end="/&apos;/" scheme="Stringf" region="String" region00="def:PairStart" region10="def:PairEnd"/>
+         <!-- cail: fixes intermixed paired regions:  (eval <<'END_MULTIPART'); -->
+         <regexp>
+           /(?{def:PairStart}(?{def:Symbol}\()) \M [^&lt;\(\)]*? &lt;&lt;
+           ([&quot;&apos;]?) [a-zA-Z_][\w_]* \1
+           (?{def:PairEnd}(?{def:Symbol}\)))/x
+         </regexp>
 <!-- cail: paired block for matching -->
          <inherit scheme="def:PairedBrackets">
             <virtual scheme="def:PairedBrackets" subst-scheme="perl"/>
