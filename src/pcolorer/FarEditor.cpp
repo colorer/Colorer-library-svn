@@ -663,6 +663,11 @@ const int FILTER_SIZE = 40;
     sel = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
                   top, GetMsg(mChoose), "add", breakKeys, &code, menu, menu_size);
 
+    // handle mouse selection
+    if (sel != -1 && code == -1){
+      code = 1;
+    }
+
     switch (code){
       case -1:
         stopMenu = true;
