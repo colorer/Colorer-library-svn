@@ -4,11 +4,18 @@
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-<!--
-Verilog
-    Aliaksei <Aliaksei@neotec.com.tw>
--->
    <type name="verilog">
+      <annotation>
+         <documentation><![CDATA[
+           Verilog
+         ]]></documentation>
+         <contributors><![CDATA[
+           Aliaksei <Aliaksei@neotec.com.tw>
+             Initial revision
+           Igor Russkih - Sat 08 Jan 01:05:50 2005
+             primitive/endprimitive
+         ]]></contributors>
+      </annotation>
 
       <import type="def"/>
 
@@ -135,6 +142,7 @@ Verilog
       <scheme name="verilog">
          <inherit scheme="verComment"/>
          <block start="/\b (module)\s+ (\w+) /x" end="/\b (endmodule) \b/x" scheme="verModule" region00="verWord" region01="PairStart" region02="Function" region10="verWord" region11="PairEnd"/>
+         <block start="/\b (primitive)\s+ (\w+) /x" end="/\b (endprimitive) \b/x" scheme="verModule" region00="verWord" region01="PairStart" region02="Function" region10="verWord" region11="PairEnd"/>
          <inherit scheme="verBad"/>
       </scheme>
 
