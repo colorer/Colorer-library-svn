@@ -10,6 +10,14 @@
 <property name="bin" value="ready" description="this project binary|hrc"/>
 <property name="obj" value="objs" description="this project temp"/>
 
+<target name="init">
+    <exec executable="${path-to-php}/php" outputproperty="php-version" failonerror='no'>
+      <arg line="-v"/>
+    </exec>
+    <condition property='relpath' value='./'><not><contains string='${php-version}' substring='4.'/></not></condition>
+    <condition property='relpath' value='../'><contains string='${php-version}' substring='4.'/></condition>
+</target>
+
 <!-- php-gen -->
 
 <target name="php-gen.check">
@@ -19,10 +27,10 @@
  </uptodate>
 </target>
 
-<target name="php-gen" depends="php-gen.check" unless="php-gen.check">
+<target name="php-gen" depends="init, php-gen.check" unless="php-gen.check">
  <echo level="info" message="Build php base"/>
  <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
-  <arg line="-q ${src}/parser.php ${src}/php.lst ${obj}/hrc-gen.php"/>
+  <arg line="-q ${src}/parser.php ${relpath}${src}/php.lst ${relpath}${obj}/hrc-gen.php"/>
  </exec>
 </target>
 
@@ -37,7 +45,7 @@
 <target name="hrc-gen" depends="php-gen, hrc-gen.check" unless="hrc-gen.check">
  <echo level="info" message="Build php schemes"/>
  <exec executable="${path-to-php}/php" output="php.out" failonerror='yes'>
-  <arg line='-q ${src}/hrc-gen-creator.php ${obj}/hrc-gen.php ${bin}/php-gen.xml'/>
+  <arg line='-q ${src}/hrc-gen-creator.php ${relpath}${obj}/hrc-gen.php ${relpath}${bin}/php-gen.xml'/>
  </exec>
 </target>
 
@@ -52,7 +60,7 @@
 <target name="hrc-prot" depends="php-gen, hrc-prot.check" unless="hrc-prot.check">
  <echo level="info" message="Build prototype"/>
  <exec executable="${path-to-php}/php" output="${bin}/../proto-php.xml" failonerror='yes'>
-  <arg line='-q ${src}/hrc-gen-prototype.php ${obj}/hrc-gen.php'/>
+  <arg line='-q ${src}/hrc-gen-prototype.php ${relpath}${obj}/hrc-gen.php'/>
  </exec>
 </target>
 
@@ -66,7 +74,7 @@
  </dependset>
 </target>
 
-<target name="hrc" depends="hrc-gen, hrc.check">
+<target name="hrc" depends="init, hrc-gen, hrc.check">
  <copy todir='${bin}'>
    <fileset dir='${src}' includes='php.hrc, php-script.xml'/>
  </copy>
