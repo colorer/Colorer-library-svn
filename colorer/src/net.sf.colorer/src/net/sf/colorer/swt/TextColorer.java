@@ -11,6 +11,7 @@ import net.sf.colorer.*;
 import net.sf.colorer.editor.*;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionDefine;
+import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.*;
 
@@ -189,33 +190,47 @@ public class TextColorer{
   }
 
 
-  /**
-   * Changes style/coloring scheme into the specified.
-   * @param name Name of color scheme (HRD name).
-   * @param useBackground If true, native HRD background properties
-   * would be assigned to colored StyledText.
-   */
-  public void setRegionMapper(String name, boolean useBackground){
-    baseEditor.setRegionMapper("rgb", name);
-    StyledRegion sr = (StyledRegion)baseEditor.getBackground();
-    text.setForeground(null);
-    text.setBackground(null);
-    if (useBackground){
-      text.setForeground(cm.getColor(sr.bfore, sr.fore));
-      text.setBackground(cm.getColor(sr.bback, sr.back));
-    };
-    /*
-    if ((sr.style & StyledRegion.BOLD) != 0){
-      Font cf = text.getFont();
-      FontData fdata[] = cf.getFontData();
-      fdata[0].setStyle(SWT.BOLD);
-      text.setFont(new Font(text.getDisplay(), fdata));
-      System.out.println("font!");
-    };
-    */
-    setCross(vertCross, horzCross);
-  };
+    /**
+     * Changes style/coloring scheme into the specified.
+     * 
+     * @param regionMapper External RegionMapper object
+     * @param useBackground If true, native HRD background properties would be
+     * assigned to colored StyledText.
+     */
+    public void setRegionMapper(RegionMapper regionMapper, boolean useBackground) {
+        baseEditor.setRegionMapper(regionMapper);
 
+        StyledRegion sr = (StyledRegion) baseEditor.getBackground();
+        text.setForeground(null);
+        text.setBackground(null);
+        if (useBackground) {
+            text.setForeground(cm.getColor(sr.bfore, sr.fore));
+            text.setBackground(cm.getColor(sr.bback, sr.back));
+        };
+        setCross(vertCross, horzCross);
+    }
+
+    /**
+     * Changes style/coloring scheme into the specified.
+     * 
+     * @param name Name of color scheme (HRD name).
+     * @param useBackground If true, native HRD background properties would be
+     * assigned to colored StyledText.
+     */
+    public void setRegionMapper(String hrdName, boolean useBackground) 
+    {
+        baseEditor.setRegionMapper(StyledRegion.HRD_RGB_CLASS, hrdName);
+
+        StyledRegion sr = (StyledRegion) baseEditor.getBackground();
+        text.setForeground(null);
+        text.setBackground(null);
+        if (useBackground) {
+            text.setForeground(cm.getColor(sr.bfore, sr.fore));
+            text.setBackground(cm.getColor(sr.bback, sr.back));
+        };
+        setCross(vertCross, horzCross);
+    }
+    
   /**
    * Inlined languages background coloring.
    * @param full If true, background color of other language insertions (jsp,

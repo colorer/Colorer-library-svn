@@ -6,6 +6,9 @@ public class StyledRegion extends RegionDefine {
     public final static int ITALIC = 2;
     public final static int UNDERLINE = 4;
     public final static int STRIKEOUT = 8;
+    
+    public final static String HRD_RGB_CLASS = "rgb";
+    public final static String HRD_CONSOLE_CLASS = "console";
 
     /** Is region defines foreground mapping */
     public boolean bfore;

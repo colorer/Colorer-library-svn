@@ -2,6 +2,8 @@ package net.sf.colorer.handlers;
 
 public class TextRegion extends RegionDefine {
 
+    public final static String HRD_TEXT_CLASS = "rgb";
+
     /** Textual mapping */
     public String stext;
     

@@ -7,6 +7,8 @@ public class RegionMapper{
     private long iptr;
     private boolean disposed = false;
 
+    private RegionMapper(){}
+
     private RegionMapper(long iptr)
     {
         this.iptr = iptr;
@@ -17,6 +19,7 @@ public class RegionMapper{
             throw new IllegalStateException("Object already disposed");
         }
         finalize(iptr);
+        iptr = 0;
         disposed = true;
     }
 
@@ -33,7 +36,7 @@ public class RegionMapper{
      * @return Region define, associated with passed
      * region parameter, or null if nothing found
      */
-    RegionDefine getRegionDefine(Region region) {
+    public RegionDefine getRegionDefine(Region region) {
         return getRegionDefine(iptr, region);
     }
 
@@ -42,7 +45,7 @@ public class RegionMapper{
     /**
      * Searches mapped region define value with qualified name
      */
-    RegionDefine getRegionDefine(String name) {
+    public RegionDefine getRegionDefine(String name) {
         return getRegionDefine(iptr, name);
     }
     private native RegionDefine getRegionDefine(long iptr, String name);

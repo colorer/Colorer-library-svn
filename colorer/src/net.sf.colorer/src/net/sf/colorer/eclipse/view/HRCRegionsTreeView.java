@@ -6,8 +6,12 @@ import java.util.Vector;
 
 import net.sf.colorer.FileType;
 import net.sf.colorer.HRCParser;
+import net.sf.colorer.ParserFactory;
 import net.sf.colorer.Region;
 import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.handlers.RegionMapper;
+import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.dialog.ResourceManager;
 
@@ -16,6 +20,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -28,12 +35,16 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -42,7 +53,7 @@ import org.eclipse.ui.part.ViewPart;
  * This view represents all HRC regions in a tree-like form,
  * allowing to navigate them and discover their relation.
  */
-public class HRCRegionsTreeView extends ViewPart {
+public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListener {
 
     private Composite composite;
     private TreeViewer treeViewer;
@@ -51,7 +62,11 @@ public class HRCRegionsTreeView extends ViewPart {
 
     private Action refreshAction, loadAllAction, linkToEditorAction;
     
+    private IPreferenceStore prefStore;
+    
+    RegionMapper regionMapper;
     Label fg_label, bg_label;
+    Color foreColor, backColor;
 
     /**
      * The view constructor.
@@ -66,9 +81,28 @@ public class HRCRegionsTreeView extends ViewPart {
     public void createPartControl(Composite parent) {
         composite = createComposite(parent);
         makeActions();
-        //hookContextMenu();
         contributeToActionBars();
+        
+        prefStore = ColorerPlugin.getDefault().getPreferenceStore();
+        prefStore.addPropertyChangeListener(this);
+        propertyChange(null);
     }
+    
+    public void propertyChange(PropertyChangeEvent event) {
+        
+        if (regionMapper != null){
+            regionMapper.dispose();
+        }
+        try{
+            regionMapper = ColorerPlugin.getDefault().getParserFactory().
+                createStyledMapper(StyledRegion.HRD_RGB_CLASS,
+                        prefStore.getString(PreferencePage.HRD_SET));
+        }catch(Exception e){
+            if (Logger.ERROR){
+                Logger.error("HRCRegionsTreeView", "createStyledMapper:", e);
+            }
+        }
+    }    
 
     Composite createComposite(Composite parent){
         Composite composite = new Composite(parent, SWT.NONE);
@@ -100,13 +134,35 @@ public class HRCRegionsTreeView extends ViewPart {
                     
                 }
             });
+
             treeViewer.addPostSelectionChangedListener(new ISelectionChangedListener(){
                 public void selectionChanged(SelectionChangedEvent event) {
                     Region sel = getSelectedRegion(event.getSelection());
                     if (sel == null){
                         return;
                     }
-                    fg_label.setBackground(ResourceManager.getColor(SWT.COLOR_RED));
+
+                    StyledRegion sr = (StyledRegion)regionMapper.getRegionDefine(sel);
+                    
+                    foreColor = ResourceManager.getColor(SWT.COLOR_BLACK);
+                    backColor = ResourceManager.getColor(SWT.COLOR_WHITE);
+                    
+                    if (sr != null){
+                        if (sr.bfore){
+                            foreColor.dispose();
+                            foreColor = new Color(Display.getCurrent(), sr.fore>>16, sr.fore>>8 & 0xFF, sr.fore & 0xFF);
+                        }
+                        if (sr.bback){
+                            backColor.dispose();
+                            backColor = new Color(Display.getCurrent(), sr.back>>16, sr.back>>8 & 0xFF, sr.back & 0xFF);
+                        }
+                    }
+                    
+                    fg_label.setBackground(foreColor);
+                    //fg_label.setForeground(ResourceManager.getColor(SWT.COLOR_RED));
+
+                    bg_label.setForeground(foreColor);
+                    bg_label.setBackground(backColor);
                     
                 }
             });
@@ -120,38 +176,24 @@ public class HRCRegionsTreeView extends ViewPart {
             gridLayout.numColumns = 3;
             composite_1.setLayout(gridLayout);
             {
-                fg_label = new Label(composite_1, SWT.BORDER | SWT.CENTER);
+                fg_label = new Label(composite_1, SWT.BORDER | SWT.CENTER | SWT.VERTICAL);
                 final GridData gridData = new GridData(GridData.GRAB_HORIZONTAL
                         | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_FILL);
                 gridData.verticalSpan = 2;
+                gridData.heightHint = 30;
                 fg_label.setLayoutData(gridData);
                 fg_label.setBackground(ResourceManager.getColor(SWT.COLOR_WHITE));
-                fg_label.setText(" foreground color");
-            }
-/*            {
-                final Button button = new Button(composite_1, SWT.NONE);
-                final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-                gridData.verticalSpan = 2;
-                button.setLayoutData(gridData);
-                button.setText("store ->");
+                fg_label.setText("Foreground");
             }
             {
-                final Label label = new Label(composite_1, SWT.BORDER | SWT.CENTER);
-                label.setBackground(ResourceManager.getColor(SWT.COLOR_WHITE));
-                final GridData gridData = new GridData(GridData.GRAB_HORIZONTAL
-                        | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_FILL);
-                gridData.verticalSpan = 2;
-                label.setLayoutData(gridData);
-                label.setText("stored color");
-            }*/
-            {
-                bg_label = new Label(composite_1, SWT.BORDER);
+                bg_label = new Label(composite_1, SWT.BORDER | SWT.CENTER | SWT.VERTICAL);
                 bg_label.setBackground(ResourceManager.getColor(SWT.COLOR_WHITE));
                 final GridData gridData = new GridData(GridData.GRAB_HORIZONTAL
                         | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_FILL);
                 gridData.verticalSpan = 2;
+                gridData.heightHint = 30;
                 bg_label.setLayoutData(gridData);
-                bg_label.setText(" background color");
+                bg_label.setText("Background");
             }
 /*            {
                 final Button button = new Button(composite_1, SWT.NONE);
@@ -265,6 +307,19 @@ public class HRCRegionsTreeView extends ViewPart {
     public void setFocus() {
         composite.setFocus();
     }
+    
+    
+    public void dispose() {
+        if (foreColor != null){
+            foreColor.dispose();
+        }
+        if (backColor != null){
+            backColor.dispose();
+        }
+        regionMapper.dispose();
+        super.dispose();
+    }
+    
 }
 
 
