@@ -7,9 +7,9 @@ import java.util.*;
 
 /**
  * Simple test routine, used to test Colorer library working.
- * 
+ *
  * @author irusskih
- *  
+ *
  */
 class Test {
 
@@ -48,8 +48,7 @@ class Test {
          * Enumerating all language types, available in the current HRC
          * database, compiling and loading them into our editor object
          */
-        for (Enumeration e = pf.getHRCParser().enumerateFileTypes(); e
-                .hasMoreElements();) {
+        for (Enumeration e = pf.getHRCParser().enumerateFileTypes(); e.hasMoreElements();) {
             FileType type = (FileType) e.nextElement();
             System.out.println("loading: " + type.getDescription());
             String[] pars = type.getParameters();

@@ -3,7 +3,7 @@ shared_path = ../../shared/
 obj_output_slash = objs/
 obj = obj
 
-CPP = cl
+CPP = @cl
 #DEBUG1 = -Zi
 #DEBUG2 = /debug /fixed:no
 DEBUG1 = /O2gtiyb2 /GX /wd4101 /W3
