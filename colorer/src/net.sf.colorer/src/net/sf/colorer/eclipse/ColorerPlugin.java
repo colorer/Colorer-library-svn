@@ -19,9 +19,9 @@ import net.sf.colorer.swt.ColorManager;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class EclipsecolorerPlugin extends AbstractUIPlugin {
+public class ColorerPlugin extends AbstractUIPlugin {
     //The shared instance.
-    private static EclipsecolorerPlugin plugin;
+    private static ColorerPlugin plugin;
     private ResourceBundle resourceBundle;
     
     private String catalogPath;
@@ -31,7 +31,7 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
     /**
      * The constructor.
      */
-    public EclipsecolorerPlugin() {
+    public ColorerPlugin() {
         super();
         plugin = this;
     }
@@ -42,6 +42,7 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         
+        plugin = this;
         Logger.trace("Plugin", "Loaded");
     
         IPreferenceStore store = getPreferenceStore();
@@ -85,7 +86,7 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
     /**
      * Returns the shared instance.
      */
-    public static EclipsecolorerPlugin getDefault() {
+    public static ColorerPlugin getDefault() {
         return plugin;
     }
 
