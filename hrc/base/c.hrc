@@ -19,6 +19,8 @@
      - split c/c++ outlines
      - add stdio.h keywords
      - change regions routing
+     - add labels
+     - preproc: fix #include and add #if((n)def)-#endif pairs 
   ]]></contributors></annotation>
 
   <import type="def"/>
@@ -38,26 +40,29 @@
   <region name="Preproc" parent="def:Directive"/>
   <region name="PreprocSpec" parent="def:KeywordStrong"/>
   <region name="PreprocWord" parent="def:DirectiveContent"/> <!-- !!EE: def:Keyword -->
+  <region name="PreprocInclude" parent="def:Path"/>
+  <region name="PreprocIncludeEdge" parent="def:StringEdge"/>
   <region name="AsmCode" parent="def:Directive"/>
 
   <region name="KeywordANSI" parent="def:Keyword"/>
+  <region name="KeywordANSI.typenames" parent="KeywordANSI"/>
   <region name="KeywordConstant" parent="def:Constant"/>
-
-  <region name="KeywordLibFunctions" parent="def:FunctionKeyword"/>
+  
+  <region name="KeywordLibFunctions" parent="def:FunctionKeyword"/> 
   <region name="KeywordStructure" parent="def:StructKeyword"/>
 
-  <region name="KeywordWin32" parent="KeywordLibFunctions"/>
-  <region name="KeywordOpenGL" parent="KeywordLibFunctions"/>
-  <region name="KeywordNetwork" parent="KeywordLibFunctions"/>
-  <region name="KeywordMacro" parent="KeywordStructure"/>
-  <region name="KeywordMFC" parent="KeywordStructure"/>
-  <region name="KeywordMFCFunc" parent="KeywordWin32"/>
+  <region name="KeywordWin32" parent="KeywordLibFunctions"/>  
+  <region name="KeywordOpenGL" parent="KeywordLibFunctions"/> 
+  <region name="KeywordNetwork" parent="KeywordLibFunctions"/> 
+  <region name="KeywordMacro" parent="KeywordStructure"/> 
+  <region name="KeywordMFC" parent="KeywordStructure"/> 
+  <region name="KeywordMFCFunc" parent="KeywordWin32"/> 
 
-  <region name="KeywordStdio" parent="KeywordStructure"/>
-  <region name="KeywordDeprecated" parent="def:DeprecatedKeyword"/>
-
+  <region name="KeywordStdio" parent="KeywordStructure"/> 
+  <region name="KeywordDeprecated" parent="def:DeprecatedKeyword"/> 
+  
   <region name="Label" parent="def:Label"/>
-
+  
   <region name="StructOutline" parent="def:Outlined"/>
   <region name="UnionOutline" parent="StructOutline"/>
   <region name="EnumOutline" parent="StructOutline"/>
@@ -221,8 +226,8 @@
    <!--
    <regexp match="/(\x22)[\:\w\d\.\-\\\/]*?(\x22)/" region0="cString" region1="def:PairStart" region2="def:PairEnd"/>
    -->
-   <regexp match="/(&lt;)[\w\d\.\-\\\/\+]*?(&gt;)/"
-           region0="String" region1="def:PairStart" region2="def:PairEnd"/>
+   <!--regexp match="/(&lt;)[\w\d\.\-\\\/]*?(&gt;)/"
+           region0="String" region1="def:PairStart" region2="def:PairEnd"/-->
    <inherit scheme="String"/>
    <inherit scheme="Character"/>
    <block start="/\b pragma \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
@@ -231,7 +236,22 @@
    <!-- can make bugs
    <inherit scheme="PairedBrackets">
       <virtual scheme="PairedBrackets" subst-scheme="cPrePro"/>
-   </inherit> -->
+   </inherit>
+    -->
+    
+   <block start="/include\s*((&lt;))/" end="/(&gt;)/"
+    scheme="def:Path" region="PreprocInclude" region00="PreprocWord"
+    region01="PreprocIncludeEdge" region10="PreprocIncludeEdge"
+    region02="def:PairStart" region11="def:PairEnd"
+   />
+   <block start="/include\s*((&quot;))/" end="/(&quot;)/"
+    scheme="def:Path" region="PreprocInclude" region00="PreprocWord"
+    region01="PreprocIncludeEdge" region10="PreprocIncludeEdge"
+    region02="def:PairStart" region11="def:PairEnd"
+   />
+   
+   <regexp match="/~\s*\M(if((n)?def)?)/" region1="def:PairStart"/>
+   <regexp match="/~\s*\M(endif)/" region1="def:PairEnd"/>
 
    <keywords region="Symbol">
       <symb name=";"/><symb name="="/>
@@ -289,13 +309,48 @@
    <block start="/\b_?_?asm\b/" end="/$/" scheme="AsmCode" region00="AsmCode"/>
 
    <inherit scheme="Outlines"/>
+   <inherit scheme="Labels"/>
    <inherit scheme="Expression"/>
-
+   
   </scheme>
 
+  
+  <!-- !!EE: new scheme - Labels -->
+  <scheme name="Labels">
+   <annotation> 
+    <documentation>
+     Labels in C/C++
+     Note! We cannot include this code into Expression scheme. It crashes.
+    </documentation>
+    <appinfo> <todo> <![CDATA[
+     ":" после неименованых членов битовых полей имеет тип "Label",
+     если перед ней нету пробела. 
+     И вообще, для этой схемы "int:", "default:" и, скажем, "for:" 
+     абсолютно аналогичны друг другу, что не есть рулез...
+    ]]> </todo> </appinfo> 
+   </annotation> 
+   <!--  -->
+   <!--regexp match="/^\s*(default)(:)/" 
+    region1="KeywordANSI" region2="Label"
+   /-->
+   <!--regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="Label"/-->
+   
+   <block start="/^\s*\M\w+\:([^\:]|$)/" end="/~\w+\m\:/" 
+    region="Label" scheme="Expression"/>
+    
+   <block start="/\bcase\s/" end="/\:?~1\:\M([^\:]|$)/" 
+    scheme="Expression" region="KeywordConstant"
+    region00="KeywordANSI" region10="Label"
+   /><!-- end =".....\M(\s|$)" region="def:Constant" -->
+   
+   <regexp match="/(\bgoto)\s+(\w+)\M(\W|$)/"   
+    region1="KeywordDeprecated" region2="Label"
+   />
+  </scheme>  
+  
   <!-- !!EE: two new schemes - Outlines -->
   <scheme name="Outlines">
-   <annotation>
+   <annotation> 
     <documentation>
      C only outlines.
      Scheme must be replased for C++ operators.
@@ -303,9 +358,9 @@
     <appinfo> <todo> <![CDATA[
      Схема не проверялась на строгое соответствие ANSI C.
      Классы я убрал, но, возможно, тут еще что-то лишнее...
-    ]]> </todo> </appinfo>
-   </annotation>
-
+    ]]> </todo> </appinfo> 
+   </annotation> 
+   
    <regexp><![CDATA[
      /^ \M \s* (\w[\w_*&~]+ \s [\s\w_*&~\"]*?)?
      (?{FuncOutline} [\:\w_&~<>]+? )
@@ -321,20 +376,20 @@
 <! - -   -->
    <regexp><![CDATA[
      /^ \M \s* (typedef\s+)? (struct) \s+
-     (?{StructOutline} [\:\w_&~<>]+
+     (?{StructOutline} [\:\w_&~<>]+ 
      [\w_:<>\s]*? [^;] )($|\{)/x
    ]]></regexp>
-
+   
    <inherit scheme="SharedOutlines"/>
   </scheme>
 
   <scheme name="SharedOutlines">
-   <annotation>
+   <annotation> 
     <documentation>
      C/C++ outlines.
     </documentation>
-   </annotation>
-
+   </annotation> 
+   
    <regexp><![CDATA[
      /^ \M \s* (typedef\s+)? (union) \s+
      (?{UnionOutline} [\:\w_&~<>]+ )
@@ -347,29 +402,31 @@
    ]]></regexp>
   </scheme>
 
+   
+  
   <!-- !!EE: new scheme - Operators -->
   <scheme name="Operators">
-   <annotation>
+   <annotation> 
     <documentation>
      ANSI C keyword operators.
      Scheme must be replased for C++ operators.
     </documentation>
     <appinfo> <todo> <![CDATA[
-
-     В принципе, каждый оператор следует обрабатывать
+    
+     В принципе, каждый оператор следует обрабатывать 
      оттдельно (см. закомментированый фрагмент)
      Hо это пораждает достаточно специфические проблемы.
      Hапример как обрабатывать конструкции типа a+++*--b?
-     Я вижу два возможных решения и пока не знаю, который из них
+     Я вижу два возможных решения и пока не знаю, который из них 
      предпочесть:
       1. Для каждой группы операторов писать регэксп, который бы опредлял
       аналог worddiv для начала и конца. (Это было бы предпочтительно,
       но при стабильной работе \M\m):
-       <regexp match="/ worddiv1 \m (operator1|...|operatorN) \M worddiv2 /x"
+       <regexp match="/ worddiv1 \m (operator1|...|operatorN) \M worddiv2 /x" 
         region1="Symbol"/>
       2. Распознавать подобный дурной стиль программирования как
       ошибку.
-
+      
      Замечание. Если в синтаксис <keywords> внести изменение - это
      может сильно упростить задачу:
       <keywords region="Symbol" start="/worddiv1/" end="/wordiv2/">
@@ -377,14 +434,14 @@
        ...
        <word name="operatorN"/>
       </keywords>
-
-    ]]> </todo> </appinfo>
+     
+    ]]> </todo> </appinfo> 
    </annotation>
 
    <!--
    <keywords region="Symbol" worddiv="/[\w\s\(\)\]&gt;&lt;&quot;&apos;*&amp;]/">
-    <symb name="::" region="PrefixSymbol"/>
-    <symb name="::*" region="PrefixSymbol"/>
+    <symb name="::" region="PrefixSymbol"/> 
+    <symb name="::*" region="PrefixSymbol"/> 
     <word name="-&lt;"/>
     <word name="-&lt;*"/>
     ...
@@ -404,21 +461,29 @@
       <symb name="%"/>
       <symb name="?" region="StructureSymbol"/>
       <symb name=":" region="StructureSymbol"/>
-      <symb name="#"/>
+      <symb name="#"/> 
       <symb name="@"/>
    </keywords>
   </scheme>
 
 
   <scheme name="Expression">
-
-
+   
    <block start="/(\()/" end="/(\))/" scheme="Expression"
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
    <block start="/(\[)/" end="/(\])/" scheme="Expression"
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
-
-
+   
+   <!-- EE - for this:
+	if(a==b
+	#ifndef BLA_BLA_BLA
+		|| b==c
+	#endif
+		)   
+   -->
+   <block start="/^\s*#/" end="/(^ | [^\\]?#1) $/x"
+          scheme="Preproc" region="Preproc"/>
+   
    <!-- Numbers -->
    <inherit scheme="def:Number"/>
    <inherit scheme="def:BadHex"/>
@@ -440,24 +505,10 @@
    <!-- Comments -->
    <block start="/\/\//" end="/$/" scheme="def:Comment" region="LineComment"/>
    <block scheme="def:Comment" region="Comment">
-      <start region0="def:PairStart"><![CDATA[/\/\*/]]></start>
+  	    <start region0="def:PairStart"><![CDATA[/\/\*/]]></start>
       <end region0="def:PairEnd"><![CDATA[/\*\//]]></end>
    </block>
-
-   <!-- labels -->
-   <regexp match="/^\s*(default)(:)/"
-    region1="KeywordANSI" region2="Label"
-   />
-   <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="Label"/>
-   <!--
-   <block start="/case\M\s+/" end="/\:?~1\:\M(\s|$)/"
-    scheme="Expression" region="def:Constant"
-    region00="KeywordANSI" region10="Label"
-   />
-   -->
-   <regexp match="/(goto)\s+(\w+)\b/"
-    region1="KeywordDeprecated" region2="Label"
-   />
+   
 
    <!-- Standard C/C++ symbols -->
    <keywords region="StructureSymbol">
@@ -471,7 +522,29 @@
       <symb name="("/><symb name=")"/>
       <symb name="*/"/>
    </keywords>
+   
+   
 
+   <!-- C Keywords: datatypes -->
+   <keywords region="KeywordANSI.typenames">
+      <word name="char"/>
+      <word name="const"/>
+      <word name="double"/>
+      <word name="float"/>
+      <word name="int"/>
+      <word name="long"/>
+      <word name="short"/>
+      <word name="signed"/>
+      <word name="unsigned"/>
+      <word name="void"/>
+      <word name="wchar_t"/>
+      <word name="__int128"/>
+      <word name="__int16"/>
+      <word name="__int32"/>
+      <word name="__int64"/>
+      <word name="__int8"/>
+      <word name="__wchar_t"/>
+   </keywords>
 
    <!-- C Keywords -->
    <keywords region="KeywordANSI">
@@ -480,13 +553,10 @@
       <word name="break"/>
       <word name="case"/>
       <word name="cdecl"/>
-      <word name="char"/>
-      <word name="const"/>
       <word name="continue"/>
       <word name="default"/>
       <word name="defined"/>
       <word name="do"/>
-      <word name="double"/>
       <word name="else"/>
       <word name="enum"/>
       <word name="explicit"/>
@@ -494,7 +564,6 @@
       <word name="extern"/>
       <word name="far"/>
       <word name="fastcall"/>
-      <word name="float"/>
       <word name="finally"/>
       <word name="for"/>
       <word name="fortran"/>
@@ -503,15 +572,11 @@
       <word name="if"/>
       <word name="import"/>
       <word name="inline"/>
-      <word name="int"/>
       <word name="interrupt"/>
-      <word name="long"/>
       <word name="near"/>
       <word name="pascal"/>
       <word name="register"/>
       <word name="return"/>
-      <word name="short"/>
-      <word name="signed"/>
       <word name="sizeof"/>
       <word name="static"/>
       <word name="stdcall"/>
@@ -520,11 +585,8 @@
       <word name="this"/>
       <word name="typedef"/>
       <word name="union"/>
-      <word name="unsigned"/>
       <word name="using"/>
-      <word name="void"/>
       <word name="volatile"/>
-      <word name="wchar_t"/>
       <word name="while"/>
       <word name="_cdecl"/>
       <word name="_export"/>
@@ -544,11 +606,6 @@
       <word name="__huge"/>
       <word name="__import"/>
       <word name="__inline"/>
-      <word name="__int128"/>
-      <word name="__int16"/>
-      <word name="__int32"/>
-      <word name="__int64"/>
-      <word name="__int8"/>
       <word name="__interrupt"/>
       <word name="__leave"/>
       <word name="__loadds"/>
@@ -571,7 +628,6 @@
       <word name="__thread"/>
       <word name="__try"/>
       <word name="__unaligned"/>
-      <word name="__wchar_t"/>
    </keywords>
 
    <keywords region='KeywordLibFunctions'>
@@ -3426,11 +3482,11 @@
      <word name="stdout"/>
      <word name="stderr"/>
      <word name="FILE"/>
-   </keywords>
+   </keywords>   
 
-
+   
    <keywords region='KeywordStructure'>
-
+   
    <!-- !!EE: insert any windows.h typedefs -->
       <word name="LPCVOID"/>
       <word name="FAR"/>
@@ -5704,7 +5760,7 @@
    - Stanislav V. Mekhanoshin <stas@titania.spb.su>
    - Timur Safin <timur@lanit.ru>
    - Vladimir Tarasov <tsoftgroup@chat.ru>
-   -
+   - 
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
    - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
