@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project default="all" basedir=".">
+<project name='XSD2HRC Module' default="all" basedir=".">
 
   <property name='core-schemas' value='../../doc/2003'/>
   <property name='hrc-path' value='../../hrc'/>
