@@ -7,6 +7,6 @@ scripts=Скрипты и конфигурация
 scripts.install=Системы установки
 scripts.far=Плагины к ФАРу
 scripts.rare=Редкие и неиспользуемые скрипты
+scripts.quorum=Скрипты Quorum
 rare=Редкие языки
-rare.quorum=Скрипты Quorum
 other=Другое
