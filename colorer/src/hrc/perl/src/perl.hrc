@@ -441,7 +441,7 @@
          <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="Pod" region="Pod" region10="PodSym"/>
          <block start="/__(END|DATA)__/" end="/$NeVeReAcH^/" scheme="Pod" region="Pod"/>
 <!-- streams and globs with html </script> hack -->
-         <regexp match="/&lt;[^\s\/\%]*?\&gt;/i" region0="Stream"/>
+         <regexp match="/&lt; (\/script)?! [^\s\%]*? \&gt;/ix" region0="Stream"/>
          <regexp match="/\B \- [ABCMORSTWXbcdefgkloprstuwxz]\b/x" region0="Word"/>
          <regexp match="/x(\d+)/x" region0="Word" region1="Numb"/>
 
