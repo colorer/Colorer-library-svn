@@ -30,7 +30,7 @@
   </prototype>
   <prototype name="perl" group="main" description="Perl">
     <location link="base/perl.hrc"/>
-    <filename>/\.(pl[sx]?|pm|pod|cgi)$/i</filename>
+    <filename>/\.(pl[sx]?|pm|pod|cgi|t)$/i</filename>
     <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
     <firstline>/perl/i</firstline>
   </prototype>
@@ -274,11 +274,11 @@
   </prototype>
   <prototype name="resources" group="scripts" description="Resources">
     <location link="scripts/resrc.hrc"/>
-    <filename>/\.rc$/i</filename>
+    <filename>/\.(rc|dlg)$/i</filename>
   </prototype>
   <prototype name="TeX" group="scripts" description="TeX">
     <location link="scripts/tex.hrc"/>
-    <filename>/\.(tex|cls|sty|ltx)$/i</filename>
+    <filename>/\.(tex|cls|sty|ltx|ltr|dtx)$/i</filename>
   </prototype>
    <prototype name="dcl" group="scripts" description="OpenVMS DCL">
      <location link="scripts/dcl.hrc"/>
@@ -408,6 +408,10 @@
     <filename>/\.(tcl|tk)$/i</filename>
     <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
+  <prototype name="sicstusProlog" group="rare" description="Sicstus Prolog">
+    <location link="rare/sprolog.hrc"/>
+    <filename>/\.pl$/i</filename>
+  </prototype>
   <prototype name="turboProlog" group="rare" description="Turbo Prolog">
     <location link="rare/tprolog.hrc"/>
     <filename>/\.tpl$/i</filename>
@@ -437,8 +441,9 @@
   <prototype name="diff" group="other" description="Diff/Patch">
     <location link="misc/diff.hrc"/>
     <filename>/\.(diff.*|patch|rej(ect)?)$/i</filename>
-    <firstline>/^(diff|---|\*\*\*)|diff/is</firstline>
-    <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/is</firstline>
+    <firstline>/^(diff|Index|---|\*\*\*)|diff/i</firstline>
+    <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
+    <firstline>/^cvs/i</firstline>
   </prototype>
   <prototype name="messages" group="other" description="message">
     <location link="misc/messages.hrc"/>
