@@ -67,7 +67,6 @@ With help of:
             <virtual scheme="htmlPairs" subst-scheme="empty"/>
          </inherit>
          -->
-         <inherit scheme="NetAddresses"/>
          <keywords region="CommentContent">
             <symb name="*"/><symb name=","/>
             <symb name=":"/><symb name=";"/>
@@ -95,6 +94,7 @@ With help of:
             <symb name="#"/>
             <symb name="@"/>
          </keywords>
+         <inherit scheme="Comment"/>
       </scheme>
 
       <scheme name="JavaComments">
