@@ -5,12 +5,12 @@ CPP     = @gcc
 LINK    = @gcc
 RM      = @rm -f
 obj     = o
-DLLTOOL = @dlltool
+DLLTOOL = dlltool
 
 obj_output_slash = $(obj_output)/
 
 FLAGS = -s $(CYGWIN)
-CPPFLAGS = -g -O2 -Wp,-I$(shared_path),-I$(unzipdir),-w -o $*.$(obj)  -c $(FLAGS) $(CPPFLAGS_CUSTOM) -D_WIN32
+CPPFLAGS = -g -O2 -Wp,-I$(shared_path),-I$(unzipdir),-w -o $*.$(obj)  -c $(FLAGS) $(CPPFLAGS_CUSTOM) -D_WIN32 -U__unix__
 
 include $(shared_path)makefile.zlib
 include $(shared_path)_dependencies.dep
