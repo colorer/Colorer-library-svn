@@ -78,7 +78,7 @@
 
 <target name="clean">
  <delete failonerror='false'>
-  <fileset dir="${obj}" includes="*.*"/>
+  <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
   <fileset dir="${bin}" includes="ant.hrc"/>
  </delete>
 </target>
