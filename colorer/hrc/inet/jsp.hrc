@@ -13,6 +13,12 @@
 
       <region name="Insertion" parent="def:Insertion"/>
 
+      <scheme name="Insertion">
+        <block start="/(&lt;\%--)/" end="/(--\%\>)/" scheme="def:Comment"
+                region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
+        <inherit scheme='asp.vb:Insertion'/>
+      </scheme>
+
       <scheme name="TypeDeclaration">
          <regexp match="/\/\/.*$/ix" region="def:Comment"/>
          <inherit scheme="InverseInsertion">
@@ -48,6 +54,7 @@
                 region="Insertion" region00="OpenTag" region10="CloseTag"
                 region01="def:PairStart" region11="def:PairEnd"/>
          <inherit scheme="html">
+            <virtual scheme="asp.vb:Insertion" subst-scheme="Insertion"/>
             <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
             <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
          </inherit>
