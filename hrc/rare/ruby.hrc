@@ -6,6 +6,14 @@
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
   <type name="ruby">
+    <annotation>
+      <documentation><![CDATA[
+        Ruby syntax
+      ]]></documentation>
+      <contributors><![CDATA[
+        Vic Zus <vvitiok@yahoo.com>
+      ]]></contributors>
+    </annotation>
 
     <region name="String" parent="def:String"/>
     <region name="Comment" parent="def:Comment"/>
@@ -44,7 +52,7 @@
       <block start='/(?{def:PairStart}(?{Keyword}def)) \s+ (\S+?) (\(.*?\))?/x' end='/\b(?{def:PairEnd}(?{Keyword}end))\b/' scheme='ruby'/>
 
 
-      <block start='/\b(case|class|while|until|for)\b/' end='/\b(end)\b/' scheme="ruby"
+      <block start='/\b(case|class|do|for|while|unless|until)\b/' end='/\b(end)\b/' scheme="ruby"
              region00='Keyword' region10='Keyword'
              region01='def:PairStart' region11='def:PairEnd'
              />
@@ -70,6 +78,7 @@
         <word name="self"/>
         <word name="when"/>
         <word name="def"/>
+        <word name="each"/>
         <word name="false"/>
         <word name="true"/>
         <word name="not"/>
@@ -97,6 +106,7 @@
         <word name="unless"/>
         <word name="case"/>
         <word name="end"/>
+        <word name="new"/>
         <word name="next"/>
         <word name="return"/>
         <word name="until"/>
