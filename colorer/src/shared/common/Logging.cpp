@@ -15,8 +15,13 @@ static FILE *log = 0;
 
 static void file_logger(int level, const char *cname, const char *msg, va_list v){
 
-  if (log == 0){
-    log = fopen("d:\\trace.txt", "a");
+  int idx = 0;
+
+  while (log == 0){
+    char log_name[30];
+    sprintf(log_name, "d:\\trace%d.txt", idx);
+    log = fopen(log_name, "a");
+    idx++;
   }
 
   fprintf(log, "[%s][%s] ", levelNames[level], cname);
@@ -78,7 +83,7 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
     }
   }
   if (!found){
-    return;
+//    return;
   }
   //*/
 

@@ -34,9 +34,17 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionCompac
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative
  * Method:    setRegionMapper
+ * Signature: (JLnet/sf/colorer/handlers/RegionMapper;)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper__JLnet_sf_colorer_handlers_RegionMapper_2
+  (JNIEnv *, jobject, jlong, jobject);
+
+/*
+ * Class:     net_sf_colorer_impl_BaseEditorNative
+ * Method:    setRegionMapper
  * Signature: (JLjava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper__JLjava_lang_String_2Ljava_lang_String_2
   (JNIEnv *, jobject, jlong, jstring, jstring);
 
 /*

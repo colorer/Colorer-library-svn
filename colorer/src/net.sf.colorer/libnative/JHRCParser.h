@@ -29,13 +29,14 @@ public:
       if (nreg == null) return null;
 
       jclass cRegion = env->FindClass("net/sf/colorer/Region");
-      jmethodID idRegionConstr = env->GetMethodID(cRegion, "<init>", "(Ljava/lang/String;Ljava/lang/String;Lnet/sf/colorer/Region;I)V");
+      jmethodID idRegionConstr = env->GetMethodID(cRegion, "<init>", "(Ljava/lang/String;Ljava/lang/String;Lnet/sf/colorer/Region;IJ)V");
 
       reg = env->NewObject(cRegion, idRegionConstr,
                           env->NewString(nreg->getName()->getWChars(), nreg->getName()->length()),
                           nreg->getDescription() ? env->NewString(nreg->getDescription()->getWChars(), nreg->getDescription()->length()) : null,
                           nreg->getParent() ? getRegion(env, nreg->getParent()->getName()) : null,
-                          nreg->getID()
+                          nreg->getID(),
+                          (jlong)nreg
                         );
       reg = env->NewGlobalRef(reg);
       regions.put(regname, reg);

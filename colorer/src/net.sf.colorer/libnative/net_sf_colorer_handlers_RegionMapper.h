@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     net_sf_colorer_handlers_RegionMapper
+ * Method:    finalize
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_handlers_RegionMapper_finalize
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_sf_colorer_handlers_RegionMapper
  * Method:    getRegionDefine
  * Signature: (JLnet/sf/colorer/Region;)Lnet/sf/colorer/handlers/RegionDefine;
  */
@@ -22,14 +30,6 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDef
  */
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDefine__JLjava_lang_String_2
   (JNIEnv *, jobject, jlong, jstring);
-
-/*
- * Class:     net_sf_colorer_handlers_RegionMapper
- * Method:    getRegionMapper0
- * Signature: (Ljava/lang/String;Ljava/lang/String;)J
- */
-JNIEXPORT jlong JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionMapper0
-  (JNIEnv *, jclass, jstring, jstring);
 
 #ifdef __cplusplus
 }

@@ -10,4 +10,4 @@
 void  throw_exc(JNIEnv *env, const char *msg){
   jclass cException = env->FindClass("java/lang/Exception");
   env->ThrowNew(cException, msg);
-};
+}
