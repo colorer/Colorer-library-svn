@@ -2,7 +2,7 @@
 <!-- PUBLIC "-//OASIS//DTD DocBook V4.2//EN" -->
 <!DOCTYPE article[
 <!--<!ENTITY colorerloc "file:/d:/programs/devel/colorer">-->
-<!ENTITY colorerloc "file:/c:/progra~1/colorer">
+<!ENTITY colorerloc "../..">
 <!ENTITY fileref "&colorerloc;/doc/2003/hrc.xsd">
 <!ENTITY hrdref "&colorerloc;/doc/2003/hrd.xsd">
 <!ENTITY catalogref "&colorerloc;/doc/2003/catalog.xsd">
