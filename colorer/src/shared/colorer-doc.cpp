@@ -177,12 +177,15 @@
   @section w32 Windows systems
       - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x).
         <br> Commonly, this is your Windows or WinNT directiry.
-      - image_start_dir, image_start_dir/../, image_start_dir/../../
-        <br> Directory, where current image is started.
+      - image_start_dir
+      - image_start_dir/../
+      - image_start_dir/../../
+      <br> &nbsp;&nbsp;(image_start_dir - directory, where current image is started)
 
   @section unix Unix Systems
       - ./catalog.xml
       - ../catalog.xml
+      - ../../catalog.xml
       - /usr/shared/colorer/catalog.xml
   @note
     \%NAME% Means Environment variable of current process.
