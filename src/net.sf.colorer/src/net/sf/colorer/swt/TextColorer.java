@@ -337,7 +337,12 @@ InternalHandler ml = new InternalHandler();
   
   void updateViewport(){
     baseEditor.lineCountEvent(text.getLineCount());
-    int start = text.getTopIndex()-1;
+    int start = 0;
+    try{
+      start = text.getTopIndex()-1;
+    }catch(Exception e){
+      e.printStackTrace(System.out);
+    }
     if (start < 0) start = 0;
     int end = start + text.getClientArea().height / text.getLineHeight();
     baseEditor.visibleTextEvent(start, end-start+2);
