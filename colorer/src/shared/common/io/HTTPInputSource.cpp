@@ -1,4 +1,7 @@
 
+#include<common/io/HTTPInputSource.h>
+#include<common/Vector.h>
+
 #if COLORER_FEATURE_HTTPINPUTSOURCE
 #ifdef _WIN32
 #include<windows.h>
@@ -9,9 +12,6 @@
 #ifndef DWORD_PTR
 #define DWORD_PTR DWORD
 #endif
-
-#include<common/io/HTTPInputSource.h>
-#include<common/Vector.h>
 
 HTTPInputSource::HTTPInputSource(const String *basePath, HTTPInputSource *base){
   if (isRelative(basePath) && base != null)
