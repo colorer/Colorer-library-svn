@@ -9,19 +9,19 @@ public class BaseEditorNative implements BaseEditor {
   // internal native object
   private long iptr;
   
-  int wStart, wSize;
-  int lineCount;
+  private int wStart, wSize;
+  private int lineCount;
   
-  Region def_PairStart = null;
-  Region def_PairEnd = null;
+  private Region defPairStart = null;
+  private Region defPairEnd = null;
 
-  native Region getRegion(long iptr, String qname);
+  native Region getRegion(final long iptr, final String qname);
 
   public BaseEditorNative(ParserFactory pf, LineSource lineSource){
     iptr = init(pf, lineSource);
     HRCParser hrcParser = pf.getHRCParser();
-    def_PairStart = hrcParser.getRegion("def:PairStart");
-    def_PairEnd = hrcParser.getRegion("def:PairEnd");
+    defPairStart = hrcParser.getRegion("def:PairStart");
+    defPairEnd = hrcParser.getRegion("def:PairEnd");
     setBackParse(2000);// TODO!!!
   };
   protected void finalize() throws Throwable{
@@ -75,14 +75,14 @@ public class BaseEditorNative implements BaseEditor {
     for(int idx = 0; idx < lrArray.length; idx++){
       LineRegion l1 = lrArray[idx];
       if (l1.region == null) continue;
-      if ((l1.region.hasParent(def_PairStart) ||
-           l1.region.hasParent(def_PairEnd)) &&
+      if ((l1.region.hasParent(defPairStart) ||
+           l1.region.hasParent(defPairEnd)) &&
            linePos >= l1.start && linePos <= l1.end)
         pair = l1;
     };
     if (pair != null){
       PairMatch pm = new PairMatch(pair, null, lineNo, -1, -1, false);
-      if (pair.region.hasParent(def_PairStart)){
+      if (pair.region.hasParent(defPairStart)){
         pm.pairBalance = 1;
         pm.topPosition = true;
       };
@@ -127,8 +127,8 @@ public class BaseEditorNative implements BaseEditor {
         pair = slr[li];
       };
       if (pair.region == null) continue;
-      if (pair.region.hasParent(def_PairStart)) pm.pairBalance++;
-      if (pair.region.hasParent(def_PairEnd)) pm.pairBalance--;
+      if (pair.region.hasParent(defPairStart)) pm.pairBalance++;
+      if (pair.region.hasParent(defPairEnd)) pm.pairBalance--;
       if (pm.pairBalance == 0) break;
     };
     if (pm.pairBalance == 0){

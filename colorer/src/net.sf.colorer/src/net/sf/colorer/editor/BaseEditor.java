@@ -3,7 +3,7 @@ package net.sf.colorer.editor;
 import net.sf.colorer.*;
 import net.sf.colorer.handlers.*;
 
-public interface BaseEditor{
+public interface BaseEditor {
 
   /** LineRegionsSupport object preferences.
       Installs specified RegionStore (basically HRDRegionStore), which
@@ -12,14 +12,14 @@ public interface BaseEditor{
       @param compact Creates LineRegionsSupport (false) or
       LineRegionsCompactSupport (true) object to store lists of RegionDefine's
   */
-  public void setRegionCompact(boolean compact);
+  void setRegionCompact(boolean compact);
 
-  /** Changes used file type */ 
-  public void setFileType(String typename);
-  /** Chooses filetype according to the filename and first line of text */ 
-  public String chooseFileType(String fname);
-  /** Returns Currently selected file type */ 
-  public String getFileType();
+  /** Changes used file type*/
+  void setFileType(String typename);
+  /** Chooses filetype according to the filename and first line of text */
+  String chooseFileType(String fname);
+  /** Returns Currently selected file type */
+  String getFileType();
 
   /** Specifies number of lines, for which parser
       would be able to run continual processing without
@@ -29,8 +29,8 @@ public interface BaseEditor{
   */
   void setBackParse(int backParse);
 
-  /** Installs specified RegionMapper. */ 
-  public void setRegionMapper(String cls, String name);
+  /** Installs specified RegionMapper. */
+  void setRegionMapper(String cls, String name);
 
   /** Adds specified RegionHandler object into the parse process.
    * @param filter If not null, handler would be activated only if
@@ -43,12 +43,12 @@ public interface BaseEditor{
   */
   void removeRegionHandler(RegionHandler rh);
 
-  /** Current Background Region (def:Text) */ 
-  public RegionDefine getBackground();
-  /** Current Vertical Rule (def:VertCross) */ 
-  public RegionDefine getVertCross();
-  /** Current Horizontal Rule (def:HorzCross) */ 
-  public RegionDefine getHorzCross();
+  /** Current Background Region (def:Text) */
+  RegionDefine getBackground();
+  /** Current Vertical Rule (def:VertCross) */
+  RegionDefine getVertCross();
+  /** Current Horizontal Rule (def:HorzCross) */
+  RegionDefine getHorzCross();
 
   /** Searches and creates pair match object.
       Returned object can be used later in the pair search methods.
@@ -61,28 +61,29 @@ public interface BaseEditor{
              Paired Region is found, if it includes specified position
              or ends directly at one char before line position.
   */
-  public PairMatch getPairMatch(int lineNo, int pos);
+  PairMatch getPairMatch(int lineNo, int pos);
 
   /** Searches pair match in currently visible text.
       @param pm Unmatched pair match
   */
-  public void searchLocalPair(PairMatch pm);
-  
+  void searchLocalPair(PairMatch pm);
+
   /** Searches pair match in all available text, possibly,
       making additional processing.
       @param pm Unmatched pair match
   */
-  public void searchGlobalPair(PairMatch pm);
+  void searchGlobalPair(PairMatch pm);
 
   /** Return parsed and colored LineRegions of requested line.
       This method validates current cache state
       and, if needed, calls Colorer parser to validate modified block of text.
       Size of reparsed text is choosed according to information
       about visible text range and modification events.
-      @todo If number of lines, to be reparsed is more, than backParse parameter,
-      then method will return null, until validate() method is called.
+      @todo If number of lines, to be reparsed is more, than backParse
+      parameter, then method will return null, until
+      validate() method is called.
   */
-  public LineRegion[] getLineRegions(int lno);
+  LineRegion[] getLineRegions(int lno);
 
   /** Validates current state of the editor and runs parser, if needed.
       This method can be called periodically in background thread
@@ -107,7 +108,7 @@ public interface BaseEditor{
       All the text becomes invalid after the specified line.
       @param topLine Topmost modified line of text.
   */
-  public void modifyEvent(int topLine);
+  void modifyEvent(int topLine);
 
   /** Informs about single line modification event.
       Generally, this type of event can be processed much faster
@@ -116,7 +117,7 @@ public interface BaseEditor{
       @param line Modified line of text.
       @todo Not used yet! This must include special 'try' parse method.
   */
-  public void modifyLineEvent(int line);
+  void modifyLineEvent(int line);
 
   /** Informs about changes in visible range of text lines.
       This information is used to make assumptions about
@@ -125,12 +126,12 @@ public interface BaseEditor{
       @param wSize  Number of currently visible text lines.
                     This number must includes all partially visible lines.
   */
-  public void visibleTextEvent(int wStart, int wSize);
+  void visibleTextEvent(int wStart, int wSize);
 
   /** Informs about total lines count change.
       This must include initial lines number setting.
   */
-  public void lineCountEvent(int newLineCount);
+  void lineCountEvent(int newLineCount);
 
 };
 /* ***** BEGIN LICENSE BLOCK *****
