@@ -14,14 +14,14 @@
  <dependset>
   <srcfilelist dir="${src}" files = "parser.bkt"/>
   <srcfilelist dir="." files = "build.xml"/>
-  <targetfilelist dir="${bin}" files="parser-brackets.hrc"/>
+  <targetfilelist dir="${bin}" files="parser-brackets.xml"/>
  </dependset>
 </target>
 
 <target name="bkt" depends="bkt.check">
  <ant antfile="${util}" target="bracket">
   <property name="util.input" value="${src}/parser.bkt"/>
-  <property name="util.output" value="${bin}/parser-brackets.hrc"/>
+  <property name="util.output" value="${bin}/parser-brackets.xml"/>
  </ant>
 </target>
 
@@ -29,14 +29,14 @@
 
 <target name="hrc.check">
  <dependset>
-  <srcfilelist dir="${src}" files = "parser.hrc, parser-ex.hrc"/>
+  <srcfilelist dir="${src}" files = "parser.hrc, parser-ex.xml"/>
   <targetfilelist dir="${bin}" files="parser.hrc"/>
  </dependset>
 </target>
 
 <target name="hrc" depends="bkt, hrc.check">
  <copy todir='${bin}'>
-   <fileset dir='${src}' includes='parser.hrc, parser-ex.hrc'/>
+   <fileset dir='${src}' includes='parser.hrc, parser-ex.xml'/>
  </copy>
 </target>
 
@@ -47,7 +47,7 @@
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="parser*.hrc"/>
+  <fileset dir="${bin}" includes="parser*.*"/>
  </delete>
 </target>
 

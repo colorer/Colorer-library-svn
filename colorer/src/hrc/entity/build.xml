@@ -11,7 +11,7 @@
 <!-- e2h -->
 
 <target name="e2h.check">
- <uptodate property="e2h.check"  targetfile="${bin}/html-entity-${type}.hrc">
+ <uptodate property="e2h.check"  targetfile="${bin}/html-entity-${type}.xml">
   <srcfiles dir="." includes="${src}/xhtml-${type}.ent, build.xml"/>
  </uptodate>
 </target>
@@ -19,7 +19,7 @@
 <target name="e2h" depends="e2h.check" unless="e2h.check">
  <ant antfile="${util}" target="ent2hrc">
   <property name="util.input" value="${src}/xhtml-${type}.ent"/>
-  <property name="util.output" value="${bin}/html-entity-${type}.hrc"/>
+  <property name="util.output" value="${bin}/html-entity-${type}.xml"/>
   <property name="ent2hrc.scheme" value="xhtml-${type}"/>
  </ant>
 </target>
@@ -67,7 +67,7 @@
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="html-entity*.hrc"/>
+  <fileset dir="${bin}" includes="html-entity*.*"/>
  </delete>
 </target>
 

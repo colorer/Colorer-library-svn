@@ -95,6 +95,7 @@
   <xs:element name="lockmode" type="esc:lockmode"/><!--13-->
   <xs:element name="usermacro" type="esc:usermacro"/><!--14-->
   <xs:element name="lockfile" type="esc:lockfile"/><!--15-->
+  <xs:element name="wordsym" type="esc:wordsym"/><!--16-->
  </xs:sequence>
  <xs:attribute name="name" type="xs:string"/>
  <xs:attribute name="include" type="esc:include-string"/>
@@ -207,6 +208,13 @@
 <!--  <xs:element name="lockfile" type="esc:lockfile"/>- 15-->
 <xs:complexType name="lockfile">
  <xs:attribute name="value" type="esc:onoff"/>
+</xs:complexType>
+
+<!--  <xs:element name="wordsym" type="esc:wordsym"/>- 16-->
+<xs:complexType name="wordsym">
+ <xs:attribute name="value" type="esc:onoff"/>
+ <xs:attribute name="alphanum" type="esc:onoff"/>
+ <xs:attribute name="additional" type="xs:string"/>
 </xs:complexType>
 
 
