@@ -50,3 +50,9 @@ outline.options=Меню
 outline.options.tooltip=Меню
 outline.options.Structure=Структура
 outline.options.Errors=Ошибки
+
+htmlgen.done=Генерация HTML завершена
+htmlgen.fault=Сбой во время генерации HTML
+
+htmlgen.done.msg=Генерация завершена.\u000A{0} файл(ов) сгенерировано в каталоге {1}:\u000A\u000A{2}
+htmlgen.fault.msg=Сбой в процессе генерации.\u000A{0} файл(ов) сгенерировано в каталоге {1}:\u000A\u000A{2}\u000A Сбой на файле: {3}

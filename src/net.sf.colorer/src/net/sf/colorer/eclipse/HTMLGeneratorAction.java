@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.impl.BaseEditorNative;
@@ -54,60 +55,68 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     ISelectionProvider selectionProvider = workbenchPart.getSite().getSelectionProvider();
     StructuredSelection selection = (StructuredSelection) selectionProvider.getSelection();
     
-    if (!(selection.getFirstElement() instanceof IResource)) return;
-    IResource resource = (IResource)selection.getFirstElement();
-    
-    if (resource == null || resource.getType() != IResource.FILE) return;
-    IFile iFile = (IFile) resource;
-    File file = new File(iFile.getLocation().toString());
-    
-    FileDialog dialog = new FileDialog (new Shell(), SWT.SAVE);
-    dialog.setFilterNames (new String [] {"HTML Files", "All files"});
-    dialog.setFilterExtensions (new String [] {"*.html", "*.*"});
-    // dialog.setFilterPath ("c:\\"); //Windows path
-    dialog.setFileName (file.getName()+".html");
-    String fileName = dialog.open();
-    if (fileName == null) return;
-    
+    StringBuffer fileNames = new StringBuffer();
+    String lastFileName = "";
+    String filePath = "./";
+    int num = 0;
     try{
-      ReaderLineSource rls = new ReaderLineSource(new FileReader(file));
-      BaseEditor be = new BaseEditorNative(EclipsecolorerPlugin.getDefault().getParserFactory(), rls);
-      be.setRegionCompact(true);
-      be.setRegionMapper("rgb", EclipsecolorerPlugin.getDefault().getPreferenceStore().getString(PreferencePage.HRD_SET));
-      be.lineCountEvent(rls.getLineCount());
-      be.visibleTextEvent(0, rls.getLineCount());
-      be.chooseFileType(file.getName());
+      Iterator iterator = selection.iterator();
+      while (iterator.hasNext()) {
+        Object obj = iterator.next();
+        if (!(obj instanceof IResource)) {
+          continue;
+        }
+        IResource resource = (IResource)obj;
+        if (resource == null || resource.getType() != IResource.FILE) return;
+  
+        IFile iFile = (IFile) resource;
+        String fileLocation = iFile.getLocation().toString();
+        lastFileName = iFile.getName();
+        File file = new File(fileLocation);
+        fileNames.append(lastFileName).append("\n");
+      
+        if (num == 0){
+          FileDialog dialog = new FileDialog (new Shell(), SWT.SAVE);
+          dialog.setFilterNames (new String [] {"HTML Files", "All files"});
+          dialog.setFilterExtensions (new String [] {"*.html", "*.*"});
+          dialog.setFileName(lastFileName+".html");
+          String fileName = dialog.open();
+          if (fileName == null) return;
+          filePath = new File(fileName).getParentFile().getAbsolutePath();
+        }
+              
+        ReaderLineSource rls = new ReaderLineSource(new FileReader(file));
+        BaseEditor be = new BaseEditorNative(EclipsecolorerPlugin.getDefault().getParserFactory(), rls);
+        be.setRegionCompact(true);
+        be.setRegionMapper("rgb", EclipsecolorerPlugin.getDefault().getPreferenceStore().getString(PreferencePage.HRD_SET));
+        be.lineCountEvent(rls.getLineCount());
+        be.visibleTextEvent(0, rls.getLineCount());
+        be.chooseFileType(file.getName());
 
-      Writer commonWriter = new FileWriter(fileName);
-      Writer escapedWriter = new EscapedWriter(commonWriter);
+        Writer commonWriter = new FileWriter(filePath + "/"+lastFileName+".html");
+        Writer escapedWriter = new EscapedWriter(commonWriter);
 
-      commonWriter.write("<html>\n<head>\n<style></style>\n</head>\n<body><pre>\n");
+        commonWriter.write("<html>\n<head>\n<style></style>\n</head>\n<body><pre>\n");
 
-      commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType()+"'\n\n");
+        commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType()+"'\n\n");
 
-      for(int i = 0; i < rls.getLineCount(); i++){
-        ParsedLineWriter.htmlRGBWrite(commonWriter, escapedWriter, rls.getLine(i), be.getLineRegions(i));
-        commonWriter.write("\n");
+        for(int i = 0; i < rls.getLineCount(); i++){
+          ParsedLineWriter.htmlRGBWrite(commonWriter, escapedWriter, rls.getLine(i), be.getLineRegions(i));
+          commonWriter.write("\n");
+        };
+        commonWriter.write("</pre></body></html>\n");
+        commonWriter.close();
+        num++;
       };
-
-      commonWriter.write("</pre></body></html>\n");
-      commonWriter.close();
-
-      MessageDialog.openInformation(null, "done", fileName);
+      MessageDialog.openInformation(null, Messages.getString("htmlgen.done"),
+                Messages.format("htmlgen.done.msg",
+                    new Object[]{ String.valueOf(num), filePath, fileNames.toString()}));
     }catch(Exception e){
-      MessageDialog.openInformation(null, "fault", fileName);
+      MessageDialog.openError(null, Messages.getString("htmlgen.fault"),
+              Messages.format("htmlgen.fault.msg",
+                       new Object[]{ String.valueOf(num), filePath, e, lastFileName}) );
+
     }
-    
-    /*
-    Iterator iterator = selection.iterator();
-    while (iterator.hasNext()) {
-      Object obj = iterator.next();
-      if (!(obj instanceof IAdaptable)) {
-        continue;
-      }
-      IAdaptable adaptable = (IAdaptable)obj;
-    }*/
-    
   }
   
 }
