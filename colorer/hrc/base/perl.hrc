@@ -948,6 +948,8 @@ With help of:
 <!-- Variables -->
          <inherit scheme="perlVars"/>
          <regexp match="/\b(sub|package) \s+ \M (?{Function}[\w_']+) /x" region="plWord"/>
+<!-- module::var -->
+         <regexp match="/\b\w[\w\d]*\s*::\s*\w[\w\d]*\b/" region="plWord"/>
 <!-- perl 5.6.0 number-encoded strings -->
          <regexp match="/\bv(\d+)(\.\d+)*\b/" region0="plString"/>
          <regexp match="/\b(\d+)(\.\d+){2,}\b/" region0="plString"/>
@@ -1249,9 +1251,7 @@ With help of:
          <block start="/\b\M(((s|tr|y) \s* \[))/x" end="/(\] [mgeioxs]*)/x" scheme="perlSubstBlock3" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
          <block start="/\b\M(((s|tr|y) \s* &lt;))/x" end="/(\&gt; [mgeioxs]*)/x" scheme="perlSubstBlock4" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
          <block start="/\b\M(((s|tr|y) \s* ([^\w\s])))/x" end="/(\y4 [mgeioxs]*)/x" scheme="perlSubstBlock" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         <!-- unavailable???
          <block start="/\b\M(((s|tr|y) \s+ (\w)))/x" end="/(\y4 [mgeioxs]*)/x" scheme="perlSubstBlock" region="plString" region01="PairStart" region10="PairEnd" region02="plStringEdge" region11="plStringEdge"/>
-         -->
 <!-- Timur: see `perldoc perlop`
        "Quote and Quote-like Operators " -->
          <block start="/\b(q[wqxr]\s*\()/" end="/(\))/" region="plString" scheme="perlIntStrBr1" region00="plStringEdge" region10="plStringEdge" region01="PairStart" region11="PairEnd"/>
