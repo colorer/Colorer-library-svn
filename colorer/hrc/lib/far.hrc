@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5"
+     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+<type name="far">
+
+<annotation>
+ <documentation>
+
+ FAR package: any types, uses in Far Manager configurations.
+
+ mask.*  - file masks
+ macro.* - key makros
+
+ </documentation>
+
+ <contributors>
+ <![CDATA[
+  Eugene Efremov <4mirror@mail.ru>
+ ]]>
+ </contributors>
+<!--
+ <appinfo><todo>
+ </todo></appinfo>
+-->
+</annotation>
+
+<region name="Quote" parent="regexp:Quote"/>
+<region name="MetaSymb" parent="regexp:MetaSymb"/>
+<region name="MetaSymbStrong" parent="regexp:MetaSymbStrong"/>
+<region name="FarKeys" parent="def:KeywordStrong"/>
+<region name="MacroComs" parent="def:Var"/>
+
+<scheme name="mask.class">
+ <regexp match="/\-\,/" region="MetaSymb"/>
+</scheme>
+
+<scheme name="mask.string">
+ <regexp match="/\,/" region="def:Symbol"/>
+ <regexp match="/[\*\?]/" region="MetaSymb"/>
+ <regexp match="/\|/" region="MetaSymbStrong"/>
+ <block start="/(\[)/" end="/(\])/" scheme="mask.class"
+  region00="Quote" region01="def:PairStart"
+  region10="Quote" region11="def:PairEnd"
+ />
+</scheme>
+
+
+<scheme name="macro.format">
+ <regexp match="/\%m[0h]?/" region="def:StringContent"/>
+ <regexp match="/\%[\%aAbBcCdDehHIjklLMnprRStTUvVwWxXyYZ]/" region="def:StringContent"/>
+</scheme>
+
+<scheme name="macro.string">
+ <inherit scheme="macro.keys"/>
+ <regexp match="/(\$MMode)\s+(1)/" region1="MacroComs" region2="def:Number"/>
+ <regexp match="/\$XLat/" region="MacroComs"/>
+ <block start="/(\[)/" end="/(\])/" scheme="macro.string"
+  region00="Quote" region01="def:PairStart"
+  region10="Quote" region11="def:PairEnd"
+ />
+ <block start="/(\$Date)\s+((\[))/" end="/(\])/" scheme="macro.format"
+  region="def:String" region01="MacroComs"
+  region02="Quote" region03="def:PairStart"
+  region10="Quote" region11="def:PairEnd"
+ />
+ <regexp match="/\w{2,}/" region="def:Error" priority="low"/>
+</scheme>
+
+<scheme name="macro.keys">
+ <keywords region="FarKeys" ignorecase="yes">
+  <word name="CTRL"/>
+  <word name="ALT"/>
+  <word name="SHIFT"/>
+  <word name="RCTRL"/>
+  <word name="RALT"/>
+  <word name="BRACKET"/>
+  <word name="BACKBRACKET"/>
+  <word name="COMMA"/>
+  <word name="QUOTE"/>
+  <word name="DOT"/>
+  <word name="SLASH"/>
+  <word name="COLON"/>
+  <word name="BACKSLASH"/>
+  <word name="BS"/>
+  <word name="TAB"/>
+  <word name="ENTER"/>
+  <word name="ESC"/>
+  <word name="SPACE"/>
+  <word name="MASKF"/>
+  <word name="BREAK"/>
+  <word name="PGUP"/>
+  <word name="PGDN"/>
+  <word name="END"/>
+  <word name="HOME"/>
+  <word name="LEFT"/>
+  <word name="UP"/>
+  <word name="RIGHT"/>
+  <word name="DOWN"/>
+  <word name="INS"/>
+  <word name="DEL"/>
+  <word name="LWIN"/>
+  <word name="RWIN"/>
+  <word name="APPS"/>
+  <word name="NUMPAD5"/>
+  <word name="CLEAR"/>
+  <word name="MULTIPLY"/>
+  <word name="ADD"/>
+  <word name="SUBTRACT"/>
+  <word name="DIVIDE"/>
+  <word name="F1"/>
+  <word name="F2"/>
+  <word name="F3"/>
+  <word name="F4"/>
+  <word name="F5"/>
+  <word name="F6"/>
+  <word name="F7"/>
+  <word name="F8"/>
+  <word name="F9"/>
+  <word name="F10"/>
+  <word name="F11"/>
+  <word name="F12"/>
+  <word name="CTRLALTSHIFTPRESS"/>
+  <word name="CTRLALTSHIFTRELEASE"/>
+  <word name="MSWHEEL_UP"/>
+  <word name="MSWHEEL_DOWN"/>
+  <word name="END_SKEY"/>
+  <word name="LAST_BASE"/>
+  <word name="CTRLSHIFT"/>
+  <word name="ALTSHIFT"/>
+  <word name="CTRLALT"/>
+  <word name="CTRL0"/>
+  <word name="CTRL1"/>
+  <word name="CTRL2"/>
+  <word name="CTRL3"/>
+  <word name="CTRL4"/>
+  <word name="CTRL5"/>
+  <word name="CTRL6"/>
+  <word name="CTRL7"/>
+  <word name="CTRL8"/>
+  <word name="CTRL9"/>
+  <word name="RCTRL0"/>
+  <word name="RCTRL1"/>
+  <word name="RCTRL2"/>
+  <word name="RCTRL3"/>
+  <word name="RCTRL4"/>
+  <word name="RCTRL5"/>
+  <word name="RCTRL6"/>
+  <word name="RCTRL7"/>
+  <word name="RCTRL8"/>
+  <word name="RCTRL9"/>
+  <word name="CTRLA"/>
+  <word name="CTRLB"/>
+  <word name="CTRLC"/>
+  <word name="CTRLD"/>
+  <word name="CTRLE"/>
+  <word name="CTRLF"/>
+  <word name="CTRLG"/>
+  <word name="CTRLH"/>
+  <word name="CTRLI"/>
+  <word name="CTRLJ"/>
+  <word name="CTRLK"/>
+  <word name="CTRLL"/>
+  <word name="CTRLM"/>
+  <word name="CTRLN"/>
+  <word name="CTRLO"/>
+  <word name="CTRLP"/>
+  <word name="CTRLQ"/>
+  <word name="CTRLR"/>
+  <word name="CTRLS"/>
+  <word name="CTRLT"/>
+  <word name="CTRLU"/>
+  <word name="CTRLV"/>
+  <word name="CTRLW"/>
+  <word name="CTRLX"/>
+  <word name="CTRLY"/>
+  <word name="CTRLZ"/>
+  <word name="CTRLBRACKET"/>
+  <word name="CTRLBACKBRACKET"/>
+  <word name="CTRLCOMMA"/>
+  <word name="CTRLQUOTE"/>
+  <word name="CTRLDOT"/>
+  <word name="ALT0"/>
+  <word name="ALT1"/>
+  <word name="ALT2"/>
+  <word name="ALT3"/>
+  <word name="ALT4"/>
+  <word name="ALT5"/>
+  <word name="ALT6"/>
+  <word name="ALT7"/>
+  <word name="ALT8"/>
+  <word name="ALT9"/>
+  <word name="ALTADD"/>
+  <word name="ALTDOT"/>
+  <word name="ALTCOMMA"/>
+  <word name="ALTMULTIPLY"/>
+  <word name="ALTA"/>
+  <word name="ALTB"/>
+  <word name="ALTC"/>
+  <word name="ALTD"/>
+  <word name="ALTE"/>
+  <word name="ALTF"/>
+  <word name="ALTG"/>
+  <word name="ALTH"/>
+  <word name="ALTI"/>
+  <word name="ALTJ"/>
+  <word name="ALTK"/>
+  <word name="ALTL"/>
+  <word name="ALTM"/>
+  <word name="ALTN"/>
+  <word name="ALTO"/>
+  <word name="ALTP"/>
+  <word name="ALTQ"/>
+  <word name="ALTR"/>
+  <word name="ALTS"/>
+  <word name="ALTT"/>
+  <word name="ALTU"/>
+  <word name="ALTV"/>
+  <word name="ALTW"/>
+  <word name="ALTX"/>
+  <word name="ALTY"/>
+  <word name="ALTZ"/>
+  <word name="CTRLSHIFTADD"/>
+  <word name="CTRLSHIFTSUBTRACT"/>
+  <word name="CTRLSHIFTDOT"/>
+  <word name="CTRLSHIFTSLASH"/>
+  <word name="CTRLSHIFT0"/>
+  <word name="CTRLSHIFT1"/>
+  <word name="CTRLSHIFT2"/>
+  <word name="CTRLSHIFT3"/>
+  <word name="CTRLSHIFT4"/>
+  <word name="CTRLSHIFT5"/>
+  <word name="CTRLSHIFT6"/>
+  <word name="CTRLSHIFT7"/>
+  <word name="CTRLSHIFT8"/>
+  <word name="CTRLSHIFT9"/>
+  <word name="RCTRLSHIFT0"/>
+  <word name="RCTRLSHIFT1"/>
+  <word name="RCTRLSHIFT2"/>
+  <word name="RCTRLSHIFT3"/>
+  <word name="RCTRLSHIFT4"/>
+  <word name="RCTRLSHIFT5"/>
+  <word name="RCTRLSHIFT6"/>
+  <word name="RCTRLSHIFT7"/>
+  <word name="RCTRLSHIFT8"/>
+  <word name="RCTRLSHIFT9"/>
+  <word name="CTRLSHIFTA"/>
+  <word name="CTRLSHIFTB"/>
+  <word name="CTRLSHIFTC"/>
+  <word name="CTRLSHIFTD"/>
+  <word name="CTRLSHIFTE"/>
+  <word name="CTRLSHIFTF"/>
+  <word name="CTRLSHIFTG"/>
+  <word name="CTRLSHIFTH"/>
+  <word name="CTRLSHIFTI"/>
+  <word name="CTRLSHIFTJ"/>
+  <word name="CTRLSHIFTK"/>
+  <word name="CTRLSHIFTL"/>
+  <word name="CTRLSHIFTM"/>
+  <word name="CTRLSHIFTN"/>
+  <word name="CTRLSHIFTO"/>
+  <word name="CTRLSHIFTP"/>
+  <word name="CTRLSHIFTQ"/>
+  <word name="CTRLSHIFTR"/>
+  <word name="CTRLSHIFTS"/>
+  <word name="CTRLSHIFTT"/>
+  <word name="CTRLSHIFTU"/>
+  <word name="CTRLSHIFTV"/>
+  <word name="CTRLSHIFTW"/>
+  <word name="CTRLSHIFTX"/>
+  <word name="CTRLSHIFTY"/>
+  <word name="CTRLSHIFTZ"/>
+  <word name="CTRLSHIFTBRACKET"/>
+  <word name="CTRLSHIFTBACKSLASH"/>
+  <word name="CTRLSHIFTBACKBRACKET"/>
+  <word name="ALTSHIFT0"/>
+  <word name="ALTSHIFT1"/>
+  <word name="ALTSHIFT2"/>
+  <word name="ALTSHIFT3"/>
+  <word name="ALTSHIFT4"/>
+  <word name="ALTSHIFT5"/>
+  <word name="ALTSHIFT6"/>
+  <word name="ALTSHIFT7"/>
+  <word name="ALTSHIFT8"/>
+  <word name="ALTSHIFT9"/>
+  <word name="ALTSHIFTA"/>
+  <word name="ALTSHIFTB"/>
+  <word name="ALTSHIFTC"/>
+  <word name="ALTSHIFTD"/>
+  <word name="ALTSHIFTE"/>
+  <word name="ALTSHIFTF"/>
+  <word name="ALTSHIFTG"/>
+  <word name="ALTSHIFTH"/>
+  <word name="ALTSHIFTI"/>
+  <word name="ALTSHIFTJ"/>
+  <word name="ALTSHIFTK"/>
+  <word name="ALTSHIFTL"/>
+  <word name="ALTSHIFTM"/>
+  <word name="ALTSHIFTN"/>
+  <word name="ALTSHIFTO"/>
+  <word name="ALTSHIFTP"/>
+  <word name="ALTSHIFTQ"/>
+  <word name="ALTSHIFTR"/>
+  <word name="ALTSHIFTS"/>
+  <word name="ALTSHIFTT"/>
+  <word name="ALTSHIFTU"/>
+  <word name="ALTSHIFTV"/>
+  <word name="ALTSHIFTW"/>
+  <word name="ALTSHIFTX"/>
+  <word name="ALTSHIFTY"/>
+  <word name="ALTSHIFTZ"/>
+  <word name="ALTSHIFTBRACKET"/>
+  <word name="ALTSHIFTBACKBRACKET"/>
+  <word name="CTRLALT0"/>
+  <word name="CTRLALT1"/>
+  <word name="CTRLALT2"/>
+  <word name="CTRLALT3"/>
+  <word name="CTRLALT4"/>
+  <word name="CTRLALT5"/>
+  <word name="CTRLALT6"/>
+  <word name="CTRLALT7"/>
+  <word name="CTRLALT8"/>
+  <word name="CTRLALT9"/>
+  <word name="CTRLALTA"/>
+  <word name="CTRLALTB"/>
+  <word name="CTRLALTC"/>
+  <word name="CTRLALTD"/>
+  <word name="CTRLALTE"/>
+  <word name="CTRLALTF"/>
+  <word name="CTRLALTG"/>
+  <word name="CTRLALTH"/>
+  <word name="CTRLALTI"/>
+  <word name="CTRLALTJ"/>
+  <word name="CTRLALTK"/>
+  <word name="CTRLALTL"/>
+  <word name="CTRLALTM"/>
+  <word name="CTRLALTN"/>
+  <word name="CTRLALTO"/>
+  <word name="CTRLALTP"/>
+  <word name="CTRLALTQ"/>
+  <word name="CTRLALTR"/>
+  <word name="CTRLALTS"/>
+  <word name="CTRLALTT"/>
+  <word name="CTRLALTU"/>
+  <word name="CTRLALTV"/>
+  <word name="CTRLALTW"/>
+  <word name="CTRLALTX"/>
+  <word name="CTRLALTY"/>
+  <word name="CTRLALTZ"/>
+  <word name="CTRLALTBRACKET"/>
+  <word name="CTRLALTBACKBRACKET"/>
+  <word name="CTRLF1"/>
+  <word name="CTRLF2"/>
+  <word name="CTRLF3"/>
+  <word name="CTRLF4"/>
+  <word name="CTRLF5"/>
+  <word name="CTRLF6"/>
+  <word name="CTRLF7"/>
+  <word name="CTRLF8"/>
+  <word name="CTRLF9"/>
+  <word name="CTRLF10"/>
+  <word name="CTRLF11"/>
+  <word name="CTRLF12"/>
+  <word name="SHIFTF1"/>
+  <word name="SHIFTF2"/>
+  <word name="SHIFTF3"/>
+  <word name="SHIFTF4"/>
+  <word name="SHIFTF5"/>
+  <word name="SHIFTF6"/>
+  <word name="SHIFTF7"/>
+  <word name="SHIFTF8"/>
+  <word name="SHIFTF9"/>
+  <word name="SHIFTF10"/>
+  <word name="SHIFTF11"/>
+  <word name="SHIFTF12"/>
+  <word name="ALTF1"/>
+  <word name="ALTF2"/>
+  <word name="ALTF3"/>
+  <word name="ALTF4"/>
+  <word name="ALTF5"/>
+  <word name="ALTF6"/>
+  <word name="ALTF7"/>
+  <word name="ALTF8"/>
+  <word name="ALTF9"/>
+  <word name="ALTF10"/>
+  <word name="ALTF11"/>
+  <word name="ALTF12"/>
+  <word name="CTRLSHIFTF1"/>
+  <word name="CTRLSHIFTF2"/>
+  <word name="CTRLSHIFTF3"/>
+  <word name="CTRLSHIFTF4"/>
+  <word name="CTRLSHIFTF5"/>
+  <word name="CTRLSHIFTF6"/>
+  <word name="CTRLSHIFTF7"/>
+  <word name="CTRLSHIFTF8"/>
+  <word name="CTRLSHIFTF9"/>
+  <word name="CTRLSHIFTF10"/>
+  <word name="CTRLSHIFTF11"/>
+  <word name="CTRLSHIFTF12"/>
+  <word name="ALTSHIFTF1"/>
+  <word name="ALTSHIFTF2"/>
+  <word name="ALTSHIFTF3"/>
+  <word name="ALTSHIFTF4"/>
+  <word name="ALTSHIFTF5"/>
+  <word name="ALTSHIFTF6"/>
+  <word name="ALTSHIFTF7"/>
+  <word name="ALTSHIFTF8"/>
+  <word name="ALTSHIFTF9"/>
+  <word name="ALTSHIFTF10"/>
+  <word name="ALTSHIFTF11"/>
+  <word name="ALTSHIFTF12"/>
+  <word name="CTRLALTF1"/>
+  <word name="CTRLALTF2"/>
+  <word name="CTRLALTF3"/>
+  <word name="CTRLALTF4"/>
+  <word name="CTRLALTF5"/>
+  <word name="CTRLALTF6"/>
+  <word name="CTRLALTF7"/>
+  <word name="CTRLALTF8"/>
+  <word name="CTRLALTF9"/>
+  <word name="CTRLALTF10"/>
+  <word name="CTRLALTF11"/>
+  <word name="CTRLALTF12"/>
+  <word name="CTRLHOME"/>
+  <word name="CTRLUP"/>
+  <word name="CTRLPGUP"/>
+  <word name="CTRLLEFT"/>
+  <word name="CTRLRIGHT"/>
+  <word name="CTRLEND"/>
+  <word name="CTRLDOWN"/>
+  <word name="CTRLPGDN"/>
+  <word name="CTRLINS"/>
+  <word name="CTRLDEL"/>
+  <word name="SHIFTHOME"/>
+  <word name="SHIFTUP"/>
+  <word name="SHIFTPGUP"/>
+  <word name="SHIFTLEFT"/>
+  <word name="SHIFTRIGHT"/>
+  <word name="SHIFTEND"/>
+  <word name="SHIFTDOWN"/>
+  <word name="SHIFTPGDN"/>
+  <word name="SHIFTINS"/>
+  <word name="SHIFTDEL"/>
+  <word name="ALTHOME"/>
+  <word name="ALTUP"/>
+  <word name="ALTPGUP"/>
+  <word name="ALTLEFT"/>
+  <word name="ALTRIGHT"/>
+  <word name="ALTEND"/>
+  <word name="ALTDOWN"/>
+  <word name="ALTPGDN"/>
+  <word name="ALTINS"/>
+  <word name="ALTDEL"/>
+  <word name="CTRLSHIFTHOME"/>
+  <word name="CTRLSHIFTUP"/>
+  <word name="CTRLSHIFTPGUP"/>
+  <word name="CTRLSHIFTLEFT"/>
+  <word name="CTRLSHIFTRIGHT"/>
+  <word name="CTRLSHIFTEND"/>
+  <word name="CTRLSHIFTDOWN"/>
+  <word name="CTRLSHIFTPGDN"/>
+  <word name="CTRLSHIFTINS"/>
+  <word name="CTRLSHIFTDEL"/>
+  <word name="ALTSHIFTHOME"/>
+  <word name="ALTSHIFTUP"/>
+  <word name="ALTSHIFTPGUP"/>
+  <word name="ALTSHIFTLEFT"/>
+  <word name="ALTSHIFTRIGHT"/>
+  <word name="ALTSHIFTEND"/>
+  <word name="ALTSHIFTDOWN"/>
+  <word name="ALTSHIFTPGDN"/>
+  <word name="ALTSHIFTINS"/>
+  <word name="ALTSHIFTDEL"/>
+  <word name="CTRLALTHOME"/>
+  <word name="CTRLALTUP"/>
+  <word name="CTRLALTPGUP"/>
+  <word name="CTRLALTLEFT"/>
+  <word name="CTRLALTRIGHT"/>
+  <word name="CTRLALTEND"/>
+  <word name="CTRLALTDOWN"/>
+  <word name="CTRLALTPGDN"/>
+  <word name="CTRLALTINS"/>
+  <word name="CTRLSLASH"/>
+  <word name="CTRLBACKSLASH"/>
+  <word name="CTRLCLEAR"/>
+  <word name="CTRLADD"/>
+  <word name="SHIFTADD"/>
+  <word name="CTRLSUBTRACT"/>
+  <word name="ALTSUBTRACT"/>
+  <word name="SHIFTSUBTRACT"/>
+  <word name="CTRLMULTIPLY"/>
+  <word name="CTRLBS"/>
+  <word name="ALTBS"/>
+  <word name="CTRLSHIFTBS"/>
+  <word name="SHIFTBS"/>
+  <word name="CTRLSHIFTTAB"/>
+  <word name="CTRLTAB"/>
+  <word name="SHIFTTAB"/>
+  <word name="CTRLENTER"/>
+  <word name="SHIFTENTER"/>
+  <word name="ALTSHIFTENTER"/>
+  <word name="CTRLALTENTER"/>
+  <word name="CTRLSHIFTENTER"/>
+  <word name="CTRLAPPS"/>
+  <word name="ALTAPPS"/>
+  <word name="SHIFTAPPS"/>
+  <word name="CTRLSHIFTAPPS"/>
+  <word name="ALTSHIFTAPPS"/>
+  <word name="CTRLALTAPPS"/>
+  <word name="CTRLSPACE"/>
+  <word name="SHIFTSPACE"/>
+  <word name="CTRLSHIFTSPACE"/>
+  <!--word name="ALT_BASE"/>
+  <word name="ALTSHIFT_BASE"/-->
+ </keywords>
+ <regexp match="/(Alt)?#3\S/i" region="FarKeys"/>
+ <regexp match="/(Ctrl)?#4\S/i" region="FarKeys"/>
+ <regexp match="/(Shift)?#5\S/i" region="FarKeys"/>
+</scheme>
+
+<!-- заглушка для создания типа -->
+
+<scheme name="far">
+ <annotation>
+  <documentation>
+   This scheme need for colorer versions,
+    then don't support packages.
+   Please don't use it.
+  </documentation>
+ </annotation>
+ <inherit scheme="mask.string"/>
+ <inherit scheme="macro.string"/>
+</scheme>
+
+
+</type>
+</hrc>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the far.hrc package.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 1999-2003
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
