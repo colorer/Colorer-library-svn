@@ -26,8 +26,8 @@
   <property name='eclipse.dir' value='../..'/>
   <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
   <property name='eclipse.ver' value='2.1.0'/>
-  
-  
+
+
   <target name="init" depends="properties">
 
     <path id='classpath'>
@@ -58,7 +58,7 @@
     <mkdir dir="${destination.temp.folder}/${full.name}"/>
     <copy file="${build.result.folder}/colorer.jar" todir="${destination.temp.folder}/${full.name}"/>
     <copy todir="${destination.temp.folder}/${full.name}">
-      <fileset dir="." includes="plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
+      <fileset dir="." includes="META-INF/**/*,plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
       <fileset dir="." includes="icons/**/*.gif"/>
       <fileset dir="${plugin.destination}" includes='ColorerDemo.bat,LINUX,MACOS,README,TODO,WHATSNEW,ColorerDemo.sh'/>
     </copy>
