@@ -6,7 +6,7 @@ TARGET = net_sf_colorer.dll
 all: $(TARGET)
 
 #shared_path=d:/projects/shared/
-shared_path=C:\Progra~1\Far\Plugins\colorer\src/shared/
+shared_path=C:\Progra~1\colorer\src/shared/
 JAVA_INCLUDE=c:/vmj/jdk130.ibm/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
 
