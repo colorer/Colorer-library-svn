@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
 
-  <annotation><documentation>
+<hrc version="take5"
+     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+  <annotation>
+   <documentation>
     Active Server Pages core syntax (vbScript)
-  </documentation></annotation>
+   </documentation>
+   <contributors><![CDATA[
+      Cail Lomecb <ruiv@uic.nnov.ru> 
+      Eugene Efremov <4mirror@mail.ru>
+   ]]></contributors>
+  </annotation>
+  
   <type name="asp.vb" access="public">
 
     <import type="def"/>
@@ -34,9 +45,12 @@
       So, this is some form of hack, allowing such complex constructions.
     </documentation></annotation>
     <scheme name="InverseInsertion">
-      <block start="/(\%&gt;)/" end="/(&lt;\%)/"
-             scheme="html" priority="low"
-             region="Text" region00="Insertion" region10="Insertion"/>
+      <block start="/((\%&gt;))/" end="/((&lt;\%))/"
+       scheme="html" priority="low" region="Text" 
+       region00="Insertion" region10="Insertion" 
+       region01="PairStart" region11="PairEnd"      
+       region02="OpenTag"   region12="OpenTag" 
+      />
     </scheme>
 
 
@@ -45,6 +59,26 @@
       to allow to use ASP insertions in internal HTML structures
     </documentation></annotation>
 
+    <scheme name="cssProperty">
+     <inherit scheme="Insertion"/>
+     <inherit scheme="css:cssProperty"/>
+    </scheme>
+    <scheme name="cssRuleContent"> 
+     <inherit scheme="Insertion"/>
+     <inherit scheme="css:RuleContent">
+      <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
+      <virtual scheme="css:Property" subst-scheme="cssProperty"/>
+     </inherit>
+    </scheme>
+    <scheme name="cssRulesList">
+     <inherit scheme="Insertion"/>
+     <inherit scheme="css:RulesList">
+      <virtual scheme="css:RulesList" subst-scheme="cssRulesList"/>
+      <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
+      <virtual scheme="css:cssProperty" subst-scheme="cssProperty"/>
+     </inherit>
+    </scheme>
+    
     <scheme name="htmlString">
       <inherit scheme="Insertion"/>
       <inherit scheme="html:htmlString"/>
@@ -76,9 +110,12 @@
     <scheme name="html">
       <inherit scheme="Insertion"/>
       <inherit scheme="html:html"> <!-- global virtualization!!! -->
-         <virtual scheme="html:htmlCore" subst-scheme="htmlCore"/>
-         <virtual scheme="html:htmlScripts" subst-scheme="htmlScripts"/>
-         <virtual scheme="html:html" subst-scheme="html"/>
+        <virtual scheme="html:htmlCore" subst-scheme="htmlCore"/>
+        <virtual scheme="html:htmlScripts" subst-scheme="htmlScripts"/>
+        <virtual scheme="html:html" subst-scheme="html"/>
+        <virtual scheme="css:Property" subst-scheme="cssPropertyValue"/>
+        <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
+        <virtual scheme="css:RulesList" subst-scheme="cssRulesList"/>
 <!--         <virtual scheme="def:Comment" subst-scheme="Comment"/> -->
       </inherit>
     </scheme>
@@ -93,7 +130,7 @@
         <virtual scheme="targetLanguage" subst-scheme="vbScript"/>
       </inherit>
       <inherit scheme="vbScript:vbScript">
-         <virtual scheme="vbScript:vbScript" subst-scheme="vbScript"/>
+        <virtual scheme="vbScript:vbScript" subst-scheme="vbScript"/>
       </inherit>
     </scheme>
 
