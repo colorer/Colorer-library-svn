@@ -7,6 +7,17 @@
     Colorer-take5 library packages.
   </description>
 
+  <property name='build-dir' value='distr'/>
+
+  <property name='distr.version' value='.beta2'/>
+
+  <property name='farplugin-dir' value='${build-dir}colorer-take5-farlight${distr.version}'/>
+  <property name='farplugin-zip' value='${farplugin-dir}.zip'/>
+
+  <property name='eclipseplugin.version' value='0.5.0'/>
+  <property name='eclipseplugin-dir' value='${build-dir}EclipseColorer-take5-${distr.version}'/>
+
+
   <xmlcatalog id="DTDs">
       <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
            location="doc/2003/hrc.dtd"/>
@@ -16,6 +27,7 @@
            location="doc/2003/catalog.dtd"/>
   </xmlcatalog>
 
+
   <target name="main">
     <splash/>
     <echo>Choose build target</echo>
@@ -24,5 +36,44 @@
   <target name="xsd2hrc">
     <echo>Choose build target</echo>
   </target>
+
+  <target name="eclipseplugin.clean">
+  </target>
+  <target name="eclipseplugin">
+  </target>
+
+
+  <target name="farplugin.clean">
+    <delete><fileset dir='${farplugin-dir}'/></delete>
+    <delete dir='${distr}' file='${farplugin-zip}'/>
+  </target>
+
+  <target name="farplugin">
+    <mkdir dir='${farplugin-dir}'/>
+    <mkdir dir='${farplugin-dir}/bin'/>
+    <mkdir dir='${farplugin-dir}/hrc'/>
+    <mkdir dir='${farplugin-dir}/hrd'/>
+    <mkdir dir='${farplugin-dir}/hrd/console'/>
+    <copy />
+  </target>
+
+cp -r bin/farplugin/*.*  %TARGET%/bin
+cp -r hrc/auto  %TARGET%/hrc
+
+cd hrc
+zip -9 -r common.jar base db inet main misc rare scripts xml colorer.hrc default.hrc
+mv common.jar %TARGET%/hrc/
+cd ..
+
+cp -r hrc/auto  %TARGET%/hrc
+cp -r hrd/console  %TARGET%/hrd
+
+cp LICENSE %TARGET%
+cp README %TARGET%
+cp catalog-light.xml %TARGET%/catalog.xml
+
+cd %TARGET%\..
+zip -9 -r %TARGET_ZIP_NAME% %TARGET_NAME%
+
 
 </project>
