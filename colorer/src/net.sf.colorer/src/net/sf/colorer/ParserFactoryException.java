@@ -1,9 +1,12 @@
 package net.sf.colorer;
 
 public class ParserFactoryException extends Exception{
-  public ParserFactoryException(String msg){
-    super(msg);
-  };
+  
+    public ParserFactoryException(String msg){
+        super(msg);
+    };
+    static final long serialVersionUID = -3387516993124229948L;
+  
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -6,11 +6,11 @@ import java.util.Vector;
 import net.sf.colorer.FileType;
 import net.sf.colorer.Group;
 import net.sf.colorer.ParserFactory;
+import net.sf.colorer.impl.Logger;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -224,17 +224,17 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
 
       ICellModifier cellModifier = new ICellModifier() {
             public Object getValue(Object element, String property) {
-                System.out.println("getValue:"+element.toString() + " - " + property);
+                Logger.trace("Preference", "getValue:"+element.toString() + " - " + property);
                 String pval = typePropertiesProvider.type.getParameterValue(element.toString());
                 return new Boolean(pval.equals("true"));
             }
             public boolean canModify(Object element, String property) {
-                System.out.println("canModify:"+element.toString() + " - " + property);
+                Logger.trace("Preference", "canModify:"+element.toString() + " - " + property);
                 String pval = typePropertiesProvider.type.getParameterDefaultValue(element.toString());
                 return pval.equals("true") || pval.equals("false");
             }
             public void modify(Object element, String property, Object value) {
-                System.out.println("modify:"+element.toString() + " - " + property + " - " + value);
+                Logger.trace("Preference", "modify:"+element.toString() + " - " + property + " - " + value);
                 if (value instanceof Boolean) {
                     boolean i = ((Boolean)value).booleanValue();
                     String pname = (String)((TableItem)element).getData();

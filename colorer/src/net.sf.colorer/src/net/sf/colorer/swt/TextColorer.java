@@ -21,64 +21,67 @@ import net.sf.colorer.impl.*;
  */
 public class TextColorer{
 
-private final static int HLS_NONE = 0;
-public final static int HLS_XOR = 1;
-public final static int HLS_OUTLINE = 2;
-public final static int HLS_OUTLINE2 = 3;
+    private final static int HLS_NONE = 0;
+    public final static int HLS_XOR = 1;
+    public final static int HLS_OUTLINE = 2;
+    public final static int HLS_OUTLINE2 = 3;
 
-private ColorManager cm;
+    private ColorManager cm;
 
-ParserFactory pf = null;
-BaseEditor baseEditor = null;
-StyledText text = null;
-boolean fullBackground = false;
+    ParserFactory pf = null;
+    BaseEditor baseEditor = null;
+    StyledText text = null;
 
-boolean vertCross = false;
-boolean horzCross = false;
-RegionDefine vertCrossColor = null;
-RegionDefine horzCrossColor = null;
+    boolean fullBackground = false;
+    boolean vertCross = false;
+    boolean horzCross = false;
+    RegionDefine vertCrossColor = null;
+    RegionDefine horzCrossColor = null;
 
-int highlightStyle = HLS_XOR;
-PairMatch currentPair = null;
+    int highlightStyle = HLS_XOR;
+    PairMatch currentPair = null;
+    int prevLine = 0;
+    boolean lineHighlighting = true;
+    boolean pairsHighlighting = true;
+    boolean backParserDelay = false;
 
-int prevLine = 0;
-boolean lineHighlighting = true;
-boolean pairsHighlighting = true;
-boolean backParserDelay = false;
+    InternalHandler ml = new InternalHandler();
 
-InternalHandler ml = new InternalHandler();
+    /**
+     * Common TextColorer creation constructor. Creates TextColorer object,
+     * which is to be attached to the StyledText widget.
+     * 
+     * @param pf
+     *            Parser factory, used to create all coloring text parsers.
+     * @param cm
+     *            Color Manager, used to store cached color objects
+     */
+    public TextColorer(ParserFactory pf, ColorManager cm) {
+        this.pf = pf;
+        this.cm = cm;
 
-  /**
-   * Common TextColorer creation constructor.
-   * Creates TextColorer object, which is to be attached to the StyledText widget.
-   *
-   * @param pf Parser factory, used to create all coloring text parsers.
-   * @param cm Color Manager, used to store cached color objects
-  */
-  public TextColorer(ParserFactory pf, ColorManager cm){
-    this.pf = pf;
-    this.cm = cm;
+        setFullBackground(false);
+        setCross(false, false);
 
-    setFullBackground(false);
-    setCross(false, false);
-
-    baseEditor = new BaseEditorNative(pf, new LineSource(){
-      public String getLine(int lno){
-        if (text.getContent().getLineCount() <= lno) return null;
-        String line = text.getContent().getLine(lno);
-        return line;
-      }
-    });
-    baseEditor.setRegionCompact(true);
-  }
+        baseEditor = new BaseEditorNative(pf, new LineSource() {
+            public String getLine(int lno) {
+                if (text.getContent().getLineCount() <= lno)
+                    return null;
+                String line = text.getContent().getLine(lno);
+                return line;
+            }
+        });
+        baseEditor.setRegionCompact(true);
+    }
 
   /**
    * Installs this highlighter into the specified StyledText object.
    * Client can manually call detach() method, then wants to destroy this object.
    */
   public void attach(StyledText parent){
-    detach();
-
+    if (baseEditor == null) {
+        throw new RuntimeException("Attach after detach");
+    }
     text = parent;
     text.addDisposeListener(ml);
     text.addLineStyleListener(ml);
@@ -145,6 +148,7 @@ InternalHandler ml = new InternalHandler();
     text.removeSelectionListener(ml);
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.removeSelectionListener(ml);
+    baseEditor.dispose();
     baseEditor = null;
   }
 

@@ -1,14 +1,18 @@
 package net.sf.colorer.eclipse;
 
 import java.net.URL;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.core.resources.*;
+import org.osgi.framework.BundleContext;
 
 import net.sf.colorer.ParserFactory;
+import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 
@@ -18,6 +22,8 @@ import net.sf.colorer.swt.ColorManager;
 public class EclipsecolorerPlugin extends AbstractUIPlugin {
     //The shared instance.
     private static EclipsecolorerPlugin plugin;
+    private ResourceBundle resourceBundle;
+    
     private String catalogPath;
     private ParserFactory parserFactory;
     private ColorManager colorManager = new ColorManager();
@@ -25,39 +31,55 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
     /**
      * The constructor.
      */
-    public EclipsecolorerPlugin(IPluginDescriptor descriptor) {
-        super(descriptor);
+    public EclipsecolorerPlugin() {
+        super();
         plugin = this;
+    }
 
-    reloadParserFactory();
+    /**
+     * This method is called upon plug-in activation
+     */
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        
+        Logger.trace("Plugin", "Loaded");
+    
+        IPreferenceStore store = getPreferenceStore();
+        store.setDefault(PreferencePage.TEXT_FONT, "");
+        store.setDefault(PreferencePage.SPACES_FOR_TABS, false);
+        store.setDefault(PreferencePage.WORD_WRAP, false);
+        store.setDefault(PreferencePage.TAB_WIDTH, 4);
+    
+        store.setDefault(PreferencePage.FULL_BACK, false);
+        store.setDefault(PreferencePage.USE_BACK, false);
+        store.setDefault(PreferencePage.VERT_CROSS, false);
+        store.setDefault(PreferencePage.HORZ_CROSS, true);
+        store.setDefault(PreferencePage.PAIRS_MATCH, "PAIRS_OUTLINE");
+    
+        store.setDefault(PreferencePage.HRD_SET, "default");
+        store.setDefault(PreferencePage.RELOAD_HRC, "xx");
+    
+        store.setDefault("Outline.Hierarchy", true);
+        store.setDefault("Outline.Sort", false);
+    
+        store.setDefault("g.Prefix", "");
+        store.setDefault("g.Suffix", ".html");
+        store.setDefault("g.HRDSchema", store.getString(PreferencePage.HRD_SET));
+        store.setDefault("g.HtmlHeaderFooter", true);
+        store.setDefault("g.InfoHeader", true);
+        store.setDefault("g.UseLineNumbers", true);
+        store.setDefault("g.OutputEncoding", "default");
+        store.setDefault("g.TargetDirectory", "/");
+        store.setDefault("g.LinkSource", "");
+    }
 
-    IPreferenceStore store = getPreferenceStore();
-    store.setDefault(PreferencePage.TEXT_FONT, "");
-    store.setDefault(PreferencePage.SPACES_FOR_TABS, false);
-    store.setDefault(PreferencePage.WORD_WRAP, false);
-    store.setDefault(PreferencePage.TAB_WIDTH, 4);
-
-    store.setDefault(PreferencePage.FULL_BACK, false);
-    store.setDefault(PreferencePage.USE_BACK, false);
-    store.setDefault(PreferencePage.VERT_CROSS, false);
-    store.setDefault(PreferencePage.HORZ_CROSS, true);
-    store.setDefault(PreferencePage.PAIRS_MATCH, "PAIRS_OUTLINE");
-
-    store.setDefault(PreferencePage.HRD_SET, "default");
-    store.setDefault(PreferencePage.RELOAD_HRC, "xx");
-
-    store.setDefault("Outline.Hierarchy", true);
-    store.setDefault("Outline.Sort", false);
-
-    store.setDefault("g.Prefix", "");
-    store.setDefault("g.Suffix", ".html");
-    store.setDefault("g.HRDSchema", store.getString(PreferencePage.HRD_SET));
-    store.setDefault("g.HtmlHeaderFooter", true);
-    store.setDefault("g.InfoHeader", true);
-    store.setDefault("g.UseLineNumbers", true);
-    store.setDefault("g.OutputEncoding", "default");
-    store.setDefault("g.TargetDirectory", "/");
-    store.setDefault("g.LinkSource", "");
+    /**
+     * This method is called when the plug-in is stopped
+     */
+    public void stop(BundleContext context) throws Exception {
+        super.stop(context);
+        plugin = null;
+        resourceBundle = null;
     }
 
     /**
@@ -67,34 +89,49 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
         return plugin;
     }
 
-  public ParserFactory getParserFactory(){
-    return parserFactory;
-  };
-  public ColorManager getColorManager(){
-    return colorManager;
-  }
-
-  public void reloadParserFactory(){
-    try{
-      catalogPath = Platform.resolve(new URL(getDescriptor().getInstallURL(), "colorer/catalog.xml")).toExternalForm();
-      parserFactory = new ParserFactory(catalogPath);
-    }catch(Throwable e){
-      boolean error = true;
-      Throwable exc = e;
-      try{
-        parserFactory = new ParserFactory();
-        error = false;
-      }catch(Throwable e1){
-        error = true;
-        exc = e1;
-      }
-      if (error) MessageDialog.openError(null, Messages.get("init.error.title"),
-                                         Messages.get("init.error.pf")+
-                                         "\n" + exc.getMessage());
+    public synchronized ParserFactory getParserFactory() {
+        if (parserFactory != null) {
+            return parserFactory;
+        }
+        try {
+            catalogPath = new URL(Platform.resolve(
+                    getBundle().getEntry("/")), "colorer/catalog.xml").toExternalForm();
+            Logger.trace("EclipsecolorerPlugin", "Catalog: "+catalogPath);
+            parserFactory = new ParserFactory(catalogPath);
+        } catch (Throwable e) {
+            Logger.trace("EclipsecolorerPlugin", "Fault in getting parser factory", e);
+            boolean error = true;
+            Throwable exc = e;
+            try {
+                parserFactory = new ParserFactory();
+                error = false;
+            } catch (Throwable e1) {
+                error = true;
+                exc = e1;
+            }
+            if (error) {
+                MessageDialog.openError(null, Messages.get("init.error.title"),
+                                Messages.get("init.error.pf") + "\n"
+                                        + exc.getMessage());
+            }
+        }
+        return parserFactory;
     };
-    // informs all the editors about ParserFactory reloading
-    getPreferenceStore().firePropertyChangeEvent(PreferencePage.RELOAD_HRC, "", "");
-  };
+
+    public synchronized void reloadParserFactory() {
+        // informs all the editors about ParserFactory reloading
+        if (parserFactory != null && !parserFactory.isDisposed()) {
+            parserFactory.dispose();
+        }
+        parserFactory = null;
+        parserFactory = getParserFactory();
+        getPreferenceStore().firePropertyChangeEvent(PreferencePage.RELOAD_HRC,
+                "", "");
+    };
+
+    public ColorManager getColorManager() {
+        return colorManager;
+    }
 
     /**
      * Returns the workspace instance.
@@ -102,6 +139,19 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
     public static IWorkspace getWorkspace() {
         return ResourcesPlugin.getWorkspace();
     }
+    
+    /**
+     * Returns the plugin's resource bundle,
+     */
+    public ResourceBundle getResourceBundle() {
+        try {
+            if (resourceBundle == null)
+                resourceBundle = ResourceBundle.getBundle("net.sf.colorer.eclipse.EclipsecolorerPluginResources");
+        } catch (MissingResourceException x) {
+            resourceBundle = null;
+        }
+        return resourceBundle;
+    }    
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

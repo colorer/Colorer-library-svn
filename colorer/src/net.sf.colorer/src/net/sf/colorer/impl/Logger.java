@@ -15,7 +15,11 @@ public class Logger {
 
     public static void trace(String comp, Object msg, Throwable ex) {
         if (TRACE) {
-            System.out.println("["+comp+"] "+msg.toString());
+            String print = "null";
+            if (msg != null) {
+                print = msg.toString();
+            }
+            System.out.println("["+comp+"] "+print);
             if (ex != null) {
                 ex.printStackTrace(System.out);
             }

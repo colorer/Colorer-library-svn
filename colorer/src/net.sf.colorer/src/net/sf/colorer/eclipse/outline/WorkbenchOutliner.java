@@ -69,7 +69,6 @@ public class WorkbenchOutliner extends Outliner implements IWorkbenchAdapter, IA
         int flevel = 0x100000;
         for(int idx = 0; idx < itemCount(); idx++){
           if (flevel > getItem(idx).level) flevel = getItem(idx).level;
-//System.out.println(flevel+" - "+ getItem(idx).level + " - "+getItem(idx).token);
           if (getItem(idx).level > flevel) continue;
           elements.addElement(getItem(idx));
         }

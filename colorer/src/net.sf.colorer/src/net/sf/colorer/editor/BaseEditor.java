@@ -1,139 +1,184 @@
 package net.sf.colorer.editor;
 
-import net.sf.colorer.*;
-import net.sf.colorer.handlers.*;
+import net.sf.colorer.FileType;
+import net.sf.colorer.Region;
+import net.sf.colorer.RegionHandler;
+import net.sf.colorer.handlers.LineRegion;
+import net.sf.colorer.handlers.RegionDefine;
+
 
 public interface BaseEditor {
 
-  /** LineRegionsSupport object preferences.
-      Installs specified RegionStore (basically HRDRegionStore), which
-      maps HRC Regions into color data, sets default size (in lines) of
-      Regions structure cache.
-      @param compact Creates LineRegionsSupport (false) or
-      LineRegionsCompactSupport (true) object to store lists of RegionDefine's
-  */
-  void setRegionCompact(boolean compact);
+    /**
+     * Dispose this Editor's resources
+     */
+    void dispose();
 
-  /** Changes used file type */
-  public void setFileType(FileType typeName);
+    /**
+     * LineRegionsSupport object preferences. Installs specified RegionStore
+     * (basically HRDRegionStore), which maps HRC Regions into color data, sets
+     * default size (in lines) of Regions structure cache.
+     * 
+     * @param compact
+     *            Creates LineRegionsSupport (false) or
+     *            LineRegionsCompactSupport (true) object to store lists of
+     *            RegionDefine's
+     */
+    void setRegionCompact(boolean compact);
 
-  /** Chooses filetype according to the filename and first line of text */
-  public FileType chooseFileType(String fname);
+    /** Changes used file type */
+    void setFileType(FileType typeName);
 
-  /** Returns Currently selected file type */
-  public FileType getFileType();
+    /** Chooses filetype according to the filename and first line of text */
+    FileType chooseFileType(String fname);
 
-  /** Specifies number of lines, for which parser
-      would be able to run continual processing without
-      highlight invalidation.
-      @param backParse Number of lines. If <= 0, dropped into default
-      value.
-  */
-  void setBackParse(int backParse);
+    /** Returns Currently selected file type */
+    FileType getFileType();
 
-  /** Installs specified RegionMapper. */
-  public void setRegionMapper(String cls, String name);
+    /**
+     * Specifies number of lines, for which parser would be able to run
+     * continual processing without highlight invalidation.
+     * 
+     * @param backParse
+     *            Number of lines. If <= 0, dropped into default value.
+     */
+    void setBackParse(int backParse);
 
-  /** Adds specified RegionHandler object into the parse process.
-   * @param filter If not null, handler would be activated only if
-   * passed regions have specified <code>filter</code> parent.
-   * This allows to optimize performance and disable unnecesary JNI
-   * context switches.
-  */
-  void addRegionHandler(RegionHandler rh, Region filter);
-  /** Removes previously added region handler.
-  */
-  void removeRegionHandler(RegionHandler rh);
+    /** Installs specified RegionMapper. */
+    void setRegionMapper(String cls, String name);
 
-  /** Current Background Region (def:Text) */
-  public RegionDefine getBackground();
-  /** Current Vertical Rule (def:VertCross) */
-  public RegionDefine getVertCross();
-  /** Current Horizontal Rule (def:HorzCross) */
-  public RegionDefine getHorzCross();
+    /**
+     * Adds specified RegionHandler object into the parse process.
+     * 
+     * @param filter
+     *            If not null, handler would be activated only if passed regions
+     *            have specified <code>filter</code> parent. This allows to
+     *            optimize performance and disable unnecesary JNI context
+     *            switches.
+     */
+    void addRegionHandler(RegionHandler rh, Region filter);
 
-  /** Searches and creates pair match object.
-      Returned object can be used later in the pair search methods.
-      This object is valid only until reparse of it's line
-      occured. After that event information about line region's
-      references in it becomes invalid and, if used, can produce
-      faults.
-      @param lineNo Line number, where to search paired region.
-      @param pos Position in line, where paired region to be searched.
-             Paired Region is found, if it includes specified position
-             or ends directly at one char before line position.
-  */
-  PairMatch getPairMatch(int lineNo, int pos);
+    /**
+     * Removes previously added region handler.
+     */
+    void removeRegionHandler(RegionHandler rh);
 
-  /** Searches pair match in currently visible text.
-      @param pm Unmatched pair match
-  */
-  public void searchLocalPair(PairMatch pm);
+    /** Current Background Region (def:Text) */
+    RegionDefine getBackground();
 
-  /** Searches pair match in all available text, possibly,
-      making additional processing.
-      @param pm Unmatched pair match
-  */
-  void searchGlobalPair(PairMatch pm);
+    /** Current Vertical Rule (def:VertCross) */
+    RegionDefine getVertCross();
 
-  /** Return parsed and colored LineRegions of requested line.
-      This method validates current cache state
-      and, if needed, calls Colorer parser to validate modified block of text.
-      Size of reparsed text is choosed according to information
-      about visible text range and modification events.
-      @todo If number of lines, to be reparsed is more, than backParse
-      parameter, then method will return null, until
-      validate() method is called.
-  */
-  LineRegion[] getLineRegions(int lno);
+    /** Current Horizontal Rule (def:HorzCross) */
+    RegionDefine getHorzCross();
 
-  /** Validates current state of the editor and runs parser, if needed.
-      This method can be called periodically in background thread
-      to make possible background parsing process.
-      @param lno Line number, for which validation is requested.
-             If this number is in the current visible window range,
-             the part of text is validated, which is required
-             for visual repaint.
-             If this number is equals to -1, all the text is validated.
-             If this number is not in visible range, optimal partial validation
-             is used
-  */
-  void validate(int lno);
+    /**
+     * Searches and creates pair match object. Returned object can be used later
+     * in the pair search methods. This object is valid only until reparse of
+     * it's line occured. After that event information about line region's
+     * references in it becomes invalid and, if used, can produce faults.
+     * 
+     * @param lineNo
+     *            Line number, where to search paired region.
+     * @param pos
+     *            Position in line, where paired region to be searched. Paired
+     *            Region is found, if it includes specified position or ends
+     *            directly at one char before line position.
+     */
+    PairMatch getPairMatch(int lineNo, int pos);
 
-  /** Tries to do some parsing job while user is doing nothing.
-      @param time integer between 0 and 100, shows an abount of time,
-      available for this job.
-  */
-  void idleJob(int time);
+    /**
+     * Searches pair match in currently visible text.
+     * 
+     * @param pm
+     *            Unmatched pair match
+     */
+    void searchLocalPair(PairMatch pm);
 
-  /** Informs BaseEditor object about text modification event.
-      All the text becomes invalid after the specified line.
-      @param topLine Topmost modified line of text.
-  */
-  void modifyEvent(int topLine);
+    /**
+     * Searches pair match in all available text, possibly, making additional
+     * processing.
+     * 
+     * @param pm
+     *            Unmatched pair match
+     */
+    void searchGlobalPair(PairMatch pm);
 
-  /** Informs about single line modification event.
-      Generally, this type of event can be processed much faster
-      because of pre-checking line's changed structure and
-      cancelling further parsing in case of unmodified text structure.
-      @param line Modified line of text.
-      @todo Not used yet! This must include special 'try' parse method.
-  */
-  void modifyLineEvent(int line);
+    /**
+     * Return parsed and colored LineRegions of requested line. This method
+     * validates current cache state and, if needed, calls Colorer parser to
+     * validate modified block of text. Size of reparsed text is choosed
+     * according to information about visible text range and modification
+     * events.
+     * 
+     * @todo If number of lines, to be reparsed is more, than backParse
+     *       parameter, then method will return null, until validate() method is
+     *       called.
+     */
+    LineRegion[] getLineRegions(int lno);
 
-  /** Informs about changes in visible range of text lines.
-      This information is used to make assumptions about
-      text structure and to make faster parsing.
-      @param wStart Topmost visible line of text.
-      @param wSize  Number of currently visible text lines.
-                    This number must includes all partially visible lines.
-  */
-  void visibleTextEvent(int wStart, int wSize);
+    /**
+     * Validates current state of the editor and runs parser, if needed. This
+     * method can be called periodically in background thread to make possible
+     * background parsing process.
+     * 
+     * @param lno
+     *            Line number, for which validation is requested. If this number
+     *            is in the current visible window range, the part of text is
+     *            validated, which is required for visual repaint. If this
+     *            number is equals to -1, all the text is validated. If this
+     *            number is not in visible range, optimal partial validation is
+     *            used
+     */
+    void validate(int lno);
 
-  /** Informs about total lines count change.
-      This must include initial lines number setting.
-  */
-  void lineCountEvent(int newLineCount);
+    /**
+     * Tries to do some parsing job while user is doing nothing.
+     * 
+     * @param time
+     *            integer between 0 and 100, shows an abount of time, available
+     *            for this job.
+     */
+    void idleJob(int time);
+
+    /**
+     * Informs BaseEditor object about text modification event. All the text
+     * becomes invalid after the specified line.
+     * 
+     * @param topLine
+     *            Topmost modified line of text.
+     */
+    void modifyEvent(int topLine);
+
+    /**
+     * Informs about single line modification event. Generally, this type of
+     * event can be processed much faster because of pre-checking line's changed
+     * structure and cancelling further parsing in case of unmodified text
+     * structure.
+     * 
+     * @param line
+     *            Modified line of text.
+     * @todo Not used yet! This must include special 'try' parse method.
+     */
+    void modifyLineEvent(int line);
+
+    /**
+     * Informs about changes in visible range of text lines. This information is
+     * used to make assumptions about text structure and to make faster parsing.
+     * 
+     * @param wStart
+     *            Topmost visible line of text.
+     * @param wSize
+     *            Number of currently visible text lines. This number must
+     *            includes all partially visible lines.
+     */
+    void visibleTextEvent(int wStart, int wSize);
+
+    /**
+     * Informs about total lines count change. This must include initial lines
+     * number setting.
+     */
+    void lineCountEvent(int newLineCount);
 
 };
 /* ***** BEGIN LICENSE BLOCK *****
