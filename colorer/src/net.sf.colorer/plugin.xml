@@ -14,10 +14,10 @@
    <requires>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide" optional="true"/>
+      <import plugin="org.eclipse.jface.text" optional="true"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" optional="true"/>
+      <import plugin="org.eclipse.ui.editors" optional="true"/>
    </requires>
 
 
@@ -182,7 +182,7 @@
       </objectContribution>
    </extension>
 
-<!-- Eclipse Help Topic 
+<!-- Eclipse Help Topic
    <extension
          point="org.eclipse.help.toc">
       <toc

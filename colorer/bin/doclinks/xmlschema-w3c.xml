@@ -3,9 +3,9 @@
   "http://colorer.sf.net/2003/doclinks.dtd">
 
 <doclinks xmlns="http://colorer.sf.net/2003/doclinks"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://colorer.sf.net/2003/doclinks
-                             http://colorer.sf.net/2003/doclinks.xsd">
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://colorer.sf.net/2003/doclinks
+                              http://colorer.sf.net/2003/doclinks.xsd">
 
   <links url='http://www.w3.org/TR/xmlschema-1'>
     <link token="element" url="#element-element"/>

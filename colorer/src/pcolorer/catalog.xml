@@ -42,8 +42,14 @@
     <hrd class="console" name="xmastree" description="Xmas tree">
       <location link="hrd/console/xmastree.hrd"/>
     </hrd>
+    <hrd class="console" name="black_sezal" description="Black Sezal">
+      <location link="hrd/console/contrib/black_sezal.hrd"/>
+    </hrd>
     <hrd class="console" name="black_ay" description="Black from Alex Yaroslavsky">
       <location link="hrd/console/contrib/black_ay.hrd"/>
+    </hrd>
+    <hrd class="console" name="mirror" description="Mirror from Eugene Efromov">
+      <location link="hrd/console/contrib/mirror.hrd"/>
     </hrd>
 
   </hrd-sets>
