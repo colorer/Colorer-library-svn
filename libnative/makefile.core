@@ -1,7 +1,7 @@
 
 objs = $(obj_output_slash)net_sf_colorer.$(obj) $(coreobjects)
 
-NSC_PATH=../bin
+NSC_PATH=../bin;../colorer.jar
 
 JAVA_DEP=net_sf_colorer_ParserFactory.h net_sf_colorer_impl_BaseEditorNative.h net_sf_colorer_HRCParser.h net_sf_colorer_Region.h
 #JAVA_DEP=
@@ -10,18 +10,18 @@ $(obj_output_slash)net_sf_colorer.$(obj): *.cpp *.h $(JAVA_DEP)
 
 
 
-net_sf_colorer_impl_BaseEditorNative.h: $(NSC_PATH)/net/sf/colorer/impl/BaseEditorNative.class
+net_sf_colorer_impl_BaseEditorNative.h:
 	$(RM) net_sf_colorer_impl_BaseEditorNative.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.impl.BaseEditorNative
 
-net_sf_colorer_ParserFactory.h: $(NSC_PATH)/net/sf/colorer/ParserFactory.class
+net_sf_colorer_ParserFactory.h:
 	$(RM) net_sf_colorer_ParserFactory.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.ParserFactory
 
-net_sf_colorer_Region.h:   $(NSC_PATH)/net/sf/colorer/Region.class
+net_sf_colorer_Region.h:
 	$(RM) net_sf_colorer_Region.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.Region
 
-net_sf_colorer_HRCParser.h:  $(NSC_PATH)/net/sf/colorer/HRCParser.class
+net_sf_colorer_HRCParser.h:
 	$(RM) net_sf_colorer_HRCParser.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.HRCParser
