@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project default="main" basedir=".">
+<project name='Colorer-take5' default="main" basedir=".">
 
   <description>
     This is the top-level buildfile, used by ANT tool (http://jakarta.apache.org/ant/)
@@ -55,6 +55,7 @@
     <mkdir dir='${farplugin-dir}'/>
     <mkdir dir='${farplugin-dir}/bin'/>
     <mkdir dir='${farplugin-dir}/hrc'/>
+    <mkdir dir='${farplugin-dir}/hrc/auto'/>
     <mkdir dir='${farplugin-dir}/hrd'/>
     <mkdir dir='${farplugin-dir}/hrd/console'/>
     <copy todir='${farplugin-dir}/bin'>
@@ -66,6 +67,28 @@
     <copy todir='${farplugin-dir}/hrd/console'>
       <fileset dir='hrd/console' includes='**'/>
     </copy>
+    <copy todir='${farplugin-dir}'>
+      <fileset dir='.' includes='LICENSE,README,catalog-light.xml'/>
+    </copy>
+    <zip destfile='${farplugin-dir}/hrc/common.jar'>
+      <fileset dir='hrc' includes='**/*' excludes='changes.txt, colorer.hrc, auto, auto/**/*'/>
+    </zip>
+    <copy file='hrc/colorer.hrc' tofile='${farplugin-dir}/hrc/colorer.hrc'>
+      <filterset begintoken='l' endtoken='"'>
+        <filter token='ink=' value='link="jar:common.jar!'/>
+      </filterset>
+    </copy>
+    <zip destfile='${farplugin-dir}/hrc/auto/auto.jar'>
+      <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*'/>
+    </zip>
+    <copy todir='${farplugin-dir}/hrc/auto'>
+      <fileset dir='hrc/auto' includes='*.hrc'/>
+      <filterset begintoken='l' endtoken='"'>
+        <filter token='ink=' value='link="jar:auto.jar!'/>
+      </filterset>
+    </copy>
+    
+    <move file='${farplugin-dir}/catalog-light.xml' tofile='${farplugin-dir}/catalog.xml'/>
   </target>
 <!--
 cp -r hrc/auto  %TARGET%/hrc
