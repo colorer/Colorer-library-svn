@@ -7,6 +7,7 @@
     Colorer-take5 library packages.
   </description>
 
+
   <property name='build-dir' value='distr'/>
 
   <property name='distr-version' value='.beta2'/>
@@ -25,6 +26,10 @@
 
   <property name='doxygen' value='C:\install\devel\doxygen\bin\doxygen.exe'/>
 
+  <property file='build.properties'/>
+
+
+
   <xmlcatalog id="DTDs">
       <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
            location="doc/2003/hrc.dtd"/>
@@ -41,6 +46,25 @@
     <antcall target='farplugin'/>
   </target>
 
+  <target name="clean" depends='hrcupdate.clean, eclipseplugin.clean, farplugin.clean, doc.clean'>
+    <delete dir='${build-dir}'/>
+  </target>
+
+  <target name="make.clean">
+    <exec dir='${make.dir}' executable='${make}'>
+      <arg line='${makefile}'/>
+      <arg line='clear'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+    </exec>
+  </target>
+
+  
+  
+  <target name="doc.clean">
+    <delete file='src\shared\colorer_doc\warn_out'/>
+    <ant dir='doc/hrc-ref' antfile='build.xml' target='clean'/>
+  </target>
+
   <target name="doc" depends='javadoc,doxygen'>
     <ant dir='doc/hrc-ref' antfile='build.xml' target='all'/>
   </target>
@@ -50,7 +74,6 @@
       <property name='doc-dir' value='../../doc/java'/>
     </ant>
   </target>
-
   <target name="doxygen" description='Generates C++ classes documentation'>
     <exec dir='src/shared/colorer_doc' executable='${doxygen}'>
       <arg value='colorer.doxygen.cfg'/>
@@ -62,10 +85,8 @@
     <ant dir='bin/xsd2hrc' antfile='build.xml' target='distr'/>
   </target>
 
-
   <target name="hrc.jar" depends='xsd2hrc.distr'>
-    <mkdir dir='${target-dir}/hrc'/>
-    <mkdir dir='${target-dir}/hrc/auto'/>
+
     <mkdir dir='${target-dir}/hrc/auto/types'/>
 
     <zip destfile='${target-dir}/hrc/common.jar'>
@@ -113,25 +134,52 @@
   <target name="eclipseplugin.clean">
     <delete dir='${eclipseplugin-dir}'/>
     <delete file='${eclipseplugin-zip}'/>
+    <ant dir='src/net.sf.colorer' antfile='build.xml' target='clean'>
+      <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
+    </ant>
+    <antcall target='make.clean'>
+      <param name='make.dir' value='src/net.sf.colorer/libnative'/>
+    </antcall>
   </target>
 
   <target name="eclipseplugin" description='Eclipse win32 distribution'>
     <mkdir dir='${eclipseplugin-dir}'/>
 
-    <exec dir='src/net.sf.colorer/libnative' executable='make' failonerror='true'>
-      <arg line='-f makefile.bcc'/>
-      <env key='PATH' path='C:\Program Files\Borland\bcc55\bin'/>
+    <exec dir='src/net.sf.colorer/libnative' executable='${make}' failonerror='true'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
     </exec>
+
     <ant dir='src/net.sf.colorer' antfile='build.xml' target='gather'>
       <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
     </ant>
+    <condition property="lib">
+      <or>
+        <available filepath="src/net.sf.colorer/libnative" file="net_sf_colorer.dll"/>
+        <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
+        <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.jnilib"/>
+      </or>
+    </condition>
+	<fail unless='lib' message='Native library was not compiled'/>
+
+	<mkdir dir="${eclipseplugin-dir}/os/win32/x86"/>
+	<mkdir dir="${eclipseplugin-dir}/os/linux/x86"/>
+	<mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
+	<copy todir="${eclipseplugin-dir}/os/win32/x86">
+		<fileset dir="src/net.sf.colorer/libnative" includes="net_sf_colorer.dll"/>
+	</copy>
+	<copy todir="${eclipseplugin-dir}/os/linux/x86">
+		<fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
+	</copy>
+	<copy todir="${eclipseplugin-dir}/os/macosx/ppc">
+		<fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+	</copy>
     
     <mkdir dir='${eclipseplugin-dir}/colorer'/>
     <antcall target='hrc.jar'>
       <param name='target-dir' value='${eclipseplugin-dir}/colorer'/>
     </antcall>
 
-    <mkdir dir='${eclipseplugin-dir}/colorer/hrd'/>
     <mkdir dir='${eclipseplugin-dir}/colorer/hrd/rgb'/>
     <copy todir='${eclipseplugin-dir}/colorer/hrd/rgb'>
       <fileset dir='hrd/rgb' includes='**'/>
@@ -155,18 +203,35 @@
   <target name="farplugin.clean">
     <delete dir='${farplugin-dir}'/>
     <delete file='${farplugin-zip}'/>
+    <antcall target='make.clean'>
+      <param name='make.dir' value='src/pcolorer'/>
+    </antcall>
   </target>
 
   <target name="farplugin">
-    <mkdir dir='${farplugin-dir}'/>
+
+    <condition property="system">
+      <os family='windows'/>
+    </condition>
+	<fail unless='system' message='FarColorer plugin is available only on Windows system'/>
+
     <mkdir dir='${farplugin-dir}/bin'/>
+    
+    <exec dir='src/pcolorer' executable='${make}' failonerror='true'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+    </exec>
+
+    <available property='lib' file='bin/farplugin/colorer.dll'/>
+    <fail unless='lib' message='FarColorer plugin was not compiled'/>
+
     <copy todir='${farplugin-dir}/bin'>
       <fileset dir='bin/farplugin' includes='colorer.dll,
                coloree.hlf,coloree.lng,colorer.hlf,
                colorer.lng,shortcuts.reg'><!-- colorer.map -->
       </fileset>
     </copy>
-    <mkdir dir='${farplugin-dir}/hrd'/>
+    
     <mkdir dir='${farplugin-dir}/hrd/console'/>
     <copy todir='${farplugin-dir}/hrd/console'>
       <fileset dir='hrd/console' includes='**'/>
