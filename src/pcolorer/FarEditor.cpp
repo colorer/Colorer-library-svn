@@ -171,9 +171,11 @@ void FarEditor::matchPair()
 {
 EditorSetPosition esp;
   enterHandler();
-  PairMatch *pm = baseEditor->getPairMatch(ei.CurLine, ei.CurPos);
-  if (pm == null) return;
-  baseEditor->searchGlobalPair(pm);
+  PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
+  if (pm == null){
+    leaveHandler();
+    return;
+  }
   leaveHandler();
 
   if (pm->eline == -1) return;
@@ -198,9 +200,11 @@ void FarEditor::selectPair(){
 EditorSelect es;
 int X1, X2, Y1, Y2;
   enterHandler();
-  PairMatch *pm = baseEditor->getPairMatch(ei.CurLine, ei.CurPos);
-  if (pm == null) return;
-  baseEditor->searchGlobalPair(pm);
+  PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
+  if (pm == null){
+    leaveHandler();
+    return;
+  }
   leaveHandler();
   if (pm->eline == -1) return;
 
@@ -228,9 +232,11 @@ void FarEditor::selectBlock(){
 EditorSelect es;
 int X1, X2, Y1, Y2;
   enterHandler();
-  PairMatch *pm = baseEditor->getPairMatch(ei.CurLine, ei.CurPos);
-  if (pm == null) return;
-  baseEditor->searchGlobalPair(pm);
+  PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
+  if (pm == null){
+    leaveHandler();
+    return;
+  }
   leaveHandler();
 
   if (pm->eline == -1) return;
@@ -278,21 +284,21 @@ EditorGetString egs;
 
 void FarEditor::listFunctions(){
   enterHandler();
-  baseEditor->validate(-1);
+  baseEditor->validate(-1, false);
   leaveHandler();
   showOutliner(structOutliner);
   ignoreChange = true;
 };
 void FarEditor::listErrors(){
   enterHandler();
-  baseEditor->validate(-1);
+  baseEditor->validate(-1, false);
   leaveHandler();
   showOutliner(errorOutliner);
   ignoreChange = true;
 };
 
 void FarEditor::updateHighlighting(){
-  baseEditor->validate(ei.TopScreenLine);
+  baseEditor->validate(ei.TopScreenLine, true);
 };
 
 void FarEditor::selectEncoding(){
@@ -462,7 +468,7 @@ int FarEditor::editorEvent(int event, void *param)
 
 
   /// pair brackets
-  PairMatch *pm = baseEditor->getPairMatch(ei.CurLine, ei.CurPos);
+  PairMatch *pm = baseEditor->searchLocalPair(ei.CurLine, ei.CurPos);
   if (pm != null){
     int color = convert(pm->start->styled());
     if (showHorizontalCross){
@@ -476,8 +482,6 @@ int FarEditor::editorEvent(int event, void *param)
       if (backDefault(color)) color = (color&0xF) + (vertCrossColor&0xF0);
       addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, color);
     };
-
-    baseEditor->searchLocalPair(pm);
 
     if (pm->eline != -1){
       color = convert(pm->end->styled());

@@ -3,33 +3,87 @@
 
 #include<colorer/handlers/LineRegionsSupport.h>
 
-/** Representation of pair match in text.
-    Contains information about two regions on two lines.
-    @ingroup colorer_editor
-*/
+/**
+ * Representation of pair match in text.
+ * Contains information about two regions on two lines.
+ * @ingroup colorer_editor
+ */
 class PairMatch{
 public:
-  /** Region's start position */
+  /**
+   * Region's start position as a cloned LineRegion object.
+   */
   LineRegion *start;
-  /** Region's end position */
+  /**
+   * Region's end position as a cloned LineRegion object.
+   */
   LineRegion *end;
-  /** Starting Line of pair */
+  /**
+   * Starting Line of pair
+   */
   int sline;
-  /** Ending Line of pair */
+  /**
+   * Ending Line of pair
+   */
   int eline;
-  /** Identifies initial position of cursor in pair */
+  /**
+   * Identifies initial position of cursor in pair
+   */
   bool topPosition;
-  /** Internal pair search counter */
+  /**
+   * Internal pair search counter
+   */
   int pairBalance;
 
-  /** Default constructor.
-      Clears all fields
-  */
-  PairMatch::PairMatch(){
-    sline = eline = -1;
-    pairBalance = 0;
-    topPosition = true;
-  };
+  /**
+   * Default constructor.
+   * Clears all fields
+   */
+  PairMatch::PairMatch(LineRegion *startRef, int lineNo, bool topPosition){
+    start = end = null;
+    this->startRef = startRef;
+    sline = lineNo;
+    pairBalance = -1;
+    this->topPosition = false;
+    if (topPosition){
+      pairBalance = 1;
+      this->topPosition = true;
+    };
+    eline = -1;
+  }
+
+  virtual PairMatch::~PairMatch(){
+    delete start;
+    delete end;
+  }
+
+
+  LineRegion *getStartRef(){
+    return startRef;
+  }
+
+  void setStart(LineRegion *pair){
+    if (start != null){
+      delete start;
+    }
+    if (pair != null){
+      start = new LineRegion(*pair);
+    }
+  }
+
+  void setEnd(LineRegion *pair){
+    if (end != null){
+      delete end;
+    }
+    if (pair != null){
+      end = new LineRegion(*pair);
+    }
+  }
+private:
+  /**
+   * Region's start position as a reference to inparse sequence.
+   */
+  LineRegion *startRef;
 };
 
 #endif
@@ -50,7 +104,7 @@ public:
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

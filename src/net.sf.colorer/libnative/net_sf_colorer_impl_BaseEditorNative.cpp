@@ -221,7 +221,7 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_validate
   (JNIEnv *env, jobject obj, jlong iptr, jint lno)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  be->validate(lno);
+  be->validate(lno, true);
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_idleJob

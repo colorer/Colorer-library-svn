@@ -10,99 +10,110 @@
 #include<colorer/ParserFactoryException.h>
 
 
-/** Maintains catalog of HRC and HRD references.
-    This class searches and loads <code>catalog.xml</code> file
-    and creates HRCParser, StyledHRDMapper, TextHRDMapper and TextParser instances
-    with information, loaded from specified sources.
-
-    If no path were passed to it's constructor,
-    it uses the next search order to find 'catalog.xml' file:
-
-    - win32 systems:
-      - image_start_dir, image_start_dir/../, image_start_dir/../../
-      - \%COLORER5CATALOG%
-      - \%HOME%/.colorer5catalog
-      - \%HOMEPATH%/.colorer5catalog
-      - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
-
-    - unix/macos systems:
-      - ./catalog.xml
-      - ../catalog.xml
-      - ../../catalog.xml
-      - \$COLORER5CATALOG
-      - \$HOME.colorer5catalog
-      - \$HOMEPATH.colorer5catalog
-      - /usr/share/colorer/catalog.xml
-      - /usr/local/share/colorer/catalog.xml
-
-  @note
-    - \%NAME%, \$NAME - Environment variable of the current process.
-    - image_start_dir - Directory, where current image was started.
-
-  @ingroup colorer
-*/
+/**
+ * Maintains catalog of HRC and HRD references.
+ * This class searches and loads <code>catalog.xml</code> file
+ * and creates HRCParser, StyledHRDMapper, TextHRDMapper and TextParser instances
+ * with information, loaded from specified sources.
+ *
+ * If no path were passed to it's constructor,
+ * it uses the next search order to find 'catalog.xml' file:
+ *
+ * - win32 systems:
+ *   - image_start_dir, image_start_dir/../, image_start_dir/../../
+ *   - \%COLORER5CATALOG%
+ *   - \%HOME%/.colorer5catalog
+ *   - \%HOMEPATH%/.colorer5catalog
+ *   - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
+ *
+ * - unix/macos systems:
+ *   - ./catalog.xml
+ *   - ../catalog.xml
+ *   - ../../catalog.xml
+ *   - \$COLORER5CATALOG
+ *   - \$HOME.colorer5catalog
+ *   - \$HOMEPATH.colorer5catalog
+ *   - /usr/share/colorer/catalog.xml
+ *   - /usr/local/share/colorer/catalog.xml
+ *
+ * @note
+ *   - \%NAME%, \$NAME - Environment variable of the current process.
+ *   - image_start_dir - Directory, where current image was started.
+ *
+ * @ingroup colorer
+ */
 class ParserFactory{
 public:
 
-  /** ParserFactory Constructor.
-      Searches for catalog.xml in the set of predefined locations
-      @throw ParserFactoryException If can't find catalog at any of standard locations.
-  */
+  /**
+   * ParserFactory Constructor.
+   * Searches for catalog.xml in the set of predefined locations
+   * @throw ParserFactoryException If can't find catalog at any of standard locations.
+   */
   ParserFactory();
 
-  /** ParserFactory Constructor with explicit catalog path.
-      @param catalogPath Path to catalog.xml file. If null,
-             standard search method is used.
-      @throw ParserFactoryException If can't load specified catalog.
-  */
+  /**
+   * ParserFactory Constructor with explicit catalog path.
+   * @param catalogPath Path to catalog.xml file. If null,
+   *        standard search method is used.
+   * @throw ParserFactoryException If can't load specified catalog.
+   */
   ParserFactory(const String *catalogPath);
   virtual ~ParserFactory();
 
   static const char *getVersion();
 
-  /** Enumerates all declared hrd classes
-  */
+  /**
+   * Enumerates all declared hrd classes
+   */
   const String *enumerateHRDClasses(int idx);
 
-  /** Enumerates all declared hrd instances of specified class
-  */
+  /**
+   * Enumerates all declared hrd instances of specified class
+   */
   const String *enumerateHRDInstances(const String &classID, int idx);
 
-  /** Returns description of HRD instance, pointed by classID and nameID parameters.
-  */
+  /**
+   * Returns description of HRD instance, pointed by classID and nameID parameters.
+   */
   const String *getHRDescription(const String &classID, const String &nameID);
 
-  /** Creates and loads HRCParser instance from catalog.xml file.
-      This method can detect directory entries, and sequentally load their
-      contents into created HRCParser instance.
-      In other cases it uses InputSource#newInstance() method to
-      create input data stream.
-      Only one HRCParser instance is created for each ParserFactory instance.
-  */
+  /**
+   * Creates and loads HRCParser instance from catalog.xml file.
+   * This method can detect directory entries, and sequentally load their
+   * contents into created HRCParser instance.
+   * In other cases it uses InputSource#newInstance() method to
+   * create input data stream.
+   * Only one HRCParser instance is created for each ParserFactory instance.
+   */
   HRCParser  *getHRCParser();
 
-  /** Creates TextParser instance
-  */
+  /**
+   * Creates TextParser instance
+   */
   TextParser *createTextParser();
 
-  /** Creates RegionMapper instance and loads specified hrd files into it.
-      @param classID Class identifier of loaded hrd instance.
-      @param nameID  Name identifier of loaded hrd instances.
-      @throw ParserFactoryException If method can't find specified pair of
-              class and name IDs in catalog.xml file
-  */
+  /**
+   * Creates RegionMapper instance and loads specified hrd files into it.
+   * @param classID Class identifier of loaded hrd instance.
+   * @param nameID  Name identifier of loaded hrd instances.
+   * @throw ParserFactoryException If method can't find specified pair of
+   *         class and name IDs in catalog.xml file
+   */
   StyledHRDMapper *createStyledMapper(const String *classID, const String *nameID);
-  /** Creates RegionMapper instance and loads specified hrd files into it.
-      It uses 'text' class by default.
-      @param nameID  Name identifier of loaded hrd instances.
-      @throw ParserFactoryException If method can't find specified pair of
-              class and name IDs in catalog.xml file
-  */
+  /**
+   * Creates RegionMapper instance and loads specified hrd files into it.
+   * It uses 'text' class by default.
+   * @param nameID  Name identifier of loaded hrd instances.
+   * @throw ParserFactoryException If method can't find specified pair of
+   *         class and name IDs in catalog.xml file
+   */
   TextHRDMapper *createTextMapper(const String *nameID);
 
-  /** Returns currently used global error handler.
-      If no error handler were installed, returns null.
-  */
+  /**
+   * Returns currently used global error handler.
+   * If no error handler were installed, returns null.
+   */
   ErrorHandler *getErrorHandler(){
     return fileErrorHandler;
   };
@@ -142,7 +153,7 @@ private:
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

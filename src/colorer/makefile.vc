@@ -9,6 +9,7 @@ obj_output=objs
 #CPPFLAGS_CUSTOM = /Zi
 #LIB_DEBUG = /debug /incremental:no
 CPPFLAGS_CUSTOM =
+#-DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET
 LIB_DEBUG = /incremental:no
 
 include ../shared/makefile.colorer.vc

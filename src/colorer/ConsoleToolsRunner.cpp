@@ -13,7 +13,7 @@ int profileLoops = 1;
 void init(ConsoleTools &ct, int argc, char*argv[]){
 
   fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
-  fprintf(stderr, "Copyright (c) 1999-2004 Igor Russkih <cail@nm.ru>\n\n");
+  fprintf(stderr, "Copyright (c) 1999-2005 Igor Russkih <cail@nm.ru>\n\n");
 
   for(int i = 1; i < argc; i++){
     if (argv[i][0] != '-'){

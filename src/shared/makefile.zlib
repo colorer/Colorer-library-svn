@@ -35,8 +35,6 @@ $(obj_output_slash)uncompr.$(obj):
 	$(CPP) $(CPPFLAGS) $(unzipdir)uncompr.c
 $(obj_output_slash)zutil.$(obj):
 	$(CPP) $(CPPFLAGS) $(unzipdir)zutil.c
-$(obj_output_slash)miniunz.$(obj):
-	$(CPP) $(CPPFLAGS) $(unzipdir)contrib/minizip/miniunz.c
 $(obj_output_slash)unzip.$(obj):
 	$(CPP) $(CPPFLAGS) $(unzipdir)contrib/minizip/unzip.c
 $(obj_output_slash)ioapi.$(obj):

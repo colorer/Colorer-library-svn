@@ -19,7 +19,7 @@ $validDir = "_valid";
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 $currentDir = sprintf("__%d-%02d-%02d %02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
 
-if (!mkdir $currentDir){
+if (!mkdir $currentDir, 0777){
 #  die "Can't create dir - already exists" ;
 }
 
@@ -135,7 +135,7 @@ sub checkDir{
     my $dirs = "/";
     foreach(split /\//, $dir){
       $dirs .= $_;
-      mkdir $currentDir.$dirs;
+      mkdir $currentDir.$dirs, 0777;
       $dirs .= "/";
     }
   }

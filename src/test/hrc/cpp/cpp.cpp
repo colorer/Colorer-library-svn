@@ -24,5 +24,13 @@ extern __inline__ unsigned char ucl_rotr8(unsigned char value, int shift)
 }
 
 
+  for(Num = 1;Num < (GDTSIZE>>3);Num++){
+    if(!p[Num*2] && !p[Num*2+1]){
+      sysSetDesc(Num,Lo,Hi);
+      return Num;
+    };
+  };
+  return false;
+
 0x2322u
 //

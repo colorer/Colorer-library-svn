@@ -14,7 +14,7 @@ void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
   if (ladd->special){
     // adds last and returns
     if (lstart == null){
-      lineRegions.setElementAt(ladd, lno-firstLineNo);
+      lineRegions.setElementAt(ladd, getLineIndex(lno));
     }else{
       ladd->prev = lstart->prev;
       lstart->prev->next = ladd;
@@ -23,7 +23,7 @@ void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
     return;
   };
   if (lstart == null){
-    lineRegions.setElementAt(ladd, lno-firstLineNo);
+    lineRegions.setElementAt(ladd, getLineIndex(lno));
     return;
   };
 
@@ -108,7 +108,7 @@ void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
       continue;
     };
   };
-  lineRegions.setElementAt(lstart, lno-firstLineNo);
+  lineRegions.setElementAt(lstart, getLineIndex(lno));
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -127,7 +127,7 @@ void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
