@@ -17,14 +17,16 @@ void *operator new(size_t size){
   return dlmalloc(size);
 };
 void operator delete(void *ptr){
-  return dlfree(ptr);
+  dlfree(ptr);
+  return;
 };
 
 void *operator new[](size_t size){
   return dlmalloc(size);
 };
 void operator delete[](void *ptr){
-  return dlfree(ptr);
+  dlfree(ptr);
+  return;
 };
 #endif
 
