@@ -395,22 +395,24 @@ Everything, that doesn't looks like metacharacters, means simple character.
 <row><entry><literal>.</literal></entry><entry>Match any character (except \r\n)</entry></row>
 <row><entry><literal>[...]</literal></entry><entry>Match characters in set</entry></row>
 <row><entry><literal>[^...]</literal></entry><entry>Match characters not in set.
-          Here all the operators are disabled, but you can
-          use other metacharacters,  and  range  operator:
-          a-z means all chars from first to second (a - z)</entry></row>
+          All the operators are disabled here, but you can
+          use other metacharacters and range operator:
+          a-z means all chars from first to second (a - z),
+          <literal>[{ASSIGNED}-[{Lu}]-[{Ll}]]</literal> - unicode classes reference.
+          </entry></row>
 <row><entry><literal>\#</literal></entry><entry>Next symbol '#' after slash (except a-z and 1-9)</entry></row>
-<row><entry><literal>\b</literal></entry><entry>Start of word</entry></row>
-<row><entry><literal>\B</literal></entry><entry>End of word</entry></row>
-<row><entry><literal>\xNN</literal></entry><entry><literal>NN</literal> - ASCII char (hex)</entry></row>
-<row><entry><literal>\n</literal></entry><entry>0x10 (lf)</entry></row>
+<row><entry><literal>\b</literal></entry><entry>Word break</entry></row>
+<row><entry><literal>\B</literal></entry><entry>No word break</entry></row>
+<row><entry><literal>\xHH</literal>, <literal>\x{HHHH}</literal></entry><entry><literal>HH, HHHH</literal> - character code (hex)</entry></row>
+<row><entry><literal>\n</literal></entry><entry>0x10 (lf)</entry></row>                                          
 <row><entry><literal>\r</literal></entry><entry>0x13 (cr)</entry></row>
 <row><entry><literal>\t</literal></entry><entry>0x09 (tab)</entry></row>
-<row><entry><literal>\s</literal></entry><entry>tab/space/cr/lf</entry></row>
-<row><entry><literal>\S</literal></entry><entry>Non-space</entry></row>
+<row><entry><literal>\s</literal></entry><entry>Whitespace character (tab/space/cr/lf)</entry></row>
+<row><entry><literal>\S</literal></entry><entry>Not whitespace</entry></row>
 <row><entry><literal>\w</literal></entry><entry>Word symbol (chars, digits, _)</entry></row>
-<row><entry><literal>\W</literal></entry><entry>Non-word symbol</entry></row>
+<row><entry><literal>\W</literal></entry><entry>Not word symbols</entry></row>
 <row><entry><literal>\d</literal></entry><entry>Digit</entry></row>
-<row><entry><literal>\D</literal></entry><entry>Non-Digit</entry></row>
+<row><entry><literal>\D</literal></entry><entry>Not Digit</entry></row>
 <row><entry><literal>\u</literal></entry><entry>Uppercase symbol</entry></row>
 <row><entry><literal>\l</literal></entry><entry>Lowercase symbol</entry></row>
 </tbody></tgroup></table>
@@ -419,19 +421,20 @@ Everything, that doesn't looks like metacharacters, means simple character.
 <section id='hrcre.exmeta'><title>Extended metacharacter</title>
 <para>These metacharacters are incompatible with Perl</para>
 <table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
-<row><entry><literal>\c</literal></entry><entry>means 'non-word before'</entry></row>
+<row><entry><literal>\c</literal></entry><entry>Means 'not word' before</entry></row>
 <row><entry><literal>\N</literal></entry><entry>Link inside of regexp to one of its brackets.
           <literal>N</literal>  - needed brackets pair.  This operator  works
           only with non-operator symbols in a bracket.
 </entry></row>
 </tbody></tgroup></table>
 
-<para>And these could be disabled during compilaton as highlight-dependent</para>
+<para>And these could be disabled during regexp module
+      compilaton as highlight-dependent</para>
 <table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of start start).</entry></row>
-<row><entry><literal>\m</literal></entry><entry>Change start of regexp</entry></row>
-<row><entry><literal>\M</literal></entry><entry>Change end of regexp</entry></row>
-<row><entry><literal>\yN</literal></entry><entry>Link  to  the   external  regexp (in End  to the Start param). N - requeried brackets pair.</entry></row>
+<row><entry><literal>\m</literal></entry><entry>Changes start of regexp</entry></row>
+<row><entry><literal>\M</literal></entry><entry>Changes end of regexp</entry></row>
+<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - requeried brackets pair, name - named bracket.</entry></row>
 </tbody></tgroup></table>
 
 </section>
