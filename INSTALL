@@ -46,19 +46,24 @@
     d. Next, you need to fix all the paths, placed in this file. In particular
        you must have:
           d.1. Some XSD files (MathML, DocBook, XHTML).
-               http://www.w3.org/TR/MathML2/
-??               http://oasis-open.org/...
+               http://www.w3.org/Math/XMLSchema/
+               http://www.oasis-open.org/committees/docbook/xmlschema/1.0b1/
                http://www.w3.org/TR/xhtml1/
           d.2. Doxygen documentation generation tool (doxygen.exe on win32).
                http://www.doxygen.org
           d.3  Norman's Walsh DocBook XSL Transformations.
-??               http://docbook-xsl.sourceforge.net
+               http://docbook.sf.net/
           d.4. Apache FOP processor.
                http://xml.apache.org/fop/
        If some of these resources are unavailable, you can tell colorer
        to ignore their tasks, with disabling 'fail-on-badpaths'
-       property. In this case appropriate build tasks should be ignored.
+       property. In this case appropriate build tasks would be ignored.
        
+    e. When building Eclipse plugin, you need to specify
+       'eclipse.dir' property, pointing to you eclipse installation directory.
+       Also, if building plugin's native part, you must have JAVA_HOME environment
+       variable pointing to your JDK installation.
+
 
   3. Installation
 
