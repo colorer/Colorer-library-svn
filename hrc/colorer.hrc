@@ -459,7 +459,8 @@
   <prototype name="messages" group="other" description="message">
     <location link="misc/messages.hrc"/>
     <filename>/\.(msg|eml|pkt|pms|nws)$/i</filename>
-    <firstline>/^FROM/i</firstline>
+    <firstline>/^FROM/si</firstline>
+    <firstline>/\%start\%/s</firstline>
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>

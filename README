@@ -7,7 +7,7 @@
   provides services to parse text in editor in real time and transform
   results into a colored text.
 
-  For more information see 'index.html' in the 'doc' directory of
+  For more information see 'index.html' in the 'doc' folder of
   the Colorer Library package distribution or visit
     http://colorer.sf.net/
   
