@@ -5,15 +5,14 @@
 
 #include"JHRCParser.h"
 
-class JParserFactory : public ParserFactory{
+class JParserFactory : public ParserFactory
+{
 public:
-  JParserFactory(String *catalog):ParserFactory(catalog){
-    jhp = null;
-    jHRCParser = null;
-  };
+    JParserFactory(String *catalog):ParserFactory(catalog){
+        jhp = null;
+    };
 
-  JHRCParser *jhp;
-  jobject jHRCParser;
+    JHRCParser *jhp;
 };
 
 #endif

@@ -5,10 +5,12 @@
 #include<colorer/HRCParser.h>
 
 class JHRCParser{
-public:
-  HRCParser *hrcParser;
   Hashtable<jobject> regions;
   Hashtable<jobject> fileTypes;
+
+public:
+  HRCParser *hrcParser;
+  jobject jHRCParser;
 
   jobject getRegion(JNIEnv *env, const String *regname){
     jobject reg = regions.get(regname);
@@ -52,6 +54,19 @@ public:
     }
     return jtype;
   }
+
+  void finalize(JNIEnv *env){
+      for(jobject region = regions.enumerate(); region != null; region = regions.next()) {
+        env->DeleteGlobalRef(region);
+      }
+      for(jobject filetype = fileTypes.enumerate(); filetype != null; filetype = fileTypes.next()) {
+        env->DeleteGlobalRef(filetype);
+      }
+      delete this;
+  }
+
+private:
+  ~JHRCParser(){}
 
 };
 
