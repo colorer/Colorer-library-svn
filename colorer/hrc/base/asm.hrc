@@ -553,12 +553,18 @@ With help of:
         <word name="JECXZ"/>
         <word name="JMP"/>
         <word name="CALL"/>
+        <word name='LOOP'/>
+        <word name='LOOPE'/>
+        <word name='LOOPNE'/>
+        <word name='LOOPNZ'/>
+        <word name='LOOPZ'/>
       </keywords>
     </scheme>
+    
     <scheme name="asm_base">
       <!-- cail: this enables labels highlighting with all
        jump-like instructions. really hard -->
-      <block start="/\M \b(j[ABCEGLMNOPSUXZabceglmnopsuxz]+?|call) \s*
+      <block start="/\M \b(j[ABCEGLMNOPSUXZabceglmnopsuxz]+?|call|loop[EeNnZz]{,2}) \s*
                      (near|far|short|) \s+
                      (near|far|short)?![\w\$\~\@\#\%\?\.\-\+]+/xi"
              end="/\s+ ([\w\$\~\@\#\%\?\.\-\+]+)/x" scheme="asm_jumps"
@@ -1148,7 +1154,7 @@ With help of:
       <!-- numbers - IEEE -->
       <regexp match="/\b(\d[0-9a-fA-F]*[rR])\b/" region0="asmNumHex"/>
       <!-- numbers - dec -->
-      <regexp match="/\b([0-9]+[dD])\b/" region0="asmNumDec"/>
+      <regexp match="/\b([0-9]+[dD]?)\b/" region0="asmNumDec"/>
       <!-- numbers - bin -->
       <regexp match="/\b([01]+[bB])\b/" region0="asmNumBin"/>
       <!-- numbers - exp -->
