@@ -111,6 +111,7 @@ void BaseEditor::chooseFileType(const String *fileName){
       String *iLine = lineSource->getLine(i);
       if (iLine == null) break;
       textStart.append(iLine);
+      textStart.append("\n");
       totalLength += iLine->length();
       if (totalLength > 500) break;
     };
