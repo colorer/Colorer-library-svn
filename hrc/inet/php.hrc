@@ -11,9 +11,13 @@
     <annotation><documentation>
        PHP scheme
     </documentation><contributors><![CDATA[
-       Zini nAlexei <zn@zn.mldnet.com>
-       Kirill Hryapin <kx@mail.ru>
-       Ondrej Brablc <colorer@brablc.com>
+        Zini nAlexei <zn@zn.mldnet.com>
+        Kirill Hryapin <kx@mail.ru>
+        Ondrej Brablc <far@brablc.com>
+        Eugene Efremov <4mirror@mail.ru>:
+         - correct strings and heredoc, new schemes for strings
+         - add regexp support (PCRE and ROSIX)
+         - any keywords/regions changed and other fixs...
     ]]></contributors></annotation>
 
     <import type="def"/>
@@ -22,274 +26,18 @@
     <region name="Insertion" parent="asp.vb:Insertion"/>
     <region name="OpenTag"   parent="asp.vb:OpenTag"/>
     <region name="CloseTag"  parent="asp.vb:CloseTag"/>
-
+    
     <region name='ClassOutline' parent='def:Outlined'/>
     <region name='FunctionOutline' parent='def:Outlined'/>
 
-    <scheme name="DeprecatedKeywords">
-      <keywords region="Comment" ignorecase="yes">
-        <word name="add_root"/>
-        <word name="addaction"/>
-        <word name="addcolor"/>
-        <word name="addentry"/>
-        <word name="addfill"/>
-        <word name="addshape"/>
-        <word name="adString"/>
-        <word name="align"/>
-        <word name="attributes"/>
-        <word name="children"/>
-        <word name="chop"/>
-        <word name="com_get"/>
-        <word name="com_propset"/>
-        <word name="com_set"/>
-        <word name="cv_add"/>
-        <word name="cv_auth"/>
-        <word name="cv_command"/>
-        <word name="cv_count"/>
-        <word name="cv_delete"/>
-        <word name="cv_done"/>
-        <word name="cv_init"/>
-        <word name="cv_lookup"/>
-        <word name="cv_new"/>
-        <word name="cv_report"/>
-        <word name="cv_return"/>
-        <word name="cv_reverse"/>
-        <word name="cv_sale"/>
-        <word name="cv_status"/>
-        <word name="cv_textvalue"/>
-        <word name="cv_void"/>
-        <word name="die"/>
-        <word name="dir"/>
-        <word name="diskfreespace"/>
-        <word name="domxml_getattr"/>
-        <word name="domxml_setattr"/>
-        <word name="doubleval"/>
-        <word name="drawarc"/>
-        <word name="drawcircle"/>
-        <word name="drawcubic"/>
-        <word name="drawcubicto"/>
-        <word name="drawcurve"/>
-        <word name="drawcurveto"/>
-        <word name="drawglyph"/>
-        <word name="drawline"/>
-        <word name="drawlineto"/>
-        <word name="dtd"/>
-        <word name="dumpmem"/>
-        <word name="fbsql"/>
-        <word name="fputs"/>
-        <word name="get_attribute"/>
-        <word name="getascent"/>
-        <word name="getascent"/>
-        <word name="getattr"/>
-        <word name="getdescent"/>
-        <word name="getdescent"/>
-        <word name="getheight"/>
-        <word name="getleading"/>
-        <word name="getshape1"/>
-        <word name="getshape2"/>
-        <word name="getwidth"/>
-        <word name="gzputs"/>
-        <word name="i18n_convert"/>
-        <word name="i18n_discover_encoding"/>
-        <word name="i18n_http_input"/>
-        <word name="i18n_http_output"/>
-        <word name="i18n_internal_encoding"/>
-        <word name="i18n_ja_jp_hantozen"/>
-        <word name="i18n_mime_header_decode"/>
-        <word name="i18n_mime_header_encode"/>
-        <word name="imap_create"/>
-        <word name="imap_fetchtext"/>
-        <word name="imap_getmailboxes"/>
-        <word name="imap_getsubscribed"/>
-        <word name="imap_header"/>
-        <word name="imap_listmailbox"/>
-        <word name="imap_listsubscribed"/>
-        <word name="imap_rename"/>
-        <word name="imap_scan"/>
-        <word name="imap_scanmailbox"/>
-        <word name="ini_alter"/>
-        <word name="is_double"/>
-        <word name="is_integer"/>
-        <word name="is_long"/>
-        <word name="is_real"/>
-        <word name="is_bool"/>
-        <word name="is_writeable"/>
-        <word name="join"/>
-        <word name="labelframe"/>
-        <word name="last_child"/>
-        <word name="lastchild"/>
-        <word name="ldap_close"/>
-        <word name="magic_quotes_runtime"/>
-        <word name="mbstrcut"/>
-        <word name="mbstrlen"/>
-        <word name="mbstrpos"/>
-        <word name="mbstrrpos"/>
-        <word name="mbsubstr"/>
-        <word name="ming_setcubicthreshold"/>
-        <word name="ming_setscale"/>
-        <word name="movepen"/>
-        <word name="movepento"/>
-        <word name="moveto"/>
-        <word name="msql"/>
-        <word name="msql_affected_rows"/>
-        <word name="msql_createdb"/>
-        <word name="msql_dbname"/>
-        <word name="msql_dropdb"/>
-        <word name="msql_fieldflags"/>
-        <word name="msql_fieldlen"/>
-        <word name="msql_fieldname"/>
-        <word name="msql_fieldtable"/>
-        <word name="msql_fieldtype"/>
-        <word name="msql_freeresult"/>
-        <word name="msql_listdbs"/>
-        <word name="msql_listfields"/>
-        <word name="msql_listtables"/>
-        <word name="msql_numfields"/>
-        <word name="msql_numrows"/>
-        <word name="msql_regcase"/>
-        <word name="msql_selectdb"/>
-        <word name="msql_tablename"/>
-        <word name="mssql_affected_rows"/>
-        <word name="mssql_close"/>
-        <word name="mssql_connect"/>
-        <word name="mssql_data_seek"/>
-        <word name="mssql_fetch_array"/>
-        <word name="mssql_fetch_field"/>
-        <word name="mssql_fetch_object"/>
-        <word name="mssql_fetch_row"/>
-        <word name="mssql_field_seek"/>
-        <word name="mssql_free_result"/>
-        <word name="mssql_get_last_message"/>
-        <word name="mssql_min_client_severity"/>
-        <word name="mssql_min_error_severity"/>
-        <word name="mssql_min_message_severity"/>
-        <word name="mssql_min_server_severity"/>
-        <word name="mssql_num_fields"/>
-        <word name="mssql_num_rows"/>
-        <word name="mssql_pconnect"/>
-        <word name="mssql_query"/>
-        <word name="mssql_result"/>
-        <word name="mssql_select_db"/>
-        <word name="multcolor"/>
-        <word name="mysql"/>
-        <word name="mysql_createdb"/>
-        <word name="mysql_db_name"/>
-        <word name="mysql_dbname"/>
-        <word name="mysql_dropdb"/>
-        <word name="mysql_fieldflags"/>
-        <word name="mysql_fieldlen"/>
-        <word name="mysql_fieldname"/>
-        <word name="mysql_fieldtable"/>
-        <word name="mysql_fieldtype"/>
-        <word name="mysql_freeresult"/>
-        <word name="mysql_listdbs"/>
-        <word name="mysql_listfields"/>
-        <word name="mysql_listtables"/>
-        <word name="mysql_numfields"/>
-        <word name="mysql_numrows"/>
-        <word name="mysql_selectdb"/>
-        <word name="mysql_tablename"/>
-        <word name="new_child"/>
-        <word name="new_xmldoc"/>
-        <word name="nextframe"/>
-        <word name="nextframe"/>
-        <word name="node"/>
-        <word name="oci8append"/>
-        <word name="oci8assign"/>
-        <word name="oci8assignelem"/>
-        <word name="oci8close"/>
-        <word name="oci8free"/>
-        <word name="oci8free"/>
-        <word name="oci8getelem"/>
-        <word name="oci8load"/>
-        <word name="oci8max"/>
-        <word name="oci8ocifreecursor"/>
-        <word name="oci8save"/>
-        <word name="oci8savefile"/>
-        <word name="oci8size"/>
-        <word name="oci8trim"/>
-        <word name="oci8writetemporary"/>
-        <word name="oci8writetofile"/>
-        <word name="odbc_do"/>
-        <word name="odbc_field_precision"/>
-        <word name="orbit_caught_exception"/>
-        <word name="orbit_exception_id"/>
-        <word name="orbit_exception_value"/>
-        <word name="orbit_get_repository_id"/>
-        <word name="orbit_load_idl"/>
-        <word name="output"/>
-        <word name="parent"/>
-        <word name="pdf_add_outline"/>
-        <word name="pg_clientencoding"/>
-        <word name="pg_setclientencoding"/>
-        <word name="pos"/>
-        <word name="recode"/>
-        <word name="rewind"/>
-        <word name="root"/>
-        <word name="rotate"/>
-        <word name="rotateto"/>
-        <word name="savetofile"/>
-        <word name="scale"/>
-        <word name="scaleto"/>
-        <word name="set_attribute"/>
-        <word name="set_content"/>
-        <word name="setaction"/>
-        <word name="setattr"/>
-        <word name="setbackground"/>
-        <word name="setbounds"/>
-        <word name="setcolor"/>
-        <word name="setdepth"/>
-        <word name="setdimension"/>
-        <word name="setdown"/>
-        <word name="setfont"/>
-        <word name="setframes"/>
-        <word name="setheight"/>
-        <word name="sethit"/>
-        <word name="setindentation"/>
-        <word name="setleftfill"/>
-        <word name="setleftmargin"/>
-        <word name="setline"/>
-        <word name="setlinespacing"/>
-        <word name="setmargins"/>
-        <word name="setmatrix"/>
-        <word name="setname"/>
-        <word name="setover"/>
-        <word name="setrate"/>
-        <word name="setratio"/>
-        <word name="setrightfill"/>
-        <word name="setrightmargin"/>
-        <word name="setspacing"/>
-        <word name="show_source"/>
-        <word name="sizeof"/>
-        <word name="skewx"/>
-        <word name="skewxto"/>
-        <word name="skewy"/>
-        <word name="skewyto"/>
-        <word name="snmpwalkoid"/>
-        <word name="strchr"/>
-        <word name="streammp3"/>
-        <word name="swfaction"/>
-        <word name="swfbitmap"/>
-        <word name="swfbutton"/>
-        <word name="swfbutton_keypress"/>
-        <word name="swffill"/>
-        <word name="swffont"/>
-        <word name="swfgradient"/>
-        <word name="swfmorph"/>
-        <word name="swfmovie"/>
-        <word name="swfshape"/>
-        <word name="swfsprite"/>
-        <word name="swftext"/>
-        <word name="swftextfield"/>
-        <word name="unlink"/>
-        <word name="xpath_eval"/>
-        <word name="xpath_eval_expression"/>
-        <word name="xpath_init"/>
-        <word name="xpath_new_context"/>
-        <word name="xptr_new_context"/>
-      </keywords>
-    </scheme>
+    <!-- !!EE add -->
+    <region name="HereDoc" parent="perl:HereDoc"/>
+    <region name="InternalInsertion" parent="def:Insertion"/>
+    <region name="VarString" parent="def:Var"/>
 
+
+    
+<!--
     <scheme name="StringCore">
       <regexp match="/\\[^xX0-7]/" region="StringContent"/>
       <regexp match="/\\[xX][\da-fA-F]{1,8}/" region="StringContent"/>
@@ -298,55 +46,252 @@
 
     <scheme name="String2Core">
       <regexp match="/\\['\\]/" region="StringContent"/>
-    </scheme>
+    </scheme>-->
 
+<!-- EE add begin -->
+
+<!-- pure strings -->      
+
+<scheme name="StringBaseCore">
+ <regexp match="/\\['\\]/" region0="StringContent"/>
+</scheme>
+
+<scheme name="StringCore">
+ <inherit scheme="StringBaseCore"/>
+ <!-- regexp match='/\\\\$/' region0="dError"/ -->
+ <regexp match='/\\[^xX0-7]/' region0="StringContent"/>
+ <regexp match='/\\$/' region0="StringContent"/>
+ <regexp match='/\\(x|X)[\da-fA-F]{1,8}/' region0="StringContent"/>
+ <regexp match='/\\[0-7]{1,12}/' region0="StringContent"/>
+ <regexp match='/\{\$[^\}]+\}?/' region0="VarString"/>   
+ <regexp match='/\$\w+/' region0="VarString"/>   
+ <!-- regexp match='/[^\\\"]$/' region0="dError"/ -->
+</scheme>
+
+<!-- RPSE Regexp -->
+
+<scheme name="RegExp.Modif">
+ <keywords region="regexp:SpecArea">
+  <symb name="i"/>
+  <symb name="m"/>
+  <symb name="s"/>
+  <symb name="x"/>
+  <symb name="U"/>
+  <symb name="X"/>
+  <symb name="-" region="def:Symbol"/>
+ </keywords>
+ <inherit scheme="regexp:pcre.modif"/> 
+</scheme>
+
+<scheme name="RegExp.BaseCore">
+ <inherit scheme="regexp:pcre.regexp">
+  <virtual scheme="regexp:string" subst-scheme="StringBaseCore"/>
+  <virtual scheme="regexp:pcre.modif" subst-scheme="RegExp.Modif"/>
+  <virtual scheme="regexp:pcre.regexp" subst-scheme="RegExp.BaseCore"/>
+ </inherit>
+</scheme>
+
+<scheme name="RegExp.Core">
+ <inherit scheme="regexp:pcre.regexp">
+  <virtual scheme="regexp:string" subst-scheme="StringCore"/>
+  <virtual scheme="regexp:pcre.modif" subst-scheme="RegExp.Modif"/>
+  <virtual scheme="regexp:pcre.regexp" subst-scheme="RegExp.Core"/>
+ </inherit>
+</scheme>
+
+<scheme name="RegExp.StringBase">
+ <annotation> 
+  <documentation>
+   php regexp for '' strings
+  </documentation>
+  <appinfo> <todo> <![CDATA[
+    Hижеприведенный блок может создавать проблемы с записями типа:
+    $str='| длинная
+    стока
+    ';
+    если первый символ строки - ^\w\s. Рекомендется использовать here doc.
+    Решением проблемы может быть замена на блок, не распознающий
+    многострочных регекспов, либо поддержка /s в колорере.
+  ]]> </todo> </appinfo> 
+ </annotation> 
+
+ <inherit scheme="StringBaseCore"/>
+ <block scheme="RegExp.BaseCore">
+  <start region2="def:PairStart" region3="StringEdge"><![CDATA[
+   /([^\\]')?#2
+    (([\/\|\@\#\%\$\^\&\*\?\!\~]))\M
+    (([^'])|(\\'))*(\2[isUmDAexXS]*'|$)
+   /x
+  ]]></start>
+  <end region1="def:PairEnd" region2="StringEdge" region3="regexp:SpecArea">
+  <![CDATA[
+   /((\y2([isUmDAexXS]*)))\M'/
+  ]]></end>
+ </block>
+</scheme>
+
+
+<scheme name="RegExp.String">
+ <annotation> 
+  <documentation>
+   php regexp for custom "" strings
+  </documentation>
+  <appinfo> <todo> <![CDATA[
+    Hижеприведенный блок может создавать проблемы с записями типа:
+    $str="| длинная
+    стока
+    ";
+    если первый символ строки - ^\w\s. Рекомендется использовать here doc.
+    Решением проблемы может быть замена на блок, не распознающий
+    многострочных регекспов, либо поддержка /s в колорере.
+  ]]> </todo> </appinfo> 
+ </annotation> 
+
+ <inherit scheme="StringCore"/>
+ <block scheme="RegExp.Core">
+  <start region2="def:PairStart" region3="StringEdge"><![CDATA[
+   /([^\\]")?#2
+    (([\/\|\@\#\%\$\^\&\*\?\!\~]))\M
+    (([^"])|(\\"))*(\2[isUmDAexXS]*"|$)
+   /x
+  ]]></start>
+  <end region1="def:PairEnd" region2="StringEdge" region3="regexp:SpecArea">
+  <![CDATA[
+   /((\y2([isUmDAexXS]*)))\M"/
+  ]]></end>
+ </block>
+</scheme>
+
+
+<!-- POSIX RegExp -->
+
+<scheme name="posix.BaseCore">
+ <inherit scheme="regexp:posix.regexp">
+  <virtual scheme="regexp:string" subst-scheme="StringBaseCore"/>
+  <virtual scheme="regexp:posix.regexp" subst-scheme="posix.BaseCore"/>
+ </inherit> 
+</scheme>
+
+<scheme name="posix.Core">
+ <inherit scheme="regexp:posix.regexp">
+  <virtual scheme="regexp:string" subst-scheme="StringCore"/>
+  <virtual scheme="regexp:posix.regexp" subst-scheme="posix.Core"/>
+ </inherit> 
+</scheme>
+
+<scheme name="posix.Support">
+ <block start='/~[^\,]*?((&#34;))/' end='/(&#34;)/'
+  scheme="posix.Core" region="String" 
+  region01="PairStart" region10="PairEnd"     
+ />
+ <block start="/~[^\,]*?((\'))/" end="/(\')/"
+  scheme="posix.BaseCore" region="String" 
+  region01="PairStart" region10="PairEnd"     
+ />
+ <inherit scheme="Script"/>
+</scheme>
+
+<!-- EE add end -->
+
+    
     <scheme name="Script">
       <!-- Numbers -->
       <inherit scheme="CHexNumber"/>
       <inherit scheme="FloatNumber"/>
       <inherit scheme="DecNumber"/>
-      <block start="/&#34;/" end="/&#34;/" scheme="StringCore" region="String"/>
-      <block start="/'/" end="/'/" scheme="String2Core" region="String"/>
-
+      
+      <!-- EE: support regexp -->
+      <block start="/&#34;/" end="/&#34;/" scheme="RegExp.String" region="String"/>
+      <block start="/'/" end="/'/" scheme="RegExp.StringBase" region="String"/>
+        
       <!-- Linear Comments-->
       <block start="/\/\/|\#/" end="/$/" scheme="Comment" region="Comment" priority="low"/>
       <block start="/\/\*/" end="/\*\//" scheme="Comment"
                region="Comment" region00="PairStart" region10="PairEnd"/>
 
-      <!-- here-doc support // added by kx -->
+               
+<!-- EE: changed -->
+         <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1)\M;$/" 
+           scheme="StringCore" region="HereDoc" 
+           region00="PairStart" region10="PairEnd" 
+           region01="Keyword" region11="Keyword"
+         />
+
+<!-- EE add: System command -->
+         <block start="/`/" end="/`/" scheme="StringCore" 
+          region="InternalInsertion" region00="String" region10="String"
+         />
+         <!-- regexp match='/ ` ( (\\.) | [^\\"] )* ` /x' / -->
+
+<!-- EE add: posix regexp support (ereg\w*)|(spliti?)|(sql_regcase)-->         
+        <block start="/\b(ereg\w*|spliti?|sql_regcase)((\())/i" 
+         end="/(\))/" scheme="posix.Support" 
+         region01="KeywordStrong" region02="PairStart" region03="Symbol"
+         region10="PairEnd" region11="Symbol"
+        />
+  
+
+<!-- variable highlighting // added by kx -->
+<!-- EE add: 'this' -->         
+         <regexp match="/\B\S(this)\b/" region0="Var" region1="Keyword"/>
+         <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>
+<!-- EE add: variable for objects -->         
+         <regexp match='/(\-&gt;)(\s)*\w+((\w)*(\s)*\()?!/' region="Var" region1="Symbol" />
+               
+      <!-- here-doc support // added by kx
       <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1);$/" scheme="c:String"
                region="CommentDoc" region00="PairStart" region10="PairEnd" region01="Keyword" region11="Keyword"/>
-
-      <!-- variable highlighting // added by kx -->
-      <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>
+       -->
+      <!-- variable highlighting // added by kx 
+      <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>-->
 
       <regexp match="/^\M \s* \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
-<!-- Brablc BEGIN -->
-      <regexp match="/^\M \s* (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
-<!-- Brablc END -->
+      <regexp match="/^\M \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
 
 
       <inherit scheme="PairedBrackets">
         <virtual scheme="PairedBrackets" subst-scheme="Script"/>
       </inherit>
 
-      <keywords region="Symbol">
-        <symb name=";"/><symb name="="/><symb name="+"/>
-        <symb name="-"/><symb name="/"/><symb name="*"/>
-        <symb name="&amp;"/><symb name="|"/><symb name="^"/>
-        <symb name="("/><symb name=")"/>
-        <symb name="["/><symb name="]"/>
-        <symb name=","/><symb name="."/><symb name=":"/>
-        <symb name="!"/><symb name="~"/>
-        <symb name="&lt;"/><symb name="&gt;"/>
-        <symb name="%"/><symb name="{"/><symb name="}"/><symb name="?"/>
-      </keywords>
+
+      <!-- EE: add any "SymbolStrong" -->
+         <keywords region="Symbol">
+            <symb name=";" region="SymbolStrong"/>
+            <symb name="="/><symb name="+"/>
+            <symb name="-"/><symb name="/"/><symb name="*"/>
+            <symb name="&amp;"/><symb name="|"/><symb name="^"/>
+            <!-- EE: this operators cannot used in this plase...
+            symb name="("/><symb name=")"/>
+            <symb name="["/><symb name="]"/ -->
+            <symb name=","/><symb name="."/>
+            <symb name="?" region="SymbolStrong"/>
+            <symb name=":" region="SymbolStrong"/>
+            <symb name="@" region="SymbolStrong"/>
+            <symb name="!"/><symb name="~"/>
+            <symb name="&lt;"/><symb name="&gt;"/>
+            <symb name="%"/>
+            <!-- EE: this operators cannot used in this plase...
+             symb name="{"/><symb name="}"/ -->
+            <!-- EE: add word operators -->
+            <word name="or"/>
+            <word name="xor"/>
+            <word name="and"/>
+         </keywords>
+         <!-- EE: copy from c.hrc -->
+         <keywords region="def:Error">
+            <symb name="["/><symb name="]"/>
+            <symb name="{"/><symb name="}"/>
+            <symb name="("/><symb name=")"/>
+            <symb name="*/"/>
+         </keywords>
+
       <keywords region="KeywordStrong" ignorecase="yes">
         <word name="case-folded"/>
         <word name="case-folding"/>
       </keywords>
-
+        
       <keywords region="Keyword" ignorecase="yes">
+        <word name="as"/> 	<!--EE move-->
         <word name="break"/>
         <word name="case"/>
         <word name="class"/>
@@ -355,6 +300,7 @@
         <word name="define"/>
         <word name="defined"/>
         <word name="do"/>
+        <word name="echo"/>	<!--EE move-->
         <word name="else"/>
         <word name="elseif"/>
         <word name="endif"/>
@@ -362,6 +308,7 @@
         <word name="extends"/>
         <word name="false"/>
         <word name="for"/>
+        <word name="foreach"/>	<!--EE move-->
         <word name="function"/>
         <word name="floatval"/>
         <word name="global"/>
@@ -377,6 +324,17 @@
         <word name="switch"/>
         <word name="true"/>
         <word name="while"/>
+            <!-- EE: typenames for conversion -->
+            <word name="int"/>
+            <word name="integer"/>
+            <word name="real"/>
+            <word name="double"/>
+            <word name="float"/>
+            <word name="string"/>
+            <word name="array"/>
+            <word name="object"/>
+            <word name="bool"/>
+            <word name="boolean"/>
       </keywords>
       <keywords region="KeywordStrong" ignorecase="yes">
         <word name="__file__"/>
@@ -418,7 +376,6 @@
         <word name="array_values"/>
         <word name="array_walk"/>
         <word name="arsort"/>
-        <word name="as"/>
         <word name="asin"/>
         <word name="asort"/>
         <word name="aspell_check"/>
@@ -518,7 +475,6 @@
         <word name="each"/>
         <word name="easter_date"/>
         <word name="easter_days"/>
-        <word name="echo"/>
         <word name="empty"/>
         <word name="end"/>
         <word name="ereg"/>
@@ -578,7 +534,6 @@
         <word name="floor"/>
         <word name="flush"/>
         <word name="fopen"/>
-        <word name="foreach"/>
         <word name="fpassthru"/>
         <word name="fread"/>
         <word name="freetype"/>
@@ -768,6 +723,12 @@
         <word name="imagefontheight"/>
         <word name="imagefontwidth"/>
         <word name="imagegif"/>
+<!-- EE: add any "image.*" - begin -->
+            <word name="imagepng"/>
+            <word name="imagejpeg"/>
+            <word name="imagecreatefrompng"/>
+            <word name="imagecreatefromjpeg"/>
+<!-- EE: add any "image.*" - end  -->
         <word name="imageinterlace"/>
         <word name="imageline"/>
         <word name="imageloadfont"/>
@@ -796,9 +757,6 @@
         <word name="is_float"/>
         <word name="is_int"/>
         <word name="is_link"/>
-<!-- Brablc BEGIN -->
-        <word name="is_numeric"/>
-<!-- Brablc END -->
         <word name="is_object"/>
         <word name="is_readable"/>
         <word name="is_string"/>
@@ -1447,23 +1405,304 @@
         <word name="xml_set_external_entity_ref_handler"/>
         <word name="xml_set_notation_decl_handler"/>
         <word name="xml_set_processing_instruction_handler"/>
+        <word name="xml_set_object"/>	<!-- EE add -->
         <word name="xml_set_unparsed_entity_decl_handler"/>
       </keywords>
       <inherit scheme="DeprecatedKeywords"/>
     </scheme>
 
+    
+    <scheme name="DeprecatedKeywords">
+      <keywords region="def:DeprecatedKeyword" ignorecase="yes">
+        <word name="add_root"/>
+        <word name="addaction"/>
+        <word name="addcolor"/>
+        <word name="addentry"/>
+        <word name="addfill"/>
+        <word name="addshape"/>
+        <word name="adString"/>
+        <word name="align"/>
+        <word name="attributes"/>
+        <word name="children"/>
+        <word name="chop"/>
+        <word name="com_get"/>
+        <word name="com_propset"/>
+        <word name="com_set"/>
+        <word name="cv_add"/>
+        <word name="cv_auth"/>
+        <word name="cv_command"/>
+        <word name="cv_count"/>
+        <word name="cv_delete"/>
+        <word name="cv_done"/>
+        <word name="cv_init"/>
+        <word name="cv_lookup"/>
+        <word name="cv_new"/>
+        <word name="cv_report"/>
+        <word name="cv_return"/>
+        <word name="cv_reverse"/>
+        <word name="cv_sale"/>
+        <word name="cv_status"/>
+        <word name="cv_textvalue"/>
+        <word name="cv_void"/>
+        <word name="die"/>
+        <word name="dir"/>
+        <word name="diskfreespace"/>
+        <word name="domxml_getattr"/>
+        <word name="domxml_setattr"/>
+        <word name="doubleval"/>
+        <word name="drawarc"/>
+        <word name="drawcircle"/>
+        <word name="drawcubic"/>
+        <word name="drawcubicto"/>
+        <word name="drawcurve"/>
+        <word name="drawcurveto"/>
+        <word name="drawglyph"/>
+        <word name="drawline"/>
+        <word name="drawlineto"/>
+        <word name="dtd"/>
+        <word name="dumpmem"/>
+        <word name="fbsql"/>
+        <word name="fputs"/>
+        <word name="get_attribute"/>
+        <word name="getascent"/>
+        <word name="getascent"/>
+        <word name="getattr"/>
+        <word name="getdescent"/>
+        <word name="getdescent"/>
+        <word name="getheight"/>
+        <word name="getleading"/>
+        <word name="getshape1"/>
+        <word name="getshape2"/>
+        <word name="getwidth"/>
+        <word name="gzputs"/>
+        <word name="i18n_convert"/>
+        <word name="i18n_discover_encoding"/>
+        <word name="i18n_http_input"/>
+        <word name="i18n_http_output"/>
+        <word name="i18n_internal_encoding"/>
+        <word name="i18n_ja_jp_hantozen"/>
+        <word name="i18n_mime_header_decode"/>
+        <word name="i18n_mime_header_encode"/>
+        <word name="imap_create"/>
+        <word name="imap_fetchtext"/>
+        <word name="imap_getmailboxes"/>
+        <word name="imap_getsubscribed"/>
+        <word name="imap_header"/>
+        <word name="imap_listmailbox"/>
+        <word name="imap_listsubscribed"/>
+        <word name="imap_rename"/>
+        <word name="imap_scan"/>
+        <word name="imap_scanmailbox"/>
+        <word name="ini_alter"/>
+        <word name="is_double"/>
+        <word name="is_integer"/>
+        <word name="is_long"/>
+        <word name="is_real"/>
+        <word name="is_bool"/>
+        <word name="is_writeable"/>
+        <word name="join"/>
+        <word name="labelframe"/>
+        <word name="last_child"/>
+        <word name="lastchild"/>
+        <word name="ldap_close"/>
+        <word name="magic_quotes_runtime"/>
+        <word name="mbstrcut"/>
+        <word name="mbstrlen"/>
+        <word name="mbstrpos"/>
+        <word name="mbstrrpos"/>
+        <word name="mbsubstr"/>
+        <word name="ming_setcubicthreshold"/>
+        <word name="ming_setscale"/>
+        <word name="movepen"/>
+        <word name="movepento"/>
+        <word name="moveto"/>
+        <word name="msql"/>
+        <word name="msql_affected_rows"/>
+        <word name="msql_createdb"/>
+        <word name="msql_dbname"/>
+        <word name="msql_dropdb"/>
+        <word name="msql_fieldflags"/>
+        <word name="msql_fieldlen"/>
+        <word name="msql_fieldname"/>
+        <word name="msql_fieldtable"/>
+        <word name="msql_fieldtype"/>
+        <word name="msql_freeresult"/>
+        <word name="msql_listdbs"/>
+        <word name="msql_listfields"/>
+        <word name="msql_listtables"/>
+        <word name="msql_numfields"/>
+        <word name="msql_numrows"/>
+        <word name="msql_regcase"/>
+        <word name="msql_selectdb"/>
+        <word name="msql_tablename"/>
+        <word name="mssql_affected_rows"/>
+        <word name="mssql_close"/>
+        <word name="mssql_connect"/>
+        <word name="mssql_data_seek"/>
+        <word name="mssql_fetch_array"/>
+        <word name="mssql_fetch_field"/>
+        <word name="mssql_fetch_object"/>
+        <word name="mssql_fetch_row"/>
+        <word name="mssql_field_seek"/>
+        <word name="mssql_free_result"/>
+        <word name="mssql_get_last_message"/>
+        <word name="mssql_min_client_severity"/>
+        <word name="mssql_min_error_severity"/>
+        <word name="mssql_min_message_severity"/>
+        <word name="mssql_min_server_severity"/>
+        <word name="mssql_num_fields"/>
+        <word name="mssql_num_rows"/>
+        <word name="mssql_pconnect"/>
+        <word name="mssql_query"/>
+        <word name="mssql_result"/>
+        <word name="mssql_select_db"/>
+        <word name="multcolor"/>
+        <word name="mysql"/>
+        <word name="mysql_createdb"/>
+        <word name="mysql_db_name"/>
+        <word name="mysql_dbname"/>
+        <word name="mysql_dropdb"/>
+        <word name="mysql_fieldflags"/>
+        <word name="mysql_fieldlen"/>
+        <word name="mysql_fieldname"/>
+        <word name="mysql_fieldtable"/>
+        <word name="mysql_fieldtype"/>
+        <word name="mysql_freeresult"/>
+        <word name="mysql_listdbs"/>
+        <word name="mysql_listfields"/>
+        <word name="mysql_listtables"/>
+        <word name="mysql_numfields"/>
+        <word name="mysql_numrows"/>
+        <word name="mysql_selectdb"/>
+        <word name="mysql_tablename"/>
+        <word name="new_child"/>
+        <word name="new_xmldoc"/>
+        <word name="nextframe"/>
+        <word name="nextframe"/>
+        <word name="node"/>
+        <word name="oci8append"/>
+        <word name="oci8assign"/>
+        <word name="oci8assignelem"/>
+        <word name="oci8close"/>
+        <word name="oci8free"/>
+        <word name="oci8free"/>
+        <word name="oci8getelem"/>
+        <word name="oci8load"/>
+        <word name="oci8max"/>
+        <word name="oci8ocifreecursor"/>
+        <word name="oci8save"/>
+        <word name="oci8savefile"/>
+        <word name="oci8size"/>
+        <word name="oci8trim"/>
+        <word name="oci8writetemporary"/>
+        <word name="oci8writetofile"/>
+        <word name="odbc_do"/>
+        <word name="odbc_field_precision"/>
+        <word name="orbit_caught_exception"/>
+        <word name="orbit_exception_id"/>
+        <word name="orbit_exception_value"/>
+        <word name="orbit_get_repository_id"/>
+        <word name="orbit_load_idl"/>
+        <word name="output"/>
+        <word name="parent"/>
+        <word name="pdf_add_outline"/>
+        <word name="pg_clientencoding"/>
+        <word name="pg_setclientencoding"/>
+        <word name="pos"/>
+        <word name="recode"/>
+        <word name="rewind"/>
+        <word name="root"/>
+        <word name="rotate"/>
+        <word name="rotateto"/>
+        <word name="savetofile"/>
+        <word name="scale"/>
+        <word name="scaleto"/>
+        <word name="set_attribute"/>
+        <word name="set_content"/>
+        <word name="setaction"/>
+        <word name="setattr"/>
+        <word name="setbackground"/>
+        <word name="setbounds"/>
+        <word name="setcolor"/>
+        <word name="setdepth"/>
+        <word name="setdimension"/>
+        <word name="setdown"/>
+        <word name="setfont"/>
+        <word name="setframes"/>
+        <word name="setheight"/>
+        <word name="sethit"/>
+        <word name="setindentation"/>
+        <word name="setleftfill"/>
+        <word name="setleftmargin"/>
+        <word name="setline"/>
+        <word name="setlinespacing"/>
+        <word name="setmargins"/>
+        <word name="setmatrix"/>
+        <word name="setname"/>
+        <word name="setover"/>
+        <word name="setrate"/>
+        <word name="setratio"/>
+        <word name="setrightfill"/>
+        <word name="setrightmargin"/>
+        <word name="setspacing"/>
+        <word name="show_source"/>
+        <word name="sizeof"/>
+        <word name="skewx"/>
+        <word name="skewxto"/>
+        <word name="skewy"/>
+        <word name="skewyto"/>
+        <word name="snmpwalkoid"/>
+        <word name="strchr"/>
+        <word name="streammp3"/>
+        <word name="swfaction"/>
+        <word name="swfbitmap"/>
+        <word name="swfbutton"/>
+        <word name="swfbutton_keypress"/>
+        <word name="swffill"/>
+        <word name="swffont"/>
+        <word name="swfgradient"/>
+        <word name="swfmorph"/>
+        <word name="swfmovie"/>
+        <word name="swfshape"/>
+        <word name="swfsprite"/>
+        <word name="swftext"/>
+        <word name="swftextfield"/>
+        <word name="unlink"/>
+        <word name="xpath_eval"/>
+        <word name="xpath_eval_expression"/>
+        <word name="xpath_init"/>
+        <word name="xpath_new_context"/>
+        <word name="xptr_new_context"/>
+      </keywords>
+    </scheme>
+    
     <scheme name="Insertion">
       <block start="/(&lt;\?(php\b)?)/" end="/(\?&gt;)/" scheme="phpScript"
                priority="low" content-priority="low"
                region="Insertion" region00="OpenTag" region10="OpenTag" region01="PairStart" region11="PairEnd"/>
     </scheme>
 
-    <scheme name="InverseInsertion">
-      <block start="/(\?&gt;)/" end="/(&lt;\?(php\b)?)/" scheme="html"
-               priority="low" region="Text"
-               region00="Insertion" region10="Insertion"/>
-    </scheme>
 
+   <!-- !!EE: add PairStart/End & OpenTag 
+      <scheme name="InverseInsertion">
+         <block start="/(\?&gt;)/" end="/(&lt;\?(php\b)?)/" scheme="html"
+                priority="low" region="Text"
+                region00="Insertion" region10="Insertion"/>
+      </scheme>
+   -->
+      
+      <scheme name="InverseInsertion">
+         <block start="/((\?&gt;))/" end="/((&lt;\?(php\b)?))/" scheme="html"
+          priority="low" region="Text"
+          region00="Insertion" region10="Insertion" 
+          region01="PairStart" region11="PairEnd"      
+          region02="OpenTag"   region12="OpenTag" 
+         />
+
+      </scheme>
+
+    
+    
     <scheme name="htmlScripts">
       <block start="/ (&lt;(script [^&gt;]+ (phpscript[\d\.]*) [^&gt;]*) &gt;) /ix" end="/(&lt;\/(script)\&gt;)/i" scheme="phpScript-client"
                region00="PairStrongStart" region10="PairStrongEnd"

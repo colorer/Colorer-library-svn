@@ -6,17 +6,17 @@
      xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <type name="css">
+  <type name="css" access="public">
 
     <annotation> 
      <documentation>
       Cascading Style Sheets, Level 1 and 2
      </documentation>
      <contributors><![CDATA[
-      Eugene Efremov <4mirror@mail.ru>
       darkman <darkman@magnet.ru>
       Albert Micheev <2:5049/80>
       Timur Safin <timur@lanit.ru> 
+      Eugene Efremov <4mirror@mail.ru>
      ]]></contributors>
     </annotation>
 
@@ -36,17 +36,17 @@
     <region name="MediaType" parent="def:Keyword" description='Media type region'/>
 
     <region name="TagName" parent="default" />
-    <region name="PseudoElement" parent="def:KeywordStrong" />
+    <region name="PseudoElement" parent="def:Keyword" />
     <region name="PseudoElementUnknown" parent="default" />
     
     <region name="PropertyName" parent="def:FunctionKeyword" />
     <region name="PropertyValue" parent="def:Parameter" />
-    <region name="ImportantValue" parent="def:KeywordStrong" />
+    <region name="ImportantValue" parent="def:Keyword" />
     
     <region name="RuleOutline" parent="def:Outlined"/>
     <region name="MediaOutline" parent="def:Outlined"/>
 
-    <entity name='worddiv' value="[\s\,\}\{]"/>
+    <entity name='worddiv' value="[\s\,\}\{\x22\x27]"/>
 
     <scheme name="Colors">
       <keywords region="w3cColors" ignorecase="yes" worddiv='%worddiv;'>
@@ -404,8 +404,8 @@
 
     <scheme name="StringValue">
       <!-- Strings -->
-      <regexp match="/'.*?'/" region="String" priority='low'/>
-      <regexp match="/&#34;.*?&#34;/" region="String" priority='low'/>
+      <regexp match="/'.*?'/" region="String"/>
+      <regexp match="/&#34;.*?&#34;/" region="String"/>
     </scheme>
 
     <scheme name="Property">
@@ -673,6 +673,12 @@
        <block start="/\M([\w\d\-]+)?\s*(:)/" end="/\M[\;\}\x22\x27]/"
               scheme="PropertyWrapper" region02="Symbol"
        />
+      
+      <!-- EE: add ";" -->
+      <keywords region="def:SymbolStrong">
+       <symb name=";"/>
+      </keywords>
+      
     </scheme>
     <scheme name="Predicate">
        <inherit scheme='StringValue'/>
@@ -687,7 +693,8 @@
       <regexp match="/^\M(?{RuleOutline}[\w\.\:][\*\s\,\.\:\[\]\#\.\w\-\*\=\x22\x27]+)/"/>
 
       <inherit scheme="TagNames"/>
-      <regexp match="/(?{}[\#\.\w\-\*]+)/" region="TagName"/>
+
+      <regexp match="/((?{Symbol}[\#\.\-\*])|\w)+/" region="TagName"/>
 
       <keywords region="PseudoElement">
         <symb name=":link"/>
