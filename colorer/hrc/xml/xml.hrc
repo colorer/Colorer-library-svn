@@ -111,18 +111,18 @@
     <region name="XMLDecl.end"   parent="PI.end"/>
     <region name="XMLDecl.eq"    parent="Symbol"/>
 
-    <region name="VersionInfo"   parent="DirectiveInternal"/>
+    <region name="VersionInfo"   parent="DirectiveContent"/>
     <region name="VersionNum"    parent="Number"/>
-    <region name="EncodingDecl"  parent="DirectiveInternal"/>
+    <region name="EncodingDecl"  parent="DirectiveContent"/>
     <region name="EncName"       parent="AttValue"/>
-    <region name="SDDecl"        parent="DirectiveInternal"/>
+    <region name="SDDecl"        parent="DirectiveContent"/>
     <region name="SDDecl.yn"     parent="AttValue"/>
 
     <region name="doctypedecl"/>
     <region name="doctypedecl.start"  parent="Directive"/>
     <region name="doctypedecl.end"    parent="Directive"/>
     <region name="doctypedecl.tag"    parent="Directive"/>
-    <region name="doctypedecl.name"   parent="DirectiveInternal"/>
+    <region name="doctypedecl.name"   parent="DirectiveContent"/>
 
     <region name="ExternalID.SYSTEM"  parent="Keyword"/>
     <region name="ExternalID.PUBLIC"  parent="Keyword"/>
