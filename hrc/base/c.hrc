@@ -1,15 +1,25 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<!--
-    c syntax description
-With help of:
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+ <type name="c">
+  <annotation><documentation>
+    C syntax description
+  </documentation><contributors><![CDATA[
     Vladimir Tarasov <tsoftgroup@chat.ru>
     Timur Safin <timur@lanit.ru>
     cail: split into two schemes: c and cpp
     Stanislav V. Mekhanoshin <stas@titania.spb.su>
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
- <type name="c" access="public">
+
+    Changed by Eugene Efremov <4mirror@mail.ru>:
+     - fixed non-begin-of-string outlines
+     - split c/c++ outlines
+     - add stdio.h keywords
+     - change regions routing
+  ]]></contributors></annotation>
 
   <import type="def"/>
 
@@ -23,23 +33,29 @@ With help of:
   <region name="Number" parent="def:Number"/>
   <region name="Symbol" parent="def:Symbol"/>
   <region name="StructureSymbol" parent="def:SymbolStrong"/>
+  <region name="PrefixSymbol" parent="def:SymbolStrong"/> <!-- !!EE: new -->
 
   <region name="Preproc" parent="def:Directive"/>
   <region name="PreprocSpec" parent="def:KeywordStrong"/>
-  <region name="PreprocWord" parent="def:Keyword"/>
+  <region name="PreprocWord" parent="def:DirectiveInternal"/> <!-- !!EE: def:Keyword -->
   <region name="AsmCode" parent="def:Directive"/>
 
   <region name="KeywordANSI" parent="def:Keyword"/>
   <region name="KeywordConstant" parent="def:Constant"/>
-  <region name="KeywordWin32" parent="def:FunctionKeyword"/>
+  
+  <region name="KeywordLibFunctions" parent="def:FunctionKeyword"/> <!-- !!EE: new -->
   <region name="KeywordStructure" parent="def:StructKeyword"/>
-  <region name="KeywordOpenGL" parent="def:FunctionKeyword"/>
-  <region name="KeywordNetwork" parent="def:FunctionKeyword"/>
-  <region name="KeywordMacro" parent="def:StructKeyword"/>
-  <region name="KeywordMFC" parent="def:StructKeyword"/>
-  <region name="KeywordMFCFunc" parent="def:FunctionKeyword"/>
 
-  <region name="ClassOutline" parent="def:Outlined"/>
+  <region name="KeywordWin32" parent="KeywordLibFunctions"/>  <!-- !!EE: def:FunctionKeyword -->
+  <region name="KeywordOpenGL" parent="KeywordLibFunctions"/> <!-- !!EE: def:FunctionKeyword -->
+  <region name="KeywordNetwork" parent="KeywordLibFunctions"/> <!-- !!EE: def:FunctionKeyword -->
+  <region name="KeywordMacro" parent="KeywordStructure"/> <!-- !!EE: def:StructKeyword -->
+  <region name="KeywordMFC" parent="KeywordStructure"/> <!-- !!EE: def:StructKeyword -->
+  <region name="KeywordMFCFunc" parent="KeywordWin32"/> <!-- !!EE: def:FunctionKeyword -->
+
+  <region name="KeywordStdio" parent="KeywordStructure"/> <!-- !!EE: new -->
+  <region name="KeywordDeprecated" parent="def:DeprecatedKeyword"/> <!-- !!EE: new -->
+  
   <region name="StructOutline" parent="def:Outlined"/>
   <region name="UnionOutline" parent="StructOutline"/>
   <region name="EnumOutline" parent="StructOutline"/>
@@ -269,33 +285,124 @@ With help of:
           region01="AsmCode" region02="StructureSymbol" region10="StructureSymbol" region00="def:PairStart" region11="def:PairEnd"/>
    <block start="/\b__asm\b/" end="/$/" scheme="AsmCode" region00="AsmCode"/>
 
-   <!-- Outline lists -->
+   <inherit scheme="Outlines"/>
+   <inherit scheme="Expression"/>
+  </scheme>
+
+  <!-- !!EE: two new schemes - Outlines -->
+  <scheme name="Outlines">
+   <annotation> 
+    <documentation>
+     C only outlines.
+     Scheme must be replased for C++ operators.
+    </documentation>
+    <appinfo> <todo> <![CDATA[
+     Схема не проверялась на строгое соответствие ANSI C.
+     Классы я убрал, но, возможно, тут еще что-то лишнее...
+    ]]> </todo> </appinfo> 
+   </annotation> 
+   
    <regexp><![CDATA[
-     /^ \M (\w[\w_*&~]+ \s [\s\w_*&~\"]*?)?
+     /^ \M \s* (\w[\w_*&~]+ \s [\s\w_*&~\"]*?)?
      (?{FuncOutline} [\:\w_&~<>]+? )
-     \s* \( [^;]* $/x
+     (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sswitch)?~7
+     \s* \( [^;]* ($|\{)/x
    ]]></regexp>
+   <!-- !!EE: C++, not C - - >
    <regexp><![CDATA[
-     /^ \M (typedef\s+)? class \s+
+     /^ \M \s* (typedef\s+)? class \s+
      (?{ClassOutline} [\:\w_&~<>]+ )
      [\w_:<>\s]*? [^;] $/x
    ]]></regexp>
+<! - -   -->
    <regexp><![CDATA[
-     /^ \M (typedef\s+)? (struct) \s+
-     (?{StructOutline} [\:\w_&~<>]+ )
-     [\w_:<>\s]*? [^;] $/x
+     /^ \M \s* (typedef\s+)? (struct) \s+
+     (?{StructOutline} [\:\w_&~<>]+ 
+     [\w_:<>\s]*? [^;] )($|\{)/x
    ]]></regexp>
+   
+   <inherit scheme="SharedOutlines"/>
+  </scheme>
+
+  <scheme name="SharedOutlines">
+   <annotation> 
+    <documentation>
+     C/C++ outlines.
+    </documentation>
+   </annotation> 
+   
    <regexp><![CDATA[
-     /^ \M (typedef\s+)? (union) \s+
+     /^ \M \s* (typedef\s+)? (union) \s+
      (?{UnionOutline} [\:\w_&~<>]+ )
-     [\w_:<>\s]*? [^;] $/x
+     [\w_:<>\s]*? [^;] ($|\{)/x
    ]]></regexp>
    <regexp><![CDATA[
-     /^ \M (typedef\s+)? (enum) \s+
+     /^ \M \s* (typedef\s+)? (enum) \s+
      (?{EnumOutline}  [\:\w_&~<>]+ )
-     [\w_:<>\s]*? [^;] $/x
+     [\w_:<>\s]*? [^;] ($|\{)/x
    ]]></regexp>
-   <inherit scheme="Expression"/>
+  </scheme>
+  
+  <!-- !!EE: new scheme - Operators -->
+  <scheme name="Operators">
+   <annotation> 
+    <documentation>
+     ANSI C keyword operators.
+     Scheme must be replased for C++ operators.
+    </documentation>
+    <appinfo> <todo> <![CDATA[
+    
+     В принципе, каждый оператор следует обрабатывать 
+     оттдельно (см. закомментированый фрагмент)
+     Hо это пораждает достаточно специфические проблемы.
+     Hапример как обрабатывать конструкции типа a+++*--b?
+     Я вижу два возможных решения и пока не знаю, который из них 
+     предпочесть:
+      1. Для каждой группы операторов писать регэксп, который бы опредлял
+      аналог worddiv для начала и конца. (Это было бы предпочтительно,
+      но при стабильной работе \M\m):
+       <regexp match="/ worddiv1 \m (operator1|...|operatorN) \M worddiv2 /x" 
+        region1="Symbol"/>
+      2. Распознавать подобный дурной стиль программирования как
+      ошибку.
+      
+     Замечание. Если в синтаксис <keywords> внести изменение - это
+     может сильно упростить задачу:
+      <keywords region="Symbol" start="/worddiv1/" end="/wordiv2/">
+       <word name="operator1"/>
+       ...
+       <word name="operatorN"/>
+      </keywords>
+     
+    ]]> </todo> </appinfo> 
+   </annotation>
+
+   <!--
+   <keywords region="Symbol" worddiv="/[\w\s\(\)\]&gt;&lt;&quot;&apos;*&amp;]/">
+    <symb name="::" region="PrefixSymbol"/> 
+    <symb name="::*" region="PrefixSymbol"/> 
+    <word name="-&lt;"/>
+    <word name="-&lt;*"/>
+    ...
+   </keywords>
+   -->
+
+   <keywords region="Symbol">
+      <symb name="::" region="PrefixSymbol"/> <!-- !!EE it's prefix -->
+      <symb name="="/>
+      <symb name="+"/><symb name="-"/>
+      <symb name="/"/><symb name="*"/>
+      <symb name="&amp;"/><symb name="^"/>
+      <symb name="|"/>
+      <symb name=","/><symb name="."/>
+      <symb name="!"/><symb name="~"/>
+      <symb name="&lt;"/><symb name="&gt;"/>
+      <symb name="%"/>
+      <symb name="?" region="StructureSymbol"/>
+      <symb name=":" region="StructureSymbol"/>
+      <symb name="#"/> 
+      <symb name="@"/>
+   </keywords>
   </scheme>
 
 
@@ -310,7 +417,7 @@ With help of:
 
    <!-- Bad tokens -->
    <regexp match="/#\w+/" region="def:Error"/>
-   <regexp match="/\b[\d\`\@]\w+/i" region="def:Error"/>
+   <regexp match="/\b[\d\$\`\@]\w+/i" region="def:Error"/>
 
    <inherit scheme="Character"/>
    <!-- cail: extended strings. You may wish to disable multilines : end='/"|$/' -->
@@ -329,19 +436,11 @@ With help of:
       <end region0="def:PairEnd"><![CDATA[/\*\//]]></end>
    </block>
    <!-- Standard C/C++ symbols -->
-   <keywords region="Symbol">
-      <symb name=";" region="StructureSymbol"/>
-      <symb name="="/>
-      <symb name="+"/><symb name="-"/>
-      <symb name="/"/><symb name="*"/>
-      <symb name="&amp;"/><symb name="^"/>
-      <symb name="|"/><symb name=":"/>
-      <symb name=","/><symb name="."/>
-      <symb name="!"/><symb name="~"/>
-      <symb name="&lt;"/><symb name="&gt;"/>
-      <symb name="%"/><symb name="?"/>
-      <symb name="#"/><symb name="@"/>
+   <keywords region="StructureSymbol">
+      <symb name=";"/>
    </keywords>
+   <inherit scheme="Operators"/>
+
    <keywords region="def:Error">
       <symb name="["/><symb name="]"/>
       <symb name="{"/><symb name="}"/>
@@ -373,7 +472,7 @@ With help of:
       <word name="finally"/>
       <word name="for"/>
       <word name="fortran"/>
-      <word name="goto"/>
+      <word name="goto" region="KeywordDeprecated"/>
       <word name="huge"/>
       <word name="if"/>
       <word name="import"/>
@@ -449,6 +548,9 @@ With help of:
       <word name="__wchar_t"/>
    </keywords>
 
+   <keywords region='KeywordLibFunctions'>
+    <word name="main"/>
+   </keywords>
 
    <keywords region='KeywordConstant'>
      <word name='ABM_ACTIVATE'/>
@@ -3285,7 +3387,39 @@ With help of:
      <word name='ZeroMemory'/>
    </keywords>
 
+  <!-- !!EE (add keywords): stdio.h -->
+   <keywords region="KeywordStdio">
+     <word name="NULL" region="KeywordConstant"/>
+     <word name="EOF" region="KeywordConstant"/>
+
+     <word name="size_t"/>
+     <word name="ptrdiff_t"/>
+     <word name="wint_t"/>
+     <word name="wctype_t"/>
+     <word name="stdin"/>
+     <word name="stdout"/>
+     <word name="stderr"/>
+     <word name="FILE"/>
+   </keywords>   
+
+   
    <keywords region='KeywordStructure'>
+   
+   <!-- !!EE: insert any windows.h typedefs -->
+      <word name="LPCVOID"/>
+      <word name="FAR"/>
+      <word name="WINAPI"/>
+      <word name="NEAR"/>
+      <word name="HEVENT"/>
+      <word name="CALLBACK"/>
+      <word name="NEARPROC"/>
+      <word name="HSTR"/>
+      <word name="HTASK"/>
+      <word name="HGLRC"/>
+      <word name="HDESK"/>
+      <word name="HDESK"/>
+   <!-- !!EE: end insert -->
+
      <word name='ABC'/>
      <word name='ABCFLOAT'/>
      <word name='ACCEL'/>
@@ -5518,7 +5652,7 @@ With help of:
 
   </scheme>
 
-  </type>
+ </type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
