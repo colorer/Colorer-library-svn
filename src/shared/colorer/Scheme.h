@@ -14,10 +14,10 @@ class Scheme
 public:
   /** Full qualified schema name.
   */
-  virtual const String *getName() = 0;
+  virtual const String *getName() const = 0;
   /** Returns reference to FileType, this scheme belongs to.
   */
-  virtual FileType *getFileType() = 0;
+  virtual FileType *getFileType() const = 0;
 protected:
   Scheme(){};
   virtual ~Scheme(){};

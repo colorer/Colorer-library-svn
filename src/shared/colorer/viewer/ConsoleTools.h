@@ -63,6 +63,8 @@ public:
   void setCatalogPath(const String &str);
   /// Optional HRD instance name, used to perform parsing
   void setHRDName(const String &str);
+  /// Sets linking datasource into this filename
+  void setLinkSource(const String &str);
 
 
   /** Regular Expressions tests.
@@ -116,6 +118,8 @@ private:
   String *hrdName;
   String *outputFileName;
   String *inputFileName;
+
+  Hashtable<String*> *docLinkHash;
 };
 
 #endif

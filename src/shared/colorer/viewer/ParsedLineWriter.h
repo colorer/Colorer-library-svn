@@ -9,6 +9,8 @@
 */
 class ParsedLineWriter{
 public:
+
+
   /** Writes given line of text using list of passed line regions.
       Formats output with class of each token, enclosed in
       \<span class='regionName'>...\</span>
@@ -18,7 +20,7 @@ public:
       @param lineRegions Linked list of LineRegion structures.
              Only region references are used there.
   */
-  static void tokenWrite(Writer *markupWriter, Writer *textWriter, String *line, LineRegion *lineRegions){
+  static void tokenWrite(Writer *markupWriter, Writer *textWriter, Hashtable<String*> *docLinkHash, String *line, LineRegion *lineRegions){
     int pos = 0;
     for(LineRegion *l1 = lineRegions; l1; l1 = l1->next){
       if (l1->special || l1->region == null) continue;
@@ -52,7 +54,7 @@ public:
       @param line Line of text
       @param lineRegions Linked list of LineRegion structures
   */
-  static void markupWrite(Writer *markupWriter, Writer *textWriter, String *line, LineRegion *lineRegions){
+  static void markupWrite(Writer *markupWriter, Writer *textWriter, Hashtable<String*> *docLinkHash, String *line, LineRegion *lineRegions){
     int pos = 0;
     for(LineRegion *l1 = lineRegions; l1; l1 = l1->next){
       if (l1->special || l1->rdef == null) continue;
@@ -85,7 +87,7 @@ public:
       @param line Line of text
       @param lineRegions Linked list of LineRegion structures
   */
-  static void htmlRGBWrite(Writer *markupWriter, Writer *textWriter, String *line, LineRegion *lineRegions){
+  static void htmlRGBWrite(Writer *markupWriter, Writer *textWriter, Hashtable<String*> *docLinkHash, String *line, LineRegion *lineRegions){
     int pos = 0;
     for(LineRegion *l1 = lineRegions; l1; l1 = l1->next){
       if (l1->special || l1->rdef == null) continue;
@@ -96,9 +98,11 @@ public:
         textWriter->write(line, pos, l1->start - pos);
         pos = l1->start;
       };
+      writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), true);
       writeStart(markupWriter, l1->styled());
       textWriter->write(line, pos, end - l1->start);
       writeEnd(markupWriter, l1->styled());
+      writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), false);
       pos += end - l1->start;
     };
     if (pos < line->length()){
@@ -132,6 +136,21 @@ public:
     if (!lr->bfore && !lr->bback) return;
     writer->write(DString("</span>"));
   };
+
+  static void writeHref(Writer *writer, Hashtable<String*> *docLinkHash, const Scheme *scheme, const String &token, bool start){
+    String *url = null;
+    if (scheme != null){
+      url = docLinkHash->get(&(StringBuffer(token).append(DString("--")).append(scheme->getName())));
+    };
+    if (url == null){
+      url = docLinkHash->get(&token);
+    };
+    if (url != null){
+      if (start) writer->write(StringBuffer("<a href='")+url+DString("'>"));
+      else writer->write(DString("</a>"));
+    };
+  };
+
 };
 
 #endif
