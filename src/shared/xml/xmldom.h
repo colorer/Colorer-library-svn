@@ -233,11 +233,11 @@ private:
 class Node
 {
 public:
-  static const short COMMENT_NODE = 0;
-  static const short DOCUMENT_NODE = 1;
-  static const short ELEMENT_NODE = 2;
-  static const short PROCESSING_INSTRUCTION_NODE = 3;
-  static const short TEXT_NODE = 4;
+  static const short COMMENT_NODE;
+  static const short DOCUMENT_NODE;
+  static const short ELEMENT_NODE;
+  static const short PROCESSING_INSTRUCTION_NODE;
+  static const short TEXT_NODE;
 
   bool hasChildNodes()
   {

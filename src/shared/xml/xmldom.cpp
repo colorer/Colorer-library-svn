@@ -664,6 +664,11 @@ long r;
   return true;
 };
 
+const short Node::COMMENT_NODE = 0;
+const short Node::DOCUMENT_NODE = 1;
+const short Node::ELEMENT_NODE = 2;
+const short Node::PROCESSING_INSTRUCTION_NODE = 3;
+const short Node::TEXT_NODE = 4;
 
 Node *Node::appendChild(Node *newChild)
 {
