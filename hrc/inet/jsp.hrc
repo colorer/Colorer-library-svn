@@ -45,6 +45,13 @@
          </keywords>
          <regexp match="/\bjsp\:\w+\b/" region="OpenTag"/>
          <inherit scheme="html:htmlCoreTags"/>
+         <keywords region="OpenTag">
+            <word name="c:set"/>
+            <word name="c:out"/>
+            <word name="x:parse"/>
+            <word name="x:transform"/>
+            <word name="x:param"/>
+         </keywords>
       </scheme>
 
       <scheme name="header-tag">

@@ -255,10 +255,12 @@
       <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="css:RuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
+             content-priority='low'
       />
       <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="css:RuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
+             content-priority='low'
       />
          
       <inherit scheme="htmlCoreParams"/>
