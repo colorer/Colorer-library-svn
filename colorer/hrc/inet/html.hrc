@@ -402,7 +402,7 @@
 
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\?]?~1 &gt;) /ix"
-             end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
+             end="/%htmlscrEnd;/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"/>
 
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\?]?~1 &gt;) /ix"
