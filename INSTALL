@@ -77,10 +77,14 @@
        ``ant hrcupdate''       - Builds zip with current HRC for
                                  separate distribution.
 
+       Test builds:
+
        ``ant this.colorer''    - Builds binary executables and installs
                                  them into the current working copy.
        ``ant this.far''        - Builds far manager executables and installs
                                  them into the FAR Manager folder.
+       ``ant this.eclipse''    - Builds EclipseColorer package and installs
+                                 it into the Eclipse folder.
 
 
   3. Installation

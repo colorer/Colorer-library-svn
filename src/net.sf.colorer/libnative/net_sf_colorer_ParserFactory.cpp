@@ -27,7 +27,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
 };
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, jobject obj, jlong iptr){
-  printf("clr:ParserFactory finalize\n");
+  printf("clr:ParserFactory finalize iptr:%d\n", (int)iptr);
   JParserFactory *jpf = (JParserFactory*)iptr;
   if (jpf == null) return;
   env->DeleteGlobalRef(jpf->jHRCParser);
