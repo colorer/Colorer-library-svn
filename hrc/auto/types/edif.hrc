@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    Language: EDIF (Electronic Design Interchange Format)
+    URL: http://www.edif.org
+    Maintainer: Artem Zankovich <z_artem@hotbox.ru>
+
+    Uses standarts:
+      ANSI/EIA Standard 548-1988 (EDIF Version 2 0 0)
+      IEC 61690-1 (EDIF Version 3 0 0)
+      IEC 61690-2 (EDIF Version 4 0 0)
+
+$Log$
+Revision 1.1  2003/06/11 06:44:58  Administrator
+by Artem Zankovich
+by Artem Zankovich
+
+Revision 2.0  2003/06/10 13:50:13  Artem
+Colorer.take5.beta1
+
+Revision 1.0  2002/10/12 10:49:40  Artem
+Initial revision
+
+-->
+<!DOCTYPE hrc
+  PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="take5" xsi:schemaLocation="http://colorer.sf.net/2003/hrc ../hrc.xsd">
+   <type name="edif" access="public">
+
+      <import type="def"/>
+
+
+
+      <scheme name="edifString">
+         <regexp match="/%[\s\d]+%/" region="VarStrong"/>
+         <keywords region="Error" ignorecase="yes" priority="low">
+            <symb name="%"/>
+         </keywords>
+         <!-- ! # $ & ' () * + , -  . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~ -->
+      </scheme>
+
+      <scheme name="edif_in">
+         <block start="/(\()/" end="/(\))/" scheme="edif_in" region00="PairStart" region10="PairEnd" region01="Symbol" region11="Symbol"/>
+         <regexp match="/~\s*[a-zA-Z&amp;]{1,1}\w*\b/" region="Keyword"/>
+         <regexp match="/~(.*?)\M\s/" region1="Error" priority="low"/>
+         <block start="/&#34;/" end="/&#34;/" scheme="edifString" region="String" region00="PairStart" region10="PairEnd"/>
+         <regexp match="/\s+[+\-]{0,1}\d+\b/" region="NumberDec"/>
+         <keywords region="Error" ignorecase="yes" priority="low">
+            <symb name="("/>
+            <symb name=")"/>
+         </keywords>
+      </scheme>
+
+      <scheme name="edif">
+         <block start="/(\()/" end="/(\))/" scheme="edif_in" region00="PairStart" region10="PairEnd" region01="Symbol" region11="Symbol"/>
+         <regexp match="/\S*/" region="Error" priority="low"/>
+      </scheme>
+
+   </type>
+
+</hrc>
