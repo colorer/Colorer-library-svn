@@ -3,21 +3,39 @@
 
 #include<unicode/String.h>
 
-/** Static unicode string.
-    Static string, do not depend on called character data.
-    @ingroup unicode
+/**
+ * Static unicode string.
+ * Static string, do not depend on called character data.
+ * @ingroup unicode
 */
 class SString : public String{
 public:
-  /** Static string constructor from String source */
+  /**
+   * Static string constructor from String source
+   * @param cstring source string, can't be null.
+   */
   SString(const String *cstring, int s = 0, int l = -1);
-  /** Static string constructor from String source */
+
+  /**
+   * Static string constructor from String source
+   * @param cstring source string, can't be null.
+   */
   SString(const String &cstring, int s = 0, int l = -1);
-  /** Static string constructor from char stream */
+
+  /**
+   * Static string constructor from char stream
+   * @param str source string, can't be null.
+   */
   SString(char *str, int enc = -1);
-  /** Static string constructor from integer number */
+
+  /**
+   * Static string constructor from integer number
+   */
   SString(int no);
-  /** Empty static string constructor */
+
+  /**
+   * Empty static string constructor
+   */
   ~SString();
 
   String *substring(int s, int l = -1) const;
