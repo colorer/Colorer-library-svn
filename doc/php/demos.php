@@ -34,6 +34,9 @@ for($i = 0; $i < count($list); $i++){
     <option <?=($hrd_color == 'black')?"selected":""?> value='black'>black</option>
     <option <?=($hrd_color == 'neo')?"selected":""?> value='neo'>neo</option>
     <option <?=($hrd_color == 'eclipse')?"selected":""?> value='eclipse'>eclipse</option>
+    <option <?=($hrd_color == 'fmx')?"selected":""?> value='fmx'>FMX</option>
+    <option <?=($hrd_color == 'hs')?"selected":""?> value='hs'>HomeSite</option>
+    <option <?=($hrd_color == 'bred3')?"selected":""?> value='bred3'>Bred3</option>
     <option <?=($hrd_color == 'grayscale')?"selected":""?> value='grayscale'>grayscale</option>
     <option <?=($hrd_color == 'tags')?"selected":""?> value='tags'>html tags</option>
     <option <?=($hrd_color == 'tokens')?"selected":""?> value='tokens'>tokenize</option>

@@ -11,15 +11,15 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer library HRC Reference take5.beta2. June 2003</releaseinfo>
+<releaseinfo>Colorer-take5 beta2 library HRC Reference. September 2003</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>30 June 2003</pubdate>
+<pubdate>12 September 2003</pubdate>
 
 <revhistory>
 <revision>
   <revnumber>take5.beta2</revnumber>
-  <date>?? June 2003</date>
+  <date>12 September 2003</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
@@ -43,7 +43,7 @@
   <firstname>Igor</firstname><surname>Ruskih</surname>
   <affiliation>
     <address>
-      <email>cail@nm.ru</email>
+      <email>cail at nm.ru</email>
     </address>
   </affiliation>
 </author>

@@ -1,53 +1,109 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<!--
-    lisp files
-    Improved and adapted for AutoCAD
-    by Konstantin Khlopenkov on 05.02.2001
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-   <type name="lisp" access="public">
+<type name="lisp" access="public">
+    <annotation><documentation>
+    Lisp Syntax Description
 
-      <import type="def"/>
+    Modified by Mykolas Juraitis on 4 Sep, 2003:
+        - Fixed string definition (StandardString could not be used because
+          symbol ' has special meaning in Lisp).
+        - Keywords (symbols starting with ':') are now higlighted.
+        - Constant variables were added.
+        - Lambda list keywords were added.
+        - Variable and constant definition regions were added.
 
+    Improved and adapted for AutoCAD by Konstantin Khlopenkov on 05.02.2001.
+    </documentation></annotation>
 
+  <import type="def"/>
 
-      <scheme name="lisp">
-         <block start="/;\|/" end="/\|;/" scheme="Comment" region="Comment"/>
-         <regexp match="/(;.*)$/" region1="Comment"/>
-         <block start="/( (\() \s* defun)\M .*? (C:)? (?{Function}[\w\-\:]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
-         <block start="/( (\() \s* [^;]*? ) \M ([;\s\)\(]|$) /x" end="/( \) )/x" scheme="lisp" region00="PairStart" region10="PairEnd" region01="Keyword" region02="Symbol" region11="Symbol"/>
-         <inherit scheme="StandardString"/>
-         <inherit scheme="def:Number"/>
-         <keywords region="Symbol">
-            <symb name=";"/>
-            <symb name="="/>
-            <symb name="+"/>
-            <symb name="-"/>
-            <symb name="/"/>
-            <symb name="*"/>
-            <symb name="&amp;"/>
-            <symb name="|"/>
-            <symb name="^"/>
-            <symb name="["/>
-            <symb name="'"/>
-            <symb name="]"/>
-            <symb name=","/>
-            <symb name="."/>
-            <symb name=":"/>
-            <symb name="!"/>
-            <symb name="~"/>
-            <symb name="&lt;"/>
-            <symb name="&gt;"/>
-            <symb name="%"/>
-            <symb name="{"/>
-            <symb name="}"/>
-            <symb name="?"/>
-            <symb name="(" region="Error"/>
-            <symb name=")" region="Error"/>
-         </keywords>
-      </scheme>
+  <region name='FunctionDefinition' parent='def:Outlined'/>
+  <region name='VariableDefinition' parent='def:Outlined'/>
+  <region name='ConstantDefinition' parent='def:Outlined'/>
 
-   </type>
+  <scheme name="lisp">
+
+    <!-- Sinle line comment -->
+    <regexp match="/(;.*)$/" region1="Comment"/>
+
+    <!-- Multi line comment -->
+    <block start="/\#\|/" end="/\|\#/" scheme="lisp" region="Comment" region00="PairStart" region10="PairEnd"/>
+
+    <!-- Function definition -->
+    <block start="/( (\() \s* defun)\M .*? (C:)? (?{FunctionDefinition}[\w\-\:]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+
+    <!-- Variable definition -->
+    <block start="/( (\() \s* defvar)\M .*? (C:)? (?{VariableDefinition}[\w\-\:\*]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+
+    <!-- Constant definition -->
+    <block start="/( (\() \s* defconstant)\M .*? (C:)? (?{ConstantDefinition}[\w\-\:\*]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+
+    <block start="/( (\() \s* [^;]*? ) \M ([;\s\)\(]|$) /x" end="/( \) )/x" scheme="lisp" region00="PairStart" region10="PairEnd" region01="Keyword" region02="Symbol" region11="Symbol"/>
+
+    <!-- String -->
+    <regexp match="/&#34;.*?&#34;/" region0="String"/>
+
+    <!-- Number -->
+    <inherit scheme="def:Number"/>
+
+    <!-- Keyword -->
+    <regexp match="/\:[\w-*+]*/" region0="FunctionKeyword"/>
+
+    <regexp match="/\,[\@\w-*+]*/" region0="Prefix"/>
+
+    <regexp match="/\'[\w-*+]*/" region0="SymbolStrong"/>
+
+    <!-- Constant variables -->
+    <keywords ignorecase="yes" region="Constant">
+      <word name="array-dimension-limit" />
+      <word name="pi" />
+      <word name="most-positive-fixnum" />
+      <word name="most-negative-fixnum" />
+      <word name="nil" />
+      <word name="t" />
+    </keywords>
+
+    <!-- Lambda list keywords -->
+    <keywords ignorecase="yes" region="FunctionKeyword">
+      <word name="&amp;allow-other-keys" />
+      <word name="&amp;aux" />
+      <word name="&amp;key" />
+      <word name="&amp;optional" />
+      <word name="&amp;rest" />
+    </keywords>
+
+    <keywords region="Symbol">
+      <symb name="="/>
+      <symb name="+"/>
+      <symb name="/"/>
+      <symb name="&amp;"/>
+      <symb name="|"/>
+      <symb name="^"/>
+      <symb name="["/>
+      <symb name="'"/>
+      <symb name="]"/>
+      <symb name=","/>
+      <symb name="."/>
+      <symb name=":"/>
+      <symb name="!"/>
+      <symb name="~"/>
+      <symb name="&lt;"/>
+      <symb name="&gt;"/>
+      <symb name="%"/>
+      <symb name="{"/>
+      <symb name="}"/>
+      <symb name="?"/>
+      <symb name="(" region="Error"/>
+      <symb name=")" region="Error"/>
+    </keywords>
+
+  </scheme>
+
+</type>
+
 </hrc>

@@ -69,7 +69,7 @@
     <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
-    
+
     <copy file='fo-hrc-ref.xsl' tofile='fo-hrc-ref-temporary.xsl' overwrite='true'>
      <filterset>
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
@@ -111,7 +111,7 @@
     <zip destfile="hrc-ref.zip"
          basedir="."
          includes="db*,fo*,html*,hrc-ref.docbook,build.xml"
-    />    
+    />
   </target>
 
   <target name="all" depends='init, html, pdf, zip' description='Builds all target versions'>
