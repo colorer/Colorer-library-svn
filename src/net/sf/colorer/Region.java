@@ -56,11 +56,13 @@ public class Region {
         return false;
     }
 
-    public Region(String name, String descr, Region parent, int id) {
+    /** Instantiated from native code */
+    Region(String name, String descr, Region parent, int id, long iptr) {
         this.name = name;
         this.description = descr;
         this.parent = parent;
         this.id = id;
+        this.iptr = iptr;
     }
 
     public String toString() {
