@@ -68,14 +68,26 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     Iterator iterator = selection.iterator();
     while (iterator.hasNext()) {
       Object obj = iterator.next();
-      if (!(obj instanceof IResource)) {
+      
+      String fileLocation = null;
+      
+      if (obj instanceof IResource) {
+        IResource resource = (IResource)obj;
+        if (resource == null || resource.getType() != IResource.FILE){
+          continue;
+        }
+        IFile iFile = (IFile) resource;
+        fileLocation = iFile.getLocation().toString(); 
+      }
+      /*
+      else if (obj instanceof org.eclipse.jdt.core.IJavaElement){
+        System.out.println(((org.eclipse.jdt.core.IJavaElement)obj).getElementName());        
+      }
+      */
+      
+      if (fileLocation == null){
         continue;
       }
-      IResource resource = (IResource)obj;
-      if (resource == null || resource.getType() != IResource.FILE) return;
-
-      IFile iFile = (IFile) resource;
-      String fileLocation = iFile.getLocation().toString();
       fileList.addElement(fileLocation);
     }
     gd.setFileList(fileList);

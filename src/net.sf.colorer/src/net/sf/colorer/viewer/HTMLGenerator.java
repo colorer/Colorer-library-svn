@@ -25,13 +25,32 @@ public class HTMLGenerator {
   String hrdSchema;
   ParserFactory pf;
   
+  /**
+   * Ñonstructor, used to pass initial common parameters of generation process
+   * @param pf ParserFactory object, used to obtain all parsing resources
+   * @param input LineSource input object, representing input source text, used for parsing
+   * @param hrd Name of a color scheme, used to highlight text and transform it into HTML form
+   *   
+   */
   public HTMLGenerator(ParserFactory pf, ReaderLineSource input, String hrd){
     lineSource = input;
     hrdSchema = hrd;
     this.pf = pf;
   }
   
-  
+  /**
+   * Common method, which generates HTML representation of the full source text and
+   * writes it into the passed writer.
+   * 
+   * @param commonWriter Writer, used to write all source text data
+   * @param escapedWriter Writer, used to write all the created HTML markup data (can be equals to commonWriter) 
+   * @param fileName input file's name, used to determine, which HRC type must be used by parser
+   * @param useLineNumbers If true, number of each line is printed before actual text data
+   * @param useHtmlSubst If true, & and < HTML symbols have to be substituted in output
+   * @param useInfoHeader If true, simple informational header is printed before actual source text
+   * @param useHeaderFooter If true, standard HTML tags with header/footer are printed
+   * @throws IOException
+   */
   public void generate(Writer commonWriter, Writer escapedWriter,
                 String fileName,
                 boolean useLineNumbers,
