@@ -29,7 +29,15 @@ void TextLinesStore::loadFile(const String *fileName, const String *inputEncodin
   if (fileName == null) throw Exception(StringBuffer("can't find 'null' file"));
   this->fileName = new SString(fileName);
   InputSource *is = InputSource::newInstance(fileName);
-  const byte *data = is->openStream();
+
+  const byte *data;
+  try{
+    data = is->openStream();
+  }catch (InputSourceException &e){
+    delete is;
+    throw e;
+  }
+
   int len = is->length();
 
   int ei = inputEncoding == null ? -1 : Encodings::getEncodingIndex(inputEncoding->getChars());

@@ -19,12 +19,21 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       continue;
     };
     if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; };
-    if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
-    if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
     if (argv[i][1] == 'f') { jobType = JT_FORWARD; continue; };
     if (argv[i][1] == 'v') { jobType = JT_VIEW; continue; };
     if (argv[i][1] == 'h' && argv[i][2] == 't') { jobType = JT_GEN_TOKENS; continue; };
     if (argv[i][1] == 'h') { jobType = JT_GEN; continue; };
+    if (argv[i][1] == 'l' && argv[i][2] == 's' && (i+1 < argc || argv[i][3])){
+      if (argv[i][3]){
+        ct.setLinkSource(DString(argv[i]+3));
+      }else{
+        ct.setLinkSource(DString(argv[i+1]));
+        i++;
+      };
+      continue;
+    };
+    if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
+    if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
 
     if (argv[i][1] == 'd' && argv[i][2] == 'c') { ct.setCopyrightHeader(false); continue; };
     if (argv[i][1] == 'd' && argv[i][2] == 'b') { ct.setBomOutput(false); continue; };
@@ -105,6 +114,7 @@ void printError(){
        "  -c<path>   Uses specified 'catalog.xml' file\n"
        "  -i<name>   Loads specified hrd rules from catalog\n"
        "  -t<type>   Tries to use type <type> instead of type autodetection\n"
+       "  -ls<name>  Use file <name> as input linking data source for href generation\n"
        "  -ei<name>  Use input file encoding <name>\n"
        "  -eo<name>  Use output stream encoding <name>, also viewer encoding in w9x\n"
        "  -o<name>   Use file <name> as output stream\n"

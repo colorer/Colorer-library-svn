@@ -19,7 +19,9 @@ ConsoleTools::ConsoleTools(){
   inputEncodingIndex = outputEncodingIndex = -1;
   catalogPath = null;
   hrdName = null;
-};
+
+  docLinkHash = new Hashtable<String*>;
+}
 ConsoleTools::~ConsoleTools(){
   delete typeDescription;
   delete catalogPath;
@@ -28,31 +30,35 @@ ConsoleTools::~ConsoleTools(){
   delete outputEncoding;
   delete outputFileName;
   delete inputFileName;
-};
+
+  for(int i = 0; i < docLinkHash->size(); i++){
+    delete docLinkHash->get(docLinkHash->key(i));
+  };
+}
 
 
-void ConsoleTools::setCopyrightHeader(bool use) { copyrightHeader = use; };
+void ConsoleTools::setCopyrightHeader(bool use) { copyrightHeader = use; }
 
-void ConsoleTools::setHtmlEscaping(bool use) { htmlEscaping = use; };
+void ConsoleTools::setHtmlEscaping(bool use) { htmlEscaping = use; }
 
-void ConsoleTools::setBomOutput(bool use) { bomOutput = use; };
+void ConsoleTools::setBomOutput(bool use) { bomOutput = use; }
 
-void ConsoleTools::setHtmlWrapping(bool use) { htmlWrapping = use; };
+void ConsoleTools::setHtmlWrapping(bool use) { htmlWrapping = use; }
 
 void ConsoleTools::setTypeDescription(const String &str) {
   delete typeDescription;
   typeDescription = new SString(str);
-};
+}
 
 void ConsoleTools::setInputFileName(const String &str) {
   delete inputFileName;
   inputFileName = new SString(str);
-};
+}
 
 void ConsoleTools::setOutputFileName(const String &str) {
   delete outputFileName;
   outputFileName = new SString(str);
-};
+}
 
 void ConsoleTools::setInputEncoding(const String &str) {
   delete inputEncoding;
@@ -60,24 +66,76 @@ void ConsoleTools::setInputEncoding(const String &str) {
   inputEncodingIndex = Encodings::getEncodingIndex(inputEncoding->getChars());
   if (inputEncodingIndex == -1) throw Exception(StringBuffer("Unknown input encoding: ")+inputEncoding);
   if (outputEncoding == null) outputEncodingIndex = inputEncodingIndex;
-};
+}
 
 void ConsoleTools::setOutputEncoding(const String &str) {
   delete outputEncoding;
   outputEncoding = new SString(str);
   outputEncodingIndex = Encodings::getEncodingIndex(outputEncoding->getChars());
   if (outputEncodingIndex == -1) throw Exception(StringBuffer("Unknown output encoding: ")+outputEncoding);
-};
+}
 
 void ConsoleTools::setCatalogPath(const String &str) {
   delete catalogPath;
   catalogPath = new SString(str);
-};
+}
 
 void ConsoleTools::setHRDName(const String &str) {
   delete hrdName;
   hrdName = new SString(str);
-};
+}
+void ConsoleTools::setLinkSource(const String &str){
+  InputSource *linkSource = null;
+  const byte *stream = null;
+  try{
+    linkSource = InputSource::newInstance(&str);
+    stream = linkSource->openStream();
+  }catch(InputSourceException &e){
+    throw Exception(*e.getMessage());
+  };
+
+  CXmlEl *linkSourceTree = new CXmlEl();
+  linkSourceTree->parse(stream, linkSource->length());
+  linkSource->closeStream();
+  
+  CXmlEl *elem = linkSourceTree;
+
+  while(elem = elem->next()){
+   if (elem == null || elem->getType() == EL_BLOCKED &&
+       elem->getName() && *elem->getName() == "doclinks") break;
+  };
+  if (elem == null) throw Exception(DString("Bad doclinks data file structure"));
+
+  elem = elem->child();
+  while(elem != null){
+    if (elem->getType() == EL_BLOCKED && elem->getName() && *elem->getName() == "links"){
+      const String *url = elem->getParamValue(DString("url"));
+      const String *scheme = elem->getParamValue(DString("scheme"));
+      CXmlEl *eachLink = elem->child();
+      while(eachLink != null){
+        if (eachLink->getName() && *eachLink->getName() == "link"){
+          const String *l_url = eachLink->getParamValue(DString("url"));
+          const String *l_scheme = eachLink->getParamValue(DString("scheme"));
+          const String *token = eachLink->getParamValue(DString("token"));
+          StringBuffer fullURL;
+          if (url != null) fullURL.append(url);
+          if (l_url != null) fullURL.append(l_url);
+          if (l_scheme == null) l_scheme = scheme;
+          if (token == null) continue;
+          StringBuffer hkey(token);
+          if (l_scheme != null){
+            hkey.append(DString("--")).append(l_scheme);
+          };
+          docLinkHash->put(&hkey, new SString(&fullURL));
+        };
+        eachLink = eachLink->next();
+      };
+    };
+    elem = elem->next();
+  };
+  delete linkSource;
+  delete linkSourceTree;
+}
 
 
 void ConsoleTools::RETest(){
@@ -100,11 +158,12 @@ void ConsoleTools::RETest(){
     };
   }while(text[0]);
   delete re;
-};
+}
 
 void ConsoleTools::listTypes(bool load){
+  Writer *writer = null;
   try{
-    Writer *writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
+    writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
     ParserFactory pf(catalogPath);
     HRCParser *hrcParser = pf.getHRCParser();
     fprintf(stderr, "\nloading file types...\n");
@@ -116,9 +175,10 @@ void ConsoleTools::listTypes(bool load){
     };
     delete writer;
   }catch(Exception &e){
+    delete writer;
     fprintf(stderr, "%s\n", e.getMessage()->getChars());
   };
-};
+}
 
 FileType *ConsoleTools::selectType(HRCParser *hrcParser, String *fline){
   FileType *type = null;
@@ -142,7 +202,7 @@ FileType *ConsoleTools::selectType(HRCParser *hrcParser, String *fline){
   if (typeDescription == null || type == null)
     type = hrcParser->chooseFileType(inputFileName, fline, 0);
   return type;
-};
+}
 
 void ConsoleTools::viewFile(){
   try{
@@ -173,7 +233,7 @@ void ConsoleTools::viewFile(){
   }catch(...){
     fprintf(stderr, "unknown exception ...\n");
   };
-};
+}
 
 void ConsoleTools::forward(){
   InputSource *fis = InputSource::newInstance(inputFileName);
@@ -194,7 +254,7 @@ void ConsoleTools::forward(){
 
   delete outputFile;
   delete fis;
-};
+}
 
 void ConsoleTools::genOutput(bool useTokens){
   try{
@@ -266,11 +326,11 @@ void ConsoleTools::genOutput(bool useTokens){
 
     for(int i = 0; i < textLinesStore.getLineCount(); i++){
       if (useTokens){
-        ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
+        ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else if (useMarkup){
-        ParsedLineWriter::markupWrite(commonWriter, escapedWriter, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
+        ParsedLineWriter::markupWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else{
-        ParsedLineWriter::htmlRGBWrite(commonWriter, escapedWriter, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
+        ParsedLineWriter::htmlRGBWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       };
       commonWriter->write(DString("\n"));
     };
@@ -294,7 +354,7 @@ void ConsoleTools::genOutput(bool useTokens){
   }catch(...){
     fprintf(stderr, "unknown exception ...\n");
   };
-};
+}
 
 
 /* ***** BEGIN LICENSE BLOCK *****

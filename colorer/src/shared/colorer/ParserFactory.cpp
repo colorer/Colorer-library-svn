@@ -161,12 +161,15 @@ String *ParserFactory::searchPath()
   for(int i = 0; i < paths.size(); i++){
     String *path = paths.elementAt(i);
     if (right_path == null){
+      InputSource *is = null;
       try{
-        InputSource *is = InputSource::newInstance(path);
+        is = InputSource::newInstance(path);
         is->openStream();
         right_path = new SString(path);
         delete is;
-      }catch(InputSourceException &e){};
+      }catch(InputSourceException &e){
+        delete is;
+      };
     };
     delete path;
   };

@@ -114,8 +114,8 @@ class SchemeImpl : public Scheme{
   friend class HRCParserImpl;
   friend class TextParserImpl;
 public:
-  const String *getName() { return schemeName; };
-  FileType *getFileType() { return (FileType*)fileType; };
+  const String *getName() const { return schemeName; };
+  FileType *getFileType() const { return (FileType*)fileType; };
 protected:
   String *schemeName;
   Vector<SchemeNode*> nodes;
