@@ -15,7 +15,8 @@ With help of:
       <import type="def"/>
       <import type="config"/>
 
-
+      <region name="RuleOutline" parent="def:Outlined"/>
+      <region name="IncludeOutline" parent="def:Outlined"/>
 
       <scheme name="MakVars">
          <regexp match="/(\$\l?\()([\@&lt;\*\^\?]?[\w\*\.\=\:]+)(\))/" region0="StringEdge" region1="PairStart" region2="String" region3="PairEnd"/>
@@ -106,7 +107,7 @@ With help of:
 
       <scheme name="MakRule">
          <inherit scheme="MakInlineFiles"/>
-         <block start="/^\M[^\s\#][^\=\:]+\:/" end="/(::?)/" scheme="MakGoal" region="Insertion"/>
+         <block start="/^\M(?{RuleOutline}[^\s\#][^\=\:]+)\:/" end="/(::?)/" scheme="MakGoal" region="Insertion"/>
          <inherit scheme="MakCommon"/>
       </scheme>
 
@@ -115,14 +116,13 @@ With help of:
       </scheme>
 
       <scheme name="makefile">
-<!--  Builder project options -->
          <block start="/^((\!\s*ifdef) IDEOPTIONS)/" end="/^(\!endif)/" scheme="config" region="String" region01="CommentContent" region02="Keyword" region11="Keyword" region00="PairStart" region10="PairEnd"/>
-<!-- ifXXX directives -->
          <block start="/^(\!)/" end="/$/" scheme="MakIf" region="CommentContent" region01="Keyword"/>
-         <block start="/^\M\S/" end="/(^ | [^\\]?#1) $/x" scheme="MakRule"/>
          <regexp match="/^(\x20{2})+/" region='Error'/>
-         <block start="/^\M[\s\t]/" end="/$/" scheme="MakEx" region="CommentContent"/>
+         <regexp match="/^\Minclude \s+ (?{IncludeOutline}.+)$/x"/>
+
          <keywords region="Keyword">
+            <word name="include"/>
             <word name="%append"/>
             <word name="%create"/>
             <word name="%null"/>
@@ -154,6 +154,8 @@ With help of:
             <word name="loaddll"/>
             <word name="VERSION"/>
          </keywords>
+         <block start="/^\M\S/" end="/(^ | [^\\]?#1) $/x" scheme="MakRule"/>
+         <block start="/^\M[\s\t]/" end="/$/" scheme="MakEx" region="CommentContent"/>
       </scheme>
 
       <scheme name="MakEx">
