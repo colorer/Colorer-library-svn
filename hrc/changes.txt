@@ -2,7 +2,8 @@
 $Date$
 
   New:
-    - SVG 1.0 (Eugene Efremov)
+    - SVG 1.0, PostScript (Eugene Efremov)
+    - Sh, def, PHP, C, Perl fixes by (Eugene Efremov)
     - Common packages regrouping
 ?????????    - ColdFusion support
 
