@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!--
-    JScript Files
-With help of:
-    Evgeny Stepanischev <se@e-kazan.ru>
--->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
    <type name="jScript" access="public">
 
+    <annotation><documentation>
+       JScript scheme
+    </documentation><contributors><![CDATA[
+       Evgeny Stepanischev <se@e-kazan.ru>
+       Eugene Efremov <4mirror@mail.ru>
+    ]]></contributors></annotation>
+
       <import type="def"/>
-
-
 
       <scheme name="jComment">
          <keywords region="CommentContent">
@@ -34,10 +38,20 @@ With help of:
 
       <scheme name="jsMETA"/>
 
-      <scheme name="RE">
+      <!-- EE: add regexp support -->
+      <scheme name="String">
          <regexp match="/\\./" region0="StringContent"/>
          <inherit scheme="jsMETA"/>
       </scheme>
+            
+      <scheme name="RE">
+       <inherit scheme="regexp:pcre.regexp">
+        <virtual scheme="regexp:string" subst-scheme="jsMETA"/>
+        <virtual scheme="regexp:pcre.regexp" subst-scheme="RE"/>        
+       </inherit>
+      </scheme>
+      
+      
 
       <scheme name="jScript">
 <!-- just ignore html comments -->
@@ -54,15 +68,24 @@ With help of:
          <inherit scheme="def:Number"/>
 <!-- Strings -->
          <inherit scheme="c:String"/>
-         <block start="/\x27/" end="/\x27/" scheme="RE" region="String"/>
+         <block start="/\x27/" end="/\x27/" scheme="String" region="String"/>
 
-         <block start="/( [\=\!]\~ |
-                         [^&lt;\]\}\)\+\-\w\s\/] |
-                         \bif | ~)
-                         \s* ((\/)) /x"
-                         end="/(\y2[cmiogxes]*)/x" scheme="RE"
-                         region="String" region01="Symbol" region02="StringEdge"
-                         region03="PairStart" region10="StringEdge" region11="PairEnd"/>
+      <!-- EE: add regexp support -->
+         <block scheme="RE" region="String">
+           <start region1="Symbol" region2="StringEdge" region3="PairStart">
+            <![CDATA[
+             /( [\=\!]\~ |
+             [^<\]\}\)\+\-\w\s\/] |
+             \bif | ~)
+             \s* ((\/)) /x
+            ]]>
+           </start>
+           <end region0="StringEdge" region1="PairEnd" region2="regexp:SpecArea">
+            <![CDATA[
+             /(\y2([cmiogxes]*))/x
+            ]]>
+           </end>
+         </block>
 
 <!-- faults with var1/var2 :(
    <regexp match='/ \/ ( \\. | [^\\\/] )*? \/ /x' region="String"/>
@@ -124,7 +147,7 @@ With help of:
             <symb name="!="/>
             <symb name="&amp;&amp;"/>
             <symb name="||"/>
-            <symb name="?"/>
+            <symb name="?" region="SymbolStrong"/> <!-- EE: strong -->
 <!-- Operators Bitwise -->
             <symb name="~"/>
             <symb name="&lt;&lt;"/>
@@ -149,17 +172,26 @@ With help of:
             <symb name="|="/>
             <symb name="^="/>
 <!-- Operators other?  -->
+            <!-- EE: this operators cannot used in this plase...
             <symb name="["/>
             <symb name="]"/>
             <symb name="{"/>
             <symb name="}"/>
             <symb name="("/>
-            <symb name=")"/>
+            <symb name=")"/>-->
             <symb name=","/>
             <symb name="."/>
-            <symb name=":"/>
-            <symb name=";"/>
+            <symb name=":" region="SymbolStrong"/> <!-- EE: strong -->
+            <symb name=";" region="SymbolStrong"/> <!-- EE: strong -->
          </keywords>
+         <!-- EE: copy from c.hrc -->
+         <keywords region="def:Error">
+            <symb name="["/><symb name="]"/>
+            <symb name="{"/><symb name="}"/>
+            <symb name="("/><symb name=")"/>
+            <symb name="*/"/>
+         </keywords>
+
          <keywords region="BooleanConstant">
             <word name="true"/>
             <word name="false"/>

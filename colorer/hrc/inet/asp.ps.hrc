@@ -20,7 +20,7 @@
     <scheme name="PerlScript-client">
       <inherit scheme="Insertion"/>
       <inherit scheme="perl:perl">
-        <virtual scheme="perl:perlMETA" subst-scheme="Insertion"/>
+        <virtual scheme="perl:META" subst-scheme="Insertion"/>
         <virtual scheme="perl:perl" subst-scheme="PerlScript-client"/>
       </inherit>
     </scheme>
