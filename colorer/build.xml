@@ -39,6 +39,9 @@
     <antcall target='farplugin'/>
   </target>
 
+  <target name="doc" depends='javadoc,doxygen'>
+    <ant dir='doc/hrc-ref' antfile='build.xml' target='all'/>
+  </target>
 
   <target name="javadoc" description='Generates Java classes documentation'>
     <ant dir='src/net.sf.colorer' antfile='javadoc.xml' target='javadoc'>
