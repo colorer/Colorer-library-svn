@@ -1,0 +1,12 @@
+#Language group names mapping
+main=Базовые языки
+inet=Интернет
+database=Базы данных
+xml=Стандарты XML
+scripts=Скрипты и конфигурация
+scripts.install=Системы установки
+scripts.far=Плагины к ФАРу
+scripts.rare=Редкие и неиспользуемые скрипты
+rare=Редкие языки
+rare.quorum=Скрипты Quorum
+other=Другое
