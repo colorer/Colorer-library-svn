@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    ada Syntax (for Colorer 4ever) (exts="/\.(ads|adb)$/i")
+With help of:
+    Eugene Kotlyarov 2:5058/26.9@fidonet.org ek@oris.ru  http://esk.nm.ru/far
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+   <type name="ada" access="public">
+
+      <import type="def"/>
+
+      <region name="adaString" parent="String"/>
+      <region name="adaComment" parent="Comment"/>
+      <region name="adaDirective" parent="Directive"/>
+      <region name="adaSymb" parent="Symbol"/>
+      <region name="adaWord" parent="Keyword"/>
+      <region name="adaNumb" parent="Number"/>
+      <region name="adaFunction" parent="Function"/>
+
+
+      <scheme name="ada">
+<!-- Comments -->
+         <regexp match="/(--.*$)/" region0="adaComment"/>
+<!-- paired -->
+         <block start="/(\()/" end="/(\))/" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <block start="/(\[)/" end="/(\])/" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <block start="/\b(begin)\b/i" end="/\b(end)\b/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <block start="/\b(if)\b/i" end="/\b(end\s+if)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <block start="/\b(case)\b/i" end="/\b(end\s+case)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <block start="/\b(loop)\b/i" end="/\b(end\s+loop)/i" scheme="ada" region00="adaSymb" region01="PairStart" region10="adaSymb" region11="PairEnd"/>
+         <regexp match="/(pragma\s+([A-Za-z_])+\s*(.*\))?;)/i" region0="adaDirective"/>
+         <regexp match="/\b(?{adaWord}procedure|function)\s+(?{adaFunction}[_\w]+)\s*/i"/>
+<!-- character -->
+         <regexp match="/('.')/" region0="adaString"/>
+<!-- Strings -->
+         <regexp match="/(&#34;.*?&#34;)/" region0="adaString"/>
+<!-- Numbers  -->
+<!-- based -->
+         <regexp match="/[0-9_]+\#[0-9a-f_]+(\.([0-9a-f][_]?)+)?\#/i" region0="adaNumb"/>
+<!-- decimal  -->
+         <regexp match="/\b[0-9_]+(\.([0-9][_]?)+)?(E([\+]?|\-)([0-9][_]?)*)?\b/" region="adaNumb"/>
+<!-- Symbols -->
+         <keywords region="adaSymb">
+            <symb name="&lt;"/>
+            <symb name="=&gt;"/>
+            <symb name="^"/>
+            <symb name="+"/>
+            <symb name="&amp;"/>
+            <symb name="~"/>
+            <symb name="|"/>
+            <symb name="-"/>
+            <symb name="*"/>
+            <symb name="/"/>
+            <symb name=";"/>
+            <symb name=":"/>
+            <symb name=":="/>
+            <symb name="="/>
+            <symb name="("/>
+            <symb name=")"/>
+            <symb name="["/>
+            <symb name="]"/>
+            <symb name=","/>
+            <symb name="&gt;"/>
+            <symb name="}"/>
+            <symb name="{"/>
+            <symb name="'"/>
+            <symb name="."/>
+         </keywords>
+<!-- Common words -->
+         <keywords ignorecase="yes" region="adaWord">
+            <word name="abort"/>
+            <word name="abs"/>
+            <word name="abstract"/>
+            <word name="accept"/>
+            <word name="access"/>
+            <word name="aliased"/>
+            <word name="all"/>
+            <word name="and"/>
+            <word name="array"/>
+            <word name="at"/>
+            <word name="begin"/>
+            <word name="body"/>
+            <word name="case"/>
+            <word name="constant"/>
+            <word name="declare"/>
+            <word name="delay"/>
+            <word name="delta"/>
+            <word name="digits"/>
+            <word name="do"/>
+            <word name="else"/>
+            <word name="elsif"/>
+            <word name="end"/>
+            <word name="entry"/>
+            <word name="exception"/>
+            <word name="exit"/>
+            <word name="for"/>
+            <word name="function"/>
+            <word name="generic"/>
+            <word name="goto"/>
+            <word name="if"/>
+            <word name="in"/>
+            <word name="limited"/>
+            <word name="loop"/>
+            <word name="mod"/>
+            <word name="new"/>
+            <word name="not"/>
+            <word name="or"/>
+            <word name="others"/>
+            <word name="out"/>
+            <word name="package"/>
+            <word name="pragma"/>
+            <word name="private"/>
+            <word name="procedure"/>
+            <word name="protected"/>
+            <word name="is"/>
+            <word name="raise"/>
+            <word name="range"/>
+            <word name="record"/>
+            <word name="rem"/>
+            <word name="renames"/>
+            <word name="requeue"/>
+            <word name="return"/>
+            <word name="reverse"/>
+            <word name="select"/>
+            <word name="separate"/>
+            <word name="null"/>
+            <word name="of"/>
+            <word name="subtype"/>
+            <word name="tagged"/>
+            <word name="task"/>
+            <word name="terminate"/>
+            <word name="then"/>
+            <word name="type"/>
+            <word name="when"/>
+            <word name="with"/>
+            <word name="until"/>
+            <word name="use"/>
+            <word name="while"/>
+            <word name="xor"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

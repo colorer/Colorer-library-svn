@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<hrc version="take5">
+
+  <!--  quorum languages  -->
+  <prototype name="dii" group="quorum" description="Quorum Dictionaries">
+    <location link="qrm/dii.hrc"/>
+    <filename>/\.dii$/i</filename>
+  </prototype>
+  <prototype name="atl" group="quorum" description="Quorum Atlantis v1.5">
+    <location link="qrm/atl.hrc"/>
+    <filename>/\.(vip|atl|def|rc)$/i</filename>
+  </prototype>
+  <prototype name="rpt" group="quorum" description="Quorum Reporter">
+    <location link="qrm/rpt.hrc"/>
+    <filename>/(^int_\d{0,3}\.\d{0,3})|(\.(rpt|prc|dlg|for))$/i</filename>
+  </prototype>
+
+</hrc>

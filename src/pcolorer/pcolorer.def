@@ -1,0 +1,9 @@
+LIBRARY
+EXPORTS
+   OpenPlugin
+   SetStartupInfo
+   GetPluginInfo
+   Configure
+   ;ProcessEditorInput
+   ProcessEditorEvent
+   ExitFAR

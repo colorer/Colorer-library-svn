@@ -1,0 +1,16 @@
+
+all: colorer.dll
+
+shared_path=../shared/
+obj_output=objs
+
+include ../shared/makefile.colorer.vc
+include makefile.core
+
+LIBFLAGS = $(objs) /map /out:colorer.dll /DLL /def:pcolorer.def wininet.lib kernel32.lib user32.lib advapi32.lib /nologo /subsystem:console
+
+colorer.dll: $(objs)
+	$(LINK) $(LIBFLAGS)
+
+clear:
+	$(RM) $(objs) colorer.exp colorer.lib colorer.map

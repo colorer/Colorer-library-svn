@@ -1,0 +1,28 @@
+
+all: colorer.dll
+
+# no cygwin/win cygwin dll
+CYGWIN=-mno-cygwin
+#CYGWIN=
+
+shared_path=../shared/
+obj_output=objs
+
+include $(shared_path)makefile.colorer.gcc
+include makefile.core
+
+DEF=pcolorer.gcc.def
+DLLMAIN=_DllMain@12
+
+LIBINC = -lwininet
+LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
+
+colorer.dll: $(objs)
+	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,colorer.dll.base $(objs) $(LIBINC)
+	$(DLLTOOL) --dllname colorer.dll --base-file colorer.dll.base --output-exp colorer.dll.exp --def $(DEF)
+	$(LINK) $(LIBFLAGS) -o $@ $(objs) colorer.dll.exp $(LIBINC)
+	$(RM) colorer.dll.base
+	$(RM) colorer.dll.exp
+
+clear:
+	$(RM) $(objs)

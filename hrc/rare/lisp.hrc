@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    lisp files
+    Improved and adapted for AutoCAD
+    by Konstantin Khlopenkov on 05.02.2001
+
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+   <type name="lisp" access="public">
+
+      <import type="def"/>
+
+
+
+      <scheme name="lisp">
+         <block start="/;\|/" end="/\|;/" scheme="Comment" region="Comment"/>
+         <regexp match="/(;.*)$/" region1="Comment"/>
+         <block start="/( (\() \s* defun)\M .*? (C:)? (?{Function}[\w\-\:]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+         <block start="/( (\() \s* [^;]*? ) \M ([;\s\)\(]|$) /x" end="/( \) )/x" scheme="lisp" region00="PairStart" region10="PairEnd" region01="Keyword" region02="Symbol" region11="Symbol"/>
+         <inherit scheme="StandardString"/>
+         <inherit scheme="def:Number"/>
+         <keywords region="Symbol">
+            <symb name=";"/>
+            <symb name="="/>
+            <symb name="+"/>
+            <symb name="-"/>
+            <symb name="/"/>
+            <symb name="*"/>
+            <symb name="&amp;"/>
+            <symb name="|"/>
+            <symb name="^"/>
+            <symb name="["/>
+            <symb name="'"/>
+            <symb name="]"/>
+            <symb name=","/>
+            <symb name="."/>
+            <symb name=":"/>
+            <symb name="!"/>
+            <symb name="~"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+            <symb name="%"/>
+            <symb name="{"/>
+            <symb name="}"/>
+            <symb name="?"/>
+            <symb name="(" region="Error"/>
+            <symb name=")" region="Error"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    Eiffel
+    Sergei Ivanov <sergei_ivanov@object-tools.com>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+   <type name="eiffel" access="public">
+
+      <import type="def"/>
+
+
+
+      <scheme name="eiffel">
+<!-- Linear Comments-->
+         <regexp match="/(\-\-.*$)/" region0="Comment"/>
+<!-- Numbers -->
+         <regexp match="/\b([0-9.]+([eE][\-+]?\d+)?)\b/" region0="Number"/>
+<!-- Strings -->
+         <regexp match="/(&#34;(.*?[^\%])??&#34;)/" region0="String"/>
+         <regexp match="/('\%?.?' | '\%\/\d\d?\d?\/')/x" region0="String"/>
+<!-- Standard Symbols -->
+         <keywords region="Symbol">
+            <symb name=";"/>
+            <symb name="."/>
+            <symb name=","/>
+            <symb name=":"/>
+            <symb name="("/>
+            <symb name=")"/>
+            <symb name="+"/>
+            <symb name="-"/>
+            <symb name="*"/>
+            <symb name="/"/>
+            <symb name="="/>
+            <symb name="?"/>
+            <symb name="!"/>
+            <symb name="["/>
+            <symb name="]"/>
+            <symb name="{"/>
+            <symb name="}"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+            <symb name="\"/>
+            <symb name="^"/>
+         </keywords>
+         <keywords ignorecase="yes" region="Keyword">
+            <word name="class"/>
+            <word name="indexing"/>
+            <word name="deferred"/>
+            <word name="expanded"/>
+            <word name="end"/>
+            <word name="obsolete"/>
+            <word name="inherit"/>
+            <word name="creation"/>
+            <word name="feature"/>
+            <word name="frozen"/>
+            <word name="unique"/>
+            <word name="is"/>
+            <word name="local"/>
+            <word name="rename"/>
+            <word name="export"/>
+            <word name="undefine"/>
+            <word name="redefine"/>
+            <word name="select"/>
+            <word name="as"/>
+            <word name="all"/>
+            <word name="invariant"/>
+            <word name="variant"/>
+            <word name="ensure"/>
+            <word name="require"/>
+            <word name="check"/>
+            <word name="debug"/>
+            <word name="strip"/>
+            <word name="old"/>
+            <word name="retry"/>
+            <word name="rescue"/>
+            <word name="True"/>
+            <word name="False"/>
+            <word name="Result"/>
+            <word name="Current"/>
+            <word name="Void"/>
+            <word name="Precursor"/>
+            <word name="and"/>
+            <word name="or"/>
+            <word name="xor"/>
+            <word name="not"/>
+            <word name="if"/>
+            <word name="elseif"/>
+            <word name="then"/>
+            <word name="else"/>
+            <word name="implies"/>
+            <word name="inspect"/>
+            <word name="when"/>
+            <word name="do"/>
+            <word name="once"/>
+            <word name="external"/>
+            <word name="prefix"/>
+            <word name="infix"/>
+            <word name="from"/>
+            <word name="until"/>
+            <word name="loop"/>
+            <word name="like"/>
+            <word name="alias"/>
+         </keywords>
+         <keywords region="Keyword">
+            <word name="BOOLEAN"/>
+            <word name="INTEGER"/>
+            <word name="REAL"/>
+            <word name="DOUBLE"/>
+            <word name="POINTER"/>
+            <word name="STRING"/>
+            <word name="ARRAY"/>
+            <word name="BIT"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

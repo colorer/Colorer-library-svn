@@ -1,0 +1,17 @@
+
+
+
+Tue 29 Apr 14:23:48 2003
+
+  New:
+    - ActionScript by Ralf Bokelberg
+    - Quorum Atlantis by Vladimir Fonarev
+    - MathML2.0 from draft xsd
+    - CSS2 support
+  
+  Fixes:
+    - VBasic/VBScript outlining by LeO Welsch
+    - HTML, PHP outline
+    - sqlj, IDL, CPP, diff
+    - VMS renamed into DCL
+
