@@ -30,7 +30,7 @@ With help of:
     <region name="asmMnemonics"  parent="Keyword"/>
     <region name="asmLabel"  parent="Label"/>
     <region name="LabelOutline"  parent="Outlined"/>
-    <region name="asmSymbol" parent="default"/>
+    <region name="asmSymbol" parent="def:Symbol"/>
     <region name="asmNumBin" parent="NumberBin"/>
     <region name="asmNumHex" parent="NumberHex"/>
     <region name="asmNumDec" parent="NumberDec"/>
