@@ -404,8 +404,8 @@
 
     <scheme name="StringValue">
       <!-- Strings -->
-      <regexp match="/'.*?'/" region="String"/>
-      <regexp match="/&#34;.*?&#34;/" region="String"/>
+      <regexp match="/'.*?'/" region="String" priority='low'/>
+      <regexp match="/&#34;.*?&#34;/" region="String" priority='low'/>
     </scheme>
 
     <scheme name="Property">
