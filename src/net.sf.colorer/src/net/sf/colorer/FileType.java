@@ -11,10 +11,10 @@ public class FileType{
   String description;
 
   FileType(long _iptr, final String _name, final String _group, final String _description){
+    iptr = _iptr;
     name = _name;
     group = _group;
     description = _description;
-    iptr = _iptr;
   };
 
   /** Public name of file type (HRC 'name' attribute)

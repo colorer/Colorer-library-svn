@@ -93,8 +93,8 @@ public class EclipsecolorerPlugin extends AbstractUIPlugin {
         error = true;
         exc = e1;
       }
-      if (error) MessageDialog.openError(null, Messages.getString("init.error.title"),
-                                         Messages.getString("init.error.pf")+
+      if (error) MessageDialog.openError(null, Messages.get("init.error.title"),
+                                         Messages.get("init.error.pf")+
                                          "\n" + exc.getMessage());
     };
     // informs all the editors about ParserFactory reloading

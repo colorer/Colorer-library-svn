@@ -1,8 +1,7 @@
 package net.sf.colorer.handlers;
 
 
-public class HRDRegionStore implements RegionMapper
-{
+public class HRDRegionStore implements RegionMapper{
   public HRDRegionStore(){
   };
 }

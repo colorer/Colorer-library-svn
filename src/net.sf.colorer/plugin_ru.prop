@@ -10,6 +10,7 @@ commands.category.description=Colorer Library
 commands=
 
 PreferenceTitle=Библиотека Colorer
+FileTypePreferenceTitle=Типы файлов
 
 
 HTMLGenerator=Генератор HTML

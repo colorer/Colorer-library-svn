@@ -2,7 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin
    id="net.sf.colorer"
-   name="Eclipse Colorer Library Plug-in"
+   name="Eclipse Colorer Library Plugin"
    version="0.6.0"
    provider-name="Igor Russkih"
    class="net.sf.colorer.eclipse.EclipsecolorerPlugin">
@@ -64,7 +64,7 @@
             id="net.sf.colorer.eclipse.editors.ColorerEditor.XML">
       </editor>
    </extension>
-<!-- Preferences page -->
+<!-- Preferences pages -->
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -72,9 +72,30 @@
             class="net.sf.colorer.eclipse.PreferencePage"
             id="net.sf.colorer.eclipse.PreferencePage">
       </page>
+      <page
+            name="%FileTypePreferenceTitle"
+            category="net.sf.colorer.eclipse.PreferencePage"
+            class="net.sf.colorer.eclipse.FileTypePreferencePage"
+            id="net.sf.colorer.eclipse.FileTypePreferencePage">
+      </page>
    </extension>
-<!-- Editor Commands  -->
+<!-- HRD Editor view page -->
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Eclipse Colorer"
+            id="colorer">
+      </category>
+      <view
+            name="Color schemas editor"
+            icon="icons/schema-view.gif"
+            category="colorer"
+            class="net.sf.colorer.eclipse.view.HRDEditorView"
+            id="net.sf.colorer.eclipse.view.HRDEditorView">
+      </view>
+   </extension>
 
+<!-- Editor Commands  -->
    <extension
          point="org.eclipse.ui.commands">
       <activeKeyConfiguration

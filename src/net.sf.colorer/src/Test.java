@@ -28,7 +28,7 @@ public static void main(String[] arr){
   for(Enumeration e = pf.enumerateHRDInstances("rgb"); e.hasMoreElements();){
     String name = (String)e.nextElement();
     System.out.println(name + " - " + pf.getHRDescription("rgb", name));
-  };
+  }
 
   /*
    * Creating BaseEditor - common object, which encapsulates internal parsing

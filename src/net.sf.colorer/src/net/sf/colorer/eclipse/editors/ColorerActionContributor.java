@@ -21,8 +21,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.*;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
 
-public class ColorerActionContributor extends TextEditorActionContributor
-{
+public class ColorerActionContributor extends TextEditorActionContributor{
   ColorerEditor activeEditor = null;
 
   UpdateAction hrcupdateAction;
@@ -33,9 +32,9 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
   class PairMatchAction extends Action{
     PairMatchAction(){
-        super(Messages.getString("pair.find"), ImageStore.EDITOR_PAIR_MATCH);
+        super(Messages.get("pair.find"), ImageStore.EDITOR_PAIR_MATCH);
       setActionDefinitionId("net.sf.colorer.eclipse.editors.pairmatch");
-          setToolTipText(Messages.getString("pair.find.tooltip"));
+          setToolTipText(Messages.get("pair.find.tooltip"));
     }
     public void run(){
       activeEditor.matchPair();
@@ -43,9 +42,9 @@ public class ColorerActionContributor extends TextEditorActionContributor
   }
   class PairSelectAction extends Action{
     PairSelectAction(){
-        super(Messages.getString("pair.select"), ImageStore.EDITOR_PAIR_SELECT);
+        super(Messages.get("pair.select"), ImageStore.EDITOR_PAIR_SELECT);
       setActionDefinitionId("net.sf.colorer.eclipse.editors.pairselect");
-          setToolTipText(Messages.getString("pair.select.tooltip"));
+          setToolTipText(Messages.get("pair.select.tooltip"));
     }
     public void run(){
       activeEditor.selectPair();
@@ -53,9 +52,9 @@ public class ColorerActionContributor extends TextEditorActionContributor
   }
   class PairSelectContentAction extends Action{
     PairSelectContentAction(){
-        super(Messages.getString("pair.selectcontent"), ImageStore.EDITOR_PAIR_SELECTCONTENT);
+        super(Messages.get("pair.selectcontent"), ImageStore.EDITOR_PAIR_SELECTCONTENT);
       setActionDefinitionId("net.sf.colorer.eclipse.editors.pairselectcontent");
-          setToolTipText(Messages.getString("pair.selectcontent.tooltip"));
+          setToolTipText(Messages.get("pair.selectcontent.tooltip"));
     }
     public void run(){
       activeEditor.selectContentPair();
@@ -93,22 +92,22 @@ public class ColorerActionContributor extends TextEditorActionContributor
     };
 
     Menu getMenuTree(Hashtable h, Menu root, String groupname){
-      Menu mgroup = (Menu)h.get(groupname);
-      String origname = groupname;
-      if (mgroup == null){
-        int idx = groupname.lastIndexOf('.');
-        if (idx != -1){
-          root = getMenuTree(h, root, groupname.substring(0, idx));
-          groupname = groupname.substring(idx+1, groupname.length());
-        }
-        MenuItem mitem = new MenuItem(root, SWT.CASCADE);
-        mitem.setText(HRCMessages.getString(origname, groupname));
-        mgroup = new Menu(mitem);
-        h.put(origname, mgroup);
-        mitem.setMenu(mgroup);
-        mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
-      }
-      return mgroup;
+			Menu mgroup = (Menu)h.get(groupname);
+			String origname = groupname;
+			if (mgroup == null){
+			  int idx = groupname.lastIndexOf('.');
+			  if (idx != -1){
+			  	root = getMenuTree(h, root, groupname.substring(0, idx));
+			  	groupname = groupname.substring(idx+1, groupname.length());
+			  }
+			  MenuItem mitem = new MenuItem(root, SWT.CASCADE);
+			  mitem.setText(HRCMessages.get(origname, groupname));
+			  mgroup = new Menu(mitem);
+			  h.put(origname, mgroup);
+			  mitem.setMenu(mgroup);
+				mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
+			}
+			return mgroup;
     }
 
     public Menu getMenu(Control parent){
@@ -148,14 +147,14 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
 public ColorerActionContributor() {
 
-  hrcupdateAction = new UpdateAction(Messages.getString("editor.hrcupdate"));
-  hrcupdateAction.setToolTipText(Messages.getString("editor.hrcupdate.tooltip"));
+  hrcupdateAction = new UpdateAction(Messages.get("editor.hrcupdate"));
+  hrcupdateAction.setToolTipText(Messages.get("editor.hrcupdate.tooltip"));
   hrcupdateAction.setImageDescriptor(ImageStore.EDITOR_UPDATEHRC);
   hrcupdateAction.setHoverImageDescriptor(ImageStore.EDITOR_UPDATEHRC_A);
   hrcupdateAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.hrcupdate");
 
-  filetypeAction = new FileTypeActionMenu(Messages.getString("editor.filetype"));
-  filetypeAction.setToolTipText(Messages.getString("editor.filetype.tooltip"));
+  filetypeAction = new FileTypeActionMenu(Messages.get("editor.filetype"));
+  filetypeAction.setToolTipText(Messages.get("editor.filetype.tooltip"));
   filetypeAction.setImageDescriptor(ImageStore.EDITOR_FILETYPE);
   filetypeAction.setHoverImageDescriptor(ImageStore.EDITOR_FILETYPE_A);
   filetypeAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.choosetype");

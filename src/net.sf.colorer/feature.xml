@@ -4,8 +4,7 @@
       label="Eclipse Colorer"
       version="0.6.0"
       provider-name="Igor Russkih"
-      image="logo-colorer.png"
-      plugin="Eclipse Colorer">
+      image="logo-colorer.png">
 
    <description url="http://colorer.sf.net/eclipsecolorer.html">
       Eclipse Colorer is a syntax Highlighting plugin for the Eclipse IDE.
@@ -67,6 +66,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
          id="net.sf.colorer"
          download-size="1000"
          install-size="1700"
-         version="0.6.0"/>
+         version="0.6.0">
+   </plugin>
 
 </feature>

@@ -1,35 +1,32 @@
 package net.sf.colorer.eclipse;
 
-import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.Enumeration;
+import java.util.Vector;
 
-public class HRCMessages{
-  
-  static String RESOURCE_BUNDLE  = "net.sf.colorer.eclipse.HRCMessages";
-  static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
-  
-  public static String format(String key, Object[] args) {
-    return MessageFormat.format(get(key), args);
+import net.sf.colorer.ParserFactory;
+
+import org.eclipse.jface.preference.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.texteditor.WorkbenchChainedTextFontFieldEditor;
+
+public class FileTypePreferencePage extends FieldEditorPreferencePage
+    implements IWorkbenchPreferencePage{
+
+  public FileTypePreferencePage(){
+    super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
+    setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
   }
-  
-  public static String get(String key) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      return "!" + key + "!";
-    }
-  }
-  
-  public static String get(String key, String def) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      if (def != null) return def;
-      return "!" + key + "!";
-    }
+
+  public void init(IWorkbench iworkbench){}
+
+  public void createFieldEditors(){
+    Composite p = getFieldEditorParent();
+    
   }
 }
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
