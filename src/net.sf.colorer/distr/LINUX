@@ -2,18 +2,9 @@
   Colorer Library is not yet fully tested on Linux systems,
   and there can be some problems.
 
-  The most annoying issue - conflicts between libstdc++ library versions,
-  used by the Colorer and Sun's JDK 1.3/1.4.
+  This version of Colorer Library comes with the native part, compilied
+  with GNU GCC 3.2 c++ compiler under Mandrake Linux 9.0.
 
-  You can find this problem description on
-    http://forum.java.sun.com/thread.jsp?forum=52&thread=138362
+  I've tested it with Eclipse 2.1 (gtk) under jdk1.4.1 and it works fine.
 
-  However, I can't solve it. The only way to resolve this problem
-  is to recompile Colorer's native part with gcc 2.95.3.
-  Another solution - use alternative Java Machines (Kaffe, Blackdown)
-
-  Now Colorer doesn't uses dynamic_cast operator - anyway it continues
-  to make faults when any internal C++ exception occurs.
-
-  So, you can try to use it with care :-)
-
+  However, you can encounter some problems with library dependencies.
