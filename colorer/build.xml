@@ -102,6 +102,9 @@
   </target>
 
   
+
+  <target name='install' depends='init' description='Installs Colorer-take5 Library'>
+  </target>
   
   <target name="doc.clean">
     <delete file='src\shared\colorer_doc\warn_out'/>
