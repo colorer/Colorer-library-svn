@@ -12,6 +12,7 @@
       <anrdaemon@hell.corp.mtu-net.ru>  2:5020/877.24@FIDO
       honeyman <honeyman@uic.nnov.ru>
       Artem Zankovich <z_artem@yahoo.com> (16.12.2001, 09.06.2003)
+      Alex Yaroslavsky <t-rex@operamail.com>
     ]]></documentation></annotation>
 
       <import type="def"/>
@@ -45,16 +46,18 @@
 
       <entity name="mesTE" value="^\M(\S|$)"/>
 
+      <scheme name="message_body_quotes">
+         <regexp match="/^\s?[^\s&gt;]*(&gt;&gt;)+([^&gt;].*|$)/" region="pktQuote2"/>
+         <regexp match="/^\s?[^\s&gt;]*(&gt;)+.*/" region="pktQuote"/>
+      </scheme>
+
       <scheme name="messages_base">
          <!-- kludges -->
          <regexp match="/^(\x01.*$)/" region0="pktKludge"/>
          <regexp match="/^(SEEN-BY\:.*$)/" region0="pktKludge"/>
          <!-- uue code filter -->
          <regexp match="/(^\S{61,})/" region0="pktUUE"/>
-         <!-- Quotes -->
-         <regexp match="/^\s?.[^\s&gt;]+(&gt;&gt;)+[^&gt;].*/" region="pktQuote2"/>
-         <regexp match="/^\s?.[^\s\&gt;]+(&gt;)+.*/" region="pktQuote"/>
-         <regexp match="/^\&gt;.*/" region="pktQuote"/>
+         <inherit scheme="message_body_quotes"/>
          <!-- (C) by Honeyman starts-->
          <regexp match="/^(X\-FTN\-Origin\:)\s(.*)$/" region0="CommentContent" region2="pktQuote"/>
          <regexp match="/^(From\s\-)\s(.*)$/" region0="CommentContent" region2="Comment" region3="Comment"/>
@@ -153,10 +156,8 @@
       <scheme name="eml_body_text">
          <!-- prevent koi8 highlighting -->
          <regexp match="/\=[0-9a-fA-F]{2}/" region="default"/>
-         <!-- Quotes -->
-         <regexp match="/^\s*(\w+)?(\&gt;\&gt;)+(([^\&gt;].*$)|$)/" region0="pktQuote2"/>
-         <regexp match="/^\s*(\w+)?(\&gt;)+.*$/" region0="pktQuote"/>
-         <inherit scheme="text"/>
+         <inherit scheme="message_body_quotes"/>
+        <inherit scheme="text"/>
       </scheme>
 
       <scheme name="eml_message_text">
@@ -217,7 +218,7 @@
          <block start="/\M^Content\-Type:\s+text\/richtext/i" end="/^--/" scheme="eml_message_rtf"/>
          <block start="/\M^Content\-Type:\s+text\/rfc822\-headers/i" end="/^--/" scheme="eml_message_headers"/>
          <block start="/\M^Content\-Type:\s+message\/delivery\-status/i" end="/^--/" scheme="eml_message_delivery"/>
-         <block start="/\M^Content\-Type:\s+message\/disposition\-notification/i" end="/^--/" scheme="eml_disposition_notification"/>         
+         <block start="/\M^Content\-Type:\s+message\/disposition\-notification/i" end="/^--/" scheme="eml_disposition_notification"/>
          <block start="/\M^Content\-Type:\s+./i" end="/^--/" scheme="eml_message_other" priority="low"/>
          <inherit scheme="messages_base"/>
          <inherit scheme="messages_FTN"/>
