@@ -3,6 +3,7 @@ $Date$
   New:
     - HRC regexp fixes
     - External xml entities now has a .xml extension.
+    - PHP/JSP/ASP inlining fixes.
 
 
 Date: 2004/09/27 05:55:36

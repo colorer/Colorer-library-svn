@@ -24,6 +24,7 @@
     f. FOP package, used to generate library documentation in PDF format.
     g. Eclipse platform jar files to build EclipseColorer plugin.
     h. PHP package to build php HRC sources from list of the components.
+    i. Perl binaries to build some of the HRC sources.
 
     NOTE: You can build Colorer Library binaries without JDK and ANT, using
           makefiles directly. In this case you have to manually collect all
