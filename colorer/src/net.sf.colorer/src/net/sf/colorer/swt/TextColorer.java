@@ -2,7 +2,6 @@ package net.sf.colorer.swt;
 
 import java.util.Vector;
 
-import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
@@ -63,6 +62,7 @@ InternalHandler ml = new InternalHandler();
 
     baseEditor = new BaseEditorNative(pf, new LineSource(){
       public String getLine(int lno){
+        if (text.getContent().getLineCount() < lno) return null;
         String line = text.getContent().getLine(lno);       
         return line;
       }
@@ -344,7 +344,12 @@ InternalHandler ml = new InternalHandler();
       Point right = text.getLocationAtOffset(end);
       if (sr != null){
         if (highlightStyle == HLS_XOR){
-          Color color = cm.getColor(sr.bfore, sr.fore ^ cm.getColor(text.getBackground()));
+          int resultColor = sr.fore ^ cm.getColor(text.getBackground());
+		  if (text.getLineAtOffset(text.getCaretOffset()) == text.getLineAtOffset(start)
+		      && horzCross && horzCrossColor != null && ((StyledRegion)horzCrossColor).bback)
+		    resultColor = sr.fore ^ ((StyledRegion)horzCrossColor).back;
+
+		  Color color = cm.getColor(sr.bfore, resultColor);
           gc.setBackground(color);
           gc.setXORMode(true);
           gc.fillRectangle(left.x, left.y, right.x - left.x, gc.getFontMetrics().getHeight());
