@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.sf.colorer" default="javadoc">
     <target name="javadoc">
-        <javadoc destdir="C:\Program Files\colorer\doc\java"
+    <javadoc destdir="C:\Program Files\colorer\doc\java"
             access="protected" use="false" notree="false"
             nonavbar="false" noindex="false" splitindex="false"
             author="true" version="true" nodeprecatedlist="false"
@@ -10,6 +10,10 @@
             sourcepath='src'
             classpath="bin;C:\Program Files\eclipse\plugins\org.eclipse.core.resources_2.1.0\resources.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui_2.1.0\ui.jar;C:\Program Files\eclipse\plugins\org.eclipse.swt.win32_2.1.0\ws\win32\swt.jar;C:\Program Files\eclipse\plugins\org.eclipse.text_2.1.0\text.jar;C:\Program Files\eclipse\plugins\org.eclipse.jface_2.1.0\jface.jar;C:\Program Files\eclipse\plugins\org.eclipse.jface.text_2.1.0\jfacetext.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui.views_2.1.0\views.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui.workbench_2.1.0\workbench.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui.win32_2.1.0\workbenchwin32.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui.workbench.texteditor_2.1.0\texteditor.jar;C:\Program Files\eclipse\plugins\org.eclipse.ui.editors_2.1.0\editors.jar;C:\Program Files\eclipse\plugins\org.eclipse.core.boot_2.1.0\boot.jar;C:\Program Files\eclipse\plugins\org.eclipse.core.runtime_2.1.0\runtime.jar"
             overview="C:\Program Files\eclipse\workspace\net.sf.colorer\src\overview.html"
-            doctitle="Colorer-take5 Library Java API" additionalparam="-tag see:a:&quot;See: &quot; -tag todo:a:&quot;TODO: &quot;"/>
+            doctitle="Colorer-take5 Library Java API">
+      <bottom><![CDATA[<i>Copyright &#169; 2003 Cail Lomecb. All Rights Reserved.</i>]]></bottom>
+      <tag name="todo" scope="all" description="To do:" />
+      <tag name="see" scope="all" description="See:" />
+    </javadoc>
     </target>
 </project>
