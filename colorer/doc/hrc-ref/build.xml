@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project default="main" basedir=".">
+<project default="all" basedir=".">
 
   <xmlcatalog id="DTDs">
     <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
@@ -18,17 +18,13 @@
   <property name='fop-dir' value='c:/install/xml/fop-0.20.5rc2'/>
 
 
-  <target name="main" description='Generate all HRCREF versions' depends='merge,html,pdf'>
-    <echo>Choose requeried build target</echo>
-  </target>
-
   <target name="merge">
     <xslt in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
   </target>
 
-  <target name="pdf" depends='merge'>
+  <target name="pdf" depends='merge' description='Builds PDF presentation'>
     <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${db-dir}/template/titlepage.xsl'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
@@ -47,7 +43,7 @@
    </java>
   </target>
 
-  <target name="html" depends='merge'>
+  <target name="html" depends='merge' description='Builds HTML presentation'>
     <xslt in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${db-dir}/template/titlepage.xsl'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
@@ -56,7 +52,7 @@
     </xslt>
   </target>
 
-  <target name="all" depends='html,pdf'>
+  <target name="all" depends='html,pdf' description='Builds all target versions'>
   </target>
 
 </project>
