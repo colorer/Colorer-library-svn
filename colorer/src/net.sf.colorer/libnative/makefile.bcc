@@ -1,0 +1,28 @@
+#
+# Borland bcc32 5.5
+#
+
+TARGET = net_sf_colorer.dll
+all: $(TARGET)
+
+#shared_path=d:/projects/shared/
+shared_path=C:\Progra~1\Far\Plugins\colorer\src/shared/
+JAVA_INCLUDE=c:/vmj/jdk130.ibm/include/
+JAVA_INCLUDE_MD=$(JAVA_INCLUDE)win32/
+
+obj_output=objs
+
+!include $(shared_path)makefile.colorer.bcc
+!include makefile.core
+
+$(obj_output_slash)net_sf_colorer.$(obj):
+	$(CPP) -oasm.asm $(CPPFLAGS) -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE_MD) -S net_sf_colorer.cpp
+	$(CPP) $(CPPFLAGS) -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE_MD) net_sf_colorer.cpp
+
+LIBFLAGS = /Tpd  -M -m -L"C:\Program Files\Borland\bcc55\lib" c0d32.obj $(objs), $(TARGET) , , import32.lib cw32.lib wininet.lib
+
+$(TARGET): $(objs)
+	$(LINK) $(LIBFLAGS)
+
+clear:
+	$(RM) $(OBJS) colorer.map colorer.il? colorer.tds
