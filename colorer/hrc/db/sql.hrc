@@ -944,6 +944,10 @@ With help of:
          </keywords>
       </scheme>
 
+      <scheme name="stringApost">
+        <regexp match="/\\'/" region='def:StringContent'/>
+      </scheme>
+
       <scheme name="sql">
 <!-- linear comments -->
          <regexp match="/(--.*$)/" region0="sqlComment"/>
@@ -952,7 +956,7 @@ With help of:
          <block start="/\/\*/" end="/\*\//" scheme="Comment" region="sqlComment" region00="PairStart" region10="PairEnd"/>
 <!-- strings -->
          <regexp match="/(&#34;(\\.|[^\\&#34;])*?&#34;)/" region="sqlQuotedIdentifier"/>
-         <block start="/'/" end="/'/" scheme="empty" region="sqlString"/>
+         <block start="/'/" end="/'/" scheme="stringApost" region="sqlString"/>
 <!-- Numbers -->
          <inherit scheme="CHexNumber"/>
          <inherit scheme="FloatNumber"/>
