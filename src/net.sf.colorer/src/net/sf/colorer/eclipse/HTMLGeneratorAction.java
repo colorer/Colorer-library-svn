@@ -11,9 +11,9 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import net.sf.colorer.ParserFactory;
-import net.sf.colorer.dialogs.ActionListener;
-import net.sf.colorer.dialogs.GeneratorDialog;
 import net.sf.colorer.impl.ReaderLineSource;
+import net.sf.colorer.swt.dialog.ActionListener;
+import net.sf.colorer.swt.dialog.GeneratorDialog;
 import net.sf.colorer.viewer.HTMLGenerator;
 
 import org.eclipse.core.resources.IFile;
