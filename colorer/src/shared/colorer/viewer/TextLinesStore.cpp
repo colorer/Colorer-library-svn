@@ -61,6 +61,7 @@ const String *TextLinesStore::getFileName(){
 };
 
 String *TextLinesStore::getLine(int lno){
+  if (lines.size() <= lno) return null;
   return lines.elementAt(lno);
 };
 int TextLinesStore::getLineCount(){

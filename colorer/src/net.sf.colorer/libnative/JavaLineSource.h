@@ -30,10 +30,12 @@ public:
     jstring line = (jstring)env->CallObjectMethod(jsource, getLineID, lno);
     jthrowable exc = env->ExceptionOccurred();
     if (exc){
-      env->ExceptionDescribe();
+      return null;
+      //env->ExceptionDescribe();
       env->ExceptionClear();
-      throw Exception(StringBuffer("getLine request fault:")+SString(lno));
+      //throw Exception(StringBuffer("getLine request fault:")+SString(lno));
     };
+    if (line == null) return null;
 
     returnLine = new JString(env, line);
     return returnLine;
