@@ -7,5 +7,4 @@
     //win32
     $colorer_path = "d:/programs/devel/colorer/bin/colorer.exe";
   };
-  echo $colorer_path;
 ?>
