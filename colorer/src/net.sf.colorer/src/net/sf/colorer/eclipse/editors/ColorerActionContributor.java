@@ -5,6 +5,7 @@ import java.util.Hashtable;
 
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.eclipse.EclipsecolorerPlugin;
+import net.sf.colorer.eclipse.HRCMessages;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
 
@@ -24,7 +25,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 {
   ColorerEditor activeEditor = null;
 
-    UpdateAction hrcupdateAction;
+  UpdateAction hrcupdateAction;
   FileTypeActionMenu filetypeAction;
   public PairMatchAction pairMatchAction;
   public PairSelectAction pairSelectAction;
@@ -61,16 +62,16 @@ public class ColorerActionContributor extends TextEditorActionContributor
     }
   }
 
-    class UpdateAction extends Action {
-    public UpdateAction(String label) {
-            super(label);
-        }
-        public void run() {
-            if (activeEditor != null && activeEditor instanceof ColorerEditor){
-                EclipsecolorerPlugin.getDefault().reloadParserFactory();
-            }
-        }
-    }
+	class UpdateAction extends Action {
+	public UpdateAction(String label) {
+	        super(label);
+	    }
+	    public void run() {
+	        if (activeEditor != null && activeEditor instanceof ColorerEditor){
+	            EclipsecolorerPlugin.getDefault().reloadParserFactory();
+	        }
+	    }
+	}
 
   class FileTypeActionMenu extends Action implements IMenuCreator{
     class FileTypeAction extends Action{
@@ -90,6 +91,26 @@ public class ColorerActionContributor extends TextEditorActionContributor
     public void run() {
       ((ColorerEditor)activeEditor).chooseFileType();
     };
+    
+    Menu getMenuTree(Hashtable h, Menu root, String groupname){
+			Menu mgroup = (Menu)h.get(groupname);
+			String origname = groupname;
+			if (mgroup == null){
+			  int idx = groupname.lastIndexOf('.');
+			  if (idx != -1){
+			  	root = getMenuTree(h, root, groupname.substring(0, idx));
+			  	groupname = groupname.substring(idx+1, groupname.length());
+			  }
+			  MenuItem mitem = new MenuItem(root, SWT.CASCADE);
+			  mitem.setText(HRCMessages.getString(origname, groupname));
+			  mgroup = new Menu(mitem);
+			  h.put(origname, mgroup);
+			  mitem.setMenu(mgroup);
+				mgroup.getParentItem().setImage(ImageStore.EDITOR_GROUP.createImage());
+			}
+			return mgroup;
+    }
+    
     public Menu getMenu(Control parent){
       if (filetypeList != null) filetypeList.dispose();
       filetypeList = new Menu(parent);
@@ -101,17 +122,12 @@ public class ColorerActionContributor extends TextEditorActionContributor
         String ftgroup = pf.getFileTypeGroup(ftype);
         String ftdescription = pf.getFileTypeDescription(ftype);
 
-        Menu mgroup = (Menu)groups.get(ftgroup);
-        if (mgroup == null){
-          MenuItem mitem = new MenuItem(filetypeList, SWT.CASCADE);
-          mitem.setText(ftgroup);
-          mgroup = new Menu(mitem);
-          groups.put(ftgroup, mgroup);
-          mitem.setMenu(mgroup);
-        }
+        Menu mgroup = getMenuTree(groups, filetypeList, ftgroup);
         FileTypeAction ft_action = new FileTypeAction(ftype, ftdescription);
         if (((ColorerEditor)activeEditor).getFileType().equals(ftype)){
-          mgroup.getParentItem().setImage(ImageStore.EDITOR_CUR_FILETYPE.createImage());
+          mgroup.getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
+		      if (mgroup.getParentItem().getParent().getParentItem() != null)
+		        mgroup.getParentItem().getParent().getParentItem().setImage(ImageStore.EDITOR_CUR_GROUP.createImage());
           ft_action.setImageDescriptor(ImageStore.EDITOR_CUR_FILETYPE);
         }
         item = new ActionContributionItem(ft_action);
