@@ -124,6 +124,7 @@ String *ParserFactory::searchPath()
 #ifdef __unix__
   paths.addElement(new SString("./catalog.xml"));
   paths.addElement(new SString("../catalog.xml"));
+  paths.addElement(new SString("../../catalog.xml"));
   paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
 #endif
 
