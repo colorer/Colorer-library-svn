@@ -289,6 +289,9 @@
   <prototype name="hrc" group="scripts" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
     <location link="scripts/hrc.hrc"/>
     <filename>/\.hrc$/i</filename>
+    <parameters>
+      <param name="show-cross" value="both"/>
+    </parameters>
   </prototype>
   <prototype name="hrd" group="scripts" description="Colorer HRD" targetNamespace="http://colorer.sf.net/2003/hrd">
     <location link="scripts/hrd.hrc"/>

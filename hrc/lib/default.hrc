@@ -109,7 +109,7 @@
     <scheme name="def"/>
 
     <scheme name="CString">
-      <regexp match="/ &#34; ( \\. | [^\\&#34;] )*? &#34; /x" region="String"/>
+      <regexp match="/ (?{StringEdge}&#34;) (?{String} ( \\. | [^\\&#34;] )*?) (?{StringEdge}&#34;) /x"/>
     </scheme>
 
     <scheme name="CHexNumber">
@@ -137,8 +137,8 @@
     </scheme>
 
     <scheme name="StandardString">
-      <regexp match="/&#34;.*?&#34;/" region0="String"/>
-      <regexp match="/'.*?'/" region0="String"/>
+      <regexp match="/(?{StringEdge}&#34;) (?{String}.*?) (?{StringEdge}&#34;)/ix"/>
+      <regexp match="/(?{StringEdge}') (?{String}.*?) (?{StringEdge}')/ix"/>
     </scheme>
 
     <scheme name="Apost">

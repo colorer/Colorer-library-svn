@@ -206,8 +206,8 @@
   </scheme>
 
   <scheme name="String">
-   <block start="/[Ll]?&#34;/" end="/&#34;/"
-          scheme="StringContent" region="String"/>
+   <block start="/(?{def:StringEdge}[Ll]?&#34;)/" end="/(?{def:StringEdge}&#34;)/"
+          scheme="StringContent" region="String" inner-region="yes"/>
   </scheme>
 
   <scheme name="StringContent">

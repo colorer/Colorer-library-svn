@@ -8,9 +8,9 @@
   <annotation>
    <documentation>
     Active Server Pages core syntax package
-    
+
     Usable in: asp.*, jsp, php, parser.
-   
+
    </documentation>
    <contributors><![CDATA[
       Cail Lomecb <cail@nm.ru>
@@ -29,7 +29,7 @@
      <type name="asp.vb"/>
      <type name="asp.js"/>
      <type name="asp.ps"/>
-    </require>     
+    </require>
    </appinfo>
 
   </annotation>
@@ -65,8 +65,8 @@
     </documentation></annotation>
     <scheme name="InverseInsertion">
       <block start="/((\%&gt;))/" end="/((&lt;\%))/"
-       scheme="html" priority="low" region="def:Text"
-       region00="Insertion" region10="Insertion"
+       scheme="html" priority="low" region="def:Text" inner-region="yes"
+       region00="OpenTag" region10="CloseTag"
        region01="def:PairStart" region11="def:PairEnd"
       />
     </scheme>
@@ -137,7 +137,7 @@
 <!--         <virtual scheme="def:Comment" subst-scheme="Comment"/> -->
       </inherit>
     </scheme>
-    
+
     <scheme name="asp">
      <inherit scheme="html"/>
     </scheme>
