@@ -6,8 +6,24 @@
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
   <type name="asp.ps">
+      <annotation>
+       <appinfo>
+        <prototype name="asp.ps" group="inet" description="asp - PerlScript">
+          <location link="inet/asp.ps.hrc"/>
+          <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
+          <firstline weight='2'>/language\s*=.*perlscript/i</firstline>
+          <firstline>/&lt;\%/i</firstline>
+        </prototype>
+        <require>
+         <package name="asp"/>
+         <type name="html"/>
+         <type name="perl"/>
+        </require>     
+       </appinfo>
+      </annotation>
 
-    <import type="asp.vb"/>
+
+    <import type="asp"/>
 
     <scheme name="PerlScript">
       <regexp match="/\/\/.*? \M (\%&gt;|$)/ix" region="def:Comment"/>

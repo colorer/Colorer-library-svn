@@ -18,7 +18,22 @@
       Andrzej Novosiolov <andrzej@ukrnet.net>
       Evgeny Stepanischev <se@e-kazan.ru>
       Eugene Efremov <4mirror@mail.ru>
-    ]]></contributors></annotation>
+    ]]></contributors>
+     <appinfo>
+      <prototype name="html" group="inet" description="html">
+        <location link="inet/html.hrc"/>
+        <filename>/\.[^p]??html?$/i</filename>
+        <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
+      </prototype>
+      <require>
+       <package name="html-entity"/>
+       <type name="html-css"/>
+       <type name="perl"/>
+       <type name="vbScript"/>
+       <type name="jScript"/>
+      </require>     
+     </appinfo>    
+    </annotation>
 
     <import type="def"/>
     <import type="jScript"/>
@@ -34,11 +49,11 @@
     <region name="htmlTT" parent="Insertion"/>
 
     <region name="htmlTagBr" parent="OpenTag"/>
-    <region name="htmlOpenTag" parent="Keyword"/>
+    <region name="htmlOpenTag" parent="Keyword"/> 
     <region name="htmlCloseTag" parent="htmlOpenTag"/>
 
-    <region name="htmlUnknowTag" parent="Tag"/>
-    <region name="htmlTagEqu" parent="Symbol"/>
+    <region name="htmlUnknowTag" parent="Tag"/> 
+    <region name="htmlTagEqu" parent="Symbol"/> 
 
 
     <entity name="htmlscrStart" value="script [^&gt;]+ language\s*=\s*(?{q}[\x22\x27]?)"/>
@@ -244,7 +259,7 @@
         <word name="vlink"/>
         <word name="vspace"/>
       </keywords>
-
+    
     </scheme>
 
     <scheme name="htmlCoreTags">
@@ -377,20 +392,20 @@
       <block start='/(STYLE)\s*=\s*([\x22\x27])/i' end="/(\y2)/" scheme="cssInsideBraces"
                region="HtString"/>
          -->
-
+         
       <block start="/~/" end="/~[\w\:\-]+\m/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
-
-      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="html-css:AposRuleContent"
-             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart"
+         
+      <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="html-css:AposRuleContent" 
+             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
       />
-      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="html-css:QuotRuleContent"
-             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart"
+      <block start="/\b(style)(\s)*(\=)(\s)*((\'))/i" end="/(\')/" scheme="html-css:QuotRuleContent" 
+             region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
              region06="htmlString" region10="def:PairEnd" region11="htmlString"
       />
-
+         
       <inherit scheme="htmlParams"/>
-
+         
       <regexp match="/ \c (0x|\#)  [\da-fA-F]+ \b /ix" region="htmlNumb"/>
       <regexp match="/ \b [0-9\.]+ \%? /x" region="htmlNumb"/>
       <block start="/([\x22\x27])/" end="/\y1/" scheme="htmlString" region="htmlString"/>
@@ -401,18 +416,18 @@
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
-
+         
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
+                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix" 
              end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
-
+         
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) \%?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
       <block start="/ (&lt;(script .*?) \%?~1 \&gt; ) /ix"
              end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
              region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
-
+         
       <block start="/(@\[[\.\?\=]?)/" end="/(\]@)/" scheme="GenoPro"
                 region="Insertion" region01="Symbol" region11="Symbol" region00="PairStart" region10="PairEnd"/>
     </scheme>
@@ -455,329 +470,51 @@
            to disable pair searching
       </documentation></annotation>
       <inherit scheme="htmlPairs"/>
-
-      <block start="/(&lt;)\M([\w\:\-]+)/i" end="/(\/?&gt;)/"
+         
+      <block start="/(&lt;)\M([\w\:\-]+)/i" end="/(\/?&gt;)/" 
              scheme="htmlCore" region="htmlUnknowParam"
-             region00="PairStart" region10="PairEnd"
+             region00="PairStart" region10="PairEnd" 
              region01="htmlTagBr" region11="htmlTagBr"/>
-      <block start="/(&lt;\/)\M([\w\:\-]+)&gt;/i" end="/(&gt;)/"
+      <block start="/(&lt;\/)\M([\w\:\-]+)&gt;/i" end="/(&gt;)/" 
              scheme="htmlCore" region="htmlUnknowParam"
-             region00="PairStart" region10="PairEnd"
+             region00="PairStart" region10="PairEnd" 
              region01="htmlTagBr" region11="htmlTagBr" priority="low"/>
     </scheme>
 
 
-
+      
     <scheme name="html">
 
       <inherit scheme="htmlScripts"/>
-
       <!-- EE: special css -->
       <block start="/ (&lt;(style)\b.*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i"
-             scheme="html-css:css" region00="PairStrongStart" region10="PairStrongEnd"
-             region01="htmlTagBr" region02="htmlOpenTag"
+             scheme="html-css:css" region00="PairStrongStart" region10="PairStrongEnd" 
+             region01="htmlTagBr" region02="htmlOpenTag" 
              region11="htmlTagBr" region12="htmlOpenTag"
       />
 
-      <regexp match="/ \b [0-9\.]+ /x" region0="htmlNumb"/>
 
+      <regexp match="/ \b [0-9\.]+ /x" region0="htmlNumb"/>
+         
       <regexp match="/\M &lt; (h1) [^&gt;]*? &gt; (?{Header1Outline}.*?)  &lt; \/\1 &gt;/ix"/>
       <regexp match="/\M &lt; (h2) [^&gt;]*? &gt; (?{Header2Outline}.*?)  &lt; \/\1 &gt;/ix"/>
       <regexp match="/\M &lt; (h\d) [^&gt;]*? &gt; (?{Header3Outline}.*?)  &lt; \/\1 &gt;/ix"/>
-
+         
       <!-- Template-toolkit support -->
       <regexp match="/\[\% .*? \%\]/x" region0="htmlTT"/>
       <!-- HTML::Template support -->
       <regexp match="/&lt;TMPL_\w+ .*? &gt;/x" region0="htmlTT"/>
 
       <inherit scheme="htmlTagCall"/>
-
+         
       <!-- comments -->
       <block start="/&lt;!--\s*\M#/" end="/--&gt;/" scheme="xssi" region="htmlComment" region00="PairStart" region10="PairEnd"/>
       <block start="/&lt;!--/" end="/--&gt;/" scheme="Comment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
-      <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment"
+      <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment" 
              region00="PairStart" region10="PairEnd" region="htmlDirective"/>
 
-      <regexp match="/&amp;\#\d+\;/x" region="htmlParam"/>
-
-      <keywords region="htmlParam">
-        <symb name=";"/>
-        <symb name="="/>
-        <symb name="+"/>
-        <symb name="-"/>
-        <symb name="/"/>
-        <symb name="*"/>
-        <symb name="|"/>
-        <symb name="^"/>
-        <symb name="("/>
-        <symb name=")"/>
-        <symb name="["/>
-        <symb name="]"/>
-        <symb name=","/>
-        <symb name="."/>
-        <symb name=":"/>
-        <symb name="!"/>
-        <symb name="~"/>
-        <symb name="'"/>
-        <symb name="&#34;"/>
-        <symb name="%"/>
-        <symb name="{"/>
-        <symb name="}"/>
-        <symb name="?"/>
-        <symb name="\"/>
-        <symb name="&amp;Aacute;"/>
-        <symb name="&amp;aacute;"/>
-        <symb name="&amp;Acirc;"/>
-        <symb name="&amp;acirc;"/>
-        <symb name="&amp;acute;"/>
-        <symb name="&amp;AElig;"/>
-        <symb name="&amp;aelig;"/>
-        <symb name="&amp;Agrave;"/>
-        <symb name="&amp;agrave;"/>
-        <symb name="&amp;alefsym;"/>
-        <symb name="&amp;Alpha;"/>
-        <symb name="&amp;alpha;"/>
-        <symb name="&amp;amp;"/>
-        <symb name="&amp;and;"/>
-        <symb name="&amp;ang;"/>
-        <symb name="&amp;Aring;"/>
-        <symb name="&amp;aring;"/>
-        <symb name="&amp;asymp;"/>
-        <symb name="&amp;Atilde;"/>
-        <symb name="&amp;atilde;"/>
-        <symb name="&amp;Auml;"/>
-        <symb name="&amp;auml;"/>
-        <symb name="&amp;bdquo;"/>
-        <symb name="&amp;Beta;"/>
-        <symb name="&amp;beta;"/>
-        <symb name="&amp;brvbar;"/>
-        <symb name="&amp;bull;"/>
-        <symb name="&amp;cap;"/>
-        <symb name="&amp;Ccedil;"/>
-        <symb name="&amp;ccedil;"/>
-        <symb name="&amp;cedil;"/>
-        <symb name="&amp;cent;"/>
-        <symb name="&amp;Chi;"/>
-        <symb name="&amp;chi;"/>
-        <symb name="&amp;circ;"/>
-        <symb name="&amp;clubs;"/>
-        <symb name="&amp;cong;"/>
-        <symb name="&amp;copy;"/>
-        <symb name="&amp;crarr;"/>
-        <symb name="&amp;cup;"/>
-        <symb name="&amp;curren;"/>
-        <symb name="&amp;dagger;"/>
-        <symb name="&amp;Dagger;"/>
-        <symb name="&amp;darr;"/>
-        <symb name="&amp;dArr;"/>
-        <symb name="&amp;deg;"/>
-        <symb name="&amp;Delta;"/>
-        <symb name="&amp;delta;"/>
-        <symb name="&amp;diams;"/>
-        <symb name="&amp;divide;"/>
-        <symb name="&amp;Eacute;"/>
-        <symb name="&amp;eacute;"/>
-        <symb name="&amp;Ecirc;"/>
-        <symb name="&amp;ecirc;"/>
-        <symb name="&amp;Egrave;"/>
-        <symb name="&amp;egrave;"/>
-        <symb name="&amp;empty;"/>
-        <symb name="&amp;emsp;"/>
-        <symb name="&amp;ensp;"/>
-        <symb name="&amp;Epsilon;"/>
-        <symb name="&amp;epsilon;"/>
-        <symb name="&amp;equiv;"/>
-        <symb name="&amp;Eta;"/>
-        <symb name="&amp;eta;"/>
-        <symb name="&amp;ETH;"/>
-        <symb name="&amp;eth;"/>
-        <symb name="&amp;Euml;"/>
-        <symb name="&amp;euml;"/>
-        <symb name="&amp;euro;"/>
-        <symb name="&amp;exist;"/>
-        <symb name="&amp;fnof;"/>
-        <symb name="&amp;forall;"/>
-        <symb name="&amp;frac12;"/>
-        <symb name="&amp;frac14;"/>
-        <symb name="&amp;frac34;"/>
-        <symb name="&amp;frasl;"/>
-        <symb name="&amp;Gamma;"/>
-        <symb name="&amp;gamma;"/>
-        <symb name="&amp;ge;"/>
-        <symb name="&amp;gt;"/>
-        <symb name="&amp;harr;"/>
-        <symb name="&amp;hArr;"/>
-        <symb name="&amp;hearts;"/>
-        <symb name="&amp;hellip;"/>
-        <symb name="&amp;Iacute;"/>
-        <symb name="&amp;iacute;"/>
-        <symb name="&amp;Icirc;"/>
-        <symb name="&amp;icirc;"/>
-        <symb name="&amp;iexcl;"/>
-        <symb name="&amp;Igrave;"/>
-        <symb name="&amp;igrave;"/>
-        <symb name="&amp;image;"/>
-        <symb name="&amp;infin;"/>
-        <symb name="&amp;int;"/>
-        <symb name="&amp;Iota;"/>
-        <symb name="&amp;iota;"/>
-        <symb name="&amp;iquest;"/>
-        <symb name="&amp;isin;"/>
-        <symb name="&amp;Iuml;"/>
-        <symb name="&amp;iuml;"/>
-        <symb name="&amp;Kappa;"/>
-        <symb name="&amp;kappa;"/>
-        <symb name="&amp;Lambda;"/>
-        <symb name="&amp;lambda;"/>
-        <symb name="&amp;lang;"/>
-        <symb name="&amp;laquo;"/>
-        <symb name="&amp;larr;"/>
-        <symb name="&amp;lArr;"/>
-        <symb name="&amp;lceil;"/>
-        <symb name="&amp;ldquo;"/>
-        <symb name="&amp;le;"/>
-        <symb name="&amp;lfloor;"/>
-        <symb name="&amp;lowast;"/>
-        <symb name="&amp;loz;"/>
-        <symb name="&amp;lrm;"/>
-        <symb name="&amp;lsaquo;"/>
-        <symb name="&amp;lsquo;"/>
-        <symb name="&amp;lt;"/>
-        <symb name="&amp;macr;"/>
-        <symb name="&amp;mdash;"/>
-        <symb name="&amp;micro;"/>
-        <symb name="&amp;middot;"/>
-        <symb name="&amp;minus;"/>
-        <symb name="&amp;Mu;"/>
-        <symb name="&amp;mu;"/>
-        <symb name="&amp;nabla;"/>
-        <symb name="&amp;nbsp;"/>
-        <symb name="&amp;ndash;"/>
-        <symb name="&amp;ne;"/>
-        <symb name="&amp;ni;"/>
-        <symb name="&amp;not;"/>
-        <symb name="&amp;notin;"/>
-        <symb name="&amp;nsub;"/>
-        <symb name="&amp;Ntilde;"/>
-        <symb name="&amp;ntilde;"/>
-        <symb name="&amp;Nu;"/>
-        <symb name="&amp;nu;"/>
-        <symb name="&amp;Oacute;"/>
-        <symb name="&amp;oacute;"/>
-        <symb name="&amp;Ocirc;"/>
-        <symb name="&amp;ocirc;"/>
-        <symb name="&amp;OElig;"/>
-        <symb name="&amp;oelig;"/>
-        <symb name="&amp;Ograve;"/>
-        <symb name="&amp;ograve;"/>
-        <symb name="&amp;oline;"/>
-        <symb name="&amp;Omega;"/>
-        <symb name="&amp;omega;"/>
-        <symb name="&amp;Omicron;"/>
-        <symb name="&amp;omicron;"/>
-        <symb name="&amp;oplus;"/>
-        <symb name="&amp;or;"/>
-        <symb name="&amp;ordf;"/>
-        <symb name="&amp;ordm;"/>
-        <symb name="&amp;Oslash;"/>
-        <symb name="&amp;oslash;"/>
-        <symb name="&amp;Otilde;"/>
-        <symb name="&amp;otilde;"/>
-        <symb name="&amp;otimes;"/>
-        <symb name="&amp;Ouml;"/>
-        <symb name="&amp;ouml;"/>
-        <symb name="&amp;para;"/>
-        <symb name="&amp;part;"/>
-        <symb name="&amp;permil;"/>
-        <symb name="&amp;perp;"/>
-        <symb name="&amp;Phi;"/>
-        <symb name="&amp;phi;"/>
-        <symb name="&amp;Pi;"/>
-        <symb name="&amp;pi;"/>
-        <symb name="&amp;piv;"/>
-        <symb name="&amp;plusmn;"/>
-        <symb name="&amp;pound;"/>
-        <symb name="&amp;prime;"/>
-        <symb name="&amp;Prime;"/>
-        <symb name="&amp;prod;"/>
-        <symb name="&amp;prop;"/>
-        <symb name="&amp;Psi;"/>
-        <symb name="&amp;psi;"/>
-        <symb name="&amp;quot;"/>
-        <symb name="&amp;radic;"/>
-        <symb name="&amp;rang;"/>
-        <symb name="&amp;raquo;"/>
-        <symb name="&amp;rarr;"/>
-        <symb name="&amp;rArr;"/>
-        <symb name="&amp;rceil;"/>
-        <symb name="&amp;rdquo;"/>
-        <symb name="&amp;real;"/>
-        <symb name="&amp;reg;"/>
-        <symb name="&amp;rfloor;"/>
-        <symb name="&amp;Rho;"/>
-        <symb name="&amp;rho;"/>
-        <symb name="&amp;rlm;"/>
-        <symb name="&amp;rsaquo;"/>
-        <symb name="&amp;rsquo;"/>
-        <symb name="&amp;sbquo;"/>
-        <symb name="&amp;Scaron;"/>
-        <symb name="&amp;scaron;"/>
-        <symb name="&amp;sdot;"/>
-        <symb name="&amp;sect;"/>
-        <symb name="&amp;shy;"/>
-        <symb name="&amp;Sigma;"/>
-        <symb name="&amp;sigma;"/>
-        <symb name="&amp;sigmaf;"/>
-        <symb name="&amp;sim;"/>
-        <symb name="&amp;spades;"/>
-        <symb name="&amp;sub;"/>
-        <symb name="&amp;sube;"/>
-        <symb name="&amp;sum;"/>
-        <symb name="&amp;sup;"/>
-        <symb name="&amp;sup1;"/>
-        <symb name="&amp;sup2;"/>
-        <symb name="&amp;sup3;"/>
-        <symb name="&amp;supe;"/>
-        <symb name="&amp;szlig;"/>
-        <symb name="&amp;Tau;"/>
-        <symb name="&amp;tau;"/>
-        <symb name="&amp;there4;"/>
-        <symb name="&amp;Theta;"/>
-        <symb name="&amp;theta;"/>
-        <symb name="&amp;thetasym;"/>
-        <symb name="&amp;thinsp;"/>
-        <symb name="&amp;THORN;"/>
-        <symb name="&amp;thorn;"/>
-        <symb name="&amp;tilde;"/>
-        <symb name="&amp;times;"/>
-        <symb name="&amp;trade;"/>
-        <symb name="&amp;Uacute;"/>
-        <symb name="&amp;uacute;"/>
-        <symb name="&amp;uarr;"/>
-        <symb name="&amp;uArr;"/>
-        <symb name="&amp;Ucirc;"/>
-        <symb name="&amp;ucirc;"/>
-        <symb name="&amp;Ugrave;"/>
-        <symb name="&amp;ugrave;"/>
-        <symb name="&amp;uml;"/>
-        <symb name="&amp;upsih;"/>
-        <symb name="&amp;Upsilon;"/>
-        <symb name="&amp;upsilon;"/>
-        <symb name="&amp;Uuml;"/>
-        <symb name="&amp;uuml;"/>
-        <symb name="&amp;weierp;"/>
-        <symb name="&amp;Xi;"/>
-        <symb name="&amp;xi;"/>
-        <symb name="&amp;Yacute;"/>
-        <symb name="&amp;yacute;"/>
-        <symb name="&amp;yen;"/>
-        <symb name="&amp;Yuml;"/>
-        <symb name="&amp;yuml;"/>
-        <symb name="&amp;Zeta;"/>
-        <symb name="&amp;zeta;"/>
-        <symb name="&amp;zwj;"/>
-        <symb name="&amp;zwnj;"/>
-      </keywords>
+      <inherit scheme="html-entity:html-entity"/>
+    
     </scheme>
 
   </type>
@@ -803,6 +540,10 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   -  Andrzej Novosiolov <andrzej@ukrnet.net>
+   -  Eugene Efremov <4mirror@mail.ru>
+   -  Evgeny Stepanischev <se@e-kazan.ru>
+   -  JULY <lubimovi@usa.net>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

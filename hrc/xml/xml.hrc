@@ -30,6 +30,7 @@
        Yury Finkel <yura@mv.ru>
        Alexander Gutman <gutman@math.nsc.ru>
        Dmitry Kirsanov <dmitry@kirsanov.com>
+       Eugene Efremov <4mirror@mail.ru>
      ]]></documentation>
     </annotation>
 
@@ -100,10 +101,10 @@
     <region name="CData"   parent="def:default"/>
     <region name="CDEnd"   parent="CommentEdge"/>
 
-    <region name="PI.start"   parent="element.start.lt"   description="Processing Instruction [&lt;?]"/>
-    <region name="PI.name"    parent="element.start.name" description="Processing Instruction Name"/>
-    <region name="PI.content" parent="Directive"          description="Processing Instruction Content"/>
-    <region name="PI.end"     parent="element.start.gt"   description="Processing Instruction [?&gt;]"/>
+    <region name="PI.start"   parent="Directive"         description="Processing Instruction [&lt;?]"/>
+    <region name="PI.name"    parent="Directive"         description="Processing Instruction Name"/>
+    <region name="PI.content" parent="DirectiveContent"  description="Processing Instruction Content"/>
+    <region name="PI.end"     parent="Directive"         description="Processing Instruction [?&gt;]"/>
 
     <region name="XMLDecl"/>
     <region name="XMLDecl.start" parent="PI.start"/>
@@ -300,6 +301,16 @@
       <regexp match="/\S/" region="badChar" priority="low"/>
     </scheme>
 
+    <scheme name="reference.content">
+     <keywords region="CharRef" worddiv="[&amp;\;]">
+      <word name="lt"/>
+      <word name="gt"/>
+      <word name="amp"/>
+      <word name="quot"/>
+      <word name="apos"/>
+     </keywords>
+    </scheme>
+
     <scheme name="Reference">
       <annotation><documentation><![CDATA[
         [66]   CharRef     ::=   '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
@@ -308,7 +319,10 @@
       ]]></documentation></annotation>
       <regexp match="/&amp;\#[0-9]+\;/" region0="CharRef"/>
       <regexp match="/&amp;\#x[0-9a-fA-F]+\;/" region0="CharRef"/>
-      <regexp match="/&amp;%Name;\;/" region0="EntityRef"/>
+      <block start="/&amp;\M%Name;\;/" end="/~%Name;\m\;/"
+       region="EntityRef" scheme="reference.content"
+       region00="CharRef" region10="CharRef"
+      />
     </scheme>
 
     <scheme name="PEReference">
@@ -338,6 +352,13 @@
         [16]   PI   ::=   '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
         [17]   PITarget   ::=   Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
       ]]></documentation></annotation>
+
+      <block start="/(&lt;\?)(?{PI.name}xml-stylesheet)\M(\s|$)/"
+             end="/(\?>)/" scheme="XMLstylesheet.content"
+             region="PI.content"
+             region00="PairStart" region01="PI.start"
+             region10="PairEnd" region11="PI.end"/>
+
       <block start="/(?{PI.start}&lt;\?) (?{PI.name}(xml\s)?!%Name;) /ix"
              end="/(?{PI.end}\?&gt;)/"
              scheme="PI.content"
@@ -348,6 +369,39 @@
     <scheme name="PI.content">
     </scheme>
 
+    <scheme name="XMLstylesheet.content">
+      <annotation><documentation><![CDATA[
+       http://www.w3.org/TR/xml-stylesheet
+       href    CDATA     #REQUIRED
+       type    CDATA     #REQUIRED
+       title     CDATA     #IMPLIED
+       media     CDATA     #IMPLIED
+       charset   CDATA     #IMPLIED
+       alternate   (yes|no)  "no"
+
+      ]]></documentation></annotation>
+
+      <block start="/(\s|^)(href)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/"
+       region02="PI.content" scheme="xmlschema:anyURI-AttributeContent"
+      />
+      <block start="/(\s|^)(type)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/"
+       region02="PI.content" scheme="xmlschema:string-AttributeContent"
+      />
+      <block start="/(\s|^)(title)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/"
+       region02="PI.content" scheme="xmlschema:string-AttributeContent"
+      />
+      <block start="/(\s|^)(media)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/"
+       region02="PI.content" scheme="xmlschema:string-AttributeContent"
+      />
+      <block start="/(\s|^)(charset)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/"
+       region02="PI.content" scheme="xmlschema:string-AttributeContent"
+      />
+      <regexp match="/(\s|^)(alternate)\s*(=)\s*(([&quot;&apos;])(yes|no)(\5))/"
+       region2="PI.content" region3="Attribute.eq" region4="AttValue"
+       region5="PairStart" region7="PairEnd"
+      />
+      <regexp match="/\S+/" region0="badChar" priority="low"/>
+    </scheme>
 
     <scheme name="CDSect">
       <annotation><documentation>
@@ -552,8 +606,9 @@
       <inherit scheme="CDSect"/>
       <inherit scheme="content.cdata.stream"/>
 
-      <!-- ??? -->
+      <!-- ???
       <regexp match="/[%Char;-[&lt;&amp;]]+/" priority="low"/>
+      -->
 
     </scheme>
 
@@ -908,6 +963,12 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Alexander Gutman <gutman@math.nsc.ru>
+   - Alexey Vasilyev <servent@fis.lv>
+   - Dmitry Kirsanov <dmitry@kirsanov.com>
+   - Eugene Efremov <4mirror@mail.ru>
+   - Max Belugin <belugin@mail.ru>
+   - Yury Finkel <yura@mv.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

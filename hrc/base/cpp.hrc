@@ -19,7 +19,7 @@
      - add temlpates
      - add STL keywords
      - change regions routing
-  ]]></contributors>
+ ]]></contributors>
  </annotation>
 
  <region name="KeywordSTL" parent="c:KeywordStdio"/>

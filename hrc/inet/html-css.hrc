@@ -7,22 +7,27 @@
 <annotation>
  <documentation>
   Extended CSS for HTML
-
-  insert this define into HRC base catalog file
-  (AFTER definition of type "css"):
- <![CDATA[
-  <prototype name="html-css" group="inet" description="css for html">
-    <location link="inet/html-css.hrc"/>
-    <filename>/\.(css)$/i</filename>
-  </prototype>
- ]]>
  </documentation>
  <contributors>
  <![CDATA[
   Eugene Efremov <4mirror@mail.ru>
  ]]>
  </contributors>
- <appinfo><todo>
+ <appinfo>
+ <!-- insert this define into HRC base catalog file
+  (AFTER definition of type "css"):-->
+  <prototype name="html-css" group="inet" description="css for html">
+    <location link="inet/html-css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+  <require>
+    <type name="css"/>
+    <type name="css"/>
+    <type name="html"/>
+    <type name="jScript"/>
+  </require>     
+ 
+ <todo>
  <![CDATA[
   Hа текущий момент нет отдельного варината для xhtml, который бы
   запрещал тэги в верхнем регистре.
@@ -34,6 +39,130 @@
 
 <type name="html-css">
 
+<region name="msie" parent="def:DeprecatedKeyword"/>
+<region name="mozilla" parent="def:DeprecatedKeyword"/>
+
+<scheme name="PropertyNames"> 
+ <inherit scheme="css:PropertyNames"/>
+ <inherit scheme="mzPropertyNames"/>
+ <inherit scheme="iePropertyNames"/>
+</scheme>
+
+<scheme name="mzPropertyNames" if="moz-css">
+ <keywords region="mozilla" ignorecase="yes" worddiv='%css:worddiv-class;'>
+  <word name="-moz-binding"/>
+  <word name="-moz-appearance"/>
+  <word name="-moz-background-clip"/>
+  <word name="-moz-background-inline-policy"/>
+  <word name="-moz-background-origin"/>
+  <word name="-moz-border-colors-bottom"/>
+  <word name="-moz-border-colors-left"/>
+  <word name="-moz-border-colors-right"/>
+  <word name="-moz-border-colors-top"/>
+  <word name="-moz-border-colors"/>
+  <word name="-moz-border-radius-bottomleft"/>
+  <word name="-moz-border-radius-bottomright"/>
+  <word name="-moz-border-radius-topleft"/>
+  <word name="-moz-border-radius-topright"/>
+  <word name="-moz-border-radius"/>
+  <word name="-moz-box-align"/>
+  <word name="-moz-box-direction"/>
+  <word name="-moz-box-flex"/>
+  <word name="-moz-box-flexgroup"/>
+  <word name="-moz-box-orient"/>
+  <word name="-moz-box-pack"/>
+  <word name="-moz-box-sizing"/>
+  <word name="-moz-image-region"/>
+  <word name="-moz-key-equivalent"/>
+  <word name="-moz-opacity"/>
+  <word name="-moz-outline-radius-bottomleft"/>
+  <word name="-moz-outline-radius-bottomright"/>
+  <word name="-moz-outline-radius-topleft"/>
+  <word name="-moz-outline-radius-topright"/>
+  <word name="-moz-outline-radius"/>
+  <word name="-moz-outline-color"/>
+  <word name="-moz-outline-style"/>
+  <word name="-moz-outline-width"/>
+  <word name="-moz-outline"/>
+  <word name="-moz-user-focus"/>
+  <word name="-moz-user-input"/>
+  <word name="-moz-user-select"/>
+ </keywords>
+</scheme>
+
+
+<scheme name="iePropertyNames" if="ie-css"> 
+ <keywords region="msie" ignorecase="yes" worddiv='%css:worddiv-class;'>
+   <word name="behavior"/>
+   <word name="filter"/>
+   <word name="layout-flow"/>
+   <word name="layout-grid-char"/>
+   <word name="layout-grid-line"/>
+   <word name="layout-grid-type"/>
+   <word name="layout-grid-mode"/>
+   <word name="text-autospace"/>
+   <word name="text-justify"/>
+   <word name="text-kashida-space"/>
+   <word name="text-underline-position"/>
+   <word name="word-break"/>
+   <word name="word-wrap"/>
+   <word name="writing-mode"/>
+   <word name="zoom"/>
+   <word name="line-break"/>
+   <word name="ruby-overhang"/>
+   <word name="ruby-position"/>
+   <word name="scrollbar-3dlight-color"/>
+   <word name="scrollbar-arrow-color"/>
+   <word name="scrollbar-base-color"/>
+   <word name="scrollbar-darkshadow-color"/>
+   <word name="scrollbar-face-color"/>
+   <word name="scrollbar-highlight-color"/>
+   <word name="scrollbar-shadow-color"/>
+ </keywords>
+</scheme>
+
+
+<scheme name="PropertyValue">
+ <inherit scheme="css:PropertyValue"/>
+ <inherit scheme="mzPropertyValue"/>
+</scheme>
+
+<scheme name="mzPropertyValue" if="moz-css">
+ <keywords region="mozilla" ignorecase="yes" worddiv='%css:worddiv-class;'>
+  <word name="border"/>
+  <word name="padding"/>
+  <word name="content"/>
+  <word name="border-box"/>
+  <word name="padding-box"/>
+  <word name="content-box"/>
+  <word name="bounding-box"/>
+  <word name="each-box"/>
+  <word name="start"/>
+  <word name="stretch"/>
+  <word name="reverse"/>
+  <word name="horizontal"/>
+  <word name="vertical"/>
+  <word name="end"/>
+  <word name="disabled"/>
+  <word name="enabled"/>
+  <word name="-moz-box"/>
+  <word name="-moz-inline-box"/>
+  <word name="-moz-inline-grid"/>
+  <word name="-moz-grid-group"/>
+  <word name="-moz-grid-line"/>
+  <word name="-moz-grid"/>
+  <word name="-moz-stack"/>
+  <word name="-moz-inline-stack"/>
+  <word name="-moz-deck"/>
+  <word name="-moz-popup"/>
+  <word name="-moz-groupbox"/>
+  <word name="-moz-scrollbars-horizontal"/>
+  <word name="-moz-scrollbars-vertical"/>
+  <word name="-moz-scrollbars-none"/>
+ </keywords>
+</scheme>
+
+
 <scheme name="cssTag">
  <inherit scheme="html:htmlCoreTags"/>
 </scheme>
@@ -41,23 +170,46 @@
  <inherit scheme="html:htmlParams"/>
 </scheme>
 
+<scheme name="PropertyFunc">
+ <inherit scheme="css:PropertyFunc"/>
+ <inherit scheme="iePropertyFunc"/>
+ 
+</scheme>
+
+<scheme name="iePropertyFunc" if="ie-css">
+ <block start="/\b(expression)(\s)*((\())/" end="/(\))/" scheme="jScript:jScript"
+  region01="msie" region03="def:PairStart" region04="css:Symbol"
+  region10="def:PairEnd"  region11="css:Symbol"
+ />
+  
+</scheme>
+
 
 <scheme name="QuotRuleContent">
  <inherit scheme="css:QuotRuleContent">
+  <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
+  <virtual scheme="css:PropertyValue" subst-scheme="PropertyValue"/>
+  <virtual scheme="css:PropertyFunc" subst-scheme="PropertyFunc"/>
   <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
  </inherit>
 </scheme>
 
 <scheme name="AposRuleContent">
  <inherit scheme="css:AposRuleContent">
+  <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
+  <virtual scheme="css:PropertyValue" subst-scheme="PropertyValue"/>
+  <virtual scheme="css:PropertyFunc" subst-scheme="PropertyFunc"/>
   <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
  </inherit>
 </scheme>
 
 
 <scheme name="css">
- <inherit scheme="css:css">
-  <virtual scheme="css:css" subst-scheme="css"/>
+ <inherit scheme="css:pure-css">
+  <virtual scheme="css:pure-css" subst-scheme="css"/>
+  <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
+  <virtual scheme="css:PropertyValue" subst-scheme="PropertyValue"/>
+  <virtual scheme="css:PropertyFunc" subst-scheme="PropertyFunc"/>
   <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
   <virtual scheme="css:TagNames" subst-scheme="cssTag"/>
   <virtual scheme="css:AttrNames" subst-scheme="cssAttr"/>

@@ -31,7 +31,9 @@
 <!-- block structures -->
          <inherit scheme="c:String"/>
          <block start="/\b(?{StringEdge}q(?{chr}\W))/" end="/(?{StringEdge}\y{chr})/" scheme="perl:InterpolateString" region="perl:String"/>
+<!--
          <block start="/\b\M ((?{plStringEdge}(s|tr|y) (?{chr}[^\w\s])))/x" end="/(?{plStringEdge}\y{chr} [mgeioxcds]*)/x" scheme="perl:SubstBlock" region="perl:String" region01="PairStart" region10="PairEnd"/>
+-->
          <block start="/&lt;&lt;(?{plWord}[^\s;\x22]+)/" end="/^(?{plWord}\y{plWord})$/" scheme="perl:InterpolateString" region="perl:String"/>
          <regexp match="/function/i" region="Function"/>
          <regexp match="/some type/i" region="TypeKeyword"/>

@@ -9,27 +9,23 @@
  <documentation>
   Extended CSS for SVG
 
-  insert this define into HRC base catalog file
-  (AFTER definition of type "css"):
- <![CDATA[
-  <prototype name="svg-css" group="css" description="css for svg">
-    <location link="css/svg-css.hrc"/>
-    <filename>/\.(css)$/i</filename>
-  </prototype>
- ]]>
  </documentation>
  <contributors>
  <![CDATA[
   Eugene Efremov <4mirror@mail.ru>
  ]]>
  </contributors>
-<!--
- <appinfo><todo>
- <![CDATA[
-
- ]]>
- </todo></appinfo>-->
-
+ <appinfo>
+ <!-- insert this define into HRC base catalog file
+  (AFTER definition of type "css"):-->
+  <prototype name="svg-css" group="css" description="css for svg">
+    <location link="css/svg-css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+  <require>
+    <type name="css"/>
+  </require>     
+ </appinfo>
 </annotation>
 
 
@@ -223,8 +219,8 @@
 
 
 <scheme name="css">
- <inherit scheme="css:css">
-  <virtual scheme="css:css" subst-scheme="css"/>
+ <inherit scheme="css:pure-css">
+  <virtual scheme="css:pure-css" subst-scheme="css"/>
   <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
   <virtual scheme="css:RuleDirective" subst-scheme="RuleDirective"/>
   <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>

@@ -1,29 +1,40 @@
-<?xml version="1.0" encoding='Windows-1251'?>
+<?xml version="1.0"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-<!--
-    Language: Apache configuration (httpd.conf, srm.conf, access.conf, .htaccess)
-    URL: http://www.apache.org/
-    Maintainer: Artem Zankovich <z_artem@yahoo.com>
-    Credits: David Ne\v{c}as (Yeti) <yeti@physics.muni.cz> (vim syntax)
-    Last Change:  28 Nov 2001
--->
+
    <type name="apache">
+
+    <annotation><documentation>
+      Language: Apache configuration
+       (httpd.conf, srm.conf, access.conf, .htaccess)
+      URL: http://www.apache.org/
+    </documentation><contributors><![CDATA[
+     Maintainer: Artem Zankovich <z_artem@yahoo.com>
+     Credits:
+      David Ne\v{c}as (Yeti) <yeti@physics.muni.cz> (vim syntax)
+      Eugene Efremov <4mirror@mail.ru>
+     Last Change: 5 Mar 2004
+    ]]></contributors></annotation>
+
 
       <import type="def"/>
 
       <region name="ApacheString" parent="String"/>
       <region name="ApacheSymbol" parent="Symbol"/>
+      <region name="ApacheOpenTag" parent="OpenTag"/>
+      <region name="ApacheCloseTag" parent="CloseTag"/>
       <region name="ApacheNumber" parent="Number"/>
       <region name="ApacheComment" parent="Comment"/>
       <region name="ApacheWord" parent="Keyword"/>
       <region name="ApacheOption" parent="Parameter"/>
+      <region name="ApacheModeWord" parent="Var"/>
 
       <entity name="apWD" value="[\s,]"/>
       <entity name="apSWD" value="[\s]"/>
+      <entity name="apSWDT" value="[\s&gt;]"/>
 
       <scheme name="ApacheCore">
 <!-- Comments -->
@@ -47,7 +58,25 @@
          <regexp match="/^\M\s*(?{Function}\#\#\# Section \d+)/i"/>
          <inherit scheme="ApacheCore"/>
          <inherit scheme="NetAddresses"/>
-         <block start="/^\s*(&lt;)((Directory(Match)?|Files(Match)?|IfModule|IfDefine|Location(Match)?|VirtualHost))\s+(?{ApacheString}.*?)(?{ApacheSymbol}&gt;)/i" end="/^\s*(&lt;)((\/\s*\y2))\s*(&gt;)/" scheme="apache" region01="ApacheSymbol" region02="ApacheWord" region03="PairStart" region11="ApacheSymbol" region12="ApacheWord" region13="PairEnd" region14="ApacheSymbol"/>
+         <block
+          start="/^\s*((&lt;)
+           (Directory(Match)?|Files(Match)?|IfModule|IfDefine|Location(Match)?|VirtualHost))
+           \s+(?{ApacheString}.*?)(?{ApacheOpenTag}&gt;)
+          /ix"
+          end="/^\s*((&lt;\/)(\s*\y3)\s*(&gt;))/"
+          scheme="apache" region01="PairStart"
+          region02="ApacheOpenTag" region03="ApacheWord"
+          region11="PairEnd" region12="ApacheCloseTag"
+          region13="ApacheWord" region14="ApacheCloseTag"
+         />
+         <block start="/^\s*((&lt;) (Limit(Except)?))/ix"
+          end="/^\s*((&lt;\/)(\s*\y3)\s*(&gt;))/" scheme="apache"
+          region01="PairStart" region02="ApacheOpenTag" region03="ApacheWord"
+          region11="PairEnd" region12="ApacheCloseTag"
+          region13="ApacheWord" region14="ApacheCloseTag"
+         />
+         <regexp match="/[\w\s]?#1&gt;/" region="ApacheCloseTag"/>
+
          <block start="/^\s*(AuthType)\s+/i" end="/$/" scheme="ApacheAuthType" region00="ApacheWord"/>
          <block start="/^\s*(AllowOverride)/i" end="/$/" scheme="ApacheAllowOverride" region00="ApacheWord"/>
          <block start="/^\s*(Limit(Except)?)\s+/i" end="/$/" scheme="ApacheLimit" region00="ApacheWord" region10="ApacheWord"/>
@@ -161,7 +190,7 @@
             <word name="group"/>
             <word name="valid-user"/>
          </keywords>
-         <keywords region="ApacheWord" worddiv="%apSWD;">
+         <keywords region="ApacheModeWord" worddiv="%apSWDT;">
             <word name="GET"/>
             <word name="POST"/>
             <word name="PUT"/>

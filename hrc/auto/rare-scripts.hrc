@@ -9,14 +9,25 @@
     <location link="types/aditor.hrc"/>
     <filename>/\.(hgh)$/i</filename>
   </prototype>
+  <prototype name="ass" group="scripts.rare" description="(Advanced) SubStation Alpha script">
+    <location link="types/assa.hrc"/>
+    <filename>/\.(ssa|ass)$/</filename>
+    <firstline weight='2'>/^(...)?\[Script Info\]/</firstline>
+  </prototype>
 
+  <prototype name="mason" group="scripts.rare" description="mason">
+    <location link="types/mason.hrc"/>
+    <filename>/\.(mc)$/i</filename>
+  </prototype>
   <prototype name="pagemakerscript" group="scripts.rare" description="PageMaker Script">
     <location link="types/spt.hrc"/>
     <filename>/\.spt$/i</filename>
   </prototype>
   <prototype name="postscript" group="scripts.rare" description="PostScript">
     <location link="types/postscript.hrc"/>
-    <filename>/\.ps$/i</filename>
+    <filename>/\.((e)?ps|pfa|gsf)$/i</filename>
+    <firstline weight="3">/^\%\!PS/</firstline>
+    <firstline>/^\%\!/</firstline>
   </prototype>
   <prototype name="lss" group="scripts.rare" description="LotusScript">
     <location link="types/lss.hrc"/>

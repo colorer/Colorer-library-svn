@@ -21,7 +21,8 @@
      - change regions routing
      - add labels
      - preproc: fix #include and add #if((n)def)-#endif pairs
-  ]]></contributors></annotation>
+  ]]></contributors>
+  </annotation>
 
   <import type="def"/>
 

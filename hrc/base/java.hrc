@@ -9,7 +9,8 @@
   </documentation><contributors><![CDATA[
     JULY <lubimovi@usa.net>
     Eugene Efremov <4mirror@mail.ru>
-  ]]></contributors></annotation>
+  ]]></contributors>
+  </annotation>
 
 
   <type name="java">
@@ -144,7 +145,7 @@
        <inherit scheme="JavaComments"/>
 
        <regexp match="/ \b (?{Keyword}new) \s+ (?{InnerClassOutline}[\w_]+ [\w_:\$]*?) \M \s*\([^\(\)]*\) \s* ([\{]|$) /x"/>
-       <!-- 
+       <!--
        <regexp match="/ \M\b native .+? (?{NativeOutline}[\w_]+ [\w_:\$]*?) \s*\( /x"/>
        -->
 

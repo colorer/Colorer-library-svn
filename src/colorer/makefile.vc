@@ -18,4 +18,4 @@ LIBFLAGS = $(objs) $(LIB_DEBUG) /map /fixed:no /out:$(TARGET) /nologo /subsystem
 include makefile.core
 
 clean:
-	$(RM) $(objs) vc70.pdb colorer.pdb colorer.exp
+	$(RM) $(objs) *.exp *.lib *.map *.pdb *.pdb

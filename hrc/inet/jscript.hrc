@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
+
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -37,10 +38,6 @@
 
       <scheme name="jsMETA"/>
 
-      <scheme name="String22">
-         <regexp match="/\\./" region0="StringContent"/>
-         <inherit scheme="jsMETA"/>
-      </scheme>
       <!-- EE: add regexp support -->
       <scheme name="String">
          <regexp match="/\\./" region0="StringContent"/>
@@ -54,14 +51,36 @@
        </inherit>
       </scheme>
 
+      <!-- EE: support js in attr -->
 
+      <scheme name="AposString">
+         <block start="/\x27/" end="/\x27/" scheme="String" region="String"/>
+      </scheme>
+      <scheme name="QuotString">
+         <inherit scheme="c:String"/>
+      </scheme>
+      <scheme name="jString">
+       <inherit scheme="AposString"/>
+       <inherit scheme="QuotString"/>
+      </scheme>
+
+      <scheme name="AposScript">
+       <inherit scheme="jScript">
+        <virtual scheme="jString" subst-scheme="AposString"/>
+       </inherit>
+      </scheme>
+      <scheme name="QuotScript">
+       <inherit scheme="jScript">
+        <virtual scheme="jString" subst-scheme="QuotString"/>
+       </inherit>
+      </scheme>
 
       <scheme name="jScript">
 <!-- just ignore html comments -->
          <regexp match="/^\s* &lt;!--/x" region0="Comment"/>
          <regexp match="/^\s* --&gt;/x" region0="Comment"/>
 <!-- Linear Comments-->
-         <block start="/\/\//" end="/\M(&lt;\/scr|$)/i" scheme="jComment" region="Comment"/>
+         <block start="/\/\//" end="/\M(&lt;\/scr|$)/" scheme="jComment" region="Comment"/>
          <block start="/\/\*/" end="/\*\//" scheme="jComment" region="Comment" region00="PairStart" region10="PairEnd"/>
          <regexp match="/^\M\s* function \s+ ([\w_]+) /x" region1="Function"/>
          <inherit scheme="PairedBrackets">
@@ -70,17 +89,17 @@
 <!-- Numbers -->
          <inherit scheme="def:Number"/>
 <!-- Strings -->
-         <block start="/\x22/" end="/\x22/" scheme="String22" region="String"/>
-         <block start="/\x27/" end="/\x27/" scheme="String" region="String"/>
+         <inherit scheme="jString"/>
 
       <!-- EE: add regexp support -->
          <block scheme="RE" region="String">
            <start region1="Symbol" region2="StringEdge" region3="PairStart">
             <![CDATA[
-             /( [\=\!]\~ |
-             [^<\]\}\)\+\-\w\s\/\;\"\'] |
-             \bif | ~ | ^ )
-             \s* ((\/))/x
+             /
+             ( [\=\!]\~ |
+             [^<\]\}\)\+\-\w\s\/\;] |
+             \bif | ~ | ^)
+             \s* ((\/))\M[^\/\*] /x
             ]]>
            </start>
            <end region0="StringEdge" region1="PairEnd" region2="regexp:SpecArea">
@@ -388,6 +407,8 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   -  Eugene Efremov <4mirror@mail.ru>
+   -  Evgeny Stepanischev <se@e-kazan.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
