@@ -8,6 +8,7 @@
     - MathML2.0 from draft xsd
     - CSS2 support
     - ANT 1.51 build.xml 
+    - Ruby syntax
   
   Fixes:
     - VBasic/VBScript outlining by LeO Welsch
