@@ -16,7 +16,7 @@ DLLMAIN=_DllMain@12
 include ../shared/makefile.colorer
 
 OBJS = icolorer.$(OBJ) iregexp.$(OBJ) ishared.$(OBJ) $(COREOBJS)
-LIBINC =
+LIBINC = -lstdc++ -lwininet
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=icolorer.map $(FLAGS)
 
 icolorer.dll: $(OBJS)

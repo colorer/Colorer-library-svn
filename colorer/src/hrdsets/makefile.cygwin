@@ -12,7 +12,7 @@ CPPFLAGS = -Wp,-I../shared/,-w -c $(FLAGS)
 !include ../shared/makefile.colorer
 
 OBJS = hrdsets.$(OBJ) hrdsets_res.$(OBJ) $(COREOBJS)
-LIBINC = -lkernel32 -lgdi32 -lcomdlg32 -luser32
+LIBINC = -lkernel32 -lgdi32 -lcomdlg32 -luser32 -lstdc++
 LIBFLAGS = $(OBJS) $(FLAGS) -o hrdsets.exe -Wl,--subsystem,windows $(LIBINC)
 
 hrdsets.exe: $(OBJS)
