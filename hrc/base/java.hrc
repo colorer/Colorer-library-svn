@@ -12,7 +12,7 @@
   ]]></contributors></annotation>
 
 
-  <type name="java" access="public">
+  <type name="java">
 
     <import type="def"/>
 

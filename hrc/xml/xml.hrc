@@ -1,11 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <type name="xml" access="private">
+  <type name="xml">
     <annotation>
      <documentation>
        xml1.0/1.1 syntax.
@@ -850,7 +850,7 @@
 
 
 
-    <scheme name="core" access="public">
+    <scheme name="core">
       <annotation><documentation><![CDATA[
         [1]    document      ::=   prolog element Misc*
         [22]   prolog        ::=   XMLDecl? Misc* (doctypedecl Misc*)?
@@ -861,7 +861,7 @@
       <inherit scheme="Misc"/>
     </scheme>
 
-    <scheme name="singleroot" access="public">
+    <scheme name="singleroot">
       <annotation><documentation><![CDATA[
         This adds one root element check.
         Have to be disabled for external parsed entities
@@ -874,7 +874,7 @@
     </scheme>
 
 
-    <scheme name="xml" access="public">
+    <scheme name="xml">
       <!--
       <inherit scheme="singleroot"/>
       -->

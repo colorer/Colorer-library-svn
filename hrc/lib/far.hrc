@@ -1,25 +1,24 @@
-<?xml version="1.0" encoding='Windows-1251'?>
+<?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
-<hrc version="take5"
-     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <type name="far">
 
 <annotation>
  <documentation>
- 
+
  FAR package: any types, uses in Far Manager configurations.
- 
+
  mask.*  - file masks
  macro.* - key makros
- 
+
  </documentation>
 
  <contributors>
  <![CDATA[
-  Eugene Efremov <4mirror@mail.ru> 
+  Eugene Efremov <4mirror@mail.ru>
  ]]>
  </contributors>
 <!--
@@ -27,7 +26,7 @@
  </todo></appinfo>
 -->
 </annotation>
- 
+
 <region name="Quote" parent="regexp:Quote"/>
 <region name="MetaSymb" parent="regexp:MetaSymb"/>
 <region name="MetaSymbStrong" parent="regexp:MetaSymbStrong"/>
@@ -35,7 +34,7 @@
 <region name="MacroComs" parent="def:Var"/>
 
 <scheme name="mask.class">
- <regexp match="/\-\,/" region="MetaSymb"/> 
+ <regexp match="/\-\,/" region="MetaSymb"/>
 </scheme>
 
 <scheme name="mask.string">
@@ -45,7 +44,7 @@
  <block start="/(\[)/" end="/(\])/" scheme="mask.class"
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
- />     
+ />
 </scheme>
 
 
@@ -66,7 +65,7 @@
   region="def:String" region01="MacroComs"
   region02="Quote" region03="def:PairStart"
   region10="Quote" region11="def:PairEnd"
- />      
+ />
  <regexp match="/\w{2,}/" region="def:Error" priority="low"/>
 </scheme>
 
@@ -568,7 +567,7 @@
 <scheme name="far">
  <annotation>
   <documentation>
-   This scheme need for colorer versions, 
+   This scheme need for colorer versions,
     then don't support packages.
    Please don't use it.
   </documentation>

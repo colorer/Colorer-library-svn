@@ -4,20 +4,21 @@
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-  <type name="asm" access="public">
-  <annotation><documentation>
-    Assembler Syntax v2.0
-  </documentation><contributors><![CDATA[
-    KiLL Zlotnikoff <e1a29df@quake.ru>
-    Ilgar Veliev <sigma@ntgres.pssr.ru>
-    Dmitriy Volkov <werewolf@atnet.ru>
-    Timur Safin <timur@lanit.ru>
-    cail: rearranged with schemes, added
-    cyrix, amd, NASM (Netwide Assembler) features.
-    Nosov Konstantin <k_nosov@chat.ru>
-    NASM has a WWW page at http://www.cryogen.com/Nasm
-    Alexander Voronenko <Alexander.Voronenko@p47.f100.n452.z2.fidonet.org>
-  ]]></contributors></annotation>
+  
+  <type name="asm">
+    <annotation><documentation>
+      Assembler Syntax v2.0
+    </documentation><contributors><![CDATA[
+      KiLL Zlotnikoff <e1a29df@quake.ru>
+      Ilgar Veliev <sigma@ntgres.pssr.ru>
+      Dmitriy Volkov <werewolf@atnet.ru>
+      Timur Safin <timur@lanit.ru>
+      cail: rearranged with schemes, added
+      cyrix, amd, NASM (Netwide Assembler) features.
+      Nosov Konstantin <k_nosov@chat.ru>
+      NASM has a WWW page at http://www.cryogen.com/Nasm
+      Alexander Voronenko <Alexander.Voronenko@p47.f100.n452.z2.fidonet.org>
+    ]]></contributors></annotation>
 
     <import type="def"/>
 
@@ -559,7 +560,7 @@
         <word name='LOOPZ'/>
       </keywords>
     </scheme>
-    
+
     <scheme name="asm_base">
       <!-- cail: this enables labels highlighting with all
        jump-like instructions. really hard -->

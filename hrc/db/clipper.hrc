@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <!--
      Clipper 5.01 syntax parsing scheme (.prg, .ch)
      Designed for "Colorer 4ever.patch2"
      Alexey V. Yatsenko, Taganrog, <alv@hotbox.ru>
      Last revised on 17-Dec-2001
 -->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-   <type name="Clipper" access="public">
+   <type name="Clipper">
 
       <import type="def"/>
 

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="windows-1251"?>
-
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-   <type name="jScript" access="public">
+   <type name="jScript">
 
     <annotation><documentation>
        JScript scheme
@@ -43,15 +42,15 @@
          <regexp match="/\\./" region0="StringContent"/>
          <inherit scheme="jsMETA"/>
       </scheme>
-            
+
       <scheme name="RE">
        <inherit scheme="regexp:pcre.regexp">
         <virtual scheme="regexp:string" subst-scheme="jsMETA"/>
-        <virtual scheme="regexp:pcre.regexp" subst-scheme="RE"/>        
+        <virtual scheme="regexp:pcre.regexp" subst-scheme="RE"/>
        </inherit>
       </scheme>
-      
-      
+
+
 
       <scheme name="jScript">
 <!-- just ignore html comments -->

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-<hrc version="take5"
-    xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-
-  <type name="php" access="public">
+  <type name="php">
 
     <annotation><documentation>
        PHP scheme
@@ -26,7 +25,7 @@
     <region name="Insertion" parent="asp.vb:Insertion"/>
     <region name="OpenTag"   parent="asp.vb:OpenTag"/>
     <region name="CloseTag"  parent="asp.vb:CloseTag"/>
-    
+
     <region name='ClassOutline' parent='def:Outlined'/>
     <region name='FunctionOutline' parent='def:Outlined'/>
 
@@ -38,7 +37,7 @@
     <region name="VarString" parent="def:Var"/>
 
 
-    
+
 <!--
     <scheme name="StringCore">
       <regexp match="/\\[^xX0-7]/" region="StringContent"/>
@@ -52,7 +51,7 @@
 
 <!-- EE add begin -->
 
-<!-- pure strings -->      
+<!-- pure strings -->
 
 <scheme name="StringBaseCore">
  <regexp match="/\\['\\]/" region0="StringContent"/>
@@ -65,8 +64,8 @@
  <regexp match='/\\$/' region0="StringContent"/>
  <regexp match='/\\(x|X)[\da-fA-F]{1,8}/' region0="StringContent"/>
  <regexp match='/\\[0-7]{1,12}/' region0="StringContent"/>
- <regexp match='/\{\$[^\}]+\}?/' region0="VarString"/>   
- <regexp match='/\$\w+/' region0="VarString"/>   
+ <regexp match='/\{\$[^\}]+\}?/' region0="VarString"/>
+ <regexp match='/\$\w+/' region0="VarString"/>
  <!-- regexp match='/[^\\\"]$/' region0="dError"/ -->
 </scheme>
 
@@ -82,7 +81,7 @@
   <symb name="X"/>
   <symb name="-" region="def:Symbol"/>
  </keywords>
- <inherit scheme="regexp:pcre.modif"/> 
+ <inherit scheme="regexp:pcre.modif"/>
 </scheme>
 
 <scheme name="RegExp.BaseCore">
@@ -102,7 +101,7 @@
 </scheme>
 
 <scheme name="RegExp.StringBase">
- <annotation> 
+ <annotation>
   <documentation>
    php regexp for '' strings
   </documentation>
@@ -112,10 +111,10 @@
     string
     ';
     if first symbol of string - ^\w\s. I recommend to use HERE DOC.
-    Solution of a problem can be replacement by the block which is 
+    Solution of a problem can be replacement by the block which is
     not supported multistring regexps, or support /s in colorer.
-  ]]> </todo> </appinfo> 
- </annotation> 
+  ]]> </todo> </appinfo>
+ </annotation>
 
  <inherit scheme="StringBaseCore"/>
  <block scheme="RegExp.BaseCore">
@@ -134,7 +133,7 @@
 
 
 <scheme name="RegExp.String">
- <annotation> 
+ <annotation>
   <documentation>
    php regexp for custom "" strings
   </documentation>
@@ -146,8 +145,8 @@
     если первый символ строки - ^\w\s. Я рекомендую использовать here doc.
     Решением проблемы может быть замена на блок, не распознающий
     многострочных регекспов, либо поддержка /s в колорере.
-  ]]> </todo> </appinfo> 
- </annotation> 
+  ]]> </todo> </appinfo>
+ </annotation>
 
  <inherit scheme="StringCore"/>
  <block scheme="RegExp.Core">
@@ -171,80 +170,80 @@
  <inherit scheme="regexp:posix.regexp">
   <virtual scheme="regexp:string" subst-scheme="StringBaseCore"/>
   <virtual scheme="regexp:posix.regexp" subst-scheme="posix.BaseCore"/>
- </inherit> 
+ </inherit>
 </scheme>
 
 <scheme name="posix.Core">
  <inherit scheme="regexp:posix.regexp">
   <virtual scheme="regexp:string" subst-scheme="StringCore"/>
   <virtual scheme="regexp:posix.regexp" subst-scheme="posix.Core"/>
- </inherit> 
+ </inherit>
 </scheme>
 
 <scheme name="posix.Support">
  <block start='/~[^\,]*?((&#34;))/' end='/(&#34;)/'
-  scheme="posix.Core" region="String" 
-  region01="PairStart" region10="PairEnd"     
+  scheme="posix.Core" region="String"
+  region01="PairStart" region10="PairEnd"
  />
  <block start="/~[^\,]*?((\'))/" end="/(\')/"
-  scheme="posix.BaseCore" region="String" 
-  region01="PairStart" region10="PairEnd"     
+  scheme="posix.BaseCore" region="String"
+  region01="PairStart" region10="PairEnd"
  />
  <inherit scheme="Script"/>
 </scheme>
 
 <!-- EE add end -->
 
-    
+
     <scheme name="Script">
       <!-- Numbers -->
       <inherit scheme="CHexNumber"/>
       <inherit scheme="FloatNumber"/>
       <inherit scheme="DecNumber"/>
-      
+
       <!-- EE: support regexp -->
       <block start="/&#34;/" end="/&#34;/" scheme="RegExp.String" region="String"/>
       <block start="/'/" end="/'/" scheme="RegExp.StringBase" region="String"/>
-        
+
       <!-- Linear Comments-->
       <block start="/\/\/|\#/" end="/$/" scheme="Comment" region="Comment" priority="low"/>
       <block start="/\/\*/" end="/\*\//" scheme="Comment"
                region="Comment" region00="PairStart" region10="PairEnd"/>
 
-               
+
 <!-- EE: changed -->
-         <block start="/(&lt;&lt;&lt;)([a-zA-Z_][\w_]*)/" end="/^(\y2)\M;$/" 
-           scheme="StringCore" region="HereDoc" 
-           region00="PairStart" region10="PairEnd" 
+         <block start="/(&lt;&lt;&lt;)([a-zA-Z_][\w_]*)/" end="/^(\y2)\M;$/"
+           scheme="StringCore" region="HereDoc"
+           region00="PairStart" region10="PairEnd"
            region01="HereDocLt" region02="HereDocName" region11="HereDocName"
          />
 
 <!-- EE add: System command -->
-         <block start="/`/" end="/`/" scheme="StringCore" 
+         <block start="/`/" end="/`/" scheme="StringCore"
           region="SystemExec" region00="String" region10="String"
          />
          <!-- regexp match='/ ` ( (\\.) | [^\\"] )* ` /x' / -->
 
-<!-- EE add: posix regexp support (ereg\w*)|(spliti?)|(sql_regcase)-->         
-        <block start="/\b(ereg\w*|spliti?|sql_regcase)((\())/i" 
-         end="/(\))/" scheme="posix.Support" 
+<!-- EE add: posix regexp support (ereg\w*)|(spliti?)|(sql_regcase)-->
+        <block start="/\b(ereg\w*|spliti?|sql_regcase)((\())/i"
+         end="/(\))/" scheme="posix.Support"
          region01="KeywordStrong" region02="PairStart" region03="Symbol"
          region10="PairEnd" region11="Symbol"
         />
-  
+
 
 <!-- variable highlighting // added by kx -->
-<!-- EE add: 'this' -->         
+<!-- EE add: 'this' -->
          <regexp match="/\B\S(this)\b/" region0="Var" region1="Keyword"/>
          <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>
-<!-- EE add: variable for objects -->         
+<!-- EE add: variable for objects -->
          <regexp match='/(\-&gt;)(\s)*\w+((\w)*(\s)*\()?!/' region="Var" region1="Symbol" />
-               
+
       <!-- here-doc support // added by kx
       <block start="/&lt;&lt;&lt;([a-zA-Z_][\w_]+)/" end="/^(\y1);$/" scheme="c:String"
                region="CommentDoc" region00="PairStart" region10="PairEnd" region01="Keyword" region11="Keyword"/>
        -->
-      <!-- variable highlighting // added by kx 
+      <!-- variable highlighting // added by kx
       <regexp match="/(\B\$[\w][\w_]*?)\b/" region="Var"/>-->
 
       <regexp match="/^\M \s* \b (class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
@@ -293,7 +292,7 @@
         <word name="case-folded"/>
         <word name="case-folding"/>
       </keywords>
-        
+
       <keywords region="Keyword" ignorecase="yes">
         <word name="as"/>  <!--EE move-->
         <word name="break"/>
@@ -1418,7 +1417,7 @@
       <inherit scheme="DeprecatedKeywords"/>
     </scheme>
 
-    
+
     <scheme name="DeprecatedKeywords">
       <keywords region="def:DeprecatedKeyword" ignorecase="yes">
         <word name="add_root"/>
@@ -1682,7 +1681,7 @@
         <word name="xptr_new_context"/>
       </keywords>
     </scheme>
-    
+
     <scheme name="Insertion">
       <block start="/(&lt;\?(php\b)?)/" end="/(\?&gt;)/" scheme="phpScript"
                priority="low" content-priority="low"
@@ -1690,26 +1689,26 @@
     </scheme>
 
 
-   <!-- !!EE: add PairStart/End & OpenTag 
+   <!-- !!EE: add PairStart/End & OpenTag
       <scheme name="InverseInsertion">
          <block start="/(\?&gt;)/" end="/(&lt;\?(php\b)?)/" scheme="html"
                 priority="low" region="Text"
                 region00="Insertion" region10="Insertion"/>
       </scheme>
    -->
-      
+
       <scheme name="InverseInsertion">
          <block start="/((\?&gt;))/" end="/((&lt;\?(php\b)?))/" scheme="html"
           priority="low" region="Text"
-          region00="Insertion" region10="Insertion" 
-          region01="PairStart" region11="PairEnd"      
-          region02="OpenTag"   region12="OpenTag" 
+          region00="Insertion" region10="Insertion"
+          region01="PairStart" region11="PairEnd"
+          region02="OpenTag"   region12="OpenTag"
          />
 
       </scheme>
 
-    
-    
+
+
     <scheme name="htmlScripts">
       <block start="/ (&lt;(script [^&gt;]+ (phpscript[\d\.]*) [^&gt;]*) &gt;) /ix" end="/(&lt;\/(script)\&gt;)/i" scheme="phpScript-client"
                region00="PairStrongStart" region10="PairStrongEnd"

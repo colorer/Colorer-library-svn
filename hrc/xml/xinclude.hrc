@@ -141,7 +141,7 @@
       </scheme>
 
 
-      <scheme name="xinclude-root" access="public">
+      <scheme name="xinclude-root">
          <annotation>
             <documentation>
                You can replace these elements with needed single root element
@@ -151,7 +151,7 @@
          <inherit scheme="include-element"/>
          <inherit scheme="fallback-element"/>
       </scheme>
-      <scheme name="xinclude" access="public">
+      <scheme name="xinclude">
          <inherit scheme="xml:singleroot">
             <virtual scheme="xml:element" subst-scheme="xinclude-root"/>
          </inherit>

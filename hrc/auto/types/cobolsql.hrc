@@ -5,7 +5,7 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <type name="cobolsql" access="public">
+  <type name="cobolsql">
     <annotation><documentation>
       EmbeddedSQL for COBOL
     </documentation><contributors><![CDATA[
