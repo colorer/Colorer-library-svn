@@ -7,7 +7,9 @@ init.error.pf = Ошибка в инициализации native-части библиотеки Colorer. \
                 в '%PLUGIN_DIR%/colorer/catalog.xml'
                 
 
-prefs.title=Настройки текстового редактора Colorer-take5 с подсветкой синтаксиса
+prefs.title=Настройки текстового редактора Colorer-take5
+prefs.filetypes.title=Типы файлов в Colorer-take5
+
 TEXT_FONT=&Шрифт, используемый в редакторе
 SPACES_FOR_TABS=Использовать &пробелы вместо табуляции.
 TAB_WIDTH=&Размер табуляции

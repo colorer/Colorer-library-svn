@@ -1,23 +1,131 @@
 package net.sf.colorer.eclipse;
 
+import net.sf.colorer.swt.dialog.ResourceManager;
+
 import org.eclipse.jface.preference.*;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.*;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class FileTypePreferencePage extends FieldEditorPreferencePage
-    implements IWorkbenchPreferencePage{
+public class FileTypePreferencePage implements IWorkbenchPreferencePage{
+
+  private Composite root;
 
   public FileTypePreferencePage(){
-    super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
-    setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
+    //super(, FieldEditorPreferencePage.GRID);
+    //setPreferenceStore(EclipsecolorerPlugin.getDefault().getPreferenceStore());
   }
 
   public void init(IWorkbench iworkbench){}
 
+  Composite createComposite(Composite parent){
+    Composite composite = new Composite(parent, SWT.NONE);
+    composite.setLayout(new GridLayout(2, false));
+    {
+      final Tree tree = new Tree(composite, SWT.NONE);
+      tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+    }
+    {
+      final Composite comp = new Composite(composite, SWT.NONE);
+      comp.setLayout(new GridLayout(2, true));
+      comp.setLayoutData(new GridData(GridData.FILL_BOTH));
+    }
+    //  DESIGNER: Add controls before this line.    
+    return composite;
+  }
+
+
   public void createFieldEditors(){
-    Composite p = getFieldEditorParent();
+    //Composite p = getFieldEditorParent();
     
+  }
+
+  public Point computeSize() {
+    return new Point(300, 500);
+  }
+  
+  public void createControl(Composite parent) {
+    root = createComposite(parent);
+  }
+
+  public boolean isValid() {
+    return true;
+  }
+
+  public boolean okToLeave() {
+    return true;
+  }
+
+  public boolean performCancel() {
+    return true;
+  }
+
+  public boolean performOk() {
+    return true;
+  }
+
+  public void setContainer(IPreferencePageContainer preferencePageContainer) {
+    // TODO Auto-generated method stub
+  }
+
+  public void setSize(Point size) {
+    // TODO Auto-generated method stub
+  }
+
+  public void dispose() {
+    // TODO Auto-generated method stub
+  }
+
+  public Control getControl() {
+    return root;
+  }
+
+  public String getDescription() {
+    // TODO Auto-generated method stub
+    return "xxx";
+  }
+
+  public String getErrorMessage() {
+    return null;
+  }
+
+  public Image getImage() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getMessage() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getTitle() {
+    return Messages.get("prefs.filetypes.title");
+  }
+
+  public void performHelp() {
+    // TODO Auto-generated method stub
+  }
+
+  public void setDescription(String description) {
+    // TODO Auto-generated method stub
+  }
+
+  public void setImageDescriptor(ImageDescriptor image) {
+    // TODO Auto-generated method stub
+  }
+
+  public void setTitle(String title) {
+    // TODO Auto-generated method stub
+  }
+
+  public void setVisible(boolean visible) {
+    // TODO Auto-generated method stub
   }
 }
 
