@@ -121,10 +121,14 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_addRegionHandler(JNIEnv *env, jobject obj, jlong iptr, jobject rh, jobject filter){
   JBaseEditor *be = JBaseEditor::get(env, iptr);
+  const Region *filterRegion = null;
 
-  jmethodID gnID = env->GetMethodID(env->GetObjectClass(filter), "getName", "()Ljava/lang/String;");
-  jstring filter_name = (jstring)env->CallObjectMethod(filter, gnID);
-  JWrapRegionHandler *jwrh = new JWrapRegionHandler(env, be->pf->jhp, rh, be->pf->getHRCParser()->getRegion(&JString(env, filter_name)));
+  if (filter != null){
+    jmethodID gnID = env->GetMethodID(env->GetObjectClass(filter), "getName", "()Ljava/lang/String;");
+    jstring filter_name = (jstring)env->CallObjectMethod(filter, gnID);
+    filterRegion = be->pf->getHRCParser()->getRegion(&JString(env, filter_name));
+  }
+  JWrapRegionHandler *jwrh = new JWrapRegionHandler(env, be->pf->jhp, rh, filterRegion);
   be->addRegionHandler(jwrh);
 }
 
