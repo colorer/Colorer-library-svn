@@ -5,9 +5,24 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
    <type name="asp.js">
+      <annotation>
+       <appinfo>
+        <prototype name="asp.js" group="inet" description="asp - JavaScript">
+          <location link="inet/asp.js.hrc"/>
+          <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
+          <firstline weight='2'>/language\s*=.*j(ava)?script/i</firstline>
+          <firstline>/&lt;\%/i</firstline>
+        </prototype>
+        <require>
+         <package name="asp"/>
+         <type name="html"/>
+         <type name="jScript"/>
+        </require>     
+       </appinfo>
+      </annotation>
 
-      <import type="asp.vb"/>
-
+      <import type="asp"/>
+ 
       <scheme name="jScript">
          <regexp match="/\/\/.*? \M (\%&gt;|$)/ix" region="def:Comment"/>
          <inherit scheme="InverseInsertion">
@@ -17,7 +32,7 @@
             <virtual scheme="jScript:jScript" subst-scheme="jScript"/>
          </inherit>
       </scheme>
-
+ 
       <scheme name="jScript-client">
          <inherit scheme="Insertion"/>
          <inherit scheme="jScript:jScript">

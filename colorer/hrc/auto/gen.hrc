@@ -5,12 +5,6 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
-    <location link="gen/ant.hrc"/>
-    <filename weight='5'>/\bbuild\.xml$/ix</filename>
-    <firstline weight='5'>/&lt;project\b/s</firstline>
-  </prototype>
-
   <prototype name="xslfo" group="xml" description="xslfo 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="gen/xslfo.hrc"/>
     <filename>/\.(xslfo?|fo)$/i</filename>
@@ -27,6 +21,10 @@
     <filename>/\.(math?|mml)$/i</filename>
     <firstline weight='3'>/MathML/</firstline>
   </prototype>
+  <prototype name="wml" group="xml" description="wml" targetNamespace="http://www.wapforum.org/2001/wml">
+    <location link="gen/wml.hrc"/>
+    <filename>/\.wml$/i</filename>
+  </prototype>
 
   <prototype name="web-app" group="inet" description="web-app" targetNamespace="http://java.sun.com/dtd/web-app_2_3.dtd">
     <location link="gen/web-app.hrc"/>
@@ -36,10 +34,42 @@
     <location link="gen/taglib.hrc"/>
     <filename>/\.tld/i</filename>
   </prototype>
-  <prototype name="svg" group="inet" description="svg" targetNamespace="http://www.w3.org/2000/svg">
-    <location link="gen/svg.hrc"/>
-    <filename>/\.svg/ix</filename>
+
+  <prototype name="parser" group="inet" description="Parser">
+    <location link="gen/parser.hrc"/>
+    <filename>/\.(p|html)$/i</filename>
+    <firstline>/^[\@\^]\w+/</firstline>
   </prototype>
+  <prototype name="wsc" group="inet" description="wsc">
+    <location link="gen/wsc.hrc"/>
+    <filename>/\.wsc$/i</filename>
+  </prototype>
+  <prototype name="wsf" group="inet" description="wsf">
+    <location link="gen/wsf.hrc"/>
+    <filename>/\.wsf$/i</filename>
+  </prototype>
+  <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
+    <location link="gen/rss.hrc"/>
+    <filename>/^rss|\.(rss|xml|rdf)$/i</filename>
+    <firstline>/xmlns="http:\/\/purl\.org\/rss\/1\.0\/"/</firstline>
+    <firstline>/&lt;rss version="0\.91"&gt;/</firstline>
+  </prototype>
+  <prototype name="htc" group="inet" description="HTC">
+    <location link="gen/htc.hrc"/>
+    <filename>/\.(htc)$/i</filename>
+  </prototype>
+  <prototype name="xbl" group="inet" description="Mozilla XBL">
+    <location link="gen/xbl.hrc"/>
+    <filename>/\.(xbl)$/i</filename>
+  </prototype>
+
+
+  <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
+    <location link="gen/ant.hrc"/>
+    <filename weight='5'>/\bbuild\.xml$/ix</filename>
+    <firstline weight='5'>/&lt;project\b/s</firstline>
+  </prototype>
+
 
   <prototype name="colorer5catalog" group="scripts" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
     <location link="gen/colorer5catalog.hrc"/>
@@ -49,7 +79,12 @@
   <prototype name="xsd2hrc.custom" group="scripts" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
     <location link="gen/xsd2hrc.custom.hrc"/>
     <filename>/custom\..*?\.xml$/ix</filename>
-    <firstline>/uri:colorer:custom/s</firstline>
+    <firstline weight="2">/uri:colorer:custom/s</firstline>
+  </prototype>
+  <prototype name="bkt" group="scripts" description="Colorer brackets script" targetNamespace="uri:colorer:bkt">
+    <location link="gen/bkt.hrc"/>
+    <filename>/\.bkt/ix</filename>
+    <firstline weight="2">/uri:colorer:bkt/s</firstline>
   </prototype>
 
 </hrc>

@@ -12,8 +12,8 @@
   by Alex Yackimoff (http://yackimoff.cjb.net)
      Denis Rybakov (den.rybakov@mail.ru)
 
-  Last changes - 21 Feb 2004
-  Last supported verision of Inno Setup - 4.1.7
+  Last changes - 03 Jun 2004
+  Last supported verision of Inno Setup - 4.2.3
 -->
    <type name="iss">
 
@@ -140,16 +140,18 @@
          <inherit scheme="issCommon"/>
 
          <keywords ignorecase="yes" region="issParameter">
-            <word name="Appname"/>
+            <word name="AppendDefaultDirName"/>
+            <word name="AppendDefaultGroupName"/>
+            <word name="AppName"/>
             <word name="AppVername"/>
             <word name="DefaultDirname"/>
             <word name="CodeFile"/>
-<!--ISX-->
             <word name="InternalCompressLevel"/>
             <word name="DiskClusterSize"/>
             <word name="DiskSize"/>
             <word name="DiskSpanning"/>
             <word name="DontMergeDuplicateFiles"/>
+            <word name="Encryption"/>
             <word name="OutputBaseFilename"/>
             <word name="OutputDir"/>
             <word name="ReserveBytes"/>
@@ -244,7 +246,6 @@
             <word name="OnlyBelowVersion"/>
             <word name="Permission"/>
             <word name="Check"/>
-<!--ISX-->
          </keywords>
       </scheme>
 
@@ -296,11 +297,13 @@
             <word name="ignoreversion"/>
             <word name="isreadme"/>
             <word name="noregerror"/>
+            <word name="noencryption"/>
             <word name="onlyifdestfileexists"/>
             <word name="overwritereadonly"/>
             <word name="recursesubdirs"/>
             <word name="regserver"/>
             <word name="regtypelib"/>
+            <word name="replacesameversion"/>
             <word name="restartreplace"/>
             <word name="sharedfile"/>
             <word name="skipifsourcedoesntexist"/>
@@ -361,6 +364,7 @@
             <word name="fixed"/>
             <word name="restart"/>
             <word name="disablenouninstallwarning"/>
+            <word name="dontinheritcheck"/>
          </keywords>
       </scheme>
 
@@ -378,6 +382,7 @@
             <word name="exclusive"/>
             <word name="restart"/>
             <word name="unchecked"/>
+            <word name="dontinheritcheck"/>
          </keywords>
       </scheme>
 
@@ -542,6 +547,7 @@
          <inherit scheme="issCommon"/>
 
          <keywords ignorecase="yes" region="issParameter">
+            <word name="LanguageCodePage"/>
             <word name="LanguageName"/>
             <word name="LanguageID"/>
             <word name="DialogFontName"/>

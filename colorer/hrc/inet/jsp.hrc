@@ -7,17 +7,29 @@
 
    <annotation><documentation>
      Java Server Pages
-   </documentation></annotation>
+   </documentation>
+     <appinfo>
+      <prototype name="jsp" group="inet" description="jsp">
+       <location link="inet/jsp.hrc"/>
+       <filename>/\.(jsp|jspf)$/i</filename>
+      </prototype>
+      <require>
+       <package name="asp"/>
+       <type name="html"/>
+       <type name="java"/>
+      </require>     
+     </appinfo>       
+   </annotation>
    <type name="jsp">
 
-      <import type="asp.vb"/>
+      <import type="asp"/>
 
-      <region name="Insertion" parent="def:Insertion"/>
+      <region name="Insertion" parent="asp:Insertion"/>
 
       <scheme name="Insertion">
         <block start="/(&lt;\%--)/" end="/(--\%\>)/" scheme="def:Comment"
                 region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
-        <inherit scheme='asp.vb:Insertion'>
+        <inherit scheme='asp:Insertion'>
           <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
           <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
         </inherit>
@@ -66,7 +78,7 @@
                 region="Insertion" region00="OpenTag" region10="CloseTag"
                 region01="def:PairStart" region11="def:PairEnd"/>
          <inherit scheme="html">
-            <virtual scheme="asp.vb:Insertion" subst-scheme="Insertion"/>
+            <virtual scheme="asp:Insertion" subst-scheme="Insertion"/>
             <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
             <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
          </inherit>

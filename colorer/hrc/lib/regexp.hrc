@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <type name="regexp">
 
 <annotation>
@@ -12,9 +12,9 @@
  REGEXP package: any types of regular expressions.
 
  std.*   - base schemes for all types of regexp
- pcre.*  - schemes for PSRE (used in php, js, etc...)
+ pcre.*  - schemes for PCRE (used in php, js, etc...)
  posix.* - schemes for POSIX 1003.2 regexp (used in php, sql, etc...)
- perl.*  - schemes for perl-like regexp (advansed PSRE)
+ perl.*  - schemes for perl-like regexp (advansed PCRE)
  xsd.*   - schemes for xml schema regexp (pattern/@value)
  hrc.*   - schemes for colorer-like regexp (used in hrc)
 
@@ -124,7 +124,7 @@
 
 
 <!--      -->
-<!-- PSRE -->
+<!-- PCRE -->
 <!--      -->
 
 
@@ -307,7 +307,7 @@
  />
 </scheme>
 <scheme name="perl.quote">
- <regexp match="/(\\Q).*?(\\E)/s" region="string"
+ <regexp match="/(\\Q).*?(\\E)/s" region="def:String"
   region1="Operator" region2="Operator" priority="low"
  />
  <!--block start="/(\\Q)/" end="/(\\E)/" scheme="string"
@@ -338,7 +338,7 @@
  <inherit scheme="std.symbs"/>
  <regexp match="/\\[Pp]P/" region0="SymbClass" />
  <regexp match="/\\[XC]/" region0="SymbClass" />
- <regexp match="/\\[LlUuE]/" region0="Operator"/>
+ <regexp match="/\\[LlUuEzG]/" region0="Operator"/>
 </scheme>
 
 <scheme name="perl.regexp">
@@ -417,6 +417,7 @@
  <regexp match="/\~/" region0="SpecOperator"/>       <!-- спецсимволы -->
  <regexp match="/\\C/i" region0="SymbClass"/>    <!-- Классы символов -->
  <regexp match="/\\[mM]/i" region0="SpecOperator"/>  <!-- colorer operators -->
+ <regexp match="/\\?&amp;/" region="def:Error"/>  <!-- Xml errors -->
  <inherit scheme="std.symbs"/>
 </scheme>
 
@@ -443,23 +444,6 @@
  </inherit>
 </scheme>
 
-
-<!-- заглушка для создания типа -->
-
-<scheme name="regexp">
- <annotation>
-  <documentation>
-   This scheme need for colorer versions,
-    then don't support packages.
-   Please don't use it.
-  </documentation>
- </annotation>
- <block start="/(\/)/" end="/(\/([mgeioxs]*))/"
-  scheme="perl.regexp" region="def:String"
-  region00="SpecQuote" region01="def:PairStart"
-  region10="SpecQuote" region11="def:PairEnd" region12="SpecArea"
- />
-</scheme>
 </type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****

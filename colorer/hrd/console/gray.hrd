@@ -3,7 +3,7 @@
   "http://colorer.sf.net/2003/hrd.dtd">
 <hrd xmlns="http://colorer.sf.net/2003/hrd">
 
-  <assign name="def:Text" fore="#0" back="7"/>
+  <assign name="def:Text" fore="#0" back="#7"/>
 
   <assign name="def:CommentContent" fore="#8"/>
   <assign name="def:CommentDoc"     fore="#8"/>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
+  "http://colorer.sf.net/2003/hrc.dtd"[
+<!ENTITY perl-proto SYSTEM "proto-perl.hrc">
+<!ENTITY php-proto  SYSTEM "proto-php.hrc">
+]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
@@ -30,6 +33,9 @@
     <parameters>
       <param name="stl-defines" value="true" description="Use STL specific keywords"/>
       <param name="afx-defines" value="true" description="Highlight MFC autogenerateg block"/>
+      <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
+      <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
+      <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
     </parameters>
   </prototype>
   <prototype name="asm" group="main" description="ASM">
@@ -42,6 +48,7 @@
     <filename>/\.(pl[sx]?|pm|pod|cgi|t)$/i</filename>
     <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
     <firstline>/perl/i</firstline>
+    &perl-proto;
   </prototype>
   <prototype name="java" group="main" description="Java">
     <location link="base/java.hrc"/>
@@ -89,31 +96,54 @@
   </prototype>
 
   <!--  inet languages  -->
+  <package name="html-entity" description="(x)html entities">
+   <location link="inet/html-entity.hrc"/>
+  </package>
   <prototype name="html" group="inet" description="html">
     <location link="inet/html.hrc"/>
     <filename>/\.[^p]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
   </prototype>
+
   <prototype name="css" group="inet" description="css">
     <location link="inet/css.hrc"/>
     <filename>/\.(css)$/i</filename>
+    <parameters>
+     <param name="html-css" value="true" description="Default use CSS for HTML"/>
+     <param name="svg-css" value="false" description="Default use CSS for SVG"/>
+    </parameters>
   </prototype>
   <prototype name="html-css" group="inet" description="css for html">
     <location link="inet/html-css.hrc"/>
-    <filename>/\.(css)$/i</filename>
+    <filename weight="0">/\.(css)$/i</filename>
+    <parameters>
+     <param name="ie-css" value="true" description="Use non-standart MSIE css extensions"/>
+     <param name="moz-css" value="true" description="Use non-standart Gecho-based css extensions"/>
+    </parameters>
   </prototype>
   <prototype name="svg-css" group="inet" description="css for svg">
     <location link="inet/svg-css.hrc"/>
-    <filename>/\.(css)$/i</filename>
+    <filename weight="0">/\.(css)$/i</filename>
   </prototype>
+
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
     <filename>/\.(jsp|jspf)$/i</filename>
   </prototype>
+
   <prototype name="php" group="inet" description="php">
     <location link="inet/php.hrc"/>
     <filename>/\.(php\d?|phtml|inc)$/i</filename>
     <firstline>/^&lt;\?(php)/</firstline>
+    &php-proto;
+  </prototype>
+
+  <prototype name="xhtml-trans" group="inet" description="xhtml transitional" targetNamespace="http://www.w3.org/1999/xhtml">
+    <location link="inet/xhtml-trans.hrc"/>
+    <filename>/\.html?/ix</filename>
+    <filename>/\.xhtml?/ix</filename>
+    <firstline weight='0.5'>/^&lt;\?xml/</firstline>
+    <firstline weight='2'>/DTD XHTML.*?Transitional/i</firstline>
   </prototype>
   <prototype name="xhtml-strict" group="inet" description="xhtml strict" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/xhtml-strict.hrc"/>
@@ -122,13 +152,6 @@
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Strict/i</firstline>
   </prototype>
-  <prototype name="xhtml-trans" group="inet" description="xhtml transitional" targetNamespace="http://www.w3.org/1999/xhtml">
-    <location link="inet/xhtml-trans.hrc"/>
-    <filename>/\.html?/ix</filename>
-    <filename>/\.xhtml?/ix</filename>
-    <firstline weight='0.5'>/^&lt;\?xml/</firstline>
-    <firstline weight='2'>/DTD XHTML.*?Transitional/i</firstline>
-  </prototype>
   <prototype name="xhtml-frameset" group="inet" description="xhtml frameset" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/xhtml-frameset.hrc"/>
     <filename>/\.html?/ix</filename>
@@ -136,6 +159,10 @@
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Frameset/i</firstline>
   </prototype>
+
+  <package name="asp" description="Active Server Pages">
+   <location link="inet/asp.hrc"/>
+  </package>
   <prototype name="asp.vb" group="inet" description="asp - VBScript">
     <location link="inet/asp.vb.hrc"/>
     <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
@@ -151,6 +178,10 @@
     <location link="inet/asp.ps.hrc"/>
     <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
     <firstline weight='2'>/language\s*=.*perlscript/i</firstline>
+  </prototype>
+  <prototype name="svg" group="inet" description="SVG 1.0" targetNamespace="http://www.w3.org/2000/svg">
+    <location link="inet/svg.hrc"/>
+    <filename>/\.svg/ix</filename>
   </prototype>
   <prototype name="coldfusion" group="inet" description="ColdFusion">
     <location link="inet/coldfusion.hrc"/>
@@ -172,12 +203,12 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml|ent)$/i</filename>
+    <filename>/\.(xml)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
   </prototype>
   <prototype name="dtd" group="xml" description="dtd">
     <location link="xml/dtd.hrc"/>
-    <filename>/\.(dtd|mod)$/i</filename>
+    <filename>/\.(dtd|ent|mod)$/i</filename>
   </prototype>
   <prototype name="xslt" group="xml" description="xslt 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="xml/xslt.hrc"/>
@@ -201,14 +232,6 @@
   </prototype>
   <prototype name="xlink" group="xml" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
     <location link="xml/xlink.hrc"/>
-  </prototype>
-  <prototype name="wsc" group="xml" description="wsc">
-    <location link="xml/wsc.hrc"/>
-    <filename>/\.wsc$/i</filename>
-  </prototype>
-  <prototype name="wsf" group="xml" description="wsf">
-    <location link="xml/wsf.hrc"/>
-    <filename>/\.wsf$/i</filename>
   </prototype>
 
   <!--  database languages  -->
@@ -238,6 +261,10 @@
   <prototype name="sql" group="database" description="SQL, PL/SQL">
     <location link="db/sql.hrc"/>
     <filename>/\.sql$/i</filename>
+  </prototype>
+  <prototype name="mysql" group="database" description="MySQL">
+   <location link="db/mysql.hrc"/>
+   <filename>/\.sql$/i</filename>
   </prototype>
 
   <!--  scripts  -->
@@ -270,6 +297,10 @@
   <prototype name="delphiform" group="scripts" description="Delphi form">
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
+  </prototype>
+  <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
+    <location link="scripts/javacc.hrc"/>
+    <filename>/\.(jjt?)$/i</filename>
   </prototype>
   <prototype name="javaProperties" group="scripts" description="Java properties">
     <location link="scripts/javaprop.hrc"/>
@@ -497,7 +528,7 @@
   <!--  packages  -->
 
   <package name="def" description="core definitions">
-    <location link="default.hrc"/>
+    <location link="lib/default.hrc"/>
   </package>
   <package name="ole" description="OLE Commons">
     <location link="lib/ole.hrc"/>

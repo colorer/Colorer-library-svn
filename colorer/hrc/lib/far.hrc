@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <type name="far">
 
 <annotation>
  <documentation>
 
- FAR package: any types, uses in Far Manager configurations.
+ FAR package: FAR Manager common expressions.
 
  mask.*  - file masks
  macro.* - key makros
@@ -21,10 +21,6 @@
   Eugene Efremov <4mirror@mail.ru>
  ]]>
  </contributors>
-<!--
- <appinfo><todo>
- </todo></appinfo>
--->
 </annotation>
 
 <region name="Quote" parent="regexp:Quote"/>
@@ -32,9 +28,17 @@
 <region name="MetaSymbStrong" parent="regexp:MetaSymbStrong"/>
 <region name="FarKeys" parent="def:KeywordStrong"/>
 <region name="MacroComs" parent="def:Var"/>
+<region name="MacroComParams" parent="def:Parameter"/>
+
+<scheme name="bat.var">
+ <regexp match="/(\%)[^\[\]]*?(\%)/"
+  region0="def:Var" region1="def:PairStart" region2="def:PairEnd"
+ />
+</scheme>
+
 
 <scheme name="mask.class">
- <regexp match="/\-\,/" region="MetaSymb"/>
+ <regexp match="/[\-\,]/" region="MetaSymb"/>
 </scheme>
 
 <scheme name="mask.string">
@@ -45,6 +49,7 @@
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
  />
+ <inherit scheme="bat.var"/>
 </scheme>
 
 
@@ -53,10 +58,97 @@
  <regexp match="/\%[\%aAbBcCdDehHIjklLMnprRStTUvVwWxXyYZ]/" region="def:StringContent"/>
 </scheme>
 
+<scheme name="macro.if.comand.panel">
+ <keywords region="MacroComParams">
+  <word name="Visible"/>
+  <word name="Empty"/>
+  <word name="Plugin"/>
+  <word name="Folder"/>
+  <word name="Selected"/>
+  <word name="Left"/>
+  <word name="Bof"/>
+  <word name="Eof"/>
+  <word name="Root"/>
+ </keywords>
+ <regexp match="/\S+/" region="def:Error" priority="low"/>
+</scheme>
+
+<scheme name="macro.if.comand">
+ <block start="/[AP]Panel(\.)\M\w+/" end="/~\w+\b\m/"
+  scheme="macro.if.comand.panel"
+  region00="MacroComParams" region01="def:Symbol"
+ />
+ <keywords region="MacroComParams">
+  <word name="DisableOutput"/>
+  <word name="Shell"/>
+  <word name="Viewer"/>
+  <word name="Editor"/>
+  <word name="Dialog"/>
+  <word name="Search"/>
+  <word name="Disks"/>
+  <word name="MainMenu"/>
+  <word name="Menu"/>
+  <word name="Help"/>
+  <word name="Info"/>
+  <word name="QView"/>
+  <word name="Tree"/>
+  <word name="Other"/>
+  <word name="Bof"/>
+  <word name="Eof"/>
+  <word name="Empty"/>
+  <word name="Selected"/>
+ </keywords>
+ <regexp match="/\!\M\w+/" region="def:Symbol"/>
+
+ <regexp match="/\S+/" region="def:Error" priority="low"/>
+</scheme>
+
+<scheme name="macro.if">
+ <block start="/~(\$If)/" end="/\$Then/"  scheme="macro.if.comand"
+  region00="MacroComs" region01="def:PairStart" region10="MacroComs"
+ />
+ <regexp match="/\$Else\b/" region="MacroComs"/>
+ <inherit scheme="macro.string"/>
+</scheme>
+
+<scheme name="macro.string.content">
+ <regexp match="/\\x%regexp:hex;{2}/" region="def:StringContent"/>
+ <regexp match="/\\[\\&quot;nt]/" region="def:StringContent"/>
+</scheme>
+
+<scheme name="macro.string.content-quot">
+ <regexp match="/\\{2}(x%regexp:hex;{2}|[nt])/" region="def:StringContent"/>
+ <regexp match="/\\{3}[\\&quot;]/" region="def:StringContent"/>
+ <regexp match="/[\\&quot;]{1,3}/" region="def:Error" priority="low"/>
+</scheme>
+
+
 <scheme name="macro.string">
  <inherit scheme="macro.keys"/>
+
+ <block start="/\M\$If\s/" end="/(\$EndIf)/" scheme="macro.if"
+  region10="MacroComs" region11="def:PairEnd"
+ />
+ <block start="/(\$Rep)\s+(\d+)/" end="/(\$EndRep)/" scheme="macro.string"
+  region00="MacroComs" region01="def:PairStart" region02="def:Number"
+  region10="MacroComs" region11="def:PairEnd"
+ />
+
+ <block start="/(\$Text)\s+((\\&quot;))/" end="/(\y3)/"
+  region="def:String" scheme="macro.string.content-quot"
+  region01="MacroComs" region02="Quote" region03="def:PairStart"
+  region10="Quote" region11="def:PairEnd"
+ />
+ <block start="/(\$Text)\s+((&quot;))/" end="/(\y3)/"
+  region="def:String" scheme="macro.string.content"
+  region01="MacroComs" region02="Quote" region03="def:PairStart"
+  region10="Quote" region11="def:PairEnd"
+ />
+
  <regexp match="/(\$MMode)\s+(1)/" region1="MacroComs" region2="def:Number"/>
- <regexp match="/\$XLat/" region="MacroComs"/>
+ <regexp match="/\$XLat\b/" region="MacroComs"/>
+ <regexp match="/\$Exit\b/" region="MacroComs"/>
+
  <block start="/(\[)/" end="/(\])/" scheme="macro.string"
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
@@ -561,22 +653,6 @@
  <regexp match="/(Shift)?#5\S/i" region="FarKeys"/>
  -->
 </scheme>
-
-<!-- заглушка для создания типа -->
-
-<scheme name="far">
- <annotation>
-  <documentation>
-   This scheme need for colorer versions,
-    then don't support packages.
-   Please don't use it.
-  </documentation>
- </annotation>
- <inherit scheme="def:Path"/>
- <inherit scheme="mask.string"/>
- <inherit scheme="macro.string"/>
-</scheme>
-
 
 </type>
 </hrc>
