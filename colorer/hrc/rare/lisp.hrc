@@ -38,16 +38,16 @@
 <block start="/\#\|/" end="/\|\#/" scheme="Comment" region="Comment" region00="PairStart" region10="PairEnd"/>
 
 <!-- Function definition -->
-<block start="/( (\() \s* defun)\M .*? (?{FunctionDefinition}\S+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+<block start="/( (\() \s* defun)\M .*? (?{FunctionDefinition}[\S\)]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
 
 <!-- Macro definition -->
-<block start="/( (\() \s* defmacro)\M .*? (?{MacroDefinition}\S+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+<block start="/( (\() \s* defmacro)\M .*? (?{MacroDefinition}[\S\)]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
 
 <!-- Variable definition -->
-<block start="/( (\() \s* defvar)\M .*? (?{VariableDefinition}\S+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+<block start="/( (\() \s* defvar)\M .*? (?{VariableDefinition}[\S\)]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
 
 <!-- Constant definition -->
-<block start="/( (\() \s* defconstant)\M .*? (?{ConstantDefinition}\S+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
+<block start="/( (\() \s* defconstant)\M .*? (?{ConstantDefinition}[\S\)]+) /ix" end="/( \) )/x" scheme="lisp" region00="PairStart" region01="Keyword" region02="Symbol" region03="Prefix" region10="PairEnd" region11="Symbol"/>
 
 <!-- Function/Marco/Special operator call -->
 <block start="/( (\() \s* [^;]*? ) \M ([;\s\)\(]|$) /x" end="/( \) )/x" scheme="lisp" region00="PairStart" region10="PairEnd" region01="Keyword" region02="Symbol" region11="Symbol"/>
