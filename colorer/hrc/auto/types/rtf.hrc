@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+  <type name="rtf" access="public">
+    <scheme name="rtf">
+      <regexp match="/(\d+)/" region0="def:Number"/>
+      <regexp match="/(\\)([\w\-]+)/" region1="def:String" region2="def:StringContent"/>
+      <keywords ignorecase="yes" region="def:Keyword">
+        <symb name="{" region="def:PairStart"/>
+        <symb name="}" region="def:PairEnd"/>
+        <symb name="\\" region="def:String"/>
+      </keywords>
+    </scheme>
+  </type>
+
+</hrc>

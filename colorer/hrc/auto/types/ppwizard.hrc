@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    ppwizard (.IT .IH) defs based on
+
+    Html Defs
+With Help of:
+    JULY <lubimovi@usa.net>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+   <type name="ppWizard" access="public">
+
+      <import type="def"/>
+      <import type="html"/>
+
+      <region name="ppString" parent="String"/>
+      <region name="ppComment" parent="Comment"/>
+      <region name="ppPar" parent="Parameter"/>
+      <region name="ppTag" parent="Keyword"/>
+      <region name="ppNumb" parent="Number"/>
+
+
+      <scheme name="ppWizardCore">
+         <keywords ignorecase="yes" region="ppTag">
+            <symb name="\"/>
+            <symb name="&lt;$"/>
+            <symb name="{$"/>
+            <symb name="}"/>
+         </keywords>
+         <keywords ignorecase="yes" region="ppPar">
+            <word name="#include"/>
+            <word name="#define"/>
+         </keywords>
+         <inherit scheme="htmlCore"/>
+      </scheme>
+
+      <scheme name="ppWizard">
+         <inherit scheme="html">
+            <virtual scheme="htmlCore" subst-scheme="ppWizardCore"/>
+         </inherit>
+         <inherit scheme="ppWizardCore"/>
+      </scheme>
+
+   </type>
+</hrc>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+<!--
+    ADM Syntax description
+With help of:
+    Kreevosheyev Vitaly (aka Shatl)  <shatl@nasnet.kiev.ua>
+-->
+   <type name="adm" access="public">
+
+      <import type="def"/>
+
+      <region name="admComment" parent="Comment"/>
+      <region name="admKwd" parent="Keyword"/>
+      <region name="admStrings" parent="String"/>
+      <region name="admStrVal" parent="String"/>
+
+
+      <scheme name="adm">
+<!-- Strings -->
+         <regexp match="/(\x22.*\x22)/" region0="admStrings"/>
+<!-- String values -->
+         <regexp match="/(\!\!(\S.*?))/" region0="admStrVal"/>
+<!-- Linear comments -->
+         <regexp match="/(\;.*$)/" region0="admComment"/>
+         <inherit scheme="DecNumber"/>
+         <keywords ignorecase="yes" region="admKwd">
+            <word name="CLASS"/>
+            <word name="CATEGORY"/>
+            <word name="END"/>
+            <word name="POLICY"/>
+            <word name="PART"/>
+            <word name="VALUEON"/>
+            <word name="VALUEOFF"/>
+            <word name="KEYNAME"/>
+            <word name="VALUENAME"/>
+            <word name="VALUE"/>
+            <word name="VALUEPREFIX"/>
+            <word name="ACTIONLIST"/>
+         </keywords>
+         <keywords ignorecase="yes" region="admStrVal">
+            <word name="CHECKBOX"/>
+            <word name="NUMERIC"/>
+            <word name="EDITTEXT"/>
+            <word name="COMBOBOX"/>
+            <word name="TEXT"/>
+            <word name="DROPDOWNLIST"/>
+            <word name="LISTBOX"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>

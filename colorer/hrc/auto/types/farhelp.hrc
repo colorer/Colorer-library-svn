@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+<!--
+    Far Help Sources
+With Help of:
+    Stas Mehanoshin <rampitec@tu.spb.ru>
+-->
+   <type name="farhelp" access="public">
+
+      <import type="def"/>
+
+      <region name="Page" parent="def:Outlined"/>
+
+      <scheme name="FarHelpStr">
+         <regexp match="/\@\@|\~\~|\$|\^|\#\#|\%\%/" region="String"/>
+      </scheme>
+
+      <scheme name="farhelp">
+         <regexp match="/^\s* \M \@ ([\@\$\^\w\s]+)  /x" region1="Page"/>
+         <regexp match="/\b([0-9]+)\b/" region0="Number"/>
+         <regexp match="/((\@)[^\@]+?(\@|$))/" region0="Symbol" region2="PairStart" region3="PairEnd"/>
+         <regexp match="/^(\$.+?$)/" region0="String"/>
+         <inherit scheme="FarHelpStr"/>
+         <block start="/(\#)/" end="/(\#|$)/" scheme="FarHelpStr" region="Number" region00="PairStart" region11="PairEnd"/>
+         <regexp match="/((\~)[^\~]+?(\~))/" region0="StringEdge" region2="PairStart" region3="PairEnd"/>
+         <keywords region="Keyword">
+            <word name=".Language"/>
+            <word name=".PluginContents"/>
+            <symb name="=" region="String"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>
