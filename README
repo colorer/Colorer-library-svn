@@ -4,12 +4,14 @@
   Copyright (c) Cail Lomecb (Igor Russkih) 1999-2003.
 
   Colorer  is  a  syntax  highlighting  and text parsing library, that
-  provides services to parse text in editor in real-time and transform
+  provides services to parse text in editor in real time and transform
   results into colored text.
 
   For more information see 'index.html' in the 'doc' directory of
   the Colorer Library package distribution or visit
+
     http://colorer.sf.net/
+  
   to find new versions and full documentation.
 
 
