@@ -94,9 +94,9 @@
 ÿ <assign name="def:Date" fore="#009797"/>
 ÿ <assign name="def:Time" fore="#8745a0"/>
 
+ÿ <assign name="def:PairStart" fore="#AAFFFF"/>
+ÿ <assign name="def:PairEnd" fore="#AAFFFF"/>
 <!--
-ÿ <assign name="def:PairStart" fore="#880088"/>
-ÿ <assign name="def:PairEnd" fore="#880088"/>
 ÿ <assign name="def:PairStrongStart" fore="#880088"/>
 ÿ <assign name="def:PairStrongEnd" fore="#880088"/>
 -->
