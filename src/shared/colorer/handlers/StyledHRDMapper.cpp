@@ -4,6 +4,11 @@
 #include<unicode/UnicodeTools.h>
 #include<xml/xmldom.h>
 
+const int StyledRegion::RD_BOLD = 1;
+const int StyledRegion::RD_ITALIC = 2;
+const int StyledRegion::RD_UNDERLINE = 4;
+const int StyledRegion::RD_STRIKEOUT = 8;
+
 StyledHRDMapper::StyledHRDMapper(){};
 StyledHRDMapper::~StyledHRDMapper(){
   for(RegionDefine *rd = regionDefines.enumerate(); rd;rd = regionDefines.next())

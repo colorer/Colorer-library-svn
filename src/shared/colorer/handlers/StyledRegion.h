@@ -11,10 +11,10 @@
 */
 class StyledRegion : public RegionDefine{
 public:
-  static const int RD_BOLD = 1;
-  static const int RD_ITALIC = 2;
-  static const int RD_UNDERLINE = 4;
-  static const int RD_STRIKEOUT = 8;
+  static const int RD_BOLD;
+  static const int RD_ITALIC;
+  static const int RD_UNDERLINE;
+  static const int RD_STRIKEOUT;
 
   /** Is foreground value assigned? */
   bool bfore;
