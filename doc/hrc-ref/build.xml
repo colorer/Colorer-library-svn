@@ -52,7 +52,14 @@
     </xslt>
   </target>
 
-  <target name="all" depends='html,pdf' description='Builds all target versions'>
+  <target name="zip" description='Creates zip distribution file'>
+    <zip destfile="hrc-ref.zip"
+         basedir="."
+         includes="db*,fo*,html*,hrc-ref.docbook,build.xml"
+    />    
+  </target>
+
+  <target name="all" depends='html,pdf,zip' description='Builds all target versions'>
   </target>
 
 </project>
