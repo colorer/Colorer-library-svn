@@ -4,6 +4,7 @@
       label="Eclipse Colorer"
       version="0.6.0"
       provider-name="Igor Russkih"
+      image="logo-colorer.png"
       plugin="Eclipse Colorer">
 
    <description url="http://colorer.sf.net/eclipsecolorer.html">
