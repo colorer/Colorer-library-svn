@@ -290,7 +290,7 @@ With help of:
 <!-- Timur: builtin perl scripts -->
 <!--Block start="/\M^#!\s*[\w:\\/\-]*perl/i" end="/\M^:endofperl/i" scheme="Perl"-->
 <!--Block start="/^\@rem\s';\m/" end="/__END__\m/" scheme="Perl"-->
-         <block start="/^(\@rem.*?';)/" end="/(__END__\M|\M^:endofperl)/i" scheme="perl_bat" region00="ntCmd" region10="plRare"/>
+         <block start="/^(\@rem.*?';)/" end="/(__END__\M|\M^:endofperl)/i" scheme="perl_bat" region00="ntCmd" region10="perl:Rare"/>
 <!-- oops! Continue Perl block -->
          <block start="/\M^[=\#]/" end="/(__END__\M|\M^:endofperl)/i" scheme="perl_bat"/>
          <inherit scheme="BatchInternal"/>
