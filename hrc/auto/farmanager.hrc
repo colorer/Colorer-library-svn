@@ -21,6 +21,12 @@
     <firstline>/\%start\%/</firstline>
   </prototype>
 
+  <prototype name="esc" group="scripts.far" description="Extended selection case">
+    <location link="gen/esc.hrc"/>
+    <filename>/esc.*?\.xml$/i</filename>
+    <firstline weight="2">/&lt;Esc-Settings&gt;/</firstline>
+  </prototype>
+
   <prototype name="tgs" group="scripts.far" description="TGS script">
     <location link="types/tgs.hrc"/>
     <filename>/\.tgs$/i</filename>
