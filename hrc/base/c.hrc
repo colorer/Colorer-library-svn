@@ -249,9 +249,11 @@
     region01="PreprocIncludeEdge" region10="PreprocIncludeEdge"
     region02="def:PairStart" region11="def:PairEnd"
    />
-   
+
+   <!-- can introduce some bugs
    <regexp match="/~\s*\M(if((n)?def)?)/" region1="def:PairStart"/>
    <regexp match="/~\s*\M(endif)/" region1="def:PairEnd"/>
+   -->
 
    <keywords region="Symbol">
       <symb name=";"/><symb name="="/>
