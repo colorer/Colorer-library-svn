@@ -144,7 +144,9 @@
        <inherit scheme="JavaComments"/>
 
        <regexp match="/ \b (?{Keyword}new) \s+ (?{InnerClassOutline}[\w_]+ [\w_:\$]*?) \M \s*\([^\(\)]*\) \s* ([\{]|$) /x"/>
+       <!-- 
        <regexp match="/ \M\b native .+? (?{NativeOutline}[\w_]+ [\w_:\$]*?) \s*\( /x"/>
+       -->
 
        <regexp match="/ \b (?{Keyword}interface) \s+ (?{InterfaceOutline}[\w_]+ [\w_:\$]*?) /x"/>
        <regexp match="/ \b (?{Keyword}class) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*?) /x"/>
