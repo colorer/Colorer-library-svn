@@ -14,7 +14,7 @@
     cail: split into two schemes: c and cpp
     Stanislav V. Mekhanoshin <stas@titania.spb.su>
 
-    Changed by Eugene Efremov <4mirror@mail.ru>:
+    Eugene Efremov <4mirror@mail.ru>:
      - fixed non-begin-of-string outlines
      - split c/c++ outlines
      - add stdio.h keywords
@@ -43,18 +43,20 @@
   <region name="KeywordANSI" parent="def:Keyword"/>
   <region name="KeywordConstant" parent="def:Constant"/>
   
-  <region name="KeywordLibFunctions" parent="def:FunctionKeyword"/> <!-- !!EE: new -->
+  <region name="KeywordLibFunctions" parent="def:FunctionKeyword"/> 
   <region name="KeywordStructure" parent="def:StructKeyword"/>
 
-  <region name="KeywordWin32" parent="KeywordLibFunctions"/>  <!-- !!EE: def:FunctionKeyword -->
-  <region name="KeywordOpenGL" parent="KeywordLibFunctions"/> <!-- !!EE: def:FunctionKeyword -->
-  <region name="KeywordNetwork" parent="KeywordLibFunctions"/> <!-- !!EE: def:FunctionKeyword -->
-  <region name="KeywordMacro" parent="KeywordStructure"/> <!-- !!EE: def:StructKeyword -->
-  <region name="KeywordMFC" parent="KeywordStructure"/> <!-- !!EE: def:StructKeyword -->
-  <region name="KeywordMFCFunc" parent="KeywordWin32"/> <!-- !!EE: def:FunctionKeyword -->
+  <region name="KeywordWin32" parent="KeywordLibFunctions"/>  
+  <region name="KeywordOpenGL" parent="KeywordLibFunctions"/> 
+  <region name="KeywordNetwork" parent="KeywordLibFunctions"/> 
+  <region name="KeywordMacro" parent="KeywordStructure"/> 
+  <region name="KeywordMFC" parent="KeywordStructure"/> 
+  <region name="KeywordMFCFunc" parent="KeywordWin32"/> 
 
-  <region name="KeywordStdio" parent="KeywordStructure"/> <!-- !!EE: new -->
-  <region name="KeywordDeprecated" parent="def:DeprecatedKeyword"/> <!-- !!EE: new -->
+  <region name="KeywordStdio" parent="KeywordStructure"/> 
+  <region name="KeywordDeprecated" parent="def:DeprecatedKeyword"/> 
+  
+  <region name="Label" parent="def:Label"/>
   
   <region name="StructOutline" parent="def:Outlined"/>
   <region name="UnionOutline" parent="StructOutline"/>
@@ -283,13 +285,11 @@
    <!-- thanx to andrei somsikov for bug -->
    <block start="/(\b_?_?asm)\s*?(\{|$)/" end="/(\})/" scheme="AsmCode"
           region01="AsmCode" region02="StructureSymbol" region10="StructureSymbol" region00="def:PairStart" region11="def:PairEnd"/>
-   <block start="/\b__asm\b/" end="/$/" scheme="AsmCode" region00="AsmCode"/>
+   <block start="/\b_?_?asm\b/" end="/$/" scheme="AsmCode" region00="AsmCode"/>
 
    <inherit scheme="Outlines"/>
    <inherit scheme="Expression"/>
    
-   <!-- labels -->
-   <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="def:Label"/>
   </scheme>
 
   <!-- !!EE: two new schemes - Outlines -->
@@ -410,12 +410,14 @@
 
 
   <scheme name="Expression">
+   
+
    <block start="/(\()/" end="/(\))/" scheme="Expression"
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
    <block start="/(\[)/" end="/(\])/" scheme="Expression"
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
    
-          
+   
    <!-- Numbers -->
    <inherit scheme="def:Number"/>
    <inherit scheme="def:BadHex"/>
@@ -440,6 +442,21 @@
       <start region0="def:PairStart"><![CDATA[/\/\*/]]></start>
       <end region0="def:PairEnd"><![CDATA[/\*\//]]></end>
    </block>
+   
+   <!-- labels -->
+   <regexp match="/^\s*(default)(:)/" 
+    region1="KeywordANSI" region2="Label"
+   />
+   <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="Label"/>       
+   
+   <block start="/case\M\s+/" end="/\:?~1\:\M(\s|$)/" 
+    scheme="Expression" region="def:Constant"
+    region00="KeywordANSI" region10="Label"
+   />
+   <regexp match="/(goto)\s+(\w+)\b/"   
+    region1="KeywordDeprecated" region2="Label"
+   />
+   
    <!-- Standard C/C++ symbols -->
    <keywords region="StructureSymbol">
       <symb name=";"/>
@@ -452,6 +469,8 @@
       <symb name="("/><symb name=")"/>
       <symb name="*/"/>
    </keywords>
+   
+   
    <!-- C Keywords -->
    <keywords region="KeywordANSI">
       <word name="asm"/>
@@ -4432,7 +4451,6 @@
      <word name='glGetTexImage'/>
      <word name='glGetTexLevelParameter'/>
      <word name='glGetTexParameter'/>
-     <word name='glHint'/>
      <word name='glIndex'/>
      <word name='glIndexMask'/>
      <word name='glIndexPointer'/>
@@ -5680,7 +5698,11 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
-   -
+   - Eugene Efremov <4mirror@mail.ru>
+   - Stanislav V. Mekhanoshin <stas@titania.spb.su>
+   - Timur Safin <timur@lanit.ru>
+   - Vladimir Tarasov <tsoftgroup@chat.ru>
+   - 
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
    - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
