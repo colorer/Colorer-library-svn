@@ -8,19 +8,23 @@ public class ParserFactory{
     System.loadLibrary("net_sf_colorer");
   };
   long iptr;
+  long internal;
   static int count = 0;
 
   public ParserFactory(String catalogPath){
     iptr = init(catalogPath);
-    System.out.println("ParserFactory count: " + (++count));
+    internal = iptr;
+    System.out.println("ParserFactory count: " + (++count) + " iptr="+iptr);
   };
   public ParserFactory(){
     iptr = init(null);
-    System.out.println("ParserFactory count: " + (++count));
+    internal = iptr;
+    System.out.println("ParserFactory(init) count: " + (++count) + " iptr="+iptr);
   };
   protected void finalize() throws Throwable{
-    if (iptr != 0) System.out.println("ParserFactory count: " + (--count));
-    finalize(iptr);
+    System.out.println("ParserFactory(fin) try internal="+internal);
+    if (internal != 0) System.out.println("ParserFactory(fin) count: " + (--count));
+    finalize(internal);
   };
 
   public String getVersion(){
