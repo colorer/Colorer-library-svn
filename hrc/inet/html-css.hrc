@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+
+<hrc version="take5"
+     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+<annotation>
+ <documentation>
+  Extended CSS for HTML
+  
+  insert this define into HRC base catalog file 
+  (AFTER definition of type "css"):
+ <![CDATA[  
+  <prototype name="html-css" group="inet" description="css for html">
+    <location link="inet/html-css.hrc"/>
+    <filename>/\.(css)$/i</filename>
+  </prototype>
+ ]]>
+ </documentation>
+ <contributors>
+ <![CDATA[
+  Eugene Efremov <4mirror@mail.ru> 
+ ]]>
+ </contributors>
+ <appinfo><todo>
+ <![CDATA[
+  Hа текущий момент нет отдельного варината для xhtml, который бы 
+  запрещал тэги в верхнем регистре.
+ ]]> 
+ </todo></appinfo>
+
+</annotation>
+
+          
+<type name="html-css" access="public">
+
+<scheme name="cssTag">
+ <inherit scheme="html:htmlCoreTags"/>
+</scheme>
+<scheme name="cssAttr">
+ <inherit scheme="html:htmlParams"/>
+</scheme>
+
+
+<scheme name="QuotRuleContent">
+ <inherit scheme="css:QuotRuleContent">
+  <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
+ </inherit>
+</scheme>
+
+<scheme name="AposRuleContent">
+ <inherit scheme="css:AposRuleContent">
+  <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
+ </inherit>
+</scheme>
+
+
+<scheme name="css">
+ <inherit scheme="css:css">
+  <virtual scheme="css:css" subst-scheme="css"/>
+  <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
+  <virtual scheme="css:TagNames" subst-scheme="cssTag"/>
+  <virtual scheme="css:AttrNames" subst-scheme="cssAttr"/>
+ </inherit>
+</scheme>
+
+<scheme name="html-css">
+ <inherit scheme="css"/>
+</scheme>
+
+<scheme name="Colors">
+ <inherit scheme="css:Colors">
+  <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>
+ </inherit>
+</scheme>
+
+
+    <scheme name="CustomColors">
+      <annotation>
+       <documentation>
+        WARNING! 
+        This colors posible used in MSIE or Mozilla,
+        but it's NOT valid CSS level 1 or 2!
+       </documentation>
+      </annotation>
+      <keywords region="def:DeprecatedKeyword" ignorecase="yes" worddiv='%css:worddiv;'>
+        <word name="aliceBlue"/>
+        <word name="antuqueWhite"/>
+        <word name="aquamarine"/>
+        <word name="azure"/>
+        <word name="beige"/>
+        <word name="bisque"/>
+        <word name="blanchedalmond"/>
+        <word name="blueviolet"/>
+        <word name="brown"/>
+        <word name="burlywood"/>
+        <word name="cadetblue"/>
+        <word name="chartreuse"/>
+        <word name="chocolate"/>
+        <word name="coral"/>
+        <word name="cornflowerblue"/>
+        <word name="cornsilk"/>
+        <word name="crimson"/>
+        <word name="cyan"/>
+        <word name="darkblue"/>
+        <word name="darkcyan"/>
+        <word name="darkgoldenrod"/>
+        <word name="darkgray"/>
+        <word name="darkgreen"/>
+        <word name="darkkhaki"/>
+        <word name="darkmagenta"/>
+        <word name="darkolivegreen"/>
+        <word name="darkorange"/>
+        <word name="darkorchid"/>
+        <word name="darkred"/>
+        <word name="darksalmon"/>
+        <word name="darkseagreen"/>
+        <word name="darkslateblue"/>
+        <word name="darkslategray"/>
+        <word name="darkturquoise"/>
+        <word name="darkviolet"/>
+        <word name="deeppink"/>
+        <word name="deepskyblue"/>
+        <word name="dimgray"/>
+        <word name="dodgerblue"/>
+        <word name="firebrick"/>
+        <word name="floralwhite"/>
+        <word name="forestgreen"/>
+        <word name="fainsboro"/>
+        <word name="ghostwhite"/>
+        <word name="gold"/>
+        <word name="goldenrod"/>
+        <word name="greenyellow"/>
+        <word name="honeydew"/>
+        <word name="hotpink"/>
+        <word name="indianred"/>
+        <word name="indigo"/>
+        <word name="ivory"/>
+        <word name="khaki"/>
+        <word name="lavender"/>
+        <word name="lavenderblush"/>
+        <word name="lawngreen"/>
+        <word name="lemonchiffon"/>
+        <word name="lightblue"/>
+        <word name="lightcoral"/>
+        <word name="lightcyan"/>
+        <word name="lightgrey"/> <!-- !!! Not lightgrAy -->
+        <word name="lightgreen"/>
+        <word name="lightpink"/>
+        <word name="lightsalmon"/>
+        <word name="lightseagreen"/>
+        <word name="lightskyblue"/>
+        <word name="lightslategray"/>
+        <word name="lightsteelblue"/>
+        <word name="lightyellow"/>
+        <word name="limegreen"/>
+        <word name="linen"/>
+        <word name="magenta"/>
+        <word name="mediumaquamarine"/>
+        <word name="mediumblue"/>
+        <word name="mediumorchid"/>
+        <word name="mediumpurple"/>
+        <word name="mediumseagreen"/>
+        <word name="mediumslateblue"/>
+        <word name="mediumspringgreen"/>
+        <word name="mediumturquoise"/>
+        <word name="mediumvioletred"/>
+        <word name="midnightblue"/>
+        <word name="mintcream"/>
+        <word name="mistyrose"/>
+        <word name="moccasin"/>
+        <word name="navajowhite"/>
+        <word name="oldlace"/>
+        <word name="olivedrab"/>
+        <word name="orange"/>
+        <word name="orangered"/>
+        <word name="orchid"/>
+        <word name="palegoldenrod"/>
+        <word name="palegreen"/>
+        <word name="paleturquoise"/>
+        <word name="plaevioletred"/>
+        <word name="papayawhip"/>
+        <word name="peachpuff"/>
+        <word name="peru"/>
+        <word name="pink"/>
+        <word name="plum"/>
+        <word name="powderblue"/>
+        <word name="rosybrown"/>
+        <word name="royalblue"/>
+        <word name="saddlebrown"/>
+        <word name="salmon"/>
+        <word name="sandybrown"/>
+        <word name="seagreen"/>
+        <word name="seashell"/>
+        <word name="sienna"/>
+        <word name="skyblue"/>
+        <word name="slateblue"/>
+        <word name="slategray"/>
+        <word name="snow"/>
+        <word name="springgreen"/>
+        <word name="steelblue"/>
+        <word name="tan"/>
+        <word name="thistle"/>
+        <word name="tomato"/>
+        <word name="turquoise"/>
+        <word name="violet"/>
+        <word name="white"/>
+        <word name="whitesmoke"/>
+        <word name="yellowgreen"/>
+        <word name="yellowgreen"/>
+      </keywords>
+    </scheme>
+
+</type>
+ 
+</hrc>
