@@ -107,7 +107,7 @@ public:
   const Region* regione[REGIONS_NUM];
   const Region* regionen[NAMED_REGIONS_NUM];
   CRegExp *start, *end;
-  bool lowPriority, lowContentPriority;
+  bool innerRegion, lowPriority, lowContentPriority;
 
 #include<common/MemoryOperator.h>
 
