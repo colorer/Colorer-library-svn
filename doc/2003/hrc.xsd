@@ -18,7 +18,7 @@
   <xs:simpleType name="REworddiv">
     <xs:restriction base="xs:string">
       <xs:whiteSpace value="collapse"/>
-      <xs:pattern value="\[.*\]|\%.*;"/>
+      <xs:pattern value="\[.*\]|%.*;"/>
     </xs:restriction>
   </xs:simpleType>
 
