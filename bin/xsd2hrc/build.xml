@@ -1,6 +1,28 @@
 <?xml version="1.0"?>
 <project default="all" basedir=".">
 
+  <property name='core-schemas' value='../../doc/2003'/>
+  <property name='hrc-path' value='../../hrc'/>
+  <property name='hrc-path-auto' value='${hrc-path}/auto/types'/>
+
+  <property name='custom' value='schemas-custom'/>
+  
+  
+
+  <!-- 
+       Paths to custom XSD definitions
+  -->
+  
+  <!--property name='xhtml-path' value='D:\usr\doc\w3.org\src'/-->
+  <property name='xhtml-path' value='c:\install\documentation\w3.org\src'/>
+  
+  <!--property name='docbook-xsd-path' value='D:\programs\xml\docbook\docbook-xsd-1.0b1/docbook.xsd'/-->
+  <property name='docbook-xsd-path' value='c:/instal/xml/docbook-xsd/docbook.xsd'/>
+  
+  <property name='mathml-xsd-path' value='D:\usr\doc\w3.org\REC\MathML\mathml2\mathml2.xsd'/>
+
+
+
   <xmlcatalog id="DTDs">
     <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
          location="docbook/docbookx.dtd"/>
@@ -16,20 +38,10 @@
   </xmlcatalog>
 
   
-  <property name='core-schemas' value='../../doc/2003'/>
-  <property name='hrc-path' value='../../hrc'/>
-  <property name='hrc-path-auto' value='${hrc-path}/auto/types'/>
-
-  <property name='custom' value='schemas-custom'/>
-  
-  <!-- Path to the DocBook XSD -->
-  <!--property name='docbook-xsd-path' value='D:\programs\xml\docbook\docbook-xsd-1.0b1/docbook.xsd'/-->
-  <property name='docbook-xsd-path' value='c:/instal/xml/docbook-xsd/docbook.xsd'/>
-
-  
   <target name="all" description='Stub target'>
     <echo>Choose requeried build target</echo>
   </target>
+
 
 
   <target name="xmlschema">
@@ -42,8 +54,8 @@
 
   <target name="xml">
     <echo>
-Building hrc/xml/xml.internal.hrc
-It must be included into basic hrc/xml/xml.hrc</echo>
+      Building hrc/xml/xml.internal.hrc
+      It must be included into basic hrc/xml/xml.hrc</echo>
     <xslt in='schemas/xml.xsd' out='${hrc-path}/xml/xml.internal.hrc' style='xsd2hrc.xsl'>
       <xmlcatalog refid="DTDs"/>
       <param name='hrctype' expression='xml'/>
@@ -99,8 +111,102 @@ It must be included into basic hrc/xml/xml.hrc</echo>
     <delete file='ant.hrc'/>
   </target>
 
+  <target name="mathml">
+    <xslt in='${mathml-xsd-path}' out='mathml.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='mathml'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='allow-any-attr' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.mathml.xml'/>
+    </xslt>
+    <zip basedir='.' includes="mathml.hrc" destfile="${hrc-path-auto}/mathml.jar"/>
+    <delete file='mathml.hrc'/>
+  </target>
 
 
+  <target name="xhtml">
+    <xslt in='${xhtml-path}/xhtml1-strict.xsd' out='xhtml-strict.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xhtml-strict'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
+    </xslt>
+    <xslt in='${xhtml-path}/xhtml1-transitional.xsd' out='xhtml-trans.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xhtml-trans'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
+    </xslt>
+    <xslt in='${xhtml-path}/xhtml1-frameset.xsd' out='xhtml-frameset.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xhtml-frameset'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.xhtml.xml'/>
+    </xslt>
+    <zip basedir='.' includes="xhtml*.hrc" destfile="${hrc-path}/inet/xhtml.jar"/>
+    <delete><fileset dir='.' includes='xhtml*.hrc'/></delete>
+  </target>
+
+
+  <target name="xslfo">
+    <xslt in='schemas/xslfo.xsd' out='${hrc-path}/xml/xslfo.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xslfo'/>
+      <param name='allow-any-attr' expression='yes'/>
+    </xslt>
+  </target>
+  <target name="xslt">
+    <xslt in='schemas/xslt.xsd' out='${hrc-path}/xml/xslt.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xslt'/>
+      <param name='allow-unknown-root-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.xslt.xml'/>
+    </xslt>
+  </target>
+  <target name="xslt2">
+    <xslt in='schemas/xslt2.xsd' out='${hrc-path}/xml/xslt2.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xslt2'/>
+      <param name='allow-unknown-root-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.xslt2.xml'/>
+    </xslt>
+  </target>
+
+
+  
+  <target name="relaxng">
+    <xslt in='schemas/relaxng.xsd' out='${hrc-path}/xml/relaxng.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='relaxng'/>
+      <param name='allow-any-attr' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.relaxng.xml'/>
+    </xslt>
+  </target>
+
+  <target name="web-app">
+    <xslt in='schemas/web-app_2_3.xsd' out='${hrc-path}/inet/web-app.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='web-app'/>
+      <param name='top-level-element' expression='web-app'/>
+    </xslt>
+  </target>
+
+  <target name="wsc">
+    <xslt in='schemas/wsc.xsd' out='${hrc-path}/xml/wsc.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='wsc'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.wsc.xml'/>
+    </xslt>
+  </target>
+  <target name="wsf">
+    <xslt in='schemas/wsf.xsd' out='${hrc-path}/xml/wsf.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='wsf'/>
+      <param name='allow-unknown-elements' expression='yes'/>
+      <param name='custom-defines' expression='${custom}/custom.wsf.xml'/>
+    </xslt>
+  </target>
 
   <target name="calcset">
     <xslt in='schemas/calcset.xsd' out='${hrc-path-auto}/calcset.hrc' style='xsd2hrc.xsl'>
@@ -108,6 +214,21 @@ It must be included into basic hrc/xml/xml.hrc</echo>
       <param name='hrctype' expression='calcset'/>
       <param name='allow-any-attr' expression='yes'/>
       <param name='top-level-element' expression='calc'/>
+    </xslt>
+  </target>
+
+  <target name="xsd2hrc.custom">
+    <xslt in='schemas/xsd2hrc.custom.xsd' out='${hrc-path-auto}/xsd2hrc.custom.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xsd2hrc.custom'/>
+    </xslt>
+  </target>
+
+  <target name="xmlspec" description='XML Spec Markup Language'>
+    <xslt in='schemas/xmlspec.xsd' out='${hrc-path-auto}/../xmlspec.hrc' style='xsd2hrc.xsl'>
+      <xmlcatalog refid="DTDs"/>
+      <param name='hrctype' expression='xmlspec'/>
+      <param name='include-prototype' expression='yes'/>
     </xslt>
   </target>
 
