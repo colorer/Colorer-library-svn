@@ -174,11 +174,11 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
                   gd.isHtmlHeaderFooter());
               num++;
             };
-            MessageDialog.openInformation(null, Messages.getString("htmlgen.done"),
+            MessageDialog.openInformation(null, Messages.get("htmlgen.done"),
                       Messages.format("htmlgen.done.msg",
                           new Object[]{ String.valueOf(num), filePath, fileNames.toString()}));
           }catch(Exception e){
-            MessageDialog.openError(null, Messages.getString("htmlgen.fault"),
+            MessageDialog.openError(null, Messages.get("htmlgen.fault"),
                     Messages.format("htmlgen.fault.msg",
                              new Object[]{ String.valueOf(num), filePath, e, lastFileName}) );
   
