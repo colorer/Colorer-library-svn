@@ -198,7 +198,7 @@
 
 <!-- EE add: posix regexp support (ereg\w*)|(spliti?)|(sql_regcase)-->
         <block start="/\b(ereg\w*|spliti?|sql_regcase)((\())/i"
-         end="/(\))/" scheme="posix.Support"
+         end="/(\))/" scheme="posix.Support" content-priority="low"
          region01="KeywordStrong" region02="PairStart" region03="Symbol"
          region10="PairEnd" region11="Symbol"
         />
