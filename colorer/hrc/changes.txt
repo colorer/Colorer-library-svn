@@ -6,6 +6,7 @@ $Date$
     - JSP TagLib, OCaml
   Fixes:
     - SML, ada, modula2
+    - Perl/HRC RE, php, html (Eugene Efremov)
 
 
 

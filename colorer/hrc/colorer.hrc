@@ -35,43 +35,43 @@
     <firstline>/perl/i</firstline>
   </prototype>
   <prototype name="java" group="main" description="Java">
-    <location link="main/java.hrc"/>
+    <location link="base/java.hrc"/>
     <filename>/\.(java|jav|jad)$/i</filename>
   </prototype>
   <prototype name="idl" group="main" description="IDL">
-    <location link="main/idl.hrc"/>
+    <location link="base/idl.hrc"/>
     <filename>/\.(hvs|(i|o)dl)$/i</filename>
     <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
     <firstline>/\#include/</firstline>
   </prototype>
   <prototype name="pascal" group="main" description="Pascal">
-    <location link="main/pascal.hrc"/>
+    <location link="base/pascal.hrc"/>
     <filename>/\.(\~?pas|dpr|dpk|inc|int)$/i</filename>
     <firstline>/^(\{|\/\/|resourcestring)/i</firstline>
   </prototype>
   <prototype name="csharp" group="main" description="C#">
-    <location link="main/csharp.hrc"/>
+    <location link="base/csharp.hrc"/>
     <filename>/\.cs$/i</filename>
   </prototype>
   <prototype name="jsnet" group="main" description="JS.NET">
-    <location link="main/js.net.hrc"/>
+    <location link="base/js.net.hrc"/>
     <filename>/\.js$/i</filename>
   </prototype>
   <prototype name="vbnet" group="main" description="VB.NET">
-    <location link="main/vb.net.hrc"/>
+    <location link="base/vb.net.hrc"/>
     <filename>/\.vb$/i</filename>
   </prototype>
   <!-- warning!! extensions conflict with Fortran -->
   <prototype name="forth" group="main" description="Forth">
-    <location link="main/forth.hrc"/>
+    <location link="base/forth.hrc"/>
     <filename>/\.(fth|f32|f|spf)$/i</filename>
   </prototype>
   <prototype name="fortran" group="main" description="Fortran">
-    <location link="main/fortran.hrc"/>
+    <location link="base/fortran.hrc"/>
     <filename>/\.(for|f(90)?)$/i</filename>
   </prototype>
   <prototype name="vbasic" group="main" description="Visual Basic">
-    <location link="main/vbasic.hrc"/>
+    <location link="base/vbasic.hrc"/>
     <filename>/\.(bas|vbp|frm|cls)$/i</filename>
     <firstline>/^(VERSION|VBWIZARD) \d+.\d+/</firstline>
   </prototype>
@@ -148,7 +148,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml|ent|tld)$/i</filename>
+    <filename>/\.(xml|ent)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <parameters>
       <param name="show-cross" value="both"/>
@@ -302,6 +302,10 @@
   <prototype name="isScripts" group="scripts.install" description="IS script">
     <location link="scripts/rul.hrc"/>
     <filename>/\.rul$/i</filename>
+  </prototype>
+  <prototype name="regexp" group="packages" description="regexp">
+    <location link="lib/regexp.hrc"/>
+    <filename>/\.regexp$/i</filename>
   </prototype>
 
   <!--  rare languages  -->
