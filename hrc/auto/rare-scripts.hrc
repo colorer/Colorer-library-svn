@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="Windows-1251"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+  <prototype name="aditor" group="scripts.rare" description="Aditor highlight">
+    <location link="types/aditor.hrc"/>
+    <filename>/\.(hgh)$/i</filename>
+  </prototype>
+
+  <prototype name="pagemakerscript" group="scripts.rare" description="PageMaker Script">
+    <location link="types/spt.hrc"/>
+    <filename>/\.spt$/i</filename>
+  </prototype>
+  <prototype name="rtf" group="scripts.rare" description="RTF text">
+    <location link="types/rtf.hrc"/>
+    <filename>/\.rtf$/i</filename>
+  </prototype>
+
+  <prototype name="kixtart" group="scripts.rare" description="Kixtart">
+    <location link="types/kixtart.hrc"/>
+    <filename>/\.(kix)+$/i</filename>
+  </prototype>
+  <prototype name="pvwave" group="scripts.rare" description="Pv-Wave">
+    <location link="types/pvwave.hrc"/>
+    <filename>/\.pvw$/i</filename>
+  </prototype>
+  <prototype name="mntrackscript" group="scripts.rare" description="MNTrack Script">
+    <location link="types/scn.hrc"/>
+    <filename>/\.scn$/i</filename>
+  </prototype>
+
+  <prototype name="sl" group="scripts.rare" description="Renderman Shading Language">
+    <location link="types/sl.hrc"/>
+    <filename>/\.(sl|slim|sli|str|stree)$/i</filename>
+  </prototype>
+  <prototype name="rib" group="scripts.rare" description="Renderman RIB">
+    <location link="types/rib.hrc"/>
+    <filename>/\.rib$/i</filename>
+  </prototype>
+  <prototype name="mel3dmax" group="scripts.rare" description="3D Max Script">
+    <location link="types/mel.hrc"/>
+    <filename>/\.(mel|ms)$/i</filename>
+  </prototype>
+
+  <prototype name="ppWizard" group="scripts.rare" description="ppWizard">
+    <location link="types/ppwizard.hrc"/>
+    <filename>/\.i(t|h)$/i</filename>
+  </prototype>
+
+  <prototype name="RSMac" group="scripts.rare" description="R-Style macrofile">
+    <location link="types/rsmac.hrc"/>
+    <filename>/\.(rsl|mac)$/i</filename>
+  </prototype>
+
+  <prototype name="adm" group="scripts.rare" description="ADM - Policy Template">
+    <location link="types/adm.hrc"/>
+    <filename>/\.adm$/i</filename>
+  </prototype>
+
+  <prototype name="linkdef" group="scripts.rare" description="Link Defines">
+    <location link="types/linkdef.hrc"/>
+    <filename>/\.def$/i</filename>
+  </prototype>
+
+  <!-- flex extension conflicts -->
+  <prototype name="flex" group="scripts.rare" description="FlexScript">
+    <location link="types/flex.hrc"/>
+    <filename>/\.(src|inc|inf)$/i</filename>
+    <firstline>/\*{10}/</firstline>
+  </prototype>
+
+  <prototype name="gpss" group="scripts.rare" description="gpss">
+    <location link="types/gpss.hrc"/>
+    <filename>/\.gps$/i</filename>
+  </prototype>
+
+  <prototype name="sdml" group="scripts.rare" description="sdml">
+    <location link="types/sdml.hrc"/>
+    <filename>/\.sdml$/i</filename>
+  </prototype>
+
+  <prototype name="irclog" group="scripts.rare" description="irc logs">
+    <location link="types/irclog.hrc"/>
+    <filename>/^\.irclog/i</filename>
+  </prototype>
+  <prototype name="micqlog" group="scripts.rare" description="micq logs">
+    <location link="types/micqlog.hrc"/>
+    <filename>/^[\._]log/i</filename>
+    <firstline>/^&lt;$/i</firstline>
+  </prototype>
+
+  <prototype name="mancolorer" group="scripts.rare" description="man colorer">
+    <location link="types/mancolor.hrc"/>
+    <filename weight='5'>/^man\s?colorer/i</filename>
+  </prototype>
+  <prototype name="urq" group="scripts.rare" description="URQ">
+    <location link="types/urq.hrc"/>
+    <filename>/\.qst$/i</filename>
+  </prototype>
+  <prototype name="vismod" group="scripts.rare" description="Visual Modeler">
+    <location link="types/vismod.hrc"/>
+    <filename>/\.mdl$/i</filename>
+  </prototype>
+
+</hrc>
