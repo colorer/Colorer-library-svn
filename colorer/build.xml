@@ -41,7 +41,8 @@
 
   <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
                                       **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
-                                      **/*.txt, **/*.html, **/*.xsd, **/*.dtd,
+                                      **/*.dep,
+                                      **/*.txt, **/*.html, **/*.xsd, **/*.dtd, **/configure*, **/Makefile*,
                                       **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
 
   <property environment='env'/>
