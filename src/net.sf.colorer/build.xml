@@ -2,18 +2,24 @@
 <project name="net.sf.colorer" default="gather" basedir=".">
 
   <property name="bootclasspath" value=""/>
-  <property name="ws" value="win32"/>
+  <property name="eclipse.ws" value='win32'/>
+  <property name="ws" value="${eclipse.ws}"/>
   <property name="os" value="win32"/>
   <property name="arch" value="x86"/>
-  <property name="javacFailOnError" value="false"/>
+  <property name="javacFailOnError" value="true"/>
   <property name="javacDebugInfo" value="on"/>
   <property name="javacVerbose" value="true"/>
 
   <target name="init" depends="properties">
     <property name="plugin" value="net.sf.colorer"/>
-    <property name="version.suffix" value="_0.5.0"/>
+
+    <property name='eclipseplugin-version' value='_0.5.0'/>
+    <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
+    <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
+
+    <property name="version.suffix" value="${eclipseplugin-version}"/>
     <property name="full.name" value="${plugin}${version.suffix}"/>
-    <property name="zip.name" value="EcliseColorer-take5${version.suffix}"/>
+    <property name="zip.name" value="${eclipseplugin-name}"/>
     <property name="temp.folder" value="${basedir}/temp.folder"/>
     <property name="plugin.destination" value="${basedir}/distr"/>
     <property name="build.result.folder" value="${basedir}"/>
@@ -50,7 +56,7 @@
     <delete dir="${temp.folder}/colorer.jar.bin"/>
     <mkdir dir="${temp.folder}/colorer.jar.bin"/>
     <!-- compile the source code -->
-    <javac destdir="${temp.folder}/colorer.jar.bin" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="${eclipse.plugins}/org.eclipse.core.boot_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.boot_2.1.0/boot.jar;${eclipse.plugins}/org.eclipse.core.runtime_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.runtime_2.1.0/runtime.jar;${eclipse.plugins}/org.apache.xerces_4.0.7/bin;${eclipse.plugins}/org.apache.xerces_4.0.7/xmlParserAPIs.jar;${eclipse.plugins}/org.apache.xerces_4.0.7/xercesImpl.jar;${eclipse.plugins}/org.eclipse.core.resources_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.resources_2.1.0/resources.jar;${eclipse.plugins}/org.eclipse.core.resources.win32_2.1.0/resources.jar;${eclipse.plugins}/org.eclipse.ui_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui_2.1.0/ui.jar;${eclipse.plugins}/org.eclipse.update.core_2.1.0/bin;${eclipse.plugins}/org.eclipse.update.core_2.1.0/updatecore.jar;${eclipse.plugins}/org.eclipse.update.core.win32_2.1.0/updatecore.jar;${eclipse.plugins}/org.eclipse.help_2.1.0/bin;${eclipse.plugins}/org.eclipse.help_2.1.0/help.jar;${eclipse.plugins}/org.apache.lucene_1.2.1/bin;${eclipse.plugins}/org.apache.lucene_1.2.1/parser.jar;${eclipse.plugins}/org.apache.lucene_1.2.1/lucene-1.2.jar;${eclipse.plugins}/org.eclipse.help.appserver_2.1.0/bin;${eclipse.plugins}/org.eclipse.help.appserver_2.1.0/appserver.jar;${eclipse.plugins}/org.eclipse.swt_2.1.0/bin;${eclipse.plugins}/org.eclipse.swt_2.1.0/ws/${ws}/swt.jar;${eclipse.plugins}/org.eclipse.swt.win32_2.1.0/ws/${ws}/swt.jar;${eclipse.plugins}/org.eclipse.text_2.1.0/bin;${eclipse.plugins}/org.eclipse.text_2.1.0/text.jar;${eclipse.plugins}/org.eclipse.jface_2.1.0/bin;${eclipse.plugins}/org.eclipse.jface_2.1.0/jface.jar;${eclipse.plugins}/org.eclipse.jface.text_2.1.0/bin;${eclipse.plugins}/org.eclipse.jface.text_2.1.0/jfacetext.jar;${eclipse.plugins}/org.eclipse.ui.views_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.views_2.1.0/views.jar;${eclipse.plugins}/org.eclipse.ui.workbench_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.workbench_2.1.0/workbench.jar;${eclipse.plugins}/org.eclipse.ui.win32_2.1.0/workbench.jar;${eclipse.plugins}/org.eclipse.ui.win32_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.win32_2.1.0/workbenchwin32.jar;${eclipse.plugins}/org.eclipse.ui.workbench.texteditor_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.workbench.texteditor_2.1.0/texteditor.jar;${eclipse.plugins}/org.eclipse.ui.editors_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.editors_2.1.0/editors.jar">
+    <javac destdir="${temp.folder}/colorer.jar.bin" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="${eclipse.plugins}/org.eclipse.core.boot_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.boot_2.1.0/boot.jar;${eclipse.plugins}/org.eclipse.core.runtime_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.runtime_2.1.0/runtime.jar;${eclipse.plugins}/org.apache.xerces_4.0.7/bin;${eclipse.plugins}/org.apache.xerces_4.0.7/xmlParserAPIs.jar;${eclipse.plugins}/org.apache.xerces_4.0.7/xercesImpl.jar;${eclipse.plugins}/org.eclipse.core.resources_2.1.0/bin;${eclipse.plugins}/org.eclipse.core.resources_2.1.0/resources.jar;${eclipse.plugins}/org.eclipse.core.resources.win32_2.1.0/resources.jar;${eclipse.plugins}/org.eclipse.ui_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui_2.1.0/ui.jar;${eclipse.plugins}/org.eclipse.update.core_2.1.0/bin;${eclipse.plugins}/org.eclipse.update.core_2.1.0/updatecore.jar;${eclipse.plugins}/org.eclipse.update.core.win32_2.1.0/updatecore.jar;${eclipse.plugins}/org.eclipse.help_2.1.0/bin;${eclipse.plugins}/org.eclipse.help_2.1.0/help.jar;${eclipse.plugins}/org.apache.lucene_1.2.1/bin;${eclipse.plugins}/org.apache.lucene_1.2.1/parser.jar;${eclipse.plugins}/org.apache.lucene_1.2.1/lucene-1.2.jar;${eclipse.plugins}/org.eclipse.help.appserver_2.1.0/bin;${eclipse.plugins}/org.eclipse.help.appserver_2.1.0/appserver.jar;${eclipse.plugins}/org.eclipse.swt_2.1.0/bin;${eclipse.plugins}/org.eclipse.swt_2.1.0/ws/${ws}/swt.jar;${eclipse.plugins}/org.eclipse.swt.${ws}_2.1.0/ws/${ws}/swt.jar;${eclipse.plugins}/org.eclipse.text_2.1.0/bin;${eclipse.plugins}/org.eclipse.text_2.1.0/text.jar;${eclipse.plugins}/org.eclipse.jface_2.1.0/bin;${eclipse.plugins}/org.eclipse.jface_2.1.0/jface.jar;${eclipse.plugins}/org.eclipse.jface.text_2.1.0/bin;${eclipse.plugins}/org.eclipse.jface.text_2.1.0/jfacetext.jar;${eclipse.plugins}/org.eclipse.ui.views_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.views_2.1.0/views.jar;${eclipse.plugins}/org.eclipse.ui.workbench_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.workbench_2.1.0/workbench.jar;${eclipse.plugins}/org.eclipse.ui.workbench.texteditor_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.workbench.texteditor_2.1.0/texteditor.jar;${eclipse.plugins}/org.eclipse.ui.editors_2.1.0/bin;${eclipse.plugins}/org.eclipse.ui.editors_2.1.0/editors.jar">
       <src path="src/"/>
     </javac>
     <!-- copy necessary resources -->
