@@ -218,7 +218,7 @@
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
     <filename>/\.(sh)$/i</filename>
-    <firstline weight='2'>/^\#(!\s*.+sh\b|\#)/</firstline>
+    <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
   <prototype name="apache" group="scripts" description="Apache httpd.conf">
     <location link="scripts/apache.hrc"/>
@@ -261,6 +261,7 @@
     <filename>/(makefile | tools\.ini) | \.(mak|ds(p|w)|bp(k|r|g)$)/ix</filename>
     <firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline>
+    <firstline>/makefile/s</firstline>
   </prototype>
   <prototype name="regedit" group="scripts" description="Regedit">
     <location link="scripts/reg.hrc"/>
