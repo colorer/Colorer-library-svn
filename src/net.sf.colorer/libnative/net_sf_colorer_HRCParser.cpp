@@ -12,10 +12,17 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion(JNIEnv *env, j
 JNIEXPORT void JNICALL Java_net_sf_colorer_HRCParser_finalize(JNIEnv *env, jobject obj, jlong iptr){
   printf("clr:HRCParser finalize\n");
   JHRCParser *hp = (JHRCParser*)iptr;
-  for(int idx = 0; idx < hp->regions.size(); idx++)
-    env->DeleteGlobalRef(hp->regions.get(hp->regions.key(idx)));
+  for(jobject region = hp->regions.enumerate(); region != null; region = hp->regions.next())
+    env->DeleteGlobalRef(region);
+  for(jobject filetype = hp->fileTypes.enumerate(); filetype != null; filetype = hp->fileTypes.next())
+    env->DeleteGlobalRef(filetype);
   delete hp;
 }
 
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_enumerateFileTypes
+  (JNIEnv *env, jobject obj, jlong iptr, jint idx){
+  JHRCParser *hp = (JHRCParser*)iptr;
+  return hp->enumerateFileTypes(env, idx);
+}
 
 }

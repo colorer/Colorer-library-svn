@@ -1,3 +1,3 @@
-set path=d:\Programs\devel\bcc55\bin;%path%
+set path=d:\Programs\devel\bc55\bin;%path%
 
 make -f makefile.bcc

@@ -11,6 +11,7 @@ public:
     jhp = null;
     jHRCParser = null;
   };
+
   JHRCParser *jhp;
   jobject jHRCParser;
 };

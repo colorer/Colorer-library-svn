@@ -31,15 +31,15 @@ public class BaseEditorNative implements BaseEditor {
   public void setRegionCompact(boolean compact){
     setRegionCompact(iptr, compact);
   }
-  public void setFileType(String typename){
+  public void setFileType(FileType typename){
     setFileType(iptr, typename);
     modifyEvent(iptr, 0);
   }
-  public String chooseFileType(String fname){
+  public FileType chooseFileType(String fname){
     modifyEvent(iptr, 0);
     return chooseFileType(iptr, fname);
   }
-  public String getFileType(){
+  public FileType getFileType(){
     return getFileType(iptr);
   }
   public void setRegionMapper(String cls, String name){
@@ -70,7 +70,7 @@ public class BaseEditorNative implements BaseEditor {
   public PairMatch getPairMatch(int lineNo, int linePos){
     LineRegion[] lrArray = getLineRegions(iptr, lineNo);
     if (lrArray.length == 0) return null;
-    
+
     LineRegion pair = null;
     for(int idx = 0; idx < lrArray.length; idx++){
       LineRegion l1 = lrArray[idx];
@@ -90,7 +90,7 @@ public class BaseEditorNative implements BaseEditor {
     };
     return null;
   }
-  
+
   int getLastVisibleLine(){
     int r1 = (wStart+wSize);
     int r2 = lineCount;
@@ -140,7 +140,7 @@ public class BaseEditorNative implements BaseEditor {
     int end_line = getLastVisibleLine();
     searchPair(pm, wStart, end_line);
   }
-  
+
   public void searchGlobalPair(PairMatch pm){
     searchPair(pm, 0, lineCount-1);
   }
@@ -169,33 +169,33 @@ public class BaseEditorNative implements BaseEditor {
     lineCount = newLineCount;
   }
 
-  private native long init(ParserFactory pf, LineSource lineSource);
-  private native void finalize(long iptr);
-  
-  public native void setRegionCompact(long iptr, boolean compact);
-  public native void setRegionMapper(long iptr, String cls, String name);
+  native long init(ParserFactory pf, LineSource lineSource);
+  native void finalize(long iptr);
 
-  public native void addRegionHandler(long iptr, RegionHandler rh, Region filter);
-  public native void removeRegionHandler(long iptr, RegionHandler rh);
+  native void setRegionCompact(long iptr, boolean compact);
+  native void setRegionMapper(long iptr, String cls, String name);
 
-  public native void setFileType(long iptr, String typename);
-  public native String chooseFileType(long iptr, String fname);
-  public native String getFileType(long iptr);
+  native void addRegionHandler(long iptr, RegionHandler rh, Region filter);
+  native void removeRegionHandler(long iptr, RegionHandler rh);
 
-  public native void setBackParse(long iptr, int backParse);
-  
-  public native RegionDefine getBackground(long iptr);
-  public native RegionDefine getVertCross(long iptr);
-  public native RegionDefine getHorzCross(long iptr);
-  
-  public native LineRegion[] getLineRegions(long iptr, int lno);
-  public native void validate(long iptr, int lno);
-  public native void idleJob(long iptr, int time);
+  native void setFileType(long iptr, FileType typename);
+  native FileType getFileType(long iptr);
+  native FileType chooseFileType(long iptr, String fname);
 
-  public native void modifyEvent(long iptr, int topLine);
-  public native void modifyLineEvent(long iptr, int line);
-  public native void visibleTextEvent(long iptr, int wStart, int wSize);
-  public native void lineCountEvent(long iptr, int newLineCount);
+  native void setBackParse(long iptr, int backParse);
+
+  native RegionDefine getBackground(long iptr);
+  native RegionDefine getVertCross(long iptr);
+  native RegionDefine getHorzCross(long iptr);
+
+  native LineRegion[] getLineRegions(long iptr, int lno);
+  native void validate(long iptr, int lno);
+  native void idleJob(long iptr, int time);
+
+  native void modifyEvent(long iptr, int topLine);
+  native void modifyLineEvent(long iptr, int line);
+  native void visibleTextEvent(long iptr, int wStart, int wSize);
+  native void lineCountEvent(long iptr, int newLineCount);
 
 };
 /* ***** BEGIN LICENSE BLOCK *****

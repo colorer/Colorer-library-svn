@@ -1,26 +1,53 @@
 package net.sf.colorer;
 
+import java.util.*;
 
+/**
+    Abstract template of HRCParser class implementation.
+    Defines basic operations of loading and accessing HRC information.
+*/
 public class HRCParser{
   long iptr;
   static int count = 0;
-  
-  HRCParser(long hp){
-    iptr = hp;
-    System.out.println("HRCParser count: " + (++count));
+
+  HRCParser(long _iptr){
+    iptr = _iptr;
   }
   protected void finalize() throws Throwable {
-    System.out.println("HRCParser count: " + (--count));
     finalize(iptr);
   }
+  native void finalize(long iptr);
 
+  /** Returns reference to region with specified qualified
+      name. If no such region, returns null.
+  */
   public Region getRegion(String qname){
     return getRegion(iptr, qname);
   }
-  
-  
   native Region getRegion(long iptr, String qname);
-  native void finalize(long iptr);
+
+
+  /** Enumerates all available language types.
+      Each element in enumeration contains reference to a
+      FileType object instance.
+  */
+  public Enumeration enumerateFileTypes(){
+    return new Enumeration(){
+      int idx = 0;
+      public boolean hasMoreElements() {
+        FileType cls = enumerateFileTypes(iptr, idx);
+        return (cls != null);
+      }
+      public Object nextElement() {
+        FileType cls = enumerateFileTypes(iptr, idx);
+        if (cls == null) return null;
+        idx++;
+        return cls;
+      }
+    };
+  }
+  native FileType enumerateFileTypes(long iptr, int idx);
+
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -11,7 +11,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
-public class ColorerDemo {  
+public class ColorerDemo {
     Shell shell;
     ToolBar toolBar;
     StyledText text;
@@ -20,19 +20,19 @@ public class ColorerDemo {
 //    Images images = new Images();
     Vector cachedStyles = new Vector();
     Font font = null;
-    
+
     boolean isBold = false;
-    
+
     ExtendedModifyListener extendedModifyListener;
     VerifyKeyListener verifyKeyListener;
     LineStyleListener lineStyleListener;
-    
+
     static ResourceBundle resources = ResourceBundle.getBundle("net.sf.colorer.swt.ColorerDemo");
 
 Menu createEditMenu() {
     Menu bar = shell.getMenuBar ();
     Menu menu = new Menu (bar);
-    
+
     MenuItem item = new MenuItem (menu, SWT.PUSH);
     item.setText (resources.getString("Cut_menuitem"));
     item.addSelectionListener(new SelectionAdapter() {
@@ -58,7 +58,7 @@ Menu createEditMenu() {
     });
 
     new MenuItem (menu, SWT.SEPARATOR);
-    
+
     item = new MenuItem (menu, SWT.PUSH);
     item.setText (resources.getString("Font_menuitem"));
     item.addSelectionListener(new SelectionAdapter() {
@@ -77,13 +77,13 @@ void createStyledText() {
     spec.verticalAlignment = GridData.FILL;
     spec.grabExcessVerticalSpace = true;
     text.setLayoutData(spec);
-    
+
     text.setFont(new Font(shell.getDisplay(), "Courier New", 10, SWT.NORMAL));
-    
+
     ParserFactory pf = new ParserFactory();
     textColorer = new TextColorer(pf, new ColorManager());
     textColorer.attach(text);
-    textColorer.setFileType("xml");
+    textColorer.chooseFileType("xml.xml");
     textColorer.setCross(true, true);
     textColorer.setRegionMapper("default", true);
 }
@@ -112,7 +112,7 @@ void createMenuBar () {
 
 void createToolBar() {
 /*  toolBar = new ToolBar(shell, SWT.NULL);
-    
+
     ToolItem item = new ToolItem(toolBar, SWT.CHECK);
     item.setImage(images.Bold);
     item.addSelectionListener(new SelectionAdapter() {
@@ -120,7 +120,7 @@ void createToolBar() {
             bold(((ToolItem)event.widget).getSelection());
         }
     });
-    
+
     item = new ToolItem(toolBar, SWT.SEPARATOR);
 
     item = new ToolItem(toolBar, SWT.PUSH);
@@ -144,7 +144,7 @@ void createToolBar() {
             fgColor(SWT.COLOR_BLUE);
         }
     });
-    
+
     item = new ToolItem(toolBar, SWT.SEPARATOR);
 
     item = new ToolItem(toolBar, SWT.PUSH);
@@ -162,10 +162,10 @@ void createToolBar() {
 }*/
 
 void setFont() {
-	    FontDialog fontDialog = new FontDialog(shell);
-	    fontDialog.setFontData((text.getFont()).getFontData()[0]);
-	    FontData fontData = fontDialog.open();
-	    if(fontData != null) {
+        FontDialog fontDialog = new FontDialog(shell);
+        fontDialog.setFontData((text.getFont()).getFontData()[0]);
+        FontData fontData = fontDialog.open();
+        if(fontData != null) {
         if(font != null)
             font.dispose();
         font = new Font(shell.getDisplay(), fontData);
@@ -175,7 +175,7 @@ void setFont() {
 
 void createShell (Display display) {
     shell = new Shell (display);
-    shell.setText (resources.getString("window_title"));    
+    shell.setText (resources.getString("window_title"));
     GridLayout layout = new GridLayout();
     layout.numColumns = 1;
     shell.setLayout(layout);

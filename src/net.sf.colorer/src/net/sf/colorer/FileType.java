@@ -4,35 +4,90 @@ package net.sf.colorer;
     @ingroup colorer
 */
 public class FileType{
+
+  long iptr;
+  String name;
+  String group;
+  String description;
+
+  FileType(long _iptr, final String _name, final String _group, final String _description){
+    name = _name;
+    group = _group;
+    description = _description;
+    iptr = _iptr;
+  };
+
   /** Public name of file type (HRC 'name' attribute)
       @return File type Name
   */
-  public native String getName();
+  public String getName(){
+    return name;
+  }
   /** Public group name of file type (HRC 'group' attribute)
       @return File type Group
   */
-  public native String getGroup();
+  public String getGroup(){
+    return group;
+  }
   /** Public description of file type (HRC 'description' attribute)
       @return File type Description
   */
-  public native String getDescription();
-  /** Returns the base scheme of this file type.
+  public String getDescription(){
+    return description;
+  }
+  /* Returns the base scheme of this file type.
       Basically, this is the scheme with same public name, as it's type.
       @return File type base scheme, to be used as root scheme of text parsing.
   */
-  public native Scheme getBaseScheme();
-  /** Returns parameter value of this file type.
+  public Scheme getBaseScheme(){
+    //throw new Exception("Not implemented");
+    return null;
+  }
+
+  /** Returns parameter's value of this file type.
       Parameters are stored in prototypes as
       <pre>
-      &lt;parameters>
-        &lt;param name="name" value="value"/>
-      &lt;/parameter>
+      \<parameters>
+        \<param name="name" value="value" description="..."/>
+      \</parameter>
       </pre>
-      @note Parameters could be used to store client-application
-            specific information about each type of file.
+      Parameters can be used to store application
+      specific information about each type of file.
+      Also parameters are accessible from the HRC definition
+      using <code>if/unless</code> attributes of scheme elements.
+      This allows portable customization of HRC loading.
       @param name Parameter's name
+      @return Value (changed or default) of this parameter
   */
-  public native String getParameter(String name);
+  public String getParamValue(String name){
+    return getParamValue(iptr, name);
+  }
+  native String getParamValue(long iptr, String name);
+
+  /** Returns parameter's default value of this file type.
+      Default values are the values, explicitly pointed with
+      \c value attribute.
+      @param name Parameter's name
+      @return Default value of this parameter
+  */
+  public String getParamDefaultValue(String name){
+    return getParamDefaultValue(iptr, name);
+  }
+  native String getParamDefaultValue(long iptr, String name);
+
+  /** Changes value of the parameter with specified name.
+      Note, that changed parameter values are not stored in HRC
+      base - they remains active only during this HRC session.
+      Application should use its own mechanism to save these
+      values between sessions (if needed).
+      @param name Parameter's name
+      @param value New value of this parameter.
+  */
+  public void setParamValue(String name, String value){
+    setParamValue(iptr, name, value);
+  }
+  native String setParamValue(long iptr, String name, String value);
+
 };
 
 /* ***** BEGIN LICENSE BLOCK *****
