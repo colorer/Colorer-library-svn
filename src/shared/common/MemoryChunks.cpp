@@ -34,8 +34,10 @@ void chunk_free(void *ptr){
   if (ptr == null) return;
   allocCount--;
   if (allocCount == 0){
-    for(int idx = 0; idx < chunks.size(); idx++)
+    for(int idx = 0; idx < chunks.size(); idx++){
       delete[] chunks.elementAt(idx);
+    };
+    chunks.setSize(0);
   };
 //  printf("cf:%d, ", allocCount);
 };
