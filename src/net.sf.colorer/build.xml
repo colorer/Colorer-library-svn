@@ -41,7 +41,7 @@
     <copy todir="${destination.temp.folder}/${full.name}">
       <fileset dir="." includes="plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties"/><!-- toc.xml -->
       <fileset dir="." includes="icons/**/*.gif"/>
-      <fileset dir="${plugin.destination}" includes='ColorerDemo.bat,LINUX,MACOS,README,todo,whatsnew,ColorerDemo.sh'/>
+      <fileset dir="${plugin.destination}" includes='ColorerDemo.bat,LINUX,MACOS,README,TODO,WHATSNEW,ColorerDemo.sh'/>
     </copy>
   </target>
 
