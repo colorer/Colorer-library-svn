@@ -222,9 +222,9 @@ ParserFactory::~ParserFactory(){
 
 const char *ParserFactory::getVersion(){
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "01.09.2003"
+#define __TIMESTAMP__ "30.01.2004"
 #endif
-  return "Colorer-take5 Library beta2 "__TIMESTAMP__;
+  return "Colorer-take5 Library beta3 "__TIMESTAMP__;
 };
 
 
@@ -253,6 +253,7 @@ HRCParser* ParserFactory::getHRCParser(){
         path = InputSource::getAbsolutePath(catalogPath, relPath);
         const String *path2del = path;
         if (path->startsWith(DString("file://"))) path = new SString(path, 7, -1);
+        if (path->startsWith(DString("file:/"))) path = new SString(path, 6, -1);
         if (path->startsWith(DString("file:"))) path = new SString(path, 5, -1);
         if (path != path2del) delete path2del;
       }else
@@ -260,7 +261,8 @@ HRCParser* ParserFactory::getHRCParser(){
 
       struct stat st;
       int ret = stat(path->getChars(), &st);
-      if (ret != -1 && st.st_mode & S_IFDIR){
+
+      if (ret != -1 && (st.st_mode & S_IFDIR)){
 #ifdef _WIN32
         WIN32_FIND_DATA ffd;
         HANDLE dir = FindFirstFile((StringBuffer(path)+"\\*.*").getChars(), &ffd);
