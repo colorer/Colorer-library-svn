@@ -8,6 +8,9 @@
   </description>
 
 
+  <property file='build.properties'/>
+
+
   <property name='build-dir' value='distr'/>
 
   <property name='distr-version' value='.beta2'/>
@@ -27,8 +30,6 @@
   <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
   <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
   <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
-
-  <property file='build.properties'/>
 
 
 
