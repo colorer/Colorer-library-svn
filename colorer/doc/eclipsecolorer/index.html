@@ -26,14 +26,22 @@ Eclipse plugin with sources, packed Colorer's HRC database and
 two versions of native library component - for Windows and Linux platforms.
 It contains sources both for native part and top-level Colorer Java API.
 Note, that it doesn't contains sources of the Colorer Library. If you want
-to rebuild native part of the plugin, download latest Colorer Library
+to rebuild native part of the plugin, you have to download latest Colorer Library
 package.
 </p>
 <p>Unpack content of plugin's package into <code>%ECLIPSEHOME%/plugins/</code>
 folder and restart Eclipse. Make sure you've extracted
 <code>net.sf.colorer/colorer/</code> folder. It contains HRC database,
 which is used by the plugin.
-If you are already have Colorer-take5 Library, installed in your system
+</p>
+<p>You can choose another way to install colorer - using build-in
+Eclipse Update Manager. Create new location
+<strong>http://colorer.sf.net/eclipsecolorer/</strong> using update manager,
+and Eclipse will allow you to automatically install EclipseColorer.
+Later you can use this way to simply and efficiently update colorer and
+check for its new versions.
+</p>
+<p>If you are already have Colorer-take5 Library, installed in your system
 (f.e. from full library package version), you can delete <code>colorer</code>
 directory and specify path to your <code>catalog.xml</code> file with one of the
 <a href='../api/classParserFactory.html'>standard locations</a>.
@@ -47,7 +55,7 @@ directory and specify path to your <code>catalog.xml</code> file with one of the
  <li>Shortcuts for pairs matching.</li>
  <li>Different color schemes.</li>
  <li>Choosing currently used file type in editor (list of all available types).</li>
- <li>Reloading of library.</li>
+ <li>Dynamic library reloading.</li>
  <li>Powerful and flexible outliner for all common languages.</li>
  <li>Errors list is included into the outliner view.</li>
  <li>Colored sources generation into HTML files (Available in the navigator's context menu).</li>

@@ -128,6 +128,7 @@ element, which contains all other HRC definitions.
 Each HRC language object is defined using XML elements and attributes.
 You can find definition of the HRC XML Syntax in <xref linkend='hrcxsd'/>.
 For instance, mostly all HRC definitions start with the next syntax:
+<example><title>Common HRC file</title>
 <programlisting><![CDATA[
 <?xml version="1.0">
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -146,7 +147,7 @@ For instance, mostly all HRC definitions start with the next syntax:
 
 </hrc>
 ]]>
-</programlisting>
+</programlisting></example>
 
 </para>
 
@@ -176,6 +177,7 @@ and in inter-language linkage process.
 Prototypes are declared with <literal>&lt;prototype&gt;</literal> elements.
 For instance:
 
+<example><title>Prototype definition</title>
 <programlisting><![CDATA[
   <prototype name="cpp" group="main" description="C++">
     <location link="base/cpp.hrc"/>
@@ -185,7 +187,7 @@ For instance:
     <firstline>/\#define|\#if/</firstline>
   </prototype>
 ]]>
-</programlisting>
+</programlisting></example>
 
 declares "C++" language and it properties. These are language's group,
 description, location of HRC file with language's syntax declaration;
@@ -241,6 +243,7 @@ to any file type or language.
 As for the rest, all its behavior is like prototype's one.
 For example:
 
+<example><title>Package definition</title>
 <programlisting><![CDATA[
   <package name="def" group="packages" description="core definitions">
     <location link="default.hrc"/>
@@ -249,7 +252,7 @@ For example:
     <location link="lib/regexp.hrc"/>
   </package>
 ]]>
-</programlisting>
+</programlisting></example>
 </para>
 
 </section>
@@ -356,7 +359,8 @@ required to be declared in each type. Only types, declared as
 as top level types.
 Each base scheme must have local (unqualified) name equal to its type name.
 Base scheme in each type is used as an entry point for parse process.
-Sample type definition:
+
+<example><title>Sample type definition</title>
 <programlisting><![CDATA[
   <type name="somelang">
     <region name="Keyword" description="This language's keyword"/>
@@ -368,8 +372,20 @@ Sample type definition:
       <regexp match="/other(keyword)?/i" region="Keyword"/>
     </scheme>
   </type>
-]]></programlisting>
+]]></programlisting></example>
 
+</para>
+<para>
+You can customize scheme loading and overall HRC structure using
+if/unless attributes of the scheme element. If used, they have to
+reference to a common parameter declaration of this scheme's type.
+
+These parameters values could be changed within Colorer's API, this
+allows to customize HRC loading and suggest different language
+profiles to user's choice.
+</para>
+
+<para>
 The next sections will describe different types of syntax elements,
 available in the HRC language.
 </para>

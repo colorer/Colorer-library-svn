@@ -65,12 +65,12 @@
 <!ELEMENT documentation ANY>
 
 
-<!ELEMENT hrc (annotation?, prototype*, type*)>
+<!ELEMENT hrc (annotation?, (prototype|package|type)*)>
 <!ATTLIST hrc
   version NMTOKEN #REQUIRED>
 
 
-<!ELEMENT prototype (annotation?, location?, filename?, switch*)>
+<!ELEMENT prototype (annotation?, location?, filename*, firstline*, parameters)>
 <!ATTLIST prototype
   name            NMTOKEN #REQUIRED
   group           CDATA   #IMPLIED
@@ -82,18 +82,32 @@
   link CDATA #REQUIRED>
 
 <!ELEMENT filename (#PCDATA)>
+<!ATTLIST filename
+  weight CDATA "2">
 
-<!ELEMENT switch (#PCDATA)>
-<!ATTLIST switch
-  type NMTOKEN #REQUIRED>
+<!ELEMENT firstline (#PCDATA)>
+<!ATTLIST firstline
+  weight CDATA "1">
 
+<!ELEMENT parameters (param+)>
+<!ELEMENT param EMPTY>
+<!ATTLIST param
+  name  CDATA #REQUIRED
+  value CDATA #REQUIRED
+  description CDATA #IMPLIED>
+
+
+<!ELEMENT package (annotation?, location?)>
+<!ATTLIST package
+  name            NMTOKEN #REQUIRED
+  description     CDATA   #REQUIRED
+  targetNamespace CDATA   #IMPLIED>
 
 
 
 <!ELEMENT type (annotation | import | define | entity | scheme)* >
 <!ATTLIST type
-  name NMTOKEN #REQUIRED
-  access (public | private) 'private'>
+  name NMTOKEN #REQUIRED>
 
 
 <!ELEMENT define EMPTY>
@@ -113,8 +127,9 @@
 
 <!ELEMENT scheme (annotation?, (inherit | regexp | block | keywords)*)>
 <!ATTLIST scheme
-  name NMTOKEN #REQUIRED
-  access (public | private) 'private'>
+  name   NMTOKEN #REQUIRED
+  if     NMTOKEN #IMPLIED
+  unless NMTOKEN #IMPLIED>
 
 
 <!ELEMENT inherit (virtual*)>
