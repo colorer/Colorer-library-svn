@@ -3,7 +3,7 @@
    id="net.sf.colorer"
    name="Eclipse Colorer Library Plug-in"
    version="0.6.0"
-   provider-name="Cail Lomecb"
+   provider-name="Igor Russkih"
    class="net.sf.colorer.eclipse.EclipsecolorerPlugin">
 
    <runtime>
