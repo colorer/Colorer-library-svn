@@ -52,7 +52,8 @@
     <region name="UnicodeChar" parent="def:Character"/>
     <region name="UnicodeCharContent" parent="def:CharacterContent"/>
 
-    <entity name='worddiv' value="(?{}$|[\s\,\}\{\x22\x27\:\;\(\)])"/>
+    <entity name='worddiv-class' value="[\s\,\}\{\x22\x27\:\;\(\)]"/>
+    <entity name='worddiv' value="(?{}$|%worddiv-class;)"/>
 
     <scheme name="Colors">
       <inherit scheme="NumericColors"/>
@@ -62,7 +63,7 @@
       <inherit scheme="CustomColors"/>
     </scheme>
     <scheme name="w3cColors">
-      <keywords region="w3cColors" ignorecase="yes" worddiv='%worddiv;'>
+      <keywords region="w3cColors" ignorecase="yes" worddiv='%worddiv-class;'>
         <word name='aqua'/>
         <word name='black'/>
         <word name='blue'/>
@@ -89,7 +90,7 @@
     </scheme>
 
     <scheme name="SystemColors">
-      <keywords region="extColors" ignorecase="yes" worddiv='%worddiv;'>
+      <keywords region="extColors" ignorecase="yes" worddiv='%worddiv-class;'>
         <word name="ActiveBorder"/>
         <word name="ActiveCaption"/>
         <word name="AppWorkspace"/>
@@ -123,7 +124,7 @@
 
 
     <scheme name="PropertyNames">
-      <keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv;'>
+      <keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
         <word name="ACCELERATOR"/>
         <word name="azimuth"/>
         <word name="background-attachment"/>
@@ -473,14 +474,14 @@
       <inherit scheme='NumericValue'/>      
       <inherit scheme='PropertyFunc'/>
       <inherit scheme='Colors'/>
-      <keywords ignorecase="yes" region="ImportantValue" worddiv='%worddiv;'>
+      <keywords ignorecase="yes" region="ImportantValue" worddiv='%worddiv-class;'>
          <word name="!important"/>
       </keywords>
       <inherit scheme='PropertyValue'/>
     </scheme>
 
     <scheme name="PropertyValue">
-      <keywords region="PropertyValue" ignorecase="yes" worddiv='%worddiv;'>
+      <keywords region="PropertyValue" ignorecase="yes" worddiv='%worddiv-class;'>
         <word name="left-side"/>
         <word name="far-left"/>
         <word name="left"/>
@@ -869,7 +870,7 @@
        This scheme add (or overload if need) new functions
       </documentation>
      </annotation>    
-     <keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv;'>
+     <keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
       <word name="unicode-range"/>
      </keywords>
      <inherit scheme="PropertyNames"/>

@@ -3,6 +3,8 @@ $Date$
 
   New:
     - SVG 1.0 (Eugene Efremov)
+    - Common packages regrouping
+    - ColdFusion support
 
   Fixes:
     - Lisp fixes, outline (Mykolas Juraitis)

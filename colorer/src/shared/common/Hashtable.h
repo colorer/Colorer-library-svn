@@ -7,7 +7,6 @@
     Hashtable template class, stores nullable objects.
     Assumes, that stored objects can be nullable (so, null object
     is returned, when no match is found).
-    @todo Normal enumerator.
     @ingroup common
 */
 template <class T>
@@ -37,7 +36,7 @@ public:
   };
   /** Returns the next value object with current enumeration procedure.
       If hashtable state is changed, and next() call occurs, exception
-      is thrown.
+      is thrown. If end of hash is reached, exception is thrown.
   */
   T next() const{
     T *retval = next_int();
@@ -77,7 +76,7 @@ public:
   };
   /** Returns the next value object with current enumeration procedure.
       If hashtable state is changed, and next() call occurs, exception
-      is thrown.
+      is thrown. If end of hash is reached, exception is thrown.
   */
   T *next() const{
     return next_int();

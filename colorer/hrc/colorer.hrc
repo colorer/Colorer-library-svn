@@ -140,6 +140,10 @@
     <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
     <firstline weight='2'>/language\s*=.*perlscript/i</firstline>
   </prototype>
+  <prototype name="coldfusion" group="inet" description="ColdFusion">
+    <location link="inet/coldfusion.hrc"/>
+    <filename>/\.(cfm|cfc)$/i</filename>
+  </prototype>
   <prototype name="jScript" group="inet" description="JavaScript">
     <location link="inet/jscript.hrc"/>
     <filename>/\.(js|mocha)$/i</filename>
@@ -158,9 +162,6 @@
     <location link="xml/xml.hrc"/>
     <filename>/\.(xml|ent)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
-    <parameters>
-      <param name="show-cross" value="both"/>
-    </parameters>
   </prototype>
   <prototype name="dtd" group="xml" description="dtd">
     <location link="xml/dtd.hrc"/>
@@ -249,9 +250,6 @@
   <prototype name="hrc" group="scripts" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
     <location link="scripts/hrc.hrc"/>
     <filename>/\.hrc$/i</filename>
-    <parameters>
-      <param name="show-cross" value="both"/>
-    </parameters>
   </prototype>
   <prototype name="hrd" group="scripts" description="Colorer HRD" targetNamespace="http://colorer.sf.net/2003/hrd">
     <location link="scripts/hrd.hrc"/>
@@ -487,7 +485,7 @@
 
   <!--  packages  -->
 
-  <package name="def" group="other" description="core definitions">
+  <package name="def" group="packages" description="core definitions">
     <location link="default.hrc"/>
   </package>
   <package name="ole" group="packages" description="OLE Commons">

@@ -35,4 +35,4 @@ $(TARGET): *.cpp *.h $(objs)
 	$(RM) net_sf_colorer.def
 
 clean:
-	$(RM) $(objs) colorer.map
+	$(RM) $(objs) $(TARGET) colorer.map

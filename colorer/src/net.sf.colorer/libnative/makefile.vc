@@ -35,4 +35,4 @@ $(TARGET): $(objs)
 	$(LINK) $(LIBFLAGS)
 
 clean:
-	$(RM) $(objs)
+	$(RM) $(objs) $(TARGET) net_sf_colorer.exp net_sf_colorer.lib
