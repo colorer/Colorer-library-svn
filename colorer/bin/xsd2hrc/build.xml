@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project default="main" basedir=".">
+<project default="all" basedir=".">
 
   <xmlcatalog id="DTDs">
     <dtd publicid="-//OASIS//DTD DocBook XML V4.1.2//EN"
@@ -18,10 +18,13 @@
   
   <property name='hrc-path' value='../../hrc'/>
   <property name='hrc-path-auto' value='${hrc-path}/auto/types'/>
+
+  <property name='custom' value='schemas-custom'/>
   
-  <target name="all">
-    <splash/>
-    <echo>Choose build target</echo>
+
+  
+  <target name="all" description='Stub target'>
+    <echo>Choose requeried build target</echo>
   </target>
 
 
@@ -31,7 +34,7 @@
       <param name='hrctype' expression='ant'/>
       <param name='allow-any-attr' expression='yes'/>
       <param name='allow-unknown-elements' expression='yes'/>
-      <param name='custom-defines' expression='custom.ant.xml'/>
+      <param name='custom-defines' expression='${custom}/custom.ant.xml'/>
     </xslt>
   </target>
 
