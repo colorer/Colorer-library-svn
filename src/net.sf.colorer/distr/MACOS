@@ -1,30 +1,34 @@
 
   You can compile Colorer Library to use it on MacOSX system.
 
-  1. You need to download C++ sources of the Colorer Library from
-     http://sourceforge.net/project/showfiles.php?group_id=34855
-     (Colorer-take5.beta3 package).
+  You need to download C++ sources of the Colorer Library from
+  http://sourceforge.net/project/showfiles.php?group_id=34855
+  (Colorer-take5.beta3 package).
 
-  Next, you need:
+  Next, you have two ways to build Colorer for MAC OS:
 
-  2. Ant (http://ant.apache.org/)
-  3. Xcode
-  4. JDK
-     a) jdk 1.4.2: http://connect.apple.com/, Downloads -> Java, Java Developper package
-     b) jdk 1.4.1: MacOSX SDK from Xcode Tools CD.
+  I. Just build native part of the library:
+     
+     1. Go into 'colorer/src/net.sf.colorer/libnative' folder.
+     2. Run
+        make -f makefile.macos
+     3. place libnet.sf.colorer.so into 'os/macosx/ppc' folder
+        of the existing EclipseColorer distribution package.
 
-  5. Check your makefile.macos:
-     Make sure your JAVA_INCLUDE path is correct.
 
-  6. You can build full Eclipse plugin distribution with
-        ant -Dplatform=macos eclipseplugin
-     command.
+  II. Build plugin package from scratch:
+
+     1. Ant (http://ant.apache.org/)
+     2. Xcode
+     3. JDK
+        a) jdk 1.4.2: http://connect.apple.com/, Downloads -> Java, Java Developper package
+        b) jdk 1.4.1: MacOSX SDK from Xcode Tools CD.
+
+     4. Check your src/net.sf.colorer/libnative/makefile.macos:
+        Make sure your JAVA_INCLUDE path is correct.
+
+     5. You can build full Eclipse plugin distribution with
+           ant -Dplatform=macos eclipseplugin
+        command.
 
   Please read INSTALL file for more information.
-
-  If you have no ANT or full JDK installed, you can compile only
-  plugin's native part with
-    make -f makefile.macos
-  in the 'colorer/src/net.sf.colorer/libnative' folder and
-  place it into 'os/macosx/ppc' folder of the existing EclipseColorer
-  distribution package.
