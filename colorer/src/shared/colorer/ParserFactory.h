@@ -16,7 +16,7 @@
     with information, loaded from specified sources.
 
     If no path were passed to it's constructor,
-    it uses next search order of the 'catalog.xml' file:
+    it uses the next search order to find 'catalog.xml' file:
 
     - win32 systems:
       - image_start_dir, image_start_dir/../, image_start_dir/../../
@@ -34,7 +34,11 @@
       - \%HOMEPATH%/.colorer5catalog
       - /usr/shared/colorer/catalog.xml
 
-    @ingroup colorer
+  @note
+    - \%NAME% - Environment variable of the current process.
+    - image_start_dir - Directory, where current image was started.
+
+  @ingroup colorer
 */
 class ParserFactory{
 public:

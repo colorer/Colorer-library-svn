@@ -164,33 +164,6 @@
   @endcode
 */
 
-/**
-  @page catalogloc catalog.xml Locations
-  Colorer Library uses a set of standard paths to search default
-  @c catalog.xml file.
-
-  @section global All systems
-      - \%COLORER5CATALOG%
-      - \%HOME%/.colorer5catalog
-      - \%HOMEPATH%/.colorer5catalog
-
-  @section w32 Windows systems
-      - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x).
-        <br> Commonly, this is your Windows or WinNT directiry.
-      - image_start_dir
-      - image_start_dir/../
-      - image_start_dir/../../
-
-  @section unix Unix Systems
-      - ./catalog.xml
-      - ../catalog.xml
-      - ../../catalog.xml
-      - /usr/shared/colorer/catalog.xml
-
-  @note
-    - \%NAME% - Environment variable of the current process.
-    - image_start_dir - Directory, where current image was started.
-*/
 
 /**
   @page acknowledgements Acknowledgements
