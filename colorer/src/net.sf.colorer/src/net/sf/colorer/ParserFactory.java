@@ -17,6 +17,9 @@ public class ParserFactory {
 
     public ParserFactory(String catalogPath) {
         iptr = init(catalogPath);
+        if (iptr == 0) {
+            disposed = true;
+        }
         Logger.trace("ParserFactory", "count: " + (++count) + " iptr=" + iptr);
     };
 
@@ -37,6 +40,8 @@ public class ParserFactory {
     
     public void dispose() {
         checkActive();
+        // Explicit HRC parser dispose - free native memory!
+        getHRCParser().dispose();
         disposed = true;
         finalize(iptr);
         Logger.trace("ParserFactory", "(fin) iptr=" + iptr);

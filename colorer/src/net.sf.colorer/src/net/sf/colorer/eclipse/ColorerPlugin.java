@@ -3,6 +3,7 @@ package net.sf.colorer.eclipse;
 import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
@@ -27,6 +28,7 @@ public class ColorerPlugin extends AbstractUIPlugin {
     private String catalogPath;
     private ParserFactory parserFactory;
     private ColorManager colorManager = new ColorManager();
+    private Vector reloadListeners = new Vector();
 
     /**
      * The constructor.
@@ -58,7 +60,6 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault(PreferencePage.PAIRS_MATCH, "PAIRS_OUTLINE");
     
         store.setDefault(PreferencePage.HRD_SET, "default");
-        store.setDefault(PreferencePage.RELOAD_HRC, "xx");
     
         store.setDefault("Outline.Hierarchy", true);
         store.setDefault("Outline.Sort", false);
@@ -126,10 +127,33 @@ public class ColorerPlugin extends AbstractUIPlugin {
         }
         parserFactory = null;
         parserFactory = getParserFactory();
-        getPreferenceStore().firePropertyChangeEvent(PreferencePage.RELOAD_HRC,
-                "", "");
+        notifyReloadListeners();
     };
 
+    void notifyReloadListeners() {
+        for(int idx = 0; idx < reloadListeners.size(); idx++) {
+            ((IColorerReloadListener)reloadListeners.elementAt(idx)).notifyReload();
+        }
+            
+    }
+    
+    /**
+     * Adds HRC database reload action listener
+     * */
+    public void addReloadListener(IColorerReloadListener listener) {
+        if (!reloadListeners.contains(listener)) {
+            reloadListeners.add(listener);
+        }
+    }
+    
+    /**
+     * Adds HRC database reload action listener
+     * */
+    public void removeReloadListener(IColorerReloadListener listener) {
+        reloadListeners.remove(listener);
+    }
+
+    
     public ColorManager getColorManager() {
         return colorManager;
     }

@@ -16,6 +16,7 @@ import net.sf.colorer.FileType;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.Region;
 import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
@@ -33,31 +34,33 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.*;
 
-public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
+public class ColorerEditor extends TextEditor implements IColorerReloadListener, IPropertyChangeListener{
 
     ISourceViewer sourceViewer;
-  IPreferenceStore prefStore;
-  TextColorer textColorer;
-  StyledText text;
-  Font textFont;
+    IPreferenceStore prefStore;
+    TextColorer textColorer;
+    StyledText text;
+    Font textFont;
 
-  WorkbenchOutliner errorsOutline;
-  WorkbenchOutliner structureOutline;
-  ColorerContentOutlinePage contentOutliner;
+    WorkbenchOutliner errorsOutline;
+    WorkbenchOutliner structureOutline;
+    ColorerContentOutlinePage contentOutliner;
 
-  class TabReplacer implements VerifyListener{
-    public void verifyText(VerifyEvent e){
-      if (e.text.equals("\t")){
-        StringBuffer tab = new StringBuffer();
-        for(int idx = 0; idx < text.getTabs(); idx++) tab.append(' ');
-        e.text = tab.toString();
-      }
+    class TabReplacer implements VerifyListener {
+        public void verifyText(VerifyEvent e) {
+            if (e.text.equals("\t")) {
+                StringBuffer tab = new StringBuffer();
+                for (int idx = 0; idx < text.getTabs(); idx++)
+                    tab.append(' ');
+                e.text = tab.toString();
+            }
+        }
     }
-  }
-  TabReplacer tabReplacer = new TabReplacer();
+    TabReplacer tabReplacer = new TabReplacer();
 
     public ColorerEditor() {
       super();
+      ColorerPlugin.getDefault().addReloadListener(this);
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
       prefStore.addPropertyChangeListener(this);
       setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
@@ -136,13 +139,13 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
     parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
   }
+  
+    public void notifyReload() {
+        relinkColorer();
+    }
 
   public void propertyChange(PropertyChangeEvent e){
     if (textColorer == null) return;
-    if (e != null && e.getProperty().equals(PreferencePage.RELOAD_HRC)){
-      relinkColorer();
-      return;
-    }
     if (e == null || e.getProperty().equals(PreferencePage.USE_BACK) || e.getProperty().equals(PreferencePage.HRD_SET))
       textColorer.setRegionMapper(prefStore.getString(PreferencePage.HRD_SET), prefStore.getBoolean(PreferencePage.USE_BACK));
     if (e == null || e.getProperty().equals(PreferencePage.FULL_BACK))
@@ -203,10 +206,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
   }
 
     public void dispose() {
-    prefStore.removePropertyChangeListener(this);
-    if (textFont != null) textFont.dispose();
-        super.dispose();
-    }
+        prefStore.removePropertyChangeListener(this);
+        ColorerPlugin.getDefault().removeReloadListener(this);
+        if (textFont != null) textFont.dispose();
+            super.dispose();
+        }
 
 }
 /* ***** BEGIN LICENSE BLOCK *****
