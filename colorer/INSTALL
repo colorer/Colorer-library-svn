@@ -43,7 +43,7 @@
        file directly, or create 'build.user.properties' file with
        some properties, redefined there.
 
-    c. First of all, you have to choose your platform for compilation of
+    c. First of all, you'll have to choose your platform for compilation of
        the native C++ libraries. You can do this with 'platform' property.
 
     d. Next, you need to fix all the paths, placed in this file. In particular
@@ -59,13 +59,13 @@
           d.4. Apache FOP processor.
                http://xml.apache.org/fop/
        If some of these resources are unavailable, you can tell colorer
-       to ignore their tasks, with disabling 'fail-on-badpaths'
-       property. In this case appropriate build tasks would be ignored.
+       to ignore appropriate tasks, setting 'fail-on-bad-paths' into 'false'.
+       In this case some of the build tasks would be ignored.
        
     e. When building Eclipse plugin, you need to specify
-       'eclipse.dir' and eclipse.ws properties, pointing to you eclipse
-       installation directory and you eclipse windowing system.
-       Also, if building plugin's native part, you must have
+       'eclipse.dir' and 'eclipse.ws' properties, pointing to your eclipse
+       installation directory and your Eclipse windowing system.
+       Also, when building plugin's native part, you must have
        JAVA_HOME environment variable pointing to your JDK installation.
 
 
