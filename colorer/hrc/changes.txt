@@ -1,6 +1,6 @@
 
 
-$Version: changes.txt,v 1.2 2003/05/15 07:16:23 Administrator Exp $
+$Version:$
 
   New:
     - ActionScript by Ralf Bokelberg
