@@ -26,7 +26,7 @@ which allows you to use common features of the library. These are include:</p>
 <p>To list all available types of syntax rules, run <code>colorer -l</code>
 command. This will print into standard output all supported computer languages
 and file types.
-If you want to test all colorer's database and load all types, run
+If you want to test full colorer's database and load all types, run
 <code>colorer -ll</code>. This will take little more time to load and test
 HRC database. All errors, warnings and other messages you'll found in log file,
 specified in <code>catalog.xml</code> file.
@@ -50,6 +50,10 @@ to read and write data. So, running
 will cause to generate highlighted html of <code>yoursource.cpp</code> file with
 name <code>NAME.HTML</code>, using UTF-8 as input encoding and UTF-16BE as
 encoding of result file.
+</p>
+<p>You can specify special "doclinks" file with external help references to any tokens
+in your generated HTML. Use <code>-ls"filename"</code> to activate this feature.
+You can find sample doclink files in <code>colorer/bin/doclinks</code> directory.
 </p>
 
 <h2>Viewing file in console window</h2>
