@@ -20,7 +20,7 @@ public class HRCParser {
     HRCParser(long _iptr) {
         iptr = _iptr;
         counter++;
-        Logger.trace("HRCParser", "init: "+counter);
+        Logger.trace("HRCParser", "init: "+counter+" iptr:"+iptr);
     }
 
     void checkActive() {
@@ -58,6 +58,15 @@ public class HRCParser {
     }
 
     native Region getRegion(long iptr, String qname);
+
+    /**
+     * Returns reference to region with specified internal index.
+     * If no such region, returns null.
+     */
+    public Region getRegion(int index) {
+        return getRegionByIndex(iptr, index);
+    }
+    native Region getRegionByIndex(long iptr, int index);
 
     /**
      * Returns tree of groups and types

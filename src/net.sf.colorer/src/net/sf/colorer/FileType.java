@@ -52,9 +52,10 @@ public class FileType{
      * used as root scheme of text parsing.
      */
     public Scheme getBaseScheme() {
-        //throw new Exception("Not implemented");
-        return null;
+        return getBaseScheme(iptr);
     }
+    
+    private native Scheme getBaseScheme(long iptr);
 
     /**
      * Returns all available parameters for this file type. Each element in

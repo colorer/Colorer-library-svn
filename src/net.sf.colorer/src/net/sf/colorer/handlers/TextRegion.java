@@ -1,14 +1,18 @@
 package net.sf.colorer.handlers;
 
-public class TextRegion extends RegionDefine{
-  /** Textual mapping */
-  public String stext;
-  /** Textual mapping */
-  public String etext;
-  /** Textual mapping */
-  public String sback;
-  /** Textual mapping */
-  public String eback;
+public class TextRegion extends RegionDefine {
+
+    /** Textual mapping */
+    public String stext;
+    
+    /** Textual mapping */
+    public String etext;
+    
+    /** Textual mapping */
+    public String sback;
+    
+    /** Textual mapping */
+    public String eback;
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

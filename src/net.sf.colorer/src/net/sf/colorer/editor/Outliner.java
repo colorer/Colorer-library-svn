@@ -6,83 +6,106 @@ import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
 import net.sf.colorer.Scheme;
 
+/**
+ * Basic outliner class, used to capture parser output and
+ * filter out only required structure elements.
+ *
+ */
 public class Outliner implements RegionHandler{
+    protected Vector outline = new Vector();
+    Region searchRegion = null;
+    int curLevel = 0;
+    boolean lineIsEmpty = true;
 
-protected Vector outline = new Vector();
-Region searchRegion = null;
-int curLevel = 0;
-boolean lineIsEmpty = true;
+    public Outliner(Region searchRegion) {
+        this.searchRegion = searchRegion;
+    };
 
-public Outliner(Region searchRegion){
-  this.searchRegion = searchRegion;
-};
+    public OutlineItem getItem(int idx) {
+        return (OutlineItem) outline.elementAt(idx);
+    };
 
-public OutlineItem getItem(int idx){
-  return (OutlineItem)outline.elementAt(idx);
-};
+    public int itemCount() {
+        return outline.size();
+    };
 
-public int itemCount(){
-  return outline.size();
-};
-public Region getFilter(){
-  return searchRegion;
-}
-
-static int manageTree(Vector treeStack, int newLevel){
-  while(treeStack.size() > 0 && newLevel < ((Integer)treeStack.lastElement()).intValue())
-    treeStack.removeElementAt(treeStack.size()-1);
-  if (treeStack.size() == 0 || newLevel > ((Integer)treeStack.lastElement()).intValue()){
-    treeStack.addElement(new Integer(newLevel));
-    return treeStack.size()-1;
-  };
-  if (newLevel == ((Integer)treeStack.lastElement()).intValue()) return treeStack.size()-1;
-  return 0;
-};
-
-
-public boolean isOutlined(Region region){
-  return region.hasParent(searchRegion);
-};
-public OutlineItem createItem(int lno, int sx, int curLevel, String itemLabel, Region region){
-  return new OutlineItem(lno, sx, curLevel, itemLabel, region);
-};
-
-public void startParsing(int lno){
-  int new_size;
-  for(new_size = outline.size()-1; new_size >= 0; new_size--){
-    if (((OutlineItem)outline.elementAt(new_size)).lno < lno) break;
-  };
-  outline.setSize(new_size+1);
-  curLevel = 0;
-};
-public void endParsing(int lno){
-  curLevel = 0;
-};
-public void clearLine(int lno, String line){
-  lineIsEmpty = true;
-};
-public void addRegion(int lno, String line, int sx, int ex, Region region){
-  if (!isOutlined(region)) return;
-  String itemLabel = null;
-  if (line != null) itemLabel = line.substring(sx, ex);
-
-  if (lineIsEmpty){
-    outline.addElement(createItem(lno, sx, curLevel, itemLabel, region));
-  }else{
-    OutlineItem thisItem = (OutlineItem)outline.lastElement();
-    if (itemLabel != null && thisItem.token != null && thisItem.lno == lno){
-	  if (itemLabel.length() > 1) thisItem.token.append(" ");
-      thisItem.token.append(itemLabel);
+    public Region getFilter() {
+        return searchRegion;
     }
-  };
-  lineIsEmpty = false;
-};
-public void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme){
-  curLevel++;
-};
-public void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme){
-  curLevel--;
-};
+
+    static int manageTree(Vector treeStack, int newLevel) {
+        while (treeStack.size() > 0 && newLevel < ((Integer) treeStack.lastElement()).intValue())
+            treeStack.removeElementAt(treeStack.size() - 1);
+        if (treeStack.size() == 0 || newLevel > ((Integer) treeStack.lastElement()).intValue()) {
+            treeStack.addElement(new Integer(newLevel));
+            return treeStack.size() - 1;
+        };
+        if (newLevel == ((Integer) treeStack.lastElement()).intValue())
+            return treeStack.size() - 1;
+        return 0;
+    }
+
+    public boolean isOutlined(Region region) {
+        return region.hasParent(searchRegion);
+    }
+    
+    /**
+     * Cleans out current outline elements.
+     */
+    public void clear(){
+        outline.setSize(0);
+    }
+
+    public OutlineItem createItem(int lno, int sx, int curLevel, String itemLabel, Region region) {
+        return new OutlineItem(lno, sx, curLevel, itemLabel, region);
+    };
+
+    public void startParsing(int lno) {
+        int new_size;
+        for (new_size = outline.size() - 1; new_size >= 0; new_size--) {
+            if (((OutlineItem) outline.elementAt(new_size)).lno < lno)
+                break;
+        };
+        outline.setSize(new_size + 1);
+        curLevel = 0;
+    };
+
+    public void endParsing(int lno) {
+        curLevel = 0;
+    };
+
+    public void clearLine(int lno, String line) {
+        lineIsEmpty = true;
+    };
+
+    public void addRegion(int lno, String line, int sx, int ex, Region region) {
+        if (!isOutlined(region))
+            return;
+        String itemLabel = null;
+        if (line != null)
+            itemLabel = line.substring(sx, ex);
+
+        if (lineIsEmpty) {
+            outline.addElement(createItem(lno, sx, curLevel, itemLabel, region));
+        } else {
+            OutlineItem thisItem = (OutlineItem) outline.lastElement();
+            if (itemLabel != null && thisItem.token != null && thisItem.lno == lno) {
+                if (itemLabel.length() > 1)
+                    thisItem.token.append(" ");
+                thisItem.token.append(itemLabel);
+            }
+        }
+        ;
+        lineIsEmpty = false;
+    };
+
+    public void enterScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+        curLevel++;
+    };
+
+    public void leaveScheme(int lno, String line, int sx, int ex, Region region, Scheme scheme) {
+        curLevel--;
+    };
 
 };
 /* ***** BEGIN LICENSE BLOCK *****

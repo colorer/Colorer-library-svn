@@ -3,7 +3,10 @@ package net.sf.colorer.eclipse.outline;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import net.sf.colorer.HRCParser;
 import net.sf.colorer.eclipse.*;
+import net.sf.colorer.editor.OutlineListener;
+import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
@@ -15,221 +18,252 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 /**
- * Content outline page for the readme editor.
+ * Content outline page for the Colorer editor.
+ * Allows to view General Outline, Error and Internal Parse Tree for
+ * currently selected editor window. 
  */
 public class ColorerContentOutlinePage extends ContentOutlinePage implements OutlineListener
 {
-  WorkbenchOutliner structureOutliner = null;
-  WorkbenchOutliner errorsOutliner = null;
-  WorkbenchOutliner activeOutliner = null;
-  
-  StructureModeAction structureModeAction = null;
-  ErrorsModeAction errorsModeAction = null;
-
-  Thread backgroundUpdater = null;
-  boolean outlineModified = true;
-  long prevTime = 0;
-  int UPDATE_DELTA = 3000;
-
-  class TreeAction extends Action{
-    public TreeAction(){
-      super(Messages.get("outline.tree"), ImageStore.getID("outline-tree"));
-      setToolTipText(Messages.get("outline.tree.tooltip"));
-      setHoverImageDescriptor(ImageStore.getID("outline-tree-hover"));
-      setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
-    };
-    public void run(){
-      setChecked(isChecked());
-      ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Hierarchy", isChecked());
-      activeOutliner.setHierarchy(isChecked());
-      update();
-    }
-  }
-
-  class SortAction extends Action{
-    private ViewerSorter sorter = new WorkbenchViewerSorter();
-    public SortAction(){
-      super(Messages.get("outline.sort"), ImageStore.getID("outline-sort"));
-      setToolTipText(Messages.get("outline.sort.tooltip"));
-      setHoverImageDescriptor(ImageStore.getID("outline-sort-hover"));
-      setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Sort"));
-      getTreeViewer().setSorter(isChecked() ? sorter : null);
-    };
-    public void run(){
-      setChecked(isChecked());
-      BusyIndicator.showWhile(getControl().getDisplay(), new Runnable() {
-        public void run() {
-          getTreeViewer().setSorter(isChecked() ? sorter : null);
-        }
-      });
-      ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Sort", isChecked());
-    }
-  }
-  
-  class StructureModeAction extends Action {
-    StructureModeAction(){
-      this.setText(Messages.get("outline.options.Structure"));
-      this.setImageDescriptor(ImageStore.getID("outline-options-structure"));
-      setChecked(activeOutliner == structureOutliner);      
-    }
-    public void run(){
-      activeOutliner = structureOutliner;
-      errorsModeAction.setChecked(false);
-      setChecked(true);
-      update();
-    };
-  }
-  
-  class ErrorsModeAction extends Action {
-    ErrorsModeAction(){
-      setText(Messages.get("outline.options.Errors"));
-      setImageDescriptor(ImageStore.getID("outline-options-errors"));
-      setChecked(activeOutliner == errorsOutliner);
-    }
-    public void run(){
-      activeOutliner = errorsOutliner;
-      structureModeAction.setChecked(false);
-      setChecked(true);
-      update();
-    };
-  }
-  
-
-/*	class ClickAction extends Action {
-		public ClickAction() {
-			super();
-			getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-				public void selectionChanged(SelectionChangedEvent event) {
-					setEnabled(!event.getSelection().isEmpty());
-				}
-			});
-		}
-		public void run() {
-			MessageDialog.openInformation(null,
-				Messages.get("Readme_Outline"),
-				Messages.get("ReadmeOutlineActionExecuted"));
-		}
-	}
-*/
-
-
-
-  public ColorerContentOutlinePage() {
-  	super();
-  }
-  
-  public void attach(WorkbenchOutliner structure, WorkbenchOutliner errors){
-    detach();
-  	structureOutliner = structure;
-  	errorsOutliner = errors;
-  	activeOutliner = structureOutliner;
-
-    activeOutliner.addListener(this);
-
-    activeOutliner.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Hierarchy"));
+    TextColorer textColorer;
     
-    notifyUpdate();
-    backgroundUpdater = new Thread(){
-      public void run(){
-        while(true){
-          try{ sleep(UPDATE_DELTA); }catch(InterruptedException e){ break; };
-          if (Thread.currentThread() != backgroundUpdater) break;
-          Display.getDefault().syncExec(new Runnable(){
-            public void run(){
-              updateIfChanged();
-            }
-          });
+    IWorkbenchOutlineSource structureOutliner, errorsOutliner, parseTreeOutliner;
+    IWorkbenchOutlineSource activeOutliner;
+
+    OutlineModeAction structureModeAction, errorsModeAction, parseTreeModeAction;
+    OutlineModeAction activeAction;
+
+    Thread backgroundUpdater = null;
+
+    boolean outlineModified = true;
+    long prevTime = 0;
+    int UPDATE_DELTA = 3000;
+
+    class TreeAction extends Action {
+
+        public TreeAction() {
+            super(Messages.get("outline.tree"), ImageStore.getID("outline-tree"));
+            setToolTipText(Messages.get("outline.tree.tooltip"));
+            setHoverImageDescriptor(ImageStore.getID("outline-tree-hover"));
+            setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean(
+                    "Outline.Hierarchy"));
         };
-      };
-    };
-    backgroundUpdater.start();
-  }
-  public void detach(){
-    if (structureOutliner != null) structureOutliner.removeListener(this);
-    structureOutliner = null;
-    errorsOutliner = null;
-    backgroundUpdater = null;
-  };
-  public void dispose(){
-    detach();
-    super.dispose();
-  }
-  
-  
-  void update(){
-    if (getControl() == null) return;
-    if (getControl().isDisposed()) return;
-    getControl().setRedraw(false);
-    int hpos = getTreeViewer().getTree().getHorizontalBar().getSelection();
-    int vpos = getTreeViewer().getTree().getVerticalBar().getSelection();
-    getTreeViewer().setInput(activeOutliner);
-    getTreeViewer().expandAll();
-    getControl().setRedraw(true);
-    getTreeViewer().getTree().getHorizontalBar().setSelection(hpos);
-    getTreeViewer().getTree().getVerticalBar().setSelection(vpos);
-  }
-  public void updateIfChanged(){
-    if (outlineModified){
-      update();
-      outlineModified = false;
-    };
-  }
-  public void notifyUpdate(){
-    outlineModified = true;
-    long cTime = System.currentTimeMillis();
-    if (cTime - prevTime > UPDATE_DELTA && activeOutliner != null){
-      updateIfChanged();
-      prevTime = System.currentTimeMillis();
-    };
-  }
-  
-  Vector doubleClickListeners = new Vector();
-  public void addDoubleClickListener(IDoubleClickListener dc){
-    if (doubleClickListeners.indexOf(dc) == -1) doubleClickListeners.add(dc);
-  }
-  public void removeDoubleClickListener(IDoubleClickListener dc){
-    doubleClickListeners.remove(dc);
-  }
-  
-  public void createControl(Composite parent) {
-  	super.createControl(parent);
-  
-  	TreeViewer viewer = getTreeViewer();
-    viewer.addDoubleClickListener(new IDoubleClickListener(){
-      public void doubleClick(DoubleClickEvent event) {
-        Enumeration e = doubleClickListeners.elements();
-        for(; e.hasMoreElements();)
-          ((IDoubleClickListener)e.nextElement()).doubleClick(event);
-      }
-    });
 
-  	/* Configure the context menu.
-  	MenuManager menuMgr = new MenuManager("#PopupMenu");
-  	menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));	
-  	menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS+"-end"));
-  
-  	Menu menu = menuMgr.createContextMenu(viewer.getTree());
-  	viewer.getTree().setMenu(menu);
-    */
-    
-    IToolBarManager toolBarManager = getSite().getActionBars().getToolBarManager();
-    if (toolBarManager != null) { 
-      toolBarManager.add(new TreeAction());
-      toolBarManager.add(new SortAction());
+        public void run() {
+            setChecked(isChecked());
+            ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Hierarchy",
+                    isChecked());
+            activeOutliner.setHierarchy(isChecked());
+        }
+    }
+
+    class SortAction extends Action {
+
+        private ViewerSorter sorter = new WorkbenchViewerSorter();
+
+        public SortAction() {
+            super(Messages.get("outline.sort"), ImageStore.getID("outline-sort"));
+            setToolTipText(Messages.get("outline.sort.tooltip"));
+            setHoverImageDescriptor(ImageStore.getID("outline-sort-hover"));
+            setChecked(ColorerPlugin.getDefault().getPreferenceStore().getBoolean("Outline.Sort"));
+            getTreeViewer().setSorter(isChecked() ? sorter : null);
+        };
+
+        public void run() {
+            setChecked(isChecked());
+            BusyIndicator.showWhile(getControl().getDisplay(), new Runnable(){
+
+                public void run() {
+                    getTreeViewer().setSorter(isChecked() ? sorter : null);
+                }
+            });
+            ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Sort", isChecked());
+            activeOutliner.setSorting(isChecked());
+        }
+    }
+
+    class OutlineModeAction extends Action {
+        
+        String id;
+        IWorkbenchOutlineSource outliner;
+
+        OutlineModeAction(String id, IWorkbenchOutlineSource outliner) {
+            this.id = id;
+            this.outliner = outliner;
+            this.setText(Messages.get("outline.options."+id));
+            this.setImageDescriptor(ImageStore.getID("outline-options-"+id));
+            setChecked(activeOutliner == outliner);
+        }
+
+        public void run() {
+            if (activeOutliner != outliner){
+                setActiveOutliner(outliner, this);
+                update();
+            }
+        };
+    }
+
+    public ColorerContentOutlinePage() {
+        super();
+    }
+
+    public void attach(TextColorer textColorer){
+        detach();
+
+        this.textColorer = textColorer;
+        HRCParser hp = textColorer.getParserFactory().getHRCParser();
+        
+        structureOutliner = new WorkbenchOutliner(hp.getRegion("def:Outlined"));
+        errorsOutliner = new WorkbenchOutliner(hp.getRegion("def:Error"));
+        parseTreeOutliner = new ParseTreeOutliner();
+
+        structureModeAction = new OutlineModeAction("Structure", structureOutliner);
+        errorsModeAction = new OutlineModeAction("Errors", errorsOutliner);
+        parseTreeModeAction = new OutlineModeAction("ParseTree", parseTreeOutliner);
+
+        setActiveOutliner(structureOutliner, structureModeAction);
+
+        activeOutliner.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean(
+                "Outline.Hierarchy"));
+
+        notifyUpdate();
+        backgroundUpdater = new Thread("backgroundUpdater"){
+            public void run() {
+                while (true) {
+                    try {
+                        sleep(UPDATE_DELTA);
+                    } catch (InterruptedException e) {
+                        break;
+                    };
+                    if (Thread.currentThread() != backgroundUpdater)
+                        break;
+                    Display.getDefault().syncExec(new Runnable(){
+                        public void run() {
+                            updateIfChanged();
+                        }
+                    });
+                };
+            };
+        };
+        backgroundUpdater.start();
+    }
+
+    public void detach() {
+        backgroundUpdater = null;
+        textColorer = null;
+        setActiveOutliner(null, null);
+        structureOutliner = null;
+        errorsOutliner = null;
+        parseTreeOutliner = null;
     };
-    
-    IMenuManager menuManager = getSite().getActionBars().getMenuManager();
-    if (menuManager != null){
-      structureModeAction = new StructureModeAction();
-      errorsModeAction = new ErrorsModeAction();
-      menuManager.add(structureModeAction);
-      menuManager.add(errorsModeAction);
+
+    public void dispose() {
+        detach();
+        super.dispose();
     }
     
-  	viewer.setContentProvider(new WorkbenchContentProvider());
-  	viewer.setLabelProvider(new WorkbenchLabelProvider());
-  	viewer.setInput(activeOutliner);
-  }
+    void setActiveOutliner(IWorkbenchOutlineSource newOutliner, OutlineModeAction action){
+        if (activeOutliner != null){
+            activeOutliner.removeListener(this);
+            if (textColorer != null){
+                textColorer.removeRegionHandler(activeOutliner.getRegionHandler());
+            }
+            if (activeAction != null){
+                activeAction.setChecked(false);
+            }
+        }
+        activeOutliner = newOutliner;
+        activeAction = action;
+        if (activeOutliner != null){
+            activeOutliner.addListener(this);
+            activeOutliner.clear();
+            if (textColorer != null){
+                textColorer.addRegionHandler(activeOutliner.getRegionHandler());
+            }
+            activeAction.setChecked(true);
+            textColorer.modifyEvent(textColorer.getVisibleStart());
+        }
+    }
+
+    void update() {
+        if (getControl() == null) { return; }
+        if (getControl().isDisposed()) { return; }
+        getControl().setRedraw(false);
+        int hpos = getTreeViewer().getTree().getHorizontalBar().getSelection();
+        int vpos = getTreeViewer().getTree().getVerticalBar().getSelection();
+        getTreeViewer().setInput(activeOutliner);
+        getTreeViewer().expandAll();
+        getControl().setRedraw(true);
+        getTreeViewer().getTree().getHorizontalBar().setSelection(hpos);
+        getTreeViewer().getTree().getVerticalBar().setSelection(vpos);
+    }
+
+    public void updateIfChanged() {
+        if (outlineModified) {
+            update();
+            outlineModified = false;
+        };
+    }
+
+    public void notifyUpdate() {
+        outlineModified = true;
+        long cTime = System.currentTimeMillis();
+        if (cTime - prevTime > UPDATE_DELTA && activeOutliner != null) {
+            updateIfChanged();
+            prevTime = System.currentTimeMillis();
+        };
+    }
+
+    Vector doubleClickListeners = new Vector();
+
+    public void addDoubleClickListener(IDoubleClickListener dc) {
+        if (doubleClickListeners.indexOf(dc) == -1)
+            doubleClickListeners.add(dc);
+    }
+
+    public void removeDoubleClickListener(IDoubleClickListener dc) {
+        doubleClickListeners.remove(dc);
+    }
+
+    public void createControl(Composite parent) {
+        super.createControl(parent);
+
+        TreeViewer viewer = getTreeViewer();
+        viewer.addDoubleClickListener(new IDoubleClickListener(){
+
+            public void doubleClick(DoubleClickEvent event) {
+                Enumeration e = doubleClickListeners.elements();
+                for (; e.hasMoreElements();)
+                    ((IDoubleClickListener) e.nextElement()).doubleClick(event);
+            }
+        });
+
+        /*
+         * Configure the context menu. MenuManager menuMgr = new
+         * MenuManager("#PopupMenu"); menuMgr.add(new
+         * Separator(IWorkbenchActionConstants.MB_ADDITIONS)); menuMgr.add(new
+         * Separator(IWorkbenchActionConstants.MB_ADDITIONS+"-end"));
+         * 
+         * Menu menu = menuMgr.createContextMenu(viewer.getTree());
+         * viewer.getTree().setMenu(menu);
+         */
+
+        IToolBarManager toolBarManager = getSite().getActionBars().getToolBarManager();
+        if (toolBarManager != null) {
+            toolBarManager.add(new TreeAction());
+            toolBarManager.add(new SortAction());
+        };
+
+        IMenuManager menuManager = getSite().getActionBars().getMenuManager();
+        if (menuManager != null) {
+            menuManager.add(structureModeAction);
+            menuManager.add(errorsModeAction);
+            menuManager.add(parseTreeModeAction);
+        }
+
+        viewer.setContentProvider(new WorkbenchContentProvider());
+        viewer.setLabelProvider(new WorkbenchLabelProvider());
+        viewer.setInput(activeOutliner);
+    }
 
 }
 /* ***** BEGIN LICENSE BLOCK *****

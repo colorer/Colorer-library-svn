@@ -62,4 +62,14 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_FileType_setParamValue
   type->setParamValue(JString(env, pname), &JString(env, pval));
 }
 
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_FileType_getBaseScheme
+  (JNIEnv *env, jobject obj, jlong iptr)
+{
+  FileType *type = (FileType*)iptr;
+
+  type->getBaseScheme();
+  return null;
+}
+
+
 }
