@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <!--
     VB Syntax description
 With help of:
@@ -6,9 +11,7 @@ With help of:
     Valery Tsyplenkov <gorilla800lbs@hotmail.com>
     Alexey Yatsenko <Alexey.Yatsenko@p52.f9.n5060.z2.fidonet.org>
 -->
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-   <type name="vbasic" access="public">
+   <type name="vbasic">
 
       <import type="def"/>
 
@@ -54,7 +57,7 @@ With help of:
 
          <regexp match="/^\s*\M (Private\s+)?Dim\s+(\w+)/ix" region2="DimPrivateOutline"/>
          <regexp match="/^\s*\M Public\s+Dim\s+(\w+)/ix" region1="DimPublicOutline"/>
-                          
+
          <regexp match="/^\s*\b\M (Private\s+)?Const\s+(\w+)/ix" region2="ConstPrivateOutline"/>
          <regexp match="/^\s*\b\M Public\s+Const\s+(\w+)/ix" region1="ConstPublicOutline"/>
       </scheme>

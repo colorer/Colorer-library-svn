@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 <!--
     Sicstus Prolog Highlighting Scheme for Colorer
     $Id$
     Created by : Alexios Palinginis <palingin@inf.ethz.ch>
 -->
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-   <type name="sicstusProlog" access="public">
+   <type name="sicstusProlog">
 
       <import type="def"/>
 
@@ -93,9 +93,9 @@
             <word name="false"/>
             <word name="true"/>
          </keywords>
-         
+
          <keywords region="spKeyword">
-        
+
 <!-- SUMMARY OF PROGRAM SECTIONS -->
             <word name="'SU_messages':generate_message"/>
             <word name="'SU_messages':query_abbreviation"/>
@@ -323,8 +323,8 @@
             <word name="write_to_chars"/>
             <word name="writeq"/>
          </keywords>
-         
-         
+
+
 
 <!-- Unbiques/Depricated/Obsolescent -->
          <keywords region="spDeprKeyword">
@@ -344,7 +344,7 @@
             <word name="recordz"/>
             <word name="skip"/>
             <word name="tab"/>
-          </keywords>    
+          </keywords>
 <!-- Sicstus only mode -->
 
          <keywords region="spSicstusKeyword">
@@ -396,4 +396,3 @@
    - the terms of any one of the MPL, the GPL or the LGPL.
    -
    - ***** END LICENSE BLOCK ***** -->
-

@@ -174,7 +174,7 @@
       </scheme>
 
 
-      <scheme name="xlink-root" access="public">
+      <scheme name="xlink-root">
          <annotation>
             <documentation>
                You can replace these elements with needed single root element
@@ -182,7 +182,7 @@
               </documentation>
          </annotation>
       </scheme>
-      <scheme name="xlink" access="public">
+      <scheme name="xlink">
          <inherit scheme="xml:singleroot">
             <virtual scheme="xml:element" subst-scheme="xlink-root"/>
          </inherit>

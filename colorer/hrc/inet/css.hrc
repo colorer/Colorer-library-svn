@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
-
-<hrc version="take5"
-     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <type name="css" access="public">
+  <type name="css">
 
-    <annotation> 
+    <annotation>
      <documentation>
       Cascading Style Sheets, Level 1 and 2
      </documentation>
      <contributors><![CDATA[
       darkman <darkman@magnet.ru>
       Albert Micheev <2:5049/80>
-      Timur Safin <timur@lanit.ru> 
+      Timur Safin <timur@lanit.ru>
       Eugene Efremov <4mirror@mail.ru>
      ]]></contributors>
     </annotation>
@@ -39,16 +38,16 @@
     <region name="TagName" parent="default" />
     <region name="PseudoElement" parent="def:Keyword" />
     <region name="PseudoElementUnknown" parent="default" />
-    
+
     <region name="PropertyName" parent="def:KeywordStrong" />
     <region name="PropertyFunc" parent="def:FunctionKeyword" />
     <region name="PropertyValue" parent="def:Parameter" />
     <region name="ImportantValue" parent="def:Keyword" />
-    
+
     <region name="RuleOutline" parent="def:Outlined"/>
     <region name="DirectiveOutline" parent="def:Outlined"/>
     <region name="MediaOutline" parent="DirectiveOutline"/>
-    
+
     <region name="UnicodeChar" parent="def:Character"/>
     <region name="UnicodeCharContent" parent="def:CharacterContent"/>
 
@@ -58,7 +57,7 @@
     <scheme name="Colors">
       <inherit scheme="NumericColors"/>
       <inherit scheme="rgbFunc"/>
-      <inherit scheme="w3cColors"/>      
+      <inherit scheme="w3cColors"/>
       <inherit scheme="SystemColors"/>
       <inherit scheme="CustomColors"/>
     </scheme>
@@ -284,7 +283,7 @@
         <word name="writing-mode"/><!-- Non standart -->
         <word name="z-index"/>
         <word name="zoom"/><!-- Non standart -->
-        
+
         <word name="src"/>
       </keywords>
       <!-- regexp match="/(font)?#4\M\-[\s\-]+/" region1="cssPar"/
@@ -322,7 +321,7 @@
     </scheme>
 
     <scheme name="NumericBaseValue">
-      <regexp match="/([+\-])?[\d\.]+\b/x" 
+      <regexp match="/([+\-])?[\d\.]+\b/x"
              region0="Number" region1="def:Symbol"/>
     </scheme>
     <scheme name="NumericLst">
@@ -331,7 +330,7 @@
      <regexp match="/~\s*\,\s*/" region="def:Error"/>
      <regexp match="/\s*\,\s*$/" region="def:Error"/>
     </scheme>
-    
+
     <scheme name="NumericColors">
      <regexp match="/(?{def:NumberPrefix}\#)([\da-fA-F]{6}|[\da-fA-F]{3})/" region="def:NumberHex"/>
     </scheme>
@@ -340,12 +339,12 @@
       <virtual scheme="NumericBaseValue" subst-scheme="NumericColors"/>
      </inherit>
     </scheme>
-    
+
     <scheme name="NumericTime">
-      <regexp match="/([+\-])?[\d\.]+ (m?s)?\M\b/x" 
+      <regexp match="/([+\-])?[\d\.]+ (m?s)?\M\b/x"
              region0="Number" region1="def:Symbol" region2="UnitSuffix"/>
-     
-    </scheme>    
+
+    </scheme>
     <scheme name="NumericTimeLst">
      <inherit scheme="NumericLst">
       <virtual scheme="NumericBaseValue" subst-scheme="NumericTime"/>
@@ -353,36 +352,36 @@
     </scheme>
 
     <scheme name="NumericFreq">
-      <regexp match="/([+\-])?[\d\.]+ (k?Hz)?\M\b/x" 
+      <regexp match="/([+\-])?[\d\.]+ (k?Hz)?\M\b/x"
              region0="Number" region1="def:Symbol" region2="UnitSuffix"/>
-     
-    </scheme>    
+
+    </scheme>
     <scheme name="NumericFreqLst">
      <inherit scheme="NumericLst">
       <virtual scheme="NumericBaseValue" subst-scheme="NumericFreq"/>
      </inherit>
     </scheme>
-    
+
     <scheme name="NumericArc">
-      <regexp match="/([+\-])?[\d\.]+ (deg|g?rad)?\M\b/x" 
+      <regexp match="/([+\-])?[\d\.]+ (deg|g?rad)?\M\b/x"
              region0="Number" region1="def:Symbol" region2="UnitSuffix"/>
-     
-    </scheme>    
+
+    </scheme>
     <scheme name="NumericArcLst">
      <inherit scheme="NumericLst">
       <virtual scheme="NumericBaseValue" subst-scheme="NumericArc"/>
      </inherit>
     </scheme>
     <scheme name="NumericLength">
-      <regexp match="/([+\-])?[\d\.]+ (\%|em|ex|pc|pt|px|in|mm|cm)?\M%worddiv;/x" 
+      <regexp match="/([+\-])?[\d\.]+ (\%|em|ex|pc|pt|px|in|mm|cm)?\M%worddiv;/x"
              region0="Number" region1="def:Symbol" region2="UnitSuffix"/>
-    </scheme>    
+    </scheme>
     <scheme name="NumericLengthLst">
      <inherit scheme="NumericLst">
       <virtual scheme="NumericBaseValue" subst-scheme="NumericLength"/>
      </inherit>
     </scheme>
-    
+
     <scheme name="NumericValue">
       <regexp match="/ \c (0x)  [\da-fA-F]+ \b /ix" region="Number"/>
 
@@ -397,7 +396,7 @@
         <!--  <symb name="("/>
         <symb name=")"/>
         <symb name="%"/>-->
-      </keywords>   
+      </keywords>
     </scheme>
 
     <scheme name="StringValue-content">
@@ -412,14 +411,14 @@
       <inherit scheme='StringValueApos'/>
     </scheme>
     <scheme name="StringValueQuot">
-      <regexp match="/((&quot;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&quot;))/" 
+      <regexp match="/((&quot;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&quot;))/"
        region="def:String"
        region1="def:StringEdge" region4="def:StringEdge"
        region2="def:PairStart" region5="def:PairEnd"
       />
     </scheme>
     <scheme name="StringValueApos">
-      <regexp match="/((&apos;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&apos;))/" 
+      <regexp match="/((&apos;))(\\\\|\\[&quot;&apos;]|\\$|.)*?((&apos;))/"
        region="def:String"
        region1="def:StringEdge" region4="def:StringEdge"
        region2="def:PairStart" region5="def:PairEnd"
@@ -437,41 +436,41 @@
      />
     </scheme>
     <scheme name="urlFunc">
-      <block start="/\b(url)(\s)*((\(\s*)(&quot;?))/" end="/(\y5)(\s*\))/" 
+      <block start="/\b(url)(\s)*((\(\s*)(&quot;?))/" end="/(\y5)(\s*\))/"
        scheme="def:NetURL" region="String"
        region01="PropertyFunc" region03="def:PairStart" region04="Symbol" region05="String"
        region10="def:PairEnd" region11="String" region12="Symbol"
-      />    
+      />
     </scheme>
     <scheme name="shareFunc-content">
      <inherit scheme="NumericLengthLst"/>
      <regexp match="/auto/" region="PropertyValue"/>
     </scheme>
-    <scheme name="shareFunc"> 
+    <scheme name="shareFunc">
       <block start="/\b(rect)(\s)*((\())/" end="/(\))/" scheme="shareFunc-content"
        region01="PropertyFunc" region03="def:PairStart" region04="Symbol"
        region10="def:PairEnd"  region11="Symbol"
       />
      <regexp match="/auto/" region="PropertyValue"/>
     </scheme>
-    
-    
+
+
     <scheme name="PropertyFunc">
       <inherit scheme="rgbFunc"/>
       <inherit scheme="urlFunc"/>
       <inherit scheme="shareFunc"/>
-      
+
       <block start="/\b(rect|attr)(\s)*((\())/" end="/(\))/" scheme="NumericLengthLst"
        region01="PropertyFunc" region03="def:PairStart" region04="Symbol"
        region10="def:PairEnd"  region11="Symbol"
       />
-      
+
     </scheme>
 
     <scheme name="Property">
       <inherit scheme="Comment"/>
       <inherit scheme='StringValue'/>
-      <inherit scheme='NumericValue'/>      
+      <inherit scheme='NumericValue'/>
       <inherit scheme='PropertyFunc'/>
       <inherit scheme='Colors'/>
       <keywords ignorecase="yes" region="ImportantValue" worddiv='%worddiv-class;'>
@@ -730,12 +729,12 @@
        <block start="/\M([\w\d\-]+)?\s*(:)/" end="/\M[\;\}\x22\x27]/"
               scheme="PropertyWrapper" region02="Symbol"
        />
- 
+
       <!-- EE: add ";" -->
       <keywords region="def:SymbolStrong">
        <symb name=";"/>
       </keywords>
-      
+
     </scheme>
 
     <!-- EE: schemes for apos/quot check in attributes -->
@@ -751,7 +750,7 @@
   <virtual scheme="StringValue" subst-scheme="StringValueApos"/>
  </inherit>
 </scheme>
-    
+
     <scheme name="Predicate">
       <keywords region="Symbol">
          <symb name="="/>
@@ -781,15 +780,15 @@
       </keywords>
     </scheme>
 
-    <scheme name="RuleDirective">    
+    <scheme name="RuleDirective">
       <regexp match="/\M\@(\w+)/" region1="DirectiveOutline"/>
-      <block start="/(?{SymbolStrong}\@)(?{Directive}font-face)\s+ 
-        (?{PairStart}(?{SymbolStrong}\{))/ixs" 
+      <block start="/(?{SymbolStrong}\@)(?{Directive}font-face)\s+
+        (?{PairStart}(?{SymbolStrong}\{))/ixs"
        end="/(?{PairEnd}(?{SymbolStrong}\}))/" scheme="FFRuleContent"
       />
       <regexp match="/(\@)(page|font-face)/" region0="Directive" region1="SymbolStrong"/>
     </scheme>
-    
+
     <scheme name="RulesList">
       <inherit scheme="Comment"/>
 
@@ -804,11 +803,11 @@
       />
       <inherit scheme="RuleDirective"/>
 
-      <block start="/(\{)/" end="/(\})/" scheme="RuleContent" 
-             region00="SymbolStrong" region01="def:PairStart" 
+      <block start="/(\{)/" end="/(\})/" scheme="RuleContent"
+             region00="SymbolStrong" region01="def:PairStart"
              region10="SymbolStrong" region11="def:PairEnd"/>
       <block start="/(\[)/" end="/(\])/" scheme="Predicate"
-             region00="Symbol" region01="def:PairStart" 
+             region00="Symbol" region01="def:PairStart"
              region10="Symbol" region11="def:PairEnd"/>
 
       <keywords region="def:Error">
@@ -832,25 +831,25 @@
 
     <scheme name="css">
       <regexp match="/\M\@media \s+ (?{MediaOutline}.*?) \{/ix"/>
-      <block start="/(?{SymbolStrong}\@)(?{Directive}media) \s+ 
-        (?{MediaOutline}(?{MediaType}.*?)) 
-        (?{PairStart}(?{SymbolStrong}\{))/ixs" 
+      <block start="/(?{SymbolStrong}\@)(?{Directive}media) \s+
+        (?{MediaOutline}(?{MediaType}.*?))
+        (?{PairStart}(?{SymbolStrong}\{))/ixs"
        end="/(?{PairEnd}(?{SymbolStrong}\}))/" scheme="RulesList"
       />
-      <block start="/(\@)(import|charset|namespace)/i" end="/(\;)/" scheme="Property" 
+      <block start="/(\@)(import|charset|namespace)/i" end="/(\;)/" scheme="Property"
        region01="SymbolStrong" region02="Directive" region11="SymbolStrong"
       />
       <inherit scheme="RulesList"/>
     </scheme>
-    
-    
+
+
     <annotation>
      <documentation>
       Example css customising:
       font-face directive support.
      </documentation>
     </annotation>
-    
+
     <scheme name="FFPropertyFunc">
      <annotation>
       <documentation>
@@ -863,19 +862,19 @@
      />
      <inherit scheme="PropertyFunc"/>
     </scheme>
-    
+
     <scheme name="FFPropertyNames">
      <annotation>
       <documentation>
        This scheme add (or overload if need) new functions
       </documentation>
-     </annotation>    
+     </annotation>
      <keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
       <word name="unicode-range"/>
      </keywords>
      <inherit scheme="PropertyNames"/>
     </scheme>
-    
+
     <scheme name="UnicodeRange-content">
      <regexp match="/[\dA-Fa-f]{1,8}/" region="UnicodeChar"/>
      <keywords region="def:Symbol">
@@ -885,11 +884,11 @@
      <regexp match="/.*/" priority="low" region="def:Error"/>
     </scheme>
     <scheme name="UnicodeRange">
-     <block start="/U\+\M[\d\?A-Fa-f]/" end="/\M%worddiv;/" 
+     <block start="/U\+\M[\d\?A-Fa-f]/" end="/\M%worddiv;/"
       scheme="UnicodeRange-content" region00="def:Keyword"
      />
     </scheme>
-    
+
     <scheme name="FFProperty">
      <inherit scheme="Property">
       <virtual scheme="PropertyFunc" subst-scheme="FFPropertyFunc"/>
@@ -937,7 +936,7 @@
    - Albert Micheev <2:5049/80>
    - darkman <darkman@magnet.ru>
    - Eugene Efremov <4mirror@mail.ru>
-   - Timur Safin <timur@lanit.ru> 
+   - Timur Safin <timur@lanit.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

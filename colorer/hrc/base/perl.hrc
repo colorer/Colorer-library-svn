@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="windows-1251"?>
-
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
-<hrc version="take5"
-     xmlns="http://colorer.sf.net/2003/hrc"
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc ../hrc.xsd">
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-   <type name="perl" access="public">
+   <type name="perl">
 
 <annotation>
  <documentation>
@@ -19,10 +18,10 @@
    JULY <lubimovi@usa.net>
    Timur Safin <timur@lanit.ru>
    Cail Lomecb <cail@nm.ru>:
-       now using different schemes for                              
-       different paired limiters, fulll s()() support               
+       now using different schemes for
+       different paired limiters, fulll s()() support
        needs complex variables parsing - using refs, hashs and lists
-       also to correct constructions as    s@  foo  @  @bar  @ix;   
+       also to correct constructions as    s@  foo  @  @bar  @ix;
    Eugene Efremov <4mirror@mail.ru>:
      - add full regexp support
      - add format support
@@ -33,26 +32,26 @@
 
  <appinfo><todo>
  <![CDATA[
-  Возможные проблемы в реализации поддержки регулярных выражений: 
- 
-  В колорере на текищий момент не существует возможности распознать 
-  ключ 'e' в конце регэкспа. По этому использется следущее 
+  Возможные проблемы в реализации поддержки регулярных выражений:
+
+  В колорере на текищий момент не существует возможности распознать
+  ключ 'e' в конце регэкспа. По этому использется следущее
   соглашение:
-   * если используется запись вида s{}{},s()() и т.п то вторая скобка 
+   * если используется запись вида s{}{},s()() и т.п то вторая скобка
    трактуется как код перл.
-   * если используется запись вида s///,s||| и т.п. то вторая строка 
+   * если используется запись вида s///,s||| и т.п. то вторая строка
    трактуется как строка.
-   
+
   Иными словами:
  - выражения типа s{s1}{s2} (где '{' - скобка любого типа) трактуются как:
    *s1* первая скобка - регулярное выражение;
-   *s2* вторая скобка - выражение на perl'е; 
+   *s2* вторая скобка - выражение на perl'е;
  - выражения типа s/s1/s2/ (где '/' - \W любого типа) тарктуются как:
    *s1* первая скобка - регулярное выражение;
    *s2* первая скобка - обычная perl-строка.
  - выражения типа q{str},qw{str},qq{str} трактуются как строки.
- - выражения типа m{str}, qr{str} etc. трактуются как регулярные выражения;  
- ]]> 
+ - выражения типа m{str}, qr{str} etc. трактуются как регулярные выражения;
+ ]]>
  </todo></appinfo>
 </annotation>
 
@@ -67,7 +66,7 @@
       <region name="Word" parent="def:Keyword"/>
       <region name="Numb" parent="def:Number"/>
       <region name="Stream" parent="def:Path"/>
-      <region name="Rare" parent="def:DeprecatedKeyword"/> 
+      <region name="Rare" parent="def:DeprecatedKeyword"/>
       <region name="Slash" parent="def:StringContent"/>
       <region name="Var" parent="def:Var"/>
       <region name="Var2" parent="def:VarStrong"/>
@@ -78,13 +77,13 @@
 
       <region name="SubOutline" parent="def:Outlined"/>
       <region name="PackageOutline" parent="def:Outlined"/>
-      
+
       <!-- !!EE: new regions -->
       <region name="EvalText" parent="def:Text"/>
       <region name="ReModif" parent="regexp:SpecArea"/>
       <region name="HereDoc" parent="String"/>
       <region name="FormatDoc" parent="HereDoc"/>
-      
+
 
       <scheme name="BuildinVars">
          <keywords region="Var">
@@ -243,7 +242,7 @@
          <inherit scheme="SubstComment"/>
       </scheme>
 
-      
+
       <!-- EE!! include here pl1.modif.hrc (begin) -->
 
 <scheme name="RegExpString">
@@ -300,7 +299,7 @@
          <block scheme="IntStrBr3" start="/&lt;/" end="/\&gt;/" region00="def:PairStart" region10="def:PairEnd"/>
       </scheme>
 
-      
+
       <!-- EE!! include here pl2.modif.hrc(begin) -->
 
 <!-- schemes to support
@@ -327,7 +326,7 @@
           scheme="SubstMiddle1" region10="StringEdge"/>
    <!-- inherit scheme="REIntStrBr1"/ -->
    <block start="/(\()/" end="/(\M\)([mgeioxs]*))/" scheme="perl" region="EvalText"
-   region00="StringEdge" region01="def:PairStart" 
+   region00="StringEdge" region01="def:PairStart"
    region10="StringEdge" region11="def:PairEnd"/>
 </scheme>
 
@@ -342,9 +341,9 @@
           scheme="SubstMiddle2" region10="StringEdge"/>
    <!-- inherit scheme="REIntStrBr2"/ -->
    <block start="/(\{)/" end="/(\M\}([mgeioxs]*))/" scheme="perl" region="EvalText"
-   region00="StringEdge" region01="def:PairStart" 
+   region00="StringEdge" region01="def:PairStart"
    region10="StringEdge" region11="def:PairEnd"/>
-    
+
 </scheme>
 
 
@@ -359,7 +358,7 @@
           scheme="SubstMiddle3" region10="StringEdge"/>
    <!-- inherit scheme="REIntStrBr3"/ -->
    <block start="/(\[)/" end="/(\M\]([mgeioxs]*))/" scheme="perl" region="EvalText"
-   region00="StringEdge" region01="def:PairStart" 
+   region00="StringEdge" region01="def:PairStart"
    region10="StringEdge" region11="def:PairEnd"/>
 </scheme>
 
@@ -374,15 +373,15 @@
           scheme="SubstMiddle4" region10="StringEdge"/>
    <!-- inherit scheme="REIntStrBr4"/ -->
    <block start="/(&lt;)/" end="/(\M\>([mgeioxs]*))/" scheme="perl" region="EvalText"
-   region00="StringEdge" region01="def:PairStart" 
+   region00="StringEdge" region01="def:PairStart"
    region10="StringEdge" region11="def:PairEnd"/>
 </scheme>
 
 <scheme name="SubstBlock">
    <block start="/~ (s|(tr)|y) ([^\w\s]) /x" end="/\y3/x"
           scheme="RegExpString" region10="StringEdge"/>
-   
-   <block start="/~ (s|tr|y) \s+ (\w) /x" end="/\y3/x" 
+
+   <block start="/~ (s|tr|y) \s+ (\w) /x" end="/\y3/x"
     scheme="RegExpString" region10="StringEdge"
    />
    <!-- May_be!!
@@ -392,7 +391,7 @@
 </scheme>
       <!-- EE!! include here pl2.modif.hrc(end) -->
 
-      
+
       <!-- EE!! cut here (begin)
       <scheme name="SubstMiddle1">
          <block start="/~ (s|tr|y) \s* \( /x" end="/\)/x" scheme="IntStrBr1" region10="StringEdge"/>
@@ -448,9 +447,9 @@
       <!-- EE: scheme for documet format -->
       <scheme name="FormatText">
        <inherit scheme="InterpolateString"/>
-       <regexp match="/([\@\^])(\*|[&lt;&gt;\|]+)/" 
+       <regexp match="/([\@\^])(\*|[&lt;&gt;\|]+)/"
         region1="def:SymbolStrong" region2="def:Symbol"/>
-       <regexp match="/([\@\^])(\#+(\.\#+)?)/" 
+       <regexp match="/([\@\^])(\#+(\.\#+)?)/"
         region1="def:SymbolStrong" region2="def:VarStrong"/>
       </scheme>
 
@@ -490,7 +489,7 @@
      really ?this? is deprecated construction in perl5, so...
    -->
 
-      
+
 <!-- EE: move ~ to separated block (s{}{/... - '/' no regexp ) -->
       <!-- EE!! include here pl3.modif.hrc(begin) -->
    <block start="/((\=|\! \~) |
@@ -513,8 +512,8 @@
           region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
       <!-- EE!! include here pl3.modif.hrc(end) -->
 
-      
-   
+
+
       <!-- EE!! cut here (begin) ->
          <block start="/( [\=\!]\~ |
                          [^&lt;\]\}\)\+\-\w\s\/] |
@@ -526,8 +525,8 @@
       <!- EE!! cut here (end) -->
 
 <!-- formatted output -->
-         <block start="/^\s* \m (format)\s*(\s\w*)\s*(\=) /x" end="/^(\.)/" 
-          scheme="FormatText" region="FormatDoc" 
+         <block start="/^\s* \m (format)\s*(\s\w*)\s*(\=) /x" end="/^(\.)/"
+          scheme="FormatText" region="FormatDoc"
           region01="Word" region02="Var" region03="Symb"
           region00="def:PairStart" region10="def:PairEnd" region11="StringEdge"
          />
@@ -565,7 +564,7 @@
         but i think this is real perversion :)
    -->
 
-      
+
       <!-- EE!! include here pl4.modif.hrc (begin) -->
    <block start="/\b\M(((s|(tr)|y) \s* \())/x" end="/(\)([mgeioxs]*))/x"
           scheme="SubstBlock1" region="String"
@@ -640,7 +639,7 @@
           region00="StringEdge" region10="StringEdge"
           region01="def:PairStart" region11="def:PairEnd"/>
 
-          
+
    <block start="/\b(m \s* \()/x" end="/(\)([cmiogxs]*))/" scheme="REIntStrBr1"
           region="String" region00="StringEdge" region10="StringEdge"
           region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
@@ -659,9 +658,9 @@
           region01="def:PairStart" region11="def:PairEnd" region12="ReModif"/>
       <!-- EE!! include here pl4.modif.hrc (end) -->
 
-      
-   
-      <!-- EE!! cut here (begin) 
+
+
+      <!-- EE!! cut here (begin)
          <block start="/\b\M(((s|tr|y) \s* \())/x" end="/(\) [mgeioxs]*)/x" scheme="SubstBlock1" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
          <block start="/\b\M(((s|tr|y) \s* \{))/x" end="/(\} [mgeioxs]*)/x" scheme="SubstBlock2" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
          <block start="/\b\M(((s|tr|y) \s* \[))/x" end="/(\] [mgeioxs]*)/x" scheme="SubstBlock3" region="String" region01="def:PairStart" region10="def:PairEnd" region02="StringEdge" region11="StringEdge"/>
@@ -729,7 +728,7 @@
             <symb name="[" region="def:Error"/>
             <symb name="]" region="def:Error"/>
          </keywords>
-      
+
          <!-- EE: labels -->
          <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="def:Label"/>
 
@@ -739,9 +738,9 @@
          <regexp match="/ (::|')? \w+ /x" region1="Symb"/>
          <inherit scheme="perl"/>
       </scheme>
-      
-      
-      
+
+
+
       <scheme name="Keywords">
 <!-- base syntax -->
          <keywords region="Word">
@@ -975,7 +974,7 @@
             <word name="x"/>
          </keywords>
       </scheme>
-      
+
       <scheme name="ExtKW">
          <keywords region="Word">
             <word name="Alias"/>

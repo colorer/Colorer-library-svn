@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
-
-<hrc version="take5"
-     xmlns="http://colorer.sf.net/2003/hrc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
   <annotation>
@@ -11,12 +10,12 @@
     Active Server Pages core syntax (vbScript)
    </documentation>
    <contributors><![CDATA[
-      Cail Lomecb <cail@nm.ru> 
+      Cail Lomecb <cail@nm.ru>
       Eugene Efremov <4mirror@mail.ru>
    ]]></contributors>
   </annotation>
-  
-  <type name="asp.vb" access="public">
+
+  <type name="asp.vb">
 
     <import type="def"/>
 
@@ -46,10 +45,10 @@
     </documentation></annotation>
     <scheme name="InverseInsertion">
       <block start="/((\%&gt;))/" end="/((&lt;\%))/"
-       scheme="html" priority="low" region="Text" 
-       region00="Insertion" region10="Insertion" 
-       region01="PairStart" region11="PairEnd"      
-       region02="OpenTag"   region12="OpenTag" 
+       scheme="html" priority="low" region="Text"
+       region00="Insertion" region10="Insertion"
+       region01="PairStart" region11="PairEnd"
+       region02="OpenTag"   region12="OpenTag"
       />
     </scheme>
 
@@ -63,7 +62,7 @@
      <inherit scheme="Insertion"/>
      <inherit scheme="css:Property"/>
     </scheme>
-    <scheme name="cssRuleContent"> 
+    <scheme name="cssRuleContent">
      <inherit scheme="Insertion"/>
      <inherit scheme="css:RuleContent">
       <virtual scheme="css:RuleContent" subst-scheme="cssRuleContent"/>
@@ -78,7 +77,7 @@
       <virtual scheme="css:Property" subst-scheme="cssProperty"/>
      </inherit>
     </scheme>
-    
+
     <scheme name="htmlString">
       <inherit scheme="Insertion"/>
       <inherit scheme="html:htmlString"/>
