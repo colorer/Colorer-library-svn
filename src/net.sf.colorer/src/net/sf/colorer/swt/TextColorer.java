@@ -346,11 +346,10 @@ InternalHandler ml = new InternalHandler();
       if (sr != null){
         if (highlightStyle == HLS_XOR){
           int resultColor = sr.fore ^ cm.getColor(text.getBackground());
-		  if (text.getLineAtOffset(text.getCaretOffset()) == text.getLineAtOffset(start)
-		      && horzCross && horzCrossColor != null && ((StyledRegion)horzCrossColor).bback)
-		    resultColor = sr.fore ^ ((StyledRegion)horzCrossColor).back;
-
-		  Color color = cm.getColor(sr.bfore, resultColor);
+          if (text.getLineAtOffset(text.getCaretOffset()) == text.getLineAtOffset(start) &&
+              horzCross && horzCrossColor != null && ((StyledRegion)horzCrossColor).bback)
+		        resultColor = sr.fore ^ ((StyledRegion)horzCrossColor).back;
+          Color color = cm.getColor(sr.bfore, resultColor);
           gc.setBackground(color);
           gc.setXORMode(true);
           gc.fillRectangle(left.x, left.y, right.x - left.x, gc.getFontMetrics().getHeight());
