@@ -1,15 +1,9 @@
 package net.sf.colorer.eclipse;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import net.sf.colorer.ParserFactory;
-
 import org.eclipse.jface.preference.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.texteditor.WorkbenchChainedTextFontFieldEditor;
 
 public class FileTypePreferencePage extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage{
