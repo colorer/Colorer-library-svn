@@ -227,20 +227,17 @@
     <zip destfile='${target-dir}/hrc/common.jar'>
       <fileset dir='hrc' includes='**/*' excludes='changes.txt, colorer.hrc, auto, auto/**/*'/>
     </zip>
-    <copy file='hrc/colorer.hrc' tofile='${target-dir}/hrc/colorer.hrc'>
-      <filterset begintoken='l' endtoken='"'>
-        <filter token='ink=' value='link="jar:common.jar!'/>
-      </filterset>
-    </copy>
+    <copy file='hrc/colorer.hrc' tofile='${target-dir}/hrc/colorer.hrc'  overwrite='true'/>
+    <replace file="${target-dir}/hrc/colorer.hrc" token='link="' value='link="jar:common.jar!'/>
+
     <zip destfile='${target-dir}/hrc/auto/types/auto.jar'>
       <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*'/>
     </zip>
-    <copy todir='${target-dir}/hrc/auto'>
+    
+    <copy todir='${target-dir}/hrc/auto' overwrite='true'>
       <fileset dir='hrc/auto' includes='*.hrc'/>
-      <filterset begintoken='l' endtoken='"'>
-        <filter token='ink=' value='link="jar:types/auto.jar!'/>
-      </filterset>
     </copy>
+    <replace dir="${target-dir}/hrc/auto" includes='*.hrc' token='link="' value='link="jar:types/auto.jar!'/>
   </target>
 
   <target name="hrcupdate.clean" depends='init'>
@@ -558,7 +555,7 @@
 
 
   <target name="this.eclipse" depends='init, eclipseplugin' description='Builds EclipseColorer plugin and copies it into working Eclipse instance'>
-    <copy todir='${eclipse.dir}/plugins'>
+    <copy todir='${eclipse.dir}/plugins' overwrite='true'>
       <fileset dir="${build-dir}/${eclipseplugin-name}"/>
     </copy>
   </target>
