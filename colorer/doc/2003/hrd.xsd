@@ -46,12 +46,12 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="fore" type="xs:token">
+    <xs:attribute name="fore" type="color">
       <xs:annotation><xs:documentation>
         Foreground color. If missed, transparent color assumed.
       </xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="back" type="xs:token">
+    <xs:attribute name="back" type="color">
       <xs:annotation><xs:documentation>
         Background color. If missed, transparent color assumed.
       </xs:documentation></xs:annotation>
@@ -82,6 +82,13 @@
       </xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
+
+  <xs:simpleType name="color">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="#[0-9A-Fa-f]{1,6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
 </xs:schema>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

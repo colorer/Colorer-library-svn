@@ -69,8 +69,11 @@
     </xs:documentation></xs:annotation>
     <xs:sequence>
       <xs:element name="annotation" type="annotation" minOccurs="0"/>
-      <xs:element name="prototype" type="prototype" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="type" type="type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="prototype" type="prototype"/>
+        <xs:element name="package" type="package"/>
+        <xs:element name="type" type="type"/>
+      </xs:choice>
     </xs:sequence>
     <xs:attribute name="version" type="xs:NMTOKEN" use="required">
       <xs:annotation><xs:documentation>
@@ -83,10 +86,13 @@
 
   <xs:complexType name="annotation">
     <xs:annotation><xs:documentation>
-      Defines formal documentation for HRC language elements.
+      Defines formal documentation for the HRC language elements.
     </xs:documentation></xs:annotation>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element name="appinfo">
+        <xs:annotation><xs:documentation>
+          Formal annotation part, used for tools processing.
+        </xs:documentation></xs:annotation>
         <xs:complexType mixed="true">
           <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:any namespace="##other" processContents="lax"/>
@@ -94,6 +100,9 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="documentation">
+        <xs:annotation><xs:documentation>
+          Human documentation part.
+        </xs:documentation></xs:annotation>
         <xs:complexType mixed="true">
           <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:any namespace="##other" processContents="skip"/>
@@ -101,6 +110,9 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="contributors">
+        <xs:annotation><xs:documentation>
+          Contribute information part.
+        </xs:documentation></xs:annotation>
         <xs:complexType mixed="true">
           <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:any namespace="##other" processContents="lax"/>
@@ -110,26 +122,49 @@
     </xs:choice>
   </xs:complexType>
 
+  <xs:complexType name="package">
+    <xs:annotation><xs:documentation>
+      Defines prototype of the defined file type, but use
+      this type as an internal hidden package structure.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="annotation" type="annotation" minOccurs="0"/>
+      <xs:element name="location" type='location' minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:NCName" use="required">
+      <xs:annotation><xs:documentation>
+        Common internal name of this package.
+        Must be valid XML non-qualified name.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="description" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>
+        User description, used to represent package in target IDE.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="group" type="xs:Name">
+      <xs:annotation><xs:documentation>
+        Group of languages, this package belongs to.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="targetNamespace" type="xs:anyURI">
+      <xs:annotation><xs:documentation>
+        Applicable to the XML group of languages.
+        Specifies namespace, this HRC file describing.
+        Allows automatically linking and combining different XML languages in HRC.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
   <xs:complexType name="prototype">
     <xs:annotation><xs:documentation>
       Defines prototype of single target programming language.
       This prototype must have name, equals to real type, defined
-      in linked resource.
+      in the linked resource.
     </xs:documentation></xs:annotation>
     <xs:sequence>
       <xs:element name="annotation" type="annotation" minOccurs="0"/>
-      <xs:element name="location" minOccurs="0">
-        <xs:annotation><xs:documentation>
-          Points to the location of HRC file with this language description.
-          Link is well formed URI address of requested HRC file.
-          This location can be relative to the location of parent type,
-          or absolute (with any URI schema). If URI schema is absent,
-          'file://' is assumed.
-        </xs:documentation></xs:annotation>
-        <xs:complexType>
-          <xs:attribute name="link" type="xs:anyURI" use="required"/>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="location" type='location' minOccurs="0"/>
       <xs:element name="filename" type="filename" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="firstline" type="firstline" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="parameters" minOccurs='0'>
@@ -177,6 +212,16 @@
     </xs:attribute>
   </xs:complexType>
 
+  <xs:complexType name="location">
+    <xs:annotation><xs:documentation>
+      Points to the location of a HRC file with this language description.
+      Link is a well formed URI address of the requested HRC file.
+      This location can be relative to the current location of the parent type,
+      or absolute (with URI schemas, supported by library).
+      If URI schema is absent, 'file://' is assumed.
+    </xs:documentation></xs:annotation>
+    <xs:attribute name="link" type="xs:anyURI" use="required"/>
+  </xs:complexType>
 
   <xs:complexType name="filename">
     <xs:annotation><xs:documentation>
@@ -248,12 +293,12 @@
 
   <xs:complexType name="scheme">
     <xs:annotation><xs:documentation>
-      HRC Scheme is basic unit, which represents some fixed set of
+      HRC scheme is a basic unit, which represents some fixed set of
       lexemes, tokens and syntax regions (lexical context).
       Each time at any position in the text only one schema is active.
-      And its content is applied to the current text position.
+      Its content is applied to the current text position.
       When starting text parse process, scheme with name, equals
-      to its type name is used.
+      to its type name is used (base scheme of type).
     </xs:documentation></xs:annotation>
     <xs:sequence>
       <xs:element name="annotation" type="annotation" minOccurs="0"/>
@@ -274,8 +319,8 @@
 
   <xs:complexType name="import">
     <xs:annotation><xs:documentation>
-      Import statement. This statement imports all definitions
-      from specified type into the current one, so you can use them
+      External type import statement. This statement imports all definitions
+      from the specified type into the current one, so you can use them
       without explicit type qualifier.
     </xs:documentation></xs:annotation>
     <xs:attribute name="type" type="xs:NCName" use="required"/>
