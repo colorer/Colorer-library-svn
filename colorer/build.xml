@@ -3,8 +3,7 @@
 
   <description>
     This is the top-level buildfile, used by ANT tool (http://jakarta.apache.org/ant/)
-    It contains tasks, used to build and distribute different versions of
-    Colorer-take5 library packages.
+    It contains tasks, used to build and distribute Colorer-take5 library packages.
   </description>
 
 
@@ -307,7 +306,8 @@
     <condition property="system">
       <os family='windows'/>
     </condition>
-  <fail unless='system' message='FarColorer plugin is available only on Windows system'/>
+
+    <fail unless='system' message='FarColorer plugin is available only on Windows system'/>
 
     <mkdir dir='${farplugin-dir}/bin'/>
     
