@@ -14,6 +14,6 @@
     - VBasic/VBScript outlining by LeO Welsch
     - HTML, PHP outline
     - sqlj, IDL, CPP, diff
-    - VMS renamed into DCL
+    - VMS is renamed into DCL
     - C/C++, css, php (Eugene Efremov)
 
