@@ -42,12 +42,22 @@ void ParserFactory::init()
   while(elem != null){
     // hrc locations
     if (elem->getType() == EL_BLOCKED && elem->getName() && *elem->getName() == "hrc-sets"){
+      
       const String *logLocation = elem->getParamValue(DString("log-location"));
+      
       if (logLocation != null){
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
-        fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF16, false);
+        try{
+          fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF16, false);
+        }catch(Exception &e){
+          fileErrorHandler = null;
+        };
         delete dfis;
-      }else fileErrorHandler = new DefaultErrorHandler();
+      };
+
+      if (fileErrorHandler == null){
+        fileErrorHandler = new DefaultErrorHandler();
+      };
 
       CXmlEl *loc = elem->child();
       while(loc != null){
