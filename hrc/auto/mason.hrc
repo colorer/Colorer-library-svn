@@ -5,9 +5,9 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <prototype name="litestep_steprc" group="scripts" description="Litestep .steprc">
-    <location link="types/litestep.hrc"/>
-    <filename>/step\.rc$/i</filename>
+  <prototype name="mason" group="inet" description="mason">
+    <location link="types/mason.hrc"/>
+    <filename>/\.(mc)$/i</filename>
   </prototype>
 
 </hrc>
