@@ -89,6 +89,7 @@ InternalHandler ml = new InternalHandler();
     text.addTraverseListener(ml);
     text.addMouseListener(ml);
     text.addSelectionListener(ml);
+    text.getContent().addTextChangeListener(ml);
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.addSelectionListener(ml);
     updateViewport();
@@ -410,7 +411,7 @@ InternalHandler ml = new InternalHandler();
 
 
 
-  class InternalHandler implements VerifyListener, ExtendedModifyListener, ControlListener,
+  class InternalHandler implements VerifyListener, ExtendedModifyListener, ControlListener, TextChangeListener,
                     SelectionListener, MouseListener, KeyListener, DisposeListener,
                     LineStyleListener, LineBackgroundListener, PaintListener, TraverseListener{
 
@@ -420,7 +421,7 @@ InternalHandler ml = new InternalHandler();
 
     public void lineGetStyle(LineStyleEvent e){
       int lno = text.getLineAtOffset(e.lineOffset);
-      int caret = text.getCaretOffset();
+      //int caret = text.getCaretOffset();
       updateViewport();
       LineRegion[] lrarr = baseEditor.getLineRegions(lno);
       Vector styles = new Vector();
@@ -474,6 +475,17 @@ InternalHandler ml = new InternalHandler();
     public void modifyText(ExtendedModifyEvent e) {
       modifyEvent(text.getLineAtOffset(e.start));
     }
+
+    public void textChanged(TextChangedEvent event) {
+    }
+    public void textChanging(TextChangingEvent event) {
+    }
+    // Used with complex text change events (tabbing, replacement, etc.)
+    public void textSet(TextChangedEvent event) {
+      modifyEvent(0);
+    }
+
+
     public void controlMoved(ControlEvent e) {};
     public void controlResized(ControlEvent e) {
       updateViewport();
