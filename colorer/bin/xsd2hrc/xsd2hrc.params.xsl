@@ -29,13 +29,17 @@
 
   <xsl:param name="include-prototype" select="'no'"/>
 
+  <!-- If yes, ignores all annotation/documentation elements in schema -->
+
+  <xsl:param name="drop-annotations" select="'no'"/>
+
   <!-- path to HRC catalog (colorer.hrc) -->
 
   <xsl:param name="catalog-path" select="'../../hrc/colorer.hrc'"/>
 
   <!-- path to custom parser file -->
 
-  <xsl:param name="custom-defines" select="'custom.default.xml'"/>
+  <xsl:param name="custom-defines" select="'schemas-custom/custom.default.xml'"/>
 
   <!-- Use specified single top-level element
        If not specified, all global elements could be at top level of file.
