@@ -67,6 +67,7 @@
 
   <scheme name="doxygen">
    <inherit scheme="def:NetAddresses"/>
+   <inherit scheme="def:Comment"/>
    <keywords region="def:CommentContent">
     <word name="\a"/><word name="@a"/>
     <word name="\addindex"/><word name="@addindex"/>
@@ -448,11 +449,12 @@
     region1="KeywordANSI" region2="Label"
    />
    <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="Label"/>       
-   
+   <!--
    <block start="/case\M\s+/" end="/\:?~1\:\M(\s|$)/" 
     scheme="Expression" region="def:Constant"
     region00="KeywordANSI" region10="Label"
    />
+   -->
    <regexp match="/(goto)\s+(\w+)\b/"   
     region1="KeywordDeprecated" region2="Label"
    />

@@ -437,8 +437,8 @@
   <prototype name="diff" group="other" description="Diff/Patch">
     <location link="misc/diff.hrc"/>
     <filename>/\.(diff.*|patch|rej(ect)?)$/i</filename>
-    <firstline>/^(diff|---|\*\*\*)|diff/i</firstline>
-    <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
+    <firstline>/^(diff|---|\*\*\*)|diff/is</firstline>
+    <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/is</firstline>
   </prototype>
   <prototype name="messages" group="other" description="message">
     <location link="misc/messages.hrc"/>
