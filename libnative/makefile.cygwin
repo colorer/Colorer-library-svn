@@ -23,7 +23,7 @@ LIBINC = -lwininet
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
 
 $(obj_output_slash)net_sf_colorer.$(obj):
-	$(CPP) $(CPPFLAGS) -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -s -O3 -c net_sf_colorer.cpp
+	$(CPP) $(CPPFLAGS) -D__int64='long long'  -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w -s -O3 -c net_sf_colorer.cpp
 
 $(TARGET): *.cpp *.h $(objs)
 	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,net_sf_colorer.dll.base $(objs) $(LIBINC)
