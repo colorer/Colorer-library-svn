@@ -287,6 +287,9 @@
 
    <inherit scheme="Outlines"/>
    <inherit scheme="Expression"/>
+   
+   <!-- labels -->
+   <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="def:Label"/>
   </scheme>
 
   <!-- !!EE: two new schemes - Outlines -->
@@ -411,6 +414,8 @@
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
    <block start="/(\[)/" end="/(\])/" scheme="Expression"
           region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+   
+          
    <!-- Numbers -->
    <inherit scheme="def:Number"/>
    <inherit scheme="def:BadHex"/>
