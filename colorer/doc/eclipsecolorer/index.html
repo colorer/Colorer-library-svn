@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Eclipse platform plugin</title>
+<link href="../styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="../images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='../index.html'><img alt='back' src='../images/back.png' width='40' height='18'/></a></div>
+
+
+<h1>Eclipse platform plugin</h1>
+<p>Colorer Library introduces it's new version for the
+<a href='http://www.eclipse.org'>Eclipse platform</a>.
+Eclipse is a highly configurable and extensible IDE, written on Java.
+It provides a great API for plugging external components, allowing
+to use all it's powerful features.
+Colorer implements multiprogramming language editor for the Eclipse platform.
+</p>
+
+<h2>Installation</h2>
+<p>To install Colorer for Eclipse you must download
+<code>EclipseColorer-take5.x.x.x.zip</code> package. This package contains
+Eclipse plugin with sources, packed Colorer's HRC database and
+two versions of native library component - for Windows and Linux platforms.
+It contains sources both for native part and top-level Colorer Java API.
+Note, that it doesn't contains sources of the Colorer Library. If you want
+to rebuild native part of the plugin, you have to download latest Colorer Library
+package.
+</p>
+<p>Unpack content of plugin's package into <code>%ECLIPSEHOME%/plugins/</code>
+folder and restart Eclipse. Make sure you've extracted
+<code>net.sf.colorer/colorer/</code> folder. It contains HRC database,
+which is used by the plugin.
+</p>
+<p>You can choose another way to install colorer - using build-in
+Eclipse Update Manager. Create new location
+<strong>http://colorer.sf.net/eclipsecolorer/</strong> using update manager,
+and Eclipse will allow you to automatically install EclipseColorer.
+Later you can use this way to simply and efficiently update colorer and
+check for its new versions.
+</p>
+<p>If you are already have Colorer-take5 Library, installed in your system
+(f.e. from full library package version), you can delete <code>colorer</code>
+directory and specify path to your <code>catalog.xml</code> file with one of the
+<a href='../api/classParserFactory.html'>standard locations</a>.
+</p>
+
+<h2>Common features</h2>
+<p>Colorer for Eclipse IDE supports:</p>
+<ul>
+ <li>Default Eclipse editor with syntax highlighting capabilities.</li>
+ <li>Paired constructions highlighting and matching.</li>
+ <li>Shortcuts for pairs matching.</li>
+ <li>Different color schemes.</li>
+ <li>Choosing currently used file type in editor (list of all available types).</li>
+ <li>Dynamic library reloading.</li>
+ <li>Powerful and flexible outliner for all common languages.</li>
+ <li>Errors list is included into the outliner view.</li>
+ <li>Colored sources generation into HTML files (Available in the navigator's context menu).</li>
+
+</ul>
+
+
+<h2>Customization</h2>
+<p>You can use <code>Windows/Preferences</code> menu option to open
+Eclipse configuration dialog. Entry <code>Colorer Library</code> contains
+several options, managing Editor's look and feel.
+These includes: </p>
+<ul>
+ <li>Current editor line highlighting.</li>
+ <li>Editor word-wrap setting.</li>
+ <li>Editor tabulation size.</li>
+ <li>Current coloring style (one of available).</li>
+ <li>Background usage setting (Use default system background or
+     current scheme's explicitly).</li>
+</ul>
+<p>To use paired constructions matching, you can
+open a context menu, when the caret is placed on a paired region.
+There you can choose commands to find and position caret on the other pair,
+or to select all the text content between paired structures.
+These commands could be runned from toolbar buttons also.
+</p>
+<p>
+If you want to customize icons used to display items in structure
+tree (outline), place them in
+<code>eclipse\plugins\net.sf.colorer_x.x.x\icons\outline\&lt;schemename></code>
+and name as your regions (use existing files for example).
+</p>
+<p>If you want to customize icon for your file type, copy <code>&lt;editor></code> entry
+  under
+   <code>&lt;extension point="org.eclipse.ui.editors"></code> entry and replace
+   <code>id, name, icon, extensions</code> attributes with your values.
+</p>
+
+<h2>Minor Notes</h2>
+<p>EclipseColorer was tested with Eclipse v2.0.2, v2.1.0, v3.0M5, M6.
+However, there are some differences in behavior of these versions.
+For example, to manage Colorer's current line color in 2.1 and later,
+you must disable line highlighting in global text editor settings.
+Also, there are some differences in Eclipse API. In particular, Colorer
+compiled with latest Eclipse can work with some bugs in previous version.
+</p>
+
+</body>
+</html>
