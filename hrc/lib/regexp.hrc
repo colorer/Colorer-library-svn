@@ -109,10 +109,7 @@
   region00="Quote" region01="def:PairStart"
   region12="Quote" region13="def:PairEnd"
  />
- <block start="/(\{)/" end="/(\})/" scheme="std.number"
-  region00="Quote" region01="def:PairStart"
-  region10="Quote" region11="def:PairEnd"
- />
+ <regexp match="/(?{def:PairStart}\{)[\d\w\s\,]+(?{def:PairEnd}\})/"/>
  <block start="/\(?#1(\?\{)/" end="/(\})/" scheme="code" region="InsertArea"
   region00="SpecQuote" region01="def:PairStart"
   region10="SpecQuote" region11="def:PairEnd"
