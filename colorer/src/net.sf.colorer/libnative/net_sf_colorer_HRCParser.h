@@ -25,6 +25,14 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegion
 
 /*
  * Class:     net_sf_colorer_HRCParser
+ * Method:    getRegionByIndex
+ * Signature: (JI)Lnet/sf/colorer/Region;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_HRCParser_getRegionByIndex
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     net_sf_colorer_HRCParser
  * Method:    enumerateFileTypes
  * Signature: (JI)Lnet/sf/colorer/FileType;
  */

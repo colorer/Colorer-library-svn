@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     net_sf_colorer_FileType
+ * Method:    getBaseScheme
+ * Signature: (J)Lnet/sf/colorer/Scheme;
+ */
+JNIEXPORT jobject JNICALL Java_net_sf_colorer_FileType_getBaseScheme
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     net_sf_colorer_FileType
  * Method:    enumerateParameters
  * Signature: (JI)Ljava/lang/String;
  */

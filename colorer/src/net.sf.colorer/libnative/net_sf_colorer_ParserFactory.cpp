@@ -26,7 +26,7 @@ JNIEXPORT jlong JNICALL Java_net_sf_colorer_ParserFactory_init(JNIEnv *env, jobj
   jpf->jhp->jHRCParser = env->NewGlobalRef(env->NewObject(jClass, jmInit, (jlong)jpf->jhp));
 
   return (jlong)jpf;
-};
+}
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, jobject obj, jlong iptr){
   CLR_TRACE("ParserFactory", "finalize iptr:%d", (int)iptr);
@@ -36,12 +36,12 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_ParserFactory_finalize(JNIEnv *env, j
     return;
   }
   delete jpf;
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getVersion(JNIEnv *env, jobject obj, jlong iptr){
   JParserFactory *jpf = (JParserFactory*)iptr;
   return env->NewStringUTF(jpf->getVersion());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateFileTypes
 (JNIEnv *env, jobject obj, jlong iptr, jint idx){
@@ -49,7 +49,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateFileTypes
   FileType *ft = pf->getHRCParser()->enumerateFileTypes(idx);
   if (ft == null) return null;
   return env->NewString(ft->getName()->getWChars(), ft->getName()->length());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeDescription
 (JNIEnv *env, jobject obj, jlong iptr, jstring ftypename){
@@ -57,7 +57,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeDescripti
   FileType *ft = pf->getHRCParser()->getFileType(&JString(env, ftypename));
   if (ft == null) return null;
   return env->NewString(ft->getDescription()->getWChars(), ft->getDescription()->length());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeGroup
 (JNIEnv *env, jobject obj, jlong iptr, jstring ftypename){
@@ -65,14 +65,14 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeGroup
   FileType *ft = pf->getHRCParser()->getFileType(&JString(env, ftypename));
   if (ft == null) return null;
   return env->NewString(ft->getGroup()->getWChars(), ft->getGroup()->length());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateHRDClasses(JNIEnv *env, jobject obj, jlong iptr, jint idx){
   ParserFactory *pf = (JParserFactory*)iptr;
   const String *str = pf->enumerateHRDClasses(idx);
   if (str == null) return null;
   return env->NewString(str->getWChars(), str->length());
-};
+}
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateHRDInstances
 (JNIEnv *env, jobject obj, jlong iptr, jstring hrdClass, jint idx){
@@ -88,7 +88,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getHRDescription
   const String *str = pf->getHRDescription(JString(env, hrdClass), JString(env, hrdName));
   if (str == null) return null;
   return env->NewString(str->getWChars(), str->length());
-};
+}
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv *env, jobject obj, jlong iptr){
   JParserFactory *jpf = (JParserFactory*)iptr;
@@ -97,23 +97,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv 
   }
   CLR_TRACE("ParserFactory", "jhp:%d", jpf->jhp);
   return jpf->jhp->jHRCParser;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
@@ -125,12 +109,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createTextParser(JNI
   jmethodID jmInit = env->GetMethodID(jClass, "<init>", "()V");
   jobject object = env->NewObject(jClass, jmInit);
   return object;
-};
-
-
-
-
-
+}
 
 
 
@@ -139,8 +118,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createStyledMapper(J
   StyledHRDMapper *rm = pf->createStyledMapper(&JString(env, hrdClass), &JString(env, hrdName));
 
   jclass jClass = env->FindClass("net/sf/colorer/handlers/RegionMapper");
-  jmethodID jmInit = env->GetMethodID(jClass, "<init>", "()V");
-  jobject object = env->NewObject(jClass, jmInit);
+  jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
+  jobject object = env->NewObject(jClass, jmInit, (jlong)rm);
   return object;
 }
 
@@ -149,9 +128,9 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_createTextMapper(JNI
   TextHRDMapper *rm = pf->createTextMapper(&JString(env, hrdName));
 
   jclass jClass = env->FindClass("net/sf/colorer/handlers/RegionMapper");
-  jmethodID jmInit = env->GetMethodID(jClass, "<init>", "()V");
-  jobject object = env->NewObject(jClass, jmInit);
+  jmethodID jmInit = env->GetMethodID(jClass, "<init>", "(J)V");
+  jobject object = env->NewObject(jClass, jmInit, (jlong)rm);
   return object;
-};
+}
 
 };
