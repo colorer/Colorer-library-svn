@@ -403,7 +403,7 @@
   </prototype>
   <prototype name="cache" group="rare" description="Cache/Open-M">
     <location link="rare/cache.hrc"/>
-    <filename>/\.(ro|rtn|inc|int|mac)$/i</filename>
+    <filename>/\.(rsa|ro|rtn|inc|int|mac|cdl)$/i</filename>
     <firstline>/^(Cache|OpenM)[^\^]+\^(IN[TC]|MAC)[^\^]*\^.*$/i</firstline>
   </prototype>
   <prototype name="eiffel" group="rare" description="Eiffel">
