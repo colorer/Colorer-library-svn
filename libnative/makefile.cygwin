@@ -19,7 +19,7 @@ include makefile.core
 
 DLLMAIN=_DllMain@12
 
-LIBINC = -lwininet
+LIBINC = -lwininet -lstdc++
 LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
 
 $(obj_output_slash)net_sf_colorer.$(obj):
