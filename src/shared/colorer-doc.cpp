@@ -186,9 +186,10 @@
       - ../catalog.xml
       - ../../catalog.xml
       - /usr/shared/colorer/catalog.xml
+
   @note
-    \%NAME% - Environment variable of the current process.<br/>
-    image_start_dir - Directory, where current image was started.
+    - \%NAME% - Environment variable of the current process.
+    - image_start_dir - Directory, where current image was started.
 */
 
 /**
