@@ -22,6 +22,7 @@ public class BaseEditorNative implements BaseEditor {
     HRCParser hrcParser = pf.getHRCParser();
     def_PairStart = hrcParser.getRegion("def:PairStart");
     def_PairEnd = hrcParser.getRegion("def:PairEnd");
+    setBackParse(2000);// TODO!!!
   };
   protected void finalize() throws Throwable{
     finalize(iptr);
@@ -61,7 +62,11 @@ public class BaseEditorNative implements BaseEditor {
   public RegionDefine getHorzCross(){
     return getHorzCross(iptr);
   }
-  
+
+  public void setBackParse(int backParse) {
+    setBackParse(iptr, backParse);
+  }
+
   public PairMatch getPairMatch(int lineNo, int linePos){
     LineRegion[] lrArray = getLineRegions(iptr, lineNo);
     if (lrArray.length == 0) return null;
@@ -142,6 +147,12 @@ public class BaseEditorNative implements BaseEditor {
   public LineRegion[] getLineRegions(int lno){
     return getLineRegions(iptr, lno);
   }
+  public void validate(int lno) {
+    validate(iptr, lno);
+   }
+  public void idleJob(int time) {
+    idleJob(iptr, time);
+  }
   public void modifyEvent(int topLine){
     modifyEvent(iptr, topLine);
   }
@@ -170,12 +181,16 @@ public class BaseEditorNative implements BaseEditor {
   public native void setFileType(long iptr, String typename);
   public native String chooseFileType(long iptr, String fname);
   public native String getFileType(long iptr);
+
+  public native void setBackParse(long iptr, int backParse);
   
   public native RegionDefine getBackground(long iptr);
   public native RegionDefine getVertCross(long iptr);
   public native RegionDefine getHorzCross(long iptr);
   
   public native LineRegion[] getLineRegions(long iptr, int lno);
+  public native void validate(long iptr, int lno);
+  public native void idleJob(long iptr, int time);
 
   public native void modifyEvent(long iptr, int topLine);
   public native void modifyLineEvent(long iptr, int line);

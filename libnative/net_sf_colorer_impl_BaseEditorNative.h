@@ -89,6 +89,14 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getFileType
 
 /*
  * Class:     net_sf_colorer_impl_BaseEditorNative
+ * Method:    setBackParse
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setBackParse
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     net_sf_colorer_impl_BaseEditorNative
  * Method:    getBackground
  * Signature: (J)Lnet/sf/colorer/handlers/RegionDefine;
  */
@@ -117,6 +125,22 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getHorzCross
  * Signature: (JI)[Lnet/sf/colorer/handlers/LineRegion;
  */
 JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLineRegions
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     net_sf_colorer_impl_BaseEditorNative
+ * Method:    validate
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_validate
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     net_sf_colorer_impl_BaseEditorNative
+ * Method:    idleJob
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_idleJob
   (JNIEnv *, jobject, jlong, jint);
 
 /*

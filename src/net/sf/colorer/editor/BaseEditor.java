@@ -21,6 +21,14 @@ public interface BaseEditor{
   /** Returns Currently selected file type */ 
   public String getFileType();
 
+  /** Specifies number of lines, for which parser
+      would be able to run continual processing without
+      highlight invalidation.
+      @param backParse Number of lines. If <= 0, dropped into default
+      value.
+  */
+  void setBackParse(int backParse);
+
   /** Installs specified RegionMapper. */ 
   public void setRegionMapper(String cls, String name);
 
@@ -43,34 +51,60 @@ public interface BaseEditor{
   public RegionDefine getHorzCross();
 
   /** Searches and creates pair match object.
-      Returned object can lately be used in pair search methods.
+      Returned object can be used later in the pair search methods.
+      This object is valid only until reparse of it's line
+      occured. After that event information about line region's
+      references in it becomes invalid and, if used, can produce
+      faults.
       @param lineNo Line number, where to search paired region.
       @param pos Position in line, where paired region to be searched.
-             Paired Region is found, if it includes
-             specified position or ends directly
-             at one char before line position.
+             Paired Region is found, if it includes specified position
+             or ends directly at one char before line position.
   */
   public PairMatch getPairMatch(int lineNo, int pos);
 
-  /** Searches pair match in currently avaiable parsed information.
+  /** Searches pair match in currently visible text.
       @param pm Unmatched pair match
   */
   public void searchLocalPair(PairMatch pm);
-  /** Searches pair match in all avaiable text.
+  
+  /** Searches pair match in all available text, possibly,
+      making additional processing.
       @param pm Unmatched pair match
   */
   public void searchGlobalPair(PairMatch pm);
 
   /** Return parsed and colored LineRegions of requested line.
       This method validates current cache state
-      and, if needed, calls Colorer parser to
-      validate modified block of text.
+      and, if needed, calls Colorer parser to validate modified block of text.
       Size of reparsed text is choosed according to information
       about visible text range and modification events.
+      @todo If number of lines, to be reparsed is more, than backParse parameter,
+      then method will return null, until validate() method is called.
   */
   public LineRegion[] getLineRegions(int lno);
+
+  /** Validates current state of the editor and runs parser, if needed.
+      This method can be called periodically in background thread
+      to make possible background parsing process.
+      @param lno Line number, for which validation is requested.
+             If this number is in the current visible window range,
+             the part of text is validated, which is required
+             for visual repaint.
+             If this number is equals to -1, all the text is validated.
+             If this number is not in visible range, optimal partial validation
+             is used
+  */
+  void validate(int lno);
+
+  /** Tries to do some parsing job while user is doing nothing.
+      @param time integer between 0 and 100, shows an abount of time,
+      available for this job.
+  */
+  void idleJob(int time);
+
   /** Informs BaseEditor object about text modification event.
-      All text after specified line becomes invalid.
+      All the text becomes invalid after the specified line.
       @param topLine Topmost modified line of text.
   */
   public void modifyEvent(int topLine);
@@ -79,8 +113,8 @@ public interface BaseEditor{
       Generally, this type of event can be processed much faster
       because of pre-checking line's changed structure and
       cancelling further parsing in case of unmodified text structure.
-      @todo Not used yet!
       @param line Modified line of text.
+      @todo Not used yet! This must include special 'try' parse method.
   */
   public void modifyLineEvent(int line);
 
@@ -89,10 +123,13 @@ public interface BaseEditor{
       text structure and to make faster parsing.
       @param wStart Topmost visible line of text.
       @param wSize  Number of currently visible text lines.
+                    This number must includes all partially visible lines.
   */
   public void visibleTextEvent(int wStart, int wSize);
 
-  /** Informs about total lines count change. */
+  /** Informs about total lines count change.
+      This must include initial lines number setting.
+  */
   public void lineCountEvent(int newLineCount);
 
 };
