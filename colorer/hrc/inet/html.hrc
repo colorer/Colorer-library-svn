@@ -465,7 +465,7 @@
 
       <inherit scheme="htmlScripts"/>
          
-      <block start="/ (&lt;(style).*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i" 
+      <block start="/ (&lt;(style\b).*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i" 
              scheme="css:css" region00="PairStrongStart" region10="PairStrongEnd" 
              region01="htmlTagBr" region02="htmlOpenTag" 
              region11="htmlTagBr" region12="htmlOpenTag"
