@@ -232,7 +232,7 @@
 
         <xsl:call-template name='crlf'/><xsl:call-template name='crlf'/>
 
-        <scheme name="{$hrctype}-root" access="public">
+        <scheme name="{$hrctype}-root">
           <xsl:choose>
             <xsl:when test="$custom-type/c:top-level">
               <xsl:for-each select="$custom-type/c:top-level/*">
@@ -262,7 +262,7 @@
           </xsl:if>
         </scheme>
 
-        <scheme name="{$hrctype}" access="public">
+        <scheme name="{$hrctype}">
           <xsl:choose>
             <xsl:when test="$force-single-root = 'yes'">
               <inherit scheme="xml:singleroot">
