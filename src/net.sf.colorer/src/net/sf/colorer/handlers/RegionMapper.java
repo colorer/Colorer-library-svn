@@ -5,12 +5,28 @@ import net.sf.colorer.Region;
 public class RegionMapper{
 
     private long iptr;
-    
+    private boolean disposed = false;
+
     private RegionMapper(long iptr)
     {
         this.iptr = iptr;
     }
     
+    public void dispose(){
+        if (disposed){
+            throw new IllegalStateException("Object already disposed");
+        }
+        finalize(iptr);
+        disposed = true;
+    }
+
+    protected void finalize(){
+        if (!disposed){
+            dispose();
+        }
+    }
+    private native void finalize(long iptr);
+
     /**
      * Searches mapped region define value.
      * 
@@ -20,7 +36,7 @@ public class RegionMapper{
     RegionDefine getRegionDefine(Region region) {
         return getRegionDefine(iptr, region);
     }
-    
+
     private native RegionDefine getRegionDefine(long iptr, Region region);
 
     /**
@@ -31,20 +47,6 @@ public class RegionMapper{
     }
     private native RegionDefine getRegionDefine(long iptr, String name);
 
-    /**
-     * Static factory method to retrieve RegionMapper object instance,
-     * associated with passed HRD class and name.
-     * 
-     * @param hrdClass Class of HRD descriptor
-     * @param hrdName Name of HRD descriptor
-     * @return Class instance
-     */
-    public static RegionMapper getRegionMapper(String hrdClass, String hrdName){
-        long iptr = getRegionMapper0(hrdClass, hrdName);
-        return new RegionMapper(iptr);
-    }
-    static native long getRegionMapper0(String hrdClass, String hrdName);
-    
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
