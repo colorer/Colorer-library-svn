@@ -12,7 +12,7 @@
 -->
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
-   <type name="asm80" access="public">
+   <type name="z80" access="public">
 
       <import type="def"/>
 
@@ -213,38 +213,6 @@
          </keywords>
       </scheme>
 
-      <scheme name="BaseAsm80">
-         <inherit scheme="z80BaseAsm"/>
-         <inherit scheme="BaseZ80"/>
-<!-- Labels -->
-         <regexp match="/^([a-zA-Z\$_][\w\$]*)/i" region0="aLabel"/>
-<!-- Commands -->
-         <regexp match="/^(\*\u.*)$/" region0="aCommand"/>
-<!-- Z80 mnemonics -->
-         <keywords ignorecase="yes" region="aMnemonic">
-            <word name="sli"/>
-         </keywords>
-<!-- Directives -->
-         <keywords ignorecase="yes" region="aDirective">
-            <word name="DEFR"/>
-            <word name="DISP"/>
-            <word name="ENDD"/>
-            <word name="ENT"/>
-            <word name="TIME"/>
-         </keywords>
-      </scheme>
-
-      <scheme name="asm80Mac">
-         <inherit scheme="BaseAsm80"/>
-         <regexp match="/\=.\b/" region0="aLabel"/>
-      </scheme>
-
-      <scheme name="asm80">
-         <inherit scheme="BaseAsm80"/>
-<!-- Macroses -->
-         <block start="/\bMAC\b/i" end="/\bENDM\b/i" scheme="asm80Mac"/>
-      </scheme>
-
       <scheme name="NameDir">
          <inherit scheme="BaseTyp"/>
 <!-- Strings -->
@@ -265,7 +233,7 @@
          </keywords>
       </scheme>
 
-      <scheme name="z80Asm">
+      <scheme name="z80">
          <inherit scheme="z80BaseAsm"/>
          <inherit scheme="BaseZ80"/>
 <!-- Strings -->
