@@ -130,7 +130,7 @@
                               separate distribution.
     ``ant this.colorer''    - Builds binary executables and installs
                               them into the current working copy.
-    ''ant this.far''        - Builds far manager executables and installs
+    ``ant this.far''        - Builds far manager executables and installs
                               them into FAR Manager folder.
 </echo>
   </target>
@@ -366,8 +366,8 @@
 
 
   <target name="eclipseplugin.clean" depends='init'>
-    <delete dir='${eclipseplugin-dir}'/>
-    <delete file='${eclipseplugin-zip}'/>
+    <delete dir='${eclipseplugin-dir}' failonerror='false'/>
+    <delete file='${eclipseplugin-zip}' failonerror='false'/>
     <ant dir='src/net.sf.colorer' antfile='build.xml' target='clean'>
       <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
     </ant>
@@ -544,6 +544,8 @@
     <fail unless='lib'>
     *********** ERROR! FarColorer plugin was not compiled
     </fail>
+
+    <mkdir dir='${this.far-dir}'/>
 
     <move failonerror='false' file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
     <copy todir='${this.far-dir}/bin'>
