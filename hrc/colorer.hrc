@@ -311,7 +311,7 @@
   </prototype>
   <prototype name="ada" group="rare" description="Ada">
     <location link="rare/ada.hrc"/>
-    <filename>/\.(ads|adb)$/i</filename>
+    <filename>/\.(ads|adb|adc)$/i</filename>
   </prototype>
   <prototype name="abap4" group="rare" description="ABAP/4">
     <location link="rare/abap4.hrc"/>
@@ -365,10 +365,11 @@
     <location link="rare/matlab.hrc"/>
     <filename>/\.m$/i</filename>
   </prototype>
+  <!-- warning!! extensions conflict with link defines -->
   <prototype name="modula2" group="rare" description="Modula2 and Oberon2">
     <location link="rare/modula.hrc"/>
-    <filename>/\.(mod|ob2)$/i</filename>
-    <firstline>/\(\*|MODULE/</firstline>
+    <filename>/\.(mod|ob2|odf|def)$/i</filename>
+    <firstline>/\(\*|MODULE|DEFINITION|IMPLEMENTATION|&lt;\*/</firstline>
   </prototype>
   <prototype name="picasm" group="rare" description="PicAsm">
     <location link="rare/picasm.hrc"/>
@@ -388,9 +389,13 @@
     <location link="rare/ruby.hrc"/>
     <filename>/\.(rb|ruby)$/i</filename>
   </prototype>
-  <prototype name="sml" group="rare" description="StandardML">
+  <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
-    <filename>/\.(sml|ml|mli)$/i</filename>
+    <filename>/\.(sml|sig)$/i</filename>
+  </prototype>
+  <prototype name="ocaml" group="rare" description="OCaml">
+    <location link="rare/ocaml.hrc"/>
+    <filename>/\.(ml|mli|mlp)$/i</filename>
   </prototype>
   <prototype name="tcltk" group="rare" description="Tcl/Tk">
     <location link="rare/tcltk.hrc"/>
