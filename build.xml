@@ -27,6 +27,8 @@
   <property name='library-linux-tar' value='${build-dir}/${library-linux-name}.tar'/>
   <property name='library-linux-tar.bz2' value='${library-linux-tar}.bz2'/>
 
+  <property name='this.far-dir' value='c:\far\plugins\colorer'/>
+
   <property name='farplugin-name' value='FarColorer-take5${distr-version}'/>
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
@@ -50,6 +52,8 @@
   <property name='native-path' value='${env.Path}:${native-path-add}'/>
   <property name='native-libs' value='${env.LIB}:${native-libs-add}'/>
 
+  <property name='use-dot' value='NO'/>
+  <property name='dot-path' value=''/>
 
   <xmlcatalog id="DTDs">
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -77,6 +81,8 @@
     <condition property='make' value='${macos.make}'><equals arg1='${platform}' arg2='macos'/></condition>
     <condition property='makefile' value='${macos.makefile}'><equals arg1='${platform}' arg2='macos'/></condition>
 
+    <condition property='fail-on-badpaths' value='true'><equals arg1='${fail-on-bad-paths}' arg2='true'/></condition>
+
     <fail unless='make'>
 
       No 'platform' property was specified. Use
@@ -97,10 +103,16 @@
     </uptodate>
 
     <uptodate property="doc.doxygen.required" targetfile="doc/api/index.html">
-      <srcfiles dir= "src" includes="**/*.h, **/*.cpp, **/colorer.doxygen.cfg, **/*.html"/>
+      <srcfiles dir= "src" includes="**/*.h, **/*.cpp, **/doxygen.cfg*, **/*.html"/>
     </uptodate>
 
     <available file='${doxygen}' property='doxygen-exists'/>
+    <condition property='doxygen-exists-orfail' value='true'>
+      <or>
+       <isset property='doxygen-exists'/>
+       <isset property='fail-on-badpaths'/>
+      </or>
+    </condition>
 
     <available file='${eclipse.dir}' type='dir' property='eclipse.plugins-exists'/>
 
@@ -108,17 +120,25 @@
 
   <target name="info" description='Shows help'>
 <echo>
-  You can build Colorer-take5 library into three kinds of packages:
-    ``ant library''         - full library distribution
-    ``ant library-linux''   - library unix package version
+  You can build Colorer-take5 library into four kinds of packages:
+    ``ant library''         - Full library distribution
+    ``ant library-linux''   - Library unix package version
     ``ant eclipseplugin''   - Eclipse IDE plugin
     ``ant farplugin''       - FAR Manager plugin
+  Service builds:
+    ``hrcupdate''           - Builds zip with current HRC for
+                              separate distribution.
+    ``ant this.colorer''    - Builds binary executables and installs
+                              them into the current working copy.
+    ''ant this.far''        - Builds far manager executables and installs
+                              them into FAR Manager folder.
 </echo>
   </target>
 
   <target name="all" depends='init' description='Builds all available packages: library, farplugin and eclipseplugin'>
     <splash/>
     <antcall target='library'/>
+    <antcall target='library-linux'/>
     <antcall target='farplugin'/>
     <antcall target='eclipseplugin'/>
   </target>
@@ -160,13 +180,23 @@
       <property name='doc.dir' value='../../doc/java'/>
     </ant>
   </target>
-  <target name="doc.doxygen" depends='init' if='doxygen-exists' description='Generates C++ classes documentation' unless='doc.doxygen.required'>
+
+  <target name="doc.doxygen" depends='init' if='doxygen-exists-orfail' description='Generates C++ classes documentation' unless='doc.doxygen.required'>
     <antcall target='doxygen-check'/>
+    <copy file='src/shared/colorer_doc/doxygen.cfg.in'
+          tofile="src/shared/colorer_doc/doxygen.cfg">
+      <filterset>
+        <filter token='use-dot' value='${use-dot}'/>
+        <filter token='dot-path' value='${dot-path}'/>
+      </filterset>
+    </copy>
     <exec executable='${doxygen}' dir='src/shared/colorer_doc'
           failonerror='true'>
-      <arg value='colorer.doxygen.cfg'/>
+      <arg value='doxygen.cfg'/>
     </exec>
+    <delete file='src/shared/colorer_doc/doxygen.cfg'/>
   </target>
+
   <target name='doxygen-check' unless='doxygen-exists'>
     <echo>
 * ********** WARNING!!! *************
@@ -175,7 +205,7 @@
 *
 * If you have these files, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
     </echo>
     <fail if='fail-on-badpaths'>
@@ -231,6 +261,26 @@
     </zip>
 
   </target>
+
+
+  <target name="this.colorer" depends='init, xsd2hrc.distr' description='Builds binary executable and moves it into current working copy'>
+    <exec dir='src/colorer' executable='${make}' failonerror='true'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+      <env key='LIB' path='${native-libs}'/>
+    </exec>
+    <condition property="lib">
+      <or>
+        <available filepath="src/colorer" file="colorer.exe"/>
+        <available filepath="src/colorer" file="colorer"/>
+      </or>
+    </condition>
+    <fail unless='lib' message='Native executable library was not compiled'/>
+    <copy todir="./bin">
+      <fileset dir="src/colorer" includes="colorer.exe, colorer"/>
+    </copy>
+  </target>
+
 
 
   <target name="library.clean" depends='init'>
@@ -336,7 +386,7 @@
 *
 * If you have these files, please fix 'build.properties'
 * file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-badpaths'
+* You can ignore this build error, removing 'fail-on-bad-paths'
 * property from the 'build.properties' file.
     </echo>
     <fail if='fail-on-badpaths'>
@@ -463,6 +513,29 @@
       <fileset dir='${farplugin-dir}'/>
     </zip>
 
+  </target>
+
+  <target name="this.far" depends='init' description='Builds FarColorer plugin and copies it into working FAR instance'>
+    <condition property="system">
+      <os family='windows'/>
+    </condition>
+    <fail unless='system'>
+    *********** FarColorer plugin is available only on Windows system
+    </fail>
+    <exec dir='src/pcolorer' executable='${make}' failonerror='true'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+    </exec>
+    <available property='lib' file='src/pcolorer/colorer.dll'/>
+    <fail unless='lib'>
+    *********** ERROR! FarColorer plugin was not compiled
+    </fail>
+
+    <move file='${this.far-dir}/bin/colorer.dll' todir='${env.TEMP}'/>
+    <copy todir='${this.far-dir}/bin'>
+      <fileset dir='bin/farplugin' includes='coloree.hlf,coloree.lng,colorer.hlf,colorer.lng,shortcuts.reg'/>
+      <fileset dir='src/pcolorer' includes='colorer.dll'/><!-- colorer.map -->
+    </copy>
   </target>
 
 </project>
