@@ -1,6 +1,6 @@
 
 
-  $Id$
+  $Date$
 
   New:
     - ActionScript by Ralf Bokelberg
