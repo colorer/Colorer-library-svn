@@ -34,7 +34,7 @@
   <target name='distr' description='All distribution targets'
           depends='checkpaths,
                    xmlschema,xml,ant,mathml,xhtml,xslfo,xslt,
-                   relaxng,web-app,wsc,wsf,
+                   relaxng,web-app,wsc,wsf,taglib,
                    hrc,hrd,colorer5catalog,calcset,esc,xsd2hrc.custom,
                    docbook'>
   </target>
