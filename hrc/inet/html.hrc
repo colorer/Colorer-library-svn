@@ -31,7 +31,7 @@
     <region name="htmlComment" parent="Comment"/>
     <region name="htmlDirective" parent="Directive"/>
     <region name="htmlParam" parent="Parameter"/>
-    <region name="htmlUnknowParam" parent="ParameterUnknow"/>
+    <region name="htmlUnknowParam" parent="ParameterUnknown"/>
     <region name="htmlTT" parent="Insertion"/>
 
     <region name="htmlTagBr" parent="OpenTag"/>
