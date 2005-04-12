@@ -17,7 +17,7 @@ obj  = obj
 
 obj_output_slash = $(obj_output)\\
 
-# /Zi
+# /Zi 
 CPPFLAGS_CUSTOM = /O2gtiyb2 -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 #LIB_DEBUG = /debug /incremental:no
 
@@ -30,7 +30,7 @@ include ../../shared/makefile.objs
 
 include makefile.core
 
-LIBFLAGS = $(objs) wininet.lib /DLL $(LIB_DEBUG)
+LIBFLAGS = $(objs) wininet.lib /MAP /DLL $(LIB_DEBUG)
 
 $(obj_output_slash)net_sf_colorer.$(obj):
 	$(CPP) $(CPPFLAGS) -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE_MD) net_sf_colorer.cpp

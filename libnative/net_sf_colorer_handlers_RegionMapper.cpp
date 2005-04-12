@@ -30,6 +30,11 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDef
 {
     RegionMapper *rm = (RegionMapper*)iptr;
 
+    if (rm == null){
+      CLR_WARN("JRegionMapper", "RM is null!!");
+      return null;
+    }
+
     const RegionDefine *rdef = rm->getRegionDefine(JString(env, name));
     if (rdef == null){
       CLR_WARN("JRegionMapper", "Region define is empty");
