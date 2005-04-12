@@ -30,7 +30,7 @@ public:
   // Cache of created color regions.
   Vector<jobjectArray> lrCache;
   // Currently installed handlers
-  Vector<JWrapRegionHandler*> regionHandlers;
+  Vector<JWrapRegionHandler*> jregionHandlers;
   // last valid line. used to invalidate cache state.
   int validLine;
 };
