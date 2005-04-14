@@ -9,6 +9,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 public class OutlineSchemeElement extends OutlineElement{
   
   public Scheme scheme;
+  public int l2no, pos2;
   
   public Vector elements = new Vector();
   
