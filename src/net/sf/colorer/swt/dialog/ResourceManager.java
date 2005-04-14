@@ -24,6 +24,11 @@ public class ResourceManager {
     public static Color getColor(int clr) {
         return Display.getDefault().getSystemColor(clr);
     }
+
+    public static Color newColor(int clr) {
+        return new Color(Display.getCurrent(), clr>>16, clr>>8 & 0xFF, clr & 0xFF); 
+    }
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

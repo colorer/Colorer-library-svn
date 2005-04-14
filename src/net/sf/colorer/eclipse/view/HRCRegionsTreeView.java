@@ -6,10 +6,13 @@ import java.util.Vector;
 
 import net.sf.colorer.FileType;
 import net.sf.colorer.HRCParser;
-import net.sf.colorer.ParserFactory;
 import net.sf.colorer.Region;
 import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.ImageStore;
+import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.editors.ColorerEditor;
+import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.Logger;
@@ -36,16 +39,17 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
@@ -65,8 +69,31 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
     private IPreferenceStore prefStore;
     
     RegionMapper regionMapper;
+    StyledRegion def_Text;
     Label fg_label, bg_label;
     Color foreColor, backColor;
+
+    ISelectionListener thisSelectionListener = new ISelectionListener (){
+        public void selectionChanged(org.eclipse.ui.IWorkbenchPart part,ISelection selection){
+            ColorerEditor activeEditor = null;
+            if (Logger.TRACE){
+                Logger.trace("RegionsTree", "selection changed:"+part);
+            }
+            if (part instanceof ColorerEditor){
+                activeEditor = (ColorerEditor)part;
+            }
+            if (activeEditor != null && linkToEditorAction.isChecked()){
+                LineRegion lr = activeEditor.getCaretRegion();
+                if (lr == null || lr.region == null) return;
+                treeViewer.expandToLevel(lr.region, 0);
+                treeViewer.setSelection(new StructuredSelection(lr.region), true);
+    
+                if (Logger.TRACE){
+                    Logger.trace("RegionsTree", "selected:"+lr.region);
+                }
+            }
+        }
+    };
 
     /**
      * The view constructor.
@@ -79,19 +106,24 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
      * to create the viewer and initialize it.
      */
     public void createPartControl(Composite parent) {
-        composite = createComposite(parent);
-        makeActions();
-        contributeToActionBars();
         
         prefStore = ColorerPlugin.getDefault().getPreferenceStore();
         prefStore.addPropertyChangeListener(this);
+
+        composite = createComposite(parent);
+        makeActions();
+        contributeToActionBars();
+
+        getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(thisSelectionListener);
+
         propertyChange(null);
     }
-    
+
     public void propertyChange(PropertyChangeEvent event) {
         
         if (regionMapper != null){
             regionMapper.dispose();
+            regionMapper = null;
         }
         try{
             regionMapper = ColorerPlugin.getDefault().getParserFactory().
@@ -102,7 +134,10 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
                 Logger.error("HRCRegionsTreeView", "createStyledMapper:", e);
             }
         }
-    }    
+        
+        def_Text = (StyledRegion)regionMapper.getRegionDefine("def:Text");
+        
+    }
 
     Composite createComposite(Composite parent){
         Composite composite = new Composite(parent, SWT.NONE);
@@ -115,7 +150,7 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
             treeViewer = new TreeViewer(composite_1, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
             treeViewer.setContentProvider(new RegionContentProvider());
             treeViewer.setLabelProvider(new RegionTreeLabelProvider());
-            
+
             hrcParser = ColorerPlugin.getDefault().getParserFactory().getHRCParser();
             treeViewer.setInput(hrcParser);
 
@@ -143,23 +178,23 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
                     }
 
                     StyledRegion sr = (StyledRegion)regionMapper.getRegionDefine(sel);
-                    
-                    foreColor = ResourceManager.getColor(SWT.COLOR_BLACK);
-                    backColor = ResourceManager.getColor(SWT.COLOR_WHITE);
-                    
+
+                    foreColor = ResourceManager.newColor(def_Text.fore);
+                    backColor = ResourceManager.newColor(def_Text.back);
+
                     if (sr != null){
                         if (sr.bfore){
                             foreColor.dispose();
-                            foreColor = new Color(Display.getCurrent(), sr.fore>>16, sr.fore>>8 & 0xFF, sr.fore & 0xFF);
+                            foreColor = ResourceManager.newColor(sr.fore);
                         }
                         if (sr.bback){
                             backColor.dispose();
-                            backColor = new Color(Display.getCurrent(), sr.back>>16, sr.back>>8 & 0xFF, sr.back & 0xFF);
+                            backColor = ResourceManager.newColor(sr.back);
                         }
                     }
-                    
+
+                    fg_label.setForeground(backColor);
                     fg_label.setBackground(foreColor);
-                    //fg_label.setForeground(ResourceManager.getColor(SWT.COLOR_RED));
 
                     bg_label.setForeground(foreColor);
                     bg_label.setBackground(backColor);
@@ -256,20 +291,16 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
 
     private void makeActions() {
 
-        refreshAction = new Action("Refresh",
-                PlatformUI.getWorkbench().getSharedImages().
-                getImageDescriptor(ISharedImages.IMG_TOOL_COPY))
+        refreshAction = new Action("Refresh", ImageStore.getID("regions-tree-refresh"))
         {
             public void run() {
                 hrcParser = ColorerPlugin.getDefault().getParserFactory().getHRCParser();
                 treeViewer.setInput(hrcParser);
             }
         };
-        refreshAction.setToolTipText("Refresh tree according to current HRC state");
+        refreshAction.setToolTipText(Messages.get("regions-tree.refresh"));
         
-        loadAllAction = new Action("Load All",
-                PlatformUI.getWorkbench().getSharedImages().
-                getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT))
+        loadAllAction = new Action("Load All", ImageStore.getID("regions-tree-loadall"))
         {
             public void run() {
                 BusyIndicator.showWhile(treeViewer.getTree().getDisplay(), new Runnable(){
@@ -278,27 +309,21 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
                             FileType ft = (FileType)e.nextElement();
                             ft.getBaseScheme();
                         }
+                        refreshAction.run();
                     }
                 });
             }
         };
-        loadAllAction.setToolTipText("Loads all available HRC resources to see Full Region Tree");
+        loadAllAction.setToolTipText(Messages.get("regions-tree.loadall"));
         
         linkToEditorAction = new Action("Link", Action.AS_CHECK_BOX){
             public void run() {
-                //
+                prefStore.setValue("RegionsTree.Link", isChecked());
             }
         };
-        linkToEditorAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
-        linkToEditorAction.setToolTipText("Links selection with current editor region under cursor");
-        
-    }
-
-    private void showMessage(String message) {
-         MessageDialog.openInformation(
-            composite.getShell(),
-            "Sample View",
-            message);
+        linkToEditorAction.setImageDescriptor(ImageStore.getID("regions-tree-link"));
+        linkToEditorAction.setToolTipText(Messages.get("regions-tree.link"));
+        linkToEditorAction.setChecked(prefStore.getBoolean("RegionsTree.Link"));
     }
 
     /**
@@ -308,7 +333,6 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
         composite.setFocus();
     }
     
-    
     public void dispose() {
         if (foreColor != null){
             foreColor.dispose();
@@ -317,9 +341,10 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
             backColor.dispose();
         }
         regionMapper.dispose();
+        getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(thisSelectionListener);
+        prefStore.removePropertyChangeListener(this);
         super.dispose();
     }
-    
 }
 
 
@@ -382,7 +407,7 @@ class RegionContentProvider implements ITreeContentProvider {
     }
 
     public Object getParent(Object element) {
-        return null;
+        return ((Region)element).getParent();
     }
 
     public boolean hasChildren(Object element) {
@@ -408,3 +433,38 @@ class RegionTreeLabelProvider extends LabelProvider {
     }
     
 }
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is the Colorer Library.
+ *
+ * The Initial Developer of the Original Code is
+ * Cail Lomecb <cail@nm.ru>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */

@@ -54,32 +54,9 @@ public class WorkbenchOutliner extends Outliner
         detachOutliner(editor.getBaseEditor());
     }
 
-
     public OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
         return new OutlineElement(this, lno, sx, length, curLevel, itemLabel, region);
     }
-
-    public void modifyEvent(int topLine) {
-        super.modifyEvent(topLine);
-    }
-    
-    public void startParsing(int lno) {
-        /*
-        if (Logger.TRACE) {
-            Logger.trace("WorkbenchOutliner", "startParsing("+lno+"):"+this);
-        }
-        */
-        super.startParsing(lno);
-    }
-
-    public void endParsing(int lno) {
-        /*
-        if (Logger.TRACE) {
-            Logger.trace("WorkbenchOutliner", "endParsing("+lno+"):"+this);
-        }
-        */
-        super.endParsing(lno);
-    };
     
     protected void notifyUpdate(){
         for (int idx = 0; idx < listeners.size(); idx++)

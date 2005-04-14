@@ -99,7 +99,7 @@ public class TextColorer{
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.addSelectionListener(ml);
     updateViewport();
-
+/*
     new Thread(){
       public void run(){
         //setPriority(Thread.NORM_PRIORITY-1);
@@ -127,6 +127,7 @@ public class TextColorer{
         };
       };
     }.start();
+    */
   }
 
   /**
@@ -321,6 +322,29 @@ public class TextColorer{
    */
   public int getVisibleEnd(){
       return visibleEnd;
+  }
+  
+  /**
+   * Retrieves current LineRegion under caret.
+   * 
+   * @return LineRegion currently under Caret
+   */
+  public LineRegion getCaretRegion(){
+      LineRegion caretRegion = null;
+      int caret = text.getCaretOffset();
+      int lno = text.getLineAtOffset(caret);
+      int linepos = caret - text.getOffsetAtLine(lno);
+
+      LineRegion[] arr = baseEditor.getLineRegions(lno);
+      if (arr == null){
+          return null;
+      }
+      for(int idx = 0; idx < arr.length; idx++){
+          if (arr[idx].start <= linepos && arr[idx].end > linepos && !arr[idx].special){
+              caretRegion = arr[idx];
+          }
+      }
+      return caretRegion;
   }
 
   /**
@@ -605,7 +629,7 @@ public class TextColorer{
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
