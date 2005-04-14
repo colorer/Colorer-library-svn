@@ -59,8 +59,9 @@ public class Logger {
     static Hashtable filter = new Hashtable();
     
     static {
-        filter.put("TextColorer", filter);
-        filter.put("ParseTree", filter);
+        //filter.put("RegionsTree", filter);
+        //filter.put("ParseTree", filter);
+        filter.put("ColorerEditor", filter);
     }
 
 }

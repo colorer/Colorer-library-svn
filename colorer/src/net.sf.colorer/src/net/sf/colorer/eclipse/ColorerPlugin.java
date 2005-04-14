@@ -63,7 +63,9 @@ public class ColorerPlugin extends AbstractUIPlugin {
     
         store.setDefault("Outline.Hierarchy", true);
         store.setDefault("Outline.Sort", false);
-    
+
+        store.setDefault("RegionsTree.Link", false);
+
         store.setDefault("g.Prefix", "");
         store.setDefault("g.Suffix", ".html");
         store.setDefault("g.HRDSchema", store.getString(PreferencePage.HRD_SET));

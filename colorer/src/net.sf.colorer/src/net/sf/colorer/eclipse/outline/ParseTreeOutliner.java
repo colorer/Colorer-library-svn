@@ -3,28 +3,29 @@ package net.sf.colorer.eclipse.outline;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
-import net.sf.colorer.Scheme;
+import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
-import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
 
 
 /**
  * Object used to store parse tree and showup it in Outline view 
  */
-public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, IWorkbenchAdapter, IAdaptable {
+public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, EditorListener, IWorkbenchAdapter {
 
+    TextColorer editor;
+    
     Vector listeners = new Vector();
     Vector regionsList = new Vector();
-    
     Vector cList = regionsList;
+
+    Stack schemeStack = new Stack();
     
     boolean changed = false;
     int modifiedLine = -1;
@@ -36,7 +37,17 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     }
     
     public void clear() {
-        regionsList.clear();
+        clear(0);
+    }
+
+    public void clear(int topLine) {
+        int csize = 0;
+        while(csize > regionsList.size() &&
+                ((OutlineElement)(regionsList.elementAt(csize))).lno < topLine)
+        {
+            csize++;
+        }
+        regionsList.setSize(csize);
     }
 
     public void startParsing(int lno) {
@@ -46,6 +57,9 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
 
     public void endParsing(int lno) {
         curLevel = 0;
+        if (modifiedLine < lno){
+            modifiedLine = lno+1;
+        }        
         if (changed) {
             notifyUpdate();
             changed = false;
@@ -56,16 +70,13 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     }
 
     public void addRegion(int lno, String line, int sx, int ex, Region region) {
-        if (Logger.TRACE) {
-            Logger.trace("ParseTree", sx+"-"+ex+": "+line);
+        if (lno < modifiedLine) {
+            return;
         }
-
         cList.addElement(new OutlineElement(this, lno, sx, ex-sx, curLevel, null, region));
         changed = true;
     }
 
-    Stack schemeStack = new Stack();
-    
     public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
         curLevel++;
         Vector elements = new Vector();
@@ -74,13 +85,22 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
         schemeStack.push(cList);
         cList = elements;
     }
+
     public void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
         curLevel--;
         cList = (Vector)schemeStack.pop();
+        
+        if (cList.size() > 0 && (cList.lastElement() instanceof OutlineSchemeElement)){
+            OutlineSchemeElement lastScheme = (OutlineSchemeElement)cList.lastElement();
+            lastScheme.l2no = lno;
+            lastScheme.pos2 = ex;
+            lastScheme = null;
+        }
     }
 
     public void modifyEvent(int topLine) {
-        clear();
+        clear(topLine);
+        modifiedLine = topLine;
         changed = true;
     }
 
@@ -124,9 +144,13 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
 
     public void attachOutliner(TextColorer editor) {
         editor.getBaseEditor().addRegionHandler(this, null);
+        editor.getBaseEditor().addEditorListener(this);
+        this.editor = editor;
     }
     public void detachOutliner(TextColorer editor) {
         editor.getBaseEditor().removeRegionHandler(this);
+        editor.getBaseEditor().removeEditorListener(this);
+        this.editor = null;
     }
 
     public void addListener(OutlineListener listener) {

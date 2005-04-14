@@ -54,6 +54,10 @@ outline.options.Structure=Структура
 outline.options.Errors=Ошибки
 outline.options.ParseTree=Дерево разбора
 
+regions-tree.link=Связать выделение с регионом под курсором в текущем редакторе
+regions-tree.loadall=Загрузить все описания HRC и полное дерево регионов
+regions-tree.refresh=Обновить дерево регионов до текущего состояния базы HRC
+
 htmlgen.done=Генерация HTML завершена
 htmlgen.fault=Сбой во время генерации HTML
 
