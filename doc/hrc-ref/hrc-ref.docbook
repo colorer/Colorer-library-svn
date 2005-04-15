@@ -821,6 +821,7 @@ metacharacter, or block of their combination (enclosed with brackets).
 <table><title>Operators</title><tgroup cols='2'><tbody>
 <row><entry><literal>( )</literal></entry><entry>Group and remember characters to form one pattern.</entry></row>
 <row><entry><literal>(?{name} )</literal></entry><entry>Group and remember characters into the named group.</entry></row>
+<row><entry><literal>(?{} ) or (?: )</literal></entry><entry>Group but don't remember characters into the group (unnamed group).</entry></row>
 <row><entry><literal>(?{} )</literal></entry><entry>Group and remember characters into the unnamed uncounted group.</entry></row>
 <row><entry><literal>|</literal></entry><entry>Match previous or next pattern.</entry></row>
 <row><entry><literal>*</literal></entry><entry>Match previous pattern 0 or more times.</entry></row>
