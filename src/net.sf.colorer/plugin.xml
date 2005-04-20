@@ -61,7 +61,6 @@
    </extension>
    
    <!-- HRC Regions tree list View -->
-   
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -76,6 +75,7 @@
             id="net.sf.colorer.eclipse.view.HRCRegionsTreeView">
       </view>
    </extension>
+   
 <!-- Editor Commands  -->
    <extension
          point="org.eclipse.ui.commands">
