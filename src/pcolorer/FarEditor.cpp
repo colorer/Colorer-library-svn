@@ -485,6 +485,7 @@ int FarEditor::editorEvent(int event, void *param)
       if (l1->special) continue;
       if (l1->start == l1->end) continue;
       if (l1->start > ei.LeftPos+ei.WindowSizeX) continue;
+      if (l1->start < ei.LeftPos-ei.WindowSizeX) continue;
 
       if ((lno != ei.CurLine || !showHorizontalCross || crossZOrder == 0)){
         int color = convert(l1->styled());
@@ -889,7 +890,7 @@ const char *FarEditor::GetMsg(int msg){
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
