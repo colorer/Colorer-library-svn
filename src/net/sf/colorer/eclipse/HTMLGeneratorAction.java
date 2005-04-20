@@ -56,8 +56,12 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
 
   public void run(IAction action) {
     ISelectionProvider selectionProvider = workbenchPart.getSite().getSelectionProvider();
+    ISelection isel = selectionProvider.getSelection();
+    if (!(isel instanceof StructuredSelection)) {
+        return;
+    }
     StructuredSelection selection = (StructuredSelection) selectionProvider.getSelection();
-    
+
     StringBuffer fileNames = new StringBuffer();
     String lastFileName = "";
     String filePath = "./";

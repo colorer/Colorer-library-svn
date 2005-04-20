@@ -68,7 +68,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
                 OutlineSchemeElement sel = (OutlineSchemeElement)el;
                 int selstart = text.getOffsetAtLine(sel.lno)+sel.pos;
                 int selsize = text.getOffsetAtLine(sel.l2no) + sel.pos2 - selstart;
-                if (sel.l2no == 0 && sel.pos2 == 0){
+                if (sel.l2no == 0 && sel.pos2 == 0 || selsize <= 0){
                     selsize = 0;
                 }
                 if (Logger.TRACE){
