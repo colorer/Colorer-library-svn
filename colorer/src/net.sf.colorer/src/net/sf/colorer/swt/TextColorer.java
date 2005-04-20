@@ -99,7 +99,7 @@ public class TextColorer{
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.addSelectionListener(ml);
     updateViewport();
-/*
+
     new Thread(){
       public void run(){
         //setPriority(Thread.NORM_PRIORITY-1);
@@ -127,7 +127,6 @@ public class TextColorer{
         };
       };
     }.start();
-    */
   }
 
   /**
