@@ -12,29 +12,33 @@
 
 
 <h1>Eclipse platform plugin</h1>
-<p>Colorer Library introduces it's new version for the
+<p>
+<img src="eclipse.png" width="283" height="274" align="right"/>
+Colorer Library introduces its plugin version for the
 <a href='http://www.eclipse.org'>Eclipse platform</a>.
 Eclipse is a highly configurable and extensible IDE, written on Java.
 It provides a great API for plugging external components, allowing
 to use all it's powerful features.
 Colorer implements multiprogramming language editor for the Eclipse platform.
+
 </p>
 
 <h2>Installation</h2>
 <p>To install Colorer for Eclipse you must download
 <code>EclipseColorer-take5.x.x.x.zip</code> package. This package contains
-Eclipse plugin with sources, packed Colorer's HRC database and
-two versions of native library component - for Windows and Linux platforms.
+EclipseColorer plugin with sources, packed Colorer's HRC database and
+native library component.
 It contains sources both for native part and top-level Colorer Java API.
 Note, that it doesn't contains sources of the Colorer Library. If you want
 to rebuild native part of the plugin, you have to download latest Colorer Library
-package.
+development package.
 </p>
 <p>Unpack content of plugin's package into <code>%ECLIPSEHOME%/plugins/</code>
 folder and restart Eclipse. Make sure you've extracted
 <code>net.sf.colorer/colorer/</code> folder. It contains HRC database,
 which is used by the plugin.
 </p>
+
 <p>You can choose another way to install colorer - using build-in
 Eclipse Update Manager. Create new location
 <strong>http://colorer.sf.net/eclipsecolorer/</strong> using update manager,
@@ -42,24 +46,36 @@ and Eclipse will allow you to automatically install EclipseColorer.
 Later you can use this way to simply and efficiently update colorer and
 check for its new versions.
 </p>
-<p>If you are already have Colorer-take5 Library, installed in your system
+<p>If you already have development Colorer-take5 Library installed in your system
 (f.e. from full library package version), you can delete <code>colorer</code>
 directory and specify path to your <code>catalog.xml</code> file with one of the
 <a href='../api/classParserFactory.html'>standard locations</a>.
+This way is useful for HRC development and for sole HRC catalog location.
 </p>
 
 <h2>Common features</h2>
 <p>Colorer for Eclipse IDE supports:</p>
 <ul>
- <li>Default Eclipse editor with syntax highlighting capabilities.</li>
- <li>Paired constructions highlighting and matching.</li>
+ <li>Default Eclipse editor with syntax highlighting capabilities.<br/>
+     This editor inherits from standard Eclipse Text Editor, thus allowing to use all
+     default feature of Eclipse Editor. You can reuse all default short-cuts, all actions and so on.
+     Note, that colorer knows nothing about Java Editor or CDT Editor, so you can't use their extended capabilities
+     simultaneously with EclipseColorer.
+ </li>
+ <li>Paired constructions highlighting and matching.<br/>
+     <img src="pairs.png" width="271" height="131"/>
+ </li>
  <li>Shortcuts for pairs matching.</li>
  <li>Different color schemes.</li>
  <li>Choosing currently used file type in editor (list of all available types).</li>
  <li>Dynamic library reloading.</li>
- <li>Powerful and flexible outliner for all common languages.</li>
+ <li>Powerful and flexible outliner for all common languages.<br/>
+     <img src="outline.png" width="252" height="144"/>
+ </li>
  <li>Errors list is included into the outliner view.</li>
- <li>Colored sources generation into HTML files (Available in the navigator's context menu).</li>
+ <li>Colored sources generation into HTML files (Available in the navigator's context menu).<br/>
+     <img src="gen.png" width="300" height="220"/>
+ </li>
 
 </ul>
 
@@ -93,15 +109,6 @@ and name as your regions (use existing files for example).
   under
    <code>&lt;extension point="org.eclipse.ui.editors"></code> entry and replace
    <code>id, name, icon, extensions</code> attributes with your values.
-</p>
-
-<h2>Minor Notes</h2>
-<p>EclipseColorer was tested with Eclipse v2.0.2, v2.1.0, v3.0M5, M6.
-However, there are some differences in behavior of these versions.
-For example, to manage Colorer's current line color in 2.1 and later,
-you must disable line highlighting in global text editor settings.
-Also, there are some differences in Eclipse API. In particular, Colorer
-compiled with latest Eclipse can work with some bugs in previous version.
 </p>
 
 </body>
