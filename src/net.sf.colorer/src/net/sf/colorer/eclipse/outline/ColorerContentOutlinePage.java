@@ -237,16 +237,6 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
             }
         });
 
-        /*
-         * Configure the context menu. MenuManager menuMgr = new
-         * MenuManager("#PopupMenu"); menuMgr.add(new
-         * Separator(IWorkbenchActionConstants.MB_ADDITIONS)); menuMgr.add(new
-         * Separator(IWorkbenchActionConstants.MB_ADDITIONS+"-end"));
-         * 
-         * Menu menu = menuMgr.createContextMenu(viewer.getTree());
-         * viewer.getTree().setMenu(menu);
-         */
-
         IToolBarManager toolBarManager = getSite().getActionBars().getToolBarManager();
         if (toolBarManager != null) {
             toolBarManager.add(new TreeAction());

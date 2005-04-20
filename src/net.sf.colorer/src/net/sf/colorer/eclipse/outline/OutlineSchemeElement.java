@@ -3,12 +3,11 @@ package net.sf.colorer.eclipse.outline;
 import java.util.Vector;
 
 import net.sf.colorer.Region;
-import net.sf.colorer.Scheme;
+
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 public class OutlineSchemeElement extends OutlineElement{
   
-  public Scheme scheme;
   public int l2no, pos2;
   
   public Vector elements = new Vector();

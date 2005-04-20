@@ -37,21 +37,22 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     }
     
     public void clear() {
-        clear(0);
+        clear(regionsList, 0);
     }
 
-    public void clear(int topLine) {
+    public void clear(Vector list, int topLine) {
         int csize = 0;
-        while(csize > regionsList.size() &&
-                ((OutlineElement)(regionsList.elementAt(csize))).lno < topLine)
+        while(csize < list.size() &&
+                ((OutlineElement)(list.elementAt(csize))).lno < topLine)
         {
             csize++;
         }
-        regionsList.setSize(csize);
+        list.setSize(csize);
     }
 
     public void startParsing(int lno) {
         curLevel = 0;
+        schemeStack.clear();
         cList = regionsList;
     }
 
@@ -79,9 +80,31 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
 
     public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
         curLevel++;
-        Vector elements = new Vector();
-        OutlineSchemeElement scheme_el = new OutlineSchemeElement(this, lno, sx, ex-sx, curLevel, scheme, region, elements);
-        cList.addElement(scheme_el);
+
+        OutlineSchemeElement sel = null;
+        Vector elements = null;
+
+        if (cList.size() > 0 && cList.lastElement() instanceof OutlineSchemeElement){
+            sel = (OutlineSchemeElement)cList.lastElement();
+            /* determine, if this is a last entered schema, or a new one */
+            if (sel.level != curLevel){
+                sel = null;
+            }else if (sel.lno == lno && sel.pos <= sx){
+                sel = null;
+            }else if (sel.l2no != 0 && sel.l2no < lno){
+                sel = null;
+            }
+            if (sel != null){
+                elements = sel.elements;
+                clear(elements, lno);
+            }
+        }
+        if (sel == null || elements == null){
+            elements = new Vector();
+            sel = new OutlineSchemeElement(this, lno, sx, ex-sx, curLevel, scheme, region, elements);
+            cList.addElement(sel);
+        }
+        sel.l2no = sel.pos2 = 0;
         schemeStack.push(cList);
         cList = elements;
     }
@@ -94,12 +117,11 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
             OutlineSchemeElement lastScheme = (OutlineSchemeElement)cList.lastElement();
             lastScheme.l2no = lno;
             lastScheme.pos2 = ex;
-            lastScheme = null;
         }
     }
 
     public void modifyEvent(int topLine) {
-        clear(topLine);
+        clear(regionsList, topLine);
         modifiedLine = topLine;
         changed = true;
     }
