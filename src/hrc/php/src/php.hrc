@@ -68,7 +68,7 @@
 
       <scheme name="InverseInsertion">
          <block start="/((\?&gt;))/" end="/((&lt;\?(php\b)?))/" scheme="html"
-          priority="low" region="Text"
+          priority="low" region="Text" inner-region="yes"
           region00="Insertion" region10="Insertion"
           region01="PairStart" region11="PairEnd"
           region02="OpenTag"   region12="OpenTag"
