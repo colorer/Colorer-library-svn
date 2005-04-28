@@ -4,6 +4,17 @@
 #include<time.h>
 
 #include<common/MemoryChunks.h>
+
+int total_req = 0;
+int new_calls = 0;
+int free_calls = 0;
+
+extern "C" {
+  int get_total_req(){ return total_req; }
+  int get_new_calls(){ return new_calls; }
+  int get_free_calls(){ return free_calls; }
+}
+
 /**
   @ingroup common @{
 */
@@ -14,17 +25,34 @@ extern "C"{
 }
 
 void *operator new(size_t size){
+
+#if MEMORY_PROFILE
+  total_req += size;
+  new_calls++;
+#endif
   return dlmalloc(size);
-};
+}
+
 void operator delete(void *ptr){
+#if MEMORY_PROFILE
+  free_calls++;
+#endif
   dlfree(ptr);
   return;
-};
+}
 
 void *operator new[](size_t size){
+#if MEMORY_PROFILE
+  total_req += size;
+  new_calls++;
+#endif
   return dlmalloc(size);
-};
+}
+
 void operator delete[](void *ptr){
+#if MEMORY_PROFILE
+  free_calls++;
+#endif
   dlfree(ptr);
   return;
 };

@@ -12,20 +12,24 @@ JARInputSource::JARInputSource(const String *basePath, InputSource *base){
 
   inJarLocation = new SString(basePath, ex_idx+1, -1);
 
-  sharedIS = new SharedInputSource(&DString(basePath, 4, ex_idx-4), base);
-  sharedIS->addref();
-  baseLocation = new SString(sharedIS->getLocation());
+  sharedIS = SharedInputSource::getInputSource(&DString(basePath, 4, ex_idx-4), base);
+
+  StringBuffer str("jar:");
+  str.append(sharedIS->getLocation());
+  str.append(DString("!"));
+  str.append(inJarLocation);
+  baseLocation = new SString(&str);
 
   stream = null;
   len = 0;
-};
+}
 
 JARInputSource::~JARInputSource(){
-  if (sharedIS->delref() == 0) delete sharedIS;
+  sharedIS->delref();
   delete baseLocation;
   delete inJarLocation;
   delete stream;
-};
+}
 
 JARInputSource::JARInputSource(const String *basePath, JARInputSource *base, bool faked){
   // relative jar uri
@@ -35,6 +39,7 @@ JARInputSource::JARInputSource(const String *basePath, JARInputSource *base, boo
   sharedIS->addref();
 
   inJarLocation = getAbsolutePath(parent->getInJarLocation(), basePath);
+
   StringBuffer str("jar:");
   str.append(sharedIS->getLocation());
   str.append(DString("!"));
@@ -42,15 +47,15 @@ JARInputSource::JARInputSource(const String *basePath, JARInputSource *base, boo
   baseLocation = new SString(&str);
   stream = null;
   len = 0;
-};
+}
 
 InputSource *JARInputSource::createRelative(const String *relPath){
   return new JARInputSource(relPath, this, true);
-};
+}
 
 const String *JARInputSource::getLocation() const{
   return baseLocation;
-};
+}
 
 const byte *JARInputSource::openStream()
 {
@@ -82,20 +87,20 @@ const byte *JARInputSource::openStream()
   ret = unzClose(fid);
 
   return stream;
-};
+}
 
 void JARInputSource::closeStream(){
   if (stream == null)
     throw InputSourceException(StringBuffer("closeStream(): source stream is not yet opened"));
   delete stream;
   stream = null;
-};
+}
 
 int JARInputSource::length() const{
   if (stream == null)
     throw InputSourceException(DString("length(): stream is not yet opened"));
   return len;
-};
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

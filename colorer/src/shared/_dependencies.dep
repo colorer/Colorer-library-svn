@@ -1,6 +1,6 @@
 $(obj_output_slash)BaseEditor.$(obj): $(shared_path)colorer/editor/BaseEditor.cpp \
- $(shared_path)common/Logging.h $(shared_path)common/Features.h \
- $(shared_path)colorer/editor/BaseEditor.h \
+ $(shared_path)common/Logging.h \
+ $(shared_path)common/Features.h $(shared_path)colorer/editor/BaseEditor.h \
  $(shared_path)colorer/ParserFactory.h $(shared_path)xml/xmldom.h \
  $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
  $(shared_path)unicode/String.h  \
@@ -30,6 +30,7 @@ $(obj_output_slash)BaseEditor.$(obj): $(shared_path)colorer/editor/BaseEditor.cp
  $(shared_path)colorer/handlers/LineRegionsSupport.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
  $(shared_path)colorer/editor/PairMatch.h
 
 
@@ -99,6 +100,7 @@ $(obj_output_slash)ConsoleTools.$(obj): $(shared_path)colorer/viewer/ConsoleTool
  $(shared_path)colorer/handlers/LineRegionsSupport.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/viewer/TextLinesStore.h \
  $(shared_path)colorer/viewer/ParsedLineWriter.h \
@@ -210,11 +212,12 @@ $(obj_output_slash)FarEditor.$(obj): $(shared_path)../pcolorer/FarEditor.cpp \
  $(shared_path)colorer/handlers/LineRegionsSupport.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/editor/Outliner.h \
  $(shared_path)colorer/editor/OutlineItem.h \
  $(shared_path)../pcolorer/pcolorer.h $(shared_path)farplugin/plugin.hpp \
- $(shared_path)farplugin/farkeys.hpp
+ $(shared_path)farplugin/farkeys.hpp $(shared_path)common/Logging.h
 
 
 $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.cpp \
@@ -251,6 +254,7 @@ $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.c
  $(shared_path)colorer/handlers/LineRegionsSupport.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/viewer/TextLinesStore.h \
  $(shared_path)../pcolorer/FarEditorSet.h $(shared_path)../pcolorer/pcolorer.h \
@@ -349,8 +353,10 @@ $(obj_output_slash)InputSource.$(obj): $(shared_path)common/io/InputSource.cpp \
  $(shared_path)unicode/StringBuffer.h $(shared_path)common/MemoryChunks.h \
  $(shared_path)common/io/FileInputSource.h \
  $(shared_path)common/io/JARInputSource.h \
- $(shared_path)common/io/SharedInputSource.h
-
+ $(shared_path)common/io/SharedInputSource.h $(shared_path)common/Hashtable.h \
+ $(shared_path)common/HashtableCore.h \
+  $(shared_path)common/Logging.h \
+  
 
 $(obj_output_slash)JARInputSource.$(obj): $(shared_path)common/io/JARInputSource.cpp \
  $(shared_path)common/io/JARInputSource.h \
@@ -360,7 +366,9 @@ $(obj_output_slash)JARInputSource.$(obj): $(shared_path)common/io/JARInputSource
  $(shared_path)unicode/Encodings.h $(shared_path)unicode/x_charcategory.h \
  $(shared_path)unicode/DString.h $(shared_path)unicode/SString.h \
  $(shared_path)unicode/StringBuffer.h $(shared_path)common/MemoryChunks.h \
- $(shared_path)common/io/SharedInputSource.h \
+ $(shared_path)common/io/SharedInputSource.h $(shared_path)common/Hashtable.h \
+ $(shared_path)common/HashtableCore.h \
+  $(shared_path)common/Logging.h \
  $(shared_path)common/io/MemoryFile.h \
  $(unzipdir)contrib/minizip/unzip.h \
  $(unzipdir)contrib/minizip/ioapi.h
@@ -402,8 +410,8 @@ $(obj_output_slash)LineRegionsSupport.$(obj): \
  $(shared_path)colorer/handlers/RegionMapper.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/StyledRegion.h \
- $(shared_path)colorer/handlers/TextRegion.h
-
+ $(shared_path)colorer/handlers/TextRegion.h $(shared_path)common/Logging.h \
+  
 
 $(obj_output_slash)Logging.$(obj): $(shared_path)common/Logging.cpp \
   $(shared_path)common/Logging.h \
@@ -430,7 +438,30 @@ $(obj_output_slash)Outliner.$(obj): $(shared_path)colorer/editor/Outliner.cpp \
  $(shared_path)unicode/StringBuffer.h $(shared_path)colorer/LineSource.h \
  $(shared_path)colorer/RegionHandler.h $(shared_path)colorer/Region.h \
  $(shared_path)colorer/Scheme.h $(shared_path)colorer/FileType.h \
- $(shared_path)colorer/editor/OutlineItem.h
+ $(shared_path)colorer/editor/OutlineItem.h \
+ $(shared_path)colorer/editor/BaseEditor.h \
+ $(shared_path)colorer/ParserFactory.h $(shared_path)xml/xmldom.h \
+ $(shared_path)common/Hashtable.h $(shared_path)common/HashtableCore.h \
+ $(shared_path)common/io/InputSource.h $(shared_path)colorer/TextParser.h \
+ $(shared_path)colorer/HRCParser.h $(shared_path)colorer/ErrorHandler.h \
+ $(shared_path)colorer/handlers/DefaultErrorHandler.h \
+ $(shared_path)colorer/handlers/StyledHRDMapper.h \
+ $(shared_path)common/io/Writer.h \
+ $(shared_path)colorer/handlers/RegionMapperImpl.h \
+ $(shared_path)colorer/handlers/RegionMapper.h \
+ $(shared_path)colorer/handlers/RegionDefine.h \
+ $(shared_path)colorer/handlers/StyledRegion.h \
+ $(shared_path)colorer/handlers/TextHRDMapper.h \
+ $(shared_path)colorer/handlers/TextRegion.h \
+ $(shared_path)colorer/ParserFactoryException.h \
+ $(shared_path)colorer/handlers/FileErrorHandler.h \
+ $(shared_path)common/io/StreamWriter.h \
+ $(shared_path)colorer/handlers/ErrorHandlerWriter.h \
+ $(shared_path)colorer/handlers/LineRegionsSupport.h \
+ $(shared_path)colorer/handlers/LineRegion.h \
+ $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
+ $(shared_path)colorer/editor/PairMatch.h
 
 
 $(obj_output_slash)ParserFactory.$(obj): $(shared_path)colorer/ParserFactory.cpp \
@@ -494,6 +525,18 @@ $(obj_output_slash)SString.$(obj): $(shared_path)unicode/SString.cpp \
  $(shared_path)common/MemoryChunks.h $(shared_path)unicode/Encodings.h \
  $(shared_path)unicode/x_charcategory.h $(shared_path)unicode/DString.h \
  $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h
+
+
+$(obj_output_slash)SharedInputSource.$(obj): $(shared_path)common/io/SharedInputSource.cpp \
+ $(shared_path)common/io/SharedInputSource.h $(shared_path)common/Common.h \
+ $(shared_path)common/Features.h $(shared_path)unicode/String.h \
+ $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
+ $(shared_path)unicode/Encodings.h $(shared_path)unicode/x_charcategory.h \
+ $(shared_path)unicode/DString.h $(shared_path)unicode/SString.h \
+ $(shared_path)unicode/StringBuffer.h $(shared_path)common/MemoryChunks.h \
+ $(shared_path)common/Hashtable.h $(shared_path)common/HashtableCore.h \
+  $(shared_path)common/Logging.h \
+ $(shared_path)common/io/InputSource.h
 
 
 $(obj_output_slash)StreamWriter.$(obj): $(shared_path)common/io/StreamWriter.cpp \
@@ -577,6 +620,7 @@ $(obj_output_slash)TextConsoleViewer.$(obj): $(shared_path)colorer/viewer/TextCo
  $(shared_path)colorer/handlers/LineRegionsSupport.h \
  $(shared_path)colorer/handlers/LineRegion.h \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
+ $(shared_path)colorer/editor/EditorListener.h \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/viewer/TextLinesStore.h
 
@@ -630,8 +674,9 @@ $(obj_output_slash)TextParserHelpers.$(obj): \
  $(shared_path)colorer/Scheme.h $(shared_path)colorer/Region.h \
  $(shared_path)unicode/UnicodeTools.h \
  $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
- $(shared_path)colorer/parsers/helpers/FileTypeImpl.h
-
+ $(shared_path)colorer/parsers/helpers/FileTypeImpl.h \
+ $(shared_path)common/Logging.h \
+  
 
 $(obj_output_slash)TextParserImpl.$(obj): $(shared_path)colorer/parsers/TextParserImpl.cpp \
  $(shared_path)colorer/parsers/TextParserImpl.h \
@@ -654,8 +699,8 @@ $(obj_output_slash)TextParserImpl.$(obj): $(shared_path)colorer/parsers/TextPars
  $(shared_path)colorer/ErrorHandler.h $(shared_path)unicode/UnicodeTools.h \
  $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
  $(shared_path)colorer/parsers/helpers/FileTypeImpl.h \
- $(shared_path)common/Logging.h
-
+ $(shared_path)common/Logging.h \
+  
 
 $(obj_output_slash)UnicodeTools.$(obj): $(shared_path)unicode/UnicodeTools.cpp \
  $(shared_path)unicode/UnicodeTools.h $(shared_path)unicode/String.h \
