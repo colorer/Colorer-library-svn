@@ -8,9 +8,14 @@
                              http://colorer.sf.net/2003/catalog.xsd">
 
   <hrc-sets log-location="colorer.log">
+
     <location link="hrc/proto.hrc"/>
     <location link="hrc/auto"/>
+
 <!--
+    <location link="C:\far\plugins\colorer\hrc\proto.hrc"/>
+    <location link="C:\far\plugins\colorer\hrc\auto"/>
+
     <location link="hrc/colorer.hrc"/>
     <location link="jar:hrc/common.jar!colorer.hrc"/>
     <location link="jar:http://colorer.sf.net/hrc/common.jar!colorer.hrc"/>
@@ -63,6 +68,9 @@
     </hrd>
     <hrd class="console" name="graypult" description="Gray (pult)">
       <location link="hrd/console/contrib/gray_pult.hrd"/>
+    </hrd>
+    <hrd class="console" name="classic" description="'Classic' by Tim Sobolev">
+      <location link="hrd/console/contrib/classic.hrd"/>
     </hrd>
 
 
