@@ -74,7 +74,6 @@
     </hrd>
 
 
-
     <hrd class="rgb" name="default" description="White (crimsoned)">
       <location link="hrd/rgb/white.hrd"/>
     </hrd>

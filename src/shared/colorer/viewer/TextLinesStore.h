@@ -7,7 +7,7 @@
 
 /** Reads array of text lines and
     makes it accessible with LineSource interface.
-    All lines are ended with \\r\\n or \\n characters.
+    All lines should be separated with \\r\\n , \\n or \\r characters.
 
     @ingroup colorer_viewer
 */

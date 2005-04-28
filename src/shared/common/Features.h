@@ -12,14 +12,14 @@
   If defined, use dlmalloc memory management implementation
 */
 #ifndef COLORER_FEATURE_USE_DL_MALLOC
-  #define COLORER_FEATURE_USE_DL_MALLOC FALSE
+  #define COLORER_FEATURE_USE_DL_MALLOC TRUE
 #endif
 
 /**
   If defined, long-living classes use chunk allocation procedure
 */
 #ifndef COLORER_FEATURE_USE_CHUNK_ALLOC
-  #define COLORER_FEATURE_USE_CHUNK_ALLOC FALSE
+  #define COLORER_FEATURE_USE_CHUNK_ALLOC TRUE
 #endif
 
 /**
