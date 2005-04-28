@@ -1,3 +1,5 @@
+AMD 450:
+
 FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	1062
 FILE:	../../../hrc/base/perl.hrc				TIMING:	321
 FILE:	tests/newB.ipl				TIMING:	851
@@ -41,5 +43,34 @@ FILE:	tests/newB.ipl				TIMING:	711
 FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	981
 FILE:	../../../hrc/base/perl.hrc				TIMING:	221
 FILE:	tests/newB.ipl				TIMING:	711
+
 15.94
 17.6 vs 20
+
+
+
+Sempron 2200:
+
+FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	250
+FILE:	../../../hrc/base/perl.hrc				TIMING:	156
+FILE:	tests/newB.ipl				TIMING:	187
+
+FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	156
+FILE:	../../../hrc/base/perl.hrc				TIMING:	31
+FILE:	tests/newB.ipl				TIMING:	125
+
+FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	156
+FILE:	../../../hrc/base/perl.hrc				TIMING:	47
+FILE:	tests/newB.ipl				TIMING:	125
+
+#define XMLDOM_FEATURE_POSITION_TRACE 0
+FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	141
+FILE:	../../../hrc/base/perl.hrc				TIMING:	31
+FILE:	tests/newB.ipl				TIMING:	109
+
+
+src_length = src.length();
+FILE:	../../../hrc/auto/gen/docbook.hrc				TIMING:	125
+FILE:	../../../hrc/base/perl.hrc				TIMING:	31
+FILE:	tests/newB.ipl				TIMING:	109
+

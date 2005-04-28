@@ -1,4 +1,7 @@
 
+all: xmlparser.exe
+
+
 shared_path = ../../shared/
 obj_output_slash = objs/
 obj = obj
@@ -27,7 +30,8 @@ OBJS = $(obj_output_slash)xmlparser.obj \
        $(obj_output_slash)FileInputSource.obj \
        $(obj_output_slash)xmldom.obj
 
-all: xmlparser.exe
+
+include ../../shared/_dependencies.dep
 
 include ../../shared/makefile.objs
 #include ../../shared/_dependencies.dep
@@ -35,7 +39,7 @@ include ../../shared/makefile.objs
 xmlparser.exe: $(OBJS)
 	link /OUT:xmlparser.exe $(OBJS) $(DEBUG2)
 
-$(obj_output_slash)xmlparser.obj: xmlparser.cpp
+$(obj_output_slash)xmlparser.obj: xmlparser.cpp xmlprint.cpp
 	$(CPP) $(CPPFLAGS) xmlparser.cpp
 
 test: xmlparser.exe
