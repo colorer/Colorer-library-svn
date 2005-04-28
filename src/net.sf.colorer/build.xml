@@ -33,6 +33,7 @@
     <path id='classpath'>
       <fileset dir="${eclipse.plugins}">
         <include name="org.eclipse*/**/*.jar"/>
+        <include name="org.eclipse*.jar"/>
       </fileset>
       <pathelement path="${java.class.path}"/>
     </path>

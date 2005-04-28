@@ -13,6 +13,7 @@ public:
     jclass jcLineSource = env->FindClass("net/sf/colorer/LineSource");
     getLineID = env->GetMethodID(jcLineSource, "getLine", "(I)Ljava/lang/String;");
     returnLine = null;
+    CLR_TRACE("JavaLineSource", "JNIEnv:%x", env);
   };
   ~JavaLineSource(){
     delete returnLine;

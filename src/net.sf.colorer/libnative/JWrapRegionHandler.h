@@ -32,10 +32,11 @@ public:
     arID = env->GetMethodID(jcRegionHandler, "addRegion", "(ILjava/lang/String;IILnet/sf/colorer/Region;)V");
     esID = env->GetMethodID(jcRegionHandler, "enterScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Ljava/lang/String;)V");
     lsID = env->GetMethodID(jcRegionHandler, "leaveScheme", "(ILjava/lang/String;IILnet/sf/colorer/Region;Ljava/lang/String;)V");
-  };
+  }
+
   ~JWrapRegionHandler(){
     env->DeleteGlobalRef(regionHandler);
-  };
+  }
 
   void startParsing(int lno){
     env->CallVoidMethod(regionHandler, spID, lno);
