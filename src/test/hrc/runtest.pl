@@ -60,11 +60,11 @@ foreach (@retlist){
   print "Processing (".($testRuns+1)."/".($#retlist+1).") $_:\n";
 
   open FAILS, ">>$currentDir/fails.html";
-  print FAILS "\n<b>$_</b>:</pre><pre>\n";
+  print FAILS "\n<b>$_</b>:</pre></pre><pre>\n";
   close FAILS;
   checkDir($currentDir, $_);
 
-  $cres = system "$colorer -h \"$_\" -dc -ln -o \"$fname.html\"";
+  $cres = system "$colorer -h \"$_\" -dc -dh -ln -o \"$fname.html\"";
 
   $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
 
@@ -84,7 +84,7 @@ $result = "Test time: ".($timeEnd-$timeStart)." sec, Executed: $testRuns, Passed
 print $result;
 
 open FAILS, ">>$currentDir/fails.html";
-print FAILS "</pre></pre><h2>$result</h2>";
+print FAILS "</pre></pre></pre><h2>$result</h2>";
 close FAILS;
 
 exit;

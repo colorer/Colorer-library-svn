@@ -32,6 +32,7 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     int curLevel;
     
 
+    
     public Region getFilter() {
         return null;
     }
