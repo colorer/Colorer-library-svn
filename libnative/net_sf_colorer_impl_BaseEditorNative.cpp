@@ -217,6 +217,8 @@ JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLine
     be->lrCache.setSize(newsize);
   }
 
+  CLR_TRACE("BaseEditorNative", "JNIEnv:%x", env);
+
   LineRegion *lregion = null;
   try{
     lregion = be->getLineRegions(lno);
