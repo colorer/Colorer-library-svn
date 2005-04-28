@@ -17,8 +17,9 @@ obj  = obj
 
 obj_output_slash = $(obj_output)\\
 
-# /Zi 
-CPPFLAGS_CUSTOM = /O2gtiyb2 -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
+# /Zi
+CPPFLAGS_CUSTOM = /O2gtiyb2
+#-DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 #LIB_DEBUG = /debug /incremental:no
 
 CPPFLAGS = -I$(shared_path) -I$(unzipdir)  /Fo$*.$(obj) /GX /nologo /c /wd4101 /W3 $(CPPFLAGS_CUSTOM)
