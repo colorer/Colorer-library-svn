@@ -16,6 +16,9 @@ import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.BaseEditorNative;
 
 /**
+ * 
+ * NOT YET IMPLEMENTED.
+ *  
  * Superclass of swing JTextArea.
  * Uses colorer library to make syntax highlighting.
  * http://colorer.sf.net/
