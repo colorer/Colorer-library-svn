@@ -47,6 +47,7 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
 
   ppos = opos = 0;
   src = DString(bytes, length, Encodings::getEncodingIndex(codepage));
+  src_length = src.length();
   src_overflow = null;
   if (src[0] == Encodings::ENC_UTF16_BOM){
     ppos++;

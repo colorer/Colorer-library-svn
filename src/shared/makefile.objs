@@ -21,6 +21,7 @@ coreobjects = $(unzipobjects) \
               $(obj_output_slash)FileInputSource.$(obj) \
               $(obj_output_slash)HTTPInputSource.$(obj)  \
               $(obj_output_slash)JARInputSource.$(obj)    \
+              $(obj_output_slash)SharedInputSource.$(obj)  \
               $(obj_output_slash)Writer.$(obj)      \
               $(obj_output_slash)StreamWriter.$(obj) \
               $(obj_output_slash)FileWriter.$(obj)    \
@@ -99,6 +100,8 @@ $(obj_output_slash)FileInputSource.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)common/io/FileInputSource.cpp
 $(obj_output_slash)JARInputSource.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)common/io/JARInputSource.cpp
+$(obj_output_slash)SharedInputSource.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)common/io/SharedInputSource.cpp
 $(obj_output_slash)HTTPInputSource.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)common/io/HTTPInputSource.cpp
 

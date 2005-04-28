@@ -11,13 +11,13 @@
 #define COLORER_FEATURE_LOGLEVEL_INFO  4
 #define COLORER_FEATURE_LOGLEVEL_FULL  4
 
-#define CLR_ERROR if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_ERROR) colorer_logger_error
+#define CLR_ERROR if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_ERROR) colorer_logger_error
 
-#define CLR_WARN  if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_WARN) colorer_logger_warn
+#define CLR_WARN  if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_WARN) colorer_logger_warn
 
-#define CLR_TRACE if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_TRACE) colorer_logger_trace
+#define CLR_TRACE if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_TRACE) colorer_logger_trace
 
-#define CLR_INFO  if (COLORER_FEATURE_LOGLEVEL > COLORER_FEATURE_LOGLEVEL_INFO) colorer_logger_info
+#define CLR_INFO  if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_INFO) colorer_logger_info
 
 void colorer_logger_error(const char *cname, const char *msg, ...);
 void colorer_logger_warn(const char *cname, const char *msg, ...);

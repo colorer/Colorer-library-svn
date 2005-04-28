@@ -87,8 +87,8 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
   }
   //*/
 
-  //console_logger(level, cname, msg, v);
-  file_logger(level, cname, msg, v);
+  console_logger(level, cname, msg, v);
+  //file_logger(level, cname, msg, v);
 }
 
 

@@ -6,6 +6,13 @@
 #include<common/io/InputSource.h>
 
 /**
+ * If true, traces line/column of an errors in the document
+ */
+#ifndef XMLDOM_FEATURE_POSITION_TRACE
+  #define XMLDOM_FEATURE_POSITION_TRACE 0
+#endif
+
+/**
  * @addtogroup xml XMLDOM Parser
  * Simple DOM-based XML Parser.
  * Please refer to the w3c DOM API specification
@@ -19,6 +26,8 @@ class ProcessingInstruction;
 class CharacterData;
 class Comment;
 class Text;
+
+class BinaryXMLWriter;
 
 /**
  * Basic XML Parser exception class
@@ -151,6 +160,7 @@ protected:
 private:
   int ppos, opos;
   DString src;
+  int src_length;
   String *src_overflow;
   Document *doc;
   EntityResolver *er;
@@ -198,7 +208,7 @@ private:
         offset -= (src_overflow->length() - opos);
       }
     }
-    if (ppos+offset >= src.length()) return -1;
+    if (ppos+offset >= src_length) return -1;
     return src[ppos+offset];
   }
 
@@ -212,14 +222,16 @@ private:
         return (*src_overflow)[opos++];
       }
     }
-    if (ppos >= src.length()){
+    if (ppos >= src_length){
       throw ParseException(DString("End of stream is reached"));
     }
+#if XMLDOM_FEATURE_POSITION_TRACE
     if (src[ppos] == '\n'){
       incDocumentLine();
       setDocumentPos(0);
     }
     incDocumentPos();
+#endif
     return src[ppos++];
   }
 
@@ -311,7 +323,6 @@ protected:
   Document *ownerDocument;
   Node(int _type, const String *_name): type(_type), name(_name),
        next(null), prev(null), parent(null), firstChild(null) {};
-  friend class DocumentBuilder;
 };
 
 

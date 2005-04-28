@@ -31,13 +31,22 @@ public:
         textWriter->write(line, pos, l1->start - pos);
         pos = l1->start;
       };
-      String *token = l1->region->getName()->replace(DString(":"),DString("_"));
       markupWriter->write(DString("<span class='"));
-      markupWriter->write(token);
+
+      const Region *region = l1->region;
+      while(region != null){
+        String *token = region->getName()->replace(DString(":"),DString("_"));
+        markupWriter->write(token);
+        delete token;
+        region = region->getParent();
+        if (region != null){
+          markupWriter->write(' ');
+        }
+      }
+
       markupWriter->write(DString("'>"));
       textWriter->write(line, pos, end - l1->start);
       markupWriter->write(DString("</span>"));
-      delete token;
       pos += end - l1->start;
     };
   };
