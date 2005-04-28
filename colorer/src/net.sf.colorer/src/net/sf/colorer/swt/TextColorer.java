@@ -146,6 +146,7 @@ public class TextColorer{
     text.removeTraverseListener(ml);
     text.removeMouseListener(ml);
     text.removeSelectionListener(ml);
+    text.getContent().removeTextChangeListener(ml);
     ScrollBar sb = text.getVerticalBar();
     if (sb != null) sb.removeSelectionListener(ml);
     baseEditor.dispose();

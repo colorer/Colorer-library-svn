@@ -138,6 +138,8 @@ void printError(){
   );
 };
 
+#include<common/MemoryChunks.h>
+
 /** Creates ConsoleTools class instance and runs it.
 */
 int main(int argc, char *argv[])
@@ -184,6 +186,9 @@ int main(int argc, char *argv[])
     fprintf(stderr, e.getMessage()->getChars());
     return -1;
   };
+
+//  printf("Memory Profiling: total_req:%d, new_calls:%d, free_calls:%d\n", get_total_req(), get_new_calls(), get_free_calls());
+
   return 0;
 };
 
