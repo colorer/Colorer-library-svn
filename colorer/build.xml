@@ -92,11 +92,14 @@
     </fail>
 
     <property name='add.excludes' value='**/*.ilc, **/*.ild, **/*.pdb,
-              **/*.ilf, **/*.ils, **/*.tds, **/*.map, **/*.o, **/*.exp
-              **/colorer/colorer.exe, **/colorer/colorer, **/warn_out
+              **/*.ilf, **/*.ils, **/*.tds, **/*.map, **/*.o, **/*.exp,
+              **/*.ncb, **/*.suo, **/*.aps,
+              **/colorer/colorer.exe, **/colorer/colorer, **/warn_out,
               **/*.obj, **/*.lib, **/*.map, **/*.log, **/*.dll, **/*.asm,
               **/*.so, **/src.zip, **/colorer.jar, **/objs/*,
-              **/build.user.properties
+              **/build.user.properties, **/__20*/**,
+              **/colorer/Debug/**, **/regtest/Release/**,
+              **/net.sf.colorer/bin/**
               '/>
 
     <uptodate property="doc.javadoc.required" targetfile="doc/java/package-list">

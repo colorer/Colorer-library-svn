@@ -15,8 +15,6 @@
 
       <scheme name="text">
 
-         <regexp match="/\t/" region="def:Error"/>
-
 <!-- inet address -->
          <inherit scheme="NetAddresses"/>
          <inherit scheme="Apost"/>

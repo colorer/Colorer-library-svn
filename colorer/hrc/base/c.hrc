@@ -182,7 +182,19 @@
    </keywords>
    <regexp match="/[\\\@]\w+/"/>
    <regexp match="/[\\\@]/" region="def:Error"/>
+   <inherit scheme="TabsAsErrors"/>
+   <inherit scheme="SpacesAsErrors"/>
   </scheme>
+
+  <scheme name="TabsAsErrors" if="tabs-as-errors">
+    <regexp match="/\t+/" region='def:Error'/>
+  </scheme>
+
+  <scheme name="SpacesAsErrors" if="spaces-as-errors">
+    <regexp match="/\x20+$/" region='def:Error'/>
+  </scheme>
+
+
 
   <scheme name="AsmCode">
    <regexp match="/\/\/.*$/" region0="Comment"/>
@@ -218,6 +230,7 @@
    <regexp match="/\\[0-7]{1,12}/" region="StringEscape"/>
    <regexp match="/\%[\-\+\#0]*?[\d\*]*(\.[\d\*]+)?[Ll]?[SsCcsuidopxXnEefgG]/" region="StringEscape"/>
    <regexp match="/[^\\\&#34;]$/" region="def:Error"/>
+   <inherit scheme="TabsAsErrors"/>
   </scheme>
 
   <scheme name="Preproc">
@@ -287,6 +300,8 @@
       <word name="sizeof"/>
       <word name="undef"/>
    </keywords>
+   <inherit scheme="TabsAsErrors"/>
+   <inherit scheme="SpacesAsErrors"/>
   </scheme>
 
   <scheme name="PreprocComment">
@@ -494,6 +509,9 @@
    <!-- Bad tokens -->
    <regexp match="/#\w+/" region="def:Error"/>
    <regexp match="/\b[\d\$\`\@]\w+/i" region="def:Error"/>
+
+   <inherit scheme="TabsAsErrors"/>
+   <inherit scheme="SpacesAsErrors"/>
 
    <inherit scheme="Character"/>
    <!-- cail: extended strings. You may wish to disable multilines : end='/"|$/' -->
