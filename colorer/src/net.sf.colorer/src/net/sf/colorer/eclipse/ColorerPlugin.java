@@ -33,17 +33,8 @@ public class ColorerPlugin extends AbstractUIPlugin {
     /**
      * The constructor.
      */
-    public ColorerPlugin() {
-        super();
-        plugin = this;
-    }
-
-    /**
-     * This method is called upon plug-in activation
-     */
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        
+    public ColorerPlugin(IPluginDescriptor descr) {
+        super(descr);
         plugin = this;
         Logger.trace("Plugin", "Loaded");
     
@@ -75,15 +66,6 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault("g.OutputEncoding", "default");
         store.setDefault("g.TargetDirectory", "/");
         store.setDefault("g.LinkSource", "");
-    }
-
-    /**
-     * This method is called when the plug-in is stopped
-     */
-    public void stop(BundleContext context) throws Exception {
-        super.stop(context);
-        plugin = null;
-        resourceBundle = null;
     }
 
     /**
@@ -166,19 +148,6 @@ public class ColorerPlugin extends AbstractUIPlugin {
     public static IWorkspace getWorkspace() {
         return ResourcesPlugin.getWorkspace();
     }
-    
-    /**
-     * Returns the plugin's resource bundle,
-     */
-    public ResourceBundle getResourceBundle() {
-        try {
-            if (resourceBundle == null)
-                resourceBundle = ResourceBundle.getBundle("net.sf.colorer.eclipse.EclipsecolorerPluginResources");
-        } catch (MissingResourceException x) {
-            resourceBundle = null;
-        }
-        return resourceBundle;
-    }    
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
