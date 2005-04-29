@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.core.resources.*;
-import org.osgi.framework.BundleContext;
 
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.impl.Logger;
@@ -80,8 +79,7 @@ public class ColorerPlugin extends AbstractUIPlugin {
             return parserFactory;
         }
         try {
-            catalogPath = new URL(Platform.resolve(
-                    getBundle().getEntry("/")), "colorer/catalog.xml").toExternalForm();
+            catalogPath = Platform.resolve(new URL(getDescriptor().getInstallURL(), "colorer/catalog.xml")).toExternalForm();
             Logger.trace("EclipsecolorerPlugin", "Catalog: "+catalogPath);
             parserFactory = new ParserFactory(catalogPath);
         } catch (Throwable e) {
