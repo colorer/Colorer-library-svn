@@ -256,7 +256,8 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
       
       typePropertiesViewer.setColumnProperties(new String[] { "name", "value"});
 
-      typePropertiesTable.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+      typePropertiesTable.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL|GridData.VERTICAL_ALIGN_FILL));
+      //, true, true, 2, 1
       typePropertiesTable.setHeaderVisible(true);
       typePropertiesTable.setLinesVisible(true);
 
