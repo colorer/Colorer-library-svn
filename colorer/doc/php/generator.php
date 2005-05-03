@@ -1,6 +1,5 @@
 <?require("paths.php");?>
 <?
-
 header("Content-type: text/html; charset=$o_encoding");
 
 $type = check($type);

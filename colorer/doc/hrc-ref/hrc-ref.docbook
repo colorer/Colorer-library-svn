@@ -14,12 +14,12 @@
 <releaseinfo>Colorer-take5 beta4 library HRC Reference. April 2005</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>28??? April 2005</pubdate>
+<pubdate>28 April 2005</pubdate>
 
 <revhistory>
 <revision>
   <revnumber>take5.beta4</revnumber>
-  <date>28??? April 2005</date>
+  <date>28 April 2005</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
@@ -971,7 +971,7 @@ version, available on the link above.
 
 <appendix id='history'><title>History of the changes</title>
 
-<itemizedlist><title>take5.beta4, 28??? April 2005</title>
+<itemizedlist><title>take5.beta4, 28 April 2005</title>
 <listitem><para>
 New <xref linkend="inner-region"/> attribute description.
 </para></listitem>
