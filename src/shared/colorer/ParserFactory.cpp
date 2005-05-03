@@ -292,15 +292,16 @@ HRCParser* ParserFactory::getHRCParser(){
           while((dire = readdir(dir)) != null){
             stat((StringBuffer(path)+"/"+dire->d_name).getChars(), &st);
             if (!(st.st_mode & S_IFDIR)){
+              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"/"+dire->d_name), catalogFIS);
               try{
-                InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"/"+dire->d_name), catalogFIS);
                 hrcParser->loadSource(dfis);
                 delete dfis;
               }catch(Exception &e){
                 if (fileErrorHandler != null){
-                  fileErrorHandler->fatalError(DString("Can't load hrc: "));
+                  fileErrorHandler->fatalError(StringBuffer("Can't load hrc: ") + dfis->getLocation());
                   fileErrorHandler->fatalError(*e.getMessage());
                 };
+		delete dfis;
               };
             };
           };

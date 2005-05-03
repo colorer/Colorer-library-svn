@@ -3,6 +3,7 @@
 #include"stdarg.h"
 #include"string.h"
 #include"common/Logging.h"
+#include"unicode/String.h"
 
 static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
 
