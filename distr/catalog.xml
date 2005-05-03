@@ -9,7 +9,13 @@
 
   <hrc-sets>
     <location link="hrc/proto.hrc"/>
-    <location link="hrc/auto"/>
+    <location link="hrc/auto/ccsql.hrc"/>
+    <location link="hrc/auto/farmanager.hrc"/>
+    <location link="hrc/auto/gen.hrc"/>
+    <location link="hrc/auto/litestep.hrc"/>
+    <location link="hrc/auto/qrm.hrc"/>
+    <location link="hrc/auto/rare-scripts.hrc"/>
+    <location link="hrc/auto/vim.hrc"/>
   </hrc-sets>
 
   <hrd-sets>
