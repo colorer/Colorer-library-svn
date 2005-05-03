@@ -30,15 +30,24 @@
     <region name='KeywordModifier' parent='def:Keyword'/>
 
 
+    <scheme name="TabsAsErrors" if="tabs-as-errors">
+      <regexp match="/\t+/" region='def:Error'/>
+    </scheme>
 
-    <!-- EE: new schemes -->
+    <scheme name="SpacesAsErrors" if="spaces-as-errors">
+      <regexp match="/\x20+$/" region='def:Error'/>
+    </scheme>
+
     <scheme name="package">
      <keywords region="def:Symbol">
       <symb name="."/>
       <symb name="$"/>
      </keywords>
      <regexp match="/[^\w\s]/" region="def:Error" priority="low"/>
+     <inherit scheme="TabsAsErrors"/>
+     <inherit scheme="SpacesAsErrors"/>
     </scheme>
+
     <scheme name="import">
      <regexp match="/[\.\s]?#1(\*)[\.\;]?=/" region1="def:Keyword"/>
      <inherit scheme="package"/>
@@ -56,7 +65,6 @@
         region01='def:Keyword' region02='ImportOutline'
         region10="def:SymbolStrong"
        />
-    <!-- EE: end changed -->
 
        <inherit scheme="JavaComments"/>
        <regexp match="/ \b (?{Keyword}interface) \s+ (?{InterfaceOutline}[\w_]+ [\w_:\$]*?) /x"/>
@@ -78,6 +86,9 @@
        <block start="/(\{)/" end="/(\})/" scheme="TypeDeclaration"
               region00="def:SymbolStrong" region01="def:PairStart"
               region10="def:SymbolStrong" region11="def:PairEnd"/>
+
+       <inherit scheme="TabsAsErrors"/>
+       <inherit scheme="SpacesAsErrors"/>
 
        <!-- EE: ; -->
        <keywords region="def:Symbol">
@@ -101,6 +112,7 @@
        </inherit>
        -->
        <inherit scheme="NetAddresses"/>
+       <regexp match="/~\*{3,}/"/>
        <keywords region="CommentContent">
           <symb name="*"/><symb name=","/>
           <symb name=":"/><symb name=";"/>
@@ -110,6 +122,10 @@
        <regexp match="/ &lt; \/? \w+ &gt; /x" region0="CommentContent"/>
        <regexp match="/ \b ([0-9\.]+) \b /x" region0="Number"/>
        <regexp match="/(\@author)\s+(\S.*)/x" region1="CommentContent" region2="CommentContent"/>
+
+       <inherit scheme="TabsAsErrors"/>
+       <inherit scheme="SpacesAsErrors"/>
+
        <!--regexp match="/(\@)(\w+)/" region1="Symbol"-->
        <keywords region="CommentContent">
           <word name="@beaninfo"/>
@@ -165,6 +181,9 @@
        <block start="/&#34;/" end="/&#34;|$/" scheme="StringContent" region="String"/>
        <regexp match="/' \\u[\da-fA-F]{1,4} '/ix" region="Character"/>
        <inherit scheme="c:Character"/>
+
+       <inherit scheme="TabsAsErrors"/>
+       <inherit scheme="SpacesAsErrors"/>
 
        <!-- Standard Symbols -->
        <keywords region="def:Error">
