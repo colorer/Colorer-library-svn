@@ -14,7 +14,6 @@
 
 <h2>Colorer-take5 HTML generator</h2>
 <p>This is a web interface to the Colorer-take5 Library.<br/>
-It uses newly released <a href='../index.html'>Colorer-take5.beta2</a> version.<br/>
 It produces highlighted source text through the web interface.</p>
 
 <form enctype="multipart/form-data" action="generator.php" method="post">
