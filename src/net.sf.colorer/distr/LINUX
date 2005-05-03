@@ -3,8 +3,10 @@
   and there can be some problems.
 
   This version of Colorer Library comes with the native part, compilied
-  with GNU GCC 3.2 c++ compiler under Mandrake Linux 9.0.
+  with GNU GCC 3.2 C++ compiler under Mandrake Linux 10.
 
-  I've tested it with Eclipse 2.1 (gtk) under jdk1.4.1 and it works fine.
+  I've tested it with Eclipse 3.01 (gtk) under jdk1.4.1 and it works fine.
 
   However, you can encounter some problems with library dependencies.
+
+  Fell free to ask or help (last is preferred).

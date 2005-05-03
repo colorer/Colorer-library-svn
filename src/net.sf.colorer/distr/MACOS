@@ -1,4 +1,7 @@
 
+  MacOS Build provided with EclipseColorer was not tested at all (hope somebody will do it).
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
   You can compile Colorer Library to use it on MacOSX system.
 
   You need to download C++ sources of the Colorer Library from
