@@ -34,10 +34,7 @@
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
   <property name='eclipseplugin-version' value='_1.0.0'/>
-  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
   <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
-  <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
-  <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
 
   <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
                                       **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
@@ -55,6 +52,8 @@
 
   <property name='use-dot' value='NO'/>
   <property name='dot-path' value=''/>
+
+  <property name='fail-on-bad-build' value="true"/>
 
   <xmlcatalog id="DTDs">
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -117,6 +116,23 @@
        <isset property='fail-on-badpaths'/>
       </or>
     </condition>
+
+    <!-- Target architecture suffix to use in EclipseColorer distribution generation -->
+    <condition property='target-arch' value='linux-x86'>
+      <equals arg1="${platform}" arg2="gcc"/>
+    </condition>
+    <condition property='target-arch' value='macos'>
+      <equals arg1="${platform}" arg2="macos"/>
+    </condition>
+    <condition property='target-arch' value='win32'>
+      <not><isset property="target-arch"/></not>
+    </condition>
+
+    <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}_${target-arch}'/>
+    <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
+    <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
+
+    <echo message="${target-arch}"/>
 
     <available file='${eclipse.dir}' type='dir' property='eclipse.plugins-exists'/>
 
@@ -351,7 +367,7 @@
       <fileset dir="." includes="doc/**" excludes='**/*.log, **/*.fo, **/*-merged'/>
     </copy>
     <copy todir='${library-linux-dir}' includeemptydirs='false'>
-      <fileset dir='.' includes='LICENSE, README, catalog.xml' excludes='*.log'/>
+      <fileset dir='.' includes='LICENSE, README' excludes='*.log'/>
     </copy>
     <copy todir='${library-linux-dir}' includeemptydirs='false'>
       <fileset dir='src/libcolorer/linux' includes='*'/>
@@ -394,6 +410,47 @@
     </fail>
   </target>
 
+
+  <target name="eclipseplugin-native-win32">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="net_sf_colorer.dll"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/win32/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/win32/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="net_sf_colorer.dll"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-linux-x86">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/linux/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/linux/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-macos">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.jnilib"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
+    <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+    </copy>
+  </target>
+
+
   <target name="eclipseplugin" depends='init' description='Eclipse plugin package'>
 
     <antcall target='eclipse.plugins-check'/>
@@ -402,36 +459,15 @@
       <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
     </ant>
 
-    <exec dir='src/net.sf.colorer/libnative' executable='${make}' failonerror='true'>
+    <exec dir='src/net.sf.colorer/libnative' executable='${make}' failonerror='${fail-on-bad-build}'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
     </exec>
 
-    <condition property="lib">
-      <or>
-        <available filepath="src/net.sf.colorer/libnative" file="net_sf_colorer.dll"/>
-        <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
-        <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.jnilib"/>
-      </or>
-    </condition>
-    <fail unless='lib'>
-    *********** ERROR! Native part of the Colorer Java library was not compiled
-    </fail>
-
     <mkdir dir='${eclipseplugin-dir}'/>
 
-    <mkdir dir="${eclipseplugin-dir}/os/win32/x86"/>
-    <mkdir dir="${eclipseplugin-dir}/os/linux/x86"/>
-    <mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
-    <copy todir="${eclipseplugin-dir}/os/win32/x86">
-      <fileset dir="src/net.sf.colorer/libnative" includes="net_sf_colorer.dll"/>
-    </copy>
-    <copy todir="${eclipseplugin-dir}/os/linux/x86">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
-    </copy>
-    <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
-    </copy>
+    <!-- handle native library -->
+    <antcall target="eclipseplugin-native-${target-arch}"/>
 
     <mkdir dir='${eclipseplugin-dir}/colorer'/>
     <antcall target='hrc.jar'>
