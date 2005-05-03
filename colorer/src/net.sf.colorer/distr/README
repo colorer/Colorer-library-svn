@@ -8,8 +8,12 @@
   To install plugin into Eclipse you have to copy content
   of this directory into %ECLIPSE_HOME%/plugins directory.
 
-  This package contains plugin's native library, compiled for
-  win32 ant Linux platforms. For Linux issues, read LINUX file.
+  EclipseColorer is based on a native Colorer-take5 library,
+  so each platform has its own native part library.
+  By default the package contains plugin's stuff
+  compiled for win32, Linux(x86) and MacOS platforms.
+
+  For Linux issues, read LINUX file.
   To compile Colorer-take5 library to use with MacOSX systems,
   read MACOS file.
 
