@@ -81,12 +81,15 @@
     <condition property='make' value='${macos.make}'><equals arg1='${platform}' arg2='macos'/></condition>
     <condition property='makefile' value='${macos.makefile}'><equals arg1='${platform}' arg2='macos'/></condition>
 
+    <condition property='make' value='${solarisgcc.make}'><equals arg1='${platform}' arg2='solarisgcc'/></condition>
+    <condition property='makefile' value='${solarisgcc.makefile}'><equals arg1='${platform}' arg2='solarisgcc'/></condition>
+
     <condition property='fail-on-badpaths' value='true'><equals arg1='${fail-on-bad-paths}' arg2='true'/></condition>
 
     <fail unless='make'>
 
       No 'platform' property was specified. Use
-      ant -Dplatform=[vc|bcc|cygwin|gcc|macos]
+      ant -Dplatform=[vc|bcc|cygwin|gcc|macos|solarisgcc]
 
     </fail>
 
@@ -123,6 +126,9 @@
     </condition>
     <condition property='target-arch' value='macos'>
       <equals arg1="${platform}" arg2="macos"/>
+    </condition>
+    <condition property='target-arch' value='solaris'>
+      <equals arg1="${platform}" arg2="solarisgcc"/>
     </condition>
     <condition property='target-arch' value='win32'>
       <not><isset property="target-arch"/></not>
@@ -447,6 +453,19 @@
     <mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
     <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
       <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-solaris">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/solaris"/>
+    <copy todir="${eclipseplugin-dir}/os/solaris">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
     </copy>
   </target>
 
