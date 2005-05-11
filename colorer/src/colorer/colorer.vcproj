@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding = "windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
@@ -29,7 +29,14 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4308,4307"/>
+				DisableSpecificWarnings="4308,4307">
+				<IntelOptions
+					Optimization="0"
+					MinimalRebuild="1"
+					BasicRuntimeChecks="3"
+					RuntimeLibrary="5"
+					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+			</Tool>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -37,10 +44,14 @@
 				AdditionalDependencies="wininet.lib"
 				OutputFile="$(OutDir)/colorer.exe"
 				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1">
+				<IntelOptions
+					AllOptions="/NOLOGO /OUT:&quot;Debug/colorer.exe&quot; /INCREMENTAL wininet.lib /DEBUG /PDB:&quot;Debug/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"/>
+			</Tool>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -61,6 +72,8 @@
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+			<IntelOptions
+				CompilerName="1"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -81,7 +94,19 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4308,4307"/>
+				DisableSpecificWarnings="4308,4307">
+				<IntelOptions
+					Optimization="3"
+					GlobalOptimizations="1"
+					InlineFunctionExpansion="2"
+					FavorSizeOrSpeed="1"
+					OmitFramePointers="1"
+					StringPooling="1"
+					RuntimeLibrary="4"
+					BufferSecurityCheck="1"
+					EnableFunctionLevelLinking="1"
+					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /Zi /nologo /W3 /Wp64 /O3 /Og /Ob2 /Ot /Oy /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;_MBCS&quot; /GF /FD /EHsc /ML /GS /Gy /Fo&quot;Release/&quot; /Fd&quot;Release/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+			</Tool>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -89,11 +114,15 @@
 				AdditionalDependencies="wininet.lib"
 				OutputFile="$(OutDir)/colorer.exe"
 				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				TargetMachine="1">
+				<IntelOptions
+					AllOptions="/NOLOGO /OUT:&quot;Release/colorer.exe&quot; /INCREMENTAL:NO wininet.lib /DEBUG /PDB:&quot;Release/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"/>
+			</Tool>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -116,8 +145,7 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
+	<References/>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -127,207 +155,172 @@
 				Name="unicode"
 				Filter="">
 				<File
-					RelativePath="..\shared\unicode\BitArray.cpp">
-				</File>
+					RelativePath="..\shared\unicode\BitArray.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\Character.cpp">
-				</File>
+					RelativePath="..\shared\unicode\Character.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\CharacterClass.cpp">
-				</File>
+					RelativePath="..\shared\unicode\CharacterClass.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\DString.cpp">
-				</File>
+					RelativePath="..\shared\unicode\DString.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\Encodings.cpp">
-				</File>
+					RelativePath="..\shared\unicode\Encodings.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\SString.cpp">
-				</File>
+					RelativePath="..\shared\unicode\SString.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\String.cpp">
-				</File>
+					RelativePath="..\shared\unicode\String.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\StringBuffer.cpp">
-				</File>
+					RelativePath="..\shared\unicode\StringBuffer.cpp"/>
 				<File
-					RelativePath="..\shared\unicode\UnicodeTools.cpp">
-				</File>
+					RelativePath="..\shared\unicode\UnicodeTools.cpp"/>
 			</Filter>
 			<Filter
 				Name="xml"
 				Filter="">
 				<File
-					RelativePath="..\shared\xml\xmldom.cpp">
-				</File>
+					RelativePath="..\shared\xml\xmldom.cpp"/>
 			</Filter>
 			<Filter
 				Name="common"
 				Filter="">
 				<File
-					RelativePath="..\shared\cregexp\cregexp.cpp">
-				</File>
+					RelativePath="..\shared\cregexp\cregexp.cpp"/>
 				<File
-					RelativePath="..\shared\colorer\handlers\ErrorHandlerWriter.cpp">
-				</File>
+					RelativePath="..\shared\colorer\handlers\ErrorHandlerWriter.cpp"/>
 				<File
-					RelativePath="..\shared\common\Exception.cpp">
-				</File>
+					RelativePath="..\shared\common\Exception.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\FileInputSource.cpp">
-				</File>
+					RelativePath="..\shared\common\io\FileInputSource.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\FileWriter.cpp">
-				</File>
+					RelativePath="..\shared\common\io\FileWriter.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\HTTPInputSource.cpp">
-				</File>
+					RelativePath="..\shared\common\io\HTTPInputSource.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\InputSource.cpp">
-				</File>
+					RelativePath="..\shared\common\io\InputSource.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\JARInputSource.cpp">
-				</File>
+					RelativePath="..\shared\common\io\JARInputSource.cpp"/>
 				<File
-					RelativePath="..\shared\common\Logging.cpp">
-				</File>
+					RelativePath="..\shared\common\Logging.cpp"/>
 				<File
-					RelativePath="..\shared\misc\malloc.c">
-				</File>
+					RelativePath="..\shared\misc\malloc.c"/>
 				<File
-					RelativePath="..\shared\common\MemoryChunks.cpp">
-				</File>
+					RelativePath="..\shared\common\MemoryChunks.cpp"/>
 				<File
-					RelativePath="..\shared\misc\registry.cpp">
-				</File>
+					RelativePath="..\shared\misc\registry.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\StreamWriter.cpp">
-				</File>
+					RelativePath="..\shared\common\io\SharedInputSource.cpp"/>
 				<File
-					RelativePath="..\shared\common\io\Writer.cpp">
-				</File>
+					RelativePath="..\shared\common\io\StreamWriter.cpp"/>
+				<File
+					RelativePath="..\shared\common\io\Writer.cpp"/>
 			</Filter>
 			<Filter
 				Name="unzip"
 				Filter="">
 				<File
-					RelativePath="..\zlib\adler32.c">
-				</File>
+					RelativePath="..\zlib\adler32.c"/>
 				<File
-					RelativePath="..\zlib\crc32.c">
-				</File>
+					RelativePath="..\zlib\crc32.c"/>
 				<File
-					RelativePath="..\zlib\infblock.c">
-				</File>
+					RelativePath="..\zlib\infblock.c"/>
 				<File
-					RelativePath="..\zlib\infcodes.c">
-				</File>
+					RelativePath="..\zlib\infcodes.c"/>
 				<File
-					RelativePath="..\zlib\inffast.c">
-				</File>
+					RelativePath="..\zlib\inffast.c"/>
 				<File
-					RelativePath="..\zlib\inflate.c">
-				</File>
+					RelativePath="..\zlib\inflate.c"/>
 				<File
-					RelativePath="..\zlib\inftrees.c">
-				</File>
+					RelativePath="..\zlib\inftrees.c"/>
 				<File
-					RelativePath="..\zlib\infutil.c">
-				</File>
+					RelativePath="..\zlib\infutil.c"/>
 				<File
-					RelativePath="..\zlib\contrib\minizip\ioapi.c">
-				</File>
+					RelativePath="..\zlib\contrib\minizip\ioapi.c"/>
 				<File
-					RelativePath="..\zlib\uncompr.c">
-				</File>
+					RelativePath="..\zlib\uncompr.c"/>
 				<File
 					RelativePath="..\zlib\contrib\minizip\unzip.c">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool">
+							<IntelOptions
+								AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TC /wd4308 /wd4307"/>
+						</Tool>
+					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\zlib\zutil.c">
-				</File>
+					RelativePath="..\zlib\zutil.c"/>
 			</Filter>
 			<Filter
 				Name="colorer"
 				Filter="">
 				<File
-					RelativePath="..\shared\colorer\ParserFactory.cpp">
-				</File>
+					RelativePath="..\shared\colorer\ParserFactory.cpp"/>
 				<Filter
 					Name="viewer"
 					Filter="">
 					<File
-						RelativePath="..\shared\colorer\viewer\ConsoleTools.cpp">
-					</File>
+						RelativePath="..\shared\colorer\viewer\ConsoleTools.cpp"/>
 					<File
 						RelativePath="..\colorer\ConsoleToolsRunner.cpp">
 						<FileConfiguration
 							Name="Debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"/>
+								UsePrecompiledHeader="0">
+								<IntelOptions
+									AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+							</Tool>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Release|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"/>
+								UsePrecompiledHeader="0">
+								<IntelOptions
+									AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /Zi /nologo /W3 /Wp64 /O3 /Og /Ob2 /Ot /Oy /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;_MBCS&quot; /GF /FD /EHsc /ML /GS /Gy /Fo&quot;Release/&quot; /Fd&quot;Release/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+							</Tool>
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\shared\colorer\viewer\TextConsoleViewer.cpp">
-					</File>
+						RelativePath="..\shared\colorer\viewer\TextConsoleViewer.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\viewer\TextLinesStore.cpp">
-					</File>
+						RelativePath="..\shared\colorer\viewer\TextLinesStore.cpp"/>
 				</Filter>
 				<Filter
 					Name="handlers"
 					Filter="">
 					<File
-						RelativePath="..\shared\colorer\handlers\FileErrorHandler.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\FileErrorHandler.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\handlers\LineRegionsCompactSupport.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\LineRegionsCompactSupport.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\handlers\LineRegionsSupport.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\LineRegionsSupport.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\handlers\RegionMapperImpl.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\RegionMapperImpl.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\handlers\StyledHRDMapper.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\StyledHRDMapper.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\handlers\TextHRDMapper.cpp">
-					</File>
+						RelativePath="..\shared\colorer\handlers\TextHRDMapper.cpp"/>
 				</Filter>
 				<Filter
 					Name="editor"
 					Filter="">
 					<File
-						RelativePath="..\shared\colorer\editor\BaseEditor.cpp">
-					</File>
+						RelativePath="..\shared\colorer\editor\BaseEditor.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\editor\Outliner.cpp">
-					</File>
+						RelativePath="..\shared\colorer\editor\Outliner.cpp"/>
 				</Filter>
 				<Filter
 					Name="parser"
 					Filter="">
 					<File
-						RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.cpp">
-					</File>
+						RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\parsers\HRCParserImpl.cpp">
-					</File>
+						RelativePath="..\shared\colorer\parsers\HRCParserImpl.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\parsers\helpers\TextParserHelpers.cpp">
-					</File>
+						RelativePath="..\shared\colorer\parsers\helpers\TextParserHelpers.cpp"/>
 					<File
-						RelativePath="..\shared\colorer\parsers\TextParserImpl.cpp">
-					</File>
+						RelativePath="..\shared\colorer\parsers\TextParserImpl.cpp"/>
 				</Filter>
 			</Filter>
 		</Filter>
@@ -336,276 +329,186 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\shared\colorer\_template.h">
-			</File>
+				RelativePath="..\shared\colorer\_template.h"/>
 			<File
-				RelativePath="..\shared\colorer\editor\BaseEditor.h">
-			</File>
+				RelativePath="..\shared\colorer\editor\BaseEditor.h"/>
 			<File
-				RelativePath="..\shared\unicode\BitArray.h">
-			</File>
+				RelativePath="..\shared\unicode\BitArray.h"/>
 			<File
-				RelativePath="..\shared\unicode\Character.h">
-			</File>
+				RelativePath="..\shared\unicode\Character.h"/>
 			<File
-				RelativePath="..\shared\unicode\CharacterClass.h">
-			</File>
+				RelativePath="..\shared\unicode\CharacterClass.h"/>
 			<File
-				RelativePath="..\shared\common\Common.h">
-			</File>
+				RelativePath="..\shared\common\Common.h"/>
 			<File
-				RelativePath="..\shared\colorer\viewer\ConsoleTools.h">
-			</File>
+				RelativePath="..\shared\colorer\viewer\ConsoleTools.h"/>
 			<File
-				RelativePath="..\shared\cregexp\cregexp.h">
-			</File>
+				RelativePath="..\shared\cregexp\cregexp.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\DefaultErrorHandler.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\DefaultErrorHandler.h"/>
 			<File
-				RelativePath="..\shared\unicode\DString.h">
-			</File>
+				RelativePath="..\shared\unicode\DString.h"/>
 			<File
-				RelativePath="..\shared\unicode\Encodings.h">
-			</File>
+				RelativePath="..\shared\unicode\Encodings.h"/>
 			<File
-				RelativePath="..\shared\colorer\ErrorHandler.h">
-			</File>
+				RelativePath="..\shared\colorer\ErrorHandler.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\ErrorHandlerWriter.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\ErrorHandlerWriter.h"/>
 			<File
-				RelativePath="..\shared\common\Exception.h">
-			</File>
+				RelativePath="..\shared\common\Exception.h"/>
 			<File
-				RelativePath="..\shared\farplugin\farcolor.hpp">
-			</File>
+				RelativePath="..\shared\farplugin\farcolor.hpp"/>
 			<File
-				RelativePath="..\shared\farplugin\farkeys.hpp">
-			</File>
+				RelativePath="..\shared\farplugin\farkeys.hpp"/>
 			<File
-				RelativePath="..\shared\common\Features.h">
-			</File>
+				RelativePath="..\shared\common\Features.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\FileErrorHandler.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\FileErrorHandler.h"/>
 			<File
-				RelativePath="..\shared\common\io\FileInputSource.h">
-			</File>
+				RelativePath="..\shared\common\io\FileInputSource.h"/>
 			<File
-				RelativePath="..\shared\colorer\FileType.h">
-			</File>
+				RelativePath="..\shared\colorer\FileType.h"/>
 			<File
-				RelativePath="..\shared\colorer\parsers\helpers\FileTypeImpl.h">
-			</File>
+				RelativePath="..\shared\colorer\parsers\helpers\FileTypeImpl.h"/>
 			<File
-				RelativePath="..\shared\common\io\FileWriter.h">
-			</File>
+				RelativePath="..\shared\common\io\FileWriter.h"/>
 			<File
-				RelativePath="..\shared\farplugin\fmt.hpp">
-			</File>
+				RelativePath="..\shared\farplugin\fmt.hpp"/>
 			<File
-				RelativePath="..\shared\common\Hashtable.h">
-			</File>
+				RelativePath="..\shared\common\Hashtable.h"/>
 			<File
-				RelativePath="..\shared\common\HashtableCore.h">
-			</File>
+				RelativePath="..\shared\common\HashtableCore.h"/>
 			<File
-				RelativePath="..\shared\colorer\HRCParser.h">
-			</File>
+				RelativePath="..\shared\colorer\HRCParser.h"/>
 			<File
-				RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.h">
-			</File>
+				RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.h"/>
 			<File
-				RelativePath="..\shared\colorer\parsers\HRCParserImpl.h">
-			</File>
+				RelativePath="..\shared\colorer\parsers\HRCParserImpl.h"/>
 			<File
-				RelativePath="..\shared\common\io\HTTPInputSource.h">
-			</File>
+				RelativePath="..\shared\common\io\HTTPInputSource.h"/>
 			<File
-				RelativePath="..\zlib\infblock.h">
-			</File>
+				RelativePath="..\zlib\infblock.h"/>
 			<File
-				RelativePath="..\zlib\infcodes.h">
-			</File>
+				RelativePath="..\zlib\infcodes.h"/>
 			<File
-				RelativePath="..\zlib\inffast.h">
-			</File>
+				RelativePath="..\zlib\inffast.h"/>
 			<File
-				RelativePath="..\zlib\inffixed.h">
-			</File>
+				RelativePath="..\zlib\inffixed.h"/>
 			<File
-				RelativePath="..\zlib\inftrees.h">
-			</File>
+				RelativePath="..\zlib\inftrees.h"/>
 			<File
-				RelativePath="..\zlib\infutil.h">
-			</File>
+				RelativePath="..\zlib\infutil.h"/>
 			<File
-				RelativePath="..\shared\common\io\InputSource.h">
-			</File>
+				RelativePath="..\shared\common\io\InputSource.h"/>
 			<File
-				RelativePath="..\zlib\contrib\minizip\ioapi.h">
-			</File>
+				RelativePath="..\zlib\contrib\minizip\ioapi.h"/>
 			<File
-				RelativePath="..\shared\common\io\JARInputSource.h">
-			</File>
+				RelativePath="..\shared\common\io\JARInputSource.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\LineRegion.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\LineRegion.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\LineRegionsCompactSupport.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\LineRegionsCompactSupport.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\LineRegionsSupport.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\LineRegionsSupport.h"/>
 			<File
-				RelativePath="..\shared\colorer\LineSource.h">
-			</File>
+				RelativePath="..\shared\colorer\LineSource.h"/>
 			<File
-				RelativePath="..\shared\common\Logging.h">
-			</File>
+				RelativePath="..\shared\common\Logging.h"/>
 			<File
-				RelativePath="..\shared\common\MemoryChunks.h">
-			</File>
+				RelativePath="..\shared\common\MemoryChunks.h"/>
 			<File
-				RelativePath="..\shared\common\io\MemoryFile.h">
-			</File>
+				RelativePath="..\shared\common\io\MemoryFile.h"/>
 			<File
-				RelativePath="..\shared\common\MemoryOperator.h">
-			</File>
+				RelativePath="..\shared\common\MemoryOperator.h"/>
 			<File
-				RelativePath="..\shared\colorer\editor\OutlineItem.h">
-			</File>
+				RelativePath="..\shared\colorer\editor\OutlineItem.h"/>
 			<File
-				RelativePath="..\shared\colorer\editor\Outliner.h">
-			</File>
+				RelativePath="..\shared\colorer\editor\Outliner.h"/>
 			<File
-				RelativePath="..\shared\colorer\editor\PairMatch.h">
-			</File>
+				RelativePath="..\shared\colorer\editor\PairMatch.h"/>
 			<File
-				RelativePath="..\shared\colorer\viewer\ParsedLineWriter.h">
-			</File>
+				RelativePath="..\shared\colorer\viewer\ParsedLineWriter.h"/>
 			<File
-				RelativePath="..\shared\colorer\ParserFactory.h">
-			</File>
+				RelativePath="..\shared\colorer\ParserFactory.h"/>
 			<File
-				RelativePath="..\shared\colorer\ParserFactoryException.h">
-			</File>
+				RelativePath="..\shared\colorer\ParserFactoryException.h"/>
 			<File
-				RelativePath="..\shared\farplugin\plugin.hpp">
-			</File>
+				RelativePath="..\shared\farplugin\plugin.hpp"/>
 			<File
-				RelativePath="..\shared\colorer\Region.h">
-			</File>
+				RelativePath="..\shared\colorer\Region.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\RegionDefine.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\RegionDefine.h"/>
 			<File
-				RelativePath="..\shared\colorer\RegionHandler.h">
-			</File>
+				RelativePath="..\shared\colorer\RegionHandler.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\RegionMapper.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\RegionMapper.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\RegionMapperImpl.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\RegionMapperImpl.h"/>
 			<File
-				RelativePath="..\shared\colorer\Scheme.h">
-			</File>
+				RelativePath="..\shared\colorer\Scheme.h"/>
 			<File
-				RelativePath="..\shared\common\io\SharedInputSource.h">
-			</File>
+				RelativePath="..\shared\common\io\SharedInputSource.h"/>
 			<File
-				RelativePath="..\shared\unicode\SString.h">
-			</File>
+				RelativePath="..\shared\unicode\SString.h"/>
 			<File
-				RelativePath="..\shared\common\io\StreamWriter.h">
-			</File>
+				RelativePath="..\shared\common\io\StreamWriter.h"/>
 			<File
-				RelativePath="..\shared\unicode\String.h">
-			</File>
+				RelativePath="..\shared\unicode\String.h"/>
 			<File
-				RelativePath="..\shared\unicode\StringBuffer.h">
-			</File>
+				RelativePath="..\shared\unicode\StringBuffer.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\StyledHRDMapper.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\StyledHRDMapper.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\StyledRegion.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\StyledRegion.h"/>
 			<File
-				RelativePath="..\shared\colorer\viewer\TextConsoleViewer.h">
-			</File>
+				RelativePath="..\shared\colorer\viewer\TextConsoleViewer.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\TextHRDMapper.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\TextHRDMapper.h"/>
 			<File
-				RelativePath="..\shared\colorer\viewer\TextLinesStore.h">
-			</File>
+				RelativePath="..\shared\colorer\viewer\TextLinesStore.h"/>
 			<File
-				RelativePath="..\shared\colorer\TextParser.h">
-			</File>
+				RelativePath="..\shared\colorer\TextParser.h"/>
 			<File
-				RelativePath="..\shared\colorer\parsers\helpers\TextParserHelpers.h">
-			</File>
+				RelativePath="..\shared\colorer\parsers\helpers\TextParserHelpers.h"/>
 			<File
-				RelativePath="..\shared\colorer\parsers\TextParserImpl.h">
-			</File>
+				RelativePath="..\shared\colorer\parsers\TextParserImpl.h"/>
 			<File
-				RelativePath="..\shared\colorer\handlers\TextRegion.h">
-			</File>
+				RelativePath="..\shared\colorer\handlers\TextRegion.h"/>
 			<File
-				RelativePath="..\shared\unicode\UnicodeTools.h">
-			</File>
+				RelativePath="..\shared\unicode\UnicodeTools.h"/>
 			<File
-				RelativePath="..\zlib\contrib\minizip\unzip.h">
-			</File>
+				RelativePath="..\zlib\contrib\minizip\unzip.h"/>
 			<File
-				RelativePath="..\shared\common\Vector.h">
-			</File>
+				RelativePath="..\shared\common\Vector.h"/>
 			<File
-				RelativePath="..\shared\common\io\Writer.h">
-			</File>
+				RelativePath="..\shared\common\io\Writer.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_charcategory.h">
-			</File>
+				RelativePath="..\shared\unicode\x_charcategory.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_charcategory2.h">
-			</File>
+				RelativePath="..\shared\unicode\x_charcategory2.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_charcategory_names.h">
-			</File>
+				RelativePath="..\shared\unicode\x_charcategory_names.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_defines.h">
-			</File>
+				RelativePath="..\shared\unicode\x_defines.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_encodings.h">
-			</File>
+				RelativePath="..\shared\unicode\x_encodings.h"/>
 			<File
-				RelativePath="..\shared\unicode\x_tables.h">
-			</File>
+				RelativePath="..\shared\unicode\x_tables.h"/>
 			<File
-				RelativePath="..\shared\xml\xmldom.h">
-			</File>
+				RelativePath="..\shared\xml\xmldom.h"/>
 			<File
-				RelativePath="..\zlib\contrib\minizip\zconf.h">
-			</File>
+				RelativePath="..\zlib\zconf.h"/>
 			<File
-				RelativePath="..\zlib\zconf.h">
-			</File>
+				RelativePath="..\zlib\contrib\minizip\zconf.h"/>
 			<File
-				RelativePath="..\zlib\zlib.h">
-			</File>
+				RelativePath="..\zlib\zlib.h"/>
 			<File
-				RelativePath="..\zlib\zutil.h">
-			</File>
+				RelativePath="..\zlib\zutil.h"/>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
-		</Filter>
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"/>
 	</Files>
-	<Globals>
-	</Globals>
+	<Globals/>
 </VisualStudioProject>
