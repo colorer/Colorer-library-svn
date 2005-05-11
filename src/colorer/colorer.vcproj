@@ -29,13 +29,15 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4308,4307">
+				DisableSpecificWarnings="4308,4307"
+				AdditionalOptions="">
 				<IntelOptions
 					Optimization="0"
 					MinimalRebuild="1"
 					BasicRuntimeChecks="3"
 					RuntimeLibrary="5"
-					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"
+					MSOriginalAdditionalOptions=""/>
 			</Tool>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -48,9 +50,11 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
 				SubSystem="1"
-				TargetMachine="1">
+				TargetMachine="1"
+				AdditionalOptions="">
 				<IntelOptions
-					AllOptions="/NOLOGO /OUT:&quot;Debug/colorer.exe&quot; /INCREMENTAL wininet.lib /DEBUG /PDB:&quot;Debug/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"/>
+					AllOptions="/NOLOGO /OUT:&quot;Debug/colorer.exe&quot; /INCREMENTAL wininet.lib /DEBUG /PDB:&quot;Debug/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
+					MSOriginalAdditionalOptions=""/>
 			</Tool>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -94,7 +98,8 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4308,4307">
+				DisableSpecificWarnings="4308,4307"
+				AdditionalOptions="">
 				<IntelOptions
 					Optimization="3"
 					GlobalOptimizations="1"
@@ -105,7 +110,8 @@
 					RuntimeLibrary="4"
 					BufferSecurityCheck="1"
 					EnableFunctionLevelLinking="1"
-					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /Zi /nologo /W3 /Wp64 /O3 /Og /Ob2 /Ot /Oy /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;_MBCS&quot; /GF /FD /EHsc /ML /GS /Gy /Fo&quot;Release/&quot; /Fd&quot;Release/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
+					AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /Zi /nologo /W3 /Wp64 /O3 /Og /Ob2 /Ot /Oy /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;_MBCS&quot; /GF /FD /EHsc /ML /GS /Gy /Fo&quot;Release/&quot; /Fd&quot;Release/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"
+					MSOriginalAdditionalOptions=""/>
 			</Tool>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -119,9 +125,11 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1">
+				TargetMachine="1"
+				AdditionalOptions="">
 				<IntelOptions
-					AllOptions="/NOLOGO /OUT:&quot;Release/colorer.exe&quot; /INCREMENTAL:NO wininet.lib /DEBUG /PDB:&quot;Release/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"/>
+					AllOptions="/NOLOGO /OUT:&quot;Release/colorer.exe&quot; /INCREMENTAL:NO wininet.lib /DEBUG /PDB:&quot;Release/colorer.pdb&quot; /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /MACHINE:IX86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
+					MSOriginalAdditionalOptions=""/>
 			</Tool>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -237,16 +245,7 @@
 				<File
 					RelativePath="..\zlib\uncompr.c"/>
 				<File
-					RelativePath="..\zlib\contrib\minizip\unzip.c">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool">
-							<IntelOptions
-								AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TC /wd4308 /wd4307"/>
-						</Tool>
-					</FileConfiguration>
-				</File>
+					RelativePath="..\zlib\contrib\minizip\unzip.c"/>
 				<File
 					RelativePath="..\zlib\zutil.c"/>
 			</Filter>
@@ -261,26 +260,7 @@
 					<File
 						RelativePath="..\shared\colorer\viewer\ConsoleTools.cpp"/>
 					<File
-						RelativePath="..\colorer\ConsoleToolsRunner.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0">
-								<IntelOptions
-									AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /ZI /nologo /W3 /Wp64 /Od /D &quot;WIN32&quot; /D &quot;_DEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;COLORER_FEATURE_USE_DL_MALLOC=FALSE&quot; /D &quot;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE&quot; /D &quot;_MBCS&quot; /Gm /EHsc /RTC1 /MLd /Fo&quot;Debug/&quot; /Fd&quot;Debug/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
-							</Tool>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0">
-								<IntelOptions
-									AllOptions="/c  /I &quot;../shared&quot; /I &quot;../zlib&quot; /Zi /nologo /W3 /Wp64 /O3 /Og /Ob2 /Ot /Oy /D &quot;WIN32&quot; /D &quot;NDEBUG&quot; /D &quot;_CONSOLE&quot; /D &quot;_MBCS&quot; /GF /FD /EHsc /ML /GS /Gy /Fo&quot;Release/&quot; /Fd&quot;Release/vc70.pdb&quot; /Gd /TP /wd4308 /wd4307"/>
-							</Tool>
-						</FileConfiguration>
-					</File>
+						RelativePath="..\colorer\ConsoleToolsRunner.cpp"/>
 					<File
 						RelativePath="..\shared\colorer\viewer\TextConsoleViewer.cpp"/>
 					<File
