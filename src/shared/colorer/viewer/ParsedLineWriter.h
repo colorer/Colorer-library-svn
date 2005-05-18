@@ -35,7 +35,9 @@ public:
 
       const Region *region = l1->region;
       while(region != null){
-        String *token = region->getName()->replace(DString(":"),DString("_"));
+        String *token0 = region->getName()->replace(DString(":"),DString("-"));
+        String *token = token0->replace(DString("."),DString("-"));
+        delete token0;
         markupWriter->write(token);
         delete token;
         region = region->getParent();
