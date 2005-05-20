@@ -4,17 +4,25 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import net.sf.colorer.HRCParser;
-import net.sf.colorer.eclipse.*;
+import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.ImageStore;
+import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.swt.TextColorer;
 
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.ui.model.WorkbenchViewerSorter;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.eclipse.ui.model.WorkbenchViewerSorter;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 /**

@@ -3,15 +3,15 @@ package net.sf.colorer.eclipse.outline;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.model.IWorkbenchAdapter;
-
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
 import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.swt.TextColorer;
+
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.model.IWorkbenchAdapter;
 
 
 /**

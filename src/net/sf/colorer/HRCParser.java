@@ -1,6 +1,8 @@
 package net.sf.colorer;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import net.sf.colorer.impl.Logger;
 

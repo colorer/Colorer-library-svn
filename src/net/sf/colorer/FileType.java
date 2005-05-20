@@ -1,6 +1,6 @@
 package net.sf.colorer;
 
-import java.util.*;
+import java.util.Vector;
 
 /**
  * HRC FileType (or prototype) instance

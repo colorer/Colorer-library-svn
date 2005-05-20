@@ -2,6 +2,7 @@ package net.sf.colorer.eclipse.outline;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.editor.OutlineItem;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 

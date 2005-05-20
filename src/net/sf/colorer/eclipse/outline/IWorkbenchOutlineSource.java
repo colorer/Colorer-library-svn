@@ -1,9 +1,9 @@
 package net.sf.colorer.eclipse.outline;
 
-import org.eclipse.core.runtime.IAdaptable;
-
 import net.sf.colorer.editor.IOutlineSource;
 import net.sf.colorer.swt.TextColorer;
+
+import org.eclipse.core.runtime.IAdaptable;
 
 /**
  * Interface for possible Colorer Editor outliners
