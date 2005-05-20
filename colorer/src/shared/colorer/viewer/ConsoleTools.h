@@ -106,11 +106,13 @@ public:
       Uses @c 'rgb' HRD class to dynamically create
       HTML tags, or @c 'text' HRD class to use specified in
       HRD file starting and ending sequences.
-      @param useTokens If true, no HRD input used, but direct
-             tokenized output is produced with region names,
-             as names of tokens.
   */
-  void genOutput(bool useTokens);
+  void genOutput();
+  
+  /*
+   *  No HRD input is used, but direct tokenized output is produced with region names, as names of tokens.
+   */
+  void genTokenOutput();
 
 private:
   bool copyrightHeader;
