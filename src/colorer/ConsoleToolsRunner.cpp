@@ -170,10 +170,10 @@ int main(int argc, char *argv[])
         ct.viewFile();
         break;
       case JT_GEN:
-        ct.genOutput(false);
+        ct.genOutput();
         break;
       case JT_GEN_TOKENS:
-        ct.genOutput(true);
+        ct.genTokenOutput();
         break;
       case JT_FORWARD:
         ct.forward();
