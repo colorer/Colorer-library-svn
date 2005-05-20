@@ -1,6 +1,7 @@
 package net.sf.colorer.eclipse.editors;
 
-import net.sf.colorer.*;
+import net.sf.colorer.FileType;
+import net.sf.colorer.Group;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
@@ -14,7 +15,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.*;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IKeyBindingService;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
 
 public class ColorerActionContributor extends TextEditorActionContributor

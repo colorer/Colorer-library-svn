@@ -7,6 +7,8 @@ import java.util.Hashtable;
  */
 public class Logger {
 
+    public final static boolean FILTER = false;
+
     public final static boolean TRACE = true;
     
     public final static boolean ERROR = true; 
@@ -22,7 +24,7 @@ public class Logger {
     public static void trace(String comp, Object msg, Throwable ex) {
         if (TRACE) {
             
-            if (filterout(comp)) return;
+            if (FILTER && filterout(comp)) return;
             
             String print = "null";
             if (msg != null) {

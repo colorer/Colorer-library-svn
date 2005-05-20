@@ -1,7 +1,8 @@
 package net.sf.colorer;
 
-import java.util.*;
-import net.sf.colorer.handlers.*;
+import java.util.Enumeration;
+
+import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.impl.Logger;
 
 public class ParserFactory {

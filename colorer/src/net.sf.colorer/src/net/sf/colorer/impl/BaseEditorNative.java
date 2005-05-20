@@ -2,11 +2,18 @@ package net.sf.colorer.impl;
 
 import java.util.Vector;
 
-import net.sf.colorer.*;
+import net.sf.colorer.FileType;
+import net.sf.colorer.HRCParser;
+import net.sf.colorer.LineSource;
+import net.sf.colorer.ParserFactory;
+import net.sf.colorer.Region;
+import net.sf.colorer.RegionHandler;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.PairMatch;
-import net.sf.colorer.handlers.*;
+import net.sf.colorer.handlers.LineRegion;
+import net.sf.colorer.handlers.RegionDefine;
+import net.sf.colorer.handlers.RegionMapper;
 
 public class BaseEditorNative implements BaseEditor {
     /** internal native object */
