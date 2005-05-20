@@ -2,18 +2,49 @@ package net.sf.colorer.swt;
 
 import java.util.Vector;
 
-import org.eclipse.swt.custom.*;
-import org.eclipse.swt.events.*;
-import org.eclipse.swt.graphics.*;
-import org.eclipse.swt.widgets.*;
-
-import net.sf.colorer.*;
-import net.sf.colorer.editor.*;
+import net.sf.colorer.FileType;
+import net.sf.colorer.LineSource;
+import net.sf.colorer.ParserFactory;
+import net.sf.colorer.RegionHandler;
+import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.editor.PairMatch;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionDefine;
 import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
-import net.sf.colorer.impl.*;
+import net.sf.colorer.impl.BaseEditorNative;
+import net.sf.colorer.impl.Logger;
+
+import org.eclipse.swt.custom.LineBackgroundEvent;
+import org.eclipse.swt.custom.LineBackgroundListener;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.TextChangeListener;
+import org.eclipse.swt.custom.TextChangedEvent;
+import org.eclipse.swt.custom.TextChangingEvent;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ScrollBar;
 
 /**
  * StyledText listener implementation

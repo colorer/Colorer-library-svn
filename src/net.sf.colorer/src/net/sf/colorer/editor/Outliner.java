@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
-import net.sf.colorer.Scheme;
 
 /**
  * Basic outliner class, used to capture parser output and

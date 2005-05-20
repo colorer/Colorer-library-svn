@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Inaccessible static: counter */
 /*
  * Class:     net_sf_colorer_HRCParser
  * Method:    finalize
