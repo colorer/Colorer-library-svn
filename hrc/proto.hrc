@@ -207,11 +207,22 @@
   </prototype>
 
   <!--  xml types  -->
-  <prototype name="xml" group="xml" description="xml" targetNamespace="http://www.w3.org/XML/1998/namespace">
+  <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
     <filename>/\.(xml)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
+    <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
   </prototype>
+  <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
+    <location link="xml/xmlns.hrc"/>
+  </package>
+  <package name="xlink" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
+    <location link="xml/xlink.hrc"/>
+  </package>
+  <package name="xinclude" description="xinclude" targetNamespace="http://www.w3.org/1999/xinclude">
+    <location link="xml/xinclude.hrc"/>
+  </package>
+
   <prototype name="dtd" group="xml" description="dtd">
     <location link="xml/dtd.hrc"/>
     <filename>/\.(dtd|ent|mod)$/i</filename>
@@ -235,9 +246,6 @@
   <prototype name="relaxng" group="xml" description="Relax NG" targetNamespace="http://relaxng.org/ns/structure/1.0">
     <location link="xml/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
-  </prototype>
-  <prototype name="xlink" group="xml" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
-    <location link="xml/xlink.hrc"/>
   </prototype>
 
   <!--  database languages  -->

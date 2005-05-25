@@ -1,5 +1,13 @@
 
 $Date$
+  Fixes:
+    - Perl improvements
+    - FAR packages fixes
+  New:
+    - No dependencies on php binaries when building HRC base
+
+
+Date: 2005/04/06 13:41:01
   New:
     - HRC regexp fixes
     - External xml entities now has a .xml extension.

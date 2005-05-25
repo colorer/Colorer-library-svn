@@ -43,32 +43,27 @@
          <regexp match="/\\./" region0="StringContent"/>
          <inherit scheme="jsMETA"/>
       </scheme>
-      <scheme name="QuotStringContent">
-         <inherit scheme="jsMETA"/>
-         <inherit scheme="c:StringContent"/>
-      </scheme>
-      
-
+            
       <scheme name="RE">
        <inherit scheme="regexp:pcre.regexp">
         <virtual scheme="regexp:string" subst-scheme="jsMETA"/>
-        <virtual scheme="regexp:pcre.regexp" subst-scheme="RE"/>
+        <virtual scheme="regexp:pcre.regexp" subst-scheme="RE"/>        
        </inherit>
       </scheme>
-
+      
       <!-- EE: support js in attr -->
-
+      
       <scheme name="AposString">
-         <block start="/\x27/" end="/\x27/" scheme="String" region="String"/>
+         <block start="/\x27/" end="/\x27/" scheme="String" region="String"/>      
       </scheme>
       <scheme name="QuotString">
-         <block start="/\x22/" end="/\x22/" scheme="QuotStringContent" region="String"/>
+         <inherit scheme="c:String"/>
       </scheme>
       <scheme name="jString">
        <inherit scheme="AposString"/>
        <inherit scheme="QuotString"/>
       </scheme>
-
+      
       <scheme name="AposScript">
        <inherit scheme="jScript">
         <virtual scheme="jString" subst-scheme="AposString"/>
@@ -85,7 +80,7 @@
          <regexp match="/^\s* &lt;!--/x" region0="Comment"/>
          <regexp match="/^\s* --&gt;/x" region0="Comment"/>
 <!-- Linear Comments-->
-         <block start="/\/\//" end="/\M(&lt;\/scr|$)/" scheme="jComment" region="Comment"/>
+         <block start="/\/\//" end="/\M(&lt;\/scr|$)/i" scheme="jComment" region="Comment"/>
          <block start="/\/\*/" end="/\*\//" scheme="jComment" region="Comment" region00="PairStart" region10="PairEnd"/>
          <regexp match="/^\M\s* function \s+ ([\w_]+) /x" region1="Function"/>
          <inherit scheme="PairedBrackets">
@@ -101,10 +96,10 @@
            <start region1="Symbol" region2="StringEdge" region3="PairStart">
             <![CDATA[
              /
-             ( [\=\!]\~ |
-             [^\<\]\}\)\+\-\/\;\w]?#1 |
-             \bif | ~ | ^)
-             \s* ((\/))\M[^\/\*] /x
+             ( [\=\!]\~ | && | \|\| |
+             [^<\]\}\)\+\-\w\s\/\;] |
+             \bif | ~)
+             \s* ((\/))\M[^\/\*>] /x
             ]]>
            </start>
            <end region0="StringEdge" region1="PairEnd" region2="regexp:SpecArea">
@@ -155,6 +150,7 @@
             <word name=".SQRT1_2"/>
             <word name=".SQRT2"/>
          </keywords>
+         <regexp match="/!\M\w/" region="Symbol"/>
          <keywords region="Symbol">
 <!-- Operators Computational  -->
             <symb name="++"/>

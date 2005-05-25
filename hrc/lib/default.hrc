@@ -77,9 +77,11 @@
     <region name="ParameterStrong" parent="Parameter" description="Special parameter"/>
     <region name="ParameterUnknown" parent="ParameterStrong" description="Undefined parameter"/>
 
-    <region name="Tag" description="HTML tag"/>
+    <region name="Tag" description="XML/HTML/SGML tag"/>
     <region name="OpenTag" parent="Tag" description="Opening tag"/>
     <region name="CloseTag" parent="Tag" description="Closing tag"/>
+
+    <region name="EmbeddedTag" parent="Tag" description="Tag for embedded structures (asp, etc.)"/>
 
     <region name="Label" description="Label"/>
     <region name="LabelStrong" parent="Label" description="High contrast Label"/>
@@ -87,6 +89,7 @@
     <region name="Insertion" description="Insertion source code"/>
     <region name="InsertionStart" parent="Insertion" description="Source Insertion start"/>
     <region name="InsertionEnd" parent="Insertion" description="Source Insertion end"/>
+    <region name="InsertionEmbed" parent="Insertion" description="Insertion embedded code"/>
 
     <region name="URI" description="URI Address"/>
     <region name="URL"  parent="URI" description="URL Address"/>
@@ -230,6 +233,13 @@
       </block>
     </scheme>
 
+    <scheme name="unixCommentDirective">
+      <regexp match="/^#!\s*([\S]+)( .*)?$/" 
+        region0="Comment" region1="VarStrong" region2="KeywordStrong" 
+      />
+    </scheme>
+    
+    
     <scheme name="PairedBrackets">
 <!-- paired block -->
       <block start="/(\{)/" end="/(\})/" scheme="PairedBrackets" region00="SymbolStrong" region01="PairStart" region10="SymbolStrong" region11="PairEnd"/>

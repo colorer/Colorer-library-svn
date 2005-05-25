@@ -48,7 +48,15 @@
  <inherit scheme="iePropertyNames"/>
 </scheme>
 
+<scheme name="PropertyValue">
+ <inherit scheme="css:PropertyValue"/>
+ <inherit scheme="mzPropertyValue"/>
+</scheme>
+
+
 <scheme name="mzPropertyNames" if="moz-css">
+ <!-- fix me!!! 
+ <regexp match="/-moz-[\w\-]+\b/" region="mozilla"/> -->
  <keywords region="mozilla" ignorecase="yes" worddiv='%css:worddiv-class;'>
   <word name="-moz-binding"/>
   <word name="-moz-appearance"/>
@@ -90,43 +98,6 @@
  </keywords>
 </scheme>
 
-
-<scheme name="iePropertyNames" if="ie-css"> 
- <keywords region="msie" ignorecase="yes" worddiv='%css:worddiv-class;'>
-   <word name="behavior"/>
-   <word name="filter"/>
-   <word name="layout-flow"/>
-   <word name="layout-grid-char"/>
-   <word name="layout-grid-line"/>
-   <word name="layout-grid-type"/>
-   <word name="layout-grid-mode"/>
-   <word name="text-autospace"/>
-   <word name="text-justify"/>
-   <word name="text-kashida-space"/>
-   <word name="text-underline-position"/>
-   <word name="word-break"/>
-   <word name="word-wrap"/>
-   <word name="writing-mode"/>
-   <word name="zoom"/>
-   <word name="line-break"/>
-   <word name="ruby-overhang"/>
-   <word name="ruby-position"/>
-   <word name="scrollbar-3dlight-color"/>
-   <word name="scrollbar-arrow-color"/>
-   <word name="scrollbar-base-color"/>
-   <word name="scrollbar-darkshadow-color"/>
-   <word name="scrollbar-face-color"/>
-   <word name="scrollbar-highlight-color"/>
-   <word name="scrollbar-shadow-color"/>
- </keywords>
-</scheme>
-
-
-<scheme name="PropertyValue">
- <inherit scheme="css:PropertyValue"/>
- <inherit scheme="mzPropertyValue"/>
-</scheme>
-
 <scheme name="mzPropertyValue" if="moz-css">
  <keywords region="mozilla" ignorecase="yes" worddiv='%css:worddiv-class;'>
   <word name="border"/>
@@ -161,6 +132,38 @@
   <word name="-moz-scrollbars-none"/>
  </keywords>
 </scheme>
+
+
+<scheme name="iePropertyNames" if="ie-css"> 
+ <keywords region="msie" ignorecase="yes" worddiv='%css:worddiv-class;'>
+   <word name="behavior"/>
+   <word name="filter"/>
+   <word name="layout-flow"/>
+   <word name="layout-grid-char"/>
+   <word name="layout-grid-line"/>
+   <word name="layout-grid-type"/>
+   <word name="layout-grid-mode"/>
+   <word name="text-autospace"/>
+   <word name="text-justify"/>
+   <word name="text-kashida-space"/>
+   <word name="text-underline-position"/>
+   <word name="word-break"/>
+   <word name="word-wrap"/>
+   <word name="writing-mode"/>
+   <word name="zoom"/>
+   <word name="line-break"/>
+   <word name="ruby-overhang"/>
+   <word name="ruby-position"/>
+   <word name="scrollbar-3dlight-color"/>
+   <word name="scrollbar-arrow-color"/>
+   <word name="scrollbar-base-color"/>
+   <word name="scrollbar-darkshadow-color"/>
+   <word name="scrollbar-face-color"/>
+   <word name="scrollbar-highlight-color"/>
+   <word name="scrollbar-shadow-color"/>
+ </keywords>
+</scheme>
+
 
 
 <scheme name="cssTag">
@@ -205,8 +208,8 @@
 
 
 <scheme name="css">
- <inherit scheme="css:pure-css">
-  <virtual scheme="css:pure-css" subst-scheme="css"/>
+ <inherit scheme="css:css-r">
+  <virtual scheme="css:css-r" subst-scheme="css"/>
   <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
   <virtual scheme="css:PropertyValue" subst-scheme="PropertyValue"/>
   <virtual scheme="css:PropertyFunc" subst-scheme="PropertyFunc"/>

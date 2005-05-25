@@ -16,30 +16,14 @@
       Cail Lomecb <cail@nm.ru>
       Eugene Efremov <4mirror@mail.ru>
    ]]></contributors>
-   <appinfo>
-    <package name="asp" description="Acitve Server Pages">
-     <location link="inet/lib/asp.hrc"/>
-    </package>
-    <require>
-     <type name="html"/>
-     <type name="css"/>
-     <type name="vbScript"/>
-     <type name="jScript"/>
-     <type name="perl"/>
-     <type name="asp.vb"/>
-     <type name="asp.js"/>
-     <type name="asp.ps"/>
-    </require>
-   </appinfo>
-
   </annotation>
 
   <type name="asp">
 
     <!--import type="def"/-->
 
-    <region name="Insertion" parent="def:Insertion"/>
-    <region name="Tag" parent="def:OpenTag"/>
+    <region name="Insertion" parent="def:InsertionEmbed"/>
+    <region name="Tag" parent="def:EmbeddedTag"/>
     <region name="OpenTag" parent="Tag"/>
     <region name="CloseTag" parent="Tag"/>
 
@@ -54,7 +38,7 @@
       <block start="/(&lt;\%)/" end="/(\%&gt;)/"
              scheme="targetLanguage" priority="low" content-priority="low"
              region="Insertion" region00="OpenTag" region10="CloseTag"
-             region01="def:PairStart" region11="def:PairEnd"/>
+             region01="def:PairStrongStart" region11="def:PairStrongEnd"/>
     </scheme>
 
     <annotation><documentation>
@@ -67,7 +51,7 @@
       <block start="/((\%&gt;))/" end="/((&lt;\%))/"
        scheme="html" priority="low" region="def:Text" inner-region="yes"
        region00="OpenTag" region10="CloseTag"
-       region01="def:PairStart" region11="def:PairEnd"
+       region01="def:PairStrongStart" region11="def:PairStrongEnd"
       />
     </scheme>
 
