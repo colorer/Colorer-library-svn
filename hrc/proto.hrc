@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY perl-proto SYSTEM "proto-perl.xml">
 <!ENTITY php-proto  SYSTEM "proto-php.xml">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -50,7 +49,10 @@
     <filename>/\.(pl[sx]?|pm|pod|cgi|t)$/i</filename>
     <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
     <firstline>/perl/i</firstline>
-    &perl-proto;
+    <parameters>
+      <param name="use-packages" value="true" description="Highlight perl packages"/>
+      <param name="data-code" value="true" description="Treat __DATA__ sections as code"/>
+    </parameters>
   </prototype>
   <prototype name="java" group="main" description="Java">
     <location link="base/java.hrc"/>
@@ -113,8 +115,8 @@
     <location link="inet/css.hrc"/>
     <filename>/\.(css)$/i</filename>
     <parameters>
-     <param name="html-css" value="true" description="Default use CSS for HTML"/>
-     <param name="svg-css" value="false" description="Default use CSS for SVG"/>
+     <param name="html-css" value="true" description="Default use css for HTML"/>
+     <param name="svg-css" value="false" description="Default use css for SVG"/>
     </parameters>
   </prototype>
   <prototype name="html-css" group="inet" description="css for html">
@@ -128,7 +130,7 @@
   <prototype name="svg-css" group="inet" description="css for svg">
     <location link="inet/svg-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
-  </prototype>
+  </prototype>  
 
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
