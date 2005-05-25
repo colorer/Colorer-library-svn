@@ -25,7 +25,7 @@
       <require> <!-- no module required -->
        <type name="xmlschema"/>
       </require>
-     </appinfo>
+     </appinfo>    
     </annotation>
 
     <import type="def"/>
@@ -280,7 +280,7 @@
      </scheme>
 
     <scheme name="Comment">
-      <block start="/\/\*/" end="/\*\//" scheme="Comment" region="Comment"
+      <block start="/\/\*/" end="/\*\//" scheme="def:Comment" region="Comment"
              region00="PairStart" region10="PairEnd"/>
       <!-- for <style>...</style> in html -->
       <regexp match="/~\s* &lt;!-- /x" region="ForeignComment"/>
@@ -683,7 +683,7 @@
         <word name="male"/><!-- for voice-family -->
         <word name="female"/>
         <word name="child"/>
-
+        
         <word name="ignore"/>
       </keywords>
     </scheme>
@@ -707,18 +707,18 @@
 
     </scheme>
 
-    <scheme name="QuotRuleContent">
-     <inherit  scheme="RuleContent">
-      <!--virtual scheme="RuleContent" subst-scheme="QuotRuleContent"/-->
-      <virtual scheme="StringValue" subst-scheme="StringValueQuot"/>
-     </inherit>
-    </scheme>
-    <scheme name="AposRuleContent">
-     <inherit  scheme="RuleContent">
-      <!--virtual scheme="RuleContent" subst-scheme="AposRuleContent"/-->
-      <virtual scheme="StringValue" subst-scheme="StringValueApos"/>
-     </inherit>
-    </scheme>
+<scheme name="QuotRuleContent">
+ <inherit  scheme="RuleContent">
+  <!--virtual scheme="RuleContent" subst-scheme="QuotRuleContent"/-->
+  <virtual scheme="StringValue" subst-scheme="StringValueQuot"/>
+ </inherit>
+</scheme>
+<scheme name="AposRuleContent">
+ <inherit  scheme="RuleContent">
+  <!--virtual scheme="RuleContent" subst-scheme="AposRuleContent"/-->
+  <virtual scheme="StringValue" subst-scheme="StringValueApos"/>
+ </inherit>
+</scheme>
 
     <scheme name="Predicate">
       <keywords region="Symbol">
@@ -798,7 +798,7 @@
     </scheme>
 
 
-    <scheme name="pure-css">
+    <scheme name="css-r">
       <regexp match="/\M\@media \s+ (?{MediaOutline}.*?) \{/ix"/>
       <block start="/(?{SymbolStrong}\@)(?{Directive}media) \s+
         (?{MediaOutline}(?{MediaType}.*?))
@@ -810,15 +810,32 @@
       />
       <inherit scheme="RulesList"/>
     </scheme>
-
-
-
+    
+    <scheme name="html-css" if="html-css">
+     <inherit scheme="html-css:css"/>
+    </scheme>
+    <scheme name="svg-css" if="svg-css">
+     <inherit scheme="svg-css:css"/>
+    </scheme>
+    <scheme name="unless-css1" unless="svg-css">
+     <inherit scheme="unless-css2"/>
+    </scheme>
+    <scheme name="unless-css2" unless="html-css">
+     <inherit scheme="css-r"/>
+    </scheme>
+    
+    <scheme name="css">
+     <inherit scheme="html-css"/>
+     <inherit scheme="svg-css"/>
+     <inherit scheme="unless-css1"/>
+    </scheme>
+    
     <!--
      -
-     - extended
+     - !! extended
      -
     -->
-
+    
 
     <annotation>
      <documentation>
@@ -886,36 +903,7 @@
       <!-- other overload... -->
      </inherit>
     </scheme>
-
-
-    <!--
-      -
-      - main
-      -
-      -->
-
-    <scheme name="check-pure-css">
-     <inherit scheme="unless-html-css"/>
-    </scheme>
-    <scheme name="html-css" if="html-css">
-     <inherit scheme="html-css:css"/>
-    </scheme>
-    <scheme name="unless-html-css" unless="html-css">
-     <inherit scheme="unless-svg-css"/>
-    </scheme>
-    <scheme name="svg-css" if="svg-css">
-     <inherit scheme="svg-css:css"/>
-    </scheme>
-    <scheme name="unless-svg-css" unless="svg-css">
-     <inherit scheme="pure-css"/>
-    </scheme>
-
-    <scheme name="css">
-     <inherit scheme="html-css"/>
-     <inherit scheme="svg-css"/>
-     <inherit scheme="check-pure-css"/>
-    </scheme>
-
+    
   </type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****

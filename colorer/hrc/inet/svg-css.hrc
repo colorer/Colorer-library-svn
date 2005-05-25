@@ -219,8 +219,8 @@
 
 
 <scheme name="css">
- <inherit scheme="css:pure-css">
-  <virtual scheme="css:pure-css" subst-scheme="css"/>
+ <inherit scheme="css:css-r">
+  <virtual scheme="css:css-r" subst-scheme="css"/>
   <virtual scheme="css:PropertyNames" subst-scheme="PropertyNames"/>
   <virtual scheme="css:RuleDirective" subst-scheme="RuleDirective"/>
   <virtual scheme="css:CustomColors" subst-scheme="CustomColors"/>

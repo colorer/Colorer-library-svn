@@ -2,22 +2,20 @@
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
 <type name="regexp">
 
 <annotation>
  <documentation>
-
  REGEXP package: any types of regular expressions.
-
  std.*   - base schemes for all types of regexp
  pcre.*  - schemes for PCRE (used in php, js, etc...)
  posix.* - schemes for POSIX 1003.2 regexp (used in php, sql, etc...)
  perl.*  - schemes for perl-like regexp (advansed PCRE)
  xsd.*   - schemes for xml schema regexp (pattern/@value)
  hrc.*   - schemes for colorer-like regexp (used in hrc)
-
  </documentation>
 
  <contributors>
@@ -27,10 +25,10 @@
  </contributors>
 
  <appinfo><todo>
- <![CDATA[
-  1.Символы \b\B выделяются в posix. Это надо будет убрать.
-  2.Планируется добавить распознавание unicode (пока там заглушка).
- ]]>
+  <![CDATA[
+   1.Символы \b\B выделяются в posix. Это надо будет убрать.
+   2.Планируется добавить распознавание unicode (пока там заглушка).
+  ]]>
  </todo></appinfo>
 
 </annotation>
@@ -50,7 +48,7 @@
 <entity name='hex' value="[0-9a-fA-F]"/>
 
 
-<scheme name="string"/> <!-- Заглушка, на ее место подставлять строку языка -->
+<scheme name="string"/>	<!-- Заглушка, на ее место подставлять строку языка -->
 
 <scheme name="code"> <!-- Заглушка, на ее место подставлять код языка -->
  <regexp match="/./" region0="def:Error" priority="low"/>
@@ -71,13 +69,13 @@
  <regexp match="/\\x%hex;{2}/" region0="Symbol"/> <!-- hex число  -->
  <regexp match="/\\[DSW]/" region0="SymbClass"/>   <!-- Классы символов -->
  <inherit scheme="std.base.core"/>
- <regexp match="/\\[0-9a-fA-F]/" region0="SpecOperator"/>    <!-- Классы символов -->
+ <regexp match="/\\[0-9a-fA-F]/" region0="SpecOperator"/>	   <!-- Классы символов -->
  <regexp match="/\\./" region0="def:Error"/>       <!-- таких символов нет  -->
 </scheme>
 
 <scheme name="std.class"> <!-- class [] -->
  <inherit scheme="string"/>
- <regexp match="/[\-]\M[^\]\-]/" region0="MetaSymb"/> <!-- A-Z -->
+ <regexp match="/[\-]\M[^\]\-]/" region0="MetaSymb"/>	<!-- A-Z -->
  <inherit scheme="std.base"/>
 </scheme>
 
@@ -109,7 +107,10 @@
   region00="Quote" region01="def:PairStart"
   region12="Quote" region13="def:PairEnd"
  />
- <regexp match="/(?{def:PairStart}\{)[\d\w\s\,]+(?{def:PairEnd}\})/"/>
+ <regexp match="/(\{)([\d\w\s\,]+)(\})/"
+  region0="Quote" region2="def:Number"
+  region1="def:PairStart" region3="def:PairEnd"
+ />
  <block start="/\(?#1(\?\{)/" end="/(\})/" scheme="code" region="InsertArea"
   region00="SpecQuote" region01="def:PairStart"
   region10="SpecQuote" region11="def:PairEnd"
@@ -131,7 +132,7 @@
  <regexp match="/\\o[0-7]{3}/" region0="Symbol"/> <!-- oct число  -->
  <regexp match="/\\[aenrtfv]/" region0="Symbol"/> <!-- спецсимволы  -->
  <regexp match="/\\c./" region0="Symbol"/>       <!-- спецсимволы  -->
- <regexp match="/\\[0-9a-fA-F]{2}/" region0="SpecOperator"/>     <!-- Классы символов -->
+ <regexp match="/\\[0-9a-fA-F]{2}/" region0="SpecOperator"/>	   <!-- Классы символов -->
  <inherit scheme="std.base"/>
 </scheme>
 
@@ -351,7 +352,6 @@
   region00="SpecQuote" region01="def:PairStart"
   region10="SpecQuote" region11="def:PairEnd"
  />
-
  <inherit scheme="pcre.regexp">
   <virtual scheme="pcre.base" subst-scheme="perl.base"/>
   <virtual scheme="pcre.symbs" subst-scheme="perl.symbs"/>
@@ -411,15 +411,16 @@
  <regexp match="/\\[ypYP]%hex;/i" region0="SpecOperator"/>  <!-- colorer operators -->
  <regexp match="/\?[\#\~]\d+/" region0="Operator"/>  <!-- операторы просмотра -->
  <regexp match="/\?[\!\=]/" region0="Operator"/>  <!-- операторы просмотра -->
- <regexp match="/\~/" region0="SpecOperator"/>       <!-- спецсимволы -->
- <regexp match="/\\C/i" region0="SymbClass"/>    <!-- Классы символов -->
+ <regexp match="/\~/" region0="SpecOperator"/>			 <!-- спецсимволы -->
+ <regexp match="/\\C/i" region0="SymbClass"/>	   <!-- Классы символов -->
  <regexp match="/\\[mM]/i" region0="SpecOperator"/>  <!-- colorer operators -->
 
- <!-- xml entities -->
+ <!-- xml entities
+  ...к регекспам никакого отношения не имеют
  <regexp match="/\\&amp;\#(x?%hex;+|\d+)\;/" region="def:Number"/>
  <regexp match="/\\&amp;(%xml:NCName;)\;/" region="def:Number"/>
 
- <regexp match="/\\?&amp;/" region="def:Error"/>  <!-- Xml errors -->
+ <regexp match="/\\?&amp;/" region="def:Error"/>   Xml errors -->
  <inherit scheme="std.symbs"/>
 </scheme>
 

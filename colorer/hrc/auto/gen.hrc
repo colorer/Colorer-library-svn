@@ -48,6 +48,13 @@
     <location link="gen/wsf.hrc"/>
     <filename>/\.wsf$/i</filename>
   </prototype>
+  <package name="rdfs" description="RDF schema" targetNamespace="http://www.w3.org/2000/01/rdf-schema#">
+    <location link="gen/rdfs.hrc"/>
+  </package>
+  <prototype name="rdf" group="xml" description="RDF" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <location link="gen/rdf.hrc"/>
+    <filename>/\.rdf$/ix</filename>
+  </prototype>
   <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
     <location link="gen/rss.hrc"/>
     <filename>/^rss|\.(rss|xml|rdf)$/i</filename>
