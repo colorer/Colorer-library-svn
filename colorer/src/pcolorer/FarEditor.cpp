@@ -485,7 +485,7 @@ int FarEditor::editorEvent(int event, void *param)
       if (l1->special) continue;
       if (l1->start == l1->end) continue;
       if (l1->start > ei.LeftPos+ei.WindowSizeX) continue;
-      if (l1->start < ei.LeftPos-ei.WindowSizeX) continue;
+      if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX) continue;
 
       if ((lno != ei.CurLine || !showHorizontalCross || crossZOrder == 0)){
         int color = convert(l1->styled());
