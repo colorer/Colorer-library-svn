@@ -1,4 +1,0 @@
-aw.fth Additional words for BootMon's or OpenBoot
-clientint.fth Client interface for BootMon.
-rp.fth Resolve path divice procedure
-walktree.fth Walking all node of device tree
