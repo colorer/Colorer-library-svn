@@ -82,6 +82,72 @@ public:
   ParseCache *searchLine(int ln, ParseCache **cache);
 };
 
+
+struct InheritStep {
+  SchemeImpl *scheme;
+  int schemeNodePosition;
+  bool vtlistPushedVirtual;
+  bool vtlistPushed;
+};
+
+
+struct ParseStep{
+  CRegExp *closingRE;
+  bool closingREmatched;
+  bool closingREparsed;
+  SMatches matchstart;
+  SMatches matchend;
+  InheritStep *itop;
+
+  bool lowContentPriority;
+  int contextStart;
+
+  int parent_len;
+
+  Vector<InheritStep*> inheritStack;
+
+/*
+  ParseCache *OldCacheF;
+  ParseCache *OldCacheP;
+  ParseCache *ResF;
+  ParseCache *ResP;
+*/
+
+  int o_gy;
+  SMatches *o_match;
+  DString *o_str;
+  SString *backLine;
+
+  ParseStep(){
+    closingREmatched = closingREparsed = false;
+    closingRE = null;
+    backLine = null;
+/*
+    OldCacheF = null;
+    OldCacheP = null;
+    ResF = null;
+    ResP = null;
+*/
+  }
+
+  void push(InheritStep *istep){
+    inheritStack.addElement(istep);
+    itop = istep;
+  }
+
+  void pop(){
+    delete inheritStack.lastElement();
+    inheritStack.setSize(inheritStack.size()-1);
+    if (inheritStack.size()){
+      itop = inheritStack.lastElement();
+    }else{
+      itop = null;
+    }
+  }
+
+};
+
+
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

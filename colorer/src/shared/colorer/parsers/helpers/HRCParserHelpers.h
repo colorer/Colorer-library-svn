@@ -123,6 +123,7 @@ public:
 class SchemeImpl : public Scheme{
   friend class HRCParserImpl;
   friend class TextParserImpl;
+  friend class ParseState;
 public:
   const String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
