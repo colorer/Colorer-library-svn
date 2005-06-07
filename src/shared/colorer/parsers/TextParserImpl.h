@@ -27,14 +27,16 @@ public:
   void clearCache();
 
 private:
+  int len, lowlen;
   String *str;
-  int gx, gy, gy2, len;
+  int gx, gy, gy2;
   int clearLine, endLine, schemeStart;
   SchemeImpl *baseScheme;
 
   bool breakParsing;
   bool first, invisibleSchemesFilled;
   bool drawing, updateCache;
+
   const Region *picked;
 
   ParseCache *cache;
@@ -43,7 +45,6 @@ private:
   int cachedLineNo;
   ParseCache *cachedParent,*cachedForward;
 
-  SMatches matchend;
   VTList *vtlist;
 
   LineSource *lineSource;
@@ -56,9 +57,128 @@ private:
   void enterScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
   void leaveScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
 
-  int searchKW(const SchemeNode *node, int no, int lowLen, int hiLen);
-  int searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen);
-  bool colorize(CRegExp *root_end_re, bool lowContentPriority);
+  void TextParserImpl::incrementPosition();
+  int searchKW(const SchemeNode *node, int lowLen);
+  //int searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen);
+  bool colorize();
+
+
+
+private:
+  ParseStep *top;
+  Vector<ParseStep*> parseSteps;
+
+  void push(ParseStep *step){
+    parseSteps.addElement(step);
+    top = step;
+  }
+
+  void pop(){
+    if (top == null){
+      throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
+    }
+    while (top->inheritStack.size()){
+      restoreVirtual();
+      top->pop();
+    }
+    delete top;
+    parseSteps.setSize(parseSteps.size()-1);
+    if (parseSteps.size() > 0){
+      top = parseSteps.lastElement();
+    }else{
+      top = null;
+    }
+  }
+
+  void restoreVirtual(){
+    /*
+     * Restore virtual table on parser pop
+     */
+    if (top->itop->vtlistPushedVirtual){
+      top->itop->vtlistPushedVirtual = false;
+      vtlist->popvirt();
+    }
+    if (top->itop->vtlistPushed){
+      top->itop->vtlistPushed = false;
+      vtlist->pop();
+    }
+  }
+
+  SchemeNode *currentSchemeNode(InheritStep *itop)
+  {
+    if (itop->schemeNodePosition >= itop->scheme->nodes.size()){
+      return null;
+    }
+    return itop->scheme->nodes.elementAt(itop->schemeNodePosition);
+  }
+
+  void restart()
+  {
+    while (top->inheritStack.size() > 1){
+      restoreVirtual();
+      top->pop();
+    }
+    top->itop->schemeNodePosition = 0;
+  }
+
+  void move()
+  {
+    restart();
+    if (top->closingREmatched && gx+1 >= lowlen) {
+      /* Reached block's end RE */
+      restoreVirtual();
+
+      if (top->itop->vtlistPushedVirtual){
+        vtlist->popvirt();
+      }
+      gx = top->matchend.e[0];
+
+      InheritStep *prev_itop = parseSteps.elementAt(parseSteps.size()-2)->itop;
+      SchemeNode *schemeNode = currentSchemeNode(prev_itop);
+      leaveScheme(gy, &top->matchend, schemeNode);
+
+      schemeNode->end->setBackTrace(top->o_str, top->o_match);
+      delete top->backLine;
+
+      top->pop();
+      pop();
+/*
+      if (updateCache){
+        if (ogy == gy){
+          delete OldCacheF;
+          if (ResF) ResF->next = null;
+          else ResP->children = null;
+          forward = ResF;
+          parent = ResP;
+        }else{
+          OldCacheF->eline = gy;
+          OldCacheF->vcache = vtlist->store();
+          forward = OldCacheF;
+          parent = OldCacheP;
+        };
+      }else{
+*/
+//      };
+      restart();
+      return;
+    }
+    incrementPosition();
+    top->itop->schemeNodePosition = 0;
+  }
+
+  void cont(){
+    top->itop->schemeNodePosition++;
+    if (top->itop->schemeNodePosition >= top->itop->scheme->nodes.size()){
+      if (top->inheritStack.size() > 1){
+        restoreVirtual();
+        top->pop();
+        cont();
+      }else{
+        move();
+      }
+    }
+  }
+
 };
 
 #endif
