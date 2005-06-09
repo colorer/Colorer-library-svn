@@ -1,16 +1,40 @@
 
+  Colorer-take5 labels naming
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The next convention should be used:
+
+    <RELEASE|DEBUG|LABEL>-<VERSION|DESCRIPTION>-<DATE>
+
+
+  Colorer-take5 branches naming
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The next convention should be used:
+
+    BRANCH-<DEVELOPER>-<DESCRIPTION>
+
+
+  Available project labels
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  RELEASE-BETA2-2003-09-12
+  RELEASE-BETA3-2004-09-29
+  RELEASE-BETA4-2005-04-28
+
+  RELEASE-ECLIPSECOLORER-060-2003-02-24
+  RELEASE-ECLIPSECOLORER-070-2005-04-28
+
+ 
   Available project branches
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-BRANCH_ECLIPSE2
+  BRANCH_ECLIPSE2
     Branch for old eclipse (2.1.3 compatible) plugin
 
 
-BRANCH-IRUSSKIH-NEW-TEXT-PARSER
+  BRANCH-IRUSSKIH-NEW-TEXT-PARSER
     New non-recursive text parser implementation branch
 
 
-BRANCH-IRUSSKIH-NEW-TOKEN-GENERATOR
+  BRANCH-IRUSSKIH-NEW-TOKEN-GENERATOR
     New token generator in ConsoleTools.cpp
     Problems with overlapping regions should be resolved still
 
