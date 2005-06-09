@@ -7,25 +7,7 @@
 <property name="src" value="src" description="this project sourse"/>
 <property name="bin" value="ready" description="this project binary|hrc"/>
 
-<!-- custom
 
-<target name="custom.check">
- <dependset>
-  <srcfilelist dir="." files="build.xml"/>
-  <srcfilelist dir="${src}" files="custom.htc.inc.xml"/>
-  <srcfilelist dir="${inc}" files="xmlss.hrc"/>
-  <targetfilelist dir="${obj}" files="custom.htc.xml"/>
- </dependset>
-</target>
-
-<target name="custom" depends="custom.check">
- <ant antfile="${util}" target="hrcincl">
-  <property name="util.input" value="${src}/custom.htc.inc.xml"/>
-  <property name="util.output" value="${obj}/custom.htc.xml"/>
-  <property name="util.url" value="src.htc"/>
-  <property name="hrcincl.path" value="${this}/${src}/"/>
- </ant>
-</target>-->
 
 <!-- hrc -->
 
@@ -43,20 +25,15 @@
   <property name="util.output" value="${bin}/htc.hrc"/>
   <property name='xsd2hrc.hrctype' value='htc'/>
   <property name='xsd2hrc.force-single-root' value='no'/>
-  <!--property name='xsd2hrc.allow-any-attr' value='yes'/>
-  <property name='xsd2hrc.allow-unknown-elements' value='yes'/-->
+  <property name='xsd2hrc.ignore-case-sgml' value='yes'/>
+  <!--property name='xsd2hrc.allow-any-attr' value='yes'/>-->
+  <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.htc.xml'/>
- </ant>
+ </ant> 
 </target>
 
 <!-- final -->
 
 <target name="all" depends="hrc"/>
-
-<target name="clean">
- <delete failonerror='false'>
-  <fileset dir="${bin}" includes="htc.hrc"/>
- </delete>
-</target>
 
 </project>

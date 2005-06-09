@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY parser-brackets SYSTEM "parser-brackets.xml">
-<!ENTITY parser-ex SYSTEM "parser-ex.xml">
+<!ENTITY parser-brackets SYSTEM "parser-brackets.ent.hrc">
+<!ENTITY parser-ex SYSTEM "parser-ex.ent.hrc">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,21 +21,6 @@
   Eugene Efremov <4mirror@mail.ru>
  ]]>
  </contributors>
- <appinfo>
-  <prototype name="parser" group="inet" description="Parser">
-    <location link="inet/parser.hrc"/>
-    <filename>/\.(p|html)$/i</filename>
-    <firstline>/^[\@\^]\w+/</firstline>
-  </prototype>
-  <require>
-   <package name="regexp"/>
-   <package name="asp"/>
-   <type name="html"/>
-   <type name="mysql"/>
-   <type name="xml"/>
-   <type name="xslt"/>
-  </require>
- </appinfo>
 </annotation>
 
 <region name="keyword" parent="def:Keyword"/>

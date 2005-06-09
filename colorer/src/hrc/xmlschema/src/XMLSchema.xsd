@@ -39,7 +39,7 @@
         <!ELEMENT hfp:hasFacet EMPTY>
         <!ATTLIST hfp:hasFacet
                 name NMTOKEN #REQUIRED>
-                
+
         <!ELEMENT hfp:hasProperty EMPTY>
         <!ATTLIST hfp:hasProperty
                 name NMTOKEN #REQUIRED
@@ -68,19 +68,13 @@
 <xs:schema targetNamespace="http://www.w3.org/2001/XMLSchema" blockDefault="#all" elementFormDefault="qualified" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xml:lang="EN" xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty">
  <xs:annotation>
   <xs:documentation>
-    Part 1 version: Id: XMLSchema.xsd,v 1.49 2001/10/25 10:25:41 ht Exp 
-    Part 2 version: Id: datatypes.xsd,v 1.53 2001/10/25 10:26:05 ht Exp 
-
-    NOTE!
-    
-     Schema was modifed by Eugene Efremov (4mirror@mail.ru)
-     for used in for use in colorer hsd2hrc.
+    Part 1 version: Id: structures.xsd,v 1.2 2004/01/15 11:34:25 ht Exp 
+    Part 2 version: Id: datatypes.xsd,v 1.3 2004/01/23 18:11:13 ht Exp 
   </xs:documentation>
  </xs:annotation>
 
-
  <xs:annotation>
-   <xs:documentation source="http://www.w3.org/TR/2001/REC-xmlschema-1-20010502/structures.html">
+   <xs:documentation source="http://www.w3.org/TR/2004/PER-xmlschema-1-20040318/structures.html">
    The schema corresponding to this document is normative,
    with respect to the syntactic constraints it expresses in the
    XML Schema language.  The documentation (within &lt;documentation> elements)
@@ -102,22 +96,6 @@
      </xs:documentation>
    </xs:annotation>
  </xs:import>
-
- <xs:simpleType name="REstring">
-   <xs:annotation>
-     <xs:documentation><!-- !!EE: add this -->
-        NOTE! 
-        This type - NOT standart xsd type
-        It need for use in colorer hsd2hrc.
-                                        EE
-     </xs:documentation>
-   </xs:annotation>
- 
-  <xs:restriction base="xs:string">
-    <xs:whiteSpace value="collapse"/>
-    <xs:pattern value=".*"/>
-  </xs:restriction>
- </xs:simpleType>
 
  <xs:complexType name="openAttrs">
    <xs:annotation>
@@ -221,6 +199,38 @@
   </xs:union>
  </xs:simpleType>
 
+ <xs:simpleType name="typeDerivationControl">
+  <xs:annotation>
+   <xs:documentation>
+   A utility type, not for public use</xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="xs:derivationControl">
+   <xs:enumeration value="extension"/>
+   <xs:enumeration value="restriction"/>
+   <xs:enumeration value="list"/>
+   <xs:enumeration value="union"/>
+  </xs:restriction>
+ </xs:simpleType>
+
+  <xs:simpleType name="fullDerivationSet">
+  <xs:annotation>
+   <xs:documentation>
+   A utility type, not for public use</xs:documentation>
+   <xs:documentation>
+   #all or (possibly empty) subset of {extension, restriction, list, union}</xs:documentation>
+  </xs:annotation>
+  <xs:union>
+   <xs:simpleType>    
+    <xs:restriction base="xs:token">
+     <xs:enumeration value="#all"/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType>
+    <xs:list itemType="xs:typeDerivationControl"/>
+   </xs:simpleType>
+  </xs:union>
+ </xs:simpleType>
+
  <xs:element name="schema" id="schema">
   <xs:annotation>
     <xs:documentation source="http://www.w3.org/TR/xmlschema-1/#element-schema"/>
@@ -242,7 +252,7 @@
      </xs:sequence>
      <xs:attribute name="targetNamespace" type="xs:anyURI"/>
      <xs:attribute name="version" type="xs:token"/>
-     <xs:attribute name="finalDefault" type="xs:derivationSet" use="optional" default=""/>
+     <xs:attribute name="finalDefault" type="xs:fullDerivationSet" use="optional" default=""/>
      <xs:attribute name="blockDefault" type="xs:blockSet" use="optional" default=""/>
      <xs:attribute name="attributeFormDefault" type="xs:formChoice" use="optional" default="unqualified"/>
      <xs:attribute name="elementFormDefault" type="xs:formChoice" use="optional" default="unqualified"/>
@@ -386,6 +396,7 @@
     <xs:attribute name="form" use="prohibited"/>
     <xs:attribute name="use" use="prohibited"/>
     <xs:attribute name="name" use="required" type="xs:NCName"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -458,6 +469,7 @@
      <xs:group ref="xs:complexTypeModel"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:NCName" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -473,6 +485,7 @@
     <xs:attribute name="abstract" use="prohibited"/>
     <xs:attribute name="final" use="prohibited"/>
     <xs:attribute name="block" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -481,9 +494,9 @@
   <xs:complexContent>
    <xs:extension base="xs:annotated">
     <xs:sequence>
-     <xs:choice>
-      <xs:group ref="xs:typeDefParticle" minOccurs="0"/>
-      <xs:group ref="xs:simpleRestrictionModel" minOccurs="0"/>
+     <xs:choice minOccurs="0">
+      <xs:group ref="xs:typeDefParticle"/>
+      <xs:group ref="xs:simpleRestrictionModel"/>
      </xs:choice>
      <xs:group ref="xs:attrDecls"/>
     </xs:sequence>
@@ -497,9 +510,16 @@
    <xs:restriction base="xs:restrictionType">
     <xs:sequence>
      <xs:element ref="xs:annotation" minOccurs="0"/>
-     <xs:group ref="xs:typeDefParticle" minOccurs="0"/>
+     <xs:choice minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>This choice is added simply to
+                   make this a valid restriction per the REC</xs:documentation>
+      </xs:annotation>
+      <xs:group ref="xs:typeDefParticle"/>
+     </xs:choice>
      <xs:group ref="xs:attrDecls"/>
     </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>       
  </xs:complexType>
@@ -543,9 +563,16 @@
    <xs:restriction base="xs:restrictionType">
     <xs:sequence>
      <xs:element ref="xs:annotation" minOccurs="0"/>
-     <xs:group ref="xs:simpleRestrictionModel" minOccurs="0"/>
+     <xs:choice minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>This choice is added simply to
+                   make this a valid restriction per the REC</xs:documentation>
+      </xs:annotation>
+      <xs:group ref="xs:simpleRestrictionModel"/>
+     </xs:choice>
      <xs:group ref="xs:attrDecls"/>
     </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -561,6 +588,7 @@
      <xs:element ref="xs:annotation" minOccurs="0"/>
      <xs:group ref="xs:attrDecls"/>
     </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -666,6 +694,7 @@
     <xs:attribute name="minOccurs" use="prohibited"/>
     <xs:attribute name="maxOccurs" use="prohibited"/>
     <xs:attribute name="name" use="required" type="xs:NCName"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -684,6 +713,7 @@
     <xs:attribute name="substitutionGroup" use="prohibited"/>
     <xs:attribute name="final" use="prohibited"/>
     <xs:attribute name="abstract" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -720,6 +750,7 @@
       <xs:element ref="xs:sequence"/>
      </xs:choice>
     </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -737,6 +768,7 @@
           <xs:group ref="xs:allModel"/>
           <xs:attribute name="minOccurs" use="prohibited"/>
           <xs:attribute name="maxOccurs" use="prohibited"/>
+          <xs:anyAttribute namespace="##other" processContents="lax"/>
          </xs:restriction>
         </xs:complexContent>
        </xs:complexType>
@@ -749,6 +781,7 @@
     <xs:attribute name="ref" use="prohibited"/>
     <xs:attribute name="minOccurs" use="prohibited"/>
     <xs:attribute name="maxOccurs" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -761,6 +794,7 @@
     </xs:sequence>
     <xs:attribute name="ref" use="required" type="xs:QName"/>
     <xs:attribute name="name" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -778,6 +812,7 @@
     </xs:sequence>
     <xs:attribute name="name" type="xs:NCName" use="prohibited"/>
     <xs:attribute name="ref" type="xs:QName" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -791,6 +826,7 @@
     </xs:sequence>
     <xs:attribute name="minOccurs" use="prohibited"/>
     <xs:attribute name="maxOccurs" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -798,43 +834,52 @@
  <xs:group name="allModel">
   <xs:sequence>
       <xs:element ref="xs:annotation" minOccurs="0"/>
-      <xs:element name="element" minOccurs="0" maxOccurs="unbounded">
-       <xs:complexType>
-        <xs:annotation>
-         <xs:documentation>restricted max/min</xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-         <xs:restriction base="xs:localElement">
-          <xs:sequence>
-           <xs:element ref="xs:annotation" minOccurs="0"/>
-           <xs:choice minOccurs="0">
-            <xs:element name="simpleType" type="xs:localSimpleType"/>
-            <xs:element name="complexType" type="xs:localComplexType"/>
-           </xs:choice>
-           <xs:group ref="xs:identityConstraint" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-          <xs:attribute name="minOccurs" use="optional" default="1">
-           <xs:simpleType>
-            <xs:restriction base="xs:nonNegativeInteger">
-             <xs:enumeration value="0"/>
-             <xs:enumeration value="1"/>
-            </xs:restriction>
-           </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="maxOccurs" use="optional" default="1">
-           <xs:simpleType>
-            <xs:restriction base="xs:allNNI">
-             <xs:enumeration value="0"/>
-             <xs:enumeration value="1"/>
-            </xs:restriction>
-           </xs:simpleType>
-          </xs:attribute>
-         </xs:restriction>
-        </xs:complexContent>
-       </xs:complexType>    
-      </xs:element>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+       <xs:annotation>
+        <xs:documentation>This choice with min/max is here to
+                          avoid a pblm with the Elt:All/Choice/Seq
+                          Particle derivation constraint</xs:documentation>
+       </xs:annotation>
+       <xs:element name="element" type="xs:narrowMaxMin"/>
+      </xs:choice>
      </xs:sequence>
  </xs:group>
+ 
+ 
+ <xs:complexType name="narrowMaxMin">
+  <xs:annotation>
+   <xs:documentation>restricted max/min</xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:restriction base="xs:localElement">
+    <xs:sequence>
+     <xs:element ref="xs:annotation" minOccurs="0"/>
+     <xs:choice minOccurs="0">
+      <xs:element name="simpleType" type="xs:localSimpleType"/>
+      <xs:element name="complexType" type="xs:localComplexType"/>
+     </xs:choice>
+     <xs:group ref="xs:identityConstraint" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="minOccurs" use="optional" default="1">
+     <xs:simpleType>
+      <xs:restriction base="xs:nonNegativeInteger">
+       <xs:enumeration value="0"/>
+       <xs:enumeration value="1"/>
+      </xs:restriction>
+     </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="maxOccurs" use="optional" default="1">
+     <xs:simpleType>
+      <xs:restriction base="xs:allNNI">
+       <xs:enumeration value="0"/>
+       <xs:enumeration value="1"/>
+      </xs:restriction>
+     </xs:simpleType>
+    </xs:attribute>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:restriction>
+  </xs:complexContent>
+ </xs:complexType>
 
   <xs:complexType name="all">
    <xs:annotation>
@@ -859,6 +904,7 @@
        </xs:restriction>
       </xs:simpleType>
      </xs:attribute>
+     <xs:anyAttribute namespace="##other" processContents="lax"/>
     </xs:restriction>
    </xs:complexContent>
   </xs:complexType>
@@ -995,6 +1041,7 @@
     </xs:sequence>
     <xs:attribute name="name" use="required" type="xs:NCName"/>
     <xs:attribute name="ref" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -1007,6 +1054,7 @@
     </xs:sequence>
     <xs:attribute name="ref" use="required" type="xs:QName"/>
     <xs:attribute name="name" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -1187,7 +1235,7 @@ use</xs:documentation>
    <xs:complexContent>
     <xs:extension base="xs:annotated">
      <xs:attribute name="name" type="xs:NCName" use="required"/>
-     <xs:attribute name="public" type="xs:public" use="required"/>
+     <xs:attribute name="public" type="xs:public"/>
      <xs:attribute name="system" type="xs:anyURI"/>
     </xs:extension>
    </xs:complexContent>
@@ -1209,10 +1257,11 @@ use</xs:documentation>
      <xs:documentation source="http://www.w3.org/TR/xmlschema-1/#element-appinfo"/>
    </xs:annotation>
    <xs:complexType mixed="true">
-     <xs:sequence minOccurs="0" maxOccurs="unbounded">
-       <xs:any processContents="lax"/>
-     </xs:sequence>
-     <xs:attribute name="source" type="xs:anyURI"/>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+     <xs:any processContents="lax"/>
+    </xs:sequence>
+    <xs:attribute name="source" type="xs:anyURI"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:complexType>
  </xs:element>
 
@@ -1221,11 +1270,12 @@ use</xs:documentation>
      <xs:documentation source="http://www.w3.org/TR/xmlschema-1/#element-documentation"/>
    </xs:annotation>
    <xs:complexType mixed="true">
-     <xs:sequence minOccurs="0" maxOccurs="unbounded">
-       <xs:any processContents="lax"/>
-     </xs:sequence>
-     <xs:attribute name="source" type="xs:anyURI"/>
-   <xs:attribute ref="xml:lang"/>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+     <xs:any processContents="lax"/>
+    </xs:sequence>
+    <xs:attribute name="source" type="xs:anyURI"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:complexType>
  </xs:element>
 
@@ -1253,7 +1303,7 @@ use</xs:documentation>
 
  <xs:notation name="XMLSchemaStructures" public="structures" system="http://www.w3.org/2000/08/XMLSchema.xsd"/>
  <xs:notation name="XML" public="REC-xml-19980210" system="http://www.w3.org/TR/1998/REC-xml-19980210"/>
- 
+  
  <xs:complexType name="anyType" mixed="true">
   <xs:annotation>
    <xs:documentation>
@@ -1261,18 +1311,15 @@ use</xs:documentation>
    get in the XML representation</xs:documentation>
   </xs:annotation>
   <xs:sequence>
-   <xs:any minOccurs="0" maxOccurs="unbounded"/>
+   <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
   </xs:sequence>
-  <xs:anyAttribute/>
+  <xs:anyAttribute processContents="lax"/>
  </xs:complexType>
 
   <xs:annotation>
     <xs:documentation>
       First the built-in primitive datatypes.  These definitions are for
-      information only, the real built-in definitions are magic.  Note in
-      particular that there is no type named 'anySimpleType'.  The
-      primitives should really be derived from no type at all, and
-      anySimpleType should be derived as a union of all the primitives.
+      information only, the real built-in definitions are magic.
     </xs:documentation>
 
     <xs:documentation>
@@ -1281,18 +1328,18 @@ use</xs:documentation>
       as follows:
         1) the base URI is the URI of the XML Schema namespace
         2) the fragment identifier is the name of the datatype
-        
+
       For example, to address the int datatype, the URI is:
-      
+
         http://www.w3.org/2001/XMLSchema#int
-      
+
       Additionally, each facet definition element can be uniquely
       addressed via a URI constructed as follows:
         1) the base URI is the URI of the XML Schema namespace
         2) the fragment identifier is the name of the facet
-        
+
       For example, to address the maxInclusive facet, the URI is:
-      
+
         http://www.w3.org/2001/XMLSchema#maxInclusive
 
       Additionally, each facet usage in a built-in datatype definition
@@ -1300,15 +1347,15 @@ use</xs:documentation>
         1) the base URI is the URI of the XML Schema namespace
         2) the fragment identifier is the name of the datatype, followed
            by a period (".") followed by the name of the facet
-        
+
       For example, to address the usage of the maxInclusive facet in
       the definition of int, the URI is:
-      
+
         http://www.w3.org/2001/XMLSchema#int.maxInclusive
-        
+
     </xs:documentation>
   </xs:annotation>
- 
+
   <xs:simpleType name="string" id="string">
     <xs:annotation>
       <xs:appinfo>
@@ -1673,7 +1720,7 @@ use</xs:documentation>
         id="hexBinary.whiteSpace"/>
     </xs:restriction>
    </xs:simpleType>
- 
+
  <xs:simpleType name="base64Binary" id="base64Binary">
     <xs:annotation>
       <xs:appinfo>
@@ -1792,7 +1839,7 @@ use</xs:documentation>
         id="normalizedString.whiteSpace"/>
     </xs:restriction>
   </xs:simpleType>
-  
+
   <xs:simpleType name="token" id="token">
     <xs:annotation>
       <xs:documentation
@@ -1802,7 +1849,7 @@ use</xs:documentation>
       <xs:whiteSpace value="collapse" id="token.whiteSpace"/>
     </xs:restriction>
   </xs:simpleType>
-  
+
   <xs:simpleType name="language" id="language">
     <xs:annotation>
       <xs:documentation
@@ -1810,13 +1857,13 @@ use</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:pattern
-        value="([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*"
+        value="[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
                 id="language.pattern">
         <xs:annotation>
           <xs:documentation
-                source="http://www.w3.org/TR/REC-xml#NT-LanguageID">
+                source="http://www.ietf.org/rfc/rfc3066.txt">
             pattern specifies the content of section 2.12 of XML 1.0e2
-            and RFC 1766
+            and RFC 3066 (Revised version of RFC 1766).
           </xs:documentation>
         </xs:annotation>
       </xs:pattern>
@@ -1831,6 +1878,7 @@ use</xs:documentation>
         <hfp:hasFacet name="maxLength"/>
         <hfp:hasFacet name="enumeration"/>
         <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="pattern"/>
         <hfp:hasProperty name="ordered" value="false"/>
         <hfp:hasProperty name="bounded" value="false"/>
         <hfp:hasProperty name="cardinality"
@@ -1842,7 +1890,7 @@ use</xs:documentation>
     </xs:annotation>
     <xs:restriction>
       <xs:simpleType>
-        <xs:list itemType="xs:IDREF"/>    
+        <xs:list itemType="xs:IDREF"/>
       </xs:simpleType>
         <xs:minLength value="1" id="IDREFS.minLength"/>
     </xs:restriction>
@@ -1856,6 +1904,7 @@ use</xs:documentation>
         <hfp:hasFacet name="maxLength"/>
         <hfp:hasFacet name="enumeration"/>
         <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="pattern"/>
         <hfp:hasProperty name="ordered" value="false"/>
         <hfp:hasProperty name="bounded" value="false"/>
         <hfp:hasProperty name="cardinality"
@@ -1898,6 +1947,7 @@ use</xs:documentation>
         <hfp:hasFacet name="maxLength"/>
         <hfp:hasFacet name="enumeration"/>
         <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="pattern"/>
         <hfp:hasProperty name="ordered" value="false"/>
         <hfp:hasProperty name="bounded" value="false"/>
         <hfp:hasProperty name="cardinality"
@@ -1980,6 +2030,7 @@ use</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:decimal">
       <xs:fractionDigits value="0" fixed="true" id="integer.fractionDigits"/>
+      <xs:pattern value="[\-+]?[0-9]+"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -2149,17 +2200,21 @@ use</xs:documentation>
    A utility type, not for public use</xs:documentation>
   </xs:annotation>
   <xs:union>
-   <xs:simpleType>    
+   <xs:simpleType>
     <xs:restriction base="xs:token">
      <xs:enumeration value="#all"/>
     </xs:restriction>
    </xs:simpleType>
    <xs:simpleType>
-    <xs:restriction base="xs:derivationControl">
-     <xs:enumeration value="list"/>
-     <xs:enumeration value="union"/>
-     <xs:enumeration value="restriction"/>
-    </xs:restriction>
+    <xs:list>
+     <xs:simpleType>
+      <xs:restriction base="xs:derivationControl">
+       <xs:enumeration value="list"/>
+       <xs:enumeration value="union"/>
+       <xs:enumeration value="restriction"/>
+      </xs:restriction>
+     </xs:simpleType>
+    </xs:list>
    </xs:simpleType>
   </xs:union>
  </xs:simpleType>
@@ -2194,7 +2249,8 @@ use</xs:documentation>
               Required at the top level
             </xs:documentation>
           </xs:annotation>
-        </xs:attribute>   
+        </xs:attribute>
+       <xs:anyAttribute namespace="##other" processContents="lax"/>
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
@@ -2212,8 +2268,9 @@ use</xs:documentation>
               Forbidden when nested
             </xs:documentation>
           </xs:annotation>
-        </xs:attribute>   
+        </xs:attribute>
         <xs:attribute name="final" use="prohibited"/>
+       <xs:anyAttribute namespace="##other" processContents="lax"/>
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
@@ -2319,7 +2376,7 @@ use</xs:documentation>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:complexType name="facet">
     <xs:complexContent>
       <xs:extension base="xs:annotated">
@@ -2329,7 +2386,7 @@ use</xs:documentation>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
- 
+
  <xs:complexType name="noFixedFacet">
   <xs:complexContent>
    <xs:restriction base="xs:facet">
@@ -2337,6 +2394,7 @@ use</xs:documentation>
      <xs:element ref="xs:annotation" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="fixed" use="prohibited"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
    </xs:restriction>
   </xs:complexContent>
  </xs:complexType>
@@ -2374,6 +2432,7 @@ use</xs:documentation>
          <xs:element ref="xs:annotation" minOccurs="0"/>
        </xs:sequence>
        <xs:attribute name="value" type="xs:nonNegativeInteger" use="required"/>
+       <xs:anyAttribute namespace="##other" processContents="lax"/>
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
@@ -2390,6 +2449,7 @@ use</xs:documentation>
             <xs:element ref="xs:annotation" minOccurs="0"/>
           </xs:sequence>
           <xs:attribute name="value" type="xs:positiveInteger" use="required"/>
+         <xs:anyAttribute namespace="##other" processContents="lax"/>
         </xs:restriction>
       </xs:complexContent>
     </xs:complexType>
@@ -2419,7 +2479,7 @@ use</xs:documentation>
         source="http://www.w3.org/TR/xmlschema-2/#element-maxLength"/>
     </xs:annotation>
   </xs:element>
-  
+
   <xs:element name="enumeration" id="enumeration" type="xs:noFixedFacet">
     <xs:annotation>
       <xs:documentation
@@ -2447,6 +2507,7 @@ use</xs:documentation>
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
+         <xs:anyAttribute namespace="##other" processContents="lax"/>
         </xs:restriction>
       </xs:complexContent>
     </xs:complexType>
@@ -2455,23 +2516,19 @@ use</xs:documentation>
   <xs:element name="pattern" id="pattern">
     <xs:annotation>
       <xs:documentation
-        source="http://www.w3.org/TR/xmlschema-2/#element-pattern">
-        NOTE! 
-        This elemnt has modifed 
-        for used in colorer hsd2hrc.
-                                        EE
-       </xs:documentation>
+        source="http://www.w3.org/TR/xmlschema-2/#element-pattern"/>
     </xs:annotation>
-   <xs:complexType>
-  <xs:complexContent>
-   <xs:restriction base="xs:noFixedFacet">
-    <xs:sequence>
-     <xs:element ref="xs:annotation" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="value" type="xs:REstring"/>
-   </xs:restriction>
-  </xs:complexContent>
-  </xs:complexType>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:restriction base="xs:noFixedFacet">
+          <xs:sequence>
+            <xs:element ref="xs:annotation" minOccurs="0"/>
+          </xs:sequence>
+          <xs:attribute name="value" type="xs:string" use="required"/>
+         <xs:anyAttribute namespace="##other" processContents="lax"/>
+        </xs:restriction>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
 
 </xs:schema>

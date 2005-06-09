@@ -24,7 +24,7 @@
   <property name="util.output" value="${bin}/xmlschema.hrc"/>
   <property name='xsd2hrc.hrctype' value='xmlschema'/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.xsd.xml'/>
- </ant>
+ </ant> 
 </target>
 
 <!-- final -->

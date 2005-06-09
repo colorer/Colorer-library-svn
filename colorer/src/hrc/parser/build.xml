@@ -14,14 +14,14 @@
  <dependset>
   <srcfilelist dir="${src}" files = "parser.bkt"/>
   <srcfilelist dir="." files = "build.xml"/>
-  <targetfilelist dir="${bin}" files="parser-brackets.xml"/>
+  <targetfilelist dir="${bin}" files="parser-brackets.ent.hrc"/>
  </dependset>
 </target>
 
 <target name="bkt" depends="bkt.check">
  <ant antfile="${util}" target="bracket">
   <property name="util.input" value="${src}/parser.bkt"/>
-  <property name="util.output" value="${bin}/parser-brackets.xml"/>
+  <property name="util.output" value="${bin}/parser-brackets.ent.hrc"/>
  </ant>
 </target>
 
@@ -29,14 +29,14 @@
 
 <target name="hrc.check">
  <dependset>
-  <srcfilelist dir="${src}" files = "parser.hrc, parser-ex.xml"/>
+  <srcfilelist dir="${src}" files = "parser.hrc, parser-ex.ent.hrc"/>
   <targetfilelist dir="${bin}" files="parser.hrc"/>
  </dependset>
 </target>
 
 <target name="hrc" depends="bkt, hrc.check">
  <copy todir='${bin}'>
-   <fileset dir='${src}' includes='parser.hrc, parser-ex.xml'/>
+   <fileset dir='${src}' includes='parser.hrc, parser-ex.ent.hrc'/>
  </copy>
 </target>
 

@@ -85,6 +85,7 @@
              <xs:complexType>
               <xs:attribute name="name" type="xs:NCName" use="required"/>
               <xs:attribute name="expr" type="hrc:REentity" use="required"/>
+              <xs:attribute name="scheme" type="xs:NCName" use="optional"/>
              </xs:complexType>
             </xs:element>
             <xs:element name="default">
@@ -102,15 +103,45 @@
            <xs:attribute name="region" type="hrc:QName" use="optional"/>
           </xs:complexType>
          </xs:element>
+         <xs:element name="element-attributes" type="scriptdef-attr"/>
+         <xs:element name="type-attributes" type="scriptdef-attr"/>         
         </xs:choice>
        </xs:complexType>
       </xs:element>
 
-      <xs:element name="references" type="xs:string"/>
+      
+      <xs:element name="processing-instruction">
+       <xs:complexType>
+        <xs:attribute name="name" type="xs:NCName" use="required"/>
+        <xs:attribute name="scheme" type="hrc:QName" use="optional"/>
+        <xs:sequence minOccurs="0" maxOccurs="1">
+         <!-- note!! This xs:complexType cannot have @name -->
+         <xs:element ref="xs:complexType"/>
+        </xs:sequence>
+       </xs:complexType>
+      </xs:element>
+      
+      <xs:element name="xsd-typedefs">
+       <xs:complexType>
+         <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element ref="xs:simpleType"/>
+          <xs:element ref="xs:complexType"/>
+         </xs:sequence>
+       </xs:complexType>
+      </xs:element>
+      
+      <xs:element name="references" type="hrc:QName"/>
 
       <xs:element name="type" type="hrc:type"/>
     </xs:sequence>
     <xs:attribute name="targetNamespace" type="xs:anyURI"/>
+  </xs:complexType>
+  
+  <xs:complexType name="scriptdef-attr">
+    <xs:attribute name="name" type="xs:NCName" use="required"/>
+    <xs:sequence minOccurs="1">
+      <xs:element ref="xs:attribute"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>
 <!-- ***** BEGIN LICENSE BLOCK *****

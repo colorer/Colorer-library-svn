@@ -50,6 +50,17 @@
    <property name="this" value="${this}/wml"/>
    <property name="bin" value="${root}/hrc/auto/gen"/>
  </ant>
+ 
+ <ant dir="xml" antfile="build.xml" target="${target}">
+   <property name="this" value="${this}/xml"/>
+   <property name="bin" value="${root}/hrc/xml"/>
+ </ant>
+
+ <ant dir="xlink" antfile="build.xml" target="${target}">
+   <property name="this" value="${this}/xlink"/>
+   <property name="bin" value="${root}/hrc/xml"/>
+ </ant>
+
  <ant dir="xslt" antfile="build.xml" target="${target}">
    <property name="this" value="${this}/xslt"/>
    <property name="bin" value="${root}/hrc/xml"/>
@@ -66,6 +77,11 @@
    <property name="this" value="${this}/relaxng"/>
    <property name="bin" value="${root}/hrc/xml/"/>
  </ant>
+ <ant dir="sch" antfile="build.xml" target="${target}">
+   <property name="this" value="${this}/sch"/>
+   <property name="bin" value="${root}/hrc/auto/gen/"/>
+ </ant>
+ 
 
  <ant dir="docbook" antfile="build.xml" target="${target}">
    <property name="this" value="${this}/docbook"/>

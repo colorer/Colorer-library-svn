@@ -83,7 +83,7 @@
    <!--
   <case type="monoblock" start="\{" end="\}" scheme="xslt:expr-content"/>
   -->
-  <case type="monoblock" start="\[" end="\]" scheme="xslt:expr-content"/>
+  <case type="monoblock" start="\[" end="\]" scheme="commands.xpath"/>
  </name-block>
  
 <!-- 

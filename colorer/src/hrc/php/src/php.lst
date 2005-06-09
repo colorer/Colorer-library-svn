@@ -4,10 +4,8 @@ false
 and
 or
 xor
-__FILE__
 exception
 php_user_filter  
-__LINE__
 array
 as
 break
@@ -54,21 +52,34 @@ unset
 use  
 var
 while
+
+null
+interface
+public
+private
+protected
+abstract
+implements
+final
+const
 try
 catch
 throw
+static
 instanceof
-interface
-implements
 clone
-abstract
-final
-private
-protected
-public
-__FUNCTION__
-__CLASS__
-__METHOD__  
+
+__construct
+__destruct
+__autoload
+__toString
+__get
+__set
+__call
+__clone
+__sleep
+__wakeup
+
 
 ~int
 ~integer
@@ -81,7 +92,15 @@ __METHOD__
 ~array
 ~object
 
+__FILE__
+__LINE__
+__FUNCTION__
+__CLASS__
+__METHOD__  
+
+
      <!-- PHP Core Predefined Constants -->
+
 PHP_VERSION (string)
 PHP_OS (string)
 DEFAULT_INCLUDE_PATH (string)
@@ -3828,7 +3847,7 @@ aggregate_properties --  Dynamic aggregation of class properties to an object
 aggregate --  Dynamic class and object aggregation of methods and properties 
 aggregation_info -- Alias of aggregate_info()
 deaggregate --  Removes the aggregated methods and properties from an object 
-     <!-- LXXIV. Oracle 8 new functions -->
+     <!-- LXXIV. Oracle 8 new Functions -->
 oci_bind_by_name --  Binds the PHP variable to the Oracle placeholder 
 oci_cancel -- Cancels reading from cursor
 oci_close -- Closes Oracle connection
@@ -4063,7 +4082,7 @@ output_add_rewrite_var --  Add URL rewriter values
 output_reset_rewrite_vars --  Reset URL rewriter values 
      <!-- LXXIX. Object property and method call overloading -->
 overload -- Enable property and method call overloading for a class
-     <!-- LXXX. PDF functions -->
+     <!-- LXXX. PDF Functions -->
 pdf_add_annotation -- Deprecated: Adds annotation
 pdf_add_bookmark -- Adds bookmark for current page
 pdf_add_launchlink -- Add a launch annotation for current page
@@ -4643,7 +4662,7 @@ shmop_open -- Create or open shared memory block
 shmop_read -- Read data from shared memory block
 shmop_size -- Get size of shared memory block
 shmop_write -- Write data into shared memory block
-     <!-- XCVIII. SimpleXML functions -->
+     <!-- XCVIII. SimpleXML Functions -->
 simplexml_element->asXML --  Return a well-formed XML string based on SimpleXML element. 
 simplexml_element->attributes --  Identifies an element's attributes. 
 simplexml_element->children --  Finds children of given node. 

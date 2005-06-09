@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="src.htc" default="all" basedir=".">
+<project name="src.xhtml" default="all" basedir=".">
 
 <property name="util" value="../../bin/ant/util.xml" description="ant utils location"/>
 <property name="this" value="../../src/xhtml" description="this project location"/>
@@ -8,25 +8,6 @@
 <property name="bin" value="ready" description="this project binary|hrc"/>
 <property name="obj" value="objs" description="this project temp"/>
 
-<!-- custom
-
-<target name="custom.check">
- <dependset>
-  <srcfilelist dir="." files="build.xml"/>
-  <srcfilelist dir="${src}" files="custom.xhtml.ini.xml"/>
-  <srcfilelist dir="${inc}" files="xmlss.hrc"/>
-  <targetfilelist dir="${obj}" files="custom.xhtml.xml"/>
- </dependset>
-</target>
-
-<target name="custom" depends="custom.check">
- <ant antfile="${util}" target="hrcincl">
-  <property name="util.input" value="${src}/custom.xhtml.inc.xml"/>
-  <property name="util.output" value="${obj}/custom.xhtml.xml"/>
-  <property name="util.url" value="src.xhtml"/>
-  <property name="hrcincl.path" value="${this}/${src}/"/>
- </ant>
-</target>-->
 
 <!-- strict -->
 
@@ -43,8 +24,9 @@
   <property name="util.input" value="${src}/xhtml1-strict.xsd"/>
   <property name="util.output" value="${bin}/xhtml-strict.hrc"/>
   <property name='xsd2hrc.hrctype' value='xhtml-strict'/>
+  <property name="xsd2hrc.add-new-references" value="html-entity:html-addref"/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.xhtml.xml'/>
- </ant>
+ </ant> 
 </target>
 
 <!-- trans -->
@@ -62,8 +44,9 @@
   <property name="util.input" value="${src}/xhtml1-transitional.xsd"/>
   <property name="util.output" value="${bin}/xhtml-trans.hrc"/>
   <property name='xsd2hrc.hrctype' value='xhtml-trans'/>
+  <property name="xsd2hrc.add-new-references" value="html-entity:html-addref"/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.xhtml.xml'/>
- </ant>
+ </ant> 
 </target>
 
 <!-- frameset -->
@@ -81,8 +64,9 @@
   <property name="util.input" value="${src}/xhtml-frameset-reduced.xsd"/>
   <property name="util.output" value="${bin}/xhtml-frameset.hrc"/>
   <property name='xsd2hrc.hrctype' value='xhtml-frameset'/>
+  <property name="xsd2hrc.add-new-references" value="html-entity:html-addref"/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.fhtml.xml'/>
- </ant>
+ </ant> 
 </target>
 
 <!-- final -->

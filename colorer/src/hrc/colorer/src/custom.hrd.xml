@@ -23,7 +23,7 @@
     />
    </scheme>
    <scheme name="style-content">
-    <regexp match="/[1-3]/" region="def:Number"/>
+    <regexp match="/\d/" region="def:Number"/>
    </scheme>
    
   </type>

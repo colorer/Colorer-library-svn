@@ -2,28 +2,27 @@
 
 <custom xmlns="uri:colorer:custom">
 
-  <custom-type targetNamespace="">
-
-    <prefix>wsf</prefix>
-    <empty-prefix/>
-
-    <contributors>Cail Lomecb, Max Belugin</contributors>
-
-    <type xmlns="http://colorer.sf.net/2003/hrc">
-
-      <scheme name="jobType-content">
-         <inherit scheme="wsc:script-elements"/>
-         <inherit scheme="jobType-content-old"/>
-      </scheme>
-      <scheme name="scriptType-content">
-         <inherit scheme="wsc:scriptType-content"/>
-      </scheme>
-      <scheme name="scriptType-content-error">
-         <inherit scheme="scriptType-content"/>
-      </scheme>
-
-    </type>
-
-  </custom-type>
+<custom-type targetNamespace="">
+	<prefix>wsf</prefix>
+	<empty-prefix/>
+	
+	<!--top-level>
+		<element>package</element>
+	</top-level-->
+	
+	<contributors>Cail Lomecb, Max Belugin, Eugene Efremov</contributors>
+	
+	<outline>
+		<element name='job' extract='withAttribute' description='WSH job'/>
+	</outline>
+	
+	<processing-instruction name="job">
+		<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:attribute name="error" type="xs:boolean"/>
+			<xs:attribute name="debug" type="xs:boolean"/>
+		</xs:complexType>
+	</processing-instruction>
+	
+</custom-type>
 
 </custom>

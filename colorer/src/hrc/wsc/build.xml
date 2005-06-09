@@ -23,6 +23,7 @@
    <property name="util.input" value="${src}/wsc.xsd"/>
    <property name="util.output" value="${bin}/wsc.hrc"/>
    <property name='xsd2hrc.hrctype' value='wsc'/>
+   <property name='xsd2hrc.ignore-case-sgml' value='yes'/>
    <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
    <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.wsc.xml'/>
  </ant>
@@ -30,6 +31,7 @@
    <property name="util.input" value="${src}/wsf.xsd"/>
    <property name="util.output" value="${bin}/wsf.hrc"/>
    <property name='xsd2hrc.hrctype' value='wsf'/>
+   <property name='xsd2hrc.ignore-case-sgml' value='yes'/>
    <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
    <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.wsf.xml'/>
  </ant>

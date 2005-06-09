@@ -51,12 +51,14 @@
  </simpleType>
 
 
+ 
+
  <!-- ??? -->
  <attributeGroup name='result-element-atts'>
-  <attribute name='extension-element-prefixes' type='string' use='optional'/>
-  <attribute name='exclude-result-prefixes' type='string' use='optional'/>
-  <attribute name='use-attribute-sets' type='NMTOKENS' use='optional'/>
-  <attribute name='version' type='decimal' use='optional'/>
+  <attribute name='extension-element-prefixes' type='string' use='optional' form="qualified"/>
+  <attribute name='exclude-result-prefixes' type='string' use='optional' form="qualified"/>
+  <attribute name='use-attribute-sets' type='NMTOKENS' use='optional' form="qualified"/>
+  <attribute name='version' type='decimal' use='optional' form="qualified"/>
  </attributeGroup>
 
 

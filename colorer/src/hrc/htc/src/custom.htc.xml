@@ -23,11 +23,11 @@
     
      <!-- xmlss support -->
      <scheme name="style-content">
-      <inherit scheme="xmlss-html-css-attr"/>
+      <inherit scheme="xmlss-html-css-RuleContent-attr"/>
      </scheme>
 
      <scheme name="Script-content">
-      <inherit scheme="xmlss-jScript-attr"/>
+      <inherit scheme="xmlss-jScript-Script-attr"/>
      </scheme>
      
      <!-- Types -->

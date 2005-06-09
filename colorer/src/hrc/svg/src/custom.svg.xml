@@ -27,16 +27,12 @@
   <!-- xmlss -->
   <script-n-style>
    <element name="script">
-    <language name="perl" expr="perlscript"/>
     <language name="jScript" expr="(ecma|j(ava)?)script"/>
-    <!-- VB in SVG? It's imposible!
-    <language name="vbScript" expr="vbscript"/>-->
-  <!--  <default name="jScript"/>-->
+    <default name="jScript"/>
    </element>
    <attribute language="jScript" scheme-suffix="Script" region="def:default"/>
    <element name="style">
     <language name="svg-css" expr="text\/css"/>
-  <!--  <default name="css"/>-->
    </element>
    <attribute language="svg-css" scheme-suffix="RuleContent"/>
   </script-n-style>
@@ -46,15 +42,15 @@
   
    <!-- xmlss support -->
    <scheme name="StyleSheet-content">
-    <inherit scheme="xmlss-svg-css-attr"/>
+    <inherit scheme="xmlss-svg-css-RuleContent-attr"/>
    </scheme>
 
    <scheme name="Script-content">
-    <inherit scheme="xmlss-jScript-attr"/>
+    <inherit scheme="xmlss-jScript-Script-attr"/>
    </scheme>
    
   
-   <annotation>
+   <!--annotation>
     <documentation>
      Custom-defines. Overload:
 SimpleType BaselineShiftValue = svg:Length      *
@@ -100,25 +96,7 @@ SimpleType ViewBoxSpec = string                 *
  * - new scheme 
     </documentation>
     
-   </annotation>      
-   <!--
-   <scheme name="script-element">
-    <inherit scheme="xmlss-script">
-     <!- - !!! Name _hrc_int_d0e2075-Attributes may be lost... - - >
-     <virtual scheme="xml:Attribute.any" 
-      subst-scheme="_hrc_int_N113D8-Attributes"/>
-    </inherit>    
-   </scheme>
-   <scheme name="style-element">
-    <inherit scheme="xmlss-style">
-     <!- - !!! Name "_hrc_int_d0e849-Attributes" may be lost... - - >
-     <virtual scheme="xml:Attribute.any" 
-      subst-scheme="_hrc_int_N107C5-Attributes"/>
-    <virtual scheme="css:css" subst-scheme="svg-css:css"/>          
-    </inherit>    
-   </scheme>
-   
-   -->
+   </annotation-->      
 
  
    <scheme name="Color-content">

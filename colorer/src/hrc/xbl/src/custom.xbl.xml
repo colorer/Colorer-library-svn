@@ -7,6 +7,10 @@
     
     <contributors>Eugene Efremov</contributors>
     
+    <top-level>
+      <element>bindings</element>
+    </top-level>
+    
     <outline>
      <element name='binding' extract='withAttribute' description='binding section'/>
      <element name='method' extract='withAttribute'  description='function'/>
@@ -31,8 +35,6 @@
      <element name="setter">
       <default name="jScript"/>
      </element>
-     <!-- handler is very long.
-      In some cases colorer don't parse it, \m don't work :-/ -->
      <element name="handler">
       <default name="jScript"/>
      </element>   
@@ -54,7 +56,7 @@
      <!-- xmlss support -->
 
      <scheme name="Script-content">
-      <inherit scheme="xmlss-jScript-attr"/>
+      <inherit scheme="xmlss-jScript-Script-attr"/>
      </scheme>
      
      <!-- BindingContent hack -->
