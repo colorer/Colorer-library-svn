@@ -4,7 +4,7 @@
 # set of their previous parse strucure.
 #
 
-$colorer  = 'D:\projects\colorer\bin\colorer.exe';
+$colorer  = 'D:/projects/colorer/bin/colorer.exe';
 
 $diff  = 'diff -U 1 -b';
 
