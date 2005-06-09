@@ -23,13 +23,18 @@
   </xsl:template>
 
   <xsl:template match="xs:anyAttribute" mode="include-attr">
+    <!-- EE: must disabled for recursion -->  
+    <xsl:param name="any" select="'yes'"/>
+  
     <!-- TODO: use @namespace attribute -
     <xsl:choose>
       <xsl:when test="@namespace = '##other'">
         <regexp match="/(\s?#1|^)(%nsprefix;)?!%xml:NCName;/" region="dInsert"/>
       </xsl:when>
     </xsl:choose>-->
-    <inherit scheme="xml:Attribute.any"/>
+    <xsl:if test="$any = 'yes'">
+      <inherit scheme="xml:Attribute.any"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="xs:attributeGroup" mode="include-attr">
@@ -43,7 +48,9 @@
   </xsl:template>
 
   <xsl:template match="xs:complexContent/xs:extension | xs:complexContent/xs:restriction" mode="include-attr">
-    <xsl:apply-templates mode="include-attr"/>
+    <xsl:apply-templates mode="include-attr">
+      <xsl:with-param name="any" select="'no'"/>
+    </xsl:apply-templates>
     <inherit>
       <xsl:attribute name="scheme">
         <xsl:call-template name="qname2hrcname">
@@ -119,6 +126,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

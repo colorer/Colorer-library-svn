@@ -35,17 +35,21 @@
 
   <!-- path to HRC catalog (colorer.hrc) -->
 
-  <xsl:param name="catalog-path" select="'../../hrc/proto.hrc'"/>
+  <xsl:param name="catalog-path" select="'xml.hrc'"/>
 
   <!-- path to custom parser file -->
 
   <xsl:param name="custom-defines" select="'custom.default.xml'"/>
 
+  <!-- ignorecase pseudo-xml -->
+  <xsl:param name="ignore-case-sgml" select="'no'"/>
+  
   <!-- Use specified single top-level element
        If not specified, all global elements could be at top level of file.
   -->
   <xsl:param name="top-level-element" select="''"/>
 
+  
   <!-- internal anonymous type prefix -->
 
   <xsl:variable name="anonymous" select="'_hrc_int_'"/>
@@ -72,6 +76,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

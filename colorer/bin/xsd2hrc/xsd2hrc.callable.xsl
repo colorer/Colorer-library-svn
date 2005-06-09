@@ -88,7 +88,7 @@
     <xsl:param name="name"/>
     <xsl:param name="type"/>
 
-    <block start="/\M &lt; (%nsprefix;{$name} ([\s\/&gt;]|$) )/x" end="/ &gt; /x">
+    <block start="/\M &lt; (%nsprefix;{$name} ([\s\/&gt;]|$) )/{$ric}x" end="/ &gt; /x">
       <xsl:attribute name="scheme">
         <xsl:call-template name="qname2hrcname">
           <xsl:with-param name="qname" select="$type"/>
@@ -110,10 +110,10 @@
       <xsl:attribute name="start">
         <xsl:choose>
           <xsl:when test="$qualified = 'yes'">
-            <xsl:value-of select="concat('/(\s?#1|^)(?{Attribute.nsprefix}%nsprefix;)(',$name,')\M([\s\=]|$)/x')"/>
+            <xsl:value-of select="concat('/(\s?#1|^)(?{Attribute.nsprefix}%attr-nsprefix;)(',$name,')\M([\s\=]|$)/',$ric,'x')"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat('/(\s?#1|^)(',$name,')\M([\s\=]|$)/x')"/>
+            <xsl:value-of select="concat('/(\s?#1|^)(',$name,')\M([\s\=]|$)/',$ric,'x')"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
