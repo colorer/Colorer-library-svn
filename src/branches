@@ -1,0 +1,16 @@
+
+  Available project branches
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BRANCH_ECLIPSE2
+    Branch for old eclipse (2.1.3 compatible) plugin
+
+
+BRANCH-IRUSSKIH-NEW-TEXT-PARSER
+    New non-recursive text parser implementation branch
+
+
+BRANCH-IRUSSKIH-NEW-TOKEN-GENERATOR
+    New token generator in ConsoleTools.cpp
+    Problems with overlapping regions should be resolved still
+

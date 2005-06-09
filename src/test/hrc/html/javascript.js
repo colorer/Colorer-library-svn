@@ -29,3 +29,16 @@ str=str.replace(/\//, "\\");
 aa = aa / 23 /;
 
 m='Begin\'s';
+
+var a = 10/ 5; // correct
+
+var b = 10 / 5; // incorrect
+
+
+
+Also with the following:
+
+var a = 10;
+a/= 5; // correct
+a /= 5; // incorrect
+
