@@ -107,7 +107,7 @@ public:
       HTML tags, or @c 'text' HRD class to use specified in
       HRD file starting and ending sequences.
   */
-  void genOutput();
+  void genOutput(bool useTokens = false);
   
   /*
    *  No HRD input is used, but direct tokenized output is produced with region names, as names of tokens.
