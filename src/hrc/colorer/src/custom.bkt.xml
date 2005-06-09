@@ -2,13 +2,14 @@
 
 <custom xmlns="uri:colorer:custom">
 
- <custom-type targetNamespace="uri:colorer:bkt">
+ <custom-type targetNamespace="colorer://namespace.xml/2004/bracket">
   <prefix>bkt</prefix>
   <empty-prefix/>
   <contributors>Eugene Efremov</contributors>
 
   <outline>
    <element name='block' extract='withAttribute' description='block'/>
+   <element name='name-block' extract='withAttribute' description='named block'/>
   </outline>
     
   <type xmlns="http://colorer.sf.net/2003/hrc">

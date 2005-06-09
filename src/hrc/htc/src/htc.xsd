@@ -6,7 +6,7 @@
 <xs:annotation>
  <xs:documentation>
   Simple fictive scheme for support HTML components in colorer HRC
-
+  
   Note! This is NOT VALID SCHEME for html componetnts!
   Use it ONLY for xsd2hrc!
  </xs:documentation>
@@ -58,8 +58,8 @@
 <xs:element name="script" type="public:script-fictive">
  <xs:annotation>
   <xs:documentation>
-   Note! In real, it's
-   html script element.
+   Note! In real, it's 
+   html script element. 
    NOT use it as public:script!
   </xs:documentation>
  </xs:annotation>
@@ -87,54 +87,47 @@
   <xs:attribute name="literalContent" type="public:bool-nest"/>
   <xs:attribute name="tagName" type="xs:string"/>
   <xs:attribute name="urn" type="xs:anyURI"/> <!--its ONE attribute! -->
-  <xs:attribute name="URN" type="xs:anyURI"/> <!-- :-( -->
   <xs:sequence>
    <xs:element ref="public:script"/>
-   <xs:element ref="public:attach"/>
+   <xs:element ref="public:attach"/>   
    <xs:element ref="public:defaults"/>
    <xs:element ref="public:event"/>
    <xs:element ref="public:method"/>
    <xs:element ref="public:property"/>
-   <!--xs:element ref="PUBLIC:ATTACH"/>
-   <xs:element ref="PUBLIC:COMPONENT"/>
-   <xs:element ref="PUBLIC:DEFAULTS"/>
-   <xs:element ref="PUBLIC:EVENT"/>
-   <xs:element ref="PUBLIC:METHOD"/>
-   <xs:element ref="PUBLIC:PROPERTY"/-->
   </xs:sequence>
  </xs:complexType>
 </xs:element>
 
 <xs:element name="attach" type="public:attach"/>
 <xs:complexType name="attach">
- <xs:attribute name="id" type="xs:ID"/>
- <xs:attribute name="for" type="public:foratt"/>
- <xs:attribute name="event" type="public:evlist"/>
- <xs:attribute name="onevent" type="public:Script"/>
+ <xs:attribute name="id" type="xs:ID"/> 
+ <xs:attribute name="for" type="public:foratt"/> 
+ <xs:attribute name="event" type="public:evlist"/> 
+ <xs:attribute name="onevent" type="public:Script"/> 
 </xs:complexType>
 
 <xs:element name="defaults" type="public:defaults"/>
 <xs:complexType name="defaults">
- <xs:attribute name="id" type="xs:ID"/>
- <xs:attribute name="style" type="public:style"/>
- <xs:attribute name="canHaveHTML" type="xs:boolean"/>
- <xs:attribute name="contentEditable" type="public:bool-ext"/>
- <xs:attribute name="tabStop" type="xs:boolean"/>
- <xs:attribute name="viewInheritStyle" type="xs:boolean"/>
- <xs:attribute name="viewLinkContent" type="xs:boolean"/>
- <xs:attribute name="viewMasterTab" type="xs:boolean"/>
+ <xs:attribute name="id" type="xs:ID"/> 
+ <xs:attribute name="style" type="public:style"/> 
+ <xs:attribute name="canHaveHTML" type="xs:boolean"/> 
+ <xs:attribute name="contentEditable" type="public:bool-ext"/> 
+ <xs:attribute name="tabStop" type="xs:boolean"/> 
+ <xs:attribute name="viewInheritStyle" type="xs:boolean"/> 
+ <xs:attribute name="viewLinkContent" type="xs:boolean"/> 
+ <xs:attribute name="viewMasterTab" type="xs:boolean"/> 
 </xs:complexType>
 
 <xs:element name="event">
  <xs:complexType>
-  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="id" type="xs:ID"/> 
   <xs:attribute name="name" type="xs:string"/>
  </xs:complexType>
 </xs:element>
 
 <xs:element name="method">
  <xs:complexType>
-  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="id" type="xs:ID"/> 
   <xs:attribute name="name" type="xs:string"/>
   <xs:attribute name="internalname" type="xs:string"/>
  </xs:complexType>
@@ -142,7 +135,7 @@
 
 <xs:element name="property">
  <xs:complexType>
-  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="id" type="xs:ID"/> 
   <xs:attribute name="name" type="xs:string"/>
   <xs:attribute name="internalname" type="xs:string"/>
   <xs:attribute name="presist" type="xs:boolean"/>
