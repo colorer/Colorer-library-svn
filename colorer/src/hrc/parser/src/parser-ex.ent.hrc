@@ -119,12 +119,6 @@
 
 
 <scheme name="commands.xml">
- <block start="/~\s*(&lt;\?)(?{xml:XMLDecl.name}xml)\M(\s|$)/"
-        end="/(\?>)/" scheme="xml.decl" region="xml:XMLDecl"
-        region00="def:PairStart" region01="xml:XMLDecl.start"
-        region10="def:PairEnd" region11="xml:XMLDecl.end"
- />
-
  <inherit scheme="xml">
   <!-- if usable references, then parser3 usable too! -->
   <virtual scheme="xml:Reference" subst-scheme="xml.reference"/>
@@ -141,17 +135,10 @@
  <inherit scheme="xml:Reference"/>
 </scheme>
 
-<scheme name="xml.decl"><!--  -->
- <block start="/(\s|^)(?{xml:EncodingDecl}encoding) \s* (?{xml:XMLDecl.eq}\=) \s*
-    (?{q}[&#x22;&#x27;])/x"  end="/ \y{q} /x"
-  region="xml:EncName"  scheme="xml.encode"
- />
 
- <inherit scheme="xml:XMLDecl.content"/>
-</scheme>
-
-<scheme name="xml.encode">
- <regexp match="/[a-zA-Z][a-zA-Z0-9_.:\-]*/" region="xml:EncName"/>
- <inherit scheme="script"/>
- <regexp match="/\S+/" region0="xml:badChar" priority="low"/>
+<scheme name="commands.xpath">
+ <inherit scheme="xpath:Expr">
+  <virtual scheme="xpath:AposLiteralContent" subst-scheme="script"/>
+  <virtual scheme="xpath:QuotLiteralContent" subst-scheme="script"/>
+ </inherit>
 </scheme>
