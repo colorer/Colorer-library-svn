@@ -54,6 +54,7 @@
           <xsl:with-param name="match-list" select="$replace-patterns/patterns/enum-patterns"/>
         </xsl:call-template>
         <xsl:text>/</xsl:text>
+        <xsl:value-of select="$ric"/>
       </xsl:attribute>
     </regexp>
   </xsl:template>
@@ -188,7 +189,7 @@
 
   <xsl:template match="xs:element" mode="include-content">
     <xsl:choose>
-      <xsl:when test="@ref">
+      <xsl:when test="@ref"><!--!!  substitutionGroup chek need -->
         <inherit>
           <xsl:attribute name="scheme">
             <xsl:call-template name="qname2hrcname">
@@ -205,39 +206,46 @@
         <xsl:variable name='custom-type-outline' select='$custom-type/c:outline/c:element[@name = current()/@name]'/>
         <xsl:if test='$custom-type-outline'>
           <xsl:if test='$custom-type-outline/@extract = "attributeValue"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (([\x22\x27])(.*?)(\3)) )/x" region4="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (([\x22\x27])(.*?)(\3)) )/{$ric}x" region4="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "withAttribute"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b\s*.*? (([\x22\x27])(.*?)(\3))? )([\/>\s]|$)/x" region1="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %nsprefix;{@name} \b\s*.*? (([\x22\x27])(.*?)(\3))? )([\/>\s]|$)/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "fullElement"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (>|$) )/x" region1="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (>|$) )/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "tillNext"'>
-            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{&#x7B;2,&#x7D;}?) (&lt;|$) /x" region1="{@name}Outlined"/>
+            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{'{2,}'}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
         </xsl:if>
-        <xsl:call-template name="element-call">
-          <xsl:with-param name="name" select="@name"/>
-          <xsl:with-param name="type">
-            <xsl:choose>
-              <xsl:when test="generate-id(xs:complexType|xs:simpleType)">
-                <xsl:value-of select="concat($anonymous, generate-id(xs:complexType|xs:simpleType))"/>
-              </xsl:when>
-              <xsl:when test="@type">
-                <xsl:value-of select="@type"/>
-              </xsl:when>
-              <!-- !!INCORRECT!! -->
-              <xsl:when test="@substitutionGroup">
-                <xsl:value-of select="@substitutionGroup"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="name(namespace::*[. = 'http://www.w3.org/2001/XMLSchema'])"/>
-                <xsl:text>:anyType</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
+        
+        <!-- EE: support @substitutionGroup -->
+        <xsl:choose>
+          <xsl:when test="@abstract = 'true'">
+            <xsl:comment>
+             <xsl:text>
+    Warning! One or more other elements must have "substitutionGroup" 
+     attribute, referenced to this element. 
+    If no these elements, you need manually define scheme 
+     "</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>-substitutionGroup" in your "</xsl:text>
+              <xsl:value-of select="$hrctype"/>
+              <xsl:text>" custom-defines file</xsl:text>
+            </xsl:comment>
+            <inherit scheme="{@name}-substitutionGroup"/>
+          </xsl:when>
+          
+          <xsl:otherwise>
+            <xsl:call-template name="element-call">
+              <xsl:with-param name="name" select="@name"/>
+              <xsl:with-param name="type">
+                <xsl:apply-templates select="." mode="subst-group-name"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+        
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -264,6 +272,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

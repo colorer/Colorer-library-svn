@@ -83,11 +83,39 @@
         <inherit scheme="xml:badChar"/>
       </xsl:with-param>
     </xsl:call-template>
+    
+    
+    <!-- EE: This scheme used for CDATA sections -->
+    <xsl:if test="(self::xs:complexType or (self::xs:simpleType and @name)) and not(parent::c:*)">
+     <xsl:call-template name="createScheme">
+      <xsl:with-param name="name" select="concat($typename, '-content-cdsect')"/>
+      <xsl:with-param name="content">
+        <inherit scheme="{$typename}-content-error">
+          <virtual scheme="xml:badLiter" subst-scheme="xml:badCDLiter"/>
+          <virtual scheme="xml:Reference" subst-scheme="def:empty"/>
+        </inherit>
+      </xsl:with-param>
+     </xsl:call-template>    
+    </xsl:if>
 
     <!-- complexType attributes -->
 
 <!--    <xsl:if test="self::xs:complexType">-->
       <scheme name="{$typename}-Attributes">
+        <!-- EE: Trap redefines in s&s attribs: -->  
+        <xsl:if test="self::xs:complexType and @name">
+          <xsl:apply-templates mode="scriptdef-attr"
+            select="$custom-type/c:script-n-style/c:type-attributes[@name = current()/@name]" 
+          />
+        </xsl:if>
+        <xsl:if test="parent::xs:element and ../@name">
+          <xsl:variable name="pn" select="../@name"/>
+          <!--xsl:comment>scriptdef-attr for <xsl:value-of select="$pn"/></xsl:comment-->
+          <xsl:apply-templates mode="scriptdef-attr"
+            select="$custom-type/c:script-n-style/c:element-attributes[@name = $pn]" 
+          />
+        </xsl:if>
+      
         <xsl:apply-templates mode="include-attr"/>
         <xsl:if test="$allow-any-attr != 'no'">
           <inherit scheme="xml:Attribute.any"/>
@@ -114,7 +142,7 @@
     Scheme to support calls from element's creation.
     Active for any kind of type
     -->
-    <xsl:if test="self::xs:complexType or (self::xs:simpleType and @name)">
+    <xsl:if test="(self::xs:complexType or (self::xs:simpleType and @name)) and not(parent::c:*)">
       <scheme name="{$typename}-elementContent">
         <inherit scheme="{$anonymous}elementContent">
           <xsl:if test="self::xs:complexType and not(xs:simpleContent)">
@@ -133,8 +161,8 @@
           </xsl:if>
           <!-- Allows to parse simpleType content in CDATA sections content -->
           <xsl:if test="self::xs:simpleType or xs:simpleContent">
-            <virtual scheme="xml:CDSect.content.stream" subst-scheme="{$typename}-content-error"/>
-            <virtual scheme="xml:content.cdata.stream"  subst-scheme="{$typename}-content-error"/>
+            <virtual scheme="xml:CDSect.content.stream" subst-scheme="{$typename}-content-cdsect"/>
+            <virtual scheme="xml:content.cdata.stream"  subst-scheme="{$typename}-content-error"/><!-- changed !! -->
             <virtual scheme="xml:element" subst-scheme="def:empty"/>
           </xsl:if>
 
@@ -174,6 +202,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

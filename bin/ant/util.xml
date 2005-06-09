@@ -10,12 +10,12 @@
 <property name="bracket" value="${root}/bin/bracket" description="bracket location"/>
 
 <!-- all properties -->
-<property name="xslt-classpath" value=""/>
 
 <property name="util.input" value="define me!"/>
 <property name="util.output" value="define me!"/>
 <property name="util.url" value="src"/>
-<property name="util.url.real" value="http://info-esta.ru/efremov/colorer/index.html?intname=colorer.${util.url}"/>
+<property name="xslt-classpath" value=""/>
+<property name="util.url.real" value="http://colorer.info-esta.ru/${util.url}"/>
 
 <!-- dtd2xsd  -->
 
@@ -26,24 +26,10 @@
 </target>
 
 <target name="dtd2xsd" depends="dtd2xsd.prop">
- <echo level="info" message="Transform dtd ${util.input} to xsd ${util.output}"/>
-
- <condition property='alias' value='-alias'>
-   <equals arg1='${dtd2xsd.alias}' arg2='yes'/>
- </condition>
- <condition property='alias' value=''>
-   <not><equals arg1='${dtd2xsd.alias}' arg2='yes'/></not>
- </condition>
- <condition property='skipxmlattr' value='-skipxmlattr'>
-   <equals arg1='${dtd2xsd.skipxmlattr}' arg2='yes'/>
- </condition>
- <condition property='skipxmlattr' value=''>
-   <not><equals arg1='${dtd2xsd.skipxmlattr}' arg2='yes'/></not>
- </condition>
-
+ <echo level="info" message="Transform dtd to xsd"/>
  <exec executable="perl" output="${util.output}">
-  <arg line='${dtd2xsd}/dtd2xsd.pl ${alias} ${skipxmlattr} -mapfile ${dtd2xsd.map} -prefix ${dtd2xsd.pre} -ns "${dtd2xsd.ns}" ${util.input}'/>
- </exec>
+  <arg line='${dtd2xsd}/dtd2xsd.pl -mapfile ${dtd2xsd.map} -prefix ${dtd2xsd.pre} -ns "${dtd2xsd.ns}" ${util.input}'/>
+ </exec> 
  <delete>
   <fileset dir="." includes="*.out"/>
  </delete>
@@ -60,14 +46,18 @@
        location="../../../doc/2003/hrd.dtd"/>
   <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
        location="../../../doc/2003/catalog.dtd"/>
+  <dtd publicid="-//W3C//DTD XMLSCHEMA 200102//EN"
+       location="../../../src/dtd/XMLSchema.dtd"/>
+  <dtd publicid="datatypes"
+       location="../../../src/dtd/datatypes.dtd"/>
  </xmlcatalog>
 </target>
-
+ 
 <target name="xsd2hrc" depends="xsd2hrc.prop">
- <xslt in="${util.input}" out="${util.output}" style="${xsd2hrc}/xsd2hrc.xsl" classpath="${xslt-classpath}">
+ <xslt in="${util.input}" out="${util.output}" style="${xsd2hrc}/xsd2hrc.xsl">
   <xmlcatalog refid="xsd2hrcdtd"/>
   <param name="hrctype" expression="${xsd2hrc.hrctype}"/>
-  <param name="add-new-references" expression="${xsd2hrc.add-new-references}"/>
+  <!--param name="add-new-references" expression="${xsd2hrc.add-new-references}"/-->
   <param name="allow-common-attr" expression="${xsd2hrc.allow-common-attr}"/>
   <param name="allow-any-attr" expression="${xsd2hrc.allow-any-attr}"/>
   <param name="allow-unknown-elements" expression="${xsd2hrc.allow-unknown-elements}"/>
@@ -77,8 +67,10 @@
   <param name="drop-annotations" expression="${xsd2hrc.drop-annotations}"/>
   <param name="catalog-path" expression="${xsd2hrc.catalog-path}"/>
   <param name="custom-defines" expression="${xsd2hrc.custom-defines}"/>
- </xslt>
+  <param name="ignore-case-sgml" expression="${xsd2hrc.ignore-case-sgml}"/>
+</xslt>  
 </target>
+
 
 <!-- bracket -->
 
@@ -96,7 +88,7 @@
  <echo level="info" message="Transform ent to hrc"/>
  <exec executable="perl" output="${util.output}">
   <arg line='${ent2hrc}/ent2hrc.pl ${util.input} ${ent2hrc.scheme}'/>
- </exec>
+ </exec> 
 </target>
 
 <!-- final -->
@@ -107,7 +99,6 @@
    dtd2xsd (perl required)
    xsd2hrc (xslt required)
    ent2hrc (perl required)
-   hrcinlc (xslt required)
    bracket (xslt required)
  </echo>
 </target>

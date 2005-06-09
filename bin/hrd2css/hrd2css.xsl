@@ -15,11 +15,7 @@
 
 <xsl:template match="h:assign">
  &separate;
- <xsl:text>.</xsl:text><xsl:value-of select="translate(@name,':','_')"/>
- <!-- It's best, but don't support in colorer now:
- <xsl:value-of select="translate(@name,':.','- 
- -')"/>
- -->
+ <xsl:text>.</xsl:text><xsl:value-of select="translate(@name,':.','--')"/>
  &separate;
  <xsl:text>{</xsl:text>
  &separate;

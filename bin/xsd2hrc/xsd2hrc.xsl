@@ -18,18 +18,21 @@
   <xsl:include href="xsd2hrc.root.xsl"/>
   <xsl:include href="xsd2hrc.root-elements.xsl"/>
   <xsl:include href="xsd2hrc.xmlss.xsl"/>
+  <xsl:include href="xsd2hrc.subst-group.xsl"/>
 
 
-  <xsl:output indent="yes"
+  <xsl:output indent="yes" encoding="utf-8"
               doctype-public="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-              doctype-system="http://colorer.sf.net/2003/hrc.dtd"  encoding="utf-8"/>
+              doctype-system="http://colorer.sf.net/2003/hrc.dtd" 
+              cdata-section-elements="hrc:contributors hrc:regexp hrc:start hrc:end"
+              />
 
   <!-- ignore spaces -->
 
   <xsl:strip-space elements="*"/>
 
   <!-- version -->
-  <xsl:variable name="version" select="'0.9.2'"/>
+  <xsl:variable name="version" select="'0.9.3'"/>
 
   <!-- path to prototype catalog -->
   <xsl:variable name="catalog" select="document($catalog-path)"/>
@@ -47,7 +50,16 @@
   <!-- path to custom defines catalog -->
   <xsl:variable name="custom-type" select="document($custom-defines)/c:custom/c:custom-type[@targetNamespace = $targetNamespace]"/>
   <xsl:variable name="custom-type-schemes" select="$custom-type/hrc:type/*"/>
-
+  <xsl:variable name="custom-pi" select="$custom-type/c:processing-instruction"/>
+  
+  <!-- 
+   EE: case-ignored pseudo-xml ("microsoft xml") support 
+  -->
+  <xsl:variable name="ric">
+    <xsl:if test="$ignore-case-sgml = 'yes'">
+      <xsl:text>i</xsl:text>
+    </xsl:if>
+  </xsl:variable>
 
   <!-- Add referense (XML entities) support  -->
   <xsl:variable name="add-new-references" select="$custom-type/c:references"/>
@@ -57,11 +69,12 @@
   <xsl:key name="script" match="xs:element" use="@name"/>
   
 
-
   <!-- possible used namespace prefixes -->
 
   <xsl:variable name="ns-map" select="$custom-type/c:prefix | $custom-type/c:empty-prefix | $custom-type/c:any-prefix"/>
-  <xsl:variable name="ns-real-prefix">
+  <!-- EE:new -->
+  <xsl:template name="ns-real-prefix">
+   <xsl:param name="nscolon"/>
     <xsl:if test="$ns-map">
       <xsl:text>(?{}</xsl:text>
       <xsl:choose>
@@ -77,8 +90,14 @@
           <xsl:text>)</xsl:text>
         </xsl:when>
       </xsl:choose>
-      <xsl:text>:)</xsl:text>
+      <xsl:text>(?{</xsl:text>
+      	<xsl:value-of select="$nscolon"/>
+      <xsl:text>}:))</xsl:text>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:variable name="ns-real-prefix">
+  	<xsl:call-template name="ns-real-prefix"/>
   </xsl:variable>
   <xsl:variable name="nsprefix">
     <xsl:if test="$ns-map">
@@ -87,6 +106,13 @@
     </xsl:if>
   </xsl:variable>
 
+  <xsl:variable name="attr-nsprefix"><!-- EE:new -->
+  	<xsl:call-template name="ns-real-prefix">
+  		<xsl:with-param name="nscolon" select="'Attribute.nscolon'"/>
+  	</xsl:call-template>
+  </xsl:variable>
+  
+  
   <!-- New line character -->
   <xsl:template name="crlf">
     <xsl:text>&#10;</xsl:text>
@@ -135,9 +161,9 @@
         <annotation>
          <documentation>
            XSLT Generated HRC scheme for language '<xsl:value-of select="$hrctype"/>'
-           from XML Schema with xsd2hrc.xsl version <xsl:value-of select="$version"/>
-            (C) 2002-03 Cail Lomecb
-            Portions copyright (C) 2004 Eugene Efremov
+           from XML Schema with xsd2hrc.xsl version <xsl:value-of select="$version"/> 
+            Copyright (C) 2002-04 Cail Lomecb
+            Portions copyright (C) 2004-05 Eugene Efremov
 
            Scheme parameters:
              targetNamespace             : <xsl:value-of select="$targetNamespace"/>
@@ -147,11 +173,12 @@
              allow-unknown-elements      : <xsl:value-of select="$allow-unknown-elements"/>
              allow-unknown-root-elements : <xsl:value-of select="$allow-unknown-root-elements"/>
              force-single-root           : <xsl:value-of select="$force-single-root"/>
-             add-new-references          : <xsl:value-of select="$add-new-references"/>
              default prefixes            : <xsl:value-of select="$nsprefix"/>
-
                you can change them with entity 'nsprefix'
-
+             
+             <xsl:if test="$ignore-case-sgml = 'yes'">Note! This scheme was generated for ignorecase pseudo-xml.
+             
+         </xsl:if>
          </documentation>
          <documentation>
           Schema documentation:<xsl:value-of select="xs:schema/xs:annotation/xs:documentation"/>
@@ -183,13 +210,14 @@
 
         <region name="Attribute.name"     parent="xml:Attribute.defined.name"/>
         <region name="Attribute.nsprefix" parent="xml:Attribute.nsprefix"/>
+        <region name="Attribute.nscolon"  parent="xml:Attribute.nscolon"/>
 
         <region name="AttValue"           parent="xml:AttValue.defined"/>
         <region name="AttValue.start"     parent="xml:AttValue.defined.start"/>
         <region name="AttValue.end"       parent="xml:AttValue.defined.end"/>
 
-        <region name="Enumeration"        parent="xml:Enumeration" description="Enumerated type values"/>
-
+        <region name="Enumeration"        parent="xml:Enumeration" description="Enumerated type values"/>        
+        
 
         <xsl:for-each select='$custom-type/c:outline/c:element[@name]'>
           <region name="{@name}Outlined" description="{@description}">
@@ -204,6 +232,7 @@
         <xsl:call-template name='crlf'/>
         <entity name="ns-real-prefix" value="{$ns-real-prefix}"/>
         <entity name="nsprefix" value="{$nsprefix}"/>
+        <entity name="attr-nsprefix" value="{$attr-nsprefix}"/><!-- EE:new -->
         <xsl:call-template name='crlf'/>
 
         <!-- These schemes was cloned from xml.hrc
@@ -237,14 +266,15 @@
             <virtual scheme="xml:AttValue" subst-scheme="{$anonymous}AttValue"/>
           </inherit>
         </scheme>
-
+        
         <!-- EE: include xmlss content -->
-        <xsl:apply-templates select="$custom-type/c:script-n-style" mode="scriptdef"/>
+        <xsl:apply-templates select="$custom-type/c:*" mode="scriptdef"/>
 
         <xsl:copy-of select="$custom-type-schemes"/>
 
         <!-- Schema datatypes: -->
 
+        <xsl:apply-templates mode="subst-group"/>
         <xsl:apply-templates mode="root"/>
         <xsl:apply-templates mode="typedefs"/>
 
@@ -279,21 +309,36 @@
             </inherit>
           </xsl:if>
         </scheme>
-
-
+        
+        
         <!-- EE: add references -->
         <xsl:if test="$add-new-references">
-         <scheme name="reference.content">
-          <inherit scheme="xml:reference.content"/>
-          <inherit scheme="{$add-new-references}"/>
-         </scheme>
+          <scheme name="reference.content">
+            <inherit scheme="xml:reference.content"/>
+            <inherit scheme="{$add-new-references}"/>
+          </scheme>
         </xsl:if>
-
+        
+        <!-- EE: add PI -->
+        <xsl:if test="$custom-pi">
+          <scheme name="PI">
+            <regexp match="/&lt;\?xml\M(\s|$)/i" region="xml:badChar"/>
+            <xsl:for-each select="$custom-pi">
+              <inherit scheme="{@name}-processing-instruction"/>
+            </xsl:for-each>
+            <inherit scheme="xml:PI"/>
+          </scheme>
+        </xsl:if>
+        
+        
         <scheme name="{$hrctype}-root-addref">
          <inherit scheme="{$hrctype}-root">
+          <xsl:if test="$custom-pi">
+           <virtual scheme="xml:PI" subst-scheme="PI"/>
+          </xsl:if>
           <xsl:if test="$add-new-references">
            <virtual scheme="xml:reference.content" subst-scheme="reference.content"/>
-          </xsl:if>
+          </xsl:if>  
          </inherit>
         </scheme>
 
@@ -312,12 +357,11 @@
             </xsl:otherwise>
           </xsl:choose>
         </scheme>
-
       </type>
     </hrc>
   </xsl:template>
-
-
+  
+  
 </xsl:stylesheet>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
