@@ -7,34 +7,6 @@
 #error need (COLORERMODE & !NAMED_MATCHES_IN_HASH) in cregexp
 #endif
 
-#define MATCH_NOTHING 0
-#define MATCH_RE 1
-#define MATCH_SCHEME 2
-
-#define LINE_NEXT 0
-#define LINE_REPARSE 1
-
-/** Dynamic parser's list of virtual entries.
-    @ingroup colorer_parsers
-*/
-class VTList
-{
-  VirtualEntryVector *vlist;
-  VTList *prev, *next, *last, *shadowlast;
-  int nodesnum;
-public:
-  VTList();
-  ~VTList();
-  void deltree();
-  bool push(SchemeNode *node);
-  bool pop();
-  SchemeImpl *pushvirt(SchemeImpl *scheme);
-  void popvirt();
-  void clear();
-  VirtualEntryVector **store();
-  bool restore(VirtualEntryVector **store);
-};
-
 /**
  * Internal parser's cache storage. Each object instance
  * stores parse information about single level of Scheme
@@ -54,10 +26,6 @@ public:
     * be instantiated.
     */
   const SchemeNode *clender;
-  /**
-   * Scheme virtualization cache entry
-   */
-  VirtualEntryVector **vcache;
   /**
    * RE Match object for start RE of the enwrapped &lt;block> object
    */
@@ -83,6 +51,10 @@ public:
 };
 
 
+/**
+ * Sinle inheritance level inside of the parser state.
+ * Used to track runtime scheme inheritance structure.
+ */
 struct InheritStep {
   SchemeImpl *scheme;
   int schemeNodePosition;
@@ -90,7 +62,10 @@ struct InheritStep {
   bool vtlistPushed;
 };
 
-
+/**
+ * Sinle step, or state, of the parser. Each state is described by a set of
+ * attributes, which affect parsing process.
+ */
 struct ParseStep{
   CRegExp *closingRE;
   bool closingREmatched;
@@ -130,11 +105,18 @@ struct ParseStep{
 */
   }
 
+  /**
+   * Pushes addiitonal 'inherit' level into the current parse state.
+   */
   void push(InheritStep *istep){
     inheritStack.addElement(istep);
     itop = istep;
   }
 
+  /**
+   * Removes topmost inherit level from current parse state.
+   * InheritStep element itself is deleted also.
+   */
   void pop(){
     delete inheritStack.lastElement();
     inheritStack.setSize(inheritStack.size()-1);

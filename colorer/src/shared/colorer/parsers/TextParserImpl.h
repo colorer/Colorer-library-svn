@@ -45,7 +45,7 @@ private:
   int cachedLineNo;
   ParseCache *cachedParent,*cachedForward;
 
-  VTList *vtlist;
+//  VTList *vtlist;
 
   LineSource *lineSource;
   RegionHandler *regionHandler;
@@ -68,11 +68,18 @@ private:
   ParseStep *top;
   Vector<ParseStep*> parseSteps;
 
+  /**
+   * Enters new parser state \c step.
+   * This step parameters should be already setted up.
+   */
   void push(ParseStep *step){
     parseSteps.addElement(step);
     top = step;
   }
 
+  /**
+   * Finishes current parser state and moves parser on parent level.
+   */
   void pop(){
     if (top == null){
       throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
@@ -112,6 +119,10 @@ private:
     return itop->scheme->nodes.elementAt(itop->schemeNodePosition);
   }
 
+  /**
+   * Restart parser on the same position from current state
+   * initial node. Drop all inheritance level for this parse state
+   */
   void restart()
   {
     while (top->inheritStack.size() > 1){
@@ -121,6 +132,12 @@ private:
     top->itop->schemeNodePosition = 0;
   }
 
+  /**
+   * Moves single position forward and restarts parse process
+   * from initial scheme node.
+   * Before move checks for possible state finish condition. If found,
+   * finishes current parse step and returns to parent step.7
+   */
   void move()
   {
     restart();
@@ -166,6 +183,10 @@ private:
     top->itop->schemeNodePosition = 0;
   }
 
+  /**
+   * Moves to the next node in current inheritance tree,
+   * Return to the parent node, if current inheritance node traverse is finished.
+   */
   void cont(){
     top->itop->schemeNodePosition++;
     if (top->itop->schemeNodePosition >= top->itop->scheme->nodes.size()){

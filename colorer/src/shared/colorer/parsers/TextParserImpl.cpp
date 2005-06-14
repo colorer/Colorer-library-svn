@@ -394,6 +394,37 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
   }
 */
 
+SchemeImpl *TextParserImpl::pushVirtual(SchemeImpl *scheme)
+{
+  SchemeImpl *ret = scheme;
+  VTList *curvl = 0;
+
+  for(VTList *vl = last; vl && vl->prev; vl = vl->prev){
+    for(int idx = 0; idx < vl->vlist->size(); idx++){
+      VirtualEntry *ve = vl->vlist->elementAt(idx);
+      if (ret == ve->virtScheme && ve->substScheme){
+        ret = ve->substScheme;
+        curvl = vl;
+      }
+    }
+  }
+
+  if (curvl){
+    curvl->shadowlast = last;
+    last = curvl->prev;
+    return ret;
+  }
+
+  return 0;
+}
+
+void TextParserImpl::popVirtual()
+{
+  VTList *that = last->next;
+  //FAULT(!last->next || !that->shadowlast);
+  last = that->shadowlast;
+  that->shadowlast = 0;
+}
 
 
 void TextParserImpl::incrementPosition() {
@@ -495,9 +526,9 @@ bool TextParserImpl::colorize()
       }
       InheritStep *itop = new InheritStep();
 
-      SchemeImpl *ssubst = vtlist->pushvirt(schemeNode->scheme);
+      SchemeImpl *ssubst = vtlist->pushVirtual(schemeNode->scheme);
       if (ssubst == null){
-        itop->vtlistPushed = vtlist->push(schemeNode);
+//        itop->vtlistPushed = vtlist->push(schemeNode);
         ssubst = schemeNode->scheme;
       }else{
         itop->vtlistPushedVirtual = true;
