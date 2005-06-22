@@ -220,10 +220,10 @@ ParserFactory::~ParserFactory(){
 };
 
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "01.12.2004"
+#define __TIMESTAMP__ "28.08.2005"
 #endif
 const char *ParserFactory::getVersion(){
-  return "Colorer-take5 Library beta4 "__TIMESTAMP__;
+  return "Colorer-take5 Library be5 "__TIMESTAMP__;
 };
 
 
@@ -301,7 +301,7 @@ HRCParser* ParserFactory::getHRCParser(){
                   fileErrorHandler->fatalError(StringBuffer("Can't load hrc: ") + dfis->getLocation());
                   fileErrorHandler->fatalError(*e.getMessage());
                 };
-		delete dfis;
+        delete dfis;
               };
             };
           };
