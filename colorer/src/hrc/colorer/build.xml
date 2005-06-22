@@ -88,7 +88,7 @@
 <target name="catalog" depends="catalog.check">
  <ant antfile="${util}" target="xsd2hrc">
   <property name="util.input" value="${src.extra}/catalog.xsd"/>
-  <property name="util.output" value="${bin.extra}/colorer5catalog.hrc"/>
+  <property name="util.output" value="${bin}/colorer5catalog.hrc"/>
   <property name='xsd2hrc.hrctype' value='colorer5catalog'/>
  </ant>
 </target>

@@ -78,7 +78,7 @@
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
   <fileset dir="${bin}" includes="php*.*"/>
-  <fileset dir="${bin}/.." includes="*.ent.hrc"/>
+  <fileset dir="${bin}/.." includes="php-prot.ent.hrc"/>
  </delete>
 </target>
 
