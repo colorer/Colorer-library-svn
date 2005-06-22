@@ -164,17 +164,27 @@ void ConsoleTools::RETest(){
   delete re;
 }
 
-void ConsoleTools::listTypes(bool load){
+void ConsoleTools::listTypes(bool names, bool load){
   Writer *writer = null;
+
   try{
-    writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
     ParserFactory pf(catalogPath);
     HRCParser *hrcParser = pf.getHRCParser();
-    fprintf(stderr, "\nloading file types...\n");
+    
+    writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
+    
+    if (load){
+      fprintf(stderr, "\nloading file types...\n");
+    }
+
     for(int idx = 0;; idx++){
       FileType *type = hrcParser->enumerateFileTypes(idx);
       if (type == null) break;
-      writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
+      if (names){
+        writer->write(StringBuffer(type->getName())+"\n");
+      }else{
+        writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
+      }
       if (load) type->getBaseScheme();
     };
     delete writer;
@@ -289,6 +299,7 @@ void ConsoleTools::forward(){
 }
 
 void ConsoleTools::genOutput(){
+
   try{
     // Source file text lines store.
     TextLinesStore textLinesStore;
@@ -301,11 +312,13 @@ void ConsoleTools::genOutput(){
     bool useMarkup = false;
     RegionMapper *mapper = null;
     if (hrdName == null) hrdName = new DString("default");
-    try{
-      mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
-    }catch(ParserFactoryException &e){
-      useMarkup = true;
-      mapper = pf.createTextMapper(hrdName);
+    if (!useTokens){
+      try{
+        mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
+      }catch(ParserFactoryException &e){
+        useMarkup = true;
+        mapper = pf.createTextMapper(hrdName);
+      };
     };
     // Base editor to make primary parse
     BaseEditor baseEditor(&pf, &textLinesStore);
@@ -332,23 +345,25 @@ void ConsoleTools::genOutput(){
       fprintf(stderr, "can't open file '%s' for writing:\n", outputFileName->getChars());
       fprintf(stderr, e.getMessage()->getChars());
       return;
-    }
+    };
 
-    if (htmlWrapping && rd != null){
+    if (htmlWrapping && useTokens){
+      commonWriter->write(DString("<html>\n<head>\n<style></style>\n</head>\n<body><pre>\n"));
+    }else if (htmlWrapping && rd != null){
       if (useMarkup){
         commonWriter->write(TextRegion::cast(rd)->stext);
       }else{
         commonWriter->write(DString("<html><body style='"));
         ParsedLineWriter::writeStyle(commonWriter, StyledRegion::cast(rd));
         commonWriter->write(DString("'><pre>\n"));
-      }
-    }
+      };
+    };
 
     if (copyrightHeader){
       commonWriter->write(DString("Created with colorer-take5 library. Type '"));
       commonWriter->write(type->getName());
       commonWriter->write(DString("'\n\n"));
-    }
+    };
 
     int lni = 0;
     int lwidth = 1;
@@ -363,21 +378,25 @@ void ConsoleTools::genOutput(){
         commonWriter->write(SString(i));
         commonWriter->write(DString(": "));
       };
-      if (useMarkup){
+      if (useTokens){
+        ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
+      }else if (useMarkup){
         ParsedLineWriter::markupWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else{
         ParsedLineWriter::htmlRGBWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
-      }
+      };
       commonWriter->write(DString("\n"));
-    }
+    };
 
-    if (htmlWrapping && rd != null){
+    if (htmlWrapping && useTokens){
+      commonWriter->write(DString("</pre></body></html>\n"));
+    }else if (htmlWrapping && rd != null){
       if (useMarkup){
         commonWriter->write(TextRegion::cast(rd)->etext);
       }else{
         commonWriter->write(DString("</pre></body></html>\n"));
-      }
-    }
+      };
+    };
 
     if (htmlEscaping) delete commonWriter;
     delete escapedWriter;
@@ -389,7 +408,6 @@ void ConsoleTools::genOutput(){
     fprintf(stderr, "unknown exception ...\n");
   };
 }
-
 
 class TokenHandler : public RegionHandler
 {
@@ -506,6 +524,8 @@ public:
   }
 
   void clearLine(int lno, String *line){
+    regionStackPos.clear();
+    regionStack.clear();
   }
 
   void addRegion(int lno, String *line, int sx, int ex, const Region *region){
@@ -602,8 +622,6 @@ void ConsoleTools::genTokenOutput()
     fprintf(stderr, "unknown exception ...\n");
   };
 }
-
-
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

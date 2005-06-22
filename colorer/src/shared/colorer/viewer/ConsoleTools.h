@@ -84,32 +84,35 @@ public:
   */
   void profile(int loopCount);
 
-  /** Lists all available HRC types and
-      optionally tries to load them.
-  */
-  void listTypes(bool load);
+  /**
+   * Lists all available HRC types and
+   * optionally tries to load them.
+   */
+  void listTypes(bool names, bool load);
 
 
   FileType *selectType(HRCParser *hrcParser, String *fline);
 
 
-
-  /** Views file in console window, using TextConsoleViewer class
-  */
+  /**
+   * Views file in console window, using TextConsoleViewer class
+   */
   void viewFile();
 
-  /** Simply forwards input text to output, using passed encoding information.
-  */
+  /**
+   *Simply forwards input text to output, using passed encoding information.
+   */
   void forward();
 
-  /** Generates HTML-ized output of file.
-      Uses @c 'rgb' HRD class to dynamically create
-      HTML tags, or @c 'text' HRD class to use specified in
-      HRD file starting and ending sequences.
-  */
-  void genOutput(bool useTokens = false);
+  /**
+   * Generates HTML-ized output of file.
+   * Uses @c 'rgb' HRD class to dynamically create
+   * HTML tags, or @c 'text' HRD class to use specified in
+   * HRD file starting and ending sequences.
+   */
+  void genOutput();
   
-  /*
+  /**
    *  No HRD input is used, but direct tokenized output is produced with region names, as names of tokens.
    */
   void genTokenOutput();
