@@ -312,13 +312,11 @@ void ConsoleTools::genOutput(){
     bool useMarkup = false;
     RegionMapper *mapper = null;
     if (hrdName == null) hrdName = new DString("default");
-    if (!useTokens){
-      try{
-        mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
-      }catch(ParserFactoryException &e){
-        useMarkup = true;
-        mapper = pf.createTextMapper(hrdName);
-      };
+    try{
+      mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
+    }catch(ParserFactoryException &e){
+      useMarkup = true;
+      mapper = pf.createTextMapper(hrdName);
     };
     // Base editor to make primary parse
     BaseEditor baseEditor(&pf, &textLinesStore);
@@ -347,9 +345,7 @@ void ConsoleTools::genOutput(){
       return;
     };
 
-    if (htmlWrapping && useTokens){
-      commonWriter->write(DString("<html>\n<head>\n<style></style>\n</head>\n<body><pre>\n"));
-    }else if (htmlWrapping && rd != null){
+    if (htmlWrapping && rd != null){
       if (useMarkup){
         commonWriter->write(TextRegion::cast(rd)->stext);
       }else{
@@ -357,7 +353,7 @@ void ConsoleTools::genOutput(){
         ParsedLineWriter::writeStyle(commonWriter, StyledRegion::cast(rd));
         commonWriter->write(DString("'><pre>\n"));
       };
-    };
+    }
 
     if (copyrightHeader){
       commonWriter->write(DString("Created with colorer-take5 library. Type '"));
@@ -377,26 +373,22 @@ void ConsoleTools::genOutput(){
         for(lni = iwidth; lni < lwidth; lni++) commonWriter->write(0x0020);
         commonWriter->write(SString(i));
         commonWriter->write(DString(": "));
-      };
-      if (useTokens){
-        ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
-      }else if (useMarkup){
+      }
+      if (useMarkup){
         ParsedLineWriter::markupWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else{
         ParsedLineWriter::htmlRGBWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
-      };
+      }
       commonWriter->write(DString("\n"));
-    };
+    }
 
-    if (htmlWrapping && useTokens){
-      commonWriter->write(DString("</pre></body></html>\n"));
-    }else if (htmlWrapping && rd != null){
+    if (htmlWrapping && rd != null){
       if (useMarkup){
         commonWriter->write(TextRegion::cast(rd)->etext);
       }else{
         commonWriter->write(DString("</pre></body></html>\n"));
-      };
-    };
+      }
+    }
 
     if (htmlEscaping) delete commonWriter;
     delete escapedWriter;
