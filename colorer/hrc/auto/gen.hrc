@@ -77,23 +77,6 @@
     <firstline weight='5'>/&lt;project\b/s</firstline>
   </prototype>
 
-
-  <prototype name="colorer5catalog" group="scripts" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
-    <location link="gen/colorer5catalog.hrc"/>
-    <filename>/\bcatalog\.xml$/ix</filename>
-    <firstline weight='5'>/DTD Colorer CATALOG/s</firstline>
-  </prototype>
-  <prototype name="xsd2hrc.custom" group="scripts" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
-    <location link="gen/xsd2hrc.custom.hrc"/>
-    <filename>/custom\..*?\.xml$/ix</filename>
-    <firstline weight="2">/uri:colorer:custom/s</firstline>
-  </prototype>
-  <prototype name="bkt" group="scripts" description="Colorer brackets script" targetNamespace="uri:colorer:bkt">
-    <location link="gen/bkt.hrc"/>
-    <filename>/\.bkt/ix</filename>
-    <firstline weight="2">/uri:colorer:bkt/s</firstline>
-  </prototype>
-
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
