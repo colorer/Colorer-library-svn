@@ -300,12 +300,12 @@ HRCParser* ParserFactory::getHRCParser(){
                 if (fileErrorHandler != null){
                   fileErrorHandler->fatalError(StringBuffer("Can't load hrc: ") + dfis->getLocation());
                   fileErrorHandler->fatalError(*e.getMessage());
-                };
-        delete dfis;
-              };
-            };
-          };
-        };
+                }
+                delete dfis;
+              }
+            }
+          }
+        }
 #endif
       }else{
         try{
