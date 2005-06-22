@@ -3,13 +3,17 @@
 #include<stdlib.h>
 #include<colorer/viewer/ConsoleTools.h>
 
-/** Internal run action type */
+/**
+ * Internal run action type
+ */
 enum { JT_NOTHING, JT_REGTEST, JT_PROFILE,
-       JT_LIST_LOAD, JT_LIST_TYPES,
+       JT_LIST_LOAD, JT_LIST_TYPES, JT_LIST_TYPE_NAMES,
        JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
 int profileLoops = 1;
 
-/** Reads and parse command line */
+/**
+ * Reads and parse command line
+ */
 void init(ConsoleTools &ct, int argc, char*argv[]){
 
   fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
@@ -44,6 +48,7 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
     };
     if (argv[i][1] == 'l' && argv[i][2] == 'n') { ct.addLineNumbers(true); continue; };
     if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
+    if (argv[i][1] == 'l' && argv[i][2] == 't') { jobType = JT_LIST_TYPE_NAMES; continue; };
     if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
 
     if (argv[i][1] == 'd' && argv[i][2] == 'c') { ct.setCopyrightHeader(false); continue; };
@@ -109,12 +114,15 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
   };
 };
 
-/** Prints usage. */
+/**
+ * Prints usage
+ */
 void printError(){
   fprintf(stderr,
        "Usage: colorer -(command) (parameters)  [<filename>]\n"
        " Commands:\n"
        "  -l         Lists all available languages\n"
+       "  -lt        Lists HRC internal type names\n"
        "  -ll        Lists and loads full HRC database\n"
        "  -r         RE tests\n"
        "  -h         Generates plain coloring from <filename> (uses 'rgb' hrd class)\n"
@@ -140,8 +148,9 @@ void printError(){
 
 #include<common/MemoryChunks.h>
 
-/** Creates ConsoleTools class instance and runs it.
-*/
+/**
+ * Creates ConsoleTools class instance and runs it.
+ */
 int main(int argc, char *argv[])
 {
   ConsoleTools ct;
@@ -161,10 +170,13 @@ int main(int argc, char *argv[])
         ct.profile(profileLoops);
         break;
       case JT_LIST_LOAD:
-        ct.listTypes(true);
+        ct.listTypes(false, true);
         break;
       case JT_LIST_TYPES:
-        ct.listTypes(false);
+        ct.listTypes(false, false);
+        break;
+      case JT_LIST_TYPE_NAMES:
+        ct.listTypes(true, false);
         break;
       case JT_VIEW:
         ct.viewFile();
