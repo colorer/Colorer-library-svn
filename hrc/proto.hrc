@@ -141,7 +141,11 @@
     <location link="inet/php.hrc"/>
     <filename>/\.(php\d?|phtml|inc)$/i</filename>
     <firstline>/^&lt;\?(php)/</firstline>
-    &php-proto;
+    <parameters>
+      <param name="posix-re" value="false" description='Use eregs highlightning'/>
+      <param name="include-base-consts"   value="true" description='PHP Predefined Constants'/>
+      &php-proto;
+    </parameters>
   </prototype>
 
   <prototype name="xhtml-trans" group="inet" description="xhtml transitional" targetNamespace="http://www.w3.org/1999/xhtml">
@@ -300,17 +304,40 @@
     <filename weight='1'>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
     <firstline>/^[;\[\#]/</firstline>
   </prototype>
-  <prototype name="hrc" group="scripts" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
+
+
+  <prototype name="ent.hrc" group="scripts.colorer" description="Entities for HRC">
+    <location link="scripts/ent.hrc.hrc"/>
+    <filename>/\.ent\.hrc$/i</filename>
+  </prototype>
+  <prototype name="hrc" group="scripts.colorer" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
     <location link="scripts/hrc.hrc"/>
     <filename>/\.hrc$/i</filename>
     <parameters>
       <param name="show-cross" value="both"/>
     </parameters>
   </prototype>
-  <prototype name="hrd" group="scripts" description="Colorer HRD" targetNamespace="http://colorer.sf.net/2003/hrd">
+  <prototype name="hrd" group="scripts.colorer" description="Colorer HRD" targetNamespace="http://colorer.sf.net/2003/hrd">
     <location link="scripts/hrd.hrc"/>
     <filename>/\.hrd$/i</filename>
   </prototype>
+  <prototype name="bkt" group="scripts.colorer" description="bkt" targetNamespace="uri:bkt">
+    <location link="scripts/bkt.hrc"/>
+    <filename>/\.bkt$/i</filename>
+  </prototype>
+  <prototype name="colorer5catalog" group="scripts.colorer" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
+    <location link="scripts/colorer5catalog.hrc"/>
+    <filename>/\bcatalog\.xml$/ix</filename>
+    <firstline weight='5'>/DTD Colorer CATALOG/s</firstline>
+  </prototype>
+  <prototype name="xsd2hrc.custom" group="scripts.colorer" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
+    <location link="scripts/xsd2hrc.custom.hrc"/>
+    <filename>/custom\..*?\.xml$/ix</filename>
+    <firstline weight='5'>/uri:colorer:custom/s</firstline>
+  </prototype>
+
+
+
   <prototype name="delphiform" group="scripts" description="Delphi form">
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
@@ -322,6 +349,10 @@
   <prototype name="javaProperties" group="scripts" description="Java properties">
     <location link="scripts/javaprop.hrc"/>
     <filename>/\.pro(p(erties)?)?$/i</filename>
+  </prototype>
+  <prototype name="javapolicy" group="scripts" description="Java policy">
+    <location link="scripts/javapolicy.hrc"/>
+    <filename>/\.policy$/i</filename>
   </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>

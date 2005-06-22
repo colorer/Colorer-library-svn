@@ -5,6 +5,7 @@ $Date$
     - FAR packages fixes
   New:
     - No dependencies on php binaries when building HRC base
+    - java policy simple syntax
 
 
 Date: 2005/04/06 13:41:01
