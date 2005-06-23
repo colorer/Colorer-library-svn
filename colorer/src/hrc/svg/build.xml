@@ -26,7 +26,7 @@
  </ant>
  <exec executable="perl" output="${obj}/svg.xsd">
   <arg line='${src}/svganm.pl svgtmp.xsd'/>
- </exec> 
+ </exec>
  <delete file="svgtmp.xsd"/>
 </target>
 
@@ -48,11 +48,17 @@
   <!--property name='xsd2hrc.allow-any-attr' value='yes'/-->
   <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.svg.xml'/>
- </ant> 
+ </ant>
 </target>
 
 <!-- final -->
 
 <target name="all" depends="hrc"/>
+
+<target name="clean">
+ <delete failonerror='false'>
+  <fileset dir="${bin}" includes="svg.hrc"/>
+ </delete>
+</target>
 
 </project>

@@ -32,29 +32,29 @@
       <element name='simpleType' extract='withAttribute' description='Global simple type'/>
       <element name='annotation' extract='withAttribute' description='Annotation definition'/>
     </outline>
-    
+
     <xsd-typedefs>
     	<xs:simpleType name="xpath-type"/>
     	<xs:simpleType name="xpath-type-attr"/>
     	<xs:simpleType name="REstring"/>
     </xsd-typedefs>
-    
+
     <script-n-style>
     	<element-attributes name="selector">
-    		<xs:attribute name="xpath" type="xpath-type"/>
+    		<xs:attribute name="xpath" type="xs:xpath-type"/>
     	</element-attributes>
     	<element-attributes name="field">
-    		<xs:attribute name="xpath" type="xpath-type-attr"/>
+    		<xs:attribute name="xpath" type="xs:xpath-type-attr"/>
     	</element-attributes>
     	<element-attributes name="pattern">
-    		<xs:attribute name="value" type="REstring"/>
+    		<xs:attribute name="value" type="xs:REstring"/>
     	</element-attributes>
-    	
+
     	<attribute language="xpath" scheme-suffix="XML.Pattern" region="def:default"/>
     </script-n-style>
 
     <type xmlns="http://colorer.sf.net/2003/hrc">
-    
+
     <!-- EE begin -->
       <region name="Scheme.nsprefix" parent="xml:Attribute.nsprefix"/>
       <region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
@@ -69,16 +69,16 @@
       <region name="uri.fragment" parent="def:Constant"/>
 
       <!-- QName -->
-      
+
       <scheme name="QName-content"><!-- fix for lists... -->
-        <regexp match="/(?{}~|\s?#1)((%xml:NCName;)(\:))?(%xml:NCName;) \b/ix" 
+        <regexp match="/(?{}~|\s?#1)((%xml:NCName;)(\:))?(%xml:NCName;) \b/ix"
          region2="Scheme.nsprefix" region3="Scheme.nscolon"
          region4="Scheme.name"/>
       </scheme>
-      
-      
+
+
       <!-- xpath -->
-      
+
       <scheme name="xpath-type-content">
       	<regexp match="/[\[\]]|\.{2}/" region="def:Error"/>
       	<inherit scheme="xmlss-xpath-XML.Pattern-attr"><!-- @ deny -->
@@ -90,7 +90,7 @@
       		<virtual scheme="xpath:Pattern" subst-scheme="Pattern"/>
       	</inherit>
       </scheme>
-      
+
       <scheme name="Pattern">
       	<regexp match="/[\[\]]/" region="def:Error"/>
       	<inherit scheme="xpath:Pattern"/>
@@ -99,48 +99,48 @@
       	<regexp match="/\battribute::|\@/" region="def:Error"/>
       	<inherit scheme="Pattern"/>
       </scheme>
-      
-      
+
+
       <!-- Regexp -->
 
       <scheme name="RE-String">
        <annotation><documentation>
-        Regexp string. Using package regexp.hrc. 
+        Regexp string. Using package regexp.hrc.
        </documentation></annotation>
        <inherit scheme="regexp:xsd.regexp">
         <!--virtual scheme="regexp:code" subst-scheme="QName-content"/-->
         <virtual scheme="regexp:string" subst-scheme="xml:Reference"/>
-        <virtual scheme="regexp:xsd.regexp" subst-scheme="RE-String"/>        
+        <virtual scheme="regexp:xsd.regexp" subst-scheme="RE-String"/>
        </inherit>
       </scheme>
-      
+
       <scheme name="REstring-content">
        <inherit scheme="RE-String"/>
        <inherit scheme="string-content"/>
       </scheme>
 
-      
+
       <!-- URI -->
-      
+
       <scheme name="anyURI-content">
        <annotation><documentation><![CDATA[
          RFC 2396:
-       
+
         ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?
               12            3  4          5    6   7      8  9
-         
+
          scheme    = $2
          authority = $4
          path      = $5
          query     = $7
          fragment  = $9
-         
+
        ]]></documentation></annotation>
-       <regexp 
+       <regexp
          match="/ (([^:/?#\s]+):)? (//([^/?#\s]*))? ([^?#\s]*) (\?([^#\s]*))? (#(\S*))? /x"
          region1="uri.nscolon" region2="uri.scheme"
          region3="uri.delit" region4="uri.authority"
-         region5="uri.path"  
+         region5="uri.path"
          region6="uri.delit" region7="uri.query"
          region8="uri.delit" region9="uri.fragment"
          priority="low"
@@ -150,7 +150,7 @@
          <inherit scheme="string-content"/>
         -->
       </scheme>
-      
+
     <!-- EE end -->
 
       <scheme name="anyType-content"/>

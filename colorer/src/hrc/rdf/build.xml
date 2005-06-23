@@ -22,11 +22,11 @@
   <property name="util.input" value="${src}/rdfs.xsd"/>
   <property name="util.output" value="${bin}/rdfs.hrc"/>
   <property name='xsd2hrc.hrctype' value='rdfs'/>
-  
+
   <!--property name='xsd2hrc.allow-any-attr' value='yes'/>
   <property name='xsd2hrc.allow-unknown-elements' value='yes'/-->
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.rdf.xml'/>
- </ant> 
+ </ant>
 </target>
 
 
@@ -49,11 +49,17 @@
   <property name='xsd2hrc.allow-unknown-elements' value='yes'/-->
   <property name='xsd2hrc.allow-unknown-root-elements' value='yes'/>
   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.rdf.xml'/>
- </ant> 
+ </ant>
 </target>
 
 <!-- final -->
 
 <target name="all" depends="hrc-rdf,hrc-rdfs"/>
+
+<target name="clean">
+ <delete failonerror='false'>
+  <fileset dir="${bin}" includes="rdfs.hrc, rdf.hrc"/>
+ </delete>
+</target>
 
 </project>
