@@ -50,7 +50,7 @@
    <property name="this" value="${this}/wml"/>
    <property name="bin" value="${root}/hrc/auto/gen"/>
  </ant>
- 
+
  <ant dir="xml" antfile="build.xml" target="${target}">
    <property name="this" value="${this}/xml"/>
    <property name="bin" value="${root}/hrc/xml"/>
@@ -81,7 +81,7 @@
    <property name="this" value="${this}/sch"/>
    <property name="bin" value="${root}/hrc/auto/gen/"/>
  </ant>
- 
+
 
  <ant dir="docbook" antfile="build.xml" target="${target}">
    <property name="this" value="${this}/docbook"/>
