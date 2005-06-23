@@ -215,18 +215,18 @@
             <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (>|$) )/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "tillNext"'>
-            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{'{2,}'}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
+            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{'&#x73;2,&#x78;'}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
         </xsl:if>
-        
+
         <!-- EE: support @substitutionGroup -->
         <xsl:choose>
           <xsl:when test="@abstract = 'true'">
             <xsl:comment>
              <xsl:text>
-    Warning! One or more other elements must have "substitutionGroup" 
-     attribute, referenced to this element. 
-    If no these elements, you need manually define scheme 
+    Warning! One or more other elements must have "substitutionGroup"
+     attribute, referenced to this element.
+    If no these elements, you need manually define scheme
      "</xsl:text>
               <xsl:value-of select="@name"/>
               <xsl:text>-substitutionGroup" in your "</xsl:text>
@@ -235,7 +235,7 @@
             </xsl:comment>
             <inherit scheme="{@name}-substitutionGroup"/>
           </xsl:when>
-          
+
           <xsl:otherwise>
             <xsl:call-template name="element-call">
               <xsl:with-param name="name" select="@name"/>
@@ -245,7 +245,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        
+
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
