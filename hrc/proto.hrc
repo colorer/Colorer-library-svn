@@ -130,7 +130,7 @@
   <prototype name="svg-css" group="inet" description="css for svg">
     <location link="inet/svg-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
-  </prototype>  
+  </prototype>
 
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
@@ -227,6 +227,10 @@
   <package name="xinclude" description="xinclude" targetNamespace="http://www.w3.org/1999/xinclude">
     <location link="xml/xinclude.hrc"/>
   </package>
+  <package name="xpath" description="xpath">
+    <location link="xml/xpath.hrc"/>
+  </package>
+
 
   <prototype name="dtd" group="xml" description="dtd">
     <location link="xml/dtd.hrc"/>
