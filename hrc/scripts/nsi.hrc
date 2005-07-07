@@ -10,6 +10,9 @@
     Maintainer: Artem Zankovich (z_artem@yahoo.com)
 
 $Log$
+Revision 1.5  2005/07/07 05:36:29  lomecb
+some directives were fixed
+
 Revision 1.4  2005/02/22 09:06:30  irusskih
 home fixes 22.02
 
@@ -84,6 +87,11 @@ NSIS v1.96 upgrade
          </keywords>
          <!-- Compiler flags -->
          <keywords ignorecase="yes" region="nsiWord">
+            <word name="AllowSkipFiles"/>
+            <word name="FileBufSize"/>
+            <word name="SetCompressor"/>
+            <word name="SetCompressorDictSize"/>
+            <word name="SetPluginUnload"/>
             <word name="SetOverwrite"/>
             <word name="SetCompress"/>
             <word name="SetDatablockOptimize"/>
