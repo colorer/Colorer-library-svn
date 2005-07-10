@@ -33,7 +33,9 @@ public class BaseEditorNative implements BaseEditor {
         defPairStart = hrcParser.getRegion("def:PairStart");
         defPairEnd = hrcParser.getRegion("def:PairEnd");
         setBackParse(2000);// TODO!!!
-        Logger.trace("BaseEditor", "init");
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditor", "init");
+        }
     };
 
     
@@ -51,7 +53,9 @@ public class BaseEditorNative implements BaseEditor {
         checkActive();
         disposed = true;
         finalize(iptr);
-        Logger.trace("BaseEditor", "dispose");
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditor", "dispose");
+        }
     }
 
     protected void finalize() throws Throwable {
@@ -237,7 +241,9 @@ public class BaseEditorNative implements BaseEditor {
 
     public LineRegion[] getLineRegions(int lno) {
         checkActive();
-        Logger.trace("BaseEditorNative", "getLineRegions:"+lno);
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditorNative", "getLineRegions:"+lno);
+        }
         return getLineRegions(iptr, lno);
     }
 
@@ -256,6 +262,9 @@ public class BaseEditorNative implements BaseEditor {
         for (int idx = editorListeners.size()-1; idx >= 0; idx--) {
             ((EditorListener)editorListeners.elementAt(idx)).modifyEvent(topLine);
         }
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditorNative", "modifyEvent:"+topLine);
+        }
         modifyEvent(iptr, topLine);
     }
 
@@ -266,6 +275,9 @@ public class BaseEditorNative implements BaseEditor {
 
     public void visibleTextEvent(int wStart, int wSize) {
         checkActive();
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditorNative", "visibleTextEvent:"+wStart+":"+wSize);
+        }
         visibleTextEvent(iptr, wStart, wSize);
         this.wStart = wStart;
         this.wSize = wSize;
