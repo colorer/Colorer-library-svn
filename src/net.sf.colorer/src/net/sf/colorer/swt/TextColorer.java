@@ -405,7 +405,13 @@ public class TextColorer{
       pairsDraw(null, currentPair);
       return;
     }
-    if (text.getSelectionRange().y != 0) return;
+    if (text.getSelectionRange().y != 0) {
+        return;
+    }
+    /* do not analize pairs if cursor is out of visible area */
+    if (curLine < visibleStart || curLine > visibleEnd) {
+        return;
+    }
     if (!lineHighlighting){
       // drawing current line
       lineHighlighting = true;
@@ -454,6 +460,8 @@ public class TextColorer{
     }
     if (visibleStart < 0) visibleStart = 0;
     visibleEnd = visibleStart + text.getClientArea().height / text.getLineHeight();
+    int lc = text.getLineCount();
+    if (visibleEnd > lc) visibleEnd = lc;
     baseEditor.visibleTextEvent(visibleStart, visibleEnd-visibleStart+2);
   }
 
@@ -490,14 +498,15 @@ public class TextColorer{
   void pairsDraw(GC gc, PairMatch pm){
     if (pm == null) return;
     if (pm.start != null){
-      if (pm.sline >= text.getLineCount()) return;
+      /* Do not draw pairs if currently invisible */
+      if (pm.sline < visibleStart || pm.sline > visibleEnd) return;
       int lineOffset = text.getOffsetAtLine(pm.sline);
       pairDraw(gc, (StyledRegion)pm.start.rdef,
                     pm.start.start+lineOffset,
                     pm.start.end+lineOffset);
     }
     if (pm.end != null){
-      if (pm.eline >= text.getLineCount()) return;
+      if (pm.eline < visibleStart || pm.eline > visibleEnd) return;
       int lineOffset = text.getOffsetAtLine(pm.eline);
       pairDraw(gc, (StyledRegion)pm.end.rdef,
                     pm.end.start+lineOffset,
@@ -539,8 +548,13 @@ public class TextColorer{
 
     public void lineGetStyle(LineStyleEvent e){
       int lno = text.getLineAtOffset(e.lineOffset);
-      //int caret = text.getCaretOffset();
+
       updateViewport();
+      if (lno < visibleStart || lno > visibleEnd+1) {
+          e.styles = null;
+          return;
+      }
+
       LineRegion[] lrarr = baseEditor.getLineRegions(lno);
       Vector styles = new Vector();
       for(int idx = 0;idx < lrarr.length; idx++){
