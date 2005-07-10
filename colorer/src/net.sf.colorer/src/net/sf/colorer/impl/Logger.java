@@ -9,9 +9,9 @@ public class Logger {
 
     public final static boolean FILTER = false;
 
-    public final static boolean TRACE = true;
+    public final static boolean TRACE = false;
     
-    public final static boolean ERROR = true; 
+    public final static boolean ERROR = false; 
     
     public static void trace(String comp, Object msg) {
         trace(comp, msg, null);
