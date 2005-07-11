@@ -49,7 +49,6 @@ public class ColorerPlugin extends AbstractUIPlugin {
         Logger.trace("Plugin", "Loaded");
     
         IPreferenceStore store = getPreferenceStore();
-        store.setDefault(PreferencePage.TEXT_FONT, "");
         store.setDefault(PreferencePage.SPACES_FOR_TABS, false);
         store.setDefault(PreferencePage.WORD_WRAP, false);
         store.setDefault(PreferencePage.TAB_WIDTH, 4);

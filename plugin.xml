@@ -79,89 +79,102 @@
    </extension>
    
 <!-- Editor Commands  -->
+<!--   NOTE:
+M1 = CTRL/COMMAND 
+M2 = SHIFT 
+M3 = ALT 
+M4 = Platform-specific fourth key -->
    <extension
          point="org.eclipse.ui.commands">
-      <activeKeyConfiguration
-            value="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </activeKeyConfiguration>
       <category
             name="%commands.category.name"
             description="%commands.category.description"
             id="net.sf.colorer.eclipse.category">
       </category>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Reload HRC base"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.hrcupdate">
       </command>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Choose language"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.choosetype">
       </command>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Match Paired Structure"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairmatch">
       </command>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Select Pair"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairselect">
       </command>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Select Pair&apos;s Content"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.pairselectcontent">
       </command>
       <command
-      category="net.sf.colorer.eclipse.category"
+            categoryId="net.sf.colorer.eclipse.category"
             name="Select Color Region"
             description="%commands"
             id="net.sf.colorer.eclipse.editors.selectregion">
       </command>
+   </extension>
 
-      <keyBinding
-            string="Ctrl+R"
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.hrcupdate"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      <keyBinding
-            string=""
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.choosetype"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      <keyBinding
-            string="Alt+["
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.pairmatch"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      <keyBinding
-            string="Alt+]"
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.pairselect"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      <keyBinding
-            string="Alt+}"
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.pairselectcontent"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      <keyBinding
-            string="Alt+&apos;"
-            scope="org.eclipse.ui.textEditorScope"
-            command="net.sf.colorer.eclipse.editors.selectregion"
-            configuration="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
+   <extension point="org.eclipse.ui.contexts">
+       <context
+          name="EclipseColorer editors"
+          description="EclipseColorer editors"
+          parentId="org.eclipse.ui.textEditorScope"
+          id="net.sf.colorer.eclipse.ColorerScope">
+       </context>
+   </extension>
+
+   <extension point="org.eclipse.ui.bindings">
+      <key
+          sequence="M1+R"
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.hrcupdate"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+          sequence=""
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.choosetype"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+          sequence="M3+["
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.pairmatch"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+          sequence="M3+]"
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.pairselect"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+          sequence="M3+}"
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.pairselectcontent"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+          sequence="M3+&apos;"
+          contextId="net.sf.colorer.eclipse.ColorerScope"
+          commandId="net.sf.colorer.eclipse.editors.selectregion"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
 
    </extension>
 
@@ -187,6 +200,21 @@
                id="net.sf.colorer.eclipse.HTMLGeneratorAction">
          </action>
       </objectContribution>
+   </extension>
+
+
+   <extension
+         point="org.eclipse.ui.themes">
+        <themeElementCategory label="%colorerPresentation.label" id="net.sf.colorer.eclipse.presentation"/>
+      <fontDefinition
+            label="%colorerEditorFontDefiniton.label"
+            defaultsTo="org.eclipse.jface.textfont"
+            categoryId="net.sf.colorer.eclipse.presentation"
+            id="net.sf.colorer.eclipse.presentation.textfont">
+         <description>
+            %colorerEditorFontDefintion.description
+         </description>
+      </fontDefinition>
    </extension>
 
 <!-- Eclipse Help Topic

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: net.sf.colorer; singleton=true
 Bundle-Name: Eclipse Colorer
-Bundle-Version: 0.7.0
+Bundle-Version: 0.8.0
 Bundle-ClassPath: colorer.jar
 Bundle-Activator: net.sf.colorer.eclipse.ColorerPlugin
 Bundle-Localization: plugin
