@@ -15,3 +15,7 @@ FileTypePreferenceTitle=“ипы файлов
 
 HTMLGenerator=√енератор HTML
 GenerateHTML=—геренировать HTML
+
+colorerPresentation.label=EclipseColorer
+colorerEditorFontDefiniton.label=Ўрифт текста в редакторе Colorer
+colorerEditorFontDefintion.description=Ўрифт текста, который будет использован в редакторе Colorer

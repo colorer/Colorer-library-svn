@@ -25,11 +25,15 @@ public class ColorerActionContributor extends TextEditorActionContributor
 {
     ColorerEditor activeEditor = null;
 
-    UpdateAction hrcupdateAction;
-    FileTypeActionMenu filetypeAction;
     public PairMatchAction pairMatchAction;
     public PairSelectAction pairSelectAction;
     public PairSelectContentAction pairSelectContentAction;
+
+    public Action cursorRegionAction = new Action() {
+        public void run(){
+            activeEditor.selectCursorRegion();
+        }
+    };
 
     class PairMatchAction extends Action {
 
@@ -70,19 +74,15 @@ public class ColorerActionContributor extends TextEditorActionContributor
         }
     }
 
-    class UpdateAction extends Action {
-
-        public UpdateAction(String label) {
-            super(label);
-        }
-
+    Action hrcupdateAction = new Action() {
         public void run() {
             if (activeEditor != null && activeEditor instanceof ColorerEditor) {
                 ColorerPlugin.getDefault().reloadParserFactory();
             }
         }
-    }
+    };
 
+    FileTypeActionMenu filetypeAction;
     class FileTypeActionMenu extends Action implements IMenuCreator{
 
       class FileTypeAction extends Action {
@@ -176,7 +176,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
     public ColorerActionContributor() {
 
-        hrcupdateAction = new UpdateAction(Messages.get("editor.hrcupdate"));
+        hrcupdateAction.setText(Messages.get("editor.hrcupdate"));
         hrcupdateAction.setToolTipText(Messages.get("editor.hrcupdate.tooltip"));
         hrcupdateAction.setImageDescriptor(ImageStore.EDITOR_UPDATEHRC);
         hrcupdateAction.setHoverImageDescriptor(ImageStore.EDITOR_UPDATEHRC_A);
@@ -191,6 +191,8 @@ public class ColorerActionContributor extends TextEditorActionContributor
         pairMatchAction = new PairMatchAction();
         pairSelectAction = new PairSelectAction();
         pairSelectContentAction = new PairSelectContentAction();
+
+        cursorRegionAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.selectregion");       
     }
 
     public void contributeToToolBar(IToolBarManager toolBarManager) {
@@ -222,6 +224,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
         kbs.registerAction(pairMatchAction);
         kbs.registerAction(pairSelectAction);
         kbs.registerAction(pairSelectContentAction);
+        kbs.registerAction(cursorRegionAction);
     }
 
 }
