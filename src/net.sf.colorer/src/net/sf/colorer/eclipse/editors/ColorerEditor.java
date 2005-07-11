@@ -13,12 +13,11 @@ import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
-
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -29,7 +28,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
@@ -43,7 +41,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     IPreferenceStore prefStore;
     TextColorer textColorer;
     StyledText text;
-    Font textFont;
 
     ColorerContentOutlinePage contentOutliner;
 
@@ -67,14 +64,14 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
             if (el instanceof OutlineSchemeElement) {
                 OutlineSchemeElement sel = (OutlineSchemeElement)el;
                 int selstart = text.getOffsetAtLine(sel.lno)+sel.pos;
-                int selsize = text.getOffsetAtLine(sel.l2no) + sel.pos2 - selstart;
-                if (sel.l2no == 0 && sel.pos2 == 0 || selsize <= 0){
-                    selsize = 0;
+                int selength = text.getOffsetAtLine(sel.l2no) + sel.pos2 - selstart;
+                if (sel.l2no == 0 && sel.pos2 == 0 || selength <= 0){
+                    selength = 0;
                 }
                 if (Logger.TRACE){
-                    Logger.trace("ColorerEditor", "doubleClick:"+sel.lno+":"+sel.pos+" - " +sel.l2no+":"+sel.pos2+" = "+selstart+"-"+selsize);
+                    Logger.trace("ColorerEditor", "doubleClick:"+sel.lno+":"+sel.pos+" - " +sel.l2no+":"+sel.pos2+" = "+selstart+"-"+selength);
                 }
-                text.setSelectionRange(selstart, selsize);
+                text.setSelectionRange(selstart, selength);
             }else{
                 text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.length);
             }
@@ -87,8 +84,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
       super();
       ColorerPlugin.getDefault().addReloadListener(this);
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-      prefStore.addPropertyChangeListener(this);
-      
+
       setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
       
       contentOutliner = new ColorerContentOutlinePage();
@@ -98,7 +94,18 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     public void createPartControl(Composite parent){
         super.createPartControl(parent);
         text = getSourceViewer().getTextWidget();
+        
+        prefStore.addPropertyChangeListener(this);
+        JFaceResources.getFontRegistry().addListener(this);
+        
         relinkColorer();
+    }
+
+    
+    protected void initializeKeyBindingScopes(){
+        setKeyBindingScopes(new String[] {
+            "net.sf.colorer.eclipse.ColorerScope"
+        });
     }
 
     /**
@@ -183,16 +190,11 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         super.editorContextMenuAboutToShow(parentMenu);
         if (!textColorer.pairAvailable())
             return;
-        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite()
-                .getActionBarContributor();
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO,
-                ec.pairMatchAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO,
-                ec.pairSelectAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO,
-                ec.pairSelectContentAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO,
-                new Separator());
+        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite().getActionBarContributor();
+        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairMatchAction);
+        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectAction);
+        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
+        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
     }
 
     public void notifyReload() {
@@ -205,25 +207,32 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     public void propertyChange(PropertyChangeEvent e) {
         if (textColorer == null)
             return;
-        if (e == null || e.getProperty().equals(PreferencePage.USE_BACK)
-                || e.getProperty().equals(PreferencePage.HRD_SET))
-            textColorer.setRegionMapper(prefStore
-                    .getString(PreferencePage.HRD_SET), prefStore
-                    .getBoolean(PreferencePage.USE_BACK));
-        if (e == null || e.getProperty().equals(PreferencePage.FULL_BACK))
-            textColorer.setFullBackground(prefStore
-                    .getBoolean(PreferencePage.FULL_BACK));
-        if (e == null || e.getProperty().equals(PreferencePage.HORZ_CROSS)
-                || e.getProperty().equals(PreferencePage.VERT_CROSS))
-            textColorer.setCross(prefStore
-                    .getBoolean(PreferencePage.HORZ_CROSS), prefStore
-                    .getBoolean(PreferencePage.VERT_CROSS));
+        if (e == null || e.getProperty().equals(PreferencePage.USE_BACK) ||
+            e.getProperty().equals(PreferencePage.HRD_SET))
+        {
+            textColorer.setRegionMapper(
+                    prefStore.getString(PreferencePage.HRD_SET),
+                    prefStore.getBoolean(PreferencePage.USE_BACK));
+        }
+        if (e == null || e.getProperty().equals(PreferencePage.FULL_BACK)){
+            textColorer.setFullBackground(prefStore.getBoolean(PreferencePage.FULL_BACK));
+        }
+        if (e == null || e.getProperty().equals(PreferencePage.HORZ_CROSS) ||
+            e.getProperty().equals(PreferencePage.VERT_CROSS))
+        {
+            textColorer.setCross(
+                    prefStore.getBoolean(PreferencePage.HORZ_CROSS),
+                    prefStore.getBoolean(PreferencePage.VERT_CROSS));
+        }
 
         if (e == null || e.getProperty().equals(PreferencePage.WORD_WRAP))
+        {
             text.setWordWrap(prefStore.getBoolean(PreferencePage.WORD_WRAP));
+        }
         if (e == null || e.getProperty().equals(PreferencePage.TAB_WIDTH))
-            if (text.getTabs() != prefStore.getInt(PreferencePage.TAB_WIDTH))
+            if (text.getTabs() != prefStore.getInt(PreferencePage.TAB_WIDTH)){
                 text.setTabs(prefStore.getInt(PreferencePage.TAB_WIDTH));
+            }
 
         if (e == null || e.getProperty().equals(PreferencePage.SPACES_FOR_TABS)) {
             if (prefStore.getBoolean(PreferencePage.SPACES_FOR_TABS))
@@ -242,15 +251,8 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
             textColorer.setPairsPainter(!pairs.equals("PAIRS_NO"), pmode);
         }
 
-        if (e == null || e.getProperty().equals(PreferencePage.TEXT_FONT)
-                && prefStore.contains(PreferencePage.TEXT_FONT)
-                && !prefStore.isDefault(PreferencePage.TEXT_FONT)) {
-            FontData data = null;
-            data = PreferenceConverter.getFontData(prefStore,
-                    PreferencePage.TEXT_FONT);
-            if (textFont != null)
-                textFont.dispose();
-            textFont = new Font(text.getDisplay(), data);
+        if (e == null || e.getProperty().equals(PreferencePage.TEXT_FONT)){
+            Font textFont = JFaceResources.getFont(PreferencePage.TEXT_FONT);
             text.setFont(textFont);
         }
     }
@@ -266,12 +268,23 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     }
 
     public void dispose() {
-        prefStore.removePropertyChangeListener(this);
-        ColorerPlugin.getDefault().removeReloadListener(this);
-        if (textFont != null) {
-            textFont.dispose();
-        }
         super.dispose();
+        prefStore.removePropertyChangeListener(this);
+        JFaceResources.getFontRegistry().removeListener(this);
+        ColorerPlugin.getDefault().removeReloadListener(this);
+    }
+
+    public void selectCursorRegion() {
+        LineRegion lr = textColorer.getCaretRegion();
+        if (lr == null) return;
+        
+        int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
+        int selstart = loffset+lr.start;
+        int selend = lr.end-lr.start;
+        if (lr.end == -1){
+            selend = 0;
+        }
+        text.setSelectionRange(selstart, selend);
     }
 
 }

@@ -7,7 +7,6 @@ import net.sf.colorer.ParserFactory;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.SWT;
@@ -17,86 +16,89 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage
-    implements IWorkbenchPreferencePage{
+public class PreferencePage extends FieldEditorPreferencePage implements
+        IWorkbenchPreferencePage {
 
-  public final static String TEXT_FONT = "TEXT_FONT";
-  public final static String SPACES_FOR_TABS = "SPACES_FOR_TABS";
-  public final static String TAB_WIDTH = "TAB_WIDTH";
-  public final static String WORD_WRAP = "WORD_WRAP";
-  public final static String FULL_BACK = "FULL_BACK";
-  public final static String VERT_CROSS = "VERT_CROSS";
-  public final static String HORZ_CROSS = "HORZ_CROSS";
-  public final static String HRD_SET = "HRD_SET";
-  public final static String USE_BACK = "USE_BACK";
-  public final static String PAIRS_MATCH = "PAIRS_MATCH";
+    public final static String TEXT_FONT = "net.sf.colorer.eclipse.presentation.textfont";
+    public final static String SPACES_FOR_TABS = "SPACES_FOR_TABS";
+    public final static String TAB_WIDTH = "TAB_WIDTH";
+    public final static String WORD_WRAP = "WORD_WRAP";
+    public final static String FULL_BACK = "FULL_BACK";
+    public final static String VERT_CROSS = "VERT_CROSS";
+    public final static String HORZ_CROSS = "HORZ_CROSS";
+    public final static String HRD_SET = "HRD_SET";
+    public final static String USE_BACK = "USE_BACK";
+    public final static String PAIRS_MATCH = "PAIRS_MATCH";
 
-  Combo hrdSets;
-  Vector hrdSetsList;
-  
-  public PreferencePage(){
-    super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
-    setPreferenceStore(ColorerPlugin.getDefault().getPreferenceStore());
-  }
+    Combo hrdSets;
+    Vector hrdSetsList;
 
-  public void init(IWorkbench iworkbench){}
+    public PreferencePage() {
+        super(Messages.get("prefs.title"), FieldEditorPreferencePage.GRID);
+        setPreferenceStore(ColorerPlugin.getDefault().getPreferenceStore());
+    }
+
+    public void init(IWorkbench iworkbench) {
+    }
 
     public boolean performOk() {
         if (hrdSetsList != null) {
-            getPreferenceStore().setValue(HRD_SET, (String)hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
+            getPreferenceStore().setValue(HRD_SET, (String) hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
         }
         super.performOk();
         return true;
     }
+
     protected void performApply() {
         if (hrdSetsList != null) {
-            getPreferenceStore().setValue(HRD_SET, (String)hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
+            getPreferenceStore().setValue(HRD_SET, (String) hrdSetsList.elementAt(hrdSets.getSelectionIndex()));
         }
         super.performApply();
     }
 
-  public void createFieldEditors(){
-    Composite p = getFieldEditorParent();
-    
-    addField(new FontFieldEditor(TEXT_FONT, Messages.get(TEXT_FONT), p));
-    addField(new BooleanFieldEditor(SPACES_FOR_TABS, Messages.get(SPACES_FOR_TABS), p));
-    IntegerFieldEditor tabsnum = new IntegerFieldEditor(TAB_WIDTH, Messages.get(TAB_WIDTH), p);
-    tabsnum.setValidRange(1, 16);
-    addField(tabsnum);
-    addField(new BooleanFieldEditor(WORD_WRAP, Messages.get(WORD_WRAP), p));
+    public void createFieldEditors() {
+        Composite p = getFieldEditorParent();
 
-    addField(new BooleanFieldEditor(FULL_BACK, Messages.get(FULL_BACK), p));
-    addField(new BooleanFieldEditor(HORZ_CROSS, Messages.get(HORZ_CROSS), p));
-    //addField(new BooleanFieldEditor(VERT_CROSS, Messages.get(VERT_CROSS), p));
-    
-    String[][] arrPairs = new String[4][2];
-    arrPairs[0][0] = Messages.get("PAIRS_NO");
-    arrPairs[0][1] = "PAIRS_NO";
-    arrPairs[1][0] = Messages.get("PAIRS_XOR");
-    arrPairs[1][1] = "PAIRS_XOR";
-    arrPairs[2][0] = Messages.get("PAIRS_OUTLINE");
-    arrPairs[2][1] = "PAIRS_OUTLINE";
-    arrPairs[3][0] = Messages.get("PAIRS_OUTLINE2");
-    arrPairs[3][1] = "PAIRS_OUTLINE2";
-    addField(new RadioGroupFieldEditor(PAIRS_MATCH,
-             Messages.get(PAIRS_MATCH), 1, arrPairs, p));
-    
-    new Label(p, 0).setText(Messages.get(HRD_SET));
-    
-    ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
-    hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
-    hrdSetsList = new Vector();
-    for(Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds.hasMoreElements();){
-      String hrd_name = (String)hrds.nextElement();
-      String hrd_descr = pf.getHRDescription("rgb", hrd_name);
-      hrdSets.add(hrd_descr);
-      hrdSetsList.add(hrd_name);
-      if (getPreferenceStore().getString(HRD_SET).equals(hrd_name)) {
-          hrdSets.select(hrdSets.getItemCount()-1);
-      }
+        addField(new BooleanFieldEditor(SPACES_FOR_TABS, Messages
+                .get(SPACES_FOR_TABS), p));
+        IntegerFieldEditor tabsnum = new IntegerFieldEditor(TAB_WIDTH, Messages
+                .get(TAB_WIDTH), p);
+        tabsnum.setValidRange(1, 16);
+        addField(tabsnum);
+        addField(new BooleanFieldEditor(WORD_WRAP, Messages.get(WORD_WRAP), p));
+
+        addField(new BooleanFieldEditor(FULL_BACK, Messages.get(FULL_BACK), p));
+        addField(new BooleanFieldEditor(HORZ_CROSS, Messages.get(HORZ_CROSS), p));
+
+        String[][] arrPairs = new String[4][2];
+        arrPairs[0][0] = Messages.get("PAIRS_NO");
+        arrPairs[0][1] = "PAIRS_NO";
+        arrPairs[1][0] = Messages.get("PAIRS_XOR");
+        arrPairs[1][1] = "PAIRS_XOR";
+        arrPairs[2][0] = Messages.get("PAIRS_OUTLINE");
+        arrPairs[2][1] = "PAIRS_OUTLINE";
+        arrPairs[3][0] = Messages.get("PAIRS_OUTLINE2");
+        arrPairs[3][1] = "PAIRS_OUTLINE2";
+        addField(new RadioGroupFieldEditor(PAIRS_MATCH, Messages
+                .get(PAIRS_MATCH), 1, arrPairs, p));
+
+        new Label(p, 0).setText(Messages.get(HRD_SET));
+
+        ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+        hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
+        hrdSetsList = new Vector();
+        for (Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds
+                .hasMoreElements();) {
+            String hrd_name = (String) hrds.nextElement();
+            String hrd_descr = pf.getHRDescription("rgb", hrd_name);
+            hrdSets.add(hrd_descr);
+            hrdSetsList.add(hrd_name);
+            if (getPreferenceStore().getString(HRD_SET).equals(hrd_name)) {
+                hrdSets.select(hrdSets.getItemCount() - 1);
+            }
+        }
+        addField(new BooleanFieldEditor(USE_BACK, Messages.get(USE_BACK), p));
     }
-    addField(new BooleanFieldEditor(USE_BACK, Messages.get(USE_BACK), p));
-  }
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -115,7 +117,7 @@ public class PreferencePage extends FieldEditorPreferencePage
  *
  * The Initial Developer of the Original Code is
  * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
