@@ -227,8 +227,11 @@
   <package name="xinclude" description="xinclude" targetNamespace="http://www.w3.org/1999/xinclude">
     <location link="xml/xinclude.hrc"/>
   </package>
-  <package name="xpath" description="xpath">
+  <package name="xpath" description="xpath 1.0">
     <location link="xml/xpath.hrc"/>
+  </package>
+  <package name="xpath2" description="xpath 2.0">
+    <location link="xml/xpath2.hrc"/>
   </package>
 
 
@@ -236,18 +239,25 @@
     <location link="xml/dtd.hrc"/>
     <filename>/\.(dtd|ent|mod)$/i</filename>
   </prototype>
+
   <prototype name="xslt" group="xml" description="xslt 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="xml/xslt.hrc"/>
     <filename>/\.(xslt?)$/i</filename>
     <firstline>/ xsl:stylesheet /x</firstline>
     <firstline>/ XSL\/Transform /x</firstline>
   </prototype>
-<!--
+  <!-- targetNamespace duplicate. It's not good... -->
   <prototype name="xslt2" group="xml" description="xslt 2.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="xml/xslt2.hrc"/>
     <filename>/\.(xslt?2?)$/i</filename>
+    <firstline weight="3">/\b(stylesheet|transform)\s+ .* \bversion\s*=\s*([&quot;&apos;])2\.0\2 /sx</firstline>
   </prototype>
--->
+  <prototype name="xquery" group="xml" description="xquery 1.0"> 
+    <location link="xml/xquery.hrc"/>
+    <filename>/\.(xq)$/i</filename>
+    <firstline weight="2">/^\s*xquery\s+version\b/x</firstline>
+  </prototype>
+
   <prototype name="xmlschema" group="xml" description="XML Schema" targetNamespace="http://www.w3.org/2001/XMLSchema">
     <location link="xml/xmlschema.hrc"/>
     <filename>/\.(xsd?)$/i</filename>
