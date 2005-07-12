@@ -19,14 +19,27 @@
 18: 
 19: 
 20: <span style='color:#800000; font-weight:bold; '>var</span> $1
-21:  <span style='color:#0000e6; '>"tra"</span>
+21:  <span style='color:#800000; '>"</span><span style='color:#0000e6; '>tra</span><span style='color:#800000; '>"</span>
 22: 
 23: $'
 24: 
 25: str<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'string'</span><span style='color:#800080; '>;</span>
-26: str<span style='color:#808030; '>=</span>str<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>replace</span><span style='color:#808030; '>(</span><span style='color:#800000; '>/</span><span style='color:#0f69ff; '>\/</span><span style='color:#800000; '>/</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"</span><span style='color:#0f69ff; '>\\</span><span style='color:#0000e6; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
-27:                <span style='color:#0000e6; '>"asdf</span><span style='color:#0f69ff; '>\"</span><span style='color:#0000e6; '>asdf</span><span style='color:#0f69ff; '>\\</span><span style='color:#0000e6; '>"</span>
-28: aa <span style='color:#808030; '>=</span> aa <span style='color:#800000; '>/</span><span style='color:#0000e6; '> 23 </span><span style='color:#800000; '>/</span><span style='color:#800080; '>;</span>
+26: str<span style='color:#808030; '>=</span>str<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>replace</span><span style='color:#808030; '>(</span><span style='color:#800000; '>/</span><span style='color:#0f69ff; '>\/</span><span style='color:#800000; '>/</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0f69ff; '>\\</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+27:                <span style='color:#800000; '>"</span><span style='color:#0000e6; '>asdf</span><span style='color:#0f69ff; '>\"</span><span style='color:#0000e6; '>asdf</span><span style='color:#0f69ff; '>\\</span><span style='color:#800000; '>"</span>
+28: aa <span style='color:#808030; '>=</span> aa <span style='color:#808030; '>/</span> <span style='color:#008c00; '>23</span> <span style='color:#808030; '>/</span><span style='color:#800080; '>;</span>
 29: 
 30: m<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'Begin</span><span style='color:#0f69ff; '>\'</span><span style='color:#0000e6; '>s'</span><span style='color:#800080; '>;</span>
 31: 
+32: <span style='color:#800000; font-weight:bold; '>var</span> a <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>/</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>// correct</span>
+33: 
+34: <span style='color:#800000; font-weight:bold; '>var</span> b <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span> <span style='color:#808030; '>/</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>// incorrect</span>
+35: 
+36: 
+37: 
+38: Also <span style='color:#800000; font-weight:bold; '>with</span> the following<span style='color:#800080; '>:</span>
+39: 
+40: <span style='color:#800000; font-weight:bold; '>var</span> a <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+41: a<span style='color:#808030; '>/=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>// correct</span>
+42: a <span style='color:#808030; '>/=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>// incorrect</span>
+43: 
+44: 
