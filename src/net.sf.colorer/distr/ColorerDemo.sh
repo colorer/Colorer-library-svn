@@ -7,7 +7,8 @@
 # in %HOME%/.colorer5catalog  file.
 
 ECLIPSE_HOME=/usr/share/eclipse
-ECLIPSE_VERSION=2.1.0
+ECLIPSE_VERSION=3.0.1
+
 # Requires inclusion of additional jars:
 ECLIPSE_TOOLKIT=gtk
 #ECLIPSE_TOOLKIT=motif 

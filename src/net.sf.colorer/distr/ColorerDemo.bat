@@ -7,8 +7,8 @@ rem in %HOME%/.colorer5catalog  file.
 
 set ECLIPSEHOME=../..
 
-rem set ECLIPSEVER=2.1.0
-set ECLIPSEVER=2.0.2
+rem set ECLIPSEVER=3.1.0
+set ECLIPSEVER=3.0.1
 
 set SWT_JAR=%ECLIPSEHOME%\plugins\org.eclipse.swt.win32_%ECLIPSEVER%\ws\win32\swt.jar
 set SWT_LIB=%ECLIPSEHOME%\plugins\org.eclipse.swt.win32_%ECLIPSEVER%\os\win32\x86
