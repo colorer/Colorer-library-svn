@@ -6,7 +6,7 @@
 
 $colorer  = 'D:/projects/colorer/bin/colorer.exe';
 
-$diff  = 'diff -U 1 -b';
+$diff  = 'diff -U 1 -bB';
 
 #%modes = (
 #  full  =>   ".",

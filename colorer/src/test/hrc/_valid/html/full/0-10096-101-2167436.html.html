@@ -26,7 +26,7 @@
  25:   <span style='color:#696969; '>// Bizarre logic because JavaScript won't behave</span>
  26:   idl <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>
  27:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>location<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>search</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span> <span style='color:#696969; '>// for NN2</span>
- 28:     idl <span style='color:#808030; '>=</span> <span style='color:#808030; '>-</span>location<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>search</span><span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>indexOf</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"idl=n"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 28:     idl <span style='color:#808030; '>=</span> <span style='color:#808030; '>-</span>location<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>search</span><span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>indexOf</span><span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>idl=n</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
  29:   <span style='color:#800080; '>}</span>
  30:   <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>idl <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  31:     window<span style='color:#808030; '>.</span>location <span style='color:#808030; '>=</span> newlocation<span style='color:#800080; '>;</span>
@@ -37,7 +37,7 @@
  36:     blurFlag <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
  37:     popWinFlag <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
  38: 
- 39:     window<span style='color:#808030; '>.</span>name<span style='color:#808030; '>=</span><span style='color:#0000e6; '>"mainWin"</span><span style='color:#800080; '>;</span>
+ 39:     window<span style='color:#808030; '>.</span>name<span style='color:#808030; '>=</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>mainWin</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
  40: 
  41:     <span style='color:#800000; font-weight:bold; '>function</span> initFocus<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  42:         self<span style='color:#808030; '>.</span>focus<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
@@ -66,7 +66,7 @@
  65:         <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>popWinFlag <span style='color:#808030; '>==</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  66:             newWin<span style='color:#808030; '>=</span>window<span style='color:#808030; '>.</span>open<span style='color:#808030; '>(</span><span style='color:#0000e6; '>'/downloads/0-10096-109-2167436.html?tag=st.dl.10096.'</span><span style='color:#808030; '>,</span><span style='color:#0000e6; '>'postpopWin'</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>'toolbar=no,width=170,height=400,location=no,status=no,scrollbars=yes,resize=yes,menubar=yes'</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
  67: 
- 68:             <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span> <span style='color:#808030; '>(</span>navigator<span style='color:#808030; '>.</span>appName <span style='color:#808030; '>!=</span> <span style='color:#0000e6; '>"Microsoft Internet Explorer"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;&amp;</span> <span style='color:#808030; '>(</span>navigator<span style='color:#808030; '>.</span>appVersion<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>substring</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>==</span> <span style='color:#0000e6; '>"3"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
+ 68:             <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span> <span style='color:#808030; '>(</span>navigator<span style='color:#808030; '>.</span>appName <span style='color:#808030; '>!=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Microsoft Internet Explorer</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;&amp;</span> <span style='color:#808030; '>(</span>navigator<span style='color:#808030; '>.</span>appVersion<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>substring</span><span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>==</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>3</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  69:                 newWin<span style='color:#808030; '>.</span>focus<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
  70:             <span style='color:#800080; '>}</span>
  71: 
@@ -76,7 +76,7 @@
  75: 
  76:     window<span style='color:#808030; '>.</span>onload <span style='color:#808030; '>=</span> initFocus<span style='color:#800080; '>;</span>
  77: 
- 78:     window<span style='color:#808030; '>.</span>setTimeout<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"timeFlag=1; checkFlags();"</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>90000</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+ 78:     window<span style='color:#808030; '>.</span>setTimeout<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>timeFlag=1; checkFlags();</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>90000</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
  79: 
  80:     window<span style='color:#808030; '>.</span>onblur <span style='color:#808030; '>=</span> waitForFocus<span style='color:#800080; '>;</span>
  81: 
@@ -264,11 +264,11 @@
 263: 
 264:     <span style='color:#800000; font-weight:bold; '>function</span> validateForm<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
 265: 
-266:         <span style='color:#800000; font-weight:bold; '>var</span> emailexpr <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RegExp<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"^[A-Za-z_0-9.-]+@[A-Za-z_0-9.-]+.[a-zA-Z]{2,3}$"</span><span style='color:#808030; '>)</span>
+266:         <span style='color:#800000; font-weight:bold; '>var</span> emailexpr <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RegExp<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>^[A-Za-z_0-9.-]+@[A-Za-z_0-9.-]+.[a-zA-Z]{2,3}$</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span>
 267:         <span style='color:#800000; font-weight:bold; '>var</span> emailStr <span style='color:#808030; '>=</span> document<span style='color:#808030; '>.</span>download_form<span style='color:#808030; '>.</span>EmailAddr<span style='color:#808030; '>.</span>value
 268: 
 269:         <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>emailStr<span style='color:#808030; '>.</span><span style='color:#800000; font-weight:bold; '>match</span><span style='color:#808030; '>(</span>emailexpr<span style='color:#808030; '>)</span><span style='color:#808030; '>==</span><span style='color:#0f4d75; '>null</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
-270:             alert<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Invalid email address!"</span><span style='color:#808030; '>)</span>
+270:             alert<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Invalid email address!</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span>
 271:             <span style='color:#800000; font-weight:bold; '>return</span> <span style='color:#0f4d75; '>false</span>
 272:         <span style='color:#800080; '>}</span>
 273: 
@@ -342,7 +342,7 @@
 341: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>p</span><span style='color:#a65700; '>></span>
 342: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>script</span><span style='color:#a65700; '>></span>
 343: 
-344: <span style='color:#800000; font-weight:bold; '>var</span> backupURL <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"http://www.ranvik.net/totalcopy/tc11.zip"</span><span style='color:#800080; '>;</span>
+344: <span style='color:#800000; font-weight:bold; '>var</span> backupURL <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>http://www.ranvik.net/totalcopy/tc11.zip</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
 345: 
 346: 
 347: 
