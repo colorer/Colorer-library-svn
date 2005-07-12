@@ -36,11 +36,13 @@
       </xsl:message>
     </xsl:if>
 
+    <xsl:variable name="nsMap" select="($catalog/hrc:hrc/hrc:prototype | $catalog/hrc:hrc/hrc:package)[@targetNamespace = $nsURI]"/>
+
     <xsl:choose>
       <xsl:when test="$targetNamespace = $nsURI or starts-with($qname, $anonymous)">
       </xsl:when>
-      <xsl:when test="$catalog/hrc:hrc/hrc:prototype[@targetNamespace = $nsURI]">
-        <xsl:value-of select="$catalog/hrc:hrc/hrc:prototype[@targetNamespace = $nsURI]/@name"/>
+      <xsl:when test="$nsMap">
+        <xsl:value-of select="$nsMap/@name"/>
         <xsl:text>:</xsl:text>
       </xsl:when>
       <xsl:when test="$prefix">
@@ -67,12 +69,12 @@
       <xsl:attribute name="name">
         <xsl:value-of select="$name"/>
         <xsl:if test="$custom-type-schemes/self::hrc:scheme[@name = $name]">-old</xsl:if>
-        
+
         <!-- EE: support xmlss. Eliminate redefined elements -->
         <xsl:for-each select="$custom-type/c:script-n-style/c:element">
          <xsl:if test="$name = concat(@name, '-element')">-old-xmlss</xsl:if>
         </xsl:for-each>
-      
+
       </xsl:attribute>
       <xsl:copy-of select="$content"/>
 
