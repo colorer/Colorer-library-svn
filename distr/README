@@ -1,7 +1,7 @@
 
   This archive contains Java Edition of the Colorer-take5 library.
 
-  It includes Java interfaces to the Library and an experimental
+  It includes Java interfaces to the Library and a
   plugin for the Eclipse platform
     http://www.eclipse.org
 
@@ -14,8 +14,7 @@
   compiled for win32, Linux(x86) and MacOS platforms.
 
   For Linux issues, read LINUX file.
-  To compile Colorer-take5 library to use with MacOSX systems,
-  read MACOS file.
+  For MacOs issues see MACOS file.
 
   If you are using Colorer with other tools/applications (and have
   your own HRC base), you can specify path to the 'catalog.xml' file
@@ -38,4 +37,4 @@
 
 
   Thanks for using Colorer,
-    Igor Russkih <cail@nm.ru>
+    Igor Russkih <irusskih at gmail.com>
