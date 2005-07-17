@@ -38,3 +38,6 @@
     New token generator in ConsoleTools.cpp
     Problems with overlapping regions should be resolved still
 
+  BRANCH-EFREMOV-BASE
+    Main Eugene Efremov's branch.
+    
