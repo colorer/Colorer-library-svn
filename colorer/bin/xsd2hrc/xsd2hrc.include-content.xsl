@@ -215,7 +215,7 @@
             <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (>|$) )/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "tillNext"'>
-            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{'&#x73;2,&#x78;'}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
+            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{{2,}}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
         </xsl:if>
 
