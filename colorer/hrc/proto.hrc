@@ -3,7 +3,7 @@
   "http://colorer.sf.net/2003/hrc.dtd"[
 <!-- include -->
 <!ENTITY ini-protos  SYSTEM "ini.ent.hrc">
-<!ENTITY msg-protos  SYSTEM "ini.ent.hrc">
+<!ENTITY msg-protos  SYSTEM "msg.ent.hrc">
 <!-- auto -->
 <!ENTITY php-proto-gen  SYSTEM "php-prot.ent.hrc">
 ]>
