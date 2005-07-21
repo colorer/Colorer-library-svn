@@ -45,10 +45,11 @@ private:
   int cachedLineNo;
   ParseCache *cachedParent,*cachedForward;
 
-//  VTList *vtlist;
-
   LineSource *lineSource;
   RegionHandler *regionHandler;
+
+  ParseStep *top;
+  Vector<ParseStep*> parseSteps;
 
   void fillInvisibleSchemes(ParseCache *cache);
   void addRegion(int lno, int sx, int ex, const Region* region);
@@ -57,148 +58,47 @@ private:
   void enterScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
   void leaveScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
 
-  void TextParserImpl::incrementPosition();
   int searchKW(const SchemeNode *node, int lowLen);
-  //int searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen);
+
+  /** General highlighting loop */
   bool colorize();
-
-
-
-private:
-  ParseStep *top;
-  Vector<ParseStep*> parseSteps;
 
   /**
    * Enters new parser state \c step.
    * This step parameters should be already setted up.
    */
-  void push(ParseStep *step){
-    parseSteps.addElement(step);
-    top = step;
-  }
-
+  void push(ParseStep *step);
   /**
    * Finishes current parser state and moves parser on parent level.
    */
-  void pop(){
-    if (top == null){
-      throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
-    }
-    while (top->inheritStack.size()){
-      restoreVirtual();
-      top->pop();
-    }
-    delete top;
-    parseSteps.setSize(parseSteps.size()-1);
-    if (parseSteps.size() > 0){
-      top = parseSteps.lastElement();
-    }else{
-      top = null;
-    }
-  }
-
-  void restoreVirtual(){
-    /*
-     * Restore virtual table on parser pop
-     */
-    if (top->itop->vtlistPushedVirtual){
-      top->itop->vtlistPushedVirtual = false;
-      vtlist->popvirt();
-    }
-    if (top->itop->vtlistPushed){
-      top->itop->vtlistPushed = false;
-      vtlist->pop();
-    }
-  }
-
-  SchemeNode *currentSchemeNode(InheritStep *itop)
-  {
-    if (itop->schemeNodePosition >= itop->scheme->nodes.size()){
-      return null;
-    }
-    return itop->scheme->nodes.elementAt(itop->schemeNodePosition);
-  }
+  void pop();
+  /**
+   * moves to the next position in a parsed text
+   */
+  void incrementPosition();
+  /**
+   * Returns current node in a scheme of current context to be applied against
+   * text.
+   */
+  SchemeNode *currentSchemeNode(InheritStep *inheritTop);
 
   /**
    * Restart parser on the same position from current state
    * initial node. Drop all inheritance level for this parse state
    */
-  void restart()
-  {
-    while (top->inheritStack.size() > 1){
-      restoreVirtual();
-      top->pop();
-    }
-    top->itop->schemeNodePosition = 0;
-  }
-
+  void restart();
   /**
    * Moves single position forward and restarts parse process
    * from initial scheme node.
    * Before move checks for possible state finish condition. If found,
    * finishes current parse step and returns to parent step.7
    */
-  void move()
-  {
-    restart();
-    if (top->closingREmatched && gx+1 >= lowlen) {
-      /* Reached block's end RE */
-      restoreVirtual();
-
-      if (top->itop->vtlistPushedVirtual){
-        vtlist->popvirt();
-      }
-      gx = top->matchend.e[0];
-
-      InheritStep *prev_itop = parseSteps.elementAt(parseSteps.size()-2)->itop;
-      SchemeNode *schemeNode = currentSchemeNode(prev_itop);
-      leaveScheme(gy, &top->matchend, schemeNode);
-
-      schemeNode->end->setBackTrace(top->o_str, top->o_match);
-      delete top->backLine;
-
-      top->pop();
-      pop();
-/*
-      if (updateCache){
-        if (ogy == gy){
-          delete OldCacheF;
-          if (ResF) ResF->next = null;
-          else ResP->children = null;
-          forward = ResF;
-          parent = ResP;
-        }else{
-          OldCacheF->eline = gy;
-          OldCacheF->vcache = vtlist->store();
-          forward = OldCacheF;
-          parent = OldCacheP;
-        };
-      }else{
-*/
-//      };
-      restart();
-      return;
-    }
-    incrementPosition();
-    top->itop->schemeNodePosition = 0;
-  }
-
+  void move();
   /**
    * Moves to the next node in current inheritance tree,
    * Return to the parent node, if current inheritance node traverse is finished.
    */
-  void cont(){
-    top->itop->schemeNodePosition++;
-    if (top->itop->schemeNodePosition >= top->itop->scheme->nodes.size()){
-      if (top->inheritStack.size() > 1){
-        restoreVirtual();
-        top->pop();
-        cont();
-      }else{
-        move();
-      }
-    }
-  }
+  void cont();
 
 };
 
@@ -220,7 +120,7 @@ private:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

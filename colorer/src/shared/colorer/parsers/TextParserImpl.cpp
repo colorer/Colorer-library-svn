@@ -1,6 +1,12 @@
 #include<colorer/parsers/TextParserImpl.h>
 #include<common/Logging.h>
 
+/* should be removed */
+#define MATCH_NOTHING 0
+#define MATCH_RE 1
+#define MATCH_SCHEME 2
+
+
 TextParserImpl::TextParserImpl()
 {
   CLR_TRACE("TextParserImpl", "constructor");
@@ -55,11 +61,8 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
   if (lineSource == null) return from;
   if (baseScheme == null) return from;
 
-  vtlist = new VTList();
-
   lineSource->startJob(from);
   regionHandler->startParsing(from);
-
 
   ParseStep *top = new ParseStep();
   top->closingRE = null;
@@ -68,8 +71,7 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
   InheritStep *itop = new InheritStep();
   itop->scheme = baseScheme;
   itop->schemeNodePosition = 0;
-  itop->vtlistPushedVirtual = itop->vtlistPushed = false;
-  top->push(itop);
+  top->goInherit(itop);
 
   push(top);
 
@@ -137,7 +139,6 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
 
   regionHandler->endParsing(endLine);
   lineSource->endJob(endLine);
-  delete vtlist;
 
   return endLine;
 }
@@ -394,6 +395,104 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
   }
 */
 
+void TextParserImpl::push(ParseStep *step){
+  parseSteps.addElement(step);
+  top = step;
+}
+
+void TextParserImpl::pop(){
+  if (top == null){
+    throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
+  }
+  while (top->inheritStack.size()){
+    restoreVirtual();
+    top->leaveInherit();
+  }
+  delete top;
+  parseSteps.setSize(parseSteps.size()-1);
+  if (parseSteps.size() > 0){
+    top = parseSteps.lastElement();
+  }else{
+    top = null;
+  }
+}
+
+SchemeNode *TextParserImpl::currentSchemeNode(InheritStep *inheritTop)
+{
+  if (inheritTop->schemeNodePosition >= inheritTop->scheme->nodes.size()){
+    return null;
+  }
+  return inheritTop->scheme->nodes.elementAt(itop->schemeNodePosition);
+}
+
+void TextParserImpl::restart()
+{
+  while (top->inheritStack.size() > 1){
+    restoreVirtual();
+    top->leaveInherit();
+  }
+  top->inheritTop->schemeNodePosition = 0;
+}
+
+void TextParserImpl::move()
+{
+  restart();
+  if (top->closingREmatched && gx+1 >= lowlen) {
+    /* Reached block's end RE */
+    restoreVirtual();
+
+    if (top->inheritTop->vtlistPushedVirtual){
+      vtlist->popvirt();
+    }
+    gx = top->matchend.e[0];
+
+    InheritStep *prev_itop = parseSteps.elementAt(parseSteps.size()-2)->inheritTop;
+    SchemeNode *schemeNode = currentSchemeNode(prev_itop);
+    leaveScheme(gy, &top->matchend, schemeNode);
+
+    schemeNode->end->setBackTrace(top->o_str, top->o_match);
+    delete top->backLine;
+
+    top->leaveInherit();
+    pop();
+/*
+    if (updateCache){
+      if (ogy == gy){
+        delete OldCacheF;
+        if (ResF) ResF->next = null;
+        else ResP->children = null;
+        forward = ResF;
+        parent = ResP;
+      }else{
+        OldCacheF->eline = gy;
+        OldCacheF->vcache = vtlist->store();
+        forward = OldCacheF;
+        parent = OldCacheP;
+      };
+    }else{
+*/
+//      };
+    restart();
+    return;
+  }
+  incrementPosition();
+  top->inheritTop->schemeNodePosition = 0;
+}
+
+void TextParserImpl::cont(){
+  top->inheritTop->schemeNodePosition++;
+  if (top->inheritTop->schemeNodePosition >= top->inheritTop->scheme->nodes.size()){
+    if (top->inheritStack.size() > 1){
+      restoreVirtual();
+      top->leaveInherit();
+      cont();
+    }else{
+      move();
+    }
+  }
+}
+
+
 SchemeImpl *TextParserImpl::pushVirtual(SchemeImpl *scheme)
 {
   SchemeImpl *ret = scheme;
@@ -433,7 +532,7 @@ void TextParserImpl::incrementPosition() {
     gx = 0;
     gy++;
     top->contextStart = -1;
-	top->closingREparsed = false;
+    top->closingREparsed = false;
     if (gy >= gy2){
       return;
     }
@@ -475,10 +574,10 @@ bool TextParserImpl::colorize()
     }
     */
 
-	  if (!top->closingREparsed || gx >= lowlen) {
+    if (!top->closingREparsed || gx >= lowlen) {
       // searches for the end of parent block
       top->closingREmatched = false;
-	    top->closingREparsed = true;
+      top->closingREparsed = true;
       if (top->closingRE){
         top->closingREmatched = top->closingRE->parse(str, gx, len, &top->matchend, top->contextStart);
       }
@@ -501,7 +600,7 @@ bool TextParserImpl::colorize()
     /*
      * Traversing over scheme
      */
-	  SchemeNode *schemeNode = currentSchemeNode(top->itop);
+    SchemeNode *schemeNode = currentSchemeNode(top->itop);
     if (schemeNode == null){
       cont();
       continue;
@@ -526,16 +625,10 @@ bool TextParserImpl::colorize()
       }
       InheritStep *itop = new InheritStep();
 
-      SchemeImpl *ssubst = vtlist->pushVirtual(schemeNode->scheme);
-      if (ssubst == null){
-//        itop->vtlistPushed = vtlist->push(schemeNode);
-        ssubst = schemeNode->scheme;
-      }else{
-        itop->vtlistPushedVirtual = true;
-      };
-      itop->scheme = ssubst;
+      /* Applying scheme substitutions */
+      itop->scheme = pushVirtual(schemeNode->scheme);
       itop->schemeNodePosition = -1;
-      top->push(itop);
+      top->goInherit(itop);
       cont();
       continue;
     }
@@ -589,7 +682,7 @@ bool TextParserImpl::colorize()
       ParseStep *newtop = new ParseStep();
 
       newtop->closingRE = schemeNode->end;
-	    newtop->lowContentPriority = schemeNode->lowContentPriority;
+      newtop->lowContentPriority = schemeNode->lowContentPriority;
       newtop->backLine = new SString(str);
       newtop->o_gy = gy;
 
@@ -600,7 +693,7 @@ bool TextParserImpl::colorize()
       itop->schemeNodePosition = 0;
       itop->vtlistPushedVirtual = (schemeNode->scheme != ssubst);
       itop->vtlistPushed = false;
-      newtop->push(itop);
+      newtop->goInherit(itop);
 
       newtop->contextStart = gx;
       newtop->matchstart = match;
@@ -620,40 +713,6 @@ bool TextParserImpl::colorize()
     continue;
   }
   return true;
-
-/*
-  //////
-  for (; gy < gy2; ){
-    CLR_TRACE("TextParserImpl", "colorize: line no %d", gy);
-
-
-
-    int ret = LINE_NEXT;
-    for (; gx <= matchend.s[0];){  //    '<' or '<=' ???
-      int ox = gx;
-      int oy = gy;
-      int re_result = searchRE(baseScheme, gy, matchend.s[0], len);
-      if ((re_result == MATCH_SCHEME && (oy != gy || matchend.s[0] < gx)) ||
-          (re_result == MATCH_RE && matchend.s[0] < gx)){
-        len = -1;
-        if (oy == gy) len = parent_len;
-        ret = LINE_REPARSE;
-        break;
-      };
-      if (re_result == MATCH_NOTHING) gx++;
-    };
-    if (ret == LINE_REPARSE) continue;
-
-    schemeStart = -1;
-    if (res) return true;
-
-    len = -1;
-    gy++;
-    gx=0;
-  };
-  return true;
-*/
-
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -672,7 +731,7 @@ bool TextParserImpl::colorize()
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

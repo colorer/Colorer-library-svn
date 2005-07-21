@@ -40,7 +40,7 @@ ParseCache *r1, *r2, *tmp = this;
   return null;
 };
 
-
+/*
 void VTList::clear()
 {
   nodesnum = 0;
@@ -81,6 +81,7 @@ VTList *prevpos, *pos = this;
   last = pos;
   return true;
 };
+*/
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -98,7 +99,7 @@ VTList *prevpos, *pos = this;
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

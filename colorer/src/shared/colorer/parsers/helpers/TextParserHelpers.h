@@ -56,10 +56,16 @@ public:
  * Used to track runtime scheme inheritance structure.
  */
 struct InheritStep {
+  /**
+   * Inherited scheme
+   */
   SchemeImpl *scheme;
+  /**
+   * Current parse position in this inherited scheme
+   */
   int schemeNodePosition;
-  bool vtlistPushedVirtual;
-  bool vtlistPushed;
+  //bool vtlistPushedVirtual;
+  //bool vtlistPushed;
 };
 
 /**
@@ -72,21 +78,14 @@ struct ParseStep{
   bool closingREparsed;
   SMatches matchstart;
   SMatches matchend;
-  InheritStep *itop;
 
   bool lowContentPriority;
   int contextStart;
 
   int parent_len;
 
+  InheritStep *inheritTop;
   Vector<InheritStep*> inheritStack;
-
-/*
-  ParseCache *OldCacheF;
-  ParseCache *OldCacheP;
-  ParseCache *ResF;
-  ParseCache *ResP;
-*/
 
   int o_gy;
   SMatches *o_match;
@@ -97,33 +96,27 @@ struct ParseStep{
     closingREmatched = closingREparsed = false;
     closingRE = null;
     backLine = null;
-/*
-    OldCacheF = null;
-    OldCacheP = null;
-    ResF = null;
-    ResP = null;
-*/
   }
 
   /**
    * Pushes addiitonal 'inherit' level into the current parse state.
    */
-  void push(InheritStep *istep){
+  void goInherit(InheritStep *istep){
     inheritStack.addElement(istep);
-    itop = istep;
+    inheritTop = istep;
   }
 
   /**
    * Removes topmost inherit level from current parse state.
    * InheritStep element itself is deleted also.
    */
-  void pop(){
+  void leaveInherit(){
     delete inheritStack.lastElement();
     inheritStack.setSize(inheritStack.size()-1);
     if (inheritStack.size()){
-      itop = inheritStack.lastElement();
+      inheritTop = inheritStack.lastElement();
     }else{
-      itop = null;
+      inheritTop = null;
     }
   }
 
@@ -147,7 +140,7 @@ struct ParseStep{
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
