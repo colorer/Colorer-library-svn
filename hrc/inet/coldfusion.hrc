@@ -18,43 +18,146 @@
     <import type="def"/>
 
     <region name='Tag' parent='def:Keyword' description='CF tag'/>
-
-
+    <region name='Expr' parent='def:VarStrong' description='CF expression'/>
+    
     <scheme name='Tags'>
       <inherit scheme='html:htmlCoreTags'/>
 
       <keywords region='Tag' ignorecase='yes'>
-        <word name='CFAUTHENTICATE'/>
-        <word name='CFGRIDCOLUMN'/>
-        <word name='CFGRIDUPDATE'/>
-        <word name='CFINCLUDE'/>
-        <word name='CFINPUT'/>
-        <word name='CFMODULE'/>
-        <word name='CFOUTPUT'/>
-        <word name='CFPROCRESULT'/>
-        <word name='CFQUERY'/>
-        <word name='CFSCHEDULE'/>
-        <word name='CFTEXTINPUT'/>
-        <word name='CFDEFAULTCASE'/>
-        <word name='CFUPDATE'/>
-        <word name='CFEXECUTE'/>
-        <word name='CFQUERYPARAM'/>
+        <word name='CFAPPLET'/>
+        <word name='CFAPPLICATION'/>
         <word name='CFARGUMENT'/>
+        <word name='CFASSOCIATE'/>
+        <word name='CFAUTHENTICATE'/>
+        <word name='CFBREAK'/>
+        <word name='CFCACHE'/>
+        <word name='CFCASE'/>
+        <word name='CFCATCH'/>
+        <word name='CFCHART'/>
+        <word name='CFCHARTDATA'/>
+        <word name='CFCHARTSERIES'/>
+        <word name='CFCOL'/>
+        <word name='CFCOLLECTION'/>
+        <word name='CFCOMPONENT'/>
+        <word name='CFCONTENT'/>
+        <word name='CFCOOKIE'/>
+        <word name='CFDEFAULTCASE'/>
+        <word name='CFDIRECTORY'/>
+        <word name='CFDUMP'/>
+        <word name='CFELSE'/>
+        <word name='CFELSEIF'/>
+        <word name='CFERROR'/>
+        <word name='CFEXECUTE'/>
+        <word name='CFEXIT'/>
+        <word name='CFFILE'/>
+        <word name='CFFLUSH'/>
+        <word name='CFFORM'/>
+        <word name='CFFTP'/>
         <word name='CFFUNCTION'/>
+        <word name='CFGRAPH'/>
+        <word name='CFGRAPHDATA'/>
+        <word name='CFGRIDCOLUMN'/>
+        <word name='CFGRIDROW'/>
+        <word name='CFGRIDUPDATE'/>
+        <word name='CFHEADER'/>
+        <word name='CFHTMLHEAD'/>
+        <word name='CFHTTP'/>
+        <word name='CFHTTPPARAM'/>
+        <word name='CFIF'/>
+        <word name='CFIMPERSONATE'/>
+        <word name='CFIMPORT'/>
+        <word name='CFINCLUDE'/>
+        <word name='CFINDEX'/>
+        <word name='CFINPUT'/>
+        <word name='CFINSERT'/>
+        <word name='CFINVOKE'/>
         <word name='CFINVOKEARGUMENT'/>
+        <word name='CFLDAP'/>
+        <word name='CFLOCATION'/>
+        <word name='CFLOCK'/>
+        <word name='CFLOG'/>
+        <word name='CFLOGIN'/>
         <word name='CFLOGINUSER'/>
         <word name='CFLOGOUT'/>
+        <word name='CFLOOP'/>
+        <word name='CFMAIL'/>
+        <word name='CFMAILPARAM'/>
+        <word name='CFMAILPART'/>
+        <word name='CFMODULE'/>
+        <word name='CFOBJECT'/>
+        <word name='CFOBJECTCACHE'/>
+        <word name='CFOUTPUT'/>
+        <word name='CFPARAM'/>
+        <word name='CFPOP'/>
+        <word name='CFPROCESSINGDIRECTIVE'/>
+        <word name='CFPROCPARAM'/>
+        <word name='CFPROCRESULT'/>
+        <word name='CFPROPERTY'/>
+        <word name='CFQUERY'/>
+        <word name='CFQUERYPARAM'/>
+        <word name='CFREGISTRY'/>
+        <word name='CFREPORT'/>
+        <word name='CFRETHROW'/>
         <word name='CFRETURN'/>
+        <word name='CFSAVECONTENT'/>
+        <word name='CFSCHEDULE'/>
+        <word name='CFSCRIPT'/>
+        <word name='CFSEARCH'/>
+        <word name='CFSELECT'/>
+        <word name='CFSERVLET'/>
+        <word name='CFSERVLETPARAM'/>
+        <word name='CFSET'/>
+        <word name='CFSETTING'/>
+        <word name='CFSILENT'/>
+        <word name='CFSLIDER'/>
+        <word name='CFSTOREDPROC'/>
+        <word name='CFSWITCH'/>
+        <word name='CFTABLE'/>
+        <word name='CFTEXTINPUT'/>
+        <word name='CFTHROW'/>
+        <word name='CFTRACE'/>
+        <word name='CFTRANSACTION'/>
+        <word name='CFTREE'/>
+        <word name='CFTREEITEM'/>
+        <word name='CFTRY'/>
+        <word name='CFUPDATE'/>
+        <word name='CFWDDX'/>
+        <word name='CFXML'/>
       </keywords>
 
     </scheme>
 
-    <scheme name="coldfusion">
+    <scheme name="cfcode">
+      <keywords region='Tag' ignorecase='yes'>
+        <word name='DateFormat'/>
+        <word name='Now'/>
+        <word name='jsStringformat'/>
+      </keywords>
+    </scheme>
+    
+    <scheme name="cf-html">
+      <block start="/&lt;!---/" end="/---&gt;/" scheme="def:Comment"
+             region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
+
+      <block start="/(?{def:OpenTag}&lt;(?{Tag}cfscript)&gt;)/i" end="/(?{def:OpenTag}&lt;\/(?{Tag}cfscript)&gt;)/"
+             scheme="jScript:jScript" region00="def:PairStart" region10="def:PairEnd"/>
+
+      <regexp match="/\#\#/"/>
+
+      <block start="/#/" end="/#/" scheme="cfcode"
+             region="Expr" region00="def:PairStart" region10="def:PairEnd"/>
 
       <inherit scheme="html:html">
+        <virtual scheme='html:html' subst-scheme='cf-html'/>
         <virtual scheme='html:htmlCoreTags' subst-scheme='Tags'/>
       </inherit>
+    </scheme>
 
+
+    <scheme name="coldfusion">
+      <inherit scheme="html:html">
+        <virtual scheme='html:html' subst-scheme='cf-html'/>
+      </inherit>
     </scheme>
 
 
@@ -81,7 +184,8 @@
    - Portions created by the Initial Developer are Copyright (C) 1999-2005
    - the Initial Developer. All Rights Reserved.
    -
-   - Contributor(s):
+   - Contributor(s): 
+   - Christopher Wigginton <c_wigginton@yahoo.com> added additional tags
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -96,3 +200,4 @@
    - the terms of any one of the MPL, the GPL or the LGPL.
    -
    - ***** END LICENSE BLOCK ***** -->
+
