@@ -89,10 +89,9 @@ public class HRCParser {
                 if (idx == -1) {
                     rg.addElement(gr);
                 } else {
-                    Group parent_gr = (Group) allGroups.get(ft_group.substring(
-                            0, idx));
+                    Group parent_gr = (Group) allGroups.get(ft_group.substring(0, idx));
                     if (parent_gr == null) {
-                        throw new RuntimeException("Invalid groups layout");
+                        rg.addElement(gr);
                     } else {
                         parent_gr.groups.addElement(gr);
                     }
