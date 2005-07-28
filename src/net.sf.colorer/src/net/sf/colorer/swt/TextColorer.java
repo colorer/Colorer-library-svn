@@ -638,7 +638,7 @@ public class TextColorer {
             int lno = text.getLineAtOffset(e.lineOffset);
             updateViewport();
             if (lno < visibleStart || lno > visibleEnd+1) {
-                e.styles = null;
+                e.styles = new StyleRange[0];
                 return;
             }
             LineRegion[] lrarr = baseEditor.getLineRegions(lno);
