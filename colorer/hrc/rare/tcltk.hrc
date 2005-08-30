@@ -206,7 +206,7 @@
              region="tclString" region00="def:PairStart" region10="def:PairEnd"/>
 
       <!-- Linear comments -->
-      <block start="/\#/" end="/([^\\]?#1$)|([\\]\s+$)/" scheme="Comment"
+      <block start="/(^|;)\s{,4}\#/" end="/([^\\]?#1$)|([\\]\s+$)/" scheme="Comment"
              region="tclComment" region12="tclError"/>
 
       <!-- paired block for matching -->
