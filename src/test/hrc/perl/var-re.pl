@@ -62,3 +62,8 @@ ${$a+foo::bar(baz)} [10] [$a+foo::bar(baz)] {foo} {1,2} [^a-b]
 ]x;
 
 $$
+
+
+if(/\|aaa\|/ or /\|bbb\|/){
+push @data, $_;
+}
