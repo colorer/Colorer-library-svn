@@ -7,7 +7,6 @@
          point="org.eclipse.ui.editors">
       <editor
             name="%ColorerEditor"
-            default="true"
             icon="icons/colorer_editor.gif"
             extensions="ada,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
@@ -16,7 +15,6 @@
       </editor>
       <editor
             name="%ColorerEditor.cpp"
-            default="true"
             icon="icons/cpp.gif"
             extensions="c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
@@ -25,7 +23,6 @@
       </editor>
       <editor
             name="%ColorerEditor.scripts"
-            default="true"
             icon="icons/scripts.gif"
             extensions="awk,bat,bbj,dbm,diff,dpk,dpr,ini,patch,pls,pm,prg,pro,project,properties,prop,pro,props,reg,sources,txt,xom,mak,makefile"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
@@ -34,7 +31,6 @@
       </editor>
       <editor
             name="%ColorerEditor.xml"
-            default="true"
             icon="icons/xml.gif"
             extensions="xml,xsd,xsl,dtd,hrc,hrd,html,htm,xhtml,asp,aspx,jsp,fo,svg,dbk,docbook,jhtml,jspf,php,php3,php4,phtml,sgm,sgml,shtm,shtml"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
