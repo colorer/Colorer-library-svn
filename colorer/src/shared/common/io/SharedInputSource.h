@@ -20,13 +20,11 @@ public:
 
   /** Increments reference counter */
   int addref(){
-    CLR_INFO("SharedInputSource", "addref %d", ref_count);
     return ++ref_count;
   }
 
   /** Decrements reference counter */
   int delref(){
-    CLR_INFO("SharedInputSource", "delref %d", ref_count);
     if (ref_count == 0){
       CLR_ERROR("SharedInputSource", "delref: already zeroed references");
     }
@@ -65,7 +63,7 @@ private:
   SharedInputSource(InputSource *source);
   ~SharedInputSource();
 
-  static Hashtable<SharedInputSource*> isHash;
+  static Hashtable<SharedInputSource*> *isHash;
 
   InputSource *is;
   const byte *stream;
