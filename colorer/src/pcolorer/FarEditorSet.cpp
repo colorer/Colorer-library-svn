@@ -462,6 +462,8 @@ void FarEditorSet::reloadBase()
   readRegistry();
 
   dropAllEditors();
+  // reason?
+  dropAllEditors();
 
   delete regionMapper;
   delete parserFactory;
