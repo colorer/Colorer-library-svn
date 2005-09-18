@@ -8,7 +8,7 @@
       <editor
             name="%ColorerEditor"
             icon="icons/colorer_editor.gif"
-            extensions="ada,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
+            extensions="adb,adc,ads,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor">
