@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="uri:wsc" targetNamespace="uri:wsc">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="uri:wsc"
+    targetNamespace="uri:wsc" elementFormDefault="qualified">
 
 <xs:annotation><xs:documentation><![CDATA[
     Windows Script Components (*.wsc) schema. 
     Written for colorer.take5.
+    File version 1.1
     
     (c) Eugene Efremov <4mirror@mail.ru>, 2005
 ]]></xs:documentation></xs:annotation>
@@ -64,29 +66,29 @@
 
 <xs:element name="property">
     <xs:complexType>
+        <xs:sequence>
+            <xs:element name="get" type="propContent"/>
+            <xs:element name="put" type="propContent"/>
+        </xs:sequence>
+
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="internalName" type="xs:string"/>
         <xs:attribute name="dispid" type="xs:integer"/>
         <xs:attribute name="get" type="xs:string"/>
         <xs:attribute name="put" type="xs:string"/>
-        
-        <xs:sequence>
-            <xs:element name="get" type="propContent"/>
-            <xs:element name="put" type="propContent"/>
-        </xs:sequence>
     </xs:complexType>
 </xs:element>
 
 
 <xs:element name="method">
     <xs:complexType>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="internalName" type="xs:string"/>
-        <xs:attribute name="dispid" type="xs:integer"/>
-        
         <xs:sequence>
             <xs:element name="parameter" type="paramContent"/>
         </xs:sequence>
+
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="internalName" type="xs:string"/>
+        <xs:attribute name="dispid" type="xs:integer"/>
     </xs:complexType>
 </xs:element>
 
@@ -139,16 +141,6 @@
 
 <xs:element name="implements">
     <xs:complexType>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:attribute name="type" use="required">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="ASP"/>
-                    <xs:enumeration value="Behavior"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        
         <xs:sequence>
             <!--xs:element ref="script"/-->
             <xs:element name="layout">
@@ -168,6 +160,16 @@
             <xs:element ref="event"/>
             <xs:element ref="comment"/>
         </xs:sequence>
+
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+        <xs:attribute name="type" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="ASP"/>
+                    <xs:enumeration value="Behavior"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 </xs:element>
 
@@ -186,16 +188,16 @@
 
 <xs:element name="registration">
     <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="script"/>
+            <xs:element ref="comment"/>
+        </xs:sequence>
+
         <xs:attribute name="progid" type="progid"/>
         <xs:attribute name="classid" type="guid"/>
         <xs:attribute name="description" type="xs:string"/>
         <xs:attribute name="version" type="xs:decimal"/>
         <xs:attribute name="remotable" type="xs:boolean"/>
-        
-        <xs:sequence>
-            <xs:element ref="script"/>
-            <xs:element ref="comment"/>
-        </xs:sequence>
     </xs:complexType>
 </xs:element>
 
@@ -204,8 +206,6 @@
 
 <xs:element name="component">
     <xs:complexType>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
-        
         <xs:sequence>
             <xs:element ref="registration" minOccurs="0"/>
             <xs:element ref="public"/>
@@ -216,6 +216,8 @@
             <xs:element ref="resource"/>
             <xs:element ref="comment"/>
         </xs:sequence>
+
+        <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
 </xs:element>
 
