@@ -339,6 +339,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         };
 
         int ogy = gy;
+		bool zeroLength;
 
         SchemeImpl *o_scheme = baseScheme;
         int o_schemeStart = schemeStart;
@@ -359,6 +360,8 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
           leaveScheme(gy, &matchend, schemeNode);
         };
         gx = matchend.e[0];
+        /* (empty-block.test) Check if the consumed scheme is zero-length */
+        zeroLength = (match.s[0] == matchend.e[0] && ogy == gy);
 
         schemeNode->end->setBackTrace(o_str, o_match);
         matchend = o_matchend;
@@ -384,6 +387,9 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         if (ssubst != schemeNode->scheme){
           vtlist->popvirt();
         }
+        /* (empty-block.test) skips block if it has zero length and spread over single line */
+        if (zeroLength) break;
+
         return MATCH_SCHEME;
       };
     };
