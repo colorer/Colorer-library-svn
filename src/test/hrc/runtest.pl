@@ -4,7 +4,7 @@
 # set of their previous parse strucure.
 #
 
-$colorer  = 'D:/projects/colorer/bin/colorer.exe';
+$colorer  = "D:/projects/colorer/bin/colorer.exe";
 
 $diff  = 'diff -U 1 -bB';
 
@@ -63,12 +63,13 @@ foreach (@retlist){
   print FAILS "\n<b>$_</b>:</pre></pre><pre>\n";
   close FAILS;
   checkDir($currentDir, $_);
-
+  
   $cres = system "$colorer -h \"$_\" -dc -dh -ln -o \"$fname.html\"";
 
   $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
 
   if ($cres != 0 or $res != 0 or !-r "$fname.html"){
+    #print "failed: $cres, $res, ".(-r "$fname.html")."\n";
     $testFailed++;
   }else{
   }

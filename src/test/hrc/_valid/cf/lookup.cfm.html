@@ -10,16 +10,16 @@
  9: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFQUERY</span><span style='color:#274796; '> </span><span style='color:#074726; '>NAME</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"qdata"</span><span style='color:#274796; '> datasource</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"fastTrack_lab"</span><span style='color:#a65700; '>></span>
 10:     select *
 11:     from beans
-12:     where bean_id = #url<span style='color:#008c00; '>.</span>productid#
+12:     where bean_id = <span style='color:#007997; '>#url.productid#</span>
 13: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFQUERY</span><span style='color:#a65700; '>></span>
 14: 
-15: <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>CFIF</span><span style='color:#274796; '> qdata</span><span style='color:#008c00; '>.</span><span style='color:#274796; '>recordcount is </span><span style='color:#008c00; '>1</span><span style='color:#a65700; '>></span>
+15: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFIF</span><span style='color:#274796; '> qdata</span><span style='color:#008c00; '>.</span><span style='color:#274796; '>recordcount is </span><span style='color:#008c00; '>1</span><span style='color:#a65700; '>></span>
 16:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFOUTPUT</span><span style='color:#a65700; '>></span>
 17:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>SCRIPT LANGUAGE="</span><span style='color:#0000e6; '>JavaScript</span><span style='color:#800000; font-weight:bold; '>" TYPE="text/javascript"</span><span style='color:#a65700; '>></span>
 18:         parent<span style='color:#808030; '>.</span>appframe<span style='color:#808030; '>.</span>document<span style='color:#808030; '>.</span>forms<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>productname#url<span style='color:#808030; '>.</span>row#<span style='color:#808030; '>.</span>value <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'#jsStringformat(qdata.bean_name)#'</span><span style='color:#800080; '>;</span>
 19:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>SCRIPT</span><span style='color:#a65700; '>></span>
 20:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFOUTPUT</span><span style='color:#a65700; '>></span>
-21: <span style='color:#a65700; '>&lt;</span><span style='color:#5f5035; '>CFELSE</span><span style='color:#a65700; '>></span>
+21: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFELSE</span><span style='color:#a65700; '>></span>
 22:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>SCRIPT LANGUAGE="</span><span style='color:#0000e6; '>JavaScript</span><span style='color:#800000; font-weight:bold; '>" TYPE="text/javascript"</span><span style='color:#a65700; '>></span>
 23: <span style='color:#696969; '>    &lt;!--</span>
 24:         <span style='color:#808030; '>&lt;</span>CFOUTPUT<span style='color:#808030; '>></span>
@@ -29,10 +29,26 @@
 28:         <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>CFOUTPUT<span style='color:#808030; '>></span>
 29:     <span style='color:#696969; '>//--></span>
 30:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>SCRIPT</span><span style='color:#a65700; '>></span>
-31: <span style='color:#a65700; '>&lt;/</span><span style='color:#5f5035; '>CFIF</span><span style='color:#a65700; '>></span>
-32:     
-33: 
-34: 
-35: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>body</span><span style='color:#a65700; '>></span>
-36: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>html</span><span style='color:#a65700; '>></span>
-37: 
+31: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFIF</span><span style='color:#a65700; '>></span>
+32: 
+33: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfscript</span><span style='color:#a65700; '>></span>
+34: <span style='color:#800000; font-weight:bold; '>function</span> foobar<span style='color:#808030; '>(</span>param1<span style='color:#808030; '>,</span> param2<span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
+35:      <span style='color:#800000; font-weight:bold; '>var</span> uselessVar <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>false</span><span style='color:#800080; '>;</span>
+36:      <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>param gt param2<span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
+37:         uselessVar  <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>true</span><span style='color:#800080; '>;</span>
+38:       <span style='color:#800080; '>}</span>
+39:      <span style='color:#800000; font-weight:bold; '>return</span> uselessVar<span style='color:#800080; '>;</span>
+40: <span style='color:#800080; '>}</span>
+41: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>cfscript</span><span style='color:#a65700; '>></span>
+42:     
+43: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfset</span><span style='color:#274796; '> myArrayofStrings[</span><span style='color:#008c00; '>1</span><span style='color:#274796; '>] </span><span style='color:#808030; '>=</span><span style='color:#274796; '> </span><span style='color:#0000e6; '>"foobar"</span><span style='color:#a65700; '>></span>
+44:  
+45: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfoutput</span><span style='color:#a65700; '>></span>
+46: Today is <span style='color:#007997; '>#</span><span style='color:#800000; font-weight:bold; '>DateFormat</span><span style='color:#007997; '>(</span><span style='color:#800000; font-weight:bold; '>Now</span><span style='color:#007997; '>(),"mm,dd,yyyy")#</span><span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>br</span><span style='color:#a65700; '>></span>
+47: <span style='color:#007997; '>#myArrayofStrings[1]#</span><span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>br</span><span style='color:#a65700; '>></span>
+48: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>cfoutput</span><span style='color:#a65700; '>></span>
+49:  <span style='color:#696969; '>&lt;!--- my comments ---></span>
+50: 
+51: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>body</span><span style='color:#a65700; '>></span>
+52: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>html</span><span style='color:#a65700; '>></span>
+53: 
