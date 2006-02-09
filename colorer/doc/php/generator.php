@@ -8,11 +8,12 @@ $i_encoding = check($i_encoding);
 $o_encoding = check($o_encoding);
 $upload = check($upload);
 
-print $upload;
+#print $upload;
 
 $col_name = $upload;
 srand((double)microtime()*1000000);
-$tempname = "./temp/temp-".rand(0,30);
+#$tempname = "./temp/temp-".rand(0,30);
+$tempname = "/tmp/php-colorer-temp".rand(0,20);
 
 $command = "-h";
 
