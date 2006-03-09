@@ -190,6 +190,12 @@
     <filename>/\.(as(p|a)|ht(r|x|a)|inc)$/i</filename>
     <firstline weight='2'>/language\s*=.*perlscript/i</firstline>
   </prototype>
+  <prototype name="adp" group="inet" description="AOLserver Dynamic Pages">
+    <location link="inet/adp.hrc"/>
+    <filename>/\.(adp)$/i</filename>
+    <firstline weight='2'>/language\s*=.*tcltk/i</firstline>
+    <firstline>/&lt;\%/i</firstline>
+  </prototype>
   <prototype name="svg" group="inet" description="SVG 1.0" targetNamespace="http://www.w3.org/2000/svg">
     <location link="inet/svg.hrc"/>
     <filename>/\.svg/ix</filename>
