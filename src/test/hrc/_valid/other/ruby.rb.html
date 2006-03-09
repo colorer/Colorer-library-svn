@@ -1,0 +1,35 @@
+ 0: import os,re,string,sys,popen2
+ 1: Dependencies <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span><span style='color:#0000e6; '>"time"</span><span style='color:#808030; '>]</span>
+ 2: 
+ 3: <span style='color:#800000; font-weight:bold; '>class</span> Parser:
+ 4:     <span style='color:#800000; font-weight:bold; '>def</span> __init__<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span>, raw, request, <span style='color:#808030; '>*</span><span style='color:#808030; '>*</span>kw<span style='color:#808030; '>)</span>:
+ 5:         <span style='color:#696969; '># save call arguments for later use in format</span>
+ 6:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>raw <span style='color:#808030; '>=</span> raw
+ 7:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>request <span style='color:#808030; '>=</span> request
+ 8:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>kw<span style='color:#808030; '>=</span> kw
+ 9: 
+10:     <span style='color:#800000; font-weight:bold; '>def</span> format<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span>, formatter<span style='color:#808030; '>)</span>:
+11:         <span style='color:#696969; '>#type to pass to colorer</span>
+12:         type<span style='color:#808030; '>=</span>string<span style='color:#808030; '>.</span>strip<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>kw<span style='color:#808030; '>[</span><span style='color:#0000e6; '>'format_args'</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span>
+13:         options<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'-dc -dh -h -t%s'</span> % type
+14:         cmd <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'colorer '</span> <span style='color:#808030; '>+</span> options
+15:         try:
+16:             fromchild, tochild, errchild <span style='color:#808030; '>=</span> popen2<span style='color:#808030; '>.</span>popen3<span style='color:#808030; '>(</span>cmd<span style='color:#808030; '>)</span>
+17:             tochild<span style='color:#808030; '>.</span>write<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>raw<span style='color:#808030; '>)</span>
+18:             tochild<span style='color:#808030; '>.</span>flush<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+19:             tochild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+20:             fromchild<span style='color:#808030; '>.</span>flush<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+21:             html <span style='color:#808030; '>=</span> fromchild<span style='color:#808030; '>.</span><span style='color:#400000; '>readlines</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+22:         finally:
+23:             fromchild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+24:             errchild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+25: 
+26:         html<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'&lt;PRE>'</span><span style='color:#808030; '>+</span>string<span style='color:#808030; '>.</span>join<span style='color:#808030; '>(</span>html, <span style='color:#0000e6; '>''</span><span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#0000e6; '>'&lt;/PRE>'</span>
+27: 
+28:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>request<span style='color:#808030; '>.</span>write<span style='color:#808030; '>(</span>formatter<span style='color:#808030; '>.</span>rawHTML<span style='color:#808030; '>(</span>html<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+29: 
+30: 
+31: 
+32: <span style='color:#800000; font-weight:bold; '>def</span> foo<span style='color:#808030; '>(</span>bar<span style='color:#808030; '>)</span>
+33:   bar<span style='color:#808030; '>.</span><span style='color:#400000; '>gsub</span><span style='color:#808030; '>(</span>%r<span style='color:#800080; '>{</span>^\<span style='color:#808030; '>.</span>|<span style='color:#808030; '>[</span>\s<span style='color:#808030; '>/</span>\\\<span style='color:#808030; '>*</span>\:\?<span style='color:#0000e6; '>'"&lt;>\|]}, '</span>_<span style='color:#0000e6; '>')</span>
+34: <span style='color:#0000e6; '>end</span>
