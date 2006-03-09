@@ -62,7 +62,7 @@ void BaseEditor::setRegionCompact(bool compact){
   if (!lrSupport || regionCompact != compact){
     regionCompact = compact;
     remapLRS(true);
-  };
+  }
 }
 
 void BaseEditor::setRegionMapper(RegionMapper *rs){
@@ -127,9 +127,9 @@ FileType *BaseEditor::chooseFileType(const String *fileName){
       textStart.append(DString("\n"));
       totalLength += iLine->length();
       if (totalLength > 500) break;
-    };
+    }
     currentFileType = hrcParser->chooseFileType(fileName, &textStart);
-  };
+  }
   setFileType(currentFileType);
   return currentFileType;
 }
@@ -171,12 +171,12 @@ PairMatch *BaseEditor::getPairMatch(int lineNo, int linePos)
          l1->region->hasParent(def_PairEnd)) &&
          linePos >= l1->start && linePos <= l1->end)
       pair = l1;
-  };
+  }
   if (pair != null){
     PairMatch *pm = new PairMatch(pair, lineNo, pair->region->hasParent(def_PairStart));
     pm->setStart(pair);
     return pm;
-  };
+  }
   return null;
 }
 
@@ -208,7 +208,7 @@ PairMatch *BaseEditor::searchLocalPair(int lineNo, int pos)
         lno++;
         if (lno > end_line) break;
         pair = getLineRegions(lno);
-      };
+      }
       if (lno > end_line) break;
     }else{
       if(pair->prev == slr->prev){ // first region
@@ -216,10 +216,10 @@ PairMatch *BaseEditor::searchLocalPair(int lineNo, int pos)
         if (lno < wStart) break;
         slr = getLineRegions(lno);
         pair = slr;
-      };
+      }
       if (lno < wStart) break;
       pair = pair->prev;
-    };
+    }
     if (pair->region->hasParent(def_PairStart)){
       pm->pairBalance++;
     }
@@ -229,11 +229,11 @@ PairMatch *BaseEditor::searchLocalPair(int lineNo, int pos)
     if (pm->pairBalance == 0){
       break;
     }
-  };
+  }
   if (pm->pairBalance == 0){
     pm->eline = lno;
     pm->setEnd(pair);
-  };
+  }
   return pm;
 }
 
@@ -257,7 +257,7 @@ PairMatch *BaseEditor::searchGlobalPair(int lineNo, int pos)
         lno++;
         if (lno > end_line) break;
         pair = getLineRegions(lno);
-      };
+      }
       if (lno > end_line) break;
     }else{
       if(pair->prev == slr->prev){ // first region
@@ -265,10 +265,10 @@ PairMatch *BaseEditor::searchGlobalPair(int lineNo, int pos)
         if (lno < 0) break;
         slr = getLineRegions(lno);
         pair = slr;
-      };
+      }
       if (lno < 0) break;
       pair = pair->prev;
-    };
+    }
     if (pair->region->hasParent(def_PairStart)){
       pm->pairBalance++;
     }
@@ -278,11 +278,11 @@ PairMatch *BaseEditor::searchGlobalPair(int lineNo, int pos)
     if (pm->pairBalance == 0){
       break;
     }
-  };
+  }
   if (pm->pairBalance == 0){
     pm->eline = lno;
     pm->setEnd(pair);
-  };
+  }
   return pm;
 }
 
@@ -356,7 +356,7 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
     // Regions were dropped
     layoutChanged = true;
     CLR_TRACE("BaseEditor", "lrSize != wSize*2");
-  };
+  }
 
   /* Fixes window position according to line number */
   if (lno < wStart || lno > wStart+wSize){
@@ -392,18 +392,18 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
     if (invalidLine < parseTo){
       parseFrom = invalidLine;
       tpmode = TPM_CACHE_UPDATE;
-    };
+    }
   }
 
   /* Text modification general ajustment */
   if (invalidLine < parseFrom){
     parseFrom = invalidLine;
     tpmode = TPM_CACHE_UPDATE;
-  };
+  }
 
   if (parseTo > lineCount){
     parseTo = lineCount;
-  };
+  }
 
   /* Runs parser */
   if (parseTo-parseFrom > 0){

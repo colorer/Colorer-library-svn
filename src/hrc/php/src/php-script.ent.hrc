@@ -235,7 +235,8 @@
     <regexp match="/^\s*/"/>
     <!-- outlines -->
     <regexp match="/\M \b ((abstract\s+)?class|interface) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/x"/>
-    <regexp match="/\M (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* ((public|private|protected|final|static|abstract)\s+)* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+    <regexp match="/\M (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* ((public|private|protected|final|static|abstract)\s+)+ \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
+    <regexp match="/\M (\/\*\w+\*\/)? \s* (\/\*\w+\*\/)? \s* \b (function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/x"/>
     
     
     <inherit scheme="PairedBrackets">
