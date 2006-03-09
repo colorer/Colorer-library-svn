@@ -2,6 +2,7 @@
 #include<farplugin/farcolor.hpp>
 #include<misc/registry.cpp>
 #include<unicode/Encodings.h>
+#include<common/Logging.h>
 #include<colorer/viewer/TextConsoleViewer.h>
 
 #include"FarEditorSet.h"
@@ -39,7 +40,7 @@ FarEditorSet::~FarEditorSet(){
 void FarEditorSet::openMenu(){
   int iMenuItems[] = {
     mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-    mListFunctions, mFindErrors, mSelectRegion, -1,
+    mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
     mUpdateHighlight, mChooseEncoding, mConfigure
   };
   FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
@@ -84,13 +85,16 @@ void FarEditorSet::openMenu(){
       case 6:
         getCurrentEditor()->selectRegion();
         break;
-      case 8:
-        getCurrentEditor()->updateHighlighting();
+      case 7:
+        getCurrentEditor()->locateFunction();
         break;
       case 9:
-        getCurrentEditor()->selectEncoding();
+        getCurrentEditor()->updateHighlighting();
         break;
       case 10:
+        getCurrentEditor()->selectEncoding();
+        break;
+      case 11:
         configure();
         break;
     };
@@ -458,7 +462,7 @@ void FarEditorSet::reloadBase()
   readRegistry();
 
   dropAllEditors();
-
+  // reason?
   dropAllEditors();
 
   delete regionMapper;
@@ -467,7 +471,6 @@ void FarEditorSet::reloadBase()
   regionMapper = null;
 
   if (rDisabled) return;
-
 
   HANDLE scr = info->SaveScreen(0, 0, -1, -1);
   info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
