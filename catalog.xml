@@ -12,15 +12,12 @@
     <location link="hrc/proto.hrc"/>
     <location link="hrc/auto"/>
 
+    <!-- Test HRC set -->
+    <location link="src\test\parser\hrc"/>
+
 <!--
     <location link="C:\far\plugins\colorer\hrc\proto.hrc"/>
     <location link="C:\far\plugins\colorer\hrc\auto"/>
-
-    <location link="hrc/colorer.hrc"/>
-    <location link="jar:hrc/common.jar!colorer.hrc"/>
-    <location link="jar:http://colorer.sf.net/hrc/common.jar!colorer.hrc"/>
-    <location link="http://colorer.sf.net/hrc/colorer.hrc"/>
-    <location link="\\server\common\colorer\hrc\colorer.hrc"/>
 -->
   </hrc-sets>
 
