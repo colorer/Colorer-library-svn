@@ -166,6 +166,7 @@
         <word name=".nolistmacro"/>
         <word name=".nommx"/>
         <word name=".radix"/>
+        <word name=".repeat"/>
         <word name=".sall"/>
         <word name=".seq"/>
         <word name=".sfcond"/>
@@ -1182,7 +1183,6 @@
         <symb name="["/>
         <symb name="]"/>
         <symb name=","/>
-        <symb name="."/>
         <symb name=":"/>
         <symb name="!"/>
         <symb name="~"/>
