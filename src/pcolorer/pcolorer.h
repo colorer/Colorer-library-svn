@@ -11,7 +11,7 @@ enum {
   mOk, mReload, mReloadAll, mCancel,
   mCatalogFile, mHRDName, mMaxTime,
   mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-  mListFunctions, mFindErrors, mSelectRegion,
+  mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
   mUpdateHighlight, mChooseEncoding, mConfigure,
   mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
   mGotcha, mChoose,
@@ -37,7 +37,7 @@ enum {
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Cail Lomecb <irusskih at gmail.com>.
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

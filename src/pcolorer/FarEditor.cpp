@@ -351,6 +351,74 @@ void FarEditor::listErrors(){
   ignoreChange = true;
 }
 
+
+void FarEditor::locateFunction(){
+  // extract word
+  String &curLine = *getLine(ei.CurLine);
+  int cpos = ei.CurPos;
+  int sword = cpos;
+  int eword = cpos;
+
+  while (cpos < curLine.length() &&
+     (Character::isLetterOrDigit(curLine[cpos]) || curLine[cpos] != '_'))
+  {
+    while(Character::isLetterOrDigit(curLine[eword]) || curLine[eword] == '_')
+    {
+      if (eword == curLine.length()-1)
+        break;
+      eword++;
+    }
+    while(Character::isLetterOrDigit(curLine[sword]) || curLine[sword] == '_'){
+      if (sword == 0)
+        break;
+      sword--;
+    }
+    SString funcname(curLine, sword+1, eword-sword-1);
+
+    CLR_INFO("FC", "Letter %s", funcname.getChars());
+
+    enterHandler();
+    baseEditor->validate(-1, false);
+    leaveHandler();
+    ignoreChange = true;
+   
+    EditorSetPosition esp;
+    OutlineItem *item_found = null;
+    OutlineItem *item_last = null;
+    int items_num = structOutliner->itemCount();
+
+    if (items_num == 0) break;
+    
+    //search through the outliner
+    for (int idx = 0; idx < items_num; idx++){
+      OutlineItem *item = structOutliner->getItem(idx);
+      if (item->token->indexOfIgnoreCase(DString(funcname)) != -1){
+        if (item->lno == ei.CurLine){
+          item_last = item;
+        }else{
+          item_found = item;
+        }
+      }
+    }
+    if (!item_found) item_found = item_last;
+
+    if (!item_found) break;
+
+    esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
+    esp.CurLine = item_found->lno;
+    esp.CurPos = item_found->pos;
+    esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
+    if (esp.TopScreenLine < 0) esp.TopScreenLine = 0;
+    info->EditorControl(ECTL_SETPOSITION, &esp);
+    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+    info->EditorControl(ECTL_GETINFO, &ei);
+    return;
+  };
+  
+  const char *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
+  info->Message(info->ModuleNumber, 0, 0, msg, 2, 1);
+}
+
 void FarEditor::updateHighlighting(){
   baseEditor->validate(ei.TopScreenLine, true);
 }
@@ -473,7 +541,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
+      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor+0x10000);
     };
     bool vertCrossDone = false;
 
@@ -511,7 +579,7 @@ int FarEditor::editorEvent(int event, void *param)
           ecp_cl.StringNumber = lno;
           ecp_cl.SrcPos = ecp.DestPos;
           info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-          addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, color);
+          addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, color+0x10000);
           vertCrossDone = true;
         };
 
@@ -522,7 +590,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
+      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor+0x10000);
     };
   };
 
@@ -543,7 +611,7 @@ int FarEditor::editorEvent(int event, void *param)
       color = convert(pm->start->styled());
       if (foreDefault(color)) color = (color&0xF0) + (vertCrossColor&0xF);
       if (backDefault(color)) color = (color&0xF) + (vertCrossColor&0xF0);
-      addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, color);
+      addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, color+0x10000);
     };
 
     if (pm->eline != -1){
@@ -561,7 +629,7 @@ int FarEditor::editorEvent(int event, void *param)
         color = convert(pm->end->styled());
         if (foreDefault(color)) color = (color&0xF0) + (vertCrossColor&0xF);
         if (backDefault(color)) color = (color&0xF) + (vertCrossColor&0xF0);
-        addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, color);
+        addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, color+0x10000);
       };
     };
     baseEditor->releasePairMatch(pm);
