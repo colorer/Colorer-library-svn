@@ -32,7 +32,7 @@
   <xsl:strip-space elements="*"/>
 
   <!-- version -->
-  <xsl:variable name="version" select="'0.9.3'"/>
+  <xsl:variable name="version" select="'0.9.4'"/>
 
   <!-- path to prototype catalog -->
   <xsl:variable name="catalog" select="document($catalog-path)"/>
@@ -163,7 +163,7 @@
            XSLT Generated HRC scheme for language '<xsl:value-of select="$hrctype"/>'
            from XML Schema with xsd2hrc.xsl version <xsl:value-of select="$version"/> 
             Copyright (C) 2002-04 Cail Lomecb
-            Portions copyright (C) 2004-05 Eugene Efremov
+            Portions copyright (C) 2004-06 Eugene Efremov
 
            Scheme parameters:
              targetNamespace             : <xsl:value-of select="$targetNamespace"/>
@@ -270,7 +270,9 @@
         <!-- EE: include xmlss content -->
         <xsl:apply-templates select="$custom-type/c:*" mode="scriptdef"/>
 
+        <xsl:comment>custom schemes from '<xsl:value-of select="$custom-defines"/>'</xsl:comment>
         <xsl:copy-of select="$custom-type-schemes"/>
+        <xsl:comment>end custom</xsl:comment>
 
         <!-- Schema datatypes: -->
 
@@ -380,7 +382,7 @@
    -
    - The Initial Developer of the Original Code is
    - Cail Lomecb <cail@nm.ru>.
-   - Portions created by the Initial Developer are Copyright (C) 1999-2003
+   - Portions created by the Initial Developer are Copyright (C) 1999-2006
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
