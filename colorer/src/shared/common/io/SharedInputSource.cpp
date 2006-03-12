@@ -1,6 +1,7 @@
 #include<common/io/SharedInputSource.h>
+#include<common/Logging.h>
 
-Hashtable<SharedInputSource*> SharedInputSource::isHash;
+Hashtable<SharedInputSource*> *SharedInputSource::isHash = null;
 
 
 SharedInputSource::SharedInputSource(InputSource *source){
@@ -10,7 +11,7 @@ SharedInputSource::SharedInputSource(InputSource *source){
 }
 
 SharedInputSource::~SharedInputSource(){
-  isHash.remove(is->getLocation());
+  isHash->remove(is->getLocation());
   delete is;
 }
 
@@ -19,11 +20,15 @@ SharedInputSource *SharedInputSource::getInputSource(const String *path, InputSo
 {
   InputSource *tempis = InputSource::newInstance(path, base);
 
-  SharedInputSource *sis = isHash.get(tempis->getLocation());
+  if (isHash == null){
+    isHash = new Hashtable<SharedInputSource*>();
+  }
+
+  SharedInputSource *sis = isHash->get(tempis->getLocation());
 
   if (sis == null){
     sis = new SharedInputSource(tempis);
-    isHash.put(tempis->getLocation(), sis);
+    isHash->put(tempis->getLocation(), sis);
     return sis;
   }else{
     delete tempis;

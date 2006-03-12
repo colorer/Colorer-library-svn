@@ -31,14 +31,14 @@
 <!-- Comments-->
          <regexp match="/\M^.{6}?([^\s\-].*)$/" region1="cobComment"/>
          <regexp match="/\M^.{72}?\s*(.*)$/" region1="cobComment"/>
+         <regexp match="/\M^.{6,}?(\*&gt;.*)$/" region1="cobComment"/>
 <!--
    <block start="/^.\M.{72}/" end="/~.{71}\m.*$/" scheme="cobol" region10="cobComment"/>
    -->
 <!-- Standard COBOL Identifiers -->
          <regexp match="/^.{6}?[\s\-]+\m(\b[\w\d]+)(\-)([\s]+)\M\-/" region1="cobDirect" region2="cobDirect" region3="cobDirect"/>
-         <regexp match="/(\b\w+)(\-)([^\s\r\n\,\.]+)/" region1="cobIdent" region2="cobIdent" region3="cobIdent"/>
          <inherit scheme="def:Number"/>
-         <inherit scheme="CString"/>
+         <block start="/\&#34;/" end="/\&#34;/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
          <regexp match="/('..??.??.??')/" region0="cobString"/>
 <!-- Multyline Strings ... -->
          <block start="/\&#34;/" end="/^.{6}\-/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
@@ -438,6 +438,7 @@
             <word name="ZEROES"/>
             <word name="ZEROS"/>
          </keywords>
+         <regexp match="/(\b\w+)(\-)([^\s\,\.]+)/" region1="cobIdent" region2="cobIdent" region3="cobIdent"/>
       </scheme>
 
    </type>
@@ -458,7 +459,7 @@
    - The Original Code is the Colorer Library.
    -
    - The Initial Developer of the Original Code is
-   - Cail Lomecb <cail@nm.ru>.
+   - Igor Russkih <irusskih at gmail dot com>.
    - Portions created by the Initial Developer are Copyright (C) 1999-2005
    - the Initial Developer. All Rights Reserved.
    -

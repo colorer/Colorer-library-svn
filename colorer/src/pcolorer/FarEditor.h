@@ -69,6 +69,10 @@ public:
   /** Editor action: Lists syntax errors in text.
   */
   void listErrors();
+  /**
+   * Locates a function under cursor and tries to jump to it using outliner information
+   */
+  void locateFunction();
 
   /** Invalidates current syntax highlighting
   */

@@ -1,38 +1,67 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="uri:wsf" xmlns:wsc="uri:wsc" targetNamespace="uri:wsf">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="uri:wsf" xmlns:wsc="uri:wsc" 
+    targetNamespace="uri:wsf"  elementFormDefault="qualified">
+<xs:import namespace="uri:wsc" schemaLocation="wsc.xsd"/>
 
 <xs:annotation><xs:documentation><![CDATA[
     Windows Script Host (*.wsf) schema. 
     Written for colorer.take5.
+    File version 1.2
+
+    Note! Namespaces "uri:wsc" and "uri:wsf" are used here ONLY for colorer. 
+    Real WSC/WSH has no any namespaces
     
-    (c) Eugene Efremov <4mirror@mail.ru>, 2005
+    (c) Eugene Efremov <4mirror@mail.ru>, 2005-2006
+    portion (c) techtonik <techtonik@php.net>, 2005
 ]]></xs:documentation></xs:annotation>
+
+<!-- 
+<xs:complexType name="scriptType"> - rejected 
+
+hrc for wsc:script was defined in custom.xml 
+    and we don't need code dublication
+    
+wfc:script has no @id, but it is not very critical...
+-->
+
+<!--
+<xs:complexType name="objectType"> - moved to wsc.xsd
+-->
+
+<xs:complexType name="unnamed">
+    <xs:attribute name="name" type="xs:token" use="required"/>
+    <xs:attribute name="helpstring" type="xs:string" use="required"/>
+    <!-- TODO: named/@many is valid or not? -->
+    <xs:attribute name="many" type="xs:boolean" use="optional"/> 
+    <xs:attribute name="required" type="xs:boolean" use="optional"/>
+</xs:complexType>
 
 
 <xs:complexType name="named">
-    <xs:attribute name="name" type="xs:token" use="required"/>
-    <xs:attribute name="helpstring" type="xs:string" use="required"/>
-    <xs:attribute name="many" type="xs:boolean"/>
-    <xs:attribute name="required" type="xs:boolean"/>
-    <xs:attribute name="type">
-        <xs:simpleType>
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="string"/>
-            <xs:enumeration value="boolean"/>
-            <xs:enumeration value="simple"/>
-        </xs:restriction>
-        </xs:simpleType>
-    </xs:attribute>
+    <xs:complexContent>
+        <xs:extension base="unnamed">
+            <xs:attribute name="type">
+                <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="string"/>
+                    <xs:enumeration value="boolean"/>
+                    <xs:enumeration value="simple"/>
+                </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:extension>
+    </xs:complexContent>
 </xs:complexType>
 
 
 <xs:element name="runtime">
     <xs:complexType>
-        <xs:sequence>
-            <xs:element name="named" type="named"/>
-            <xs:element name="unnamed" type="named"/>
-            <xs:element name="description" type="xs:string"/>
-            <xs:element name="example" type="xs:string"/>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="named" type="named" minOccurs="0"/>
+            <xs:element name="unnamed" type="unnamed" minOccurs="0"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="example" type="xs:string" minOccurs="0"/>
+            <xs:element name="usage" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>
@@ -41,11 +70,12 @@
 <xs:element name="job">
     <xs:complexType>
         <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:sequence>
-            <xs:element ref="wsc:script"/>
-            <xs:element ref="wsc:object"/>
-            <xs:element ref="wsc:reference"/>
-            <xs:element ref="runtime"/>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="runtime" minOccurs="0"/>
+            <xs:element ref="wsc:script" minOccurs="0"/>
+            <xs:element name="object" type="wsc:objectType" minOccurs="0"/>
+            <xs:element ref="wsc:reference" minOccurs="0"/>
+            <xs:element ref="wsc:resource" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:element>

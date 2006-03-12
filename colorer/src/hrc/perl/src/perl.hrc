@@ -10,8 +10,8 @@
 ]>
 
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
  >
 
    
@@ -21,15 +21,15 @@
 <package name="perl-vars-ex.internal.hack"/>
 
 <type name="perl-vars.internal.hack">
-	<entity name="var" value="[$@%*&amp;]"/>
-	
-	&perl-internal-hack;
+        <entity name="var" value="[$@%*&amp;]"/>
+        
+        &perl-internal-hack;
 </type>
 
 <type name="perl-vars-ex.internal.hack">
-	<entity name="var" value="[$@]"/>
-	
-	&perl-internal-hack;
+        <entity name="var" value="[$@]"/>
+        
+        &perl-internal-hack;
 </type>
 
 
@@ -249,21 +249,21 @@
       <entity name="PerlData" value="__(?{}END|DATA)__|[\x1A\x04]"/>
       
       <scheme name="PerlDataOn" if="data-code">
-      	<block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
-      		region00="DataName" scheme="perl"
-      	/>
+        <block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
+                region00="DataName" scheme="perl"
+        />
       </scheme>
       <scheme name="PerlDataOff" unless="data-code">
-      	<block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
-      		scheme="PerlDataOff" region="Comment"
-      		region00="DataName" 
-      	/>
-      	<block start="/\M^=/" end="/^=(head|cut)\m/" scheme="Pod" region="Pod" region10="PodSym"/>
-      	<inherit scheme="def:Comment"/>
+        <block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
+                scheme="PerlDataOff" region="Comment"
+                region00="DataName" 
+        />
+        <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="Pod" region="Pod" region10="PodSym"/>
+        <inherit scheme="def:Comment"/>
       </scheme>
       <scheme name="PerlDATA">
-      	<inherit scheme="PerlDataOn"/>
-      	<inherit scheme="PerlDataOff"/>
+        <inherit scheme="PerlDataOn"/>
+        <inherit scheme="PerlDataOff"/>
       </scheme>
       
       <!-- scheme for documet format -->
@@ -277,13 +277,13 @@
       
       <!-- rhomb -->
       <scheme name="Stream">
-      	<inherit scheme="Vars"/>
-      	<inherit scheme="shell:regexp"/>
+        <inherit scheme="Vars"/>
+        <inherit scheme="shell:regexp"/>
       </scheme>
       
       <scheme name="Comment">
          <block start="/(^|\$?~1)\#/" end="/$/" 
-         	region="Comment" scheme="def:Comment"
+                region="Comment" scheme="def:Comment"
          />
       </scheme>
 
@@ -310,9 +310,9 @@
 <!-- Variables -->
          <inherit scheme="Vars"/>
          <block start="/\b(sub)\s+(?{SubOutline}[\w_]+)\s*((\())/" 
-         	end="/(\))/" scheme="SubProt"
-         	region01="Word" region02="Symb" region03="def:PairStart"
-         	region10="Symb" region11="def:PairEnd"
+                end="/(\))/" scheme="SubProt"
+                region01="Word" region02="Symb" region03="def:PairStart"
+                region10="Symb" region11="def:PairEnd"
          /><!-- ([%@])? region11="SubProt" -->
          
          <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="Word"/>
@@ -367,17 +367,17 @@
 
 
 <!-- EE: move ~ to separated block (s{}{/... - '/' no regexp ) -->
-   <block start="/((\=|\! \~) |
+         <block start="/((\=|\! \~) |
                   [^&lt;\]\}\)\+\-\w\s\/] |
-                  (\bif) | (\bunless) | (\bsplit) | grep |^ )
+                  (\bif) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
                  \s*
-                 ((\/))
+                 ((?{def:PairStart}\/))
                 /x"
-          end="/(\y6([cmiogxes]*) )/x" scheme="RegExpString"
-          region="String" region01="Symb"
-          region06="StringEdge" region07="def:PairStart"
-          region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
-   <block start="/([\)\}\]\>])?~2(~)
+           end="/(\y7([cmiogxes]*) )/x"
+           scheme="RegExpString"
+           region="String" region01="Symb" region07="StringEdge"
+           region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
+         <block start="/([\)\}\]\>])?~2(~)
                  \s*
                  ((\/))
                 /x"
@@ -412,8 +412,8 @@
 <!-- streams and globs with html </script> hack -->
 
          <block start="/(&lt;) \M (\/script)?! [^\s\%]*? &gt;/ix"
-         	end="/&gt;/" region="Stream" scheme="Stream"
-         	region01="def:PairStart" region10="def:PairEnd"
+                end="/&gt;/" region="Stream" scheme="Stream"
+                region01="def:PairStart" region10="def:PairEnd"
          />
          <!--regexp match="/&lt; (\/script)?! [^\s\%]*? \&gt;/ix" region0="Stream"/-->
          <regexp match="/\B \- [ABCMORSTWXbcdefgkloprstuwxz]\b/x" region0="Word"/>

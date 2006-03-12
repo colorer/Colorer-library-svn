@@ -61,7 +61,7 @@ void operator delete[](void *ptr){
 /**
   List of currently allocated memory chunks with size CHUNK_SIZE
 */
-static Vector<byte*> chunks;
+static Vector<byte*> *chunks = null;
 
 /**
   Pointer to the last allocated chunk
@@ -85,21 +85,26 @@ static int allocCount = 0;
 */
 void *chunk_alloc(size_t size){
   if (size >= CHUNK_SIZE+4) throw Exception(DString("Too big memory request"));
-  if (chunks.size() == 0){
+  /* Init static - cygwin problems workaround */
+  if (chunks == null){
+    chunks = new Vector<byte*>;
+  };
+
+  if (chunks->size() == 0){
     currentChunk = new byte[CHUNK_SIZE];
-    chunks.addElement(currentChunk);
+    chunks->addElement(currentChunk);
     currentChunkAlloc = 0;
   };
   size = ((size-1) | 0x3) + 1; // 4-byte aling
   if (currentChunkAlloc+size > CHUNK_SIZE){
     currentChunk = new byte[CHUNK_SIZE];
-    chunks.addElement(currentChunk);
+    chunks->addElement(currentChunk);
     currentChunkAlloc = 0;
   };
   void *retVal = (void*)(currentChunk+currentChunkAlloc);
   currentChunkAlloc += size;
   allocCount++;
-  //printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks.size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
+  //printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks->size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
   //printf("calloc\t%d\n", clock());
   return retVal;
 };
@@ -113,10 +118,10 @@ void chunk_free(void *ptr){
   //printf("cfree\t%d\n", clock());
   allocCount--;
   if (allocCount == 0){
-    for(int idx = 0; idx < chunks.size(); idx++){
-      delete[] chunks.elementAt(idx);
+    for(int idx = 0; idx < chunks->size(); idx++){
+      delete[] chunks->elementAt(idx);
     };
-    chunks.setSize(0);
+    chunks->setSize(0);
   };
 //  printf("cf:%d, ", allocCount);
 };

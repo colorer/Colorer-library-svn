@@ -38,6 +38,11 @@
     New token generator in ConsoleTools.cpp
     Problems with overlapping regions should be resolved still
 
+  
   BRANCH-EFREMOV-BASE
     Main Eugene Efremov's branch.
+    
+  
+  BRANCH-IRUSSKIH-FAR-SEARCH-FUNC
+    Probably, something for Far plugin...
     
