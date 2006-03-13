@@ -29,6 +29,11 @@ REGEDIT4
 "DisableOutput"=dword:00000001
 "Description"="select region [colorer]"
 
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltF]
+"Sequence"="F11 c 8"
+"DisableOutput"=dword:00000001
+"Description"="find function [colorer]"
+
 [HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt;]
 "Sequence"="F11 c 5"
 "DisableOutput"=dword:00000001
