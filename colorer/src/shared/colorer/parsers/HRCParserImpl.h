@@ -71,7 +71,9 @@ friend class FileTypeImpl;
 
   void addScheme(Element *elem);
   void addSchemeNodes(SchemeImpl *scheme, Node *elem);
-  void loadRegions(SchemeNode *node, Element *el);
+  
+  void loadBlockRegions(SchemeNode *node, Element *el);
+  void loadRegions(SchemeNode *node, Element *el, bool st);
 
   String *qualifyOwnName(const String *name);
   bool checkNameExist(const String *name, FileTypeImpl *parseType, QualifyNameType qntype, bool logErrors);
@@ -108,6 +110,7 @@ friend class FileTypeImpl;
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ *  Eugene Efremov <4mirror@mail.ru>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
