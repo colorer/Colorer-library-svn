@@ -27,7 +27,7 @@
      
      <c:element name="style">
       <c:language name="html-css" expr="text\/css"/>
-      <c:default name="css"/>
+      <c:default name="html-css"/>
      </c:element>
      <c:attribute language="html-css" scheme-suffix="RuleContent"/>
     </c:script-n-style>

@@ -29,9 +29,11 @@
     </scheme>
 
     <scheme name="TclScript-client">
+      <!-- TODO: <script ... runat=server> not supported -->
       <inherit scheme="asp:Insertion"/>
       <inherit scheme="tcltk:tcltk">
-        <virtual scheme="tcltk:META" subst-scheme="Insertion"/>
+        <!-- ??? tcltk:META is not defined 
+        <virtual scheme="tcltk:META" subst-scheme="Insertion"/> -->
         <virtual scheme="tcltk:tcltk" subst-scheme="TclScript-client"/>
       </inherit>
     </scheme>

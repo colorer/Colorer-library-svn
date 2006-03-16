@@ -63,11 +63,12 @@
   </prototype>
   <prototype name="htc" group="inet" description="HTC">
     <location link="gen/htc.hrc"/>
-    <filename>/\.(htc)$/i</filename>
+    <filename weight='3'>/\.(htc)$/i</filename>
   </prototype>
   <prototype name="xbl" group="inet" description="Mozilla XBL">
     <location link="gen/xbl.hrc"/>
-    <filename>/\.(xbl)$/i</filename>
+    <filename>/\.(xml)/i</filename>
+    <firstline weight="5">/\bxmlns\s*=\s*(["'])http:\/\/www\.mozilla\.org\/xbl\1/</firstline>
   </prototype>
 
 
