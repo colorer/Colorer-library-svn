@@ -184,7 +184,7 @@ void ConsoleTools::listTypes(bool load){
   };
 }
 
-FileType *ConsoleTools::selectType(HRCParser *hrcParser, String *fline){
+FileType *ConsoleTools::selectType(HRCParser *hrcParser, LineSource *lineSource){
   FileType *type = null;
   if (typeDescription != null){
     type = hrcParser->getFileType(typeDescription);
@@ -200,11 +200,22 @@ FileType *ConsoleTools::selectType(HRCParser *hrcParser, String *fline){
             DString(type->getName(), 0, typeDescription->length()).equalsIgnoreCase(typeDescription))
           break;
         type = null;
-      };
-    };
-  };
-  if (typeDescription == null || type == null)
-    type = hrcParser->chooseFileType(inputFileName, fline, 0);
+      }
+    }
+  }
+  if (typeDescription == null || type == null){
+    StringBuffer textStart;
+    int totalLength = 0;
+    for(int i = 0; i < 4; i++){
+      String *iLine = lineSource->getLine(i);
+      if (iLine == null) break;
+      textStart.append(iLine);
+      textStart.append(DString("\n"));
+      totalLength += iLine->length();
+      if (totalLength > 500) break;
+    }
+    type = hrcParser->chooseFileType(inputFileName, &textStart, 0);
+  }
   return type;
 }
 
@@ -221,7 +232,7 @@ void ConsoleTools::profile(int loopCount){
   // HRD RegionMapper linking
   if (hrdName == null) hrdName = new DString("default");
   baseEditor.setRegionMapper(&DString("console"), hrdName);
-  FileType *type = selectType(pf.getHRCParser(), textLinesStore.getLine(0));
+  FileType *type = selectType(pf.getHRCParser(), &textLinesStore);
   type->getBaseScheme();
   baseEditor.setFileType(type);
 
@@ -248,7 +259,7 @@ void ConsoleTools::viewFile(){
     // HRD RegionMapper linking
     if (hrdName == null) hrdName = new DString("default");
     baseEditor.setRegionMapper(&DString("console"), hrdName);
-    FileType *type = selectType(pf.getHRCParser(), textLinesStore.getLine(0));
+    FileType *type = selectType(pf.getHRCParser(), &textLinesStore);
     baseEditor.setFileType(type);
     // Initial line count notify
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
@@ -316,7 +327,7 @@ void ConsoleTools::genOutput(bool useTokens){
     baseEditor.setRegionMapper(mapper);
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
     // Choosing file type
-    FileType *type = selectType(hrcParser, textLinesStore.getLine(0));
+    FileType *type = selectType(hrcParser, &textLinesStore);
     baseEditor.setFileType(type);
 
     //  writing result into HTML colored stream...

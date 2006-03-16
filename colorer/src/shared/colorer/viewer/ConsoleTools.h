@@ -90,7 +90,7 @@ public:
   void listTypes(bool load);
 
 
-  FileType *selectType(HRCParser *hrcParser, String *fline);
+  FileType *selectType(HRCParser *hrcParser, LineSource *lineSource);
 
 
 
