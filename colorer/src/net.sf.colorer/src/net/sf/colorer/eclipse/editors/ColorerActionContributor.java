@@ -150,7 +150,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
             }
             filetypeList = new Menu(parent);
             
-            Group[] groups = ColorerPlugin.getDefault().getParserFactory().getHRCParser().getGroups();
+            Group[] groups = ColorerPlugin.getDefaultPF().getHRCParser().getGroups();
 
             FileType currentFileType = ((ColorerEditor)activeEditor).getFileType();
             

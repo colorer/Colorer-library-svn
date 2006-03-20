@@ -48,14 +48,14 @@
             class="net.sf.colorer.eclipse.PreferencePage"
             id="net.sf.colorer.eclipse.PreferencePage">
       </page>
-<!--
+
       <page
             name="%FileTypePreferenceTitle"
             category="net.sf.colorer.eclipse.PreferencePage"
-            class="net.sf.colorer.eclipse.FileTypePreferencePage"
-            id="net.sf.colorer.eclipse.FileTypePreferencePage">
+            class="net.sf.colorer.eclipse.ftpp.FileTypePreferencePage"
+            id="net.sf.colorer.eclipse.ftpp.FileTypePreferencePage">
       </page>
--->
+
    </extension>
 
    <!-- HRC Regions tree list View -->

@@ -94,7 +94,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
     }
     gd.setFileList(fileList);
 
-    final ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+    final ParserFactory pf = ColorerPlugin.getDefaultPF();
     Vector hrdSchemas = new Vector();
     for(Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds.hasMoreElements();){
       final String hrd_name = (String)hrds.nextElement();
@@ -167,7 +167,7 @@ public class HTMLGeneratorAction implements IObjectActionDelegate  {
                 escapedWriter = commonWriter;
               }
               
-              ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+              ParserFactory pf = ColorerPlugin.getDefaultPF();
               HTMLGenerator hg = new HTMLGenerator(pf,rls,gd.getHRDSchema());
 
               hg.generate(commonWriter, escapedWriter,

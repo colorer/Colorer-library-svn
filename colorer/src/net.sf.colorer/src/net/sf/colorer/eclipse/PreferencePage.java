@@ -79,20 +79,17 @@ public class PreferencePage extends FieldEditorPreferencePage implements
         arrPairs[2][1] = "PAIRS_OUTLINE";
         arrPairs[3][0] = Messages.get("PAIRS_OUTLINE2");
         arrPairs[3][1] = "PAIRS_OUTLINE2";
-        addField(new RadioGroupFieldEditor(PAIRS_MATCH, Messages
-                .get(PAIRS_MATCH), 1, arrPairs, p));
+        addField(new RadioGroupFieldEditor(PAIRS_MATCH, Messages.get(PAIRS_MATCH), 1, arrPairs, p));
 
         new Label(p, 0).setText(Messages.get(HRD_SET));
 
-        ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
         hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
-        hrdSetsList = new Vector();
-        for (Enumeration hrds = pf.enumerateHRDInstances("rgb"); hrds
-                .hasMoreElements();) {
-            String hrd_name = (String) hrds.nextElement();
+        ParserFactory pf = ColorerPlugin.getDefaultPF();
+        Vector hrdList = ColorerPlugin.getDefault().getHRDList();
+        for (int idx = 0; idx < hrdList.size(); idx++) {
+            String hrd_name = (String) hrdList.elementAt(idx);
             String hrd_descr = pf.getHRDescription("rgb", hrd_name);
             hrdSets.add(hrd_descr);
-            hrdSetsList.add(hrd_name);
             if (getPreferenceStore().getString(HRD_SET).equals(hrd_name)) {
                 hrdSets.select(hrdSets.getItemCount() - 1);
             }

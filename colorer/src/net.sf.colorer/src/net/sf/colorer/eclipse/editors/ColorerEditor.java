@@ -136,7 +136,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         if (textColorer != null) {
             textColorer.detach();
         }
-        ParserFactory pf = ColorerPlugin.getDefault().getParserFactory();
+        ParserFactory pf = ColorerPlugin.getDefaultPF();
         HRCParser hp = pf.getHRCParser();
 
         textColorer = new TextColorer(pf, ColorerPlugin.getDefault()
