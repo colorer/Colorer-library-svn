@@ -624,10 +624,10 @@
   </target>
 
   <target name="this.eclipse" depends='this.eclipse.build' description='Builds EclipseColorer plugin and updates it in working Eclipse instance'>
-    <copy todir='${eclipse.dir}/plugins/${eclipsedir-name}' overwrite='true'>
+    <copy todir='${this.eclipse.dir}/plugins/${eclipsedir-name}' overwrite='true'>
       <fileset dir="src/net.sf.colorer" includes='colorer.jar, plugin.xml'/>
     </copy>
-    <copy todir='${eclipse.dir}/plugins/${eclipsedir-name}/os/win32/x86' overwrite='true'>
+    <copy todir='${this.eclipse.dir}/plugins/${eclipsedir-name}/os/win32/x86' overwrite='true'>
       <fileset dir="src/net.sf.colorer/libnative" includes='net_sf_colorer.dll'/>
     </copy>
   </target>
