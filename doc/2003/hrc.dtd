@@ -145,6 +145,7 @@
 
 <!ELEMENT regexp (#PCDATA)>
 <!ATTLIST regexp
+  region  NMTOKEN #IMPLIED
   match    CDATA #IMPLIED
   priority (low|normal) "normal"
 
@@ -164,11 +165,15 @@
 
 <!ELEMENT start (#PCDATA)>
 <!ATTLIST start
+  match    CDATA #IMPLIED
+  
   %regionX;
 >
 
 <!ELEMENT end (#PCDATA)>
 <!ATTLIST end
+  match    CDATA #IMPLIED
+  
   %regionX;
 >
 

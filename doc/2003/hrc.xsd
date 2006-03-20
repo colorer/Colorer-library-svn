@@ -51,7 +51,6 @@
   </xs:simpleType>
 
   <xs:attributeGroup name="regionX">
-    <xs:attribute name="region" type="QName"/>
     <xs:attribute name="region0" type="QName"/>
     <xs:attribute name="region1" type="QName"/>
     <xs:attribute name="region2" type="QName"/>
@@ -390,17 +389,12 @@
     <xs:annotation><xs:documentation>
       Regular Expression token.
     </xs:documentation></xs:annotation>
-    <xs:simpleContent>
-      <xs:extension base="REstring-or-null">
-        <xs:attribute name="match" type="REstring">
-          <xs:annotation><xs:documentation>
-            RE syntax
-          </xs:documentation></xs:annotation>
-        </xs:attribute>
+    <xs:complexContent>
+      <xs:extension base="blockInner">
+        <xs:attribute name="region" type="QName"/>
         <xs:attribute name="priority" type="priority" default="normal"/>
-        <xs:attributeGroup ref="regionX"/>
       </xs:extension>
-    </xs:simpleContent>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:simpleType name="priority">
@@ -494,6 +488,11 @@
     <xs:simpleContent>
       <xs:extension base="REstring">
         <xs:attributeGroup ref="regionX"/>
+        <xs:attribute name="match" type="REstring">
+          <xs:annotation><xs:documentation>
+            RE syntax
+          </xs:documentation></xs:annotation>
+        </xs:attribute>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
