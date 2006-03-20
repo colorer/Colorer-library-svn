@@ -472,30 +472,45 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+entMatchParam+"' in scheme '"+scheme->schemeName+"'");
       delete entMatchParam;
       next->end = 0;
-      loadRegions(next, (Element*)tmpel);
+      
+      // !! EE
+      loadRegions(next, (Element*)tmpel, true);
+      if(next->region) next->regions[0] = next->region;
+      
       scheme->nodes.addElement(next);
       next = null;
       continue;
     };
 
+    
     if (*tmpel->getNodeName() == "block"){
+    
       const String *sParam = ((Element*)tmpel)->getAttribute(DString("start"));
       const String *eParam = ((Element*)tmpel)->getAttribute(DString("end"));
-
-      if (!sParam && tmpel->getFirstChild() &&
-          *tmpel->getFirstChild()->getNodeName() == "start" &&
-          tmpel->getFirstChild()->getFirstChild() != null &&
-          tmpel->getFirstChild()->getFirstChild()->getNodeType() == Node::TEXT_NODE)
+      
+      // !! EE
+      Element *eStart = NULL, *eEnd = NULL;
+          
+      for(Node *blkn = tmpel->getFirstChild(); blkn && !(eParam && sParam); blkn = blkn->getNextSibling())
       {
-        sParam = ((Text*)tmpel->getFirstChild()->getFirstChild())->getData();
-      }
-      if (!eParam && tmpel->getFirstChild() &&
-          tmpel->getFirstChild()->getNextSibling() &&
-          *tmpel->getFirstChild()->getNextSibling()->getNodeName() == "end" &&
-          tmpel->getFirstChild()->getNextSibling()->getFirstChild() != null &&
-          tmpel->getFirstChild()->getNextSibling()->getFirstChild()->getNodeType() == Node::TEXT_NODE)
-      {
-        eParam = ((Text*)tmpel->getFirstChild()->getNextSibling()->getFirstChild())->getData();
+      	Element *blkel;
+      	if(blkn->getNodeType() == Node::ELEMENT_NODE) blkel = (Element*)blkn;
+      	else continue;
+      	
+      	const String *p = (blkel->getFirstChild() && blkel->getFirstChild()->getNodeType() == Node::TEXT_NODE)
+      	                ? ((Text*)blkel->getFirstChild())->getData()
+      	                : blkel->getAttribute(DString("match"));
+      	
+      	if(*blkel->getNodeName() == "start") 
+      	{
+      		sParam = p;
+      		eStart = blkel;
+      	}
+      	if(*blkel->getNodeName() == "end")   
+      	{
+      		eParam = p;
+      		eEnd = blkel;
+      	}
       }
 
       String *startParam;
@@ -547,7 +562,10 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       delete startParam;
       delete endParam;
 
-      loadRegions(next, (Element*)tmpel);
+      // !! EE
+      loadBlockRegions(next, (Element*)tmpel);
+      loadRegions(next, eStart, true);
+      loadRegions(next, eEnd, false);
       scheme->nodes.addElement(next);
       next = null;
       continue;
@@ -629,39 +647,47 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
   if (next != null) delete next;
 };
 
-void HRCParserImpl::loadRegions(SchemeNode *node, Element *el)
+
+// !! EE
+void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
+{
+	static char rg_tmpl[0x10] = "region\0\0";
+	
+	if(el)
+	{
+		if(!node->region) node->region = getNCRegion(el, DString("region"));
+		
+		for(int i = 0; i < REGIONS_NUM; i++)
+		{
+			rg_tmpl[6] = (i<0xA?i:i+7+32)+'0';
+			
+			if(st) node->regions[i] = getNCRegion(el, DString(rg_tmpl));
+			else   node->regione[i] = getNCRegion(el, DString(rg_tmpl));
+		}
+	}
+	
+	for (int i = 0; i < NAMED_REGIONS_NUM; i++)
+	{
+		if(st) node->regionsn[i] = getNCRegion(node->start->getBracketName(i), false);
+		else   node->regionen[i] = getNCRegion(node->end->getBracketName(i), false);
+	}
+}
+
+
+void HRCParserImpl::loadBlockRegions(SchemeNode *node, Element *el)
 {
 int i;
 static char rg_tmpl[0x10] = "region";
 
   node->region = getNCRegion(el, DString("region"));
   for (i = 0; i < REGIONS_NUM; i++){
-    if (node->type == SNT_SCHEME){
       rg_tmpl[6] = '0'; rg_tmpl[7] = (i<0xA?i:i+7)+'0'; rg_tmpl[8] = 0;
       node->regions[i] = getNCRegion(el, DString(rg_tmpl));
       rg_tmpl[6] = '1';
       node->regione[i] = getNCRegion(el, DString(rg_tmpl));
-
-      rg_tmpl[6] = (i<0xA?i:i+7+32)+'0'; rg_tmpl[7] = 0;
-      if (el->getFirstChild() && *el->getFirstChild()->getNodeName() == "start"){
-        node->regions[i] = getNCRegion((Element*)el->getFirstChild(), DString(rg_tmpl));
-      };
-      if (el->getFirstChild() && el->getFirstChild()->getNextSibling() &&
-          *el->getFirstChild()->getNextSibling()->getNodeName() == "end"){
-         node->regione[i] = getNCRegion((Element*)el->getFirstChild()->getNextSibling(), DString(rg_tmpl));
-      };
-    }else if (node->type == SNT_RE){
-      rg_tmpl[6] = (i<0xA?i:i+7+32)+'0'; rg_tmpl[7] = 0;
-      node->regions[i] = getNCRegion(el, DString(rg_tmpl));
-    };
-  };
-  for (i = 0; i < NAMED_REGIONS_NUM; i++){
-    node->regionsn[i] = getNCRegion(node->start->getBracketName(i), false);
-    if (node->type == SNT_SCHEME)
-      node->regionen[i] = getNCRegion(node->end->getBracketName(i), false);
-  };
-  if (node->type == SNT_RE && node->region) node->regions[0] = node->region;
-};
+  }
+}
+  
 
 void HRCParserImpl::updateLinks()
 {
@@ -868,6 +894,7 @@ const Region* HRCParserImpl::getNCRegion(Element *el, const String &tag){
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ *  Eugene Efremov <4mirror@mail.ru>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
