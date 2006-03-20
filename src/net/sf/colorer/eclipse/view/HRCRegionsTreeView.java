@@ -120,7 +120,7 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
             regionMapper = null;
         }
         try{
-            regionMapper = ColorerPlugin.getDefault().getParserFactory().
+            regionMapper = ColorerPlugin.getDefaultPF().
                 createStyledMapper(StyledRegion.HRD_RGB_CLASS,
                         prefStore.getString(PreferencePage.HRD_SET));
         }catch(Exception e){
@@ -145,7 +145,7 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
             treeViewer.setContentProvider(new RegionContentProvider());
             treeViewer.setLabelProvider(new RegionTreeLabelProvider());
 
-            hrcParser = ColorerPlugin.getDefault().getParserFactory().getHRCParser();
+            hrcParser = ColorerPlugin.getDefaultPF().getHRCParser();
             treeViewer.setInput(hrcParser);
 
             treeViewer.addDoubleClickListener(new IDoubleClickListener(){
@@ -288,7 +288,7 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
         refreshAction = new Action("Refresh", ImageStore.getID("regions-tree-refresh"))
         {
             public void run() {
-                hrcParser = ColorerPlugin.getDefault().getParserFactory().getHRCParser();
+                hrcParser = ColorerPlugin.getDefaultPF().getHRCParser();
                 treeViewer.setInput(hrcParser);
             }
         };

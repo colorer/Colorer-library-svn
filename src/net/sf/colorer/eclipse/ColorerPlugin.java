@@ -1,6 +1,7 @@
 package net.sf.colorer.eclipse;
 
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -14,6 +15,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -30,6 +33,7 @@ public class ColorerPlugin extends AbstractUIPlugin {
     private ParserFactory parserFactory;
     private ColorManager colorManager = new ColorManager();
     private Vector reloadListeners = new Vector();
+    private Vector hrdSetsList;
 
     /**
      * The constructor.
@@ -92,7 +96,14 @@ public class ColorerPlugin extends AbstractUIPlugin {
     public static ColorerPlugin getDefault() {
         return plugin;
     }
-
+    
+    /**
+     * @return Default parser factory from default plugin instance
+     */
+    public static ParserFactory getDefaultPF() {
+        return getDefault().getParserFactory();
+    }
+    
     public synchronized ParserFactory getParserFactory() {
         if (parserFactory != null) {
             return parserFactory;
@@ -119,8 +130,16 @@ public class ColorerPlugin extends AbstractUIPlugin {
                                         + exc.getMessage());
             }
         }
+        if (parserFactory != null) {
+            hrdSetsList = new Vector();
+            for (Enumeration hrds = parserFactory.enumerateHRDInstances("rgb"); hrds.hasMoreElements();) {
+                String hrd_name = (String) hrds.nextElement();
+                String hrd_descr = parserFactory.getHRDescription("rgb", hrd_name);
+                hrdSetsList.add(hrd_name);
+            }
+        }
         return parserFactory;
-    };
+    }
 
     public synchronized void reloadParserFactory() {
         // informs all the editors about ParserFactory reloading
@@ -130,7 +149,11 @@ public class ColorerPlugin extends AbstractUIPlugin {
         parserFactory = null;
         parserFactory = getParserFactory();
         notifyReloadListeners();
-    };
+    }
+    
+    public Vector getHRDList() {
+        return hrdSetsList;
+    }
 
     void notifyReloadListeners() {
         for(int idx = 0; idx < reloadListeners.size(); idx++) {
@@ -178,7 +201,8 @@ public class ColorerPlugin extends AbstractUIPlugin {
             resourceBundle = null;
         }
         return resourceBundle;
-    }    
+    }
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
