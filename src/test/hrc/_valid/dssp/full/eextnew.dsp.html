@@ -1,465 +1,465 @@
   0: <span style='color:#0000e6; '>"Расшиpения pедактоpа.        Версия 1.2. 20 Ноября  1990."</span>
-  1: <span style='color:#074726; '>B10 CR </span><span style='color:#008c00; '>12</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> SCOLOR TOS</span><span style='color:#0000e6; '>''</span>
-  2: <span style='color:#074726; '>PROGRAM $EDEXT USE SYSTEM USE $EDIT</span>
+  1: <span style='color:#074726; '>B10</span> <span style='color:#074726; '>CR</span> <span style='color:#008c00; '>12</span> <span style='color:#074726; '>!</span> SCOLOR <span style='color:#074726; '>TOS</span>''
+  2: <span style='color:#004a43; '>PROGRAM $EDEXT</span> USE SYSTEM USE $EDIT
   3: <span style='color:#074726; '>B8</span>
-  4: <span style='color:#808030; '>[</span><span style='color:#074726; '> </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> NOP   </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> ATT   </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> POINT </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> COPY   </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> CTRLD </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> EX    </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> CTRLF </span><span style='color:#0000e6; '>''</span><span style='color:#074726; '> GET</span>
-  5: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#bb7977; font-weight:bold; '> A      </span><span style='color:#008c00; font-weight:bold; '>2</span><span style='color:#bb7977; font-weight:bold; '> B      </span><span style='color:#008c00; font-weight:bold; '>3</span><span style='color:#bb7977; font-weight:bold; '> C       </span><span style='color:#008c00; font-weight:bold; '>4</span><span style='color:#bb7977; font-weight:bold; '> D      </span><span style='color:#008c00; font-weight:bold; '>5</span><span style='color:#bb7977; font-weight:bold; '> E      </span><span style='color:#008c00; font-weight:bold; '>6</span><span style='color:#bb7977; font-weight:bold; '> F      </span><span style='color:#008c00; font-weight:bold; '>7</span><span style='color:#bb7977; font-weight:bold; '> G</span>
-  6: 
-  7: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ERS    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ГТ    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> DIV   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> STS    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> NSTR  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>BK   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> NOP   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> NOP</span>
-  8: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>10</span><span style='color:#bb7977; font-weight:bold; '> H      </span><span style='color:#008c00; font-weight:bold; '>11</span><span style='color:#bb7977; font-weight:bold; '> I     </span><span style='color:#008c00; font-weight:bold; '>12</span><span style='color:#bb7977; font-weight:bold; '> J     </span><span style='color:#008c00; font-weight:bold; '>13</span><span style='color:#bb7977; font-weight:bold; '> K      </span><span style='color:#008c00; font-weight:bold; '>14</span><span style='color:#bb7977; font-weight:bold; '> L     </span><span style='color:#008c00; font-weight:bold; '>15</span><span style='color:#bb7977; font-weight:bold; '> M     </span><span style='color:#008c00; font-weight:bold; '>16</span><span style='color:#bb7977; font-weight:bold; '> N     </span><span style='color:#008c00; font-weight:bold; '>17</span><span style='color:#bb7977; font-weight:bold; '> O</span>
-  9: 
- 10: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ТАБ    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TXT   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> DL    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> IC     </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> DC    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> CTRLU </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> IL    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> NOP</span>
- 11: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>20</span><span style='color:#bb7977; font-weight:bold; '> P      </span><span style='color:#008c00; font-weight:bold; '>21</span><span style='color:#bb7977; font-weight:bold; '> Q     </span><span style='color:#008c00; font-weight:bold; '>22</span><span style='color:#bb7977; font-weight:bold; '> R     </span><span style='color:#008c00; font-weight:bold; '>23</span><span style='color:#bb7977; font-weight:bold; '> S      </span><span style='color:#008c00; font-weight:bold; '>24</span><span style='color:#bb7977; font-weight:bold; '> T     </span><span style='color:#008c00; font-weight:bold; '>25</span><span style='color:#bb7977; font-weight:bold; '> U     </span><span style='color:#008c00; font-weight:bold; '>26</span><span style='color:#bb7977; font-weight:bold; '> V     </span><span style='color:#008c00; font-weight:bold; '>27</span><span style='color:#bb7977; font-weight:bold; '> W</span>
- 12: 
- 13: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ТАБ    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#808030; font-weight:bold; '>></span><span style='color:#bb7977; font-weight:bold; '>   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>&lt;</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> AR2    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> UP    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> DOWN  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ПРДМ  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> NOPOIN</span>
- 14: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>30</span><span style='color:#bb7977; font-weight:bold; '> X      </span><span style='color:#008c00; font-weight:bold; '>31</span><span style='color:#bb7977; font-weight:bold; '> Y     </span><span style='color:#008c00; font-weight:bold; '>32</span><span style='color:#bb7977; font-weight:bold; '> Z     </span><span style='color:#008c00; font-weight:bold; '>33</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>{</span><span style='color:#bb7977; font-weight:bold; '>      </span><span style='color:#008c00; font-weight:bold; '>34</span><span style='color:#bb7977; font-weight:bold; '> \     </span><span style='color:#008c00; font-weight:bold; '>35</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>}</span><span style='color:#bb7977; font-weight:bold; '>     </span><span style='color:#008c00; font-weight:bold; '>36</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>^</span><span style='color:#bb7977; font-weight:bold; '>     </span><span style='color:#008c00; font-weight:bold; '>37</span><span style='color:#bb7977; font-weight:bold; '> _</span>
- 15: 
- 16: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> WINDOW </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TSTR  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> LDATE </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> SK</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> MARKS </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> DATE  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> EXR   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> L1</span>
- 17: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>40</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>41</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>42</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>43</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>44</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>45</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>46</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>47</span>
- 18: 
- 19: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> AU</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>BSTR </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TOLMOV </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ZAPIS </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> EDIT  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> REST  </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> BEG   </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>ПС</span>
- 20: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>50</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>51</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>52</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>53</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>54</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>55</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>56</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>57</span>
- 21: 
- 22: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ST3    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> RENSC </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TOPMOV </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> SCHFL </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> ZB    </span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> IFL</span>
- 23: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>60</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>61</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>62</span><span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#008c00; font-weight:bold; '>63</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>64</span><span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>65</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>]</span>
+  4: <span style='color:#696969; '>[ '' NOP   '' ATT   '' POINT '' COPY   '' CTRLD '' EX    '' CTRLF '' GET</span>
+  5: <span style='color:#696969; '>  0        1 A      2 B      3 C       4 D      5 E      6 F      7 G</span>
+  6: <span style='color:#696969; '></span>
+  7: <span style='color:#696969; '> '' ERS    '' ГТ    '' DIV   '' STS    '' NSTR  '' .BK   '' NOP   '' NOP</span>
+  8: <span style='color:#696969; '> 10 H      11 I     12 J     13 K      14 L     15 M     16 N     17 O</span>
+  9: <span style='color:#696969; '></span>
+ 10: <span style='color:#696969; '> '' ТАБ    '' TXT   '' DL    '' IC     '' DC    '' CTRLU '' IL    '' NOP</span>
+ 11: <span style='color:#696969; '> 20 P      21 Q     22 R     23 S      24 T     25 U     26 V     27 W</span>
+ 12: <span style='color:#696969; '></span>
+ 13: <span style='color:#696969; '> '' ТАБ    '' !->   '' &lt;-    '' AR2    '' UP    '' DOWN  '' ПРДМ  '' NOPOIN</span>
+ 14: <span style='color:#696969; '> 30 X      31 Y     32 Z     33 {      34 \     35 }     36 ^     37 _</span>
+ 15: <span style='color:#696969; '></span>
+ 16: <span style='color:#696969; '> '' WINDOW '' TSTR  '' LDATE '' SK+    '' MARKS '' DATE  '' EXR   '' L1</span>
+ 17: <span style='color:#696969; '> 40        41       42       43        44       45       46       47</span>
+ 18: <span style='color:#696969; '></span>
+ 19: <span style='color:#696969; '> '' AU+    '' .BSTR '' TOLMOV '' ZAPIS '' EDIT  '' REST  '' BEG   '' .ПС</span>
+ 20: <span style='color:#696969; '> 50        51       52        53       54       55       56       57</span>
+ 21: <span style='color:#696969; '></span>
+ 22: <span style='color:#696969; '> '' ST3    '' RENSC '' TOPMOV '' SCHFL '' ZB    '' IFL</span>
+ 23: <span style='color:#696969; '> 60        61       62        63       64       65 ]</span>
  24: 
- 25: <span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>4</span><span style='color:#bb7977; font-weight:bold; '> EXE HEAD CTRLD</span>
- 26: <span style='color:#008c00; '>12</span><span style='color:#074726; '> EXE HEAD DIV</span>
- 27: <span style='color:#008c00; '>13</span><span style='color:#074726; '> EXE HEAD STS</span>
- 28: <span style='color:#008c00; '>15</span><span style='color:#074726; '> EXE HEAD </span><span style='color:#808030; '>.</span><span style='color:#074726; '>BK</span>
- 29: <span style='color:#008c00; '>23</span><span style='color:#074726; '> EXE HEAD IC</span>
- 30: <span style='color:#008c00; '>24</span><span style='color:#074726; '> EXE HEAD DC</span>
- 31: <span style='color:#008c00; '>30</span><span style='color:#074726; '> EXE HEAD TAB</span>
- 32: <span style='color:#008c00; '>31</span><span style='color:#074726; '> EXE HEAD </span><span style='color:#808030; '>!</span><span style='color:#808030; '>-</span><span style='color:#808030; '>></span>
- 33: <span style='color:#008c00; '>32</span><span style='color:#074726; '> EXE HEAD </span><span style='color:#808030; '>&lt;</span><span style='color:#808030; '>-</span>
- 34: <span style='color:#008c00; '>34</span><span style='color:#074726; '> EXE HEAD UP</span>
- 35: <span style='color:#008c00; '>35</span><span style='color:#074726; '> EXE HEAD DOWN</span>
- 36: <span style='color:#008c00; '>40</span><span style='color:#074726; '> EXE HEAD WINDOW</span>
- 37: <span style='color:#008c00; '>41</span><span style='color:#074726; '> EXE HEAD TSTR</span>
- 38: <span style='color:#008c00; '>43</span><span style='color:#074726; '> EXE HEAD SK</span><span style='color:#808030; '>+</span>
- 39: <span style='color:#008c00; '>44</span><span style='color:#074726; '> EXE HEAD MARKS</span>
- 40: <span style='color:#008c00; '>46</span><span style='color:#074726; '> EXE HEAD EXR</span>
- 41: <span style='color:#008c00; '>47</span><span style='color:#074726; '> EXE HEAD L1</span>
- 42: <span style='color:#008c00; '>50</span><span style='color:#074726; '> EXE HEAD AU</span><span style='color:#808030; '>+</span>
- 43: <span style='color:#008c00; '>51</span><span style='color:#074726; '> EXE HEAD </span><span style='color:#808030; '>.</span><span style='color:#074726; '>BSTR</span>
- 44: <span style='color:#008c00; '>52</span><span style='color:#074726; '> EXE HEAD TOLMOV</span>
- 45: <span style='color:#008c00; '>53</span><span style='color:#074726; '> EXE HEAD ZAPIS</span>
- 46: <span style='color:#008c00; '>54</span><span style='color:#074726; '> EXE HEAD EDIT</span>
- 47: <span style='color:#008c00; '>55</span><span style='color:#074726; '> EXE HEAD REST</span>
- 48: <span style='color:#008c00; '>56</span><span style='color:#074726; '> EXE HEAD BEG</span>
- 49: <span style='color:#008c00; '>57</span><span style='color:#074726; '> EXE HEAD </span><span style='color:#808030; '>.</span><span style='color:#074726; '>PC</span>
- 50: <span style='color:#008c00; '>60</span><span style='color:#074726; '> EXE HEAD ST3</span>
- 51: <span style='color:#008c00; '>61</span><span style='color:#074726; '> EXE HEAD RENSC</span>
- 52: <span style='color:#008c00; '>62</span><span style='color:#074726; '> EXE HEAD TOPMOV</span>
- 53: <span style='color:#008c00; '>63</span><span style='color:#074726; '> EXE HEAD SCHFL</span>
- 54: <span style='color:#008c00; '>64</span><span style='color:#074726; '> EXE HEAD ZB</span>
- 55: <span style='color:#008c00; '>65</span><span style='color:#074726; '> EXE HEAD IFL</span>
+ 25:  <span style='color:#008c00; '>4</span> EXE <span style='color:#074726; '>HEAD</span> CTRLD
+ 26: <span style='color:#008c00; '>12</span> EXE <span style='color:#074726; '>HEAD</span> DIV
+ 27: <span style='color:#008c00; '>13</span> EXE <span style='color:#074726; '>HEAD</span> STS
+ 28: <span style='color:#008c00; '>15</span> EXE <span style='color:#074726; '>HEAD</span> .BK
+ 29: <span style='color:#008c00; '>23</span> EXE <span style='color:#074726; '>HEAD</span> IC
+ 30: <span style='color:#008c00; '>24</span> EXE <span style='color:#074726; '>HEAD</span> DC
+ 31: <span style='color:#008c00; '>30</span> EXE <span style='color:#074726; '>HEAD</span> TAB
+ 32: <span style='color:#008c00; '>31</span> EXE <span style='color:#074726; '>HEAD</span> !-<span style='color:#074726; '>></span>
+ 33: <span style='color:#008c00; '>32</span> EXE <span style='color:#074726; '>HEAD</span> <span style='color:#074726; '>&lt;</span>-
+ 34: <span style='color:#008c00; '>34</span> EXE <span style='color:#074726; '>HEAD</span> UP
+ 35: <span style='color:#008c00; '>35</span> EXE <span style='color:#074726; '>HEAD</span> DOWN
+ 36: <span style='color:#008c00; '>40</span> EXE <span style='color:#074726; '>HEAD</span> WINDOW
+ 37: <span style='color:#008c00; '>41</span> EXE <span style='color:#074726; '>HEAD</span> TSTR
+ 38: <span style='color:#008c00; '>43</span> EXE <span style='color:#074726; '>HEAD</span> SK+
+ 39: <span style='color:#008c00; '>44</span> EXE <span style='color:#074726; '>HEAD</span> MARKS
+ 40: <span style='color:#008c00; '>46</span> EXE <span style='color:#074726; '>HEAD</span> EXR
+ 41: <span style='color:#008c00; '>47</span> EXE <span style='color:#074726; '>HEAD</span> L1
+ 42: <span style='color:#008c00; '>50</span> EXE <span style='color:#074726; '>HEAD</span> AU+
+ 43: <span style='color:#008c00; '>51</span> EXE <span style='color:#074726; '>HEAD</span> .BSTR
+ 44: <span style='color:#008c00; '>52</span> EXE <span style='color:#074726; '>HEAD</span> TOLMOV
+ 45: <span style='color:#008c00; '>53</span> EXE <span style='color:#074726; '>HEAD</span> ZAPIS
+ 46: <span style='color:#008c00; '>54</span> EXE <span style='color:#074726; '>HEAD</span> EDIT
+ 47: <span style='color:#008c00; '>55</span> EXE <span style='color:#074726; '>HEAD</span> REST
+ 48: <span style='color:#008c00; '>56</span> EXE <span style='color:#074726; '>HEAD</span> BEG
+ 49: <span style='color:#008c00; '>57</span> EXE <span style='color:#074726; '>HEAD</span> .PC
+ 50: <span style='color:#008c00; '>60</span> EXE <span style='color:#074726; '>HEAD</span> ST3
+ 51: <span style='color:#008c00; '>61</span> EXE <span style='color:#074726; '>HEAD</span> RENSC
+ 52: <span style='color:#008c00; '>62</span> EXE <span style='color:#074726; '>HEAD</span> TOPMOV
+ 53: <span style='color:#008c00; '>63</span> EXE <span style='color:#074726; '>HEAD</span> SCHFL
+ 54: <span style='color:#008c00; '>64</span> EXE <span style='color:#074726; '>HEAD</span> ZB
+ 55: <span style='color:#008c00; '>65</span> EXE <span style='color:#074726; '>HEAD</span> IFL
  56: 
- 57: <span style='color:#808030; '>:</span><span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>?</span><span style='color:#074726; '>SP </span><span style='color:#696969; '>#  = ;</span>
- 58: <span style='color:#808030; '>:</span><span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>?</span><span style='color:#074726; '>BK </span><span style='color:#008c00; '>12</span><span style='color:#074726; '> </span><span style='color:#808030; '>=</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
- 59: <span style='color:#808030; '>:</span><span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>:</span><span style='color:#074726; '> SPE </span><span style='color:#696969; '>#  TOB'' ;</span>
+ 57: :: : ?<span style='color:#074726; '>SP</span> #  <span style='color:#074726; '>=</span> ;
+ 58: :: : ?BK <span style='color:#008c00; '>12</span> <span style='color:#074726; '>=</span> ;
+ 59: :: : SPE #  <span style='color:#074726; '>TOB</span>'' ;
  60: 
- 61: <span style='color:#808030; '>[</span><span style='color:#074726; '>Форматирование</span><span style='color:#808030; '>]</span>
+ 61: <span style='color:#696969; '>[Форматирование]</span>
  62: <span style='color:#074726; '>VAR A</span>
- 63: <span style='color:#808030; '>:</span><span style='color:#808030; '>:</span><span style='color:#074726; '> FIX VAR NDLS </span><span style='color:#008c00; '>113</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> NDLS</span>
- 64: <span style='color:#808030; '>:</span><span style='color:#074726; '> ER </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> MARKS </span><span style='color:#808030; '>[</span><span style='color:#074726; '>L</span><span style='color:#808030; '>,</span><span style='color:#074726; '>H</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>/</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#074726; '> BR</span><span style='color:#808030; '>+</span><span style='color:#074726; '> ER1 DD </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
- 65: <span style='color:#808030; '>:</span><span style='color:#074726; '> ER1 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>L</span><span style='color:#808030; '>,</span><span style='color:#074726; '>H</span><span style='color:#808030; '>]</span><span style='color:#074726; '> SCHFL</span>
- 66: <span style='color:#bb7977; font-weight:bold; '>  C2 </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> C2 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>LINE</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> C ST3 </span><span style='color:#008c00; font-weight:bold; '>5</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> ST3 HS </span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>5</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> SEG BR</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> TOLMOV RENSC</span>
- 67: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>L</span><span style='color:#808030; font-weight:bold; '>,</span><span style='color:#bb7977; font-weight:bold; '>SK</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>BSTR ER2 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>L</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> TSTR </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> E2 WINDOW L1 TOLMOV </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+ 63: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR NDLS</span> <span style='color:#008c00; '>113</span> <span style='color:#074726; '>!</span> NDLS
+ 64: : ER <span style='color:#696969; '>[]</span> MARKS <span style='color:#696969; '>[L,H,1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ER1 DD</span> <span style='color:#696969; '>[]</span> ;
+ 65: : ER1 <span style='color:#696969; '>[L,H]</span> SCHFL
+ 66:   <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>C2</span> <span style='color:#696969; '>[LINE]</span> <span style='color:#074726; '>C</span> ST3 <span style='color:#008c00; '>5</span> - ST3 <span style='color:#074726; '>HS</span> + <span style='color:#008c00; '>5</span> + <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> TOLMOV RENSC</span>
+ 67:   <span style='color:#696969; '>[L,SK]</span> .BSTR ER2 <span style='color:#696969; '>[L]</span> TSTR <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> WINDOW L1 TOLMOV <span style='color:#696969; '>[]</span> ;
  68: 
- 69: <span style='color:#808030; '>[</span><span style='color:#074726; '>Основной цикл</span><span style='color:#808030; '>]</span>
- 70: <span style='color:#808030; '>:</span><span style='color:#074726; '> ER2 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>SK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> AF </span><span style='color:#808030; '>!</span><span style='color:#074726; '> A RP OSTR D </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
- 71: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> OSTR </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>SK</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> A </span><span style='color:#808030; font-weight:bold; '>@</span><span style='color:#bb7977; font-weight:bold; '>B BR </span><span style='color:#008c00; font-weight:bold; '>12</span><span style='color:#bb7977; font-weight:bold; '> OS1 </span><span style='color:#008c00; font-weight:bold; '>40</span><span style='color:#bb7977; font-weight:bold; '> OS2 </span><span style='color:#696969; font-weight:bold; '>#- OS3 ELSE OS4 [SK'] ;</span>
+ 69: <span style='color:#696969; '>[Основной цикл]</span>
+ 70: : ER2 <span style='color:#696969; '>[SK]</span> AF <span style='color:#074726; '>!</span> A <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> OSTR</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+ 71:   : OSTR <span style='color:#696969; '>[SK]</span> A @B <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 12 OS1 40 OS2 #- OS3</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> OS4</span> <span style='color:#696969; '>[SK']</span> ;
  72: 
- 73: <span style='color:#808030; '>:</span><span style='color:#074726; '> OS1 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>SK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> C EX0 A AF </span><span style='color:#808030; '>-</span>
- 74: <span style='color:#bb7977; font-weight:bold; '>  BR </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> OSTR0 NDLS OSTR0 DLS</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#bb7977; font-weight:bold; '> OSTR0 ELSE OSTR1 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>SK</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
- 75: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> OSTR0 A</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> AF A AF </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> UN C2 AU</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '>SB </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> TSTR </span><span style='color:#808030; font-weight:bold; '>;</span>
- 76: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> OSTR1 A </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>@</span><span style='color:#bb7977; font-weight:bold; '>B BR </span><span style='color:#008c00; font-weight:bold; '>12</span><span style='color:#bb7977; font-weight:bold; '> OSTR0 </span><span style='color:#696969; font-weight:bold; '>#  OSTR0 #- OSTR0</span>
- 77: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#696969; font-weight:bold; '>#| OSTR0 177 OSTR0 ELSE OSTR2 ;</span>
- 78: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> OSTR2 </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> LEN </span><span style='color:#008c00; font-weight:bold; '>40</span><span style='color:#bb7977; font-weight:bold; '> A </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '>TB A</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+ 73: : OS1 <span style='color:#696969; '>[SK]</span> <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>C</span> EX0 A AF -
+ 74:   <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 0 OSTR0 NDLS OSTR0 DLS-1 OSTR0</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> OSTR1</span> <span style='color:#696969; '>[SK-1]</span> ;
+ 75:   : OSTR0 A+ AF A AF - UN <span style='color:#074726; '>C2</span> AU+ <span style='color:#074726; '>!SB</span> <span style='color:#074726; '>!1+</span> TSTR ;
+ 76:   : OSTR1 A <span style='color:#008c00; '>1</span>+ @B BR <span style='color:#008c00; '>12</span> OSTR0 #  OSTR0 #- OSTR0
+ 77:     #| OSTR0 <span style='color:#008c00; '>177</span> OSTR0 <span style='color:#800000; font-weight:bold; '>ELSE OSTR2</span> ;
+ 78:     : OSTR2 <span style='color:#074726; '>!1-</span> LEN <span style='color:#008c00; '>40</span> A <span style='color:#074726; '>!TB</span> A+ ;
  79: 
- 80: <span style='color:#808030; '>:</span><span style='color:#074726; '> OS2 A AF </span><span style='color:#808030; '>-</span><span style='color:#074726; '> BR NDLS </span><span style='color:#808030; '>+</span><span style='color:#074726; '>STR DLS</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#074726; '> </span><span style='color:#808030; '>+</span><span style='color:#074726; '>STR ELSE A</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
- 81: <span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>+</span><span style='color:#074726; '>STR </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> LEN </span><span style='color:#008c00; '>12</span><span style='color:#074726; '> A </span><span style='color:#808030; '>!</span><span style='color:#074726; '>TB OSTR0 </span><span style='color:#808030; '>;</span>
+ 80: : OS2 A AF - <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> NDLS +STR DLS-1 +STR</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> A+</span> ;
+ 81: : +STR <span style='color:#074726; '>!1+</span> LEN <span style='color:#008c00; '>12</span> A <span style='color:#074726; '>!TB</span> OSTR0 ;
  82: 
- 83: <span style='color:#808030; '>:</span><span style='color:#074726; '> OS3 A </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>?</span><span style='color:#074726; '>BK BR</span><span style='color:#808030; '>+</span><span style='color:#074726; '> OS31 OS4 </span><span style='color:#808030; '>;</span>
- 84: <span style='color:#808030; '>:</span><span style='color:#074726; '> OS31 A </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B BR </span><span style='color:#696969; '>#  OS4 #- OS4 ELSE OST1 ;</span>
- 85: <span style='color:#808030; '>:</span><span style='color:#074726; '> OST1 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>SK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> C EX0 </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> LEN AF A AF </span><span style='color:#808030; '>-</span><span style='color:#074726; '> AF </span><span style='color:#008c00; '>2</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> AF AF </span><span style='color:#808030; '>!</span><span style='color:#074726; '>SB A</span><span style='color:#808030; '>+</span><span style='color:#074726; '> A</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>SK</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+ 83: : OS3 A <span style='color:#008c00; '>1</span>+ @B ?BK <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> OS31 OS4</span> ;
+ 84: : OS31 A <span style='color:#008c00; '>1</span>- @B <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #  OS4 #- OS4</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> OST1</span> ;
+ 85: : OST1 <span style='color:#696969; '>[SK]</span> <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>C</span> EX0 <span style='color:#074726; '>!1-</span> LEN AF A AF - AF <span style='color:#008c00; '>2</span>+ <span style='color:#074726; '>!</span> AF AF <span style='color:#074726; '>!SB</span> A+ A+ <span style='color:#696969; '>[SK-1]</span> ;
  86: 
- 87: <span style='color:#808030; '>:</span><span style='color:#074726; '> OS4 A AF </span><span style='color:#808030; '>-</span><span style='color:#074726; '> NDLS </span><span style='color:#808030; '>=</span><span style='color:#074726; '> BR</span><span style='color:#808030; '>+</span><span style='color:#074726; '> STR1 A</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
- 88: <span style='color:#808030; '>:</span><span style='color:#074726; '> STR1 A </span><span style='color:#008c00; '>2</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> A A </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>?</span><span style='color:#074726; '>SP BR</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>+</span><span style='color:#074726; '>STR STR2 </span><span style='color:#808030; '>;</span>
- 89: <span style='color:#808030; '>:</span><span style='color:#074726; '> STR2 </span><span style='color:#008c00; '>40</span><span style='color:#074726; '> A NDLS NEG SRCHB </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> A </span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> NSL</span>
- 90: <span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#008c00; font-weight:bold; '>40</span><span style='color:#bb7977; font-weight:bold; '> A NDLS SRCHB </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> A </span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> KSL</span>
- 91: <span style='color:#bb7977; font-weight:bold; '>       A PER MESTOP BR0 NPER EPER </span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '>STR </span><span style='color:#808030; font-weight:bold; '>;</span>
- 92: <span style='color:#808030; '>:</span><span style='color:#074726; '> NPER NSL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> A </span><span style='color:#808030; '>;</span>
- 93: <span style='color:#808030; '>:</span><span style='color:#074726; '> EPER AF MESTOP </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> AF </span><span style='color:#808030; '>-</span><span style='color:#074726; '> AF </span><span style='color:#008c00; '>2</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> AF AF </span><span style='color:#808030; '>!</span><span style='color:#074726; '>SB MESTOP </span><span style='color:#808030; '>!</span><span style='color:#074726; '> A </span><span style='color:#696969; '>#- A 1- !TB ;</span>
- 94: <span style='color:#808030; '>:</span><span style='color:#074726; '> A</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> A </span><span style='color:#808030; '>;</span>
- 95: <span style='color:#808030; '>:</span><span style='color:#074726; '> DLS</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>1</span><span style='color:#074726; '> NDLS </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+ 87: : OS4 A AF - NDLS <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> STR1 A+</span> ;
+ 88: : STR1 A <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>!</span> A A @B ?<span style='color:#074726; '>SP</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> +STR STR2</span> ;
+ 89: : STR2 <span style='color:#008c00; '>40</span> A NDLS NEG <span style='color:#074726; '>SRCHB</span> <span style='color:#008c00; '>1</span>+ A + <span style='color:#074726; '>!</span> NSL
+ 90:        <span style='color:#008c00; '>40</span> A NDLS <span style='color:#074726; '>SRCHB</span> <span style='color:#008c00; '>1</span>- A + <span style='color:#074726; '>!</span> KSL
+ 91:        A PER MESTOP <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> NPER EPER</span> +STR ;
+ 92: : NPER NSL <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!</span> A ;
+ 93: : EPER AF MESTOP <span style='color:#008c00; '>1</span>+ AF - AF <span style='color:#008c00; '>2</span>- <span style='color:#074726; '>!</span> AF AF <span style='color:#074726; '>!SB</span> MESTOP <span style='color:#074726; '>!</span> A #- A <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!TB</span> ;
+ 94: : A+ <span style='color:#074726; '>!1+</span> A ;
+ 95: : DLS-<span style='color:#008c00; '>1</span> NDLS <span style='color:#008c00; '>1</span>- ;
  96: 
- 97: <span style='color:#808030; '>[</span><span style='color:#074726; '>Процедура переноса слов</span><span style='color:#808030; '>]</span>
- 98: <span style='color:#074726; '>VAR NSL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Начало</span><span style='color:#808030; '>]</span>
- 99: <span style='color:#074726; '>VAR KSL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Конец</span><span style='color:#808030; '>]</span>
-100: <span style='color:#074726; '>VAR LGL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Левая гласная</span><span style='color:#808030; '>,</span><span style='color:#074726; '> адр</span><span style='color:#808030; '>.</span><span style='color:#074726; '> или </span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>
-101: <span style='color:#074726; '>VAR RGL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Правая гласная</span><span style='color:#808030; '>,</span><span style='color:#074726; '> адр</span><span style='color:#808030; '>.</span><span style='color:#074726; '> или </span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span>
-102: <span style='color:#074726; '>VAR DLINA </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Адрес посл</span><span style='color:#808030; '>.</span><span style='color:#074726; '> возм</span><span style='color:#808030; '>.</span><span style='color:#074726; '> литеры в строке</span><span style='color:#808030; '>]</span>
-103: <span style='color:#074726; '>VAR MESTOP </span><span style='color:#808030; '>[</span><span style='color:#074726; '>Место пер</span><span style='color:#808030; '>.</span><span style='color:#808030; '>,</span><span style='color:#074726; '> адр</span><span style='color:#808030; '>.</span><span style='color:#074726; '> посл</span><span style='color:#808030; '>.</span><span style='color:#074726; '>буквы</span><span style='color:#808030; '>]</span>
+ 97: <span style='color:#696969; '>[Процедура переноса слов]</span>
+ 98: <span style='color:#074726; '>VAR NSL</span> <span style='color:#696969; '>[Начало]</span>
+ 99: <span style='color:#074726; '>VAR KSL</span> <span style='color:#696969; '>[Конец]</span>
+100: <span style='color:#074726; '>VAR LGL</span> <span style='color:#696969; '>[Левая гласная, адр. или 0]</span>
+101: <span style='color:#074726; '>VAR RGL</span> <span style='color:#696969; '>[Правая гласная, адр. или 0]</span>
+102: <span style='color:#074726; '>VAR DLINA</span> <span style='color:#696969; '>[Адрес посл. возм. литеры в строке]</span>
+103: <span style='color:#074726; '>VAR MESTOP</span> <span style='color:#696969; '>[Место пер., адр. посл.буквы]</span>
 104: 
-105: <span style='color:#808030; '>[</span><span style='color:#e34adc; '>Вход:</span><span style='color:#074726; '> адр</span><span style='color:#808030; '>.</span><span style='color:#074726; '> посл</span><span style='color:#808030; '>.</span><span style='color:#074726; '> возможной</span>
-106: <span style='color:#bb7977; font-weight:bold; '> буквы в строке </span><span style='color:#808030; font-weight:bold; '>(</span><span style='color:#bb7977; font-weight:bold; '>длина</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>)</span><span style='color:#bb7977; font-weight:bold; '> в стеке</span><span style='color:#808030; font-weight:bold; '>,</span><span style='color:#bb7977; font-weight:bold; '> адр</span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '> первой и посл</span><span style='color:#808030; font-weight:bold; '>.</span>
-107: <span style='color:#bb7977; font-weight:bold; '> букв слова в переменных NSL и KSL</span><span style='color:#808030; font-weight:bold; '>]</span>
-108: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER </span><span style='color:#808030; '>[</span><span style='color:#074726; '>TEK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>!</span><span style='color:#074726; '> DLINA PERENOS </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-109: <span style='color:#808030; '>:</span><span style='color:#074726; '> PERENOS </span><span style='color:#808030; '>[</span><span style='color:#074726; '>TEK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C RP ISKRGL D </span><span style='color:#808030; '>[</span><span style='color:#074726; '>TEK</span><span style='color:#808030; '>]</span><span style='color:#074726; '> RP ISKLGL D </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span>
-110: <span style='color:#bb7977; font-weight:bold; '>  LGL BR0 NETPER PEREN1 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+105: <span style='color:#696969; '>[Вход: адр. посл. возможной</span>
+106: <span style='color:#696969; '> буквы в строке (длина-1) в стеке, адр. первой и посл.</span>
+107: <span style='color:#696969; '> букв слова в переменных NSL и KSL]</span>
+108: : PER <span style='color:#696969; '>[TEK]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> DLINA PERENOS <span style='color:#696969; '>[]</span> ;
+109: : PERENOS <span style='color:#696969; '>[TEK]</span> <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> ISKRGL</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[TEK]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> ISKLGL</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span>
+110:   LGL <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> NETPER PEREN1</span> <span style='color:#696969; '>[]</span> ;
 111: 
-112: <span style='color:#808030; '>[</span><span style='color:#074726; '>Правая гласная</span><span style='color:#808030; '>]</span>
-113: <span style='color:#808030; '>:</span><span style='color:#074726; '> ISKRGL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> C </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>+</span><span style='color:#074726; '>1B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>?</span><span style='color:#074726; '>SP IF</span><span style='color:#808030; '>+</span><span style='color:#074726; '> IRGL1</span>
-114: <span style='color:#bb7977; font-weight:bold; '>  GLAS</span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>A</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>,</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> IRGL2 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>A</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-115: <span style='color:#808030; '>[</span><span style='color:#074726; '>Кончилось</span><span style='color:#808030; '>]</span>
-116: <span style='color:#808030; '>:</span><span style='color:#074726; '> IRGL1 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>]</span><span style='color:#074726; '> D </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>0</span><span style='color:#074726; '> RGL EX </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-117: <span style='color:#808030; '>[</span><span style='color:#074726; '>Есть гласная</span><span style='color:#808030; '>]</span>
-118: <span style='color:#808030; '>:</span><span style='color:#074726; '> IRGL2 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>!</span><span style='color:#074726; '> RGL EX </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+112: <span style='color:#696969; '>[Правая гласная]</span>
+113: : ISKRGL <span style='color:#696969; '>[A]</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>C</span> @B <span style='color:#696969; '>[A+1B]</span> <span style='color:#074726; '>C</span> ?<span style='color:#074726; '>SP</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> IRGL1</span>
+114:   GLAS? <span style='color:#696969; '>[A+1,1/0]</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> IRGL2</span> <span style='color:#696969; '>[A+1]</span> ;
+115: <span style='color:#696969; '>[Кончилось]</span>
+116: : IRGL1 <span style='color:#696969; '>[A,40]</span> <span style='color:#074726; '>D</span> <span style='color:#074726; '>!0</span> RGL EX <span style='color:#696969; '>[A]</span> ;
+117: <span style='color:#696969; '>[Есть гласная]</span>
+118: : IRGL2 <span style='color:#696969; '>[A]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> RGL EX <span style='color:#696969; '>[A]</span> ;
 119: 
-120: <span style='color:#808030; '>[</span><span style='color:#074726; '>Левая гласная</span><span style='color:#808030; '>]</span>
-121: <span style='color:#808030; '>:</span><span style='color:#074726; '> ISKLGL </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>,</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>?</span><span style='color:#074726; '>SP IF</span><span style='color:#808030; '>+</span><span style='color:#074726; '> ILGL1</span>
-122: <span style='color:#bb7977; font-weight:bold; '>  GLAS</span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>A</span><span style='color:#808030; font-weight:bold; '>,</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> ILGL2 </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>A</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-123: <span style='color:#808030; '>[</span><span style='color:#074726; '>Кончилось</span><span style='color:#808030; '>]</span>
-124: <span style='color:#808030; '>:</span><span style='color:#074726; '> ILGL1 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>40</span><span style='color:#808030; '>]</span><span style='color:#074726; '> D </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>0</span><span style='color:#074726; '> LGL EX </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-125: <span style='color:#808030; '>[</span><span style='color:#074726; '>Есть гласная</span><span style='color:#808030; '>]</span>
-126: <span style='color:#808030; '>:</span><span style='color:#074726; '> ILGL2 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#808030; '>!</span><span style='color:#074726; '> LGL EX </span><span style='color:#808030; '>[</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+120: <span style='color:#696969; '>[Левая гласная]</span>
+121: : ISKLGL <span style='color:#696969; '>[A]</span> <span style='color:#074726; '>C</span> @B <span style='color:#696969; '>[A,B]</span> <span style='color:#074726; '>C</span> ?<span style='color:#074726; '>SP</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ILGL1</span>
+122:   GLAS? <span style='color:#696969; '>[A,1/0]</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ILGL2</span> <span style='color:#008c00; '>1</span>- <span style='color:#696969; '>[A-1]</span> ;
+123: <span style='color:#696969; '>[Кончилось]</span>
+124: : ILGL1 <span style='color:#696969; '>[A,40]</span> <span style='color:#074726; '>D</span> <span style='color:#074726; '>!0</span> LGL EX <span style='color:#696969; '>[A]</span> ;
+125: <span style='color:#696969; '>[Есть гласная]</span>
+126: : ILGL2 <span style='color:#696969; '>[A]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> LGL EX <span style='color:#696969; '>[A]</span> ;
 127: 
-128: <span style='color:#808030; '>[</span><span style='color:#074726; '>Не переносится</span><span style='color:#808030; '>]</span>
-129: <span style='color:#808030; '>:</span><span style='color:#074726; '> NETPER </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>0</span><span style='color:#074726; '> MESTOP </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+128: <span style='color:#696969; '>[Не переносится]</span>
+129: : NETPER <span style='color:#696969; '>[]</span> <span style='color:#074726; '>!0</span> MESTOP <span style='color:#696969; '>[]</span> ;
 130: 
-131: <span style='color:#808030; '>[</span><span style='color:#074726; '>Левая гласная есть</span><span style='color:#808030; '>,</span><span style='color:#074726; '> дальше</span><span style='color:#808030; '>]</span>
-132: <span style='color:#808030; '>:</span><span style='color:#074726; '> PEREN1 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> RGL BR0 PEREN11 PEREN2 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-133: <span style='color:#808030; '>[</span><span style='color:#074726; '>Есть обе гласные</span><span style='color:#808030; '>]</span>
-134: <span style='color:#808030; '>:</span><span style='color:#074726; '> PEREN2 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> RGL LGL </span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>RGL</span><span style='color:#808030; '>-</span><span style='color:#074726; '>LGL</span><span style='color:#808030; '>]</span><span style='color:#074726; '> BR </span><span style='color:#008c00; '>1</span><span style='color:#074726; '> PER0 </span><span style='color:#008c00; '>2</span><span style='color:#074726; '> PER1 ELSE PER2 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-135: <span style='color:#808030; '>[</span><span style='color:#074726; '>Перенос невозможен</span><span style='color:#808030; '>,</span><span style='color:#074726; '> левее</span><span style='color:#808030; '>]</span>
-136: <span style='color:#808030; '>:</span><span style='color:#074726; '> PEREN11 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> PERENOS </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+131: <span style='color:#696969; '>[Левая гласная есть, дальше]</span>
+132: : PEREN1 <span style='color:#696969; '>[]</span> RGL <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> PEREN11 PEREN2</span> <span style='color:#696969; '>[]</span> ;
+133: <span style='color:#696969; '>[Есть обе гласные]</span>
+134: : PEREN2 <span style='color:#696969; '>[]</span> RGL LGL - <span style='color:#696969; '>[RGL-LGL]</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 1 PER0 2 PER1</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> PER2</span> <span style='color:#696969; '>[]</span> ;
+135: <span style='color:#696969; '>[Перенос невозможен, левее]</span>
+136: : PEREN11 <span style='color:#696969; '>[]</span> LGL <span style='color:#008c00; '>1</span>- PERENOS <span style='color:#696969; '>[]</span> ;
 137: 
-138: <span style='color:#808030; '>[</span><span style='color:#074726; '>Гласные рядом</span><span style='color:#808030; '>]</span>
-139: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER0 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL NSL </span><span style='color:#808030; '>=</span><span style='color:#074726; '> NOT RGL KSL </span><span style='color:#808030; '>=</span><span style='color:#074726; '> NOT </span><span style='color:#808030; '>&amp;</span><span style='color:#074726; '> LGL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B SPEC</span><span style='color:#808030; '>?</span><span style='color:#074726; '> NOT </span><span style='color:#808030; '>&amp;</span>
-140: <span style='color:#bb7977; font-weight:bold; '>  RGL </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>@</span><span style='color:#bb7977; font-weight:bold; '>B SPEC</span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '> NOT </span><span style='color:#808030; font-weight:bold; '>&amp;</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> BR</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> PER01 PEREN11 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-141: <span style='color:#808030; '>[</span><span style='color:#074726; '>Перенос возможен</span><span style='color:#808030; '>]</span>
-142: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER01 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL </span><span style='color:#808030; '>!</span><span style='color:#074726; '> MESTOP </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+138: <span style='color:#696969; '>[Гласные рядом]</span>
+139: : PER0 <span style='color:#696969; '>[]</span> LGL NSL <span style='color:#074726; '>=</span> NOT RGL KSL <span style='color:#074726; '>=</span> NOT <span style='color:#074726; '>&amp;</span> LGL <span style='color:#008c00; '>1</span>- @B SPEC? NOT <span style='color:#074726; '>&amp;</span>
+140:   RGL <span style='color:#008c00; '>1</span>+ @B SPEC? NOT <span style='color:#074726; '>&amp;</span> <span style='color:#696969; '>[1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> PER01 PEREN11</span> <span style='color:#696969; '>[]</span> ;
+141: <span style='color:#696969; '>[Перенос возможен]</span>
+142: : PER01 <span style='color:#696969; '>[]</span> LGL <span style='color:#074726; '>!</span> MESTOP <span style='color:#696969; '>[]</span> ;
 143: 
-144: <span style='color:#808030; '>[</span><span style='color:#074726; '>Гласные через </span><span style='color:#008c00; '>1</span><span style='color:#074726; '> букву</span><span style='color:#808030; '>]</span>
-145: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER1 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#696969; '>#й = BR+ PER11 PER12 [] ;</span>
-146: <span style='color:#808030; '>[</span><span style='color:#074726; '>Перенос после й</span><span style='color:#808030; '>]</span>
-147: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER11 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> MESTOP MESTOP DLINA </span><span style='color:#808030; '>></span><span style='color:#074726; '> IF</span><span style='color:#808030; '>+</span><span style='color:#074726; '> PEREN11 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-148: <span style='color:#808030; '>[</span><span style='color:#074726; '>Между гласными согласная</span><span style='color:#808030; '>]</span>
-149: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER12 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL NSL </span><span style='color:#808030; '>=</span><span style='color:#074726; '> NOT LGL </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B SPEC</span><span style='color:#808030; '>?</span><span style='color:#074726; '> NOT </span><span style='color:#808030; '>&amp;</span>
-150: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> BR</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> PER01 PEREN11 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+144: <span style='color:#696969; '>[Гласные через 1 букву]</span>
+145: : PER1 <span style='color:#696969; '>[]</span> LGL <span style='color:#008c00; '>1</span>+ @B #й <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> PER11 PER12</span> <span style='color:#696969; '>[]</span> ;
+146: <span style='color:#696969; '>[Перенос после й]</span>
+147: : PER11 <span style='color:#696969; '>[]</span> LGL <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>!</span> MESTOP MESTOP DLINA <span style='color:#074726; '>></span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PEREN11</span> <span style='color:#696969; '>[]</span> ;
+148: <span style='color:#696969; '>[Между гласными согласная]</span>
+149: : PER12 <span style='color:#696969; '>[]</span> LGL NSL <span style='color:#074726; '>=</span> NOT LGL <span style='color:#008c00; '>1</span>- @B SPEC? NOT <span style='color:#074726; '>&amp;</span>
+150:   <span style='color:#696969; '>[1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> PER01 PEREN11</span> <span style='color:#696969; '>[]</span> ;
 151: 
-152: <span style='color:#808030; '>[</span><span style='color:#074726; '>Между гласными </span><span style='color:#008c00; '>2</span><span style='color:#074726; '> или больше букв</span><span style='color:#808030; '>]</span>
-153: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER2 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#008c00; '>0</span><span style='color:#074726; '> LGL RGL LGL </span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> DO PER20 D </span><span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>/</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#074726; '> BR</span><span style='color:#808030; '>+</span><span style='color:#074726; '> PEREN11 PER22 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-154: <span style='color:#808030; '>[</span><span style='color:#074726; '>Есть ли между гласными SPEC</span><span style='color:#808030; '>?</span><span style='color:#808030; '>]</span>
-155: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER20 </span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> C </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B SPEC</span><span style='color:#808030; '>?</span><span style='color:#074726; '> IF</span><span style='color:#808030; '>+</span><span style='color:#074726; '> PER201 </span><span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>/</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#074726; '>A</span><span style='color:#808030; '>+</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-156: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER201 </span><span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> E2 T1 E2 EX </span><span style='color:#808030; '>[</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span><span style='color:#074726; '>A</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-157: <span style='color:#808030; '>[</span><span style='color:#074726; '>Анализ переноса возможен</span><span style='color:#808030; '>]</span>
-158: <span style='color:#808030; '>:</span><span style='color:#074726; '> PER22 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> LGL </span><span style='color:#008c00; '>2</span><span style='color:#808030; '>+</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B C </span><span style='color:#696969; '>#ъ = E2 #ь = &amp;0 BR+ 2 1 LGL + ! MESTOP</span>
-159: <span style='color:#bb7977; font-weight:bold; '>  MESTOP DLINA </span><span style='color:#808030; font-weight:bold; '>></span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> PEREN11 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+152: <span style='color:#696969; '>[Между гласными 2 или больше букв]</span>
+153: : PER2 <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> LGL RGL LGL - <span style='color:#008c00; '>1</span>- <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> PER20</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> PEREN11 PER22</span> <span style='color:#696969; '>[]</span> ;
+154: <span style='color:#696969; '>[Есть ли между гласными SPEC?]</span>
+155: : PER20 <span style='color:#696969; '>[0,A]</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>C</span> @B SPEC? <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PER201</span> <span style='color:#696969; '>[1/0,A+1]</span> ;
+156: : PER201 <span style='color:#696969; '>[0,A]</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>T1</span> <span style='color:#074726; '>E2</span> EX <span style='color:#696969; '>[1,A]</span> ;
+157: <span style='color:#696969; '>[Анализ переноса возможен]</span>
+158: : PER22 <span style='color:#696969; '>[]</span> LGL <span style='color:#008c00; '>2</span>+ @B <span style='color:#074726; '>C</span> #ъ <span style='color:#074726; '>=</span> <span style='color:#074726; '>E2</span> #ь <span style='color:#074726; '>=</span> &amp;<span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> 2 1</span> LGL + <span style='color:#074726; '>!</span> MESTOP
+159:   MESTOP DLINA <span style='color:#074726; '>></span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PEREN11</span> <span style='color:#696969; '>[]</span> ;
 160: 
-161: <span style='color:#808030; '>[</span><span style='color:#074726; '>Проверка на SPEC</span><span style='color:#808030; '>?</span><span style='color:#808030; '>]</span>
-162: <span style='color:#808030; '>:</span><span style='color:#074726; '> SPEC</span><span style='color:#808030; '>?</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> BR </span><span style='color:#696969; '>#- 1  #/ 1  #_ 1  #, 1  #. 1  #! 1  #? 1  #; 1  #" 1</span>
-163: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#696969; font-weight:bold; '>#' 1  #( 1  #) 1  #[ 1  #] 1  #: 1  #> 1  #&lt; 1</span>
-164: <span style='color:#bb7977; font-weight:bold; '>  ELSE </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-165: <span style='color:#808030; '>[</span><span style='color:#074726; '>Проверка на гласную</span><span style='color:#808030; '>]</span>
-166: <span style='color:#808030; '>:</span><span style='color:#074726; '> GLAS</span><span style='color:#808030; '>?</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> BR  </span><span style='color:#696969; '>#а 1  #е 1  #и 1  #о 1  #у 1  #э 1  #ы 1  #ю 1  #я 1</span>
-167: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#696969; font-weight:bold; '>#А 1  #Е 1  #И 1  #О 1  #У 1  #Э 1  #Ы 1  #Ю 1  #Я 1</span>
-168: <span style='color:#bb7977; font-weight:bold; '>  ELSE </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>/</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+161: <span style='color:#696969; '>[Проверка на SPEC?]</span>
+162: : SPEC? <span style='color:#696969; '>[B]</span> BR #- <span style='color:#008c00; '>1</span>  #/ <span style='color:#008c00; '>1</span>  #_ <span style='color:#008c00; '>1</span>  #, <span style='color:#008c00; '>1</span>  #. <span style='color:#008c00; '>1</span>  #! <span style='color:#008c00; '>1</span>  #? <span style='color:#008c00; '>1</span>  #; <span style='color:#008c00; '>1</span>  #" <span style='color:#008c00; '>1</span>
+163:   #' <span style='color:#008c00; '>1</span>  #( <span style='color:#008c00; '>1</span>  #) <span style='color:#008c00; '>1</span>  #[ <span style='color:#008c00; '>1</span>  #] <span style='color:#008c00; '>1</span>  #: <span style='color:#008c00; '>1</span>  #> <span style='color:#008c00; '>1</span>  #&lt; <span style='color:#008c00; '>1</span>
+164:   <span style='color:#800000; font-weight:bold; '>ELSE 0</span> <span style='color:#696969; '>[1/0]</span> ;
+165: <span style='color:#696969; '>[Проверка на гласную]</span>
+166: : GLAS? <span style='color:#696969; '>[B]</span> BR  #а <span style='color:#008c00; '>1</span>  #е <span style='color:#008c00; '>1</span>  #и <span style='color:#008c00; '>1</span>  #о <span style='color:#008c00; '>1</span>  #у <span style='color:#008c00; '>1</span>  #э <span style='color:#008c00; '>1</span>  #ы <span style='color:#008c00; '>1</span>  #ю <span style='color:#008c00; '>1</span>  #я <span style='color:#008c00; '>1</span>
+167:   #А <span style='color:#008c00; '>1</span>  #Е <span style='color:#008c00; '>1</span>  #И <span style='color:#008c00; '>1</span>  #О <span style='color:#008c00; '>1</span>  #У <span style='color:#008c00; '>1</span>  #Э <span style='color:#008c00; '>1</span>  #Ы <span style='color:#008c00; '>1</span>  #Ю <span style='color:#008c00; '>1</span>  #Я <span style='color:#008c00; '>1</span>
+168:   <span style='color:#800000; font-weight:bold; '>ELSE 0</span> <span style='color:#696969; '>[1/0]</span> ;
 169: 
-170: <span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>A AF </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>;</span>
-171: <span style='color:#808030; '>:</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>U UN </span><span style='color:#008c00; '>1</span><span style='color:#808030; '>-</span><span style='color:#074726; '> </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B </span><span style='color:#808030; '>;</span>
-172: <span style='color:#808030; '>:</span><span style='color:#074726; '> AU1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> AF </span><span style='color:#808030; '>@</span><span style='color:#074726; '>B UN </span><span style='color:#808030; '>!</span><span style='color:#074726; '>TB </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> AF </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>+</span><span style='color:#074726; '> UN </span><span style='color:#808030; '>;</span>
+170: : @A AF @B ;
+171: : @U UN <span style='color:#008c00; '>1</span>- @B ;
+172: : AU1+ AF @B UN <span style='color:#074726; '>!TB</span> <span style='color:#074726; '>!1+</span> AF <span style='color:#074726; '>!1+</span> UN ;
 173: 
-174: <span style='color:#808030; '>[</span><span style='color:#074726; '>AA </span><span style='color:#808030; '>-</span><span style='color:#074726; '> вставляется в ZAPIS</span><span style='color:#808030; '>,</span><span style='color:#074726; '> обработка символа в конце строки</span><span style='color:#808030; '>]</span>
-175: <span style='color:#808030; '>:</span><span style='color:#074726; '> AA </span><span style='color:#808030; '>[</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C BR </span><span style='color:#696969; '>#  MBK ELSE PEREP TAB ;</span>
-176: <span style='color:#808030; '>:</span><span style='color:#074726; '> MBK D </span><span style='color:#808030; '>.</span><span style='color:#074726; '>BK IL </span><span style='color:#808030; '>;</span>
-177: <span style='color:#0000e6; '>' EL NUSE</span>
-178: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' AA ! EL</span>
-179: <span style='color:#0000e6; '>: PEREP [B] RP PEREP1 [B] BEG BR0 DBELL PEREP2 ;</span>
-180: <span style='color:#0000e6; '>: PEREP2 [B] !-> DIV .PC TAB ZAPIS [] ;</span>
-181: <span style='color:#0000e6; '>: PEREP1 &lt;- @A ?SP @A ?BK &amp;0 EX+ BEG EX0 ;</span>
-182: <span style='color:#0000e6; '>: DBELL D BELL ;</span>
-183: <span style='color:#0000e6; '></span>
-184: <span style='color:#0000e6; '>[AA1 -выравнивание по правому краю]</span>
-185: <span style='color:#0000e6; '>: AA1 [] .BW REST NDLS > BR+ BELL AAA1 .BK [] ;</span>
-186: <span style='color:#0000e6; '>: AAA1 [] NDLS REST - C TAB RP EXTENT DD [] ;</span>
-187: <span style='color:#0000e6; '>: EXTENT [J,I] C EX0 BEG IF0 TAB? &lt;- @A ?SP @U ?SP NOT &amp;</span>
-188: <span style='color:#0000e6; '>  IF+ IC2 [J,I НОВ.] ;</span>
-189: <span style='color:#0000e6; '>: IC2 IC 1- ;</span>
-190: <span style='color:#0000e6; '>: TAB? [J,I] C2 C2 = EX+ E2D C TAB [I,I] ;</span>
-191: <span style='color:#0000e6; '></span>
-192: <span style='color:#0000e6; '>'</span><span style='color:#074726; '> TRB </span><span style='color:#808030; '>@</span><span style='color:#074726; '> HEAD OLDTRB</span>
-193: <span style='color:#0000e6; '>' TRB NUSE</span>
-194: <span style='color:#0000e6; '>FIX VAR INFTRB</span>
-195: <span style='color:#0000e6; '>FIX VAR BIGL 1 ! BIGL</span>
-196: <span style='color:#0000e6; '>: NEWTRB [] OLDTRB BIGL IF0 TBIG [B'</span><span style='color:#808030; '>]</span>
-197: <span style='color:#bb7977; font-weight:bold; '>  C BR </span><span style='color:#696969; font-weight:bold; '>#> K.  #&lt; #,  #. #>  #, #&lt;  #= #-  #* #:  #+ #;</span>
-198: <span style='color:#bb7977; font-weight:bold; '>       </span><span style='color:#696969; font-weight:bold; '>#- #=  #: #*  #; #+  ELSE C  E2D [] ;</span>
+174: <span style='color:#696969; '>[AA - вставляется в ZAPIS, обработка символа в конце строки]</span>
+175: : AA <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #  MBK</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> PEREP</span> TAB ;
+176: : MBK <span style='color:#074726; '>D</span> .BK IL ;
+177: ' EL NUSE
+178: '' AA <span style='color:#074726; '>!</span> EL
+179: : PEREP <span style='color:#696969; '>[B]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> PEREP1</span> <span style='color:#696969; '>[B]</span> BEG <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> DBELL PEREP2</span> ;
+180: : PEREP2 <span style='color:#696969; '>[B]</span> !-<span style='color:#074726; '>></span> DIV .PC TAB ZAPIS <span style='color:#696969; '>[]</span> ;
+181: : PEREP1 <span style='color:#074726; '>&lt;</span>- @A ?<span style='color:#074726; '>SP</span> @A ?BK &amp;<span style='color:#008c00; '>0</span> EX+ BEG EX0 ;
+182: : DBELL <span style='color:#074726; '>D</span> BELL ;
+183: 
+184: <span style='color:#696969; '>[AA1 -выравнивание по правому краю]</span>
+185: : AA1 <span style='color:#696969; '>[]</span> .BW REST NDLS <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> BELL AAA1</span> .BK <span style='color:#696969; '>[]</span> ;
+186: : AAA1 <span style='color:#696969; '>[]</span> NDLS REST - <span style='color:#074726; '>C</span> TAB <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> EXTENT</span> <span style='color:#074726; '>DD</span> <span style='color:#696969; '>[]</span> ;
+187: : EXTENT <span style='color:#696969; '>[J,I]</span> <span style='color:#074726; '>C</span> EX0 BEG <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> TAB?</span> <span style='color:#074726; '>&lt;</span>- @A ?<span style='color:#074726; '>SP</span> @U ?<span style='color:#074726; '>SP</span> NOT <span style='color:#074726; '>&amp;</span>
+188:   <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> IC2</span> <span style='color:#696969; '>[J,I НОВ.]</span> ;
+189: : IC2 IC <span style='color:#008c00; '>1</span>- ;
+190: : TAB? <span style='color:#696969; '>[J,I]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>=</span> EX+ <span style='color:#074726; '>E2D</span> <span style='color:#074726; '>C</span> TAB <span style='color:#696969; '>[I,I]</span> ;
+191: 
+192: ' <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>@</span> <span style='color:#074726; '>HEAD</span> OLDTRB
+193: ' <span style='color:#074726; '>TRB</span> NUSE
+194: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR INFTRB</span>
+195: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR BIGL</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> BIGL
+196: : NEWTRB <span style='color:#696969; '>[]</span> OLDTRB BIGL <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> TBIG</span> <span style='color:#696969; '>[B']</span>
+197:   <span style='color:#074726; '>C</span> BR #> K.  #&lt; #,  #. #>  #, #&lt;  #= #-  #* #:  #+ #;
+198:        #- #=  #: #*  #; #+  <span style='color:#800000; font-weight:bold; '>ELSE C</span>  <span style='color:#074726; '>E2D</span> <span style='color:#696969; '>[]</span> ;
 199: 
-200: <span style='color:#074726; '>COPYW E E</span><span style='color:#0000e6; '>'</span>
-201: <span style='color:#0000e6; '>:: : E S( TRB BASE@ ) B10 INFTRB ! TRB E'</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-202: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> OLDTRB </span><span style='color:#808030; '>!</span><span style='color:#074726; '> INFTRB</span>
+200: <span style='color:#800000; font-weight:bold; '>COPYW E E'</span>
+201: :: : E <span style='color:#004a43; '>S( TRB BASE@ )</span> <span style='color:#074726; '>B10</span> INFTRB <span style='color:#074726; '>!</span> <span style='color:#074726; '>TRB</span> E' ;
+202: '' OLDTRB <span style='color:#074726; '>!</span> INFTRB
 203: 
-204: <span style='color:#808030; '>:</span><span style='color:#074726; '> K</span><span style='color:#808030; '>.</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>0</span><span style='color:#074726; '> BIGL </span><span style='color:#696969; '>#. ;</span>
-205: <span style='color:#808030; '>:</span><span style='color:#074726; '> TBIG C </span><span style='color:#696969; '>#  > IF+ TBIG1 ;</span>
-206: <span style='color:#808030; '>:</span><span style='color:#074726; '> TBIG1 RUSCAP </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>1</span><span style='color:#074726; '> BIGL </span><span style='color:#808030; '>;</span>
+204: : K. <span style='color:#074726; '>!0</span> BIGL #. ;
+205: : TBIG <span style='color:#074726; '>C</span> #  <span style='color:#074726; '>></span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> TBIG1</span> ;
+206: : TBIG1 RUSCAP <span style='color:#074726; '>!1</span> BIGL ;
 207: 
-208: <span style='color:#074726; '>BYTE CNST CAP</span>
-209: <span style='color:#696969; '>#А #Б #В #Г #Д #Е #Ж #З #И #Й #К #Л #М #Н #О #П</span>
-210: <span style='color:#696969; '>#Р #С #Т #У #Ф #Х #Ц #Ч #  #Щ #Ъ #Ы #Ь #Э #Ю #Я ;</span>
+208: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST CAP</span>
+209: #А #Б #В #Г #Д #Е #Ж #З #И #Й #К #Л #М #Н #О #П
+210: #Р #С #Т #У #Ф #Х #Ц #Ч #  #Щ #Ъ #Ы #Ь #Э #Ю #Я ;
 211: 
-212: <span style='color:#074726; '>BYTE CNST LIT</span>
-213: <span style='color:#696969; '>#а #б #в #г #д #е #ж #з #и #й #к #л #м #н #о #п</span>
-214: <span style='color:#696969; '>#р #с #т #у #ф #х #ц #ч #ш #щ #ъ #ы #ь #э #ю #я ;</span>
+212: <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>CNST LIT</span>
+213: #а #б #в #г #д #е #ж #з #и #й #к #л #м #н #о #п
+214: #р #с #т #у #ф #х #ц #ч #ш #щ #ъ #ы #ь #э #ю #я ;
 215: 
-216: <span style='color:#808030; '>:</span><span style='color:#074726; '> TOCAP LATCAP RUSCAP </span><span style='color:#808030; '>;</span>
-217: <span style='color:#808030; '>:</span><span style='color:#074726; '> RUSCAP </span><span style='color:#808030; '>[</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#008c00; '>0</span><span style='color:#074726; '> </span><span style='color:#0000e6; '>' LIT 40 SRCHB [B,I] C 40 &lt; BR+ CAP E2 E2D [B'</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-218: <span style='color:#808030; '>:</span><span style='color:#074726; '> LATCAP </span><span style='color:#808030; '>[</span><span style='color:#074726; '>B</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#696969; '>#a #z SEG BR+ 40 0 - [B'] ;</span>
+216: : TOCAP LATCAP RUSCAP ;
+217: : RUSCAP <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>0</span> ' LIT <span style='color:#008c00; '>40</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#696969; '>[B,I]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>40</span> <span style='color:#074726; '>&lt;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CAP E2</span> <span style='color:#074726; '>E2D</span> <span style='color:#696969; '>[B']</span> ;
+218: : LATCAP <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> #a #z <span style='color:#074726; '>SEG</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> 40 0</span> - <span style='color:#696969; '>[B']</span> ;
 219: 
-220: <span style='color:#808030; '>[</span><span style='color:#074726; '>Расшифровка сокращений</span><span style='color:#808030; '>]</span>
-221: <span style='color:#808030; '>:</span><span style='color:#074726; '> K20 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> VVD FIND BR0 D K21 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-222: <span style='color:#808030; '>:</span><span style='color:#074726; '> K21 </span><span style='color:#808030; '>[</span><span style='color:#074726; '>AZ</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#0000e6; '>'BA @ [BA] EXEC [A,DL] C2 @B #_ = IF+ BAC DO ZAS [] D ;</span>
-223: <span style='color:#0000e6; '>: BAC &lt;- DC E2 1+ E2 1- ;</span>
-224: <span style='color:#0000e6; '>: ZAS [A] C @B C #* = BR+ ZAS1 ZAPIS 1+ [A+1] ;</span>
-225: <span style='color:#0000e6; '>: ZAS1 [*] D '</span><span style='color:#0000e6; '>' TRB RP EDITT D [] ;</span>
-226: <span style='color:#0000e6; '>: EDITT EDIT @U ?SP EX+ ;</span>
-227: <span style='color:#0000e6; '></span>
-228: <span style='color:#0000e6; '>[Прием сокращения]</span>
-229: <span style='color:#0000e6; '>: VVD [] 40 UN 1- BEG NEG SRCHB NEG [SK]</span>
-230: <span style='color:#0000e6; '>  UN C2 - C2 TWE [SK]</span>
-231: <span style='color:#0000e6; '>  SWIM PRS DO VVD1 D</span>
-232: <span style='color:#0000e6; '>  [SK] 1- DO ZB [] ;</span>
-233: <span style='color:#0000e6; '>: VVD1 [A] C @B TOCAP C2 !TB 1+ [A+1] ;</span>
-234: <span style='color:#0000e6; '></span>
-235: <span style='color:#0000e6; '>B16</span>
-236: <span style='color:#0000e6; '>: TWE #  !!! WIMAGE 7 MIN C SHR 7 ! WIMAGE SWIM C2 - 1+ 2000 0 !SB ;</span>
-237: <span style='color:#0000e6; '>: SLR INFTRB '</span><span style='color:#0000e6; '>' OLDTRB = BR+ MNEW MOLD C ! TRB ! INFTRB ;</span>
-238: <span style='color:#0000e6; '>: MNEW '</span><span style='color:#0000e6; '>' NEWTRB ;</span>
-239: <span style='color:#0000e6; '>: MOLD '</span><span style='color:#0000e6; '>' OLDTRB ;</span>
-240: <span style='color:#0000e6; '></span>
-241: <span style='color:#0000e6; '>: .W RCP T0 SCP ;</span>
-242: <span style='color:#0000e6; '>: .BW .W TSTR WINDOW ;</span>
-243: <span style='color:#0000e6; '></span>
-244: <span style='color:#0000e6; '>[Центрирование текста в строке]</span>
-245: <span style='color:#0000e6; '>: CENTR .PC UP AF [ADR] NOSP [DL] DO DC NDLS REST - SHR</span>
-246: <span style='color:#0000e6; '>  C BB > IF+ T0 DO IC .PC ;</span>
-247: <span style='color:#0000e6; '>  : NOSP [A] 0 RP NOSP1 E2D [I] ;</span>
-248: <span style='color:#0000e6; '>    : NOSP1 [A,I] C C3 + @B ?SP EX0 1+ [A,I+1] ;</span>
-249: <span style='color:#0000e6; '></span>
-250: <span style='color:#0000e6; '>: STRLEN [] S( BASE@ ) B10 .BW .STS 0C ! SCOLOR</span>
-251: <span style='color:#0000e6; '>  "Длина стpоки (Ввод - " TOS'</span><span style='color:#0000e6; '>'</span>
-252: <span style='color:#0000e6; '>  NDLS 2 TON ") - " TOS'</span><span style='color:#0000e6; '>' 2 [TEXTCOLOR] ! SCOLOR</span>
-253: <span style='color:#0000e6; '>  ON NERR NOP TIN</span>
-254: <span style='color:#0000e6; '>  C BR0 NDLS C E2D 1 MAX DLS MIN ! NDLS .BW .STS L1 [] ;</span>
-255: <span style='color:#0000e6; '></span>
-256: <span style='color:#0000e6; '>B10</span>
-257: <span style='color:#0000e6; '>VAR USLOVIE</span>
-258: <span style='color:#0000e6; '>: WORDTORUS !0 USLOVIE TOEND TOSTART RP TORUS1 [] ;</span>
-259: <span style='color:#0000e6; '>  : TORUS1 [] AF @B C ?SP IF+ DEX C ?BK BR+ .PCDEX UCHNGR [] ;</span>
-260: <span style='color:#0000e6; '>    : DEX D EX [] ;</span>
-261: <span style='color:#0000e6; '>    : .PCDEX .PC DEX [] ;</span>
-262: <span style='color:#0000e6; '>    : UCHNGR USLOVIE BR0 CHNGR 0 E2 [DOP,B,B]</span>
-263: <span style='color:#0000e6; '>      C BR #. SBROS #  NOP #: NOP ELSE UST [] E2 IZMSDV ;</span>
-264: <span style='color:#0000e6; '>      : SBROS !1 USLOVIE ;</span>
-265: <span style='color:#0000e6; '>      : UST !0 USLOVIE ;</span>
-266: <span style='color:#0000e6; '>      : CHNGR C</span>
-267: <span style='color:#0000e6; '>        BR</span>
-268: <span style='color:#0000e6; '>        #A 95</span>
-269: <span style='color:#0000e6; '>        #B 96</span>
-270: <span style='color:#0000e6; '>        #C 158</span>
-271: <span style='color:#0000e6; '>        #E 96</span>
-272: <span style='color:#0000e6; '>        #P 32</span>
-273: <span style='color:#0000e6; '>        #O 95</span>
-274: <span style='color:#0000e6; '>        #K 95</span>
-275: <span style='color:#0000e6; '>        #M 95</span>
-276: <span style='color:#0000e6; '>        #T 142</span>
-277: <span style='color:#0000e6; '>        #X 141</span>
-278: <span style='color:#0000e6; '>        #H 101</span>
-279: <span style='color:#0000e6; '>        #А 32</span>
-280: <span style='color:#0000e6; '>        #Б 32</span>
-281: <span style='color:#0000e6; '>        #В 32</span>
-282: <span style='color:#0000e6; '>        #Г 32</span>
-283: <span style='color:#0000e6; '>        #Д 32</span>
-284: <span style='color:#0000e6; '>        #Е 32</span>
-285: <span style='color:#0000e6; '>        #Ж 32</span>
-286: <span style='color:#0000e6; '>        #З 32</span>
-287: <span style='color:#0000e6; '>        #И 32</span>
-288: <span style='color:#0000e6; '>        #Й 32</span>
-289: <span style='color:#0000e6; '>        #К 32</span>
-290: <span style='color:#0000e6; '>        #Л 32</span>
-291: <span style='color:#0000e6; '>        #М 32</span>
-292: <span style='color:#0000e6; '>        #Н 32</span>
-293: <span style='color:#0000e6; '>        #О 32</span>
-294: <span style='color:#0000e6; '>        #П 32</span>
-295: <span style='color:#0000e6; '></span>
-296: <span style='color:#0000e6; '>        #Р 80</span>
-297: <span style='color:#0000e6; '>        #С 80</span>
-298: <span style='color:#0000e6; '>        #Т 80</span>
-299: <span style='color:#0000e6; '>        #У 80</span>
-300: <span style='color:#0000e6; '>        #Ф 80</span>
-301: <span style='color:#0000e6; '>        #Х 80</span>
-302: <span style='color:#0000e6; '>        #Ц 80</span>
-303: <span style='color:#0000e6; '>        #Ч 80</span>
-304: <span style='color:#0000e6; '>        #  80</span>
-305: <span style='color:#0000e6; '>        #Щ 80</span>
-306: <span style='color:#0000e6; '>        #Ъ 80</span>
-307: <span style='color:#0000e6; '>        #Ы 80</span>
-308: <span style='color:#0000e6; '>        #Ь 80</span>
-309: <span style='color:#0000e6; '>        #Э 80</span>
-310: <span style='color:#0000e6; '>        #Ю 80</span>
-311: <span style='color:#0000e6; '>        #Я 80</span>
-312: <span style='color:#0000e6; '>        ELSE 0 ;</span>
-313: <span style='color:#0000e6; '>      : IZMSDV + [B] C AF !TB TOB AU1+ [] ;</span>
-314: <span style='color:#0000e6; '></span>
-315: <span style='color:#0000e6; '></span>
-316: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' WORDTORU 69 [aF6]  C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR </span><span style='color:#808030; '>[</span><span style='color:#808030; '>+</span><span style='color:#808030; '>]</span>
+220: <span style='color:#696969; '>[Расшифровка сокращений]</span>
+221: : K20 <span style='color:#696969; '>[]</span> VVD FIND <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> D K21</span> <span style='color:#696969; '>[]</span> ;
+222: : K21 <span style='color:#696969; '>[AZ]</span> 'BA <span style='color:#074726; '>@</span> <span style='color:#696969; '>[BA]</span> EXEC <span style='color:#696969; '>[A,DL]</span> <span style='color:#074726; '>C2</span> @B #_ <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> BAC</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ZAS</span> <span style='color:#696969; '>[]</span> <span style='color:#074726; '>D</span> ;
+223: : BAC <span style='color:#074726; '>&lt;</span>- DC <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>- ;
+224: : ZAS <span style='color:#696969; '>[A]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> #* <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ZAS1 ZAPIS</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[A+1]</span> ;
+225: : ZAS1 <span style='color:#696969; '>[*]</span> <span style='color:#074726; '>D</span> '' <span style='color:#074726; '>TRB</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> EDITT</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+226: : EDITT EDIT @U ?<span style='color:#074726; '>SP</span> EX+ ;
+227: 
+228: <span style='color:#696969; '>[Прием сокращения]</span>
+229: : VVD <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>40</span> UN <span style='color:#008c00; '>1</span>- BEG NEG <span style='color:#074726; '>SRCHB</span> NEG <span style='color:#696969; '>[SK]</span>
+230:   UN <span style='color:#074726; '>C2</span> - <span style='color:#074726; '>C2</span> TWE <span style='color:#696969; '>[SK]</span>
+231:   SWIM PRS <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> VVD1</span> <span style='color:#074726; '>D</span>
+232:   <span style='color:#696969; '>[SK]</span> <span style='color:#008c00; '>1</span>- <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ZB</span> <span style='color:#696969; '>[]</span> ;
+233: : VVD1 <span style='color:#696969; '>[A]</span> <span style='color:#074726; '>C</span> @B TOCAP <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[A+1]</span> ;
+234: 
+235: <span style='color:#074726; '>B16</span>
+236: : TWE #  <span style='color:#074726; '>!!!</span> WIMAGE <span style='color:#008c00; '>7</span> <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>C</span> SHR <span style='color:#008c00; '>7</span> <span style='color:#074726; '>!</span> WIMAGE SWIM <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>2000</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!SB</span> ;
+237: : SLR INFTRB '' OLDTRB <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> MNEW MOLD</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>!</span> INFTRB ;
+238: : MNEW '' NEWTRB ;
+239: : MOLD '' OLDTRB ;
+240: 
+241: : .W RCP <span style='color:#074726; '>T0</span> SCP ;
+242: : .BW .W TSTR WINDOW ;
+243: 
+244: <span style='color:#696969; '>[Центрирование текста в строке]</span>
+245: : CENTR .PC UP AF <span style='color:#696969; '>[ADR]</span> NOSP <span style='color:#696969; '>[DL]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> DC</span> NDLS REST - SHR
+246:   <span style='color:#074726; '>C</span> BB <span style='color:#074726; '>></span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> T0</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> IC</span> .PC ;
+247:   : NOSP <span style='color:#696969; '>[A]</span> <span style='color:#008c00; '>0</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> NOSP1</span> <span style='color:#074726; '>E2D</span> <span style='color:#696969; '>[I]</span> ;
+248:     : NOSP1 <span style='color:#696969; '>[A,I]</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>C3</span> + @B ?<span style='color:#074726; '>SP</span> EX0 <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[A,I+1]</span> ;
+249: 
+250: : STRLEN <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B10</span> .BW .STS 0C <span style='color:#074726; '>!</span> SCOLOR
+251:  <span style='color:#0000e6; '> "Длина стpоки (Ввод - "</span> <span style='color:#074726; '>TOS</span>''
+252:   NDLS <span style='color:#008c00; '>2</span> TON<span style='color:#0000e6; '> ") - "</span> <span style='color:#074726; '>TOS</span>'' <span style='color:#008c00; '>2</span> <span style='color:#696969; '>[TEXTCOLOR]</span> <span style='color:#074726; '>!</span> SCOLOR
+253:   <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> NERR NOP</span> TIN
+254:   <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> NDLS C</span> <span style='color:#074726; '>E2D</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>MAX</span> DLS <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> NDLS .BW .STS L1 <span style='color:#696969; '>[]</span> ;
+255: 
+256: <span style='color:#074726; '>B10</span>
+257: <span style='color:#074726; '>VAR USLOVIE</span>
+258: : WORDTORUS <span style='color:#074726; '>!0</span> USLOVIE TOEND TOSTART <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> TORUS1</span> <span style='color:#696969; '>[]</span> ;
+259:   : TORUS1 <span style='color:#696969; '>[]</span> AF @B <span style='color:#074726; '>C</span> ?<span style='color:#074726; '>SP</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DEX</span> <span style='color:#074726; '>C</span> ?BK <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> .PCDEX UCHNGR</span> <span style='color:#696969; '>[]</span> ;
+260:     : DEX <span style='color:#074726; '>D</span> EX <span style='color:#696969; '>[]</span> ;
+261:     : .PCDEX .PC DEX <span style='color:#696969; '>[]</span> ;
+262:     : UCHNGR USLOVIE <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> CHNGR 0</span> <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[DOP,B,B]</span>
+263:       <span style='color:#074726; '>C</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #. SBROS #  NOP #: NOP</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> UST</span> <span style='color:#696969; '>[]</span> <span style='color:#074726; '>E2</span> IZMSDV ;
+264:       : SBROS <span style='color:#074726; '>!1</span> USLOVIE ;
+265:       : UST <span style='color:#074726; '>!0</span> USLOVIE ;
+266:       : CHNGR <span style='color:#074726; '>C</span>
+267:         BR
+268:         #A <span style='color:#008c00; '>95</span>
+269:         #B <span style='color:#008c00; '>96</span>
+270:         #C <span style='color:#008c00; '>158</span>
+271:         #E <span style='color:#008c00; '>96</span>
+272:         #P <span style='color:#008c00; '>32</span>
+273:         #O <span style='color:#008c00; '>95</span>
+274:         #K <span style='color:#008c00; '>95</span>
+275:         #M <span style='color:#008c00; '>95</span>
+276:         #T <span style='color:#008c00; '>142</span>
+277:         #X <span style='color:#008c00; '>141</span>
+278:         #H <span style='color:#008c00; '>101</span>
+279:         #А <span style='color:#008c00; '>32</span>
+280:         #Б <span style='color:#008c00; '>32</span>
+281:         #В <span style='color:#008c00; '>32</span>
+282:         #Г <span style='color:#008c00; '>32</span>
+283:         #Д <span style='color:#008c00; '>32</span>
+284:         #Е <span style='color:#008c00; '>32</span>
+285:         #Ж <span style='color:#008c00; '>32</span>
+286:         #З <span style='color:#008c00; '>32</span>
+287:         #И <span style='color:#008c00; '>32</span>
+288:         #Й <span style='color:#008c00; '>32</span>
+289:         #К <span style='color:#008c00; '>32</span>
+290:         #Л <span style='color:#008c00; '>32</span>
+291:         #М <span style='color:#008c00; '>32</span>
+292:         #Н <span style='color:#008c00; '>32</span>
+293:         #О <span style='color:#008c00; '>32</span>
+294:         #П <span style='color:#008c00; '>32</span>
+295: 
+296:         #Р <span style='color:#008c00; '>80</span>
+297:         #С <span style='color:#008c00; '>80</span>
+298:         #Т <span style='color:#008c00; '>80</span>
+299:         #У <span style='color:#008c00; '>80</span>
+300:         #Ф <span style='color:#008c00; '>80</span>
+301:         #Х <span style='color:#008c00; '>80</span>
+302:         #Ц <span style='color:#008c00; '>80</span>
+303:         #Ч <span style='color:#008c00; '>80</span>
+304:         #  <span style='color:#008c00; '>80</span>
+305:         #Щ <span style='color:#008c00; '>80</span>
+306:         #Ъ <span style='color:#008c00; '>80</span>
+307:         #Ы <span style='color:#008c00; '>80</span>
+308:         #Ь <span style='color:#008c00; '>80</span>
+309:         #Э <span style='color:#008c00; '>80</span>
+310:         #Ю <span style='color:#008c00; '>80</span>
+311:         #Я <span style='color:#008c00; '>80</span>
+312:         <span style='color:#800000; font-weight:bold; '>ELSE 0</span> ;
+313:       : IZMSDV + <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>C</span> AF <span style='color:#074726; '>!TB</span> <span style='color:#074726; '>TOB</span> AU1+ <span style='color:#696969; '>[]</span> ;
+314: 
+315: 
+316: '' WORDTORU <span style='color:#008c00; '>69</span> <span style='color:#696969; '>[aF6]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
 317: 
-318: <span style='color:#074726; '>FIX BYTE VAR LINNEW </span><span style='color:#008c00; '>0</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> LINNEW</span>
-319: <span style='color:#074726; '>FIX BYTE VAR NEWPOSLIN </span><span style='color:#008c00; '>0</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> NEWPOSLIN</span>
+318: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR LINNEW</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> LINNEW
+319: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR NEWPOSLIN</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> NEWPOSLIN
 320: 
-321: <span style='color:#808030; '>:</span><span style='color:#074726; '> IZMNEWLIN LINNEW NOT </span><span style='color:#808030; '>!</span><span style='color:#074726; '> LINNEW </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
+321: : IZMNEWLIN LINNEW NOT <span style='color:#074726; '>!</span> LINNEW <span style='color:#696969; '>[]</span> ;
 322: 
 323: 
-324: <span style='color:#808030; '>:</span><span style='color:#074726; '> STRZAMEN </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> RP SYMZAMEN </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-325: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> SYMZAMEN </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> OSTFREE EX0 </span><span style='color:#808030; font-weight:bold; '>@</span><span style='color:#bb7977; font-weight:bold; '>A C </span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '>BK BR</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> EXNEWLINE UCHNGR </span><span style='color:#808030; font-weight:bold; '>;</span>
-326: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> EXNEWLINE NEWLINE EX </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-327: <span style='color:#bb7977; font-weight:bold; '>      </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> NEWLINE </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>B</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> D LEN TSTR </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> NEWSTR </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-328: <span style='color:#bb7977; font-weight:bold; '>        </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> NEWSTR </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>PC LINNEW IF0 PEREDV </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-329: <span style='color:#bb7977; font-weight:bold; '>          </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> PEREDV </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> NEWPOSLIN OSTFREE C2 </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> T0 DO </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#808030; font-weight:bold; '>></span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-330: <span style='color:#bb7977; font-weight:bold; '>            </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> OSTFREE </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> KBUF AF </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+324: : STRZAMEN <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> SYMZAMEN</span> <span style='color:#696969; '>[]</span> ;
+325:   : SYMZAMEN <span style='color:#696969; '>[]</span> OSTFREE EX0 @A <span style='color:#074726; '>C</span> ?BK <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> EXNEWLINE UCHNGR</span> ;
+326:     : EXNEWLINE NEWLINE EX <span style='color:#696969; '>[]</span> ;
+327:       : NEWLINE <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>D</span> LEN TSTR - <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> NEWSTR</span> <span style='color:#696969; '>[]</span> ;
+328:         : NEWSTR <span style='color:#696969; '>[]</span> .PC LINNEW <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> PEREDV</span> <span style='color:#696969; '>[]</span> ;
+329:           : PEREDV <span style='color:#696969; '>[]</span> NEWPOSLIN OSTFREE <span style='color:#074726; '>C2</span> - <span style='color:#000000; background:#ffffe8; '>IF-</span><span style='color:#004a43; '> T0</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> !-></span> <span style='color:#696969; '>[]</span> ;
+330:             : OSTFREE <span style='color:#696969; '>[]</span> KBUF AF - <span style='color:#008c00; '>1</span>- ;
 331: 
-332: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> STRZAMEN </span><span style='color:#008c00; '>68</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>aF6</span><span style='color:#808030; '>]</span><span style='color:#074726; '>  C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-333: <span style='color:#0000e6; '></span>
-334: <span style='color:#0000e6; '>[Формирование файла с помощью]</span>
-335: <span style='color:#0000e6; '>[ADDEHELP - добавить текст отмеченный маpкеpами как новую секцию в файл помощи]</span>
-336: <span style='color:#0000e6; '>       CHANNEL   CH0    [Канал для связи с файлом помощи]</span>
-337: <span style='color:#0000e6; '>       WORD VAR  N      [Номер секции]</span>
-338: <span style='color:#0000e6; '>       WORD VAR  HIGH   [Номеp стpоки веpхнего маpкеpа]</span>
-339: <span style='color:#0000e6; '>       WORD VAR  QSTRS  [Счетчик строк]</span>
-340: <span style='color:#0000e6; '>       BYTE VAR  SBPTR  [Указатель по вектоpу SBUF]</span>
-341: <span style='color:#0000e6; '>       WORD VAR  NSTROK [Сколько стpок пеpенести в файл]</span>
-342: <span style='color:#0000e6; '>       WORD VAR  LITTLE [Номеp стpоки нижнего маpкеpа]</span>
-343: <span style='color:#0000e6; '>       LONG VAR  OLDPOS [Позиция в файле помощи, куда надо пеpеписать</span>
-344: <span style='color:#0000e6; '>                         число строк в секции]</span>
-345: <span style='color:#0000e6; '>   FIX BYTE VAR  UDAL?  [Пеpеменная флаг - удалять текст после пеpенесенмя</span>
-346: <span style='color:#0000e6; '>                         в файл помощи (1) или нет (0)]</span>
-347: <span style='color:#0000e6; '>    79 BYTE VCTR SBUF   [Буфеp для выводимой стpоки]</span>
-348: <span style='color:#0000e6; '>FIX 11 BYTE VCTR NFHELP [Буфеp для имени файла помощи]</span>
-349: <span style='color:#0000e6; '></span>
-350: <span style='color:#0000e6; '>"COMDSSP.HLP" 0 '</span><span style='color:#074726; '> NFHELP </span><span style='color:#808030; '>!</span><span style='color:#074726; '>SB</span>
+332: '' STRZAMEN <span style='color:#008c00; '>68</span> <span style='color:#696969; '>[aF6]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+333: 
+334: <span style='color:#696969; '>[Формирование файла с помощью]</span>
+335: <span style='color:#696969; '>[ADDEHELP - добавить текст отмеченный маpкеpами как новую секцию в файл помощи]</span>
+336:        <span style='color:#074726; '>CHANNEL   CH0</span>    <span style='color:#696969; '>[Канал для связи с файлом помощи]</span>
+337:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR  N</span>      <span style='color:#696969; '>[Номер секции]</span>
+338:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR  HIGH</span>   <span style='color:#696969; '>[Номеp стpоки веpхнего маpкеpа]</span>
+339:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR  QSTRS</span>  <span style='color:#696969; '>[Счетчик строк]</span>
+340:        <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  SBPTR</span>  <span style='color:#696969; '>[Указатель по вектоpу SBUF]</span>
+341:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR  NSTROK</span> <span style='color:#696969; '>[Сколько стpок пеpенести в файл]</span>
+342:        <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VAR  LITTLE</span> <span style='color:#696969; '>[Номеp стpоки нижнего маpкеpа]</span>
+343:        <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR  OLDPOS</span> <span style='color:#696969; '>[Позиция в файле помощи, куда надо пеpеписать</span>
+344: <span style='color:#696969; '>                         число строк в секции]</span>
+345:    <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  UDAL?</span>  <span style='color:#696969; '>[Пеpеменная флаг - удалять текст после пеpенесенмя</span>
+346: <span style='color:#696969; '>                         в файл помощи (1) или нет (0)]</span>
+347:     <span style='color:#008c00; '>79</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR SBUF</span>   <span style='color:#696969; '>[Буфеp для выводимой стpоки]</span>
+348: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>11</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR NFHELP</span> <span style='color:#696969; '>[Буфеp для имени файла помощи]</span>
+349: 
+350: <span style='color:#0000e6; '>"COMDSSP.HLP"</span> <span style='color:#008c00; '>0</span> ' NFHELP <span style='color:#074726; '>!SB</span>
 351: 
-352: <span style='color:#808030; '>:</span><span style='color:#074726; '> IZMUDAL </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>.</span><span style='color:#074726; '>BW </span><span style='color:#808030; '>.</span><span style='color:#074726; '>STS </span><span style='color:#008c00; '>113</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#074726; '> SCOLOR</span>
-353: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#0000e6; font-weight:bold; '>"Вы действительно "</span><span style='color:#bb7977; font-weight:bold; '> TOS</span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> UDAL</span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '> BR</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>"нехотите"</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>"хотите"</span>
-354: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#008c00; font-weight:bold; '>118</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SCOLOR TOS</span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>113</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SCOLOR</span>
-355: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#0000e6; font-weight:bold; '>" удалять текст после его записи в HELPing (Y/N)"</span><span style='color:#bb7977; font-weight:bold; '> TOS</span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TEXTCOLOR </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SCOLOR</span>
-356: <span style='color:#bb7977; font-weight:bold; '>  UDAL</span><span style='color:#808030; font-weight:bold; '>?</span><span style='color:#bb7977; font-weight:bold; '> TIB BR </span><span style='color:#696969; font-weight:bold; '>#Y NOT #y NOT ELSE NOP ! UDAL? .BW .STS L1 [] ;</span>
+352: : IZMUDAL <span style='color:#696969; '>[]</span> .BW .STS <span style='color:#008c00; '>113</span> <span style='color:#074726; '>!</span> SCOLOR
+353:  <span style='color:#0000e6; '> "Вы действительно "</span> <span style='color:#074726; '>TOS</span>'' UDAL? <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> "нехотите" "хотите"</span>
+354:   <span style='color:#008c00; '>118</span> <span style='color:#074726; '>!</span> SCOLOR <span style='color:#074726; '>TOS</span>'' <span style='color:#008c00; '>113</span> <span style='color:#074726; '>!</span> SCOLOR
+355:  <span style='color:#0000e6; '> " удалять текст после его записи в HELPing (Y/N)"</span> <span style='color:#074726; '>TOS</span>'' TEXTCOLOR <span style='color:#074726; '>!</span> SCOLOR
+356:   UDAL? <span style='color:#074726; '>TIB</span> <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> #Y NOT #y NOT</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> NOP</span> <span style='color:#074726; '>!</span> UDAL? .BW .STS L1 <span style='color:#696969; '>[]</span> ;
 357: 
-358: <span style='color:#808030; '>:</span><span style='color:#074726; '> NAMEFHLP </span><span style='color:#808030; '>.</span><span style='color:#074726; '>BW </span><span style='color:#808030; '>.</span><span style='color:#074726; '>STS</span>
-359: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#0000e6; font-weight:bold; '>"Введите имя файла помощи - "</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#696969; font-weight:bold; '>#  </span><span style='color:#ffffff; background:#808000; font-weight:bold; '>!!!</span><span style='color:#696969; font-weight:bold; '> NFHELP</span>
-360: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#008c00; font-weight:bold; '>14</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SCOLOR TOS</span><span style='color:#0000e6; font-weight:bold; '>''</span>
-361: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>' NFHELP 12 TIS</span>
-362: <span style='color:#0000e6; font-weight:bold; '>  TEXTCOLOR ! SCOLOR .BW .STS L1 [] ;</span>
-363: <span style='color:#0000e6; font-weight:bold; '></span>
-364: <span style='color:#0000e6; font-weight:bold; '>: ADDEHELP [] MARKS [L,H,1/0] BR+ ADDEHLP DD [] ;</span>
-365: <span style='color:#0000e6; font-weight:bold; '>  : ADDEHLP [L,H] ! HIGH ! LITTLE</span>
-366: <span style='color:#0000e6; font-weight:bold; '>    BEG TSTR [Тек позиция и тек стpока]</span>
-367: <span style='color:#0000e6; font-weight:bold; '>    ST3 SGX 0 MAX</span>
-368: <span style='color:#0000e6; font-weight:bold; '>    [Тек позиция и тек стpока,ST3]</span>
-369: <span style='color:#0000e6; font-weight:bold; '>    EON EXERR NOP</span>
-370: <span style='color:#0000e6; font-weight:bold; '>    ON ZAPROS NAMEFHLP</span>
-371: <span style='color:#0000e6; font-weight:bold; '>    ON .RAS ".HLP"</span>
-372: <span style='color:#0000e6; font-weight:bold; '>    0 '</span><span style='color:#bb7977; font-weight:bold; '> NFHELP </span><span style='color:#008c00; font-weight:bold; '>12</span><span style='color:#bb7977; font-weight:bold; '> C2 C2 TOS</span>
-373: <span style='color:#bb7977; font-weight:bold; '>    CONNECT CH0 OPEN CH0</span>
+358: : NAMEFHLP .BW .STS
+359:  <span style='color:#0000e6; '> "Введите имя файла помощи - "</span> #  <span style='color:#074726; '>!!!</span> NFHELP
+360:   <span style='color:#008c00; '>14</span> <span style='color:#074726; '>!</span> SCOLOR <span style='color:#074726; '>TOS</span>''
+361:   <span style='color:#008c00; '>0</span> ' NFHELP <span style='color:#008c00; '>12</span> TIS
+362:   TEXTCOLOR <span style='color:#074726; '>!</span> SCOLOR .BW .STS L1 <span style='color:#696969; '>[]</span> ;
+363: 
+364: : ADDEHELP <span style='color:#696969; '>[]</span> MARKS <span style='color:#696969; '>[L,H,1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ADDEHLP DD</span> <span style='color:#696969; '>[]</span> ;
+365:   : ADDEHLP <span style='color:#696969; '>[L,H]</span> <span style='color:#074726; '>!</span> HIGH <span style='color:#074726; '>!</span> LITTLE
+366:     BEG TSTR <span style='color:#696969; '>[Тек позиция и тек стpока]</span>
+367:     ST3 SGX <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span>
+368:     <span style='color:#696969; '>[Тек позиция и тек стpока,ST3]</span>
+369:     <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> EXERR NOP</span>
+370:     <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ZAPROS NAMEFHLP</span>
+371:     <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> .RAS ".HLP"</span>
+372:     <span style='color:#008c00; '>0</span> ' NFHELP <span style='color:#008c00; '>12</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>TOS</span>
+373:     CONNECT CH0 OPEN CH0
 374: 
-375: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>BW </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>STS</span>
-376: <span style='color:#bb7977; font-weight:bold; '>     </span><span style='color:#008c00; font-weight:bold; '>14</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SCOLOR</span>
-377: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#0000e6; font-weight:bold; '>"Номеp добавляемой секции - "</span><span style='color:#bb7977; font-weight:bold; '> TOS</span><span style='color:#0000e6; font-weight:bold; '>''</span><span style='color:#bb7977; font-weight:bold; '> TIN </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> N</span>
-378: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>BW </span><span style='color:#808030; font-weight:bold; '>.</span><span style='color:#bb7977; font-weight:bold; '>STS L1</span>
+375:     .BW .STS
+376:      <span style='color:#008c00; '>14</span> <span style='color:#074726; '>!</span> SCOLOR
+377:    <span style='color:#0000e6; '> "Номеp добавляемой секции - "</span> <span style='color:#074726; '>TOS</span>'' TIN <span style='color:#074726; '>!</span> N
+378:     .BW .STS L1
 379: 
-380: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>2</span><span style='color:#bb7977; font-weight:bold; '> SPOS CH0 IW CH0 DO GH0 C</span>
-381: <span style='color:#bb7977; font-weight:bold; '>    BR0 CYCL SOOB CLOSE CH0</span>
-382: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>-</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> SCURS</span>
-383: <span style='color:#bb7977; font-weight:bold; '>    N </span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#0000e6; font-weight:bold; '>' NFHELP 12 GENHELP</span>
-384: <span style='color:#0000e6; font-weight:bold; '>    6 8 SCURS E3 E2</span>
-385: <span style='color:#0000e6; font-weight:bold; '>    RENSC TOLMOV TOPMOV [EXIST STATUS] IF0 ?UDAL .BK ;</span>
-386: <span style='color:#0000e6; font-weight:bold; '>    : ?UDAL UDAL? IF+ UDALYT [] ;</span>
-387: <span style='color:#0000e6; font-weight:bold; '>    : SOOB .BW .STS "Данная секция уже есть !!!" TOS'</span><span style='color:#0000e6; font-weight:bold; '>' TRB D .BW .STS L1 ;</span>
-388: <span style='color:#0000e6; font-weight:bold; '></span>
-389: <span style='color:#0000e6; font-weight:bold; '>: CYCL 0 SPOS CH0</span>
-390: <span style='color:#0000e6; font-weight:bold; '>  TEXTCOLOR ! SCOLOR</span>
-391: <span style='color:#0000e6; font-weight:bold; '>  [L,H,Тек позиция и тек стpока,ST3,L,H]</span>
-392: <span style='color:#0000e6; font-weight:bold; '>  ADDEH0 ;</span>
-393: <span style='color:#0000e6; font-weight:bold; '>  : GH0 [есть ли данная секция в файле]</span>
-394: <span style='color:#0000e6; font-weight:bold; '>    [0] IW CH0 N = IF+ GH0'</span><span style='color:#bb7977; font-weight:bold; '> POS CH0 </span><span style='color:#008c00; font-weight:bold; '>4</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> SPOS CH0 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#008c00; font-weight:bold; '>0</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
-395: <span style='color:#bb7977; font-weight:bold; '>    </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> GH0</span><span style='color:#0000e6; font-weight:bold; '>' [0] D IL CH0 EX ;</span>
-396: <span style='color:#0000e6; font-weight:bold; '></span>
-397: <span style='color:#0000e6; font-weight:bold; '>: FHM ."</span>
-398: <span style='color:#0000e6; font-weight:bold; '>Нет свободных секций в файле помощи " FNAME CH0 EXERR ;</span>
-399: <span style='color:#0000e6; font-weight:bold; '></span>
-400: <span style='color:#0000e6; font-weight:bold; '>: UDALYT [] HIGH ! M2 LITTLE ! M1 CTRLD [] ;</span>
-401: <span style='color:#0000e6; font-weight:bold; '></span>
-402: <span style='color:#0000e6; font-weight:bold; '>: ADDEH0 []</span>
-403: <span style='color:#0000e6; font-weight:bold; '>   EON EXERR NOP</span>
-404: <span style='color:#0000e6; font-weight:bold; '>   IW CH0 IW CH0 = IF+ FHM</span>
-405: <span style='color:#0000e6; font-weight:bold; '>   2 SPOS CH0 IW CH0 6 * 4 + SPOS CH0 N OW CH0 LENB CH0 OL CH0</span>
-406: <span style='color:#0000e6; font-weight:bold; '>   LENB CH0 ! OLDPOS</span>
-407: <span style='color:#0000e6; font-weight:bold; '>   LENB CH0 2+ SPOS CH0</span>
-408: <span style='color:#0000e6; font-weight:bold; '>   !0 QSTRS</span>
-409: <span style='color:#0000e6; font-weight:bold; '>   DOWN</span>
-410: <span style='color:#0000e6; font-weight:bold; '>   LITTLE HIGH C2 - 1+ [L,SK] E2 TOLMOV</span>
-411: <span style='color:#0000e6; font-weight:bold; '>   DO ADDEH1</span>
-412: <span style='color:#0000e6; font-weight:bold; '>   OLDPOS SPOS CH0</span>
-413: <span style='color:#0000e6; font-weight:bold; '>   QSTRS OW CH0</span>
-414: <span style='color:#0000e6; font-weight:bold; '>   2 SPOS CH0 IW CH0 1+ 2 SPOS CH0 OW CH0 [] ;</span>
-415: <span style='color:#0000e6; font-weight:bold; '></span>
-416: <span style='color:#0000e6; font-weight:bold; '>: ADDEH1 [Ввод и вывод одной строки]</span>
-417: <span style='color:#0000e6; font-weight:bold; '>   #  !!! SBUF</span>
-418: <span style='color:#0000e6; font-weight:bold; '>   13 78 ! SBUF 10 79 ! SBUF</span>
-419: <span style='color:#0000e6; font-weight:bold; '>   !0 SBPTR</span>
-420: <span style='color:#0000e6; font-weight:bold; '>   ADDEH2</span>
-421: <span style='color:#0000e6; font-weight:bold; '>   0 '</span><span style='color:#bb7977; font-weight:bold; '> SBUF </span><span style='color:#008c00; font-weight:bold; '>80</span><span style='color:#bb7977; font-weight:bold; '> OS CH0</span>
-422: <span style='color:#bb7977; font-weight:bold; '>   </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> QSTRS DOWN </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>;</span>
+380:     <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>2</span> SPOS CH0 IW CH0 <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> GH0</span> <span style='color:#074726; '>C</span>
+381:     <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> CYCL SOOB</span> CLOSE CH0
+382:     -<span style='color:#008c00; '>1</span> <span style='color:#008c00; '>0</span> SCURS
+383:     N <span style='color:#008c00; '>0</span> ' NFHELP <span style='color:#008c00; '>12</span> GENHELP
+384:     <span style='color:#008c00; '>6</span> <span style='color:#008c00; '>8</span> SCURS <span style='color:#074726; '>E3</span> <span style='color:#074726; '>E2</span>
+385:     RENSC TOLMOV TOPMOV <span style='color:#696969; '>[EXIST STATUS]</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> ?UDAL</span> .BK ;
+386:     : ?UDAL UDAL? <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> UDALYT</span> <span style='color:#696969; '>[]</span> ;
+387:     : SOOB .BW .STS<span style='color:#0000e6; '> "Данная секция уже есть !!!"</span> <span style='color:#074726; '>TOS</span>'' <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>D</span> .BW .STS L1 ;
+388: 
+389: : CYCL <span style='color:#008c00; '>0</span> SPOS CH0
+390:   TEXTCOLOR <span style='color:#074726; '>!</span> SCOLOR
+391:   <span style='color:#696969; '>[L,H,Тек позиция и тек стpока,ST3,L,H]</span>
+392:   ADDEH0 ;
+393:   : GH0 <span style='color:#696969; '>[есть ли данная секция в файле]</span>
+394:     <span style='color:#696969; '>[0]</span> IW CH0 N <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> GH0'</span> POS CH0 <span style='color:#008c00; '>4</span> + SPOS CH0 <span style='color:#696969; '>[0]</span> ;
+395:     : GH0' <span style='color:#696969; '>[0]</span> <span style='color:#074726; '>D</span> IL CH0 EX ;
+396: 
+397: : FHM <span style='color:#0000e6; '>."</span>
+398: <span style='color:#0000e6; '>Нет свободных секций в файле помощи "</span> FNAME CH0 EXERR ;
+399: 
+400: : UDALYT <span style='color:#696969; '>[]</span> HIGH <span style='color:#074726; '>!</span> M2 LITTLE <span style='color:#074726; '>!</span> M1 CTRLD <span style='color:#696969; '>[]</span> ;
+401: 
+402: : ADDEH0 <span style='color:#696969; '>[]</span>
+403:    <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> EXERR NOP</span>
+404:    IW CH0 IW CH0 <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> FHM</span>
+405:    <span style='color:#008c00; '>2</span> SPOS CH0 IW CH0 <span style='color:#008c00; '>6</span> <span style='color:#074726; '>*</span> <span style='color:#008c00; '>4</span> + SPOS CH0 N OW CH0 LENB CH0 OL CH0
+406:    LENB CH0 <span style='color:#074726; '>!</span> OLDPOS
+407:    LENB CH0 <span style='color:#008c00; '>2</span>+ SPOS CH0
+408:    <span style='color:#074726; '>!0</span> QSTRS
+409:    DOWN
+410:    LITTLE HIGH <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[L,SK]</span> <span style='color:#074726; '>E2</span> TOLMOV
+411:    <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ADDEH1</span>
+412:    OLDPOS SPOS CH0
+413:    QSTRS OW CH0
+414:    <span style='color:#008c00; '>2</span> SPOS CH0 IW CH0 <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>2</span> SPOS CH0 OW CH0 <span style='color:#696969; '>[]</span> ;
+415: 
+416: : ADDEH1 <span style='color:#696969; '>[Ввод и вывод одной строки]</span>
+417:    #  <span style='color:#074726; '>!!!</span> SBUF
+418:    <span style='color:#008c00; '>13</span> <span style='color:#008c00; '>78</span> <span style='color:#074726; '>!</span> SBUF <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>79</span> <span style='color:#074726; '>!</span> SBUF
+419:    <span style='color:#074726; '>!0</span> SBPTR
+420:    ADDEH2
+421:    <span style='color:#008c00; '>0</span> ' SBUF <span style='color:#008c00; '>80</span> OS CH0
+422:    <span style='color:#074726; '>!1+</span> QSTRS DOWN <span style='color:#696969; '>[]</span> ;
 423: 
-424: <span style='color:#808030; '>[</span><span style='color:#074726; '>Заполнение вуфера SBUF</span><span style='color:#808030; '>]</span>
-425: <span style='color:#808030; '>:</span><span style='color:#074726; '> ADDEH2 </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>!</span><span style='color:#008c00; '>0</span><span style='color:#074726; '> SBPTR AF </span><span style='color:#008c00; '>80</span><span style='color:#074726; '> DO ADDEH3 D </span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span><span style='color:#074726; '> </span><span style='color:#808030; '>;</span>
-426: <span style='color:#bb7977; font-weight:bold; '>  </span><span style='color:#808030; font-weight:bold; '>:</span><span style='color:#bb7977; font-weight:bold; '> ADDEH3 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>AF</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> C </span><span style='color:#808030; font-weight:bold; '>@</span><span style='color:#bb7977; font-weight:bold; '>B C </span><span style='color:#008c00; font-weight:bold; '>10</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>=</span><span style='color:#bb7977; font-weight:bold; '> IF</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> ADDEH4 </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>B</span><span style='color:#808030; font-weight:bold; '>]</span>
-427: <span style='color:#bb7977; font-weight:bold; '>    SBPTR </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> SBUF </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>AF</span><span style='color:#808030; font-weight:bold; '>]</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#008c00; font-weight:bold; '>1</span><span style='color:#808030; font-weight:bold; '>+</span><span style='color:#bb7977; font-weight:bold; '> </span><span style='color:#808030; font-weight:bold; '>[</span><span style='color:#bb7977; font-weight:bold; '>AF</span><span style='color:#0000e6; font-weight:bold; '>'] !1+ SBPTR [] ;</span>
-428: <span style='color:#0000e6; font-weight:bold; '>    : ADDEH4 [B] D EX [] ;</span>
-429: <span style='color:#0000e6; font-weight:bold; '>B10</span>
-430: <span style='color:#0000e6; font-weight:bold; '>: helpcom</span>
-431: <span style='color:#0000e6; font-weight:bold; '>    BEG TSTR [Тек позиция и тек стpока]</span>
-432: <span style='color:#0000e6; font-weight:bold; '>    ST3 SGX 0 MAX CLS</span>
-433: <span style='color:#0000e6; font-weight:bold; '>    [Тек позиция и тек стpока,ST3]</span>
-434: <span style='color:#0000e6; font-weight:bold; '>    EON EXERR NOP</span>
-435: <span style='color:#0000e6; font-weight:bold; '>    ON .RAS ".HLP" ON ZAPROS NAMEFHLP</span>
-436: <span style='color:#0000e6; font-weight:bold; '>    20 "COMAND32.HLP" GENHELP</span>
-437: <span style='color:#0000e6; font-weight:bold; '>    RENSC TOLMOV TOPMOV .BK ;</span>
-438: <span style='color:#0000e6; font-weight:bold; '></span>
-439: <span style='color:#0000e6; font-weight:bold; '>[Стягивание текста в стpоке]</span>
-440: <span style='color:#0000e6; font-weight:bold; '>: STYG [] TAB AF [AFendstr] .BK UP RP STYGSTR D .BK [] ;</span>
-441: <span style='color:#0000e6; font-weight:bold; '>  : STYGSTR [AFendstr]</span>
-442: <span style='color:#0000e6; font-weight:bold; '>    KBUF AF - EX- C AF > EX0 TOEND RP OBRWORD [AFendstr] ;</span>
-443: <span style='color:#0000e6; font-weight:bold; '>    : OBRWORD []</span>
-444: <span style='color:#0000e6; font-weight:bold; '>      AF @B ?BK EX+</span>
-445: <span style='color:#0000e6; font-weight:bold; '>      AF 1+ @B ?SP BR+ DC EX ;</span>
-446: <span style='color:#0000e6; font-weight:bold; '></span>
-447: <span style='color:#0000e6; font-weight:bold; '>: NSTYG [] MARKS [L,H,1/0] BR+ DONSTYG DD [] ;</span>
-448: <span style='color:#0000e6; font-weight:bold; '>  : DONSTYG [L,H] C2 - 1+ E2 TOLMOV DO STYG [] ;</span>
-449: <span style='color:#0000e6; font-weight:bold; '></span>
-450: <span style='color:#0000e6; font-weight:bold; '>'</span><span style='color:#0000e6; font-weight:bold; '>' ER       25 [F7]   C '</span><span style='color:#bb7977; font-weight:bold; '> EXR NUSE </span><span style='color:#808030; font-weight:bold; '>!</span><span style='color:#bb7977; font-weight:bold; '> EXR</span>
-451: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> K20      </span><span style='color:#008c00; '>26</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>F8</span><span style='color:#808030; '>]</span><span style='color:#074726; '>   C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR</span>
-452: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' SLR      28 [F10]  C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR</span>
-453: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> IZMUDAL  </span><span style='color:#008c00; '>49</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>sF6</span><span style='color:#808030; '>]</span><span style='color:#074726; '>  C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-454: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' ADDEHELP 50 [sF7]  C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR </span><span style='color:#808030; '>[</span><span style='color:#808030; '>+</span><span style='color:#808030; '>]</span>
-455: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> AA1      </span><span style='color:#008c00; '>51</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>sF8</span><span style='color:#808030; '>]</span><span style='color:#074726; '>  C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-456: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' NAMEFHLP 53 [sF10] C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR </span><span style='color:#808030; '>[</span><span style='color:#808030; '>+</span><span style='color:#808030; '>]</span>
-457: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> NSTYG    </span><span style='color:#008c00; '>60</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#808030; '>^</span><span style='color:#074726; '>SF7</span><span style='color:#808030; '>]</span><span style='color:#074726; '> C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-458: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' STYG     61 [^SF8] C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR </span><span style='color:#808030; '>[</span><span style='color:#808030; '>+</span><span style='color:#808030; '>]</span>
-459: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>STRLEN</span><span style='color:#808030; '>]</span><span style='color:#074726; '> TOEND   </span><span style='color:#008c00; '>70</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>aF7</span><span style='color:#808030; '>]</span><span style='color:#074726; '>  C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-460: <span style='color:#0000e6; '>'</span><span style='color:#0000e6; '>' CENTR    71 [aF8]  C '</span><span style='color:#074726; '> EXR NUSE </span><span style='color:#808030; '>!</span><span style='color:#074726; '> EXR </span><span style='color:#808030; '>[</span><span style='color:#808030; '>+</span><span style='color:#808030; '>]</span>
-461: <span style='color:#0000e6; '>''</span><span style='color:#074726; '> helpcom  </span><span style='color:#008c00; '>72</span><span style='color:#074726; '> </span><span style='color:#808030; '>[</span><span style='color:#074726; '>aF9</span><span style='color:#808030; '>]</span><span style='color:#074726; '>  C </span><span style='color:#0000e6; '>' EXR NUSE ! EXR [+]</span>
-462: <span style='color:#0000e6; '></span>
-463: <span style='color:#0000e6; '>UNDEF</span>
-464: <span style='color:#0000e6; '></span>
+424: <span style='color:#696969; '>[Заполнение вуфера SBUF]</span>
+425: : ADDEH2 <span style='color:#696969; '>[]</span> <span style='color:#074726; '>!0</span> SBPTR AF <span style='color:#008c00; '>80</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> ADDEH3</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
+426:   : ADDEH3 <span style='color:#696969; '>[AF]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> ADDEH4</span> <span style='color:#696969; '>[B]</span>
+427:     SBPTR <span style='color:#074726; '>!</span> SBUF <span style='color:#696969; '>[AF]</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[AF']</span> <span style='color:#074726; '>!1+</span> SBPTR <span style='color:#696969; '>[]</span> ;
+428:     : ADDEH4 <span style='color:#696969; '>[B]</span> <span style='color:#074726; '>D</span> EX <span style='color:#696969; '>[]</span> ;
+429: <span style='color:#074726; '>B10</span>
+430: : helpcom
+431:     BEG TSTR <span style='color:#696969; '>[Тек позиция и тек стpока]</span>
+432:     ST3 SGX <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span> CLS
+433:     <span style='color:#696969; '>[Тек позиция и тек стpока,ST3]</span>
+434:     <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> EXERR NOP</span>
+435:     <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> .RAS ".HLP"</span> <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ZAPROS NAMEFHLP</span>
+436:     <span style='color:#008c00; '>20</span><span style='color:#0000e6; '> "COMAND32.HLP"</span> GENHELP
+437:     RENSC TOLMOV TOPMOV .BK ;
+438: 
+439: <span style='color:#696969; '>[Стягивание текста в стpоке]</span>
+440: : STYG <span style='color:#696969; '>[]</span> TAB AF <span style='color:#696969; '>[AFendstr]</span> .BK UP <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> STYGSTR</span> <span style='color:#074726; '>D</span> .BK <span style='color:#696969; '>[]</span> ;
+441:   : STYGSTR <span style='color:#696969; '>[AFendstr]</span>
+442:     KBUF AF - EX- <span style='color:#074726; '>C</span> AF <span style='color:#074726; '>></span> EX0 TOEND <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> OBRWORD</span> <span style='color:#696969; '>[AFendstr]</span> ;
+443:     : OBRWORD <span style='color:#696969; '>[]</span>
+444:       AF @B ?BK EX+
+445:       AF <span style='color:#008c00; '>1</span>+ @B ?<span style='color:#074726; '>SP</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> DC EX</span> ;
+446: 
+447: : NSTYG <span style='color:#696969; '>[]</span> MARKS <span style='color:#696969; '>[L,H,1/0]</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> DONSTYG DD</span> <span style='color:#696969; '>[]</span> ;
+448:   : DONSTYG <span style='color:#696969; '>[L,H]</span> <span style='color:#074726; '>C2</span> - <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> TOLMOV <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> STYG</span> <span style='color:#696969; '>[]</span> ;
+449: 
+450: '' ER       <span style='color:#008c00; '>25</span> <span style='color:#696969; '>[F7]</span>   <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR
+451: '' K20      <span style='color:#008c00; '>26</span> <span style='color:#696969; '>[F8]</span>   <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR
+452: '' SLR      <span style='color:#008c00; '>28</span> <span style='color:#696969; '>[F10]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR
+453: '' IZMUDAL  <span style='color:#008c00; '>49</span> <span style='color:#696969; '>[sF6]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+454: '' ADDEHELP <span style='color:#008c00; '>50</span> <span style='color:#696969; '>[sF7]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+455: '' AA1      <span style='color:#008c00; '>51</span> <span style='color:#696969; '>[sF8]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+456: '' NAMEFHLP <span style='color:#008c00; '>53</span> <span style='color:#696969; '>[sF10]</span> <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+457: '' NSTYG    <span style='color:#008c00; '>60</span> <span style='color:#696969; '>[^SF7]</span> <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+458: '' STYG     <span style='color:#008c00; '>61</span> <span style='color:#696969; '>[^SF8]</span> <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+459: '' <span style='color:#696969; '>[STRLEN]</span> TOEND   <span style='color:#008c00; '>70</span> <span style='color:#696969; '>[aF7]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+460: '' CENTR    <span style='color:#008c00; '>71</span> <span style='color:#696969; '>[aF8]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+461: '' helpcom  <span style='color:#008c00; '>72</span> <span style='color:#696969; '>[aF9]</span>  <span style='color:#074726; '>C</span> ' EXR NUSE <span style='color:#074726; '>!</span> EXR <span style='color:#696969; '>[+]</span>
+462: 
+463: <span style='color:#074726; '>UNDEF</span>
+464: 
