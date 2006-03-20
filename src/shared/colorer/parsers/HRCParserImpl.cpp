@@ -41,20 +41,25 @@ void HRCParserImpl::loadSource(InputSource *is){
       errorHandler->error(StringBuffer("Can't open stream for type without location attribute"));
     }
     return;
-  };
+  }
   try{
     parseHRC(is);
   }catch(Exception &e){
     throw e;
-  };
+  }
   curInputSource = istemp;
 }
 
-void HRCParserImpl::loadFileType(FileType *filetype){
+void HRCParserImpl::loadFileType(FileType *filetype)
+{
   if (filetype == null) return;
 
   FileTypeImpl *thisType = (FileTypeImpl*)filetype;
-  if (thisType->typeLoaded || thisType->loadBroken) return;
+  
+  if (thisType->typeLoaded || thisType->inputSourceLoading || thisType->loadBroken){
+    return;
+  }
+  thisType->inputSourceLoading = true;
 
   try{
 
@@ -80,7 +85,7 @@ void HRCParserImpl::loadFileType(FileType *filetype){
       errorHandler->fatalError(StringBuffer("Unknown exception while loading ")+thisType->inputSource->getLocation());
     }
     thisType->loadBroken = true;
-  };
+  }
 }
 
 FileType *HRCParserImpl::chooseFileType(const String *fileName, const String *firstLine, int typeNo)
@@ -95,12 +100,12 @@ const double DELTA = 1e-6;
     if (typeNo > 0 && (prior-max_prior < DELTA)){
       best = ret;
       typeNo--;
-    };
+    }
     if (prior-max_prior > DELTA || best == null){
       best = ret;
       max_prior = prior;
-    };
-  };
+    }
+  }
   if (typeNo > 0) return null;
   return best;
 }

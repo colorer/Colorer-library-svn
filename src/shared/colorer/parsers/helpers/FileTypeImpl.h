@@ -3,10 +3,11 @@
 
 #include<colorer/parsers/HRCParserImpl.h>
 
-/** File Type storage implementation.
-    Contains different attributes of HRC file type.
-    @ingroup colorer_parsers
-*/
+/**
+ * File Type storage implementation.
+ * Contains different attributes of HRC file type.
+ * @ingroup colorer_parsers
+ */
 class FileTypeImpl : public FileType
 {
   friend class HRCParserImpl;
@@ -49,17 +50,18 @@ public:
     paramHash.put(&name, new SString(value));
   }
 
-  /** Returns total priority, accordingly to all it's
-      choosers (filename and firstline choosers).
-      All <code>fileContent</code> RE's are tested only if priority of previously
-      computed <code>fileName</code> RE's is more, than zero.
-      @param fileName String representation of file name (without path).
-             If null, method skips filename matching, and starts directly
-             with fileContent matching.
-      @param fileContent Some part of file's starting content (first line,
-             for example). If null, skipped.
-      @return Computed total filetype priority.
-  */
+  /**
+   * Returns total priority, accordingly to all it's
+   * choosers (filename and firstline choosers).
+   * All <code>fileContent</code> RE's are tested only if priority of previously
+   * computed <code>fileName</code> RE's is more, than zero.
+   * @param fileName String representation of file name (without path).
+   *        If null, method skips filename matching, and starts directly
+   *        with fileContent matching.
+   * @param fileContent Some part of file's starting content (first line,
+   *        for example). If null, skipped.
+   * @return Computed total filetype priority.
+   */
   double getPriority(const String *fileName, const String *fileContent) const{
     SMatches match;
     double cur_prior = 0;
@@ -81,6 +83,8 @@ protected:
   bool loadDone;
   /// is initial type load failed
   bool loadBroken;
+  /// is this IS loading was started
+  bool inputSourceLoading;
 
   String *name, *group, *description;
   bool isPackage;
@@ -97,7 +101,7 @@ protected:
 
   FileTypeImpl(HRCParserImpl *hrcParser){
     this->hrcParser = hrcParser;
-    protoLoaded = typeLoaded = loadDone = loadBroken = false;
+    protoLoaded = typeLoaded = loadDone = loadBroken = inputSourceLoading = false;
     isPackage = false;
     name = group = description = null;
     baseScheme = null;

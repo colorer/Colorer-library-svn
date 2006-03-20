@@ -5,7 +5,7 @@
 #
 
 #$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer.exe";
+$colorer  = "colorer";
 
 $diff  = 'diff -U 1 -bB';
 

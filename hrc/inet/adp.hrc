@@ -31,7 +31,7 @@
     <scheme name="TclScript-client">
       <inherit scheme="asp:Insertion"/>
       <inherit scheme="tcltk:tcltk">
-        <virtual scheme="tcltk:META" subst-scheme="Insertion"/>
+<!--        <virtual scheme="tcltk:META" subst-scheme="asp:Insertion"/> -->
         <virtual scheme="tcltk:tcltk" subst-scheme="TclScript-client"/>
       </inherit>
     </scheme>
