@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XML Schema to HRC</title>
+<link href="styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='index.html'><img alt='back' src='images/back.png' width='40' height='18'/></a></div>
+
+<h1>XMLSchema linking</h1>
+<p>Colorer library package contains scripts and
+settings, which allows you to integrate it with XML language
+editing process and add to Colorer features of an on-fly
+XML validation.
+Colorer package includes XSLT Scripts for producing transformations
+of XML Schemas 1.0 into the HRC language.
+Resulted HRC files could be used by Colorer and provide
+syntax checking and document's logical structure validation.
+</p>
+
+<h2>Including support</h2>
+<p>Colorer includes following XML languages and their schemas:</p>
+  <ul>
+    <li>XHTML 1.0 (Strict, Transitional)</li>
+    <li>XSLT 1.0, XSLFO 1.0</li>
+    <li>XMLSchema 1.0</li>
+    <li>OASIS DocBook 4.1</li>
+    <li>Relax NG 1.0</li>
+    <li>WSC, WSF</li>
+    <li>Sun's web.xml</li>
+  </ul>
+<p>
+To add others language support, you must use those language's
+XSD description and transform it through the xsd2hrc.xsl transformation.
+Colorer package includes DTD to XMLSchema converter
+(<code>xsd2hrc/schemas/dtd/dtd2xsd/dtd2xsd.pl</code>), so you can
+use DTD descriptions also.
+</p>
+
+<h2>xsd2hrc.xsl</h2>
+
+  <p>This transformation (<code>/bin/xsd2hrc/xsd2hrc.xsl</code>) generates HRC syntax files
+to parse XML files from appropriate XML Schema description of these files type.
+Generated HRC syntax conforms XML Schema Recomendations,
+except some syntax and logic looses. Most of them can't be implemented
+due to HRC context-free grammar model limitations.</p>
+
+<h2>Limitations</h2>
+<ul>
+<li>Poor namespace checks. It is assumed, that some set of
+    frequently used ns prefixes (including empty and any prefixes)
+    is provided for each namespace. This set can be easily changed.</li>
+
+<li>Elements order check looses.
+    Ignoring  difference in  <code>xs:sequence, xs:choose, xs:all</code>,
+    treating any of them as <code>&lt;xs:choose minOccurs="0" maxOccurs="unbounded"&gt;</code></li>
+
+<li><code>xs:list/xs:union</code> membertypes order has no importance in xmlschema,
+    but can greatly affect syntax results in HRC.</li>
+
+<li>Limited <code>xs:import</code> support. Using it implies, that there is
+    an already defined HRC type for imported schema, and
+    importing schema just refers it with the valid hrc type prefix,
+    obtained from HRC catalog file using the @targetNamespace attribute
+    of the prototype definition element.</li>
+
+<li>Ignoring difference in <code>xs:union</code>, <code>xs:list</code>.</li>
+<li><code>xs:simpleType/xs:restriction</code> is just reference to base type
+    except then using <code>xs:enumeration</code> and <code>xs:pattern</code> facets.</li>
+<li>Lax buildin simpleTypes support. Treating all of them as lists.</li>
+<li>Unsupported substitution groups, <code>xsi:type</code> instance element identification.</li>
+
+<li>Missed keys and unique constrains checks.</li>
+<li>No <code>xs:redefine</code> support.</li>
+</ul>
+
+<h2>TODO:</h2>
+<ul>
+  <li>'fixed' on attr decls</li>
+  <li>xs:redefine features</li>
+  <li>substitution groups??</li>
+  <li>different hrc regions assign for different xml elements?</li>
+  <li>additional special region indention</li>
+</ul>
+
+</body>
+</html>

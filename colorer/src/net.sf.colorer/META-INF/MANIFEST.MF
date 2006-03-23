@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: net.sf.colorer; singleton=true
+Bundle-Name: Eclipse Colorer
+Bundle-Version: 0.8.0
+Bundle-ClassPath: colorer.jar
+Bundle-Activator: net.sf.colorer.eclipse.ColorerPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jface.text,
+ org.eclipse.ui.views
+Eclipse-AutoStart: true

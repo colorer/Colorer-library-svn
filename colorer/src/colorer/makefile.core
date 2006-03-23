@@ -1,0 +1,9 @@
+
+objs = $(obj_output_slash)ConsoleToolsRunner.$(obj) $(coreobjects)
+
+$(obj_output_slash)ConsoleToolsRunner.$(obj):
+	$(CPP) $(CPPFLAGS) ConsoleToolsRunner.cpp
+
+$(TARGET): $(objs)
+	$(LINK) $(LIBFLAGS)
+#	cp colorer.exe d:/programs/devel/colorer/bin

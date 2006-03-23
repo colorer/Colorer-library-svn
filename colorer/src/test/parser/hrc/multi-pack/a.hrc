@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+	"http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
+ >
+
+
+<package name="multi-pack.internal"/>
+
+<type name="multi-pack.internal">
+	<scheme name="foo">
+		<regexp match="/foo/" region="def:Keyword"/>
+		<!-- !! generate errors in logfile: -->
+		<inherit scheme="multi-pack:bar"/> 
+	</scheme>
+</type>
+
+
+<type name="multi-pack">
+	<scheme name="bar">
+		<regexp match="/bar/" region="def:Keyword"/>
+	</scheme>
+	
+	<scheme name="multi-pack">
+		<inherit scheme="multi-pack.internal:foo"/>
+	</scheme>
+</type>
+ 
+</hrc>

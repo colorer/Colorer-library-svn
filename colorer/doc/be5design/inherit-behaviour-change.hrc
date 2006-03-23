@@ -1,0 +1,121 @@
+<hrc>
+
+<type name="jsp">
+
+  <scheme name="jsp">
+    <block start="/(&lt;\%\@)/" end="/(\%\>)/" scheme="header-tag" region="Insertion" region00="OpenTag" region10="CloseTag" region01="def:PairStart" region11="def:PairEnd"/>
+    <!--
+      ASP inheritance with common ASP and HTML parameters improvements.
+    -->
+    <inherit scheme="asp:html">
+      <virtual scheme="asp:Insertion" prologue="Insertion.prologue"/>
+      <virtual scheme="asp:targetLanguage" subst-scheme="TypeDeclaration"/>
+      <!-- Refer to "prologue-epilogue.hrc" improvement document -->
+      <virtual scheme="html:htmlCoreTags" prologue="coreTags.prologue" epilogue="coreTags.epilogue"/>
+    </inherit>
+  </scheme>
+
+  <scheme name="Insertion.prologue">
+    <block start="/(&lt;\%--)/" end="/(--\%\>)/" scheme="def:Comment" region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
+    <!--
+        Do not need "asp:Insertion" inheritance, because "prologue" is used,
+        Do not need additional re-virtualization because already reused from "jsp" scheme
+    -->
+  </scheme>
+
+  <!-- Redefined Java type for JSP with inverse insertion and comment fixup -->
+  <scheme name="TypeDeclaration">
+    <regexp match="/\/\/.*$/ix" region="def:Comment"/>
+    <!-- Do not need to specify now targetLanguage re-virtualization. Already reused from "jsp" scheme -->
+    <inherit scheme="InverseInsertion"/>
+    <block start="/(\\&quot;)/" end="/(\\&quot;)/" scheme="def:Comment" region="def:String" region00="def:PairStart" region10="def:PairEnd"/>
+    <inherit scheme="java:TypeDeclaration">
+       <virtual scheme="java:TypeDeclaration" subst-scheme="TypeDeclaration"/>
+    </inherit>
+  </scheme>
+
+  <scheme name="coreTags.prologue">
+     <keywords region="OpenTag">
+        <word name="jsp:include"/>
+        <word name="jsp:forward"/>
+        <word name="jsp:getproperty"/>
+        <word name="jsp:setproperty"/>
+        <word name="jsp:useBean"/>
+        <word name="jsp:param"/>
+     </keywords>
+     <regexp match="/\bjsp\:\w+\b/" region="OpenTag"/>
+  </scheme>
+  <scheme name="coreTags.epilogue">
+     <keywords region="OpenTag">
+        <word name="c:set"/>
+        <word name="c:out"/>
+        <word name="c:forEach"/>
+        <word name="x:parse"/>
+        <word name="x:transform"/>
+        <word name="x:param"/>
+     </keywords>
+  </scheme>
+
+</type>
+
+
+
+
+
+Old code:
+
+
+
+<type name="jsp">
+   <scheme name="jsp">
+      <!-- FIX!!! -->
+      <block start="/(&lt;\%\@)/" end="/(\%\>)/" scheme="header-tag" region="Insertion" region00="OpenTag" region10="CloseTag" region01="def:PairStart" region11="def:PairEnd"/>
+      <inherit scheme="asp:html">
+         <virtual scheme="asp:Insertion" subst-scheme="Insertion"/>
+         <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
+         <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
+      </inherit>
+   </scheme>
+
+   <scheme name="Insertion">
+     <block start="/(&lt;\%--)/" end="/(--\%\>)/" scheme="def:Comment"
+             region="def:Comment" region00="def:PairStart" region10="def:PairEnd"/>
+     <inherit scheme='asp:Insertion'>
+       <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
+       <virtual scheme="html:htmlCoreTags" subst-scheme="coreTags"/>
+     </inherit>
+   </scheme>
+
+   <scheme name="TypeDeclaration">
+      <regexp match="/\/\/.*$/ix" region="def:Comment"/>
+      <inherit scheme="InverseInsertion">
+         <virtual scheme="targetLanguage" subst-scheme="TypeDeclaration"/>
+      </inherit>
+      <block start="/(\\&quot;)/" end="/(\\&quot;)/" scheme="def:Comment"
+             region="def:String" region00="def:PairStart" region10="def:PairEnd"/>
+      <inherit scheme="java:TypeDeclaration">
+         <virtual scheme="java:TypeDeclaration" subst-scheme="TypeDeclaration"/>
+      </inherit>
+   </scheme>
+
+   <scheme name="coreTags">
+      <keywords region="OpenTag">
+         <word name="jsp:include"/>
+         <word name="jsp:forward"/>
+         <word name="jsp:getproperty"/>
+         <word name="jsp:setproperty"/>
+         <word name="jsp:useBean"/>
+         <word name="jsp:param"/>
+      </keywords>
+      <regexp match="/\bjsp\:\w+\b/" region="OpenTag"/>
+      <inherit scheme="html:htmlCoreTags"/>
+      <keywords region="OpenTag">
+         <word name="c:set"/>
+         <word name="c:out"/>
+         <word name="c:forEach"/>
+         <word name="x:parse"/>
+         <word name="x:transform"/>
+         <word name="x:param"/>
+      </keywords>
+   </scheme>
+</type>

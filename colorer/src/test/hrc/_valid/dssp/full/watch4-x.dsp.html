@@ -1,0 +1,43 @@
+ 0: USE SYSTEM USE $SCRWORK
+ 1: DEFINE? $DATTIM %IF USE $DATTIM %FI
+ 2: <span style='color:#004a43; '>PROGRAM $WATCH</span> BASE@ <span style='color:#0000e6; '>."</span>
+ 3: <span style='color:#0000e6; '>Процесс TIMER для выдачи времени на экран."</span>
+ 4: <span style='color:#696969; '>[*****************************************************************************]</span>
+ 5: <span style='color:#008c00; '>0</span> <span style='color:#696969; '>[&lt;= КОНФИГУРАЦИЯ:  0 - часы:минуты:секунды    1 - часы:минуты  ]</span>
+ 6: <span style='color:#074726; '>B10</span>
+ 7: 
+ 8: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR TimFon</span> <span style='color:#008c00; '>3</span> <span style='color:#074726; '>!</span> TimFon
+ 9: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR TimTxt</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> TimTxt
+10: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR TimI</span>   <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> TimI
+11: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>VAR TimJ</span>  <span style='color:#008c00; '>70</span> <span style='color:#074726; '>!</span> TimJ
+12:    <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VAR Btime</span> <span style='color:#696969; '>[системное время в милисекундах]</span>
+13: 
+14: : PTIM <span style='color:#696969; '>[]</span> TIME <span style='color:#008c00; '>55</span> <span style='color:#074726; '>*</span> Btime  +  <span style='color:#008c00; '>1000</span> <span style='color:#074726; '>/</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[время в секундах]</span>
+15:   <span style='color:#008c00; '>60</span> <span style='color:#074726; '>/</span> <span style='color:#696969; '>[tm,s]</span> <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>60</span> <span style='color:#074726; '>/</span> <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[s,m,h]</span>  ShowTim  <span style='color:#074726; '>DDD</span> <span style='color:#696969; '>[]</span> ;
+16: 
+17: <span style='color:#008c00; '>20</span> <span style='color:#008c00; '>100</span> <span style='color:#008c00; '>100</span> '' PTIM :: TASK TIMER  <span style='color:#008c00; '>18</span> INTV TIMER
+18: : OUT2N <span style='color:#696969; '>[N,J]</span> <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>/</span>  <span style='color:#696969; '>[J,NH,NL]</span> #0 + <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>!</span> TEXTIM
+19:   <span style='color:#696969; '>[J,NH]</span> <span style='color:#074726; '>C</span> NOT <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>1</span> <span style='color:#074726; '>=</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> H#SP</span>   #0 + <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> TEXTIM <span style='color:#696969; '>[]</span> ;
+20:   : H#<span style='color:#074726; '>SP</span> <span style='color:#696969; '>[0]</span> <span style='color:#074726; '>D</span> #  #0 - <span style='color:#696969; '>[K]</span> ;
+21: 
+22: <span style='color:#696969; '>[K]</span>  <span style='color:#074726; '>C</span> NOT %IF
+23: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>10</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR TEXTIM</span> <span style='color:#0000e6; '> "   :  :   "</span> <span style='color:#008c00; '>0</span> ' TEXTIM <span style='color:#074726; '>!SB</span>
+24: :: : ShowTim <span style='color:#696969; '>[S,M,H]</span>  <span style='color:#008c00; '>1</span> OUT2N <span style='color:#008c00; '>4</span> OUT2N <span style='color:#008c00; '>7</span> OUT2N
+25:      TimFon TimTxt  TimI TimJ <span style='color:#008c00; '>0</span> ' TEXTIM <span style='color:#008c00; '>10</span> OLDCLTS <span style='color:#696969; '>[]</span> ;
+26:            %FI
+27: 
+28: <span style='color:#696969; '>[K]</span> %IF
+29: <span style='color:#074726; '>FIX</span> <span style='color:#008c00; '>8</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR TEXTIM</span> <span style='color:#0000e6; '> "   :   "</span> <span style='color:#008c00; '>0</span> ' TEXTIM <span style='color:#074726; '>!SB</span>
+30: :: : ShowTim <span style='color:#696969; '>[S,M,H]</span> <span style='color:#008c00; '>1</span> OUT2N <span style='color:#008c00; '>4</span> OUT2N <span style='color:#696969; '>[S]</span> <span style='color:#074726; '>D</span> INV:  <span style='color:#696969; '>[]</span>
+31:      TimFon TimTxt  TimI TimJ <span style='color:#008c00; '>0</span> ' TEXTIM <span style='color:#008c00; '>7</span> OLDCLTS <span style='color:#696969; '>[]</span> ;
+32:      : INV: <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>3</span> TEXTIM #  <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> #: #</span>  <span style='color:#008c00; '>3</span> <span style='color:#074726; '>!</span> TEXTIM <span style='color:#696969; '>[]</span> ;
+33:      <span style='color:#008c00; '>72</span> <span style='color:#074726; '>!</span> TimJ
+34:     %FI
+35: 
+36: :: : IniTim  <span style='color:#696969; '>[]</span> TIME <span style='color:#696969; '>[SS,S,M,H]</span> <span style='color:#008c00; '>60</span> <span style='color:#074726; '>*</span> + <span style='color:#008c00; '>60</span> <span style='color:#074726; '>*</span> + <span style='color:#008c00; '>100</span> <span style='color:#074726; '>*</span> + <span style='color:#008c00; '>10</span> <span style='color:#074726; '>*</span> <span style='color:#074726; '>!</span> Btime
+37:      <span style='color:#696969; '>[0 ! Time []</span> ;
+38: 
+39: DEFINE? OLDCLTS NOT %IF : OLDCLTS CLTOS ; %FI
+40: 
+41: <span style='color:#074726; '>UNDEF</span> <span style='color:#074726; '>!</span> BASE@ <span style='color:#696969; '>[CLEAR $WATCH]</span>
+42: 
