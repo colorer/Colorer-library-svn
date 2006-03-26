@@ -81,6 +81,10 @@
    <property name="this" value="${this}/sch"/>
    <property name="bin" value="${root}/hrc/auto/gen/"/>
  </ant>
+ <ant dir="wsdl" antfile="build.xml" target="${target}">
+   <property name="this" value="${this}/wsdl"/>
+   <property name="bin" value="${root}/hrc/xml/"/>
+ </ant>
 
 
  <ant dir="docbook" antfile="build.xml" target="${target}">

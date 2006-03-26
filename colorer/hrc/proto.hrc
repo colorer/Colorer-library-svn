@@ -276,6 +276,17 @@
     <location link="xml/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
   </prototype>
+  
+  
+  <package name="wsdl-soap" description="wsdl soap binding" targetNamespace="http://schemas.xmlsoap.org/wsdl/soap/">
+    <location link="xml/wsdl-soap.hrc"/>
+  </package>
+  <prototype name="wsdl" group="xml" description="wsdl 1.1" targetNamespace="http://schemas.xmlsoap.org/wsdl/">
+    <location link="xml/wsdl.hrc"/>
+    <filename>/\.wsdl$/ix</filename>
+  </prototype>
+
+  
 
   <!--  database languages  -->
   <prototype name="clarion" group="database" description="Clarion">
