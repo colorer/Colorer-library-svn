@@ -20,7 +20,7 @@
  19:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>not</span> <span style='color:#800000; font-weight:bold; '>defined</span> $where<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>    <span style='color:#696969; '># Try NIS.</span>
  20:     <span style='color:#800000; font-weight:bold; '>foreach</span> <span style='color:#800000; font-weight:bold; '>my</span> $ypcat <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>qw</span><span style='color:#800000; '>(</span><span style='color:#0000e6; '>/usr/bin/ypcat /bin/ypcat /etc/ypcat</span><span style='color:#800000; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  21:         <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>-x</span> $ypcat <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
- 22:         <span style='color:#400000; '>open</span><span style='color:#808030; '>(</span>PW<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"</span><span style='color:#0000e6; '>$ypcat</span><span style='color:#0000e6; '> passwd </span><span style='color:#008c00; '>2</span><span style='color:#0000e6; '>>/dev/null |"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
+ 22:         <span style='color:#400000; '>open</span><span style='color:#808030; '>(</span>PW<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"$ypcat passwd </span><span style='color:#008c00; '>2</span><span style='color:#0000e6; '>>/dev/null |"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
  23:         <span style='color:#800000; font-weight:bold; '>defined</span><span style='color:#808030; '>(</span><span style='color:#40015a; '>&lt;PW></span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  24:         $where <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"NIS passwd"</span><span style='color:#800080; '>;</span>
  25:         <span style='color:#400000; '>undef</span> $reason<span style='color:#800080; '>;</span>
@@ -32,7 +32,7 @@
  31:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>not</span> <span style='color:#800000; font-weight:bold; '>defined</span> $where<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>    <span style='color:#696969; '># Try NetInfo.</span>
  32:     <span style='color:#800000; font-weight:bold; '>foreach</span> <span style='color:#800000; font-weight:bold; '>my</span> $nidump <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>qw</span><span style='color:#800000; '>(</span><span style='color:#0000e6; '>/usr/bin/nidump</span><span style='color:#800000; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  33:         <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>-x</span> $nidump <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
- 34:         <span style='color:#400000; '>open</span><span style='color:#808030; '>(</span>PW<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"</span><span style='color:#0000e6; '>$nidump</span><span style='color:#0000e6; '> passwd . </span><span style='color:#008c00; '>2</span><span style='color:#0000e6; '>>/dev/null |"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
+ 34:         <span style='color:#400000; '>open</span><span style='color:#808030; '>(</span>PW<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"$nidump passwd . </span><span style='color:#008c00; '>2</span><span style='color:#0000e6; '>>/dev/null |"</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>&amp;</span><span style='color:#808030; '>&amp;</span>
  35:         <span style='color:#800000; font-weight:bold; '>defined</span><span style='color:#808030; '>(</span><span style='color:#40015a; '>&lt;PW></span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  36:         $where <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"NetInfo passwd"</span><span style='color:#800080; '>;</span>
  37:         <span style='color:#400000; '>undef</span> $reason<span style='color:#800080; '>;</span>
@@ -50,7 +50,7 @@
  49:     <span style='color:#800080; '>}</span>
  50: 
  51:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>$reason<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>    <span style='color:#696969; '># Give up.</span>
- 52:     <span style='color:#800000; font-weight:bold; '>print</span> <span style='color:#0000e6; '>"</span><span style='color:#008c00; '>1</span><span style='color:#0000e6; '>.</span><span style='color:#008000; '>.0</span><span style='color:#0000e6; '> # Skip: </span><span style='color:#0000e6; '>$reason</span><span style='color:#0f69ff; '>\n</span><span style='color:#0000e6; '>"</span><span style='color:#800080; '>;</span>
+ 52:     <span style='color:#800000; font-weight:bold; '>print</span> <span style='color:#0000e6; '>"</span><span style='color:#008c00; '>1</span><span style='color:#0000e6; '>.</span><span style='color:#008000; '>.0</span><span style='color:#0000e6; '> # Skip: $reason</span><span style='color:#0f69ff; '>\n</span><span style='color:#0000e6; '>"</span><span style='color:#800080; '>;</span>
  53:     <span style='color:#800000; font-weight:bold; '>exit</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span>
  54:     <span style='color:#800080; '>}</span>
  55: <span style='color:#800080; '>}</span>
@@ -76,7 +76,7 @@
  75:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>@s<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
  76:     <span style='color:#400000; '>push</span> @{ $seen<span style='color:#808030; '>{</span>$name_s<span style='color:#808030; '>}</span> }<span style='color:#808030; '>,</span> $.<span style='color:#800080; '>;</span>
  77:     <span style='color:#800080; '>}</span> <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800080; '>{</span>
- 78:     <span style='color:#400000; '>warn</span> <span style='color:#0000e6; '>"# Your </span><span style='color:#0000e6; '>$where</span><span style='color:#0000e6; '> line </span><span style='color:#0000e6; '>$.</span><span style='color:#0000e6; '> is empty.</span><span style='color:#0f69ff; '>\n</span><span style='color:#0000e6; '>"</span><span style='color:#800080; '>;</span>
+ 78:     <span style='color:#400000; '>warn</span> <span style='color:#0000e6; '>"# Your $where line </span><span style='color:#0000e6; '>$.</span><span style='color:#0000e6; '> is empty.</span><span style='color:#0f69ff; '>\n</span><span style='color:#0000e6; '>"</span><span style='color:#800080; '>;</span>
  79:     <span style='color:#800000; font-weight:bold; '>next</span><span style='color:#800080; '>;</span>
  80:     <span style='color:#800080; '>}</span>
  81:     <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>$n <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> $max<span style='color:#808030; '>)</span> <span style='color:#800080; '>{</span>
@@ -119,8 +119,8 @@
 118: <span style='color:#0000e6; '># test failure is possible.  Any distributed password scheme</span>
 119: <span style='color:#0000e6; '># can cause such failures.</span>
 120: <span style='color:#0000e6; '>#</span>
-121: <span style='color:#0000e6; '># What the pwent test is doing is that it compares the </span><span style='color:#0000e6; '>$max</span><span style='color:#0000e6; '> first</span>
-122: <span style='color:#0000e6; '># entries of </span><span style='color:#0000e6; '>$where</span><span style='color:#0000e6; '></span>
+121: <span style='color:#0000e6; '># What the pwent test is doing is that it compares the $max first</span>
+122: <span style='color:#0000e6; '># entries of $where</span>
 123: <span style='color:#0000e6; '># with the results of getpwuid() and getpwnam() call.  If it finds no</span>
 124: <span style='color:#0000e6; '># matches at all, it suspects something is wrong.</span>
 125: <span style='color:#0000e6; '># </span>
