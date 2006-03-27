@@ -27,14 +27,16 @@ public:
   void clearCache();
 
 private:
+  int len, lowlen;
   String *str;
-  int gx, gy, gy2, len;
+  int gx, gy, gy2;
   int clearLine, endLine, schemeStart;
   SchemeImpl *baseScheme;
 
   bool breakParsing;
   bool first, invisibleSchemesFilled;
   bool drawing, updateCache;
+
   const Region *picked;
 
   ParseCache *cache;
@@ -43,11 +45,11 @@ private:
   int cachedLineNo;
   ParseCache *cachedParent,*cachedForward;
 
-  SMatches matchend;
-  VTList *vtlist;
-
   LineSource *lineSource;
   RegionHandler *regionHandler;
+
+  ParseStep *top;
+  Vector<ParseStep*> parseSteps;
 
   void fillInvisibleSchemes(ParseCache *cache);
   void addRegion(int lno, int sx, int ex, const Region* region);
@@ -56,9 +58,48 @@ private:
   void enterScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
   void leaveScheme(int lno, SMatches *match, const SchemeNode *schemeNode);
 
-  int searchKW(const SchemeNode *node, int no, int lowLen, int hiLen);
-  int searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen);
-  bool colorize(CRegExp *root_end_re, bool lowContentPriority);
+  int searchKW(const SchemeNode *node, int lowLen);
+
+  /** General highlighting loop */
+  bool colorize();
+
+  /**
+   * Enters new parser state \c step.
+   * This step parameters should be already setted up.
+   */
+  void push(ParseStep *step);
+  /**
+   * Finishes current parser state and moves parser on parent level.
+   */
+  void pop();
+  /**
+   * moves to the next position in a parsed text
+   */
+  void incrementPosition();
+  /**
+   * Returns current node in a scheme of current context to be applied against
+   * text.
+   */
+  SchemeNode *currentSchemeNode(InheritStep *inheritTop);
+
+  /**
+   * Restart parser on the same position from current state
+   * initial node. Drop all inheritance level for this parse state
+   */
+  void restart();
+  /**
+   * Moves single position forward and restarts parse process
+   * from initial scheme node.
+   * Before move checks for possible state finish condition. If found,
+   * finishes current parse step and returns to parent step.7
+   */
+  void move();
+  /**
+   * Moves to the next node in current inheritance tree,
+   * Return to the parent node, if current inheritance node traverse is finished.
+   */
+  void cont();
+
 };
 
 #endif
@@ -79,7 +120,7 @@ private:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

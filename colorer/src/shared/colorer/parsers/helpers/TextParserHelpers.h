@@ -7,34 +7,6 @@
 #error need (COLORERMODE & !NAMED_MATCHES_IN_HASH) in cregexp
 #endif
 
-#define MATCH_NOTHING 0
-#define MATCH_RE 1
-#define MATCH_SCHEME 2
-
-#define LINE_NEXT 0
-#define LINE_REPARSE 1
-
-/** Dynamic parser's list of virtual entries.
-    @ingroup colorer_parsers
-*/
-class VTList
-{
-  VirtualEntryVector *vlist;
-  VTList *prev, *next, *last, *shadowlast;
-  int nodesnum;
-public:
-  VTList();
-  ~VTList();
-  void deltree();
-  bool push(SchemeNode *node);
-  bool pop();
-  SchemeImpl *pushvirt(SchemeImpl *scheme);
-  void popvirt();
-  void clear();
-  VirtualEntryVector **store();
-  bool restore(VirtualEntryVector **store);
-};
-
 /**
  * Internal parser's cache storage. Each object instance
  * stores parse information about single level of Scheme
@@ -54,10 +26,6 @@ public:
     * be instantiated.
     */
   const SchemeNode *clender;
-  /**
-   * Scheme virtualization cache entry
-   */
-  VirtualEntryVector **vcache;
   /**
    * RE Match object for start RE of the enwrapped &lt;block> object
    */
@@ -82,6 +50,79 @@ public:
   ParseCache *searchLine(int ln, ParseCache **cache);
 };
 
+
+/**
+ * Sinle inheritance level inside of the parser state.
+ * Used to track runtime scheme inheritance structure.
+ */
+struct InheritStep {
+  /**
+   * Inherited scheme
+   */
+  SchemeImpl *scheme;
+  /**
+   * Current parse position in this inherited scheme
+   */
+  int schemeNodePosition;
+  //bool vtlistPushedVirtual;
+  //bool vtlistPushed;
+};
+
+/**
+ * Sinle step, or state, of the parser. Each state is described by a set of
+ * attributes, which affect parsing process.
+ */
+struct ParseStep{
+  CRegExp *closingRE;
+  bool closingREmatched;
+  bool closingREparsed;
+  SMatches matchstart;
+  SMatches matchend;
+
+  bool lowContentPriority;
+  int contextStart;
+
+  int parent_len;
+
+  InheritStep *inheritTop;
+  Vector<InheritStep*> inheritStack;
+
+  int o_gy;
+  SMatches *o_match;
+  DString *o_str;
+  SString *backLine;
+
+  ParseStep(){
+    closingREmatched = closingREparsed = false;
+    closingRE = null;
+    backLine = null;
+  }
+
+  /**
+   * Pushes addiitonal 'inherit' level into the current parse state.
+   */
+  void goInherit(InheritStep *istep){
+    inheritStack.addElement(istep);
+    inheritTop = istep;
+  }
+
+  /**
+   * Removes topmost inherit level from current parse state.
+   * InheritStep element itself is deleted also.
+   */
+  void leaveInherit(){
+    delete inheritStack.lastElement();
+    inheritStack.setSize(inheritStack.size()-1);
+    if (inheritStack.size()){
+      inheritTop = inheritStack.lastElement();
+    }else{
+      inheritTop = null;
+    }
+  }
+
+};
+
+
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -99,7 +140,7 @@ public:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

@@ -123,6 +123,7 @@ public:
 class SchemeImpl : public Scheme{
   friend class HRCParserImpl;
   friend class TextParserImpl;
+  friend class ParseState;
 public:
   const String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
@@ -197,7 +198,7 @@ private:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *
