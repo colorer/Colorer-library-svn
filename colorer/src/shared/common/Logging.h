@@ -19,6 +19,16 @@
 
 #define CLR_INFO  if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_INFO) colorer_logger_info
 
+
+#define NDEBUG
+
+#if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_WARN)
+#undef NDEBUG
+#endif
+
+#include<assert.h>
+
+
 void colorer_logger_error(const char *cname, const char *msg, ...);
 void colorer_logger_warn(const char *cname, const char *msg, ...);
 void colorer_logger_trace(const char *cname, const char *msg, ...);
