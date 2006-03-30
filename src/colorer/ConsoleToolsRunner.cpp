@@ -5,51 +5,51 @@
 
 /** Internal run action type */
 enum { JT_NOTHING, JT_REGTEST, JT_PROFILE,
-       JT_LIST_LOAD, JT_LIST_TYPES,
+       JT_LIST_LOAD, JT_LIST_TYPES, JT_LIST_TYPE_NAMES,
        JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
 int profileLoops = 1;
 
 /** Reads and parse command line */
 void init(ConsoleTools &ct, int argc, char*argv[]){
 
-  fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
-  fprintf(stderr, "Copyright (c) 1999-2005 Igor Russkih <cail@nm.ru>\n\n");
+  bool showBanner = true;
 
   for(int i = 1; i < argc; i++){
     if (argv[i][0] != '-'){
       ct.setInputFileName(DString(argv[i]));
       continue;
-    };
+    }
 
     if (argv[i][1] == 'p'){
       jobType = JT_PROFILE;
       if (argv[i][2]){
         profileLoops = atoi(argv[i]+2);
-      };
+      }
       continue;
-    };
-    if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; };
-    if (argv[i][1] == 'f') { jobType = JT_FORWARD; continue; };
-    if (argv[i][1] == 'v') { jobType = JT_VIEW; continue; };
-    if (argv[i][1] == 'h' && argv[i][2] == 't') { jobType = JT_GEN_TOKENS; continue; };
-    if (argv[i][1] == 'h') { jobType = JT_GEN; continue; };
+    }
+    if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; }
+    if (argv[i][1] == 'f') { jobType = JT_FORWARD; continue; }
+    if (argv[i][1] == 'v') { jobType = JT_VIEW; continue; }
+    if (argv[i][1] == 'h' && argv[i][2] == 't') { jobType = JT_GEN_TOKENS; continue; }
+    if (argv[i][1] == 'h') { jobType = JT_GEN; continue; }
     if (argv[i][1] == 'l' && argv[i][2] == 's' && (i+1 < argc || argv[i][3])){
       if (argv[i][3]){
         ct.setLinkSource(DString(argv[i]+3));
       }else{
         ct.setLinkSource(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
-    if (argv[i][1] == 'l' && argv[i][2] == 'n') { ct.addLineNumbers(true); continue; };
-    if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; };
-    if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; };
+    }
+    if (argv[i][1] == 'l' && argv[i][2] == 'n') { ct.addLineNumbers(true); continue; }
+    if (argv[i][1] == 'l' && argv[i][2] == 'l') { jobType = JT_LIST_LOAD; continue; }
+    if (argv[i][1] == 'l' && argv[i][2] == 't') { jobType = JT_LIST_TYPE_NAMES; continue; }
+    if (argv[i][1] == 'l') { jobType = JT_LIST_TYPES; continue; }
 
-    if (argv[i][1] == 'd' && argv[i][2] == 'c') { ct.setCopyrightHeader(false); continue; };
-    if (argv[i][1] == 'd' && argv[i][2] == 'b') { ct.setBomOutput(false); continue; };
-    if (argv[i][1] == 'd' && argv[i][2] == 's') { ct.setHtmlEscaping(false); continue; };
-    if (argv[i][1] == 'd' && argv[i][2] == 'h') { ct.setHtmlWrapping(false); continue; };
+    if (argv[i][1] == 'd' && argv[i][2] == 'c') { ct.setCopyrightHeader(false); showBanner = false; continue; }
+    if (argv[i][1] == 'd' && argv[i][2] == 'b') { ct.setBomOutput(false); continue; }
+    if (argv[i][1] == 'd' && argv[i][2] == 's') { ct.setHtmlEscaping(false); continue; }
+    if (argv[i][1] == 'd' && argv[i][2] == 'h') { ct.setHtmlWrapping(false); continue; }
 
     if (argv[i][1] == 't' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
@@ -57,57 +57,63 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       }else{
         ct.setTypeDescription(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1] == 'o' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
         ct.setOutputFileName(DString(argv[i]+2));
       }else{
         ct.setOutputFileName(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1] == 'i' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
         ct.setHRDName(DString(argv[i]+2));
       }else{
         ct.setHRDName(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1] == 'c' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
         ct.setCatalogPath(DString(argv[i]+2));
       }else{
         ct.setCatalogPath(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1] == 'e' && argv[i][2] == 'i' && (i+1 < argc || argv[i][3])){
       if (argv[i][3]){
         ct.setInputEncoding(DString(argv[i]+3));
       }else{
         ct.setInputEncoding(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1] == 'e' && argv[i][2] == 'o' && (i+1 < argc || argv[i][3])){
       if (argv[i][3]){
         ct.setOutputEncoding(DString(argv[i]+3));
       }else{
         ct.setOutputEncoding(DString(argv[i+1]));
         i++;
-      };
+      }
       continue;
-    };
+    }
     if (argv[i][1]) fprintf(stderr, "WARNING: unknown option '-%s'\n", argv[i]+1);
-  };
-};
+  }
+
+  if (showBanner){
+    fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
+    fprintf(stderr, "Copyright (c) 1999-2005 Igor Russkih <cail@nm.ru>\n\n");
+  }
+
+}
 
 /** Prints usage. */
 void printError(){
@@ -115,6 +121,7 @@ void printError(){
        "Usage: colorer -(command) (parameters)  [<filename>]\n"
        " Commands:\n"
        "  -l         Lists all available languages\n"
+       "  -lt        Lists all available languages (HRC types)\n"
        "  -ll        Lists and loads full HRC database\n"
        "  -r         RE tests\n"
        "  -h         Generates plain coloring from <filename> (uses 'rgb' hrd class)\n"
@@ -133,6 +140,7 @@ void printError(){
        "  -ln        Add line numbers into the colorized file\n"
        "  -db        Disable BOM(ZWNBSP) start symbol output in Unicode encodings\n"
        "  -dc        Disable information header in generator's output\n"
+       "  -dh        Disable copyright header output\n"
        "  -ds        Disable HTML symbol substitutions in generator's output\n"
        "  -dh        Disable HTML header and footer output\n"
   );
@@ -161,10 +169,13 @@ int main(int argc, char *argv[])
         ct.profile(profileLoops);
         break;
       case JT_LIST_LOAD:
-        ct.listTypes(true);
+        ct.listTypes(true, false);
         break;
       case JT_LIST_TYPES:
-        ct.listTypes(false);
+        ct.listTypes(false, false);
+        break;
+      case JT_LIST_TYPE_NAMES:
+        ct.listTypes(false, true);
         break;
       case JT_VIEW:
         ct.viewFile();

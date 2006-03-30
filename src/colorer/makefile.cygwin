@@ -9,8 +9,9 @@ obj_output=objs
 
 include ../shared/makefile.colorer.cygwin
 
-LIBINC = -lwininet -lstdc++
-LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
+LIBINC = -lwininet -lstdc++ -lmingw32
+LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC) -ggdb
+CPPFLAGS_CUSTOM =  -ggdb -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 
 include makefile.core
 

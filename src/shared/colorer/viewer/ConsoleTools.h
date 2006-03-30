@@ -87,7 +87,7 @@ public:
   /** Lists all available HRC types and
       optionally tries to load them.
   */
-  void listTypes(bool load);
+  void listTypes(bool load, bool useNames);
 
 
   FileType *selectType(HRCParser *hrcParser, LineSource *lineSource);
@@ -108,7 +108,7 @@ public:
       HRD file starting and ending sequences.
   */
   void genOutput(bool useTokens = false);
-  
+
   /*
    *  No HRD input is used, but direct tokenized output is produced with region names, as names of tokens.
    */
