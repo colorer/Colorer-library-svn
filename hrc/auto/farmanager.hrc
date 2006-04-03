@@ -36,6 +36,18 @@
     <filename>/calcset\.csr$/i</filename>
   </prototype>
 
+  <prototype name="umc" group="scripts.far" description="EUM Commands">
+    <location link="types/eum.hrc"/>
+    <filename>/(\.umc)/i</filename>
+    <parameters>
+      <param name="show-cross" value="both"/>
+    </parameters>
+  </prototype>
+  <prototype name="eum" group="scripts.far" description="EUM Config file">
+    <location link="types/eum.hrc"/>
+    <filename>/(\.eum)/i</filename>
+  </prototype>
+
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
