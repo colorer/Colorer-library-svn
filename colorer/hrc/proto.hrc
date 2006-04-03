@@ -389,7 +389,7 @@
   </prototype>
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|ds(p|w)|bp(k|r|g)$)/ix</filename>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
     <firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline>
     <firstline>/makefile/s</firstline>
