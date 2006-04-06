@@ -5,7 +5,7 @@
 #
 
 #$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer";
+$colorer  = "colorer -c D:\\projects\\colorer-4merge\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
 

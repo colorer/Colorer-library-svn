@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<custom xmlns="uri:colorer:custom">
+<c:custom xmlns:c="uri:colorer:custom">
 
-  <custom-type targetNamespace="http://www.w3.org/1999/xhtml">
-    <prefix>xhtml</prefix>
-    <prefix>xh</prefix>
-    <empty-prefix/>
-    <contributors>Cail Lomecb, Eugene Efremov</contributors>
+  <c:custom-type targetNamespace="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+    <c:prefix>xhtml</c:prefix>
+    <c:prefix>xh</c:prefix>
+    <c:empty-prefix/>
+    <c:contributors>Cail Lomecb, Eugene Efremov</c:contributors>
 
-    <outline>
-      <element name='body' extract='fullElement' description='Body start'/>
-      <element name='h1' extract='tillNext' parent='html:Header1Outline' description='Header 1'/>
-      <element name='h2' extract='tillNext' parent='html:Header2Outline' description='Header 2'/>
-      <element name='h3' extract='tillNext' parent='html:Header3Outline' description='Header 2'/>
-    </outline>
+    <c:outline>
+      <c:element name='body' extract='fullElement' description='Body start'/>
+      <c:element name='h1' extract='tillNext' parent='html:Header1Outline' description='Header 1'/>
+      <c:element name='h2' extract='tillNext' parent='html:Header2Outline' description='Header 2'/>
+      <c:element name='h3' extract='tillNext' parent='html:Header3Outline' description='Header 2'/>
+    </c:outline>
     
     <!-- xmlss -->
-    <script-n-style>
-     <element name="script">
-      <language name="perl" expr="perlscript"/>
-      <language name="jScript" expr="(ecma|j(ava)?)script"/>
-      <language name="vbScript" expr="vbscript"/>
-      <language name="php" expr="php" scheme="phpScript"/>
-      <default name="jScript"/> <!-- multiline support... -->
-     </element>
-     <attribute language="jScript" scheme-suffix="Script" region="def:default"/>
+    <c:script-n-style>
+     <c:element name="script">
+      <c:language name="perl" expr="perlscript"/>
+      <c:language name="jScript" expr="(ecma|j(ava)?)script"/>
+      <c:language name="vbScript" expr="vbscript"/>
+      <c:language name="php" expr="php" scheme="phpScript"/>
+      <c:default name="jScript"/> <!-- multiline support... -->
+     </c:element>
+     <c:attribute language="jScript" scheme-suffix="Script" region="def:default"/>
      
-     <element name="style">
-      <language name="html-css" expr="text\/css"/>
-      <default name="css"/>
-     </element>
-     <attribute language="html-css" scheme-suffix="RuleContent"/>
-    </script-n-style>
+     <c:element name="style">
+      <c:language name="html-css" expr="text\/css"/>
+      <c:default name="html-css"/>
+     </c:element>
+     <c:attribute language="html-css" scheme-suffix="RuleContent"/>
+    </c:script-n-style>
     
-    <references>html-entity:html-addref</references>
+    <c:references>html-entity:html-addref</c:references>
       
     <type xmlns="http://colorer.sf.net/2003/hrc">
     
@@ -119,5 +119,5 @@
       </scheme>
       
     </type>
-  </custom-type>
-</custom>
+  </c:custom-type>
+</c:custom>

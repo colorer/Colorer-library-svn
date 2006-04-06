@@ -52,7 +52,7 @@
 	
 	<xsl:call-template name='crlf'/>
 		<xsl:comment>
-			xmlss.hrc: support &apos;<xsl:value-of select="$script-elem"/>&apos; element
+			xmlss: support &apos;<xsl:value-of select="$script-elem"/>&apos; element
 		</xsl:comment>
 	<xsl:call-template name='crlf'/>
 	
@@ -99,11 +99,13 @@
 
 
 <!-- custom/custom-type/script-n-style/element/language - part II: -->
+<!-- 08-03-2006 - now support language without expr: -->
 
-<xsl:template match="c:element/c:language" mode="scriptdef">
+<xsl:template match="c:element/c:language[@expr]" mode="scriptdef" priority='1'>
 	<xsl:param name="tag" select="'script'"/>
 	
-	<block start="/\M &lt;%nsprefix;{$tag}\b [^&gt;]+ {@expr}[\d\.]* [^&gt;]* (&gt;|$) /six"
+	<!-- [\d\.]* ?? -->
+	<block start="/\M &lt;%nsprefix;{$tag}\b [^&gt;]+ {@expr} [^&gt;]* (&gt;|$) /six" 
 		end="/&gt;/" scheme="xmlss-{@name}-elementContent"
 	/> 
 </xsl:template>
@@ -111,7 +113,7 @@
 
 <!-- custom/custom-type/script-n-style/element/default: -->
 
-<xsl:template match="c:element/c:default" mode="scriptdef">
+<xsl:template match="c:element/c:default | c:element/c:language" mode="scriptdef">
 	<xsl:param name="tag" select="'script'"/>
 	
 	<block start="/\M &lt;%nsprefix;{$tag}\b [^&gt;]* (&gt;|$)/{$ric}x" 
@@ -133,7 +135,7 @@ Note!! We need include to custom/custom-type/type:
 <xsl:template match="c:script-n-style/c:attribute" mode="scriptdef">
 	<xsl:call-template name='crlf'/>
 		<xsl:comment>
-			xmlss.hrc: support attributes for language &apos;<xsl:value-of select="@language"/>&apos;, schemes &apos;(Quot|Apos)<xsl:value-of select="@scheme-suffix"/>&apos;
+			xmlss: support attributes for language &apos;<xsl:value-of select="@language"/>&apos;, schemes &apos;(Quot|Apos)<xsl:value-of select="@scheme-suffix"/>&apos;
 		</xsl:comment>
 	<xsl:call-template name='crlf'/>
 	
@@ -248,11 +250,11 @@ Note!! We need include to custom/custom-type/type:
    - for the specific language governing rights and limitations under the
    - License.
    -
-   - The Original Code is the xmlss.hrc package.
+   - The Original Code is the xmlss package.
    -
    - The Initial Developer of the Original Code is
    - Eugene Efremov <4mirror@mail.ru>
-   - Portions created by the Initial Developer are Copyright (C) 2003-2004
+   - Portions created by the Initial Developer are Copyright (C) 2003-2006
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):

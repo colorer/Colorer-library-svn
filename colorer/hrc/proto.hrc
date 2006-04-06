@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY php-proto  SYSTEM "php-prot.ent.hrc">
+<!-- include -->
+<!ENTITY ini-protos  SYSTEM "ini.ent.hrc">
+<!ENTITY msg-protos  SYSTEM "msg.ent.hrc">
+<!-- auto -->
+<!ENTITY php-proto-gen  SYSTEM "php-prot.ent.hrc">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -145,7 +149,7 @@
     <parameters>
       <param name="posix-re" value="false" description='Use eregs highlightning'/>
       <param name="include-base-consts"   value="true" description='PHP Predefined Constants'/>
-      &php-proto;
+      &php-proto-gen;
     </parameters>
   </prototype>
 
@@ -272,6 +276,17 @@
     <location link="xml/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
   </prototype>
+  
+  
+  <package name="wsdl-soap" description="wsdl soap binding" targetNamespace="http://schemas.xmlsoap.org/wsdl/soap/">
+    <location link="xml/wsdl-soap.hrc"/>
+  </package>
+  <prototype name="wsdl" group="xml" description="wsdl 1.1" targetNamespace="http://schemas.xmlsoap.org/wsdl/">
+    <location link="xml/wsdl.hrc"/>
+    <filename>/\.wsdl$/ix</filename>
+  </prototype>
+
+  
 
   <!--  database languages  -->
   <prototype name="clarion" group="database" description="Clarion">
@@ -307,6 +322,8 @@
   </prototype>
 
   <!--  scripts  -->
+  &ini-protos;
+  
   <prototype name="Batch" group="scripts" description="Batch/Config.sys/NTcmd">
     <location link="scripts/batch.hrc"/>
     <filename>/\.(Cmd|Bat|nt|btm|sys)$/i</filename>
@@ -393,11 +410,6 @@
     <firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline>
     <firstline>/makefile/s</firstline>
-  </prototype>
-  <prototype name="regedit" group="scripts" description="Regedit">
-    <location link="scripts/reg.hrc"/>
-    <filename>/\.(reg)$/i</filename>
-    <firstline>/^\s*(REGEDIT4|FARREG\d\d|Windows Registry Editor Version \d\.\d\d)\s*$/</firstline>
   </prototype>
   <prototype name="resources" group="scripts" description="Resources">
     <location link="scripts/resrc.hrc"/>
@@ -566,8 +578,9 @@
     <firstline>/^\s*;/</firstline>
   </prototype>
 
-
+   
   <!--  other types  -->
+  &msg-protos;
   <prototype name="filesbbs" group="other" description="files.bbs">
     <location link="misc/filesbbs.hrc"/>
     <filename>/(files\.bbs|descript\.ion|file_id.diz)/i</filename>
@@ -578,12 +591,6 @@
     <firstline weight='2'>/^(diff|Index|---|\+\+\+|\*\*\*)/si</firstline>
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
-  </prototype>
-  <prototype name="messages" group="other" description="message">
-    <location link="misc/messages.hrc"/>
-    <filename>/\.(msg|eml|pkt|pms|nws)$/i</filename>
-    <firstline>/^FROM/si</firstline>
-    <firstline>/\%start\%/s</firstline>
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
@@ -622,6 +629,9 @@
   <package name="far" description="FAR Manager common expressions">
     <location link="lib/far.hrc"/>
   </package>
+  <package name="msg" description="message package">
+    <location link="lib/message.hrc"/>
+  </package>
 
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
@@ -645,6 +655,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
