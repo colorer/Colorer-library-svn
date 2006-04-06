@@ -8,9 +8,10 @@
 
   Colorer-take5 branches naming
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  The next convention should be used:
+  All the branches are stored in /svnroot/colorer/branches/*
+  The next convention should be used for naming:
 
-    BRANCH-<DEVELOPER>-<DESCRIPTION>
+    <DEVELOPER>-<DESCRIPTION>
 
 
   Available project labels

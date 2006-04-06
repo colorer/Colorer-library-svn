@@ -14,7 +14,7 @@
 <target name="check.all">
 	<dependset>
 		<srcfilelist dir="." files = "build.xml"/>
-		<targetfilelist dir="${bin}" files="*.hrc"/>
+		<targetfilelist dir="${bin}" files="bkt.hrc, hrc.hrc, hrd.hrc, colorer5catalog.hrc"/>
 	</dependset>
 </target>
 
@@ -91,6 +91,7 @@
 		<property name="util.input" value="${src.extra}/catalog.xsd"/>
 		<property name="util.output" value="${bin}/colorer5catalog.hrc"/>
 		<property name='xsd2hrc.hrctype' value='colorer5catalog'/>
+                <property name='xsd2hrc.force-single-root' value='false'/>
 	</ant>
 </target>
 

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding='UTF-8'?>
 <!DOCTYPE catalog PUBLIC "-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-  "http://colorer.sf.net/2003/catalog.dtd">
+  "http://colorer.sf.net/2003/catalog.dtd"[
+
+<!ENTITY catalog-console SYSTEM "hrd/catalog-console.xml">
+<!ENTITY catalog-rgb SYSTEM "hrd/catalog-rgb.xml">
+<!ENTITY catalog-text SYSTEM "hrd/catalog-text.xml">
+
+]>
 
 <catalog xmlns="http://colorer.sf.net/2003/catalog"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,109 +17,20 @@
 
     <location link="hrc/proto.hrc"/>
     <location link="hrc/auto"/>
-
-    <!-- Test HRC set -->
-    <location link="src\test\parser\hrc"/>
-
 <!--
     <location link="C:\far\plugins\colorer\hrc\proto.hrc"/>
     <location link="C:\far\plugins\colorer\hrc\auto"/>
 -->
+    <!-- Test HRC set -->
+    <location link="src/test/parser/hrc"/>
+
   </hrc-sets>
 
-  <hrd-sets>
-    <hrd class="console" name="default" description="Aqua on blue">
-      <location link="hrd/console/default.hrd"/>
-    </hrd>
-    <hrd class="console" name="blue" description="Blue colors">
-      <location link="hrd/console/blue.hrd"/>
-    </hrd>
-    <hrd class="console" name="nc"  description="NC colors">
-      <location link="hrd/console/nc.hrd"/>
-    </hrd>
-    <hrd class="console" name="white" description="White colors">
-      <location link="hrd/console/white.hrd"/>
-    </hrd>
-    <hrd class="console" name="black"   description="Black colors">
-      <location link="hrd/console/black.hrd"/>
-    </hrd>
-    <hrd class="console" name="hack"  description="Matrix/Hack">
-      <location link="hrd/console/hack.hrd"/>
-    </hrd>
-    <hrd class="console" name="dnlike"  description="Gray a'la DN">
-      <location link="hrd/console/dnlike.hrd"/>
-    </hrd>
-    <hrd class="console" name="gray"   description="Light gray">
-      <location link="hrd/console/white.hrd"/>
-      <location link="hrd/console/gray.hrd"/>
-    </hrd>
-    <hrd class="console" name="xmastree" description="Xmas tree">
-      <location link="hrd/console/xmastree.hrd"/>
-    </hrd>
-    <hrd class="console" name="mirror" description="Extended NC-like colors">
-      <location link="hrd/console/mirror.hrd"/>
-    </hrd>
+  &catalog-console;
 
-    <hrd class="console" name="ocean" description="Ocean Vladimir Fonarev">
-      <location link="hrd/console/contrib/ocean.hrd"/>
-    </hrd>
-    <hrd class="console" name="black_ay" description="Black from Alex Yaroslavsky">
-      <location link="hrd/console/contrib/black_ay.hrd"/>
-    </hrd>
-    <hrd class="console" name="black_sezal" description="Black Sezal">
-      <location link="hrd/console/contrib/black_sezal.hrd"/>
-    </hrd>
-    <hrd class="console" name="graypult" description="Gray (pult)">
-      <location link="hrd/console/contrib/gray_pult.hrd"/>
-    </hrd>
-    <hrd class="console" name="classic" description="'Classic' by Tim Sobolev">
-      <location link="hrd/console/contrib/classic.hrd"/>
-    </hrd>
-    <hrd class="console" name="Cyberpunk" description="Cyberpunk black from 4ekucT">
-      <location link="hrd/console/contrib/cyberpunk.hrd"/>
-    </hrd>
+  &catalog-rgb;
 
-
-    <hrd class="rgb" name="default" description="White (crimsoned)">
-      <location link="hrd/rgb/white.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="navy" description="Navy (seashore)">
-      <location link="hrd/rgb/navy.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="eclipse" description="A'la Eclipse (minimal)">
-      <location link="hrd/rgb/eclipse.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="neo" description="Neo (and Morpheus)">
-      <location link="hrd/rgb/neo.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="black"  description="Black (scarlet)">
-      <location link="hrd/rgb/black.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="grayscale" description="Grayscale (colour neutral)">
-      <location link="hrd/rgb/grayscale.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="mirror" description="Blue a'la NC">
-      <location link="hrd/rgb/mirror.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="mirice" description="Ice Mirror">
-      <location link="hrd/rgb/mirice.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="fmx" description="FMX">
-      <location link="hrd/rgb/contrib/fmx.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="hs" description="A'la HomeSite">
-      <location link="hrd/rgb/hs.hrd"/>
-    </hrd>
-    <hrd class="rgb" name="bred3" description="Bred3 colors">
-      <location link="hrd/rgb/contrib/bred3.hrd"/>
-    </hrd>
-
-
-    <hrd class="text" name="tags" description="HTML italic, underline indention">
-      <location link="hrd/text/tags.hrd"/>
-    </hrd>
-
-  </hrd-sets>
+  &catalog-text;
 
 </catalog>
 <!-- ***** BEGIN LICENSE BLOCK *****
