@@ -4,7 +4,7 @@
 ]>
 <custom xmlns="uri:colorer:custom"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-<custom-type targetNamespace="http://www.w3.org/1999/XSL/Transform">
+<custom-type targetNamespace="http://www.w3.org/1999/XSL/Transform" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 &shared;
 
@@ -28,7 +28,7 @@
 
 <script-n-style>
     <element-attributes name="analyze-string">
-        <xs:attribute name="regex" type="regex"/>
+        <xs:attribute name="regex" type="xsl:regex"/>
     </element-attributes>
     
     <attribute language="xpath2" scheme-suffix="XML.Pattern" region="def:default"/>

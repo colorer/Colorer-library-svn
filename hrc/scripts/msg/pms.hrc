@@ -1,40 +1,48 @@
-<?xml version="1.0" encoding='Windows-1251'?>
+<?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-<!--
-    Far Help Sources
-With Help of:
-    Stas Mehanoshin <rampitec@tu.spb.ru>
--->
-   <type name="farhelp">
 
-      <import type="def"/>
 
-      <region name="Page" parent="def:Outlined"/>
+<type name="pms">
+ <annotation> 
+  <documentation>
+    Messages for PKTView plugin for FAR 
+  </documentation>
+  <contributors> <![CDATA[
+   Eugene Efremov <4mirror@mail.ru>
+  ]]> </contributors>
+ </annotation>
 
-      <scheme name="FarHelpStr">
-         <regexp match="/\@\@|\~\~|\$|\^|\#\#|\%\%/" region="String"/>
-      </scheme>
 
-      <scheme name="farhelp">
-         <regexp match="/^\s* \M \@ ([\@\$\^\w\s]+)  /x" region1="Page"/>
-         <regexp match="/\b([0-9]+)\b/" region0="Number"/>
-         <regexp match="/((\@)[^\@]+?(\@|$))/" region0="Symbol" region2="PairStart" region3="PairEnd"/>
-         <regexp match="/^(\$.+?$)/" region0="String"/>
-         <inherit scheme="FarHelpStr"/>
-         <block start="/(\#)/" end="/(\#|$)/" scheme="FarHelpStr" region="Number" region00="PairStart" region11="PairEnd"/>
-         <regexp match="/((\~)[^\~]+?(\~))/" region0="StringEdge" region2="PairStart" region3="PairEnd"/>
-         <keywords region="Keyword">
-            <word name=".Language"/>
-            <word name=".PluginContents"/>
-            <symb name="=" region="String"/>
-         </keywords>
-      </scheme>
+<scheme name="header">
+ <inherit scheme="def:NetAddresses"/> 
+ <regexp match="/(\d{2}\.\w{3}\.\d{4})\s((\d{2}\:){2}\d{2})/" 
+  region1="def:Date" region2="def:Time"
+ />
+ <regexp match="/^(From\:)\s.+\s{2,}/" 
+  region1="msg:header.word" region0="msg:header.name"
+ />
+ <regexp match="/^(To\s{2}\:)\s.+\s{2,}/" 
+  region1="msg:header.word" region0="msg:header.name"
+ />
+ <block start="/^Subj\:/" end="/$/"
+  scheme="msg:subj" region00="msg:header.word"
+ />
+ <regexp match="/^(Area\:)\s/" region1="msg:header.word"/>
+</scheme>                                    
 
-   </type>
+<scheme name="pms">
+ <block start="/^\={79}$/" end="/\y0/"
+  scheme="header" region="msg:header"
+  region00="msg:header.start" region10="msg:header.end"
+ />
+ <inherit scheme="ftn:ftn"/>
+</scheme>
+
+</type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -52,8 +60,8 @@ With Help of:
    - The Original Code is the Colorer Library.
    -
    - The Initial Developer of the Original Code is
-   - Cail Lomecb <cail@nm.ru>.
-   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - Eugene Efremov <4mirror@mail.ru>.
+   - Portions created by the Initial Developer are Copyright (C) 2003-2005
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):

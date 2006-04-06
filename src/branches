@@ -30,12 +30,17 @@
     Branch for old eclipse (2.1.3 compatible) plugin
 
 
-  BRANCH-IRUSSKIH-NEW-TEXT-PARSER
+  IRUSSKIH-NEW-PARSER
     New non-recursive text parser implementation branch
 
+  IRUSSKIH-EXPAND-INHERIT
+    HRC Inheritance structure mod tests
 
   BRANCH-IRUSSKIH-NEW-TOKEN-GENERATOR
     New token generator in ConsoleTools.cpp
     Problems with overlapping regions should be resolved still
 
   BRANCH-IRUSSKIH-FAR-SEARCH-FUNC
+
+  BRANCH-EFREMOV-BASE
+    Main Eugene Efremov's branch.

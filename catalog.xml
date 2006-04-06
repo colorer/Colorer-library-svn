@@ -50,6 +50,9 @@
     <hrd class="console" name="xmastree" description="Xmas tree">
       <location link="hrd/console/xmastree.hrd"/>
     </hrd>
+    <hrd class="console" name="mirror" description="Extended NC-like colors">
+      <location link="hrd/console/mirror.hrd"/>
+    </hrd>
 
     <hrd class="console" name="ocean" description="Ocean Vladimir Fonarev">
       <location link="hrd/console/contrib/ocean.hrd"/>
@@ -59,9 +62,6 @@
     </hrd>
     <hrd class="console" name="black_sezal" description="Black Sezal">
       <location link="hrd/console/contrib/black_sezal.hrd"/>
-    </hrd>
-    <hrd class="console" name="mirror" description="Mirror from Eugene Efromov">
-      <location link="hrd/console/contrib/mirror.hrd"/>
     </hrd>
     <hrd class="console" name="graypult" description="Gray (pult)">
       <location link="hrd/console/contrib/gray_pult.hrd"/>
@@ -91,6 +91,12 @@
     </hrd>
     <hrd class="rgb" name="grayscale" description="Grayscale (colour neutral)">
       <location link="hrd/rgb/grayscale.hrd"/>
+    </hrd>
+    <hrd class="rgb" name="mirror" description="Blue a'la NC">
+      <location link="hrd/rgb/mirror.hrd"/>
+    </hrd>
+    <hrd class="rgb" name="mirice" description="Ice Mirror">
+      <location link="hrd/rgb/mirice.hrd"/>
     </hrd>
     <hrd class="rgb" name="fmx" description="FMX">
       <location link="hrd/rgb/contrib/fmx.hrd"/>

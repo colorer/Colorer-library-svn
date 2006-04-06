@@ -21,8 +21,20 @@ my $hack2=<<FAIL;
 FAIL
 
 my $element='';
+my $ignore=0;
 while(<XMLIN>)
 {
+ if($ignore)
+ {
+ 	$ignore=0 if/name CDATA #IMPLIED>/;
+ 	next
+ }
+ if(/<!ELEMENT target EMPTY>/)
+ {
+ 	$ignore=1;
+ 	next
+ }
+ 
  if(m|<!ATTLIST (\w+)|)
  {
   $element=$1;
