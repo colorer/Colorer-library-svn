@@ -1,6 +1,7 @@
 #ifndef _COLORER_LOGGING_H_
 #define _COLORER_LOGGING_H_
 
+#include"stdio.h"
 #include"stdarg.h"
 #include"common/Features.h"
 
@@ -28,6 +29,9 @@
 
 #include<assert.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void colorer_logger_error(const char *cname, const char *msg, ...);
 void colorer_logger_warn(const char *cname, const char *msg, ...);
@@ -35,6 +39,12 @@ void colorer_logger_trace(const char *cname, const char *msg, ...);
 void colorer_logger_info(const char *cname, const char *msg, ...);
 
 void colorer_logger(int level, const char *cname, const char *msg, va_list v);
+
+void colorer_logger_set_handle(FILE *logfile);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
