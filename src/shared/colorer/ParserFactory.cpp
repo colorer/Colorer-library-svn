@@ -8,6 +8,8 @@
 #include<windows.h>
 #endif
 
+#include<common/Logging.h>
+
 #include<colorer/ParserFactory.h>
 #include<colorer/viewer/TextLinesStore.h>
 #include<colorer/handlers/DefaultErrorHandler.h>
@@ -44,7 +46,9 @@ void ParserFactory::init()
       if (logLocation != null){
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
         try{
-          fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF16, false);
+          fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);
+          FILE *handle = ((FileErrorHandler*)fileErrorHandler)->getHandle();
+          colorer_logger_set_handle(handle);
         }catch(Exception &e){
           fileErrorHandler = null;
         };
@@ -60,10 +64,10 @@ void ParserFactory::init()
         if (loc->getNodeType() == Node::ELEMENT_NODE &&
             *loc->getNodeName() == "location"){
           hrcLocations.addElement(((Element*)loc)->getAttribute(DString("link")));
-        };
+        }
         loc = loc->getNextSibling();
-      };
-    };
+      }
+    }
     // hrd locations
     if (elem->getNodeType() == Node::ELEMENT_NODE && *elem->getNodeName() == "hrd-sets"){
       Node *hrd = elem->getFirstChild();

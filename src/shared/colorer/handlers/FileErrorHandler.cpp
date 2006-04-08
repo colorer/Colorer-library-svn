@@ -10,29 +10,34 @@ FileErrorHandler::FileErrorHandler(const String *fileName, int encoding, bool cl
   }else{
     file = fopen(fileName->getChars(), "ab+");
     useBOM = false;
-  };
+  }
   if (file == null) throw Exception(StringBuffer("Can't open output stream for error handler: '")+fileName+"\'");
   writer = new StreamWriter(file, encoding, useBOM);
   ehw = new ErrorHandlerWriter(writer);
-};
+}
+
 FileErrorHandler::~FileErrorHandler(){
   delete ehw;
   delete writer;
   fclose(file);
-};
+}
 
 void FileErrorHandler::error(const String &msg){
   ehw->error(msg);
   fflush(file);
-};
+}
 void FileErrorHandler::fatalError(const String &msg){
   ehw->fatalError(msg);
   fflush(file);
-};
+}
 void FileErrorHandler::warning(const String &msg){
   ehw->warning(msg);
   fflush(file);
-};
+}
+
+FILE *FileErrorHandler::getHandle(){
+  return file;
+}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
