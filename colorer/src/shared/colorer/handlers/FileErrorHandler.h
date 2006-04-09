@@ -26,11 +26,6 @@ public:
   void error(const String &msg);
   void warning(const String &msg);
 
-  /**
-   * Returns this logger's native handle
-   */
-  FILE *getHandle();
-
 protected:
   ErrorHandlerWriter *ehw;
   StreamWriter *writer;
