@@ -47,8 +47,7 @@ void ParserFactory::init()
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
         try{
           fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);
-          FILE *handle = ((FileErrorHandler*)fileErrorHandler)->getHandle();
-          colorer_logger_set_handle(handle);
+          colorer_logger_set_target(dfis->getLocation()->getChars());
         }catch(Exception &e){
           fileErrorHandler = null;
         };
