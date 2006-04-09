@@ -11,24 +11,20 @@ static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
 static const char *toTrace[] = {"BaseEditorNative", "JavaLineSource" };
 
 static FILE *log = 0;
-static bool usedOwnHandle = true;
 
 static void file_logger(int level, const char *cname, const char *msg, va_list v){
 
   int idx = 0;
 
-  while (log == 0){
+  while (log == 0 && idx < 10){
     char log_name[30];
 #ifdef __unix__
     sprintf(log_name, "/tmp/clr-trace%d.log", idx);
 #else
     sprintf(log_name, "c:\\clr-trace%d.log", idx);
 #endif
-    log = fopen(log_name, "a");
+    log = fopen(log_name, "ab+");
     idx++;
-  }
-  if (log != 0){
-    usedOwnHandle = 1;
   }
 
   fprintf(log, "[%s][%s] ", levelNames[level], cname);
@@ -50,13 +46,12 @@ static void console_logger(int level, const char *cname, const char *msg, va_lis
 }
 
 
-void colorer_logger_set_handle(FILE *logfile){
-  if (log != 0 && usedOwnHandle){
+void colorer_logger_set_target(const char *logfile){
+  if (logfile == 0) return;
+  if (log != 0){
     fclose(log);
-    usedOwnHandle = false;
   }
-  log = logfile;
-
+  log = fopen(logfile, "ab+");
 }
 
 

@@ -40,7 +40,7 @@ void colorer_logger_info(const char *cname, const char *msg, ...);
 
 void colorer_logger(int level, const char *cname, const char *msg, va_list v);
 
-void colorer_logger_set_handle(FILE *logfile);
+void colorer_logger_set_target(const char *logfile);
 
 #ifdef __cplusplus
 }
