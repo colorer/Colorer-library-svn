@@ -28,6 +28,8 @@ install:
 	cp -r hrd $(prefix)/share/colorer/
 	cp -r bin/4ever2take5 bin/apache bin/doclinks bin/xsd2hrc bin/ue2hrc $(prefix)/share/colorer/bin
 	cp catalog.xml LICENSE README $(prefix)/share/colorer
+	echo > /tmp/colorer.log
+	chmod 0777 /tmp/colorer.log
 
 	install -g 0 -o 0 -m 755 -d $(prefix)/share/doc
 	install -g 0 -o 0 -m 755 -d $(prefix)/share/doc/colorer-take5
