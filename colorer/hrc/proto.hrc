@@ -398,7 +398,7 @@
   </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
-    <filename>/\.(l|lex)+$/i</filename>
+    <filename>/\.(l|f?lex)+$/i</filename>
   </prototype>
   <prototype name="yacc" group="scripts" description="YACC">
     <location link="scripts/yacc.hrc"/>
