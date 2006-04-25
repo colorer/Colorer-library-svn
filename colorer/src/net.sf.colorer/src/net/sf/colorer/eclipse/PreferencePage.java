@@ -1,6 +1,5 @@
 package net.sf.colorer.eclipse;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import net.sf.colorer.ParserFactory;
