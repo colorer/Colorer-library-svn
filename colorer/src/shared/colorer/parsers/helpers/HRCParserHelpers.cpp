@@ -99,7 +99,13 @@ SchemeNode::SchemeNode() : virtualEntryVector(5){
   worddiv = null;
   start = end = null;
   lowPriority = 0;
-  //!!regions clean???
+
+  //!!regions cleanup
+  region = null;
+  memset(regions, 0, sizeof(regions));
+  memset(regionsn, 0, sizeof(regionsn));
+  memset(regione, 0, sizeof(regione));
+  memset(regionen, 0, sizeof(regionen));
 };
 
 SchemeNode::~SchemeNode(){
