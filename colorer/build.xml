@@ -287,7 +287,7 @@
   </target>
 
 
-  <target name="this.colorer" depends='init, hrc' description='Builds binary executable and moves it into current working copy'>
+  <target name="this.colorer" depends='init' description='Builds binary executable and moves it into current working copy'>
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
       <env key='Path' path='${native-path}:${java.library.path}'/>
