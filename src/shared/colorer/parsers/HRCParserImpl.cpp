@@ -478,10 +478,11 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       delete entMatchParam;
       next->end = 0;
       
-      // !! EE
       loadRegions(next, (Element*)tmpel, true);
-      if(next->region) next->regions[0] = next->region;
-      
+      if(next->region){
+        next->regions[0] = next->region;
+      }
+
       scheme->nodes.addElement(next);
       next = null;
       continue;
@@ -493,7 +494,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       const String *sParam = ((Element*)tmpel)->getAttribute(DString("start"));
       const String *eParam = ((Element*)tmpel)->getAttribute(DString("end"));
       
-      // !! EE
       Element *eStart = NULL, *eEnd = NULL;
           
       for(Node *blkn = tmpel->getFirstChild(); blkn && !(eParam && sParam); blkn = blkn->getNextSibling())
@@ -653,21 +653,26 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 };
 
 
-// !! EE
 void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
 {
 	static char rg_tmpl[0x10] = "region\0\0";
 	
 	if(el)
 	{
-		if(!node->region) node->region = getNCRegion(el, DString("region"));
-		
+        if (node->region == null){
+          node->region = getNCRegion(el, DString("region"));
+        }
+
 		for(int i = 0; i < REGIONS_NUM; i++)
 		{
-			rg_tmpl[6] = (i<0xA?i:i+7+32)+'0';
+			rg_tmpl[6] = (i < 0xA ? i : i+7+32) + '0';
 			
-			if(st) node->regions[i] = getNCRegion(el, DString(rg_tmpl));
-			else   node->regione[i] = getNCRegion(el, DString(rg_tmpl));
+			if(st){
+			  node->regions[i] = getNCRegion(el, DString(rg_tmpl));
+			}
+			else{
+			  node->regione[i] = getNCRegion(el, DString(rg_tmpl));
+		    }
 		}
 	}
 	
