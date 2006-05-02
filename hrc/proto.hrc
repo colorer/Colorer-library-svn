@@ -224,7 +224,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml)$/i</filename>
+    <filename>/\.(xml|gi2|gpr)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
   </prototype>
