@@ -110,7 +110,7 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
 
   if (showBanner){
     fprintf(stderr, "\n%s\n", ParserFactory::getVersion());
-    fprintf(stderr, "Copyright (c) 1999-2005 Igor Russkih <cail@nm.ru>\n\n");
+    fprintf(stderr, "Copyright (c) 1999-2006 Igor Russkih <irusskih at gmail.com>\n\n");
   }
 
 }
