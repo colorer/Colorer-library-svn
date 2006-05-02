@@ -17,6 +17,11 @@
 #include<colorer/parsers/HRCParserImpl.h>
 #include<colorer/parsers/TextParserImpl.h>
 
+#ifndef __TIMESTAMP__
+#define __TIMESTAMP__ "28 May 2006"
+#endif
+
+
 void ParserFactory::init()
 {
   hrcParser = null;
@@ -222,9 +227,6 @@ ParserFactory::~ParserFactory(){
   delete fileErrorHandler;
 };
 
-#ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "28.08.2005"
-#endif
 const char *ParserFactory::getVersion(){
   return "Colorer-take5 Library be5 "__TIMESTAMP__;
 };
