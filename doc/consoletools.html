@@ -17,9 +17,9 @@
 which allows you to use common features of the library. These are include:</p>
 <ul>
 <li>Listing and test loading of all available languages.</li>
-<li>Regular Expressions tests.</li>
 <li>Generating HTML markup of highlighted source files.</li>
 <li>Viewing highlighted files in console window (win32 only).</li>
+<li>Regular Expressions tests.</li>
 </ul>
 
 <h2>Listing Languages</h2>
@@ -28,45 +28,50 @@ command. This will print into standard output all supported computer languages
 and file types.
 If you want to test full colorer's database and load all types, run
 <code>colorer -ll</code>. This will take little more time to load and test
-HRC database. All errors, warnings and other messages you'll found in log file,
+HRC database. All errors, warnings and other messages you'll found in the log file,
 specified in <code>catalog.xml</code> file.
+</p><p>
+Additionally you can use <code>colorer -lt</code> syntax to list not type descriptions, but
+their internal names. This can be used in automated environments.
 </p>
 
 <h2>Generating highlighted HTML sources</h2>
 <p>You can use Colorer to format you source files into HTML markup.
 This is useful when publishing sources on your web-site, or making
-documentation, based on source files. You can find generated examples
+documentation based on your source files. You can find generated examples
 of some sources on <a href="../index.html#Highlighting">start page</a> in section <em>Highlighting</em>.
 Also you can check <a href="http://colorer.sf.net/php/">Online HTML Generator</a>
 on colorer.sf.net site.
 </p>
 <p>To generate highlighted source of file <code>filename</code>, you have
 to run <code>colorer -h filename</code>. This will print generated HTML file
-into standard output. If you want to write this HTML into some file,
+into standard output. If you want to write this HTML code into some other file,
 you can specify this file with <code>-o</code> option. Also you can specify input
 and output character encodings (<code>-ei ENCNAME</code> and <code>-eo ENCNAME</code>)
-to read and write data. So, running
-<code>colorer -h -ei UTF-8 -eo UTF-16BE -o NAME.HTML yoursource.cpp</code>
-will cause to generate highlighted html of <code>yoursource.cpp</code> file with
-name <code>NAME.HTML</code>, using UTF-8 as input encoding and UTF-16BE as
+to read and write data.
+</p>
+<p>So, running <code>colorer -h -ei UTF-8 -eo UTF-16BE -o NAME.HTML yoursource.cpp</code>
+will cause highlighted html generation of <code>yoursource.cpp</code> file with
+output name <code>NAME.HTML</code>, using UTF-8 as input encoding and UTF-16BE as
 encoding of result file.
 </p>
 <p>If placing "<code>-</code>" instead of input file name, colorer will read data
 from standard input.</p>
 
-<p>You can specify special "doclinks" file with external help references to any tokens
+<p>
+You can specify special "doclinks" file with external help references to any tokens
 in your generated HTML. Use <code>-ls"filename"</code> to activate this feature.
 You can find sample doclink files in <code>colorer/bin/doclinks</code> directory.
 </p>
 
 <h2>Viewing file in a console window</h2>
-<p>To run internal colorer viewer you can run <code>colorer -v filename</code>.
+<p>To run internal colorer viewer you can execute <code>colorer -v filename</code>.
 This should work only on win32 systems.
+
 Console viewer uses unicode versions of Win32 API, so it can view files with
 different character sets. In w9x systems colorer additionally uses output
-encoding parameter because they don't support unicode console output.
+encoding parameter because w9x doesn't support unicode console output.
 Viewer supports standard navigation keys, but has minimal functionality.
-
 </p>
 
 <h2>Additional options</h2>
@@ -74,10 +79,10 @@ Viewer supports standard navigation keys, but has minimal functionality.
 of them running <code>colorer</code> without any parameters.</p>
 
 <h3>Token generator</h3>
-<p>This option is similar with HTML generation more, except that
-generated HTML file defines all tokens not with colors, but with abstract
-css classes, which has name, equals to the name of appropriate token (Region).
-Each token is assigned here to a class with its region name and to all its parent
+<p>This option is similar with HTML generation more, with exception that
+generated HTML file defines tokens not with colors, but with abstract
+CSS classes, with the same name as the name of the appropriate token (Region).
+Each token is assigned here to a CSS class with its region's name and to all its parent
 classes. For instance simple comment token will be formatted as
 <code>&lt;span class='c_Comment def_Comment def_Syntax'>//comment&lt;/span></code>.
 
@@ -85,14 +90,14 @@ To use colorer in tokenizer more, you have to run <code>colorer -ht filename</co
 </p>
 
 <h3>Type detection</h3>
-<p>By default, colorer tries automatically detect filetype. You can redefine
-used language with <code>-t</code> parameter. Use <code>-t name</code>,
+<p>By default, colorer tries to automatically detect filetype. You can redefine
+used language with <code>-t</code> parameter. Just specify <code>-t name</code>,
 and colorer will use language <code>name</code> to highlight requiried file.</p>
 
-<h3>Specifing catalog path</h3>
+<h3>Changing catalog path</h3>
 <p>You can specify custom path to <code>catalog.xml</code> file. This file
 contains references to all other library resources. By default, colorer
-tries to search this file in a set of <a href='api/classParserFactory.html'>predefined locations</a>.
+tries to search this file within a set of <a href='api/classParserFactory.html'>predefined locations</a>.
 </p>
 
 <h3>Highlighting styles selection</h3>
@@ -106,11 +111,12 @@ of colors.
 </p>
 
 <h3>Customizing HTML output</h3>
-<p>There is a numerous options available, controlling HTML output.
+<p>There is a number of options available, which control HTML output.
 These are:</p>
 <ul>
+<li><code>-ln</code> Place line numbers into the generated file.</li>
 <li><code>-db</code> Disable <abbr title='Byte Order Mark'>BOM</abbr> insertion in start of output files when one of Unicode encodings is used.</li>
-<li><code>-dc</code> Disable informational header output in start of each HTML file.</li>
+<li><code>-dc</code> Disable informational&amp;copyright header output in start of each HTML file.</li>
 <li><code>-ds</code> Disable HTML special symbols substitutions with entities.</li>
 <li><code>-dh</code> Disable HTML header and footer output.</li>
 </ul>
