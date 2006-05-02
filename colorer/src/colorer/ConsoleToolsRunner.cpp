@@ -140,7 +140,6 @@ void printError(){
        "  -ln        Add line numbers into the colorized file\n"
        "  -db        Disable BOM(ZWNBSP) start symbol output in Unicode encodings\n"
        "  -dc        Disable information header in generator's output\n"
-       "  -dh        Disable copyright header output\n"
        "  -ds        Disable HTML symbol substitutions in generator's output\n"
        "  -dh        Disable HTML header and footer output\n"
   );
