@@ -30,7 +30,7 @@ public:
       if (l1->start > pos){
         textWriter->write(line, pos, l1->start - pos);
         pos = l1->start;
-      };
+      }
       markupWriter->write(DString("<span class='"));
 
       const Region *region = l1->region;
@@ -50,8 +50,11 @@ public:
       textWriter->write(line, pos, end - l1->start);
       markupWriter->write(DString("</span>"));
       pos += end - l1->start;
-    };
-  };
+    }
+    if (pos < line->length()){
+      textWriter->write(line, pos, line->length() - pos);
+    }
+  }
 
 
   /** Write specified line of text using list of LineRegion's.
@@ -82,11 +85,11 @@ public:
       if (l1->texted()->etext != null) markupWriter->write(l1->texted()->etext);
       if (l1->texted()->eback != null) markupWriter->write(l1->texted()->eback);
       pos += end - l1->start;
-    };
+    }
     if (pos < line->length()){
       textWriter->write(line, pos, line->length() - pos);
-    };
-  };
+    }
+  }
 
 
   /** Write specified line of text using list of LineRegion's.
@@ -117,11 +120,12 @@ public:
       if (docLinkHash->size() > 0)
         writeHref(markupWriter, docLinkHash, l1->scheme, DString(line, pos, end - l1->start), false);
       pos += end - l1->start;
-    };
+    }
     if (pos < line->length()){
       textWriter->write(line, pos, line->length() - pos);
-    };
-  };
+    }
+  }
+
   /** Puts into stream style attributes from RegionDefine object.
   */
   static void writeStyle(Writer *writer, const StyledRegion *lr){
@@ -134,7 +138,8 @@ public:
     if (lr->style&StyledRegion::RD_UNDERLINE) cp += sprintf(span+cp, "text-decoration:underline; ");
     if (lr->style&StyledRegion::RD_STRIKEOUT) cp += sprintf(span+cp, "text-decoration:strikeout; ");
     if (cp > 0) writer->write(DString(span));
-  };
+  }
+
   /** Puts into stream starting HTML \<span> tag with requested style specification
   */
   static void writeStart(Writer *writer, const StyledRegion *lr){
@@ -142,27 +147,28 @@ public:
     writer->write(DString("<span style='"));
     writeStyle(writer, lr);
     writer->write(DString("'>"));
-  };
+  }
+
   /** Puts into stream ending HTML \</span> tag
   */
   static void writeEnd(Writer *writer, const StyledRegion *lr){
     if (!lr->bfore && !lr->bback) return;
     writer->write(DString("</span>"));
-  };
+  }
 
   static void writeHref(Writer *writer, Hashtable<String*> *docLinkHash, const Scheme *scheme, const String &token, bool start){
     String *url = null;
     if (scheme != null){
       url = docLinkHash->get(&(StringBuffer(token).append(DString("--")).append(scheme->getName())));
-    };
+    }
     if (url == null){
       url = docLinkHash->get(&token);
-    };
+    }
     if (url != null){
       if (start) writer->write(StringBuffer("<a href='")+url+DString("'>"));
       else writer->write(DString("</a>"));
-    };
-  };
+    }
+  }
 
 };
 
