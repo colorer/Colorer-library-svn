@@ -56,8 +56,23 @@ features, but don't loads HRC database each time, so it works faster.
 $# Outliner
     Here you see list of all found functions or syntax errors. Choose any item
 and you'll go to corresponding line in text.
-You can use here keyboard filter to quickly search requeried items.
+    
+    You can use here keyboard filter to quickly search requeried items:
 
+    #Ctrl-Left/Right#
+      Expands-Collapses level of Outliner
+
+    #Ctrl-Up/Down#
+      Moves to next/previous item both in outliner and in source code
+
+    #Ctrl-Enter#
+      Close the outliner and insert current item into the cursor position
+    
+    #Enter#
+      Close the outliner and jump to the selected item
+
+    #Any symbol keys#
+      Filters out the outliner items against entered filter
 
 @menu
 $#Colorer operation
