@@ -5,7 +5,7 @@
 #
 
 #$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer -c D:\\projects\\colorer-4merge\\catalog.xml";
+$colorer  = "colorer -c D:\\projects\\colorer\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
 
@@ -71,6 +71,7 @@ foreach (@retlist){
 
   if ($cres != 0 or $res != 0 or !-r "$fname.html"){
     #print "failed: $cres, $res, ".(-r "$fname.html")."\n";
+    $failed .= "$_<br/>";
     $testFailed++;
   }else{
   }
@@ -87,6 +88,7 @@ print $result;
 
 open FAILS, ">>$currentDir/fails.html";
 print FAILS "</pre></pre></pre><h2>$result</h2>";
+print FAILS "<h2>Failed tests</h2><br/>$failed";
 close FAILS;
 
 exit;
