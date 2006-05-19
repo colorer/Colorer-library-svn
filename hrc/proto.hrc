@@ -560,6 +560,10 @@
     <location link="rare/vhdl.hrc"/>
     <filename>/\.vhdl?$/i</filename>
   </prototype>
+ <prototype name="ahdl" group="rare" description="AHDL">
+   <location link="rare/ahdl.hrc"/>
+   <filename>/\.(tdf|tdo|ahdl)$/i</filename>
+ </prototype>
   <prototype name="z80" group="rare" description="z80asm">
     <location link="rare/z80.hrc"/>
     <filename>/\.za$/i</filename>
