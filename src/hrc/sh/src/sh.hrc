@@ -46,7 +46,7 @@
 <region name="string.eval" parent="def:Insertion"/>
 <region name="path" parent="def:Path"/>
 
-<entity name="var" value="[\w_][\w\d_]*"/>
+<entity name="var" value="[\w_][\w\d_\-\.]*"/>
 
 <scheme name="string.eval">
  <block start="/`/" end="/`/"
