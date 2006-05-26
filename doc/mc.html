@@ -13,6 +13,8 @@
 <h1>Midnight Commander mod with Colorer-take5 syntax engine</h1>
 
 <p>
+<img alt='mc' align="right" src='sshots/mc.png' height='373' width='561'/>
+
 This release contains Midnight Commander modified to use
 Colorer-take5 as a syntax highlighting engine.
 </p>
@@ -37,6 +39,36 @@ Next, just use the provided 'mc' binary to run it.
 In case you have no root rights you can look
 for the 'mclr.sh' script and fix it for yourself
 to make it possible to run this MC mod from non-root account.
+</p>
+
+<h2>Whats new in 0.5?</h2>
+
+<p>
+Editor is now capable to show paired constructions, like it
+works in eclipse/far versions. <br/>
+Moreover, two editor menu options were added:
+Command/<code>"Select Block"</code> and <code>"Select Block Content"</code>.
+<br/>
+These allows you to mark with selection current paired construction.
+<br/>
+Of course, <code>"Go to matching Bracket"</code> (alt/meta-b) also works with Colorer.
+</p>
+
+<p>
+There is no UI settings now, however you can manually change default color
+style, colorer uses to highlight the text.
+<br/>
+To do this just add this section to your ~/.mc/ini file:
+</p>
+
+<pre>
+[Colorer]
+colorer_hrd_string=nc
+</pre>
+
+<p>
+Changing it's value you can choose one of available HRD styles (see your
+colorer/catalog.xml file for list of available styles).
 </p>
 
 </body>
