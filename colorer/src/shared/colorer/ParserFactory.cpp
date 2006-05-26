@@ -124,11 +124,6 @@ String *ParserFactory::searchPath()
   TextLinesStore tls;
 
 
-#ifdef __unix__
-  paths.addElement(new SString("./catalog.xml"));
-  paths.addElement(new SString("../catalog.xml"));
-  paths.addElement(new SString("../../catalog.xml"));
-#endif
 #ifdef _WIN32
   // image_path/  image_path/..  image_path/../..
   char cname[256];
