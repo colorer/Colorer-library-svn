@@ -376,28 +376,47 @@ void colorer_get_syntax_color (WEdit * edit, long byte_index, int *color)
 
 void colorer_edit_modified(WEdit * edit)
 {
-    //CLR_TRACE("MC", "colorer_edit_modified:%d", colorer_edit_cursline(edit));
-    ((MCEditColorer*)colorer_get_handle(edit))->modifyEvent(colorer_edit_cursline(edit));
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return;
+    }
+    mccolorer->modifyEvent(colorer_edit_cursline(edit));
 }
 
 int colorer_find_visible_bracket(WEdit *edit)
 {
-    return ((MCEditColorer*)colorer_get_handle(edit))->find_visible_bracket(edit);    
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return -1;
+    }
+    return mccolorer->find_visible_bracket(edit);
 }
 
 int colorer_get_bracket(WEdit *edit)
 {
-    return ((MCEditColorer*)colorer_get_handle(edit))->get_bracket(edit);    
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return -1;
+    }
+    return mccolorer->get_bracket(edit);    
 }
 
 int colorer_select_bracket(WEdit *edit)
 {
-    return ((MCEditColorer*)colorer_get_handle(edit))->select_bracket(edit);    
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return 0;
+    }
+    return mccolorer->select_bracket(edit);
 }
 
 int colorer_select_bracket_content(WEdit *edit)
 {
-    return ((MCEditColorer*)colorer_get_handle(edit))->select_bracket_content(edit);    
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return 0;
+    }
+    return mccolorer->select_bracket_content(edit);
 }
 
 
