@@ -256,6 +256,18 @@ menu_goto_bracket (void)
 }
 
 static void
+menu_select_block (void)
+{
+    menu_cmd (CK_Select_Block);
+}
+
+static void
+menu_select_block_content (void)
+{
+    menu_cmd (CK_Select_Block_Content);
+}
+
+static void
 menu_lit_cmd (void)
 {
     menu_key (XCTRL ('q'));
@@ -277,6 +289,13 @@ menu_user_menu_cmd (void)
 {
     menu_key (KEY_F (11));
 }
+#if USE_COLORER
+static void
+menu_colorer (void)
+{
+    edit_colorer_options_dialog ();
+}
+#endif
 
 static menu_entry FileMenu[] =
 {
@@ -346,6 +365,8 @@ static menu_entry CmdMenu[] =
 {
     {' ', N_("&Go to line...            M-l"), 'G', menu_goto_line},
     {' ', N_("Go to matching &bracket   M-b"), 'B', menu_goto_bracket},
+    {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
+    {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
     {' ', "", ' ', 0},
@@ -370,6 +391,8 @@ static menu_entry CmdMenuEmacs[] =
 {
     {' ', N_("&Go to line...            M-l"), 'G', menu_goto_line},
     {' ', N_("Go to matching &bracket   M-b"), 'B', menu_goto_bracket},
+    {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
+    {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
     {' ', "", ' ', 0},
@@ -395,6 +418,10 @@ static menu_entry OptMenu[] =
     {' ', N_("&General...  "), 'G', menu_options},
     {' ', N_("&Save mode..."), 'S', menu_save_mode_cmd},
     {' ', N_("learn &Keys..."), 'K', learn_keys}
+#if USE_COLORER
+//    ,
+//    {' ', N_("&Colorer..."), 'C', menu_colorer}
+#endif
 };
 
 #define OptMenuEmacs OptMenu

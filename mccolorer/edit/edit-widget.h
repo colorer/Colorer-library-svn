@@ -96,6 +96,9 @@ struct WEdit {
     struct syntax_rule rule;
     char *syntax_type;		/* description of syntax highlighting type being used */
     GTree *defines;		/* List of defines */
+#ifdef USE_COLORER
+    void *colorer_handle;	/* Colorer object handler */
+#endif
 
     /* macro stuff */
     int macro_i;		/* index to macro[], -1 if not recording a macro */

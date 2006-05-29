@@ -213,6 +213,9 @@ static const struct {
     { "editor_option_typewriter_wrap", &option_typewriter_wrap },
     { "editor_edit_confirm_save", &edit_confirm_save },
     { "editor_syntax_highlighting", &option_syntax_highlighting },
+#if USE_COLORER
+    { "editor_syntax_colorer", &option_syntax_colorer },
+#endif
 #endif /* USE_INTERNAL_EDIT */
 
     { "nice_rotating_dash", &nice_rotating_dash },
@@ -520,6 +523,10 @@ load_setup (void)
     ftpfs_proxy_host = do_load_string ("Misc", "ftp_proxy_host", "gate");
 #endif
 
+#if USE_COLORER
+    load_string ("Colorer", "colorer_hrd_string", "default", colorer_hrd_string, COLORER_HRD_STRING_LENGTH);
+#endif
+    
     load_string ("Misc", "find_ignore_dirs", "", setup_color_string,
 		 sizeof (setup_color_string));
     if (setup_color_string [0])

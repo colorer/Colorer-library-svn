@@ -1,4 +1,4 @@
-/* edit.h - main include file
+/* edit.h - main inlude file
 
    Copyright (C) 1996, 1997 the Free Software Foundation
 
@@ -238,7 +238,6 @@ void edit_load_syntax (WEdit * edit, char **names, const char *type);
 void edit_free_syntax_rules (WEdit * edit);
 void edit_get_syntax_color (WEdit * edit, long byte_index, int *color);
 
-
 void book_mark_insert (WEdit * edit, int line, int c);
 int book_mark_query_color (WEdit * edit, int line, int c);
 int book_mark_query_all (WEdit * edit, int line, int *c);
@@ -252,6 +251,9 @@ int line_is_blank (WEdit *edit, long line);
 int edit_indent_width (WEdit *edit, long p);
 void edit_insert_indent (WEdit *edit, int indent);
 void edit_options_dialog (void);
+#ifdef USE_COLORER
+void edit_colorer_options_dialog (void);
+#endif
 void edit_mail_dialog (WEdit *edit);
 void format_paragraph (WEdit *edit, int force);
 
@@ -311,6 +313,9 @@ extern int option_save_position;
 extern int option_backup_ext_int;
 extern int option_max_undo;
 extern int option_syntax_highlighting;
+#ifdef USE_COLORER
+extern int option_syntax_colorer;
+#endif
 extern int editor_option_check_nl_at_eof;
 
 extern int option_edit_right_extreme;

@@ -98,6 +98,9 @@
 #define CK_ExtCmd		424
 
 #define CK_User_Menu		425
+#define CK_Select_Block         426
+#define CK_Select_Block_Content 427
+
 /* application control */
 #define CK_Save_Desktop		451
 #define CK_New_Window		452

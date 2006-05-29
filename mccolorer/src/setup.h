@@ -21,6 +21,11 @@ extern char setup_color_string[];
 extern char term_color_string[];
 extern char color_terminal_string[];
 
+#if USE_COLORER
+#define COLORER_HRD_STRING_LENGTH 64
+extern char colorer_hrd_string[];
+#endif
+
 extern int startup_left_mode;
 extern int startup_right_mode;
 extern int verbose;

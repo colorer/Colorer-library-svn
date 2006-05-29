@@ -596,6 +596,9 @@
 /* Define to enable internal editor */
 #undef USE_INTERNAL_EDIT
 
+/* Define to enable colorer */
+#undef USE_COLORER
+
 /* Define to use ncurses for screen management */
 #undef USE_NCURSES
 

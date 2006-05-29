@@ -513,6 +513,23 @@ else
 	edit_msg="no"
 fi
 
+dnl
+dnl Colorer support.
+dnl
+AC_ARG_WITH(colorer,
+        [  --with-colorer           Enable Colorer Syntax Highlighing [[yes]]])
+
+if test x$with_colorer != xno; then
+	AC_DEFINE(USE_COLORER, 1, [Define to enable Colorer])
+	use_colorer=yes
+	colorer_msg="yes"
+	MCLIBS="$MCLIBS -lcolorer -lstdc++"
+        CPPFLAGS="$CPPFLAGS -I/usr/include/colorer -I/usr/local/include/colorer"
+	AC_MSG_NOTICE([using colorer syntax highlighting engine])
+else
+	colorer_msg="no"
+fi
+
 
 dnl Check if the OS is supported by the console saver.
 cons_saver=""
@@ -583,6 +600,7 @@ if test -n "$use_smbfs"; then
 fi
 
 AM_CONDITIONAL(USE_EDIT, [test -n "$use_edit"])
+AM_CONDITIONAL(USE_COLORER, [test -n "$use_colorer"])
 AM_CONDITIONAL(USE_VFS, [test "x$use_vfs" = xyes])
 AM_CONDITIONAL(USE_VFS_NET, [test x"$use_net_code" = xtrue])
 AM_CONDITIONAL(USE_UNDEL_FS, [test -n "$use_undelfs"])
@@ -656,5 +674,6 @@ Configuration:
   X11 events support:         ${textmode_x11_support}
   With subshell support:      ${subshell}
   Internal editor:            ${edit_msg}
+  Colorer syntax highlight:   ${colorer_msg}
   Support for charset:        ${charset_msg}
 "

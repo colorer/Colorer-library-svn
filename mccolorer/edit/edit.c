@@ -25,6 +25,9 @@
 #include "editlock.h"
 #include "edit-widget.h"
 #include "editcmddef.h"
+#ifdef USE_COLORER
+#include "syntax-colorer.h"
+#endif
 
 #include "../src/cmd.h"		/* view_other_cmd() */
 #include "../src/user.h"	/* user_menu_cmd() */
@@ -823,6 +826,11 @@ static inline void edit_modification (WEdit * edit)
     if (!edit->modified && !edit->delete_file)
 	edit->locked = edit_lock_file (edit->filename);
     edit->modified = 1;
+#ifdef USE_COLORER
+    if (option_syntax_colorer) {
+        colorer_edit_modified(edit);
+    }
+#endif
 }
 
 /*
@@ -1415,7 +1423,7 @@ is_blank (WEdit *edit, long offset)
 
 
 /* returns the offset of line i */
-static long
+long
 edit_find_line (WEdit *edit, int line)
 {
     int i, j = 0;
@@ -2076,6 +2084,13 @@ static long last_bracket = -1;
 
 static void edit_find_bracket (WEdit * edit)
 {
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	if (colorer_find_visible_bracket(edit))
+	    edit->force |= REDRAW_PAGE;
+	return;
+    }
+#endif
     edit->bracket = edit_get_bracket (edit, 1, 10000);
     if (last_bracket != edit->bracket)
 	edit->force |= REDRAW_PAGE;
@@ -2085,13 +2100,64 @@ static void edit_find_bracket (WEdit * edit)
 static void edit_goto_matching_bracket (WEdit *edit)
 {
     long q;
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	q = colorer_get_bracket(edit);
+    } else {
+#endif
     q = edit_get_bracket (edit, 0, 0);
+#if USE_COLORER
+    }
+#endif
     if (q < 0)
 	return;
     edit->bracket = edit->curs1;
     edit->force |= REDRAW_PAGE;
     edit_cursor_move (edit, q - edit->curs1);
 }
+
+static void edit_select_block (WEdit *edit)
+{
+    long q;
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	colorer_select_bracket(edit);
+	return;
+    } else {
+#endif
+    q = edit_get_bracket (edit, 0, 0);
+#if USE_COLORER
+    }
+#endif
+    if (q < 0)
+	return;
+    edit->mark1 = min(edit->curs1, q);
+    edit->mark2 = max(edit->curs1, q)+1;
+    edit->column1 = edit->column2 = 0;
+    edit->force |= REDRAW_PAGE;
+}
+
+static void edit_select_block_content (WEdit *edit)
+{
+    long q;
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	colorer_select_bracket_content(edit);
+	return;
+    } else {
+#endif
+    q = edit_get_bracket (edit, 0, 0);
+#if USE_COLORER
+    }
+#endif
+    if (q < 0)
+	return;
+    edit->mark1 = min(edit->curs1, q)+1;
+    edit->mark2 = max(edit->curs1, q);
+    edit->column1 = edit->column2 = 0;
+    edit->force |= REDRAW_PAGE;
+}
+
 
 /*
  * This executes a command as though the user initiated it through a key
@@ -2541,6 +2607,12 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
 	break;
     case CK_Match_Bracket:
 	edit_goto_matching_bracket (edit);
+	break;
+    case CK_Select_Block:
+	edit_select_block (edit);
+	break;
+    case CK_Select_Block_Content:
+	edit_select_block_content (edit);
 	break;
     case CK_User_Menu:
 	user_menu (edit);

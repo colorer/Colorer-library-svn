@@ -23,6 +23,9 @@
 #include <config.h>
 #include "edit.h"
 #include "edit-widget.h"
+#ifdef USE_COLORER
+#include "syntax-colorer.h"
+#endif
 #include "../src/color.h"	/* use_colors */
 #include "../src/main.h"	/* mc_home */
 #include "../src/wtools.h"	/* message() */
@@ -444,6 +447,17 @@ static void translate_rule_to_color (WEdit * edit, struct syntax_rule rule, int 
 
 void edit_get_syntax_color (WEdit * edit, long byte_index, int *color)
 {
+#if USE_COLORER
+    if (option_syntax_colorer){
+	if (!option_syntax_highlighting || !use_colors)
+	{
+	    *color = use_colors ? EDITOR_NORMAL_COLOR_INDEX : 0;
+	    return;
+	}
+	colorer_get_syntax_color(edit, byte_index, color);
+	return;
+    }
+#endif
     if (edit->rules && byte_index < edit->last_byte && 
                          option_syntax_highlighting && use_colors) {
 	translate_rule_to_color (edit, edit_get_rule (edit, byte_index), color);
@@ -917,6 +931,10 @@ edit_read_syntax_rules (WEdit *edit, FILE *f, char **args, int args_size)
 void edit_free_syntax_rules (WEdit * edit)
 {
     int i, j;
+#if USE_COLORER
+    colorer_free_syntax_rules(edit);
+    return;
+#endif    
     if (!edit)
 	return;
     if (edit->defines)
@@ -1110,6 +1128,14 @@ edit_load_syntax (WEdit *edit, char **names, const char *type)
 	if (!*edit->filename && !type)
 	    return;
     }
+
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	colorer_load_syntax(edit, names, type);
+	return;
+    }
+#endif
+
     f = catstrs (home_dir, SYNTAX_FILE, (char *) NULL);
     r = edit_read_syntax_file (edit, names, f, edit ? edit->filename : 0,
 			       get_first_editor_line (edit), type);

@@ -35,6 +35,8 @@
  */
 static const long cooledit_key_map[] = {
     ALT ('b'), CK_Match_Bracket,
+    ALT (']'), CK_Select_Block,
+    ALT ('p'), CK_Select_Block_Content,
     ALT ('m'), CK_Mail,
     XCTRL ('f'), CK_Save_Block,
     XCTRL ('n'), CK_New,
