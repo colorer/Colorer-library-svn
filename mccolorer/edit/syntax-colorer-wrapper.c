@@ -7,8 +7,8 @@
 #include "../src/wtools.h"  /* message() */
 #include "../src/setup.h"
 
-#define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_FULL
-//#define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_QUIET
+//#define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_FULL
+#define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_QUIET
 
 #include "syntax-colorer-legacy-log.h"
 #include "common/Logging.h"

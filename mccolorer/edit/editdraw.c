@@ -194,7 +194,18 @@ print_to_widget (WEdit *edit, long row, int start_col, int start_col_real,
     int y = row + EDIT_TEXT_VERTICAL_OFFSET;
     int cols_to_skip = abs (x);
 
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	int ccolor = colorer_get_default_color(edit);
+	/* Regular set_color doesn't work here... */
+	lowlevel_set_color (ccolor == -1 ? EDITOR_NORMAL_COLOR : ccolor);
+    } else {
+	set_color (EDITOR_NORMAL_COLOR);
+    }
+#else
     set_color (EDITOR_NORMAL_COLOR);
+#endif
+
     edit_move (x1, y);
     hline (' ', end_col + 1 - EDIT_TEXT_HORIZONTAL_OFFSET - x1);
 

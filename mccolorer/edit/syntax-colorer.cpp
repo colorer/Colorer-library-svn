@@ -1,6 +1,6 @@
 
-//#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_FULL
-#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_QUIET
+#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_FULL
+//#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_QUIET
 
 #include"syntax-colorer-legacy-log.h"
 
@@ -123,46 +123,54 @@ class MCEditColorer
 public:
     MCEditColorer(WEdit *edit)
     {
-        if (pf == null){
-            try {
+        try{
+            if (pf == null) {
                 pf = new ParserFactory();
-            } catch(Exception &e) {
-                //notify about disabled colorer
-                option_syntax_colorer = 0;
-                return;
+                // cleanup color index map
+                for (int idx = 0; idx < 16*16; idx++){
+                    colorer_color_map[idx] = -1;
+                }
+            }
+            this->edit = edit;
+            colorer_store_handle(edit, this);
+
+            lineSource = new MCLineSource(edit);
+            
+            baseEditor = new BaseEditor(pf, lineSource);
+            baseEditor->chooseFileType(&DString(colorer_get_filename(edit)));
+            
+            /* Loading color style */
+            try {
+                if (*colorer_hrd_string == 0) {
+                    strcpy(colorer_hrd_string, "default");
+                }
+                baseEditor->setRegionMapper(&DString("console"), &DString(colorer_hrd_string));
+            } catch (Exception &e) {
+                baseEditor->setRegionMapper(&DString("console"), &DString("default"));
             }
 
-            // cleanup color index map
-            for (int idx = 0; idx < 16*16; idx++){
-                colorer_color_map[idx] = -1;
-            }
+            baseEditor->setRegionCompact(true);
+
+            CLR_TRACE("MC", "filename: %s", colorer_get_filename(edit));
+            CLR_TRACE("MC", "filetype: %s", baseEditor->getFileType()->getName()->getChars());
+
+            def_fore = StyledRegion::cast(baseEditor->rd_def_Text)->fore;
+            def_back = StyledRegion::cast(baseEditor->rd_def_Text)->back;
+            def_mc   = colorer_convert_color(StyledRegion::cast(baseEditor->rd_def_Text));
+//            def_mc_bg= try_alloc_color_pair(null, win_colors[def_back]);
+
+    	CLR_TRACE("MC", "def_fore=%d, def_back=%d, def_mc=%d", def_fore, def_back, def_mc);
+    	CLR_TRACE("MC", "def_mc_bg=%d", def_mc_bg);
+
+    	pairMatch = null;
+
+        } catch(Exception &e) {
+            // TODO: notify about disabled colorer
+    	    CLR_TRACE("MC", "Exception in MCEditColorer: %s", e.getMessage()->getChars());
+            option_syntax_colorer = 0;
+            return;
         }
-        this->edit = edit;
-        colorer_store_handle(edit, this);
 
-        lineSource = new MCLineSource(edit);
-        
-        baseEditor = new BaseEditor(pf, lineSource);
-        baseEditor->chooseFileType(&DString(colorer_get_filename(edit)));
-        
-        try {
-            if (*colorer_hrd_string == 0) {
-                strcpy(colorer_hrd_string, "default");
-            }
-            baseEditor->setRegionMapper(&DString("console"), &DString(colorer_hrd_string));
-        } catch (Exception &e) {
-            baseEditor->setRegionMapper(&DString("console"), &DString("default"));
-        }
-
-        baseEditor->setRegionCompact(true);
-
-        CLR_TRACE("MC", "filename: %s", colorer_get_filename(edit));
-        CLR_TRACE("MC", "filetype: %s", baseEditor->getFileType()->getName()->getChars());
-        def_fore = StyledRegion::cast(baseEditor->rd_def_Text)->fore;
-        def_back = StyledRegion::cast(baseEditor->rd_def_Text)->back;
-        def_mc   = colorer_convert_color(StyledRegion::cast(baseEditor->rd_def_Text));
-	CLR_TRACE("MC", "def_fore=%d, def_back=%d, def_mc=%d", def_fore, def_back, def_mc);
-	pairMatch = null;
     }
 
     ~MCEditColorer()
@@ -191,27 +199,9 @@ public:
         baseEditor->lineCountEvent(colorer_total_lines(edit));
         baseEditor->visibleTextEvent(colorer_top_line(edit), colorer_height(edit));
 
-	/*
-	static int tl = 0;
-	static int topl = 0;
-	static int h = 0;
-	if (tl != colorer_total_lines(edit) ||
-	    topl != colorer_top_line(edit) ||
-	    h != colorer_height(edit)+1)
-	{
-	    tl = colorer_total_lines(edit);
-	    topl = colorer_top_line(edit);
-	    h = colorer_height(edit)+1;
-            //CLR_TRACE("MC", "colorer_total_lines: %d", tl);
-	    //CLR_TRACE("MC", "colorer_top: %d, height=%d", topl, h);
-	}
-	*/
-
 	int line = colorer_get_line(edit, byte_index);
-	//CLR_TRACE("MC", "byte=%d, line=%d", byte_index, line);
 
         LineRegion *lr = baseEditor->getLineRegions(line);
-        //CLR_TRACE("MC", "lr=%p", lr);
 
         int line_offset = byte_index - edit_bol(edit, byte_index);
         
@@ -240,7 +230,7 @@ public:
         return def_mc;
     }
     
-    int find_visible_bracket(WEdit *edit) 
+    int find_visible_bracket()
     {
     	bool pairDrop = false;
     	int cpos = colorer_edit_get_cursor(edit);
@@ -263,7 +253,7 @@ public:
         return 0;
     }
     
-    int get_bracket(WEdit *edit)
+    int get_bracket()
     {
     	int cpos = colorer_edit_get_cursor(edit);
     	cpos = cpos - edit_bol(edit, cpos);
@@ -280,9 +270,9 @@ public:
         return -1;
     }
     
-    int select_bracket(WEdit *edit)
+    int select_bracket()
     {
-    	if (get_bracket(edit) == -1 || pairMatch == null) {
+    	if (get_bracket() == -1 || pairMatch == null) {
     	    return 0;
     	}
     	if (pairMatch->topPosition) {
@@ -299,9 +289,9 @@ public:
     	return 1;
     }
     
-    int select_bracket_content(WEdit *edit)
+    int select_bracket_content()
     {
-    	if (get_bracket(edit) == -1 || pairMatch == null) {
+    	if (get_bracket() == -1 || pairMatch == null) {
     	    return 0;
     	}
     	if (pairMatch->topPosition) {
@@ -317,7 +307,12 @@ public:
     	}
     	return 1;
     }
-    
+
+    int get_default_color()
+    {
+        return def_mc;
+    }
+
 private:
     int colorer_convert_color(const StyledRegion *region)
     {
@@ -327,9 +322,8 @@ private:
         if (ret == -1){
             ret =  try_alloc_color_pair(win_colors[fg], win_colors[bg]);
             colorer_color_map[bg+(fg<<4)] = ret;
-            //CLR_TRACE("MC", "map[%s:%s - %d]=%d", win_colors[fg], win_colors[bg], bg + (fg<<4), colorer_color_map[bg + (fg<<4)]);
+            CLR_TRACE("MC", "map[%s:%s - %d]=%d", win_colors[fg], win_colors[bg], bg + (fg<<4), colorer_color_map[bg + (fg<<4)]);
         }
-        //CLR_TRACE("MC", "clr_map [%d-%d]=%d", fg, bg, ret);
         return ret;
     }
 
@@ -339,7 +333,7 @@ private:
     WEdit        *edit;
     BaseEditor   *baseEditor;
     MCLineSource *lineSource;
-    int          def_fore, def_back, def_mc;
+    int          def_fore, def_back, def_mc, def_mc_bg;
     PairMatch    *pairMatch;
 };
 
@@ -389,7 +383,7 @@ int colorer_find_visible_bracket(WEdit *edit)
     if (mccolorer == null) {
         return -1;
     }
-    return mccolorer->find_visible_bracket(edit);
+    return mccolorer->find_visible_bracket();
 }
 
 int colorer_get_bracket(WEdit *edit)
@@ -398,7 +392,7 @@ int colorer_get_bracket(WEdit *edit)
     if (mccolorer == null) {
         return -1;
     }
-    return mccolorer->get_bracket(edit);    
+    return mccolorer->get_bracket();    
 }
 
 int colorer_select_bracket(WEdit *edit)
@@ -407,7 +401,7 @@ int colorer_select_bracket(WEdit *edit)
     if (mccolorer == null) {
         return 0;
     }
-    return mccolorer->select_bracket(edit);
+    return mccolorer->select_bracket();
 }
 
 int colorer_select_bracket_content(WEdit *edit)
@@ -416,8 +410,18 @@ int colorer_select_bracket_content(WEdit *edit)
     if (mccolorer == null) {
         return 0;
     }
-    return mccolorer->select_bracket_content(edit);
+    return mccolorer->select_bracket_content();
 }
+
+int colorer_get_default_color(WEdit * edit)
+{
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return -1;
+    }
+    return mccolorer->get_default_color();
+}
+
 
 
 }
