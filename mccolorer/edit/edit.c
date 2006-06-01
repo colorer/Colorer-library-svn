@@ -1,14 +1,14 @@
 /* editor low level data handling and cursor fundamentals.
 
    Copyright (C) 1996, 1997 the Free Software Foundation
-   
+
    Authors: 1996, 1997 Paul Sheer
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,6 +21,19 @@
 */
 
 #include <config.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "editlock.h"
 #include "edit-widget.h"
@@ -28,10 +41,12 @@
 #ifdef USE_COLORER
 #include "syntax-colorer.h"
 #endif
+#include "usermap.h"
 
 #include "../src/cmd.h"		/* view_other_cmd() */
 #include "../src/user.h"	/* user_menu_cmd() */
 #include "../src/wtools.h"	/* query_dialog() */
+
 
 /*
    what editor are we going to emulate? one of EDIT_KEY_EMULATION_NORMAL
@@ -49,7 +64,6 @@ int option_backspace_through_tabs = 0;
 int option_fake_half_tabs = 1;
 int option_save_mode = EDIT_QUICK_SAVE;
 int option_save_position = 1;
-int option_backup_ext_int = -1;
 int option_max_undo = 32768;
 
 int option_edit_right_extreme = 0;
@@ -58,14 +72,14 @@ int option_edit_top_extreme = 0;
 int option_edit_bottom_extreme = 0;
 
 const char *option_whole_chars_search = "0123456789abcdefghijklmnopqrstuvwxyz_";
-char *option_backup_ext = "~";
+char *option_backup_ext = NULL;
 
-/*
+/*-
  *
  * here's a quick sketch of the layout: (don't run this through indent.)
- * 
+ *
  * (b1 is buffers1 and b2 is buffers2)
- * 
+ *
  *                                       |
  * \0\0\0\0\0m e _ f i l e . \nf i n . \n|T h i s _ i s _ s o\0\0\0\0\0\0\0\0\0
  * ______________________________________|______________________________________
@@ -82,19 +96,15 @@ char *option_backup_ext = "~";
  *                              file end|||file beginning
  *                                       |
  *                                       |
- * 
+ *
  *           _
  * This_is_some_file
  * fin.
- *
- *
  */
 
 
 static void edit_move_to_prev_col (WEdit *edit, long p);
 static void user_menu (WEdit *edit);
-
-#ifndef NO_INLINE_GETBYTE
 
 int edit_get_byte (WEdit * edit, long byte_index)
 {
@@ -109,9 +119,6 @@ int edit_get_byte (WEdit * edit, long byte_index)
 	return edit->buffers1[byte_index >> S_EDIT_BUF_SIZE][byte_index & M_EDIT_BUF_SIZE];
     }
 }
-
-#endif
-
 
 /*
  * Initialize the buffers for an empty files.
@@ -145,12 +152,10 @@ edit_load_file_fast (WEdit *edit, const char *filename)
     buf2 = edit->curs2 >> S_EDIT_BUF_SIZE;
 
     if ((file = mc_open (filename, O_RDONLY | O_BINARY)) == -1) {
-	/* The file-name is printed after the ':' */
-	edit_error_dialog (_("Error"),
-			   get_sys_error (catstrs
-					  (_
-					   (" Cannot open file for reading: "),
-					   filename, " ", (char *) NULL)));
+	GString *errmsg = g_string_new(NULL);
+	g_string_sprintf(errmsg, _(" Cannot open %s for reading "), filename);
+	edit_error_dialog (_("Error"), get_sys_error (errmsg->str));
+	g_string_free (errmsg, TRUE);
 	return 1;
     }
 
@@ -180,16 +185,9 @@ edit_load_file_fast (WEdit *edit, const char *filename)
 static const struct edit_filters {
     const char *read, *write, *extension;
 } all_filters[] = {
-
-    {
-	"bzip2 -cd %s 2>&1", "bzip2 > %s", ".bz2"
-    },
-    {
-	"gzip -cd %s 2>&1", "gzip > %s", ".gz"
-    },
-    {
-	"gzip -cd %s 2>&1", "gzip > %s", ".Z"
-    }
+    { "bzip2 -cd %s 2>&1",  "bzip2 > %s",  ".bz2" },
+    { "gzip -cd %s 2>&1",   "gzip > %s",   ".gz"  },
+    { "gzip -cd %s 2>&1",   "gzip > %s",   ".Z"   }
 };
 
 /* Return index of the filter or -1 is there is no appropriate filter */
@@ -276,19 +274,18 @@ edit_insert_file (WEdit *edit, const char *filename)
 	    edit_insert_stream (edit, f);
 	    edit_cursor_move (edit, current - edit->curs1);
 	    if (pclose (f) > 0) {
-		edit_error_dialog (_("Error"),
-				   catstrs (_
-					    (" Error reading from pipe: "),
-					    p, " ", (char *) NULL));
+	        GString *errmsg = g_string_new (NULL);
+		g_string_sprintf (errmsg, _(" Error reading from pipe: %s "), p);
+		edit_error_dialog (_("Error"), errmsg->str);
+		g_string_free (errmsg, TRUE);
 		g_free (p);
 		return 0;
 	    }
 	} else {
-	    edit_error_dialog (_("Error"),
-			       get_sys_error (catstrs
-					      (_
-					       (" Cannot open pipe for reading: "),
-					       p, " ", (char *) NULL)));
+	    GString *errmsg = g_string_new (NULL);
+	    g_string_sprintf (errmsg, _(" Cannot open pipe for reading: %s "), p);
+	    edit_error_dialog (_("Error"), errmsg->str);
+	    g_string_free (errmsg, TRUE);
 	    g_free (p);
 	    return 0;
 	}
@@ -318,6 +315,7 @@ static int
 check_file_access (WEdit *edit, const char *filename, struct stat *st)
 {
     int file;
+    GString *errmsg = (GString *) 0;
 
     /* Try opening an existing file */
     file = mc_open (filename, O_NONBLOCK | O_RDONLY | O_BINARY, 0666);
@@ -332,12 +330,9 @@ check_file_access (WEdit *edit, const char *filename, struct stat *st)
 		     O_NONBLOCK | O_RDONLY | O_BINARY | O_CREAT | O_EXCL,
 		     0666);
 	if (file < 0) {
-	    edit_error_dialog (_("Error"),
-			       get_sys_error (catstrs
-					      (_
-					       (" Cannot open file for reading: "),
-					       filename, " ", (char *) NULL)));
-	    return 1;
+	    g_string_sprintf (errmsg = g_string_new (NULL),
+		_(" Cannot open %s for reading "), filename);
+	    goto cleanup;
 	} else {
 	    /* New file, delete it if it's not modified or saved */
 	    edit->delete_file = 1;
@@ -346,22 +341,16 @@ check_file_access (WEdit *edit, const char *filename, struct stat *st)
 
     /* Check what we have opened */
     if (mc_fstat (file, st) < 0) {
-	mc_close (file);
-	edit_error_dialog (_("Error"),
-			   get_sys_error (catstrs
-					  (_
-					   (" Cannot get size/permissions info for file: "),
-					   filename, " ", (char *) NULL)));
-	return 1;
+	g_string_sprintf (errmsg = g_string_new (NULL),
+	    _(" Cannot get size/permissions for %s "), filename);
+	goto cleanup;
     }
 
     /* We want to open regular files only */
     if (!S_ISREG (st->st_mode)) {
-	mc_close (file);
-	edit_error_dialog (_("Error"),
-			   catstrs (_(" Not an ordinary file: "), filename,
-				    " ", (char *) NULL));
-	return 1;
+	g_string_sprintf (errmsg = g_string_new (NULL),
+	    _(" %s is not a regular file "), filename);
+	goto cleanup;
     }
 
     /*
@@ -373,14 +362,18 @@ check_file_access (WEdit *edit, const char *filename, struct stat *st)
     }
 
     if (st->st_size >= SIZE_LIMIT) {
-	mc_close (file);
-	edit_error_dialog (_("Error"),
-			   catstrs (_(" File is too large: "), filename,
-				    (char *) NULL));
-	return 1;
+        g_string_sprintf (errmsg = g_string_new (NULL),
+	    _(" File %s is too large "), filename);
+	goto cleanup;
     }
 
-    mc_close (file);
+cleanup:
+    (void) mc_close (file);
+    if (errmsg) {
+	edit_error_dialog (_("Error"), errmsg->str);
+	g_string_free (errmsg, TRUE);
+	return 1;
+    }
     return 0;
 }
 
@@ -502,10 +495,11 @@ edit_init (WEdit *edit, int lines, int columns, const char *filename,
 	   long line)
 {
     int to_free = 0;
+    option_auto_syntax = 1; /* Resetting to auto on every invokation */
 
     if (!edit) {
 #ifdef ENABLE_NLS
-	/* 
+	/*
 	 * Expand option_whole_chars_search by national letters using
 	 * current locale
 	 */
@@ -569,6 +563,8 @@ edit_init (WEdit *edit, int lines, int columns, const char *filename,
 	edit_move_to_line (edit, line - 1);
     }
 
+    edit_load_user_map(edit);
+
     return edit;
 }
 
@@ -584,7 +580,7 @@ edit_clean (WEdit *edit)
     /* a stale lock, remove it */
     if (edit->locked)
 	edit->locked = edit_unlock_file (edit->filename);
-    
+
     /* save cursor position */
     if (option_save_position)
 	edit_save_position (edit);
@@ -821,7 +817,7 @@ static inline void edit_modification (WEdit * edit)
 {
     edit->caches_valid = 0;
     edit->screen_modified = 1;
-    
+
     /* raise lock when file modified */
     if (!edit->modified && !edit->delete_file)
 	edit->locked = edit_lock_file (edit->filename);
@@ -856,7 +852,7 @@ edit_insert (WEdit *edit, int c)
     if (edit->loading_done) {
 	edit_modification (edit);
     }
-    
+
     /* now we must update some info on the file and check if a redraw is required */
     if (c == '\n') {
 	if (edit->book_mark)
@@ -1470,7 +1466,7 @@ int line_is_blank (WEdit * edit, long line)
     return is_blank (edit, edit_find_line (edit, line));
 }
 
-/* moves up until a blank line is reached, or until just 
+/* moves up until a blank line is reached, or until just
    before a non-blank line is reached */
 static void edit_move_up_paragraph (WEdit * edit, int scroll)
 {
@@ -1946,17 +1942,20 @@ void edit_insert_indent (WEdit * edit, int indent)
 }
 
 static void
-edit_auto_indent (WEdit * edit, int extra, int no_advance)
+edit_auto_indent (WEdit * edit)
 {
     long p;
-    int indent;
+    char c;
     p = edit->curs1;
-    while (isspace (edit_get_byte (edit, p - 1)) && p > 0)	/* move back/up to a line with text */
-	p--;
-    indent = edit_indent_width (edit, edit_bol (edit, p));
-    if (edit->curs_col < indent && no_advance)
-	indent = edit->curs_col;
-    edit_insert_indent (edit, indent + (option_fake_half_tabs ? HALF_TAB_SIZE : TAB_SIZE) * space_width * extra);
+    /* use the previous line as a template */
+    p = edit_move_backward (edit, p, 1);
+    /* copy the leading whitespace of the line */
+    for (;;) {	/* no range check - the line _is_ \n-terminated */
+	c = edit_get_byte (edit, p++);
+	if (c != ' ' && c != '\t')
+	    break;
+	edit_insert (edit, c);
+    }
 }
 
 static void edit_double_newline (WEdit * edit)
@@ -1977,7 +1976,7 @@ static void edit_tab_cmd (WEdit * edit)
     if (option_fake_half_tabs) {
 	if (is_in_indent (edit)) {
 	    /*insert a half tab (usually four spaces) unless there is a
-	       half tab already behind, then delete it and insert a 
+	       half tab already behind, then delete it and insert a
 	       full tab. */
 	    if (!option_fill_tabs_with_spaces && right_of_four_spaces (edit)) {
 		for (i = 1; i <= HALF_TAB_SIZE; i++)
@@ -2186,7 +2185,7 @@ void edit_execute_key_command (WEdit *edit, int command, int char_for_insertion)
 	edit->macro[edit->macro_i++].ch = char_for_insertion;
     }
 /* record the beginning of a set of editing actions initiated by a key press */
-    if (command != CK_Undo)
+    if (command != CK_Undo && command != CK_Ext_Mode)
 	edit_push_key_press (edit);
 
     edit_execute_cmd (edit, command, char_for_insertion);
@@ -2325,12 +2324,12 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
 	if (option_auto_para_formatting) {
 	    edit_double_newline (edit);
 	    if (option_return_does_auto_indent)
-		edit_auto_indent (edit, 0, 1);
+		edit_auto_indent (edit);
 	    format_paragraph (edit, 0);
 	} else {
 	    edit_insert (edit, '\n');
 	    if (option_return_does_auto_indent) {
-		edit_auto_indent (edit, 0, 1);
+		edit_auto_indent (edit);
 	    }
 	}
 	break;
@@ -2546,6 +2545,12 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
 	edit_insert_file_cmd (edit);
 	break;
 
+    case CK_Toggle_Syntax:
+	if ((option_syntax_highlighting ^= 1) == 1)
+	    edit_load_syntax (edit, NULL, option_syntax_type);
+	edit->force |= REDRAW_PAGE;
+	break;
+
     case CK_Find:
 	edit_search_cmd (edit, 0);
 	break;
@@ -2628,6 +2633,21 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
 	break;
     case CK_Shell:
 	view_other_cmd ();
+	break;
+    case CK_Select_Codepage:
+	edit_select_codepage_cmd (edit);
+	break;
+    case CK_Insert_Literal:
+	edit_insert_literal_cmd (edit);
+	break;
+    case CK_Execute_Macro:
+	edit_execute_macro_cmd (edit);
+	break;
+    case CK_Begin_End_Macro:
+	edit_begin_end_macro_cmd (edit);
+	break;
+    case CK_Ext_Mode:
+	edit->extmod = 1;
 	break;
     default:
 	break;
@@ -2724,7 +2744,7 @@ user_menu (WEdit * edit)
     int nomark;
     struct stat status;
     long start_mark, end_mark;
-    char *block_file = catstrs (home_dir, BLOCK_FILE, (char *) NULL);
+    char *block_file = concat_dir_and_file (home_dir, BLOCK_FILE);
     int rc = 0;
 
     nomark = eval_marks (edit, &start_mark, &end_mark);
@@ -2736,7 +2756,7 @@ user_menu (WEdit * edit)
 
     if (mc_stat (block_file, &status) != 0 || !status.st_size) {
 	/* no block messages */
-	return;
+	goto cleanup;
     }
 
     if (!nomark) {
@@ -2755,5 +2775,7 @@ user_menu (WEdit * edit)
 
     edit_refresh_cmd (edit);
     edit->force |= REDRAW_COMPLETELY;
-    return;
+
+cleanup:
+    g_free (block_file);
 }

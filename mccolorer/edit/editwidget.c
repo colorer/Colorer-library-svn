@@ -21,11 +21,27 @@
  */
 
 #include <config.h>
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "edit-widget.h"
 
 #include "../src/tty.h"		/* LINES */
-#include "../src/widget.h"	/* redraw_labels() */
+#include "../src/widget.h"	/* buttonbar_redraw() */
 #include "../src/menu.h"	/* menubar_new() */
 #include "../src/key.h"		/* is_idle() */
 
@@ -34,7 +50,7 @@ struct WMenu *edit_menubar;
 
 int column_highlighting = 0;
 
-static cb_ret_t edit_callback (WEdit *edit, widget_msg_t msg, int parm);
+static cb_ret_t edit_callback (Widget *, widget_msg_t msg, int parm);
 
 static int
 edit_event (WEdit * edit, Gpm_Event * event, int *result)
@@ -127,11 +143,11 @@ edit_adjust_size (Dlg_head *h)
     WEdit *edit;
     WButtonBar *edit_bar;
 
-    edit = (WEdit *) find_widget_type (h, (callback_fn) edit_callback);
+    edit = (WEdit *) find_widget_type (h, edit_callback);
     edit_bar = find_buttonbar (h);
 
     widget_set_size (&edit->widget, 0, 0, LINES - 1, COLS);
-    widget_set_size (&edit_bar->widget, LINES - 1, 0, 1, COLS);
+    widget_set_size ((Widget *) edit_bar, LINES - 1, 0, 1, COLS);
     widget_set_size (&edit_menubar->widget, 0, 0, 1, COLS);
 
 #ifdef RESIZABLE_MENUBAR
@@ -151,7 +167,7 @@ edit_dialog_callback (Dlg_head *h, dlg_msg_t msg, int parm)
 	return MSG_HANDLED;
 
     case DLG_VALIDATE:
-	edit = (WEdit *) find_widget_type (h, (callback_fn) edit_callback);
+	edit = (WEdit *) find_widget_type (h, edit_callback);
 	if (!edit_ok_to_exit (edit)) {
 	    h->running = 1;
 	}
@@ -169,15 +185,10 @@ edit_file (const char *_file, int line)
     Dlg_head *edit_dlg;
     WButtonBar *edit_bar;
 
-    if (option_backup_ext_int != -1) {
-	option_backup_ext = g_malloc (sizeof (int) + 1);
-	option_backup_ext[sizeof (int)] = '\0';
-	memcpy (option_backup_ext, (char *) &option_backup_ext_int,
-		sizeof (int));
-    }
     if (!made_directory) {
-	mkdir (catstrs (home_dir, EDIT_DIR, (char *) NULL), 0700);
-	made_directory = 1;
+	char *dir = concat_dir_and_file (home_dir, EDIT_DIR);
+	made_directory = (mkdir (dir, 0700) != -1 || errno == EEXIST);
+	g_free (dir);
     }
 
     if (!(wedit = edit_init (NULL, LINES - 2, COLS, _file, line))) {
@@ -190,22 +201,14 @@ edit_file (const char *_file, int line)
 		    "[Internal File Editor]", NULL, DLG_WANT_TAB);
 
     init_widget (&(wedit->widget), 0, 0, LINES - 1, COLS,
-		 (callback_fn) edit_callback,
-		 (mouse_h) edit_mouse_event);
+		 edit_callback,
+		 edit_mouse_event);
 
     widget_want_cursor (wedit->widget, 1);
 
     edit_bar = buttonbar_new (1);
 
-    switch (edit_key_emulation) {
-    case EDIT_KEY_EMULATION_NORMAL:
-	edit_init_menu_normal ();	/* editmenu.c */
-	break;
-    case EDIT_KEY_EMULATION_EMACS:
-	edit_init_menu_emacs ();	/* editmenu.c */
-	break;
-    }
-    edit_menubar = menubar_new (0, 0, COLS, EditMenuBar, N_menus);
+    edit_menubar = edit_init_menu ();
 
     add_widget (edit_dlg, edit_bar);
     add_widget (edit_dlg, wedit);
@@ -213,7 +216,7 @@ edit_file (const char *_file, int line)
 
     run_dlg (edit_dlg);
 
-    edit_done_menu ();		/* editmenu.c */
+    edit_done_menu (edit_menubar);		/* editmenu.c */
 
     destroy_dlg (edit_dlg);
 
@@ -223,7 +226,9 @@ edit_file (const char *_file, int line)
 static void edit_my_define (Dlg_head * h, int idx, const char *text,
 			    void (*fn) (WEdit *), WEdit * edit)
 {
-    define_label_data (h, idx, text, (buttonbarfn) fn, edit);
+    text = edit->labels[idx - 1]? edit->labels[idx - 1] : text;
+    /* function-cast ok */
+    buttonbar_set_label_data (h, idx, text, (buttonbarfn) fn, edit);
 }
 
 
@@ -295,7 +300,7 @@ edit_labels (WEdit *edit)
     edit_my_define (h, 9, _("PullDn"), edit_menu_cmd, edit);
     edit_my_define (h, 10, _("Quit"), cmd_F10, edit);
 
-    redraw_labels (h);
+    buttonbar_redraw (h);
 }
 
 void edit_update_screen (WEdit * e)
@@ -317,8 +322,10 @@ void edit_update_screen (WEdit * e)
 }
 
 static cb_ret_t
-edit_callback (WEdit *e, widget_msg_t msg, int parm)
+edit_callback (Widget *w, widget_msg_t msg, int parm)
 {
+    WEdit *e = (WEdit *) w;
+
     switch (msg) {
     case WIDGET_INIT:
 	e->force |= REDRAW_COMPLETELY;
@@ -339,15 +346,17 @@ edit_callback (WEdit *e, widget_msg_t msg, int parm)
 	{
 	    int cmd, ch;
 
-	    /* first check alt-f, alt-e, alt-s, etc for drop menus */
-	    if (edit_drop_hotkey_menu (e, parm))
+	    /* The user may override the access-keys for the menu bar. */
+	    if (edit_translate_key (e, parm, &cmd, &ch)) {
+		edit_execute_key_command (e, cmd, ch);
+		edit_update_screen (e);
 		return MSG_HANDLED;
-	    if (!edit_translate_key (e, parm, &cmd, &ch))
+	    } else  if (edit_drop_hotkey_menu (e, parm)) {
+		return MSG_HANDLED;
+	    } else {
 		return MSG_NOT_HANDLED;
-	    edit_execute_key_command (e, cmd, ch);
-	    edit_update_screen (e);
+	    }
 	}
-	return MSG_HANDLED;
 
     case WIDGET_CURSOR:
 	widget_move (&e->widget, e->curs_row + EDIT_TEXT_VERTICAL_OFFSET,

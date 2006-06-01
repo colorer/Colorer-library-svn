@@ -1,7 +1,303 @@
+2006-05-04  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* choosesyntax.c (pstrcmp): Fix the function declaration.
+
+2006-04-03  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* syntax.c (edit_read_syntax_rules): Zero edit->rules on allocation to
+	avoid crash after attempting to load a non existent syntax file.
+
+2006-03-21  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* choosesyntax.c: Sort syntax list.
+
+2006-03-21  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* choosesyntax.c: GPL v2 only.
+
+2006-03-17  Oswald Buddenhagen  <ossi@kde.org>
+
+	* edit-widget.h (struct WEdit): Add new field.
+	* editcmd.c (edit_save_file): Prompt whether to detach a hardlinked
+	file if in "Quick save" mode.
+	Return -1 to indicated that the user requested to cancel the
+	operation.
+	(edit_save_as_cmd): Adjust the code to handle the new return
+	value of edit_save_file().
+	(edit_save_cmd): Likewise.
+
+2006-03-17  Oswald Buddenhagen <ossi@kde.org>
+
+	* editcmd.c (edit_save_as_cmd): If saving of the file fails
+	remove only the _save_ lock. 
+
+2006-03-15  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* editlock.c: Fix for savannah bug #13673.
+	(lock_build_symlink_name): New function.
+	(edit_lock_file): Use lock_build_symlink_name().
+	(edit_unlock_file): Likewise.
+
+2006-03-15  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* editcmd.c (edit_new_cmd): Remove redundant call to
+	`edit_unlock_file()'.
+	(edit_ok_to_exit): Likewise.
+
+2006-02-10  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.c (user_menu): There is no need to prefix the filename
+	with PATH_SEP when calling concat_dir_and_file().
+
+2006-02-03  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Removed the leading PATH_SEP_STR from EDIT_DIR, as the
+	latter is not an absolute directory.
+	* edit.c: Adjusted the users of EDIT_DIR.
+	* editcmd.c: Likewise.
+	* syntax.c: Likewise.
+	* src/user.c: Likewise.
+
+2006-02-02  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* edit.c (edit_execute_cmd): Reload syntax on toggle to on.
+
+2006-02-01  Andy Shevchenko  <andy@pylesos.interdon.net>
+
+	* edit.c, editcmddef.h, editkeys.c: Add Ctrl-S to toggle syntax
+	highlighting. Patch from unnamed MPlayer developer.
+
+2006-01-30  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* editcmd.c: Do not set the field `histname' of `QuickWidget'
+	unless the widget is of type `quick_input'.
+
+2006-01-27  Pavel Tsekov  <ptsekov@gmx.net>
+
+	* editcmd.c (edit_block_copy_cmd): Allow a block of selected
+	columns	as created by Shift + F3 to be copied anywhere in
+	the editor area.
+
+2006-01-26  Oswald Buddenhagen <ossi@kde.org>
+
+	* edit.c (edit_auto_indent): Remove redundant parameters.
+	Change the indentation strategy to copy whitespace
+	from the previous line instead of filling up with allegedly
+	equivalent whitespace depending on the tab setting.
+	(edit_execute_cmd): Accomodate change of parameters to
+	edit_auto_indent().
+
+2005-11-22  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* editcmd.c (edit_replace_dialog): Alt-p is in use for the
+	previous entry. Use Alt-m on pro&Mpt.
+
+2005-11-10  Pavel Roskin  <proski@gnu.org>
+
+	* choosesyntax.c: Make undeclared functions static.
+	* editmenu.c: Likewise.
+	* usermap.c: Likewise.
+
+2005-10-04  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* editcmd.c (edit_replace_dialog): Replace duplicate hotkey.
+
+2005-09-07  Roland Illig  <roland.illig@gmx.de>
+
+	* editmenu.c: Added a "Save setup..." entry. There had not been
+	the possibility of saving editor options except calling the
+	"Save setup..." function from within the file manager.
+
+	* edit.c, edit.h, editcmd.c, editwidget.c: Replaced the
+	editor_option_backup_ext_int hack with a string configuration
+	variable, which allows the backup extension to have more than
+	just four characters.
+
+2005-09-05  Roland Illig  <roland.illig@gmx.de>
+
+	* editcmd.c: Fixed some of the gcc warnings.
+	* editdraw.c: Moved printwstr() from ../src/slint.c to here.
+
+2005-08-19  David Martin  <dmartina@excite.com>
+
+	* choosesyntax.c (exec_edit_syntax_dialog): Not just mark for
+	l10n, but do translate dialog strings.
+
+2005-08-15  Roland Illig  <roland.illig@gmx.de>
+
+	* edit-widget.h: Changed bit fields of length 1 from signed to
+	unsigned.
+	* editcmd.c (edit_completion_dialog): Code cleanup.
+	* editdraw.c (render_edit_text): Removed unused variables.
+	* syntax.c (edit_read_syntax_file): Likewise.
+
+2005-08-10  Pavel Roskin  <proski@gnu.org>
+
+	* choosesyntax.c (edit_syntax_dialog): Add parentheses as
+	suggested by gcc.
+	* editkeys.c: Use braces in the keymap initializers.
+
+2005-07-27  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* choosesyntax.c: Add option to reload current syntax.
+
+2005-07-24  Leonard den Ottolander  <leonard den ottolander nl>
+
+	* choosesyntax.c: Create file. Menu option to override syntax
+	highlighting.
+	* Makefile.am: Add choosesyntax.c..
+	* edit.c (edit_init): Set option_auto_syntax to 1 on every invokation
+	of the 	editor.
+	* edit.h: Pass char*** to edit_load_syntax(). Add parameters for
+	syntax dialog and override.
+	* editmenu.c (menu_options): Add menu option to override syntax
+	highlighting.
+	* editoptions.c (edit_options_dialog): Pass option_syntax_type to
+	edit_load_syntax().
+	* syntax.c (edit_read_syntax_file): Dynamically allocate and fill
+	syntax list pnames.
+	* syntax.c (edit_load_syntax): Use char*** for syntax list.
+
+2005-05-21  Pavel Roskin  <proski@gnu.org>
+
+	* Makefile.am: Add usermap.h to the sources.
+
+2005-07-20  Vitja Makarov  <vitja.makarov@gmail.com>
+
+	* usermap.c: Allow user-defined keyboard bindings for mcedit.
+	* usermap.h: Likewise.
+	* Makefile.am: Likewise.
+	* editcmd.c: Define new editor commands which had been coded
+	inline before.
+	This change also affects some other files.
+
+2005-07-20  Roland Illig  <roland.illig@gmx.de>
+
+	* edit-widget.h: Invented a new type edit_key_map_type instead of
+	using long for.
+	* editkeys.c: Using that type.
+
+2005-07-18  Roland Illig  <roland.illig@gmx.de>
+
+	* editkeys.c: When typing literal characters after C-q, allow
+	the alphabetic characters to input ASCII control characters.
+
+2005-07-06  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Added missing #include <stdio.h>.
+
+2005-06-14  Roland Illig  <roland.illig@gmx.de>
+
+	* editwidget.c: Don't dereference WButtonBar.
+
+2005-05-23  Roland Illig  <roland.illig@gmx.de>
+
+	* editwidget.c: Removed casts on function pointer types.
+
+2005-05-20  Pavel Roskin  <proski@gnu.org>
+
+	* editwidget.c (edit_file): Move menu initialization ...
+	* editmenu.c (edit_init_menu): ... here.  Allocate menu
+	dynamically.
+	(edit_done_menu): Take Wmenu argument rather than Menu.  Free
+	menu.
+	(edit_reload_menu): New function, reload the menu.
+	(edit_options_dialog): Reload the menu if key emulation has
+	changed.
+
+	* edit.h: Eliminate global EditMenuBar.  Fix all dependencies.
+
+	* edit.h: Eliminate edit_message_dialog macro - it's used
+	inconsistently.  Fix all callers to use query_dialog().
+
+2005-05-10  Pavel Roskin  <proski@gnu.org>
+
+	* edit-widget.h: Revert signedness fixes.  We need unsigned char
+	for character classification.
+	* editcmd.c: Likewise.  Use casts to suppress warnings instead.
+	Thanks to Roland Illig <roland.illig@gmx.de>
+
+	* *.c: Remove duplicate includes.
+
+2005-05-03  Pavel Roskin  <proski@gnu.org>
+
+	* edit-widget.h: Use char instead of unsigned char to fix
+	warnings from gcc 4.0.
+	* editcmd.c: Likewise.
+
+	* edit.h: Use D_ERROR for edit_error_dialog, D_NORMAL for query
+	dialogs.  Remove unused edit_query_dialog4.
+
 2005-04-27  Leonard den Ottolander  <leonard * den ottolander nl>
 
 	* editdraw.c (status_string): Added casts on 2 parameters to
 	g_snprintf.
+
+2005-03-17  Pavel Roskin  <proski@gnu.org>
+
+	* editcmd.c (edit_replace_cmd): Restore correct behavior of
+	Shift-F4.
+
+2005-02-22  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Removed unnecessary #include directives ...
+	* *.c: ... and added them here.
+
+2005-02-08  Roland Illig  <roland.illig@gmx.de>
+
+	* editdraw.c: Renamed redraw_labels to buttonbar_redraw.
+	* editwidget.c: Likewise. Renamed define_label_data to
+	buttonbar_set_label_data.
+
+2005-02-08  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Reformatted #definitions.
+	* editcmd.c: Explicitly declared unused variables to make gcc
+	quiet.
+
+2005-02-07  Roland Illig  <roland.illig@gmx.de>
+
+	* *.c: Removed trailing whitespace.
+	* *.c: Removed unused parameters for static functions. Marked
+	unused parameters for global functions. Removed redundant
+	comments.
+
+2005-02-07  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Removed catstrs, as it is only used in editcmd.c.
+	* editcmd.c (catstrs): Changed declaration to be static.
+	* editcmd.c: Added const qualifiers.
+	* syntax.c: Don't use catstrs anymore.
+	* edit.c (user_menu): Likewise.
+	* editwidget.c: Likewise.
+
+2005-02-07  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.c: Improved message formatting.
+
+2005-01-30  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Removed NO_INLINE_GETBYTE conditional. The name was
+	misleading, as it really meant INLINE_GETBYTE. Furthermore,
+	it has not been working since the split of edit.h into edit-widget.h.
+	* edit.c: Likewise.
+
+2005-01-26  Roland Illig  <roland.illig@gmx.de>
+
+	* editdraw.c (edit_status): Fixed drawing bug with ncurses.
+
+2004-12-03  Roland Illig  <roland.illig@gmx.de>
+
+	* edit.h: Renamed multiple inclusion guards that started with a
+	double underscore. Added #includes for dependent files.
+	* editcmddef.h: Likewise.
+	* editlock.h: Likewise.
+	* edit-widget.h: Likewise.
+
+2004-12-02  Roland Illig  <roland.illig@gmx.de>
+
+	* editcmd.c (edit_replace_cmd): Separated input and output arguments.
+	* editcmd.c (edit_replace_dialog): Code cleanup.
 
 2004-12-02  Pavel S. Shirshov  <me@pavelsh.pp.ru>
 

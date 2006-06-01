@@ -20,8 +20,21 @@
    02110-1301, USA.
  */
 
-
 #include <config.h>
+
+#include <ctype.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "edit-widget.h"
 
@@ -32,6 +45,8 @@
 
 static inline struct _book_mark *double_marks (WEdit * edit, struct _book_mark *p)
 {
+    (void) edit;
+
     if (p->next)
 	while (p->next->line == p->line)
 	    p = p->next;

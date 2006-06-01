@@ -23,6 +23,22 @@
 
 #include <config.h>
 #include <signal.h>		/* kill() */
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "editlock.h"
 
@@ -50,21 +66,40 @@ struct lock_s {
 
 /* Build user@host.domain.pid string (need to be freed) */
 static char *
-lock_build_name (const char *fname)
+lock_build_name (void)
 {
     char host[BUF_SIZE];
     const char *user;
 
-    if (!
-	((user = getpwuid (getuid ())->pw_name) || (user = getenv ("USER"))
-	 || (user = getenv ("USERNAME")) || (user = getenv ("LOGNAME"))))
-	user = "";
+    user = getpwuid (getuid ())->pw_name;
+    if (!user) user = getenv ("USER");
+    if (!user) user = getenv ("USERNAME");
+    if (!user) user = getenv ("LOGNAME");
+    if (!user) user = "";
 
     /* TODO: Use FQDN, no clean interface, so requires lot of code */
     if (gethostname (host, BUF_SIZE - 1) == -1)
 	*host = '\0';
 
     return g_strdup_printf ("%s@%s.%d", user, host, (int) getpid ());
+}
+
+static char *
+lock_build_symlink_name (const char *fname)
+{
+    char *fname_copy, *symlink_name;
+    char absolute_fname[PATH_MAX];
+
+    if (mc_realpath (fname, absolute_fname) == NULL)
+	return NULL;
+
+    fname = x_basename (absolute_fname);
+    fname_copy = g_strdup (fname);
+    absolute_fname[fname - absolute_fname] = '\0';
+    symlink_name = g_strconcat (absolute_fname, ".#", fname_copy, (char *) NULL);
+    g_free (fname_copy);
+
+    return symlink_name;
 }
 
 /* Extract pid from user@host.domain.pid string */
@@ -114,7 +149,7 @@ lock_get_info (const char *lockfname)
 
 
 /* Tries to raise file lock
-   Returns 1 on success,  0 on failure, -1 if abort 
+   Returns 1 on success,  0 on failure, -1 if abort
    Warning: Might do screen refresh and lose edit->force */
 int
 edit_lock_file (const char *fname)
@@ -132,7 +167,9 @@ edit_lock_file (const char *fname)
 	return 0;
 
     /* Check if already locked */
-    lockfname = g_strconcat (".#", fname, (char *) NULL);
+    lockfname = lock_build_symlink_name (fname);
+    if (lockfname == NULL)
+	return 0;
     if (lstat (lockfname, &statbuf) == 0) {
 	lock = lock_get_info (lockfname);
 	if (!lock) {
@@ -147,7 +184,7 @@ edit_lock_file (const char *fname)
 	    msg =
 		g_strdup_printf (_
 				 ("File \"%s\" is already being edited\n"
-				  "User: %s\nProcess ID: %d"), fname,
+				  "User: %s\nProcess ID: %d"), x_basename (lockfname) + 2,
 				 lockinfo->who, (int) lockinfo->pid);
 	    /* TODO: Implement "Abort" - needs to rewind undo stack */
 	    switch (edit_query_dialog2
@@ -167,7 +204,7 @@ edit_lock_file (const char *fname)
     }
 
     /* Create lock symlink */
-    newlock = lock_build_name (fname);
+    newlock = lock_build_name ();
     if (symlink (newlock, lockfname) == -1) {
 	g_free (lockfname);
 	g_free (newlock);
@@ -179,7 +216,7 @@ edit_lock_file (const char *fname)
     return 1;
 }
 
-/* Lowers file lock if possible 
+/* Lowers file lock if possible
    Always returns 0 to make 'lock = edit_unlock_file (f)' possible */
 int
 edit_unlock_file (const char *fname)
@@ -191,7 +228,9 @@ edit_unlock_file (const char *fname)
     if (!fname || !*fname)
 	return 0;
 
-    lockfname = g_strconcat (".#", fname, (char *) NULL);
+    lockfname = lock_build_symlink_name (fname);
+    if (lockfname == NULL)
+	return 0;
 
     /* Check if lock exists */
     if (lstat (lockfname, &statbuf) == -1) {

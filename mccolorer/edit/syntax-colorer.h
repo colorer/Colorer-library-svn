@@ -4,7 +4,7 @@ extern "C" {
 #endif
 
 
-void colorer_load_syntax (WEdit * edit, char **names, const char *type);
+void colorer_load_syntax (WEdit * edit, char ***names, const char *type);
 
 void colorer_free_syntax_rules (WEdit * edit);
 

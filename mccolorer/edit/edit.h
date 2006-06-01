@@ -20,35 +20,22 @@
    02110-1301, USA.
 */
 
-#ifndef __EDIT_H
-#define __EDIT_H
+#ifndef MC_EDIT_H
+#define MC_EDIT_H
 
 #include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#    include <unistd.h>
-#endif
-#include <string.h>
-#include <ctype.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <errno.h>
-
-#include <stdlib.h>
-
-#include "../src/global.h"
 
 #define N_menus 5
 
-#define SEARCH_DIALOG_OPTION_NO_SCANF	1
-#define SEARCH_DIALOG_OPTION_NO_REGEX	2
-#define SEARCH_DIALOG_OPTION_NO_CASE	4
-#define SEARCH_DIALOG_OPTION_BACKWARDS	8
-#define SEARCH_DIALOG_OPTION_BOOKMARK	16
+#define SEARCH_DIALOG_OPTION_NO_SCANF	(1 << 0)
+#define SEARCH_DIALOG_OPTION_NO_REGEX	(1 << 1)
+#define SEARCH_DIALOG_OPTION_NO_CASE	(1 << 2)
+#define SEARCH_DIALOG_OPTION_BACKWARDS	(1 << 3)
+#define SEARCH_DIALOG_OPTION_BOOKMARK	(1 << 4)
 
 #define EDIT_KEY_EMULATION_NORMAL 0
 #define EDIT_KEY_EMULATION_EMACS  1
+#define EDIT_KEY_EMULATION_USER   2
 
 #define REDRAW_LINE          (1 << 0)
 #define REDRAW_LINE_ABOVE    (1 << 1)
@@ -60,8 +47,8 @@
 #define REDRAW_CHAR_ONLY     (1 << 7)
 #define REDRAW_COMPLETELY    (1 << 8)
 
-#define EDIT_TEXT_HORIZONTAL_OFFSET 0
-#define EDIT_TEXT_VERTICAL_OFFSET 1
+#define EDIT_TEXT_HORIZONTAL_OFFSET	0
+#define EDIT_TEXT_VERTICAL_OFFSET	1
 
 #define EDIT_RIGHT_EXTREME option_edit_right_extreme
 #define EDIT_LEFT_EXTREME option_edit_left_extreme
@@ -99,18 +86,18 @@
 #define START_STACK_SIZE 32
 
 /* Some codes that may be pushed onto or returned from the undo stack */
-#define CURS_LEFT 601
-#define CURS_RIGHT 602
-#define DELCHAR 603
-#define BACKSPACE 604
-#define STACK_BOTTOM 605
-#define CURS_LEFT_LOTS 606
-#define CURS_RIGHT_LOTS 607
-#define COLUMN_ON 608
-#define COLUMN_OFF 609
-#define MARK_1 1000
-#define MARK_2 700000000
-#define KEY_PRESS 1400000000
+#define CURS_LEFT	601
+#define CURS_RIGHT	602
+#define DELCHAR		603
+#define BACKSPACE	604
+#define STACK_BOTTOM	605
+#define CURS_LEFT_LOTS	606
+#define CURS_RIGHT_LOTS	607
+#define COLUMN_ON	608
+#define COLUMN_OFF	609
+#define MARK_1		1000
+#define MARK_2		700000000
+#define KEY_PRESS	1400000000
 
 /* Tabs spaces: (sofar only HALF_TAB_SIZE is used: */
 #define TAB_SIZE		option_tab_spacing
@@ -123,35 +110,18 @@ struct macro {
 
 struct WEdit;
 typedef struct WEdit WEdit;
+struct Menu;
 
 int edit_drop_hotkey_menu (WEdit *e, int key);
 void edit_menu_cmd (WEdit *e);
-void edit_init_menu_emacs (void);
-void edit_init_menu_normal (void);
-void edit_done_menu (void);
+struct WMenu *edit_init_menu (void);
+void edit_done_menu (struct WMenu *wmenu);
+void edit_reload_menu (void);
 void menu_save_mode_cmd (void);
 int edit_raw_key_query (const char *heading, const char *query, int cancel);
 int edit_file (const char *_file, int line);
 int edit_translate_key (WEdit *edit, long x_key, int *cmd, int *ch);
-
-#ifndef NO_INLINE_GETBYTE
 int edit_get_byte (WEdit * edit, long byte_index);
-#else
-static inline int edit_get_byte (WEdit * edit, long byte_index)
-{
-    unsigned long p;
-    if (byte_index >= (edit->curs1 + edit->curs2) || byte_index < 0)
-	return '\n';
-
-    if (byte_index >= edit->curs1) {
-	p = edit->curs1 + edit->curs2 - byte_index - 1;
-	return edit->buffers2[p >> S_EDIT_BUF_SIZE][EDIT_BUF_SIZE - (p & M_EDIT_BUF_SIZE) - 1];
-    } else {
-	return edit->buffers1[byte_index >> S_EDIT_BUF_SIZE][byte_index & M_EDIT_BUF_SIZE];
-    }
-}
-#endif
-
 int edit_count_lines (WEdit * edit, long current, int upto);
 long edit_move_forward (WEdit * edit, long current, int lines, long upto);
 long edit_move_forward3 (WEdit * edit, long current, int cols, long upto);
@@ -204,7 +174,6 @@ int edit_save_block_cmd (WEdit * edit);
 int edit_insert_file_cmd (WEdit * edit);
 int edit_insert_file (WEdit * edit, const char *filename);
 void edit_block_process_cmd (WEdit * edit, const char *shell_cmd, int block);
-char *catstrs (const char *first, ...);
 void freestrs (void);
 void edit_refresh_cmd (WEdit * edit);
 void edit_date_cmd (WEdit * edit);
@@ -230,11 +199,16 @@ int edit_copy_to_X_buf_cmd (WEdit * edit);
 int edit_cut_to_X_buf_cmd (WEdit * edit);
 void edit_paste_from_X_buf_cmd (WEdit * edit);
 
+void edit_select_codepage_cmd (WEdit *edit);
+void edit_insert_literal_cmd (WEdit *edit);
+void edit_execute_macro_cmd (WEdit *edit);
+void edit_begin_end_macro_cmd(WEdit *edit);
+
 void edit_paste_from_history (WEdit *edit);
 
 void edit_set_filename (WEdit *edit, const char *name);
 
-void edit_load_syntax (WEdit * edit, char **names, const char *type);
+void edit_load_syntax (WEdit * edit, char ***pnames, const char *type);
 void edit_free_syntax_rules (WEdit * edit);
 void edit_get_syntax_color (WEdit * edit, long byte_index, int *color);
 
@@ -254,6 +228,7 @@ void edit_options_dialog (void);
 #ifdef USE_COLORER
 void edit_colorer_options_dialog (void);
 #endif
+void edit_syntax_dialog (void);
 void edit_mail_dialog (WEdit *edit);
 void format_paragraph (WEdit *edit, int force);
 
@@ -262,12 +237,10 @@ void edit_execute_cmd (WEdit *edit, int command, int char_for_insertion);
 
 #define get_sys_error(s) (s)
 
-#define edit_error_dialog(h,s) query_dialog (h, s, 0, 1, _("&Dismiss"))
+#define edit_error_dialog(h,s) query_dialog (h, s, D_ERROR, 1, _("&Dismiss"))
 
-#define edit_message_dialog(h,s) query_dialog (h, s, 0, 1, _("&OK"))
-#define edit_query_dialog2(h,t,a,b) query_dialog(h,t,0,2,a,b)
-#define edit_query_dialog3(h,t,a,b,c) query_dialog(h,t,0,3,a,b,c)
-#define edit_query_dialog4(h,t,a,b,c,d) query_dialog(h,t,0,4,a,b,c,d)
+#define edit_query_dialog2(h,t,a,b) query_dialog (h, t, D_NORMAL, 2, a, b)
+#define edit_query_dialog3(h,t,a,b,c) query_dialog (h, t, D_NORMAL, 3, a, b, c)
 
 #define color_palette(x) win->color[x].pixel
 
@@ -288,8 +261,6 @@ void edit_execute_cmd (WEdit *edit, int command, int char_for_insertion);
 extern int edit_key_emulation;
 
 extern WEdit *wedit;
-struct Menu;
-extern struct Menu *EditMenuBar[];
 struct WMenu;
 extern struct WMenu *edit_menubar;
 
@@ -310,12 +281,13 @@ typedef enum {
 
 extern int option_save_mode;
 extern int option_save_position;
-extern int option_backup_ext_int;
 extern int option_max_undo;
 extern int option_syntax_highlighting;
 #ifdef USE_COLORER
 extern int option_syntax_colorer;
 #endif
+extern int option_auto_syntax;
+extern char *option_syntax_type;
 extern int editor_option_check_nl_at_eof;
 
 extern int option_edit_right_extreme;
@@ -330,11 +302,11 @@ extern int edit_confirm_save;
 extern int column_highlighting;
 
 /* File names */
-#define EDIT_DIR           PATH_SEP_STR ".mc" PATH_SEP_STR "cedit"
+#define EDIT_DIR           ".mc" PATH_SEP_STR "cedit"
 #define SYNTAX_FILE        EDIT_DIR PATH_SEP_STR "Syntax"
 #define CLIP_FILE          EDIT_DIR PATH_SEP_STR "cooledit.clip"
 #define MACRO_FILE         EDIT_DIR PATH_SEP_STR "cooledit.macros"
 #define BLOCK_FILE         EDIT_DIR PATH_SEP_STR "cooledit.block"
 #define TEMP_FILE          EDIT_DIR PATH_SEP_STR "cooledit.temp"
 
-#endif 				/* __EDIT_H */
+#endif

@@ -346,7 +346,7 @@ ParserFactory *MCEditColorer::pf = null;
 extern "C" {
 
 
-void colorer_load_syntax (WEdit * edit, char **names, const char *type)
+void colorer_load_syntax (WEdit * edit, char ***names, const char *type)
 {
     //CLR_TRACE("MC", "colorer-load:%s", type);
 

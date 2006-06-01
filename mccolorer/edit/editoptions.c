@@ -21,7 +21,24 @@
 */
 
 #include <config.h>
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
+#include "usermap.h"
 #include "../src/dialog.h"	/* B_CANCEL */
 #include "../src/wtools.h"	/* QuickDialog */
 
@@ -38,7 +55,7 @@
 #endif
 
 static const char *key_emu_str[] =
-{N_("Intuitive"), N_("Emacs"), NULL};
+{N_("Intuitive"), N_("Emacs"), N_("User-defined"), NULL};
 
 static const char *wrap_str[] =
 {N_("None"), N_("Dynamic paragraphing"), N_("Type writer wrap"), NULL};
@@ -160,7 +177,7 @@ edit_options_dialog (void)
 	 N_("Wrap mode"), 0, 0,
 	 0, 0, NULL},
 	/* 15 */
-	{quick_radio, 5, OPT_DLG_W, OPT_DLG_H - 13, OPT_DLG_H, "", 2, 0, 0,
+	{quick_radio, 5, OPT_DLG_W, OPT_DLG_H - 13, OPT_DLG_H, "", 3, 0, 0,
 	 const_cast(char **, key_emu_str), "keyemu"},
 	/* 16 */
 	{quick_label, 4, OPT_DLG_W, OPT_DLG_H - 14, OPT_DLG_H,
@@ -261,7 +278,11 @@ edit_options_dialog (void)
 	option_typewriter_wrap = 0;
     }
 
-    edit_key_emulation = tedit_key_emulation;
+    /* Reload menu if key emulation has changed */
+    if (edit_key_emulation != tedit_key_emulation) {
+	edit_key_emulation = tedit_key_emulation;
+	edit_reload_menu ();
+    }
 
     /* Load or unload syntax rules if the option has changed */
     if (option_syntax_highlighting != old_syntax_hl
@@ -273,7 +294,9 @@ edit_options_dialog (void)
 #ifdef USE_COLORER
 	edit_free_syntax_rules (wedit);
 #endif
-	edit_load_syntax (wedit, 0, 0);
+ 	edit_load_syntax (wedit, NULL, option_syntax_type);
+    /* Load usermap if it's needed */
+    edit_load_user_map (wedit);
     }
 }
 

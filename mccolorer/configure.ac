@@ -3,16 +3,18 @@ dnl Configure.in file for the Midnight Commander
 dnl
 
 AC_INIT([GNU Midnight Commander], [], [mc-devel@gnome.org])
-AC_PREREQ(2.52)
+AC_PREREQ(2.54)
+m4_pattern_forbid(MC_)
 AC_CONFIG_SRCDIR(src/main.c)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(mc, 4.6.1)
+AM_INIT_AUTOMAKE(mc, 2006-05-30-15)
 
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 AC_CANONICAL_HOST
 
+AC_GNU_SOURCE
 AC_AIX
 AC_MINIX
 AC_ISC_POSIX
@@ -101,9 +103,8 @@ fi
 dnl
 dnl Internationalization
 dnl
-MC_ASM_LABELS
-AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION(0.11.5)
+AM_GNU_GETTEXT(no-libtool, need-ngettext)
+AM_GNU_GETTEXT_VERSION(0.14.3)
 
 if test "x$USE_INCLUDED_LIBINTL" = xyes; then
     CPPFLAGS="$CPPFLAGS -I\$(top_builddir)/intl -I\$(top_srcdir)/intl"
@@ -142,17 +143,22 @@ aux*)
     LIBS="$LIBS -lposix"
     AC_DEFINE(_POSIX_SOURCE)
     ;;
-linux*)
-    AC_DEFINE(_GNU_SOURCE,, [Define to request GNU feature set on Linux])
-    ;;
 esac
 
+dnl Extended Character Sets
+dnl
+AC_ARG_ENABLE([extcharset],
+	AC_HELP_STRING([--enable-extcharset], [Enable extended character sets]))
+if test x"$enable_extcharset" = x"yes"; then
+  AC_DEFINE([EXTCHARSET_ENABLED], 1, [Enable extended character sets?])
+fi
 
 AC_PROG_INSTALL
 AC_CHECK_HEADERS([unistd.h string.h memory.h grp.h limits.h malloc.h \
 	stdlib.h termios.h utime.h fcntl.h pwd.h sys/statfs.h sys/time.h \
 	sys/timeb.h sys/select.h sys/ioctl.h stropts.h arpa/inet.h \
-	security/pam_misc.h sys/socket.h])
+	security/pam_misc.h sys/socket.h sys/sysmacros.h sys/types.h \
+	sys/mkdev.h wchar.h wctype.h sys/statvfs.h])
 
 AC_HEADER_TIME
 AC_HEADER_SYS_WAIT
@@ -161,15 +167,27 @@ AC_HEADER_STDC
 
 dnl Missing structure components
 AC_CHECK_MEMBERS([struct stat.st_blksize, struct stat.st_rdev])
+AC_CHECK_MEMBERS([struct statvfs.f_fstypename],,,
+[AC_INCLUDES_DEFAULT()
+#ifdef HAVE_SYS_STATVFS_H
+#  include <sys/statvfs.h>
+#endif])
 AC_STRUCT_ST_BLOCKS
 
 dnl
 dnl Check availability of some functions 
 dnl 
 
-AC_CHECK_FUNCS([atoll cfgetospeed getsid initgroups memcpy memmove memset \
-		putenv setreuid setuid statfs strerror strftime \
-		sysconf tcgetattr tcsetattr truncate])
+AC_CHECK_FUNCS([\
+	atoll \
+	cfgetospeed \
+	getegid geteuid getgid getsid getuid \
+	initgroups isascii \
+	memcpy memmove memset \
+	putenv \
+	setreuid setuid statfs statvfs strerror strftime sysconf \
+	tcgetattr tcsetattr truncate \
+])
 
 dnl S-Lang needs all four functions to be defined to use POSIX signal API
 AC_CHECK_FUNCS([sigaction sigemptyset sigprocmask sigaddset], , [slang_signals=no])
@@ -210,15 +228,15 @@ dnl Missing typedefs and replacements
 dnl 
 
 AC_TYPE_MODE_T
-AC_CHECK_TYPE(umode_t, int)
 AC_CHECK_TYPE(off_t, long)
 AC_TYPE_PID_T
 AC_TYPE_UID_T
 AC_CHECK_TYPE(nlink_t, unsigned int)
-AC_CHECK_TYPES([socklen_t],
-  AC_DEFINE([HAVE_C_TYPE_SOCKLEN_T], [1], [Define to 1 if socklen_t is defined by <sys/socket.h>]),,
-[#include <sys/types.h>
-#include <sys/socket.h>])
+AC_CHECK_TYPES([socklen_t],,,
+[
+#include <sys/types.h>
+#include <sys/socket.h>
+])
 
 dnl This is needed for regex.c only
 AC_CHECK_TYPE(uintptr_t,
@@ -292,31 +310,8 @@ dnl
 dnl Network related functions
 dnl
 
-AC_CHECK_LIB(nsl, t_accept)
-AC_CHECK_LIB(socket, socket)
-
-have_socket=no
-AC_CHECK_FUNCS(socket, have_socket=yes)
-if test $have_socket = no; then
-  # socket is not in the default libraries.  See if it's in some other.
-  for lib in bsd socket inet; do
-    AC_CHECK_LIB($lib, socket, [
-        LIBS="$LIBS -l$lib"
-	have_socket=yes
-	AC_DEFINE(HAVE_SOCKET)
-	break])
-  done
-fi
-
-have_gethostbyname=no
-AC_CHECK_FUNC(gethostbyname, [have_gethostbyname=yes])
-if test $have_gethostbyname = no; then
-  # gethostbyname is not in the default libraries.  See if it's in some other.
-  for lib in bsd socket inet; do
-    AC_CHECK_LIB([$lib], [gethostbyname],
-		 [LIBS="$LIBS -l$lib"; have_gethostbyname=yes; break])
-  done
-fi
+AC_SEARCH_LIBS([socket], [socket])
+AC_SEARCH_LIBS([gethostbyname], [nsl])
 
 dnl
 dnl Sequent wants getprocessstats
@@ -569,19 +564,12 @@ if test "$GLIBC21" != yes; then
     AC_DEFINE(USE_INCLUDED_REGEX, 1, [Use the regex included here])
 fi
 
-if test "x$with_screen" = xmcslang; then
-    AC_DEFINE(USE_INCLUDED_SLANG, 1, [Use the S-Lang included here])
-fi
-
-if test x"$USE_MAINTAINER_MODE" = x"yes"; then
-    if test x"${enable_gcc_warnings+set}" != x"set"; then
-        if test x"${GCC}" = x"yes"; then
-            CFLAGS="-Wall $CFLAGS"
-        fi
+dnl If default CFLAGS is used with gcc, add -Wall
+if test -z "$ac_env_CFLAGS_set"; then
+    if test -n "$GCC"; then
+	CFLAGS="$CFLAGS -Wall"
     fi
 fi
-
-ri_GCC_WARNINGS
 
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
@@ -639,6 +627,7 @@ vfs/extfs/lslR
 vfs/extfs/mailfs
 vfs/extfs/patchfs
 vfs/extfs/rpms
+vfs/extfs/ualz
 vfs/extfs/uar
 vfs/extfs/uarj
 vfs/extfs/uha

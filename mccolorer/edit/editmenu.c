@@ -22,7 +22,23 @@
 
 #include <config.h>
 
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
+#include "../src/cmd.h"		/* save_setup_cmd() */
 #include "../src/wtools.h"	/* query_dialog() */
 #include "../src/menu.h"	/* menu_entry */
 #include "../src/tty.h"		/* KEY_F */
@@ -32,10 +48,6 @@
 
 #include "edit-widget.h"
 #include "editcmddef.h"
-
-#undef edit_message_dialog
-#define edit_message_dialog(w,x,y,h,s) query_dialog (h, s, 0, 1, _("&OK"))
-#define CFocus(x) 
 
 static void
 menu_cmd (int command)
@@ -52,15 +64,12 @@ static void menu_key (int i)
 static void
 edit_about_cmd (void)
 {
-    edit_message_dialog (wedit->mainid, 20, 20, _(" About "),
-		      _("\n"
-		      "                Cooledit  v3.11.5\n"
-		      "\n"
-		      " Copyright (C) 1996 the Free Software Foundation\n"
-		      "\n"
-		      "       A user friendly text editor written\n"
-		      "           for the Midnight Commander.\n")
-	);
+    query_dialog (_(" About "),
+		  _("\n                Cooledit  v3.11.5\n\n"
+		    " Copyright (C) 1996 the Free Software Foundation\n\n"
+		    "       A user friendly text editor written\n"
+		    "           for the Midnight Commander.\n"), D_NORMAL,
+		  1, _("&OK"));
 }
 
 static void
@@ -207,7 +216,7 @@ menu_sort_cmd (void)
     menu_cmd (CK_Sort);
 }
 
-static void 
+static void
 menu_ext_cmd (void)
 {
     menu_cmd (CK_ExtCmd);
@@ -284,6 +293,13 @@ menu_options (void)
 {
     edit_options_dialog ();
 }
+
+static void
+menu_syntax (void)
+{
+    edit_syntax_dialog ();
+}
+
 static void
 menu_user_menu_cmd (void)
 {
@@ -417,7 +433,10 @@ static menu_entry OptMenu[] =
 {
     {' ', N_("&General...  "), 'G', menu_options},
     {' ', N_("&Save mode..."), 'S', menu_save_mode_cmd},
-    {' ', N_("learn &Keys..."), 'K', learn_keys}
+    {' ', N_("Learn &Keys..."), 'K', learn_keys},
+    {' ', N_("Syntax &Highlighting..."), 'H', menu_syntax},
+    {' ', "", ' ', 0},
+    {' ', N_("Save setu&p..."), 'p', save_setup_cmd}
 #if USE_COLORER
 //    ,
 //    {' ', N_("&Colorer..."), 'C', menu_colorer}
@@ -428,9 +447,8 @@ static menu_entry OptMenu[] =
 
 #define menu_entries(x) sizeof(x)/sizeof(menu_entry)
 
-struct Menu *EditMenuBar[N_menus];
-
-void edit_init_menu_normal (void)
+static void
+edit_init_menu_normal (struct Menu *EditMenuBar[])
 {
     EditMenuBar[0] = create_menu (_(" File "), FileMenu, menu_entries (FileMenu),
 				    "[Internal File Editor]");
@@ -444,7 +462,8 @@ void edit_init_menu_normal (void)
 				    "[Internal File Editor]");
 }
 
-void edit_init_menu_emacs (void)
+static void
+edit_init_menu_emacs (struct Menu *EditMenuBar[])
 {
     EditMenuBar[0] = create_menu (_(" File "), FileMenuEmacs, menu_entries (FileMenuEmacs),
 				    "[Internal File Editor]");
@@ -458,11 +477,43 @@ void edit_init_menu_emacs (void)
 				    "[Internal File Editor]");
 }
 
-void edit_done_menu (void)
+struct WMenu *
+edit_init_menu (void)
+{
+    struct Menu **EditMenuBar = g_new(struct Menu *, N_menus);
+
+    switch (edit_key_emulation) {
+    default:
+    case EDIT_KEY_EMULATION_NORMAL:
+	edit_init_menu_normal (EditMenuBar);
+	break;
+    case EDIT_KEY_EMULATION_EMACS:
+	edit_init_menu_emacs (EditMenuBar);
+	break;
+    }
+    return menubar_new (0, 0, COLS, EditMenuBar, N_menus);
+}
+
+void
+edit_done_menu (struct WMenu *wmenu)
 {
     int i;
     for (i = 0; i < N_menus; i++)
-	destroy_menu (EditMenuBar[i]);
+	destroy_menu (wmenu->menu[i]);
+
+    g_free(wmenu->menu);
+}
+
+
+void
+edit_reload_menu (void)
+{
+    struct WMenu *new_edit_menubar;
+
+    new_edit_menubar = edit_init_menu ();
+    dlg_replace_widget (&edit_menubar->widget, &new_edit_menubar->widget);
+    edit_done_menu (edit_menubar);
+    edit_menubar = new_edit_menubar;
 }
 
 
@@ -478,7 +529,7 @@ edit_drop_menu_cmd (WEdit *e, int which)
     }
 
     edit_menubar->previous_widget = e->widget.parent->current->dlg_id;
-    dlg_select_widget (e->widget.parent, edit_menubar);
+    dlg_select_widget (edit_menubar);
 }
 
 

@@ -16,10 +16,12 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
 #include <config.h>
-#include <sys/types.h>		/* Needed to include local .h files */
-#include <sys/stat.h>
+
 #include <string.h>
 #include <stdio.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "global.h"
 #include "tty.h"
@@ -28,7 +30,6 @@
 #include "main.h"
 #include "tree.h"		/* xtree_mode */
 #include "profile.h"
-#define WANT_WIDGETS
 #include "setup.h"
 #include "mouse.h"		/* To make view.h happy */
 #include "view.h"		/* For the externs */
@@ -51,6 +52,7 @@
 
 #ifdef USE_NETCODE
 #   include "../vfs/ftpfs.h"
+#   include "../vfs/fish.h"
 #endif
 
 #ifdef USE_INTERNAL_EDIT
@@ -138,7 +140,7 @@ static const struct {
 static const struct {
     const char *opt_name;
     int  *opt_addr;
-} options [] = {
+} int_options [] = {
     { "show_backups", &show_backups },
     { "show_dot_files", &show_dot_files },
     { "verbose", &verbose },
@@ -157,6 +159,7 @@ static const struct {
     { "confirm_overwrite", &confirm_overwrite },
     { "confirm_execute", &confirm_execute },
     { "confirm_exit", &confirm_exit },
+    { "confirm_directory_hotlist_delete", &confirm_directory_hotlist_delete },
     { "safe_delete", &safe_delete },
     { "mouse_repeat_rate", &mou_auto_repeat },
     { "double_click_speed", &double_click_speed },
@@ -175,7 +178,6 @@ static const struct {
     { "old_esc_mode", &old_esc_mode },
     { "cd_symlinks", &cd_symlinks },
     { "show_all_if_ambiguous", &show_all_if_ambiguous },
-    { "have_fast_cpu", &have_fast_cpu },
     { "max_dirt_limit", &max_dirt_limit },
     { "torben_fj_mode", &torben_fj_mode },
     { "use_file_to_guess_type", &use_file_to_check_type },
@@ -196,6 +198,7 @@ static const struct {
     { "ftpfs_use_passive_connections", &ftpfs_use_passive_connections },
     { "ftpfs_use_unix_list_options", &ftpfs_use_unix_list_options },
     { "ftpfs_first_cd_then_ls", &ftpfs_first_cd_then_ls },
+    { "fish_directory_timeout", &fish_directory_timeout },
 #endif /* USE_NETCODE */
 #endif /* USE_VFS */
 #ifdef USE_INTERNAL_EDIT
@@ -208,7 +211,6 @@ static const struct {
     { "editor_fake_half_tabs", &option_fake_half_tabs },
     { "editor_option_save_mode", &option_save_mode },
     { "editor_option_save_position", &option_save_position },
-    { "editor_option_backup_ext_int", &option_backup_ext_int },
     { "editor_option_auto_para_formatting", &option_auto_para_formatting },
     { "editor_option_typewriter_wrap", &option_typewriter_wrap },
     { "editor_edit_confirm_save", &edit_confirm_save },
@@ -220,7 +222,19 @@ static const struct {
 
     { "nice_rotating_dash", &nice_rotating_dash },
     { "horizontal_split",   &horizontal_split },
+    { "mcview_remember_file_position", &mcview_remember_file_position },
     { 0, 0 }
+};
+
+static const struct {
+    const char *opt_name;
+    char **opt_addr;
+    const char *opt_defval;
+} str_options [] = {
+#ifdef USE_INTERNAL_EDIT
+    { "editor_backup_extension", &option_backup_ext, "~" },
+#endif
+    { NULL, NULL }
 };
 
 void
@@ -287,8 +301,13 @@ save_configure (void)
     profile = concat_dir_and_file (home_dir, PROFILE_NAME);
 
     /* Save integer options */
-    for (i = 0; options [i].opt_name; i++)
-	set_int (profile, options [i].opt_name, *options [i].opt_addr);
+    for (i = 0; int_options[i].opt_name; i++)
+	set_int (profile, int_options[i].opt_name, *int_options[i].opt_addr);
+
+    /* Save string options */
+    for (i = 0; str_options[i].opt_name != NULL; i++)
+	set_config_string (profile, str_options[i].opt_name,
+	    *str_options[i].opt_addr);
 
     g_free (profile);
 }
@@ -489,9 +508,14 @@ load_setup (void)
     global_profile_name = concat_dir_and_file (mc_home, "mc.lib");
 
     /* Load integer boolean options */
-    for (i = 0; options [i].opt_name; i++)
-	*options [i].opt_addr =
-	    get_int (profile, options [i].opt_name, *options [i].opt_addr);
+    for (i = 0; int_options[i].opt_name; i++)
+	*int_options[i].opt_addr =
+	    get_int (profile, int_options[i].opt_name, *int_options[i].opt_addr);
+
+    /* Load string options */
+    for (i = 0; str_options[i].opt_name != NULL; i++)
+	*str_options[i].opt_addr = get_config_string (profile,
+	    str_options[i].opt_name, str_options[i].opt_defval);
 
     load_layout (profile);
 

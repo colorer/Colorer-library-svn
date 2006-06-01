@@ -22,6 +22,19 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "edit-widget.h"
 
@@ -29,7 +42,7 @@
 
 #include "../src/color.h"	/* EDITOR_NORMAL_COLOR */
 #include "../src/tty.h"		/* attrset() */
-#include "../src/widget.h"	/* redraw_labels() */
+#include "../src/widget.h"	/* buttonbar_redraw() */
 #include "../src/key.h"		/* is_idle() */
 #include "../src/charsets.h"
 
@@ -80,22 +93,32 @@ static void status_string (WEdit * edit, char *s, int w)
 		edit->total_lines + 1,
 
 		edit->curs1,
-		edit->last_byte, 
+		edit->last_byte,
 		byte_str);
 }
 
-/* Draw the status line at the top of the widget. The status is displayed
- * right-aligned to be able to display long file names unshorteded. */
+static inline void
+printwstr (const char *s, int len)
+{
+    if (len > 0)
+	tty_printf ("%-*.*s", len, len, s);
+}
+
+/* Draw the status line at the top of the widget. The size of the filename
+ * field varies depending on the width of the screen and the length of
+ * the filename. */
 void
 edit_status (WEdit *edit)
 {
     const int w = edit->widget.cols;
     const size_t status_size = w + 1;
     char * const status = g_malloc (status_size);
-    size_t status_len;
+    int status_len;
     const char *fname = "";
-    size_t fname_len;
+    int fname_len;
     const int gap = 3; /* between the filename and the status */
+    const int right_gap = 2; /* at the right end of the screen */
+    const int preferred_fname_len = 16;
 
     status_string (edit, status, status_size);
     status_len = (int) strlen (status);
@@ -103,22 +126,21 @@ edit_status (WEdit *edit)
     if (edit->filename)
         fname = edit->filename;
     fname_len = strlen(fname);
-    if (fname_len < 16)
-        fname_len = 16;
+    if (fname_len < preferred_fname_len)
+        fname_len = preferred_fname_len;
 
-    if (fname_len + gap + status_len + 2 >= w) {
-    	if (16 + gap + status_len + 2 >= w)
-    	    fname_len = 16;
-    	else
-            fname_len = w - (gap + status_len + 2);
-    	fname = name_trunc (fname, fname_len);
+    if (fname_len + gap + status_len + right_gap >= w) {
+	if (preferred_fname_len + gap + status_len + right_gap >= w)
+	    fname_len = preferred_fname_len;
+	else
+            fname_len = w - (gap + status_len + right_gap);
+	fname = name_trunc (fname, fname_len);
     }
 
     widget_move (edit, 0, 0);
     attrset (SELECTED_COLOR);
-    printw ("%-*s", fname_len + gap, fname);
-    if (fname_len + gap + 2 < w)
-        printw ("%-*s  ", w - (fname_len + gap + 2), status);
+    printwstr (fname, fname_len + gap);
+    printwstr (status, w - (fname_len + gap));
     attrset (EDITOR_NORMAL_COLOR);
 
     g_free (status);
@@ -365,9 +387,7 @@ render_edit_text (WEdit * edit, long start_row, long start_column, long end_row,
 {
     long row = 0, curs_row;
     static int prev_curs_row = 0;
-    static int prev_start_col = 0;
     static long prev_curs = 0;
-    static long prev_start = -1;
 
     int force = edit->force;
     long b;
@@ -463,10 +483,9 @@ render_edit_text (WEdit * edit, long start_row, long start_column, long end_row,
 
     prev_curs_row = edit->curs_row;
     prev_curs = edit->curs1;
-    prev_start_col = edit->start_col;
+
   exit_render:
     edit->screen_modified = 0;
-    prev_start = edit->start_line;
     return;
 }
 
@@ -477,10 +496,10 @@ edit_render (WEdit * edit, int page, int row_start, int col_start, int row_end, 
 	edit->force |= REDRAW_PAGE | REDRAW_IN_BOUNDS;
 
     if (edit->force & REDRAW_COMPLETELY)
-	redraw_labels (edit->widget.parent);
+	buttonbar_redraw (edit->widget.parent);
     render_edit_text (edit, row_start, col_start, row_end, col_end);
     /*
-     * edit->force != 0 means a key was pending and the redraw 
+     * edit->force != 0 means a key was pending and the redraw
      * was halted, so next time we must redraw everything in case stuff
      * was left undrawn from a previous key press.
      */

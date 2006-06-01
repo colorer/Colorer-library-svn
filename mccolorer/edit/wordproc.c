@@ -19,6 +19,22 @@
  */
 
 #include <config.h>
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#endif
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include "../src/global.h"
+
 #include "edit.h"
 #include "edit-widget.h"
 
@@ -148,8 +164,8 @@ static void strip_newlines (unsigned char *t, int size)
     }
 }
 
-/* 
-   This is a copy of the function 
+/*
+   This is a copy of the function
    int calc_text_pos (WEdit * edit, long b, long *q, int l)
    in propfont.c  :(
    It calculates the number of chars in a line specified to length l in pixels
@@ -181,8 +197,8 @@ static int line_pixel_length (unsigned char *t, long b, int l)
     return b;
 }
 
-/* find the start of a word */
-static int next_word_start (unsigned char *t, int q, int size)
+static int
+next_word_start (unsigned char *t, int q)
 {
     int i;
     for (i = q;; i++) {
@@ -203,11 +219,12 @@ static int next_word_start (unsigned char *t, int q, int size)
 }
 
 /* find the start of a word */
-static int word_start (unsigned char *t, int q, int size)
+static int
+word_start (unsigned char *t, int q)
 {
     int i = q;
     if (t[q] == ' ' || t[q] == '\t')
-	return next_word_start (t, q, size);
+	return next_word_start (t, q);
     for (;;) {
 	int c;
 	if (!i)
@@ -236,10 +253,10 @@ static void format_this (unsigned char *t, int size, int indent)
 	    break;
 	if (t[q] == '\n')
 	    break;
-	p = word_start (t, q, size);
+	p = word_start (t, q);
 	if (p == -1)
-	    q = next_word_start (t, q, size);	/* Return the end of the word if the beginning 
-						   of the word is at the beginning of a line 
+	    q = next_word_start (t, q);		/* Return the end of the word if the beginning
+						   of the word is at the beginning of a line
 						   (i.e. a very long word) */
 	else
 	    q = p;
@@ -258,7 +275,8 @@ static void replace_at (WEdit * edit, long q, int c)
 }
 
 /* replaces a block of text */
-static void put_paragraph (WEdit * edit, unsigned char *t, long p, long q, int indent, int size)
+static void
+put_paragraph (WEdit * edit, unsigned char *t, long p, int indent, int size)
 {
     long cursor;
     int i, c = 0;
@@ -342,7 +360,7 @@ format_paragraph (WEdit *edit, int force)
 	}
     }
     format_this (t, q - p, indent);
-    put_paragraph (edit, t, p, q, indent, size);
+    put_paragraph (edit, t, p, indent, size);
     g_free (t);
 
     /* Scroll left as much as possible to show the formatted paragraph */
