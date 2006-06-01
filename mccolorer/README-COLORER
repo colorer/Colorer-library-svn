@@ -1,0 +1,50 @@
+
+Midnight Commander Colorer-take5 mod
+-------------------------------------
+
+
+Introduction
+-------------
+
+This release contains Midnight Commander modified to use
+Colorer-take5 as a syntax highlighting engine.
+
+This MOD is based on MC version 2006-05-30-15 and adds
+a couple of new features into the mcedit component.
+
+
+Features
+---------
+
+The next features are available in this MOD:
+
+ - Syntax highlighting using colorer-take5 engine.
+   Can be switched back to MC syntax highlighter in runtime
+   or during compilation.
+
+ - Visual indication of paired constructions.
+   Includes commands to jump between and mark the block between
+   these elements.
+
+ - HRD Schemes Customization (visual color style)
+
+
+License
+--------
+
+Since MC is distributed under GPLv2, the parts of new code
+in MC tree are also subject to this license.
+
+However Colorer-take5 library itself is distributed under
+MPL (Mozilla Public License), with an option to use GPL/LGPL.
+
+This modified MC code dynamically links to the Colorer library.
+
+
+About
+------
+
+Igor Russkih,
+  email/jabber: irusskih at gmail dot com
+           www: http://colorer.sf.net
+

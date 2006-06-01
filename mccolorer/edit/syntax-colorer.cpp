@@ -365,7 +365,11 @@ void colorer_free_syntax_rules (WEdit * edit)
 
 void colorer_get_syntax_color (WEdit * edit, long byte_index, int *color)
 {
-    *color = ((MCEditColorer*)colorer_get_handle(edit))->get_color(byte_index);
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return;
+    }
+    *color = mccolorer->get_color(byte_index);
 }
 
 void colorer_edit_modified(WEdit * edit)
