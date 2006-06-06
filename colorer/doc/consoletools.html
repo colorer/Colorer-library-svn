@@ -6,27 +6,39 @@
 <title>Colorer console tools documentation</title>
 <link href="styles/styles.css" rel="stylesheet" type="text/css"/>
 <link rel="icon" href="images/logo-small.png"/>
-</head>
+<style type="text/css">
+.bigleft{
+  text-align: left;
+  font-size: 20pt;
+  font-weight: bold;
+  color:#0000A0;
+  float: left;
+  margin-right: 10pt;
+  margin-left: -8pt;
+  margin-bottom: 10pt;
+}
+</style></head>
 <body>
 <div class='back'><a href='index.html'><img alt='back' src='images/back.png' width='40' height='18'/></a></div>
 
 <h1>Colorer Library console tools</h1>
 
-<p>Colorer library provides useful program, located at
-<code>colorer/bin/colorer.exe</code> (<code>colorer/bin/colorer</code> in unix systems),
-which allows you to use common features of the library. These are include:</p>
+<div class="bigleft">~/&gt;su</div>
+<p>Colorer library provides useful program <code>colorer/bin/colorer.exe</code>
+(<code>/usr/bin/colorer</code> in unix systems),
+which allows you to use common features of the library itself. These includes:</p>
 <ul>
-<li>Listing and test loading of all available languages.</li>
-<li>Generating HTML markup of highlighted source files.</li>
-<li>Viewing highlighted files in console window (win32 only).</li>
+<li>Listing and test load of all the available languages.</li>
+<li>Highlighted source files HTML markup generation.</li>
+<li>Highlighted files viewing in console window (win32 only).</li>
 <li>Regular Expressions tests.</li>
 </ul>
 
 <h2>Listing Languages</h2>
 <p>To list all available types of syntax rules, run <code>colorer -l</code>
-command. This will print into standard output all supported computer languages
+command. This will print out into the standard output all the supported computer languages
 and file types.
-If you want to test full colorer's database and load all types, run
+If you want to test full database and load all types, run
 <code>colorer -ll</code>. This will take little more time to load and test
 HRC database. All errors, warnings and other messages you'll found in the log file,
 specified in <code>catalog.xml</code> file.
@@ -35,7 +47,7 @@ Additionally you can use <code>colorer -lt</code> syntax to list not type descri
 their internal names. This can be used in automated environments.
 </p>
 
-<h2>Generating highlighted HTML sources</h2>
+<h2>Highlighted HTML sources generation</h2>
 <p>You can use Colorer to format you source files into HTML markup.
 This is useful when publishing sources on your web-site, or making
 documentation based on your source files. You can find generated examples
@@ -43,9 +55,9 @@ of some sources on <a href="../index.html#Highlighting">start page</a> in sectio
 Also you can check <a href="http://colorer.sf.net/php/">Online HTML Generator</a>
 on colorer.sf.net site.
 </p>
-<p>To generate highlighted source of file <code>filename</code>, you have
-to run <code>colorer -h filename</code>. This will print generated HTML file
-into standard output. If you want to write this HTML code into some other file,
+<p>To generate highlighted source of <code>filename</code>, you have
+to run <code>colorer -h filename</code>. This will print out the generated HTML file
+into the standard output. If you want to write this HTML code into some other file,
 you can specify this file with <code>-o</code> option. Also you can specify input
 and output character encodings (<code>-ei ENCNAME</code> and <code>-eo ENCNAME</code>)
 to read and write data.
@@ -108,6 +120,12 @@ generator has different sets of HRD styles, you can find available style
 names in <code>catalog.xml</code> file.
 For example, specify <code>-i black</code> to activate black styled scheme
 of colors.
+<br/>
+Extended formatting properties are available for RGB styles: bold, italic, underline.
+These are customized via 'style' attribute of HRD description.
+<br/>
+Link references definitions (doc-links) can be used additionally to provide special
+links formatting. Special doc-links format files can be specified via <code>-ls</code> option.
 </p>
 
 <h3>Customizing HTML output</h3>
@@ -125,6 +143,8 @@ These are:</p>
 <p>Last useful option of colorer tool is <code>-f</code> processing mode.
 With this command colorer simply forwards input file into the output one with
 optional encoding convertion.</p>
+
+<div class="bigleft">~/&gt;exit</div>
 
 </body>
 </html>
