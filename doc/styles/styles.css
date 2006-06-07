@@ -57,7 +57,7 @@ li{}
 img{ border: none; }
 
 table{
-  margin-top: 8px;
+  margin-top: 2px;
 }
 th{
   font-family: verdana, tahoma, arial, helvetica, sans-serif;
@@ -93,7 +93,7 @@ a[href]:hover{
 }
 
 h1, h2, h3{ color: #303570; font-weight: normal; }
-h1, h2{ margin: 14pt 7pt 14pt 0pt; }
+h1, h2{ margin: 5pt 7pt 14pt 0pt; }
 h1{ font: 190%; text-align: center; }
 h2{ font: 150%; }
 h3{ font: 120%; margin: 14pt 4pt 8pt 4pt; }
@@ -103,11 +103,39 @@ h4{ font: small-caps 100%; font-weight: bold; }
   float:left;
 }
 
+.download{
+  border: 0;
+  border-left: 3px solid #fff;
+  border-right: 3px solid #fff;
+  display: block;
+  background: url("../images/download.png") top left no-repeat;
+  height: 40px;
+}
+.download a,
+.download a:visited,
+.download a:hover,
+.download a:link,
+.download a:active
+{
+  padding-right: 70pt;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  top: 10px;
+  position: relative;
+  font-size: 100%;
+  color: white;
+  background: transparent;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 2px 2px black;
+}
+
 .newsdiv{
   border: 1pt solid gray;
   padding: 1pt 1pt 3pt 2pt;
   width: 180pt;
-  margin-top: 40pt;
+  margin-top: 5pt;
 }
 .newsheader{
   font-weight: bold;
