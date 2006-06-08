@@ -375,6 +375,9 @@ save_setup (void)
     save_string( "Misc", "display_codepage",
     		 get_codepage_id( display_codepage ), profile_name );
 #endif /* HAVE_CHARSET */
+#if USE_COLORER
+    save_string ("Colorer", "colorer_hrd_string", colorer_hrd_string != NULL ? colorer_hrd_string : "default", profile);
+#endif
 
     g_free (profile);
     saving_setup = 0;

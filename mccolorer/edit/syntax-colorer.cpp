@@ -159,10 +159,10 @@ public:
             def_mc   = colorer_convert_color(StyledRegion::cast(baseEditor->rd_def_Text));
 //            def_mc_bg= try_alloc_color_pair(null, win_colors[def_back]);
 
-    	CLR_TRACE("MC", "def_fore=%d, def_back=%d, def_mc=%d", def_fore, def_back, def_mc);
-    	CLR_TRACE("MC", "def_mc_bg=%d", def_mc_bg);
+    	    CLR_TRACE("MC", "def_fore=%d, def_back=%d, def_mc=%d", def_fore, def_back, def_mc);
+    	    CLR_TRACE("MC", "def_mc_bg=%d", def_mc_bg);
 
-    	pairMatch = null;
+	    pairMatch = null;
 
         } catch(Exception &e) {
             // TODO: notify about disabled colorer
@@ -313,6 +313,42 @@ public:
         return def_mc;
     }
 
+    static void get_color_styles(const char ***names, const char ***descr)
+    {
+        ParserFactory *pf = MCEditColorer::pf;
+    
+	if (pf == null) {
+	    *names = null;
+	    *descr = null;
+	    return;
+	}
+    
+	Vector<const char *> hrd_styles;
+	int i = 0;
+	while (true){
+	    const String * hrd = pf->enumerateHRDInstances(DString("console"), i++);
+	    if (hrd == null) break;
+	    hrd_styles.addElement(hrd->getChars());
+	    hrd_styles.addElement(pf->getHRDescription(DString("console"), *hrd)->getChars());
+	}
+	const char **hrd_names = new const char*[hrd_styles.size()/2 + 1];
+	const char **hrd_descr = new const char*[hrd_styles.size()/2 + 1];
+	for (i = 0; i < hrd_styles.size()/2; i++) {
+	    hrd_names[i] = hrd_styles.elementAt(i*2);
+	    hrd_descr[i] = hrd_styles.elementAt(i*2+1);
+	}
+	hrd_names[i] = null;
+	hrd_descr[i] = null;
+	*names = hrd_names;
+	*descr = hrd_descr;
+    }
+    
+    static void free_color_styles(const char **names, const char **descr)
+    {
+        delete[] names;
+        delete[] descr;
+    }
+
 private:
     int colorer_convert_color(const StyledRegion *region)
     {
@@ -426,7 +462,15 @@ int colorer_get_default_color(WEdit * edit)
     return mccolorer->get_default_color();
 }
 
+void colorer_get_color_styles(const char ***names, const char ***descr)
+{
+    MCEditColorer::get_color_styles(names, descr);
+}
 
+void colorer_free_color_styles(const char **names, const char **descr)
+{
+    MCEditColorer::free_color_styles(names, descr);
+}
 
 }
 

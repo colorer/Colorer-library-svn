@@ -41,6 +41,7 @@
 #include "usermap.h"
 #include "../src/dialog.h"	/* B_CANCEL */
 #include "../src/wtools.h"	/* QuickDialog */
+#include "../src/setup.h"
 
 #ifdef USE_COLORER
 #define OPT_DLG_H 18
@@ -292,6 +293,7 @@ edit_options_dialog (void)
     )
     {
 #ifdef USE_COLORER
+        edit_reload_menu();
 	edit_free_syntax_rules (wedit);
 #endif
  	edit_load_syntax (wedit, NULL, option_syntax_type);
@@ -305,8 +307,32 @@ edit_options_dialog (void)
 void
 edit_colorer_options_dialog (void)
 {
+    int i;
+    char **names, **descr;
+    Listbox *syntaxlist;
+    
+    if (!option_syntax_colorer) {
+	return;
+    }
+    
+    syntaxlist = create_listbox_window (40, 18, _(" Choose Color Style "), NULL);
+    
+    colorer_get_color_styles(&names, &descr);
+    for (i = 0; names[i]; i++) {
+	LISTBOX_APPEND_TEXT (syntaxlist, 0, descr[i], NULL);
+	if (colorer_hrd_string != NULL && (strcmp (names[i], colorer_hrd_string) == 0))
+	    listbox_select_by_number (syntaxlist->list, i);
+    }
 
-
+    i =  run_listbox (syntaxlist);
+    if (i >= 0) {
+	strcpy(colorer_hrd_string, names[i]);
+	
+	/* reload instance to apply changes */
+	edit_free_syntax_rules(wedit);
+	edit_load_syntax(wedit, NULL, option_syntax_type);
+    }
+    colorer_free_color_styles(names, descr);
 }
 #endif
 

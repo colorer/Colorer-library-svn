@@ -435,12 +435,11 @@ static menu_entry OptMenu[] =
     {' ', N_("&Save mode..."), 'S', menu_save_mode_cmd},
     {' ', N_("Learn &Keys..."), 'K', learn_keys},
     {' ', N_("Syntax &Highlighting..."), 'H', menu_syntax},
+#if USE_COLORER
+    {' ', N_("&Choose Color Style..."), 'C', menu_colorer},
+#endif
     {' ', "", ' ', 0},
     {' ', N_("Save setu&p..."), 'p', save_setup_cmd}
-#if USE_COLORER
-//    ,
-//    {' ', N_("&Colorer..."), 'C', menu_colorer}
-#endif
 };
 
 #define OptMenuEmacs OptMenu
