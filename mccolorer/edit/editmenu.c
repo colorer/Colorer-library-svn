@@ -264,6 +264,7 @@ menu_goto_bracket (void)
     menu_cmd (CK_Match_Bracket);
 }
 
+#if USE_COLORER
 static void
 menu_select_block (void)
 {
@@ -275,6 +276,7 @@ menu_select_block_content (void)
 {
     menu_cmd (CK_Select_Block_Content);
 }
+#endif
 
 static void
 menu_lit_cmd (void)
@@ -381,8 +383,10 @@ static menu_entry CmdMenu[] =
 {
     {' ', N_("&Go to line...            M-l"), 'G', menu_goto_line},
     {' ', N_("Go to matching &bracket   M-b"), 'B', menu_goto_bracket},
+#if USE_COLORER
     {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
     {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
+#endif
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
     {' ', "", ' ', 0},
@@ -407,8 +411,10 @@ static menu_entry CmdMenuEmacs[] =
 {
     {' ', N_("&Go to line...            M-l"), 'G', menu_goto_line},
     {' ', N_("Go to matching &bracket   M-b"), 'B', menu_goto_bracket},
+#if USE_COLORER
     {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
     {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
+#endif
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
     {' ', "", ' ', 0},

@@ -2115,19 +2115,16 @@ static void edit_goto_matching_bracket (WEdit *edit)
     edit_cursor_move (edit, q - edit->curs1);
 }
 
+#if USE_COLORER
 static void edit_select_block (WEdit *edit)
 {
     long q;
-#if USE_COLORER
     if (option_syntax_colorer) {
 	colorer_select_bracket(edit);
 	return;
     } else {
-#endif
-    q = edit_get_bracket (edit, 0, 0);
-#if USE_COLORER
+        q = edit_get_bracket (edit, 0, 0);
     }
-#endif
     if (q < 0)
 	return;
     edit->mark1 = min(edit->curs1, q);
@@ -2139,16 +2136,12 @@ static void edit_select_block (WEdit *edit)
 static void edit_select_block_content (WEdit *edit)
 {
     long q;
-#if USE_COLORER
     if (option_syntax_colorer) {
 	colorer_select_bracket_content(edit);
 	return;
     } else {
-#endif
-    q = edit_get_bracket (edit, 0, 0);
-#if USE_COLORER
+        q = edit_get_bracket (edit, 0, 0);
     }
-#endif
     if (q < 0)
 	return;
     edit->mark1 = min(edit->curs1, q)+1;
@@ -2156,6 +2149,7 @@ static void edit_select_block_content (WEdit *edit)
     edit->column1 = edit->column2 = 0;
     edit->force |= REDRAW_PAGE;
 }
+#endif
 
 
 /*
@@ -2613,12 +2607,14 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
     case CK_Match_Bracket:
 	edit_goto_matching_bracket (edit);
 	break;
+#if USE_COLORER
     case CK_Select_Block:
 	edit_select_block (edit);
 	break;
     case CK_Select_Block_Content:
 	edit_select_block_content (edit);
 	break;
+#endif
     case CK_User_Menu:
 	user_menu (edit);
 	break;

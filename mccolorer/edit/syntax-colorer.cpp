@@ -76,7 +76,7 @@ private:
 /**
  * Line information source from original WEdit buffer.
  * To speedup operation this object eliminates real String object
- * creation and returns alwayse the same object (cline).
+ * creation and returns always the same object (cline).
  * This is ok since parser requires this object
  * to be valid only until next call to getLine() method.
  */

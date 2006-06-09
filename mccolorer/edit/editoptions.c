@@ -315,9 +315,13 @@ edit_colorer_options_dialog (void)
 	return;
     }
     
+    colorer_get_color_styles(&names, &descr);
+    if (names == NULL || descr == NULL) {
+        return;
+    }
+        
     syntaxlist = create_listbox_window (40, 18, _(" Choose Color Style "), NULL);
     
-    colorer_get_color_styles(&names, &descr);
     for (i = 0; names[i]; i++) {
 	LISTBOX_APPEND_TEXT (syntaxlist, 0, descr[i], NULL);
 	if (colorer_hrd_string != NULL && (strcmp (names[i], colorer_hrd_string) == 0))

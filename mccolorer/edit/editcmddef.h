@@ -98,8 +98,11 @@
 #define CK_ExtCmd		424
 
 #define CK_User_Menu		425
+
+#if USE_COLORER
 #define CK_Select_Block         426
 #define CK_Select_Block_Content 427
+#endif
 
 /* application control */
 #define CK_Save_Desktop		451
