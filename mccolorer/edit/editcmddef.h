@@ -102,6 +102,7 @@
 #if USE_COLORER
 #define CK_Select_Block         426
 #define CK_Select_Block_Content 427
+#define CK_Colorer_Outline      428
 #endif
 
 /* application control */

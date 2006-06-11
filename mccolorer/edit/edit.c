@@ -2614,6 +2614,9 @@ edit_execute_cmd (WEdit *edit, int command, int char_for_insertion)
     case CK_Select_Block_Content:
 	edit_select_block_content (edit);
 	break;
+    case CK_Colorer_Outline:
+        edit_colorer_outline_dialog ();
+	break;
 #endif
     case CK_User_Menu:
 	user_menu (edit);

@@ -309,9 +309,15 @@ menu_user_menu_cmd (void)
 }
 #if USE_COLORER
 static void
-menu_colorer (void)
+menu_colorer_style (void)
 {
     edit_colorer_options_dialog ();
+}
+
+static void
+menu_colorer_outline (void)
+{
+    edit_colorer_outline_dialog ();
 }
 #endif
 
@@ -386,6 +392,7 @@ static menu_entry CmdMenu[] =
 #if USE_COLORER
     {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
     {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
+    {' ', N_("Outl&ine...               M-;"), 'I', menu_colorer_outline},
 #endif
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
@@ -414,6 +421,7 @@ static menu_entry CmdMenuEmacs[] =
 #if USE_COLORER
     {' ', N_("Select bloc&k             M-]"), 'K', menu_select_block},
     {' ', N_("Select block co&ntent     M-p"), 'N', menu_select_block_content},
+    {' ', N_("Outl&ine...               M-;"), 'I', menu_colorer_outline},
 #endif
     {' ', "", ' ', 0},
     {' ', N_("Insert &literal...       C-q"), 'L', menu_lit_cmd},
@@ -442,7 +450,7 @@ static menu_entry OptMenu[] =
     {' ', N_("Learn &Keys..."), 'K', learn_keys},
     {' ', N_("Syntax &Highlighting..."), 'H', menu_syntax},
 #if USE_COLORER
-    {' ', N_("&Choose Color Style..."), 'C', menu_colorer},
+    {' ', N_("&Choose Color Style..."), 'C', menu_colorer_style},
 #endif
     {' ', "", ' ', 0},
     {' ', N_("Save setu&p..."), 'p', save_setup_cmd}

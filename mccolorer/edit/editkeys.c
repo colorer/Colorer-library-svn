@@ -53,6 +53,7 @@ static const edit_key_map_type cooledit_key_map[] = {
 #if USE_COLORER
     { ALT (']'), CK_Select_Block },
     { ALT ('p'), CK_Select_Block_Content },
+    { ALT (';'), CK_Colorer_Outline },
 #endif
     { ALT ('m'), CK_Mail },
     { XCTRL ('f'), CK_Save_Block },

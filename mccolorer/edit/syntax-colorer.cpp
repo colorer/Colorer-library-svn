@@ -5,8 +5,10 @@
 #include"syntax-colorer-legacy-log.h"
 
 #include"syntax-colorer-wrapper.h"
+#include"syntax-colorer.h"
 
 #include<colorer/editor/BaseEditor.h>
+#include<colorer/editor/Outliner.h>
 #include<common/Logging.h>
 #include<assert.h>
 
@@ -150,6 +152,11 @@ public:
             }
 
             baseEditor->setRegionCompact(true);
+            
+            const Region *def_Outlined = pf->getHRCParser()->getRegion(&DString("def:Outlined"));
+            const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
+            structOutliner = new Outliner(baseEditor, def_Outlined);
+            //errorOutliner = new Outliner(baseEditor, def_Error);
 
             CLR_TRACE("MC", "filename: %s", colorer_get_filename(edit));
             CLR_TRACE("MC", "filetype: %s", baseEditor->getFileType()->getName()->getChars());
@@ -177,6 +184,7 @@ public:
     {
         colorer_store_handle(edit, null);
         delete pairMatch;
+        delete structOutliner;
         delete baseEditor;
         delete lineSource;
     }
@@ -348,6 +356,24 @@ public:
         delete[] names;
         delete[] descr;
     }
+    
+    colorer_outline_items *get_outline_items()
+    {
+        colorer_outline_items *outline_items;
+        
+        baseEditor->validate(-1, false);
+        
+        outline_items = new colorer_outline_items[structOutliner->itemCount()+1];
+        
+        for (int idx = 0; idx < structOutliner->itemCount(); idx++) {
+            outline_items[idx].item = structOutliner->getItem(idx)->token->getChars();
+            outline_items[idx].line = structOutliner->getItem(idx)->lno;
+            outline_items[idx].pos  = structOutliner->getItem(idx)->pos;
+        }
+        outline_items[structOutliner->itemCount()].item = null;
+
+	return outline_items;
+    }
 
 private:
     int colorer_convert_color(const StyledRegion *region)
@@ -368,6 +394,7 @@ private:
 
     WEdit        *edit;
     BaseEditor   *baseEditor;
+    Outliner     *structOutliner;
     MCLineSource *lineSource;
     int          def_fore, def_back, def_mc, def_mc_bg;
     PairMatch    *pairMatch;
@@ -471,6 +498,22 @@ void colorer_free_color_styles(const char **names, const char **descr)
 {
     MCEditColorer::free_color_styles(names, descr);
 }
+
+colorer_outline_items *colorer_get_outline_items(WEdit * edit)
+{
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return null;
+    }
+    return mccolorer->get_outline_items();
+}
+
+void colorer_free_outline_items(WEdit * edit, colorer_outline_items *outline_items)
+{
+    delete[] outline_items;
+}
+
+
 
 }
 

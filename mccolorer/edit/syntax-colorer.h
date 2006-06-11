@@ -9,10 +9,20 @@ void colorer_load_syntax (WEdit * edit, char ***names, const char *type);
 void colorer_free_syntax_rules (WEdit * edit);
 
 /* Requests for a list of available color styles */
-void colorer_get_color_styles (char ***names, char ***descr);
+void colorer_get_color_styles (const char ***names, const char ***descr);
 
 /* Frees previously returned arrays */
-void colorer_free_color_styles (char **names, char **descr);
+void colorer_free_color_styles (const char **names, const char **descr);
+
+typedef struct {
+    const char *item;
+    int line, pos;
+} colorer_outline_items;
+
+colorer_outline_items *colorer_get_outline_items (WEdit *edit);
+
+void colorer_free_outline_items(WEdit *edit, colorer_outline_items *outline_items);
+
 
 /**
  * Base entrance point to request color from highlighting system

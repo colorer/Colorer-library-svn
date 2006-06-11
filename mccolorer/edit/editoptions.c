@@ -43,6 +43,9 @@
 #include "../src/wtools.h"	/* QuickDialog */
 #include "../src/setup.h"
 
+#include "edit-widget.h"
+#include "syntax-colorer.h"
+
 #ifdef USE_COLORER
 #define OPT_DLG_H 18
 #else
@@ -338,6 +341,44 @@ edit_colorer_options_dialog (void)
     }
     colorer_free_color_styles(names, descr);
 }
+
+
+
+void edit_colorer_outline_dialog (void)
+{
+    int i, cpos;
+    colorer_outline_items *items;
+    Listbox *syntaxlist;
+    
+    if (!option_syntax_colorer) {
+	return;
+    }
+    
+    items = colorer_get_outline_items(wedit);
+    if (items == NULL) {
+        return;
+    }
+        
+    syntaxlist = create_listbox_window (40, 18, _(" Outline "), NULL);
+    
+    cpos = wedit->curs_line;
+     
+    for (i = 0; items[i].item; i++) {
+	LISTBOX_APPEND_TEXT (syntaxlist, 0, items[i].item, NULL);
+	if (cpos >= items[i].line && (items[i+1].item == NULL || cpos < items[i+1].line) )
+	    listbox_select_by_number (syntaxlist->list, i);
+    }
+
+    i =  run_listbox (syntaxlist);
+    if (i >= 0) {
+        int target_pos = edit_find_line(wedit, items[i].line) + items[i].pos;
+        edit_cursor_move(wedit, wedit->curs1 - target_pos);
+        wedit->force |= REDRAW_PAGE;
+    }
+    colorer_free_outline_items(wedit, items);
+}
+
+
 #endif
 
 
