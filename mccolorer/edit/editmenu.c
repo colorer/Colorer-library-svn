@@ -299,7 +299,15 @@ menu_options (void)
 static void
 menu_syntax (void)
 {
+#if USE_COLORER
+    if (option_syntax_colorer) {
+	edit_syntax_colorer_dialog ();
+    } else {
+	edit_syntax_dialog ();
+    }
+#else
     edit_syntax_dialog ();
+#endif
 }
 
 static void

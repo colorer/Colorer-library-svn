@@ -321,6 +321,31 @@ public:
         return def_mc;
     }
 
+    static colorer_types_list *enumerate_types()
+    {
+        colorer_types_list *types_list = null;
+        Vector<FileType *> types_vector;
+
+        if (pf == null) {
+            return null;
+        }
+
+        int idx = 0;
+        while(true) {
+            FileType *type = pf->getHRCParser()->enumerateFileTypes(idx++);
+            if (type == null) break;
+            types_vector.addElement(type);
+        }
+        types_list = new colorer_types_list[types_vector.size()];
+        for (idx = 0; idx < types_vector.size(); idx++) {
+            types_list[idx].name = types_vector.elementAt(idx)->getName()->getChars();
+            types_list[idx].descr = types_vector.elementAt(idx)->getDescription()->getChars();
+            types_list[idx].group = types_vector.elementAt(idx)->getGroup()->getChars();
+        }
+        types_list[0].items_number = idx;
+        return types_list;
+    }
+
     static void get_color_styles(const char ***names, const char ***descr)
     {
         ParserFactory *pf = MCEditColorer::pf;
@@ -375,6 +400,17 @@ public:
 	return outline_items;
     }
 
+    const char *get_current_type()
+    {
+        return baseEditor->getFileType()->getName()->getChars();
+    }
+
+    int set_current_type (const char *type)
+    {
+        return 1;
+    }
+
+
 private:
     int colorer_convert_color(const StyledRegion *region)
     {
@@ -390,14 +426,13 @@ private:
     }
 
 private:    
-    static ParserFactory *pf;
-
     WEdit        *edit;
     BaseEditor   *baseEditor;
     Outliner     *structOutliner;
     MCLineSource *lineSource;
     int          def_fore, def_back, def_mc, def_mc_bg;
     PairMatch    *pairMatch;
+    static ParserFactory *pf;
 };
 
 
@@ -489,6 +524,17 @@ int colorer_get_default_color(WEdit * edit)
     return mccolorer->get_default_color();
 }
 
+colorer_types_list *colorer_enumerate_types()
+{
+    return MCEditColorer::enumerate_types();
+}
+
+void colorer_free_types_list(colorer_types_list *types_list)
+{
+    delete[] types_list;
+    return;
+}
+
 void colorer_get_color_styles(const char ***names, const char ***descr)
 {
     MCEditColorer::get_color_styles(names, descr);
@@ -498,6 +544,25 @@ void colorer_free_color_styles(const char **names, const char **descr)
 {
     MCEditColorer::free_color_styles(names, descr);
 }
+
+const char *colorer_get_current_type (WEdit *edit)
+{
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return null;
+    }
+    return mccolorer->get_current_type();
+}
+
+int colorer_set_current_type (WEdit *edit, const char *type)
+{
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer == null) {
+        return -1;
+    }
+    return mccolorer->set_current_type(type);
+}
+
 
 colorer_outline_items *colorer_get_outline_items(WEdit * edit)
 {
@@ -514,6 +579,4 @@ void colorer_free_outline_items(WEdit * edit, colorer_outline_items *outline_ite
 }
 
 
-
 }
-

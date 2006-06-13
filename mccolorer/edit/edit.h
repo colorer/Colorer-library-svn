@@ -228,6 +228,7 @@ void edit_options_dialog (void);
 #ifdef USE_COLORER
 void edit_colorer_options_dialog (void);
 void edit_colorer_outline_dialog (void);
+void edit_syntax_colorer_dialog (void);
 #endif
 void edit_syntax_dialog (void);
 void edit_mail_dialog (WEdit *edit);

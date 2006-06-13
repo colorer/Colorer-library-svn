@@ -150,3 +150,4 @@ void colorer_mark_text(WEdit * edit, int start, int end)
     edit->column1 = edit->column2 = 0;
     edit->force |= REDRAW_PAGE;
 }
+

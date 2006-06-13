@@ -12,7 +12,7 @@ libedit_a_SOURCES = \
 	editmenu.c editoptions.c editcmddef.h edit.h edit-widget.h \
 	editlock.c editlock.h syntax.c usermap.h usermap.cwordproc.c \
 	choosesyntax.c \
-	syntax-colorer-wrapper.c syntax-colorer.cpp
+	syntax-colorer-wrapper.c syntax-colorer-dialog.c syntax-colorer.cpp
 else
 libedit_a_SOURCES = \
 	bookmark.c edit.c editcmd.c editwidget.c editdraw.c editkeys.c \

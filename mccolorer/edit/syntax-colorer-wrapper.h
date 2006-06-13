@@ -16,7 +16,7 @@ extern "C"{
     long edit_bol (WEdit * edit, long current);
     long edit_eol (WEdit * edit, long current);
     long edit_find_line (WEdit *edit, int line);
-    
+
 /* C-C++ layer code */
 
     void colorer_store_handle(WEdit *edit, void *mcedit);

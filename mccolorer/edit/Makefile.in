@@ -74,14 +74,14 @@ am_libedit_a_OBJECTS = bookmark.$(OBJEXT) edit.$(OBJEXT) \
 	editlock.$(OBJEXT) syntax.$(OBJEXT) usermap.$(OBJEXT) \
 	wordproc.$(OBJEXT) choosesyntax.$(OBJEXT)
 
-@USE_COLORER_TRUE@am_libedit_a_OBJECTS += syntax-colorer.$(OBJEXT)  syntax-colorer-wrapper.$(OBJEXT)
+@USE_COLORER_TRUE@am_libedit_a_OBJECTS += syntax-colorer.$(OBJEXT)  syntax-colorer-dialog.$(OBJEXT) syntax-colorer-wrapper.$(OBJEXT)
 
 libedit_a_OBJECTS = $(am_libedit_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
 
-@USE_COLORER_TRUE@@AMDEP_TRUE@DEP_FILES += ./$(DEPDIR)/syntax-colorer.Po ./$(DEPDIR)/syntax-colorer-wrapper.Po
+@USE_COLORER_TRUE@@AMDEP_TRUE@DEP_FILES += ./$(DEPDIR)/syntax-colorer.Po ./$(DEPDIR)/syntax-colorer-dialog.Po ./$(DEPDIR)/syntax-colorer-wrapper.Po
 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -261,7 +261,7 @@ libedit_a_SOURCES = \
 	editlock.c editlock.h syntax.c usermap.h usermap.c wordproc.c \
 	choosesyntax.c
 
-@USE_COLORER_TRUE@libedit_a_SOURCES += syntax-colorer.cpp syntax-colorer-wrapper.c
+@USE_COLORER_TRUE@libedit_a_SOURCES += syntax-colorer.cpp syntax-colorer-dialog.c syntax-colorer-wrapper.c
 
 EXTRA_DIST = ChangeLog
 all: all-am
