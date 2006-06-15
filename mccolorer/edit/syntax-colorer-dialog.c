@@ -1,3 +1,26 @@
+/*
+   Colorer syntax engine - MC Edit dialogs support: syntax, style selection and outline
+
+   Copyright (C) 1996, 1997 the Free Software Foundation
+
+   Authors: 2006 Igor Russkih <irusskih at gmail dot com>
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301, USA.
+*/
+
 #include <config.h>
 #include "../src/global.h"
 #include "../src/dialog.h"
@@ -68,7 +91,7 @@ void edit_colorer_outline_dialog (void)
     i =  run_listbox (syntaxlist);
     if (i >= 0) {
         int target_pos = edit_find_line(wedit, items[i].line) + items[i].pos;
-        edit_cursor_move(wedit, wedit->curs1 - target_pos);
+        edit_cursor_move(wedit,  target_pos - wedit->curs1);
         wedit->force |= REDRAW_PAGE;
     }
     colorer_free_outline_items(wedit, items);
@@ -76,31 +99,34 @@ void edit_colorer_outline_dialog (void)
 
 
 static int
-exec_edit_syntax_dialog (const char **names) {
-/*    int i;
+exec_edit_syntax_dialog (const char **names, int current, const char *titlepart)
+{
+    int i;
+    char title[255];
 
-    Listbox *syntaxlist = create_listbox_window (MAX_ENTRY_LEN, LIST_LINES,
-	_(" Choose syntax highlighting "), NULL);
+    sprintf(title, "%s[ %s ]", _(" Choose syntax highlighting "), titlepart);
+
+    Listbox *syntaxlist = create_listbox_window (24, 18, title, NULL);
+
     LISTBOX_APPEND_TEXT (syntaxlist, 'A', _("< Auto >"), NULL);
     LISTBOX_APPEND_TEXT (syntaxlist, 'R', _("< Reload Current Syntax >"), NULL);
 
     for (i = 0; names[i]; i++) {
 	LISTBOX_APPEND_TEXT (syntaxlist, 0, names[i], NULL);
-	if (! option_auto_syntax && option_syntax_type &&
-	    (strcmp (names[i], option_syntax_type) == 0))
-    	    listbox_select_by_number (syntaxlist->list, i + N_DFLT_ENTRIES);
     }
+    listbox_select_by_number (syntaxlist->list, current+2);
 
-    return run_listbox (syntaxlist);
-*/
+    return run_listbox (syntaxlist) - 2;
 }
 
 
 void edit_syntax_colorer_dialog (void)
 {
-/*    int idx;
-    char **groups;
-    int groups_num = 0;
+    int idx, j, cgroupitem = 0, ctypeitem = 0;
+    const char **groups = NULL;
+    const char **types = NULL;
+    const char *ctype, *cdescr, *cgroup;
+    int groups_num = 0, types_num = 0;
 
     colorer_types_list *types_list = colorer_enumerate_types();
 
@@ -108,32 +134,84 @@ void edit_syntax_colorer_dialog (void)
         return;
     }
 
+    ctype = colorer_get_current_type(wedit);
+
     groups = g_malloc (sizeof(char*) * types_list[0].items_number);
     
     for (idx = 0; idx < types_list[0].items_number; idx++) {
-        for (int j = 0; j < groups_num; j++) {
-            if (strcmp(groups[j], types_list[idx].group) != 0)
-                continue;
+        int exists = FALSE;
+        for (j = 0; j < groups_num; j++) {
+            if (strcmp(groups[j], types_list[idx].group) == 0) {
+                exists = TRUE;
+            }
+            if (strcmp(cgroup, groups[j]) == 0) {
+                cgroupitem = j;
+            }
         }
-        groups[groups_num++] = types_list[idx].group;
+        if (strcmp(ctype, types_list[idx].name) == 0) {
+            cdescr = types_list[idx].descr;
+            cgroup = types_list[idx].group;
+        }
+        if (!exists) {
+            groups[groups_num] = types_list[idx].group;
+            groups_num++;
+        }
+    }
+    groups[groups_num] = NULL;
+
+
+    while (1) {
+        
+        cgroupitem = exec_edit_syntax_dialog(groups, cgroupitem, cdescr);
+        
+        if (cgroupitem < 0) {
+            break;
+        }
+
+        cgroup = groups[cgroupitem];
+
+        types_num = 0;
+        ctypeitem = 0;
+
+        g_free(types);
+        types = g_malloc(sizeof(char*) * types_list[0].items_number * 2);
+
+        for (idx = 0; idx < types_list[0].items_number; idx++) {
+            if (strcmp(cgroup, types_list[idx].group) == 0) {
+                types[types_num] = types_list[idx].descr;
+                types[types_list[0].items_number * 2 - types_num] = types_list[idx].name;
+                if (strcmp(ctype, types_list[idx].name) == 0) {
+                    ctypeitem = types_num;
+                }
+                types_num++;
+            }
+        }
+        types[types_num] = NULL;
+        
+        ctypeitem = exec_edit_syntax_dialog(types, ctypeitem, cdescr);
+
+        if (ctypeitem == -3) {
+            continue;
+        } else if (ctypeitem < 0) {
+            cgroupitem = ctypeitem;
+            break;
+        } else {
+            colorer_set_current_type(wedit, types[types_list[0].items_number * 2 - ctypeitem]);
+            break;
+        }
+    }
+    g_free(types);
+    g_free(groups);
+    colorer_free_types_list(types_list);
+
+    if (cgroupitem == -2) {
+	edit_free_syntax_rules (wedit);
+ 	edit_load_syntax (wedit, NULL, option_syntax_type);
     }
 
-
-    names = (char**) g_malloc (sizeof (char*));
-    names[0] = NULL;
-    while (names[count++] != NULL);
-    qsort(names, count - 1, sizeof(char*), pstrcmp);
-
-    if ((syntax = exec_edit_syntax_dialog ((const char**) names)) < 0) {
-	for (i = 0; names[i]; i++) {
-	    g_free (names[i]);
-	}
-	g_free (names);
-	return;
+    if (cgroupitem == -1) {
+        colorer_reload(wedit);
+ 	edit_load_syntax (wedit, NULL, option_syntax_type);
     }
 
-    old_auto_syntax = option_auto_syntax;
-    old_syntax_type = g_strdup (option_syntax_type);
-
-*/
 }

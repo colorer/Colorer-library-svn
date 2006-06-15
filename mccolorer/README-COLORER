@@ -16,7 +16,7 @@ a couple of new features into the mcedit component.
 Features
 ---------
 
-The next features are available in this MOD:
+The next features are available in this mod:
 
  - Syntax highlighting using colorer-take5 engine.
    Can be switched back to MC syntax highlighter in runtime
@@ -27,6 +27,8 @@ The next features are available in this MOD:
    these elements.
 
  - HRD Schemes Customization (visual color style)
+ 
+ - Outline list for current file
 
 
 License

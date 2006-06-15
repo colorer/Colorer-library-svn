@@ -1,6 +1,28 @@
+/*
+   Colorer syntax engine - C++ bridge
 
-#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_FULL
-//#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_QUIET
+   Copyright (C) 1996, 1997 the Free Software Foundation
+
+   Authors: 2006 Igor Russkih <irusskih at gmail dot com>
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301, USA.
+*/
+
+//#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_FULL
+#define COLORER_FEATURE_LOGLEVEL  COLORER_FEATURE_LOGLEVEL_QUIET
 
 #include"syntax-colorer-legacy-log.h"
 
@@ -402,14 +424,26 @@ public:
 
     const char *get_current_type()
     {
+        if (baseEditor->getFileType() == null) {
+            return null;
+        }
         return baseEditor->getFileType()->getName()->getChars();
     }
 
     int set_current_type (const char *type)
     {
-        return 1;
+        if (type == null) {
+            baseEditor->chooseFileType(null);
+            return true;
+        }
+        return baseEditor->setFileType(DString(type)) != null ? true : false;
     }
 
+    static void reload()
+    {
+        delete pf;
+        pf = null;
+    }
 
 private:
     int colorer_convert_color(const StyledRegion *region)
@@ -576,6 +610,15 @@ colorer_outline_items *colorer_get_outline_items(WEdit * edit)
 void colorer_free_outline_items(WEdit * edit, colorer_outline_items *outline_items)
 {
     delete[] outline_items;
+}
+
+void colorer_reload(WEdit *edit)
+{
+    MCEditColorer *mccolorer = (MCEditColorer*)colorer_get_handle(edit);
+    if (mccolorer != null) {
+        delete mccolorer;
+    }
+    MCEditColorer::reload();
 }
 
 
