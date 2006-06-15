@@ -105,11 +105,12 @@ h4{ font: small-caps 100%; font-weight: bold; }
 
 .download{
   border: 0;
-  border-left: 3px solid #fff;
-  border-right: 3px solid #fff;
   display: block;
   background: url("../images/download.png") top left no-repeat;
-  height: 40px;
+  height: 60px;
+  width: 350px;
+  text-align: right;
+  vertical-align:bottom;
 }
 .download a,
 .download a:visited,
@@ -117,17 +118,16 @@ h4{ font: small-caps 100%; font-weight: bold; }
 .download a:link,
 .download a:active
 {
-  padding-right: 70pt;
+  padding-right: 25pt;
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-left: 5px;
-  top: 10px;
+  padding-left: 120px;
+  top: 18px;
   position: relative;
-  font-size: 100%;
-  color: white;
+  font-size: 135%;
+  color: #202567;
   background: transparent;
-  text-decoration: none;
-  font-weight: bold;
+  white-space: nowrap;
   text-shadow: 2px 2px black;
 }
 
