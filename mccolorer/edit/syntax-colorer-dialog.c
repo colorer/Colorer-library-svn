@@ -1,9 +1,7 @@
 /*
    Colorer syntax engine - MC Edit dialogs support: syntax, style selection and outline
 
-   Copyright (C) 1996, 1997 the Free Software Foundation
-
-   Authors: 2006 Igor Russkih <irusskih at gmail dot com>
+   Copyright (C) 2006 Igor Russkih <irusskih at gmail dot com>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
