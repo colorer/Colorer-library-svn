@@ -77,6 +77,9 @@ public:
         start = pos;
         //CLR_TRACE("MC", "setPosition start=%d", pos);
         len = edit_eol(edit, pos) - start;
+        if (colorer_edit_get_byte(edit, start+len-1) ==  '\r') {
+            len--;
+        }
         //CLR_TRACE("MC", "setPosition len=%d", len);
         assert(len >= 0);
     }
