@@ -384,6 +384,16 @@
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
   </prototype>
+  <prototype name="pnuts" group="scripts" description="Java: Pnuts">
+    <location link="scripts/pnuts.hrc"/>
+    <filename>/\.(pnut)$/i</filename>
+    <parameters>
+      <param name="pnuts-modules" value="true" description="Use some common Pnuts module function names"/>
+      <param name="j2se-classes" value="true" description="Use some common used J2SE class names"/>
+      <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
+      <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
+    </parameters>
+  </prototype>
   <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
     <location link="scripts/javacc.hrc"/>
     <filename>/\.(jjt?)$/i</filename>
