@@ -8,6 +8,7 @@ $Date$
     - java policy simple syntax
     - 4mirror: xsieve, wsdl
     - AHDL syntax
+    - Pnuts syntax (by Nate)
 
 
 Date: 2005/04/06 13:41:01
