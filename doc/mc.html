@@ -41,8 +41,11 @@ Source package allows you to rebuild it for any platform MC available on,
 and Binary package contains Midnight Commander, compiled for <strong>i386 Linux</strong> (mdk10).
 </p>
 <ul>
-<li>To install it you should have Colorer-take5-linux
-already installed or unpacked somewere (however any form of its distribution is suitable).
+<li>Source package doesn't contain colorer-take5 library part, so you should download and compile it separately
+(<a href="http://sourceforge.net/project/showfiles.php?group_id=34855">Colorer-take5-linux</a>)
+</li>
+<li>Binary package already contains compiled colorer-take5 library you need.
+You can install it into normal place (/usr/ or /usr/local/) or just unpack somewere.
 </li>
 <li>
 MC binary was compiled with hardcoded <strong>/usr/</strong> prefix,
@@ -50,13 +53,10 @@ so you should have MC already installed there
 or recompile it from the source package with your prefix.
 </li>
 <li>
-Next, just use the provided <strong>'mc'</strong> binary to run it.
-</li>
-<li>
-In case you have no root rights you can look
-for the 'mclr.sh' script and fix it for yourself
-to make it possible to run this MC mod from non-root account.
-<br/><br/>
+In case you have no root rights, just use the provided <strong>'mclr.sh'</strong> script  to run it.
+Or you can install library and <strong>mc</strong> binary into the appropriate locations and use it
+as always.
+<br/>
 </li>
 </ul>
 <hr/>
