@@ -51,7 +51,12 @@ void edit_colorer_options_dialog (void)
 
     i =  run_listbox (syntaxlist);
     if (i >= 0) {
-	strcpy(colorer_hrd_string, names[i]);
+	int slen = strlen(names[i]);
+	if (slen >= COLORER_HRD_STRING_LENGTH) {
+	    slen = COLORER_HRD_STRING_LENGTH-1;
+	}
+	strncpy(colorer_hrd_string, names[i], slen);
+	colorer_hrd_string[slen] = 0;
 	
 	/* reload instance to apply changes */
 	edit_free_syntax_rules(wedit);
