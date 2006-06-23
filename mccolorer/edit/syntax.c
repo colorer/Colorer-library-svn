@@ -981,13 +981,14 @@ void edit_free_syntax_rules (WEdit * edit)
 {
     int i, j;
 
+    if (!edit)
+	return;
+
 #if USE_COLORER
     colorer_free_syntax_rules(edit);
     return;
 #endif    
 
-    if (!edit)
-	return;
     if (edit->defines)
 	destroy_defines (&edit->defines);
     if (!edit->rules)
