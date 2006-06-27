@@ -540,6 +540,7 @@
   <prototype name="ruby" group="rare" description="Ruby">
     <location link="rare/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/Rakefile$/i</filename>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
