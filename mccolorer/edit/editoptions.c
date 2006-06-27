@@ -118,7 +118,7 @@ edit_options_dialog (void)
 #ifdef USE_COLORER
 	/* 7 */
 	{quick_checkbox, OPT_DLG_W / 2 + 1, OPT_DLG_W, OPT_DLG_H - 9,
-	 OPT_DLG_H, N_("&Colorer syntax engine"), 0, 0, 0, 0, NULL},
+	 OPT_DLG_H, N_("Colorer syntax &engine"), 0, 0, 0, 0, NULL},
 	/* 8 */
 	{quick_checkbox, OPT_DLG_W / 2 + 1, OPT_DLG_W, OPT_DLG_H - 10,
 	 OPT_DLG_H, N_("Save file &position"), 0, 0, 0, 0, NULL},

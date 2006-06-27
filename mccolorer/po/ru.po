@@ -594,7 +594,7 @@ msgid "Synta&x highlighting"
 msgstr "&Цветовыделение синтаксиса"
 
 #, fuzzy
-msgid "&Colorer syntax engine"
+msgid "Colorer syntax &engine"
 msgstr "Подсветка Colorer"
 
 msgid "Save file &position"
