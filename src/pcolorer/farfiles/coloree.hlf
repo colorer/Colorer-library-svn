@@ -107,11 +107,14 @@ alphabetic symbols to create filters.
   #*# All these features are depend on the content of HRC files.
 All information is taken from syntax regions analysis.
 
-  #8 Update highlight#
+  #8 Find function#       ~Alt-O~
+    Searches function name under cursor in outliner view, and jumps there.
+
+  #9 Update highlight#
     Updates syntax highlighting in current editor. Use it, if
 some problems occurs in current syntax.
 
-  #9 Select encoding#
+  #A Select encoding#
     Show dialog, allowing you to change current FAR text encoding.
 
   #C Configuration#
