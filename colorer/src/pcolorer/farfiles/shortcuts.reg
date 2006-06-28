@@ -54,6 +54,14 @@ REGEDIT4
 "Sequence"="F11 c 6"
 "DisableOutput"=dword:00000001
 "Description"="find errors [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltO]
+"Sequence"="F11 c 8"
+"DisableOutput"=dword:00000001
+"Description"="find function [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt™]
+"Sequence"="F11 c 8"
+"DisableOutput"=dword:00000001
+"Description"="find function [colorer]"
 
 
 [HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt[]
