@@ -3,10 +3,23 @@
 #include<stdlib.h>
 #include<colorer/viewer/ConsoleTools.h>
 
+#include<common/MemoryRomizer.h>
+
 /** Internal run action type */
-enum { JT_NOTHING, JT_REGTEST, JT_PROFILE,
-       JT_LIST_LOAD, JT_LIST_TYPES, JT_LIST_TYPE_NAMES,
-       JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
+enum {
+  JT_NOTHING,
+  JT_REGTEST,
+  JT_ROMTEST,
+  JT_PROFILE,
+  JT_LIST_LOAD,
+  JT_LIST_TYPES,
+  JT_LIST_TYPE_NAMES,
+  JT_VIEW,
+  JT_GEN,
+  JT_GEN_TOKENS,
+  JT_FORWARD
+} jobType;
+
 int profileLoops = 1;
 
 /** Reads and parse command line */
@@ -27,6 +40,7 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
       }
       continue;
     }
+    if (argv[i][1] == 'r' && argv[i][2] == 'o' && argv[i][3] == 'm') { jobType = JT_ROMTEST; continue; }
     if (argv[i][1] == 'r') { jobType = JT_REGTEST; continue; }
     if (argv[i][1] == 'f') { jobType = JT_FORWARD; continue; }
     if (argv[i][1] == 'v') { jobType = JT_VIEW; continue; }
@@ -128,6 +142,7 @@ void printError(){
        "  -ht        Generates plain coloring from <filename> using tokens output\n"
        "  -v         Runs viewer on file <fname> (uses 'console' hrd class)\n"
        "  -p<n>      Runs parser in profile mode (if <n> specified, makes <n> loops)\n"
+       "  -rom       Runs ROMizer test\n"
        "  -f         Forwards input file into output with specified encodings\n"
        " Parameters:\n"
        "  -c<path>   Uses specified 'catalog.xml' file\n"
@@ -147,7 +162,39 @@ void printError(){
 
 #include<common/MemoryChunks.h>
 
-/** Creates ConsoleTools class instance and runs it.
+void ROMTest()
+{
+  ParserFactory *pf;
+  ParserFactory *pfclone;
+
+  romizer_start();
+  
+  pf = new ParserFactory();
+  HRCParser *hrcParser = pf->getHRCParser();
+  for(int idx = 0;; idx++){
+    FileType *type = hrcParser->enumerateFileTypes(idx);
+    if (type == null) break;
+    printf("%s\n", type->getName()->getChars());
+//    type->getBaseScheme();
+  }
+  
+  romizer_stop();
+
+  pfclone = (ParserFactory*) romizer_traverse(pf);
+
+  delete pf;
+
+  hrcParser = pfclone->getHRCParser();
+  for(int idx = 0;; idx++){
+    FileType *type = hrcParser->enumerateFileTypes(idx);
+    if (type == null) break;
+    printf("%s,  ", type->getName()->getChars());
+    //type->getBaseScheme();
+  }
+}
+
+/**
+ * Creates ConsoleTools class instance and runs it.
 */
 int main(int argc, char *argv[])
 {
@@ -163,6 +210,9 @@ int main(int argc, char *argv[])
     switch(jobType){
       case JT_REGTEST:
         ct.RETest();
+        break;
+      case JT_ROMTEST:
+        ROMTest();
         break;
       case JT_PROFILE:
         ct.profile(profileLoops);
