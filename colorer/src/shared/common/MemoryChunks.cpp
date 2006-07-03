@@ -1,19 +1,12 @@
 #include<common/Vector.h>
+#include<common/Hashtable.h>
+#include<common/Logging.h>
 #include<memory.h>
 #include<stdio.h>
 #include<time.h>
 
 #include<common/MemoryChunks.h>
-
-int total_req = 0;
-int new_calls = 0;
-int free_calls = 0;
-
-extern "C" {
-  int get_total_req(){ return total_req; }
-  int get_new_calls(){ return new_calls; }
-  int get_free_calls(){ return free_calls; }
-}
+#include<common/MemoryRomizer.h>
 
 /**
   @ingroup common @{
@@ -24,39 +17,33 @@ extern "C"{
   void dlfree(void *ptr);
 }
 
-void *operator new(size_t size){
+#include<common/MemoryRomizer.cpp>
 
-#if MEMORY_PROFILE
-  total_req += size;
-  new_calls++;
-#endif
-  return dlmalloc(size);
+void *operator new(size_t size)
+{
+  return new_wrapper(size);
 }
 
-void operator delete(void *ptr){
-#if MEMORY_PROFILE
-  free_calls++;
-#endif
-  dlfree(ptr);
+void operator delete(void *ptr)
+{
+  delete_wrapper(ptr);
   return;
 }
 
-void *operator new[](size_t size){
-#if MEMORY_PROFILE
-  total_req += size;
-  new_calls++;
-#endif
-  return dlmalloc(size);
+void *operator new[](size_t size)
+{
+  return new_wrapper(size);
 }
 
-void operator delete[](void *ptr){
-#if MEMORY_PROFILE
-  free_calls++;
-#endif
-  dlfree(ptr);
+void operator delete[](void *ptr)
+{
+  delete_wrapper(ptr);
   return;
-};
+}
 #endif
+
+
+
 
 /**
   List of currently allocated memory chunks with size CHUNK_SIZE
@@ -88,26 +75,24 @@ void *chunk_alloc(size_t size){
   /* Init static - cygwin problems workaround */
   if (chunks == null){
     chunks = new Vector<byte*>;
-  };
+  }
 
   if (chunks->size() == 0){
     currentChunk = new byte[CHUNK_SIZE];
     chunks->addElement(currentChunk);
     currentChunkAlloc = 0;
-  };
+  }
   size = ((size-1) | 0x3) + 1; // 4-byte aling
   if (currentChunkAlloc+size > CHUNK_SIZE){
     currentChunk = new byte[CHUNK_SIZE];
     chunks->addElement(currentChunk);
     currentChunkAlloc = 0;
-  };
+  }
   void *retVal = (void*)(currentChunk+currentChunkAlloc);
   currentChunkAlloc += size;
   allocCount++;
-  //printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks->size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
-  //printf("calloc\t%d\n", clock());
   return retVal;
-};
+}
 
 /**
   Deallocates previously allocated memory.
@@ -120,11 +105,38 @@ void chunk_free(void *ptr){
   if (allocCount == 0){
     for(int idx = 0; idx < chunks->size(); idx++){
       delete[] chunks->elementAt(idx);
-    };
+    }
     chunks->setSize(0);
-  };
-//  printf("cf:%d, ", allocCount);
-};
+  }
+}
+
+
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+
+Hashtable<int> profile_number;
+Hashtable<int> profile_size;
+Hashtable<bool> profile_increase;
+
+void profile_new(char*cname, int size)
+{
+    //CLR_INFO("MEM", "new %s - %d", cname, size);
+    if (profile_increase.get(&DString(cname)) == false) {
+        profile_increase.put(&DString(cname), true);
+        CLR_INFO("MEM", "%s - %d - %d", cname, profile_number.get(&DString(cname)), profile_size.get(&DString(cname)));
+    }
+    profile_number.put(&DString(cname), profile_number.get(&DString(cname))+1);
+    profile_size.put(&DString(cname), profile_size.get(&DString(cname))+size);
+}
+void profile_delete(char*cname)
+{
+    //CLR_INFO("MEM", "del %s", cname);
+    if (profile_increase.get(&DString(cname)) == true) {
+        profile_increase.put(&DString(cname), false);
+        CLR_INFO("MEM", "%s - %d", cname, profile_number.get(&DString(cname)));
+    }
+    profile_number.put(&DString(cname), profile_number.get(&DString(cname))-1);
+}
+#endif
 
 /**
   @}

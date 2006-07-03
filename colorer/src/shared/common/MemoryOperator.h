@@ -1,20 +1,41 @@
 
+#ifndef CNAME
+#define CNAME "NOP"
+#endif
+
 #if COLORER_FEATURE_USE_CHUNK_ALLOC
 
   void *operator new(size_t size){
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+    profile_new(CNAME, size);
+#endif
     return chunk_alloc(size);
-  };
+  }
+  
   void operator delete(void *ptr){
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+    profile_delete(CNAME);
+#endif
     chunk_free(ptr);
-  };
+  }
+  
   void *operator new[](size_t size){
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+    profile_new(CNAME, size);
+#endif
     return chunk_alloc(size);
-  };
+  }
+
   void operator delete[](void *ptr){
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+    profile_delete(CNAME);
+#endif
     chunk_free(ptr);
-  };
+  }
 
 #endif
+
+#undef CNAME
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

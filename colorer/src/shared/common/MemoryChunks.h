@@ -3,17 +3,16 @@
 
 #define MEMORY_PROFILE 1
 
-
 #define CHUNK_SIZE 1024*1024*2
 
 void *chunk_alloc(size_t size);
 void chunk_free(void *ptr);
 
-extern "C" {
-  int get_total_req();
-  int get_new_calls();
-  int get_free_calls();
-}
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
+void profile_new(char*cname, int size);
+void profile_delete(char*cname);
+#endif
+
 
 #endif
 

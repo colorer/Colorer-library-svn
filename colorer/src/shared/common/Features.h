@@ -19,8 +19,13 @@
   If defined, long-living classes use chunk allocation procedure
 */
 #ifndef COLORER_FEATURE_USE_CHUNK_ALLOC
-  #define COLORER_FEATURE_USE_CHUNK_ALLOC TRUE
+  #define COLORER_FEATURE_USE_CHUNK_ALLOC FALSE
 #endif
+
+#ifndef COLORER_FEATURE_PROFILE_MEM_DISTR
+  #define COLORER_FEATURE_PROFILE_MEM_DISTR FALSE
+#endif
+
 
 /**
   If defined, HTTP InputSource is implemented.
