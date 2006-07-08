@@ -175,22 +175,28 @@ void ROMTest()
     FileType *type = hrcParser->enumerateFileTypes(idx);
     if (type == null) break;
     printf("%s\n", type->getName()->getChars());
-//    type->getBaseScheme();
+    if (idx == 3)
+    type->getBaseScheme();
   }
-  
-  romizer_stop();
 
   pfclone = (ParserFactory*) romizer_traverse(pf);
 
   delete pf;
+
+  romizer_stop();
+
 
   hrcParser = pfclone->getHRCParser();
   for(int idx = 0;; idx++){
     FileType *type = hrcParser->enumerateFileTypes(idx);
     if (type == null) break;
     printf("%s,  ", type->getName()->getChars());
-    //type->getBaseScheme();
+//    type->getBaseScheme();
   }
+
+  delete pfclone;
+
+  printf("success!");
 }
 
 /**

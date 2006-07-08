@@ -6,10 +6,9 @@ shared_path=../shared/
 obj_output=objs
 
 #for profiler usage
-#CPPFLAGS_CUSTOM = /Zi
-#LIB_DEBUG = /debug
-CPPFLAGS_CUSTOM = -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
-LIB_DEBUG = /incremental:no
+CPPFLAGS_CUSTOM = /Zi
+#CPPFLAGS_CUSTOM = -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
+LIB_DEBUG = /debug /incremental:no
 
 include ../shared/makefile.colorer.vc
 
