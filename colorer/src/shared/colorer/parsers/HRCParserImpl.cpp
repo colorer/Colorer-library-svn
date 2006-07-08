@@ -10,6 +10,7 @@ HRCParserImpl::HRCParserImpl()
   parseType = null;
   versionName = null;
   errorHandler = null;
+  curInputSource = null;
   updateStarted = false;
 }
 
@@ -631,6 +632,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         pIDs[pos].keyword = new SString(param);
         pIDs[pos].region = rgn;
         pIDs[pos].isSymbol = (type == 2);
+        pIDs[pos].ssShorter = -1;
         next->kwList->firstChar->addChar((*param)[0]);
         if (!isCase){
           next->kwList->firstChar->addChar(Character::toLowerCase((*param)[0]));

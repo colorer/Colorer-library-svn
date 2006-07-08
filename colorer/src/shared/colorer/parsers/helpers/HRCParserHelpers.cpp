@@ -2,7 +2,7 @@
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 #include<stdlib.h>
 
-
+/*
 KeywordInfo::KeywordInfo(){
   keyword = null;
   ssShorter = -1;
@@ -24,7 +24,7 @@ void KeywordInfo::swapWith(KeywordInfo *kwi){
   kwi->region    = _region;
   kwi->ssShorter = _ssShorter;
 };
-/*KeywordInfo::KeywordInfo(KeywordInfo &ki){
+KeywordInfo::KeywordInfo(KeywordInfo &ki){
   keyword = new SString(ki.keyword);
   region = ki.region;
   isSymbol = ki.isSymbol;
@@ -37,10 +37,11 @@ KeywordInfo &KeywordInfo::operator=(KeywordInfo &ki){
   isSymbol = ki.isSymbol;
   ssShorter = ki.ssShorter;
   return *this;
-};*/
+};
 KeywordInfo::~KeywordInfo(){
   delete keyword;
 };
+*/
 
 KeywordList::KeywordList(){
   num = 0;
@@ -50,6 +51,9 @@ KeywordList::KeywordList(){
   firstChar = new CharacterClass();
 };
 KeywordList::~KeywordList(){
+  for(int idx = 0; idx < num; idx++) {
+    delete kwList[idx].keyword;
+  }
   delete[] kwList;
   delete   firstChar;
 };
