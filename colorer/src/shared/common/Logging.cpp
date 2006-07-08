@@ -102,6 +102,11 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
   file_logger(level, cname, msg, v);
 }
 
+void __clr_assert(const char *file, int line, const char *s)
+{
+  CLR_ERROR("ASSERT", "%s:%d:  %s", file, line, s);
+  assert(!"stub");
+}
 
 
 /* ***** BEGIN LICENSE BLOCK *****

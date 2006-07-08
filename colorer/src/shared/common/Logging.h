@@ -23,11 +23,15 @@
 
 #define NDEBUG
 
-#if (COLORER_FEATURE_LOGLEVEL >= COLORER_FEATURE_LOGLEVEL_WARN)
-#undef NDEBUG
+#if (COLORER_FEATURE_ASSERT == TRUE)
+ #undef NDEBUG
+ #include<assert.h>
+ #define clr_assert(e)       ((e) ? (void)0 : __clr_assert(__FILE__, __LINE__, #e))
+ void __clr_assert(const char *, int, const char *);
+#else
+ #define assert(e)     ((void)0)
+ #define clr_assert(e) ((void)0)
 #endif
-
-#include<assert.h>
 
 #ifdef __cplusplus
 extern "C" {

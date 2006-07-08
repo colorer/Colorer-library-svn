@@ -44,6 +44,13 @@ public:
   OutOfBoundException(const String &msg);
 };
 
+class InvalidOperationException : public Exception
+{
+public:
+  InvalidOperationException();
+  InvalidOperationException(const String &msg);
+};
+
 /**
     InputSourceException is thrown, if some IO error occurs.
     @ingroup common

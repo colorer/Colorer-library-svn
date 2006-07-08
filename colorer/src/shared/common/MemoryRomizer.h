@@ -1,7 +1,7 @@
 #ifndef _COLORER_MEMORYROMIZER_
 #define _COLORER_MEMORYROMIZER_
 
-#include<common/Vector.h>
+#include<common/SortedVector.h>
 
 #ifdef MEMORY_PROFILE
 extern "C" {
@@ -15,7 +15,7 @@ void romizer_start();
 void romizer_stop();
 void *romizer_traverse(void *address);
 
-extern Vector<int*> *romizer_data;
+extern SortedVector<int*> *romizer_data;
 
 #endif
 

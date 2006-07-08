@@ -24,7 +24,7 @@ public:
   Vector(int initsize, int incrementSize = 0);
   /** Default Destructor
   */
-  ~Vector();
+  virtual ~Vector();
   /** Clears vector.
   */
   void clear();
@@ -44,39 +44,39 @@ public:
 
   /** Adds element into tail of sequence.
   */
-  void addElement(const T el);
+  virtual void addElement(const T el);
   /** Inserts element at specified position and expand vector
       by one element.
   */
-  void insertElementAt(const T el, int index);
+  virtual void insertElementAt(const T el, int index);
   /** Replaces element at specified position with specified
       element. Vector's size is not changed.
   */
-  void setElementAt(const T el, int index);
+  virtual void setElementAt(const T el, int index);
   /** Removes element at specified @c index and shift all
       elements.
   */
-  void removeElementAt(int index);
+  virtual void removeElementAt(int index);
   /** Removes first found element el from vector.
   */
-  bool removeElement(const T el);
+  virtual bool removeElement(const T el);
   /** Returns index of element, starting search from specified @c index
       parameter. Returns -1, if not found.
   */
-  int indexOf(T el, int index) const;
+  virtual int indexOf(T el, int index) const;
   /** Returns index of element, starting search from start of vector.
       Returns -1, if not found.
   */
-  int indexOf(T el) const;
+  virtual int indexOf(T el) const;
   /** Returns element at specified position
       @throw OutOfBoundException If @c index is too big or less, than zero.
   */
-  T elementAt(int index) const;
+  virtual T elementAt(int index) const;
   /** Returns last element of vector.
       @throw OutOfBoundException If vector has no elements.
   */
-  T lastElement() const;
-private:
+  virtual T lastElement() const;
+protected:
   int csize, asize;
   int incrementSize;
   T*  array;
@@ -124,7 +124,7 @@ template<class T> void Vector<T>::setSize(int newSize){
   if (newSize > asize) ensureCapacity(newSize);
   if (newSize <= asize){
     for(int idx = csize; idx < newSize; idx++)
-      array[idx] = null; //!!!
+      array[idx] = (T)null; // only for null-convertable objects!!!
     csize = newSize;
   };
 };

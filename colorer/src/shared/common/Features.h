@@ -8,6 +8,10 @@
   #define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_ERROR
 #endif
 
+#ifndef COLORER_FEATURE_ASSERT
+  #define COLORER_FEATURE_ASSERT FALSE
+#endif
+
 /**
   If defined, use dlmalloc memory management implementation
 */

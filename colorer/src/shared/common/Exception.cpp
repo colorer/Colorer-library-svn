@@ -27,6 +27,11 @@ OutOfBoundException::OutOfBoundException(const String &msg){
   message->append(DString("OutOfBoundException: ")).append(msg);
 };
 
+InvalidOperationException::InvalidOperationException(){};
+InvalidOperationException::InvalidOperationException(const String &msg){
+  message->append(DString("InvalidOperationException: ")).append(msg);
+};
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
