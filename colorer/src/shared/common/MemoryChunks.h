@@ -7,6 +7,7 @@
 
 void *chunk_alloc(size_t size);
 void chunk_free(void *ptr);
+bool chunk_belongs(void *ptr);
 
 #if COLORER_FEATURE_PROFILE_MEM_DISTR
 void profile_new(char*cname, int size);
