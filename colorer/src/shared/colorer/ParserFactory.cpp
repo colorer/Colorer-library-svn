@@ -9,6 +9,7 @@
 #endif
 
 #include<common/Logging.h>
+#include<common/MemoryRomizer.h>
 
 #include<colorer/ParserFactory.h>
 #include<colorer/viewer/TextLinesStore.h>
@@ -21,11 +22,12 @@
 #define __TIMESTAMP__ "28 May 2006"
 #endif
 
-
 void ParserFactory::init()
 {
   hrcParser = null;
   fileErrorHandler = null;
+  cacheIS = null;
+  
   const byte *stream = null;
   try{
     catalogFIS = InputSource::newInstance(catalogPath);
@@ -41,7 +43,25 @@ void ParserFactory::init()
   }
 
   elem = elem->getFirstChild();
-  while(elem != null){
+  while(elem != null)
+  {
+    if (elem->getNodeType() == Node::ELEMENT_NODE &&
+        *elem->getNodeName() == "hrc-cache"){
+      if (hrcParser != null) {
+        if (fileErrorHandler) fileErrorHandler->error(DString("HRC Cache already loaded! Multiple hrc-cache elements in catalog.xml?"));
+        continue;
+      }
+      cacheIS = InputSource::newInstance(((Element*)elem)->getAttribute(DString("link")), catalogFIS);
+      
+      try{
+        const byte *cache_stream = cacheIS->openStream();
+        hrcParser = (HRCParser*)romizer_loadup((void*)cache_stream);
+      }catch(Exception &e){
+        CLR_ERROR("PF", e.getMessage()->getChars());
+        hrcParser = null;
+        continue;
+      }
+    }
     // hrc locations
     if (elem->getNodeType() == Node::ELEMENT_NODE &&
         *elem->getNodeName() == "hrc-sets"){
@@ -219,6 +239,7 @@ ParserFactory::~ParserFactory(){
   delete hrcParser;
   delete catalogPath;
   delete catalogFIS;
+  delete cacheIS;
   delete fileErrorHandler;
 };
 

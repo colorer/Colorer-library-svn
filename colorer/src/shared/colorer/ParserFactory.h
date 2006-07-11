@@ -121,6 +121,7 @@ private:
 
   String *catalogPath;
   InputSource *catalogFIS;
+  InputSource *cacheIS;
   ErrorHandler *fileErrorHandler;
   Vector<const String*> hrcLocations;
   Hashtable<Hashtable<Vector<const String*>*>*> hrdLocations;
