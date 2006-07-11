@@ -13,7 +13,8 @@ extern "C" {
 
 void romizer_start();
 void romizer_stop();
-void *romizer_traverse(void *address);
+bool romizer_traverse(void *address);
+void *romizer_loadup(void *base);
 
 extern SortedVector<int*> *romizer_data;
 

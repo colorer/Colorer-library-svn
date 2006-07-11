@@ -7,6 +7,27 @@
 #include<common/MemoryChunks.h>
 #include<common/MemoryRomizer.h>
 
+
+
+#include<stdio.h>
+#include<string.h>
+#include<sys/stat.h>
+#include<sys/timeb.h>
+#include<fcntl.h>
+#include<time.h>
+
+#if defined _WIN32
+#include<io.h>
+#endif
+#if defined __unix__ || defined __GNUC__
+#include<unistd.h>
+#endif
+#ifndef O_BINARY
+#define O_BINARY 0x0
+#endif
+
+
+
 int total_req = 0;
 int new_calls = 0;
 int free_calls = 0;
@@ -19,7 +40,7 @@ extern "C" {
 
 bool romizer_collecting = false;
 int total_size = 0, total_count = 0;
-
+Vector<int> *relink_basement = null;
 char *cloned = null;
 int cloned_filled = 0;
 
@@ -52,12 +73,17 @@ void romizer_traverse_i(int *address)
 
   // clone it
   if (cloned == null) {
-    cloned = new char[total_size];
+    // for the possible size alignment
+    cloned = new char[total_size + total_count*4];
   }
   int this_filled = cloned_filled;
   memcpy(cloned+this_filled, address, size);
+  if (size % 4 != 0) size = (size & (~0x03)) + 4;
   cloned_filled += size;
-  address[-3] = (int)(cloned+this_filled);
+  address[-3] = (int)(this_filled);
+  if (relink_basement == null) {
+    relink_basement = new Vector<int>(100000);
+  }
 
   // traverse in recurse
   for(int idx = 0; idx < size/4; idx++){
@@ -67,12 +93,13 @@ void romizer_traverse_i(int *address)
       romizer_traverse_i(new_address);
       if (new_address[-1] == 0xDEAD) {
         ((int*) (cloned+this_filled) )[idx] = new_address[-3];
+        relink_basement->addElement(this_filled + idx*4);
       }
     }
   }
 }
 
-void *romizer_traverse(void *address)
+bool romizer_traverse(void *address)
 {
   bool local_rc = romizer_collecting;
   romizer_collecting = false;
@@ -80,15 +107,58 @@ void *romizer_traverse(void *address)
   if (!chunk_belongs(address)) {
     CLR_WARN("MEM", "traverse: warn - unmapped address: %p", address);
     romizer_collecting = local_rc;
-    return 0;
+    return false;
   }
-  romizer_traverse_i((int*)address);
   
+  if (cloned != null) {
+    delete[] cloned;
+    cloned = null;
+    delete relink_basement;
+    relink_basement = null;
+    cloned_filled = 0;
+  }
+
+  romizer_traverse_i((int*)address);
+
+  if (cloned == null) {
+    CLR_ERROR("MEM", "traverse: already traversed??");
+    return false;
+  }
+  
+  int source = open("hrc-cache", O_BINARY|O_CREAT|O_TRUNC|O_RDWR);
+  if (source == -1){
+    CLR_ERROR("MEM", "traverse: file open failed");
+    return false;
+  }
+  int val;
+  val = relink_basement->size();
+  write(source, &val, 4);
+  for(int idx = 0; idx < relink_basement->size(); idx++) {
+    val = relink_basement->elementAt(idx);
+    write(source, &val, 4);
+  }
+  write(source, cloned, cloned_filled);
+  close(source);
+
+
   CLR_TRACE("MEM", "traverse: cloned:%p, cloned_filled:%d", cloned, cloned_filled);
 
   romizer_collecting = local_rc;
-  return (void*)((int*)address)[-3];
+  return true;
 }
+
+void *romizer_loadup(void *base)
+{
+  int *relocate_base = (int*)base;
+  int size = relocate_base[0];
+  int *start_address = relocate_base+size+1;
+  
+  for(int idx = 0; idx < size; idx++) {
+    start_address[relocate_base[1+idx]/4] += (int)start_address;
+  }
+  return start_address;
+}                                      
+
 
 
 
