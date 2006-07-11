@@ -22,8 +22,11 @@ enum {
 
 int profileLoops = 1;
 
+ConsoleTools ct;
+
+
 /** Reads and parse command line */
-void init(ConsoleTools &ct, int argc, char*argv[]){
+void init(int argc, char*argv[]){
 
   bool showBanner = true;
 
@@ -175,28 +178,23 @@ void ROMTest()
     FileType *type = hrcParser->enumerateFileTypes(idx);
     if (type == null) break;
     printf("%s\n", type->getName()->getChars());
-    if (idx == 3)
+    //if (idx == 3)
     type->getBaseScheme();
   }
 
-  pfclone = (ParserFactory*) romizer_traverse(pf);
-
-  delete pf;
-
   romizer_stop();
 
+  printf("traversing...\n");
+  bool res = romizer_traverse(hrcParser);
+  printf("traverse %s.\n", res ? "complete" : "failed (file exists?)");
 
-  hrcParser = pfclone->getHRCParser();
-  for(int idx = 0;; idx++){
-    FileType *type = hrcParser->enumerateFileTypes(idx);
-    if (type == null) break;
-    printf("%s,  ", type->getName()->getChars());
-//    type->getBaseScheme();
-  }
 
-  delete pfclone;
+  //hrcParser = (HRCParser*)  (void*)((int*)hrcParser)[-3];
+  
+  delete pf;
 
-  printf("success!");
+  
+  printf("end!");
 }
 
 /**
@@ -204,9 +202,8 @@ void ROMTest()
 */
 int main(int argc, char *argv[])
 {
-  ConsoleTools ct;
   try{
-    init(ct, argc, argv);
+    init(argc, argv);
   }catch(Exception e){
     fprintf(stderr, e.getMessage()->getChars());
     return -1;
