@@ -102,7 +102,7 @@ void ConsoleTools::setLinkSource(const String &str){
   }catch(Exception &e){
     docbuilder.free(linkSourceTree);
     throw e;
-  };
+  }
 
   Node *elem = linkSourceTree->getDocumentElement();
 
@@ -129,14 +129,14 @@ void ConsoleTools::setLinkSource(const String &str){
           StringBuffer hkey(token);
           if (l_scheme != null && l_scheme->length() > 0){
             hkey.append(DString("--")).append(l_scheme);
-          };
+          }
           docLinkHash->put(&hkey, new SString(&fullURL));
-        };
+        }
         eachLink = eachLink->getNextSibling();
-      };
-    };
+      }
+    }
     elem = elem->getNextSibling();
-  };
+  }
   delete linkSource;
   docbuilder.free(linkSourceTree);
 }
@@ -159,12 +159,12 @@ void ConsoleTools::RETest(){
     printf("%s\nmatch:  ",res?"ok":"error");
     for(int i = 0; i < match.cMatch; i++){
       printf("%d:(%d,%d), ",i,match.s[i],match.e[i]);
-    };
+    }
   }while(text[0]);
   delete re;
 }
 
-void ConsoleTools::listTypes(bool load){
+void ConsoleTools::listTypes(bool load, bool useNames){
   Writer *writer = null;
   try{
     writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
@@ -174,14 +174,19 @@ void ConsoleTools::listTypes(bool load){
     for(int idx = 0;; idx++){
       FileType *type = hrcParser->enumerateFileTypes(idx);
       if (type == null) break;
-      writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
+      if (useNames){
+        writer->write(StringBuffer(type->getName())+"\n");
+      }else{
+        writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
+      }
+
       if (load) type->getBaseScheme();
-    };
+    }
     delete writer;
   }catch(Exception &e){
     delete writer;
     fprintf(stderr, "%s\n", e.getMessage()->getChars());
-  };
+  }
 }
 
 FileType *ConsoleTools::selectType(HRCParser *hrcParser, LineSource *lineSource){
@@ -241,7 +246,7 @@ void ConsoleTools::profile(int loopCount){
     baseEditor.modifyLineEvent(0);
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
     baseEditor.validate(-1, false);
-  };
+  }
   msecs = clock() - msecs;
 
   printf("%d\n", (msecs*1000)/CLOCKS_PER_SEC );
@@ -275,7 +280,7 @@ void ConsoleTools::viewFile(){
     fprintf(stderr, "%s\n", e.getMessage()->getChars());
   }catch(...){
     fprintf(stderr, "unknown exception ...\n");
-  };
+  }
 }
 
 void ConsoleTools::forward(){
@@ -291,7 +296,7 @@ void ConsoleTools::forward(){
     fprintf(stderr, "can't open file '%s' for writing:", outputFileName->getChars());
     fprintf(stderr, e.getMessage()->getChars());
     return;
-  };
+  }
 
   outputFile->write(eStream);
 
@@ -318,8 +323,8 @@ void ConsoleTools::genOutput(bool useTokens){
       }catch(ParserFactoryException &e){
         useMarkup = true;
         mapper = pf.createTextMapper(hrdName);
-      };
-    };
+      }
+    }
     // Base editor to make primary parse
     BaseEditor baseEditor(&pf, &textLinesStore);
     // Using compact regions
@@ -345,7 +350,7 @@ void ConsoleTools::genOutput(bool useTokens){
       fprintf(stderr, "can't open file '%s' for writing:\n", outputFileName->getChars());
       fprintf(stderr, e.getMessage()->getChars());
       return;
-    };
+    }
 
     if (htmlWrapping && useTokens){
       commonWriter->write(DString("<html>\n<head>\n<style></style>\n</head>\n<body><pre>\n"));
@@ -356,14 +361,14 @@ void ConsoleTools::genOutput(bool useTokens){
         commonWriter->write(DString("<html><body style='"));
         ParsedLineWriter::writeStyle(commonWriter, StyledRegion::cast(rd));
         commonWriter->write(DString("'><pre>\n"));
-      };
-    };
+      }
+    }
 
     if (copyrightHeader){
       commonWriter->write(DString("Created with colorer-take5 library. Type '"));
       commonWriter->write(type->getName());
       commonWriter->write(DString("'\n\n"));
-    };
+    }
 
     int lni = 0;
     int lwidth = 1;
@@ -377,16 +382,16 @@ void ConsoleTools::genOutput(bool useTokens){
         for(lni = iwidth; lni < lwidth; lni++) commonWriter->write(0x0020);
         commonWriter->write(SString(i));
         commonWriter->write(DString(": "));
-      };
+      }
       if (useTokens){
         ParsedLineWriter::tokenWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else if (useMarkup){
         ParsedLineWriter::markupWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
       }else{
         ParsedLineWriter::htmlRGBWrite(commonWriter, escapedWriter, docLinkHash, textLinesStore.getLine(i), baseEditor.getLineRegions(i));
-      };
+      }
       commonWriter->write(DString("\n"));
-    };
+    }
 
     if (htmlWrapping && useTokens){
       commonWriter->write(DString("</pre></body></html>\n"));
@@ -395,8 +400,8 @@ void ConsoleTools::genOutput(bool useTokens){
         commonWriter->write(TextRegion::cast(rd)->etext);
       }else{
         commonWriter->write(DString("</pre></body></html>\n"));
-      };
-    };
+      }
+    }
 
     if (htmlEscaping) delete commonWriter;
     delete escapedWriter;
@@ -406,7 +411,7 @@ void ConsoleTools::genOutput(bool useTokens){
     fprintf(stderr, "%s\n", e.getMessage()->getChars());
   }catch(...){
     fprintf(stderr, "unknown exception ...\n");
-  };
+  }
 }
 
 void ConsoleTools::genTokenOutput(){

@@ -13,6 +13,7 @@ import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.TextColorer;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -86,9 +87,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
 
       setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
-      
-      contentOutliner = new ColorerContentOutlinePage();
-      contentOutliner.addDoubleClickListener(doubleClickListener);
     }
 
     public void createPartControl(Composite parent){
@@ -146,7 +144,9 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
 
         if (contentOutliner != null) {
             contentOutliner.attach(textColorer);
-            Logger.trace("ColorerEditor", "contentOutliner.attach()");
+            if (Logger.TRACE){
+                Logger.trace("ColorerEditor", "contentOutliner.attach()");
+            }
         }
         propertyChange(null);
     }
@@ -184,6 +184,22 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     void showPairError() {
         MessageDialog.openInformation(null, Messages.get("editor.pairerr.title"),
                 Messages.get("editor.pairerr.msg"));
+    }
+    
+    /**
+     * Selects region under the cursor
+     */
+    public void selectCursorRegion() {
+        LineRegion lr = textColorer.getCaretRegion();
+        if (lr == null) return;
+        
+        int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
+        int selstart = loffset+lr.start;
+        int selend = lr.end-lr.start;
+        if (lr.end == -1){
+            selend = 0;
+        }
+        text.setSelectionRange(selstart, selend);
     }
 
     protected void editorContextMenuAboutToShow(IMenuManager parentMenu) {
@@ -261,6 +277,11 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         if (key.equals(IContentOutlinePage.class)) {
             IEditorInput input = getEditorInput();
             if (input instanceof IFileEditorInput) {
+                if (contentOutliner == null){
+                    contentOutliner = new ColorerContentOutlinePage();
+                    contentOutliner.addDoubleClickListener(doubleClickListener);
+                    contentOutliner.attach(textColorer);
+                }
                 return contentOutliner;
             }
         }
@@ -269,24 +290,13 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
 
     public void dispose() {
         super.dispose();
+        if (contentOutliner != null) {
+            contentOutliner.detach();
+        }
         prefStore.removePropertyChangeListener(this);
         JFaceResources.getFontRegistry().removeListener(this);
         ColorerPlugin.getDefault().removeReloadListener(this);
     }
-
-    public void selectCursorRegion() {
-        LineRegion lr = textColorer.getCaretRegion();
-        if (lr == null) return;
-        
-        int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
-        int selstart = loffset+lr.start;
-        int selend = lr.end-lr.start;
-        if (lr.end == -1){
-            selend = 0;
-        }
-        text.setSelectionRange(selstart, selend);
-    }
-
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

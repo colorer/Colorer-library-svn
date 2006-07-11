@@ -25,6 +25,7 @@ public:
   void fatalError(const String &msg);
   void error(const String &msg);
   void warning(const String &msg);
+
 protected:
   ErrorHandlerWriter *ehw;
   StreamWriter *writer;

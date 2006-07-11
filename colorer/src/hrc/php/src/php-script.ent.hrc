@@ -235,8 +235,6 @@
     <regexp match="/^\s*/"/>
     
     <!-- outlines -->
-
-    <!-- Note: we DON'T NEED '(\/\*\w+\*\/)?', 'public|private', etc. before 'function' here -->
     <regexp match="/\M (^|\s)(class|interface) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/ix"/>
     <regexp match="/\M (^|\s)(function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/ix"/>    
     

@@ -75,7 +75,7 @@
   <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
     <location link="gen/ant.hrc"/>
     <filename weight='5'>/\bbuild\.xml$/ix</filename>
-    <firstline weight='5'>/&lt;project\b/s</firstline>
+    <firstline weight='2'>/&lt;project\b/s</firstline>
   </prototype>
   
   

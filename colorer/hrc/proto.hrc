@@ -224,7 +224,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml)$/i</filename>
+    <filename>/\.(xml|gi2|gpr)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
   </prototype>
@@ -330,7 +330,7 @@
   </prototype>
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
-    <filename>/\.(sh)$/i</filename>
+    <filename>/\.(sh)$|^\./i</filename>
     <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
   <prototype name="apache" group="scripts" description="Apache httpd.conf">
@@ -380,6 +380,16 @@
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
   </prototype>
+  <prototype name="pnuts" group="scripts" description="Java: Pnuts">
+    <location link="scripts/pnuts.hrc"/>
+    <filename>/\.(pnut)$/i</filename>
+    <parameters>
+      <param name="pnuts-modules" value="true" description="Use some common Pnuts module function names"/>
+      <param name="j2se-classes" value="true" description="Use some common used J2SE class names"/>
+      <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
+      <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
+    </parameters>
+  </prototype>
   <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
     <location link="scripts/javacc.hrc"/>
     <filename>/\.(jjt?)$/i</filename>
@@ -394,7 +404,7 @@
   </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
-    <filename>/\.(l|lex)+$/i</filename>
+    <filename>/\.(l|f?lex)+$/i</filename>
   </prototype>
   <prototype name="yacc" group="scripts" description="YACC">
     <location link="scripts/yacc.hrc"/>
@@ -402,7 +412,7 @@
   </prototype>
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|ds(p|w)|bp(k|r|g)$)/ix</filename>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
     <firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline>
     <firstline>/makefile/s</firstline>
@@ -526,6 +536,7 @@
   <prototype name="ruby" group="rare" description="Ruby">
     <location link="rare/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/Rakefile$/i</filename>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
@@ -556,6 +567,10 @@
     <location link="rare/vhdl.hrc"/>
     <filename>/\.vhdl?$/i</filename>
   </prototype>
+ <prototype name="ahdl" group="rare" description="AHDL">
+   <location link="rare/ahdl.hrc"/>
+   <filename>/\.(tdf|tdo|ahdl)$/i</filename>
+ </prototype>
   <prototype name="z80" group="rare" description="z80asm">
     <location link="rare/z80.hrc"/>
     <filename>/\.za$/i</filename>
@@ -590,7 +605,7 @@
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
-    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install$)/i</filename>
+    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install*|*ChangeLog*|AUTHORS|COPYING|FAQ|TODO$)/i</filename>
     <filename>/\.spo/ix</filename>
   </prototype>
 

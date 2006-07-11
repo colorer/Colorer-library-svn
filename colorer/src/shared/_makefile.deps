@@ -15,9 +15,13 @@ include makefile.colorer.gcc
 LIBINC = -lc -lm
 LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
 
-colorer:: $(coreobjects)
+colorer:: $(coreobjects) ./ConsoleToolsRunner.o ./FarEditor.o  ./FarEditorSet.o
+
+./ConsoleToolsRunner.o:
 	$(CPP) $(CPPFLAGS) $(shared_path)../colorer/ConsoleToolsRunner.cpp
+./FarEditor.o:
 	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditor.cpp
+./FarEditorSet.o:
 	$(CPP) $(CPPFLAGS) $(shared_path)../pcolorer/FarEditorSet.cpp
 
 clean:

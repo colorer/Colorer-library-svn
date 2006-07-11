@@ -660,6 +660,7 @@ const int FILTER_SIZE = 40;
     VK_BACK, VK_RETURN, 0xBA, 0xBD, VK_TAB,
     (PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
     (PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
+    (PKF_CONTROL<<16)+VK_RETURN,
     '0','1','2','3','4','5','6','7','8','9',
     'A','B','C','D','E','F','G','H','I','J',
     'K','L','M','N','O','P','Q','R','S','T',
@@ -684,7 +685,7 @@ const int FILTER_SIZE = 40;
   if (items_num == 0) stopMenu = true;
   menu = new FarMenuItem[items_num];
 
-  while (!stopMenu){
+  while (!stopMenu) {
     memset(menu, 0, sizeof(FarMenuItem)*items_num);
 
     // items in FAR's menu;
@@ -768,7 +769,7 @@ const int FILTER_SIZE = 40;
     char captionfilter[FILTER_SIZE+1];
     strncpy(captionfilter, filter, flen);
     captionfilter[flen] = 0;
-    if (aflen > flen){
+    if (aflen > flen) {
       strcat(captionfilter, "?");
       strncat(captionfilter, autofilter+flen, aflen-flen);
       captionfilter[aflen+1] = 0;
@@ -862,15 +863,23 @@ const int FILTER_SIZE = 40;
         visibleLevel++;
         break;
       }
+      case 9:{ // ctrl-return
+        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        info->EditorControl(ECTL_INSERTTEXT, (void*)item->token->getChars());
+        stopMenu = true;
+        break;
+      }
       default:
         if (flen == FILTER_SIZE || code > keys_size) break;
         filter[flen] = (char)Character::toLowerCase(breakKeys[code]);
         filter[++flen] = 0;
         break;
-    };
-  };
+    }
+  }
+
   delete[] menu;
-  if (!moved){
+
+  if (!moved) {
     // restoring position
     esp.CurLine = ei.CurLine;
     esp.CurPos = ei.CurPos;
@@ -879,11 +888,12 @@ const int FILTER_SIZE = 40;
     esp.LeftPos = ei.LeftPos;
     esp.Overtype = ei.Overtype;
     info->EditorControl(ECTL_SETPOSITION, &esp);
-  };
-  if (items_num == 0){
+  }
+
+  if (items_num == 0) {
     const char *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
     info->Message(info->ModuleNumber, 0, 0, msg, 2, 1);
-  };
+  }
 }
 
 void FarEditor::enterHandler(){

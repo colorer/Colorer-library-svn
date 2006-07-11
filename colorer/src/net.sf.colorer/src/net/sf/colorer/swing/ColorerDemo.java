@@ -30,7 +30,7 @@ public final static void main(String[] args){
   frame.getContentPane().add("Center", scroller);
   frame.pack();
   frame.setSize(300, 200);
-  frame.show();
+  frame.setVisible(true);
 
   frame.addWindowListener(new AppCloser());
 }

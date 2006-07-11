@@ -107,7 +107,7 @@
  106: TmКndCode prc<span style='color:#008c00; '>.</span>TimeKind
  107: TmКndCode prc<span style='color:#008c00; '>.</span>OldTimeKind
  108: IDENT     prc<span style='color:#008c00; '>.</span>OldSickList 
- 109: DATE      prc<span style='color:#008c00; '>.</span>SickListDate
+ 109: <span style='color:#797997; '>DATE</span>      prc<span style='color:#008c00; '>.</span>SickListDate
  110: Ident     prc<span style='color:#008c00; '>.</span>SickList
  111: <span style='color:#800000; font-weight:bold; '>long</span>      prc<span style='color:#008c00; '>.</span>SickListLength       
  112: <span style='color:#800000; font-weight:bold; '>double</span>    prc<span style='color:#008c00; '>.</span>FundH
@@ -201,7 +201,7 @@
  200: <span style='color:#696969; '>| created 12.10.99                    </span>
  201: <span style='color:#696969; '>| Возвращает двту больничного для</span>
  202: <span style='color:#696969; '>| текущей даты табеля</span>
- 203: <span style='color:#800000; font-weight:bold; '>function</span> DATE getSickListDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 203: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#797997; '>DATE</span> getSickListDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  204:    <span style='color:#800000; font-weight:bold; '> if</span> hasSickList<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>            
  205:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>curSickList<span style='color:#008c00; '>.</span>BegDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>  
  206:    <span style='color:#800000; font-weight:bold; '> endif</span>
@@ -217,7 +217,7 @@
  216: <span style='color:#808030; '>}</span>               
  217: <span style='color:#696969; '>| Возвращает дату начала больничного,</span>
  218: <span style='color:#696969; '>| связанного с текущей датой табеля</span>
- 219: <span style='color:#800000; font-weight:bold; '>function</span> DATE curSickList<span style='color:#008c00; '>.</span>BegDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 219: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#797997; '>DATE</span> curSickList<span style='color:#008c00; '>.</span>BegDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  220:     <span style='color:#005fd2; '>skls.findByID</span><span style='color:#808030; '>(</span>CurrStaff<span style='color:#808030; '>,</span> currentSickList<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
  221:       HERR<span style='color:#008c00; '>.</span>N
  222:    <span style='color:#800000; font-weight:bold; '> if</span> skls<span style='color:#008c00; '>.</span>firstDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>then</span>
@@ -251,7 +251,7 @@
  250: <span style='color:#696969; '>| begDate - дата начала</span>
  251: <span style='color:#696969; '>| Length - длина </span>
  252: <span style='color:#696969; '>| aResult - переменная, в которую возвращается сумма</span>
- 253: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>performOne<span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span> TmКndCode aTimeKind<span style='color:#808030; '>,</span>DATE begDate<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>long</span> Length<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>double</span> FundH<span style='color:#808030; '>,</span>BOOL isTimePayed<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>ref</span> MONEY aResult<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>   
+ 253: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>performOne<span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span> TmКndCode aTimeKind<span style='color:#808030; '>,</span><span style='color:#797997; '>DATE</span> begDate<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>long</span> Length<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>double</span> FundH<span style='color:#808030; '>,</span>BOOL isTimePayed<span style='color:#808030; '>,</span><span style='color:#800000; font-weight:bold; '>ref</span> MONEY aResult<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>   
  254:     ibuf<span style='color:#008c00; '>.</span>dim<span style='color:#808030; '>(</span>ttfzzz007<span style='color:#808030; '>)</span>
  255:     ibuf<span style='color:#008c00; '>.</span>store<span style='color:#808030; '>(</span>ttfzzz007<span style='color:#808030; '>)</span>
  256:     ERRCODE err            
@@ -350,7 +350,7 @@
  349: 
  350: <span style='color:#696969; '>| Расчет базовой стоимости  </span>
  351: <span style='color:#696969; '>| created 14.10.99 by MaxBelugin</span>
- 352: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>calcBase <span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span>TmКndCode aTimeKind<span style='color:#808030; '>,</span> DATE aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 352: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>calcBase <span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span>TmКndCode aTimeKind<span style='color:#808030; '>,</span> <span style='color:#797997; '>DATE</span> aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  353:   ERRCODE err
  354:   <span style='color:#696969; '>| Создать временный расчетный протокол</span>
  355:   <span style='color:#808030; '>db.retry.point</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
@@ -367,7 +367,7 @@
  366: 
  367: <span style='color:#696969; '>| Заполнение расчетного листка</span>
  368: <span style='color:#696969; '>| created 14.10.99 by MaxBelugin</span>
- 369: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>fillCalcLog<span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span>TmКndCode aTimeKind<span style='color:#808030; '>,</span> DATE aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 369: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE sklscnt<span style='color:#008c00; '>.</span>fillCalcLog<span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span>TmКndCode aTimeKind<span style='color:#808030; '>,</span> <span style='color:#797997; '>DATE</span> aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  370:     ERRCODE err
  371:     <span style='color:#696969; '>| Для всех лицевых данных на момент </span>
  372:     <span style='color:#696969; '>| начала больничного{               </span>
@@ -390,7 +390,7 @@
  389: <span style='color:#696969; '>| считатется, что протокол расчета создан </span>
  390: <span style='color:#696969; '>| и загружен в буфер</span>
  391: <span style='color:#696969; '>| created 15.10.99 (01:39:00 ) by Max Belugin</span>
- 392: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE calcPersData<span style='color:#808030; '>(</span>Date aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 392: <span style='color:#800000; font-weight:bold; '>function</span> ERRCODE calcPersData<span style='color:#808030; '>(</span><span style='color:#797997; '>Date</span> aDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  393:     <span style='color:#696969; '>| Расчет = Создать расчет по его коду в лицевом счете </span>
  394:     <span style='color:#696969; '>| Расчет.ЛицевыеДанные = Срез на дату начала</span>
  395:     <span style='color:#696969; '>| Расчет.Протокол = Текущий протокол</span>
@@ -428,7 +428,7 @@
  427: <span style='color:#696969; '>|}</span>
  428: <span style='color:#696969; '>| Дата начала первого больничного,</span>
  429: <span style='color:#696969; '>| продолжением которого является этот</span>
- 430: <span style='color:#800000; font-weight:bold; '>function</span> DATE skls<span style='color:#008c00; '>.</span>firstDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 430: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#797997; '>DATE</span> skls<span style='color:#008c00; '>.</span>firstDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  431:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>tfzzz097<span style='color:#008c00; '>.</span>sklsfrst<span style='color:#808030; '>)</span>
  432: <span style='color:#808030; '>}</span>
  433: 
@@ -514,15 +514,15 @@
  513: <span style='color:#696969; '>| Обработка премий</span>
  514: <span style='color:#696969; '>|  begDate - дата начала больничного</span>
  515: <span style='color:#696969; '>| created 22.10.99 (03:40:30) by Max Belugin</span>
- 516: <span style='color:#800000; font-weight:bold; '>function</span> MONEY <span style='color:#005fd2; '>processBonuses</span> <span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span>DATE begDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 516: <span style='color:#800000; font-weight:bold; '>function</span> MONEY <span style='color:#005fd2; '>processBonuses</span> <span style='color:#808030; '>(</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>DATE</span> begDate<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  517:     Period bolnPrd
  518:     Period prevPrd
  519:     Period firstYearPrd
  520:     CalcCode bonusCode
  521:     ContKind aKind
- 522:     Date startDate <span style='color:#696969; '>| Дата с которой смотреть премии             </span>
+ 522:     <span style='color:#797997; '>Date</span> startDate <span style='color:#696969; '>| Дата с которой смотреть премии             </span>
  523:     Period startPrd <span style='color:#696969; '>| Период с которого смотреть премии</span>
- 524:     Date firstYearDate <span style='color:#696969; '>| Дата начала первого периода года</span>
+ 524:     <span style='color:#797997; '>Date</span> firstYearDate <span style='color:#696969; '>| Дата начала первого периода года</span>
  525:     MONEY Total
  526:     <span style='color:#800000; font-weight:bold; '>long</span> goodPeriods
  527:     
@@ -558,7 +558,7 @@
  557:   
  558: <span style='color:#696969; '>| Обработка премий по коду. Возвращает сумму премий</span>
  559: <span style='color:#696969; '>| created 25.10.99 (12:03:24) by Max Belugin</span>
- 560: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCode<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span>Date aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 560: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCode<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>Date</span> aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  561:    <span style='color:#800000; font-weight:bold; '> if</span> contKindIsCL<span style='color:#808030; '>(</span>aKind<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>then</span>
  562:         <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span>processBonusesByCodeCL<span style='color:#808030; '>(</span>aKind<span style='color:#808030; '>,</span>aCode<span style='color:#808030; '>,</span>aBeg<span style='color:#808030; '>,</span>anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
  563:    <span style='color:#800000; font-weight:bold; '> endif</span>
@@ -577,7 +577,7 @@
  576: <span style='color:#808030; '>}</span>
  577: <span style='color:#696969; '>| Обработка премий по коду (Из расчетного листа). Возвращает сумму премий</span>
  578: <span style='color:#696969; '>| created 25.10.99 (12:03:24) by Max Belugin</span>
- 579: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodeCL<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span>Date aBeg<span style='color:#808030; '>,</span> TPeriod anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 579: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodeCL<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>Date</span> aBeg<span style='color:#808030; '>,</span> TPeriod anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  580:   <span style='color:#696969; '>| Выяснить, является ли рабместо главным</span>
  581:   BOOL isMain           
  582:   TPeriod aPeriod
@@ -587,7 +587,7 @@
  586:   MONEY Total
  587:   isMain<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wp.isMain</span><span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>)</span>   
  588:   CurrStaff<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.empl</span><span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>)</span>
- 589:   Date wpBeg<span style='color:#808030; '>,</span>wpEnd
+ 589:   <span style='color:#797997; '>Date</span> wpBeg<span style='color:#808030; '>,</span>wpEnd
  590:   wpBeg<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wpc.begDate</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  591:   wpEnd<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.annihilate.date</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  592:   <span style='color:#696969; '>| Начало обработки                                                          </span>
@@ -639,20 +639,20 @@
  638: 
  639: <span style='color:#696969; '>| Обработка премий по коду (Из лицевых данных). Возвращает сумму премий</span>
  640: <span style='color:#696969; '>| created 25.10.99 (12:03:24) by Max Belugin</span>
- 641: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodePersDat<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span>Date aBeg<span style='color:#808030; '>,</span> TPeriod anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 641: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodePersDat<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>Date</span> aBeg<span style='color:#808030; '>,</span> TPeriod anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  642:   <span style='color:#696969; '>| Выяснить, является ли рабместо главным</span>
  643:   BOOL isMain           
  644:   TPeriod aPeriod
  645:   IDENT  aWorkPlace     
  646:   MONEY CurTotal          
  647:   MONEY Total  
- 648:   DATE aBegDate
- 649:   DATE EndDate
+ 648:   <span style='color:#797997; '>DATE</span> aBegDate
+ 649:   <span style='color:#797997; '>DATE</span> EndDate
  650:   IDENT CurrStaff
  651:   isMain<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wp.isMain</span><span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>)</span>   
  652:   CurrStaff<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.empl</span><span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>)</span>
  653:   EndDate<span style='color:#808030; '>=</span><span style='color:#005fd2; '>endDateOfPeriod</span><span style='color:#808030; '>(</span>anEnd<span style='color:#808030; '>)</span>
- 654:   Date wpBeg<span style='color:#808030; '>,</span>wpEnd
+ 654:   <span style='color:#797997; '>Date</span> wpBeg<span style='color:#808030; '>,</span>wpEnd
  655:   wpBeg<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wpc.begDate</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  656:   wpEnd<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.annihilate.date</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  657:   <span style='color:#696969; '>| Начало обработки</span>
@@ -698,7 +698,7 @@
  697: 
  698: <span style='color:#696969; '>| Обработка премий по коду (Из расчетного листа). Возвращает сумму премий</span>
  699: <span style='color:#696969; '>| created 25.10.99 (12:03:24) by Max Belugin</span>
- 700: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodeCL<span style='color:#008c00; '>.</span>old<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span>Date aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 700: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodeCL<span style='color:#008c00; '>.</span>old<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>Date</span> aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  701:   <span style='color:#696969; '>| Выяснить, является ли рабместо главным</span>
  702:   BOOL isMain           
  703:   Period aPeriod
@@ -708,7 +708,7 @@
  707:   isMain<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wp.isMain</span><span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>)</span>   
  708:   <span style='color:#696969; '>| Начало обработки</span>
  709:   Total <span style='color:#808030; '>=</span> totalBeg<span style='color:#808030; '>(</span>CalcCurrWorkingPlace<span style='color:#808030; '>,</span>aKind<span style='color:#808030; '>,</span><span style='color:#005fd2; '>periodByDate</span><span style='color:#808030; '>(</span>aBeg<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>anEnd<span style='color:#808030; '>)</span>
- 710:   Date wpBeg<span style='color:#808030; '>,</span>wpEnd
+ 710:   <span style='color:#797997; '>Date</span> wpBeg<span style='color:#808030; '>,</span>wpEnd
  711:   wpBeg<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wpc.begDate</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  712:   wpEnd<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.annihilate.date</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  713:   <span style='color:#004a43; '>SELECT</span> rl_id:<span style='color:#005fd2; '>aWorkPlace</span><span style='color:#808030; '>,</span>rl_p_v:<span style='color:#005fd2; '>aPeriod</span><span style='color:#808030; '>,</span>rl_summa:<span style='color:#005fd2; '>CurTotal</span> 
@@ -763,14 +763,14 @@
  762: 
  763: <span style='color:#696969; '>| Обработка премий по коду (Из лицевых данных). Возвращает сумму премий</span>
  764: <span style='color:#696969; '>| created 25.10.99 (12:03:24) by Max Belugin</span>
- 765: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodePersDat<span style='color:#008c00; '>.</span>old<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span>Date aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
+ 765: <span style='color:#800000; font-weight:bold; '>function</span> MONEY processBonusesByCodePersDat<span style='color:#008c00; '>.</span>old<span style='color:#808030; '>(</span>ContKind aKind<span style='color:#808030; '>,</span>CalcCode aCode<span style='color:#808030; '>,</span><span style='color:#797997; '>Date</span> aBeg<span style='color:#808030; '>,</span> Period anEnd<span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>
  766:   <span style='color:#696969; '>| Выяснить, является ли рабместо главным</span>
  767:   BOOL isMain           
  768:   Period aPeriod
  769:   IDENT  aWorkPlace     
  770:   MONEY CurTotal          
  771:   MONEY Total  
- 772:   Date wpBeg<span style='color:#808030; '>,</span>wpEnd<span style='color:#808030; '>,</span>EndDate<span style='color:#808030; '>,</span>aBegDAte
+ 772:   <span style='color:#797997; '>Date</span> wpBeg<span style='color:#808030; '>,</span>wpEnd<span style='color:#808030; '>,</span>EndDate<span style='color:#808030; '>,</span>aBegDAte
  773:   wpBeg<span style='color:#808030; '>=</span><span style='color:#005fd2; '>wpc.begDate</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  774:   wpEnd<span style='color:#808030; '>=</span><span style='color:#005fd2; '>get.wp.annihilate.date</span><span style='color:#808030; '>(</span>aWorkPlace<span style='color:#808030; '>)</span>
  775:   EndDate<span style='color:#808030; '>=</span><span style='color:#005fd2; '>endDateOfPeriod</span><span style='color:#808030; '>(</span>anEnd<span style='color:#808030; '>)</span>
@@ -820,7 +820,7 @@
  819: 
  820: <span style='color:#696969; '>| Возвращает дату последнего приема на работу</span>
  821: <span style='color:#696969; '>| created 26.10.99 (11:54:27) by Max Belugin</span>
- 822: <span style='color:#800000; font-weight:bold; '>function</span> DATE lastAcceptanceDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>      
+ 822: <span style='color:#800000; font-weight:bold; '>function</span> <span style='color:#797997; '>DATE</span> lastAcceptanceDate<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>{</span>      
  823:     <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#808030; '>(</span><span style='color:#005fd2; '>get.last.acceptance</span><span style='color:#808030; '>(</span>CurrStaff<span style='color:#808030; '>,</span> <span style='color:#808030; '>date.num</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
  824: <span style='color:#808030; '>}</span>
  825:            
