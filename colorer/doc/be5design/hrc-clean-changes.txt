@@ -1,0 +1,7 @@
+
+1.prologue/epilogue. inherited scheme includes all virtual parameters of the parent <inherit> tag.
+  additional lower level virtualizations are not cancelled but should be added as a last-level virtual-set.
+
+2.Direct scheme substitution, when applied to another <inherit> with virtuals set, doesn't cancel this
+  virtuals set. The reason is that virtual set is not a property of the <inherit>ed scheme, but a property of a 
+  scheme, which calls the latter.
