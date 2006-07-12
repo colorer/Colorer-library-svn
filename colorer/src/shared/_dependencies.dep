@@ -138,8 +138,7 @@ $(obj_output_slash)ConsoleToolsRunner.$(obj): $(shared_path)../colorer/ConsoleTo
   $(shared_path)colorer/handlers/StyledRegion.h \
   $(shared_path)colorer/handlers/TextHRDMapper.h \
   $(shared_path)colorer/handlers/TextRegion.h \
-  $(shared_path)colorer/ParserFactoryException.h \
-  $(shared_path)common/MemoryRomizer.h
+  $(shared_path)colorer/ParserFactoryException.h 
 
 
 $(obj_output_slash)DString.$(obj): $(shared_path)unicode/DString.cpp $(shared_path)unicode/DString.h \
@@ -433,8 +432,7 @@ $(obj_output_slash)MemoryChunks.$(obj): $(shared_path)common/MemoryChunks.cpp \
   $(shared_path)unicode/x_charcategory.h $(shared_path)unicode/DString.h \
   $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h \
   $(shared_path)common/Hashtable.h $(shared_path)common/HashtableCore.h \
-   $(shared_path)common/Logging.h  \
-  $(shared_path)common/MemoryRomizer.h $(shared_path)common/MemoryRomizer.cpp
+   $(shared_path)common/Logging.h  
 
 
 $(obj_output_slash)Outliner.$(obj): $(shared_path)colorer/editor/Outliner.cpp \

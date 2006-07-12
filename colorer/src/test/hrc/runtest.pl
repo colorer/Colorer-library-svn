@@ -4,8 +4,8 @@
 # set of their previous parse strucure.
 #
 
-#$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer -c D:\\projects\\colorer\\catalog.xml";
+$colorer_path = "..\\..\\..";
+$colorer  = "$colorer_path\\bin\\colorer -c $colorer_path\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
 
