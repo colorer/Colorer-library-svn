@@ -146,12 +146,20 @@ void printError(){
 };
 
 #include<common/MemoryChunks.h>
-
+#include<string.h>
 /** Creates ConsoleTools class instance and runs it.
 */
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *env[])
 {
   ConsoleTools ct;
+	char *c5h = "COLORER5HRD=";
+	for (int i = 0; env[i] != NULL; i++)
+	{
+		if(strstr(env[i],c5h) == NULL) continue;
+		ct.setHRDName(DString(env[i]+strlen(c5h)));
+		break;
+	}
+  
   try{
     init(ct, argc, argv);
   }catch(Exception e){
