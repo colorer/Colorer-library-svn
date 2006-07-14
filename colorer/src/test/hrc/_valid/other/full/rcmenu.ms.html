@@ -1,28 +1,28 @@
-  0: <span style='color:#0f69ff; '>-------------------------------------------------------------------------------</span>
-  1: <span style='color:#0f69ff; '>--</span>
-  2: <span style='color:#0f69ff; '>--   RCMENU.MS</span>
-  3: <span style='color:#0f69ff; '>--   This script adds new items to MAX's right click menu</span>
-  4: <span style='color:#0f69ff; '>--   By Ravi Karra [Kinetix]             ravi.karra@ktx.com</span>
-  5: <span style='color:#0f69ff; '>--     Commands added by Frank DeLise</span>
-  6: <span style='color:#0f69ff; '>--     Make sure you have MXSAgni.dlx file in MAX Plugins folder</span>
-  7: <span style='color:#0f69ff; '>--     Please refer to MXSAgni.doc for information on the functions in MXSAgni.dlx</span>
-  8: <span style='color:#0f69ff; '>--     Build 5-03-98 .1</span>
-  9: <span style='color:#0f69ff; '>-------------------------------------------------------------------------------</span>
+  0: <span class='diff-diffOrg def-StringContent def-String'>-------------------------------------------------------------------------------</span>
+  1: <span class='diff-diffOrg def-StringContent def-String'>--</span>
+  2: <span class='diff-diffOrg def-StringContent def-String'>--   RCMENU.MS</span>
+  3: <span class='diff-diffOrg def-StringContent def-String'>--   This script adds new items to MAX's right click menu</span>
+  4: <span class='diff-diffOrg def-StringContent def-String'>--   By Ravi Karra [Kinetix]             ravi.karra@ktx.com</span>
+  5: <span class='diff-diffOrg def-StringContent def-String'>--     Commands added by Frank DeLise</span>
+  6: <span class='diff-diffOrg def-StringContent def-String'>--     Make sure you have MXSAgni.dlx file in MAX Plugins folder</span>
+  7: <span class='diff-diffOrg def-StringContent def-String'>--     Please refer to MXSAgni.doc for information on the functions in MXSAgni.dlx</span>
+  8: <span class='diff-diffOrg def-StringContent def-String'>--     Build 5-03-98 .1</span>
+  9: <span class='diff-diffOrg def-StringContent def-String'>-------------------------------------------------------------------------------</span>
  10: 
- 11: <span style='color:#0f69ff; '>-- Array of all the menu items that are added</span>
+ 11: <span class='diff-diffOrg def-StringContent def-String'>-- Array of all the menu items that are added</span>
  12: menu_items = #()
  13: 
- 14: <span style='color:#0f69ff; '>--This function gets called when a menu item is selected</span>
+ 14: <span class='diff-diffOrg def-StringContent def-String'>--This function gets called when a menu item is selected</span>
  15: fn fnSelected item =
  16: (
  17:     case item of
  18:     (
  19:     "Edit CV's":(
  20:     
- 21:     If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 21:     If $.modifiers[<span class='diff-diffNumb def-Number'>1</span>] == undefined then
  22:         (
  23:         Max modify mode
- 24:         subobjectlevel = <span style='color:#008c00; '>1</span>
+ 24:         subobjectlevel = <span class='diff-diffNumb def-Number'>1</span>
  25:         )
  26:         else
  27:         (
@@ -32,7 +32,7 @@
  31:             Converttomesh $
  32:             select obj
  33:             Max modify mode
- 34:             subobjectlevel = <span style='color:#008c00; '>1</span>
+ 34:             subobjectlevel = <span class='diff-diffNumb def-Number'>1</span>
  35:             )
  36:         )    
  37:     )
@@ -41,10 +41,10 @@
  40:     
  41:     "Edit Vertices":(
  42:     
- 43:     If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 43:     If $.modifiers[<span class='diff-diffNumb def-Number'>1</span>] == undefined then
  44:         (
  45:         Max modify mode
- 46:         subobjectlevel = <span style='color:#008c00; '>1</span>
+ 46:         subobjectlevel = <span class='diff-diffNumb def-Number'>1</span>
  47:         )
  48:         else
  49:         (
@@ -54,16 +54,16 @@
  53:             Converttomesh $
  54:             select obj
  55:             Max modify mode
- 56:             subobjectlevel = <span style='color:#008c00; '>1</span>
+ 56:             subobjectlevel = <span class='diff-diffNumb def-Number'>1</span>
  57:             )
  58:         )    
  59:     )
  60:     
  61:     "Edit Faces":(
- 62:         If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 62:         If $.modifiers[<span class='diff-diffNumb def-Number'>1</span>] == undefined then
  63:         (
  64:         Max modify mode
- 65:         subobjectlevel = <span style='color:#008c00; '>2</span>
+ 65:         subobjectlevel = <span class='diff-diffNumb def-Number'>2</span>
  66:         )
  67:         else
  68:         (
@@ -73,17 +73,17 @@
  72:             Converttomesh $
  73:             select obj
  74:             Max modify mode
- 75:             subobjectlevel = <span style='color:#008c00; '>2</span>
+ 75:             subobjectlevel = <span class='diff-diffNumb def-Number'>2</span>
  76:             )
  77:         )    
  78: 
  79:         )
  80:     "Edit Edges":(
  81: 
- 82:         If $.modifiers[<span style='color:#008c00; '>1</span>] == undefined then
+ 82:         If $.modifiers[<span class='diff-diffNumb def-Number'>1</span>] == undefined then
  83:         (
  84:         Max modify mode
- 85:         subobjectlevel = <span style='color:#008c00; '>3</span>
+ 85:         subobjectlevel = <span class='diff-diffNumb def-Number'>3</span>
  86:         )
  87:         else
  88:         (
@@ -93,7 +93,7 @@
  92:             Converttomesh $
  93:             select obj
  94:             Max modify mode
- 95:             subobjectlevel = <span style='color:#008c00; '>3</span>
+ 95:             subobjectlevel = <span class='diff-diffNumb def-Number'>3</span>
  96:             )
  97:         )    
  98: 
@@ -129,7 +129,7 @@
 128:             
 129:     "Extrude": 
 130:         (
-131:             addModifier selection (Extrude amount:<span style='color:#008c00; '>30</span>)
+131:             addModifier selection (Extrude amount:<span class='diff-diffNumb def-Number'>30</span>)
 132:         )
 133:         "Cast Shadows:On":selection.castshadows = true
 134:         "Cast Shadows:Off":selection.castshadows = false
@@ -141,12 +141,12 @@
 140: Group "Light Properties"
 141:         (
 142:         CheckBox LON "ON:"Checked:$.on
-143:         ColorPicker LC "Light Color:" color:$.color offset:[<span style='color:#008c00; '>50</span>,-<span style='color:#008c00; '>22</span>]
-144:         Spinner mt "Multiplier:" range:[-<span style='color:#008c00; '>50</span>,<span style='color:#008c00; '>50</span>,$.multiplier]width:<span style='color:#008c00; '>90</span> offset:[-<span style='color:#008c00; '>30</span>,<span style='color:#008c00; '>0</span>] 
+143:         ColorPicker LC "Light Color:" color:$.color offset:[<span class='diff-diffNumb def-Number'>50</span>,-<span class='diff-diffNumb def-Number'>22</span>]
+144:         Spinner mt "Multiplier:" range:[-<span class='diff-diffNumb def-Number'>50</span>,<span class='diff-diffNumb def-Number'>50</span>,$.multiplier]width:<span class='diff-diffNumb def-Number'>90</span> offset:[-<span class='diff-diffNumb def-Number'>30</span>,<span class='diff-diffNumb def-Number'>0</span>] 
 145:         Checkbox CS "CastShadows"checked:$.castshadows
-146:         Button upd "Update" Across:<span style='color:#008c00; '>3</span>
+146:         Button upd "Update" Across:<span class='diff-diffNumb def-Number'>3</span>
 147:         Button pst "Paste"
-148:         Button CL "Ok" width:<span style='color:#008c00; '>20</span> Align:#right 
+148:         Button CL "Ok" width:<span class='diff-diffNumb def-Number'>20</span> Align:#right 
 149:         
 150:         )
 151:         on upd pressed do
@@ -207,7 +207,7 @@
 206:             (
 207:             RemoveRollout Lightroll NW
 208:             CloseRolloutFloater NW
-209:             NW = NewrolloutFloater "LightBoy" <span style='color:#008c00; '>200</span> <span style='color:#008c00; '>180</span>
+209:             NW = NewrolloutFloater "LightBoy" <span class='diff-diffNumb def-Number'>200</span> <span class='diff-diffNumb def-Number'>180</span>
 210:             Addrollout LightRoll NW
 211:             lightroll.lc = $.color
 212:             lightroll.cs = $.castshadows
@@ -216,7 +216,7 @@
 215:             )
 216:             else
 217:             (
-218:             NW = NewrolloutFloater "LightBoy" <span style='color:#008c00; '>200</span> <span style='color:#008c00; '>180</span>
+218:             NW = NewrolloutFloater "LightBoy" <span class='diff-diffNumb def-Number'>200</span> <span class='diff-diffNumb def-Number'>180</span>
 219:             Addrollout LightRoll NW
 220:             )
 221:         )
@@ -224,11 +224,11 @@
 223:         
 224: )
 225: 
-226: <span style='color:#0f69ff; '>-- filter function for adding the menu items </span>
+226: <span class='diff-diffOrg def-StringContent def-String'>-- filter function for adding the menu items </span>
 227: fn flt_items = 
 228: (
 229:     -- Make sure to delete all the items in the array
-230:     while (menu_items.count > <span style='color:#008c00; '>0</span>) do deleteItem menu_items <span style='color:#008c00; '>1</span>    
+230:     while (menu_items.count > <span class='diff-diffNumb def-Number'>0</span>) do deleteItem menu_items <span class='diff-diffNumb def-Number'>1</span>    
 231:     
 232:     -- Add the menu item only if it is a shape object
 233:     if isKindOf $ Shape then
@@ -325,6 +325,6 @@
 324: 
 325: registerRightClickMenu menu_items fnSelected filter:flt_items
 326: 
-327: <span style='color:#0f69ff; '>--Uncomment the following to unRegister the right_click functions--</span>
-328: <span style='color:#0f69ff; '>--unregisterRightClickMenu fnSelected</span>
+327: <span class='diff-diffOrg def-StringContent def-String'>--Uncomment the following to unRegister the right_click functions--</span>
+328: <span class='diff-diffOrg def-StringContent def-String'>--unregisterRightClickMenu fnSelected</span>
 329: 

@@ -9,6 +9,8 @@ $colorer  = "$colorer_path\\bin\\colorer -c $colorer_path\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
 
+$hrd = 'mirice'; #user setting. TODO: define COLORER_HRD env variable...
+
 #%modes = (
 #  full  =>   ".",
 #  quick =>   '(?!full\/)',
@@ -50,7 +52,13 @@ $timeStart = time();
 unlink "$currentDir/fails.html";
 
 open FAILS, ">$currentDir/fails.html";
-print FAILS "<pre>\n";
+print FAILS <<"FL";
+<html>
+<head>
+	<link href="../../../../hrd/css/$hrd.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><pre>
+FL
 close FAILS;
 
 foreach (@retlist){
@@ -65,7 +73,7 @@ foreach (@retlist){
   close FAILS;
   checkDir($currentDir, $_);
   
-  $cres = system "$colorer -h \"$_\" -dc -dh -ln -o \"$fname.html\"";
+  $cres = system "$colorer -ht \"$_\" -dc -dh -ln -o \"$fname.html\"";
 
   $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
 

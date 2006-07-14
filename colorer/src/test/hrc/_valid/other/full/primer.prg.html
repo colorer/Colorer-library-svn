@@ -1,33 +1,33 @@
- 0: <span style='color:#696969; '>//  Пример возможных структур кодовых блоков / массивов</span>
- 1: <span style='color:#696969; '>//</span>
- 2: <span style='color:#696969; '>//</span>
- 3: <span style='color:#696969; '>//</span>
- 4: <span style='color:#696969; '>//</span>
+ 0: <span class='Clipper-clipperComment def-Comment def-Syntax'>//  Пример возможных структур кодовых блоков / массивов</span>
+ 1: <span class='Clipper-clipperComment def-Comment def-Syntax'>//</span>
+ 2: <span class='Clipper-clipperComment def-Comment def-Syntax'>//</span>
+ 3: <span class='Clipper-clipperComment def-Comment def-Syntax'>//</span>
+ 4: <span class='Clipper-clipperComment def-Comment def-Syntax'>//</span>
  5: SetWidth
  6: Size
- 7: <span style='color:#696969; '>&amp;&amp; lalalala</span>
+ 7: <span class='Clipper-clipperComment def-Comment def-Syntax'>&amp;&amp; lalalala</span>
  8: 
- 9: BrowseArray<span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span>,<span style='color:#008c00; '>5</span>,;
-10:             <span style='color:#800080; '>{</span>|| ADvm_Header<span style='color:#808030; '>(</span><span style='color:#0000e6; '>" Месяц "</span><span style='color:#808030; '>)</span>, ;
-11:                 ADvm_Keys<span style='color:#808030; '>(</span><span style='color:#800080; '>{</span>K_F1, K_F5, K_F9<span style='color:#800080; '>}</span>, <span style='color:#800080; '>{</span>|n, k| BA_KeyHandle<span style='color:#808030; '>(</span>n,k<span style='color:#808030; '>)</span><span style='color:#800080; '>}</span><span style='color:#808030; '>)</span>,;
-12:                 <span style='color:#696969; '>// закрылся второй кодовы блок ... и соответственно</span>
-13:                 <span style='color:#696969; '>// закрылась раскраска и первого</span>
-14:                 ADvm_extra<span style='color:#808030; '>(</span>,;
-15:                             <span style='color:#800080; '>{</span>|| BA_StatusLine<span style='color:#808030; '>(</span><span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>, ADvm_versbar<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>}</span>,;
-16:                           <span style='color:#808030; '>)</span>;
-17:             <span style='color:#800080; '>}</span>,; <span style='color:#696969; '>// на самом деле первый КБ должен закрываться здесь</span>
-18:             aListLK,;
-19:             <span style='color:#800080; '>{</span>|nLine, sLine,KolLine| OnEnterMonth<span style='color:#808030; '>(</span>nLine, sLine, KolLine<span style='color:#808030; '>)</span><span style='color:#800080; '>}</span><span style='color:#808030; '>)</span>
+ 9: BrowseArray<span class='def-Symbol'>(</span><span class='Clipper-clipperNumb def-Number'>1</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperNumb def-Number'>5</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+10:             <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span><span class='Clipper-clipperSymb def-Syntax'>|</span> ADvm_Header<span class='def-Symbol'>(</span><span class='Clipper-clipperString def-String'>" Месяц "</span><span class='def-Symbol'>)</span><span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='Clipper-clipperSymb def-Syntax'>;</span>
+11:                 ADvm_Keys<span class='def-Symbol'>(</span><span class='def-SymbolStrong def-Symbol'>{</span>K_F1<span class='Clipper-clipperSymb def-Syntax'>,</span> K_F5<span class='Clipper-clipperSymb def-Syntax'>,</span> K_F9<span class='def-SymbolStrong def-Symbol'>}</span><span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span>n<span class='Clipper-clipperSymb def-Syntax'>,</span> k<span class='Clipper-clipperSymb def-Syntax'>|</span> BA_KeyHandle<span class='def-Symbol'>(</span>n<span class='Clipper-clipperSymb def-Syntax'>,</span>k<span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>}</span><span class='def-Symbol'>)</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+12:                 <span class='Clipper-clipperComment def-Comment def-Syntax'>// закрылся второй кодовы блок ... и соответственно</span>
+13:                 <span class='Clipper-clipperComment def-Comment def-Syntax'>// закрылась раскраска и первого</span>
+14:                 ADvm_extra<span class='def-Symbol'>(</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+15:                             <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span><span class='Clipper-clipperSymb def-Syntax'>|</span> BA_StatusLine<span class='def-Symbol'>(</span><span class='Clipper-clipperNumb def-Number'>1</span><span class='def-Symbol'>)</span><span class='Clipper-clipperSymb def-Syntax'>,</span> ADvm_versbar<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>}</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+16:                           <span class='def-Symbol'>)</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+17:             <span class='def-SymbolStrong def-Symbol'>}</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span> <span class='Clipper-clipperComment def-Comment def-Syntax'>// на самом деле первый КБ должен закрываться здесь</span>
+18:             aListLK<span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+19:             <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span>nLine<span class='Clipper-clipperSymb def-Syntax'>,</span> sLine<span class='Clipper-clipperSymb def-Syntax'>,</span>KolLine<span class='Clipper-clipperSymb def-Syntax'>|</span> OnEnterMonth<span class='def-Symbol'>(</span>nLine<span class='Clipper-clipperSymb def-Syntax'>,</span> sLine<span class='Clipper-clipperSymb def-Syntax'>,</span> KolLine<span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>}</span><span class='def-Symbol'>)</span>
 20: 
-21: s1:=<span style='color:#800080; '>{</span> <span style='color:#800080; '>{</span>|| wwewe <span style='color:#800080; '>}</span>;   <span style='color:#696969; '>// также закрытие КБ приводит к закрытию и раскрасски массива</span>
-22:     <span style='color:#800080; '>}</span>
-23: <span style='color:#696969; '>//* и наоборот</span>
-24: cb:=<span style='color:#800080; '>{</span>|a1, a2|  A1=a2, <span style='color:#800080; '>{</span><span style='color:#0000e6; '>"223"</span>, <span style='color:#008c00; '>33</span><span style='color:#800080; '>}</span> <span style='color:#800080; '>}</span>  <span style='color:#696969; '>// и во вторых внутри КБ / массива</span>
-25:    <span style='color:#696969; '>// расскраска внутренних структу не производится, так же само как</span>
+21: s1<span class='Clipper-clipperSymb def-Syntax'>:</span><span class='Clipper-clipperSymb def-Syntax'>=</span><span class='def-SymbolStrong def-Symbol'>{</span> <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span><span class='Clipper-clipperSymb def-Syntax'>|</span> wwewe <span class='def-SymbolStrong def-Symbol'>}</span><span class='Clipper-clipperSymb def-Syntax'>;</span>   <span class='Clipper-clipperComment def-Comment def-Syntax'>// также закрытие КБ приводит к закрытию и раскрасски массива</span>
+22:     <span class='def-SymbolStrong def-Symbol'>}</span>
+23: <span class='Clipper-clipperComment def-Comment def-Syntax'>//* и наоборот</span>
+24: cb<span class='Clipper-clipperSymb def-Syntax'>:</span><span class='Clipper-clipperSymb def-Syntax'>=</span><span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span>a1<span class='Clipper-clipperSymb def-Syntax'>,</span> a2<span class='Clipper-clipperSymb def-Syntax'>|</span>  A1<span class='Clipper-clipperSymb def-Syntax'>=</span>a2<span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperString def-String'>"223"</span><span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='Clipper-clipperNumb def-Number'>33</span><span class='def-SymbolStrong def-Symbol'>}</span> <span class='def-SymbolStrong def-Symbol'>}</span>  <span class='Clipper-clipperComment def-Comment def-Syntax'>// и во вторых внутри КБ / массива</span>
+25:    <span class='Clipper-clipperComment def-Comment def-Syntax'>// расскраска внутренних структу не производится, так же само как</span>
 26: 
-27: Ss:=<span style='color:#800080; '>{</span> <span style='color:#800080; '>{</span><span style='color:#0000e6; '>"wsasd"</span>, <span style='color:#0000e6; '>"qwqwqw"</span><span style='color:#800080; '>}</span>,;
-28:       <span style='color:#008c00; '>1</span>,<span style='color:#008c00; '>2</span>,<span style='color:#008c00; '>3</span> , ;
-29:       <span style='color:#800080; '>{</span>|wewe, wewe| <span style='color:#0000e6; '>"uyewtuytweury"</span><span style='color:#800080; '>}</span> ;
-30:     <span style='color:#800080; '>}</span>
+27: Ss<span class='Clipper-clipperSymb def-Syntax'>:</span><span class='Clipper-clipperSymb def-Syntax'>=</span><span class='def-SymbolStrong def-Symbol'>{</span> <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperString def-String'>"wsasd"</span><span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='Clipper-clipperString def-String'>"qwqwqw"</span><span class='def-SymbolStrong def-Symbol'>}</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperSymb def-Syntax'>;</span>
+28:       <span class='Clipper-clipperNumb def-Number'>1</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperNumb def-Number'>2</span><span class='Clipper-clipperSymb def-Syntax'>,</span><span class='Clipper-clipperNumb def-Number'>3</span> <span class='Clipper-clipperSymb def-Syntax'>,</span> <span class='Clipper-clipperSymb def-Syntax'>;</span>
+29:       <span class='def-SymbolStrong def-Symbol'>{</span><span class='Clipper-clipperSymb def-Syntax'>|</span>wewe<span class='Clipper-clipperSymb def-Syntax'>,</span> wewe<span class='Clipper-clipperSymb def-Syntax'>|</span> <span class='Clipper-clipperString def-String'>"uyewtuytweury"</span><span class='def-SymbolStrong def-Symbol'>}</span> <span class='Clipper-clipperSymb def-Syntax'>;</span>
+30:     <span class='def-SymbolStrong def-Symbol'>}</span>
 31: 
 32: 
