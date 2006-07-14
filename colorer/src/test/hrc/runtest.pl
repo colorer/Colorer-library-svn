@@ -9,7 +9,7 @@ $colorer  = "$colorer_path\\bin\\colorer -c $colorer_path\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
 
-$hrd = 'mirice'; #user setting. TODO: define COLORER_HRD env variable...
+$hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
 
 #%modes = (
 #  full  =>   ".",
