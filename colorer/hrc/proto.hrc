@@ -22,6 +22,7 @@
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
     <parameters>
+      <param name="ansi-defines" value="true" description="Use ANSI C standart library keywords"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
       <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
