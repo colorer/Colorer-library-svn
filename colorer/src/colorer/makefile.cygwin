@@ -11,7 +11,7 @@ include ../shared/makefile.colorer.cygwin
 
 LIBINC = -lwininet -lstdc++ -lmingw32
 LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC) -ggdb
-CPPFLAGS_CUSTOM =  -ggdb -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
+#CPPFLAGS_CUSTOM =  -ggdb -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
 
 include makefile.core
 
