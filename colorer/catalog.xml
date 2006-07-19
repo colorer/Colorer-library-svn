@@ -17,10 +17,7 @@
 
     <location link="hrc/proto.hrc"/>
     <location link="hrc/auto"/>
-<!--
-    <location link="C:\far\plugins\colorer\hrc\proto.hrc"/>
-    <location link="C:\far\plugins\colorer\hrc\auto"/>
--->
+
     <!-- Test HRC set -->
     <location link="src/test/parser/hrc"/>
 
