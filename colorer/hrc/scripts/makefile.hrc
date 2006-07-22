@@ -1,209 +1,317 @@
 <?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
+	"http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
+ >
 
-  <type name="makefile">
-    <annotation><documentation>
-     Make Files Syntax
-    </documentation><contributors><![CDATA[
-     Vincent GUIGNOT <vguignot@ingenico.fr>
-     Timur Safin <timur@lanit.ru> CBuilder project stuff
-     Eugene Efremov <4mirror@mail.ru>
-    ]]></contributors>
-    <appinfo>
-     <prototype name="makefile" group="scripts" description="makefile">
-       <location link="scripts/makefile.hrc"/>
-       <filename>/(makefile | tools\.ini) | \.(mak|ds(p|w)|bp(k|r|g)$)/ix</filename>
-       <firstline>/Microsoft Developer Studio Project File/i</firstline>
-       <firstline>/^\!if/i</firstline>
-       <firstline>/makefile/s</firstline>
-     </prototype>
-     <require/> <!-- no module required -->
-    </appinfo>
-    </annotation>
+<type name="makefile">
+	<annotation><documentation>
+		GNU Make Files Syntax
+	</documentation><contributors><![CDATA[
+		Eugene Efremov <4mirror@mail.ru>
+	]]></contributors>
+</annotation>
 
-      <import type="def"/>
-      <import type="config"/>
 
-      <region name="RuleOutline" parent="def:Outlined"/>
-      <region name="IncludeOutline" parent="def:Outlined"/>
+<scheme name="makefile">
+	<inherit scheme='gnumake'/>
+	<inherit scheme='old-makefile'/>
+</scheme>
 
-      <region name="MakVars" parent="def:Var"/>
-      <region name="MakParams" parent="def:KeywordStrong"/>
-      <region name="MakRule" parent="def:Parameter"/>
-      <region name="MakGoal" parent="def:Label"/>
-      <region name="MakVarValue" parent="def:VarStrong"/>
-      <region name="MakVarName" parent="def:Var"/>
+<scheme name="old-makefile" unless='gnu'>
+	<inherit scheme='old-makefile:makefile'/>
+</scheme>
 
-      <scheme name="MakVars">
-         <regexp match="/(\$\l?\()([\@&lt;\*\^\?]?[\w\*\.\=\:]+)(\))/"
-          region0="StringEdge" region1="PairStart"
-          region2="MakVars" region3="PairEnd"
-         />
-         <regexp match="/\$[\@\%&lt;\?\^\+\*]/" region0="StringEdge"/>
-      </scheme>
 
-      <scheme name="MakString">
-         <inherit scheme="MakVars"/>
-      </scheme>
 
-      <scheme name="MakCommon">
-<!-- Linear Comments -->
-<!-- regexp match="/^(\#.*$)/"  region0="Comments" -->
-         <block start="/(\^?~1)\#/" end="/$/" scheme="Comment" region="Comment"/>
-         <regexp match="/\/\/.*$/" region0="Comment"/>
-<!-- Strings -->
-         <block start="/\'/" end="/\'/" scheme="MakString" region="String"/>
-         <block start="/\&#34;/" end="/\&#34;/" scheme="MakString" region="String"/>
-<!--Block start="/\%/" end="/\%/" scheme="MakString" region0="String"-->
-         <regexp match="/\\$/" region0="def:StringContent"/>
-<!-- Numbers -->
-         <regexp match="/\b0[xX][\da-fA-F]+\b/" region0="Number"/>
-         <regexp match="/\b[0-9]+\b/" region0="Number"/>
-<!-- Variables -->
-         <inherit scheme="MakVars"/>
-<!-- ECHOed Strings -->
-<!--regexp match="/(append\s+)(\S*)(.*$)/" region1="Keywords" region2="Default" region3="Strings"-->
-         <block start="/(echo)\M[\s\W]/" end="/$/" scheme="MakString" region="String" region00="Keyword"/>
-         <keywords region="Symbol">
-            <symb name=";"/>
-            <symb name="="/>
-            <symb name="+"/>
-            <symb name="-"/>
-            <symb name="/"/>
-            <symb name="*"/>
-            <symb name="&amp;"/>
-            <symb name="|"/>
-            <symb name="^"/>
-            <symb name="("/>
-            <symb name=")"/>
-            <symb name="["/>
-            <symb name="]"/>
-            <symb name=","/>
-            <symb name="."/>
-            <symb name=":"/>
-            <symb name="!"/>
-            <symb name="~"/>
-            <symb name="&lt;"/>
-            <symb name="&gt;"/>
-            <symb name="%"/>
-            <symb name="{"/>
-            <symb name="}"/>
-            <symb name="?"/>
-            <symb name="@"/>
-         </keywords>
-      </scheme>
+<region name='symbs' parent='def:Symbol'/>
+<region name='symbs-rare' parent='regexp:Operator'/>
 
-      <scheme name="MakInlineFiles">
-<!-- nmake version -->
-         <block start="/.\m(&lt;&lt;)/" end="/^(&lt;&lt;)((NO)?KEEP)?/" region="Insertion" region01="Directive" region11="Directive" region12="Keyword" region00="PairStart" region10="PairEnd" scheme="MakEx"/>
-<!-- borland make -->
-         <block start="/(&amp;&amp;)([^\s\#\\])/" end="/^(\y2)/" region="Insertion" region01="Directive" region02="Directive" region11="Directive" region00="PairStart" region10="PairEnd" scheme="MakEx"/>
-      </scheme>
+<region name='quoted' parent='def:CommentEdge'/><!-- def:StringContent'/>-->
 
-      <scheme name="MakIf">
-         <inherit scheme="MakCommon"/>
-         <regexp match="/\b (ERROR) (.*)/ix" region0="Keyword" region2="String"/>
-         <regexp match="/\b (MESSAGE) (.*)/ix" region0="Keyword" region2="String"/>
-         <block start="/\b (exist) \s* (\()?=/x" end="/(\))?#1 | $/x" region="String" region01="Keyword" scheme="MakString"/>
-         <block start="/&lt;/" end="/\&gt;/" scheme="MakString" region="String" region00="PairStart" region10="PairEnd"/>
-         <keywords ignorecase="yes" region="Keyword">
-            <word name="CMDSWITCHES"/>
-            <word name="define"/>
-            <word name="defined"/>
-            <word name="else"/>
-            <word name="elseif"/>
-            <word name="endif"/>
-            <word name="exist"/>
-            <word name="if"/>
-            <word name="ifdef"/>
-            <word name="ifeq"/>
-            <word name="ifndef"/>
-            <word name="ifneq"/>
-            <word name="include"/>
-            <word name="pragma"/>
-            <word name="undef"/>
-         </keywords>
-      </scheme>
+<region name='rule-tag' parent='def:Label'/>
+<region name='rule-tag-spec' parent='def:LabelStrong'/>
+<region name='rule-tag-colon' parent='symbs-rare'/>
+<region name='rule-string' parent='def:String'/>
+<region name='var' parent='def:Var'/>
+<region name='var-ref' parent='def:SymbolStrong'/>
+<region name='var-names' parent='def:Keyword'/>
+<region name='var-func' parent='def:KeywordStrong'/>
+<region name='var-equ' parent='symbs'/>
+<region name='var-content' parent='def:VarStrong'/>
 
-      <scheme name="MakRule">
-         <inherit scheme="MakInlineFiles"/>
-         <block start="/^\M(?{RuleOutline}[^\s\#][^\=\:]+)\:/" end="/(::?)/"
-          scheme="MakGoal" region="MakGoal"
-         />
-         <inherit scheme="MakCommon"/>
-      </scheme>
+<region name='template' parent='def:Directive'/>
+<region name='path-symb' parent='def:Symbol'/>
+<region name='path-wldcrg' parent='regexp:Operator'/>
+<region name='silent' parent='def:KeywordStrong'/>
 
-      <scheme name="MakGoal">
-         <inherit scheme="MakCommon"/>
-      </scheme>
+<region name='keyword' parent='def:Directive'/>
+<region name='override' parent='keyword'/>
+<region name='in-directive' parent='def:String'/>
 
-      <scheme name="makefile">
-         <block start="/^((\!\s*ifdef) IDEOPTIONS)/" end="/^(\!endif)/"
-          scheme="config" region="String"
-          region01="MakParams" region02="Keyword" region11="Keyword"
-          region00="PairStart" region10="PairEnd"
-         />
-         <block start="/^(\!)/" end="/$/"
-          scheme="MakIf" region="MakParams" region01="Keyword"
-         />
-         <regexp match="/^\Minclude \s+ (?{IncludeOutline}.+)$/x"/>
+<region name='rule-outline' parent='def:Outlined'/>
+<region name='include-outline' parent='def:Outlined'/>
 
-         <keywords region="Keyword">
-            <word name="include"/>
-            <word name="%append"/>
-            <word name="%create"/>
-            <word name="%null"/>
-            <word name="%quit"/>
-            <word name="%stop"/>
-            <word name="%write"/>
-            <word name=".AFTER"/>
-            <word name=".AUTODEPEND"/>
-            <word name=".BEFORE"/>
-            <word name=".BLOCK"/>
-            <word name=".CONTINUE"/>
-            <word name=".DEFAULT"/>
-            <word name=".ERASE"/>
-            <word name=".ERROR"/>
-            <word name=".EXTENSIONS"/>
-            <word name=".HOLD"/>
-            <word name=".IGNORE"/>
-            <word name=".NOCHECK"/>
-            <word name=".OPTIMIZE"/>
-            <word name=".PATH"/>
-            <word name=".PRECIOUS"/>
-            <word name=".SILENT"/>
-            <word name=".SILENT"/>
-            <word name=".SUFFIXES"/>
-            <word name=".SYMBOLIC"/>
-            <word name="FAMILY"/>
-            <word name="INC_VERSION"/>
-            <word name="LANGUAGE"/>
-            <word name="loaddll"/>
-            <word name="VERSION"/>
-         </keywords>
-         <block start="/(\w+)\s*(\=)\s*/" end="/\\?~1$/"
-          scheme="MakCommon" region="MakVarValue"
-          region01="MakVarName" region02="def:SymbolStrong"
-         />
+<region name='foreign' parent='def:Debug' description="other makefiles minimal support"/>
 
-         <block start="/^\M\S/" end="/(^ | [^\\]?#1) $/x"
-          scheme="MakRule" region="MakRule"/>
-         <block start="/^\M(\s+|\t)/" end="/$/"
-          scheme="MakEx" region="MakParams"
-         />
-         <regexp match="/^(\x20{2})+/" region='Error'/>
-      </scheme>
 
-      <scheme name="MakEx">
-         <inherit scheme="MakInlineFiles"/>
-         <inherit scheme="MakCommon"/>
-      </scheme>
+<scheme name='comments'>
+	<block start='/\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
+</scheme>
 
-   </type>
+
+<scheme name='specvars'>
+	<regexp match='/\${2}/' region='quoted'/>
+	<regexp match='/\$[\%@&lt;\?\^\+\*\w]/' region='var'/>
+	<regexp match='/\$\(([@*%&lt;\^\+\?][FD])\)/' region0='var' region1='var-names'/>
+</scheme>
+
+<scheme name='template'>
+	<regexp match='/\\(.|$)/' region='quoted'/>
+	<regexp match='/%/' region='template'/>
+	
+	<regexp match='/[\.\/]/' region0='path-symb'/>
+	<regexp match='/:/' region0='path-symb' priority='low'/>
+	<regexp match='/[\*\?\~]/' region0='path-wldcrg'/>
+	<regexp match='/(\[)(.+?)(\])/' 
+		region0='path-wldcrg' region2='path-symb'
+		region1='def:PairStart' region3='def:PairEnd'
+	/>
+</scheme>
+
+<entity name='var-name' value='[^\s:=#\(\)]+'/>
+<scheme name='var-names'>
+	<keywords region='var-names'>
+		<word name='.LIBPATTERNS'/>
+		<word name='MAKEFILES'/>
+		<word name='MAKESHELL'/>
+		<word name='MAKELEVEL'/>
+		<word name='MAKEFLAGS'/>
+		<word name='MAKECMDGOALS'/>
+		<word name='MAKE'/>
+		<word name='VPATH'/>
+		<word name='SHELL'/>
+		<word name='CURDIR'/>
+		<word name='SUFFIXES'/>
+	</keywords>
+</scheme>
+
+<scheme name='var-func'>
+	<keywords region='var-func'>
+		<word name='subst'/>
+		<word name='patsubst'/>
+		<word name='strip'/>
+		<word name='findstring'/>
+		<word name='filter'/>
+		<word name='filter-out'/>
+		<word name='sort'/>
+		<word name='dir'/>
+		<word name='notdir'/>
+		<word name='suffix'/>
+		<word name='basename'/>
+		<word name='addsuffix'/>
+		<word name='addprefix'/>
+		<word name='join'/>
+		<word name='word'/>
+		<word name='words'/>
+		<word name='wordlist'/>
+		<word name='firstword'/>
+		<word name='wildcard'/>
+		<word name='error'/>
+		<word name='warning'/>
+		<word name='shell'/>
+		<word name='origin'/>
+		<word name='foreach'/>
+		<word name='call'/>
+	</keywords>
+</scheme>
+
+<scheme name='var'>
+	<inherit scheme='var-names'/>
+	<inherit scheme='vars'/>
+	
+	<regexp match='/,/' region0='symbs'/>
+	
+	
+	<block scheme='template'>
+		<start match='/~\s*(%var-name;)(:)\M.*?(?{symbs-rare}=)/' 
+			region1='var' region2='symbs-rare'
+		/>
+		<end match='/\)?=/' />
+	</block>
+	
+	<block scheme='var-func' region='var'>
+		<start match='/~\s*\M%var-name;\s+/' />
+		<end match='/~%var-name;\m/' />
+	</block>
+	<regexp match='/~\s*%var-name;/' region0='var' priority='low'/>
+</scheme>
+
+<scheme name='vars'>
+	<inherit scheme='specvars'/>
+	<block scheme='var' region='var-content'>
+		<start match="/(\$\()/" region0='var-ref' region1='def:PairStart'/>
+		<end match="/(\))/" region0='var-ref' region1='def:PairEnd'/>
+	</block>
+	<inherit scheme='template'/>
+	<!--regexp match='/\$\S+/' region='var'-->
+</scheme>
+
+<entity name='var-equ' value='[=:?+]?\=' />
+<scheme name='var-defs'>
+	<block scheme='var-names' region='var'>
+		<start match='/~\s*(override|export)?/' region1='override'/>
+		<end match='/%var-equ;/' region0='var-equ'/>
+	</block>
+	<inherit scheme='vars'/>
+</scheme>
+
+<scheme name='rule-tag-spec'>
+	<keywords region='rule-tag-spec'>
+		<word name='.PHONY'/>
+		<word name='.SUFFIXES'/>
+		<word name='.DEFAULT'/>
+		<word name='.PRECIOUS'/>
+		<word name='.INTERMEDIATE'/>
+		<word name='.SECONDARY'/>
+		<word name='.DELETE_ON_ERROR'/>
+		<word name='.IGNORE'/>
+		<word name='.SILENT'/>
+		<word name='.EXPORT_ALL_VARIABLES'/>
+		<word name='.NOTPARALLEL'/>
+	</keywords>
+	<!--regexp match='/\w+/' region0='def:Error' priority='low'/-->
+</scheme>
+
+
+
+<scheme name='rule-tag'>
+	<inherit scheme='rule-tag-spec'/>
+	<!--block scheme='rule-tag-spec' region="rule-tag">
+		<start match="/~(\.)\M\w+/" region1='rule-tag-spec'/>
+		<end match="/~\w+\m/"/>
+	</block-->
+	<inherit scheme='vars'/>
+</scheme>
+
+<scheme name='rule-string'>
+	<block scheme='rule-tag' region="rule-tag">
+		<start match="/~/"/>
+		<end match="/:{1,2}/" region0='rule-tag-colon'/>
+	</block>
+	
+	<inherit scheme='comments'/>
+	<inherit scheme='vars'/>
+	<!-- rule string here -->
+</scheme>
+
+
+<scheme name='rule-content'>
+	<inherit scheme='comments'/>
+	<inherit scheme='vars'/>
+	<regexp match='/@/' region0='silent'/>
+	<regexp match='/;/' region0='rule-tag-colon'/>
+</scheme>
+
+<scheme name='rule'>
+	<block scheme='rule-string' region="rule-string">
+		<start match="/~/"/>
+		<end match="/;?=|\\?~1$/"/>
+	</block>
+	
+	<inherit scheme='rule-content'/>
+	<block start='/\\?#1$/' end='/^\s*/' scheme='def:empty'/>
+	<regexp match='/^\t?!\s+/' region0='def:Error' priority='low'/>
+	<!-- rule defs here -->
+</scheme>
+
+<scheme name='keyword-if-head'>
+	<block scheme='vars'>
+		<start match='/~\s*((\())\M.*?(?{symbs},)/'
+			region1='symbs' region2='def:PairStart'
+		/>
+		<end match='/(\))/' region0='symbs' region1='def:PairEnd'/>
+	</block>
+	<block scheme='vars'>
+		<start match='/(")/' region0='symbs' region1='def:PairStart' />
+		<end   match='/(")/' region0='symbs' region1='def:PairEnd' />
+	</block>
+	<block scheme='vars'>
+		<start match="/(')/" region0='symbs' region1='def:PairStart' />
+		<end   match="/(')/" region0='symbs' region1='def:PairEnd' />
+	</block>
+</scheme>
+
+<scheme name='keyword-if-content'>
+	<regexp match='/^\s*else\b/' region0='keyword'/>
+	<inherit scheme='gnumake'/>
+</scheme>
+
+<scheme name='keyword-if'>
+	<block scheme='keyword-if-head' region='in-directive'>
+		<start match="/~/"/>
+		<end match="/$/"/>
+	</block>
+	<inherit scheme='keyword-if-content'/>
+</scheme>
+
+<scheme name='keywords'>
+	<block scheme='rule-content'>
+		<start match='/^\s*(override|export)?\s*(define)\s+(%var-name;)/' 
+			region0='keyword' region2='def:PairStart' 
+			region1='override' region3='var'
+		/>
+		<end match='/^\s*(endef)/' 
+			region0='keyword' region1='def:PairEnd'
+		/>
+	</block>
+	
+	<regexp match="/^\s*unexport\s+(%var-name;)/" region0='keyword' region1='var'/>
+	<block start='/^\s*vpath\b/' end='/\\?~1$/' 
+		region00='keyword' scheme='template' region='in-directive'
+	/>
+	<block start='/^\s*([\-s]|(?{foreign}!))?include\M\s+(?{include-outline}.+?)\s*$/' 
+		end='/$/' region00='keyword' scheme='vars' region='in-directive'
+	/>
+	
+	<block scheme='keyword-if'>
+		<start match='/^\s*(ifn?eq)\b/'
+			region0='keyword' region1='def:PairStart'
+		/>
+		<end match='/^\s*(endif)/' 
+			region0='keyword' region1='def:PairEnd'
+		/>
+	</block>
+	
+	<block scheme='keyword-if-content'>
+		<start match='/^\s*(ifn?def)\s+(%var-name;)/'
+			region0='keyword' region1='def:PairStart' region2='var'
+		/>
+		<end match='/^\s*(endif)/' 
+			region0='keyword' region1='def:PairEnd'
+		/>
+	</block>
+</scheme>
+
+<scheme name="gnumake" if='gnu'>
+	<inherit scheme='keywords'/>
+	<block scheme='var-defs'  region='var-content'>
+		<start match='/^\M\s*(override|export)?\s*%var-name;\s*%var-equ;/' />
+		<end match='/\\?~1$/'/>
+	</block>
+	<block scheme='rule'>
+		<start match="/^\M(?{rule-outline}[\w_.%$].*?):/"/>
+		<end match="/^\s?!/"/>
+		<!--end match="/^\M[^\s#]/"/  ^\s*$|-->
+	</block>
+	<inherit scheme='comments'/>
+	<regexp match='/\S/' region='def:Error' priority='low'/>
+</scheme>
+
+
+</type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -221,14 +329,11 @@
    - The Original Code is the Colorer Library.
    -
    - The Initial Developer of the Original Code is
-   - Cail Lomecb <cail@nm.ru>.
+   - Eugene Efremov <4mirror@mail.ru>
    - Portions created by the Initial Developer are Copyright (C) 1999-2005
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
-   -  Eugene Efremov <4mirror@mail.ru>
-   -  Timur Safin <timur@lanit.ru>
-   -  Vincent GUIGNOT <vguignot@ingenico.fr>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

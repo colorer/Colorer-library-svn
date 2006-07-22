@@ -329,14 +329,14 @@
     <location link="scripts/batch.hrc"/>
     <filename>/\.(Cmd|Bat|nt|btm|sys)$/i</filename>
   </prototype>
+  <prototype name="apache" group="scripts" description="Apache httpd.conf">
+    <location link="scripts/apache.hrc"/>
+    <filename>/(httpd\.conf|srm\.conf|access\.conf|\.htaccess|apache\.conf)$/i</filename>
+  </prototype>
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
     <filename>/\.(sh)$|^\./i</filename>
     <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
-  </prototype>
-  <prototype name="apache" group="scripts" description="Apache httpd.conf">
-    <location link="scripts/apache.hrc"/>
-    <filename>/(httpd\.conf|srm\.conf|access\.conf|\.htaccess|apache\.conf)$/i</filename>
   </prototype>
   <prototype name="avisynth" group="scripts" description="AviSynth">
     <location link="scripts/avisynth.hrc"/>
@@ -415,12 +415,19 @@
     <location link="scripts/yacc.hrc"/>
     <filename>/\.y+$/i</filename>
   </prototype>
+  
+  <package name="old-makefile" description="old makefile package">
+    <location link="scripts/makefile.old.hrc"/>
+  </package>
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
     <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
-    <firstline>/Microsoft Developer Studio Project File/i</firstline>
-    <firstline>/^\!if/i</firstline>
+    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
+    <firstline>/^\!if/i</firstline-->
     <firstline>/makefile/s</firstline>
+    <parameters>
+      <param name="gnu" value="true" description="use GNU make only"/>
+    </parameters>
   </prototype>
   <prototype name="resources" group="scripts" description="Resources">
     <location link="scripts/resrc.hrc"/>
