@@ -361,6 +361,7 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
   /* Fixes window position according to line number */
   if (lno < wStart || lno > wStart+wSize){
     wStart = lno;
+    layoutChanged = true;
   }
 
   if (layoutChanged || wStart < firstLine || wStart+wSize > firstLine+lrSize){

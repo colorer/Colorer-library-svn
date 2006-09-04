@@ -4,6 +4,8 @@
 #include<colorer/TextParser.h>
 #include<colorer/parsers/helpers/TextParserHelpers.h>
 
+#define MAX_RECURSION_LEVEL 100
+
 /**
  * Implementation of TextParser interface.
  * This is the base Colorer syntax parser, which
@@ -28,6 +30,7 @@ public:
 
 private:
   String *str;
+  int stackLevel;
   int gx, gy, gy2, len;
   int clearLine, endLine, schemeStart;
   SchemeImpl *baseScheme;

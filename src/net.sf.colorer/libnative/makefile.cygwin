@@ -20,7 +20,9 @@ include makefile.core
 DLLMAIN=_DllMain@12
 
 LIBINC = -lwininet -lstdc++
-LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=colorer.map $(FLAGS)
+LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=net_sf_colorer.map $(FLAGS)
+#LIBFLAGS += -s
+#CPPFLAGS += -ggdb
 
 $(obj_output_slash)net_sf_colorer.$(obj):
 	$(CPP) -D__int64='long long'  -Wp,-I$(shared_path),-I$(unzipdir),-I$(JAVA_INCLUDE),-I$(JAVA_INCLUDE_MD),-w $(CPPFLAGS) -s -O3 -c net_sf_colorer.cpp
@@ -36,4 +38,4 @@ $(TARGET): *.cpp *.h $(objs)
 	$(RM) temp.exe
 
 clean:
-	$(RM) $(objs) $(TARGET) colorer.map
+	$(RM) $(objs) $(TARGET) net_sf_colorer.map
