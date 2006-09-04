@@ -37,7 +37,7 @@
   <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
 
   <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
-                                      **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml,
+                                      **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml, **/*.xslt, **/*.pl,
                                       **/*.dep,
                                       **/*.txt, **/*.html, **/*.xsd, **/*.dtd, **/configure*, **/Makefile*,
                                       **/README, **/LICENSE, **/LINUX, **/MACOS, **/TODO, **/WHATSNEW"/>
