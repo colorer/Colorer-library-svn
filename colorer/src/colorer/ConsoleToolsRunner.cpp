@@ -182,8 +182,6 @@ void ROMTest()
     type->getBaseScheme();
   }
 
-  romizer_stop();
-
   printf("traversing...\n");
   bool res = romizer_traverse(hrcParser);
   printf("traverse %s.\n", res ? "complete" : "failed (file exists?)");
@@ -193,6 +191,7 @@ void ROMTest()
   
   delete pf;
 
+  romizer_stop();
   
   printf("end!");
 }
