@@ -3,7 +3,7 @@
 
 #define MEMORY_PROFILE 1
 
-#define CHUNK_SIZE 1024*1024*2
+#define CHUNK_SIZE 1024*1024*3
 
 void *chunk_alloc(size_t size);
 void chunk_free(void *ptr);

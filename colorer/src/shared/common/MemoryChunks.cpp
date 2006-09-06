@@ -116,7 +116,7 @@ void chunk_free(void *ptr){
 bool chunk_belongs(void *ptr){
   for(int idx = 0; idx < chunks->size(); idx++){
     byte *cstart = chunks->elementAt(idx);
-    if (((byte*)ptr > cstart) && ((byte*)ptr < (cstart+CHUNK_SIZE)))
+    if (((byte*)ptr >= cstart) && ((byte*)ptr < (cstart+CHUNK_SIZE)))
       return true;
   }
   return false;

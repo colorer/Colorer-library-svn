@@ -92,6 +92,7 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
     };
     baseScheme = parent->scheme;
 
+    stackLevel = 0;
     CLR_TRACE("TextParserImpl", "parse: goes into colorize()");
     if (parent != cache) {
       vtlist->restore(parent->vcache);
@@ -400,6 +401,13 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
 bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
 {
   len = -1;
+  
+  /* Direct check for recursion level */
+  if (stackLevel > MAX_RECURSION_LEVEL) {
+    return true;
+  }
+  stackLevel++;
+
   for (; gy < gy2; ){
     CLR_TRACE("TextParserImpl", "colorize: line no %d", gy);
     // clears line at start,
@@ -469,12 +477,15 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
     if (ret == LINE_REPARSE) continue;
 
     schemeStart = -1;
-    if (res) return true;
-
+    if (res) {
+      stackLevel--;
+      return true;
+    }
     len = -1;
     gy++;
     gx=0;
-  };
+  }
+  stackLevel--;
   return true;
 };
 /* ***** BEGIN LICENSE BLOCK *****

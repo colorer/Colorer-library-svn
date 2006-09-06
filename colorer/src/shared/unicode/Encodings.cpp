@@ -115,15 +115,15 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
   if (encoding == ENC_UTF32){
     dest[0] = wc&0xFF;
     dest[1] = (wc>>8)&0xFF;
-    dest[2] = (wc>>16)&0xFF;
-    dest[3] = (wc>>14)&0xFF;
+    dest[2] = 0; //(wc>>16)&0xFF;
+    dest[3] = 0; //(wc>>24)&0xFF;
     return 4;
   };
   if (encoding == ENC_UTF32BE){
     dest[3] = wc&0xFF;
     dest[2] = (wc>>8)&0xFF;
-    dest[1] = (wc>>16)&0xFF;
-    dest[0] = (wc>>14)&0xFF;
+    dest[1] = 0; //(wc>>16)&0xFF;
+    dest[0] = 0; //(wc>>24)&0xFF;
     return 4;
   };
   throw UnsupportedEncodingException(SString(encoding));

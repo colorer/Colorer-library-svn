@@ -52,15 +52,6 @@ void ParserFactory::init()
         continue;
       }
       cacheIS = InputSource::newInstance(((Element*)elem)->getAttribute(DString("link")), catalogFIS);
-      
-      try{
-        const byte *cache_stream = cacheIS->openStream();
-        hrcParser = (HRCParser*)romizer_loadup((void*)cache_stream);
-      }catch(Exception &e){
-        CLR_ERROR("PF", e.getMessage()->getChars());
-        hrcParser = null;
-        continue;
-      }
     }
     // hrc locations
     if (elem->getNodeType() == Node::ELEMENT_NODE &&
@@ -236,7 +227,9 @@ ParserFactory::~ParserFactory(){
     delete hrdClass;
   };
   docbuilder.free(catalog);
-  delete hrcParser;
+  if (!cacheIS) {
+	  delete hrcParser;
+  }
   delete catalogPath;
   delete catalogFIS;
   delete cacheIS;
@@ -265,6 +258,17 @@ HRCParser* ParserFactory::getHRCParser(){
   if (hrcParser != null) return hrcParser;
   hrcParser = new HRCParserImpl();
   hrcParser->setErrorHandler(fileErrorHandler);
+
+  if (cacheIS)
+  {
+    try{
+      const byte *cache_stream = cacheIS->openStream();
+      hrcParser = (HRCParser*)romizer_loadup((void*)cache_stream);
+	}catch(Exception &e){
+	  CLR_ERROR("PF", e.getMessage()->getChars());
+	  hrcParser = null;
+	}
+  }
   for(int idx = 0; idx < hrcLocations.size(); idx++){
     if (hrcLocations.elementAt(idx) != null){
       const String *relPath = hrcLocations.elementAt(idx);
