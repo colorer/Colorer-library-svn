@@ -3,7 +3,11 @@
 
 #include<common/SortedVector.h>
 
-#ifdef MEMORY_PROFILE
+#if COLORER_FEATURE_HRC_ROMIZING && !COLORER_FEATURE_USE_CHUNK_ALLOC
+#error COLORER_FEATURE_HRC_ROMIZING can be only used when COLORER_FEATURE_USE_CHUNK_ALLOC is enabled
+#endif
+
+#ifdef COLORER_FEATURE_PROFILE_MEM_DISTR
 extern "C" {
   int get_total_req();
   int get_new_calls();
@@ -11,12 +15,16 @@ extern "C" {
 }
 #endif
 
+void *new_wrapper(size_t size);
+void delete_wrapper(void *ptr);
+
+#if COLORER_FEATURE_HRC_ROMIZING
 void romizer_start();
 void romizer_stop();
 bool romizer_traverse(void *address);
 void *romizer_loadup(void *base);
+#endif
 
-extern SortedVector<int*> *romizer_data;
 
 #endif
 

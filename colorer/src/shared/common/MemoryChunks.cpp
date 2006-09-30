@@ -11,13 +11,6 @@
 /**
   @ingroup common @{
 */
-#if COLORER_FEATURE_USE_DL_MALLOC
-extern "C"{
-  void *dlmalloc(size_t size);
-  void dlfree(void *ptr);
-}
-
-#include<common/MemoryRomizer.cpp>
 
 void *operator new(size_t size)
 {
@@ -40,9 +33,6 @@ void operator delete[](void *ptr)
   delete_wrapper(ptr);
   return;
 }
-#endif
-
-
 
 
 /**

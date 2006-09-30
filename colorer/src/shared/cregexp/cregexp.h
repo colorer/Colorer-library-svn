@@ -140,6 +140,7 @@ public:
   SRegInfo();
   ~SRegInfo();
 
+#define CNAME "SRegInfo"
 #include<common/MemoryOperator.h>
 
   EOps op;

@@ -45,6 +45,7 @@ void ParserFactory::init()
   elem = elem->getFirstChild();
   while(elem != null)
   {
+#if COLORER_FEATURE_HRC_ROMIZING
     if (elem->getNodeType() == Node::ELEMENT_NODE &&
         *elem->getNodeName() == "hrc-cache"){
       if (hrcParser != null) {
@@ -53,6 +54,7 @@ void ParserFactory::init()
       }
       cacheIS = InputSource::newInstance(((Element*)elem)->getAttribute(DString("link")), catalogFIS);
     }
+#endif
     // hrc locations
     if (elem->getNodeType() == Node::ELEMENT_NODE &&
         *elem->getNodeName() == "hrc-sets"){
@@ -259,6 +261,7 @@ HRCParser* ParserFactory::getHRCParser(){
   hrcParser = new HRCParserImpl();
   hrcParser->setErrorHandler(fileErrorHandler);
 
+#if COLORER_FEATURE_HRC_ROMIZING
   if (cacheIS)
   {
     try{
@@ -269,6 +272,8 @@ HRCParser* ParserFactory::getHRCParser(){
 	  hrcParser = null;
 	}
   }
+#endif
+
   for(int idx = 0; idx < hrcLocations.size(); idx++){
     if (hrcLocations.elementAt(idx) != null){
       const String *relPath = hrcLocations.elementAt(idx);

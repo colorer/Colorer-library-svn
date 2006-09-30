@@ -167,6 +167,7 @@ void printError(){
 
 void ROMTest()
 {
+#if COLORER_FEATURE_HRC_ROMIZING
   ParserFactory *pf;
   ParserFactory *pfclone;
 
@@ -178,7 +179,7 @@ void ROMTest()
     FileType *type = hrcParser->enumerateFileTypes(idx);
     if (type == null) break;
     printf("%s\n", type->getName()->getChars());
-    //if (idx == 3)
+    if (idx == 31)
     type->getBaseScheme();
   }
 
@@ -194,6 +195,9 @@ void ROMTest()
   romizer_stop();
   
   printf("end!");
+#else
+  printf("ROMizing feature (COLORER_FEATURE_HRC_ROMIZING) is not enabled. Recompilation is required\n");
+#endif
 }
 
 /**

@@ -7,8 +7,6 @@
 #include<common/MemoryChunks.h>
 #include<common/MemoryRomizer.h>
 
-
-
 #include<stdio.h>
 #include<string.h>
 #include<sys/stat.h>
@@ -27,6 +25,7 @@
 #endif
 
 
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
 
 int total_req = 0;
 int new_calls = 0;
@@ -37,7 +36,14 @@ extern "C" {
   int get_new_calls(){ return new_calls; }
   int get_free_calls(){ return free_calls; }
 }
+#endif
 
+#if COLORER_FEATURE_USE_DL_MALLOC
+  #define malloc dlmalloc
+  #define free dlfree
+#endif
+
+#if COLORER_FEATURE_HRC_ROMIZING
 bool romizer_collecting = false;
 int total_size = 0, total_count = 0;
 Vector<int> *relink_basement = null;
@@ -53,7 +59,6 @@ void romizer_stop()
 {
   romizer_collecting = false;
 }
-
 
 void romizer_traverse_i(int *address)
 {
@@ -88,7 +93,7 @@ void romizer_traverse_i(int *address)
   // traverse in recurse
   for(int idx = 0; idx < size/4; idx++){
     int *new_address = ((int**)address)[idx];
-    
+    // address reference
     if ((int)new_address > 0x10000 && chunk_belongs(new_address)) {
       romizer_traverse_i(new_address);
       if (new_address[-1] == 0xDEAD) {
@@ -96,6 +101,8 @@ void romizer_traverse_i(int *address)
         relink_basement->addElement(this_filled + idx*4);
       }
     }
+    // function/method reference
+
   }
 }
 
@@ -122,12 +129,14 @@ bool romizer_traverse(void *address)
 
   if (cloned == null) {
     CLR_ERROR("MEM", "traverse: already traversed??");
+    romizer_collecting = local_rc;
     return false;
   }
   
   int source = open("hrc-cache", O_BINARY|O_CREAT|O_TRUNC|O_RDWR);
   if (source == -1){
     CLR_ERROR("MEM", "traverse: file open failed");
+    romizer_collecting = local_rc;
     return false;
   }
   int val;
@@ -158,6 +167,7 @@ void *romizer_loadup(void *base)
   }
   return start_address;
 }                                      
+#endif
 
 
 
@@ -165,11 +175,12 @@ void *romizer_loadup(void *base)
 
 void *new_wrapper(size_t size)
 {
-#if MEMORY_PROFILE
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
   total_req += size;
   new_calls++;
 #endif
   
+#if COLORER_FEATURE_HRC_ROMIZING
   if (romizer_collecting) {
     romizer_collecting = false;
     int *ret = (int*)chunk_alloc(size + sizeof(int)*3);
@@ -185,17 +196,18 @@ void *new_wrapper(size_t size)
     
     romizer_collecting = true;
     return ret;
-  } else {
-    return malloc(size);
   }
+#endif
+  return malloc(size);
 }
 
 void delete_wrapper(void *ptr)
 {
-#if MEMORY_PROFILE
+#if COLORER_FEATURE_PROFILE_MEM_DISTR
   free_calls++;
 #endif
 
+#if COLORER_FEATURE_HRC_ROMIZING
   if (romizer_collecting) {
     romizer_collecting = false;
     int *ret = (int*)ptr;
@@ -211,10 +223,11 @@ void delete_wrapper(void *ptr)
     }
     chunk_free(ret);
     romizer_collecting = true;
+    return;
   } else if (ptr > cloned && ptr <= cloned + cloned_filled) {
     return;
-  } else {
-    free(ptr);
   }
+#endif
+  free(ptr);
   return;
 }

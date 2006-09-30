@@ -16,7 +16,7 @@
   If defined, use dlmalloc memory management implementation
 */
 #ifndef COLORER_FEATURE_USE_DL_MALLOC
-  #define COLORER_FEATURE_USE_DL_MALLOC TRUE
+  #define COLORER_FEATURE_USE_DL_MALLOC FALSE
 #endif
 
 /**
@@ -30,12 +30,18 @@
   #define COLORER_FEATURE_PROFILE_MEM_DISTR FALSE
 #endif
 
+/**
+  If defined, Object model ROMizing functionality is included
+ */
+#ifndef COLORER_FEATURE_HRC_ROMIZING
+  #define COLORER_FEATURE_HRC_ROMIZING FALSE
+#endif
 
 /**
   If defined, HTTP InputSource is implemented.
 */
 #ifndef COLORER_FEATURE_HTTPINPUTSOURCE
-  #define COLORER_FEATURE_HTTPINPUTSOURCE TRUE
+  #define COLORER_FEATURE_HTTPINPUTSOURCE FALSE
 #endif
 
 /**
@@ -62,7 +68,7 @@
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail dot com>.
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

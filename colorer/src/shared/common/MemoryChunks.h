@@ -1,9 +1,14 @@
 #ifndef _COLORER_MEMORYCHUNKS_
 #define _COLORER_MEMORYCHUNKS_
 
-#define MEMORY_PROFILE 1
-
 #define CHUNK_SIZE 1024*1024*3
+
+#if COLORER_FEATURE_USE_DL_MALLOC
+extern "C"{
+  void *dlmalloc(size_t size);
+  void dlfree(void *ptr);
+}
+#endif
 
 void *chunk_alloc(size_t size);
 void chunk_free(void *ptr);
