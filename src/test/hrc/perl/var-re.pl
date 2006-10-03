@@ -67,3 +67,8 @@ $$
 if(/\|aaa\|/ or /\|bbb\|/){
 push @data, $_;
 }
+
+push @addLines, "$c_off {"; # no pair
+
+push @addLines, "$c_off {sdf}"; # has pair
+

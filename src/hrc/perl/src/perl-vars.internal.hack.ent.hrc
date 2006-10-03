@@ -11,14 +11,14 @@
 
 
 <scheme name="vars">
-	<block start="/(%varl;\s*\M\{)/" end="/%endbr;/"
+	<block start="/(%varl;\s*\M\{ [^&quot;]*\})/x" end="/%endbr;/"
 		scheme="perl:VarBrakEx" 
 		region00="perl:Var" region01="def:PairStart"
 	/>
-	<block start="/%varl;%name;+\s*\M[\{\[]/" end="/%endbr;/"
+	<block start="/%varl;%name;+\s*\M[\{\[] [^&quot;]*[\]\}]/x" end="/%endbr;/"
 		scheme="perl:VarBrak" region00="perl:Var" 
 	/>
-	<block start="/(-&gt;)?#2\s*\M[\{\[]/" end="/%endbr;/"
+	<block start="/(-&gt;)?#2\s*\M[\{\[] [^&quot;]*[\]\}]/x" end="/%endbr;/"
 		scheme="perl:VarBrak" 
 	/>
 	<regexp match="/(&amp;)?!%varl;%name;+/" region="perl:Var" priority="low"/>
