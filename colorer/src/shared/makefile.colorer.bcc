@@ -14,3 +14,4 @@ CPPFLAGS = -I$(shared_path) -I$(unzipdir) -n$(obj_output) -c -O2 -N- -RT- -w-rvl
 !include $(shared_path)makefile.zlib
 !include $(shared_path)_dependencies.dep
 !include $(shared_path)makefile.objs
+!include $(shared_path)makefile.lines
