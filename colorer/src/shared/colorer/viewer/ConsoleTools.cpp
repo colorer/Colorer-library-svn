@@ -235,7 +235,6 @@ void ConsoleTools::profile(int loopCount){
   // Base editor to make primary parse
   BaseEditor baseEditor(&pf, &textLinesStore);
   // HRD RegionMapper linking
-  if (hrdName == null) hrdName = new DString("default");
   baseEditor.setRegionMapper(&DString("console"), hrdName);
   FileType *type = selectType(pf.getHRCParser(), &textLinesStore);
   type->getBaseScheme();
@@ -262,7 +261,6 @@ void ConsoleTools::viewFile(){
     // Base editor to make primary parse
     BaseEditor baseEditor(&pf, &textLinesStore);
     // HRD RegionMapper linking
-    if (hrdName == null) hrdName = new DString("default");
     baseEditor.setRegionMapper(&DString("console"), hrdName);
     FileType *type = selectType(pf.getHRCParser(), &textLinesStore);
     baseEditor.setFileType(type);
@@ -316,7 +314,6 @@ void ConsoleTools::genOutput(bool useTokens){
     // HRD RegionMapper creation
     bool useMarkup = false;
     RegionMapper *mapper = null;
-    if (hrdName == null) hrdName = new DString("default");
     if (!useTokens){
       try{
         mapper = pf.createStyledMapper(&DString("rgb"), hrdName);

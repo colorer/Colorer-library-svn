@@ -151,7 +151,7 @@ void printError(){
 */
 int main(int argc, char *argv[])
 {
-  ConsoleTools ct;
+  ConsoleTools ct;  
   try{
     init(ct, argc, argv);
   }catch(Exception e){

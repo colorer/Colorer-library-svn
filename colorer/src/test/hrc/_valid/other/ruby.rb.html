@@ -1,35 +1,35 @@
  0: import os,re,string,sys,popen2
- 1: Dependencies <span style='color:#808030; '>=</span> <span style='color:#808030; '>[</span><span style='color:#0000e6; '>"time"</span><span style='color:#808030; '>]</span>
+ 1: Dependencies <span class='def-Symbol'>=</span> <span class='def-Symbol'>[</span><span class='ruby-String def-String'>"time"</span><span class='def-Symbol'>]</span>
  2: 
- 3: <span style='color:#800000; font-weight:bold; '>class</span> Parser:
- 4:     <span style='color:#800000; font-weight:bold; '>def</span> __init__<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span>, raw, request, <span style='color:#808030; '>*</span><span style='color:#808030; '>*</span>kw<span style='color:#808030; '>)</span>:
- 5:         <span style='color:#696969; '># save call arguments for later use in format</span>
- 6:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>raw <span style='color:#808030; '>=</span> raw
- 7:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>request <span style='color:#808030; '>=</span> request
- 8:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>kw<span style='color:#808030; '>=</span> kw
+ 3: <span class='ruby-Keyword def-Keyword'>class</span> Parser:
+ 4:     <span class='ruby-Keyword def-Keyword'>def</span> __init__<span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span>, raw, request, <span class='def-Symbol'>*</span><span class='def-Symbol'>*</span>kw<span class='def-Symbol'>)</span>:
+ 5:         <span class='ruby-Comment def-Comment def-Syntax'># save call arguments for later use in format</span>
+ 6:         <span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>raw <span class='def-Symbol'>=</span> raw
+ 7:         <span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>request <span class='def-Symbol'>=</span> request
+ 8:         <span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>kw<span class='def-Symbol'>=</span> kw
  9: 
-10:     <span style='color:#800000; font-weight:bold; '>def</span> format<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span>, formatter<span style='color:#808030; '>)</span>:
-11:         <span style='color:#696969; '>#type to pass to colorer</span>
-12:         type<span style='color:#808030; '>=</span>string<span style='color:#808030; '>.</span>strip<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>kw<span style='color:#808030; '>[</span><span style='color:#0000e6; '>'format_args'</span><span style='color:#808030; '>]</span><span style='color:#808030; '>)</span>
-13:         options<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'-dc -dh -h -t%s'</span> % type
-14:         cmd <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'colorer '</span> <span style='color:#808030; '>+</span> options
+10:     <span class='ruby-Keyword def-Keyword'>def</span> format<span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span>, formatter<span class='def-Symbol'>)</span>:
+11:         <span class='ruby-Comment def-Comment def-Syntax'>#type to pass to colorer</span>
+12:         type<span class='def-Symbol'>=</span>string<span class='def-Symbol'>.</span>strip<span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>kw<span class='def-Symbol'>[</span><span class='ruby-String def-String'>'format_args'</span><span class='def-Symbol'>]</span><span class='def-Symbol'>)</span>
+13:         options<span class='def-Symbol'>=</span><span class='ruby-String def-String'>'-dc -dh -h -t%s'</span> % type
+14:         cmd <span class='def-Symbol'>=</span> <span class='ruby-String def-String'>'colorer '</span> <span class='def-Symbol'>+</span> options
 15:         try:
-16:             fromchild, tochild, errchild <span style='color:#808030; '>=</span> popen2<span style='color:#808030; '>.</span>popen3<span style='color:#808030; '>(</span>cmd<span style='color:#808030; '>)</span>
-17:             tochild<span style='color:#808030; '>.</span>write<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>raw<span style='color:#808030; '>)</span>
-18:             tochild<span style='color:#808030; '>.</span>flush<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
-19:             tochild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
-20:             fromchild<span style='color:#808030; '>.</span>flush<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
-21:             html <span style='color:#808030; '>=</span> fromchild<span style='color:#808030; '>.</span><span style='color:#400000; '>readlines</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+16:             fromchild, tochild, errchild <span class='def-Symbol'>=</span> popen2<span class='def-Symbol'>.</span>popen3<span class='def-Symbol'>(</span>cmd<span class='def-Symbol'>)</span>
+17:             tochild<span class='def-Symbol'>.</span>write<span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>raw<span class='def-Symbol'>)</span>
+18:             tochild<span class='def-Symbol'>.</span>flush<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
+19:             tochild<span class='def-Symbol'>.</span>close<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
+20:             fromchild<span class='def-Symbol'>.</span>flush<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
+21:             html <span class='def-Symbol'>=</span> fromchild<span class='def-Symbol'>.</span><span class='def-FunctionKeyword def-Keyword'>readlines</span><span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
 22:         finally:
-23:             fromchild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
-24:             errchild<span style='color:#808030; '>.</span>close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+23:             fromchild<span class='def-Symbol'>.</span>close<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
+24:             errchild<span class='def-Symbol'>.</span>close<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
 25: 
-26:         html<span style='color:#808030; '>=</span><span style='color:#0000e6; '>'&lt;PRE>'</span><span style='color:#808030; '>+</span>string<span style='color:#808030; '>.</span>join<span style='color:#808030; '>(</span>html, <span style='color:#0000e6; '>''</span><span style='color:#808030; '>)</span><span style='color:#808030; '>+</span><span style='color:#0000e6; '>'&lt;/PRE>'</span>
+26:         html<span class='def-Symbol'>=</span><span class='ruby-String def-String'>'&lt;PRE>'</span><span class='def-Symbol'>+</span>string<span class='def-Symbol'>.</span>join<span class='def-Symbol'>(</span>html, <span class='ruby-String def-String'>''</span><span class='def-Symbol'>)</span><span class='def-Symbol'>+</span><span class='ruby-String def-String'>'&lt;/PRE>'</span>
 27: 
-28:         <span style='color:#800000; font-weight:bold; '>self</span><span style='color:#808030; '>.</span>request<span style='color:#808030; '>.</span>write<span style='color:#808030; '>(</span>formatter<span style='color:#808030; '>.</span>rawHTML<span style='color:#808030; '>(</span>html<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+28:         <span class='ruby-Keyword def-Keyword'>self</span><span class='def-Symbol'>.</span>request<span class='def-Symbol'>.</span>write<span class='def-Symbol'>(</span>formatter<span class='def-Symbol'>.</span>rawHTML<span class='def-Symbol'>(</span>html<span class='def-Symbol'>)</span><span class='def-Symbol'>)</span>
 29: 
 30: 
 31: 
-32: <span style='color:#800000; font-weight:bold; '>def</span> foo<span style='color:#808030; '>(</span>bar<span style='color:#808030; '>)</span>
-33:   bar<span style='color:#808030; '>.</span><span style='color:#400000; '>gsub</span><span style='color:#808030; '>(</span>%r<span style='color:#800080; '>{</span>^\<span style='color:#808030; '>.</span>|<span style='color:#808030; '>[</span>\s<span style='color:#808030; '>/</span>\\\<span style='color:#808030; '>*</span>\:\?<span style='color:#0000e6; '>'"&lt;>\|]}, '</span>_<span style='color:#0000e6; '>')</span>
-34: <span style='color:#0000e6; '>end</span>
+32: <span class='ruby-Keyword def-Keyword'>def</span> foo<span class='def-Symbol'>(</span>bar<span class='def-Symbol'>)</span>
+33:   bar<span class='def-Symbol'>.</span><span class='def-FunctionKeyword def-Keyword'>gsub</span><span class='def-Symbol'>(</span>%r<span class='def-SymbolStrong def-Symbol'>{</span>^\<span class='def-Symbol'>.</span>|<span class='def-Symbol'>[</span>\s<span class='def-Symbol'>/</span>\\\<span class='def-Symbol'>*</span>\:\?<span class='ruby-String def-String'>'"&lt;>\|]}, '</span>_<span class='ruby-String def-String'>')</span>
+34: <span class='ruby-String def-String'>end</span>

@@ -1,23 +1,23 @@
- 0: <span style='color:#800000; font-weight:bold; '>my</span> $fh <span style='color:#808030; '>=</span> <span style='color:#400000; '>shift</span><span style='color:#800080; '>;</span>
+ 0: <span class='perl-Word def-Keyword'>my</span> $fh <span class='perl-Symb def-Symbol'>=</span> <span class='perl-WordFun def-FunctionKeyword def-Keyword'>shift</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
  1: 
- 2:  <span style='color:#696969; '># adsfasdfas</span>
- 3:  <span style='color:#696969; '># multiline value: name = &lt;&lt;TERM</span>
- 4:  <span style='color:#696969; '># ....</span>
- 5:  <span style='color:#696969; '># ....</span>
- 6:  <span style='color:#696969; '>#</span>
- 7:  <span style='color:#696969; '># TERM</span>
+ 2:  <span class='perl-Comment def-Comment def-Syntax'># adsfasdfas</span>
+ 3:  <span class='perl-Comment def-Comment def-Syntax'># multiline value: name = &lt;&lt;TERM</span>
+ 4:  <span class='perl-Comment def-Comment def-Syntax'># ....</span>
+ 5:  <span class='perl-Comment def-Comment def-Syntax'># ....</span>
+ 6:  <span class='perl-Comment def-Comment def-Syntax'>#</span>
+ 7:  <span class='perl-Comment def-Comment def-Syntax'># TERM</span>
  8: 
- 9: <span style='color:#800000; font-weight:bold; '>my</span><span style='color:#808030; '>(</span> $n<span style='color:#808030; '>,</span> $term <span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span> <span style='color:#797997; '>$1</span><span style='color:#808030; '>,</span> <span style='color:#797997; '>$2</span> <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
-10: <span style='color:#800000; font-weight:bold; '>my</span> $ok<span style='color:#800080; '>;</span>
-11: <span style='color:#800000; font-weight:bold; '>my</span> $v <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>''</span><span style='color:#800080; '>;</span>
-12: <span style='color:#800000; font-weight:bold; '>while</span><span style='color:#808030; '>(</span> $line <span style='color:#808030; '>=</span> <span style='color:#40015a; '>&lt;$fh></span> <span style='color:#808030; '>)</span>
-13: <span style='color:#800080; '>{</span>
-14:     <span style='color:#800000; font-weight:bold; '>if</span><span style='color:#808030; '>(</span> $line <span style='color:#808030; '>=</span><span style='color:#808030; '>~</span><span style='color:#0000e6; '> </span><span style='color:#800000; '>/</span><span style='color:#808030; '>^</span><span style='color:#0000e6; '>$term</span><span style='color:#797997; '>\s</span><span style='color:#808030; '>*</span><span style='color:#808030; '>$</span><span style='color:#800000; '>/</span> <span style='color:#808030; '>)</span>
-15:     <span style='color:#800080; '>{</span>
-16:         $ok <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>
-17:         <span style='color:#800000; font-weight:bold; '>last</span><span style='color:#800080; '>;</span>
-18:     <span style='color:#800080; '>}</span>
+ 9: <span class='perl-Word def-Keyword'>my</span><span class='def-Symbol'>(</span> $n<span class='perl-Symb def-Symbol'>,</span> $term <span class='def-Symbol'>)</span> <span class='perl-Symb def-Symbol'>=</span> <span class='def-Symbol'>(</span> <span class='perl-Var def-Var'>$1</span><span class='perl-Symb def-Symbol'>,</span> <span class='perl-Var def-Var'>$2</span> <span class='def-Symbol'>)</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+10: <span class='perl-Word def-Keyword'>my</span> $ok<span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+11: <span class='perl-Word def-Keyword'>my</span> $v <span class='perl-Symb def-Symbol'>=</span> <span class='perl-String def-String'>''</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+12: <span class='perl-Word def-Keyword'>while</span><span class='def-Symbol'>(</span> $line <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Stream def-Path def-URI'>&lt;$fh></span> <span class='def-Symbol'>)</span>
+13: <span class='def-SymbolStrong def-Symbol'>{</span>
+14:     <span class='perl-Word def-Keyword'>if</span><span class='def-Symbol'>(</span> $line <span class='perl-Symb def-Symbol'>=</span><span class='perl-Symb def-Symbol'>~</span><span class='perl-String def-String'> </span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='regexp-MetaSymb def-Symbol'>^</span><span class='perl-String def-String'>$term</span><span class='regexp-SymbClass def-Var'>\s</span><span class='regexp-MetaSymb def-Symbol'>*</span><span class='regexp-MetaSymb def-Symbol'>$</span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span> <span class='def-Symbol'>)</span>
+15:     <span class='def-SymbolStrong def-Symbol'>{</span>
+16:         $ok <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Numb def-Number'>1</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+17:         <span class='perl-Word def-Keyword'>last</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+18:     <span class='def-SymbolStrong def-Symbol'>}</span>
 19: 
-20:     $v <span style='color:#808030; '>.</span><span style='color:#808030; '>=</span> $line<span style='color:#800080; '>;</span>
-21: <span style='color:#800080; '>}</span>
+20:     $v <span class='perl-Symb def-Symbol'>.</span><span class='perl-Symb def-Symbol'>=</span> $line<span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+21: <span class='def-SymbolStrong def-Symbol'>}</span>
 22: 

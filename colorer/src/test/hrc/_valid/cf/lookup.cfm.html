@@ -1,54 +1,54 @@
- 0: <span style='color:#004a43; '>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"></span>
+ 0: <span class='html-htmlDirective def-Directive'>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"></span>
  1: 
- 2: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>html</span><span style='color:#a65700; '>></span>
- 3: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>head</span><span style='color:#a65700; '>></span>
- 4:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>title</span><span style='color:#a65700; '>></span>Untitled<span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>title</span><span style='color:#a65700; '>></span>
- 5: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>head</span><span style='color:#a65700; '>></span>
+ 2: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>html</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+ 3: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>head</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+ 4:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>title</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>Untitled<span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlOpenTag def-Keyword'>title</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+ 5: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlOpenTag def-Keyword'>head</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
  6: 
- 7: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>body</span><span style='color:#a65700; '>></span>
+ 7: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>body</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
  8:  
- 9: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFQUERY</span><span style='color:#274796; '> </span><span style='color:#074726; '>NAME</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"qdata"</span><span style='color:#274796; '> datasource</span><span style='color:#808030; '>=</span><span style='color:#0000e6; '>"fastTrack_lab"</span><span style='color:#a65700; '>></span>
+ 9: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>CFQUERY</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'> </span><span class='html-htmlParam def-Parameter'>NAME</span><span class='html-htmlTagEqu def-Symbol'>=</span><span class='html-htmlString def-String'>"qdata"</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'> datasource</span><span class='html-htmlTagEqu def-Symbol'>=</span><span class='html-htmlString def-String'>"fastTrack_lab"</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
 10:     select *
 11:     from beans
-12:     where bean_id = <span style='color:#007997; '>#url.productid#</span>
-13: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFQUERY</span><span style='color:#a65700; '>></span>
+12:     where bean_id = <span class='coldfusion-Expr def-VarStrong def-Var'>#url.productid#</span>
+13: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='coldfusion-Tag def-Keyword'>CFQUERY</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
 14: 
-15: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFIF</span><span style='color:#274796; '> qdata</span><span style='color:#008c00; '>.</span><span style='color:#274796; '>recordcount is </span><span style='color:#008c00; '>1</span><span style='color:#a65700; '>></span>
-16:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFOUTPUT</span><span style='color:#a65700; '>></span>
-17:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>SCRIPT LANGUAGE="</span><span style='color:#0000e6; '>JavaScript</span><span style='color:#800000; font-weight:bold; '>" TYPE="text/javascript"</span><span style='color:#a65700; '>></span>
-18:         parent<span style='color:#808030; '>.</span>appframe<span style='color:#808030; '>.</span>document<span style='color:#808030; '>.</span>forms<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>productname#url<span style='color:#808030; '>.</span>row#<span style='color:#808030; '>.</span>value <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>'#jsStringformat(qdata.bean_name)#'</span><span style='color:#800080; '>;</span>
-19:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>SCRIPT</span><span style='color:#a65700; '>></span>
-20:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFOUTPUT</span><span style='color:#a65700; '>></span>
-21: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>CFELSE</span><span style='color:#a65700; '>></span>
-22:     <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>SCRIPT LANGUAGE="</span><span style='color:#0000e6; '>JavaScript</span><span style='color:#800000; font-weight:bold; '>" TYPE="text/javascript"</span><span style='color:#a65700; '>></span>
-23: <span style='color:#696969; '>    &lt;!--</span>
-24:         <span style='color:#808030; '>&lt;</span>CFOUTPUT<span style='color:#808030; '>></span>
-25:         alert<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Not found</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
-26:         parent<span style='color:#808030; '>.</span>appframe<span style='color:#808030; '>.</span>document<span style='color:#808030; '>.</span>forms<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>productid#url<span style='color:#808030; '>.</span>row#<span style='color:#808030; '>.</span>value <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>''</span><span style='color:#800080; '>;</span>
-27:         parent<span style='color:#808030; '>.</span>appframe<span style='color:#808030; '>.</span>document<span style='color:#808030; '>.</span>forms<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>productid#url<span style='color:#808030; '>.</span>row#<span style='color:#808030; '>.</span>focus<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
-28:         <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>/</span>CFOUTPUT<span style='color:#808030; '>></span>
-29:     <span style='color:#696969; '>//--></span>
-30:     <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>SCRIPT</span><span style='color:#a65700; '>></span>
-31: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>CFIF</span><span style='color:#a65700; '>></span>
+15: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>CFIF</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'> qdata</span><span class='html-htmlNumb def-Number'>.</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'>recordcount is </span><span class='html-htmlNumb def-Number'>1</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+16:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>CFOUTPUT</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+17:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>SCRIPT LANGUAGE="</span><span class='html-htmlString def-String'>JavaScript</span><span class='html-htmlOpenTag def-Keyword'>" TYPE="text/javascript"</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+18:         parent<span class='def-Symbol'>.</span>appframe<span class='def-Symbol'>.</span>document<span class='def-Symbol'>.</span>forms<span class='def-Symbol'>[</span><span class='def-NumberDec def-Number'>0</span><span class='def-Symbol'>]</span><span class='def-Symbol'>.</span>productname#url<span class='def-Symbol'>.</span>row#<span class='def-Symbol'>.</span>value <span class='def-Symbol'>=</span> <span class='def-String'>'#jsStringformat(qdata.bean_name)#'</span><span class='def-SymbolStrong def-Symbol'>;</span>
+19:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlCloseTag html-htmlOpenTag def-Keyword'>SCRIPT</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+20:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='coldfusion-Tag def-Keyword'>CFOUTPUT</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+21: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>CFELSE</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+22:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>SCRIPT LANGUAGE="</span><span class='html-htmlString def-String'>JavaScript</span><span class='html-htmlOpenTag def-Keyword'>" TYPE="text/javascript"</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+23: <span class='def-Comment def-Syntax'>    &lt;!--</span>
+24:         <span class='def-Symbol'>&lt;</span>CFOUTPUT<span class='def-Symbol'>></span>
+25:         alert<span class='def-Symbol'>(</span><span class='def-StringEdge def-String'>"</span><span class='c-String def-String'>Not found</span><span class='def-StringEdge def-String'>"</span><span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span>
+26:         parent<span class='def-Symbol'>.</span>appframe<span class='def-Symbol'>.</span>document<span class='def-Symbol'>.</span>forms<span class='def-Symbol'>[</span><span class='def-NumberDec def-Number'>0</span><span class='def-Symbol'>]</span><span class='def-Symbol'>.</span>productid#url<span class='def-Symbol'>.</span>row#<span class='def-Symbol'>.</span>value <span class='def-Symbol'>=</span> <span class='def-String'>''</span><span class='def-SymbolStrong def-Symbol'>;</span>
+27:         parent<span class='def-Symbol'>.</span>appframe<span class='def-Symbol'>.</span>document<span class='def-Symbol'>.</span>forms<span class='def-Symbol'>[</span><span class='def-NumberDec def-Number'>0</span><span class='def-Symbol'>]</span><span class='def-Symbol'>.</span>productid#url<span class='def-Symbol'>.</span>row#<span class='def-Symbol'>.</span>focus<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span>
+28:         <span class='def-Symbol'>&lt;</span><span class='def-Symbol'>/</span>CFOUTPUT<span class='def-Symbol'>></span>
+29:     <span class='def-Comment def-Syntax'>//--></span>
+30:     <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlCloseTag html-htmlOpenTag def-Keyword'>SCRIPT</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+31: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='coldfusion-Tag def-Keyword'>CFIF</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
 32: 
-33: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfscript</span><span style='color:#a65700; '>></span>
-34: <span style='color:#800000; font-weight:bold; '>function</span> foobar<span style='color:#808030; '>(</span>param1<span style='color:#808030; '>,</span> param2<span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
-35:      <span style='color:#800000; font-weight:bold; '>var</span> uselessVar <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>false</span><span style='color:#800080; '>;</span>
-36:      <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>param gt param2<span style='color:#808030; '>)</span><span style='color:#800080; '>{</span>
-37:         uselessVar  <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>true</span><span style='color:#800080; '>;</span>
-38:       <span style='color:#800080; '>}</span>
-39:      <span style='color:#800000; font-weight:bold; '>return</span> uselessVar<span style='color:#800080; '>;</span>
-40: <span style='color:#800080; '>}</span>
-41: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>cfscript</span><span style='color:#a65700; '>></span>
+33: <span class='def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>cfscript</span><span class='def-OpenTag def-Tag'>></span>
+34: <span class='def-Keyword'>function</span> foobar<span class='def-Symbol'>(</span>param1<span class='def-Symbol'>,</span> param2<span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>{</span>
+35:      <span class='def-Keyword'>var</span> uselessVar <span class='def-Symbol'>=</span> <span class='def-BooleanConstant def-Constant def-Keyword'>false</span><span class='def-SymbolStrong def-Symbol'>;</span>
+36:      <span class='def-Keyword'>if</span> <span class='def-Symbol'>(</span>param gt param2<span class='def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>{</span>
+37:         uselessVar  <span class='def-Symbol'>=</span> <span class='def-BooleanConstant def-Constant def-Keyword'>true</span><span class='def-SymbolStrong def-Symbol'>;</span>
+38:       <span class='def-SymbolStrong def-Symbol'>}</span>
+39:      <span class='def-Keyword'>return</span> uselessVar<span class='def-SymbolStrong def-Symbol'>;</span>
+40: <span class='def-SymbolStrong def-Symbol'>}</span>
+41: <span class='def-OpenTag def-Tag'>&lt;/</span><span class='coldfusion-Tag def-Keyword'>cfscript</span><span class='def-OpenTag def-Tag'>></span>
 42:     
-43: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfset</span><span style='color:#274796; '> myArrayofStrings[</span><span style='color:#008c00; '>1</span><span style='color:#274796; '>] </span><span style='color:#808030; '>=</span><span style='color:#274796; '> </span><span style='color:#0000e6; '>"foobar"</span><span style='color:#a65700; '>></span>
+43: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>cfset</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'> myArrayofStrings[</span><span class='html-htmlNumb def-Number'>1</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'>] </span><span class='html-htmlTagEqu def-Symbol'>=</span><span class='html-htmlUnknowParam def-ParameterUnknown def-ParameterStrong def-Parameter'> </span><span class='html-htmlString def-String'>"foobar"</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
 44:  
-45: <span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>cfoutput</span><span style='color:#a65700; '>></span>
-46: Today is <span style='color:#007997; '>#</span><span style='color:#800000; font-weight:bold; '>DateFormat</span><span style='color:#007997; '>(</span><span style='color:#800000; font-weight:bold; '>Now</span><span style='color:#007997; '>(),"mm,dd,yyyy")#</span><span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>br</span><span style='color:#a65700; '>></span>
-47: <span style='color:#007997; '>#myArrayofStrings[1]#</span><span style='color:#a65700; '>&lt;</span><span style='color:#800000; font-weight:bold; '>br</span><span style='color:#a65700; '>></span>
-48: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>cfoutput</span><span style='color:#a65700; '>></span>
-49:  <span style='color:#696969; '>&lt;!--- my comments ---></span>
+45: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='coldfusion-Tag def-Keyword'>cfoutput</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+46: Today is <span class='coldfusion-Expr def-VarStrong def-Var'>#</span><span class='coldfusion-Tag def-Keyword'>DateFormat</span><span class='coldfusion-Expr def-VarStrong def-Var'>(</span><span class='coldfusion-Tag def-Keyword'>Now</span><span class='coldfusion-Expr def-VarStrong def-Var'>(),"mm,dd,yyyy")#</span><span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>br</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+47: <span class='coldfusion-Expr def-VarStrong def-Var'>#myArrayofStrings[1]#</span><span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;</span><span class='html-htmlOpenTag def-Keyword'>br</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+48: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='coldfusion-Tag def-Keyword'>cfoutput</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+49:  <span class='def-Comment def-Syntax'>&lt;!--- my comments ---></span>
 50: 
-51: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>body</span><span style='color:#a65700; '>></span>
-52: <span style='color:#a65700; '>&lt;/</span><span style='color:#800000; font-weight:bold; '>html</span><span style='color:#a65700; '>></span>
+51: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlOpenTag def-Keyword'>body</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
+52: <span class='html-htmlTagBr def-OpenTag def-Tag'>&lt;/</span><span class='html-htmlOpenTag def-Keyword'>html</span><span class='html-htmlTagBr def-OpenTag def-Tag'>></span>
 53: 

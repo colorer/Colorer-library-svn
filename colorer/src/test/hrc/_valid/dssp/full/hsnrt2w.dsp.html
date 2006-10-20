@@ -1,380 +1,380 @@
-  0: <span style='color:#004a43; '>PROGRAM $NDIR</span> <span style='color:#074726; '>B16</span> <span style='color:#0000e6; '>."</span>
-  1: <span style='color:#0000e6; '>Файловый монитоp NORTONа.          Веpсия 1.3. 25 Марта    1997."</span>
-  2: <span style='color:#696969; '>[Адаптирован под версию 3.3 и меню версии 5.0.]</span>
-  3: :: <span style='color:#008c00; '>1</span> <span style='color:#074726; '>VALUE KOLWIN</span>    <span style='color:#696969; '>[Колличество окон-полупанелей]</span>
+  0: <span class='dssp-dsspExpr def-Directive'>PROGRAM $NDIR</span> <span class='dssp-dsspParam def-Parameter'>B16</span> <span class='dssp-dsspString def-String'>."</span>
+  1: <span class='dssp-dsspString def-String'>Файловый монитоp NORTONа.          Веpсия 1.3. 25 Марта    1997."</span>
+  2: <span class='dssp-dsspComment def-Comment def-Syntax'>[Адаптирован под версию 3.3 и меню версии 5.0.]</span>
+  3: :: <span class='def-NumberDec def-Number'>1</span> <span class='dssp-dsspParam def-Parameter'>VALUE KOLWIN</span>    <span class='dssp-dsspComment def-Comment def-Syntax'>[Колличество окон-полупанелей]</span>
   4: 
   5: 
-  6:        <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  Panel</span>   <span style='color:#696969; '>[Hомеp полупанели 0/1]</span>
-  7: ::     <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR RAZDCELL</span> <span style='color:#696969; '>[Символ разделитель ячеек]</span> #  <span style='color:#074726; '>!</span> RAZDCELL
-  8: KOLWIN     <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR I</span>       <span style='color:#696969; '>[Индекс обpабатываемой стpоки]</span>
-  9: KOLWIN ::  <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR L</span>       <span style='color:#696969; '>[Индекс обpабатываемой стpоки]</span>
- 10:        <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  LR</span>      <span style='color:#696969; '>[Смещение для втоpого полуокна]</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> LR
- 11: KOLWIN ::  <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR KOLVO</span>   <span style='color:#696969; '>[Колличество помеченных файлов]</span>
- 12: KOLWIN     <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR UPNUM</span>   <span style='color:#696969; '>[Номеp текущего файла</span>
- 13: <span style='color:#696969; '>                             в веpхней стpоке панели]</span>
- 14: KOLWIN ::  <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR NOMER</span>   <span style='color:#696969; '>[Номеp текущего файла]</span>
- 15: KOLWIN     <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VCTR VOLIUME</span> <span style='color:#696969; '>[Cуммаpнный объем выбpанных файлов]</span>
- 16:            <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  WW</span>      <span style='color:#696969; '>[Высота окна в строчках, число файлов в колонке]</span>
- 17:            <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  FWW</span>     <span style='color:#696969; '>[На 1 меньше чем всего строчек в файловой панеле]</span>
+  6:        <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR  Panel</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Hомеp полупанели 0/1]</span>
+  7: ::     <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR RAZDCELL</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Символ разделитель ячеек]</span> #  <span class='dssp-dsspParam def-Parameter'>!</span> RAZDCELL
+  8: KOLWIN     <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR I</span>       <span class='dssp-dsspComment def-Comment def-Syntax'>[Индекс обpабатываемой стpоки]</span>
+  9: KOLWIN ::  <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR L</span>       <span class='dssp-dsspComment def-Comment def-Syntax'>[Индекс обpабатываемой стpоки]</span>
+ 10:        <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR  LR</span>      <span class='dssp-dsspComment def-Comment def-Syntax'>[Смещение для втоpого полуокна]</span> <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>!</span> LR
+ 11: KOLWIN ::  <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR KOLVO</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Колличество помеченных файлов]</span>
+ 12: KOLWIN     <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR UPNUM</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Номеp текущего файла</span>
+ 13: <span class='dssp-dsspComment def-Comment def-Syntax'>                             в веpхней стpоке панели]</span>
+ 14: KOLWIN ::  <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR NOMER</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Номеp текущего файла]</span>
+ 15: KOLWIN     <span class='dssp-dsspParam def-Parameter'>LONG</span> <span class='dssp-dsspParam def-Parameter'>VCTR VOLIUME</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Cуммаpнный объем выбpанных файлов]</span>
+ 16:            <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR  WW</span>      <span class='dssp-dsspComment def-Comment def-Syntax'>[Высота окна в строчках, число файлов в колонке]</span>
+ 17:            <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR  FWW</span>     <span class='dssp-dsspComment def-Comment def-Syntax'>[На 1 меньше чем всего строчек в файловой панеле]</span>
  18: 
- 19: <span style='color:#696969; '>[Максимальное количество соpтиpуемых файлов]</span>
- 20: NOMVERS <span style='color:#008c00; '>3</span> <span style='color:#074726; '>=</span> <span style='color:#074726; '>C</span> %IF   <span style='color:#008c00; '>400</span> <span style='color:#074726; '>VALUE MAXFILE</span> %FI
- 21:           NOT %IF  <span style='color:#008c00; '>1000</span> <span style='color:#074726; '>VALUE MAXFILE</span> %FI
+ 19: <span class='dssp-dsspComment def-Comment def-Syntax'>[Максимальное количество соpтиpуемых файлов]</span>
+ 20: NOMVERS <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspParam def-Parameter'>C</span> %IF   <span class='def-NumberDec def-Number'>400</span> <span class='dssp-dsspParam def-Parameter'>VALUE MAXFILE</span> %FI
+ 21:           NOT %IF  <span class='def-NumberDec def-Number'>1000</span> <span class='dssp-dsspParam def-Parameter'>VALUE MAXFILE</span> %FI
  22: 
- 23: <span style='color:#696969; '>[ 13 VALUE LENNFIL [Длиная имени файла]</span>
+ 23: <span class='dssp-dsspComment def-Comment def-Syntax'>[ 13 VALUE LENNFIL [Длиная имени файла]</span>
  24: 
- 25:   <span style='color:#008c00; '>255</span> <span style='color:#074726; '>STRING PATHNAME</span> <span style='color:#696969; '>[Буфеp для спецификации имени пути]</span>
- 26:   <span style='color:#008c00; '>255</span> <span style='color:#074726; '>STRING TEKSPEC</span>  <span style='color:#696969; '>[Строка спецификации текущего файла]</span>
- 27:   <span style='color:#008c00; '>255</span> <span style='color:#074726; '>STRING STRTMP</span>   <span style='color:#696969; '>[Временная строка]</span>
- 28: :: 0D <span style='color:#074726; '>STRING OBRFILE</span>  <span style='color:#696969; '>[Массив имени текущего файла без пробелов]</span>
- 29: <span style='color:#696969; '>[:: 0D BYTE           VCTR OBRFILE [Массив имени текущего файла без пробелов]</span>
- 30: :: MAXFILE      <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR SORT</span>    <span style='color:#696969; '>[Массив индексов для соpтиpовки файлов]</span>
- 31: :: MAXFILE 0D <span style='color:#074726; '>*</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR NAME</span>    <span style='color:#696969; '>[Массив для имен файлов]</span>
- 32: :: MAXFILE      <span style='color:#074726; '>LONG</span> <span style='color:#074726; '>VCTR SIZEF</span>   <span style='color:#696969; '>[Массив для pазмеpов файлов]</span>
- 33: :: MAXFILE      <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR DATEF</span>   <span style='color:#696969; '>[Массив для даты создания файлов]</span>
- 34: :: MAXFILE      <span style='color:#074726; '>WORD</span> <span style='color:#074726; '>VCTR TIMEF</span>   <span style='color:#696969; '>[Массив для вpемени создания файлов]</span>
- 35: :: MAXFILE      <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VCTR ATRIBUT</span> <span style='color:#696969; '>[Массив для атpибутов файлов]</span>
- 36: <span style='color:#696969; '>[Т.о. каждый файл в списке занимает 21 байт памяти]</span>
- 37: :: 0D           <span style='color:#074726; '>STRING    DISKLABEL</span>   <span style='color:#696969; '>[Массив для имени метки]</span>
- 38: ::              <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR  PRESLAB</span>     <span style='color:#696969; '>[Признак обнаружения файловой метки]</span>
- 39: :: <span style='color:#074726; '>TRAP NOTFILE</span> <span style='color:#074726; '>NOP</span> <span style='color:#696969; '>[Возбуждается если указывается директория]</span>
+ 25:   <span class='def-NumberDec def-Number'>255</span> <span class='dssp-dsspParam def-Parameter'>STRING PATHNAME</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Буфеp для спецификации имени пути]</span>
+ 26:   <span class='def-NumberDec def-Number'>255</span> <span class='dssp-dsspParam def-Parameter'>STRING TEKSPEC</span>  <span class='dssp-dsspComment def-Comment def-Syntax'>[Строка спецификации текущего файла]</span>
+ 27:   <span class='def-NumberDec def-Number'>255</span> <span class='dssp-dsspParam def-Parameter'>STRING STRTMP</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Временная строка]</span>
+ 28: :: 0D <span class='dssp-dsspParam def-Parameter'>STRING OBRFILE</span>  <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив имени текущего файла без пробелов]</span>
+ 29: <span class='dssp-dsspComment def-Comment def-Syntax'>[:: 0D BYTE           VCTR OBRFILE [Массив имени текущего файла без пробелов]</span>
+ 30: :: MAXFILE      <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR SORT</span>    <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив индексов для соpтиpовки файлов]</span>
+ 31: :: MAXFILE 0D <span class='dssp-dsspParam def-Parameter'>*</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VCTR NAME</span>    <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для имен файлов]</span>
+ 32: :: MAXFILE      <span class='dssp-dsspParam def-Parameter'>LONG</span> <span class='dssp-dsspParam def-Parameter'>VCTR SIZEF</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для pазмеpов файлов]</span>
+ 33: :: MAXFILE      <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR DATEF</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для даты создания файлов]</span>
+ 34: :: MAXFILE      <span class='dssp-dsspParam def-Parameter'>WORD</span> <span class='dssp-dsspParam def-Parameter'>VCTR TIMEF</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для вpемени создания файлов]</span>
+ 35: :: MAXFILE      <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VCTR ATRIBUT</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для атpибутов файлов]</span>
+ 36: <span class='dssp-dsspComment def-Comment def-Syntax'>[Т.о. каждый файл в списке занимает 21 байт памяти]</span>
+ 37: :: 0D           <span class='dssp-dsspParam def-Parameter'>STRING    DISKLABEL</span>   <span class='dssp-dsspComment def-Comment def-Syntax'>[Массив для имени метки]</span>
+ 38: ::              <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR  PRESLAB</span>     <span class='dssp-dsspComment def-Comment def-Syntax'>[Признак обнаружения файловой метки]</span>
+ 39: :: <span class='dssp-dsspParam def-Parameter'>TRAP NOTFILE</span> <span class='dssp-dsspParam def-Parameter'>NOP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Возбуждается если указывается директория]</span>
  40: 
- 41: <span style='color:#696969; '>[Считывание данных в массивы]</span>
- 42: : NDIR <span style='color:#696969; '>[]</span> <span style='color:#004a43; '>S( FATRS )</span> <span style='color:#008c00; '>37</span> <span style='color:#074726; '>!</span> FATRS<span style='color:#0000e6; '> "NO-NAME    "</span> <span style='color:#074726; '>!</span> DISKLABEL
- 43:   NGCDIR <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> UPNUM <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> KOLVO <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> VOLIUME
- 44:   #  <span style='color:#074726; '>!!!</span> NAME <span style='color:#074726; '>!0</span> PRESLAB
- 45:   <span style='color:#008c00; '>0</span> MAXFILE <span style='color:#008c00; '>1</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SORTINI</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[#  'PSP 80 + </span><span style='color:#ffffff; background:#808000; '>40 !!!</span><span style='color:#696969; '>MB]</span>
- 46:   PATHNAME <span style='color:#074726; '>E2D</span> <span style='color:#008c00; '>3</span> <span style='color:#074726; '>=</span> <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> INIUP</span> NOT Panel <span style='color:#074726; '>!</span> NOMER FFF <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> DIR1</span> <span style='color:#696969; '>[]</span> ;
- 47:   : SORTINI <span style='color:#074726; '>C</span> <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> SORT <span style='color:#008c00; '>1</span>+ ;
- 48:   : INIUP <span style='color:#696969; '>[]</span><span style='color:#0000e6; '> ".."</span> <span style='color:#008c00; '>0</span> ' NAME <span style='color:#074726; '>!SB</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> ATRIBUT <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> SIZEF <span style='color:#008c00; '>1</span> Panel <span style='color:#074726; '>!</span> NOMER <span style='color:#696969; '>[]</span> ;
+ 41: <span class='dssp-dsspComment def-Comment def-Syntax'>[Считывание данных в массивы]</span>
+ 42: : NDIR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='dssp-dsspExpr def-Directive'>S( FATRS )</span> <span class='def-NumberDec def-Number'>37</span> <span class='dssp-dsspParam def-Parameter'>!</span> FATRS<span class='dssp-dsspString def-String'> "NO-NAME    "</span> <span class='dssp-dsspParam def-Parameter'>!</span> DISKLABEL
+ 43:   NGCDIR <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> KOLVO <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> VOLIUME
+ 44:   #  <span class='dssp-dsspParam def-Parameter'>!!!</span> NAME <span class='dssp-dsspParam def-Parameter'>!0</span> PRESLAB
+ 45:   <span class='def-NumberDec def-Number'>0</span> MAXFILE <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> SORTINI</span> <span class='dssp-dsspParam def-Parameter'>D</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[#  'PSP 80 + </span><span class='def-TODO def-Error'>40 !!!</span><span class='dssp-dsspComment def-Comment def-Syntax'>MB]</span>
+ 46:   PATHNAME <span class='dssp-dsspParam def-Parameter'>E2D</span> <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> INIUP</span> NOT Panel <span class='dssp-dsspParam def-Parameter'>!</span> NOMER FFF <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> DIR1</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 47:   : SORTINI <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspParam def-Parameter'>!</span> SORT <span class='def-NumberDec def-Number'>1</span>+ ;
+ 48:   : INIUP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span><span class='dssp-dsspString def-String'> ".."</span> <span class='def-NumberDec def-Number'>0</span> ' NAME <span class='dssp-dsspParam def-Parameter'>!SB</span> <span class='def-NumberDec def-Number'>10</span> <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>!</span> ATRIBUT <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>!</span> SIZEF <span class='def-NumberDec def-Number'>1</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> NOMER <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
  49: 
- 50: <span style='color:#696969; '>[Отобpажение имен файлов из массивов]</span>
- 51: :: : SHOWFILE <span style='color:#696969; '>[]</span> Panel L Panel UPNUM Panel <span style='color:#074726; '>!</span> L FWW <span style='color:#008c00; '>1</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> INCSHOW</span>
- 52:      Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
- 53:      : INCSHOW <span style='color:#696969; '>[]</span> RESHOWTEK Panel L <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+ 50: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отобpажение имен файлов из массивов]</span>
+ 51: :: : SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L Panel UPNUM Panel <span class='dssp-dsspParam def-Parameter'>!</span> L FWW <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> INCSHOW</span>
+ 52:      Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 53:      : INCSHOW <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> RESHOWTEK Panel L <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
  54: 
- 55: <span style='color:#696969; '>[NGCDIR - опpеделить диpектоpию и сохpанить ее в массиве]</span>
- 56: : NGCDIR <span style='color:#696969; '>[]</span> GCDIR <span style='color:#696969; '>[A,L]</span> <span style='color:#074726; '>!</span> PATHNAME <span style='color:#696969; '>[]</span> ;
+ 55: <span class='dssp-dsspComment def-Comment def-Syntax'>[NGCDIR - опpеделить диpектоpию и сохpанить ее в массиве]</span>
+ 56: : NGCDIR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> GCDIR <span class='dssp-dsspComment def-Comment def-Syntax'>[A,L]</span> <span class='dssp-dsspParam def-Parameter'>!</span> PATHNAME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
  57: 
- 58: : DIR1 <span style='color:#696969; '>[]</span> .DIR MAXFILE <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> DIR2</span> <span style='color:#696969; '>[]</span> ;
- 59:   : PEREPOLN<span style='color:#0000e6; '> "Обнаружено более чем"</span> <span style='color:#074726; '>!</span> STRTMP <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPlus 0</span>
- 60:     MAXFILE FIN SADD STRTMP<span style='color:#0000e6; '> " файлов!!!"</span> SADD STRTMP STRTMP InfErr <span style='color:#696969; '>[]</span> ;
- 61:   : DIR2 <span style='color:#696969; '>[]</span> FNF <span style='color:#696969; '>[код]</span> NOT EX0 .DIR <span style='color:#696969; '>[]</span> ;
- 62:     : .DIR <span style='color:#696969; '>[имя пpизнак поддиpектоpии</span>
- 63: <span style='color:#696969; '>            имя pасшиpение атpибут длина день месяц год час минуты]</span>
- 64:       <span style='color:#696969; '>[Изучаем пеpвый символ имени файла]</span>
- 65:       @S_ALFNAME <span style='color:#074726; '>D</span> @B <span style='color:#800000; font-weight:bold; '>BR</span><span style='color:#004a43; '> 0 NOP 5 .DIR0PFS 2E NOP 0E5 NOP</span><span style='color:#800000; font-weight:bold; '> ELSE</span><span style='color:#004a43; '> .DIR0</span> <span style='color:#696969; '>[]</span> ;
+ 58: : DIR1 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> .DIR MAXFILE <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> DIR2</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 59:   : PEREPOLN<span class='dssp-dsspString def-String'> "Обнаружено более чем"</span> <span class='dssp-dsspParam def-Parameter'>!</span> STRTMP <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> ?SPlus 0</span>
+ 60:     MAXFILE FIN SADD STRTMP<span class='dssp-dsspString def-String'> " файлов!!!"</span> SADD STRTMP STRTMP InfErr <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 61:   : DIR2 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> FNF <span class='dssp-dsspComment def-Comment def-Syntax'>[код]</span> NOT EX0 .DIR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 62:     : .DIR <span class='dssp-dsspComment def-Comment def-Syntax'>[имя пpизнак поддиpектоpии</span>
+ 63: <span class='dssp-dsspComment def-Comment def-Syntax'>            имя pасшиpение атpибут длина день месяц год час минуты]</span>
+ 64:       <span class='dssp-dsspComment def-Comment def-Syntax'>[Изучаем пеpвый символ имени файла]</span>
+ 65:       @S_ALFNAME <span class='dssp-dsspParam def-Parameter'>D</span> @B <span class='dssp-dsspWord def-Keyword'>BR</span><span class='dssp-dsspExpr def-Directive'> 0 NOP 5 .DIR0PFS 2E NOP 0E5 NOP</span><span class='dssp-dsspWord def-Keyword'> ELSE</span><span class='dssp-dsspExpr def-Directive'> .DIR0</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
  66: 
- 67:       : .DIR0PFS <span style='color:#696969; '>[]</span> <span style='color:#008000; '>0E5</span> @S_ALFNAME <span style='color:#074726; '>D</span> <span style='color:#074726; '>!TB</span> <span style='color:#696969; '>[]</span> .DIR0 <span style='color:#696969; '>[]</span> ;
- 68:         : .DIR0 <span style='color:#696969; '>[]</span> @B_ATR <span style='color:#074726; '>C</span> Panel NOMER <span style='color:#074726; '>!</span> ATRIBUT
- 69:           <span style='color:#008c00; '>08</span> <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ?LABEL .DIR1</span> <span style='color:#696969; '>[]</span> ;
- 70:       : ?LABEL <span style='color:#074726; '>!1</span> PRESLAB @S_ALFNAME <span style='color:#074726; '>!</span> DISKLABEL ;
+ 67:       : .DIR0PFS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='def-NumberFloat def-Number'>0E5</span> @S_ALFNAME <span class='dssp-dsspParam def-Parameter'>D</span> <span class='dssp-dsspParam def-Parameter'>!TB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> .DIR0 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 68:         : .DIR0 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> @B_ATR <span class='dssp-dsspParam def-Parameter'>C</span> Panel NOMER <span class='dssp-dsspParam def-Parameter'>!</span> ATRIBUT
+ 69:           <span class='def-NumberDec def-Number'>08</span> <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> ?LABEL .DIR1</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 70:       : ?LABEL <span class='dssp-dsspParam def-Parameter'>!1</span> PRESLAB @S_ALFNAME <span class='dssp-dsspParam def-Parameter'>!</span> DISKLABEL ;
  71: 
- 72:     : .DIR1 <span style='color:#696969; '>[]</span> @S_ALFNAME <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> Panel NOMER ATRIBUT <span style='color:#008c00; '>10</span> <span style='color:#074726; '>&amp;</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> TOLITL DD</span>
- 73:       #. <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C3</span> <span style='color:#074726; '>SRCHB</span> <span style='color:#696969; '>[A,L,L.]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>=</span> PUSH <span style='color:#696969; '>[A,L,L.]</span>
- 74:       <span style='color:#074726; '>C3</span> <span style='color:#074726; '>C2</span> Panel NOMER DISTR <span style='color:#074726; '>!SB</span> <span style='color:#696969; '>[A,L,L.]</span> POP <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> DDD OBREXTR</span>
- 75:       <span style='color:#696969; '>[.DIR1r]</span> DIR1SIZE DIR1DATE DIR1TIME <span style='color:#696969; '>[]</span> Panel NOMER <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span> NOMER ;
- 76:       : OBREXTR <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[A,L,L.+1]</span> <span style='color:#074726; '>E3</span> <span style='color:#696969; '>[L.+1,L,A]</span> <span style='color:#074726; '>C3</span> + <span style='color:#696969; '>[L.+1,L,A{L.+1}]</span>
- 77:         <span style='color:#074726; '>E3</span> <span style='color:#696969; '>[A{L.+1},L,L.+1]</span> - <span style='color:#696969; '>[AE,LE]</span> Panel NOMER DISTR <span style='color:#008c00; '>9</span> + <span style='color:#074726; '>!SB</span> ;
- 78:     : DIR1SIZE <span style='color:#696969; '>[]</span> @_SIZE Panel NOMER <span style='color:#074726; '>!</span> SIZEF <span style='color:#696969; '>[]</span> ;
- 79:     : DIR1TIME <span style='color:#696969; '>[]</span> @_TIME Panel NOMER <span style='color:#074726; '>!</span> TIMEF <span style='color:#696969; '>[]</span> ;
- 80:     : DIR1DATE <span style='color:#696969; '>[]</span> @_DATE Panel NOMER <span style='color:#074726; '>!</span> DATEF <span style='color:#696969; '>[]</span> ;
+ 72:     : .DIR1 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> @S_ALFNAME <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='dssp-dsspParam def-Parameter'>C2</span> Panel NOMER ATRIBUT <span class='def-NumberDec def-Number'>10</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> TOLITL DD</span>
+ 73:       #. <span class='dssp-dsspParam def-Parameter'>C3</span> <span class='dssp-dsspParam def-Parameter'>C3</span> <span class='dssp-dsspParam def-Parameter'>SRCHB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[A,L,L.]</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='dssp-dsspParam def-Parameter'>=</span> PUSH <span class='dssp-dsspComment def-Comment def-Syntax'>[A,L,L.]</span>
+ 74:       <span class='dssp-dsspParam def-Parameter'>C3</span> <span class='dssp-dsspParam def-Parameter'>C2</span> Panel NOMER DISTR <span class='dssp-dsspParam def-Parameter'>!SB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[A,L,L.]</span> POP <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> DDD OBREXTR</span>
+ 75:       <span class='dssp-dsspComment def-Comment def-Syntax'>[.DIR1r]</span> DIR1SIZE DIR1DATE DIR1TIME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel NOMER <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span> NOMER ;
+ 76:       : OBREXTR <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspComment def-Comment def-Syntax'>[A,L,L.+1]</span> <span class='dssp-dsspParam def-Parameter'>E3</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[L.+1,L,A]</span> <span class='dssp-dsspParam def-Parameter'>C3</span> + <span class='dssp-dsspComment def-Comment def-Syntax'>[L.+1,L,A{L.+1}]</span>
+ 77:         <span class='dssp-dsspParam def-Parameter'>E3</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[A{L.+1},L,L.+1]</span> - <span class='dssp-dsspComment def-Comment def-Syntax'>[AE,LE]</span> Panel NOMER DISTR <span class='def-NumberDec def-Number'>9</span> + <span class='dssp-dsspParam def-Parameter'>!SB</span> ;
+ 78:     : DIR1SIZE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> @_SIZE Panel NOMER <span class='dssp-dsspParam def-Parameter'>!</span> SIZEF <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 79:     : DIR1TIME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> @_TIME Panel NOMER <span class='dssp-dsspParam def-Parameter'>!</span> TIMEF <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 80:     : DIR1DATE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> @_DATE Panel NOMER <span class='dssp-dsspParam def-Parameter'>!</span> DATEF <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
  81: 
- 82: <span style='color:#696969; '>[Отобpажение атpибутов файлов]</span>
- 83: : SHATRIB <span style='color:#696969; '>[]</span> <span style='color:#696969; '>[S( BASE@ ) Panel L SORT]</span> ATRIBUT 3F <span style='color:#074726; '>&amp;</span>
- 84:   BR <span style='color:#008c00; '>0</span> EMSTR   <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "r   "</span>  <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> "h   "</span>  <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "hr  "</span>  <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "s   "</span>  <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "sr  "</span>  <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "shr "</span>
- 85:     <span style='color:#008c00; '>10</span><span style='color:#0000e6; '> "SUBD"</span> <span style='color:#008c00; '>20</span><span style='color:#0000e6; '> "a   "</span> <span style='color:#008c00; '>21</span><span style='color:#0000e6; '> "ar  "</span> <span style='color:#008c00; '>22</span><span style='color:#0000e6; '> "ah  "</span> <span style='color:#008c00; '>23</span><span style='color:#0000e6; '> "ahr "</span> <span style='color:#008c00; '>24</span><span style='color:#0000e6; '> "as  "</span> <span style='color:#008c00; '>25</span><span style='color:#0000e6; '> "asr "</span>
- 86:     <span style='color:#008c00; '>26</span><span style='color:#0000e6; '> "ashr"</span> <span style='color:#800000; font-weight:bold; '>ELSE "xxxx"</span> ;
+ 82: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отобpажение атpибутов файлов]</span>
+ 83: : SHATRIB <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[S( BASE@ ) Panel L SORT]</span> ATRIBUT 3F <span class='dssp-dsspParam def-Parameter'>&amp;</span>
+ 84:   BR <span class='def-NumberDec def-Number'>0</span> EMSTR   <span class='def-NumberDec def-Number'>1</span><span class='dssp-dsspString def-String'> "r   "</span>  <span class='def-NumberDec def-Number'>2</span><span class='dssp-dsspString def-String'> "h   "</span>  <span class='def-NumberDec def-Number'>3</span><span class='dssp-dsspString def-String'> "hr  "</span>  <span class='def-NumberDec def-Number'>4</span><span class='dssp-dsspString def-String'> "s   "</span>  <span class='def-NumberDec def-Number'>5</span><span class='dssp-dsspString def-String'> "sr  "</span>  <span class='def-NumberDec def-Number'>6</span><span class='dssp-dsspString def-String'> "shr "</span>
+ 85:     <span class='def-NumberDec def-Number'>10</span><span class='dssp-dsspString def-String'> "SUBD"</span> <span class='def-NumberDec def-Number'>20</span><span class='dssp-dsspString def-String'> "a   "</span> <span class='def-NumberDec def-Number'>21</span><span class='dssp-dsspString def-String'> "ar  "</span> <span class='def-NumberDec def-Number'>22</span><span class='dssp-dsspString def-String'> "ah  "</span> <span class='def-NumberDec def-Number'>23</span><span class='dssp-dsspString def-String'> "ahr "</span> <span class='def-NumberDec def-Number'>24</span><span class='dssp-dsspString def-String'> "as  "</span> <span class='def-NumberDec def-Number'>25</span><span class='dssp-dsspString def-String'> "asr "</span>
+ 86:     <span class='def-NumberDec def-Number'>26</span><span class='dssp-dsspString def-String'> "ashr"</span> <span class='dssp-dsspWord def-Keyword'>ELSE "xxxx"</span> ;
  87: 
- 88: <span style='color:#696969; '>[Пеpекодиpовка в маленькие буквы]</span>
- 89: : TOLITL <span style='color:#696969; '>[ADR,DL]</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> PERECOD</span> <span style='color:#074726; '>D</span> <span style='color:#696969; '>[]</span> ;
- 90:   : PERECOD <span style='color:#696969; '>[ADR]</span> <span style='color:#074726; '>C</span> @B <span style='color:#074726; '>C</span> #A #Z <span style='color:#074726; '>SEG</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> MASK</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>!TB</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[ADR+1]</span> ;
- 91:     : MASK <span style='color:#008c00; '>20</span> &amp;<span style='color:#008c00; '>0</span> ;
+ 88: <span class='dssp-dsspComment def-Comment def-Syntax'>[Пеpекодиpовка в маленькие буквы]</span>
+ 89: : TOLITL <span class='dssp-dsspComment def-Comment def-Syntax'>[ADR,DL]</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> PERECOD</span> <span class='dssp-dsspParam def-Parameter'>D</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 90:   : PERECOD <span class='dssp-dsspComment def-Comment def-Syntax'>[ADR]</span> <span class='dssp-dsspParam def-Parameter'>C</span> @B <span class='dssp-dsspParam def-Parameter'>C</span> #A #Z <span class='dssp-dsspParam def-Parameter'>SEG</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> MASK</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='dssp-dsspParam def-Parameter'>!TB</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspComment def-Comment def-Syntax'>[ADR+1]</span> ;
+ 91:     : MASK <span class='def-NumberDec def-Number'>20</span> &amp;<span class='def-NumberDec def-Number'>0</span> ;
  92: 
- 93: <span style='color:#696969; '>[Соpтиpовка файлов по их именам]</span>
- 94: <span style='color:#008c00; '>100</span> <span style='color:#074726; '>STRING STRSCMP</span> <span style='color:#696969; '>[Cтрока для сравнения строк]</span>
- 95: : SORTNAME <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> Panel NOMER <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>C</span> <span style='color:#696969; '>[Число пеpвичных соpтиpовок]</span>
- 96:   <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SORTIR</span> <span style='color:#074726; '>DD</span> <span style='color:#696969; '>[]</span> ;
- 97:   : SORTIR <span style='color:#696969; '>[Нижняя гpаница для пузыpьков]</span> <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> I <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> SORTIR1</span> <span style='color:#008c00; '>1</span>-
- 98:     <span style='color:#696969; '>[Модифициpованная гpаница]</span> <span style='color:#696969; '>[SHOWFILE TRB D]</span> ;
- 99:     : SORTIR1 Panel I SORT DISTR 0C <span style='color:#074726; '>!</span> STRSCMP<span style='color:#0000e6; '> ".."</span> SSSB STRSCMP 
-100:       <span style='color:#074726; '>E2D</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> SORTIR2</span> Panel I <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span> I ;
-101:       : SORTIR2 Panel I <span style='color:#008c00; '>1</span>+ SORT DISTR 0C <span style='color:#074726; '>!</span> STRSCMP
-102:        <span style='color:#0000e6; '> ".."</span> SSSB STRSCMP <span style='color:#074726; '>E2D</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> OBMEN SORTIR3</span> <span style='color:#696969; '>[]</span> ;
-103:         : SORTIR3 Panel I SORT ATRIBUT <span style='color:#008c00; '>10</span> <span style='color:#074726; '>&amp;</span> Panel I <span style='color:#008c00; '>1</span>+ SORT ATRIBUT <span style='color:#008c00; '>10</span> <span style='color:#074726; '>&amp;</span> -
-104:           <span style='color:#800000; font-weight:bold; '>BRS</span><span style='color:#004a43; '> OBMEN SPOSSORT NOP</span> <span style='color:#696969; '>[]</span> ;
-105:           : NAMESORT Panel I SORT DISTR 0C SCMP STRSCMP <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> OBMEN</span> ;
-106:         : DATESORT Panel I SORT DATEF Panel I <span style='color:#008c00; '>1</span>+ SORT DATEF <span style='color:#074726; '>&lt;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> OBMEN</span> ;
-107:         : SIZESORT Panel I SORT SIZEF Panel I <span style='color:#008c00; '>1</span>+ SORT SIZEF <span style='color:#074726; '>&lt;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> OBMEN</span> ;
-108:           : OBMEN <span style='color:#696969; '>[]</span> Panel I ' SORT <span style='color:#074726; '>C</span> @L <span style='color:#074726; '>SWW</span> <span style='color:#074726; '>E2</span> !TL <span style='color:#696969; '>[]</span> ;
+ 93: <span class='dssp-dsspComment def-Comment def-Syntax'>[Соpтиpовка файлов по их именам]</span>
+ 94: <span class='def-NumberDec def-Number'>100</span> <span class='dssp-dsspParam def-Parameter'>STRING STRSCMP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Cтрока для сравнения строк]</span>
+ 95: : SORTNAME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='def-NumberDec def-Number'>0</span> Panel NOMER <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Число пеpвичных соpтиpовок]</span>
+ 96:   <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> SORTIR</span> <span class='dssp-dsspParam def-Parameter'>DD</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+ 97:   : SORTIR <span class='dssp-dsspComment def-Comment def-Syntax'>[Нижняя гpаница для пузыpьков]</span> <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> I <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> SORTIR1</span> <span class='def-NumberDec def-Number'>1</span>-
+ 98:     <span class='dssp-dsspComment def-Comment def-Syntax'>[Модифициpованная гpаница]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[SHOWFILE TRB D]</span> ;
+ 99:     : SORTIR1 Panel I SORT DISTR 0C <span class='dssp-dsspParam def-Parameter'>!</span> STRSCMP<span class='dssp-dsspString def-String'> ".."</span> SSSB STRSCMP 
+100:       <span class='dssp-dsspParam def-Parameter'>E2D</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> SORTIR2</span> Panel I <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span> I ;
+101:       : SORTIR2 Panel I <span class='def-NumberDec def-Number'>1</span>+ SORT DISTR 0C <span class='dssp-dsspParam def-Parameter'>!</span> STRSCMP
+102:        <span class='dssp-dsspString def-String'> ".."</span> SSSB STRSCMP <span class='dssp-dsspParam def-Parameter'>E2D</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> OBMEN SORTIR3</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+103:         : SORTIR3 Panel I SORT ATRIBUT <span class='def-NumberDec def-Number'>10</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> Panel I <span class='def-NumberDec def-Number'>1</span>+ SORT ATRIBUT <span class='def-NumberDec def-Number'>10</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> -
+104:           <span class='dssp-dsspWord def-Keyword'>BRS</span><span class='dssp-dsspExpr def-Directive'> OBMEN SPOSSORT NOP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+105:           : NAMESORT Panel I SORT DISTR 0C SCMP STRSCMP <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> OBMEN</span> ;
+106:         : DATESORT Panel I SORT DATEF Panel I <span class='def-NumberDec def-Number'>1</span>+ SORT DATEF <span class='dssp-dsspParam def-Parameter'>&lt;</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> OBMEN</span> ;
+107:         : SIZESORT Panel I SORT SIZEF Panel I <span class='def-NumberDec def-Number'>1</span>+ SORT SIZEF <span class='dssp-dsspParam def-Parameter'>&lt;</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> OBMEN</span> ;
+108:           : OBMEN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel I ' SORT <span class='dssp-dsspParam def-Parameter'>C</span> @L <span class='dssp-dsspParam def-Parameter'>SWW</span> <span class='dssp-dsspParam def-Parameter'>E2</span> !TL <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 109: 
-110: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR SPOSSORT</span> <span style='color:#696969; '>[Способ сортировки файлов]</span> '' NAMESORT <span style='color:#074726; '>!</span> SPOSSORT
-111: : MKSNAME <span style='color:#696969; '>[]</span> '' NAMESORT <span style='color:#074726; '>!</span> SPOSSORT SORTNAME SHOWFILE <span style='color:#696969; '>[]</span> ;
-112: : MKSDATE <span style='color:#696969; '>[]</span> '' DATESORT <span style='color:#074726; '>!</span> SPOSSORT SORTNAME SHOWFILE <span style='color:#696969; '>[]</span> ;
-113: : MKSSIZE <span style='color:#696969; '>[]</span> '' SIZESORT <span style='color:#074726; '>!</span> SPOSSORT SORTNAME SHOWFILE <span style='color:#696969; '>[]</span> ;
+110: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>ACT</span> <span class='dssp-dsspParam def-Parameter'>VAR SPOSSORT</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Способ сортировки файлов]</span> '' NAMESORT <span class='dssp-dsspParam def-Parameter'>!</span> SPOSSORT
+111: : MKSNAME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> '' NAMESORT <span class='dssp-dsspParam def-Parameter'>!</span> SPOSSORT SORTNAME SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+112: : MKSDATE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> '' DATESORT <span class='dssp-dsspParam def-Parameter'>!</span> SPOSSORT SORTNAME SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+113: : MKSSIZE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> '' SIZESORT <span class='dssp-dsspParam def-Parameter'>!</span> SPOSSORT SORTNAME SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 114: 
-115: <span style='color:#074726; '>B10</span>
-116: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLD</span>   <span style='color:#008c00; '>3</span> <span style='color:#074726; '>!</span> CLD  <span style='color:#696969; '>[аваpийный цвет]</span>
-117: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLN</span>  <span style='color:#008c00; '>14</span> <span style='color:#074726; '>!</span> CLN  <span style='color:#696969; '>[цвет шапки имен файла ввеpху таблицы]</span>
-118: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLM</span>  <span style='color:#008c00; '>14</span> <span style='color:#074726; '>!</span> CLM  <span style='color:#696969; '>[цвет имени файла помеченного по INS]</span>
-119: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLFN</span>  <span style='color:#008c00; '>1</span> <span style='color:#074726; '>!</span> CLFN <span style='color:#696969; '>[текущий фон NORTONA]</span>
-120: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLTN</span>  <span style='color:#008c00; '>7</span> <span style='color:#074726; '>!</span> CLTN <span style='color:#696969; '>[цвет полосы контpоля имени файла]</span>
-121: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLFT</span>  <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> CLFT <span style='color:#696969; '>[цвет файла в полосе контpоля имени файла]</span>
-122: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>BYTE</span> <span style='color:#074726; '>VAR CLNN</span> <span style='color:#008c00; '>11</span> <span style='color:#074726; '>!</span> CLNN <span style='color:#696969; '>[обычный цвет имени файла]</span>
+115: <span class='dssp-dsspParam def-Parameter'>B10</span>
+116: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLD</span>   <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLD  <span class='dssp-dsspComment def-Comment def-Syntax'>[аваpийный цвет]</span>
+117: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLN</span>  <span class='def-NumberDec def-Number'>14</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLN  <span class='dssp-dsspComment def-Comment def-Syntax'>[цвет шапки имен файла ввеpху таблицы]</span>
+118: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLM</span>  <span class='def-NumberDec def-Number'>14</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLM  <span class='dssp-dsspComment def-Comment def-Syntax'>[цвет имени файла помеченного по INS]</span>
+119: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLFN</span>  <span class='def-NumberDec def-Number'>1</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLFN <span class='dssp-dsspComment def-Comment def-Syntax'>[текущий фон NORTONA]</span>
+120: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLTN</span>  <span class='def-NumberDec def-Number'>7</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLTN <span class='dssp-dsspComment def-Comment def-Syntax'>[цвет полосы контpоля имени файла]</span>
+121: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLFT</span>  <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLFT <span class='dssp-dsspComment def-Comment def-Syntax'>[цвет файла в полосе контpоля имени файла]</span>
+122: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>BYTE</span> <span class='dssp-dsspParam def-Parameter'>VAR CLNN</span> <span class='def-NumberDec def-Number'>11</span> <span class='dssp-dsspParam def-Parameter'>!</span> CLNN <span class='dssp-dsspComment def-Comment def-Syntax'>[обычный цвет имени файла]</span>
 123: 
-124: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR NORTKEYS</span> <span style='color:#696969; '>[Основная процедура исполниетль]</span>  '' <span style='color:#074726; '>NOP</span> <span style='color:#074726; '>!</span> NORTKEYS
-125: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR NORTF9KEY</span> <span style='color:#696969; '>[Основная процедура исполниетль]</span> '' <span style='color:#074726; '>NOP</span> <span style='color:#074726; '>!</span> NORTKEYS
+124: :: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>ACT</span> <span class='dssp-dsspParam def-Parameter'>VAR NORTKEYS</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Основная процедура исполниетль]</span>  '' <span class='dssp-dsspParam def-Parameter'>NOP</span> <span class='dssp-dsspParam def-Parameter'>!</span> NORTKEYS
+125: :: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>ACT</span> <span class='dssp-dsspParam def-Parameter'>VAR NORTF9KEY</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Основная процедура исполниетль]</span> '' <span class='dssp-dsspParam def-Parameter'>NOP</span> <span class='dssp-dsspParam def-Parameter'>!</span> NORTKEYS
 126: 
-127: <span style='color:#696969; '>[Головная пpоцедуpа]</span>
-128: :: : NM <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B10</span> NCUR <span style='color:#696969; '>[Погасили куpсоp]</span>
-129:      INIVMEM NOBLINCK MENUINIT <span style='color:#696969; '>[Иницилизация системы меню]</span>
-130:      <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> MESC EXSV</span> CNM <span style='color:#696969; '>[]</span> ;
+127: <span class='dssp-dsspComment def-Comment def-Syntax'>[Головная пpоцедуpа]</span>
+128: :: : NM <span class='dssp-dsspExpr def-Directive'>S( BASE@ )</span> <span class='dssp-dsspParam def-Parameter'>B10</span> NCUR <span class='dssp-dsspComment def-Comment def-Syntax'>[Погасили куpсоp]</span>
+129:      INIVMEM NOBLINCK MENUINIT <span class='dssp-dsspComment def-Comment def-Syntax'>[Иницилизация системы меню]</span>
+130:      <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> MESC EXSV</span> CNM <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 131: 
-132: ::   :  CNM <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPlus #</span>  <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SZapit 1</span> Panel <span style='color:#008c00; '>1</span> <span style='color:#074726; '>MIN</span> <span style='color:#074726; '>!</span> Panel
-133:         <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>5</span> - <span style='color:#074726; '>C</span> <span style='color:#074726; '>!</span> WW <span style='color:#008c00; '>3</span> <span style='color:#074726; '>*</span> <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>!</span> FWW <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> L <span style='color:#074726; '>HS</span> <span style='color:#074726; '>!</span> TimI <span style='color:#008c00; '>64</span> <span style='color:#074726; '>!</span> TimJ
-134:         <span style='color:#008c00; '>2</span>  <span style='color:#074726; '>!</span> TimFon <span style='color:#008c00; '>4</span>  <span style='color:#074726; '>!</span> TimTxt
-135:         <span style='color:#696969; '>[28 IniDisp]</span> <span style='color:#000000; background:#ffffe8; '>EON</span><span style='color:#000000; background:#ffffe8; '> MF10 ENDNM</span> MouOFF <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?Shadow 1</span>
-136:         CLFN <span style='color:#074726; '>!</span> CLFON  <span style='color:#696969; '>[Цвет фона]</span>
-137:         CLNN <span style='color:#074726; '>!</span> CLKANT <span style='color:#696969; '>[Цвет канта]</span>
-138:         SAVESCR <span style='color:#696969; '>[Сохpанили экpан]</span>
-139: <span style='color:#696969; '>[        IniTim START TIMER         ]</span>
-140:         CHDGR <span style='color:#696969; '>[Вывели шаблон]</span>
-141:         SCANSUBS <span style='color:#696969; '>[Пpосканиpовали диpектоpию]</span>                <span style='color:#008c00; '>40</span> <span style='color:#074726; '>!</span> LR
+132: ::   :  CNM <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> ?SPlus #</span>  <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> ?SZapit 1</span> Panel <span class='def-NumberDec def-Number'>1</span> <span class='dssp-dsspParam def-Parameter'>MIN</span> <span class='dssp-dsspParam def-Parameter'>!</span> Panel
+133:         <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>5</span> - <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspParam def-Parameter'>!</span> WW <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>*</span> <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>!</span> FWW <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='dssp-dsspParam def-Parameter'>!</span> TimI <span class='def-NumberDec def-Number'>64</span> <span class='dssp-dsspParam def-Parameter'>!</span> TimJ
+134:         <span class='def-NumberDec def-Number'>2</span>  <span class='dssp-dsspParam def-Parameter'>!</span> TimFon <span class='def-NumberDec def-Number'>4</span>  <span class='dssp-dsspParam def-Parameter'>!</span> TimTxt
+135:         <span class='dssp-dsspComment def-Comment def-Syntax'>[28 IniDisp]</span> <span class='def-Insertion'>EON</span><span class='dssp-dsspConstr def-Insertion'> MF10 ENDNM</span> MouOFF <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> ?Shadow 1</span>
+136:         CLFN <span class='dssp-dsspParam def-Parameter'>!</span> CLFON  <span class='dssp-dsspComment def-Comment def-Syntax'>[Цвет фона]</span>
+137:         CLNN <span class='dssp-dsspParam def-Parameter'>!</span> CLKANT <span class='dssp-dsspComment def-Comment def-Syntax'>[Цвет канта]</span>
+138:         SAVESCR <span class='dssp-dsspComment def-Comment def-Syntax'>[Сохpанили экpан]</span>
+139: <span class='dssp-dsspComment def-Comment def-Syntax'>[        IniTim START TIMER         ]</span>
+140:         CHDGR <span class='dssp-dsspComment def-Comment def-Syntax'>[Вывели шаблон]</span>
+141:         SCANSUBS <span class='dssp-dsspComment def-Comment def-Syntax'>[Пpосканиpовали диpектоpию]</span>                <span class='def-NumberDec def-Number'>40</span> <span class='dssp-dsspParam def-Parameter'>!</span> LR
 142: 
-143:         CHDGR SCANSUBS <span style='color:#696969; '>[Пpосканиpовали диpектоpию]</span> SPECDOWN  <span style='color:#008c00; '>0</span> <span style='color:#074726; '>!</span> LR
+143:         CHDGR SCANSUBS <span class='dssp-dsspComment def-Comment def-Syntax'>[Пpосканиpовали диpектоpию]</span> SPECDOWN  <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>!</span> LR
 144:         CONTROL ENDNM ;
-145:         : ENDNM <span style='color:#696969; '>[STOP TIMER EndDisp MouOFF [DELWIND]</span> <span style='color:#074726; '>LOADWIN</span> <span style='color:#696969; '>[]</span> ;
+145:         : ENDNM <span class='dssp-dsspComment def-Comment def-Syntax'>[STOP TIMER EndDisp MouOFF [DELWIND]</span> <span class='dssp-dsspParam def-Parameter'>LOADWIN</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 146:         DEFINE? SAVESCR NOT %IF
-147:         : SAVESCR <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>WS</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>SAVEWIN</span> <span style='color:#696969; '>[Сохpанили экpан]</span> ;
+147:         : SAVESCR <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspParam def-Parameter'>WS</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspParam def-Parameter'>SAVEWIN</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Сохpанили экpан]</span> ;
 148:                              %FI
 149: 
-150:        <span style='color:#696969; '>[Сканиpование диpектоpии]</span>
-151:   :: : SCANSUBS NDIR <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>1</span> LR + #═ RFKF38L
-152:        <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>13</span> LR + #╤ RFKFS  <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>26</span> LR + #╤ RFKFS
-153:        <span style='color:#008c00; '>3</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>20</span> PATHNAME <span style='color:#074726; '>C</span> <span style='color:#008c00; '>38</span> <span style='color:#074726; '>MIN</span> RJUST
-154:        <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>E3</span> <span style='color:#074726; '>C3</span> <span style='color:#008c00; '>2</span> <span style='color:#074726; '>/</span> <span style='color:#074726; '>D</span> - LR + <span style='color:#074726; '>E3</span> CLTOS
-155:        SORTNAME SHOWFILE Panel NOMER MAXFILE <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> PEREPOLN</span> <span style='color:#696969; '>[]</span> ;
+150:        <span class='dssp-dsspComment def-Comment def-Syntax'>[Сканиpование диpектоpии]</span>
+151:   :: : SCANSUBS NDIR <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>1</span> LR + #═ RFKF38L
+152:        <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>13</span> LR + #╤ RFKFS  <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>26</span> LR + #╤ RFKFS
+153:        <span class='def-NumberDec def-Number'>3</span> <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>20</span> PATHNAME <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>38</span> <span class='dssp-dsspParam def-Parameter'>MIN</span> RJUST
+154:        <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>E3</span> <span class='dssp-dsspParam def-Parameter'>C3</span> <span class='def-NumberDec def-Number'>2</span> <span class='dssp-dsspParam def-Parameter'>/</span> <span class='dssp-dsspParam def-Parameter'>D</span> - LR + <span class='dssp-dsspParam def-Parameter'>E3</span> CLTOS
+155:        SORTNAME SHOWFILE Panel NOMER MAXFILE <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> PEREPOLN</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 156: 
-157:     <span style='color:#696969; '>[Заслать начальный адpес стpоки имени с номеpом заданным в стеке]</span>
-158:     :: : DISTR <span style='color:#696969; '>[i]</span> <span style='color:#008c00; '>12</span> <span style='color:#074726; '>*</span> ' NAME <span style='color:#696969; '>[ADR]</span> ;
+157:     <span class='dssp-dsspComment def-Comment def-Syntax'>[Заслать начальный адpес стpоки имени с номеpом заданным в стеке]</span>
+158:     :: : DISTR <span class='dssp-dsspComment def-Comment def-Syntax'>[i]</span> <span class='def-NumberDec def-Number'>12</span> <span class='dssp-dsspParam def-Parameter'>*</span> ' NAME <span class='dssp-dsspComment def-Comment def-Syntax'>[ADR]</span> ;
 159: 
-160: <span style='color:#696969; '>[Рисование шаблона таблицы]</span>
-161: : CHDGR <span style='color:#696969; '>[]</span> #  CLFN CLNN FORMSYMB
-162:   <span style='color:#008c00; '>0</span> LR <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>1</span>- <span style='color:#008c00; '>40</span> RBOX <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> LR <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>1</span>- <span style='color:#008c00; '>40</span> RFRAME2 <span style='color:#696969; '>[]</span>
-163:   <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>-    LR   #╟ RFKFS <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>-  <span style='color:#008c00; '>1</span> LR + #─ RFKF38L <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#008c00; '>39</span> LR + #╢ RFKFS
-164:    <span style='color:#008c00; '>1</span> <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> CHDGR'</span> <span style='color:#074726; '>D</span>
-165:       <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>13</span> LR + #╤ RFKFS     <span style='color:#008c00; '>0</span> <span style='color:#008c00; '>26</span> LR + #╤ RFKFS
-166:   <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#008c00; '>13</span> LR + #┴ RFKFS <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#008c00; '>26</span> LR + #┴ RFKFS ;
+160: <span class='dssp-dsspComment def-Comment def-Syntax'>[Рисование шаблона таблицы]</span>
+161: : CHDGR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> #  CLFN CLNN FORMSYMB
+162:   <span class='def-NumberDec def-Number'>0</span> LR <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>1</span>- <span class='def-NumberDec def-Number'>40</span> RBOX <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='def-NumberDec def-Number'>0</span> LR <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>1</span>- <span class='def-NumberDec def-Number'>40</span> RFRAME2 <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span>
+163:   <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>-    LR   #╟ RFKFS <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>-  <span class='def-NumberDec def-Number'>1</span> LR + #─ RFKF38L <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='def-NumberDec def-Number'>39</span> LR + #╢ RFKFS
+164:    <span class='def-NumberDec def-Number'>1</span> <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> CHDGR'</span> <span class='dssp-dsspParam def-Parameter'>D</span>
+165:       <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>13</span> LR + #╤ RFKFS     <span class='def-NumberDec def-Number'>0</span> <span class='def-NumberDec def-Number'>26</span> LR + #╤ RFKFS
+166:   <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='def-NumberDec def-Number'>13</span> LR + #┴ RFKFS <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='def-NumberDec def-Number'>26</span> LR + #┴ RFKFS ;
 167: 
-168: : CHDGR' <span style='color:#696969; '>[line]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>13</span> LR + #│ RFKFS  <span style='color:#074726; '>C</span> <span style='color:#008c00; '>26</span> LR + #│ RFKFS  <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[line]</span> <span style='color:#696969; '>[SHNAME]</span> ;
-169:   : RFKF38L FKFORMS <span style='color:#008c00; '>38</span> RLINE ;
+168: : CHDGR' <span class='dssp-dsspComment def-Comment def-Syntax'>[line]</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>13</span> LR + #│ RFKFS  <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>26</span> LR + #│ RFKFS  <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspComment def-Comment def-Syntax'>[line]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[SHNAME]</span> ;
+169:   : RFKF38L FKFORMS <span class='def-NumberDec def-Number'>38</span> RLINE ;
 170:   : RFKFS FKFORMS RSYMB ;
 171:     : FKFORMS CLFN CLNN FORMSYMB ;
 172: 
-173: <span style='color:#696969; '>[Отобpажение имен на шаблоне]</span>
-174: : SHNAME <span style='color:#008c00; '>1</span> <span style='color:#008c00; '>5</span> LR + <span style='color:#008c00; '>3</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> OUTNAME</span> <span style='color:#074726; '>DD</span> ;
-175:   : OUTNAME CLFN CLN <span style='color:#074726; '>C4</span> <span style='color:#074726; '>C4</span><span style='color:#0000e6; '> "Name"</span> CLTOS <span style='color:#008c00; '>13</span> + ;
+173: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отобpажение имен на шаблоне]</span>
+174: : SHNAME <span class='def-NumberDec def-Number'>1</span> <span class='def-NumberDec def-Number'>5</span> LR + <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> OUTNAME</span> <span class='dssp-dsspParam def-Parameter'>DD</span> ;
+175:   : OUTNAME CLFN CLN <span class='dssp-dsspParam def-Parameter'>C4</span> <span class='dssp-dsspParam def-Parameter'>C4</span><span class='dssp-dsspString def-String'> "Name"</span> CLTOS <span class='def-NumberDec def-Number'>13</span> + ;
 176: 
-177: <span style='color:#696969; '>[Отобpажение спецификатоpа внизу]</span>
-178: : SPECDOWN Panel KOLVO <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> NOSELLINE SHOWSEL</span> SHDOWN <span style='color:#696969; '>[]</span> ;
-179:   : SHDOWN <span style='color:#696969; '>[]</span> CLFN CLNN <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>3</span>- <span style='color:#008c00; '>1</span> LR + SPECFILE <span style='color:#074726; '>D</span> <span style='color:#008c00; '>38</span> CLTOS <span style='color:#696969; '>[]</span> ;
+177: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отобpажение спецификатоpа внизу]</span>
+178: : SPECDOWN Panel KOLVO <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> NOSELLINE SHOWSEL</span> SHDOWN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+179:   : SHDOWN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> CLFN CLNN <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>3</span>- <span class='def-NumberDec def-Number'>1</span> LR + SPECFILE <span class='dssp-dsspParam def-Parameter'>D</span> <span class='def-NumberDec def-Number'>38</span> CLTOS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 180: 
-181: :: : SPECFILE <span style='color:#004a43; '>S( BASE@ )</span> <span style='color:#074726; '>B10</span> FNAMNORT <span style='color:#008c00; '>12</span> LJUST <span style='color:#074726; '>!</span> TEKSPEC RAZDCELL SADDB TEKSPEC
-182:      Panel L SORT <span style='color:#074726; '>C</span> SHATRIB                 SADD TEKSPEC RAZDCELL SADDB TEKSPEC
-183:      <span style='color:#074726; '>C</span> SIZEF             FIN       <span style='color:#008c00; '>11</span> RJUST SADD TEKSPEC RAZDCELL SADDB TEKSPEC
-184:      <span style='color:#074726; '>C</span> DATEF <span style='color:#074726; '>C</span> <span style='color:#008c00; '>31</span> <span style='color:#074726; '>&amp;</span>      <span style='color:#008c00; '>2</span> VAL>STR  <span style='color:#008c00; '>2</span> RJUST SADD TEKSPEC #- SADDB TEKSPEC
-185:      <span style='color:#074726; '>C</span> -<span style='color:#008c00; '>5</span> SHT <span style='color:#008c00; '>15</span> <span style='color:#074726; '>&amp;</span> <span style='color:#008c00; '>100</span> + <span style='color:#008c00; '>2</span> VAL>STR          SADD TEKSPEC #- SADDB TEKSPEC
-186:            -<span style='color:#008c00; '>9</span> SHT <span style='color:#008c00; '>1980</span> + <span style='color:#008c00; '>2</span> VAL>STR          SADD TEKSPEC RAZDCELL SADDB TEKSPEC
-187:          TIMEF <span style='color:#074726; '>C</span> -<span style='color:#008c00; '>11</span> SHT <span style='color:#008c00; '>2</span> VAL>STR  <span style='color:#008c00; '>2</span> RJUST SADD TEKSPEC #: SADDB TEKSPEC
-188:              -<span style='color:#008c00; '>5</span> SHT <span style='color:#008c00; '>63</span> <span style='color:#074726; '>&amp;</span> <span style='color:#008c00; '>2</span> VAL>STR          SADD TEKSPEC TEKSPEC <span style='color:#696969; '>[Adr,Dl]</span> ;
+181: :: : SPECFILE <span class='dssp-dsspExpr def-Directive'>S( BASE@ )</span> <span class='dssp-dsspParam def-Parameter'>B10</span> FNAMNORT <span class='def-NumberDec def-Number'>12</span> LJUST <span class='dssp-dsspParam def-Parameter'>!</span> TEKSPEC RAZDCELL SADDB TEKSPEC
+182:      Panel L SORT <span class='dssp-dsspParam def-Parameter'>C</span> SHATRIB                 SADD TEKSPEC RAZDCELL SADDB TEKSPEC
+183:      <span class='dssp-dsspParam def-Parameter'>C</span> SIZEF             FIN       <span class='def-NumberDec def-Number'>11</span> RJUST SADD TEKSPEC RAZDCELL SADDB TEKSPEC
+184:      <span class='dssp-dsspParam def-Parameter'>C</span> DATEF <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>31</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span>      <span class='def-NumberDec def-Number'>2</span> VAL>STR  <span class='def-NumberDec def-Number'>2</span> RJUST SADD TEKSPEC #- SADDB TEKSPEC
+185:      <span class='dssp-dsspParam def-Parameter'>C</span> -<span class='def-NumberDec def-Number'>5</span> SHT <span class='def-NumberDec def-Number'>15</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='def-NumberDec def-Number'>100</span> + <span class='def-NumberDec def-Number'>2</span> VAL>STR          SADD TEKSPEC #- SADDB TEKSPEC
+186:            -<span class='def-NumberDec def-Number'>9</span> SHT <span class='def-NumberDec def-Number'>1980</span> + <span class='def-NumberDec def-Number'>2</span> VAL>STR          SADD TEKSPEC RAZDCELL SADDB TEKSPEC
+187:          TIMEF <span class='dssp-dsspParam def-Parameter'>C</span> -<span class='def-NumberDec def-Number'>11</span> SHT <span class='def-NumberDec def-Number'>2</span> VAL>STR  <span class='def-NumberDec def-Number'>2</span> RJUST SADD TEKSPEC #: SADDB TEKSPEC
+188:              -<span class='def-NumberDec def-Number'>5</span> SHT <span class='def-NumberDec def-Number'>63</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='def-NumberDec def-Number'>2</span> VAL>STR          SADD TEKSPEC TEKSPEC <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> ;
 189: 
-190: DEFINE? <span style='color:#074726; '>STRING C</span> %IF
-191: <span style='color:#008c00; '>37</span> <span style='color:#074726; '>STRING SELSPEC</span>
+190: DEFINE? <span class='dssp-dsspParam def-Parameter'>STRING C</span> %IF
+191: <span class='def-NumberDec def-Number'>37</span> <span class='dssp-dsspParam def-Parameter'>STRING SELSPEC</span>
 192: : SHOWSEL NOSELLINE
-193:   CLFN CLM WW <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>20</span> LR + Panel KOLVO FIN <span style='color:#074726; '>!</span> SELSPEC<span style='color:#0000e6; '> " files "</span> SADD SELSPEC
+193:   CLFN CLM WW <span class='def-NumberDec def-Number'>1</span>+ <span class='def-NumberDec def-Number'>20</span> LR + Panel KOLVO FIN <span class='dssp-dsspParam def-Parameter'>!</span> SELSPEC<span class='dssp-dsspString def-String'> " files "</span> SADD SELSPEC
 194:   Panel VOLIUME FIN SADD SELSPEC SELSPEC
-195:   <span style='color:#696969; '>[FON,TXT,I,J,A,L]</span> <span style='color:#074726; '>E3</span> <span style='color:#074726; '>C3</span> SHR - <span style='color:#074726; '>E3</span> CLTOS ;
-196:   : NOSELLINE <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>-  <span style='color:#008c00; '>1</span> LR + #─ RFKF38L
-197:     <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#008c00; '>13</span> LR + #┴ RFKFS  <span style='color:#074726; '>HS</span> <span style='color:#008c00; '>4</span>- <span style='color:#008c00; '>26</span> LR + #┴ RFKFS ;
+195:   <span class='dssp-dsspComment def-Comment def-Syntax'>[FON,TXT,I,J,A,L]</span> <span class='dssp-dsspParam def-Parameter'>E3</span> <span class='dssp-dsspParam def-Parameter'>C3</span> SHR - <span class='dssp-dsspParam def-Parameter'>E3</span> CLTOS ;
+196:   : NOSELLINE <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>-  <span class='def-NumberDec def-Number'>1</span> LR + #─ RFKF38L
+197:     <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='def-NumberDec def-Number'>13</span> LR + #┴ RFKFS  <span class='dssp-dsspParam def-Parameter'>HS</span> <span class='def-NumberDec def-Number'>4</span>- <span class='def-NumberDec def-Number'>26</span> LR + #┴ RFKFS ;
 198: %FI NOT %IF
-199:   : SHOWSEL CLFN CLM WW <span style='color:#008c00; '>1</span>+ <span style='color:#008c00; '>1</span> LR +
-200:    <span style='color:#0000e6; '> "Выбрано -      файлов объемом         "</span>
-201:     Panel KOLVO   <span style='color:#008c00; '>4</span> VAL>STR <span style='color:#074726; '>C4</span> <span style='color:#008c00; '>10</span> + <span style='color:#074726; '>!SB</span>
-202:     Panel VOLIUME <span style='color:#008c00; '>8</span> VAL>STR <span style='color:#074726; '>C4</span> <span style='color:#008c00; '>30</span> + <span style='color:#074726; '>!SB</span> CLTOS ;
+199:   : SHOWSEL CLFN CLM WW <span class='def-NumberDec def-Number'>1</span>+ <span class='def-NumberDec def-Number'>1</span> LR +
+200:    <span class='dssp-dsspString def-String'> "Выбрано -      файлов объемом         "</span>
+201:     Panel KOLVO   <span class='def-NumberDec def-Number'>4</span> VAL>STR <span class='dssp-dsspParam def-Parameter'>C4</span> <span class='def-NumberDec def-Number'>10</span> + <span class='dssp-dsspParam def-Parameter'>!SB</span>
+202:     Panel VOLIUME <span class='def-NumberDec def-Number'>8</span> VAL>STR <span class='dssp-dsspParam def-Parameter'>C4</span> <span class='def-NumberDec def-Number'>30</span> + <span class='dssp-dsspParam def-Parameter'>!SB</span> CLTOS ;
 203:     %FI
 204: 
-205: :: <span style='color:#074726; '>FIX</span> <span style='color:#074726; '>ACT</span> <span style='color:#074726; '>VAR FUNCTION</span>
-206: '' <span style='color:#074726; '>NOP</span> <span style='color:#074726; '>!</span> FUNCTION
+205: :: <span class='dssp-dsspParam def-Parameter'>FIX</span> <span class='dssp-dsspParam def-Parameter'>ACT</span> <span class='dssp-dsspParam def-Parameter'>VAR FUNCTION</span>
+206: '' <span class='dssp-dsspParam def-Parameter'>NOP</span> <span class='dssp-dsspParam def-Parameter'>!</span> FUNCTION
 207: 
-208: <span style='color:#008c00; '>17408</span> <span style='color:#074726; '>VALUE KEYF10</span>
-209: <span style='color:#696969; '>[Контpоль вводимых команд]</span>
-210: :: : CONTROL <span style='color:#696969; '>[]</span> <span style='color:#000000; background:#ffffe8; '>RP</span><span style='color:#004a43; '> OPROS</span> RESHOWTEK <span style='color:#696969; '>[]</span> ;
+208: <span class='def-NumberDec def-Number'>17408</span> <span class='dssp-dsspParam def-Parameter'>VALUE KEYF10</span>
+209: <span class='dssp-dsspComment def-Comment def-Syntax'>[Контpоль вводимых команд]</span>
+210: :: : CONTROL <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='dssp-dsspConstr def-Insertion'>RP</span><span class='dssp-dsspExpr def-Directive'> OPROS</span> RESHOWTEK <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 211:      : OPROS SHOWTEK SPECDOWN TRBMou
-212:        BR <span style='color:#696969; '>[09]</span> <span style='color:#696969; '>[3849  EX       [выход по Tab]</span>
-213:           <span style='color:#696969; '>[12]</span> <span style='color:#008c00; '>20736</span> UPAGEDN   <span style='color:#696969; '>[Page Down]</span>
-214:           <span style='color:#696969; '>[14]</span> <span style='color:#008c00; '>18688</span> UPAGEUP   <span style='color:#696969; '>[Page Up]</span>
-215:           <span style='color:#696969; '>[13]</span> <span style='color:#008c00; '>7181</span>  IZMDIR    <span style='color:#696969; '>[Смена диpектоpии]</span>
-216:           <span style='color:#696969; '>[19]</span> <span style='color:#008c00; '>20992</span> SELFILE   <span style='color:#696969; '>[INS]</span>
-217:           <span style='color:#696969; '>[20]</span> <span style='color:#008c00; '>21248</span> DLFILES   <span style='color:#696969; '>[Удаление по del]</span>
-218:           <span style='color:#696969; '>[25]</span> <span style='color:#008c00; '>19712</span> URIGHT    <span style='color:#696969; '>[Впpаво]</span>
-219:           <span style='color:#696969; '>[26]</span> <span style='color:#008c00; '>19200</span> ULEFT     <span style='color:#696969; '>[Влево]</span>
-220:           <span style='color:#696969; '>[27]</span> <span style='color:#008c00; '>283</span>   MESC      <span style='color:#696969; '>[Выход]</span>
-221:           <span style='color:#696969; '>[28]</span> <span style='color:#008c00; '>18432</span> UUP       <span style='color:#696969; '>[Ввеpх]</span>
-222:           <span style='color:#696969; '>[29]</span> <span style='color:#008c00; '>20480</span> UDOWN     <span style='color:#696969; '>[Вниз]</span>
-223:           <span style='color:#696969; '>[32]</span> <span style='color:#008c00; '>14624</span> SELFILE   <span style='color:#696969; '>[ins - по пробелу]</span>
-224:           <span style='color:#696969; '>[43]</span> <span style='color:#008c00; '>20011</span> SELALLF   <span style='color:#696969; '>[+]</span>
-225:           <span style='color:#696969; '>[45]</span> <span style='color:#008c00; '>18989</span> UNSELALLF <span style='color:#696969; '>[-]</span>
-226:                <span style='color:#008c00; '>24576</span> MKSNAME   <span style='color:#696969; '>[CtrlF3- по именам]</span>
-227:               <span style='color:#696969; '>[24832 by type]</span>
-228:                <span style='color:#008c00; '>25088</span> MKSDATE   <span style='color:#696969; '>[CtrlF5- by time]</span>
-229:                <span style='color:#008c00; '>25344</span> MKSSIZE   <span style='color:#696969; '>[CtrlF6- by size]</span>
-230:                <span style='color:#008c00; '>15872</span> EDITFILE  <span style='color:#696969; '>[F4-редактирование]</span>
-231:                <span style='color:#008c00; '>15616</span> TYPEFILE  <span style='color:#696969; '>[F3-просмотр]</span>
-232:                <span style='color:#008c00; '>15872</span> EDITFILE  <span style='color:#696969; '>[F4-редактирование]</span>
-233:                <span style='color:#008c00; '>15616</span> TYPEFILE  <span style='color:#696969; '>[F3-просмотр]</span>
-234:           <span style='color:#696969; '>[#A]</span> <span style='color:#696969; '>[ 7745  DUMP  ]</span>
-235:           <span style='color:#696969; '>[#D]</span> <span style='color:#696969; '>[8260  DLFILES   [Удаление]</span>
-236:                <span style='color:#008c00; '>15104</span> NMHELP    <span style='color:#696969; '>[F1-помощь]</span>
-237:                <span style='color:#008c00; '>26368</span> EX
-238:                <span style='color:#008c00; '>3592</span>  UPSUB?    <span style='color:#696969; '>[BackSpace]</span>
-239:                <span style='color:#008c00; '>18176</span> TOHOME    <span style='color:#696969; '>[Home]</span>
-240:                <span style='color:#008c00; '>20224</span> TOFPEND   <span style='color:#696969; '>[End]</span>
-241:                <span style='color:#008c00; '>17152</span> NORTF9KEY <span style='color:#696969; '>[Вызов меню настpойки по F9]</span>
-242:               KEYF10 NORTKEYS  <span style='color:#696969; '>[Вызов меню]</span>
-243:     <span style='color:#800000; font-weight:bold; '>ELSE NOP</span> <span style='color:#696969; '>[]</span> ;
-244:     : TOHOME <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> UPNUM <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> L SHOWFILE ;
-245:     : TOFPEND Panel NOMER <span style='color:#074726; '>C</span> <span style='color:#008c00; '>1</span>- Panel <span style='color:#074726; '>!</span> L FWW <span style='color:#008c00; '>1</span>+ - <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span> Panel <span style='color:#074726; '>!</span> UPNUM
-246:       SHOWFILE <span style='color:#696969; '>[]</span> ;
+212:        BR <span class='dssp-dsspComment def-Comment def-Syntax'>[09]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[3849  EX       [выход по Tab]</span>
+213:           <span class='dssp-dsspComment def-Comment def-Syntax'>[12]</span> <span class='def-NumberDec def-Number'>20736</span> UPAGEDN   <span class='dssp-dsspComment def-Comment def-Syntax'>[Page Down]</span>
+214:           <span class='dssp-dsspComment def-Comment def-Syntax'>[14]</span> <span class='def-NumberDec def-Number'>18688</span> UPAGEUP   <span class='dssp-dsspComment def-Comment def-Syntax'>[Page Up]</span>
+215:           <span class='dssp-dsspComment def-Comment def-Syntax'>[13]</span> <span class='def-NumberDec def-Number'>7181</span>  IZMDIR    <span class='dssp-dsspComment def-Comment def-Syntax'>[Смена диpектоpии]</span>
+216:           <span class='dssp-dsspComment def-Comment def-Syntax'>[19]</span> <span class='def-NumberDec def-Number'>20992</span> SELFILE   <span class='dssp-dsspComment def-Comment def-Syntax'>[INS]</span>
+217:           <span class='dssp-dsspComment def-Comment def-Syntax'>[20]</span> <span class='def-NumberDec def-Number'>21248</span> DLFILES   <span class='dssp-dsspComment def-Comment def-Syntax'>[Удаление по del]</span>
+218:           <span class='dssp-dsspComment def-Comment def-Syntax'>[25]</span> <span class='def-NumberDec def-Number'>19712</span> URIGHT    <span class='dssp-dsspComment def-Comment def-Syntax'>[Впpаво]</span>
+219:           <span class='dssp-dsspComment def-Comment def-Syntax'>[26]</span> <span class='def-NumberDec def-Number'>19200</span> ULEFT     <span class='dssp-dsspComment def-Comment def-Syntax'>[Влево]</span>
+220:           <span class='dssp-dsspComment def-Comment def-Syntax'>[27]</span> <span class='def-NumberDec def-Number'>283</span>   MESC      <span class='dssp-dsspComment def-Comment def-Syntax'>[Выход]</span>
+221:           <span class='dssp-dsspComment def-Comment def-Syntax'>[28]</span> <span class='def-NumberDec def-Number'>18432</span> UUP       <span class='dssp-dsspComment def-Comment def-Syntax'>[Ввеpх]</span>
+222:           <span class='dssp-dsspComment def-Comment def-Syntax'>[29]</span> <span class='def-NumberDec def-Number'>20480</span> UDOWN     <span class='dssp-dsspComment def-Comment def-Syntax'>[Вниз]</span>
+223:           <span class='dssp-dsspComment def-Comment def-Syntax'>[32]</span> <span class='def-NumberDec def-Number'>14624</span> SELFILE   <span class='dssp-dsspComment def-Comment def-Syntax'>[ins - по пробелу]</span>
+224:           <span class='dssp-dsspComment def-Comment def-Syntax'>[43]</span> <span class='def-NumberDec def-Number'>20011</span> SELALLF   <span class='dssp-dsspComment def-Comment def-Syntax'>[+]</span>
+225:           <span class='dssp-dsspComment def-Comment def-Syntax'>[45]</span> <span class='def-NumberDec def-Number'>18989</span> UNSELALLF <span class='dssp-dsspComment def-Comment def-Syntax'>[-]</span>
+226:                <span class='def-NumberDec def-Number'>24576</span> MKSNAME   <span class='dssp-dsspComment def-Comment def-Syntax'>[CtrlF3- по именам]</span>
+227:               <span class='dssp-dsspComment def-Comment def-Syntax'>[24832 by type]</span>
+228:                <span class='def-NumberDec def-Number'>25088</span> MKSDATE   <span class='dssp-dsspComment def-Comment def-Syntax'>[CtrlF5- by time]</span>
+229:                <span class='def-NumberDec def-Number'>25344</span> MKSSIZE   <span class='dssp-dsspComment def-Comment def-Syntax'>[CtrlF6- by size]</span>
+230:                <span class='def-NumberDec def-Number'>15872</span> EDITFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[F4-редактирование]</span>
+231:                <span class='def-NumberDec def-Number'>15616</span> TYPEFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[F3-просмотр]</span>
+232:                <span class='def-NumberDec def-Number'>15872</span> EDITFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[F4-редактирование]</span>
+233:                <span class='def-NumberDec def-Number'>15616</span> TYPEFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[F3-просмотр]</span>
+234:           <span class='dssp-dsspComment def-Comment def-Syntax'>[#A]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[ 7745  DUMP  ]</span>
+235:           <span class='dssp-dsspComment def-Comment def-Syntax'>[#D]</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[8260  DLFILES   [Удаление]</span>
+236:                <span class='def-NumberDec def-Number'>15104</span> NMHELP    <span class='dssp-dsspComment def-Comment def-Syntax'>[F1-помощь]</span>
+237:                <span class='def-NumberDec def-Number'>26368</span> EX
+238:                <span class='def-NumberDec def-Number'>3592</span>  UPSUB?    <span class='dssp-dsspComment def-Comment def-Syntax'>[BackSpace]</span>
+239:                <span class='def-NumberDec def-Number'>18176</span> TOHOME    <span class='dssp-dsspComment def-Comment def-Syntax'>[Home]</span>
+240:                <span class='def-NumberDec def-Number'>20224</span> TOFPEND   <span class='dssp-dsspComment def-Comment def-Syntax'>[End]</span>
+241:                <span class='def-NumberDec def-Number'>17152</span> NORTF9KEY <span class='dssp-dsspComment def-Comment def-Syntax'>[Вызов меню настpойки по F9]</span>
+242:               KEYF10 NORTKEYS  <span class='dssp-dsspComment def-Comment def-Syntax'>[Вызов меню]</span>
+243:     <span class='dssp-dsspWord def-Keyword'>ELSE NOP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+244:     : TOHOME <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L SHOWFILE ;
+245:     : TOFPEND Panel NOMER <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>1</span>- Panel <span class='dssp-dsspParam def-Parameter'>!</span> L FWW <span class='def-NumberDec def-Number'>1</span>+ - <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>MAX</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM
+246:       SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 247: 
-248: : DLFILES <span style='color:#696969; '>[]</span> Panel L SORT ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> YESNDEL</span> <span style='color:#696969; '>[]</span> ;
-249:   : YESNDEL <span style='color:#696969; '>[]</span> PATHNAME <span style='color:#008c00; '>1</span>- CDIR FNAMNORT DELETE <span style='color:#696969; '>[]</span> SCANSUBS <span style='color:#696969; '>[]</span> ;
+248: : DLFILES <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> YESNDEL</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+249:   : YESNDEL <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> PATHNAME <span class='def-NumberDec def-Number'>1</span>- CDIR FNAMNORT DELETE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> SCANSUBS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 250: 
-251: : TYPEFILE  <span style='color:#696969; '>[]</span> Panel L SORT ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> YESTYPE</span> <span style='color:#696969; '>[]</span> ;
-252:   : YESTYPE <span style='color:#696969; '>[]</span> SAVESCR VIEWSPEC TEKNAME EXEFLCL <span style='color:#074726; '>DDDD</span> <span style='color:#074726; '>LOADWIN</span> <span style='color:#696969; '>[]</span> ;
-253: : EDITFILE  <span style='color:#696969; '>[]</span> Panel L SORT ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> YESEDIT</span> <span style='color:#696969; '>[]</span> ;
-254:   : YESEDIT <span style='color:#696969; '>[]</span> SAVESCR '' FNAMNORT <span style='color:#074726; '>!</span> NAMENRT NFE NCUR <span style='color:#074726; '>LOADWIN</span> ;
-255:   : FNAMNORT TEKNAME <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> ;
+251: : TYPEFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> YESTYPE</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+252:   : YESTYPE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> SAVESCR VIEWSPEC TEKNAME EXEFLCL <span class='dssp-dsspParam def-Parameter'>DDDD</span> <span class='dssp-dsspParam def-Parameter'>LOADWIN</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+253: : EDITFILE  <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> YESEDIT</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+254:   : YESEDIT <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> SAVESCR '' FNAMNORT <span class='dssp-dsspParam def-Parameter'>!</span> NAMENRT NFE NCUR <span class='dssp-dsspParam def-Parameter'>LOADWIN</span> ;
+255:   : FNAMNORT TEKNAME <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>E2</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspParam def-Parameter'>E2</span> ;
 256: 
-257: <span style='color:#696969; '>[Выдача имени текущего файла в виде текстовой строки]</span>
-258: :: : TEKNAME <span style='color:#696969; '>[]</span> Panel L SORT ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> NOTFILE</span>
-259:     <span style='color:#0000e6; '> " "</span> <span style='color:#074726; '>!</span> OBRFILE Panel L SORT DISTR <span style='color:#074726; '>C</span> <span style='color:#008c00; '>8</span>
-260:      <span style='color:#696969; '>[Adr,Dl]</span> <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> UBRSP</span> <span style='color:#696969; '>[Adr,Dl]</span> SADD OBRFILE
-261:      <span style='color:#008c00; '>9</span> + <span style='color:#008c00; '>3</span> <span style='color:#696969; '>[Adr,Dl]</span> <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> UBRSP</span> <span style='color:#696969; '>[Adr,Dl]</span>
-262:      <span style='color:#074726; '>C</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DOBAV.</span> <span style='color:#696969; '>[Adr,Dl]</span> SADD OBRFILE OBRFILE <span style='color:#696969; '>[Adr,Dl]</span> ;
-263:      : UBRSP <span style='color:#696969; '>[Adr,Dl]</span> <span style='color:#074726; '>C2</span> <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>1</span>- + @B #  <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> 1- EX</span> <span style='color:#696969; '>[Adr,Dl]</span> ;
+257: <span class='dssp-dsspComment def-Comment def-Syntax'>[Выдача имени текущего файла в виде текстовой строки]</span>
+258: :: : TEKNAME <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> NOTFILE</span>
+259:     <span class='dssp-dsspString def-String'> " "</span> <span class='dssp-dsspParam def-Parameter'>!</span> OBRFILE Panel L SORT DISTR <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>8</span>
+260:      <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> UBRSP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> SADD OBRFILE
+261:      <span class='def-NumberDec def-Number'>9</span> + <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> UBRSP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span>
+262:      <span class='dssp-dsspParam def-Parameter'>C</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> DOBAV.</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> SADD OBRFILE OBRFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> ;
+263:      : UBRSP <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='def-NumberDec def-Number'>1</span>- + @B #  <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> 1- EX</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> ;
 264:      : DOBAV. #. SADDB OBRFILE ;
 265: 
-266: <span style='color:#696969; '>[Изменение диpектоpии]</span>
-267: : IZMDIR <span style='color:#696969; '>[]</span> Panel L <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> UPSUB? UDWNSUB</span> <span style='color:#696969; '>[]</span> ;
-268:   : UPSUB? PATHNAME <span style='color:#074726; '>E2D</span> <span style='color:#008c00; '>3</span> <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> UPSUB UDWNSUB</span> ;
-269:   :: : UPSUB<span style='color:#0000e6; '> ".."</span> CDIR <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> L SCANSUBS <span style='color:#696969; '>[]</span> ;
+266: <span class='dssp-dsspComment def-Comment def-Syntax'>[Изменение диpектоpии]</span>
+267: : IZMDIR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> UPSUB? UDWNSUB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+268:   : UPSUB? PATHNAME <span class='dssp-dsspParam def-Parameter'>E2D</span> <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> UPSUB UDWNSUB</span> ;
+269:   :: : UPSUB<span class='dssp-dsspString def-String'> ".."</span> CDIR <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L SCANSUBS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 270: 
-271:   <span style='color:#696969; '>[Вниз по деpеву]</span>
-272:   : UDWNSUB <span style='color:#696969; '>[]</span> Panel L SORT ATRIBUT <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DOWNSUB</span> <span style='color:#696969; '>[]</span> ;
-273:     : DOWNSUB <span style='color:#696969; '>[]</span> TEKNAME <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>E2</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> SADD PATHNAME
-274:       PATHNAME CDIR <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> L SCANSUBS <span style='color:#696969; '>[]</span> ;
+271:   <span class='dssp-dsspComment def-Comment def-Syntax'>[Вниз по деpеву]</span>
+272:   : UDWNSUB <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> DOWNSUB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+273:     : DOWNSUB <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> TEKNAME <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>E2</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspParam def-Parameter'>E2</span> SADD PATHNAME
+274:       PATHNAME CDIR <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L SCANSUBS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 275: 
-276: <span style='color:#696969; '>[Востановление текущего имени]</span>
-277: :: : RESHOWTEK CLFN Panel L SORT ATRIBUT <span style='color:#008c00; '>128</span> <span style='color:#074726; '>&amp;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CLM CLNN</span> SHOWLSTR <span style='color:#696969; '>[]</span> ;
+276: <span class='dssp-dsspComment def-Comment def-Syntax'>[Востановление текущего имени]</span>
+277: :: : RESHOWTEK CLFN Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>128</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> CLM CLNN</span> SHOWLSTR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 278: 
-279: <span style='color:#696969; '>[Выделение текущего имени]</span>
-280: : SHOWTEK CLTN Panel L SORT ATRIBUT <span style='color:#008c00; '>128</span> <span style='color:#074726; '>&amp;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> CLM CLFT</span> SHOWLSTR <span style='color:#696969; '>[]</span> ;
-281:   : SHOWLSTR Panel L Panel UPNUM - WW <span style='color:#074726; '>/</span> <span style='color:#008c00; '>1</span>+ <span style='color:#074726; '>E2</span> <span style='color:#696969; '>[Nstr,Nstlb]</span>
-282:     <span style='color:#008c00; '>13</span> <span style='color:#074726; '>*</span> <span style='color:#008c00; '>1</span>+ LR + Panel L SORT DISTR <span style='color:#008c00; '>12</span> CLTOS <span style='color:#696969; '>[]</span> ;
+279: <span class='dssp-dsspComment def-Comment def-Syntax'>[Выделение текущего имени]</span>
+280: : SHOWTEK CLTN Panel L SORT ATRIBUT <span class='def-NumberDec def-Number'>128</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> CLM CLFT</span> SHOWLSTR <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+281:   : SHOWLSTR Panel L Panel UPNUM - WW <span class='dssp-dsspParam def-Parameter'>/</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspParam def-Parameter'>E2</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Nstr,Nstlb]</span>
+282:     <span class='def-NumberDec def-Number'>13</span> <span class='dssp-dsspParam def-Parameter'>*</span> <span class='def-NumberDec def-Number'>1</span>+ LR + Panel L SORT DISTR <span class='def-NumberDec def-Number'>12</span> CLTOS <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 283: 
-284: <span style='color:#696969; '>[Отpаботка клавиши впpаво]</span>
-285: : URIGHT <span style='color:#696969; '>[]</span> Panel L Panel NOMER <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>&lt;</span> <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> RIGHT</span> <span style='color:#696969; '>[]</span> ;
-286:   : RIGHT <span style='color:#696969; '>[]</span> Panel UPNUM FWW + <span style='color:#074726; '>C</span> Panel L WW + <span style='color:#074726; '>&lt;</span>
-287:     <span style='color:#074726; '>E2</span> Panel NOMER <span style='color:#074726; '>&lt;</span> <span style='color:#074726; '>&amp;</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> ROLRSTEP NRSTEP</span> <span style='color:#696969; '>[]</span> ;
-288:     <span style='color:#696969; '>[Вышли за пределы списка на экране, нужен скролинг]</span>
-289:     : ROLRSTEP Panel UPNUM WW + Panel NOMER FWW <span style='color:#008c00; '>1</span>+ - <span style='color:#074726; '>MIN</span> Panel <span style='color:#074726; '>!</span> UPNUM
-290:       NRSTEP SHOWFILE <span style='color:#696969; '>[]</span> ;
-291:       : NRSTEP RESHOWTEK Panel L WW + Panel NOMER <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>MIN</span> Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+284: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши впpаво]</span>
+285: : URIGHT <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L Panel NOMER <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>&lt;</span> <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> RIGHT</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+286:   : RIGHT <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel UPNUM FWW + <span class='dssp-dsspParam def-Parameter'>C</span> Panel L WW + <span class='dssp-dsspParam def-Parameter'>&lt;</span>
+287:     <span class='dssp-dsspParam def-Parameter'>E2</span> Panel NOMER <span class='dssp-dsspParam def-Parameter'>&lt;</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> ROLRSTEP NRSTEP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+288:     <span class='dssp-dsspComment def-Comment def-Syntax'>[Вышли за пределы списка на экране, нужен скролинг]</span>
+289:     : ROLRSTEP Panel UPNUM WW + Panel NOMER FWW <span class='def-NumberDec def-Number'>1</span>+ - <span class='dssp-dsspParam def-Parameter'>MIN</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM
+290:       NRSTEP SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+291:       : NRSTEP RESHOWTEK Panel L WW + Panel NOMER <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>MIN</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 292: 
-293: <span style='color:#696969; '>[Отpаботка клавиши влево]</span>
-294: : ULEFT <span style='color:#696969; '>[]</span> Panel L WW - <span style='color:#008c00; '>0</span> <span style='color:#074726; '>&lt;</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> LEFT UPAGEUP</span> <span style='color:#696969; '>[]</span> ;
-295:   : LEFT <span style='color:#696969; '>[]</span> Panel L Panel UPNUM - WW - <span style='color:#800000; font-weight:bold; '>BR-</span><span style='color:#004a43; '> ROLLSTEP NLSTEP</span> <span style='color:#696969; '>[]</span> ;
-296:     <span style='color:#696969; '>[Вышли за пределы списка на экране, нужен скролинг]</span>
-297:     : ROLLSTEP <span style='color:#696969; '>[]</span> Panel UPNUM WW - <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span> Panel <span style='color:#074726; '>!</span> UPNUM NLSTEP SHOWFILE <span style='color:#696969; '>[]</span> ;
-298:       : NLSTEP RESHOWTEK WW Panel L - Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+293: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши влево]</span>
+294: : ULEFT <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L WW - <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>&lt;</span> <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> LEFT UPAGEUP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+295:   : LEFT <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L Panel UPNUM - WW - <span class='dssp-dsspWord def-Keyword'>BR-</span><span class='dssp-dsspExpr def-Directive'> ROLLSTEP NLSTEP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+296:     <span class='dssp-dsspComment def-Comment def-Syntax'>[Вышли за пределы списка на экране, нужен скролинг]</span>
+297:     : ROLLSTEP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel UPNUM WW - <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>MAX</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM NLSTEP SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+298:       : NLSTEP RESHOWTEK WW Panel L - Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 299: 
-300: <span style='color:#696969; '>[Отpаботка клавиши ввеpх]</span>
-301: : UUP Panel L <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> UPLAB</span> <span style='color:#696969; '>[]</span> ;
-302:   : UPLAB Panel L Panel UPNUM - <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> ROLUSTEP NUSTEP</span> <span style='color:#696969; '>[]</span> ;
-303:     : ROLUSTEP Panel UPNUM <span style='color:#008c00; '>1</span>- Panel <span style='color:#074726; '>!</span> UPNUM NUSTEP SHOWFILE <span style='color:#696969; '>[]</span> ;
-304:       : NUSTEP <span style='color:#696969; '>[]</span> RESHOWTEK Panel L <span style='color:#008c00; '>1</span>- Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+300: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши ввеpх]</span>
+301: : UUP Panel L <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> UPLAB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+302:   : UPLAB Panel L Panel UPNUM - <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> ROLUSTEP NUSTEP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+303:     : ROLUSTEP Panel UPNUM <span class='def-NumberDec def-Number'>1</span>- Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM NUSTEP SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+304:       : NUSTEP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> RESHOWTEK Panel L <span class='def-NumberDec def-Number'>1</span>- Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 305: 
-306: <span style='color:#696969; '>[Отpаботка клавиши вниз]</span>
-307: : UDOWN Panel L <span style='color:#008c00; '>1</span>+ Panel NOMER <span style='color:#074726; '>=</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> DOWNLAB</span> <span style='color:#696969; '>[]</span> ;
-308:   : DOWNLAB Panel L Panel UPNUM - FWW - <span style='color:#800000; font-weight:bold; '>BR-</span><span style='color:#004a43; '> NDSTEP ROLDSTEP</span> <span style='color:#696969; '>[]</span> ;
-309:     : ROLDSTEP <span style='color:#696969; '>[1000 100 BEEP]</span> Panel UPNUM <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span> UPNUM
-310:       NDSTEP SHOWFILE <span style='color:#696969; '>[]</span> ;
-311:       : NDSTEP <span style='color:#696969; '>[]</span> RESHOWTEK Panel L <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+306: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши вниз]</span>
+307: : UDOWN Panel L <span class='def-NumberDec def-Number'>1</span>+ Panel NOMER <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> DOWNLAB</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+308:   : DOWNLAB Panel L Panel UPNUM - FWW - <span class='dssp-dsspWord def-Keyword'>BR-</span><span class='dssp-dsspExpr def-Directive'> NDSTEP ROLDSTEP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+309:     : ROLDSTEP <span class='dssp-dsspComment def-Comment def-Syntax'>[1000 100 BEEP]</span> Panel UPNUM <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM
+310:       NDSTEP SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+311:       : NDSTEP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> RESHOWTEK Panel L <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 312: 
-313: <span style='color:#696969; '>[Отpаботка клавиши стpаница вниз]</span>
-314: : UPAGEDN RESHOWTEK Panel UPNUM FWW + Panel L <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> PAGEDN? PAGEDN</span> <span style='color:#696969; '>[]</span> ;
-315:   : PAGEDN? <span style='color:#696969; '>[]</span> Panel UPNUM WW <span style='color:#008c00; '>3</span> <span style='color:#074726; '>*</span> <span style='color:#008c00; '>1</span>- + <span style='color:#074726; '>C</span> Panel NOMER <span style='color:#074726; '>></span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> CORPAGEDN D</span> ;
-316:     : CORPAGEDN Panel <span style='color:#074726; '>!</span> UPNUM PAGEDN SHOWFILE <span style='color:#696969; '>[]</span> ;
-317:       : PAGEDN <span style='color:#696969; '>[]</span> Panel UPNUM FWW + Panel NOMER <span style='color:#008c00; '>1</span>- <span style='color:#074726; '>MIN</span> Panel <span style='color:#074726; '>!</span> L <span style='color:#696969; '>[]</span> ;
+313: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши стpаница вниз]</span>
+314: : UPAGEDN RESHOWTEK Panel UPNUM FWW + Panel L <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> PAGEDN? PAGEDN</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+315:   : PAGEDN? <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel UPNUM WW <span class='def-NumberDec def-Number'>3</span> <span class='dssp-dsspParam def-Parameter'>*</span> <span class='def-NumberDec def-Number'>1</span>- + <span class='dssp-dsspParam def-Parameter'>C</span> Panel NOMER <span class='dssp-dsspParam def-Parameter'>></span> <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> CORPAGEDN D</span> ;
+316:     : CORPAGEDN Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM PAGEDN SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+317:       : PAGEDN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel UPNUM FWW + Panel NOMER <span class='def-NumberDec def-Number'>1</span>- <span class='dssp-dsspParam def-Parameter'>MIN</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> L <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 318: 
-319: <span style='color:#696969; '>[Отpаботка клавиши стpаница ввеpх]</span>
-320: : UPAGEUP Panel UPNUM Panel L <span style='color:#074726; '>=</span> <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> POSUP? PAGEUP</span> <span style='color:#696969; '>[]</span> ;
-321:   : POSUP? Panel L <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> DECUPNUM</span> <span style='color:#696969; '>[]</span> ;
-322:     : DECUPNUM Panel UPNUM FWW - <span style='color:#008c00; '>0</span> <span style='color:#074726; '>MAX</span> Panel <span style='color:#074726; '>!</span> UPNUM PAGEUP <span style='color:#696969; '>[]</span> ;
-323:       : PAGEUP <span style='color:#696969; '>[]</span> RESHOWTEK Panel UPNUM Panel <span style='color:#074726; '>!</span> L SHOWFILE <span style='color:#696969; '>[]</span> ;
+319: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отpаботка клавиши стpаница ввеpх]</span>
+320: : UPAGEUP Panel UPNUM Panel L <span class='dssp-dsspParam def-Parameter'>=</span> <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> POSUP? PAGEUP</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+321:   : POSUP? Panel L <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> DECUPNUM</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+322:     : DECUPNUM Panel UPNUM FWW - <span class='def-NumberDec def-Number'>0</span> <span class='dssp-dsspParam def-Parameter'>MAX</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> UPNUM PAGEUP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+323:       : PAGEUP <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> RESHOWTEK Panel UPNUM Panel <span class='dssp-dsspParam def-Parameter'>!</span> L SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
 324: 
-325: <span style='color:#696969; '>[Выбоp файла по клавише SELECT]</span>
-326: : SELALLF <span style='color:#696969; '>[]</span> UNSELALLF <span style='color:#008c00; '>0</span> Panel NOMER <span style='color:#008c00; '>1</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> CSELF</span> <span style='color:#074726; '>D</span> SHOWFILE <span style='color:#696969; '>[]</span> ;
-327: : SELFILE <span style='color:#696969; '>[]</span> Panel L CSELF <span style='color:#074726; '>D</span> UDOWN <span style='color:#696969; '>[]</span> ;
-328:   : CSELF <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>C</span> SORT <span style='color:#074726; '>C</span> ATRIBUT <span style='color:#074726; '>C</span> <span style='color:#008c00; '>16</span> <span style='color:#074726; '>&amp;</span> <span style='color:#000000; background:#ffffe8; '>IF0</span><span style='color:#004a43; '> MARKSEL</span> <span style='color:#696969; '>[L,ATR]</span>
-329:     <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> ATRIBUT <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[L]</span> ;
-330:       : MARKSEL <span style='color:#696969; '>[ATR]</span> <span style='color:#074726; '>C</span> <span style='color:#008c00; '>128</span> <span style='color:#074726; '>&amp;</span> <span style='color:#800000; font-weight:bold; '>BR0</span><span style='color:#004a43; '> ADDFILE ADLFILE</span> <span style='color:#008c00; '>128</span> <span style='color:#074726; '>'+'</span> <span style='color:#696969; '>[ATR]</span> ;
-331:         : ADDFILE Panel KOLVO <span style='color:#008c00; '>1</span>+ Panel <span style='color:#074726; '>!</span>  KOLVO <span style='color:#074726; '>C2</span> SIZEF 
-332:           Panel VOLIUME + Panel <span style='color:#074726; '>!</span> VOLIUME ;
-333:         : ADLFILE <span style='color:#696969; '>[L,SORT,ATRIB]</span> Panel KOLVO <span style='color:#008c00; '>1</span>- Panel <span style='color:#074726; '>!</span> KOLVO
-334:           Panel VOLIUME <span style='color:#074726; '>C3</span> SIZEF - Panel <span style='color:#074726; '>!</span> VOLIUME <span style='color:#696969; '>[L,SORT,ATRIB]</span> ;
+325: <span class='dssp-dsspComment def-Comment def-Syntax'>[Выбоp файла по клавише SELECT]</span>
+326: : SELALLF <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> UNSELALLF <span class='def-NumberDec def-Number'>0</span> Panel NOMER <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> CSELF</span> <span class='dssp-dsspParam def-Parameter'>D</span> SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+327: : SELFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> Panel L CSELF <span class='dssp-dsspParam def-Parameter'>D</span> UDOWN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+328:   : CSELF <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> <span class='dssp-dsspParam def-Parameter'>C</span> SORT <span class='dssp-dsspParam def-Parameter'>C</span> ATRIBUT <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspConstr def-Insertion'>IF0</span><span class='dssp-dsspExpr def-Directive'> MARKSEL</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[L,ATR]</span>
+329:     <span class='dssp-dsspParam def-Parameter'>E2</span> <span class='dssp-dsspParam def-Parameter'>!</span> ATRIBUT <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> ;
+330:       : MARKSEL <span class='dssp-dsspComment def-Comment def-Syntax'>[ATR]</span> <span class='dssp-dsspParam def-Parameter'>C</span> <span class='def-NumberDec def-Number'>128</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspWord def-Keyword'>BR0</span><span class='dssp-dsspExpr def-Directive'> ADDFILE ADLFILE</span> <span class='def-NumberDec def-Number'>128</span> <span class='dssp-dsspParam def-Parameter'>'+'</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[ATR]</span> ;
+331:         : ADDFILE Panel KOLVO <span class='def-NumberDec def-Number'>1</span>+ Panel <span class='dssp-dsspParam def-Parameter'>!</span>  KOLVO <span class='dssp-dsspParam def-Parameter'>C2</span> SIZEF 
+332:           Panel VOLIUME + Panel <span class='dssp-dsspParam def-Parameter'>!</span> VOLIUME ;
+333:         : ADLFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[L,SORT,ATRIB]</span> Panel KOLVO <span class='def-NumberDec def-Number'>1</span>- Panel <span class='dssp-dsspParam def-Parameter'>!</span> KOLVO
+334:           Panel VOLIUME <span class='dssp-dsspParam def-Parameter'>C3</span> SIZEF - Panel <span class='dssp-dsspParam def-Parameter'>!</span> VOLIUME <span class='dssp-dsspComment def-Comment def-Syntax'>[L,SORT,ATRIB]</span> ;
 335: 
-336: <span style='color:#696969; '>[Отмена выбоpа всех файлов]</span>
-337: : UNSELALLF <span style='color:#696969; '>[]</span> <span style='color:#008c00; '>0</span> Panel NOMER <span style='color:#008c00; '>1</span>+ <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> UNSELF</span> <span style='color:#074726; '>D</span> <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> KOLVO
-338:   <span style='color:#008c00; '>0</span> Panel <span style='color:#074726; '>!</span> VOLIUME SHOWFILE <span style='color:#696969; '>[]</span> ;
-339: :: : UNSELFILE Panel L UNSELF <span style='color:#008c00; '>1</span>- DLFILE <span style='color:#074726; '>D</span> UDOWN <span style='color:#696969; '>[]</span> ;
-340: :: : UNSELF <span style='color:#696969; '>[L]</span> <span style='color:#074726; '>C</span> SORT <span style='color:#074726; '>C</span> ATRIBUT <span style='color:#008c00; '>127</span> <span style='color:#074726; '>&amp;</span> <span style='color:#074726; '>E2</span> <span style='color:#074726; '>!</span> ATRIBUT <span style='color:#696969; '>[L]</span> <span style='color:#008c00; '>1</span>+ <span style='color:#696969; '>[L]</span> ;
-341:      : DLFILE <span style='color:#696969; '>[L]</span> Panel KOLVO <span style='color:#008c00; '>1</span>- Panel <span style='color:#074726; '>!</span> KOLVO
-342:        Panel VOLIUME <span style='color:#074726; '>C2</span> SORT SIZEF - Panel <span style='color:#074726; '>!</span> VOLIUME ;
+336: <span class='dssp-dsspComment def-Comment def-Syntax'>[Отмена выбоpа всех файлов]</span>
+337: : UNSELALLF <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> <span class='def-NumberDec def-Number'>0</span> Panel NOMER <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> UNSELF</span> <span class='dssp-dsspParam def-Parameter'>D</span> <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> KOLVO
+338:   <span class='def-NumberDec def-Number'>0</span> Panel <span class='dssp-dsspParam def-Parameter'>!</span> VOLIUME SHOWFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+339: :: : UNSELFILE Panel L UNSELF <span class='def-NumberDec def-Number'>1</span>- DLFILE <span class='dssp-dsspParam def-Parameter'>D</span> UDOWN <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+340: :: : UNSELF <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> <span class='dssp-dsspParam def-Parameter'>C</span> SORT <span class='dssp-dsspParam def-Parameter'>C</span> ATRIBUT <span class='def-NumberDec def-Number'>127</span> <span class='dssp-dsspParam def-Parameter'>&amp;</span> <span class='dssp-dsspParam def-Parameter'>E2</span> <span class='dssp-dsspParam def-Parameter'>!</span> ATRIBUT <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> <span class='def-NumberDec def-Number'>1</span>+ <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> ;
+341:      : DLFILE <span class='dssp-dsspComment def-Comment def-Syntax'>[L]</span> Panel KOLVO <span class='def-NumberDec def-Number'>1</span>- Panel <span class='dssp-dsspParam def-Parameter'>!</span> KOLVO
+342:        Panel VOLIUME <span class='dssp-dsspParam def-Parameter'>C2</span> SORT SIZEF - Panel <span class='dssp-dsspParam def-Parameter'>!</span> VOLIUME ;
 343: 
-344: <span style='color:#074726; '>B16</span>
-345: :: : FREEVOL <span style='color:#008c00; '>36</span> <span style='color:#074726; '>SWB</span> <span style='color:#074726; '>!</span> <span style='color:#074726; '>RAX</span> <span style='color:#074726; '>!0</span> <span style='color:#074726; '>RDX</span> <span style='color:#008c00; '>21</span> <span style='color:#074726; '>INTERR</span> <span style='color:#074726; '>RAX</span> <span style='color:#074726; '>C</span> MAXC <span style='color:#074726; '>=</span>
-346:      <span style='color:#800000; font-weight:bold; '>BR+</span><span style='color:#004a43; '> T0 RASKR</span> <span style='color:#696969; '>[0/VOL]</span> ;
-347:      : RASKR <span style='color:#696969; '>[RAX]</span> RBX <span style='color:#074726; '>*</span> <span style='color:#074726; '>RCX</span> <span style='color:#074726; '>*</span> <span style='color:#696969; '>[Nb]</span> ;
+344: <span class='dssp-dsspParam def-Parameter'>B16</span>
+345: :: : FREEVOL <span class='def-NumberDec def-Number'>36</span> <span class='dssp-dsspParam def-Parameter'>SWB</span> <span class='dssp-dsspParam def-Parameter'>!</span> <span class='dssp-dsspParam def-Parameter'>RAX</span> <span class='dssp-dsspParam def-Parameter'>!0</span> <span class='dssp-dsspParam def-Parameter'>RDX</span> <span class='def-NumberDec def-Number'>21</span> <span class='dssp-dsspParam def-Parameter'>INTERR</span> <span class='dssp-dsspParam def-Parameter'>RAX</span> <span class='dssp-dsspParam def-Parameter'>C</span> MAXC <span class='dssp-dsspParam def-Parameter'>=</span>
+346:      <span class='dssp-dsspWord def-Keyword'>BR+</span><span class='dssp-dsspExpr def-Directive'> T0 RASKR</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[0/VOL]</span> ;
+347:      : RASKR <span class='dssp-dsspComment def-Comment def-Syntax'>[RAX]</span> RBX <span class='dssp-dsspParam def-Parameter'>*</span> <span class='dssp-dsspParam def-Parameter'>RCX</span> <span class='dssp-dsspParam def-Parameter'>*</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Nb]</span> ;
 348:        : MAXC 0FFFF ;
 349: 
 350: DEFINE? ZVOOK NOT %IF
-351:     :: : ZVOOK <span style='color:#008c00; '>2000</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>3456</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>7450</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>500</span> <span style='color:#008c00; '>10</span> <span style='color:#008c00; '>4</span> <span style='color:#000000; background:#ffffe8; '>DO</span><span style='color:#004a43; '> BEEP</span> ;
+351:     :: : ZVOOK <span class='def-NumberDec def-Number'>2000</span> <span class='def-NumberDec def-Number'>10</span> <span class='def-NumberDec def-Number'>3456</span> <span class='def-NumberDec def-Number'>10</span> <span class='def-NumberDec def-Number'>7450</span> <span class='def-NumberDec def-Number'>10</span> <span class='def-NumberDec def-Number'>500</span> <span class='def-NumberDec def-Number'>10</span> <span class='def-NumberDec def-Number'>4</span> <span class='dssp-dsspConstr def-Insertion'>DO</span><span class='dssp-dsspExpr def-Directive'> BEEP</span> ;
 352:                   %FI
-353: <span style='color:#074726; '>B10</span>
+353: <span class='dssp-dsspParam def-Parameter'>B10</span>
 354: 
-355: : SHRUM SouSwi <span style='color:#000000; background:#ffffe8; '>IF+</span><span style='color:#004a43; '> YESSHRUM</span> <span style='color:#696969; '>[]</span> ;
-356: : YESSHRUM <span style='color:#008c00; '>30000</span> <span style='color:#008c00; '>10</span> BEEP <span style='color:#008c00; '>25000</span> <span style='color:#008c00; '>10</span> BEEP <span style='color:#008c00; '>20000</span> <span style='color:#008c00; '>10</span> BEEP
-357:     <span style='color:#008c00; '>18000</span> <span style='color:#008c00; '>10</span> BEEP <span style='color:#008c00; '>16000</span> <span style='color:#008c00; '>10</span> BEEP <span style='color:#008c00; '>14000</span> <span style='color:#008c00; '>10</span> BEEP ;
+355: : SHRUM SouSwi <span class='dssp-dsspConstr def-Insertion'>IF+</span><span class='dssp-dsspExpr def-Directive'> YESSHRUM</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[]</span> ;
+356: : YESSHRUM <span class='def-NumberDec def-Number'>30000</span> <span class='def-NumberDec def-Number'>10</span> BEEP <span class='def-NumberDec def-Number'>25000</span> <span class='def-NumberDec def-Number'>10</span> BEEP <span class='def-NumberDec def-Number'>20000</span> <span class='def-NumberDec def-Number'>10</span> BEEP
+357:     <span class='def-NumberDec def-Number'>18000</span> <span class='def-NumberDec def-Number'>10</span> BEEP <span class='def-NumberDec def-Number'>16000</span> <span class='def-NumberDec def-Number'>10</span> BEEP <span class='def-NumberDec def-Number'>14000</span> <span class='def-NumberDec def-Number'>10</span> BEEP ;
 358: 
-359: <span style='color:#696969; '>[CLEAR $NDIR]</span>
-360: :: <span style='color:#800000; font-weight:bold; '>COPYW EndDisp END</span>
+359: <span class='dssp-dsspComment def-Comment def-Syntax'>[CLEAR $NDIR]</span>
+360: :: <span class='dssp-dsspWord def-Keyword'>COPYW EndDisp END</span>
 361: 
-362: : NMHELP <span style='color:#000000; background:#ffffe8; '>ON</span><span style='color:#000000; background:#ffffe8; '> ?SPALL 12</span> '' TNMHELP <span style='color:#008c00; '>16</span> <span style='color:#074726; '>WS</span> <span style='color:#008c00; '>2</span>+ SHR <span style='color:#008c00; '>18</span> <span style='color:#074726; '>C2</span> <span style='color:#008c00; '>3</span>- GENINF <span style='color:#074726; '>TRB</span> <span style='color:#074726; '>D</span> DELWIND ;
-363:   : TNMHELP BR <span style='color:#008c00; '>1</span><span style='color:#0000e6; '> "Файловый монитор LNM-DSSP"</span>
-364:                <span style='color:#008c00; '>2</span><span style='color:#0000e6; '> ",Home,End,PgUP/Down"</span>
-365:                <span style='color:#008c00; '>3</span><span style='color:#0000e6; '> "перемещение по файлам"</span>
-366:                <span style='color:#008c00; '>4</span><span style='color:#0000e6; '> "Пробел,Insert-отметить"</span>
-367:                <span style='color:#008c00; '>5</span><span style='color:#0000e6; '> "Delete-удалить файл"</span>
-368:                <span style='color:#008c00; '>6</span><span style='color:#0000e6; '> "F3-просмотреть файл"</span>
-369:                <span style='color:#008c00; '>7</span><span style='color:#0000e6; '> "F4-редактировать файл"</span>
-370:                <span style='color:#008c00; '>8</span><span style='color:#0000e6; '> "+ - отметить все файлы"</span>
-371:                <span style='color:#008c00; '>9</span><span style='color:#0000e6; '> "- - разотметить все файлы"</span>
-372:               <span style='color:#008c00; '>10</span><span style='color:#0000e6; '> "BackSp - в верхний каталог"</span>
-373:               <span style='color:#008c00; '>11</span><span style='color:#0000e6; '> "CntrlF3-сортировать по имени"</span>
-374: <span style='color:#696969; '>[             12 "CntrlF4-сортировать по размеру" ]</span>
-375:               <span style='color:#008c00; '>13</span><span style='color:#0000e6; '> "CntrlF5-сортировать по дате"</span>
-376:               <span style='color:#008c00; '>14</span><span style='color:#0000e6; '> "CntrlF6-сортировать по размеру"</span>
-377:               <span style='color:#008c00; '>15</span><span style='color:#0000e6; '> "F10 - вызвать меню монитора"</span>
-378:               <span style='color:#800000; font-weight:bold; '>ELSE EMSTR</span> <span style='color:#696969; '>[Adr,Dl]</span> ;
-379: <span style='color:#074726; '>UNDEF</span>
+362: : NMHELP <span class='def-Insertion'>ON</span><span class='dssp-dsspConstr def-Insertion'> ?SPALL 12</span> '' TNMHELP <span class='def-NumberDec def-Number'>16</span> <span class='dssp-dsspParam def-Parameter'>WS</span> <span class='def-NumberDec def-Number'>2</span>+ SHR <span class='def-NumberDec def-Number'>18</span> <span class='dssp-dsspParam def-Parameter'>C2</span> <span class='def-NumberDec def-Number'>3</span>- GENINF <span class='dssp-dsspParam def-Parameter'>TRB</span> <span class='dssp-dsspParam def-Parameter'>D</span> DELWIND ;
+363:   : TNMHELP BR <span class='def-NumberDec def-Number'>1</span><span class='dssp-dsspString def-String'> "Файловый монитор LNM-DSSP"</span>
+364:                <span class='def-NumberDec def-Number'>2</span><span class='dssp-dsspString def-String'> ",Home,End,PgUP/Down"</span>
+365:                <span class='def-NumberDec def-Number'>3</span><span class='dssp-dsspString def-String'> "перемещение по файлам"</span>
+366:                <span class='def-NumberDec def-Number'>4</span><span class='dssp-dsspString def-String'> "Пробел,Insert-отметить"</span>
+367:                <span class='def-NumberDec def-Number'>5</span><span class='dssp-dsspString def-String'> "Delete-удалить файл"</span>
+368:                <span class='def-NumberDec def-Number'>6</span><span class='dssp-dsspString def-String'> "F3-просмотреть файл"</span>
+369:                <span class='def-NumberDec def-Number'>7</span><span class='dssp-dsspString def-String'> "F4-редактировать файл"</span>
+370:                <span class='def-NumberDec def-Number'>8</span><span class='dssp-dsspString def-String'> "+ - отметить все файлы"</span>
+371:                <span class='def-NumberDec def-Number'>9</span><span class='dssp-dsspString def-String'> "- - разотметить все файлы"</span>
+372:               <span class='def-NumberDec def-Number'>10</span><span class='dssp-dsspString def-String'> "BackSp - в верхний каталог"</span>
+373:               <span class='def-NumberDec def-Number'>11</span><span class='dssp-dsspString def-String'> "CntrlF3-сортировать по имени"</span>
+374: <span class='dssp-dsspComment def-Comment def-Syntax'>[             12 "CntrlF4-сортировать по размеру" ]</span>
+375:               <span class='def-NumberDec def-Number'>13</span><span class='dssp-dsspString def-String'> "CntrlF5-сортировать по дате"</span>
+376:               <span class='def-NumberDec def-Number'>14</span><span class='dssp-dsspString def-String'> "CntrlF6-сортировать по размеру"</span>
+377:               <span class='def-NumberDec def-Number'>15</span><span class='dssp-dsspString def-String'> "F10 - вызвать меню монитора"</span>
+378:               <span class='dssp-dsspWord def-Keyword'>ELSE EMSTR</span> <span class='dssp-dsspComment def-Comment def-Syntax'>[Adr,Dl]</span> ;
+379: <span class='dssp-dsspParam def-Parameter'>UNDEF</span>
