@@ -1,4 +1,4 @@
-$(obj_output_slash)BaseEditor.$(obj): $(shared_path)colorer/editor/BaseEditor.cpp \
+$(obj_output_slash)BaseEditor.$(obj): $(shared_path)/./colorer/editor/BaseEditor.cpp \
   $(shared_path)common/Logging.h   \
   $(shared_path)common/Features.h  \
   $(shared_path)colorer/editor/BaseEditor.h $(shared_path)colorer/ParserFactory.h \
@@ -35,7 +35,7 @@ $(obj_output_slash)BaseEditor.$(obj): $(shared_path)colorer/editor/BaseEditor.cp
   $(shared_path)colorer/editor/PairMatch.h
 
 
-$(obj_output_slash)BitArray.$(obj): $(shared_path)unicode/BitArray.cpp  \
+$(obj_output_slash)BitArray.$(obj): $(shared_path)/./unicode/BitArray.cpp  \
    $(shared_path)unicode/BitArray.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
   $(shared_path)unicode/String.h $(shared_path)common/Exception.h \
@@ -45,7 +45,7 @@ $(obj_output_slash)BitArray.$(obj): $(shared_path)unicode/BitArray.cpp  \
   $(shared_path)common/MemoryChunks.h $(shared_path)common/MemoryOperator.h
 
 
-$(obj_output_slash)Character.$(obj): $(shared_path)unicode/Character.cpp \
+$(obj_output_slash)Character.$(obj): $(shared_path)/./unicode/Character.cpp \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
   $(shared_path)common/Features.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
@@ -56,7 +56,7 @@ $(obj_output_slash)Character.$(obj): $(shared_path)unicode/Character.cpp \
   $(shared_path)unicode/x_charcategory_names.h
 
 
-$(obj_output_slash)CharacterClass.$(obj): $(shared_path)unicode/CharacterClass.cpp \
+$(obj_output_slash)CharacterClass.$(obj): $(shared_path)/./unicode/CharacterClass.cpp \
   $(shared_path)unicode/CharacterClass.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -69,7 +69,7 @@ $(obj_output_slash)CharacterClass.$(obj): $(shared_path)unicode/CharacterClass.c
   $(shared_path)unicode/x_charcategory2.h
 
 
-$(obj_output_slash)ConsoleTools.$(obj): $(shared_path)colorer/viewer/ConsoleTools.cpp \
+$(obj_output_slash)ConsoleTools.$(obj): $(shared_path)/./colorer/viewer/ConsoleTools.cpp \
   $(shared_path)colorer/ParserFactory.h $(shared_path)xml/xmldom.h \
   $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
   $(shared_path)unicode/String.h  \
@@ -141,7 +141,7 @@ $(obj_output_slash)ConsoleToolsRunner.$(obj): $(shared_path)../colorer/ConsoleTo
   $(shared_path)colorer/ParserFactoryException.h
 
 
-$(obj_output_slash)DString.$(obj): $(shared_path)unicode/DString.cpp $(shared_path)unicode/DString.h \
+$(obj_output_slash)DString.$(obj): $(shared_path)/./unicode/DString.cpp $(shared_path)unicode/DString.h \
   $(shared_path)unicode/String.h   \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -150,7 +150,7 @@ $(obj_output_slash)DString.$(obj): $(shared_path)unicode/DString.cpp $(shared_pa
   $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)Encodings.$(obj): $(shared_path)unicode/Encodings.cpp \
+$(obj_output_slash)Encodings.$(obj): $(shared_path)/./unicode/Encodings.cpp \
   $(shared_path)unicode/Encodings.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -160,7 +160,8 @@ $(obj_output_slash)Encodings.$(obj): $(shared_path)unicode/Encodings.cpp \
   $(shared_path)unicode/x_encodings.h
 
 
-$(obj_output_slash)ErrorHandlerWriter.$(obj): $(shared_path)colorer/handlers/ErrorHandlerWriter.cpp \
+$(obj_output_slash)ErrorHandlerWriter.$(obj):  \
+ $(shared_path)/./colorer/handlers/ErrorHandlerWriter.cpp  \
   $(shared_path)colorer/handlers/ErrorHandlerWriter.h \
   $(shared_path)colorer/ErrorHandler.h $(shared_path)common/Common.h \
   $(shared_path)common/Features.h $(shared_path)unicode/String.h \
@@ -171,8 +172,8 @@ $(obj_output_slash)ErrorHandlerWriter.$(obj): $(shared_path)colorer/handlers/Err
   $(shared_path)common/io/Writer.h
 
 
-$(obj_output_slash)Exception.$(obj): $(shared_path)common/Exception.cpp $(shared_path)common/Exception.h \
-  $(shared_path)unicode/String.h   \
+$(obj_output_slash)Exception.$(obj): $(shared_path)/./common/Exception.cpp \
+  $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
    $(shared_path)unicode/Character.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
   $(shared_path)common/MemoryChunks.h $(shared_path)unicode/Encodings.h \
@@ -264,7 +265,7 @@ $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.c
   $(shared_path)colorer/editor/OutlineItem.h
 
 
-$(obj_output_slash)FileErrorHandler.$(obj): $(shared_path)colorer/handlers/FileErrorHandler.cpp \
+$(obj_output_slash)FileErrorHandler.$(obj): $(shared_path)/./colorer/handlers/FileErrorHandler.cpp \
   $(shared_path)colorer/handlers/FileErrorHandler.h  \
   $(shared_path)common/io/StreamWriter.h $(shared_path)common/io/Writer.h \
   $(shared_path)unicode/String.h  \
@@ -278,7 +279,7 @@ $(obj_output_slash)FileErrorHandler.$(obj): $(shared_path)colorer/handlers/FileE
   $(shared_path)colorer/ErrorHandler.h
 
 
-$(obj_output_slash)FileInputSource.$(obj): $(shared_path)common/io/FileInputSource.cpp \
+$(obj_output_slash)FileInputSource.$(obj): $(shared_path)/./common/io/FileInputSource.cpp \
   $(shared_path)common/io/FileInputSource.h $(shared_path)common/io/InputSource.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
   $(shared_path)unicode/String.h $(shared_path)common/Exception.h \
@@ -288,7 +289,7 @@ $(obj_output_slash)FileInputSource.$(obj): $(shared_path)common/io/FileInputSour
   $(shared_path)common/MemoryChunks.h
 
 
-$(obj_output_slash)FileWriter.$(obj): $(shared_path)common/io/FileWriter.cpp  \
+$(obj_output_slash)FileWriter.$(obj): $(shared_path)/./common/io/FileWriter.cpp  \
   $(shared_path)common/io/FileWriter.h $(shared_path)common/io/StreamWriter.h \
   $(shared_path)common/io/Writer.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
@@ -299,7 +300,7 @@ $(obj_output_slash)FileWriter.$(obj): $(shared_path)common/io/FileWriter.cpp  \
 
 
 $(obj_output_slash)HRCParserHelpers.$(obj):  \
- $(shared_path)colorer/parsers/helpers/HRCParserHelpers.cpp \
+ $(shared_path)/./colorer/parsers/helpers/HRCParserHelpers.cpp \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)cregexp/cregexp.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
@@ -315,7 +316,7 @@ $(obj_output_slash)HRCParserHelpers.$(obj):  \
   $(shared_path)colorer/Scheme.h $(shared_path)colorer/FileType.h \
    
 
-$(obj_output_slash)HRCParserImpl.$(obj): $(shared_path)colorer/parsers/HRCParserImpl.cpp \
+$(obj_output_slash)HRCParserImpl.$(obj): $(shared_path)/./colorer/parsers/HRCParserImpl.cpp \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)cregexp/cregexp.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
@@ -334,7 +335,7 @@ $(obj_output_slash)HRCParserImpl.$(obj): $(shared_path)colorer/parsers/HRCParser
   $(shared_path)colorer/parsers/helpers/FileTypeImpl.h
 
 
-$(obj_output_slash)HTTPInputSource.$(obj): $(shared_path)common/io/HTTPInputSource.cpp \
+$(obj_output_slash)HTTPInputSource.$(obj): $(shared_path)/./common/io/HTTPInputSource.cpp \
   $(shared_path)common/io/HTTPInputSource.h $(shared_path)common/io/InputSource.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
   $(shared_path)unicode/String.h   \
@@ -345,7 +346,7 @@ $(obj_output_slash)HTTPInputSource.$(obj): $(shared_path)common/io/HTTPInputSour
   $(shared_path)common/MemoryChunks.h $(shared_path)common/Vector.h
 
 
-$(obj_output_slash)InputSource.$(obj): $(shared_path)common/io/InputSource.cpp \
+$(obj_output_slash)InputSource.$(obj): $(shared_path)/./common/io/InputSource.cpp \
   $(shared_path)common/io/InputSource.h $(shared_path)common/Common.h \
   $(shared_path)common/Features.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
@@ -359,7 +360,7 @@ $(obj_output_slash)InputSource.$(obj): $(shared_path)common/io/InputSource.cpp \
   $(shared_path)common/Logging.h  \
     
 
-$(obj_output_slash)JARInputSource.$(obj): $(shared_path)common/io/JARInputSource.cpp \
+$(obj_output_slash)JARInputSource.$(obj): $(shared_path)/./common/io/JARInputSource.cpp \
   $(shared_path)common/io/JARInputSource.h $(shared_path)common/io/InputSource.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
   $(shared_path)unicode/String.h   \
@@ -376,7 +377,7 @@ $(obj_output_slash)JARInputSource.$(obj): $(shared_path)common/io/JARInputSource
 
 
 $(obj_output_slash)LineRegionsCompactSupport.$(obj):  \
- $(shared_path)colorer/handlers/LineRegionsCompactSupport.cpp \
+ $(shared_path)/./colorer/handlers/LineRegionsCompactSupport.cpp \
   $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
   $(shared_path)colorer/handlers/LineRegionsSupport.h \
   $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
@@ -395,7 +396,8 @@ $(obj_output_slash)LineRegionsCompactSupport.$(obj):  \
   $(shared_path)colorer/handlers/TextRegion.h
 
 
-$(obj_output_slash)LineRegionsSupport.$(obj): $(shared_path)colorer/handlers/LineRegionsSupport.cpp \
+$(obj_output_slash)LineRegionsSupport.$(obj):  \
+ $(shared_path)/./colorer/handlers/LineRegionsSupport.cpp \
   $(shared_path)colorer/handlers/LineRegionsSupport.h \
   $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
   $(shared_path)unicode/String.h   \
@@ -413,7 +415,7 @@ $(obj_output_slash)LineRegionsSupport.$(obj): $(shared_path)colorer/handlers/Lin
   $(shared_path)colorer/handlers/TextRegion.h $(shared_path)common/Logging.h \
     
 
-$(obj_output_slash)Logging.$(obj): $(shared_path)common/Logging.cpp  \
+$(obj_output_slash)Logging.$(obj): $(shared_path)/./common/Logging.cpp  \
    $(shared_path)common/Logging.h \
    $(shared_path)common/Features.h \
    $(shared_path)unicode/String.h  \
@@ -425,7 +427,7 @@ $(obj_output_slash)Logging.$(obj): $(shared_path)common/Logging.cpp  \
   $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)MemoryChunks.$(obj): $(shared_path)common/MemoryChunks.cpp \
+$(obj_output_slash)MemoryChunks.$(obj): $(shared_path)/./common/MemoryChunks.cpp \
   $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
   $(shared_path)unicode/String.h   \
    $(shared_path)unicode/Character.h \
@@ -435,7 +437,7 @@ $(obj_output_slash)MemoryChunks.$(obj): $(shared_path)common/MemoryChunks.cpp \
   $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h \
    
 
-$(obj_output_slash)Outliner.$(obj): $(shared_path)colorer/editor/Outliner.cpp \
+$(obj_output_slash)Outliner.$(obj): $(shared_path)/./colorer/editor/Outliner.cpp \
   $(shared_path)colorer/editor/Outliner.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
    $(shared_path)unicode/Character.h \
@@ -471,7 +473,7 @@ $(obj_output_slash)Outliner.$(obj): $(shared_path)colorer/editor/Outliner.cpp \
   $(shared_path)colorer/editor/PairMatch.h
 
 
-$(obj_output_slash)ParserFactory.$(obj): $(shared_path)colorer/ParserFactory.cpp  \
+$(obj_output_slash)ParserFactory.$(obj): $(shared_path)/./colorer/ParserFactory.cpp \
   $(shared_path)common/Logging.h $(shared_path)common/Features.h \
    $(shared_path)colorer/ParserFactory.h \
   $(shared_path)xml/xmldom.h $(shared_path)common/Vector.h \
@@ -510,7 +512,7 @@ $(obj_output_slash)ParserFactory.$(obj): $(shared_path)colorer/ParserFactory.cpp
   $(shared_path)colorer/parsers/helpers/TextParserHelpers.h
 
 
-$(obj_output_slash)RegionMapperImpl.$(obj): $(shared_path)colorer/handlers/RegionMapperImpl.cpp \
+$(obj_output_slash)RegionMapperImpl.$(obj): $(shared_path)/./colorer/handlers/RegionMapperImpl.cpp \
   $(shared_path)colorer/handlers/RegionMapperImpl.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
    $(shared_path)unicode/Character.h \
@@ -525,7 +527,7 @@ $(obj_output_slash)RegionMapperImpl.$(obj): $(shared_path)colorer/handlers/Regio
   $(shared_path)colorer/handlers/RegionDefine.h
 
 
-$(obj_output_slash)SString.$(obj): $(shared_path)unicode/SString.cpp  \
+$(obj_output_slash)SString.$(obj): $(shared_path)/./unicode/SString.cpp  \
   $(shared_path)unicode/String.h  \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -535,7 +537,7 @@ $(obj_output_slash)SString.$(obj): $(shared_path)unicode/SString.cpp  \
   $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)SharedInputSource.$(obj): $(shared_path)common/io/SharedInputSource.cpp \
+$(obj_output_slash)SharedInputSource.$(obj): $(shared_path)/./common/io/SharedInputSource.cpp \
   $(shared_path)common/io/SharedInputSource.h $(shared_path)common/Common.h \
   $(shared_path)common/Features.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
@@ -548,7 +550,7 @@ $(obj_output_slash)SharedInputSource.$(obj): $(shared_path)common/io/SharedInput
   $(shared_path)common/io/InputSource.h
 
 
-$(obj_output_slash)StreamWriter.$(obj): $(shared_path)common/io/StreamWriter.cpp  \
+$(obj_output_slash)StreamWriter.$(obj): $(shared_path)/./common/io/StreamWriter.cpp \
   $(shared_path)common/io/StreamWriter.h $(shared_path)common/io/Writer.h \
   $(shared_path)unicode/String.h  \
    $(shared_path)common/Exception.h \
@@ -559,7 +561,7 @@ $(obj_output_slash)StreamWriter.$(obj): $(shared_path)common/io/StreamWriter.cpp
   $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)String.$(obj): $(shared_path)unicode/String.cpp  \
+$(obj_output_slash)String.$(obj): $(shared_path)/./unicode/String.cpp  \
    $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -568,7 +570,7 @@ $(obj_output_slash)String.$(obj): $(shared_path)unicode/String.cpp  \
   $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)StringBuffer.$(obj): $(shared_path)unicode/StringBuffer.cpp \
+$(obj_output_slash)StringBuffer.$(obj): $(shared_path)/./unicode/StringBuffer.cpp \
   $(shared_path)unicode/StringBuffer.h $(shared_path)unicode/String.h \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -577,7 +579,7 @@ $(obj_output_slash)StringBuffer.$(obj): $(shared_path)unicode/StringBuffer.cpp \
   $(shared_path)unicode/DString.h $(shared_path)unicode/SString.h
 
 
-$(obj_output_slash)StyledHRDMapper.$(obj): $(shared_path)colorer/handlers/StyledHRDMapper.cpp \
+$(obj_output_slash)StyledHRDMapper.$(obj): $(shared_path)/./colorer/handlers/StyledHRDMapper.cpp \
   $(shared_path)colorer/handlers/StyledHRDMapper.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -594,7 +596,7 @@ $(obj_output_slash)StyledHRDMapper.$(obj): $(shared_path)colorer/handlers/Styled
   $(shared_path)unicode/UnicodeTools.h $(shared_path)xml/xmldom.h
 
 
-$(obj_output_slash)TextConsoleViewer.$(obj): $(shared_path)colorer/viewer/TextConsoleViewer.cpp \
+$(obj_output_slash)TextConsoleViewer.$(obj): $(shared_path)/./colorer/viewer/TextConsoleViewer.cpp \
   $(shared_path)colorer/viewer/TextConsoleViewer.h \
   $(shared_path)colorer/editor/BaseEditor.h $(shared_path)colorer/ParserFactory.h \
   $(shared_path)xml/xmldom.h $(shared_path)common/Vector.h \
@@ -631,7 +633,7 @@ $(obj_output_slash)TextConsoleViewer.$(obj): $(shared_path)colorer/viewer/TextCo
   $(shared_path)colorer/viewer/TextLinesStore.h
 
 
-$(obj_output_slash)TextHRDMapper.$(obj): $(shared_path)colorer/handlers/TextHRDMapper.cpp \
+$(obj_output_slash)TextHRDMapper.$(obj): $(shared_path)/./colorer/handlers/TextHRDMapper.cpp \
   $(shared_path)xml/xmldom.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -648,7 +650,7 @@ $(obj_output_slash)TextHRDMapper.$(obj): $(shared_path)colorer/handlers/TextHRDM
   $(shared_path)colorer/handlers/TextRegion.h
 
 
-$(obj_output_slash)TextLinesStore.$(obj): $(shared_path)colorer/viewer/TextLinesStore.cpp \
+$(obj_output_slash)TextLinesStore.$(obj): $(shared_path)/./colorer/viewer/TextLinesStore.cpp \
   $(shared_path)colorer/viewer/TextLinesStore.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
    $(shared_path)unicode/Character.h \
@@ -660,7 +662,7 @@ $(obj_output_slash)TextLinesStore.$(obj): $(shared_path)colorer/viewer/TextLines
    
 
 $(obj_output_slash)TextParserHelpers.$(obj):  \
- $(shared_path)colorer/parsers/helpers/TextParserHelpers.cpp \
+ $(shared_path)/./colorer/parsers/helpers/TextParserHelpers.cpp \
   $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
   $(shared_path)colorer/parsers/HRCParserImpl.h $(shared_path)xml/xmldom.h \
   $(shared_path)common/Vector.h $(shared_path)common/Exception.h \
@@ -682,7 +684,7 @@ $(obj_output_slash)TextParserHelpers.$(obj):  \
   $(shared_path)common/Logging.h  \
     
 
-$(obj_output_slash)TextParserImpl.$(obj): $(shared_path)colorer/parsers/TextParserImpl.cpp \
+$(obj_output_slash)TextParserImpl.$(obj): $(shared_path)/./colorer/parsers/TextParserImpl.cpp \
   $(shared_path)colorer/parsers/TextParserImpl.h \
   $(shared_path)colorer/TextParser.h $(shared_path)colorer/FileType.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -707,7 +709,7 @@ $(obj_output_slash)TextParserImpl.$(obj): $(shared_path)colorer/parsers/TextPars
   $(shared_path)common/Logging.h  \
     
 
-$(obj_output_slash)UnicodeTools.$(obj): $(shared_path)unicode/UnicodeTools.cpp  \
+$(obj_output_slash)UnicodeTools.$(obj): $(shared_path)/./unicode/UnicodeTools.cpp  \
   $(shared_path)unicode/UnicodeTools.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -716,7 +718,7 @@ $(obj_output_slash)UnicodeTools.$(obj): $(shared_path)unicode/UnicodeTools.cpp  
   $(shared_path)unicode/SString.h $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)Writer.$(obj): $(shared_path)common/io/Writer.cpp $(shared_path)common/io/Writer.h \
+$(obj_output_slash)Writer.$(obj): $(shared_path)/./common/io/Writer.cpp $(shared_path)common/io/Writer.h \
   $(shared_path)unicode/String.h   \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -726,15 +728,15 @@ $(obj_output_slash)Writer.$(obj): $(shared_path)common/io/Writer.cpp $(shared_pa
   $(shared_path)unicode/StringBuffer.h
 
 
-$(obj_output_slash)adler32.$(obj): $(unzipdir)adler32.c $(unzipdir)zlib.h \
-  $(unzipdir)zconf.h
+$(obj_output_slash)adler32.$(obj): $(shared_path)/../zlib/adler32.c $(shared_path)/../zlib/zlib.h \
+  $(shared_path)/../zlib/zconf.h
 
 
-$(obj_output_slash)crc32.$(obj): $(unzipdir)crc32.c $(unzipdir)zlib.h \
-  $(unzipdir)zconf.h
+$(obj_output_slash)crc32.$(obj): $(shared_path)/../zlib/crc32.c $(shared_path)/../zlib/zlib.h \
+  $(shared_path)/../zlib/zconf.h
 
 
-$(obj_output_slash)cregexp.$(obj): $(shared_path)cregexp/cregexp.cpp $(shared_path)cregexp/cregexp.h \
+$(obj_output_slash)cregexp.$(obj): $(shared_path)/./cregexp/cregexp.cpp $(shared_path)cregexp/cregexp.h \
   $(shared_path)unicode/String.h   \
    $(shared_path)common/Exception.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -746,61 +748,61 @@ $(obj_output_slash)cregexp.$(obj): $(shared_path)cregexp/cregexp.cpp $(shared_pa
   $(shared_path)unicode/UnicodeTools.h
 
 
-$(obj_output_slash)infblock.$(obj): $(unzipdir)infblock.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)infblock.h $(unzipdir)inftrees.h \
-  $(unzipdir)infcodes.h $(unzipdir)infutil.h
+$(obj_output_slash)infblock.$(obj): $(shared_path)/../zlib/infblock.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/infblock.h $(shared_path)/../zlib/inftrees.h \
+  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h
 
 
-$(obj_output_slash)infcodes.$(obj): $(unzipdir)infcodes.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)inftrees.h $(unzipdir)infblock.h \
-  $(unzipdir)infcodes.h $(unzipdir)infutil.h \
-  $(unzipdir)inffast.h
+$(obj_output_slash)infcodes.$(obj): $(shared_path)/../zlib/infcodes.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/infblock.h \
+  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h \
+  $(shared_path)/../zlib/inffast.h
 
 
-$(obj_output_slash)inffast.$(obj): $(unzipdir)inffast.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)inftrees.h $(unzipdir)infblock.h \
-  $(unzipdir)infcodes.h $(unzipdir)infutil.h \
-  $(unzipdir)inffast.h
+$(obj_output_slash)inffast.$(obj): $(shared_path)/../zlib/inffast.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/infblock.h \
+  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h \
+  $(shared_path)/../zlib/inffast.h
 
 
-$(obj_output_slash)inflate.$(obj): $(unzipdir)inflate.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)infblock.h
+$(obj_output_slash)inflate.$(obj): $(shared_path)/../zlib/inflate.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/infblock.h
 
 
-$(obj_output_slash)inftrees.$(obj): $(unzipdir)inftrees.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)inftrees.h $(unzipdir)inffixed.h
+$(obj_output_slash)inftrees.$(obj): $(shared_path)/../zlib/inftrees.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/inffixed.h
 
 
-$(obj_output_slash)infutil.$(obj): $(unzipdir)infutil.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
-  $(unzipdir)infblock.h $(unzipdir)inftrees.h \
-  $(unzipdir)infcodes.h $(unzipdir)infutil.h
+$(obj_output_slash)infutil.$(obj): $(shared_path)/../zlib/infutil.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
+  $(shared_path)/../zlib/infblock.h $(shared_path)/../zlib/inftrees.h \
+  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h
 
 
-$(obj_output_slash)ioapi.$(obj): $(unzipdir)contrib/minizip/ioapi.c  \
+$(obj_output_slash)ioapi.$(obj): $(shared_path)/../zlib/contrib/minizip/ioapi.c  \
    $(unzipdir)zlib.h \
-  $(unzipdir)zconf.h $(unzipdir)contrib/minizip/ioapi.h
+  $(unzipdir)zconf.h $(shared_path)/../zlib/contrib/minizip/ioapi.h
 
 
-$(obj_output_slash)malloc.$(obj): $(shared_path)misc/malloc.c \
+$(obj_output_slash)malloc.$(obj): $(shared_path)/./misc/malloc.c \
     
 
-$(obj_output_slash)uncompr.$(obj): $(unzipdir)uncompr.c $(unzipdir)zlib.h \
-  $(unzipdir)zconf.h
+$(obj_output_slash)uncompr.$(obj): $(shared_path)/../zlib/uncompr.c $(shared_path)/../zlib/zlib.h \
+  $(shared_path)/../zlib/zconf.h
 
 
-$(obj_output_slash)unzip.$(obj): $(unzipdir)contrib/minizip/unzip.c  \
+$(obj_output_slash)unzip.$(obj): $(shared_path)/../zlib/contrib/minizip/unzip.c  \
    $(unzipdir)zlib.h \
-  $(unzipdir)zconf.h $(unzipdir)contrib/minizip/unzip.h \
-  $(unzipdir)contrib/minizip/ioapi.h  \
+  $(unzipdir)zconf.h $(shared_path)/../zlib/contrib/minizip/unzip.h \
+  $(shared_path)/../zlib/contrib/minizip/ioapi.h  \
    
 
-$(obj_output_slash)xmldom.$(obj): $(shared_path)xml/xmldom.cpp  \
+$(obj_output_slash)xmldom.$(obj): $(shared_path)/./xml/xmldom.cpp  \
   $(shared_path)xml/xmldom.h $(shared_path)common/Vector.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/String.h \
   $(shared_path)unicode/Character.h $(shared_path)common/Common.h \
@@ -812,7 +814,7 @@ $(obj_output_slash)xmldom.$(obj): $(shared_path)xml/xmldom.cpp  \
   $(shared_path)common/io/InputSource.h $(shared_path)unicode/UnicodeTools.h
 
 
-$(obj_output_slash)zutil.$(obj): $(unzipdir)zutil.c $(unzipdir)zutil.h \
-  $(unzipdir)zlib.h $(unzipdir)zconf.h \
+$(obj_output_slash)zutil.$(obj): $(shared_path)/../zlib/zutil.c $(shared_path)/../zlib/zutil.h \
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
     
 

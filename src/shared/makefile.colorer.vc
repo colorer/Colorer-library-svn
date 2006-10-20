@@ -8,11 +8,10 @@ obj  = obj
 
 obj_output_slash = $(obj_output)\\
 
-#CPPFLAGS = -I$(shared_path) -I$(unzipdir)  /Fo$*.$(obj) /Zi /c $(CPPFLAGS_CUSTOM)
-CPPFLAGS = -I$(shared_path) -I$(unzipdir) /wd4996 /Fo$*.$(obj) /D_CRT_SECURE_NO_DEPRECATE /nologo /Otiyb2 /EHsc /c /wd4101 /W3 $(CPPFLAGS_CUSTOM)
-MALLOCFLAGS = /wd4308 /wd4307
+CPPFLAGS = -I$(shared_path) -I$(unzipdir) /Otiyb2 /EHsc /wd4996 /wd4308 /wd4307 /wd4101 /W3 /Fo$*.$(obj) /D_CRT_SECURE_NO_DEPRECATE /nologo /c  $(CPPFLAGS_CUSTOM)
 
 # ms nmake faults to substitute $(shared_path) here :(
 include ../shared/makefile.zlib
 include ../shared/_dependencies.dep
 include ../shared/makefile.objs
+include ../shared/makefile.lines
