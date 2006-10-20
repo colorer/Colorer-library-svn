@@ -1,62 +1,62 @@
- 0: <span style='color:#696969; '>\ Walk by device's of tree in BootMon LNM 2000</span>
- 1: <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Device tree parsing"</span>
- 2: <span style='color:#800000; font-weight:bold; '>forth</span> <span style='color:#000000; background:#a8a800; '>definitions</span> <span style='color:#e34adc; '>decimal</span> anew task-walktree.fth
- 3: <span style='color:#800000; font-weight:bold; '>defer</span> workfornode <span style='color:#696969; '>\ Work that must executed on node point</span>
- 4: ' <span style='color:#800000; font-weight:bold; '>noop</span> <span style='color:#800000; font-weight:bold; '>is</span> workfornode 
+ 0: <span class='forth-forComment def-Comment def-Syntax'>\ Walk by device's of tree in BootMon LNM 2000</span>
+ 1: <span class='forth-forWord def-Keyword'>cr</span><span class='forth-forString def-String'> ." Device tree parsing"</span>
+ 2: <span class='forth-forWord def-Keyword'>forth</span> <span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>definitions</span> <span class='forth-forResWord def-Label'>decimal</span> anew task-walktree.fth
+ 3: <span class='forth-forWord def-Keyword'>defer</span> workfornode <span class='forth-forComment def-Comment def-Syntax'>\ Work that must executed on node point</span>
+ 4: ' <span class='forth-forWord def-Keyword'>noop</span> <span class='forth-forWord def-Keyword'>is</span> workfornode 
  5: 
- 6: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>ptrmethwork</span> <span style='color:#696969; '>( Phandle AdrM LM -- )</span>
- 7:     <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>pick</span> <span style='color:#696969; '>( A L Phandle )</span> find-method <span style='color:#696969; '>( XtW 1 | endVoc 0 )</span>
- 8:     <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>space</span> <span style='color:#800000; font-weight:bold; '>execute</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Phandle )</span> ;
- 9: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>testonnode</span> <span style='color:#696969; '>( Phandle )</span><span style='color:#0000e6; '> s" TEST"</span> ptrmethwork <span style='color:#696969; '>( -- )</span> ;
-10: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagonnode</span> <span style='color:#696969; '>( Phandle )</span><span style='color:#0000e6; '> s" TEST"</span> ptrmethwork <span style='color:#696969; '>( -- )</span> ;
-11: ' testonnode <span style='color:#800000; font-weight:bold; '>value</span> ptstnode
-12: ' diagonnode <span style='color:#800000; font-weight:bold; '>value</span> ptdiagnode
+ 6: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>ptrmethwork</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle AdrM LM -- )</span>
+ 7:     <span class='forth-forNumb def-Number'>2</span> <span class='forth-forWord def-Keyword'>pick</span> <span class='forth-forComment def-Comment def-Syntax'>( A L Phandle )</span> find-method <span class='forth-forComment def-Comment def-Syntax'>( XtW 1 | endVoc 0 )</span>
+ 8:     <span class='forth-forResWord def-Label'>if</span> <span class='forth-forWord def-Keyword'>space</span> <span class='forth-forWord def-Keyword'>execute</span> <span class='forth-forWord def-Keyword'>drop</span> <span class='forth-forResWord def-Label'>then</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span> ;
+ 9: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>testonnode</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span><span class='forth-forString def-String'> s" TEST"</span> ptrmethwork <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+10: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>diagonnode</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span><span class='forth-forString def-String'> s" TEST"</span> ptrmethwork <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+11: ' testonnode <span class='forth-forWord def-Keyword'>value</span> ptstnode
+12: ' diagonnode <span class='forth-forWord def-Keyword'>value</span> ptdiagnode
 13: 
-14: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>endnode</span> <span style='color:#696969; '>( -- )</span><span style='color:#0000e6; '> ." /"</span><span style='color:#0000e6; '> s" name"</span> get-my-property <span style='color:#800000; font-weight:bold; '>not</span> <span style='color:#e34adc; '>if</span> <span style='color:#800000; font-weight:bold; '>type</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>(  )</span> ;
-15: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>tagshows</span> <span style='color:#696969; '>( ChPhandle )</span> <span style='color:#800000; font-weight:bold; '>cr</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> endnode
-16:     workfornode <span style='color:#696969; '>( Phandle )</span> <span style='color:#800000; font-weight:bold; '>>code</span> siblinghandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#696969; '>( SiblHandle )</span> ;
-17: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>nodetarget-devs</span> <span style='color:#696969; '>( Phandle -- )</span>  
-18:     <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>dup</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#800000; font-weight:bold; '>>code</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span>
-19:     <span style='color:#e34adc; '>if</span>  <span style='color:#e34adc; '>begin</span>
-20:             tagshows <span style='color:#800000; font-weight:bold; '>dup</span>
-21:             nodehandle <span style='color:#007997; '>@nt</span> ihandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#e34adc; '>if</span> <span style='color:#696969; '>( showinst )</span> <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span>
-22:             <span style='color:#800000; font-weight:bold; '>not</span>
-23:         <span style='color:#e34adc; '>until</span> <span style='color:#800000; font-weight:bold; '>drop</span>
-24:     <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#e34adc; '>then</span> nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( Phandle -- )</span> ;
-25: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>walkbylevel</span> <span style='color:#696969; '>( Phandle )</span>
-26:     <span style='color:#e34adc; '>begin</span>  <span style='color:#696969; '>( Phandle )</span>
-27:         <span style='color:#800000; font-weight:bold; '>dup</span> chnglevelnode <span style='color:#696969; '>( Phandle )</span>
+14: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>endnode</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span><span class='forth-forString def-String'> ." /"</span><span class='forth-forString def-String'> s" name"</span> get-my-property <span class='forth-forWord def-Keyword'>not</span> <span class='forth-forResWord def-Label'>if</span> <span class='forth-forWord def-Keyword'>type</span> <span class='forth-forResWord def-Label'>then</span> <span class='forth-forComment def-Comment def-Syntax'>(  )</span> ;
+15: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>tagshows</span> <span class='forth-forComment def-Comment def-Syntax'>( ChPhandle )</span> <span class='forth-forWord def-Keyword'>cr</span> <span class='forth-forWord def-Keyword'>dup</span> <span class='forth-forWord def-Keyword'>.</span> <span class='forth-forWord def-Keyword'>dup</span> nodehandle <span class='forth-forWord def-Keyword'>!</span> endnode
+16:     workfornode <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span> <span class='forth-forWord def-Keyword'>>code</span> siblinghandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forComment def-Comment def-Syntax'>( SiblHandle )</span> ;
+17: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>nodetarget-devs</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle -- )</span>  
+18:     <span class='forth-forWord def-Keyword'>dup</span> nodehandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>swap</span> <span class='forth-forWord def-Keyword'>dup</span> nodehandle <span class='forth-forWord def-Keyword'>!</span> <span class='forth-forWord def-Keyword'>>code</span> childhandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>dup</span>
+19:     <span class='forth-forResWord def-Label'>if</span>  <span class='forth-forResWord def-Label'>begin</span>
+20:             tagshows <span class='forth-forWord def-Keyword'>dup</span>
+21:             nodehandle <span class='forth-forExtWords def-VarStrong def-Var'>@nt</span> ihandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>dup</span> <span class='forth-forResWord def-Label'>if</span> <span class='forth-forComment def-Comment def-Syntax'>( showinst )</span> <span class='forth-forResWord def-Label'>else</span> <span class='forth-forWord def-Keyword'>drop</span> <span class='forth-forResWord def-Label'>then</span>
+22:             <span class='forth-forWord def-Keyword'>not</span>
+23:         <span class='forth-forResWord def-Label'>until</span> <span class='forth-forWord def-Keyword'>drop</span>
+24:     <span class='forth-forResWord def-Label'>else</span> <span class='forth-forWord def-Keyword'>drop</span> <span class='forth-forResWord def-Label'>then</span> nodehandle <span class='forth-forWord def-Keyword'>!</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle -- )</span> ;
+25: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>walkbylevel</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
+26:     <span class='forth-forResWord def-Label'>begin</span>  <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
+27:         <span class='forth-forWord def-Keyword'>dup</span> chnglevelnode <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
 28:         nodetarget-devs
-29:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>>code</span> childhandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span>
-30:         <span style='color:#e34adc; '>if</span> <span style='color:#696969; '>\ Child are exists</span>
-31:             downtochild <span style='color:#800000; font-weight:bold; '>swap</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( Phandle )</span>
-32:         <span style='color:#e34adc; '>else</span> <span style='color:#696969; '>\ No child consist</span>
-33:             <span style='color:#800000; font-weight:bold; '>drop</span> siblingorup <span style='color:#696969; '>( Phandle )</span>
-34:         <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( Phandle )</span>
-35:         <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>not</span>
-36:     <span style='color:#e34adc; '>until</span> <span style='color:#800000; font-weight:bold; '>drop</span> <span style='color:#696969; '>( -- )</span> ;
-37: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>gotree</span> <span style='color:#696969; '>( -- )</span> nodehandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#008c00; '>0</span> leveltree <span style='color:#800000; font-weight:bold; '>!</span>
-38:     roothandle <span style='color:#800000; font-weight:bold; '>@</span> <span style='color:#800000; font-weight:bold; '>dup</span> <span style='color:#800000; font-weight:bold; '>.</span> <span style='color:#696969; '>( ascii / emit )</span> walkbylevel nodehandle <span style='color:#800000; font-weight:bold; '>!</span> <span style='color:#696969; '>( -- )</span> ;
-39: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>tsttree</span> <span style='color:#696969; '>( -- )</span> ptstnode <span style='color:#800000; font-weight:bold; '>is</span> workfornode gotree <span style='color:#696969; '>( -- )</span> ;
-40: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagtree</span> <span style='color:#696969; '>( -- )</span> ptdiagnode <span style='color:#800000; font-weight:bold; '>is</span> workfornode gotree <span style='color:#696969; '>( -- )</span> ;
+29:         <span class='forth-forWord def-Keyword'>dup</span> <span class='forth-forWord def-Keyword'>>code</span> childhandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>dup</span>
+30:         <span class='forth-forResWord def-Label'>if</span> <span class='forth-forComment def-Comment def-Syntax'>\ Child are exists</span>
+31:             downtochild <span class='forth-forWord def-Keyword'>swap</span> <span class='forth-forWord def-Keyword'>drop</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
+32:         <span class='forth-forResWord def-Label'>else</span> <span class='forth-forComment def-Comment def-Syntax'>\ No child consist</span>
+33:             <span class='forth-forWord def-Keyword'>drop</span> siblingorup <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
+34:         <span class='forth-forResWord def-Label'>then</span> <span class='forth-forComment def-Comment def-Syntax'>( Phandle )</span>
+35:         <span class='forth-forWord def-Keyword'>dup</span> <span class='forth-forWord def-Keyword'>not</span>
+36:     <span class='forth-forResWord def-Label'>until</span> <span class='forth-forWord def-Keyword'>drop</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+37: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>gotree</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> nodehandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forNumb def-Number'>0</span> leveltree <span class='forth-forWord def-Keyword'>!</span>
+38:     roothandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>dup</span> <span class='forth-forWord def-Keyword'>.</span> <span class='forth-forComment def-Comment def-Syntax'>( ascii / emit )</span> walkbylevel nodehandle <span class='forth-forWord def-Keyword'>!</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+39: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>tsttree</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ptstnode <span class='forth-forWord def-Keyword'>is</span> workfornode gotree <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+40: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>diagtree</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ptdiagnode <span class='forth-forWord def-Keyword'>is</span> workfornode gotree <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
 41: 
-42: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>diagnostic</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Device diagnostics..."</span> <span style='color:#800000; font-weight:bold; '>cr</span> diagtree <span style='color:#696969; '>( -- )</span> ;
-43: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>fulltest</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." Full device diagnostics..."</span> <span style='color:#800000; font-weight:bold; '>cr</span> tsttree <span style='color:#696969; '>( -- )</span> ;
-44: <span style='color:#800000; font-weight:bold; '>: </span><span style='color:#000000; background:#a8a800; '>startbm</span> <span style='color:#696969; '>( -- )</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." BootMon v1.0a Russia Moscow SRISS 2000"</span>
-45:     use-nvramrc? <span style='color:#e34adc; '>if</span> execscript <span style='color:#e34adc; '>then</span>
+42: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>diagnostic</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> <span class='forth-forWord def-Keyword'>cr</span><span class='forth-forString def-String'> ." Device diagnostics..."</span> <span class='forth-forWord def-Keyword'>cr</span> diagtree <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+43: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>fulltest</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> <span class='forth-forWord def-Keyword'>cr</span><span class='forth-forString def-String'> ." Full device diagnostics..."</span> <span class='forth-forWord def-Keyword'>cr</span> tsttree <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+44: <span class='forth-forWord def-Keyword'>: </span><span class='forth-forWordDefinition forth-forHiColor def-LabelStrong def-Label'>startbm</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> <span class='forth-forWord def-Keyword'>cr</span><span class='forth-forString def-String'> ." BootMon v1.0a Russia Moscow SRISS 2000"</span>
+45:     use-nvramrc? <span class='forth-forResWord def-Label'>if</span> execscript <span class='forth-forResWord def-Label'>then</span>
 46:     initbootmon
-47:     diag-switch? <span style='color:#e34adc; '>if</span> diagnostic <span style='color:#e34adc; '>else</span> fulltest <span style='color:#e34adc; '>then</span>
+47:     diag-switch? <span class='forth-forResWord def-Label'>if</span> diagnostic <span class='forth-forResWord def-Label'>else</span> fulltest <span class='forth-forResWord def-Label'>then</span>
 48:     selectIO
-49:     auto-boot?   <span style='color:#e34adc; '>if</span> gotoboot <span style='color:#e34adc; '>else</span> <span style='color:#800000; font-weight:bold; '>cr</span><span style='color:#0000e6; '> ." I'm ready"</span> <span style='color:#e34adc; '>then</span> <span style='color:#696969; '>( -- )</span> ;
-50: <span style='color:#696969; '>0 [IF]</span>
-51: <span style='color:#696969; '>HEX \ For testing setprop operations</span>
-52: <span style='color:#696969; '></span>
-53: <span style='color:#696969; '>20 STRING ZSTR </span>
-54: <span style='color:#696969; '>: TSP</span>
-55: <span style='color:#696969; '>    S" SELFTEST" ZSTR ST!</span>
-56: <span style='color:#696969; '>    ZSTR + 1+ 0 SWAP C!</span>
-57: <span style='color:#696969; '>    S" DISABLE NAVSEGDA" HERE 200 + SWAP MOVE</span>
-58: <span style='color:#696969; '>    10 HERE 200 + ZSTR DROP B41C SETPROP ;</span>
-59: <span style='color:#696969; '>DECIMAL</span>
-60: <span style='color:#696969; '>[THEN]</span>
+49:     auto-boot?   <span class='forth-forResWord def-Label'>if</span> gotoboot <span class='forth-forResWord def-Label'>else</span> <span class='forth-forWord def-Keyword'>cr</span><span class='forth-forString def-String'> ." I'm ready"</span> <span class='forth-forResWord def-Label'>then</span> <span class='forth-forComment def-Comment def-Syntax'>( -- )</span> ;
+50: <span class='forth-forComment def-Comment def-Syntax'>0 [IF]</span>
+51: <span class='forth-forComment def-Comment def-Syntax'>HEX \ For testing setprop operations</span>
+52: <span class='forth-forComment def-Comment def-Syntax'></span>
+53: <span class='forth-forComment def-Comment def-Syntax'>20 STRING ZSTR </span>
+54: <span class='forth-forComment def-Comment def-Syntax'>: TSP</span>
+55: <span class='forth-forComment def-Comment def-Syntax'>    S" SELFTEST" ZSTR ST!</span>
+56: <span class='forth-forComment def-Comment def-Syntax'>    ZSTR + 1+ 0 SWAP C!</span>
+57: <span class='forth-forComment def-Comment def-Syntax'>    S" DISABLE NAVSEGDA" HERE 200 + SWAP MOVE</span>
+58: <span class='forth-forComment def-Comment def-Syntax'>    10 HERE 200 + ZSTR DROP B41C SETPROP ;</span>
+59: <span class='forth-forComment def-Comment def-Syntax'>DECIMAL</span>
+60: <span class='forth-forComment def-Comment def-Syntax'>[THEN]</span>
 61: 

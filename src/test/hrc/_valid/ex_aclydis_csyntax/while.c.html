@@ -1,14 +1,14 @@
  0: 
  1: Begin
  2: 
- 3:  While  Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>ID <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span><span style='color:#008c00; '>0</span>
+ 3:  While  Manufacturers<span class='c-Symbol def-Symbol'>[</span>i<span class='c-Symbol def-Symbol'>]</span><span class='c-Symbol def-Symbol'>.</span>ID <span class='c-Symbol def-Symbol'>!</span><span class='c-Symbol def-Symbol'>=</span><span class='def-NumberDec def-Number'>0</span>
  4:      BeginWhile
- 5:        If  Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>ID <span style='color:#808030; '>=</span> <span style='color:#808030; '>=</span> InAudioCardCaps<span style='color:#808030; '>[</span>j<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>wMid
+ 5:        If  Manufacturers<span class='c-Symbol def-Symbol'>[</span>i<span class='c-Symbol def-Symbol'>]</span><span class='c-Symbol def-Symbol'>.</span>ID <span class='c-Symbol def-Symbol'>=</span> <span class='c-Symbol def-Symbol'>=</span> InAudioCardCaps<span class='c-Symbol def-Symbol'>[</span>j<span class='c-Symbol def-Symbol'>]</span><span class='c-Symbol def-Symbol'>.</span>wMid
  6:     Then
- 7:      <span style='color:#400000; '>wsprintf</span> <span style='color:#808030; '>(</span> szMessage<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0f69ff; '>%s</span><span style='color:#0f69ff; '>\0</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> Manufacturers<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Name <span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
- 8:      <span style='color:#800000; font-weight:bold; '>break</span><span style='color:#800080; '>;</span>
+ 7:      <span class='c-KeywordWin32 c-KeywordLibFunctions def-FunctionKeyword def-Keyword'>wsprintf</span> <span class='c-Symbol def-Symbol'>(</span> szMessage<span class='c-Symbol def-Symbol'>,</span> <span class='def-StringEdge def-String'>"</span><span class='c-StringEscape def-StringContent def-String'>%s</span><span class='c-StringEscape def-StringContent def-String'>\0</span><span class='def-StringEdge def-String'>"</span><span class='c-Symbol def-Symbol'>,</span> Manufacturers<span class='c-Symbol def-Symbol'>[</span>i<span class='c-Symbol def-Symbol'>]</span><span class='c-Symbol def-Symbol'>.</span>Name <span class='c-Symbol def-Symbol'>)</span><span class='c-StructureSymbol def-SymbolStrong def-Symbol'>;</span>
+ 8:      <span class='c-KeywordANSI def-Keyword'>break</span><span class='c-StructureSymbol def-SymbolStrong def-Symbol'>;</span>
  9:     Else
-10:         i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#800080; '>;</span>
+10:         i<span class='c-Symbol def-Symbol'>+</span><span class='c-Symbol def-Symbol'>+</span><span class='c-StructureSymbol def-SymbolStrong def-Symbol'>;</span>
 11:      EndIf
 12:  EndWhile
 13: 

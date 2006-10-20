@@ -342,7 +342,14 @@ StyledHRDMapper *ParserFactory::createStyledMapper(const String *classID, const 
 
   Vector<const String*> *hrdLocV = null;
   if (nameID == null)
-    hrdLocV = hrdClass->get(&DString("default"));
+  {
+    char *hrd = getenv("COLORER5HRD");
+    hrdLocV = (hrd) ? hrdClass->get(&DString(hrd)) : hrdClass->get(&DString("default"));
+    if(hrdLocV == null)
+    {
+      hrdLocV = hrdClass->get(&DString("default"));
+    }
+  }
   else
     hrdLocV = hrdClass->get(nameID);
   if (hrdLocV == null)

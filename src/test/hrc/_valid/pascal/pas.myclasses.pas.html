@@ -1,78 +1,78 @@
- 0: <span style='color:#800000; font-weight:bold; '>unit</span> MyClasses<span style='color:#800080; '>;</span>
+ 0: <span class='pascal-pWord def-Keyword'>unit</span> MyClasses<span class='def-SymbolStrong def-Symbol'>;</span>
  1: 
- 2: <span style='color:#800000; font-weight:bold; '>interface</span>
+ 2: <span class='pascal-pWord def-Keyword'>interface</span>
  3: 
- 4: <span style='color:#800000; font-weight:bold; '>uses</span>
- 5:   Classes<span style='color:#808030; '>,</span> Tags<span style='color:#800080; '>;</span>
+ 4: <span class='pascal-pWord def-Keyword'>uses</span>
+ 5:   Classes<span class='pascal-pSymb def-Symbol'>,</span> Tags<span class='def-SymbolStrong def-Symbol'>;</span>
  6: 
- 7: <span style='color:#696969; '>{</span>
- 8: <span style='color:#696969; '>  Есть в паскале т.н. классовые функции/процедуры и блоки</span>
- 9: <span style='color:#696969; '>   обработки исключений. Так вот они неверно подсвечиваются</span>
-10: <span style='color:#696969; '>   (имеется в виду возможность подсветки парных скобок/тэгов)</span>
-11: <span style='color:#696969; '>   Пытаюсь сейчас сам разобраться, как можно модифицировать</span>
-12: <span style='color:#696969; '>   hrc, но пока надежды мало.</span>
-13: <span style='color:#696969; '>}</span>
-14: <span style='color:#696969; '>(*</span>
-15: <span style='color:#696969; '>sdfsadf</span>
-16: <span style='color:#696969; '>*)</span>
+ 7: <span class='pascal-pComment def-Comment def-Syntax'>{</span>
+ 8: <span class='pascal-pComment def-Comment def-Syntax'>  Есть в паскале т.н. классовые функции/процедуры и блоки</span>
+ 9: <span class='pascal-pComment def-Comment def-Syntax'>   обработки исключений. Так вот они неверно подсвечиваются</span>
+10: <span class='pascal-pComment def-Comment def-Syntax'>   (имеется в виду возможность подсветки парных скобок/тэгов)</span>
+11: <span class='pascal-pComment def-Comment def-Syntax'>   Пытаюсь сейчас сам разобраться, как можно модифицировать</span>
+12: <span class='pascal-pComment def-Comment def-Syntax'>   hrc, но пока надежды мало.</span>
+13: <span class='pascal-pComment def-Comment def-Syntax'>}</span>
+14: <span class='pascal-pComment def-Comment def-Syntax'>(*</span>
+15: <span class='pascal-pComment def-Comment def-Syntax'>sdfsadf</span>
+16: <span class='pascal-pComment def-Comment def-Syntax'>*)</span>
 17: 
-18: <span style='color:#004a43; '>(*$I+*)</span> <span style='color:#696969; '>//</span><span style='color:#ffffff; background:#808000; '>!!</span><span style='color:#696969; '> &lt;-- кстати, это тоже директива компилятора. как и</span>
-19: <span style='color:#004a43; '>{$I+}</span>
-20:         <span style='color:#696969; '>//       и мне ее тоже задать пока не удалось.</span>
+18: <span class='pascal-pOther def-Directive'>(*$I+*)</span> <span class='pascal-pComment def-Comment def-Syntax'>//</span><span class='def-TODO def-Error'>!!</span><span class='pascal-pComment def-Comment def-Syntax'> &lt;-- кстати, это тоже директива компилятора. как и</span>
+19: <span class='pascal-pOther def-Directive'>{$I+}</span>
+20:         <span class='pascal-pComment def-Comment def-Syntax'>//       и мне ее тоже задать пока не удалось.</span>
 21: 
-22: <span style='color:#800000; font-weight:bold; '>type</span>         <span style='color:#696969; '>//</span><span style='color:#ffffff; background:#808000; '>┌─ !!</span><span style='color:#696969; '>подсвечивается сам по себе, без пары</span>
-23:   TClass1 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>class</span><span style='color:#808030; '>(</span>TMyObject<span style='color:#808030; '>)</span>
-24:     <span style='color:#800000; font-weight:bold; '>class</span> <span style='color:#800000; font-weight:bold; '>function</span> TagSupported<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>const</span> Tag<span style='color:#808030; '>:</span> TagType<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Boolean</span><span style='color:#800080; '>;</span>
-25:   <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span><span style='color:#696969; '>//</span><span style='color:#ffffff; background:#808000; '>┴── !!</span><span style='color:#696969; '>подсвечиваются в паре</span>
+22: <span class='pascal-pWord def-Keyword'>type</span>         <span class='pascal-pComment def-Comment def-Syntax'>//</span><span class='def-TODO def-Error'>┌─ !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсвечивается сам по себе, без пары</span>
+23:   TClass1 <span class='pascal-pSymb def-Symbol'>=</span> <span class='pascal-pWord2 def-Keyword'>class</span><span class='pascal-pSymb def-Symbol'>(</span>TMyObject<span class='pascal-pSymb def-Symbol'>)</span>
+24:     <span class='pascal-pWord def-Keyword'>class</span> <span class='pascal-pWord def-Keyword'>function</span> TagSupported<span class='pascal-pSymb def-Symbol'>(</span><span class='pascal-pWord def-Keyword'>const</span> Tag<span class='pascal-pSymb def-Symbol'>:</span> TagType<span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>:</span> <span class='pascal-pType def-TypeKeyword def-Keyword'>Boolean</span><span class='def-SymbolStrong def-Symbol'>;</span>
+25:   <span class='pascal-pWord2 def-Keyword'>end</span><span class='def-SymbolStrong def-Symbol'>;</span><span class='pascal-pComment def-Comment def-Syntax'>//</span><span class='def-TODO def-Error'>┴── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсвечиваются в паре</span>
 26: 
-27: <span style='color:#800000; font-weight:bold; '>function</span> CopyList<span style='color:#808030; '>(</span>List<span style='color:#808030; '>:</span> TList<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> TList<span style='color:#800080; '>;</span>
+27: <span class='pascal-pWord def-Keyword'>function</span> CopyList<span class='pascal-pSymb def-Symbol'>(</span>List<span class='pascal-pSymb def-Symbol'>:</span> TList<span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>:</span> TList<span class='def-SymbolStrong def-Symbol'>;</span>
 28: 
-29: <span style='color:#800000; font-weight:bold; '>implementation</span><span style='color:#696969; '>//&lt;</span><span style='color:#ffffff; background:#808000; '>─── !!</span><span style='color:#696969; '>подсвечивается сам по себе, без пары</span>
+29: <span class='pascal-pWord2 def-Keyword'>implementation</span><span class='pascal-pComment def-Comment def-Syntax'>//&lt;</span><span class='def-TODO def-Error'>─── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсвечивается сам по себе, без пары</span>
 30: 
-31: <span style='color:#800000; font-weight:bold; '>uses</span>
-32:   SysUtils<span style='color:#800080; '>;</span>
+31: <span class='pascal-pWord def-Keyword'>uses</span>
+32:   SysUtils<span class='def-SymbolStrong def-Symbol'>;</span>
 33: 
-34: <span style='color:#800000; font-weight:bold; '>function</span> CopyList<span style='color:#808030; '>(</span>List<span style='color:#808030; '>:</span> TList<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> TList<span style='color:#800080; '>;</span>
-35: <span style='color:#800000; font-weight:bold; '>var</span>
-36:   i<span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Integer</span><span style='color:#800080; '>;</span>
-37: <span style='color:#800000; font-weight:bold; '>begin</span><span style='color:#696969; '>//&lt;───────────────────────────────────────────────────────────────────┐</span>
-38:   <span style='color:#800000; font-weight:bold; '>Result</span> <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> TList<span style='color:#808030; '>.</span>Create<span style='color:#800080; '>;</span>                       <span style='color:#696969; '>//                         │</span>
+34: <span class='pascal-pWord def-Keyword'>function</span> CopyList<span class='pascal-pSymb def-Symbol'>(</span>List<span class='pascal-pSymb def-Symbol'>:</span> TList<span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>:</span> TList<span class='def-SymbolStrong def-Symbol'>;</span>
+35: <span class='pascal-pWord def-Keyword'>var</span>
+36:   i<span class='pascal-pSymb def-Symbol'>:</span> <span class='pascal-pType def-TypeKeyword def-Keyword'>Integer</span><span class='def-SymbolStrong def-Symbol'>;</span>
+37: <span class='pascal-pWord2 def-Keyword'>begin</span><span class='pascal-pComment def-Comment def-Syntax'>//&lt;───────────────────────────────────────────────────────────────────┐</span>
+38:   <span class='pascal-pWord def-Keyword'>Result</span> <span class='pascal-pSymb def-Symbol'>:</span><span class='pascal-pSymb def-Symbol'>=</span> TList<span class='pascal-pSymb def-Symbol'>.</span>Create<span class='def-SymbolStrong def-Symbol'>;</span>                       <span class='pascal-pComment def-Comment def-Syntax'>//                         │</span>
 39: 
 40: 
-41:   <span style='color:#800000; font-weight:bold; '>try</span>
-42:      <span style='color:#800000; font-weight:bold; '>try</span>
-43:      <span style='color:#800000; font-weight:bold; '>except</span>
-44:      <span style='color:#800000; font-weight:bold; '>end</span>
+41:   <span class='pascal-pWord2 def-Keyword'>try</span>
+42:      <span class='pascal-pWord2 def-Keyword'>try</span>
+43:      <span class='pascal-pWord def-Keyword'>except</span>
+44:      <span class='pascal-pWord2 def-Keyword'>end</span>
 45: 
-46:   <span style='color:#800000; font-weight:bold; '>except</span>
-47:   <span style='color:#800000; font-weight:bold; '>end</span>
+46:   <span class='pascal-pWord def-Keyword'>except</span>
+47:   <span class='pascal-pWord2 def-Keyword'>end</span>
 48: 
-49:   <span style='color:#800000; font-weight:bold; '>try</span> <span style='color:#696969; '>//</span><span style='color:#ffffff; background:#808000; '>──────── !!</span><span style='color:#696969; '>подсв. с ─>──────────────────────────────────────┐      │</span>
-50:     <span style='color:#800000; font-weight:bold; '>if</span> List <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#7d0045; '>nil</span> <span style='color:#800000; font-weight:bold; '>then</span>                         <span style='color:#696969; '>//                  │      │</span>
-51:       <span style='color:#800000; font-weight:bold; '>for</span> i <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>to</span> List<span style='color:#808030; '>.</span>Count <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>do</span>           <span style='color:#696969; '>//                  │      │</span>
-52:         <span style='color:#800000; font-weight:bold; '>Result</span><span style='color:#808030; '>.</span>Add<span style='color:#808030; '>(</span>TMyObject<span style='color:#808030; '>.</span>CreateAssign<span style='color:#808030; '>(</span>TMyObject<span style='color:#808030; '>(</span>List<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span><span style='color:#696969; '>//   │      │</span>
-53:   <span style='color:#800000; font-weight:bold; '>except</span>                                        <span style='color:#696969; '>//                  │      │</span>
-54:     <span style='color:#800000; font-weight:bold; '>Result</span><span style='color:#808030; '>.</span>Free<span style='color:#800080; '>;</span>                                <span style='color:#696969; '>//                  │      │</span>
-55:     <span style='color:#800000; font-weight:bold; '>raise</span><span style='color:#800080; '>;</span>                                      <span style='color:#696969; '>//                  │      │</span>
-56:   <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>                                          <span style='color:#696969; '>//                  │      │</span>
-57:   <span style='color:#800000; font-weight:bold; '>Result</span><span style='color:#808030; '>.</span>Capacity <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Result</span><span style='color:#808030; '>.</span>Count<span style='color:#800080; '>;</span>              <span style='color:#696969; '>//                  │      │</span>
-58:   <span style='color:#696969; '>//       </span><span style='color:#ffffff; background:#808000; '>└────────────────┴── !!</span><span style='color:#696969; '> и еще - как убрать подсветку     │      │</span>
-59:   <span style='color:#696969; '>//                   белым с полей и методов объектов и записей?  │      │</span>
-60:   <span style='color:#696969; '>//                   в сишном тексте такого нет...                │      │</span>
-61: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span><span style='color:#696969; '>//&lt;─────────────────────────────────────────────────────────────┘      │</span>
-62: <span style='color:#696969; '>//</span><span style='color:#ffffff; background:#808000; '>└───────────── !!</span><span style='color:#696969; '>подсв. с ─>─────────────────────────────────────────────┘</span>
+49:   <span class='pascal-pWord2 def-Keyword'>try</span> <span class='pascal-pComment def-Comment def-Syntax'>//</span><span class='def-TODO def-Error'>──────── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсв. с ─>──────────────────────────────────────┐      │</span>
+50:     <span class='pascal-pWord def-Keyword'>if</span> List <span class='pascal-pSymb def-Symbol'>&lt;</span><span class='pascal-pSymb def-Symbol'>></span> <span class='pascal-pConst def-Constant def-Keyword'>nil</span> <span class='pascal-pWord def-Keyword'>then</span>                         <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+51:       <span class='pascal-pWord def-Keyword'>for</span> i <span class='pascal-pSymb def-Symbol'>:</span><span class='pascal-pSymb def-Symbol'>=</span> <span class='def-NumberDec def-Number'>0</span> <span class='pascal-pWord def-Keyword'>to</span> List<span class='pascal-pSymb def-Symbol'>.</span>Count <span class='pascal-pSymb def-Symbol'>-</span> <span class='def-NumberDec def-Number'>1</span> <span class='pascal-pWord def-Keyword'>do</span>           <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+52:         <span class='pascal-pWord def-Keyword'>Result</span><span class='pascal-pSymb def-Symbol'>.</span>Add<span class='pascal-pSymb def-Symbol'>(</span>TMyObject<span class='pascal-pSymb def-Symbol'>.</span>CreateAssign<span class='pascal-pSymb def-Symbol'>(</span>TMyObject<span class='pascal-pSymb def-Symbol'>(</span>List<span class='pascal-pSymb def-Symbol'>[</span>i<span class='pascal-pSymb def-Symbol'>]</span><span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span><span class='pascal-pComment def-Comment def-Syntax'>//   │      │</span>
+53:   <span class='pascal-pWord def-Keyword'>except</span>                                        <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+54:     <span class='pascal-pWord def-Keyword'>Result</span><span class='pascal-pSymb def-Symbol'>.</span>Free<span class='def-SymbolStrong def-Symbol'>;</span>                                <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+55:     <span class='pascal-pWord def-Keyword'>raise</span><span class='def-SymbolStrong def-Symbol'>;</span>                                      <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+56:   <span class='pascal-pWord2 def-Keyword'>end</span><span class='def-SymbolStrong def-Symbol'>;</span>                                          <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+57:   <span class='pascal-pWord def-Keyword'>Result</span><span class='pascal-pSymb def-Symbol'>.</span>Capacity <span class='pascal-pSymb def-Symbol'>:</span><span class='pascal-pSymb def-Symbol'>=</span> <span class='pascal-pWord def-Keyword'>Result</span><span class='pascal-pSymb def-Symbol'>.</span>Count<span class='def-SymbolStrong def-Symbol'>;</span>              <span class='pascal-pComment def-Comment def-Syntax'>//                  │      │</span>
+58:   <span class='pascal-pComment def-Comment def-Syntax'>//       </span><span class='def-TODO def-Error'>└────────────────┴── !!</span><span class='pascal-pComment def-Comment def-Syntax'> и еще - как убрать подсветку     │      │</span>
+59:   <span class='pascal-pComment def-Comment def-Syntax'>//                   белым с полей и методов объектов и записей?  │      │</span>
+60:   <span class='pascal-pComment def-Comment def-Syntax'>//                   в сишном тексте такого нет...                │      │</span>
+61: <span class='pascal-pWord2 def-Keyword'>end</span><span class='def-SymbolStrong def-Symbol'>;</span><span class='pascal-pComment def-Comment def-Syntax'>//&lt;─────────────────────────────────────────────────────────────┘      │</span>
+62: <span class='pascal-pComment def-Comment def-Syntax'>//</span><span class='def-TODO def-Error'>└───────────── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсв. с ─>─────────────────────────────────────────────┘</span>
 63: 
-64: <span style='color:#696969; '>{ TClass1 }</span>
+64: <span class='pascal-pComment def-Comment def-Syntax'>{ TClass1 }</span>
 65: 
-66: <span style='color:#696969; '>//┌────&lt;</span><span style='color:#ffffff; background:#808000; '>── !!</span><span style='color:#696969; '>подсв. с ──>─────────────────────────────────────────────┐</span>
-67: <span style='color:#800000; font-weight:bold; '>class</span> <span style='color:#800000; font-weight:bold; '>function</span> TClass1<span style='color:#808030; '>.</span>TagSupported<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>const</span> Tag<span style='color:#808030; '>:</span> TagType<span style='color:#808030; '>)</span><span style='color:#808030; '>:</span> <span style='color:#bb7977; '>Boolean</span><span style='color:#800080; '>;</span> <span style='color:#696969; '>//  │</span>
-68: <span style='color:#800000; font-weight:bold; '>begin</span>                                                             <span style='color:#696969; '>//  │</span>
-69:   <span style='color:#800000; font-weight:bold; '>Result</span> <span style='color:#808030; '>:</span><span style='color:#808030; '>=</span> TagIn<span style='color:#808030; '>(</span>Tag<span style='color:#808030; '>,</span> <span style='color:#808030; '>[</span>TClass1Tag<span style='color:#808030; '>,</span> TClass11Tag<span style='color:#808030; '>]</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>                <span style='color:#696969; '>//  │</span>
-70: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#800080; '>;</span>                                                              <span style='color:#696969; '>//  │</span>
-71:                                                                   <span style='color:#696969; '>//  │</span>
-72: <span style='color:#800000; font-weight:bold; '>initialization</span> <span style='color:#696969; '>//&lt;</span><span style='color:#ffffff; background:#808000; '>──── !!</span><span style='color:#696969; '>вообще не подсвечивается                 //  │</span>
-73:   RegisterClass<span style='color:#808030; '>(</span>TClass1<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>                                         <span style='color:#696969; '>//  │</span>
-74: <span style='color:#800000; font-weight:bold; '>finalization</span> <span style='color:#696969; '>//&lt;</span><span style='color:#ffffff; background:#808000; '>──── !!</span><span style='color:#696969; '>вообще не подсвечивается                   //  │</span>
-75:   UnRegisterClass<span style='color:#808030; '>(</span>TClass1<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>                                       <span style='color:#696969; '>//  │</span>
-76: <span style='color:#800000; font-weight:bold; '>end</span><span style='color:#808030; '>.</span><span style='color:#696969; '>//──&lt;</span><span style='color:#ffffff; background:#808000; '>── !!</span><span style='color:#696969; '>подсв. с ─>─────────────────────────────────────────────┘</span>
+66: <span class='pascal-pComment def-Comment def-Syntax'>//┌────&lt;</span><span class='def-TODO def-Error'>── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсв. с ──>─────────────────────────────────────────────┐</span>
+67: <span class='pascal-pWord def-Keyword'>class</span> <span class='pascal-pWord def-Keyword'>function</span> TClass1<span class='pascal-pSymb def-Symbol'>.</span>TagSupported<span class='pascal-pSymb def-Symbol'>(</span><span class='pascal-pWord def-Keyword'>const</span> Tag<span class='pascal-pSymb def-Symbol'>:</span> TagType<span class='pascal-pSymb def-Symbol'>)</span><span class='pascal-pSymb def-Symbol'>:</span> <span class='pascal-pType def-TypeKeyword def-Keyword'>Boolean</span><span class='def-SymbolStrong def-Symbol'>;</span> <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+68: <span class='pascal-pWord2 def-Keyword'>begin</span>                                                             <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+69:   <span class='pascal-pWord def-Keyword'>Result</span> <span class='pascal-pSymb def-Symbol'>:</span><span class='pascal-pSymb def-Symbol'>=</span> TagIn<span class='pascal-pSymb def-Symbol'>(</span>Tag<span class='pascal-pSymb def-Symbol'>,</span> <span class='pascal-pSymb def-Symbol'>[</span>TClass1Tag<span class='pascal-pSymb def-Symbol'>,</span> TClass11Tag<span class='pascal-pSymb def-Symbol'>]</span><span class='pascal-pSymb def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span>                <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+70: <span class='pascal-pWord2 def-Keyword'>end</span><span class='def-SymbolStrong def-Symbol'>;</span>                                                              <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+71:                                                                   <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+72: <span class='pascal-pWord def-Keyword'>initialization</span> <span class='pascal-pComment def-Comment def-Syntax'>//&lt;</span><span class='def-TODO def-Error'>──── !!</span><span class='pascal-pComment def-Comment def-Syntax'>вообще не подсвечивается                 //  │</span>
+73:   RegisterClass<span class='pascal-pSymb def-Symbol'>(</span>TClass1<span class='pascal-pSymb def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span>                                         <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+74: <span class='pascal-pWord def-Keyword'>finalization</span> <span class='pascal-pComment def-Comment def-Syntax'>//&lt;</span><span class='def-TODO def-Error'>──── !!</span><span class='pascal-pComment def-Comment def-Syntax'>вообще не подсвечивается                   //  │</span>
+75:   UnRegisterClass<span class='pascal-pSymb def-Symbol'>(</span>TClass1<span class='pascal-pSymb def-Symbol'>)</span><span class='def-SymbolStrong def-Symbol'>;</span>                                       <span class='pascal-pComment def-Comment def-Syntax'>//  │</span>
+76: <span class='pascal-pWord2 def-Keyword'>end</span><span class='pascal-pSymb def-Symbol'>.</span><span class='pascal-pComment def-Comment def-Syntax'>//──&lt;</span><span class='def-TODO def-Error'>── !!</span><span class='pascal-pComment def-Comment def-Syntax'>подсв. с ─>─────────────────────────────────────────────┘</span>
 77: 

@@ -11,16 +11,20 @@
 
 <type name="multi-pack.internal">
 	<scheme name="foo">
-		<regexp match="/foo/" region="def:Keyword"/>
-		<!-- !! generate errors in logfile: -->
+		<regexp match="/foo1/" region="def:Keyword"/>
+		<!-- !! multi-pack:Test invisible here -->
+		<regexp match="/foo2/" region="multi-pack:Test"/> 
 		<inherit scheme="multi-pack:bar"/> 
 	</scheme>
 </type>
 
 
 <type name="multi-pack">
+	<region name="Test" parent="def:Var"/>
+	
 	<scheme name="bar">
-		<regexp match="/bar/" region="def:Keyword"/>
+		<regexp match="/bar1/" region="def:Keyword"/>
+		<regexp match="/bar2/" region="Test"/>
 	</scheme>
 	
 	<scheme name="multi-pack">
