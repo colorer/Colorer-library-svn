@@ -1,6 +1,4 @@
 
-#include"stdio.h"
-#include"stdarg.h"
 #include"string.h"
 #include"common/Logging.h"
 #include"unicode/String.h"
@@ -18,10 +16,14 @@ static void file_logger(int level, const char *cname, const char *msg, va_list v
 
   int idx = 0;
 
-  while (log == 0){
+  while (log == 0 && idx < 10){
     char log_name[30];
-    sprintf(log_name, "d:\\trace%d.txt", idx);
-    log = fopen(log_name, "a");
+#ifdef __unix__
+    sprintf(log_name, "/tmp/clr-trace%d.log", idx);
+#else
+    sprintf(log_name, "c:\\clr-trace%d.log", idx);
+#endif
+    log = fopen(log_name, "ab+");
     idx++;
   }
 
@@ -43,6 +45,14 @@ static void console_logger(int level, const char *cname, const char *msg, va_lis
   printf("\n");
 }
 
+
+void colorer_logger_set_target(const char *logfile){
+  if (logfile == 0) return;
+  if (log != 0){
+    fclose(log);
+  }
+  log = fopen(logfile, "ab+");
+}
 
 
 

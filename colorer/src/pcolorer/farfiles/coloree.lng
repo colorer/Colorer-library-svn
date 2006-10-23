@@ -38,7 +38,7 @@
 "Outliner [%s]"
 "Nothing found"
 "Gotcha"
-"Enter, Tab, Ctrl-Up/Down/Left/Right, [a-z:_]"
+"[Ctrl]Enter, Tab, Ctrl-Cursor, [a-z:_]"
 
 "Reloading colorer..."
 "Problem with colorer"

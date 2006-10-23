@@ -32,7 +32,7 @@
 <scheme name="lisp">
 
 <!-- Single line comment -->
-<regexp match="/(;.*)$/" region1="Comment"/>
+<regexp match="/(^|\s)(;.*)$/" region2="Comment"/>
 
 <!-- Multi line comment -->
 <block start="/\#\|/" end="/\|\#/" scheme="Comment" region="Comment" region00="PairStart" region10="PairEnd"/>
@@ -78,7 +78,7 @@
 <regexp match="/\#(\-|\+)[\w-*+]*/" region0="SymbolStrong"/>
 
 <!-- Quoted symbol -->
-<regexp match="/\'[\w-*+]*/" region0="SymbolStrong"/>
+<regexp match="/[\'\`][\w-*+]*/" region0="SymbolStrong"/>
 
 <!-- Constant variables -->
 <keywords ignorecase="yes" region="Constant">

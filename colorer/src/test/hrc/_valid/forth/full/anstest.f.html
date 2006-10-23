@@ -1,77 +1,77 @@
  0: OPTIONAL ANSTEST ANS Test Suite
  1: 
  2: { =====================================================================
- 3: ANS <span style='color:#800000; font-weight:bold; '>Forth</span> Test Suite
+ 3: ANS <span class='forth-forWord def-Keyword'>Forth</span> Test Suite
  4: 
- 5: Copyright (<span style='color:#008c00; '>c</span>) <span style='color:#008c00; '>1998</span>, FORTH, Incorporated
+ 5: Copyright (<span class='forth-forNumb def-Number'>c</span>) <span class='forth-forNumb def-Number'>1998</span>, FORTH, Incorporated
  6: 
- 7: This set <span style='color:#e34adc; '>of</span> tests has been taken from John Hayes' original Core.fr
- 8: Dated Mon, <span style='color:#008c00; '>27</span> Nov <span style='color:#008c00; '>95</span> <span style='color:#008c00; '>13</span>:<span style='color:#008c00; '>10</span>.  We retain the following statement as
+ 7: This set <span class='forth-forResWord def-Label'>of</span> tests has been taken from John Hayes' original Core.fr
+ 8: Dated Mon, <span class='forth-forNumb def-Number'>27</span> Nov <span class='forth-forNumb def-Number'>95</span> <span class='forth-forNumb def-Number'>13</span>:<span class='forth-forNumb def-Number'>10</span>.  We retain the following statement as
  9: required for its use:
 10: 
-11: (<span style='color:#008c00; '>C</span>) <span style='color:#008c00; '>1995</span> JOHNS HOPKINS UNIVERSITY <span style='color:#800000; font-weight:bold; '>/</span> APPLIED PHYSICS LABORATORY
-12: MAY <span style='color:#008c00; '>BE</span> DISTRIBUTED FREELY AS LONG AS THIS COPYRIGHT NOTICE REMAINS.
+11: (<span class='forth-forNumb def-Number'>C</span>) <span class='forth-forNumb def-Number'>1995</span> JOHNS HOPKINS UNIVERSITY <span class='forth-forWord def-Keyword'>/</span> APPLIED PHYSICS LABORATORY
+12: MAY <span class='forth-forNumb def-Number'>BE</span> DISTRIBUTED FREELY AS LONG AS THIS COPYRIGHT NOTICE REMAINS.
 13: 
-14: His last know update was VERSION <span style='color:#008c00; '>1</span>.<span style='color:#008c00; '>2</span>
+14: His last know update was VERSION <span class='forth-forNumb def-Number'>1</span>.<span class='forth-forNumb def-Number'>2</span>
 15: 
-16: This program tests the core <span style='color:#800000; font-weight:bold; '>words</span> <span style='color:#e34adc; '>of</span> an ANS <span style='color:#800000; font-weight:bold; '>Forth</span> system.
-17: The program assumes <span style='color:#008c00; '>a</span> two's complement implementation where
-18: the range <span style='color:#e34adc; '>of</span> signed numbers <span style='color:#800000; font-weight:bold; '>is</span> -<span style='color:#008c00; '>2</span>^(n-<span style='color:#008c00; '>1</span>) ... <span style='color:#008c00; '>2</span>^(n-<span style='color:#008c00; '>1</span>)-<span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>and</span>
-19: the range <span style='color:#e34adc; '>of</span> unsigned numbers <span style='color:#800000; font-weight:bold; '>is</span> <span style='color:#008c00; '>0</span> ... <span style='color:#008c00; '>2</span>^(n)-<span style='color:#008c00; '>1</span>.
+16: This program tests the core <span class='forth-forWord def-Keyword'>words</span> <span class='forth-forResWord def-Label'>of</span> an ANS <span class='forth-forWord def-Keyword'>Forth</span> system.
+17: The program assumes <span class='forth-forNumb def-Number'>a</span> two's complement implementation where
+18: the range <span class='forth-forResWord def-Label'>of</span> signed numbers <span class='forth-forWord def-Keyword'>is</span> -<span class='forth-forNumb def-Number'>2</span>^(n-<span class='forth-forNumb def-Number'>1</span>) ... <span class='forth-forNumb def-Number'>2</span>^(n-<span class='forth-forNumb def-Number'>1</span>)-<span class='forth-forNumb def-Number'>1</span> <span class='forth-forWord def-Keyword'>and</span>
+19: the range <span class='forth-forResWord def-Label'>of</span> unsigned numbers <span class='forth-forWord def-Keyword'>is</span> <span class='forth-forNumb def-Number'>0</span> ... <span class='forth-forNumb def-Number'>2</span>^(n)-<span class='forth-forNumb def-Number'>1</span>.
 20: 
-21: I haven't figured out how <span style='color:#800000; font-weight:bold; '>to</span> test KEY, QUIT, ABORT, <span style='color:#800000; font-weight:bold; '>or</span><span style='color:#0000e6; '> ABORT"...</span>
-22: <span style='color:#0000e6; '>I also haven't thought of a way to test ENVIRONMENT?...</span>
-23: <span style='color:#0000e6; '></span>
-24: <span style='color:#0000e6; '>Dependencies: EMPTY FORTH DEFINITIONS TESTING</span>
-25: <span style='color:#0000e6; '></span>
-26: <span style='color:#0000e6; '>Exports: VERBOSE</span>
-27: <span style='color:#0000e6; '></span>
-28: <span style='color:#0000e6; '>===================================================================== }</span>
-29: <span style='color:#0000e6; '></span>
-30: <span style='color:#0000e6; '>( ---------------------------------------------------------------------</span>
-31: <span style='color:#0000e6; '>Test control</span>
-32: <span style='color:#0000e6; '></span>
-33: <span style='color:#0000e6; '></span>
-34: <span style='color:#0000e6; '></span>
-35: <span style='color:#0000e6; '>VERBOSE set to true for more verbose output; this may allow you to tell</span>
-36: <span style='color:#0000e6; '>which test caused your system to hang.</span>
-37: <span style='color:#0000e6; '></span>
-38: <span style='color:#0000e6; '>--------------------------------------------------------------------- )</span>
-39: <span style='color:#0000e6; '></span>
-40: <span style='color:#0000e6; '>EMPTY  FORTH DEFINITIONS  CR</span>
-41: <span style='color:#0000e6; '></span>
-42: <span style='color:#0000e6; '></span>
-43: <span style='color:#0000e6; '>-? VARIABLE VERBOSE   TRUE VERBOSE !</span>
-44: <span style='color:#0000e6; '></span>
-45: <span style='color:#0000e6; '>INCLUDE Tester</span>
-46: <span style='color:#0000e6; '></span>
-47: <span style='color:#0000e6; '></span>
-48: <span style='color:#0000e6; '>TESTING CORE WORDS</span>
-49: <span style='color:#0000e6; '></span>
-50: <span style='color:#0000e6; '>INCLUDE Basics</span>
-51: <span style='color:#0000e6; '>INCLUDE Booleans</span>
-52: <span style='color:#0000e6; '>INCLUDE Shifts</span>
-53: <span style='color:#0000e6; '>INCLUDE Compares</span>
-54: <span style='color:#0000e6; '>INCLUDE DataStack</span>
-55: <span style='color:#0000e6; '>INCLUDE ReturnStack</span>
-56: <span style='color:#0000e6; '>INCLUDE AddSubtract</span>
-57: <span style='color:#0000e6; '>INCLUDE Multiply</span>
-58: <span style='color:#0000e6; '>INCLUDE Divide</span>
-59: <span style='color:#0000e6; '>INCLUDE Dictionary</span>
-60: <span style='color:#0000e6; '>INCLUDE Chars</span>
-61: <span style='color:#0000e6; '>INCLUDE Compiler</span>
-62: <span style='color:#0000e6; '>INCLUDE Structures</span>
-63: <span style='color:#0000e6; '>INCLUDE Loops</span>
-64: <span style='color:#0000e6; '>INCLUDE Defining</span>
-65: <span style='color:#0000e6; '>INCLUDE Evaluate</span>
-66: <span style='color:#0000e6; '>INCLUDE Source</span>
-67: <span style='color:#0000e6; '>INCLUDE Numbers</span>
-68: <span style='color:#0000e6; '>INCLUDE FillMove</span>
-69: <span style='color:#0000e6; '>INCLUDE Output</span>
-70: <span style='color:#0000e6; '>INCLUDE Input</span>
-71: <span style='color:#0000e6; '>INCLUDE Search</span>
-72: <span style='color:#0000e6; '>INCLUDE Alu</span>
-73: <span style='color:#0000e6; '></span>
-74: <span style='color:#0000e6; '>0 TO INITIAL-DEPTH \ Remove depth allowance</span>
-75: <span style='color:#0000e6; '></span>
-76: <span style='color:#0000e6; '></span>
+21: I haven't figured out how <span class='forth-forWord def-Keyword'>to</span> test KEY, QUIT, ABORT, <span class='forth-forWord def-Keyword'>or</span><span class='forth-forString def-String'> ABORT"...</span>
+22: <span class='forth-forString def-String'>I also haven't thought of a way to test ENVIRONMENT?...</span>
+23: <span class='forth-forString def-String'></span>
+24: <span class='forth-forString def-String'>Dependencies: EMPTY FORTH DEFINITIONS TESTING</span>
+25: <span class='forth-forString def-String'></span>
+26: <span class='forth-forString def-String'>Exports: VERBOSE</span>
+27: <span class='forth-forString def-String'></span>
+28: <span class='forth-forString def-String'>===================================================================== }</span>
+29: <span class='forth-forString def-String'></span>
+30: <span class='forth-forString def-String'>( ---------------------------------------------------------------------</span>
+31: <span class='forth-forString def-String'>Test control</span>
+32: <span class='forth-forString def-String'></span>
+33: <span class='forth-forString def-String'></span>
+34: <span class='forth-forString def-String'></span>
+35: <span class='forth-forString def-String'>VERBOSE set to true for more verbose output; this may allow you to tell</span>
+36: <span class='forth-forString def-String'>which test caused your system to hang.</span>
+37: <span class='forth-forString def-String'></span>
+38: <span class='forth-forString def-String'>--------------------------------------------------------------------- )</span>
+39: <span class='forth-forString def-String'></span>
+40: <span class='forth-forString def-String'>EMPTY  FORTH DEFINITIONS  CR</span>
+41: <span class='forth-forString def-String'></span>
+42: <span class='forth-forString def-String'></span>
+43: <span class='forth-forString def-String'>-? VARIABLE VERBOSE   TRUE VERBOSE !</span>
+44: <span class='forth-forString def-String'></span>
+45: <span class='forth-forString def-String'>INCLUDE Tester</span>
+46: <span class='forth-forString def-String'></span>
+47: <span class='forth-forString def-String'></span>
+48: <span class='forth-forString def-String'>TESTING CORE WORDS</span>
+49: <span class='forth-forString def-String'></span>
+50: <span class='forth-forString def-String'>INCLUDE Basics</span>
+51: <span class='forth-forString def-String'>INCLUDE Booleans</span>
+52: <span class='forth-forString def-String'>INCLUDE Shifts</span>
+53: <span class='forth-forString def-String'>INCLUDE Compares</span>
+54: <span class='forth-forString def-String'>INCLUDE DataStack</span>
+55: <span class='forth-forString def-String'>INCLUDE ReturnStack</span>
+56: <span class='forth-forString def-String'>INCLUDE AddSubtract</span>
+57: <span class='forth-forString def-String'>INCLUDE Multiply</span>
+58: <span class='forth-forString def-String'>INCLUDE Divide</span>
+59: <span class='forth-forString def-String'>INCLUDE Dictionary</span>
+60: <span class='forth-forString def-String'>INCLUDE Chars</span>
+61: <span class='forth-forString def-String'>INCLUDE Compiler</span>
+62: <span class='forth-forString def-String'>INCLUDE Structures</span>
+63: <span class='forth-forString def-String'>INCLUDE Loops</span>
+64: <span class='forth-forString def-String'>INCLUDE Defining</span>
+65: <span class='forth-forString def-String'>INCLUDE Evaluate</span>
+66: <span class='forth-forString def-String'>INCLUDE Source</span>
+67: <span class='forth-forString def-String'>INCLUDE Numbers</span>
+68: <span class='forth-forString def-String'>INCLUDE FillMove</span>
+69: <span class='forth-forString def-String'>INCLUDE Output</span>
+70: <span class='forth-forString def-String'>INCLUDE Input</span>
+71: <span class='forth-forString def-String'>INCLUDE Search</span>
+72: <span class='forth-forString def-String'>INCLUDE Alu</span>
+73: <span class='forth-forString def-String'></span>
+74: <span class='forth-forString def-String'>0 TO INITIAL-DEPTH \ Remove depth allowance</span>
+75: <span class='forth-forString def-String'></span>
+76: <span class='forth-forString def-String'></span>

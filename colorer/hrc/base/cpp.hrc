@@ -148,6 +148,7 @@
    <word name="operator"/>
    <word name="or"/>
    <word name="or_eq"/>
+   <word name="offsetof"/>
    <word name="private"/>
    <word name="protected"/>
    <word name="public"/>

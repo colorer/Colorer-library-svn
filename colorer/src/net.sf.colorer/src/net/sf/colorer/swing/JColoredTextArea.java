@@ -11,7 +11,6 @@ import net.sf.colorer.FileType;
 import net.sf.colorer.LineSource;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.editor.BaseEditor;
-import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.BaseEditorNative;
 
@@ -25,6 +24,8 @@ import net.sf.colorer.impl.BaseEditorNative;
  */
 public class JColoredTextArea extends JTextArea{
 
+  private static final long serialVersionUID = -1316654352760531864L;
+    
   private Hashtable colorsHash = new Hashtable();
   private BaseEditor baseEditor;
 

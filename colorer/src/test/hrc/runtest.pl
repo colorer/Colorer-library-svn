@@ -5,9 +5,11 @@
 #
 
 #$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer";
+$colorer  = "colorer -c D:\\projects\\colorer\\catalog.xml";
 
 $diff  = 'diff -U 1 -bB';
+
+$hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
 
 #%modes = (
 #  full  =>   ".",
@@ -50,7 +52,13 @@ $timeStart = time();
 unlink "$currentDir/fails.html";
 
 open FAILS, ">$currentDir/fails.html";
-print FAILS "<pre>\n";
+print FAILS <<"FL";
+<html>
+<head>
+	<link href="../../../../hrd/css/$hrd.css" rel="stylesheet" type="text/css"/>
+</head>
+<body><pre>
+FL
 close FAILS;
 
 foreach (@retlist){
@@ -65,12 +73,13 @@ foreach (@retlist){
   close FAILS;
   checkDir($currentDir, $_);
   
-  $cres = system "$colorer -h \"$_\" -dc -dh -ln -o \"$fname.html\"";
+  $cres = system "$colorer -ht \"$_\" -dc -dh -ln -o \"$fname.html\"";
 
   $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
 
   if ($cres != 0 or $res != 0 or !-r "$fname.html"){
     #print "failed: $cres, $res, ".(-r "$fname.html")."\n";
+    $failed .= "$_<br/>";
     $testFailed++;
   }else{
   }
@@ -87,6 +96,7 @@ print $result;
 
 open FAILS, ">>$currentDir/fails.html";
 print FAILS "</pre></pre></pre><h2>$result</h2>";
+print FAILS "<h2>Failed tests</h2><br/>$failed";
 close FAILS;
 
 exit;

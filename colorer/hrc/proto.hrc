@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding='Windows-1251'?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY php-proto  SYSTEM "php-prot.ent.hrc">
+<!-- include -->
+<!ENTITY ini-protos  SYSTEM "ini.ent.hrc">
+<!ENTITY msg-protos  SYSTEM "msg.ent.hrc">
+<!-- auto -->
+<!ENTITY php-proto-gen  SYSTEM "php-prot.ent.hrc">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +22,7 @@
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
     <parameters>
+      <param name="ansi-defines" value="true" description="Use ANSI C standart library keywords"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
       <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
@@ -145,7 +150,7 @@
     <parameters>
       <param name="posix-re" value="false" description='Use eregs highlightning'/>
       <param name="include-base-consts"   value="true" description='PHP Predefined Constants'/>
-      &php-proto;
+      &php-proto-gen;
     </parameters>
   </prototype>
 
@@ -220,7 +225,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml)$/i</filename>
+    <filename>/\.(xml|gi2|gpr)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
   </prototype>
@@ -272,6 +277,17 @@
     <location link="xml/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
   </prototype>
+  
+  
+  <package name="wsdl-soap" description="wsdl soap binding" targetNamespace="http://schemas.xmlsoap.org/wsdl/soap/">
+    <location link="xml/wsdl-soap.hrc"/>
+  </package>
+  <prototype name="wsdl" group="xml" description="wsdl 1.1" targetNamespace="http://schemas.xmlsoap.org/wsdl/">
+    <location link="xml/wsdl.hrc"/>
+    <filename>/\.wsdl$/ix</filename>
+  </prototype>
+
+  
 
   <!--  database languages  -->
   <prototype name="clarion" group="database" description="Clarion">
@@ -307,18 +323,20 @@
   </prototype>
 
   <!--  scripts  -->
+  &ini-protos;
+  
   <prototype name="Batch" group="scripts" description="Batch/Config.sys/NTcmd">
     <location link="scripts/batch.hrc"/>
     <filename>/\.(Cmd|Bat|nt|btm|sys)$/i</filename>
   </prototype>
-  <prototype name="shell" group="scripts" description="sh/ksh/bash script">
-    <location link="scripts/sh.hrc"/>
-    <filename>/\.(sh)$/i</filename>
-    <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
-  </prototype>
   <prototype name="apache" group="scripts" description="Apache httpd.conf">
     <location link="scripts/apache.hrc"/>
     <filename>/(httpd\.conf|srm\.conf|access\.conf|\.htaccess|apache\.conf)$/i</filename>
+  </prototype>
+  <prototype name="shell" group="scripts" description="sh/ksh/bash script">
+    <location link="scripts/sh.hrc"/>
+    <filename>/\.(sh)$|^\./i</filename>
+    <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
   <prototype name="avisynth" group="scripts" description="AviSynth">
     <location link="scripts/avisynth.hrc"/>
@@ -367,6 +385,16 @@
     <location link="scripts/dfm.hrc"/>
     <filename>/\.dfm$/i</filename>
   </prototype>
+  <prototype name="pnuts" group="scripts" description="Java: Pnuts">
+    <location link="scripts/pnuts.hrc"/>
+    <filename>/\.(pnut)$/i</filename>
+    <parameters>
+      <param name="pnuts-modules" value="true" description="Use some common Pnuts module function names"/>
+      <param name="j2se-classes" value="true" description="Use some common used J2SE class names"/>
+      <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
+      <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
+    </parameters>
+  </prototype>
   <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
     <location link="scripts/javacc.hrc"/>
     <filename>/\.(jjt?)$/i</filename>
@@ -381,23 +409,22 @@
   </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
-    <filename>/\.(l|lex)+$/i</filename>
+    <filename>/\.(l|f?lex)+$/i</filename>
   </prototype>
   <prototype name="yacc" group="scripts" description="YACC">
     <location link="scripts/yacc.hrc"/>
     <filename>/\.y+$/i</filename>
   </prototype>
+  
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|ds(p|w)|bp(k|r|g)$)/ix</filename>
-    <firstline>/Microsoft Developer Studio Project File/i</firstline>
-    <firstline>/^\!if/i</firstline>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
+    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
+    <firstline>/^\!if/i</firstline-->
     <firstline>/makefile/s</firstline>
-  </prototype>
-  <prototype name="regedit" group="scripts" description="Regedit">
-    <location link="scripts/reg.hrc"/>
-    <filename>/\.(reg)$/i</filename>
-    <firstline>/^\s*(REGEDIT4|FARREG\d\d|Windows Registry Editor Version \d\.\d\d)\s*$/</firstline>
+    <parameters>
+      <param name="gnu" value="true" description="use GNU make only"/>
+    </parameters>
   </prototype>
   <prototype name="resources" group="scripts" description="Resources">
     <location link="scripts/resrc.hrc"/>
@@ -518,6 +545,7 @@
   <prototype name="ruby" group="rare" description="Ruby">
     <location link="rare/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/Rakefile$/i</filename>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
@@ -548,6 +576,10 @@
     <location link="rare/vhdl.hrc"/>
     <filename>/\.vhdl?$/i</filename>
   </prototype>
+ <prototype name="ahdl" group="rare" description="AHDL">
+   <location link="rare/ahdl.hrc"/>
+   <filename>/\.(tdf|tdo|ahdl)$/i</filename>
+ </prototype>
   <prototype name="z80" group="rare" description="z80asm">
     <location link="rare/z80.hrc"/>
     <filename>/\.za$/i</filename>
@@ -566,8 +598,9 @@
     <firstline>/^\s*;/</firstline>
   </prototype>
 
-
+   
   <!--  other types  -->
+  &msg-protos;
   <prototype name="filesbbs" group="other" description="files.bbs">
     <location link="misc/filesbbs.hrc"/>
     <filename>/(files\.bbs|descript\.ion|file_id.diz)/i</filename>
@@ -579,15 +612,9 @@
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
   </prototype>
-  <prototype name="messages" group="other" description="message">
-    <location link="misc/messages.hrc"/>
-    <filename>/\.(msg|eml|pkt|pms|nws)$/i</filename>
-    <firstline>/^FROM/si</firstline>
-    <firstline>/\%start\%/s</firstline>
-  </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
-    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install$)/i</filename>
+    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install*|*ChangeLog*|AUTHORS|COPYING|FAQ|TODO$)/i</filename>
     <filename>/\.spo/ix</filename>
   </prototype>
 
@@ -622,6 +649,9 @@
   <package name="far" description="FAR Manager common expressions">
     <location link="lib/far.hrc"/>
   </package>
+  <package name="msg" description="message package">
+    <location link="lib/message.hrc"/>
+  </package>
 
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
@@ -645,6 +675,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

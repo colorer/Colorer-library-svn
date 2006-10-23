@@ -51,15 +51,17 @@ for($i = 0; $i < count($list); $i++){
   </select>
   <h3>Coloring style:</h3>
   <select name="hrd_color">
-    <option <?=($hrd_color == 'default')?"selected":""?> value='default'>white</option>
-    <option <?=($hrd_color == 'navy')?"selected":""?> value='navy'>navy</option>
-    <option <?=($hrd_color == 'black')?"selected":""?> value='black'>black</option>
-    <option <?=($hrd_color == 'neo')?"selected":""?> value='neo'>neo</option>
-    <option <?=($hrd_color == 'eclipse')?"selected":""?> value='eclipse'>eclipse</option>
+    <option <?=($hrd_color == 'default')?"selected":""?> value='default'>White (crimsoned)</option>
+    <option <?=($hrd_color == 'navy')?"selected":""?> value='navy'>Navy (seashore)</option>
+    <option <?=($hrd_color == 'eclipse')?"selected":""?> value='eclipse'>A'la Eclipse (minimal)</option>
+    <option <?=($hrd_color == 'neo')?"selected":""?> value='neo'>Neo (and Morpheus)</option>
+    <option <?=($hrd_color == 'black')?"selected":""?> value='black'>Black (scarlet)</option>
+    <option <?=($hrd_color == 'grayscale')?"selected":""?> value='grayscale'>Grayscale (colour neutral)</option>
+    <option <?=($hrd_color == 'mirror')?"selected":""?> value='mirror'>Blue a'la NC</option>
+    <option <?=($hrd_color == 'mirice')?"selected":""?> value='mirice'>Ice Mirror</option>
     <option <?=($hrd_color == 'fmx')?"selected":""?> value='fmx'>FMX</option>
-    <option <?=($hrd_color == 'hs')?"selected":""?> value='hs'>HomeSite</option>
-    <option <?=($hrd_color == 'bred3')?"selected":""?> value='bred3'>Bred3</option>
-    <option <?=($hrd_color == 'grayscale')?"selected":""?> value='grayscale'>grayscale</option>
+    <option <?=($hrd_color == 'hs')?"selected":""?> value='hs'>A'la HomeSite</option>
+    <option <?=($hrd_color == 'bred3')?"selected":""?> value='bred3'>Bred3 colors</option>
     <option <?=($hrd_color == 'tags')?"selected":""?> value='tags'>html tags</option>
     <option <?=($hrd_color == 'tokens')?"selected":""?> value='tokens'>tokenize</option>
   </select>

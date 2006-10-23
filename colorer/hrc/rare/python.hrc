@@ -112,11 +112,12 @@ With help of:
             <word name="LookupError"/>
             <word name="MemoryError"/>
             <word name="NameError"/>
-            <word name="NotImplementeError"/>
+            <word name="NotImplementedError"/>
+            <word name="NotImplemented"/>
             <word name="OSError"/>
             <word name="OverflowError"/>
             <word name="RuntimeError"/>
-            <word name="StandarError"/>
+            <word name="StandardError"/>
             <word name="StopIteration"/>
             <word name="SyntaxError"/>
             <word name="SystemError"/>
@@ -232,6 +233,7 @@ With help of:
             <word name="dir"/>
             <word name="divmod"/>
             <word name="eval"/>
+            <word name="enumerate"/>
             <word name="execfile"/>
             <word name="exit"/>
             <word name="filter"/>

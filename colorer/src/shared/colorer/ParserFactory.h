@@ -27,12 +27,9 @@
  *   - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
  *
  * - unix/macos systems:
- *   - ./catalog.xml
- *   - ../catalog.xml
- *   - ../../catalog.xml
  *   - \$COLORER5CATALOG
- *   - \$HOME.colorer5catalog
- *   - \$HOMEPATH.colorer5catalog
+ *   - \$HOME/.colorer5catalog
+ *   - \$HOMEPATH/.colorer5catalog
  *   - /usr/share/colorer/catalog.xml
  *   - /usr/local/share/colorer/catalog.xml
  *

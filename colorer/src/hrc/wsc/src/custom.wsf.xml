@@ -2,7 +2,7 @@
 
 <custom xmlns="uri:colorer:custom">
 
-<custom-type targetNamespace="">
+<custom-type targetNamespace="uri:wsf">
 	<prefix>wsf</prefix>
 	<empty-prefix/>
 	

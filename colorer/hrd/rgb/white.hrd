@@ -44,7 +44,7 @@
   <assign name="def:Function"/>
   <assign name="def:Register" fore="#000080"/>
   <assign name="def:Constant" fore="#7d0045"/>
-  <assign name="def:VarStrong" fore="#797997"/>
+  <assign name="def:Var" fore="#797997"/>
   <assign name="def:VarStrong" fore="#007997"/>
   <assign name="def:Identifier" fore="#005fd2"/>
   <assign name="def:BooleanConstant" fore="#0f4d75"/>

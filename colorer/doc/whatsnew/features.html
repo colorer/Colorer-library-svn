@@ -13,12 +13,13 @@
 <h1>Colorer-take5 Library Features</h1>
 
   <ul>
-    <li>Colorer supports more than hundred programming languages, scripts and markups.</li>
+    <li>Colorer-take5 supports more than hundred programming languages, scripts and markups.</li>
     <li>Uses powerful and flexible HRC syntax description
-        language, based on regular expressions and scheme (context)
-        structure.</li>
-    <li>Colorer can be easily integrated into any target application.</li>
-
+        language, based on regular expressions and scheme (context) structure.</li>
+    <li>Colorer library can be easily integrated into any target application.</li>
+    <li>Java API available, C-based API can easily be adopted.</li>
+    <li>End user applications for <a href="../eclipsecolorer/">Eclipse platform</a>,
+        <a href="../farplugin.html">FAR Manager</a> and <a href="../mc.html">Midnight Commander</a> shells.</li>
     <li>Unicode support: UTF-* support, single-byte encodings support.</li>
   </ul>
 
@@ -30,64 +31,19 @@
       <li>Separate type namespaces.</li>
       <li>Free linking between schemas (forward inheritance and switch references).</li>
       <li>HRC Region information extension, region inheritance tree, transparent HRC linking.</li>
+      <li>All Colorer applications uses single repository referencing from <code>catalog.xml</code> file.</li>
+      <li>Global library logging and tracing.</li>
       </ul>
     </li>
   </ul>
 
-  <h2>HRC repository configuration</h2>
+  <h2>HRD styles</h2>
   <ul>
-    <li>All Colorer applications uses repository in <code>catalog.xml</code> file.</li>
-    <li>Automatic catalog.xml searching with environment variables and standard locations.</li>
-    <li>Multiple HRC reading sources, directory HRC source.</li>
-    <li>Possibility of global module logging.</li>
-    <li>Different input data sources: File stream, Zip stream, Http stream (win32 only).</li>
+    <li>HRD style files is a universal format to customize visual appearance of colorezed source code.</li>
+    <li>For different platform capabilities there could be different supporting HRD styles.</li>
+    <li>HRD styles provides library with an content-presentation separation layer.</li>
   </ul>
-
-<h1>Eclipse Colorer</h1>
-
-  <ul>
-    <li>Powerful and flexible outliner for all common languages.</li>
-    <li>Errors list could be showed in outline view.</li>
-    <li>Shortcuts for pairs matching.</li>
-    <li>Replace tabs with spaces option.</li>
-    <li>Soft linebreakes option.</li>
-    <li>Colored sources generation into HTML files.</li>
-  </ul>
-
-
-<h1>Colorer.exe</h1>
-
-  <ul>
-   <li>Console files viewer with unicode support (win32).</li>
-   <li>Colorized HTML output from rgb HRD color schemas.</li>
-   <li>Tokenizer output mode for usage with CSS styles.</li>
-   <li>Simple file forward with encoding conversion.</li>
-   <li>Extended formatting properties: bold, italic, underline. Link references definitions (doc-links).</li>
-  </ul>
-
-<h1>FAR Plugin</h1>
- <ul>
-  <li>Top level highlight caching, parse on request.</li>
-  <li><strong>Latest features:</strong></li>
-  <li>Color schemes dialog selection.</li>
-  <li>File Encoding selection.</li>
-  <li>Prototype parameters handling - default-fore, default-back.
-      With this numeric properties you can change default text and background
-      color in any file type.
-  </li>
-  <li>If exception is ocurred while text processing, colorer stops
-      it's job and disables any further text coloring.</li>
-  <li>Paired constructions are searched on all the text.</li>
-  <li>FAR command line prefix 'clr' allows to run internal colorer's
-      viewer and to view files with syntax highlighting.</li>
-  <li>Works with outlined text structure (functions and errors list at now).</li>
-  <li>Structured presentation of created outliner.
-      All elements are displayed in tree, also, for each element,
-      prefix-char is shown.
-      You can collapse or extend tree with <code>Ctrl-Left/Right</code>.
-  </li>
-
- </ul>
+  
 
 </body>
 </html>

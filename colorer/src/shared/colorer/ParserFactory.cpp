@@ -8,12 +8,19 @@
 #include<windows.h>
 #endif
 
+#include<common/Logging.h>
+
 #include<colorer/ParserFactory.h>
 #include<colorer/viewer/TextLinesStore.h>
 #include<colorer/handlers/DefaultErrorHandler.h>
 #include<colorer/handlers/FileErrorHandler.h>
 #include<colorer/parsers/HRCParserImpl.h>
 #include<colorer/parsers/TextParserImpl.h>
+
+#ifndef __TIMESTAMP__
+#define __TIMESTAMP__ "28 May 2006"
+#endif
+
 
 void ParserFactory::init()
 {
@@ -44,7 +51,8 @@ void ParserFactory::init()
       if (logLocation != null){
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
         try{
-          fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF16, false);
+          fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);
+          colorer_logger_set_target(dfis->getLocation()->getChars());
         }catch(Exception &e){
           fileErrorHandler = null;
         };
@@ -60,10 +68,10 @@ void ParserFactory::init()
         if (loc->getNodeType() == Node::ELEMENT_NODE &&
             *loc->getNodeName() == "location"){
           hrcLocations.addElement(((Element*)loc)->getAttribute(DString("link")));
-        };
+        }
         loc = loc->getNextSibling();
-      };
-    };
+      }
+    }
     // hrd locations
     if (elem->getNodeType() == Node::ELEMENT_NODE && *elem->getNodeName() == "hrd-sets"){
       Node *hrd = elem->getFirstChild();
@@ -116,11 +124,6 @@ String *ParserFactory::searchPath()
   TextLinesStore tls;
 
 
-#ifdef __unix__
-  paths.addElement(new SString("./catalog.xml"));
-  paths.addElement(new SString("../catalog.xml"));
-  paths.addElement(new SString("../../catalog.xml"));
-#endif
 #ifdef _WIN32
   // image_path/  image_path/..  image_path/../..
   char cname[256];
@@ -219,9 +222,6 @@ ParserFactory::~ParserFactory(){
   delete fileErrorHandler;
 };
 
-#ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "28.08.2005"
-#endif
 const char *ParserFactory::getVersion(){
   return "Colorer-take5 Library be5 "__TIMESTAMP__;
 };
@@ -342,7 +342,14 @@ StyledHRDMapper *ParserFactory::createStyledMapper(const String *classID, const 
 
   Vector<const String*> *hrdLocV = null;
   if (nameID == null)
-    hrdLocV = hrdClass->get(&DString("default"));
+  {
+    char *hrd = getenv("COLORER5HRD");
+    hrdLocV = (hrd) ? hrdClass->get(&DString(hrd)) : hrdClass->get(&DString("default"));
+    if(hrdLocV == null)
+    {
+      hrdLocV = hrdClass->get(&DString("default"));
+    }
+  }
   else
     hrdLocV = hrdClass->get(nameID);
   if (hrdLocV == null)
