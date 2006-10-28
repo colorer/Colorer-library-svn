@@ -430,6 +430,10 @@
     <location link="scripts/resrc.hrc"/>
     <filename>/\.(rc|dlg)$/i</filename>
   </prototype>
+  <prototype name="rtf" group="scripts" description="RTF text">
+    <location link="scripts/rtf.hrc"/>
+    <filename>/\.rtf$/i</filename>
+  </prototype>
   <prototype name="TeX" group="scripts" description="TeX">
     <location link="scripts/tex.hrc"/>
     <filename>/\.(tex|cls|sty|ltx|ltr|dtx)$/i</filename>

@@ -33,11 +33,6 @@
     <location link="types/lss.hrc"/>
     <filename>/\.lss$/i</filename>
   </prototype>
-  <prototype name="rtf" group="scripts.rare" description="RTF text">
-    <location link="types/rtf.hrc"/>
-    <filename>/\.rtf$/i</filename>
-  </prototype>
-
   <prototype name="kixtart" group="scripts.rare" description="Kixtart">
     <location link="types/kixtart.hrc"/>
     <filename>/\.(kix)+$/i</filename>
