@@ -39,7 +39,7 @@ public:
    * Default constructor.
    * Clears all fields
    */
-  PairMatch::PairMatch(LineRegion *startRef, int lineNo, bool topPosition){
+  PairMatch(LineRegion *startRef, int lineNo, bool topPosition){
     start = end = null;
     this->startRef = startRef;
     sline = lineNo;
@@ -52,7 +52,7 @@ public:
     eline = -1;
   }
 
-  virtual PairMatch::~PairMatch(){
+  virtual ~PairMatch(){
     delete start;
     delete end;
   }
