@@ -62,7 +62,7 @@ public:
     return *this;
   };
   /** Clears all fields */
-  LineRegion::LineRegion(){
+  LineRegion(){
     next = prev = null;
     start = end = 0;
     scheme = null;
@@ -73,12 +73,12 @@ public:
   /** Copy constructor.
       Do not copies next and prev pointers.
   */
-  LineRegion::LineRegion(const LineRegion &lr){
+  LineRegion(const LineRegion &lr){
     //_next = lr._next;
     //_prev = lr._prev;
     operator=(lr);
   };
-  LineRegion::~LineRegion(){
+  ~LineRegion(){
     delete rdef;
   };
 private:
