@@ -469,14 +469,13 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         delete next;
         continue;
       };
-      String *entMatchParam = useEntities(matchParam);
+      next->start_re = useEntities(matchParam);
       next->lowPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       next->type = SNT_RE;
-      next->start = new CRegExp(entMatchParam);
+      next->start = new CRegExp(next->start_re);
       next->start->setPositionMoves(false);
       if (!next->start || !next->start->isOk())
-        if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+entMatchParam+"' in scheme '"+scheme->schemeName+"'");
-      delete entMatchParam;
+        if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+next->start_re+"' in scheme '"+scheme->schemeName+"'");
       next->end = 0;
       
       loadRegions(next, (Element*)tmpel, true);

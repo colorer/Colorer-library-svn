@@ -114,6 +114,8 @@ public:
    */
   void genTokenOutput();
 
+  void compile();
+
 private:
   bool copyrightHeader;
   bool htmlEscaping;

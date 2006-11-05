@@ -103,6 +103,7 @@ public:
   const Region* regione[REGIONS_NUM];
   const Region* regionen[NAMED_REGIONS_NUM];
   CRegExp *start, *end;
+  String *start_re, *end_re;
   bool innerRegion, lowPriority, lowContentPriority;
 
 #define CNAME "SchemeNode"
@@ -119,10 +120,11 @@ public:
 */
 class SchemeImpl : public Scheme{
   friend class HRCParserImpl;
+  friend class HRCCompiler;
   friend class TextParserImpl;
   friend class ParseState;
 public:
-  const String *getName() const { return schemeName; };
+  String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
 
 #define CNAME "SchemeImpl"

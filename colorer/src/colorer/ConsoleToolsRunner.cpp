@@ -6,7 +6,9 @@
 /** Internal run action type */
 enum { JT_NOTHING, JT_REGTEST, JT_PROFILE,
        JT_LIST_LOAD, JT_LIST_TYPES, JT_LIST_TYPE_NAMES,
-       JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD } jobType;
+       JT_VIEW, JT_GEN, JT_GEN_TOKENS, JT_FORWARD,
+       JT_COMPILE
+     } jobType;
 int profileLoops = 1;
 
 /** Reads and parse command line */
@@ -50,6 +52,11 @@ void init(ConsoleTools &ct, int argc, char*argv[]){
     if (argv[i][1] == 'd' && argv[i][2] == 'b') { ct.setBomOutput(false); continue; }
     if (argv[i][1] == 'd' && argv[i][2] == 's') { ct.setHtmlEscaping(false); continue; }
     if (argv[i][1] == 'd' && argv[i][2] == 'h') { ct.setHtmlWrapping(false); continue; }
+
+    if (argv[i][1] == 'c' && argv[i][2] == 'o' && argv[i][3] == 'm' && argv[i][4] == 'p') {
+       jobType = JT_COMPILE;
+       continue;
+    };
 
     if (argv[i][1] == 't' && (i+1 < argc || argv[i][2])){
       if (argv[i][2]){
@@ -187,6 +194,9 @@ int main(int argc, char *argv[])
         break;
       case JT_FORWARD:
         ct.forward();
+        break;
+      case JT_COMPILE:
+        ct.compile();
         break;
       default:
         printError();

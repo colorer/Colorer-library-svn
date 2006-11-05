@@ -8,7 +8,7 @@ foreach(`ls *.d`){
     s/\.o/\.\$\(obj\)/g;
     s/(\w\:|\/cygdrive\/\w)?\/usr.*?(\s|$)/ /g;
     s/^\s*\\\s*$//;
-    s/\.\.\/shared\/..\/zlib\//\$(unzipdir)/g;
+#    s/\.\.\/shared\/..\/zlib\//\$(unzipdir)/g;
     s/\.\.\/shared\//\$(shared_path)/g;
     print DEPS $_;
   };

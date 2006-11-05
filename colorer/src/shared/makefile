@@ -1,8 +1,13 @@
-TARGET=colorer
 
-all: $(TARGET)
+all: lines
+	echo \#..>_dependencies.dep
+	make colorer
 	perl _makefile.deps.pl
 	rm -f *.d *.o .o
+
+lines:
+	perl _buildlines.pl
+
 
 #generate dependencies:
 CPPFLAGS_CUSTOM=-MD -E
@@ -10,10 +15,11 @@ CPPFLAGS_CUSTOM=-MD -E
 shared_path=../shared/
 obj_output=.
 
+
 include makefile.colorer.gcc
 
 LIBINC = -lc -lm
-LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
+LIBFLAGS = $(objs) $(FLAGS) -o colorer $(LIBINC)
 
 colorer:: $(coreobjects) ./ConsoleToolsRunner.o ./FarEditor.o  ./FarEditorSet.o
 

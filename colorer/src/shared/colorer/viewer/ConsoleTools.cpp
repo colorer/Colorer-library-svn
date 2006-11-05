@@ -6,6 +6,9 @@
 #include<colorer/viewer/TextLinesStore.h>
 #include<colorer/viewer/ParsedLineWriter.h>
 #include<colorer/viewer/TextConsoleViewer.h>
+#include<colorer/parsers/HRCCompiler.h>
+#include<colorer/parsers/StaticBuilder.h>
+#include<colorer/parsers/DynamicBuilder.h>
 
 #include<colorer/viewer/ConsoleTools.h>
 #include<xml/xmldom.h>
@@ -413,6 +416,15 @@ void ConsoleTools::genOutput(bool useTokens){
 
 void ConsoleTools::genTokenOutput(){
   genOutput(true);
+}
+
+void ConsoleTools::compile(){
+  ParserFactory pf(catalogPath);
+  // HRC loading
+  HRCParser *hrcParser = pf.getHRCParser();
+  
+  (new HRCCompiler(hrcParser))->compile(new StaticBuilder());
+
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

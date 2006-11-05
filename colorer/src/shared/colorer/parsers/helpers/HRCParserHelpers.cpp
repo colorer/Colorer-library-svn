@@ -102,6 +102,7 @@ SchemeNode::SchemeNode() : virtualEntryVector(5){
   kwList = null;
   worddiv = null;
   start = end = null;
+  start_re = end_re = null;
   lowPriority = 0;
 
   //!!regions cleanup
@@ -116,6 +117,8 @@ SchemeNode::~SchemeNode(){
   if (type == SNT_RE || type == SNT_SCHEME){
     delete start;
     delete end;
+    delete start_re;
+    delete end_re;
   };
   if (type == SNT_KEYWORDS){
     delete kwList;

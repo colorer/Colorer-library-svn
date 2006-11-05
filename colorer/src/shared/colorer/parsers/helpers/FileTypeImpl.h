@@ -13,13 +13,13 @@ class FileTypeImpl : public FileType
   friend class HRCParserImpl;
   friend class TextParserImpl;
 public:
-  const String *getName() {
+  String *getName() {
     return name;
   }
-  const String *getGroup() {
+  String *getGroup() {
     return group;
   }
-  const String *getDescription() {
+  String *getDescription() {
     return description;
   }
   Scheme *getBaseScheme() {
@@ -27,23 +27,23 @@ public:
     return baseScheme;
   }
 
-  const String *enumerateParameters(int idx) {
+  String *enumerateParameters(int idx) {
     if (idx >= paramVector.size() || idx < 0){
       return null;
     }
     return paramVector.elementAt(idx);
   }
 
-  const String *getParameterDescription(const String &name) {
+  String *getParameterDescription(const String &name) {
     return paramDescriptionHash.get(&name);
   }
 
-  const String *getParamValue(const String &name) {
-    const String *val = paramHash.get(&name);
+  String *getParamValue(const String &name) {
+    String *val = paramHash.get(&name);
     if (val == null) return getParamDefaultValue(name);
     return val;
   }
-  const String *getParamDefaultValue(const String &name) {
+  String *getParamDefaultValue(const String &name) {
     return paramDefaultHash.get(&name);
   }
   void setParamValue(const String &name, const String *value){

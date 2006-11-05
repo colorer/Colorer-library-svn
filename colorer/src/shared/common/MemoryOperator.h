@@ -1,4 +1,8 @@
 
+#ifndef CNAME
+#define CNAME "NOP"
+#endif
+
 #if COLORER_FEATURE_USE_CHUNK_ALLOC
 
   void *operator new(size_t size){
@@ -15,6 +19,8 @@
   };
 
 #endif
+
+#undef CNAME
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

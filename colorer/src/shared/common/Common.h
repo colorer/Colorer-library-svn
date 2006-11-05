@@ -21,6 +21,7 @@ typedef unsigned int dword;
 
 #include<unicode/String.h>
 #include<common/MemoryChunks.h>
+#include<common/Logging.h>
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

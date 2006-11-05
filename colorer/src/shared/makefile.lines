@@ -28,8 +28,17 @@ $(obj_output_slash)StyledHRDMapper.$(obj):
 $(obj_output_slash)TextHRDMapper.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/handlers/TextHRDMapper.cpp
 
+$(obj_output_slash)DynamicBuilder.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/DynamicBuilder.cpp
+
+$(obj_output_slash)HRCCompiler.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/HRCCompiler.cpp
+
 $(obj_output_slash)HRCParserImpl.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/HRCParserImpl.cpp
+
+$(obj_output_slash)StaticBuilder.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/StaticBuilder.cpp
 
 $(obj_output_slash)TextParserImpl.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/TextParserImpl.cpp
@@ -48,9 +57,6 @@ $(obj_output_slash)TextConsoleViewer.$(obj):
 
 $(obj_output_slash)TextLinesStore.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/viewer/TextLinesStore.cpp
-
-$(obj_output_slash)colorer-doc.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer-doc.cpp
 
 $(obj_output_slash)Exception.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./common/Exception.cpp
@@ -88,29 +94,8 @@ $(obj_output_slash)Writer.$(obj):
 $(obj_output_slash)cregexp.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./cregexp/cregexp.cpp
 
-$(obj_output_slash)blockdef.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/blockdef.cpp
-
-$(obj_output_slash)exparse.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/exparse.cpp
-
-$(obj_output_slash)sarg.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/sarg.cpp
-
-$(obj_output_slash)syntax.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/syntax.cpp
-
-$(obj_output_slash)tools.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/tools.cpp
-
-$(obj_output_slash)clipbrd.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/clipbrd.cpp
-
 $(obj_output_slash)malloc.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/malloc.c
-
-$(obj_output_slash)registry.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/registry.cpp
 
 $(obj_output_slash)BitArray.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./unicode/BitArray.cpp
@@ -149,38 +134,14 @@ $(obj_output_slash)xmldom.$(obj):
 $(obj_output_slash)adler32.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/adler32.c
 
-$(obj_output_slash)compress.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/compress.c
-
 $(obj_output_slash)ioapi.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/ioapi.c
-
-$(obj_output_slash)iowin32.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/iowin32.c
-
-$(obj_output_slash)miniunz.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/miniunz.c
-
-$(obj_output_slash)minizip.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/minizip.c
 
 $(obj_output_slash)unzip.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/unzip.c
 
-$(obj_output_slash)zip.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/contrib/minizip/zip.c
-
 $(obj_output_slash)crc32.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/crc32.c
-
-$(obj_output_slash)deflate.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/deflate.c
-
-$(obj_output_slash)example.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/example.c
-
-$(obj_output_slash)gzio.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/gzio.c
 
 $(obj_output_slash)infblock.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/infblock.c
@@ -199,15 +160,6 @@ $(obj_output_slash)inftrees.$(obj):
 
 $(obj_output_slash)infutil.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/infutil.c
-
-$(obj_output_slash)maketree.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/maketree.c
-
-$(obj_output_slash)minigzip.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/minigzip.c
-
-$(obj_output_slash)trees.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/trees.c
 
 $(obj_output_slash)uncompr.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/uncompr.c
