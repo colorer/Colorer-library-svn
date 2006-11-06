@@ -1,9 +1,9 @@
 
 #include<stdio.h>
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
-#include<colorer/parsers/HRCParserImpl.h>
+#include<colorer/parsers/dynamic/DynamicHRCModel.h>
 
-HRCParserImpl::HRCParserImpl()
+DynamicHRCModel::DynamicHRCModel()
  : fileTypeHash(200), fileTypeVector(150), schemeHash(4000),
    regionNamesHash(1000), regionNamesVector(1000, 200)
 {
@@ -14,7 +14,7 @@ HRCParserImpl::HRCParserImpl()
   updateStarted = false;
 }
 
-HRCParserImpl::~HRCParserImpl()
+DynamicHRCModel::~DynamicHRCModel()
 {
   int idx;
   for(FileTypeImpl *ft = fileTypeHash.enumerate(); ft != null; ft = fileTypeHash.next())
@@ -30,11 +30,11 @@ HRCParserImpl::~HRCParserImpl()
   delete versionName;
 }
 
-void HRCParserImpl::setErrorHandler(ErrorHandler *eh){
+void DynamicHRCModel::setErrorHandler(ErrorHandler *eh){
   errorHandler = eh;
 }
 
-void HRCParserImpl::loadSource(InputSource *is){
+void DynamicHRCModel::loadSource(InputSource *is){
   InputSource *istemp = curInputSource;
   curInputSource = is;
   if (is == null){
@@ -51,7 +51,7 @@ void HRCParserImpl::loadSource(InputSource *is){
   curInputSource = istemp;
 }
 
-void HRCParserImpl::loadFileType(FileType *filetype)
+void DynamicHRCModel::loadFileType(FileType *filetype)
 {
   if (filetype == null) return;
 
@@ -89,7 +89,7 @@ void HRCParserImpl::loadFileType(FileType *filetype)
   }
 }
 
-FileType *HRCParserImpl::chooseFileType(const String *fileName, const String *firstLine, int typeNo)
+FileType *DynamicHRCModel::chooseFileType(const String *fileName, const String *firstLine, int typeNo)
 {
 FileTypeImpl *best = null;
 double max_prior = 0;
@@ -111,33 +111,33 @@ const double DELTA = 1e-6;
   return best;
 }
 
-FileType *HRCParserImpl::getFileType(const String *name) {
+FileType *DynamicHRCModel::getFileType(const String *name) {
   if (name == null) return null;
   return fileTypeHash.get(name);
 }
 
-FileType *HRCParserImpl::enumerateFileTypes(int index) {
+FileType *DynamicHRCModel::enumerateFileTypes(int index) {
   if (index < fileTypeVector.size()) return fileTypeVector.elementAt(index);
   return null;
 }
 
-int HRCParserImpl::getRegionCount() {
+int DynamicHRCModel::getRegionCount() {
   return regionNamesVector.size();
 }
 
-const Region *HRCParserImpl::getRegion(int id) {
+const Region *DynamicHRCModel::getRegion(int id) {
   if (id < 0 || id >= regionNamesVector.size()){
     return null;
   }
   return regionNamesVector.elementAt(id);
 }
 
-const Region* HRCParserImpl::getRegion(const String *name) {
+const Region* DynamicHRCModel::getRegion(const String *name) {
   if (name == null) return null;
   return getNCRegion(name, false); // regionNamesHash.get(name);
 }
 
-const String *HRCParserImpl::getVersion() {
+const String *DynamicHRCModel::getVersion() {
   return versionName;
 }
 
@@ -145,7 +145,7 @@ const String *HRCParserImpl::getVersion() {
 // protected methods
 
 
-void HRCParserImpl::parseHRC(InputSource *is)
+void DynamicHRCModel::parseHRC(InputSource *is)
 {
   Document *xmlDocument = docbuilder.parse(is);
   Element *types = xmlDocument->getDocumentElement();
@@ -185,7 +185,7 @@ void HRCParserImpl::parseHRC(InputSource *is)
 }
 
 
-void HRCParserImpl::addPrototype(Element *elem)
+void DynamicHRCModel::addPrototype(Element *elem)
 {
   const String *typeName = elem->getAttribute(DString("name"));
   const String *typeGroup = elem->getAttribute(DString("group"));
@@ -274,7 +274,7 @@ void HRCParserImpl::addPrototype(Element *elem)
   };
 }
 
-void HRCParserImpl::addType(Element *elem)
+void DynamicHRCModel::addType(Element *elem)
 {
   const String *typeName = elem->getAttribute(DString("name"));
 
@@ -372,7 +372,7 @@ void HRCParserImpl::addType(Element *elem)
   parseType = o_parseType;
 }
 
-void HRCParserImpl::addScheme(Element *elem)
+void DynamicHRCModel::addScheme(Element *elem)
 {
   const String *schemeName = elem->getAttribute(DString("name"));
   String *qSchemeName = qualifyOwnName(schemeName);
@@ -404,7 +404,7 @@ void HRCParserImpl::addScheme(Element *elem)
   addSchemeNodes(scheme, elem->getFirstChild());
 }
 
-void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
+void DynamicHRCModel::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 {
   SchemeNode *next = null;
   for(Node *tmpel = elem; tmpel; tmpel = tmpel->getNextSibling()){
@@ -647,7 +647,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 };
 
 
-void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
+void DynamicHRCModel::loadRegions(SchemeNode *node, Element *el, bool st)
 {
 	static char rg_tmpl[0x10] = "region\0\0";
 	
@@ -678,7 +678,7 @@ void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
 }
 
 
-void HRCParserImpl::loadBlockRegions(SchemeNode *node, Element *el)
+void DynamicHRCModel::loadBlockRegions(SchemeNode *node, Element *el)
 {
 int i;
 static char rg_tmpl[0x10] = "region";
@@ -693,7 +693,7 @@ static char rg_tmpl[0x10] = "region";
 }
   
 
-void HRCParserImpl::updateLinks()
+void DynamicHRCModel::updateLinks()
 {
   while(structureChanged){
     structureChanged = false;
@@ -744,7 +744,7 @@ void HRCParserImpl::updateLinks()
 
 
 
-String *HRCParserImpl::qualifyOwnName(const String *name) {
+String *DynamicHRCModel::qualifyOwnName(const String *name) {
   if (name == null) return null;
   int colon = name->indexOf(':');
   if (colon != -1){
@@ -759,7 +759,7 @@ String *HRCParserImpl::qualifyOwnName(const String *name) {
     return sbuf;
   };
 };
-bool HRCParserImpl::checkNameExist(const String *name, FileTypeImpl *parseType, QualifyNameType qntype, bool logErrors) {
+bool DynamicHRCModel::checkNameExist(const String *name, FileTypeImpl *parseType, QualifyNameType qntype, bool logErrors) {
   if (qntype == QNT_DEFINE && regionNamesHash.get(name) == null){
     if (logErrors)
       if (errorHandler != null) errorHandler->error(StringBuffer("region '")+name+"', referenced in type '"+parseType->name+"', is not defined");
@@ -775,7 +775,7 @@ bool HRCParserImpl::checkNameExist(const String *name, FileTypeImpl *parseType, 
   };
   return true;
 };
-String *HRCParserImpl::qualifyForeignName(const String *name, QualifyNameType qntype, bool logErrors){
+String *DynamicHRCModel::qualifyForeignName(const String *name, QualifyNameType qntype, bool logErrors){
   if (name == null) return null;
   int colon = name->indexOf(':');
   if (colon != -1){ // qualified name
@@ -809,7 +809,7 @@ String *HRCParserImpl::qualifyForeignName(const String *name, QualifyNameType qn
 };
 
 
-String *HRCParserImpl::useEntities(const String *name)
+String *DynamicHRCModel::useEntities(const String *name)
 {
   int copypos = 0;
   int epos = 0;
@@ -853,7 +853,7 @@ String *HRCParserImpl::useEntities(const String *name)
   return newname;
 };
 
-const Region* HRCParserImpl::getNCRegion(const String *name, bool logErrors){
+const Region* DynamicHRCModel::getNCRegion(const String *name, bool logErrors){
   if (name == null) return null;
   const Region *reg = null;
   String *qname = qualifyForeignName(name, QNT_DEFINE, logErrors);
@@ -871,7 +871,7 @@ const Region* HRCParserImpl::getNCRegion(const String *name, bool logErrors){
   return reg;
 };
 
-const Region* HRCParserImpl::getNCRegion(Element *el, const String &tag){
+const Region* DynamicHRCModel::getNCRegion(Element *el, const String &tag){
   const String *par = el->getAttribute(tag);
   if (par == null) return null;
   return getNCRegion(par, true);

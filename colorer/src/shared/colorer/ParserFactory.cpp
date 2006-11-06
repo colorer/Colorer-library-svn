@@ -14,7 +14,7 @@
 #include<colorer/viewer/TextLinesStore.h>
 #include<colorer/handlers/DefaultErrorHandler.h>
 #include<colorer/handlers/FileErrorHandler.h>
-#include<colorer/parsers/HRCParserImpl.h>
+#include<colorer/parsers/dynamic/DynamicHRCModel.h>
 #include<colorer/parsers/TextParserImpl.h>
 
 #ifndef __TIMESTAMP__
@@ -240,9 +240,9 @@ const String* ParserFactory::getHRDescription(const String &classID, const Strin
   return hrdDescriptions.get(&(StringBuffer(classID)+"-"+nameID));
 };
 
-HRCParser* ParserFactory::getHRCParser(){
+HRCModel* ParserFactory::getHRCParser(){
   if (hrcParser != null) return hrcParser;
-  hrcParser = new HRCParserImpl();
+  hrcParser = new DynamicHRCModel();
   hrcParser->setErrorHandler(fileErrorHandler);
   for(int idx = 0; idx < hrcLocations.size(); idx++){
     if (hrcLocations.elementAt(idx) != null){

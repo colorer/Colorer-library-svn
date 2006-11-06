@@ -1,13 +1,13 @@
 #ifndef _COLORER_STATICBUILDER_H_
 #define _COLORER_STATICBUILDER_H_
 
-#include <colorer/parsers/HRCCompiler.h>
-#include <colorer/parsers/DynamicBuilder.h>
+#include <colorer/parsers/static/HRCCompiler.h>
+#include <colorer/parsers/static/DynamicBuilder.h>
 
 class StaticBuilder : public DynamicBuilder
 {
 public:
-    void onStart(HRCParser *hrcParser);
+    void onStart(HRCModel *hrcParser);
 
     void onFinish();
 
@@ -25,7 +25,7 @@ protected:
     void buildRE();
     void buildRegions();
     void buildRegionNodes();
-    HRCParser *hrcParser;
+    HRCModel *hrcParser;
 };
 
 #endif

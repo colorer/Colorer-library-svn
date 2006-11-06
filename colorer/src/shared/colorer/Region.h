@@ -39,7 +39,7 @@ public:
   };
   /**
     Basic constructor.
-    Used only by HRCParser.
+    Used only by HRCModel.
   */
   Region(const String *_name, const String* _description, const Region *_parent, int _id){
     name = new SString(_name);

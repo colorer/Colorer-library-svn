@@ -9,13 +9,13 @@ coreobjects = \
   $(obj_output_slash)RegionMapperImpl.$(obj) \
   $(obj_output_slash)StyledHRDMapper.$(obj) \
   $(obj_output_slash)TextHRDMapper.$(obj) \
-  $(obj_output_slash)DynamicBuilder.$(obj) \
-  $(obj_output_slash)HRCCompiler.$(obj) \
-  $(obj_output_slash)HRCParserImpl.$(obj) \
-  $(obj_output_slash)StaticBuilder.$(obj) \
   $(obj_output_slash)TextParserImpl.$(obj) \
+  $(obj_output_slash)DynamicHRCModel.$(obj) \
   $(obj_output_slash)HRCParserHelpers.$(obj) \
   $(obj_output_slash)TextParserHelpers.$(obj) \
+  $(obj_output_slash)DynamicBuilder.$(obj) \
+  $(obj_output_slash)HRCCompiler.$(obj) \
+  $(obj_output_slash)StaticBuilder.$(obj) \
   $(obj_output_slash)ConsoleTools.$(obj) \
   $(obj_output_slash)TextConsoleViewer.$(obj) \
   $(obj_output_slash)TextLinesStore.$(obj) \

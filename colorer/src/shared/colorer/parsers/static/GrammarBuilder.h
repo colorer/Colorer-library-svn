@@ -1,14 +1,14 @@
 #ifndef _COLORER_GRAMMARBUILDER_H_
 #define _COLORER_GRAMMARBUILDER_H_
 
-#include <colorer/HRCParser.h>
-#include <colorer/parsers/HRCParserImpl.h>
+#include <colorer/HRCModel.h>
+#include <colorer/parsers/dynamic/DynamicHRCModel.h>
 
 class GrammarBuilder {
 
 public:
 
-    virtual void onStart(HRCParser *hrcParser) = 0;
+    virtual void onStart(HRCModel *hrcParser) = 0;
 
     virtual void onFinish() = 0;
 

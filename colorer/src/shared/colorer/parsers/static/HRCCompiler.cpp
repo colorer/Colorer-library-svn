@@ -1,8 +1,8 @@
 
 #include<stdio.h>
-#include<colorer/parsers/HRCCompiler.h>
+#include<colorer/parsers/static/HRCCompiler.h>
 
-#include<colorer/parsers/GrammarBuilder.h>
+#include<colorer/parsers/static/GrammarBuilder.h>
 
 
 Vector<String*> schemeQueue;
@@ -10,9 +10,9 @@ Vector<VirtualEntryVector**> vtlistQueue;
 
 Hashtable<SchemeImpl*> schemeQueueHash;
 
-HRCCompiler::HRCCompiler(HRCParser *hrcParser)
+HRCCompiler::HRCCompiler(HRCModel *hrcParser)
 {
-    this->hp = (HRCParserImpl*)hrcParser;
+    this->hp = (DynamicHRCModel*)hrcParser;
     builder = null;
 }
 

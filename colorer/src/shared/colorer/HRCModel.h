@@ -20,12 +20,12 @@ public:
 };
 
 
-/** Abstract template of HRCParser class implementation.
+/** Abstract template of HRCModel class implementation.
     Defines basic operations of loading and accessing
     HRC information.
     @ingroup colorer
 */
-class HRCParser
+class HRCModel
 {
 public:
   /** Error Handler, used to inform application about different error conditions
@@ -78,9 +78,9 @@ public:
   */
   virtual const String *getVersion() = 0;
 
-  virtual ~HRCParser(){};
+  virtual ~HRCModel(){};
 protected:
-  HRCParser(){};
+  HRCModel(){};
 };
 
 

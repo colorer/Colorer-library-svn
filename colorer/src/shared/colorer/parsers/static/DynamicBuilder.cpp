@@ -4,7 +4,7 @@
 #include<colorer/FileType.h>
 #include<colorer/Region.h>
 
-#include<colorer/parsers/DynamicBuilder.h>
+#include<colorer/parsers/static/DynamicBuilder.h>
 
 DynamicBuilder::DynamicBuilder()
 {
@@ -20,7 +20,7 @@ DynamicBuilder::~DynamicBuilder()
 //    delete regionDescriptions;
 }
 
-void DynamicBuilder::onStart(HRCParser *hrcParser)
+void DynamicBuilder::onStart(HRCModel *hrcParser)
 {
     reHashIndex = 1;
 }

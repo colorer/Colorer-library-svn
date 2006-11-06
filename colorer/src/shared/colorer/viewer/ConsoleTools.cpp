@@ -6,9 +6,9 @@
 #include<colorer/viewer/TextLinesStore.h>
 #include<colorer/viewer/ParsedLineWriter.h>
 #include<colorer/viewer/TextConsoleViewer.h>
-#include<colorer/parsers/HRCCompiler.h>
-#include<colorer/parsers/StaticBuilder.h>
-#include<colorer/parsers/DynamicBuilder.h>
+#include<colorer/parsers/static/HRCCompiler.h>
+#include<colorer/parsers/static/StaticBuilder.h>
+#include<colorer/parsers/static/DynamicBuilder.h>
 
 #include<colorer/viewer/ConsoleTools.h>
 #include<xml/xmldom.h>
@@ -172,7 +172,7 @@ void ConsoleTools::listTypes(bool load, bool useNames){
   try{
     writer = new StreamWriter(stdout, outputEncodingIndex, bomOutput);
     ParserFactory pf(catalogPath);
-    HRCParser *hrcParser = pf.getHRCParser();
+    HRCModel *hrcParser = pf.getHRCParser();
     fprintf(stderr, "\nloading file types...\n");
     for(int idx = 0;; idx++){
       FileType *type = hrcParser->enumerateFileTypes(idx);
@@ -192,7 +192,7 @@ void ConsoleTools::listTypes(bool load, bool useNames){
   }
 }
 
-FileType *ConsoleTools::selectType(HRCParser *hrcParser, LineSource *lineSource){
+FileType *ConsoleTools::selectType(HRCModel *hrcParser, LineSource *lineSource){
   FileType *type = null;
   if (typeDescription != null){
     type = hrcParser->getFileType(typeDescription);
@@ -313,7 +313,7 @@ void ConsoleTools::genOutput(bool useTokens){
     // parsers factory
     ParserFactory pf(catalogPath);
     // HRC loading
-    HRCParser *hrcParser = pf.getHRCParser();
+    HRCModel *hrcParser = pf.getHRCParser();
     // HRD RegionMapper creation
     bool useMarkup = false;
     RegionMapper *mapper = null;
@@ -421,7 +421,7 @@ void ConsoleTools::genTokenOutput(){
 void ConsoleTools::compile(){
   ParserFactory pf(catalogPath);
   // HRC loading
-  HRCParser *hrcParser = pf.getHRCParser();
+  HRCModel *hrcParser = pf.getHRCParser();
   
   (new HRCCompiler(hrcParser))->compile(new StaticBuilder());
 

@@ -1,7 +1,7 @@
 #ifndef _COLORER_FILETYPEIMPL_H_
 #define _COLORER_FILETYPEIMPL_H_
 
-#include<colorer/parsers/HRCParserImpl.h>
+#include<colorer/parsers/dynamic/DynamicHRCModel.h>
 
 /**
  * File Type storage implementation.
@@ -11,7 +11,7 @@
 class FileTypeImpl : public FileType
 {
   friend class HRCCompiler;
-  friend class HRCParserImpl;
+  friend class DynamicHRCModel;
   friend class TextParserImpl;
 public:
   String *getName() {
@@ -96,7 +96,7 @@ protected:
 
   String *name, *group, *description;
   bool isPackage;
-  HRCParserImpl *hrcParser;
+  DynamicHRCModel *hrcParser;
   SchemeImpl *baseScheme;
 
   Vector<FileTypeChooser*> chooserVector;
@@ -107,7 +107,7 @@ protected:
   Vector<String*> importVector;
   InputSource *inputSource;
 
-  FileTypeImpl(HRCParserImpl *hrcParser){
+  FileTypeImpl(DynamicHRCModel *hrcParser){
     this->hrcParser = hrcParser;
     protoLoaded = typeLoaded = loadDone = loadBroken = inputSourceLoading = false;
     isPackage = false;

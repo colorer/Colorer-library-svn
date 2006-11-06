@@ -1,7 +1,7 @@
 #ifndef _COLORER_DYNAMICBUILDER_H_
 #define _COLORER_DYNAMICBUILDER_H_
 
-#include <colorer/parsers/HRCCompiler.h>
+#include <colorer/parsers/static/HRCCompiler.h>
 #include <common/DynamicArray.h>
 
 enum {
@@ -53,7 +53,7 @@ public:
     
     virtual ~DynamicBuilder();
 
-    void onStart(HRCParser *hrcParser);
+    void onStart(HRCModel *hrcParser);
 
     void onFinish();
 

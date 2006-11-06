@@ -3,7 +3,7 @@
 
 #include<xml/xmldom.h>
 #include<colorer/TextParser.h>
-#include<colorer/HRCParser.h>
+#include<colorer/HRCModel.h>
 #include<colorer/handlers/DefaultErrorHandler.h>
 #include<colorer/handlers/StyledHRDMapper.h>
 #include<colorer/handlers/TextHRDMapper.h>
@@ -13,7 +13,7 @@
 /**
  * Maintains catalog of HRC and HRD references.
  * This class searches and loads <code>catalog.xml</code> file
- * and creates HRCParser, StyledHRDMapper, TextHRDMapper and TextParser instances
+ * and creates HRCModel, StyledHRDMapper, TextHRDMapper and TextParser instances
  * with information, loaded from specified sources.
  *
  * If no path were passed to it's constructor,
@@ -76,14 +76,14 @@ public:
   const String *getHRDescription(const String &classID, const String &nameID);
 
   /**
-   * Creates and loads HRCParser instance from catalog.xml file.
+   * Creates and loads HRCModel instance from catalog.xml file.
    * This method can detect directory entries, and sequentally load their
-   * contents into created HRCParser instance.
+   * contents into created HRCModel instance.
    * In other cases it uses InputSource#newInstance() method to
    * create input data stream.
-   * Only one HRCParser instance is created for each ParserFactory instance.
+   * Only one HRCModel instance is created for each ParserFactory instance.
    */
-  HRCParser  *getHRCParser();
+  HRCModel  *getHRCParser();
 
   /**
    * Creates TextParser instance
@@ -125,7 +125,7 @@ private:
   Vector<const String*> hrcLocations;
   Hashtable<Hashtable<Vector<const String*>*>*> hrdLocations;
   Hashtable<const String *>hrdDescriptions;
-  HRCParser  *hrcParser;
+  HRCModel  *hrcParser;
   DocumentBuilder docbuilder;
   Document *catalog;
 

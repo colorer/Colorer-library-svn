@@ -90,7 +90,7 @@ public:
   void listTypes(bool load, bool useNames);
 
 
-  FileType *selectType(HRCParser *hrcParser, LineSource *lineSource);
+  FileType *selectType(HRCModel *hrcParser, LineSource *lineSource);
 
 
 

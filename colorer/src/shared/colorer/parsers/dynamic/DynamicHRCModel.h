@@ -5,23 +5,23 @@
 #include<cregexp/cregexp.h>
 #include<common/Vector.h>
 #include<common/Hashtable.h>
-#include<colorer/HRCParser.h>
+#include<colorer/HRCModel.h>
 #include<unicode/UnicodeTools.h>
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 
 class FileTypeImpl;
 
-/** Implementation of HRCParser.
+/** Implementation of HRCModel.
     Reads and mantains HRC database of syntax rules,
     used by TextParser implementations to make
     realtime text syntax parsing.
     @ingroup colorer_parsers
 */
-class HRCParserImpl : public HRCParser
+class DynamicHRCModel : public HRCModel
 {
 public:
-  HRCParserImpl();
-  ~HRCParserImpl();
+  DynamicHRCModel();
+  ~DynamicHRCModel();
 
   void setErrorHandler(ErrorHandler *eh);
 
@@ -85,7 +85,7 @@ friend class FileTypeImpl;
   const Region *getNCRegion(const String *name, bool logErrors);
 };
 
-#include<colorer/parsers/helpers/FileTypeImpl.h>
+#include<colorer/parsers/dynamic/FileTypeImpl.h>
 
 #endif
 

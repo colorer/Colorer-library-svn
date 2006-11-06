@@ -4,7 +4,7 @@
 #include<colorer/FileType.h>
 #include<colorer/Region.h>
 
-#include<colorer/parsers/StaticBuilder.h>
+#include<colorer/parsers/static/StaticBuilder.h>
 
 void StaticBuilder::buildRE()
 {
@@ -39,7 +39,7 @@ void StaticBuilder::buildRegions()
     printf("}\n\n");
 }
 
-void StaticBuilder::onStart(HRCParser *hrcParser)
+void StaticBuilder::onStart(HRCModel *hrcParser)
 {
     this->hrcParser = hrcParser;
 

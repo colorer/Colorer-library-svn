@@ -1,18 +1,18 @@
 #ifndef _COLORER_HRCCOMPILER_H_
 #define _COLORER_HRCCOMPILER_H_
 
-#include<colorer/parsers/HRCParserImpl.h>
+#include<colorer/parsers/dynamic/DynamicHRCModel.h>
 #include<colorer/parsers/helpers/TextParserHelpers.h>
-#include<colorer/parsers/GrammarBuilder.h>
+#include<colorer/parsers/static/GrammarBuilder.h>
 
 class HRCCompiler
 {
 public:
-    HRCCompiler(HRCParser *hrcParser);
+    HRCCompiler(HRCModel *hrcParser);
     ~HRCCompiler();
     void compile(GrammarBuilder *builder);
 private:
-    HRCParserImpl *hp;
+    DynamicHRCModel *hp;
     GrammarBuilder *builder;
     
     VTList *vtList;

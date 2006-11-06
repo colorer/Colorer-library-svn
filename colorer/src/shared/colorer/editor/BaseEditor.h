@@ -241,7 +241,7 @@ public:
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
 
 private:
-  HRCParser *hrcParser;
+  HRCModel *hrcParser;
   TextParser *textParser;
   ParserFactory *parserFactory;
   LineSource *lineSource;

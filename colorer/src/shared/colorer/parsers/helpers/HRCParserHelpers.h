@@ -119,7 +119,7 @@ public:
     @ingroup colorer_parsers
 */
 class SchemeImpl : public Scheme{
-  friend class HRCParserImpl;
+  friend class DynamicHRCModel;
   friend class HRCCompiler;
   friend class TextParserImpl;
   friend class ParseState;
