@@ -8,7 +8,7 @@ class GrammarBuilder {
 
 public:
 
-    virtual void onStart() = 0;
+    virtual void onStart(HRCParser *hrcParser) = 0;
 
     virtual void onFinish() = 0;
 

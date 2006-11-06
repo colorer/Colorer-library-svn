@@ -10,6 +10,7 @@
  */
 class FileTypeImpl : public FileType
 {
+  friend class HRCCompiler;
   friend class HRCParserImpl;
   friend class TextParserImpl;
 public:
@@ -22,9 +23,16 @@ public:
   String *getDescription() {
     return description;
   }
-  Scheme *getBaseScheme() {
+  
+  GrammarProvider *createGrammarProvider()
+  {
     if (!typeLoaded) hrcParser->loadFileType(this);
-    return baseScheme;
+    return null;//new HRCDynamicProvider(baseScheme);
+  }
+
+  void compile()
+  {
+    hrcParser->loadFileType(this);
   }
 
   String *enumerateParameters(int idx) {

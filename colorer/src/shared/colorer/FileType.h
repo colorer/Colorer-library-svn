@@ -2,15 +2,15 @@
 #define _COLORER_FILETYPE_H_
 
 #include<common/Common.h>
-#include<colorer/Scheme.h>
 
-class Scheme;
+class GrammarProvider;
 
 /**
  * HRC FileType (or prototype) instance.
  * @ingroup colorer
  */
-class FileType{
+class FileType
+{
 public:
 
   /**
@@ -30,12 +30,15 @@ public:
   */
   virtual const String *getDescription() = 0;
 
-  /** Returns the base scheme of this file type.
-      Basically, this is the scheme with same public name, as it's type.
-      If this FileType object is not yet loaded, it is loaded with this call.
-      @return File type base scheme, to be used as root scheme of text parsing.
-  */
-  virtual Scheme *getBaseScheme() = 0;
+  /**
+   * Returns grammar provider for this Syntax Type
+   */
+  virtual GrammarProvider *createGrammarProvider() = 0;
+
+  /**
+   * Requests this syntax to be preloaded
+   */
+  virtual void compile(){};
 
   /** Enumerates all available parameters, defined in this file type.
       @return Parameter name with index <code>idx</code> or <code>null</code>

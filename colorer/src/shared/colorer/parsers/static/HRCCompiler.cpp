@@ -28,13 +28,13 @@ void HRCCompiler::compile(GrammarBuilder *builder)
     
     this->builder = builder;
 
-    builder->onStart();
+    builder->onStart(hp);
 
     for(int idx = 0;; idx++){
-      FileType *type = hp->enumerateFileTypes(idx);
-      if (type == null) break;
+      FileTypeImpl *type = (FileTypeImpl*)hp->enumerateFileTypes(idx);
+      if (type == null ) break;
       vtList = new VTList();
-      enqueue((SchemeImpl*)type->getBaseScheme());
+      enqueue((SchemeImpl*)type->baseScheme);
       compile();
       delete vtList;
     };
@@ -90,7 +90,7 @@ void HRCCompiler::putScheme(SchemeImpl *scheme)
                 break;
             case SNT_INHERIT:
                 subst = vtList->pushvirt(node->scheme);
-                //printf("//++inherit %s\n", node->scheme->getName()->getChars());
+                // TODO: Recursion validation??
                 if (!subst){
                   bool b = vtList->push(node);
                   putScheme(node->scheme);
@@ -99,7 +99,6 @@ void HRCCompiler::putScheme(SchemeImpl *scheme)
                   putScheme(subst);
                   vtList->popvirt();
                 };
-                //printf("//--inherit %s\n", node->scheme->getName()->getChars());
                 break;
         }
     }

@@ -7,7 +7,7 @@
 class StaticBuilder : public DynamicBuilder
 {
 public:
-    void onStart();
+    void onStart(HRCParser *hrcParser);
 
     void onFinish();
 
@@ -20,6 +20,12 @@ public:
     void visitBlock(String *scheme, SchemeNode *node);
 
     void visitKeywords(SchemeNode *node);
+
+protected:
+    void buildRE();
+    void buildRegions();
+    void buildRegionNodes();
+    HRCParser *hrcParser;
 };
 
 #endif

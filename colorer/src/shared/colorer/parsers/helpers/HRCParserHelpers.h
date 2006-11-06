@@ -43,6 +43,7 @@ public:
   int matchCase;
   int minKeywordLength;
   CharacterClass *firstChar;
+  CharacterClass *worddiv;
   KeywordInfo *kwList;
   KeywordList();
   ~KeywordList();
@@ -95,7 +96,6 @@ public:
 
   VirtualEntryVector virtualEntryVector;
   KeywordList *kwList;
-  CharacterClass *worddiv;
 
   const Region* region;
   const Region* regions[REGIONS_NUM];

@@ -53,7 +53,7 @@ public:
     
     virtual ~DynamicBuilder();
 
-    void onStart();
+    void onStart(HRCParser *hrcParser);
 
     void onFinish();
 
@@ -67,6 +67,14 @@ public:
 
     void visitKeywords(SchemeNode *node);
 protected:
+    int getREindex(String *re);
+    int getRegionIndex(SchemeNode *node);
+
+    Hashtable <int> schemeHash;
+    Hashtable <int> reHash;
+    Vector<String*> reVector;
+    int reHashIndex;
+
     DynamicArray<ParserNode> *parserNodes;
     DynamicArray<RegionNode> *regionNodes;
     DynamicArray<RegionDescription> *regionDescriptions;

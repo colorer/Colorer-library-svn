@@ -49,6 +49,8 @@ class ParseCache
 public:
   /** Start and end lines of this scheme match */
   int sline, eline;
+  
+  
   /** Scheme, matched for this cache entry */
   SchemeImpl *scheme;
   /** Particular parent block object, caused this scheme to
@@ -59,6 +61,9 @@ public:
    * Scheme virtualization cache entry
    */
   VirtualEntryVector **vcache;
+  
+  
+  
   /**
    * RE Match object for start RE of the enwrapped &lt;block> object
    */
@@ -83,6 +88,36 @@ public:
   ParseCache *searchLine(int ln, ParseCache **cache);
 };
 
+/**
+ * Sinle step, or state, of the parser. Each state is described by a set of
+ * attributes, which affect parsing process.
+ */
+struct ParseStep
+{
+  CRegExp *closingRE;
+  bool closingREmatched;
+  bool closingREparsed;
+  SMatches matchstart;
+  SMatches matchend;
+
+  bool lowContentPriority;
+  int contextStart;
+
+  int parent_len;
+
+  int o_gy;
+  SMatches *o_match;
+  DString *o_str;
+  SString *backLine;
+/*
+  ParseStep() {
+    closingREmatched = closingREparsed = false;
+    closingRE = null;
+    backLine = null;
+  }
+*/
+};
+
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -100,8 +135,8 @@ public:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Igor Russkih <irusskih at gmail at com>
+ * Portions created by the Initial Developer are Copyright (C) 1999-2006
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

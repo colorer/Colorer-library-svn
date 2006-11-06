@@ -2,58 +2,20 @@
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 #include<stdlib.h>
 
-/*
-KeywordInfo::KeywordInfo(){
-  keyword = null;
-  ssShorter = -1;
-  isSymbol = false;
-  region = null;
-};
-void KeywordInfo::swapWith(KeywordInfo *kwi){
-  const SString *_keyword = keyword;
-  bool _isSymbol = isSymbol;
-  const Region *_region = region;
-  int _ssShorter = ssShorter;
-  keyword   = kwi->keyword;
-  isSymbol  = kwi->isSymbol;
-  region    = kwi->region;
-  ssShorter = kwi->ssShorter;
-
-  kwi->keyword   = _keyword;
-  kwi->isSymbol  = _isSymbol;
-  kwi->region    = _region;
-  kwi->ssShorter = _ssShorter;
-};
-KeywordInfo::KeywordInfo(KeywordInfo &ki){
-  keyword = new SString(ki.keyword);
-  region = ki.region;
-  isSymbol = ki.isSymbol;
-  ssShorter = ki.ssShorter;
-};
-KeywordInfo &KeywordInfo::operator=(KeywordInfo &ki){
-  delete keyword;
-  keyword = new SString(ki.keyword);
-  region = ki.region;
-  isSymbol = ki.isSymbol;
-  ssShorter = ki.ssShorter;
-  return *this;
-};
-KeywordInfo::~KeywordInfo(){
-  delete keyword;
-};
-*/
-
-KeywordList::KeywordList(){
+KeywordList::KeywordList()
+{
   num = 0;
   matchCase = false;
   minKeywordLength = 0;
   kwList = null;
+  worddiv = null;
   firstChar = new CharacterClass();
 };
 KeywordList::~KeywordList(){
   for(int idx = 0; idx < num; idx++) {
     delete kwList[idx].keyword;
   }
+  delete worddiv;
   delete[] kwList;
   delete   firstChar;
 };
@@ -100,7 +62,6 @@ SchemeNode::SchemeNode() : virtualEntryVector(5){
   schemeName = null;
   scheme = null;
   kwList = null;
-  worddiv = null;
   start = end = null;
   start_re = end_re = null;
   lowPriority = 0;
@@ -122,7 +83,6 @@ SchemeNode::~SchemeNode(){
   };
   if (type == SNT_KEYWORDS){
     delete kwList;
-    delete worddiv;
   };
   if (type == SNT_INHERIT){
     for(int idx = 0; idx < virtualEntryVector.size(); idx++)

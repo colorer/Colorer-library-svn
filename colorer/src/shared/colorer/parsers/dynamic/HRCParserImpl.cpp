@@ -518,16 +518,14 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       	}
       }
 
-      String *startParam;
-      String *endParam;
-      if (!(startParam = useEntities(sParam))){
+      if (!(next->start_re = useEntities(sParam))){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'start' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
         delete next;
         continue;
       };
-      if (!(endParam = useEntities(eParam))){
+      if (!(next->end_re = useEntities(eParam))){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'end' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
@@ -539,8 +537,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         if (errorHandler != null){
           errorHandler->error(StringBuffer("block with bad scheme attribute in scheme '")+scheme->getName()+"'");
         }
-        delete startParam;
-        delete endParam;
         continue;
       };
       next->schemeName = new SString(schemeName);
@@ -548,26 +544,23 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->lowContentPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("content-priority")));
       next->innerRegion = DString("yes").equals(((Element*)tmpel)->getAttribute(DString("inner-region")));
       next->type = SNT_SCHEME;
-      next->start = new CRegExp(startParam);
+      next->start = new CRegExp(next->start_re);
       next->start->setPositionMoves(false);
       if (!next->start->isOk()){
         if (errorHandler != null){
-          errorHandler->error(StringBuffer("fault compiling regexp '")+startParam+"' in scheme '"+scheme->schemeName+"'");
+          errorHandler->error(StringBuffer("fault compiling regexp '")+next->start_re+"' in scheme '"+scheme->schemeName+"'");
         }
       }
       next->end = new CRegExp();
       next->end->setPositionMoves(true);
       next->end->setBackRE(next->start);
-      next->end->setRE(endParam);
+      next->end->setRE(next->end_re);
       if (!next->end->isOk()){
         if (errorHandler != null){
-          errorHandler->error(StringBuffer("fault compiling regexp '")+endParam+"' in scheme '"+scheme->schemeName+"'");
+          errorHandler->error(StringBuffer("fault compiling regexp '")+next->end_re+"' in scheme '"+scheme->schemeName+"'");
         }
       }
-      delete startParam;
-      delete endParam;
 
-      // !! EE
       loadBlockRegions(next, (Element*)tmpel);
       loadRegions(next, eStart, true);
       loadRegions(next, eEnd, false);
@@ -585,17 +578,17 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       }
       const String *worddiv = ((Element*)tmpel)->getAttribute(DString("worddiv"));
 
-      next->worddiv = null;
+      next->kwList = new KeywordList();
+      next->kwList->worddiv = null;
       if (worddiv){
         String *entWordDiv = useEntities(worddiv);
-        next->worddiv = CharacterClass::createCharClass(*entWordDiv, 0, null);
-        if(next->worddiv == null){
+        next->kwList->worddiv = CharacterClass::createCharClass(*entWordDiv, 0, null);
+        if(next->kwList->worddiv == null){
           if (errorHandler != null) errorHandler->warning(StringBuffer("fault compiling worddiv regexp '")+entWordDiv+"' in scheme '"+scheme->schemeName+"'");
         }
         delete entWordDiv;
       };
 
-      next->kwList = new KeywordList;
       for(Node *keywrd_count = tmpel->getFirstChild(); keywrd_count; keywrd_count = keywrd_count->getNextSibling()){
         if (*keywrd_count->getNodeName() == "word" ||
             *keywrd_count->getNodeName() == "symb")

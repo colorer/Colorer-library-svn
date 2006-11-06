@@ -183,7 +183,7 @@ void ConsoleTools::listTypes(bool load, bool useNames){
         writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
       }
 
-      if (load) type->getBaseScheme();
+      if (load) type->compile();
     }
     delete writer;
   }catch(Exception &e){
@@ -240,7 +240,7 @@ void ConsoleTools::profile(int loopCount){
   // HRD RegionMapper linking
   baseEditor.setRegionMapper(&DString("console"), hrdName);
   FileType *type = selectType(pf.getHRCParser(), &textLinesStore);
-  type->getBaseScheme();
+  type->compile();
   baseEditor.setFileType(type);
 
   msecs = clock();
