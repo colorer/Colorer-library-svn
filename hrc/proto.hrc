@@ -112,7 +112,7 @@
   </package>
   <prototype name="html" group="inet" description="html">
     <location link="inet/html.hrc"/>
-    <filename>/\.[^p]??html?$/i</filename>
+    <filename>/\.[^pt]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
   </prototype>
 
@@ -144,7 +144,7 @@
 
   <prototype name="php" group="inet" description="php">
     <location link="inet/php.hrc"/>
-    <filename>/\.(php\d?|phtml|inc)$/i</filename>
+    <filename>/\.(php\d?|phtml|thtml|inc)$/i</filename>
     <firstline>/^&lt;\?(php)/</firstline>
     <firstline>/^#!\S*(php)/</firstline>
     <parameters>
@@ -336,6 +336,7 @@
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
     <filename>/\.(sh)$|^\./i</filename>
+    <filename>/^PKGBUILD$/i</filename>
     <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
   <prototype name="avisynth" group="scripts" description="AviSynth">
