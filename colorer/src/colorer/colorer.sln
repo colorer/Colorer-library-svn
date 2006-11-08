@@ -1,19 +1,21 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "colorer", "colorer.vcproj", "{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Default = Debug|Default
-		Release|Default = Release|Default
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Debug|Default.ActiveCfg = Debug|Win32
-		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Debug|Default.Build.0 = Debug|Win32
-		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Release|Default.ActiveCfg = Release|Win32
-		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Release|Default.Build.0 = Release|Win32
+	GlobalSection(ProjectConfiguration) = postSolution
+		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Debug.ActiveCfg = Debug|Win32
+		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Debug.Build.0 = Debug|Win32
+		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Release.ActiveCfg = Release|Win32
+		{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}.Release.Build.0 = Release|Win32
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
 EndGlobal

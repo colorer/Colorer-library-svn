@@ -10,8 +10,8 @@
 TextParserImpl::TextParserImpl()
 {
   CLR_TRACE("TextParserImpl", "constructor");
-  cache = new ParseCache();
-  clearCache();
+  //cache = new ParseCache();
+  //clearCache();
   lineSource = null;
   regionHandler = null;
   picked = null;
@@ -20,16 +20,16 @@ TextParserImpl::TextParserImpl()
 
 TextParserImpl::~TextParserImpl()
 {
-  clearCache();
+  //clearCache();
   delete provider;
-  delete cache;
+  //delete cache;
 }
 
 void TextParserImpl::setFileType(FileType *type)
 {
   delete provider;
   provider = type->createGrammarProvider();
-  clearCache();
+  //clearCache();
 }
 
 void TextParserImpl::setLineSource(LineSource *lh){
@@ -65,14 +65,18 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
   lineSource->startJob(from);
   regionHandler->startParsing(from);
 
-  ParseStep *top = new ParseStep();
-  top->closingRE = null;
-  top->lowContentPriority = false;
+  ParseStep *ctop = new ParseStep();
+  ctop->closingRE = null;
+  ctop->lowContentPriority = false;
 
-  push(top);
+  push(ctop);
 
   colorize();
 
+  while(top != null) {
+      pop();
+      provider->leaveBlock();
+  }
   /* Init cache *
   parent = cache;
   forward = null;
@@ -410,7 +414,6 @@ void TextParserImpl::pop(){
   }else{
     top = null;
   }
-  provider->leaveBlock();
 }
 
 
@@ -418,14 +421,18 @@ void TextParserImpl::move()
 {
   if (top->closingREmatched && gx+1 >= lowlen) {
     /* Reached block's end RE */
-    gx = top->matchend.e[0];
+    provider->leaveBlock();
 
+    gx = top->matchend.e[0];
     leaveScheme(gy, &top->matchend);
 
     provider->endRE()->setBackTrace(top->o_str, top->o_match);
     delete top->backLine;
+//    top->backLine = null;
 
     pop();
+
+    provider->restart();
 /*
     if (updateCache){
       if (ogy == gy){
@@ -463,9 +470,11 @@ void TextParserImpl::restart()
 
 void TextParserImpl::incrementPosition() {
   gx++;
+  CLR_TRACE("TextParserImpl", "X: %d", gx);
   if (gx < 0 || gx >= str->length()){
     gx = 0;
     gy++;
+    CLR_TRACE("TextParserImpl", "Line: %d", gy);
     top->contextStart = -1;
     top->closingREparsed = false;
     if (gy >= gy2){
@@ -512,7 +521,7 @@ bool TextParserImpl::colorize()
     }
     */
 
-    if (!top->closingREparsed || gx >= lowlen) {
+    if (!top->closingREparsed || gx >= lowlen) { //gx > lowlen??
       // searches for the end of parent block
       top->closingREmatched = false;
       top->closingREparsed = true;
@@ -565,8 +574,9 @@ bool TextParserImpl::colorize()
     else if (provider->nodeType() == SNT_RE)
     {
       SMatches match;
-      if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, schemeStart)){
+      if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart)){
         int i;
+        CLR_TRACE("TextParserImpl", "re matched: %s", DString(str, match.s[0], match.e[0]-match.s[0]).getChars());
         /* applying syntax tokens from RE */
         for (i = 0; i < match.cMatch; i++){
           addRegion(gy, match.s[i], match.e[i], provider->regions(i));
@@ -590,7 +600,7 @@ bool TextParserImpl::colorize()
       SMatches match;
       if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart))
       {
-        CLR_TRACE("TextParserImpl", "scheme matched");
+        CLR_TRACE("TextParserImpl", "scheme matched: %s", provider->scheme()->getName()->getChars());
 
         gx = match.e[0];
 

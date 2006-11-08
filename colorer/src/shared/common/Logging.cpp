@@ -38,11 +38,13 @@ static void file_logger(int level, const char *cname, const char *msg, va_list v
 
 static void console_logger(int level, const char *cname, const char *msg, va_list v){
 
-  printf("[%s][%s] ", levelNames[level], cname);
+  fprintf(stderr, "[%s][%s] ", levelNames[level], cname);
 
-  vprintf(msg, v);
+  vfprintf(stderr, msg, v);
 
-  printf("\n");
+  fprintf(stderr, "\n");
+
+  fflush(stderr);
 }
 
 
@@ -98,8 +100,8 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
   }
   //*/
 
-//  console_logger(level, cname, msg, v);
-  file_logger(level, cname, msg, v);
+  console_logger(level, cname, msg, v);
+//  file_logger(level, cname, msg, v);
 }
 
 

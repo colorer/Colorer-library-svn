@@ -1,8 +1,8 @@
 
 #include<stdio.h>
 #include<colorer/parsers/static/HRCCompiler.h>
-
 #include<colorer/parsers/static/GrammarBuilder.h>
+#include<colorer/parsers/dynamic/FileTypeImpl.h>
 
 
 Vector<String*> schemeQueue;

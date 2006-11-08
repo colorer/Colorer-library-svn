@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 #include<colorer/parsers/dynamic/DynamicHRCModel.h>
+#include<colorer/parsers/dynamic/FileTypeImpl.h>
 
 DynamicHRCModel::DynamicHRCModel()
  : fileTypeHash(200), fileTypeVector(150), schemeHash(4000),

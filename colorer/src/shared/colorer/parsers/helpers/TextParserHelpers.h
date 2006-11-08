@@ -14,28 +14,6 @@
 #define LINE_NEXT 0
 #define LINE_REPARSE 1
 
-/** Dynamic parser's list of virtual entries.
-    @ingroup colorer_parsers
-*/
-class VTList
-{
-  VirtualEntryVector *vlist;
-  VTList *prev, *next, *last, *shadowlast;
-  int nodesnum;
-public:
-  VTList();
-  ~VTList();
-  void deltree();
-  bool push(SchemeNode *node);
-  bool pop();
-  SchemeImpl *pushvirt(SchemeImpl *scheme);
-  void popvirt();
-  void clear();
-  VirtualEntryVector **store();
-  bool restore(VirtualEntryVector **store);
-  friend class HRCCompiler;
-};
-
 /**
  * Internal parser's cache storage. Each object instance
  * stores parse information about single level of Scheme
@@ -109,13 +87,16 @@ struct ParseStep
   SMatches *o_match;
   DString *o_str;
   SString *backLine;
-/*
+
   ParseStep() {
     closingREmatched = closingREparsed = false;
     closingRE = null;
     backLine = null;
+    o_match = null;
+    o_str = null;
+    backLine = null;
   }
-*/
+
 };
 
 #endif

@@ -1,29 +1,41 @@
-#ifndef _COLORER_HRCCOMPILER_H_
-#define _COLORER_HRCCOMPILER_H_
+#ifndef _COLORER_GRAMMARPROVIDER_H_
+#define _COLORER_GRAMMARPROVIDER_H_
 
-#include<colorer/parsers/dynamic/DynamicHRCModel.h>
-#include<colorer/parsers/dynamic/VTList.h>
-#include<colorer/parsers/static/GrammarBuilder.h>
+#include <cregexp/cregexp.h>
+#include <colorer/parsers/helpers/HRCParserHelpers.h>
 
-class HRCCompiler
-{
+class GrammarProvider {
+
 public:
-    HRCCompiler(HRCModel *hrcParser);
-    ~HRCCompiler();
-    void compile(GrammarBuilder *builder);
-private:
-    DynamicHRCModel *hp;
-    GrammarBuilder *builder;
-    
-    VTList *vtList;
+    virtual bool nextItem() = 0;
 
-    void compile();
-    void putScheme(SchemeImpl *scheme);
-    void enqueue(SchemeImpl *scheme);
-    String *qualifyName(SchemeImpl *scheme);
+    virtual void restart() = 0;
+
+    virtual void enterBlock() = 0;
+    virtual void leaveBlock() = 0;
+
+    virtual void *storeState() = 0;
+    virtual void restoreState(void *p) = 0;
+
+    virtual SchemeNodeType nodeType() = 0;
+
+    virtual KeywordList *kwList() = 0;
+    virtual CRegExp *startRE() = 0;
+    virtual CRegExp *endRE() = 0;
+    virtual const Scheme *scheme() = 0;
+
+    virtual bool lowPriority() = 0;
+    virtual bool lowContentPriority() = 0;
+    virtual bool innerRegion() = 0;
+
+    virtual const Region *region() = 0;
+    virtual const Region *regions(int idx) = 0;
+    virtual const Region *regionsn(int idx) = 0;
+    virtual const Region *regione(int idx) = 0;
+    virtual const Region *regionen(int idx) = 0;
 };
-
 #endif
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
@@ -40,7 +52,7 @@ private:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Igor Russkih <irusskih at gmail dot com>.
+ * Igor Russkih <irusskih at gmail dot com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2006
  * the Initial Developer. All Rights Reserved.
  *

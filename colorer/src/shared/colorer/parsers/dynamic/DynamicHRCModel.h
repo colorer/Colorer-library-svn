@@ -85,8 +85,6 @@ friend class FileTypeImpl;
   const Region *getNCRegion(const String *name, bool logErrors);
 };
 
-#include<colorer/parsers/dynamic/FileTypeImpl.h>
-
 #endif
 
 /* ***** BEGIN LICENSE BLOCK *****

@@ -1,6 +1,7 @@
 #ifndef _COLORER_FILETYPEIMPL_H_
 #define _COLORER_FILETYPEIMPL_H_
 
+#include<colorer/parsers/dynamic/DynamicGrammarProvider.h>
 #include<colorer/parsers/dynamic/DynamicHRCModel.h>
 
 /**
@@ -26,13 +27,13 @@ public:
   
   GrammarProvider *createGrammarProvider()
   {
-    if (!typeLoaded) hrcParser->loadFileType(this);
-    return null;//new HRCDynamicProvider(baseScheme);
+    if (!typeLoaded) hrcModel->loadFileType(this);
+    return new DynamicGrammarProvider(hrcModel, baseScheme);
   }
 
   void compile()
   {
-    hrcParser->loadFileType(this);
+    hrcModel->loadFileType(this);
   }
 
   String *enumerateParameters(int idx) {
@@ -96,7 +97,7 @@ protected:
 
   String *name, *group, *description;
   bool isPackage;
-  DynamicHRCModel *hrcParser;
+  DynamicHRCModel *hrcModel;
   SchemeImpl *baseScheme;
 
   Vector<FileTypeChooser*> chooserVector;
@@ -107,8 +108,8 @@ protected:
   Vector<String*> importVector;
   InputSource *inputSource;
 
-  FileTypeImpl(DynamicHRCModel *hrcParser){
-    this->hrcParser = hrcParser;
+  FileTypeImpl(DynamicHRCModel *hrcModel){
+    this->hrcModel = hrcModel;
     protoLoaded = typeLoaded = loadDone = loadBroken = inputSourceLoading = false;
     isPackage = false;
     name = group = description = null;

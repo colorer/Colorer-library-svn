@@ -1,29 +1,66 @@
-#ifndef _COLORER_HRCCOMPILER_H_
-#define _COLORER_HRCCOMPILER_H_
+#ifndef _COLORER_DynamicGrammarProvider
+#define _COLORER_DynamicGrammarProvider
 
-#include<colorer/parsers/dynamic/DynamicHRCModel.h>
-#include<colorer/parsers/dynamic/VTList.h>
-#include<colorer/parsers/static/GrammarBuilder.h>
+#include <common/DynamicArray.h>
+#include <colorer/parsers/GrammarProvider.h>
+#include <colorer/parsers/dynamic/VTList.h>
 
-class HRCCompiler
+struct ProviderStep
 {
-public:
-    HRCCompiler(HRCModel *hrcParser);
-    ~HRCCompiler();
-    void compile(GrammarBuilder *builder);
-private:
-    DynamicHRCModel *hp;
-    GrammarBuilder *builder;
-    
-    VTList *vtList;
+    bool inheritStep;
+    bool virtualized, virtPushed;
+    SchemeImpl *scheme;
+    int nodePosition;
 
-    void compile();
-    void putScheme(SchemeImpl *scheme);
-    void enqueue(SchemeImpl *scheme);
-    String *qualifyName(SchemeImpl *scheme);
 };
 
+class DynamicGrammarProvider : public GrammarProvider
+{
+public:
+    DynamicGrammarProvider(DynamicHRCModel *hrcModel, SchemeImpl *baseScheme);
+    ~DynamicGrammarProvider();
+    
+    virtual bool nextItem();
+
+    virtual void restart();
+
+    virtual void enterBlock();
+    virtual void leaveBlock();
+
+    virtual void *storeState();
+    virtual void restoreState(void *p);
+
+    virtual SchemeNodeType nodeType();
+
+    virtual KeywordList *kwList();
+    virtual CRegExp *startRE();
+    virtual CRegExp *endRE();
+    virtual const Scheme *scheme();
+
+    virtual bool lowPriority();
+    virtual bool lowContentPriority();
+    virtual bool innerRegion();
+
+    virtual const Region *region();
+    virtual const Region *regions(int idx);
+    virtual const Region *regionsn(int idx);
+    virtual const Region *regione(int idx);
+    virtual const Region *regionen(int idx);
+protected:
+    DynamicHRCModel *hrcModel;
+    SchemeImpl *baseScheme;
+    VTList vtList;
+    bool leaveBlockRequired;
+    
+    DynamicArray<ProviderStep> providerSteps;
+    ProviderStep *top;
+
+    void popInherit();
+    void validateInherit();
+
+};
 #endif
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
@@ -40,7 +77,7 @@ private:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Igor Russkih <irusskih at gmail dot com>.
+ * Igor Russkih <irusskih at gmail dot com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2006
  * the Initial Developer. All Rights Reserved.
  *

@@ -117,11 +117,14 @@ $(obj_output_slash)ConsoleTools.$(obj): $(shared_path)/./colorer/viewer/ConsoleT
   $(shared_path)unicode/UnicodeTools.h \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
-  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h \
   $(shared_path)colorer/parsers/static/GrammarBuilder.h \
   $(shared_path)colorer/parsers/static/StaticBuilder.h \
   $(shared_path)colorer/parsers/static/DynamicBuilder.h \
-  $(shared_path)common/DynamicArray.h $(shared_path)colorer/viewer/ConsoleTools.h \
+  $(shared_path)colorer/viewer/ConsoleTools.h \
   $(shared_path)common/io/FileWriter.h
 
 
@@ -187,9 +190,37 @@ $(obj_output_slash)DynamicBuilder.$(obj): $(shared_path)/./colorer/parsers/stati
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/Scheme.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
-  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
-  $(shared_path)colorer/parsers/static/GrammarBuilder.h \
-  $(shared_path)common/DynamicArray.h
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h \
+  $(shared_path)colorer/parsers/static/GrammarBuilder.h
+
+
+$(obj_output_slash)DynamicGrammarProvider.$(obj):  \
+ $(shared_path)/./colorer/parsers/dynamic/DynamicGrammarProvider.cpp \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h $(shared_path)common/Exception.h \
+  $(shared_path)unicode/String.h   \
+   $(shared_path)unicode/Character.h \
+  $(shared_path)common/Common.h $(shared_path)common/Features.h \
+  $(shared_path)common/MemoryChunks.h $(shared_path)common/Logging.h \
+  $(shared_path)unicode/Encodings.h $(shared_path)unicode/x_charcategory.h \
+  $(shared_path)unicode/DString.h $(shared_path)unicode/SString.h \
+  $(shared_path)unicode/StringBuffer.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h $(shared_path)cregexp/cregexp.h \
+  $(shared_path)unicode/CharacterClass.h $(shared_path)unicode/BitArray.h \
+  $(shared_path)common/MemoryOperator.h \
+  $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
+  $(shared_path)common/Vector.h $(shared_path)common/Hashtable.h \
+  $(shared_path)common/HashtableCore.h  \
+  $(shared_path)common/io/InputSource.h $(shared_path)colorer/Region.h \
+  $(shared_path)colorer/Scheme.h $(shared_path)colorer/FileType.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicHRCModel.h \
+  $(shared_path)xml/xmldom.h $(shared_path)colorer/HRCModel.h \
+  $(shared_path)colorer/ErrorHandler.h $(shared_path)unicode/UnicodeTools.h \
+  $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h
 
 
 $(obj_output_slash)DynamicHRCModel.$(obj):  \
@@ -211,7 +242,11 @@ $(obj_output_slash)DynamicHRCModel.$(obj):  \
   $(shared_path)colorer/parsers/dynamic/DynamicHRCModel.h \
   $(shared_path)xml/xmldom.h $(shared_path)colorer/HRCModel.h \
   $(shared_path)colorer/ErrorHandler.h $(shared_path)unicode/UnicodeTools.h \
-  $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h
+  $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h
 
 
 $(obj_output_slash)Encodings.$(obj): $(shared_path)/./unicode/Encodings.cpp \
@@ -387,7 +422,10 @@ $(obj_output_slash)HRCCompiler.$(obj): $(shared_path)/./colorer/parsers/static/H
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/Scheme.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
-  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h \
   $(shared_path)colorer/parsers/static/GrammarBuilder.h
 
 
@@ -586,9 +624,12 @@ $(obj_output_slash)ParserFactory.$(obj): $(shared_path)/./colorer/ParserFactory.
   $(shared_path)unicode/UnicodeTools.h \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h \
   $(shared_path)colorer/parsers/TextParserImpl.h \
-  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
-  $(shared_path)colorer/parsers/GrammarProvider.h
+  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h
 
 
 $(obj_output_slash)RegionMapperImpl.$(obj): $(shared_path)/./colorer/handlers/RegionMapperImpl.cpp \
@@ -650,10 +691,12 @@ $(obj_output_slash)StaticBuilder.$(obj): $(shared_path)/./colorer/parsers/static
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/Scheme.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
-  $(shared_path)colorer/parsers/helpers/TextParserHelpers.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h \
   $(shared_path)colorer/parsers/static/GrammarBuilder.h \
-  $(shared_path)colorer/parsers/static/DynamicBuilder.h \
-  $(shared_path)common/DynamicArray.h
+  $(shared_path)colorer/parsers/static/DynamicBuilder.h
 
 
 $(obj_output_slash)StreamWriter.$(obj): $(shared_path)/./common/io/StreamWriter.cpp \
@@ -794,7 +837,11 @@ $(obj_output_slash)TextParserHelpers.$(obj):  \
   $(shared_path)colorer/Region.h $(shared_path)unicode/UnicodeTools.h \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/Scheme.h \
-  $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h
+  $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h
 
 
 $(obj_output_slash)TextParserImpl.$(obj): $(shared_path)/./colorer/parsers/TextParserImpl.cpp \
@@ -820,7 +867,10 @@ $(obj_output_slash)TextParserImpl.$(obj): $(shared_path)/./colorer/parsers/TextP
   $(shared_path)unicode/UnicodeTools.h \
   $(shared_path)colorer/parsers/helpers/HRCParserHelpers.h \
   $(shared_path)colorer/parsers/dynamic/FileTypeImpl.h \
-  $(shared_path)colorer/parsers/GrammarProvider.h
+  $(shared_path)colorer/parsers/dynamic/DynamicGrammarProvider.h \
+  $(shared_path)common/DynamicArray.h \
+  $(shared_path)colorer/parsers/GrammarProvider.h \
+  $(shared_path)colorer/parsers/dynamic/VTList.h
 
 
 $(obj_output_slash)UnicodeTools.$(obj): $(shared_path)/./unicode/UnicodeTools.cpp  \

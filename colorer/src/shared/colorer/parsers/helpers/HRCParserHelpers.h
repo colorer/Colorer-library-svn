@@ -16,7 +16,7 @@
 
 class SchemeImpl;
 class FileTypeImpl;
-
+class DynamicGrammarProvider;
 
 /** Information about one parsed keyword.
     Contains keyword, symbol specifier, region reference
@@ -120,8 +120,8 @@ public:
 */
 class SchemeImpl : public Scheme{
   friend class DynamicHRCModel;
+  friend class DynamicGrammarProvider;
   friend class HRCCompiler;
-  friend class TextParserImpl;
   friend class ParseState;
 public:
   String *getName() const { return schemeName; };
