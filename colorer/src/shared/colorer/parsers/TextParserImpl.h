@@ -5,6 +5,9 @@
 #include<colorer/parsers/helpers/TextParserHelpers.h>
 #include<colorer/parsers/GrammarProvider.h>
 
+struct ParseStep;
+struct ParseCache;
+
 /**
  * Implementation of TextParser interface.
  * This is the base Colorer syntax parser, which
@@ -31,13 +34,15 @@ private:
   int len, lowlen;
   String *str;
   int gx, gy, gy2;
-  int clearLine, endLine, schemeStart;
-  //SchemeImpl *baseScheme;
+  int clearLine, endLine;
+
   GrammarProvider *provider;
+  LineSource *lineSource;
+  RegionHandler *regionHandler;
 
   bool breakParsing;
-  bool first, invisibleSchemesFilled;
-  bool drawing, updateCache;
+  bool invisibleSchemesFilled;
+  bool updateCache;
 
   const Region *picked;
 
@@ -45,13 +50,10 @@ private:
   ParseCache *parent, *forward;
 
   int cachedLineNo;
-  ParseCache *cachedParent,*cachedForward;
+  ParseCache *cachedParent, *cachedForward;
 
-  LineSource *lineSource;
-  RegionHandler *regionHandler;
-
-  ParseStep *top;
-  Vector<ParseStep*> parseSteps;
+  ParseStep *root, *top;
+  Vector<ParseStep *> parseSteps;
 
   void fillInvisibleSchemes(ParseCache *cache);
   void addRegion(int lno, int sx, int ex, const Region* region);

@@ -18,7 +18,7 @@
 #include<colorer/parsers/TextParserImpl.h>
 
 #ifndef __TIMESTAMP__
-#define __TIMESTAMP__ "28 May 2006"
+#define __TIMESTAMP__ "09 Nov 2006"
 #endif
 
 

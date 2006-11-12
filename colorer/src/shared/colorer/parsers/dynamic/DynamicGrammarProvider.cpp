@@ -24,8 +24,11 @@ void DynamicGrammarProvider::popInherit()
     }
     CLR_TRACE("DGP", "traverse inherit <<%s", top->scheme->getName()->getChars());
     
-    providerSteps.removeElementAt(providerSteps.size() - 1);
-    top = providerSteps.elementAt(providerSteps.size() - 1);
+    ProviderStep *newtop = top->parent;
+    newtop->addref();
+
+    top->rmref();
+    top = newtop;
 }
 
 void DynamicGrammarProvider::validateInherit()
@@ -40,7 +43,16 @@ void DynamicGrammarProvider::validateInherit()
     SchemeNode *node = top->scheme->nodes.elementAt(top->nodePosition);
 
     if (node->type == SNT_INHERIT) {
-        top = providerSteps.addElement();
+        ProviderStep *newtop = new ProviderStep();
+        
+        newtop->parent = top;
+        top->addref();
+
+        // reassign
+        top->rmref();
+        top = newtop;
+        top->addref();
+
         top->inheritStep = true;
         top->virtPushed = false;
         top->virtualized = true;
@@ -51,6 +63,7 @@ void DynamicGrammarProvider::validateInherit()
             top->scheme = node->scheme;
         }
         top->nodePosition = 0;
+        
         CLR_TRACE("DGP", "traverse inherit >>%s", top->scheme->getName()->getChars());
         validateInherit();
     }
@@ -91,7 +104,10 @@ void DynamicGrammarProvider::enterBlock()
     assert(!leaveBlockRequired);
 
     if (top == null) {
-        top = providerSteps.addElement();
+        top = new ProviderStep();
+        
+        top->addref();
+
         top->inheritStep = false;
         top->scheme = baseScheme;
         top->virtualized = top->virtPushed = false;
@@ -103,8 +119,16 @@ void DynamicGrammarProvider::enterBlock()
     SchemeNode *node = top->scheme->nodes.elementAt(top->nodePosition);
     assert(node->type == SNT_SCHEME);
     
-    top = providerSteps.addElement();
+    ProviderStep *newtop = new ProviderStep();
     
+    newtop->parent = top;
+    top->addref();
+
+    // reassign
+    top->rmref();
+    top = newtop;
+    top->addref();
+
     top->inheritStep = false;
     top->virtPushed = false;
     top->nodePosition = 0;
@@ -129,23 +153,29 @@ void DynamicGrammarProvider::leaveBlock()
     if (top->virtualized) {
         vtList.popvirt();
     }
-    providerSteps.removeElementAt(providerSteps.size() - 1);
-    if (providerSteps.size() > 0){
-        top = providerSteps.elementAt(providerSteps.size() - 1);
-    }else{
-        top = null;
-    };
+    
+    ProviderStep *newtop = top->parent;
+    
+    if (newtop) newtop->addref();
+
+    top->rmref();
+    top = newtop;
 }
 
 
 void *DynamicGrammarProvider::storeState()
 {
     assert(!"never reach");
-    return null;
+    top->addref();
+    return (void*)top;
 }
 
 void DynamicGrammarProvider::restoreState(void *p)
 {
+    if (top) top->rmref();
+
+    top = (ProviderStep*)p;
+    
     assert(!"never reach");
 }
 

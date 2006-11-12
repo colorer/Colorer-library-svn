@@ -1,10 +1,120 @@
 #include<colorer/parsers/TextParserImpl.h>
 #include<common/Logging.h>
 
-/* should be removed */
-#define MATCH_NOTHING 0
-#define MATCH_RE 1
-#define MATCH_SCHEME 2
+
+/**
+ * Sinle step, or state, of the parser. Each state is described by a set of
+ * attributes, which affect parsing process.
+ */
+struct ParseStep
+{
+  /**
+   * Tree structure references in parse cache
+   */
+  ParseStep *children, *next, *parent;
+  
+  CRegExp *closingRE;
+  bool closingREmatched;
+  bool closingREparsed;
+  SMatches matchstart;
+  SMatches matchend;
+
+  bool lowContentPriority;
+  int contextStart;
+
+  /** Start and end lines of this scheme match */
+  int sline, eline;
+  /** provider's state at this parse position */
+  void *providerState;
+
+  int o_gy;
+  SMatches *o_match;
+  DString *o_str;
+  SString *backLine;
+
+  ParseStep() {
+    closingREmatched = closingREparsed = false;
+    closingRE = null;
+    backLine = null;
+    o_match = null;
+    o_str = null;
+    backLine = null;
+  }
+
+};
+
+/**
+ * Internal parser's cached tree storage. Each object instance
+ * stores parse information about single level of Scheme
+ * objects. The object always takes more, than a single line,
+ * because single-line scheme match doesn't need to be cached.
+ *
+ * @ingroup colorer_parsers
+ */
+class ParseCache
+{
+public:
+  /** Start and end lines of this scheme match */
+  int sline, eline;
+
+  /**
+   * RE Match object for start RE of the enwrapped &lt;block> object
+   */
+  SMatches matchstart;
+  /**
+   * Copy of the line with parent's start RE.
+   */
+  SString *backLine;
+
+  ParseCache *children, *next, *parent;
+  
+  ParseCache()
+  {
+    children = next = parent = null;
+    backLine = null;
+    //vcache = 0;
+  };
+
+  ~ParseCache()
+  {
+    //CLR_TRACE("TPCache", "~ParseCache():%s,%d-%d", scheme ? scheme->getName()->getChars() : "", sline, eline);
+    delete backLine;
+    backLine = (SString*)0xdead;
+    delete children;
+    delete next;
+    //delete[] vcache;
+  };
+  
+  /**
+   * Searched a cache position for the specified line number.
+   * @param ln     Line number to search for
+   * @param cache  Cache entry, filled with last child cache entry.
+   * @return       Cache entry, assigned to the specified line number
+   */
+  ParseCache *searchLine(int ln, ParseCache **cache)
+  {
+  ParseCache *r1, *r2, *tmp = this;
+    *cache = null;
+    while(tmp)
+    {
+      //CLR_TRACE("TPCache", "  searchLine() tmp:%s,%d-%d", tmp->scheme ? tmp->scheme->getName()->getChars() : "", tmp->sline, tmp->eline);
+      if (tmp->sline <=ln && tmp->eline >= ln) {
+        r1 = tmp->children->searchLine(ln, &r2);
+        if (r1){
+          *cache = r2;
+          return r1;
+        }
+        *cache = r2; // last child
+        return tmp;
+      }
+      if (tmp->sline <= ln) *cache = tmp;
+      tmp = tmp->next;
+    }
+    return null;
+  };
+
+};
+
 
 
 TextParserImpl::TextParserImpl()
@@ -52,7 +162,6 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
   gy2 = from+num;
 
   invisibleSchemesFilled = false;
-  schemeStart = -1;
   breakParsing = false;
   updateCache = (mode == TPM_CACHE_UPDATE);
 
@@ -217,10 +326,13 @@ void TextParserImpl::fillInvisibleSchemes(ParseCache *ch)
   }
   /* Fills output stream with valid "pseudo" enterScheme */
   fillInvisibleSchemes(ch->parent);
-  enterScheme(gy, 0, 0, ch->clender->region);
+  //TODO:
+  //enterScheme(gy, 0, 0, ch->clender->region);
   return;
 }
 
+#define MATCH_NOTHING 0
+#define MATCH_RE 1
 
 int TextParserImpl::searchKW(int lowlen)
 {
@@ -509,9 +621,6 @@ bool TextParserImpl::colorize()
       break;
     }
 
-    // clears line at start,
-    // prevents multiple requests on each line
-    
     // hack to include invisible regions in start of block
     // when parsing with cache information
     /*
@@ -541,17 +650,9 @@ bool TextParserImpl::colorize()
       len = lowlen;
     }
 
-    // TODO???
-    top->parent_len = len;
-
     /*
      * Traversing over scheme
      */
-    //SchemeNode *schemeNode = currentSchemeNode(top->itop);
-    //if (provider->nodeType == SNT_EMPTY){
-    //  cont();
-    //  continue;
-    //}
 
     if (picked != null && gx+11 <= lowlen && (*str)[gx] == 'C'){
       int ci;

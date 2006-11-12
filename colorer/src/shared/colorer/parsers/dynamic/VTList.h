@@ -57,8 +57,10 @@ public:
 
   bool pop()
   {
-  VTList *ditem;
+    VTList *ditem;
+
     assert(last != this);
+    
     ditem = last;
     if (ditem->next){
       ditem->next->prev = ditem->prev;

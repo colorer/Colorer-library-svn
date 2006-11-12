@@ -4,45 +4,6 @@
 
 
 /////////////////////////////////////////////////////////////////////////
-// parser's cache structures
-ParseCache::ParseCache()
-{
-  children = next = parent = null;
-  backLine = null;
-  vcache = 0;
-}
-
-ParseCache::~ParseCache()
-{
-  CLR_TRACE("TPCache", "~ParseCache():%s,%d-%d", scheme ? scheme->getName()->getChars() : "", sline, eline);
-  delete backLine;
-  backLine = (SString*)0xdead;
-  delete children;
-  delete next;
-  delete[] vcache;
-}
-
-ParseCache *ParseCache::searchLine(int ln, ParseCache **cache)
-{
-ParseCache *r1, *r2, *tmp = this;
-  *cache = null;
-  while(tmp)
-  {
-    CLR_TRACE("TPCache", "  searchLine() tmp:%s,%d-%d", tmp->scheme ? tmp->scheme->getName()->getChars() : "", tmp->sline, tmp->eline);
-    if (tmp->sline <=ln && tmp->eline >= ln) {
-      r1 = tmp->children->searchLine(ln, &r2);
-      if (r1){
-        *cache = r2;
-        return r1;
-      }
-      *cache = r2; // last child
-      return tmp;
-    }
-    if (tmp->sline <= ln) *cache = tmp;
-    tmp = tmp->next;
-  }
-  return null;
-}
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

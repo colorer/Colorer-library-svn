@@ -2,17 +2,30 @@
 #define _COLORER_DynamicGrammarProvider
 
 #include <common/DynamicArray.h>
+#include <common/RefCounter.h>
 #include <colorer/parsers/GrammarProvider.h>
 #include <colorer/parsers/dynamic/VTList.h>
 
-struct ProviderStep
+struct ProviderStep : RefCounter
 {
+    ProviderStep *parent;
+
     bool inheritStep;
     bool virtualized, virtPushed;
     SchemeImpl *scheme;
     int nodePosition;
 
+    ProviderStep()
+    {
+        parent = null;
+    }
+
+    ~ProviderStep()
+    {
+        if (parent) parent->rmref();
+    }
 };
+
 
 class DynamicGrammarProvider : public GrammarProvider
 {
@@ -52,7 +65,7 @@ protected:
     VTList vtList;
     bool leaveBlockRequired;
     
-    DynamicArray<ProviderStep> providerSteps;
+//    DynamicArray<ProviderStep> providerSteps;
     ProviderStep *top;
 
     void popInherit();
