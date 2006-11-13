@@ -535,6 +535,8 @@ void TextParserImpl::move()
     /* Reached block's end RE */
     provider->leaveBlock();
 
+    bool zeroLength = (top->matchstart.s[0] == top->matchend.e[0]);
+
     gx = top->matchend.e[0];
     leaveScheme(gy, &top->matchend);
 
@@ -544,6 +546,11 @@ void TextParserImpl::move()
 
     pop();
 
+    if (zeroLength){
+      cont();
+      return;
+    }
+    
     provider->restart();
 /*
     if (updateCache){
@@ -630,7 +637,7 @@ bool TextParserImpl::colorize()
     }
     */
 
-    if (!top->closingREparsed || gx >= lowlen) { //gx > lowlen??
+    if (!top->closingREparsed || gx >= lowlen) {
       // searches for the end of parent block
       top->closingREmatched = false;
       top->closingREparsed = true;

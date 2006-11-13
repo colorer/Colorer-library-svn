@@ -2,6 +2,31 @@
 #include <colorer/parsers/dynamic/DynamicGrammarProvider.h>
 #include<common/Logging.h>
 
+struct ProviderStep : RefCounter
+{
+    ProviderStep *parent;
+    ProviderStep *virtualPrev;
+
+    bool inheritStep;
+    bool virtualized, virtPushed;
+    SchemeImpl *scheme;
+    int nodePosition;
+
+    ProviderStep()
+    {
+        parent = null;
+        virtualPrev = null;
+    }
+
+    ~ProviderStep()
+    {
+        if (parent) parent->rmref();
+        if (virtualPrev) virtualPrev->rmref();
+    }
+};
+
+
+
 DynamicGrammarProvider::DynamicGrammarProvider(DynamicHRCModel *hrcModel, SchemeImpl *baseScheme) :
     hrcModel(hrcModel), baseScheme(baseScheme), top(null), leaveBlockRequired(false)
 {
@@ -14,6 +39,8 @@ DynamicGrammarProvider::~DynamicGrammarProvider()
 void DynamicGrammarProvider::popInherit()
 {
     assert(top->inheritStep);
+    
+    /*
     if (top->virtualized)
     {
         vtList.popvirt();
@@ -22,6 +49,8 @@ void DynamicGrammarProvider::popInherit()
     {
         vtList.pop();
     }
+    */
+    
     CLR_TRACE("DGP", "traverse inherit <<%s", top->scheme->getName()->getChars());
     
     ProviderStep *newtop = top->parent;
@@ -40,6 +69,8 @@ void DynamicGrammarProvider::validateInherit()
         return;
     }
 
+    if (top->scheme->nodes.size() == 0) return;
+
     SchemeNode *node = top->scheme->nodes.elementAt(top->nodePosition);
 
     if (node->type == SNT_INHERIT) {
@@ -54,6 +85,10 @@ void DynamicGrammarProvider::validateInherit()
         top->addref();
 
         top->inheritStep = true;
+        
+        adviceScheme(node->scheme);
+
+        /*
         top->virtPushed = false;
         top->virtualized = true;
         top->scheme = vtList.pushvirt(node->scheme);
@@ -62,6 +97,8 @@ void DynamicGrammarProvider::validateInherit()
             top->virtPushed = vtList.push(node);
             top->scheme = node->scheme;
         }
+        */
+        
         top->nodePosition = 0;
         
         CLR_TRACE("DGP", "traverse inherit >>%s", top->scheme->getName()->getChars());
@@ -97,6 +134,35 @@ void DynamicGrammarProvider::restart()
     top->nodePosition = 0;
     leaveBlockRequired = false;
     validateInherit();
+}                              	
+
+
+
+
+void DynamicGrammarProvider::adviceScheme(SchemeImpl *scheme)
+{
+    SchemeImpl *ret = scheme;
+    ProviderStep *curvl = null;
+    
+    for(ProviderStep *vl = top->parent->virtualPrev; vl; vl = vl->virtualPrev)
+    {
+        SchemeNode *node = vl->scheme->nodes.elementAt(vl->nodePosition);
+        assert(node->type == SNT_INHERIT || node->type == SNT_SCHEME);
+        
+        for(int idx = 0; idx < node->virtualEntryVector.size(); idx++)
+        {
+            VirtualEntry *ve = node->virtualEntryVector.elementAt(idx);
+            if (ret == ve->virtScheme && ve->substScheme){
+              ret = ve->substScheme;
+              curvl = vl;
+            }
+        }
+    }
+    
+    top->virtualPrev = curvl ? curvl->virtualPrev : top->parent;
+    if (top->virtualPrev) top->virtualPrev->addref();
+
+    top->scheme = ret;
 }
 
 void DynamicGrammarProvider::enterBlock()
@@ -130,13 +196,12 @@ void DynamicGrammarProvider::enterBlock()
     top->addref();
 
     top->inheritStep = false;
-    top->virtPushed = false;
     top->nodePosition = 0;
 
-    top->scheme = vtList.pushvirt(node->scheme);
-    top->virtualized = top->scheme != null;
-    if (!top->scheme) top->scheme = node->scheme;
+    adviceScheme(node->scheme);
     assert(top->scheme);
+
+    CLR_TRACE("DGP", "traverse block >>%s (%s)", top->scheme->getName()->getChars(), node->scheme->getName()->getChars());
 
     validateInherit();
 }
@@ -150,10 +215,8 @@ void DynamicGrammarProvider::leaveBlock()
         popInherit();
     }
 
-    if (top->virtualized) {
-        vtList.popvirt();
-    }
-    
+    CLR_TRACE("DGP", "traverse block <<%s", top->scheme->getName()->getChars());
+
     ProviderStep *newtop = top->parent;
     
     if (newtop) newtop->addref();

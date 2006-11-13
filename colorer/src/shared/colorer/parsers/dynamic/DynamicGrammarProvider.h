@@ -6,26 +6,7 @@
 #include <colorer/parsers/GrammarProvider.h>
 #include <colorer/parsers/dynamic/VTList.h>
 
-struct ProviderStep : RefCounter
-{
-    ProviderStep *parent;
-
-    bool inheritStep;
-    bool virtualized, virtPushed;
-    SchemeImpl *scheme;
-    int nodePosition;
-
-    ProviderStep()
-    {
-        parent = null;
-    }
-
-    ~ProviderStep()
-    {
-        if (parent) parent->rmref();
-    }
-};
-
+struct ProviderStep;
 
 class DynamicGrammarProvider : public GrammarProvider
 {
@@ -62,11 +43,12 @@ public:
 protected:
     DynamicHRCModel *hrcModel;
     SchemeImpl *baseScheme;
-    VTList vtList;
+//    VTList vtList;
     bool leaveBlockRequired;
     
-//    DynamicArray<ProviderStep> providerSteps;
     ProviderStep *top;
+
+    void adviceScheme(SchemeImpl *scheme);
 
     void popInherit();
     void validateInherit();
