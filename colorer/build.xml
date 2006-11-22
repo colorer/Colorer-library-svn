@@ -101,7 +101,8 @@
               **/*.so, **/src.zip, **/colorer.jar, **/objs/*,
               **/build.user.properties, **/__20*/**,
               **/colorer/Debug/**, **/regtest/Release/**,
-              **/net.sf.colorer/bin/**
+              **/net.sf.colorer/bin/**, **/*.psd,
+              **/test/hrc/_valid/**
               '/>
 
     <uptodate property="doc.javadoc.required" targetfile="doc/java/package-list">
