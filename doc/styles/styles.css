@@ -2,8 +2,15 @@
 body{
   font-family: Verdana, Arial, helvetica, sans-serif;
   font-size:10pt;
-  margin-left: 40pt;
-  margin-right: 20pt;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 40pt;
+  padding-right: 20pt;
+  max-width: 80em;
+  /* IE hack: */
+  /*
+  width:expression(document.body.clientWidth > (500/12) * parseInt(document.body.currentStyle.fontSize) ? "500pt" : "auto" );
+  */
   color:black;
   background:white;
   background-position: top left;
@@ -99,6 +106,14 @@ h2{ font: 150%; }
 h3{ font: 120%; margin: 14pt 4pt 8pt 4pt; }
 h4{ font: small-caps 100%; font-weight: bold; }
 
+.smalllic{
+  font-size: 8pt;
+  color: gray;
+  margin-left: 10pt;
+  margin-right: 20pt;
+  text-align:justify;
+}
+
 .icon{
   float:left;
 }
@@ -134,7 +149,7 @@ h4{ font: small-caps 100%; font-weight: bold; }
 .newsdiv{
   border: 1pt solid gray;
   padding: 1pt 1pt 3pt 2pt;
-  width: 180pt;
+  width: 20em;
   margin-top: 5pt;
 }
 .newsheader{
@@ -154,30 +169,9 @@ h4{ font: small-caps 100%; font-weight: bold; }
   font-size: 8pt;
 }
 
-.rss{
-    font-size: 85%;
-    font-weight: normal;
-    border: 1px solid #f40;
-    background: #f60;
-    text-shadow: none;
-    padding: 0 .2em 0 .1em;
-    margin: 0 0 0 1em;
-    color: #fff;
-    font-family: Arial, helvetica, sans-serif;
-    font-size: 7pt;
-    text-decoration: none;
-}
-span.rss a
-{
-    text-decoration: none;
-    background: transparent;
-    padding: 0;
-    color: #fff;
-}
-span.rss a:hover
-{
-    text-decoration: none;
-    background: transparent;
-    color: #f00;
-    text-decoration: none;
+a.rss, a.rss:hover, a.rss:active{
+  background: url("../images/feed.png") no-repeat;
+  padding: 0 0 5px 20px;
+  margin-left: 1em;
+  font-size: 8pt;
 }
