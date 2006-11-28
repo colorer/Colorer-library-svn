@@ -72,3 +72,18 @@ push @addLines, "$c_off {"; # no pair
 
 push @addLines, "$c_off {sdf}"; # has pair
 
+#against <stream>
+$i<scalar(@{$self->{'key'}});
+
+test
+
+#against improper y}}}
+$a->{y}=1;
+
+#RE with \s operator
+/a/ or /\s+b/ and print;
+
+#In this line both ; and # are colored as comment, while
+#only # should be treated as one.
+
+print;#

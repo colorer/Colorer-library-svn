@@ -72,4 +72,19 @@
 71: 
 72: <span class='perl-WordFun def-FunctionKeyword def-Keyword'>push</span> @addLines<span class='perl-Symb def-Symbol'>,</span> <span class='perl-String def-String'>"$c_off </span><span class='perl-Symb def-Symbol'>{</span><span class='perl-Var def-Var'>sdf</span><span class='perl-Symb def-Symbol'>}</span><span class='perl-String def-String'>"</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span> <span class='perl-Comment def-Comment def-Syntax'># has pair</span>
 73: 
-74: 
+74: <span class='perl-Comment def-Comment def-Syntax'>#against &lt;stream></span>
+75: $i<span class='perl-Symb def-Symbol'>&lt;</span><span class='perl-WordFun def-FunctionKeyword def-Keyword'>scalar</span><span class='def-Symbol'>(</span>@<span class='perl-Var def-Var'>{</span>$self<span class='perl-Symb def-Symbol'>-></span><span class='perl-Symb def-Symbol'>{</span><span class='perl-String def-String'>'key'</span><span class='perl-Symb def-Symbol'>}</span><span class='perl-Var def-Var'>}</span><span class='def-Symbol'>)</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+76: 
+77: test
+78: 
+79: <span class='perl-Comment def-Comment def-Syntax'>#against improper y}}}</span>
+80: $a<span class='perl-Symb def-Symbol'>-></span><span class='perl-Symb def-Symbol'>{</span><span class='perl-Var def-Var'>y</span><span class='perl-Symb def-Symbol'>}</span><span class='perl-Symb def-Symbol'>=</span><span class='perl-Numb def-Number'>1</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+81: 
+82: <span class='perl-Comment def-Comment def-Syntax'>#RE with \s operator</span>
+83: <span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='perl-String def-String'>a</span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span> <span class='perl-Symb def-Symbol'>or</span><span class='perl-String def-String'> </span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='regexp-SymbClass def-Var'>\s</span><span class='regexp-MetaSymb def-Symbol'>+</span><span class='perl-String def-String'>b</span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span> <span class='perl-Symb def-Symbol'>and</span> <span class='perl-Word def-Keyword'>print</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
+84: 
+85: <span class='perl-Comment def-Comment def-Syntax'>#In this line both ; and # are colored as comment, while</span>
+86: <span class='perl-Comment def-Comment def-Syntax'>#only # should be treated as one.</span>
+87: 
+88: <span class='perl-Word def-Keyword'>print</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span><span class='perl-Comment def-Comment def-Syntax'>#</span>
+89: 
