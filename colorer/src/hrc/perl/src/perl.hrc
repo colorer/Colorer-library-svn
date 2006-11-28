@@ -411,7 +411,7 @@
           scheme="PerlDATA" region00="DataName"/>
 <!-- streams and globs with html </script> hack -->
 
-         <block start="/(&lt;) \M (\/script)?! [^\s\%]*? &gt;/ix"
+         <block start="/(&lt;) \M (\/script)?! [^\s\%\@\{\}]*? &gt;/ix"
                 end="/&gt;/" region="Stream" scheme="Stream"
                 region01="def:PairStart" region10="def:PairEnd"
          />
