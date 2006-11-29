@@ -7,7 +7,7 @@
 <!--
     Batch/WinNT CMD script files Syntax v 2.5
 With help of:
-    Vadim N. Zaharenko <zvn@msalt.belpak.gomel.by>
+    Vadim N. Zaharenko <zvn@msalt.belpak.gomel.by>, <Vadim.Zaharenko@GMail.com>
     Vladimir Tarasov <tsoftgroup@chat.ru>
     Alexander Lishansky <alex@i-sight.com>
     Aleksey Pichugin <pichugin@hotpop.com>
@@ -114,7 +114,7 @@ With help of:
             <word name="echoconfig"/>
             <word name="endlocal"/>
             <word name="eof"/>
-            <word name="eql"/>
+            <word name="equ"/>
             <word name="erase"/>
             <word name="errorlevel"/>
             <word name="exist"/>
