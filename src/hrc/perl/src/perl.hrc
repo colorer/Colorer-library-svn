@@ -2,8 +2,7 @@
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
 <!ENTITY perl-brackets SYSTEM "perl-brackets.ent.hrc">
-<!ENTITY perl-vars  SYSTEM "perl-vars.ent.hrc">
-<!ENTITY perl-internal-hack  SYSTEM "perl-vars.internal.hack.ent.hrc">
+<!ENTITY perl-vars     SYSTEM "perl-vars.ent.hrc">
 <!ENTITY perl-heredoc  SYSTEM "perl-heredoc.ent.hrc">
 <!ENTITY perl-keywords SYSTEM "perl-keywords.ent.hrc">
 
@@ -15,22 +14,12 @@
  >
 
    
-<!-- hack for string interpolation vars -->
- 
-<package name="perl-vars.internal.hack"/>
-<package name="perl-vars-ex.internal.hack"/>
-
-<type name="perl-vars.internal.hack">
-        <entity name="var" value="[$@%*&amp;]"/>
-        
-        &perl-internal-hack;
-</type>
-
-<type name="perl-vars-ex.internal.hack">
-        <entity name="var" value="[$@]"/>
-        
-        &perl-internal-hack;
-</type>
+<package name="perl-vars-ex">
+  <location link="perl-vars.pkg.hrc"/>
+</package>
+<package name="perl-vars">
+  <location link="perl-vars.pkg.hrc"/>
+</package>
 
 
 <type name="perl">
@@ -94,9 +83,6 @@
  </appinfo>
 </annotation>
 
-      <!-- EE:  namespase modifed, import not need.
-      import type="def"/ -->
-
       <region name="String" parent="def:String"/>
       <region name="StringEdge" parent="regexp:SpecQuote"/>
       <region name="Comment" parent="def:Comment"/>
@@ -123,7 +109,6 @@
       <region name="DataOutline" parent="def:Outlined"/>
       <region name="PodOutline" parent="def:Outlined"/>
 
-      <!-- EE: new regions -->
       <region name="EvalText" parent="def:default"/>
       <region name="ReModif" parent="regexp:SpecArea"/>
       <region name="ReType" parent="Word"/><!-- StringEdge-->
@@ -134,7 +119,7 @@
       <region name="FormatDoc" parent="HereDoc"/>
       <region name="Warning" parent="def:DeprecatedKeyword"/>
 
-      <!-- EE Note: This region insert ` ` strings (system commands)
+      <!-- Note: This region insert ` ` strings (system commands)
                     If you don't want it, change "def:Insertion" to "String"
       -->
       <region name="SystemExec" parent="def:Insertion"/>
@@ -164,7 +149,7 @@
          <regexp match="/\\['\\\/]/" region0="Slash"/>
       </scheme>
 
-      <!-- EE: New schemes: strings for blocks -->
+      <!-- New schemes: strings for blocks -->
       <scheme name="ClassString">
        <inherit scheme="String"/>
        <inherit scheme="regexp:perl.string"/>
@@ -194,7 +179,7 @@
          <regexp match="/\\[^xX0-7]/" region0="Slash"/>
       </scheme>
 
-      <!-- EE: sprintf support - not conflict with hash now... -->
+      <!-- sprintf support - not conflict with hash now... -->
       <entity name="pfn" value="(?{Var}\d+\$)?"/>
       <entity name="sf" value="(\d+|(?{Symb}\*)%pfn;)"/>
       <scheme name="PrintfString">
@@ -230,7 +215,7 @@
          <inherit scheme="SubstComment"/>
       </scheme>
 
-      <!--EE: regexps -->
+      <!-- regexps -->
       <scheme name="RegExpString">
        <inherit scheme="regexp:perl.regexp">
         <virtual scheme="regexp:string" subst-scheme="StringForRegExp"/>
@@ -366,7 +351,7 @@
    -->
 
 
-<!-- EE: move ~ to separated block (s{}{/... - '/' no regexp ) -->
+<!-- move ~ to separated block (s{}{/... - '/' no regexp ) -->
          <block start="/((\=|\! \~) |
                   [^&lt;\]\}\)\+\-\w\s\/] |
                   (\bif) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
@@ -385,16 +370,6 @@
           region="String" region01="Symb"
           region03="StringEdge" region04="def:PairStart"
           region10="StringEdge" region11="def:PairEnd" region12="ReModif"/>
-
-      <!-- EE!! cut here (begin) ->
-         <block start="/( [\=\!]\~ |
-                         [^&lt;\]\}\)\+\-\w\s\/] |
-                         \bif | \bunless | \bsplit | ~ | ^)
-                         \s* ((\/)) /x"
-                         end="/(\y2[cmiogxes]*)/x" scheme="RegExpString"
-                         region="String" region01="Symb" region02="StringEdge"
-                         region03="def:PairStart" region10="StringEdge" region11="def:PairEnd"/>
-      <!- EE!! cut here (end) -->
 
 <!-- formatted output -->
          <block start="/^\s* \m (format)\s*(\s\w*)\s*(\=) /x" end="/^(\.)/"
@@ -424,7 +399,7 @@
 
 
          <annotation><documentation>
-   cail: regexps
+
         in reallity  s'foo'bar' does no interpolation - but i thing this
           isn't so important :)
         currently this subst will not work in such cases:
@@ -437,14 +412,11 @@
          }ix;
         but i think this is real perversion :)
 
-   EE: next included scheme
-        was created by my script 'bracket.xml'
+        The next included scheme was created by my script 'bracket.xml'
 
          </documentation></annotation>
 
          <inherit scheme="bracket"/>
-
-
 
 <!-- operators -->
          <keywords region="Symb" worddiv="[\s\W\d]">
@@ -494,9 +466,9 @@
          </keywords>
 
          <inherit scheme="Keywords"/>
-         <!-- EE: labels -->
+         <!-- labels -->
          <regexp match="/^\s*(\w+\:)\M(\s|$)/" region1="def:Label"/>
-<!-- Timur: hack against Ada maniacs -->
+         <!-- Against Ada maniacs -->
          <regexp match="/\c(&amp;|\w+)'[\w_']+\b/" region0="WordExt"/>
 
       </scheme>
@@ -505,6 +477,7 @@
 <!--    &perl-genkeywords-->
 
    </type>
+
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

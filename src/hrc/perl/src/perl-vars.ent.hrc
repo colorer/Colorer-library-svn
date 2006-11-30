@@ -62,14 +62,14 @@
 <scheme name="Vars">
 	<inherit scheme="BuildinVars"/>
 	<inherit scheme="BuildinConst"/>
-	<inherit scheme="perl-vars.internal.hack:vars"/>
+	<inherit scheme="perl-vars:vars"/>
 </scheme>
 
 
 
 <scheme name="VarsEx">
 	<inherit scheme="BuildinVars"/>
-	<inherit scheme="perl-vars-ex.internal.hack:vars"/>
+	<inherit scheme="perl-vars-ex:vars"/>
 </scheme>
 
 <!--Conetnt
