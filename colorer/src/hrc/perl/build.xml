@@ -32,8 +32,8 @@
 
 <target name="hrc.check">
  <dependset>
-  <srcfilelist dir="${src}" files = "perl.hrc, *.ent.hrc"/>
-  <targetfilelist dir="${bin}" files="perl.hrc, *.ent.hrc" />
+  <srcfilelist dir="${src}" files = "perl*.hrc"/>
+  <targetfilelist dir="${bin}" files="perl*.hrc" />
  </dependset>
 </target>
 
@@ -41,7 +41,7 @@
 
 <target name="hrc" depends="hrc.check, bkt">
  <copy todir='${bin}'>
-   <fileset dir='${src}' includes='perl.hrc, *.ent.hrc'/>
+   <fileset dir='${src}' includes='perl*.hrc'/>
  </copy>
 </target>
 
