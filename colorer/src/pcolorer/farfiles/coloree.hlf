@@ -19,9 +19,9 @@ $^#colorer's settings.#
      Turns off Colorer.
 
   #catalog.xml file:#
-     full file path sets default catalog file for colorer.
-     Leave empty this field, and colorer starts to search file itself.
-     In other cases, it tries to find file in:
+     Full file path sets default catalog file for colorer.
+     If this field is empty colorer tries to find the file automatically
+     in the following order:
         - Path in %COLORER5CATALOG%
         - Path in file %HOME%/.colorer5catalog
         - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
@@ -29,7 +29,7 @@ $^#colorer's settings.#
 
 
   #Color scheme:#
-     Selected color scheme to use in text highlighting.
+     Selected color scheme to use for text highlighting.
 
   #Time before showing cancel dialog (msec)#
      After this time interval colorer shows cancelling dialog.
@@ -46,24 +46,24 @@ $^#colorer's settings.#
 
 @cmdline
 $# Command line support
-    You can use plugin from FAR's command line with prefix 'clr:' to
-view files with syntax highlighting in colorer's internal viewer.
+    You can use the plugin from FAR's command line with prefix 'clr:'
+to view files with syntax highlighting in colorer's internal viewer.
 To view file you have to specify file name after the 'clr:' prefix
 in FAR's command line. This function is equal to #colorer.exe# program
-features, but don't loads HRC database each time, so it works faster.
+features, but doesn't load HRC database each time, so it works faster.
 
 @add
 $# Outliner
-    Here you see list of all found functions or syntax errors. Choose any item
-and you'll go to corresponding line in text.
+    Here you can see a list of all functions or syntax errors found.
+Choose any item to go to corresponding line in text.
     
-    You can use here keyboard filter to quickly search requeried items:
+    You can use keyboard filter to quickly search for required items:
 
     #Ctrl-Left/Right#
-      Expands-Collapses level of Outliner
+      Expand-Collapse level of Outliner
 
     #Ctrl-Up/Down#
-      Moves to next/previous item both in outliner and in source code
+      Move to next/previous item both in outliner and in source code
 
     #Ctrl-Enter#
       Close the outliner and insert current item into the cursor position
@@ -72,7 +72,7 @@ and you'll go to corresponding line in text.
       Close the outliner and jump to the selected item
 
     #Any symbol keys#
-      Filters out the outliner items against entered filter
+      Filter out the outliner items against entered filter
 
 @menu
 $#Colorer operation
@@ -122,15 +122,15 @@ some problems occurs in current syntax.
 
 @encodings
 $# Encoding selection
-    List of all avaiable encoding. You can choose what you need.
+    List of all available encodings. You can choose what you need.
 
 @hrd
 $# Color scheme selection
-    List of all avaiable color schemes. You can choose what you need.
+    List of all available color schemes. You can choose what you need.
 
 @exception
-$# Exception is occured
-    Exception is happend while colorer work.
+$# Exception occured
+    Exception happened while colorer work.
 All further processing would be disabled. You can re-enable
 colorer from it's settings menu after locating and removing
 exception cause. All extended information in colorer logging
