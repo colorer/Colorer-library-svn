@@ -46,23 +46,18 @@ private:
 
   const Region *picked;
 
-  ParseCache *cache;
-  ParseCache *parent, *forward;
-
   int cachedLineNo;
-  ParseCache *cachedParent, *cachedForward;
 
-  ParseStep *root, *top;
-  Vector<ParseStep *> parseSteps;
+  ParseStep *proot, *top;
 
-  void fillInvisibleSchemes(ParseCache *cache);
+  void fillInvisibleSchemes(ParseStep *step);
   void addRegion(int lno, int sx, int ex, const Region* region);
-  void enterScheme(int lno, int sx, int ex, const Region* region);
-  void leaveScheme(int lno, int sx, int ex, const Region* region);
   void enterScheme(int lno, SMatches *match);
   void leaveScheme(int lno, SMatches *match);
 
   int searchKW(int lowLen);
+
+  ParseStep *searchTree(int ln, ParseStep *step);
 
   /** General highlighting loop */
   bool colorize();
@@ -75,7 +70,7 @@ private:
   /**
    * Finishes current parser state and moves parser on parent level.
    */
-  void pop();
+  void removeTop();
   /**
    * moves to the next position in a parsed text
    */

@@ -4,7 +4,6 @@
 #include <common/DynamicArray.h>
 #include <common/RefCounter.h>
 #include <colorer/parsers/GrammarProvider.h>
-#include <colorer/parsers/dynamic/VTList.h>
 
 struct ProviderStep;
 
@@ -17,12 +16,14 @@ public:
     virtual bool nextItem();
 
     virtual void restart();
+    virtual void reset();
 
-    virtual void enterBlock();
-    virtual void leaveBlock();
+    virtual void enterScheme();
+    virtual void leaveScheme();
 
     virtual void *storeState();
     virtual void restoreState(void *p);
+    virtual void freeState(void *p);
 
     virtual SchemeNodeType nodeType();
 
@@ -43,7 +44,6 @@ public:
 protected:
     DynamicHRCModel *hrcModel;
     SchemeImpl *baseScheme;
-//    VTList vtList;
     bool leaveBlockRequired;
     
     ProviderStep *top;
@@ -52,6 +52,8 @@ protected:
 
     void popInherit();
     void validateInherit();
+private:
+    int s_inheritLevel;
 
 };
 #endif

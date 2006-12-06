@@ -6,7 +6,7 @@
 
 
 Vector<String*> schemeQueue;
-Vector<VirtualEntryVector**> vtlistQueue;
+//Vector<VirtualEntryVector**> vtlistQueue;
 
 Hashtable<SchemeImpl*> schemeQueueHash;
 
@@ -33,10 +33,10 @@ void HRCCompiler::compile(GrammarBuilder *builder)
     for(int idx = 0;; idx++){
       FileTypeImpl *type = (FileTypeImpl*)hp->enumerateFileTypes(idx);
       if (type == null ) break;
-      vtList = new VTList();
+//      vtList = new VTList();
       enqueue((SchemeImpl*)type->baseScheme);
       compile();
-      delete vtList;
+//      delete vtList;
     };
     
 
@@ -52,17 +52,17 @@ void HRCCompiler::compile()
         
         builder->schemeStart(schemeQueue.elementAt(idx), scheme);
         
-        vtList->clear();
-        vtList->restore(vtlistQueue.elementAt(idx));
+//        vtList->clear();
+//        vtList->restore(vtlistQueue.elementAt(idx));
         putScheme(scheme);
         
         builder->schemeEnd(schemeQueue.elementAt(idx), scheme);
         
-        delete[] vtlistQueue.elementAt(idx);
+//        delete[] vtlistQueue.elementAt(idx);
         delete schemeQueue.elementAt(idx);
     }
     schemeQueue.setSize(0);
-    vtlistQueue.setSize(0);
+//    vtlistQueue.setSize(0);
 }
 
 void HRCCompiler::putScheme(SchemeImpl *scheme)
@@ -77,27 +77,27 @@ void HRCCompiler::putScheme(SchemeImpl *scheme)
                 builder->visitRE(node->start_re, node);
                 break;
             case SNT_SCHEME:
-                subst = vtList->pushvirt(node->scheme);
+//                subst = vtList->pushvirt(node->scheme);
                 if (!subst) subst = node->scheme;
                 
                 builder->visitBlock(qualifyName(subst), node);
 
                 enqueue(subst);
-                if (subst != node->scheme) vtList->popvirt();
+//                if (subst != node->scheme) vtList->popvirt();
                 break;
             case SNT_KEYWORDS:
                 builder->visitKeywords(node);
                 break;
             case SNT_INHERIT:
-                subst = vtList->pushvirt(node->scheme);
+//                subst = vtList->pushvirt(node->scheme);
                 // TODO: Recursion validation??
                 if (!subst){
-                  bool b = vtList->push(node);
+//                  bool b = vtList->push(node);
                   putScheme(node->scheme);
-                  if (b) vtList->pop();
+//                  if (b) vtList->pop();
                 }else{
                   putScheme(subst);
-                  vtList->popvirt();
+//                  vtList->popvirt();
                 };
                 break;
         }
@@ -111,7 +111,7 @@ void HRCCompiler::enqueue(SchemeImpl *scheme)
     if (schemeQueueHash.get(qname) == null)
     {
         schemeQueue.addElement(qname);
-        vtlistQueue.addElement(vtList->store());
+//        vtlistQueue.addElement(vtList->store());
         schemeQueueHash.put(qname, scheme);
     }
 }
@@ -119,7 +119,7 @@ void HRCCompiler::enqueue(SchemeImpl *scheme)
 String *HRCCompiler::qualifyName(SchemeImpl *scheme)
 {
     StringBuffer *sb = new StringBuffer(scheme->getName());
-
+/*
     for(VTList *list = vtList->next; list; list = list->next){
       
       for(int idx = 0; idx < list->vlist->size(); idx++){
@@ -131,7 +131,7 @@ String *HRCCompiler::qualifyName(SchemeImpl *scheme)
 
       if (list == vtList->last) break;
     };
-
+*/
 
     return (String*)sb;
 }

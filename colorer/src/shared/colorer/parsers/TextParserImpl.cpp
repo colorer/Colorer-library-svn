@@ -1,6 +1,9 @@
 #include<colorer/parsers/TextParserImpl.h>
 #include<common/Logging.h>
 
+#define MAX_LINE_LENGTH 0x7FFFFFF
+
+#define dynamic_assert(a) if (!(a)) { throw Exception(DString("dynamic_assert: "#a)); }
 
 /**
  * Sinle step, or state, of the parser. Each state is described by a set of
@@ -8,259 +11,197 @@
  */
 struct ParseStep
 {
-  /**
-   * Tree structure references in parse cache
-   */
-  ParseStep *children, *next, *parent;
-  
-  CRegExp *closingRE;
-  bool closingREmatched;
-  bool closingREparsed;
-  SMatches matchstart;
-  SMatches matchend;
+    /**
+     * Tree structure references in parse cache
+     */
+    ParseStep *parent;
+    ParseStep *children;
+    ParseStep *next, *prev;
+    
+    GrammarProvider *provider;
 
-  bool lowContentPriority;
-  int contextStart;
+    /* Data duplication with provider?? */
+    CRegExp *schemeClosingRE;
+    const Region *schemeRegion;
+    const Scheme *scheme;
 
-  /** Start and end lines of this scheme match */
-  int sline, eline;
-  /** provider's state at this parse position */
-  void *providerState;
+    bool closingREmatched;
+    bool closingREparsed;
+    SMatches matchstart;
+    SMatches matchend;
 
-  int o_gy;
-  SMatches *o_match;
-  DString *o_str;
-  SString *backLine;
+    bool lowContentPriority;
+    int contextStart;
 
-  ParseStep() {
-    closingREmatched = closingREparsed = false;
-    closingRE = null;
-    backLine = null;
-    o_match = null;
-    o_str = null;
-    backLine = null;
-  }
+    /** Start and end lines of this scheme match */
+    int sline, eline;
+    /** provider's state at this parse position */
+    void *providerState;
 
-};
+    SMatches *o_match;
+    DString *o_str;
+    SString *backLine;
 
-/**
- * Internal parser's cached tree storage. Each object instance
- * stores parse information about single level of Scheme
- * objects. The object always takes more, than a single line,
- * because single-line scheme match doesn't need to be cached.
- *
- * @ingroup colorer_parsers
- */
-class ParseCache
-{
-public:
-  /** Start and end lines of this scheme match */
-  int sline, eline;
-
-  /**
-   * RE Match object for start RE of the enwrapped &lt;block> object
-   */
-  SMatches matchstart;
-  /**
-   * Copy of the line with parent's start RE.
-   */
-  SString *backLine;
-
-  ParseCache *children, *next, *parent;
-  
-  ParseCache()
-  {
-    children = next = parent = null;
-    backLine = null;
-    //vcache = 0;
-  };
-
-  ~ParseCache()
-  {
-    //CLR_TRACE("TPCache", "~ParseCache():%s,%d-%d", scheme ? scheme->getName()->getChars() : "", sline, eline);
-    delete backLine;
-    backLine = (SString*)0xdead;
-    delete children;
-    delete next;
-    //delete[] vcache;
-  };
-  
-  /**
-   * Searched a cache position for the specified line number.
-   * @param ln     Line number to search for
-   * @param cache  Cache entry, filled with last child cache entry.
-   * @return       Cache entry, assigned to the specified line number
-   */
-  ParseCache *searchLine(int ln, ParseCache **cache)
-  {
-  ParseCache *r1, *r2, *tmp = this;
-    *cache = null;
-    while(tmp)
+    ParseStep(GrammarProvider *provider) : provider(provider)
     {
-      //CLR_TRACE("TPCache", "  searchLine() tmp:%s,%d-%d", tmp->scheme ? tmp->scheme->getName()->getChars() : "", tmp->sline, tmp->eline);
-      if (tmp->sline <=ln && tmp->eline >= ln) {
-        r1 = tmp->children->searchLine(ln, &r2);
-        if (r1){
-          *cache = r2;
-          return r1;
-        }
-        *cache = r2; // last child
-        return tmp;
-      }
-      if (tmp->sline <= ln) *cache = tmp;
-      tmp = tmp->next;
+        closingREmatched = closingREparsed = false;
+        lowContentPriority = false;
+        schemeClosingRE = null;
+        schemeRegion = null;
+        backLine = null;
+        o_match = null;
+        o_str = null;
+        sline = 0;
+        eline = MAX_LINE_LENGTH;
+        children = next = prev = parent = null;
+        providerState = null;
     }
-    return null;
-  };
+
+    ~ParseStep()
+    {
+        if (providerState) provider->freeState(providerState);
+        
+        delete backLine;
+        backLine = null;
+
+        while (children != null) {
+            ParseStep *child = children;
+            children = children->next;
+            delete child;
+        }
+    }
+
+    void addChild(ParseStep *child)
+    {
+        if (children == null) {
+            // Single child
+            children = child;
+            child->next = null;
+            child->prev = child;
+            child->parent = this;
+            return;
+        }
+        ParseStep *last = children->prev;
+        assert(last);
+        // Add to the tail
+        last->next = child;
+        child->prev = last;
+        child->next = null;
+        child->parent = this;
+        children->prev = child;
+    }
 
 };
-
 
 
 TextParserImpl::TextParserImpl()
 {
-  CLR_TRACE("TextParserImpl", "constructor");
-  //cache = new ParseCache();
-  //clearCache();
-  lineSource = null;
-  regionHandler = null;
-  picked = null;
-  provider = null;
+    CLR_TRACE("TextParserImpl", "constructor");
+    proot = null;
+    lineSource = null;
+    regionHandler = null;
+    picked = null;
+    provider = null;
 }
 
 TextParserImpl::~TextParserImpl()
 {
-  //clearCache();
-  delete provider;
-  //delete cache;
+    delete proot;
+    delete provider;
 }
 
 void TextParserImpl::setFileType(FileType *type)
 {
-  delete provider;
-  provider = type->createGrammarProvider();
-  //clearCache();
+    delete proot;
+
+    delete provider;
+    provider = type->createGrammarProvider();
+
+    proot = new ParseStep(provider);
 }
 
 void TextParserImpl::setLineSource(LineSource *lh){
-  lineSource = lh;
+    lineSource = lh;
 }
-
 
 void TextParserImpl::setRegionHandler(RegionHandler *rh){
-  regionHandler = rh;
+    regionHandler = rh;
 }
 
-#define dynamic_assert(a) if (!(a)) { throw Exception(DString("dynamic_assert: "#a)); }
+ParseStep *TextParserImpl::searchTree(int ln, ParseStep *step)
+{
+    ParseStep *iterate = step;
+    
+    while(iterate)
+    {
+        //CLR_TRACE("TPCache", "  searchLine() tmp:%s,%d-%d", tmp->scheme->getName()->getChars(), tmp->sline, tmp->eline);
+        if (iterate->sline == ln) return iterate->parent ? iterate->parent : iterate;
+        if (iterate->sline < ln && iterate->eline >= ln)
+        {
+            ParseStep *child = searchTree(ln, iterate->children);
+            if (child)
+            {
+                return child;
+            }
+            return iterate;
+        }
+        iterate = iterate->next;
+    }
+    return null;
+};
+
 
 int TextParserImpl::parse(int from, int num, TextParseMode mode)
 {
-  int i;
+    gx = 0;
+    gy = from;
+    gy2 = from+num;
 
-  gx = 0;
-  gy = from;
-  gy2 = from+num;
+    invisibleSchemesFilled = false;
+    breakParsing = false;
+    updateCache = (mode == TPM_CACHE_UPDATE);
 
-  invisibleSchemesFilled = false;
-  breakParsing = false;
-  updateCache = (mode == TPM_CACHE_UPDATE);
+    CLR_TRACE("TextParserImpl", "parse from=%d, num=%d", from, num);
+    /* Check for initial bad conditions */
+    dynamic_assert(regionHandler);
+    dynamic_assert(lineSource);
+    dynamic_assert(provider);
 
-  CLR_TRACE("TextParserImpl", "parse from=%d, num=%d", from, num);
-  /* Check for initial bad conditions */
-  dynamic_assert(regionHandler);
-  dynamic_assert(lineSource);
-  dynamic_assert(provider);
+    lineSource->startJob(from);
+    regionHandler->startParsing(from);
 
-  lineSource->startJob(from);
-  regionHandler->startParsing(from);
-
-  ParseStep *ctop = new ParseStep();
-  ctop->closingRE = null;
-  ctop->lowContentPriority = false;
-
-  push(ctop);
-
-  colorize();
-
-  while(top != null) {
-      pop();
-      provider->leaveBlock();
-  }
-  /* Init cache *
-  parent = cache;
-  forward = null;
-  cache->scheme = baseScheme;
-
-  if (mode == TPM_CACHE_READ || mode == TPM_CACHE_UPDATE) {
-    parent = cache->searchLine(from, &forward);
-    if (parent != null){
-      CLR_TRACE("TPCache", "searchLine() parent:%s,%d-%d", parent->scheme->getName()->getChars(), parent->sline, parent->eline);
+    provider->reset();
+    
+    top = searchTree(gy, proot);
+    if (top->providerState != null)
+    {
+        provider->restoreState(top->providerState);
     }
-  }
-  cachedLineNo = from;
-  cachedParent = parent;
-  cachedForward = forward;
-  CLR_TRACE("TextParserImpl", "parse: cache filled");
+    //all tree!
+    delete top->children;
+    top->children = null;
 
+    fillInvisibleSchemes(top);
 
-  do{
-    if (!forward) {
-      if (!parent) {
-        return from;
-      }
-      if (updateCache){
-        delete parent->children;
-        parent->children = null;
-      }
-    }else{
-      if (updateCache){
-        delete forward->next;
-        forward->next = null;
-      }
-    };
-    baseScheme = parent->scheme;
+    colorize();
 
-    CLR_TRACE("TextParserImpl", "parse: goes into colorize()");
-    if (parent != cache) {
-      vtlist->restore(parent->vcache);
-      parent->clender->end->setBackTrace(parent->backLine, &parent->matchstart);
+    /*
 
-      colorize();
-      vtlist->clear();
-    }else{
-      colorize();
-    };
+    if (mode == TPM_CACHE_READ || mode == TPM_CACHE_UPDATE) {
 
-    if (updateCache){
-      if (parent != cache){
-        parent->eline = gy;
-      };
     }
-    if (parent != cache && gy < gy2){
-      leaveScheme(gy, &matchend, parent->clender);
-    };
-    gx = matchend.e[0];
 
-    forward = parent;
-    parent = parent->parent;
-  }while(parent);
-  */
+    */
 
-  regionHandler->endParsing(endLine);
-  lineSource->endJob(endLine);
+    regionHandler->endParsing(endLine);
+    lineSource->endJob(endLine);
 
-  return endLine;
+    return endLine;
 }
 
 
 void TextParserImpl::clearCache()
 {
-  delete cache->children;
-  delete cache->backLine;
-  cache->backLine = null;
-  cache->sline = 0;
-  cache->eline = 0x7FFFFFF;
-  cache->children = cache->parent = cache->next = null;
 }
 
 
@@ -274,21 +215,13 @@ void TextParserImpl::addRegion(int lno, int sx, int ex, const Region* region){
   if (sx == -1 || region == null) return;
   regionHandler->addRegion(lno, str, sx, ex, region);
 }
-void TextParserImpl::enterScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->enterScheme(lno, str, sx, ex, region, provider->scheme());
-}
-void TextParserImpl::leaveScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->leaveScheme(lno, str, sx, ex, region, provider->scheme());
-  if (region != null) picked = region;
-}
-
 
 void TextParserImpl::enterScheme(int lno, SMatches *match)
 {
   int i;
 
   if (provider->innerRegion() == false){
-    enterScheme(lno, match->s[0], match->e[0], provider->region());
+    regionHandler->enterScheme(lno, str, match->s[0], match->e[0], provider->region(), provider->scheme());
   }
 
   for (i = 0; i < match->cMatch; i++)
@@ -297,7 +230,7 @@ void TextParserImpl::enterScheme(int lno, SMatches *match)
     addRegion(lno, match->ns[i], match->ne[i], provider->regionsn(i));
 
   if (provider->innerRegion() == true){
-    enterScheme(lno, match->e[0], match->e[0], provider->region());
+    regionHandler->enterScheme(lno, str, match->e[0], match->e[0], provider->region(), provider->scheme());
   }
 }
 
@@ -306,7 +239,7 @@ void TextParserImpl::leaveScheme(int lno, SMatches *match)
   int i;
 
   if (provider->innerRegion() == true){
-    leaveScheme(gy, match->s[0], match->s[0], provider->region());
+    regionHandler->leaveScheme(gy, str, match->s[0], match->s[0], provider->region(), provider->scheme());
   }
 
   for (i = 0; i < match->cMatch; i++)
@@ -315,20 +248,21 @@ void TextParserImpl::leaveScheme(int lno, SMatches *match)
     addRegion(gy, match->ns[i], match->ne[i], provider->regionen(i));
 
   if (provider->innerRegion() == false){
-    leaveScheme(gy, match->s[0], match->e[0], provider->region());
+    regionHandler->leaveScheme(gy, str, match->s[0], match->e[0], provider->region(), provider->scheme());
+    if (provider->region() != null) picked = provider->region();
   }
 }
 
-void TextParserImpl::fillInvisibleSchemes(ParseCache *ch)
+
+void TextParserImpl::fillInvisibleSchemes(ParseStep *step)
 {
-  if (!ch->parent || ch == cache){
+    if (step->parent == null || step == proot){
+        return;
+    }
+    /* Fills output stream with valid "pseudo" enterScheme */
+    fillInvisibleSchemes(step->parent);
+    regionHandler->enterScheme(gy, null, 0, 0, step->schemeRegion, step->scheme);
     return;
-  }
-  /* Fills output stream with valid "pseudo" enterScheme */
-  fillInvisibleSchemes(ch->parent);
-  //TODO:
-  //enterScheme(gy, 0, 0, ch->clender->region);
-  return;
 }
 
 #define MATCH_NOTHING 0
@@ -390,142 +324,28 @@ int TextParserImpl::searchKW(int lowlen)
   return MATCH_NOTHING;
 }
 
-/*
-int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
+
+void TextParserImpl::removeTop()
 {
-  int i, re_result;
-  SchemeImpl *ssubst = null;
-  SMatches match;
-  ParseCache *OldCacheF = null;
-  ParseCache *OldCacheP = null;
-  ParseCache *ResF = null;
-  ParseCache *ResP = null;
-
-  CLR_TRACE("TextParserImpl", "searchRE: entered scheme \"%s\"", cscheme->getName()->getChars());
-
-  if (!cscheme){
-    return MATCH_NOTHING;
-  }
-  for(int idx = 0; idx < cscheme->nodes.size(); idx++){
-    SchemeNode *schemeNode = cscheme->nodes.elementAt(idx);
-    CLR_TRACE("TextParserImpl", "searchRE: processing node:%d/%d, type:%s", idx+1, cscheme->nodes.size(), schemeNodeTypeNames[schemeNode->type]);
-    switch(schemeNode->type){
-      case SNT_INHERIT:
-      case SNT_KEYWORDS:
-      case SNT_RE:
-      case SNT_SCHEME:{
-
-        gx = match.e[0];
-        ssubst = vtlist->pushvirt(schemeNode->scheme);
-        if (!ssubst) ssubst = schemeNode->scheme;
-
-        SString *backLine = new SString(str);
-        if (updateCache){
-          ResF = forward;
-          ResP = parent;
-          if (forward){
-            forward->next = new ParseCache;
-            OldCacheF = forward->next;
-            OldCacheP = parent?parent:forward->parent;
-            parent = forward->next;
-            forward = null;
-          }else{
-            forward = new ParseCache;
-            parent->children = forward;
-            OldCacheF = forward;
-            OldCacheP = parent;
-            parent = forward;
-            forward = null;
-          };
-          OldCacheF->parent = OldCacheP;
-          OldCacheF->sline = gy+1;
-          OldCacheF->eline = 0x7FFFFFFF;
-          OldCacheF->scheme = ssubst;
-          OldCacheF->matchstart = match;
-          OldCacheF->clender = schemeNode;
-          OldCacheF->backLine = backLine;
-        };
-
-        int ogy = gy;
-
-        SchemeImpl *o_scheme = baseScheme;
-        int o_schemeStart = schemeStart;
-        SMatches o_matchend = matchend;
-        SMatches *o_match;
-        DString *o_str;
-        schemeNode->end->getBackTrace((const String**)&o_str, &o_match);
-
-        baseScheme = ssubst;
-        schemeStart = gx;
-        schemeNode->end->setBackTrace(backLine, &match);
-
-        enterScheme(no, &match, schemeNode);
-
-        colorize(schemeNode->end, schemeNode->lowContentPriority);
-
-        if (gy < gy2){
-          leaveScheme(gy, &matchend, schemeNode);
-        };
-        gx = matchend.e[0];
-
-        schemeNode->end->setBackTrace(o_str, o_match);
-        matchend = o_matchend;
-        schemeStart = o_schemeStart;
-        baseScheme = o_scheme;
-
-        if (updateCache){
-          if (ogy == gy){
-            delete OldCacheF;
-            if (ResF) ResF->next = null;
-            else ResP->children = null;
-            forward = ResF;
-            parent = ResP;
-          }else{
-            OldCacheF->eline = gy;
-            OldCacheF->vcache = vtlist->store();
-            forward = OldCacheF;
-            parent = OldCacheP;
-          };
-        }else{
-          delete backLine;
-        };
-        if (ssubst != schemeNode->scheme){
-          vtlist->popvirt();
-        }
-        return MATCH_SCHEME;
-      };
-    };
-  };
-  return MATCH_NOTHING;
-}
-*/
-
-/*
-  ~ParseState(){
-    while(parseSteps.size() > 0){
-      delete parseSteps.lastElement();
-      parseSteps.setSize(parseSteps.size()-1);
+    if (top == null) {
+      throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
     }
-  }
-*/
+    assert(top->parent);
+    // Remove from sibling
+    if (top->next != null) {
+        top->next->prev = top->prev;
+    }
+    // Remove from parent
+    if (top->parent && top == top->parent->children) {
+        top->parent->children = top->next;
+    } else {
+        top->prev->next = top->next;
+    }
 
-void TextParserImpl::push(ParseStep *step){
-  parseSteps.addElement(step);
-  top = step;
-  provider->enterBlock();
-}
-
-void TextParserImpl::pop(){
-  if (top == null){
-    throw Exception(DString("Invalid parser state: ParseState::pop() from null"));
-  }
-  delete top;
-  parseSteps.setSize(parseSteps.size()-1);
-  if (parseSteps.size() > 0){
-    top = parseSteps.lastElement();
-  }else{
-    top = null;
-  }
+    ParseStep *parent = top->parent;
+    delete top;
+    top = parent;
+  
 }
 
 
@@ -533,20 +353,25 @@ void TextParserImpl::move()
 {
   if (top->closingREmatched && gx+1 >= lowlen) {
     /* Reached block's end RE */
-    provider->leaveBlock();
+    provider->leaveScheme();
 
-    bool zeroLength = (top->matchstart.s[0] == top->matchend.e[0]);
+    top->eline = gy;
+    
+    bool zeroLength = (top->matchstart.s[0] == top->matchend.e[0] && top->sline == top->eline);
 
     gx = top->matchend.e[0];
     leaveScheme(gy, &top->matchend);
 
     provider->endRE()->setBackTrace(top->o_str, top->o_match);
-    delete top->backLine;
-//    top->backLine = null;
 
-    pop();
+    if (top->eline == top->sline) {
+        removeTop();
+    }else{
+        top = top->parent;
+        assert(top != null);
+    }
 
-    if (zeroLength){
+    if (zeroLength) { 
       cont();
       return;
     }
@@ -587,30 +412,34 @@ void TextParserImpl::restart()
   provider->restart();
 }
 
-void TextParserImpl::incrementPosition() {
-  gx++;
-  CLR_TRACE("TextParserImpl", "X: %d", gx);
-  if (gx < 0 || gx >= str->length()){
-    gx = 0;
-    gy++;
-    CLR_TRACE("TextParserImpl", "Line: %d", gy);
-    top->contextStart = -1;
-    top->closingREparsed = false;
-    if (gy >= gy2){
-      return;
+void TextParserImpl::incrementPosition()
+{
+    gx++;
+    CLR_TRACE("TextParserImpl", "X: %d", gx);
+    /* Next line */
+    if (gx < 0 || gx >= str->length())
+    {
+        gx = 0;
+        gy++;
+        CLR_TRACE("TextParserImpl", "Line: %d", gy);
+        
+        top->contextStart = -1;
+        top->closingREparsed = false;
+        if (gy >= gy2){
+          return;
+        }
+        // get line data from LineSource interface
+        clearLine = gy;
+        str = lineSource->getLine(gy);
+        len = str->length();
+        lowlen = -1;
+        if (str == null){
+          gy = gy2;
+          throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
+        }
+        endLine = gy;
+        regionHandler->clearLine(gy, str);
     }
-    // get line data from LineSource interface
-    clearLine = gy;
-    str = lineSource->getLine(gy);
-    len = str->length();
-    lowlen = -1;
-    if (str == null){
-      gy = gy2;
-      throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
-    }
-    endLine = gy;
-    regionHandler->clearLine(gy, str);
-  }
 }
 
 bool TextParserImpl::colorize()
@@ -641,18 +470,15 @@ bool TextParserImpl::colorize()
       // searches for the end of parent block
       top->closingREmatched = false;
       top->closingREparsed = true;
-      if (top->closingRE) {
-        top->closingREmatched = top->closingRE->parse(str, gx, len, &top->matchend, top->contextStart);
+      if (top->schemeClosingRE) {
+        top->closingREmatched = top->schemeClosingRE->parse(str, gx, len, &top->matchend, top->contextStart);
       }
     }
     lowlen = len;
     if (top->closingREmatched){
       lowlen = top->matchend.s[0];
     }
-    /*
-    BUG: <regexp match="/.{3}\M$/" region="def:Error" priority="low"/>
-    $ at the end of current schema
-    */
+
     if (top->lowContentPriority){
       len = lowlen;
     }
@@ -712,17 +538,16 @@ bool TextParserImpl::colorize()
 
         gx = match.e[0];
 
-        //SchemeImpl *ssubst = vtlist->pushvirt(schemeNode->scheme);
-        //if (!ssubst){
-        //  ssubst = schemeNode->scheme;
-        //}
+        ParseStep *newtop = new ParseStep(provider);
 
-        ParseStep *newtop = new ParseStep();
-
-        newtop->closingRE = provider->endRE();
+        newtop->schemeClosingRE = provider->endRE();
+        newtop->schemeRegion = provider->regions(0);
+        newtop->scheme = provider->scheme();
         newtop->lowContentPriority = provider->lowContentPriority();
+
         newtop->backLine = new SString(str);
-        newtop->o_gy = gy;
+        newtop->sline = gy;
+        newtop->eline = MAX_LINE_LENGTH;
 
         provider->endRE()->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
 
@@ -733,7 +558,10 @@ bool TextParserImpl::colorize()
 
         enterScheme(gy, &match);
 
-        push(newtop);
+        top->addChild(newtop);
+        top = newtop;
+        provider->enterScheme();
+        top->providerState = provider->storeState();
         continue;
       }
     }

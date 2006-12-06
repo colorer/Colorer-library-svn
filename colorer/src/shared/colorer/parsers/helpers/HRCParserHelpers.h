@@ -82,6 +82,7 @@ enum SchemeNodeType { SNT_EMPTY, SNT_RE, SNT_SCHEME, SNT_KEYWORDS, SNT_INHERIT }
 extern char*schemeNodeTypeNames[];
 
 typedef Vector<VirtualEntry*> VirtualEntryVector;
+typedef Vector<const Region*> RegionPairVector;
 
 /** Scheme node.
     @ingroup colorer_parsers
@@ -95,6 +96,8 @@ public:
   SchemeImpl *scheme;
 
   VirtualEntryVector virtualEntryVector;
+  RegionPairVector regionPairVector;
+  
   KeywordList *kwList;
 
   const Region* region;

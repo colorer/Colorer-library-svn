@@ -426,33 +426,50 @@ void DynamicHRCModel::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->type = SNT_INHERIT;
       next->schemeName = new SString(nqSchemeName);
       String *schemeName = qualifyForeignName(nqSchemeName, QNT_SCHEME, false);
-      if (schemeName == null){
-//        if (errorHandler != null) errorHandler->warning(StringBuffer("forward inheritance of '")+nqSchemeName+"'. possible inherit loop with '"+scheme->schemeName+"'");
-//        delete next;
-//        continue;
-      }else
-        next->scheme = schemeHash.get(schemeName);
       if (schemeName != null){
+        next->scheme = schemeHash.get(schemeName);
         delete next->schemeName;
         next->schemeName = schemeName;
       };
 
-      if (tmpel->getFirstChild() != null){
-        for(Node *vel = tmpel->getFirstChild(); vel; vel = vel->getNextSibling()){
+      if (tmpel->getFirstChild() != null)
+      {
+        for(Node *vel = tmpel->getFirstChild(); vel; vel = vel->getNextSibling())
+        {
           if (*vel->getNodeName() != "virtual"){
             continue;
           }
           const String *schemeName = ((Element*)vel)->getAttribute(DString("scheme"));
           const String *substName = ((Element*)vel)->getAttribute(DString("subst-scheme"));
-          if (schemeName == null || substName == null){
-            if (errorHandler != null){
-              errorHandler->error(StringBuffer("bad virtualize attributes in scheme '")+scheme->schemeName+"'");
+          const String *regionName = ((Element*)vel)->getAttribute(DString("region"));
+          const String *substRegionName = ((Element*)vel)->getAttribute(DString("subst"));
+
+          if (schemeName != null && substName != null)
+          {
+            next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
+          }
+          else if (regionName != null && substRegionName != null)
+          {
+            const Region *region = getNCRegion(regionName, true);
+            const Region *substRegion = getNCRegion(substRegionName, true);
+            
+            if (region == null || substRegion == null){
+              if (errorHandler != null)
+                errorHandler->error(StringBuffer("bad region virtualize attributes in scheme '")+scheme->schemeName+"'");
+              continue;
             }
+
+            next->regionPairVector.addElement(region);
+            next->regionPairVector.addElement(substRegion);
+          }
+          else
+          {
+            if (errorHandler != null)
+              errorHandler->error(StringBuffer("bad virtualize attributes in scheme '")+scheme->schemeName+"'");
             continue;
-          };
-          next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
-        };
-      };
+          }
+        }
+      }
       scheme->nodes.addElement(next);
       next = null;
       continue;

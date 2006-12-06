@@ -21,6 +21,10 @@ public:
         return this;
     };
 
+    static void unlink(RefCounter *obj) {
+        if (obj != null) obj->rmref();
+    };
+
     RefCounter() : _count(0) {
     };
     

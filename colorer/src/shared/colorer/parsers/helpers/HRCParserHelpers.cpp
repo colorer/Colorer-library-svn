@@ -53,11 +53,10 @@ void KeywordList::substrIndex(){
     };
 };
 
+char* schemeNodeTypeNames[] =  { "EMPTY", "RE", "SCHEME", "KEYWORDS", "INHERIT" };
 
-char*schemeNodeTypeNames[] =  { "EMPTY", "RE", "SCHEME", "KEYWORDS", "INHERIT" };
 
-
-SchemeNode::SchemeNode() : virtualEntryVector(5){
+SchemeNode::SchemeNode() : virtualEntryVector(5), regionPairVector(4) {
   type = SNT_EMPTY;
   schemeName = null;
   scheme = null;
@@ -66,13 +65,12 @@ SchemeNode::SchemeNode() : virtualEntryVector(5){
   start_re = end_re = null;
   lowPriority = 0;
 
-  //!!regions cleanup
   region = null;
   memset(regions, 0, sizeof(regions));
   memset(regionsn, 0, sizeof(regionsn));
   memset(regione, 0, sizeof(regione));
   memset(regionen, 0, sizeof(regionen));
-};
+}
 
 SchemeNode::~SchemeNode(){
   if (type == SNT_RE || type == SNT_SCHEME){
@@ -80,16 +78,17 @@ SchemeNode::~SchemeNode(){
     delete end;
     delete start_re;
     delete end_re;
-  };
+  }
   if (type == SNT_KEYWORDS){
     delete kwList;
-  };
+  }
   if (type == SNT_INHERIT){
     for(int idx = 0; idx < virtualEntryVector.size(); idx++)
       delete virtualEntryVector.elementAt(idx);
-  };
+  }
   delete schemeName;
-};
+}
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

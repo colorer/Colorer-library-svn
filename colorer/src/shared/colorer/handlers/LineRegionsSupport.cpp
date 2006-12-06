@@ -154,6 +154,7 @@ void LineRegionsSupport::enterScheme(int lno, String *line, int sx, int ex, cons
 }
 
 void LineRegionsSupport::leaveScheme(int lno, String *line, int sx, int ex, const Region* region, const Scheme *scheme){
+  assert(schemeStack.size() > 1);
   const Region* scheme_region = schemeStack.lastElement()->region;
   delete schemeStack.lastElement();
   schemeStack.setSize(schemeStack.size()-1);

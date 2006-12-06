@@ -6,16 +6,18 @@ struct ProviderStep : RefCounter
 {
     ProviderStep *parent;
     ProviderStep *virtualPrev;
+    SchemeNode *nodePrev;
 
     bool inheritStep;
     bool virtualized, virtPushed;
     SchemeImpl *scheme;
-    int nodePosition;
+    int nodePosition, parentNodePosition;
 
     ProviderStep()
     {
         parent = null;
         virtualPrev = null;
+        nodePrev = null;
     }
 
     ~ProviderStep()
@@ -23,13 +25,34 @@ struct ProviderStep : RefCounter
         if (parent) parent->rmref();
         if (virtualPrev) virtualPrev->rmref();
     }
+
+    void initNodePosition()
+    {
+        nodePosition = 0;
+        // Recursive node position storage in child
+        assert(parent != null);
+        assert(parent->nodePosition != -1);
+        parentNodePosition = parent->nodePosition;
+        parent->nodePosition = -1;
+    }
 };
 
 
 
 DynamicGrammarProvider::DynamicGrammarProvider(DynamicHRCModel *hrcModel, SchemeImpl *baseScheme) :
-    hrcModel(hrcModel), baseScheme(baseScheme), top(null), leaveBlockRequired(false)
+    hrcModel(hrcModel), baseScheme(baseScheme), top(null), leaveBlockRequired(false),
+    s_inheritLevel(0)
 {
+    top = new ProviderStep();
+    
+    top->addref();
+
+    top->inheritStep = false;
+    top->scheme = baseScheme;
+    top->virtualized = top->virtPushed = false;
+    top->nodePosition = top->parentNodePosition = 0;
+    top->parent = null;
+    validateInherit();
 }
 
 DynamicGrammarProvider::~DynamicGrammarProvider()
@@ -40,21 +63,12 @@ void DynamicGrammarProvider::popInherit()
 {
     assert(top->inheritStep);
     
-    /*
-    if (top->virtualized)
-    {
-        vtList.popvirt();
-    }
-    if (!top->virtualized && top->virtPushed)
-    {
-        vtList.pop();
-    }
-    */
-    
-    CLR_TRACE("DGP", "traverse inherit <<%s", top->scheme->getName()->getChars());
+    s_inheritLevel--;
+    CLR_TRACE("DGP", "traverse inherit %03d<<%s", s_inheritLevel, top->scheme->getName()->getChars());
     
     ProviderStep *newtop = top->parent;
     newtop->addref();
+    newtop->nodePosition = top->parentNodePosition;
 
     top->rmref();
     top = newtop;
@@ -86,22 +100,12 @@ void DynamicGrammarProvider::validateInherit()
 
         top->inheritStep = true;
         
-        adviceScheme(node->scheme);
+        top->initNodePosition();
 
-        /*
-        top->virtPushed = false;
-        top->virtualized = true;
-        top->scheme = vtList.pushvirt(node->scheme);
-        if (!top->scheme) {
-            top->virtualized = false;
-            top->virtPushed = vtList.push(node);
-            top->scheme = node->scheme;
-        }
-        */
+        adviceScheme(node->scheme);
         
-        top->nodePosition = 0;
-        
-        CLR_TRACE("DGP", "traverse inherit >>%s", top->scheme->getName()->getChars());
+        s_inheritLevel++;
+        CLR_TRACE("DGP", "traverse inherit %03d>>%s", s_inheritLevel, top->scheme->getName()->getChars());
         validateInherit();
     }
 }
@@ -136,17 +140,35 @@ void DynamicGrammarProvider::restart()
     validateInherit();
 }                              	
 
-
+void DynamicGrammarProvider::reset()
+{
+    while (top->parent != null) {
+        while (top->inheritStep) {
+            popInherit();
+        }
+        ProviderStep *newtop = top->parent;
+        if (newtop != null) {
+            newtop->addref();
+            newtop->nodePosition = top->parentNodePosition;
+            top->rmref();
+            top = newtop;
+        }
+    }
+    validateInherit();
+}
 
 
 void DynamicGrammarProvider::adviceScheme(SchemeImpl *scheme)
 {
     SchemeImpl *ret = scheme;
     ProviderStep *curvl = null;
+                                    
+    ProviderStep *vl = top->parent->virtualPrev;
+    SchemeNode *node = top->parent->nodePrev;
     
-    for(ProviderStep *vl = top->parent->virtualPrev; vl; vl = vl->virtualPrev)
+    while(vl != null)
     {
-        SchemeNode *node = vl->scheme->nodes.elementAt(vl->nodePosition);
+        //SchemeNode *node = vl->scheme->nodes.elementAt(vl->nodePosition);
         assert(node->type == SNT_INHERIT || node->type == SNT_SCHEME);
         
         for(int idx = 0; idx < node->virtualEntryVector.size(); idx++)
@@ -157,31 +179,21 @@ void DynamicGrammarProvider::adviceScheme(SchemeImpl *scheme)
               curvl = vl;
             }
         }
+        node = vl->nodePrev;
+        vl = vl->virtualPrev;
     }
-    
+                             //curvl->virtualPrev
     top->virtualPrev = curvl ? curvl->virtualPrev : top->parent;
     if (top->virtualPrev) top->virtualPrev->addref();
+    top->nodePrev = curvl ? curvl->nodePrev : top->parent->scheme->nodes.elementAt(top->parentNodePosition);
 
     top->scheme = ret;
 }
 
-void DynamicGrammarProvider::enterBlock()
+void DynamicGrammarProvider::enterScheme()
 {
     assert(!leaveBlockRequired);
 
-    if (top == null) {
-        top = new ProviderStep();
-        
-        top->addref();
-
-        top->inheritStep = false;
-        top->scheme = baseScheme;
-        top->virtualized = top->virtPushed = false;
-        top->nodePosition = 0;
-        validateInherit();
-        return;
-    }
-    
     SchemeNode *node = top->scheme->nodes.elementAt(top->nodePosition);
     assert(node->type == SNT_SCHEME);
     
@@ -196,7 +208,7 @@ void DynamicGrammarProvider::enterBlock()
     top->addref();
 
     top->inheritStep = false;
-    top->nodePosition = 0;
+    top->initNodePosition();
 
     adviceScheme(node->scheme);
     assert(top->scheme);
@@ -206,7 +218,7 @@ void DynamicGrammarProvider::enterBlock()
     validateInherit();
 }
 
-void DynamicGrammarProvider::leaveBlock()
+void DynamicGrammarProvider::leaveScheme()
 {
     leaveBlockRequired = false;
     
@@ -219,16 +231,17 @@ void DynamicGrammarProvider::leaveBlock()
 
     ProviderStep *newtop = top->parent;
     
-    if (newtop) newtop->addref();
+    assert(newtop != null);
+    newtop->addref();
+
+    newtop->nodePosition = top->parentNodePosition;
 
     top->rmref();
     top = newtop;
 }
 
-
 void *DynamicGrammarProvider::storeState()
 {
-    assert(!"never reach");
     top->addref();
     return (void*)top;
 }
@@ -236,12 +249,16 @@ void *DynamicGrammarProvider::storeState()
 void DynamicGrammarProvider::restoreState(void *p)
 {
     if (top) top->rmref();
-
     top = (ProviderStep*)p;
-    
-    assert(!"never reach");
+    top->addref();
+    restart();
 }
 
+void DynamicGrammarProvider::freeState(void *p)
+{
+    ProviderStep *step = (ProviderStep*)p;
+    step->rmref();
+}
 
 
 SchemeNodeType DynamicGrammarProvider::nodeType()

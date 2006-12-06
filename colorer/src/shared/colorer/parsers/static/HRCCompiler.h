@@ -2,7 +2,6 @@
 #define _COLORER_HRCCOMPILER_H_
 
 #include<colorer/parsers/dynamic/DynamicHRCModel.h>
-#include<colorer/parsers/dynamic/VTList.h>
 #include<colorer/parsers/static/GrammarBuilder.h>
 
 class HRCCompiler
@@ -15,7 +14,7 @@ private:
     DynamicHRCModel *hp;
     GrammarBuilder *builder;
     
-    VTList *vtList;
+//    VTList *vtList;
 
     void compile();
     void putScheme(SchemeImpl *scheme);

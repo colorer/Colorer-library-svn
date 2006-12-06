@@ -10,12 +10,14 @@ public:
     virtual bool nextItem() = 0;
 
     virtual void restart() = 0;
+    virtual void reset() = 0;
 
-    virtual void enterBlock() = 0;
-    virtual void leaveBlock() = 0;
+    virtual void enterScheme() = 0;
+    virtual void leaveScheme() = 0;
 
     virtual void *storeState() = 0;
     virtual void restoreState(void *p) = 0;
+    virtual void freeState(void *p) = 0;
 
     virtual SchemeNodeType nodeType() = 0;
 
