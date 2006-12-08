@@ -1,6 +1,8 @@
 <!--   DTD description of colorer HRD format -->
 
-<!ELEMENT hrd (assign)*>
+<!ELEMENT hrd (documentation?, assign)*>
+
+<!ELEMENT documentation ANY>
 
 <!ELEMENT assign EMPTY>
 <!ATTLIST assign
