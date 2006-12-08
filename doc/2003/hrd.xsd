@@ -24,8 +24,20 @@
       some properties, they are requested from underlying schema fill region which
       is determined in runtime.
     </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="documentation" type="documentation" minOccurs="0"/>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="assign" type='assign'/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentation" mixed="true">
+    <xs:annotation><xs:documentation>
+      Human documentation part
+    </xs:documentation></xs:annotation>
     <xs:sequence minOccurs="0" maxOccurs="unbounded">
-      <xs:element name="assign" type='assign'/>
+      <xs:any namespace="##other" processContents="skip"/>
     </xs:sequence>
   </xs:complexType>
 
