@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE xsl:transform [
-  <!ENTITY separate "<xsl:text>&#10;</xsl:text>">
+  <!ENTITY separate '<xsl:text xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xml:space="preserve">&#10;</xsl:text>'>
 ]>
 
 <xsl:transform 
@@ -11,6 +11,11 @@
 
 <xsl:output method="text"/>     
 <xsl:strip-space elements="*"/>
+
+
+<xsl:template match="h:documentation">
+/** <xsl:value-of select="."/> **/
+</xsl:template>
 
 
 <xsl:template match="h:assign">
