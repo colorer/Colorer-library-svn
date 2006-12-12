@@ -11,7 +11,6 @@ obj_output_slash = $(obj_output)\\
 CPPFLAGS = -I$(shared_path) -I$(shared_path)../zlib -n$(obj_output) -c -O2 -N- -RT- -w-rvl -w-pia -w-par -w-aus -w-inl -w-hid $(CPPFLAGS_CUSTOM)
 
 
-!include $(shared_path)makefile.zlib
 !include $(shared_path)_dependencies.dep
 !include $(shared_path)makefile.objs
 !include $(shared_path)makefile.lines

@@ -64,10 +64,12 @@ struct ParseStep
         delete backLine;
         backLine = null;
 
-        while (children != null) {
-            ParseStep *child = children;
-            children = children->next;
+        ParseStep *child_iter = children;
+        while (child_iter) {
+            ParseStep *child = child_iter;
+            child_iter = child_iter->next;
             delete child;
+            if (child_iter == children) break;
         }
     }
 
@@ -76,7 +78,7 @@ struct ParseStep
         if (children == null) {
             // Single child
             children = child;
-            child->next = null;
+            child->next = child;
             child->prev = child;
             child->parent = this;
             return;
@@ -86,7 +88,7 @@ struct ParseStep
         // Add to the tail
         last->next = child;
         child->prev = last;
-        child->next = null;
+        child->next = children;
         child->parent = this;
         children->prev = child;
     }
@@ -146,6 +148,7 @@ ParseStep *TextParserImpl::searchTree(int ln, ParseStep *step)
             return iterate;
         }
         iterate = iterate->next;
+        if (iterate == step) break;
     }
     return null;
 };
@@ -178,7 +181,13 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
         provider->restoreState(top->providerState);
     }
     //all tree!
-    delete top->children;
+    ParseStep *child = top->children;
+    while (child) {
+        ParseStep *cc = child;
+        child = child->next;
+        delete cc;
+        if (child == top->children) break;
+    }
     top->children = null;
 
     fillInvisibleSchemes(top);
@@ -332,14 +341,12 @@ void TextParserImpl::removeTop()
     }
     assert(top->parent);
     // Remove from sibling
-    if (top->next != null) {
-        top->next->prev = top->prev;
-    }
+    top->next->prev = top->prev;
+    top->prev->next = top->next;
     // Remove from parent
     if (top->parent && top == top->parent->children) {
+        if (top->next == top) top->next = null;
         top->parent->children = top->next;
-    } else {
-        top->prev->next = top->next;
     }
 
     ParseStep *parent = top->parent;
@@ -349,67 +356,14 @@ void TextParserImpl::removeTop()
 }
 
 
-void TextParserImpl::move()
-{
-  if (top->closingREmatched && gx+1 >= lowlen) {
-    /* Reached block's end RE */
-    provider->leaveScheme();
-
-    top->eline = gy;
-    
-    bool zeroLength = (top->matchstart.s[0] == top->matchend.e[0] && top->sline == top->eline);
-
-    gx = top->matchend.e[0];
-    leaveScheme(gy, &top->matchend);
-
-    provider->endRE()->setBackTrace(top->o_str, top->o_match);
-
-    if (top->eline == top->sline) {
-        removeTop();
-    }else{
-        top = top->parent;
-        assert(top != null);
-    }
-
-    if (zeroLength) { 
-      cont();
-      return;
-    }
-    
-    provider->restart();
-/*
-    if (updateCache){
-      if (ogy == gy){
-        delete OldCacheF;
-        if (ResF) ResF->next = null;
-        else ResP->children = null;
-        forward = ResF;
-        parent = ResP;
-      }else{
-        OldCacheF->eline = gy;
-        OldCacheF->vcache = vtlist->store();
-        forward = OldCacheF;
-        parent = OldCacheP;
-      };
-    }else{
-*/
-  } else {
-    provider->restart();
-    incrementPosition();
-  }
-}
-
 void TextParserImpl::cont()
 {
-  provider->nextItem();
-  if (provider->nodeType() == SNT_EMPTY) {
-    move();
-  }
+    provider->nextItem();
 }
 
 void TextParserImpl::restart()
 {
-  provider->restart();
+    provider->restart();
 }
 
 void TextParserImpl::incrementPosition()
@@ -444,7 +398,7 @@ void TextParserImpl::incrementPosition()
 
 bool TextParserImpl::colorize()
 {
-  // debug preconditions
+  // initial preconditions
   gx = -2;
   gy -= 1;
   
@@ -457,16 +411,7 @@ bool TextParserImpl::colorize()
       break;
     }
 
-    // hack to include invisible regions in start of block
-    // when parsing with cache information
-    /*
-    if (!invisibleSchemesFilled){
-      invisibleSchemesFilled = true;
-      fillInvisibleSchemes(parent);
-    }
-    */
-
-    if (!top->closingREparsed || gx >= lowlen) {
+    if (!top->closingREparsed || gx > lowlen) {
       // searches for the end of parent block
       top->closingREmatched = false;
       top->closingREparsed = true;
@@ -498,7 +443,42 @@ bool TextParserImpl::colorize()
       }
     }
 
-    if (provider->nodeType() == SNT_KEYWORDS)
+    if (provider->nodeType() == SNT_EMPTY)
+    {
+        if (top->closingREmatched && gx+1 >= lowlen) 
+        {
+            /* Reached block's end RE */
+            provider->leaveScheme();
+
+            top->eline = gy;
+            
+            bool zeroLength = (top->matchstart.s[0] == top->matchend.e[0] && top->sline == top->eline);
+
+            gx = top->matchend.e[0];
+            leaveScheme(gy, &top->matchend);
+
+            provider->endRE()->setBackTrace(top->o_str, top->o_match);
+
+            if (top->eline == top->sline) {
+                removeTop();
+            }else{
+                top = top->parent;
+            }
+            assert(top != null);
+            top->closingREparsed = false;
+
+            if (zeroLength) { 
+                cont();
+            }else {
+                restart();
+            }
+        }else{
+            incrementPosition();
+            restart();
+        }
+        continue;
+    }
+    else if (provider->nodeType() == SNT_KEYWORDS)
     {
       if (searchKW(lowlen) == MATCH_RE){
         restart();
@@ -541,7 +521,7 @@ bool TextParserImpl::colorize()
         ParseStep *newtop = new ParseStep(provider);
 
         newtop->schemeClosingRE = provider->endRE();
-        newtop->schemeRegion = provider->regions(0);
+        newtop->schemeRegion = provider->region();
         newtop->scheme = provider->scheme();
         newtop->lowContentPriority = provider->lowContentPriority();
 

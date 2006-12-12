@@ -27,8 +27,8 @@ BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
   backParse = -1;
   lineCount = 0;
   wStart = 0;
-  wSize = 20;
-  lrSize = wSize*3;
+  wSize = 40;
+  lrSize = wSize*2;
   internalRM = false;
   regionMapper = null;
   regionCompact = false;

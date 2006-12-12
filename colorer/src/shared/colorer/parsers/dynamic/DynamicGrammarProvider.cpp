@@ -213,7 +213,7 @@ void DynamicGrammarProvider::enterScheme()
     adviceScheme(node->scheme);
     assert(top->scheme);
 
-    CLR_TRACE("DGP", "traverse block >>%s (%s)", top->scheme->getName()->getChars(), node->scheme->getName()->getChars());
+    CLR_TRACE("DGP", "traverse block >>%s (%s)", top->scheme->getName()->getChars(), DString(node->scheme->getName()).getChars());
 
     validateInherit();
 }
