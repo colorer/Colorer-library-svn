@@ -61,6 +61,7 @@ NSIS v1.96 upgrade
          <regexp match="/\b(0)+[0-8]+\b/" region0="nsiNumber"/>
          <regexp match="/\b(0x)+[\da-fA-F]+\b/" region0="nsiNumber"/>
          <!-- Variables -->
+         <regexp match="/\$[\d\w]+/" region="Var"/>
          <regexp match="/\$R?\d/" region0="Var"/>
          <regexp match="/\$\\[nrt&#34;]/" region0="Var"/>
          <regexp match="/\$\{\w+\}/" region0="Var"/>
