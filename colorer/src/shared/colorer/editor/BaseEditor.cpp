@@ -359,7 +359,7 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
   }
 
   /* Fixes window position according to line number */
-  if (lno < wStart || lno > wStart+wSize){
+  if (lno < wStart || lno >= wStart+wSize){
     wStart = lno;
     layoutChanged = true;
   }
@@ -397,7 +397,7 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
   }
 
   /* Text modification general ajustment */
-  if (invalidLine < parseFrom){
+  if (invalidLine <= parseFrom){
     parseFrom = invalidLine;
     tpmode = TPM_CACHE_UPDATE;
   }

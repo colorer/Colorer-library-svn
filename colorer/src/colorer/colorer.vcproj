@@ -647,7 +647,13 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath=".\colorer.rc">
+		</File>
+		<File
 			RelativePath=".\ConsoleToolsRunner.cpp">
+		</File>
+		<File
+			RelativePath=".\resource.h">
 		</File>
 	</Files>
 	<Globals>

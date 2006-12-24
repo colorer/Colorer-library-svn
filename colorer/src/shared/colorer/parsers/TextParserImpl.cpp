@@ -48,6 +48,7 @@ struct ParseStep
         lowContentPriority = false;
         schemeClosingRE = null;
         schemeRegion = null;
+        scheme = null;
         backLine = null;
         o_match = null;
         o_str = null;
@@ -98,7 +99,6 @@ struct ParseStep
 
 TextParserImpl::TextParserImpl()
 {
-    CLR_TRACE("TextParserImpl", "constructor");
     proot = null;
     lineSource = null;
     regionHandler = null;
@@ -136,7 +136,8 @@ ParseStep *TextParserImpl::searchTree(int ln, ParseStep *step)
     
     while(iterate)
     {
-        //CLR_TRACE("TPCache", "  searchLine() tmp:%s,%d-%d", tmp->scheme->getName()->getChars(), tmp->sline, tmp->eline);
+        CLR_TRACE("TextParserImpl", "search: sline=%d, eline=%d, scheme=%s", iterate->sline, iterate->eline, iterate->scheme ? iterate->scheme->getName()->getChars() : "null");
+        /* Returns the scheme parse node at very start of the line "ln" */
         if (iterate->sline == ln) return iterate->parent ? iterate->parent : iterate;
         if (iterate->sline < ln && iterate->eline >= ln)
         {
@@ -190,6 +191,9 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
     }
     top->children = null;
 
+    if (top->schemeClosingRE) {
+        top->schemeClosingRE->setBackTrace(top->backLine, &top->matchstart);
+    }
     fillInvisibleSchemes(top);
 
     colorize();
@@ -412,16 +416,17 @@ bool TextParserImpl::colorize()
     }
 
     if (!top->closingREparsed || gx > lowlen) {
-      // searches for the end of parent block
-      top->closingREmatched = false;
-      top->closingREparsed = true;
-      if (top->schemeClosingRE) {
-        top->closingREmatched = top->schemeClosingRE->parse(str, gx, len, &top->matchend, top->contextStart);
-      }
-    }
-    lowlen = len;
-    if (top->closingREmatched){
-      lowlen = top->matchend.s[0];
+        // searches for the end of parent block
+        top->closingREmatched = false;
+        top->closingREparsed = true;
+        len = str->length();
+        if (top->schemeClosingRE) {
+            top->closingREmatched = top->schemeClosingRE->parse(str, gx, len, &top->matchend, top->contextStart);
+        }
+        lowlen = len;
+        if (top->closingREmatched){
+            lowlen = top->matchend.s[0];
+        }
     }
 
     if (top->lowContentPriority){
@@ -457,7 +462,7 @@ bool TextParserImpl::colorize()
             gx = top->matchend.e[0];
             leaveScheme(gy, &top->matchend);
 
-            provider->endRE()->setBackTrace(top->o_str, top->o_match);
+            top->schemeClosingRE->setBackTrace(top->o_str, top->o_match);
 
             if (top->eline == top->sline) {
                 removeTop();
@@ -466,6 +471,7 @@ bool TextParserImpl::colorize()
             }
             assert(top != null);
             top->closingREparsed = false;
+            len = str->length();
 
             if (zeroLength) { 
                 cont();
@@ -529,12 +535,12 @@ bool TextParserImpl::colorize()
         newtop->sline = gy;
         newtop->eline = MAX_LINE_LENGTH;
 
-        provider->endRE()->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
+        newtop->schemeClosingRE->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
 
         newtop->contextStart = gx;
         newtop->matchstart = match;
 
-        provider->endRE()->setBackTrace(newtop->backLine, &newtop->matchstart);
+        newtop->schemeClosingRE->setBackTrace(newtop->backLine, &newtop->matchstart);
 
         enterScheme(gy, &match);
 

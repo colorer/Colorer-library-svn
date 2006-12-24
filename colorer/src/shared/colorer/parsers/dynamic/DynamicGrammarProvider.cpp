@@ -64,7 +64,7 @@ void DynamicGrammarProvider::popInherit()
     assert(top->inheritStep);
     
     s_inheritLevel--;
-    CLR_TRACE("DGP", "traverse inherit %03d<<%s", s_inheritLevel, top->scheme->getName()->getChars());
+//    CLR_TRACE("DGP", "traverse inherit %03d<<%s", s_inheritLevel, top->scheme->getName()->getChars());
     
     ProviderStep *newtop = top->parent;
     newtop->addref();
@@ -105,7 +105,7 @@ void DynamicGrammarProvider::validateInherit()
         adviceScheme(node->scheme);
         
         s_inheritLevel++;
-        CLR_TRACE("DGP", "traverse inherit %03d>>%s", s_inheritLevel, top->scheme->getName()->getChars());
+//        CLR_TRACE("DGP", "traverse inherit %03d>>%s", s_inheritLevel, top->scheme->getName()->getChars());
         validateInherit();
     }
 }
