@@ -51,6 +51,7 @@
   </xs:simpleType>
 
   <xs:attributeGroup name="regionX">
+    <xs:attribute name="region"  type="QName"/>
     <xs:attribute name="region0" type="QName"/>
     <xs:attribute name="region1" type="QName"/>
     <xs:attribute name="region2" type="QName"/>
