@@ -104,6 +104,12 @@
 
          <block  start="/\\begin\{comment\}/" end="/\\end\{comment\}/" scheme="Comment"
                  region="Comment" region00="PairStart" region10="PairEnd"/>
+         
+         <block start="/(\\begin\s*\{)(verbatim)(\})/" end="/(\\end\s*\{)(verbatim)(\})/x" scheme="def:Comment" region="Bracket"
+                region00="PairStart" region10="PairEnd"
+                region01="Word" region11="Word"
+                region02="LargeBracket" region12="LargeBracket"
+                region03="Word" region13="Word"/>
 
          <block start="/((\\(begin)\s*\{(lstlisting)\})).*?(\{.*\})/" end="/(\\(end)\s*\{(lstlisting)\})/x"
                 scheme="empty" region="BooleanConstant"
@@ -112,7 +118,11 @@
                 region05="Text"
                 region11="Word" region12="Word" region13="Label"/>
 
-         <block start="/(\\begin\s*\{)([\w]+)(\})/" end="/(\\end\s*\{)(\y2)(\})/x" scheme="TeX" region="Bracket" region00="PairStart" region10="PairEnd" region01="Word" region11="Word" region02="LargeBracket" region12="LargeBracket" region03="Word" region13="Word"/>
+         <block start="/(\\begin\s*\{)([\w]+)(\})/" end="/(\\end\s*\{)(\y2)(\})/x" scheme="TeX" region="Bracket"
+                region00="PairStart" region10="PairEnd"
+                region01="Word" region11="Word"
+                region02="LargeBracket" region12="LargeBracket"
+                region03="Word" region13="Word"/>
          <inherit scheme="quoters"/>
          <block start="/(\$\$)/" end="/(\$\$)/" scheme="Formula" region="Formula" region00="PairStart" region10="PairEnd" region01="Symb" region11="Symb"/>
          <block start="/(\$)/" end="/(\$)/" scheme="Formula" region="Formula" region00="PairStart" region10="PairEnd" region01="Symb" region11="Symb"/>
