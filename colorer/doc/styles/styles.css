@@ -6,7 +6,7 @@ body{
   margin-right: auto;
   padding-left: 40pt;
   padding-right: 20pt;
-  max-width: 80em;
+  max-width: 75em;
   /* IE hack: */
   /*
   width:expression(document.body.clientWidth > (500/12) * parseInt(document.body.currentStyle.fontSize) ? "500pt" : "auto" );
