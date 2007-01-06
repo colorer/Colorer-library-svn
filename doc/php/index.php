@@ -66,8 +66,9 @@ It produces highlighted source text through the web interface.</p>
     <option selected='selected' value=''>Autodetect</option>
 <?
     exec("$colorer_path -lt", $list);
+    exec("$colorer_path -l", $list_descr);
     for($i = 0; $i < count($list); $i++)
-    print "<option value='".substr(strstr($list[$i],":"),2)."'>$list[$i]</option>\n";?>
+    print "<option value='$list[$i]'>$list_descr[$i]</option>\n";?>
   </select>
   </td></tr>
 
