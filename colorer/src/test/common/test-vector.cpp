@@ -27,7 +27,7 @@ int main()
   printf("passed: Vector\n");
 
   
-  
+/*  
   SortedVector<int> sv;
 
   sv.addElement(7);
@@ -85,5 +85,5 @@ int main()
 
 
   printf("passed: SortedVector\n");
-
+*/
 }
