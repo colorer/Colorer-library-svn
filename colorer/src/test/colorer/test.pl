@@ -1,7 +1,7 @@
 
 $testcount = 2;
 
-$testcmd = "..\\colorer.exe -p$testcount ";
+$testcmd = "colorer.exe -p$testcount ";
 
 @list = `cat test-list.txt`;
 

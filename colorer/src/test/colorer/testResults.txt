@@ -1,0 +1,28 @@
+
+Fri Dec  8 00:58:04 2006
+ - Tested : ../hrc/perl/full/perl5db.pl
+ - Timing : 3468
+ - nTiming: 1734
+ - Total  : 3468
+
+
+Fri Dec  8 01:00:05 2006
+ - Tested : ../hrc/perl/full/perl5db.pl, ../hrc/xml/build.xml
+ - Timing : 3500, 141
+ - nTiming: 1750, 70.5
+ - Total  : 3641
+
+
+Fri Dec  8 01:01:52 2006
+ - Tested : ../hrc/perl/full/perl5db.pl, ../hrc/xml/build.xml
+ - Timing : 7250, 375
+ - nTiming: 3625, 187.5
+ - Total  : 7625
+
+
+Fri Dec  8 01:10:18 2006
+ - Tested : ../hrc/perl/full/perl5db.pl, ../hrc/xml/build.xml
+ - Timing : 7219, 391
+ - nTiming: 3609.5, 195.5
+ - Total  : 7610
+

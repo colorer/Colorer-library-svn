@@ -71,7 +71,7 @@ static byte *currentChunk = null;
 /**
   Currently used size of the last allocated chunk
 */
-static int currentChunkAlloc = 0;
+static size_t currentChunkAlloc = 0;
 
 /**
   Number of allocation instances.

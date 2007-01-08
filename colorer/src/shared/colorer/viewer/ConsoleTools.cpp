@@ -332,7 +332,7 @@ void ConsoleTools::genOutput(bool useTokens){
     baseEditor.setRegionMapper(mapper);
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
     //FIX:temporary:
-    //baseEditor.visibleTextEvent(0, textLinesStore.getLineCount());
+    baseEditor.visibleTextEvent(0, textLinesStore.getLineCount());
     
     // Choosing file type
     FileType *type = selectType(hrcParser, &textLinesStore);

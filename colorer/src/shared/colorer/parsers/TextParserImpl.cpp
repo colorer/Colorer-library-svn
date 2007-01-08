@@ -3,6 +3,9 @@
 
 #define MAX_LINE_LENGTH 0x7FFFFFF
 
+#define MATCH_NOTHING 0
+#define MATCH_RE 1
+
 #define dynamic_assert(a) if (!(a)) { throw Exception(DString("dynamic_assert: "#a)); }
 
 /**
@@ -136,11 +139,14 @@ ParseStep *TextParserImpl::searchTree(int ln, ParseStep *step)
     
     while(iterate)
     {
-        CLR_TRACE("TextParserImpl", "search: sline=%d, eline=%d, scheme=%s", iterate->sline, iterate->eline, iterate->scheme ? iterate->scheme->getName()->getChars() : "null");
+        CLR_TRACE("TextParserImpl:Search", "sline=%d, eline=%d, scheme=%s", iterate->sline, iterate->eline, iterate->scheme ? iterate->scheme->getName()->getChars() : "null");
+
         /* Returns the scheme parse node at very start of the line "ln" */
         if (iterate->sline == ln) return iterate->parent ? iterate->parent : iterate;
+        
         if (iterate->sline < ln && iterate->eline >= ln)
         {
+            CLR_TRACE("TextParserImpl:Search", "go child");
             ParseStep *child = searchTree(ln, iterate->children);
             if (child)
             {
@@ -160,10 +166,7 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
     gx = 0;
     gy = from;
     gy2 = from+num;
-
-    invisibleSchemesFilled = false;
     breakParsing = false;
-    updateCache = (mode == TPM_CACHE_UPDATE);
 
     CLR_TRACE("TextParserImpl", "parse from=%d, num=%d", from, num);
     /* Check for initial bad conditions */
@@ -176,20 +179,31 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
 
     provider->reset();
     
+    /* Locate cached parse tree node */
     top = searchTree(gy, proot);
+    CLR_TRACE("TextParserImpl:Search", "Found: sline=%d, eline=%d, scheme=%s", top->sline, top->eline, top->scheme ? top->scheme->getName()->getChars() : "null");
+    
     if (top->providerState != null)
     {
         provider->restoreState(top->providerState);
     }
-    //all tree!
-    ParseStep *child = top->children;
-    while (child) {
-        ParseStep *cc = child;
-        child = child->next;
-        delete cc;
-        if (child == top->children) break;
-    }
-    top->children = null;
+    //TODO: cleanup full tree below top
+    
+    ParseStep *rootback = top;
+
+//    while(rootback != null) {
+        ParseStep *child = rootback->children;
+        while (child) {
+            ParseStep *cc = child;
+            child = child->next;
+            delete cc;
+            if (child == rootback->children) break;
+        }
+        rootback->children = null;
+//    }
+
+
+
 
     if (top->schemeClosingRE) {
         top->schemeClosingRE->setBackTrace(top->backLine, &top->matchstart);
@@ -197,14 +211,6 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
     fillInvisibleSchemes(top);
 
     colorize();
-
-    /*
-
-    if (mode == TPM_CACHE_READ || mode == TPM_CACHE_UPDATE) {
-
-    }
-
-    */
 
     regionHandler->endParsing(endLine);
     lineSource->endJob(endLine);
@@ -278,17 +284,14 @@ void TextParserImpl::fillInvisibleSchemes(ParseStep *step)
     return;
 }
 
-#define MATCH_NOTHING 0
-#define MATCH_RE 1
-
-int TextParserImpl::searchKW(int lowlen)
+bool TextParserImpl::searchKW(int lowlen)
 {
   KeywordList *kwList = provider->kwList();
 
-  if (!kwList->num) return MATCH_NOTHING;
+  if (!kwList->num) return false;
 
-  if (kwList->minKeywordLength+gx > lowlen) return MATCH_NOTHING;
-  if (gx < lowlen && !kwList->firstChar->inClass((*str)[gx])) return MATCH_NOTHING;
+  if (kwList->minKeywordLength+gx > lowlen) return false;
+  if (gx < lowlen && !kwList->firstChar->inClass((*str)[gx])) return false;
 
   int left = 0;
   int right = kwList->num;
@@ -320,7 +323,7 @@ int TextParserImpl::searchKW(int lowlen)
       if (!badbound){
         addRegion(gy, gx, gx + kwlen, kwList->kwList[pos].region);
         gx += kwlen;
-        return MATCH_RE;
+        return true;
       };
     };
     if (right-left == 1){
@@ -334,7 +337,7 @@ int TextParserImpl::searchKW(int lowlen)
     if (cr == 1) right = pos;
     if (cr == 0 || cr == -1) left = pos;
   };
-  return MATCH_NOTHING;
+  return false;
 }
 
 
@@ -384,16 +387,15 @@ void TextParserImpl::incrementPosition()
         top->contextStart = -1;
         top->closingREparsed = false;
         if (gy >= gy2){
-          return;
+            return;
         }
         // get line data from LineSource interface
-        clearLine = gy;
         str = lineSource->getLine(gy);
         len = str->length();
         lowlen = -1;
         if (str == null){
-          gy = gy2;
-          throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
+            gy = gy2;
+            throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
         }
         endLine = gy;
         regionHandler->clearLine(gy, str);
@@ -411,8 +413,8 @@ bool TextParserImpl::colorize()
   while( gy < gy2 ) {
 
     if (breakParsing) {
-      gy = gy2;
-      break;
+        gy = gy2;
+        break;
     }
 
     if (!top->closingREparsed || gx > lowlen) {
@@ -427,27 +429,25 @@ bool TextParserImpl::colorize()
         if (top->closingREmatched){
             lowlen = top->matchend.s[0];
         }
+        if (top->lowContentPriority){
+            len = lowlen;
+        }
     }
 
-    if (top->lowContentPriority){
-      len = lowlen;
+    if (picked != null && gx+11 <= lowlen && (*str)[gx] == 'C'){
+        int ci;
+        static char id[] = "fnq%Qtrjhg";
+        for(ci = 0; ci < 10; ci++) if ((*str)[gx+1+ci] != id[ci]-5) break;
+        if (ci == 10) {
+            addRegion(gy, gx, gx+11, picked);
+            gx += 11;
+            continue;
+        }
     }
 
     /*
      * Traversing over scheme
      */
-
-    if (picked != null && gx+11 <= lowlen && (*str)[gx] == 'C'){
-      int ci;
-      static char id[] = "fnq%Qtrjhg";
-      for(ci = 0; ci < 10; ci++) if ((*str)[gx+1+ci] != id[ci]-5) break;
-      if (ci == 10){
-        addRegion(gy, gx, gx+11, picked);
-        gx += 11;
-        continue;
-      }
-    }
-
     if (provider->nodeType() == SNT_EMPTY)
     {
         if (top->closingREmatched && gx+1 >= lowlen) 
@@ -471,7 +471,6 @@ bool TextParserImpl::colorize()
             }
             assert(top != null);
             top->closingREparsed = false;
-            len = str->length();
 
             if (zeroLength) { 
                 cont();
@@ -486,70 +485,73 @@ bool TextParserImpl::colorize()
     }
     else if (provider->nodeType() == SNT_KEYWORDS)
     {
-      if (searchKW(lowlen) == MATCH_RE){
-        restart();
-        continue;
-      }
+        if (searchKW(lowlen) == true)
+        {
+            restart();
+            continue;
+        }
     }
     else if (provider->nodeType() == SNT_RE)
     {
-      SMatches match;
-      if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart)){
-        int i;
-        CLR_TRACE("TextParserImpl", "re matched: %s", DString(str, match.s[0], match.e[0]-match.s[0]).getChars());
-        /* applying syntax tokens from RE */
-        for (i = 0; i < match.cMatch; i++){
-          addRegion(gy, match.s[i], match.e[i], provider->regions(i));
+        SMatches match;
+        if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart))
+        {
+            int i;
+            CLR_TRACE("TextParserImpl", "re matched: %s", DString(str, match.s[0], match.e[0]-match.s[0]).getChars());
+            /* applying syntax tokens from RE */
+            for (i = 0; i < match.cMatch; i++){
+              addRegion(gy, match.s[i], match.e[i], provider->regions(i));
+            }
+            for (i = 0; i < match.cnMatch; i++){
+              addRegion(gy, match.ns[i], match.ne[i], provider->regionsn(i));
+            }
+            /* skip regexp if it has zero length */
+            if (match.e[0] == match.s[0]){
+              cont();
+              continue;
+            }
+            gx = match.e[0];
+            restart();
+            continue;
         }
-        for (i = 0; i < match.cnMatch; i++){
-          addRegion(gy, match.ns[i], match.ne[i], provider->regionsn(i));
-        }
-        /* skip regexp if it has zero length */
-        if (match.e[0] == match.s[0]){
-          cont();
-          continue;
-        }
-        gx = match.e[0];
-        restart();
-        continue;
-      }
 
     }
     else if (provider->nodeType() == SNT_SCHEME)
     {
-      SMatches match;
-      if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart))
-      {
-        CLR_TRACE("TextParserImpl", "scheme matched: %s", provider->scheme()->getName()->getChars());
+        SMatches match;
+        if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart))
+        {
+            CLR_TRACE("TextParserImpl", "scheme matched: %s", provider->scheme()->getName()->getChars());
 
-        gx = match.e[0];
+            gx = match.e[0];
 
-        ParseStep *newtop = new ParseStep(provider);
+            ParseStep *newtop = new ParseStep(provider);
 
-        newtop->schemeClosingRE = provider->endRE();
-        newtop->schemeRegion = provider->region();
-        newtop->scheme = provider->scheme();
-        newtop->lowContentPriority = provider->lowContentPriority();
+            newtop->schemeClosingRE = provider->endRE();
+            newtop->schemeRegion = provider->region();
+            newtop->scheme = provider->scheme();
+            newtop->lowContentPriority = provider->lowContentPriority();
 
-        newtop->backLine = new SString(str);
-        newtop->sline = gy;
-        newtop->eline = MAX_LINE_LENGTH;
+            /* TODO: Only for RE with \y backtrace */
+            newtop->backLine = new SString(str);
+            newtop->schemeClosingRE->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
 
-        newtop->schemeClosingRE->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
+            newtop->sline = gy;
+            newtop->eline = MAX_LINE_LENGTH;
 
-        newtop->contextStart = gx;
-        newtop->matchstart = match;
+            newtop->contextStart = gx;
+            newtop->matchstart = match;
 
-        newtop->schemeClosingRE->setBackTrace(newtop->backLine, &newtop->matchstart);
+            newtop->schemeClosingRE->setBackTrace(newtop->backLine, &newtop->matchstart);
 
-        enterScheme(gy, &match);
+            enterScheme(gy, &match);
 
-        top->addChild(newtop);
-        top = newtop;
-        provider->enterScheme();
-        top->providerState = provider->storeState();
-        continue;
-      }
+            top->addChild(newtop);
+            top = newtop;
+            provider->enterScheme();
+            top->providerState = provider->storeState();
+            continue;
+        }
     }
 
     // default action

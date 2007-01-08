@@ -1,59 +1,92 @@
 
-#include"string.h"
-#include"common/Logging.h"
-#include"unicode/String.h"
+#include<stdlib.h>
+#include<string.h>
+#include<common/Logging.h>
+#include<unicode/String.h>
+#include<common/Vector.h>
 
-static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
+/**
 
-// BaseEditor, TextParserImpl, TPCache
-// ParserFactory, BaseEditorNative, NSC:JHRCParser:getRegion
+Environment variables:
 
-static const char *toTrace[] = {"BaseEditorNative", "JavaLineSource" };
+COLORER5LOGGING = QUIET|ERROR|WARN|TRACE|INFO
+    Logging level
+
+COLORER5LOGGINGTO = OUT|ERR|FILE
+    To stdout, stderr, or file
+
+COLORER5LOGGINGON = Component1,Component2
+    Component names to enable logging for
+
+COLORER5LOGGINGOFF = Component1,Component2
+    Component names to disable logging for
+
+
+ParserFactory, BaseEditor, TextParserImpl
+
+BaseEditorNative, NSC:JHRCParser:getRegion, JavaLineSource
+
+*/
+
+static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO" };
+
+static int envLevel = -1;
+
+static Vector<char*> *envLoggingNamesOn = null;
+static Vector<char*> *envLoggingNamesOff = null;
+
 
 static FILE *log = 0;
 
-static void file_logger(int level, const char *cname, const char *msg, va_list v){
 
-  int idx = 0;
+static void file_logger(int level, const char *cname, const char *msg, va_list v) {
 
-  while (log == 0 && idx < 10){
-    char log_name[30];
+    int idx = 0;
+
+    while (log == 0 && idx < 10) {
+        char log_name[30];
 #ifdef __unix__
-    sprintf(log_name, "/tmp/clr-trace%d.log", idx);
+        sprintf(log_name, "/tmp/colorer-logging-%d.log", idx);
 #else
-    sprintf(log_name, "c:\\clr-trace%d.log", idx);
+        sprintf(log_name, "c:\\colorer-logging-%d.log", idx);
 #endif
-    log = fopen(log_name, "ab+");
-    idx++;
-  }
+        log = fopen(log_name, "ab+");
+        idx++;
+    }
 
-  fprintf(log, "[%s][%s] ", levelNames[level], cname);
+    fprintf(log, "[%s][%s] ", levelNames[level], cname);
 
-  vfprintf(log, msg, v);
+    vfprintf(log, msg, v);
 
-  fprintf(log, "\n");
+    fprintf(log, "\n");
 
-  fflush(log);
+    fflush(log);
 }
 
 static void console_logger(int level, const char *cname, const char *msg, va_list v){
 
-  fprintf(stderr, "[%s][%s] ", levelNames[level], cname);
+    fprintf(stderr, "[%s][%s] ", levelNames[level], cname);
 
-  vfprintf(stderr, msg, v);
+    vfprintf(stderr, msg, v);
 
-  fprintf(stderr, "\n");
+    fprintf(stderr, "\n");
 
-  fflush(stderr);
+    fflush(stderr);
 }
 
 
 void colorer_logger_set_target(const char *logfile){
-  if (logfile == 0) return;
-  if (log != 0){
-    fclose(log);
-  }
-  log = fopen(logfile, "ab+");
+    if (logfile == 0) {
+        log = stderr;
+        return;
+    }
+    if (log == stderr || log == stdout) return;
+    
+    if (log != 0) {
+        fclose(log);
+    }
+
+    log = fopen(logfile, "ab+");
 }
 
 
@@ -88,20 +121,81 @@ void colorer_logger_info(const char *cname, const char *msg, ...){
 
 void colorer_logger(int level, const char *cname, const char *msg, va_list v){
 
-  bool found = false;
+  
+  if (envLevel == -1) {
+      
+      char *envLevelChar = getenv("COLORER5LOGGING");
+      envLevel = 0;
+      
+      while(stricmp(levelNames[envLevel], envLevelChar) != 0 ) {
+          envLevel++;
+          if (envLevel == COLORER_FEATURE_LOGLEVEL_FULL) {
+              break;
+          }
+      } 
+      
+      char *envLoggingChar = getenv("COLORER5LOGGINGON");
+      envLoggingNamesOn = new Vector<char*>;
 
-  for (int idx = 0; idx < sizeof(toTrace)/sizeof(toTrace[0]); idx++){
-    if (stricmp(toTrace[idx], cname) == 0){
-      found = true;
-    }
-  }
-  if (!found){
-  //  return;
-  }
-  //*/
+      while (envLoggingChar && *envLoggingChar) {
+          envLoggingNamesOn->addElement(envLoggingChar);
+          
+          envLoggingChar = strchr(envLoggingChar, ',');
+          if (envLoggingChar != null) envLoggingChar++;
+      }
 
-  console_logger(level, cname, msg, v);
-//  file_logger(level, cname, msg, v);
+      envLoggingChar = getenv("COLORER5LOGGINGOFF");
+      envLoggingNamesOff = new Vector<char*>;
+
+      while (envLoggingChar && *envLoggingChar) {
+          envLoggingNamesOff->addElement(envLoggingChar);
+          
+          envLoggingChar = strchr(envLoggingChar, ',');
+          if (envLoggingChar != null) envLoggingChar++;
+      }
+
+      char *envLogTo = getenv("COLORER5LOGGINGTO");
+
+      if (envLogTo && !stricmp(envLogTo, "ERR")) log = stderr;
+      if (envLogTo && !stricmp(envLogTo, "OUT")) log = stdout;
+
+  }
+
+  /* Check for environment level */
+  if (level > envLevel) return;
+
+  
+  if (cname != null) {
+      int idx;
+      bool foundOn = true;
+      bool foundOff = false;
+
+      size_t cnamelen = strlen(cname);
+
+      for (idx = 0; idx < envLoggingNamesOn->size(); idx++) {
+          if (strnicmp(envLoggingNamesOn->elementAt(idx), cname, cnamelen) == 0 &&
+             (envLoggingNamesOn->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOn->elementAt(idx)[cnamelen] == 0) ) {
+              foundOn = true;
+              break;
+          } else {
+              foundOn = false;
+          }
+      }
+
+      for (idx = 0; idx < envLoggingNamesOff->size(); idx++) {
+          if (strnicmp(envLoggingNamesOff->elementAt(idx), cname, cnamelen) == 0 &&
+             (envLoggingNamesOff->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOff->elementAt(idx)[cnamelen] == 0) ) {
+              foundOff = true;
+              break;
+          }
+      }
+
+      if (!foundOn || foundOff) {
+          return;
+      }
+  }
+
+  file_logger(level, cname, msg, v);
 }
 
 

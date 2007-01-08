@@ -40,9 +40,6 @@ $(obj_output_slash)DynamicHRCModel.$(obj):
 $(obj_output_slash)HRCParserHelpers.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/helpers/HRCParserHelpers.cpp
 
-$(obj_output_slash)TextParserHelpers.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/helpers/TextParserHelpers.cpp
-
 $(obj_output_slash)DynamicBuilder.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./colorer/parsers/static/DynamicBuilder.cpp
 

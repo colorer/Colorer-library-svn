@@ -13,7 +13,6 @@ coreobjects = \
   $(obj_output_slash)DynamicGrammarProvider.$(obj) \
   $(obj_output_slash)DynamicHRCModel.$(obj) \
   $(obj_output_slash)HRCParserHelpers.$(obj) \
-  $(obj_output_slash)TextParserHelpers.$(obj) \
   $(obj_output_slash)DynamicBuilder.$(obj) \
   $(obj_output_slash)HRCCompiler.$(obj) \
   $(obj_output_slash)StaticBuilder.$(obj) \

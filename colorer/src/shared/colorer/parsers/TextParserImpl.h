@@ -2,7 +2,6 @@
 #define _COLORER_TEXTPARSERIMPL_H_
 
 #include<colorer/TextParser.h>
-#include<colorer/parsers/helpers/TextParserHelpers.h>
 #include<colorer/parsers/GrammarProvider.h>
 
 struct ParseStep;
@@ -34,19 +33,14 @@ private:
   int len, lowlen;
   String *str;
   int gx, gy, gy2;
-  int clearLine, endLine;
+  int endLine;
 
   GrammarProvider *provider;
   LineSource *lineSource;
   RegionHandler *regionHandler;
 
   bool breakParsing;
-  bool invisibleSchemesFilled;
-  bool updateCache;
-
   const Region *picked;
-
-  int cachedLineNo;
 
   ParseStep *proot, *top;
 
@@ -55,7 +49,7 @@ private:
   void enterScheme(int lno, SMatches *match);
   void leaveScheme(int lno, SMatches *match);
 
-  int searchKW(int lowLen);
+  bool searchKW(int lowLen);
 
   ParseStep *searchTree(int ln, ParseStep *step);
 

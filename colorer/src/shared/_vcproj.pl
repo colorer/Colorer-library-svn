@@ -19,12 +19,19 @@ sub traverse
     my $dir = shift;
     my @list = `ls $dir`;
 
+    print "\n Traversing $dir .";
+
     $dir =~ /\\([^\\]+)$/;
-    print F "<Filter Name=\"$1\">\n";
+    $fname = $1;
+    $fname = $folderidx++ if ($1 eq "");
+
+    print F "<Filter Name=\"$fname\">\n";
 
     foreach $entry (@list){
         chomp $entry;
         
+        print ".";
+
         if (-d $dir.'/'.$entry) {
             traverse($dir.'\\'.$entry);
         }
@@ -33,7 +40,7 @@ sub traverse
         next if grep(/$entry/, @excludes);
         if (-f $dir."/".$entry)
         {
-           print F "<File RelativePath=\"..\\shared\\$dir\\$entry\">\n</File>\n";
+           print F "<File RelativePath=\"$dir\\$entry\">\n</File>\n";
         }
     }
     print F "</Filter>\n";
@@ -171,8 +178,18 @@ print F <<INPUT;
 	<Files>
 INPUT
 
-traverse('..\\shared');
-traverse('..\\zlib');
+# default folders
+if ($#ARGV == -1) {
+    traverse('..\\shared');
+    traverse('..\\zlib');
+}
+
+while(1) {
+  $arg = shift @ARGV;
+  last if (!$arg);
+  traverse($arg);
+}
+
 
 print F <<INPUT;
 	</Files>
