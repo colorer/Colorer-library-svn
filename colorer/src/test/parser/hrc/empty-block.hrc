@@ -20,8 +20,8 @@
 
     <scheme name="empty-block">
       
-      <regexp match="/\M(?{def:Error}test)/"/>
-      <regexp match="/test  (?{def:Error}RED)/"/>
+      <regexp match="/\M(?{def:Insertion}test)/"/>
+      <regexp match="/test  (?{def:Insertion}OK)/"/>
 
       <block start="/ \M &lt; [\w\d]+ /x" end="/&gt;?#1/" scheme="tagContainer"/>
 
