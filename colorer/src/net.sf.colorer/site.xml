@@ -4,7 +4,7 @@
    <description url="http://colorer.sf.net/eclipsecolorer/">
       Eclipse Colorer plugin information
    </description>
-   <feature url="features/net.sf.colorer_0.8.0.jar" id="net.sf.colorer" version="0.8.0">
+   <feature url="features/net.sf.colorer_0.7.2.jar" id="net.sf.colorer" version="0.7.2">
       <category name="syntax"/>
    </feature>
    <category-def name="syntax" label="Syntax Highlighting">

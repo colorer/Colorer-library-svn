@@ -532,7 +532,6 @@
       <fileset dir='src/net.sf.colorer' includes='site.xml'/>
     </copy>
 
-
   </target>
 
 
