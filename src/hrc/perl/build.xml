@@ -27,27 +27,9 @@
  </ant>
 </target>
 
-
-<!-- hrc -->
-
-<target name="hrc.check">
- <dependset>
-  <srcfilelist dir="${src}" files = "perl*.hrc"/>
-  <targetfilelist dir="${bin}" files="perl*.hrc" />
- </dependset>
-</target>
-
-
-
-<target name="hrc" depends="hrc.check, bkt">
- <copy todir='${bin}'>
-   <fileset dir='${src}' includes='perl*.hrc'/>
- </copy>
-</target>
-
 <!-- final -->
 
-<target name="all" depends="hrc"/>
+<target name="all" depends="bkt"/>
 
 <target name="clean">
  <delete failonerror='false'>
