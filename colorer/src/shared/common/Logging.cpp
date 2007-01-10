@@ -121,81 +121,83 @@ void colorer_logger_info(const char *cname, const char *msg, ...){
 
 void colorer_logger(int level, const char *cname, const char *msg, va_list v){
 
-  
-  if (envLevel == -1) {
-      
-      char *envLevelChar = getenv("COLORER5LOGGING");
-      envLevel = 0;
-      
-      while(stricmp(levelNames[envLevel], envLevelChar) != 0 ) {
-          envLevel++;
-          if (envLevel == COLORER_FEATURE_LOGLEVEL_FULL) {
-              break;
-          }
-      } 
-      
-      char *envLoggingChar = getenv("COLORER5LOGGINGON");
-      envLoggingNamesOn = new Vector<char*>;
+    if (envLevel == -1) {
+        
+        char *envLevelChar = getenv("COLORER5LOGGING");
+        if (envLevelChar != null) {
+              envLevel = 0;
+              while(stricmp(levelNames[envLevel], envLevelChar) != 0 ) {
+                  envLevel++;
+                  if (envLevel == COLORER_FEATURE_LOGLEVEL_FULL) {
+                      break;
+                  }
+              } 
+        }else{
+            envLevel = COLORER_FEATURE_LOGLEVEL_FULL;
+        }
+        
+        char *envLoggingChar = getenv("COLORER5LOGGINGON");
+        envLoggingNamesOn = new Vector<char*>;
 
-      while (envLoggingChar && *envLoggingChar) {
-          envLoggingNamesOn->addElement(envLoggingChar);
-          
-          envLoggingChar = strchr(envLoggingChar, ',');
-          if (envLoggingChar != null) envLoggingChar++;
-      }
+        while (envLoggingChar && *envLoggingChar) {
+            envLoggingNamesOn->addElement(envLoggingChar);
+            
+            envLoggingChar = strchr(envLoggingChar, ',');
+            if (envLoggingChar != null) envLoggingChar++;
+        }
 
-      envLoggingChar = getenv("COLORER5LOGGINGOFF");
-      envLoggingNamesOff = new Vector<char*>;
+        envLoggingChar = getenv("COLORER5LOGGINGOFF");
+        envLoggingNamesOff = new Vector<char*>;
 
-      while (envLoggingChar && *envLoggingChar) {
-          envLoggingNamesOff->addElement(envLoggingChar);
-          
-          envLoggingChar = strchr(envLoggingChar, ',');
-          if (envLoggingChar != null) envLoggingChar++;
-      }
+        while (envLoggingChar && *envLoggingChar) {
+            envLoggingNamesOff->addElement(envLoggingChar);
+            
+            envLoggingChar = strchr(envLoggingChar, ',');
+            if (envLoggingChar != null) envLoggingChar++;
+        }
 
-      char *envLogTo = getenv("COLORER5LOGGINGTO");
+        char *envLogTo = getenv("COLORER5LOGGINGTO");
 
-      if (envLogTo && !stricmp(envLogTo, "ERR")) log = stderr;
-      if (envLogTo && !stricmp(envLogTo, "OUT")) log = stdout;
+        if (envLogTo && !stricmp(envLogTo, "ERR")) log = stderr;
+        if (envLogTo && !stricmp(envLogTo, "OUT")) log = stdout;
 
-  }
+    }
 
-  /* Check for environment level */
-  if (level > envLevel) return;
+    /* Check for environment level */
+    if (level > envLevel) return;
 
-  
-  if (cname != null) {
-      int idx;
-      bool foundOn = true;
-      bool foundOff = false;
+    
+    if (cname != null) {
+        int idx;
+        bool foundOn = true;
+        bool foundOff = false;
 
-      size_t cnamelen = strlen(cname);
+        size_t cnamelen = strlen(cname);
 
-      for (idx = 0; idx < envLoggingNamesOn->size(); idx++) {
-          if (strnicmp(envLoggingNamesOn->elementAt(idx), cname, cnamelen) == 0 &&
-             (envLoggingNamesOn->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOn->elementAt(idx)[cnamelen] == 0) ) {
-              foundOn = true;
-              break;
-          } else {
-              foundOn = false;
-          }
-      }
+        for (idx = 0; idx < envLoggingNamesOn->size(); idx++) {
+            if (strnicmp(envLoggingNamesOn->elementAt(idx), cname, cnamelen) == 0 &&
+               (envLoggingNamesOn->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOn->elementAt(idx)[cnamelen] == 0) ) {
+                foundOn = true;
+                break;
+            } else {
+                foundOn = false;
+            }
+        }
 
-      for (idx = 0; idx < envLoggingNamesOff->size(); idx++) {
-          if (strnicmp(envLoggingNamesOff->elementAt(idx), cname, cnamelen) == 0 &&
-             (envLoggingNamesOff->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOff->elementAt(idx)[cnamelen] == 0) ) {
-              foundOff = true;
-              break;
-          }
-      }
+        for (idx = 0; idx < envLoggingNamesOff->size(); idx++) {
+            if (strnicmp(envLoggingNamesOff->elementAt(idx), cname, cnamelen) == 0 &&
+               (envLoggingNamesOff->elementAt(idx)[cnamelen] == ',' || envLoggingNamesOff->elementAt(idx)[cnamelen] == 0) ) {
+                foundOff = true;
+                break;
+            }
+        }
 
-      if (!foundOn || foundOff) {
-          return;
-      }
-  }
+        if (!foundOn || foundOff) {
+            return;
+        }
+    }
 
-  file_logger(level, cname, msg, v);
+    file_logger(level, cname, msg, v);
 }
 
 

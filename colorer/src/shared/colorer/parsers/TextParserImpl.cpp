@@ -97,6 +97,11 @@ struct ParseStep
         children->prev = child;
     }
 
+    inline ParseStep *first_sibling()
+    {
+        return parent->children;
+    }
+
 };
 
 
@@ -464,9 +469,24 @@ bool TextParserImpl::colorize()
 
             top->schemeClosingRE->setBackTrace(top->o_str, top->o_match);
 
+            /*
+             * Cleanup invalid nodes from previous parses on this level:
+             * remove all sibling elements from this 'top' till the end.
+             */
+            ParseStep *dead = top->next;
+            while(dead && dead != top->first_sibling()) {
+                ParseStep *tokill = dead;
+                dead = dead->next;
+                delete tokill;
+            }
+            top->next = top->first_sibling();
+            top->first_sibling()->prev = top;
+            
             if (top->eline == top->sline) {
+                /* Remove 'top' single lined schema - no caching required */
                 removeTop();
             }else{
+                /* Retain 'top' - caching multiple lined schema */
                 top = top->parent;
             }
             assert(top != null);
