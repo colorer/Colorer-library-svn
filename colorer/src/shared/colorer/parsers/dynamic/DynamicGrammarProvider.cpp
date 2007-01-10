@@ -251,7 +251,6 @@ void DynamicGrammarProvider::restoreState(void *p)
     if (top) top->rmref();
     top = (ProviderStep*)p;
     top->addref();
-    restart();
 }
 
 void DynamicGrammarProvider::freeState(void *p)

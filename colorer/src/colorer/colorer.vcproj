@@ -291,12 +291,6 @@
 						<File
 							RelativePath="..\shared\..\shared\colorer\parsers\helpers\HRCParserHelpers.h">
 						</File>
-						<File
-							RelativePath="..\shared\..\shared\colorer\parsers\helpers\TextParserHelpers.cpp">
-						</File>
-						<File
-							RelativePath="..\shared\..\shared\colorer\parsers\helpers\TextParserHelpers.h">
-						</File>
 					</Filter>
 					<Filter
 						Name="static">

@@ -23,7 +23,7 @@ struct ParseStep
     
     GrammarProvider *provider;
 
-    /* Data duplication with provider?? */
+    /* Data duplication with provider? */
     CRegExp *schemeClosingRE;
     const Region *schemeRegion;
     const Scheme *scheme;
@@ -41,8 +41,6 @@ struct ParseStep
     /** provider's state at this parse position */
     void *providerState;
 
-    SMatches *o_match;
-    DString *o_str;
     SString *backLine;
 
     ParseStep(GrammarProvider *provider) : provider(provider)
@@ -53,8 +51,6 @@ struct ParseStep
         schemeRegion = null;
         scheme = null;
         backLine = null;
-        o_match = null;
-        o_str = null;
         sline = 0;
         eline = MAX_LINE_LENGTH;
         children = next = prev = parent = null;
@@ -192,27 +188,19 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
     {
         provider->restoreState(top->providerState);
     }
-    //TODO: cleanup full tree below top
-    
-    ParseStep *rootback = top;
+    provider->restart();
 
-//    while(rootback != null) {
-        ParseStep *child = rootback->children;
-        while (child) {
-            ParseStep *cc = child;
-            child = child->next;
-            delete cc;
-            if (child == rootback->children) break;
+    // Cleanup children in parse tree below top: sline >= gy
+    ParseStep *child2kill = top->children;
+    while (child2kill && child2kill->sline < gy) {
+        child2kill = child2kill->next;
+        if (child2kill == child2kill->first_sibling()) {
+            child2kill = null;
+            break;
         }
-        rootback->children = null;
-//    }
-
-
-
-
-    if (top->schemeClosingRE) {
-        top->schemeClosingRE->setBackTrace(top->backLine, &top->matchstart);
     }
+    cleanupDeadNodes(child2kill);
+
     fillInvisibleSchemes(top);
 
     colorize();
@@ -367,6 +355,25 @@ void TextParserImpl::removeTop()
   
 }
 
+void TextParserImpl::cleanupDeadNodes(ParseStep *node)
+{
+    if (node == null) return;
+    // kill all below 'node'
+    ParseStep *dead = node->next;
+    while(dead && dead != node->first_sibling()) {
+        ParseStep *tokill = dead;
+        dead = dead->next;
+        delete tokill;
+    }
+    // kill 'node' itself
+    if (node == node->first_sibling()) {
+        node->parent->children = null;
+    }else{
+        node->prev->next = node->first_sibling();
+        node->first_sibling()->prev = node->prev;
+    }
+    delete node;
+}
 
 void TextParserImpl::cont()
 {
@@ -428,6 +435,7 @@ bool TextParserImpl::colorize()
         top->closingREparsed = true;
         len = str->length();
         if (top->schemeClosingRE) {
+            top->schemeClosingRE->setBackTrace(top->backLine, &top->matchstart);
             top->closingREmatched = top->schemeClosingRE->parse(str, gx, len, &top->matchend, top->contextStart);
         }
         lowlen = len;
@@ -467,20 +475,10 @@ bool TextParserImpl::colorize()
             gx = top->matchend.e[0];
             leaveScheme(gy, &top->matchend);
 
-            top->schemeClosingRE->setBackTrace(top->o_str, top->o_match);
-
-            /*
-             * Cleanup invalid nodes from previous parses on this level:
-             * remove all sibling elements from this 'top' till the end.
-             */
-            ParseStep *dead = top->next;
-            while(dead && dead != top->first_sibling()) {
-                ParseStep *tokill = dead;
-                dead = dead->next;
-                delete tokill;
+            // remove everything after 'top'
+            if (top->next != top && top->next != top->first_sibling()) {
+                cleanupDeadNodes(top->next);
             }
-            top->next = top->first_sibling();
-            top->first_sibling()->prev = top;
             
             if (top->eline == top->sline) {
                 /* Remove 'top' single lined schema - no caching required */
@@ -517,7 +515,7 @@ bool TextParserImpl::colorize()
         if (provider->startRE()->parse(str, gx, provider->lowPriority() ? lowlen : len, &match, top->contextStart))
         {
             int i;
-            CLR_TRACE("TextParserImpl", "re matched: %s", DString(str, match.s[0], match.e[0]-match.s[0]).getChars());
+            CLR_TRACE("TextParserImpl", "re matched: %d:%d", match.s[0], match.e[0]);
             /* applying syntax tokens from RE */
             for (i = 0; i < match.cMatch; i++){
               addRegion(gy, match.s[i], match.e[i], provider->regions(i));
@@ -554,15 +552,12 @@ bool TextParserImpl::colorize()
 
             /* TODO: Only for RE with \y backtrace */
             newtop->backLine = new SString(str);
-            newtop->schemeClosingRE->getBackTrace((const String**)&newtop->o_str, &newtop->o_match);
 
             newtop->sline = gy;
             newtop->eline = MAX_LINE_LENGTH;
 
             newtop->contextStart = gx;
             newtop->matchstart = match;
-
-            newtop->schemeClosingRE->setBackTrace(newtop->backLine, &newtop->matchstart);
 
             enterScheme(gy, &match);
 

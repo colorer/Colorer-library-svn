@@ -57,6 +57,12 @@ private:
   bool colorize();
 
   /**
+   * Cleanup invalid nodes from previous parses on this level:
+   * remove all sibling elements from this 'top' till the end.
+   */
+  void cleanupDeadNodes(ParseStep *node);
+
+  /**
    * Enters new parser state \c step.
    * This step parameters should be already setted up.
    */
