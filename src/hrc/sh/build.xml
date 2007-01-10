@@ -25,28 +25,13 @@
  </ant>
 </target>
 
-<!-- hrc -->
-
-<target name="hrc.check">
- <dependset>
-  <srcfilelist dir="${src}" files = "sh.hrc, sh-keywords.ent.hrc"/>
-  <targetfilelist dir="${bin}" files="sh.hrc, sh-keywords.ent.hrc"/>
- </dependset>
-</target>
-
-<target name="hrc" depends="bkt, hrc.check">
- <copy todir='${bin}'>
-   <fileset dir='${src}' includes='sh.hrc, sh-keywords.ent.hrc'/>
- </copy>
-</target>
-
 <!-- final -->
 
-<target name="all" depends="hrc"/>
+<target name="all" depends="bkt"/>
 
 <target name="clean">
  <delete failonerror='false'>
-  <fileset dir="${bin}" includes="sh.hrc, sh-*.hrc"/>
+  <fileset dir="${bin}" includes="sh-brackets.ent.hrc"/>
  </delete>
 </target>
 
