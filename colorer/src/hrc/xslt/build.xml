@@ -57,30 +57,13 @@
 </target>
 
 
-
-<!-- copy -->
-
-<target name="copy.check">
- <dependset>
-  <srcfilelist dir="${src}" files="*.hrc"/>
-  <targetfilelist dir="${bin}" files="*.hrc"/>
- </dependset>
-</target>
-
-<target name="copy" depends="copy.check">
- <copy todir='${bin}'>
-   <fileset dir='${src}' includes='*.hrc'/>
- </copy>
-</target>
-
-
 <!-- final -->
 
-<target name="all" depends="xsl1,xsl2,copy"/>
+<target name="all" depends="xsl1,xsl2"/>
 
 <target name="clean">
  <delete failonerror='false'>
-  <fileset dir="${bin}" includes="xpath.hrc, xpath.internal.hack.ent.hrc, xpath-functions.ent.hrc, xpath-re.ent.hrc, xpath-xml.ent.hrc, xpath2.hrc, xquery.hrc, xslt.hrc, xslt2.hrc"/>
+  <fileset dir="${bin}" includes="xslt.hrc, xslt2.hrc"/>
  </delete>
 </target>
 
