@@ -660,6 +660,7 @@
      <word name="NULL" region="KeywordConstant"/>
      <word name="EOF" region="KeywordConstant"/>
 
+     <word name="intptr_t"/>
      <word name="size_t"/>
      <word name="ptrdiff_t"/>
      <word name="wint_t"/>
@@ -677,7 +678,7 @@
  </scheme>
  
  <scheme name="Keyword-Stdlibs" if="ansi-defines">
-		<keywords region="KeywordStdio">
+		<keywords region="KeywordStdio" worddiv="[^\d\w\.]">
 			<word name='isalnum'/>
 			<word name='isalpha'/>
 			<word name='iscntrl'/>
@@ -4646,6 +4647,7 @@
      <word name='CTRYID'/>
      <word name='DLGPROC'/>
      <word name='DWORD'/>
+     <word name='DWORD_PTR'/>
      <word name='DWORDLONG'/>
      <word name='EDITWORDBREAKPROC'/>
      <word name='ENHMFENUMPROC'/>

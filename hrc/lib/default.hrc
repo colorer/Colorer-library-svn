@@ -116,7 +116,7 @@
     </scheme>
 
     <scheme name="CHexNumber">
-      <regexp match="/\b 0[xX][\da-fA-F]+ (?{NumberSuffix}[UuLl]{1,2}|(i64)|(i128))? \b/x" region="NumberHex"/>
+      <regexp match="/\b 0x[\da-fA-F]+ (?{NumberSuffix}ul{0,2}|l{1,2}u?|(i64)|(i128))? \b/ix" region="NumberHex"/>
     </scheme>
 
     <scheme name="FloatNumber">
@@ -126,7 +126,7 @@
     </scheme>
 
     <scheme name="DecNumber">
-      <regexp match="/\b\d+ ([UuLl]{1,2}|i64|i128)?\b/x" region0="NumberDec" region1="NumberSuffix"/>
+      <regexp match="/\b\d+ (ul{0,2}|l{1,2}u?|i64|i128)?\b/ix" region0="NumberDec" region1="NumberSuffix"/>
     </scheme>
 
     <scheme name="Number">
@@ -265,8 +265,8 @@
    - The Original Code is the Colorer Library.
    -
    - The Initial Developer of the Original Code is
-   - Cail Lomecb <cail@nm.ru>.
-   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - Igor Russkih <irusskih at gmail dot com>.
+   - Portions created by the Initial Developer are Copyright (C) 1999-2007
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
