@@ -55,29 +55,13 @@
  <xslt in="${obj}/php.xml" out="${bin}/../php-prot.ent.hrc" style="${src}/php-prot.xsl"/>
 </target>
 
-<!-- hrc -->
-
-<target name="hrc.check">
- <dependset>
-  <srcfilelist dir="${src}" files = "php.hrc, php-script.ent.hrc"/>
-  <targetfilelist dir="${bin}" files="php.hrc, php-script.ent.hrc"/>
- </dependset>
-</target>
-
-<target name="hrc" depends="hrc.check">
- <copy todir='${bin}'>
-   <fileset dir='${src}' includes='php.hrc, php-script.ent.hrc'/>
- </copy>
-</target>
-
 <!-- final -->
 
-<target name="all" depends="hrc, hrc-prot, pack-hrc"/>
+<target name="all" depends="hrc-prot, pack-hrc"/>
 
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="php*.*"/>
   <fileset dir="${bin}/.." includes="php-prot.ent.hrc"/>
  </delete>
 </target>
