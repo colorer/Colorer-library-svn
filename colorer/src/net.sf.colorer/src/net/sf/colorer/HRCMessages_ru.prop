@@ -4,6 +4,7 @@ inet=Интернет
 database=Базы данных
 xml=Стандарты XML
 scripts=Скрипты и конфигурация
+scripts.colorer=Скрипты для Colorer
 scripts.install=Системы установки
 scripts.far=Плагины к ФАРу
 scripts.rare=Редкие и неиспользуемые скрипты
