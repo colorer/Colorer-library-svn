@@ -352,9 +352,10 @@
 
 
 <!-- move ~ to separated block (s{}{/... - '/' no regexp ) -->
-         <block start="/((\=|\! \~) |
+         <block start="/(
+                  (\=|\! \~) |
                   [^&lt;\]\}\)\+\-\w\s\/] |
-                  (\bif) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
+                  (\bif) | (\bunless) | (\bsplit) | (\bor) | \bgrep | \band |^ )
                  \s*
                  ((?{def:PairStart}\/))
                 /x"
