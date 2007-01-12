@@ -127,7 +127,7 @@
 </target>
 
 <target name="hrce.xsd" depends="hrce.xsd.check" unless="hrce.check">
-	<xslt in="${src.extra}/hrc.xsd" out="${obj}/hrc.ent.xsd" style="${src}/hrc.ent.xsl"/>
+	<xslt in="${src.extra}/hrc.xsd" out="${obj}/hrc.ent.xsd" style="${src}/hrc.ent.xsl" classpath="${xslt-classpath}"/>
 </target>
 
 
