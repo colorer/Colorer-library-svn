@@ -37,7 +37,7 @@
 </target>
 
 <target name="pack-hrc" depends="pack-xml, pack-hrc.check">
- <xslt in="${obj}/php.xml" out="${bin}/php-gen.ent.hrc" style="${src}/php.xsl"/>
+ <xslt in="${obj}/php.xml" out="${bin}/php-gen.ent.hrc" style="${src}/php.xsl" classpath="${xslt-classpath}"/>
 </target>
 
 
@@ -52,7 +52,7 @@
 </target>
 
 <target name="hrc-prot" depends="pack-xml, hrc-prot.check">
- <xslt in="${obj}/php.xml" out="${bin}/../php-prot.ent.hrc" style="${src}/php-prot.xsl"/>
+ <xslt in="${obj}/php.xml" out="${bin}/../php-prot.ent.hrc" style="${src}/php-prot.xsl" classpath="${xslt-classpath}"/>
 </target>
 
 <!-- final -->

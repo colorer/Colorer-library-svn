@@ -13,9 +13,7 @@
 
 <property name="util.input" value="define me!"/>
 <property name="util.output" value="define me!"/>
-<property name="util.url" value="src"/>
 <property name="xslt-classpath" value=""/>
-<property name="util.url.real" value="http://colorer.info-esta.ru/${util.url}"/>
 
 <!-- dtd2xsd  -->
 
@@ -54,7 +52,7 @@
 </target>
  
 <target name="xsd2hrc" depends="xsd2hrc.prop">
- <xslt in="${util.input}" out="${util.output}" style="${xsd2hrc}/xsd2hrc.xsl">
+ <xslt in="${util.input}" out="${util.output}" style="${xsd2hrc}/xsd2hrc.xsl" classpath="${xslt-classpath}">
   <xmlcatalog refid="xsd2hrcdtd"/>
   <param name="hrctype" expression="${xsd2hrc.hrctype}"/>
   <!--param name="add-new-references" expression="${xsd2hrc.add-new-references}"/-->
@@ -75,7 +73,7 @@
 <!-- bracket -->
 
 <target name="bracket">
- <xslt in="${util.input}" out="${util.output}" style="${bracket}/bracket.xsl"/>
+ <xslt in="${util.input}" out="${util.output}" style="${bracket}/bracket.xsl" classpath="${xslt-classpath}"/>
 </target>
 
 <!-- ent2hrc -->

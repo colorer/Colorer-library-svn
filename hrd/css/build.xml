@@ -23,7 +23,7 @@
 </target>
  
 <target name="hrd2css" depends="hrd2css.prop">
- <xslt in="${input}" out="${output}" style="../../bin/hrd2css/hrd2css.xsl">
+ <xslt in="${input}" out="${output}" style="../../bin/hrd2css/hrd2css.xsl" classpath="${xslt-classpath}">
   <xmlcatalog refid="xsd2hrcdtd"/>
  </xslt>  
 </target>

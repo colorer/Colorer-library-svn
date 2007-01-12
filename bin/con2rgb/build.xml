@@ -22,7 +22,7 @@
 </target>
 
 <target name="con2rgb" depends="con2rgb.prop">
-	<xslt in="${hrd}/console/${input}" out="${hrd}/rgb/${output}" style="con2rgb.xsl">
+	<xslt in="${hrd}/console/${input}" out="${hrd}/rgb/${output}" style="con2rgb.xsl" classpath="${xslt-classpath}">
 		<xmlcatalog refid="xsd2hrcdtd"/>
 		<param name="hcd" expression="hcd/${hcd}"/>
 	</xslt>  
