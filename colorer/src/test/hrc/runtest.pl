@@ -21,7 +21,7 @@ $validDir = "_valid";
 $currentDir = sprintf("__%d-%02d-%02d %02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
 
 if (!mkdir $currentDir, 0777){
-#  die "Can't create dir - already exists" ;
+  die "Can't create dir - already exists" ;
 }
 
 $runMode = shift @ARGV;
