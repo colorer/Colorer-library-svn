@@ -4,36 +4,103 @@
 #include <cregexp/cregexp.h>
 #include <colorer/parsers/helpers/HRCParserHelpers.h>
 
+/**
+ * Derivates should provides parser with the grammar, from the random grammar source.
+ */
 class GrammarProvider {
 
 public:
+    /**
+     * Move one element forward
+     */
     virtual bool nextItem() = 0;
 
+    /**
+     * Restart current context, reset its current position
+     */
     virtual void restart() = 0;
+    /**
+     * Resets all the context information - drops to the base context
+     */
     virtual void reset() = 0;
 
+    /**
+     * Enter the scheme (context). Current node must be SNT_SCHEME
+     */
     virtual void enterScheme() = 0;
+    /**
+     * Leaves the current scheme (context).
+     */
     virtual void leaveScheme() = 0;
 
+    /**
+     * Stores GrammarProvider's state to allow incremental parsing from
+     * the stored position. Returned handle should be freed later with the freeState.
+     */
     virtual void *storeState() = 0;
+    /**
+     * Restores GrammarProvider's state and allow incremental parsing from the saved position in the grammar
+     */
     virtual void restoreState(void *p) = 0;
+    /**
+     * Frees previously stored state
+     */
     virtual void freeState(void *p) = 0;
 
+    /**
+     * Current node's type
+     */
     virtual SchemeNodeType nodeType() = 0;
 
+    /**
+     * Returns list of the keywords for SNT_KW
+     */
     virtual KeywordList *kwList() = 0;
+    /**
+     * Returns starting RE token for the SNT_SCHEME node
+     */
     virtual CRegExp *startRE() = 0;
+    /**
+     * Returns closing RE token for the SNT_SCHEME node
+     */
     virtual CRegExp *endRE() = 0;
+    /**
+     * Returns scheme to jump to for the SNT_SCHEME node
+     */
     virtual const Scheme *scheme() = 0;
 
+    /**
+     * If scheme or RE lowprioritized
+     */
     virtual bool lowPriority() = 0;
+    /**
+     * If scheme to jump to has a low content priority
+     */
     virtual bool lowContentPriority() = 0;
+    /**
+     * If scheme to jump to has an inner region property
+     */
     virtual bool innerRegion() = 0;
 
+    /**
+     * Base Region for RE or schema node
+     */
     virtual const Region *region() = 0;
+    /**
+     * Bracketed Regions for RE or schema node
+     */
     virtual const Region *regions(int idx) = 0;
+    /**
+     * Named bracket Regions for schema node
+     */
     virtual const Region *regionsn(int idx) = 0;
+    /**
+     * Bracketed Regions for schema node end token
+     */
     virtual const Region *regione(int idx) = 0;
+    /**
+     * Named bracket Regions for schema node end token
+     */
     virtual const Region *regionen(int idx) = 0;
 };
 #endif

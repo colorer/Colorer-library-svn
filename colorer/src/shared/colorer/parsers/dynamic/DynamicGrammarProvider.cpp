@@ -2,16 +2,28 @@
 #include <colorer/parsers/dynamic/DynamicGrammarProvider.h>
 #include<common/Logging.h>
 
+/**
+ * HRC traverse node element. Reference counting strategy is used to free ProviderStep objects.
+ */
 struct ProviderStep : RefCounter
 {
+    /** Parent in the hierarchy */
     ProviderStep *parent;
+    /** Parent in the currently active virtualization tree */
     ProviderStep *virtualPrev;
+    /** Active node position of used <inherit> in that virtualPrev reference */
     SchemeNode *nodePrev;
 
+    /** true for 'abstract' inheritance steps,
+     *  false for 'real' scheme switch steps
+     */
     bool inheritStep;
-    bool virtualized, virtPushed;
+    /** This node's schema */
     SchemeImpl *scheme;
-    int nodePosition, parentNodePosition;
+    /** This node schema's position */
+    int nodePosition;
+    /** Schema's position for parent node (to keep virtual linked lists) */
+    int parentNodePosition;
 
     ProviderStep()
     {
@@ -20,19 +32,23 @@ struct ProviderStep : RefCounter
         nodePrev = null;
     }
 
+    /** Destructor, removes references */
     ~ProviderStep()
     {
         if (parent) parent->rmref();
         if (virtualPrev) virtualPrev->rmref();
     }
 
+    /** Destructor, removes references */
     void initNodePosition()
     {
         nodePosition = 0;
         // Recursive node position storage in child
         assert(parent != null);
         assert(parent->nodePosition != -1);
+        // save parent's node position, since it can be overwritten by other saved parses.
         parentNodePosition = parent->nodePosition;
+        // initial value
         parent->nodePosition = -1;
     }
 };
@@ -49,7 +65,6 @@ DynamicGrammarProvider::DynamicGrammarProvider(DynamicHRCModel *hrcModel, Scheme
 
     top->inheritStep = false;
     top->scheme = baseScheme;
-    top->virtualized = top->virtPushed = false;
     top->nodePosition = top->parentNodePosition = 0;
     top->parent = null;
     validateInherit();
@@ -57,6 +72,8 @@ DynamicGrammarProvider::DynamicGrammarProvider(DynamicHRCModel *hrcModel, Scheme
 
 DynamicGrammarProvider::~DynamicGrammarProvider()
 {
+    top->rmref();
+    top = null;
 }
 
 void DynamicGrammarProvider::popInherit()
@@ -138,7 +155,7 @@ void DynamicGrammarProvider::restart()
     top->nodePosition = 0;
     leaveBlockRequired = false;
     validateInherit();
-}                              	
+}
 
 void DynamicGrammarProvider::reset()
 {
@@ -160,15 +177,18 @@ void DynamicGrammarProvider::reset()
 
 void DynamicGrammarProvider::adviceScheme(SchemeImpl *scheme)
 {
+    // final scheme to apply
     SchemeImpl *ret = scheme;
+    // step, containing applied virtualization node
     ProviderStep *curvl = null;
                                     
+    // Initial conditions to search
     ProviderStep *vl = top->parent->virtualPrev;
     SchemeNode *node = top->parent->nodePrev;
     
+    // Searching inheritance tree back to top to make all required schema virtualizations
     while(vl != null)
     {
-        //SchemeNode *node = vl->scheme->nodes.elementAt(vl->nodePosition);
         assert(node->type == SNT_INHERIT || node->type == SNT_SCHEME);
         
         for(int idx = 0; idx < node->virtualEntryVector.size(); idx++)
@@ -182,7 +202,8 @@ void DynamicGrammarProvider::adviceScheme(SchemeImpl *scheme)
         node = vl->nodePrev;
         vl = vl->virtualPrev;
     }
-                             //curvl->virtualPrev
+    
+    // top->virtualPrev will store link to the next active virtualization node
     top->virtualPrev = curvl ? curvl->virtualPrev : top->parent;
     if (top->virtualPrev) top->virtualPrev->addref();
     top->nodePrev = curvl ? curvl->nodePrev : top->parent->scheme->nodes.elementAt(top->parentNodePosition);

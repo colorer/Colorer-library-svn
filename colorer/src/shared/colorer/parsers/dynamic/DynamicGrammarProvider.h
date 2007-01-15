@@ -7,6 +7,9 @@
 
 struct ProviderStep;
 
+/**
+ * Provides parser with the grammar, based on HRC language layout.
+ */
 class DynamicGrammarProvider : public GrammarProvider
 {
 public:
@@ -48,9 +51,18 @@ protected:
     
     ProviderStep *top;
 
+    /**
+     * Virtualization/inheritance logic.
+     * Searches tree for correct schema substitution for 'top' element
+     */
     void adviceScheme(SchemeImpl *scheme);
-
+    /**
+     * Comes back from inheritance step
+     */
     void popInherit();
+    /**
+     * Recursively enters all pending inheritance steps
+     */
     void validateInherit();
 private:
     int s_inheritLevel;

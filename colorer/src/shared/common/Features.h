@@ -2,10 +2,17 @@
 #define _COLORER_FEATURES_H_
 
 /**
-  Default log-level
+  Default log-level: COLORER_FEATURE_LOGLEVEL_ERROR
 */
 #ifndef COLORER_FEATURE_LOGLEVEL
   #define COLORER_FEATURE_LOGLEVEL COLORER_FEATURE_LOGLEVEL_ERROR
+#endif
+
+/**
+  Default assertion mode: FALSE
+*/
+#ifndef COLORER_FEATURE_ASSERT
+  #define COLORER_FEATURE_ASSERT TRUE
 #endif
 
 /**

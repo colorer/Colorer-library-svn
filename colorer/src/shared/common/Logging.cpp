@@ -123,6 +123,12 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
 
     if (envLevel == -1) {
         
+        envLevel = COLORER_FEATURE_LOGLEVEL_FULL;
+        colorer_logger_info("Logging", "COLORER5LOGGING=%s", getenv("COLORER5LOGGING"));
+        colorer_logger_info("Logging", "COLORER5LOGGINGON=%s", getenv("COLORER5LOGGINGON"));
+        colorer_logger_info("Logging", "COLORER5LOGGINGOFF=%s", getenv("COLORER5LOGGINGOFF"));
+        colorer_logger_info("Logging", "COLORER5LOGGINGTO=%s", getenv("COLORER5LOGGINGTO"));
+
         char *envLevelChar = getenv("COLORER5LOGGING");
         if (envLevelChar != null) {
               envLevel = 0;
@@ -167,7 +173,7 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
     if (level > envLevel) return;
 
     
-    if (cname != null) {
+    if (cname != null && envLoggingNamesOn != null) {
         int idx;
         bool foundOn = true;
         bool foundOff = false;
