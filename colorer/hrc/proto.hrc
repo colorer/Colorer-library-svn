@@ -537,6 +537,10 @@
     <location link="rare/picasm.hrc"/>
     <filename>/\.(asm|pic)$/i</filename>
   </prototype>
+  <prototype name="pl1" group="rare" description="PL1">
+    <location link="rare/pl1.hrc"/>
+    <filename>/\.(pl1|pli)$/i</filename>
+  </prototype>
   <prototype name="python" group="rare" description="Python">
     <location link="rare/python.hrc"/>
     <filename>/\.(py|pyw|pys)$/i</filename>
