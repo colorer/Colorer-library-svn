@@ -1,6 +1,19 @@
 
 $Date$
   Fixes:
+    - Forth fixes
+    - Perl variable fixes
+    - c/cpp i128 support
+    - TeX verbatim mode improvements, etc
+    - NSI fixes
+    - Foxpro (Vadim Zaharenko)
+    - picasm improvements
+  New:
+    - PL1 (Pavel Pleva)
+
+
+Date: 2006-06-20 18:03:09
+  Fixes:
     - Perl improvements
     - FAR packages fixes
   New:
@@ -36,8 +49,6 @@ Date : 2004/09/27 05:55:36
     - xhtml improvements (Eugene Efremov)
 
 
-
-
 Date: 2003/09/12 11:39:20
 
   New:
@@ -47,7 +58,6 @@ Date: 2003/09/12 11:39:20
     - SML, ada, modula2
     - Perl/HRC RE, php, html, css (Eugene Efremov)
     - Tex
-
 
 
 Date: 2003/06/02 11:26:40

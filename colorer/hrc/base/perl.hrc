@@ -355,7 +355,7 @@
          <block start="/(
                   (\=|\! \~) |
                   [^&lt;\]\}\)\+\-\w\s\/] |
-                  (\bif) | (\bunless) | (\bsplit) | (\bor) | \bgrep | \band |^ )
+                  (\bif) | (\bunless) | (\bsplit) | (\bor) | \bgrep | \band | \bnot |^ )
                  \s*
                  ((?{def:PairStart}\/))
                 /x"
