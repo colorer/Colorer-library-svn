@@ -5,6 +5,7 @@ import java.util.Hashtable;
 
 import net.sf.colorer.impl.Logger;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public class ImageStore {

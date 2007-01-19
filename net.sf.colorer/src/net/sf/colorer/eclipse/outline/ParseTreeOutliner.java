@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
+import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
@@ -19,8 +20,6 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
  */
 public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, EditorListener, IWorkbenchAdapter {
 
-    TextColorer editor;
-    
     Vector listeners = new Vector();
     Vector regionsList = new Vector();
     Vector cList = regionsList;
@@ -165,15 +164,13 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler
     public void setSorting(boolean sorting) {
     }
 
-    public void attachOutliner(TextColorer editor) {
-        editor.getBaseEditor().addRegionHandler(this, null);
-        editor.getBaseEditor().addEditorListener(this);
-        this.editor = editor;
+    public void attachOutliner(BaseEditor editor) {
+        editor.addRegionHandler(this, null);
+        editor.addEditorListener(this);
     }
-    public void detachOutliner(TextColorer editor) {
-        editor.getBaseEditor().removeRegionHandler(this);
-        editor.getBaseEditor().removeEditorListener(this);
-        this.editor = null;
+    public void detachOutliner(BaseEditor editor) {
+        editor.removeRegionHandler(this);
+        editor.removeEditorListener(this);
     }
 
     public void addListener(OutlineListener listener) {

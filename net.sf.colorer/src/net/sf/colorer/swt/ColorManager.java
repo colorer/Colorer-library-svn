@@ -21,12 +21,12 @@ public class ColorManager{
       color = new Color(Display.getCurrent(), rgb>>16, (rgb>>8)&0xFF, rgb&0xFF);
       colorsHash.put(new Integer(rgb), color);
     }
-    return color; 
-  };
+    return color;
+  }
   
   public void clean(){
     for(Iterator e = colorsHash.values().iterator(); e.hasNext();)
       ((Color)e.next()).dispose();
   }
-  
-};
+
+}

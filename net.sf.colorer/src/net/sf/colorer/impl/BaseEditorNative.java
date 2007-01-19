@@ -23,12 +23,14 @@ public class BaseEditorNative implements BaseEditor {
     private int lineCount;
     private Region defPairStart = null;
     private Region defPairEnd = null;
-    private Vector editorListeners = new Vector(); 
+    private Vector editorListeners = new Vector();
+    private ParserFactory fParserFactory; 
 
     //native Region getRegion(final long iptr, final String qname);
 
     public BaseEditorNative(ParserFactory pf, LineSource lineSource) {
         iptr = init(pf, lineSource);
+        fParserFactory = pf;
         HRCParser hrcParser = pf.getHRCParser();
         defPairStart = hrcParser.getRegion("def:PairStart");
         defPairEnd = hrcParser.getRegion("def:PairEnd");
@@ -289,6 +291,10 @@ public class BaseEditorNative implements BaseEditor {
         lineCount = newLineCount;
     }
 
+    public ParserFactory getParserFactory() {
+        return fParserFactory;
+    }
+    
     native long init(ParserFactory pf, LineSource lineSource);
 
     native void finalize(long iptr);

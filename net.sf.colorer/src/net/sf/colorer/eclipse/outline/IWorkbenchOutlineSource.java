@@ -1,7 +1,7 @@
 package net.sf.colorer.eclipse.outline;
 
+import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.IOutlineSource;
-import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.core.runtime.IAdaptable;
 
@@ -25,12 +25,12 @@ public interface IWorkbenchOutlineSource extends IOutlineSource, IAdaptable {
      * parse information.
      * @param editor
      */
-    void attachOutliner(TextColorer editor);
+    void attachOutliner(BaseEditor editor);
     
     /**
      * Detaches the outliner, specified by this interface
      */
-    void detachOutliner(TextColorer editor);
+    void detachOutliner(BaseEditor editor);
 
 }
 /* ***** BEGIN LICENSE BLOCK *****

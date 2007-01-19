@@ -7,6 +7,7 @@ import net.sf.colorer.HRCParser;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
+import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.swt.TextColorer;
 
@@ -32,8 +33,6 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
  */
 public class ColorerContentOutlinePage extends ContentOutlinePage implements OutlineListener
 {
-    TextColorer textColorer;
-    
     IWorkbenchOutlineSource structureOutliner, errorsOutliner, parseTreeOutliner;
     IWorkbenchOutlineSource activeOutliner;
 
@@ -45,6 +44,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
     boolean outlineModified = true;
     long prevTime = 0;
     int UPDATE_DELTA = 3000;
+
+    private BaseEditor baseEditor;
 
     class TreeAction extends Action {
 
@@ -114,11 +115,11 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
         super();
     }
 
-    public void attach(TextColorer textColorer){
+    public void attach(BaseEditor baseEditor){
         detach();
 
-        this.textColorer = textColorer;
-        HRCParser hp = textColorer.getParserFactory().getHRCParser();
+        this.baseEditor = baseEditor;
+        HRCParser hp = baseEditor.getParserFactory().getHRCParser();
         
         structureOutliner = new WorkbenchOutliner(hp.getRegion("def:Outlined"));
         errorsOutliner = new WorkbenchOutliner(hp.getRegion("def:Error"));
@@ -157,7 +158,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
 
     public void detach() {
         backgroundUpdater = null;
-        textColorer = null;
+        baseEditor = null;
         setActiveOutliner(null, null);
         structureOutliner = null;
         errorsOutliner = null;
@@ -172,8 +173,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
     void setActiveOutliner(IWorkbenchOutlineSource newOutliner, OutlineModeAction action){
         if (activeOutliner != null){
             activeOutliner.removeListener(this);
-            if (textColorer != null){
-                activeOutliner.detachOutliner(textColorer);
+            if (baseEditor != null){
+                activeOutliner.detachOutliner(baseEditor);
             }
             if (activeAction != null){
                 activeAction.setChecked(false);
@@ -184,11 +185,11 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
         if (activeOutliner != null){
             activeOutliner.addListener(this);
             activeOutliner.clear();
-            if (textColorer != null){
-                activeOutliner.attachOutliner(textColorer);
+            if (baseEditor != null){
+                activeOutliner.attachOutliner(baseEditor);
             }
             activeAction.setChecked(true);
-            textColorer.modifyEvent(textColorer.getVisibleStart());
+            //TODO? textColorer.modifyEvent(textColorer.getVisibleStart());
         }
     }
 

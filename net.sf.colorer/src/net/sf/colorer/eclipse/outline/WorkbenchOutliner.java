@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.eclipse.ImageStore;
+import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.editor.Outliner;
@@ -46,14 +47,6 @@ public class WorkbenchOutliner extends Outliner
         //nop
     }
     
-    public void attachOutliner(TextColorer editor) {
-        attachOutliner(editor.getBaseEditor());
-    }
-    
-    public void detachOutliner(TextColorer editor) {
-        detachOutliner(editor.getBaseEditor());
-    }
-
     public OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
         return new OutlineElement(this, lno, sx, length, curLevel, itemLabel, region);
     }

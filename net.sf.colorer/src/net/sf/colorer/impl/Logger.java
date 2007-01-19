@@ -7,11 +7,11 @@ import java.util.Hashtable;
  */
 public class Logger {
 
-    public final static boolean FILTER = false;
+    public final static boolean FILTER = true;
 
-    public final static boolean TRACE = false;
+    public final static boolean TRACE = true;
     
-    public final static boolean ERROR = false; 
+    public final static boolean ERROR = true; 
     
     public static void trace(String comp, Object msg) {
         trace(comp, msg, null);
@@ -50,11 +50,14 @@ public class Logger {
         }
     }
     
+    // true - removes matches
+    final static boolean FILTEROUT = true;
+    
     private static boolean filterout(String comp) {
         if (filter.get(comp) != null) {
-            return false;
+            return FILTEROUT;
         }else {
-            return true;
+            return !FILTEROUT;
         }
     }
 
@@ -62,7 +65,7 @@ public class Logger {
     
     static {
         //filter.put("RegionsTree", filter);
-        //filter.put("ParseTree", filter);
+        filter.put("BaseEditorNative", filter);
         filter.put("ColorerEditor", filter);
     }
 

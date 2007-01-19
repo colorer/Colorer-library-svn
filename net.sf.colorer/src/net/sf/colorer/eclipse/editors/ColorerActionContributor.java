@@ -76,7 +76,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
     Action hrcupdateAction = new Action() {
         public void run() {
-            if (activeEditor != null && activeEditor instanceof ColorerEditor) {
+            if (activeEditor != null) {
                 ColorerPlugin.getDefault().reloadParserFactory();
             }
         }
@@ -95,7 +95,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
             }
 
             public void run() {
-                if (activeEditor != null && activeEditor instanceof ColorerEditor) {
+                if (activeEditor != null) {
                     ((ColorerEditor) activeEditor).setFileType(ftype);
                 }
             }
@@ -216,7 +216,11 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
     public void setActiveEditor(IEditorPart editor) {
         super.setActiveEditor(editor);
-        activeEditor = (ColorerEditor) editor;
+        if (editor instanceof ColorerEditor){
+            activeEditor = (ColorerEditor) editor;
+        }else{
+            activeEditor = null;
+        }
 
         IKeyBindingService kbs = editor.getEditorSite().getKeyBindingService();
         kbs.registerAction(hrcupdateAction);

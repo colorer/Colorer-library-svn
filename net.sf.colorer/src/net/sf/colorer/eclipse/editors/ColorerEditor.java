@@ -1,7 +1,6 @@
 package net.sf.colorer.eclipse.editors;
 
 import net.sf.colorer.FileType;
-import net.sf.colorer.HRCParser;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.IColorerReloadListener;
@@ -9,17 +8,29 @@ import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineSchemeElement;
+import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.handlers.LineRegion;
+import net.sf.colorer.handlers.StyledRegion;
 import net.sf.colorer.impl.Logger;
+import net.sf.colorer.jface.SyntaxConfiguration;
 import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
+import org.eclipse.jface.text.source.projection.ProjectionSupport;
+import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -30,18 +41,24 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IColorerReloadListener, IPropertyChangeListener{
 
+    private ProjectionSupport fProjectionSupport;
+    private ProjectionAnnotationModel annotationModel;
     ISourceViewer sourceViewer;
+    ColorerSourceViewerConfiguration fColorerSVC;
     IPreferenceStore prefStore;
+
+    BaseEditor baseEditor;
     TextColorer textColorer;
     StyledText text;
+    IDocument fDocument;
 
     ColorerContentOutlinePage contentOutliner;
 
@@ -56,49 +73,81 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         }
     };
     
-    IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
+    final class OutlineDoubleClickListener implements IDoubleClickListener {
+        
         public void doubleClick(DoubleClickEvent event) {
-            if (text == null || event.getSelection().isEmpty()){
+            if (fDocument == null || event.getSelection().isEmpty()){
                 return;
             }
-            OutlineItem el = (OutlineItem)((IStructuredSelection)event.getSelection()).getFirstElement();
-            if (el instanceof OutlineSchemeElement) {
-                OutlineSchemeElement sel = (OutlineSchemeElement)el;
-                int selstart = text.getOffsetAtLine(sel.lno)+sel.pos;
-                int selength = text.getOffsetAtLine(sel.l2no) + sel.pos2 - selstart;
-                if (sel.l2no == 0 && sel.pos2 == 0 || selength <= 0){
-                    selength = 0;
+            try {
+                OutlineItem el = (OutlineItem)((IStructuredSelection)event.getSelection()).getFirstElement();
+                if (el instanceof OutlineSchemeElement) {
+                    OutlineSchemeElement sel = (OutlineSchemeElement)el;
+                    int selstart = fDocument.getLineOffset(sel.lno)+sel.pos;
+                    int selength = fDocument.getLineOffset(sel.l2no) + sel.pos2 - selstart;
+                    if (sel.l2no == 0 && sel.pos2 == 0 || selength <= 0){
+                        selength = 0;
+                    }
+                    if (Logger.TRACE){
+                        Logger.trace("ColorerEditor", "doubleClick:"+sel.lno+":"+sel.pos+" - " +sel.l2no+":"+sel.pos2+" = "+selstart+"-"+selength);
+                    }
+                    selectAndReveal(selstart, selength);
+                }else{
+                    selectAndReveal(fDocument.getLineOffset(el.lno)+el.pos, el.length);
                 }
-                if (Logger.TRACE){
-                    Logger.trace("ColorerEditor", "doubleClick:"+sel.lno+":"+sel.pos+" - " +sel.l2no+":"+sel.pos2+" = "+selstart+"-"+selength);
-                }
-                text.setSelectionRange(selstart, selength);
-            }else{
-                text.setSelectionRange(text.getOffsetAtLine(el.lno)+el.pos, el.length);
-            }
-            text.showSelection();
-            textColorer.stateChanged();
+            }catch(BadLocationException e){};
         }
-    };
+    }    
 
     public ColorerEditor() {
       super();
+
       ColorerPlugin.getDefault().addReloadListener(this);
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
+      prefStore.addPropertyChangeListener(this);
+      JFaceResources.getFontRegistry().addListener(this);
 
-      setSourceViewerConfiguration(new ColorerSourceViewerConfiguration());
+      fColorerSVC = new ColorerSourceViewerConfiguration();
+      setSourceViewerConfiguration(fColorerSVC);
     }
 
-    public void createPartControl(Composite parent){
+    public void createPartControl(Composite parent)
+    {
         super.createPartControl(parent);
+
+        SyntaxConfiguration fSyntaxConfig = fColorerSVC.getSyntaxConfiguration();
+        fSyntaxConfig.setColorManager(ColorerPlugin.getDefault().getColorManager());
+        baseEditor = fSyntaxConfig.getBaseEditor();
+
         text = getSourceViewer().getTextWidget();
+        fDocument = getSourceViewer().getDocument();
+
+        ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
+        fProjectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(), getSharedColors());
+        fProjectionSupport.setHoverControlCreator(new IInformationControlCreator() {
+            public IInformationControl createInformationControl(Shell shell) {
+                return new ColorerSourceViewerInformationControl(shell);
+              }
+           });
+        fProjectionSupport.install();
+        viewer.doOperation(ProjectionViewer.TOGGLE);
         
-        prefStore.addPropertyChangeListener(this);
-        JFaceResources.getFontRegistry().addListener(this);
-        
+        annotationModel = viewer.getProjectionAnnotationModel();
+        // Test:
+        annotationModel.addAnnotation(new ProjectionAnnotation(), new Position(10, 70));
+
         relinkColorer();
     }
+    
+    protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+        
+        ISourceViewer viewer = new ProjectionViewer(parent, ruler,
+                getOverviewRuler(), isOverviewRulerVisible(), styles);
 
+        getSourceViewerDecorationSupport(viewer);
+
+       return viewer;
+    }
     
     protected void initializeKeyBindingScopes(){
         setKeyBindingScopes(new String[] {
@@ -110,7 +159,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
      * Selects filetype according to file name and first line of content
      */
     public void chooseFileType() {
-        textColorer.chooseFileType(getTitle());
+        baseEditor.chooseFileType(getTitle());
         text.redraw();
     }
 
@@ -118,58 +167,56 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
      * Selects file's type according to the passed type name
      */
     public void setFileType(FileType type) {
-        textColorer.setFileType(type);
+        baseEditor.setFileType(type);
         text.redraw();
     }
 
     /** Returns currently used file type */
     public FileType getFileType() {
-        return textColorer.getFileType();
+        return baseEditor.getFileType();
     }
 
     /**
      * Reloads coloring highlighting in this editor
      */
     public void relinkColorer() {
-        if (textColorer != null) {
-            textColorer.detach();
-        }
         ParserFactory pf = ColorerPlugin.getDefaultPF();
-        HRCParser hp = pf.getHRCParser();
 
-        textColorer = new TextColorer(pf, ColorerPlugin.getDefault()
-                .getColorManager());
-        textColorer.attach(text);
-        textColorer.chooseFileType(getTitle());
+//        textColorer = new TextColorer(pf, ColorerPlugin.getDefault()
+//                .getColorManager());
+//        textColorer.attach(getSourceViewer());
+        baseEditor.chooseFileType(getTitle());
+        baseEditor.setRegionMapper(StyledRegion.HRD_RGB_CLASS, prefStore.getString(PreferencePage.HRD_SET));
 
         if (contentOutliner != null) {
-            contentOutliner.attach(textColorer);
+            contentOutliner.attach(baseEditor);
             if (Logger.TRACE){
                 Logger.trace("ColorerEditor", "contentOutliner.attach()");
             }
         }
         propertyChange(null);
+        getSourceViewer().invalidateTextPresentation();
     }
 
     /** Tries to match paired construction */
     public void matchPair() {
-        if (!textColorer.matchPair()) {
-            showPairError();
-        }
+//        if (!textColorer.matchPair()) {
+//            showPairError();
+//        }
     }
 
     /** Selects paired construction */
     public void selectPair() {
-        if (!textColorer.selectPair()) {
-            showPairError();
-        }
+//        if (!textColorer.selectPair()) {
+//            showPairError();
+//        }
     }
 
     /** Selects content of paired construction */
     public void selectContentPair() {
-        if (!textColorer.selectContentPair()) {
-            showPairError();
-        }
+//        if (!textColorer.selectContentPair()) {
+//            showPairError();
+//        }
     }
 
     /**
@@ -178,7 +225,8 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
      * @return LineRegion currently under Caret
      */
     public LineRegion getCaretRegion() {
-        return textColorer.getCaretRegion();
+        return null;//textColorer.getCaretRegion();
+
     }
 
     void showPairError() {
@@ -190,7 +238,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
      * Selects region under the cursor
      */
     public void selectCursorRegion() {
-        LineRegion lr = textColorer.getCaretRegion();
+        LineRegion lr = getCaretRegion();
         if (lr == null) return;
         
         int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
@@ -204,13 +252,13 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
 
     protected void editorContextMenuAboutToShow(IMenuManager parentMenu) {
         super.editorContextMenuAboutToShow(parentMenu);
-        if (!textColorer.pairAvailable())
-            return;
-        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite().getActionBarContributor();
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairMatchAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
+//        if (!textColorer.pairAvailable())
+//            return;
+//        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite().getActionBarContributor();
+//        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairMatchAction);
+//        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectAction);
+//        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
+//        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
     }
 
     public void notifyReload() {
@@ -279,12 +327,28 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
             if (input instanceof IFileEditorInput) {
                 if (contentOutliner == null){
                     contentOutliner = new ColorerContentOutlinePage();
-                    contentOutliner.addDoubleClickListener(doubleClickListener);
-                    contentOutliner.attach(textColorer);
+                    contentOutliner.addDoubleClickListener(new OutlineDoubleClickListener());
+                    contentOutliner.attach(baseEditor);
                 }
                 return contentOutliner;
             }
         }
+        
+        if (fProjectionSupport != null) { 
+            Object adapter= fProjectionSupport.getAdapter(getSourceViewer(), key); 
+            if (adapter != null) {
+                return adapter;
+            }
+        }
+
+//        if (key == IShowInTargetList.class) {
+//            return new IShowInTargetList() {
+//                public String[] getShowInTargetIds() {
+//                    return new String[] { JavaUI.ID_PACKAGES, IPageLayout.ID_RES_NAV };
+//                }
+//            };
+//        }
+        
         return super.getAdapter(key);
     }
 
@@ -311,11 +375,11 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

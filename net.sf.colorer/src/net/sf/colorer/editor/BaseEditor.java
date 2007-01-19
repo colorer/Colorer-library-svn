@@ -1,6 +1,7 @@
 package net.sf.colorer.editor;
 
 import net.sf.colorer.FileType;
+import net.sf.colorer.ParserFactory;
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
 import net.sf.colorer.handlers.LineRegion;
@@ -193,6 +194,11 @@ public interface BaseEditor {
      * number setting.
      */
     void lineCountEvent(int newLineCount);
+
+    /**
+     * Currently used parser factory.
+     */
+    ParserFactory getParserFactory();
 
 };
 /* ***** BEGIN LICENSE BLOCK *****
