@@ -24,37 +24,41 @@
       <region name="pComment" parent="Comment"/>
       <region name="pString" parent="String"/>
       <region name="pSymb" parent="Symbol"/>
+      <region name="pSymbSemicolon" parent="SymbolStrong"/>
       <region name="pAttrWord" parent="Keyword"/>
       <region name="pBuiltWord" parent="Keyword"/>
       <region name="pEnviWord" parent="Keyword"/>
       <region name="pKeyWord" parent="Keyword"/>
       <region name="pPrepro" parent="Label"/>
       <region name="pNumb" parent="Number"/>
+      <region name="pConst" parent="Number"/>
       <region name="pOther" parent="Directive"/>
       <region name="pError" parent="Error"/>
 
       <scheme name="pl1">
-<!-- no character except '*' allowed in 1st column -->
-         <regexp match="/^([^\s\*])\M/" region="pError"/>
-<!-- Package statement -->
-         <regexp match="/^\*.*$/" region="pOther"/>
-<!-- Preprocessor directive -->
+<!-- Preprocessor directives -->
+         <regexp match="/^[\*\%]PROCESS.*$/i" region="pPrepro"/> <!-- compiler options -->
          <regexp match="/\M[;\s](%)/" region1="pPrepro"/>
+<!-- no character allowed in 1st column -->
+         <regexp match="/^([^\s])\M/" region="pError"/>
 <!-- Comments -->
          <block start="/\/\*/" end="/\*\//" scheme="Comment" region="pComment" region00="PairStart" region10="PairEnd"/>
 <!-- Embedded EXEC is usually "EXEC SQL" -->
-         <block start="/\bEXEC\b/" end="/;/" scheme="sql" region="pOther" region00="PairStart" region10="PairEnd"/>
+         <block start="/\bEXEC\b/i" end="/;/" scheme="sql" region="pOther" region00="PairStart" region10="PairEnd"/>
 <!-- paired -->
          <block start="/(\()/" end="/(\))/" scheme="pl1" region00="pSymb" region01="PairStart" region10="pSymb" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="pl1" region00="pSymb" region01="PairStart" region10="pSymb" region11="PairEnd"/>
-         <block start="/[\s|\b](%DO|%PROC|%PROCEDURE)\b/i" end="/[\s|\b](%END)\b/i" scheme="pl1" region00="PairStart" region01="pPrepro" region10="PairEnd" region11="pPrepro"/>
+         <block start="/(%DO|%PROC|%PROCEDURE)\b/i" end="/(%END)\b/i" scheme="pl1" region00="PairStart" region01="pPrepro" region10="PairEnd" region11="pPrepro"/>
          <block start="/\b(DO|PROC|PROCEDURE|SELECT)\b/i" end="/\b(END)\b/i" scheme="pl1" region00="PairStart" region01="pKeyWord" region10="PairEnd" region11="pKeyWord"/>
 <!-- Numbers in pl1 may contain underscores -->
-         <regexp match="/\b([\d\_]*\.?[\d\_]+)\b/" region="pNumb"/> 
-         <regexp match="/(\'[\d\_]+\')(B|X)\b/xi" region1="pNumb" region2="pNumb"/>
+         <regexp match="/\B\.\d(\d|\_)*\b/" region0="pNumb"/> 
+         <regexp match="/\b\d(\d|\_)*(\.(\d|\_)*)?/" region0="pNumb"/> 
+<!-- Constants may also contain underscores -->
+         <regexp match="/\'[\dA-F\_]*\'((B[X43]?)|(XN?))\b/i" region0="pConst"/>
+         <regexp match="/\&#34;[\dA-F\_]*\&#34;((B[X43]?)|(XN?))\b/i" region0="pConst"/>
 <!-- Strings cannot be divided into more lines -->
-         <regexp match="/'(.*?[^\'])??'/" region0="pString"/>
-         <block start="/\'/" end="/\'/" scheme="String" region="pString" region00="PairStart" region10="PairEnd"/>
+         <block start="/\'/" end="/\'/" scheme="Comment" region="pString" region00="PairStart" region10="PairEnd"/>
+         <block start="/\&#34;/" end="/\&#34;/" scheme="Comment" region="pString" region00="PairStart" region10="PairEnd"/>
 <!-- Symbols -->
          <keywords region="pSymb">
             <symb name="="/> 
@@ -66,9 +70,9 @@
             <symb name=")"/>
             <symb name=","/>
             <symb name="."/>
-            <symb name=";" region="def:SymbolStrong"/>
+            <symb name=";" region="pSymbSemicolon"/>
             <symb name=":"/>
-            <symb name="¬"/><symb name="ª"/> <!-- not sign: 0xaa or 0xac-->
+            <symb name="&#xAC;"/> <!-- not sign: 0xac-->
             <symb name="&amp;"/>
             <symb name="|"/>
             <symb name="&gt;"/>
