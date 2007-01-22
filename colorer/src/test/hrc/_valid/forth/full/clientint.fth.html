@@ -1,8 +1,8 @@
   0: <span class='forth-forComment def-Comment def-Syntax'>\ Client interface for BootMon. Chapter 6</span>
   1: <span class='forth-forWord def-Keyword'>." </span><span class='forth-forString def-String'>Client interface</span><span class='forth-forWord def-Keyword'>"</span>
   2: include? task-rp.fth rp.fth anew task-ClientInt.fth <span class='forth-forWord def-Keyword'>decimal</span>
-  3: vocabulary client <span class='forth-forWord def-Keyword'>also</span> client <span class='forth-forWord def-Keyword'>definitions</span>
-  4: <span class='forth-forExtWords def-VarStrong def-Var'>dictlist</span> <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>cell+</span> <span class='forth-forWord def-Keyword'>@</span> value clientvoc<span class='forth-forComment def-Comment def-Syntax'> \ Adr vocabulary of client interface</span>
+  3: <span class='forth-forWord def-Keyword'>vocabulary</span> <span class='forth-forWordDefinition def-Keyword'>client</span> <span class='forth-forWord def-Keyword'>also</span> client <span class='forth-forWord def-Keyword'>definitions</span>
+  4: <span class='forth-forExtWords def-VarStrong def-Var'>dictlist</span> <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>cell+</span> <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>value</span> <span class='forth-forWordDefinition def-Keyword'>clientvoc</span><span class='forth-forComment def-Comment def-Syntax'> \ Adr vocabulary of client interface</span>
   5: 
   6: <span class='forth-forComment def-Comment def-Syntax'>\ Convert zerro terminated string to S" string</span>
   7: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>z>s-string</span><span class='forth-forComment def-Comment def-Syntax'> ( Azstr -- A L )</span> <span class='forth-forWord def-Keyword'>dup</span>

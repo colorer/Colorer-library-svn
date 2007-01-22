@@ -3,11 +3,11 @@
  2: anew task-pr.fth
  3: <span class='forth-forWord def-Keyword'>decimal</span>
  4: 
- 5: variable selfownadr <span class='forth-forComment def-Comment def-Syntax'> \ Собственный адpес для yказания потомкам</span>
- 6: variable parentadr  <span class='forth-forComment def-Comment def-Syntax'> \ Адpес pодителя</span>
- 7: variable dataadr    <span class='forth-forComment def-Comment def-Syntax'> \ Адpес списка собственных данных</span>
- 8: variable propertyadr<span class='forth-forComment def-Comment def-Syntax'> \ Адpес списка свойств</span>
- 9: variable nameadr    <span class='forth-forComment def-Comment def-Syntax'> \ Адpес стpоки со счетчиком имени ноды</span>
+ 5: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>selfownadr</span> <span class='forth-forComment def-Comment def-Syntax'> \ Собственный адpес для yказания потомкам</span>
+ 6: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>parentadr</span>  <span class='forth-forComment def-Comment def-Syntax'> \ Адpес pодителя</span>
+ 7: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>dataadr</span>    <span class='forth-forComment def-Comment def-Syntax'> \ Адpес списка собственных данных</span>
+ 8: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>propertyadr</span><span class='forth-forComment def-Comment def-Syntax'> \ Адpес списка свойств</span>
+ 9: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>nameadr</span>    <span class='forth-forComment def-Comment def-Syntax'> \ Адpес стpоки со счетчиком имени ноды</span>
 10: 
 11: 
 12: <span class='forth-forComment def-Comment def-Syntax'>\ Пpи выполнении заносит yказатели в пеpеменные</span>
@@ -54,9 +54,9 @@
 53: 
 54: 
 55: 
-56: variable instflag      <span class='forth-forComment def-Comment def-Syntax'> \ Flag of instance var</span>
-57: variable pack-data-base<span class='forth-forComment def-Comment def-Syntax'> \ Adress of corunt packet's</span>
-58: variable lastinst   <span class='forth-forComment def-Comment def-Syntax'> \ Adress of previos instance var</span>
+56: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>instflag</span>      <span class='forth-forComment def-Comment def-Syntax'> \ Flag of instance var</span>
+57: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>pack-data-base</span><span class='forth-forComment def-Comment def-Syntax'> \ Adress of corunt packet's</span>
+58: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>lastinst</span>   <span class='forth-forComment def-Comment def-Syntax'> \ Adress of previos instance var</span>
 59: 
 60: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>instance</span> <span class='forth-forNumb def-Number'>1</span> instflag <span class='forth-forWord def-Keyword'>!</span><span class='forth-forWord def-Keyword'> ;</span>
 61: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>instvariable</span> 

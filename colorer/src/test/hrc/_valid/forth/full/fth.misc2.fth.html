@@ -23,7 +23,7 @@
  22:     <span class='forth-forResWord def-Label'>IF</span>
  23:         <span class='forth-forWord def-Keyword'>state</span> <span class='forth-forWord def-Keyword'>@</span>
  24:         <span class='forth-forResWord def-Label'>IF</span>    <span class='forth-forExtWords def-VarStrong def-Var'>namebase</span> <span class='forth-forWord def-Keyword'>-</span><span class='forth-forComment def-Comment def-Syntax'> ( make nfa relocatable )</span>
- 25:             [compile] <span class='forth-forWord def-Keyword'>literal</span>   <span class='forth-forComment def-Comment def-Syntax'> ( store nfa of word to be compiled )</span>
+ 25:             <span class='forth-forResWord def-Label'>[compile]</span> <span class='forth-forWord def-Keyword'>literal</span>   <span class='forth-forComment def-Comment def-Syntax'> ( store nfa of word to be compiled )</span>
  26:             <span class='forth-forWord def-Keyword'>compile</span> namebase+
  27:         <span class='forth-forResWord def-Label'>THEN</span>
  28:     <span class='forth-forResWord def-Label'>THEN</span>
@@ -31,7 +31,7 @@
  30: 
  31: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>?LITERAL</span> <span class='forth-forComment def-Comment def-Syntax'> ( n -- , do literal if compiling )</span>
  32:      <span class='forth-forWord def-Keyword'>state</span> <span class='forth-forWord def-Keyword'>@</span>
- 33:      <span class='forth-forResWord def-Label'>IF</span> [compile] <span class='forth-forWord def-Keyword'>literal</span>
+ 33:      <span class='forth-forResWord def-Label'>IF</span> <span class='forth-forResWord def-Label'>[compile]</span> <span class='forth-forWord def-Keyword'>literal</span>
  34:      <span class='forth-forResWord def-Label'>THEN</span>
  35: <span class='forth-forWord def-Keyword'>;</span>
  36: 
@@ -39,10 +39,10 @@
  38:     <span class='forth-forWord def-Keyword'>'</span> ?literal
  39: <span class='forth-forWord def-Keyword'>;</span> <span class='forth-forWord def-Keyword'>immediate</span>
  40: 
- 41: variable if-debug
+ 41: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>if-debug</span>
  42: 
  43: <span class='forth-forWord def-Keyword'>decimal</span>
- 44: create msec-delay <span class='forth-forNumb def-Number'>1000</span> <span class='forth-forWord def-Keyword'>,</span> <span class='forth-forComment def-Comment def-Syntax'> ( default for SUN )</span>
+ 44: <span class='forth-forWord def-Keyword'>create</span> <span class='forth-forWordDefinition def-Keyword'>msec-delay</span> <span class='forth-forNumb def-Number'>1000</span> <span class='forth-forWord def-Keyword'>,</span> <span class='forth-forComment def-Comment def-Syntax'> ( default for SUN )</span>
  45: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>msec</span><span class='forth-forComment def-Comment def-Syntax'> ( #msecs -- )</span>
  46:     <span class='forth-forNumb def-Number'>0</span>
  47:     <span class='forth-forResWord def-Label'>do</span>  msec-delay <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forNumb def-Number'>0</span>
@@ -58,7 +58,7 @@
  57: <span class='forth-forWord def-Keyword'>;</span>
  58: 
  59: 
- 60: variable rand-seed <span class='forth-forWord def-Keyword'>here</span> rand-seed <span class='forth-forWord def-Keyword'>!</span>
+ 60: <span class='forth-forWord def-Keyword'>variable</span> <span class='forth-forWordDefinition def-Keyword'>rand-seed</span> <span class='forth-forWord def-Keyword'>here</span> rand-seed <span class='forth-forWord def-Keyword'>!</span>
  61: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>random</span><span class='forth-forComment def-Comment def-Syntax'> ( -- random_number )</span>
  62:     rand-seed <span class='forth-forWord def-Keyword'>@</span>
  63:     <span class='forth-forNumb def-Number'>31421</span> <span class='forth-forWord def-Keyword'>*</span> <span class='forth-forNumb def-Number'>6927</span> <span class='forth-forWord def-Keyword'>+</span> 
@@ -129,7 +129,7 @@
 128:     <span class='forth-forResWord def-Label'>then</span>
 129: <span class='forth-forWord def-Keyword'>;</span>
 130: 
-131: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>WITHIN</span><span class='def-Symbol'> </span><span class='def-Symbol'>{ </span><span class='def-Parameter'>n1 n2 n3 </span><span class='def-Symbol'>--</span><span class='def-Symbol'> </span><span class='def-Comment def-Syntax'>flag </span><span class='def-Symbol'>}</span>
+131: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>WITHIN</span> <span class='forth-forWord def-Keyword'>{</span> n1 n2 n3 <span class='forth-forWord def-Keyword'>--</span> <span class='forth-forComment def-Comment def-Syntax'>flag </span><span class='forth-forWord def-Keyword'>}</span>
 132:     n2 n3 &lt;=
 133:     <span class='forth-forResWord def-Label'>IF</span>
 134:         n2 n1 &lt;=
@@ -199,7 +199,7 @@
 198: 
 199: 
 200: <span class='forth-forComment def-Comment def-Syntax'>\ Search for substring S2 in S1</span>
-201: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>SEARCH</span><span class='def-Symbol'> </span><span class='def-Symbol'>{ </span><span class='def-Parameter'>addr1 cnt1 addr2 cnt2 </span><span class='def-Symbol'>|</span><span class='def-Symbol'> </span><span class='def-Var'>addr3 cnt3 flag </span><span class='def-Symbol'>--</span><span class='def-Symbol'>  </span><span class='def-Comment def-Syntax'>addr3 cnt3 flag </span><span class='def-Symbol'>}</span>
+201: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>SEARCH</span> <span class='forth-forWord def-Keyword'>{</span> addr1 cnt1 addr2 cnt2 <span class='forth-forWord def-Keyword'>|</span> <span class='forth-forNumb def-Number'>addr3 cnt3 flag </span><span class='forth-forWord def-Keyword'>--</span>  <span class='forth-forComment def-Comment def-Syntax'>addr3 cnt3 flag </span><span class='forth-forWord def-Keyword'>}</span>
 202: <span class='forth-forComment def-Comment def-Syntax'>\ ." Search for " addr2 cnt2 type  ."  in "  addr1 cnt1 type cr</span>
 203: <span class='forth-forComment def-Comment def-Syntax'>\ if true, s1 contains s2 at addr3 with cnt3 chars remaining</span>
 204: <span class='forth-forComment def-Comment def-Syntax'>\ if false, s3 = s1    </span>
