@@ -72,6 +72,8 @@ friend class FileTypeImpl;
   void addScheme(Element *elem);
   void addSchemeNodes(SchemeImpl *scheme, Node *elem);
   
+  String *createPrologEpilogScheme(const String *schemeName, const String *prologName, const String *epilogName);
+
   void loadBlockRegions(SchemeNode *node, Element *el);
   void loadRegions(SchemeNode *node, Element *el, bool st);
 

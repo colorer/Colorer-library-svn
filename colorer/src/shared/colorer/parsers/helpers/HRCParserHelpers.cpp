@@ -64,6 +64,7 @@ SchemeNode::SchemeNode() : virtualEntryVector(5), regionPairVector(4) {
   start = end = null;
   start_re = end_re = null;
   lowPriority = 0;
+  includeTag = false;
 
   region = null;
   memset(regions, 0, sizeof(regions));

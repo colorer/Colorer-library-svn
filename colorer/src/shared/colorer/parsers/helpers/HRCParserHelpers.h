@@ -96,6 +96,7 @@ public:
   SchemeImpl *scheme;
 
   VirtualEntryVector virtualEntryVector;
+  bool includeTag;
   RegionPairVector regionPairVector;
   
   KeywordList *kwList;

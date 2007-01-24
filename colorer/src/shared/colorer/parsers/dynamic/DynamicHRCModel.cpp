@@ -405,6 +405,45 @@ void DynamicHRCModel::addScheme(Element *elem)
   addSchemeNodes(scheme, elem->getFirstChild());
 }
 
+String *DynamicHRCModel::createPrologEpilogScheme(const String *schemeName, const String *prologName, const String *epilogName)
+{
+    StringBuffer *targetName = new StringBuffer(parseType->getName());
+    targetName->append(DString(":__hrcint_"));
+    targetName->append(schemeName);
+    if (prologName != null) targetName->append(DString(":")).append(prologName);
+    if (epilogName != null) targetName->append(DString(":")).append(epilogName);
+
+    SchemeImpl *scheme = new SchemeImpl(targetName);
+    scheme->fileType = parseType;
+
+    schemeHash.put(scheme->schemeName, scheme);
+
+    if (prologName != null) {
+    	SchemeNode *prolog = new SchemeNode();
+    	prolog->type = SNT_INHERIT;
+    	prolog->schemeName = new SString(prologName);
+    	prolog->includeTag = false;
+    	scheme->nodes.addElement(prolog);
+	}
+
+    SchemeNode *orig = new SchemeNode();
+    orig->type = SNT_INHERIT;
+    orig->schemeName = new SString(schemeName);
+    orig->includeTag = true;
+    scheme->nodes.addElement(orig);
+
+    if (epilogName != null) {
+    	SchemeNode *epilog = new SchemeNode();
+    	epilog->type = SNT_INHERIT;
+    	epilog->schemeName = new SString(epilogName);
+    	epilog->includeTag = false;
+    	scheme->nodes.addElement(epilog);
+	}
+	
+	return targetName;
+
+}
+
 void DynamicHRCModel::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 {
   SchemeNode *next = null;
@@ -415,22 +454,25 @@ void DynamicHRCModel::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next = new SchemeNode();
     }
 
-    if (*tmpel->getNodeName() == "inherit"){
+    if (*tmpel->getNodeName() == "inherit" || *tmpel->getNodeName() == "include")
+    {
       const String *nqSchemeName = ((Element*)tmpel)->getAttribute(DString("scheme"));
       if (nqSchemeName == null || nqSchemeName->length() == 0){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("empty scheme name in inheritance operator in scheme '")+scheme->schemeName+"'");
         }
         continue;
-      };
+      }
       next->type = SNT_INHERIT;
       next->schemeName = new SString(nqSchemeName);
       String *schemeName = qualifyForeignName(nqSchemeName, QNT_SCHEME, false);
-      if (schemeName != null){
+      if (schemeName != null)
+      {
         next->scheme = schemeHash.get(schemeName);
         delete next->schemeName;
         next->schemeName = schemeName;
-      };
+      }
+      next->includeTag = (*tmpel->getNodeName() == "include");
 
       if (tmpel->getFirstChild() != null)
       {
@@ -441,11 +483,18 @@ void DynamicHRCModel::addSchemeNodes(SchemeImpl *scheme, Node *elem)
           }
           const String *schemeName = ((Element*)vel)->getAttribute(DString("scheme"));
           const String *substName = ((Element*)vel)->getAttribute(DString("subst-scheme"));
+          const String *prologName = ((Element*)vel)->getAttribute(DString("prolog"));
+          const String *epilogName = ((Element*)vel)->getAttribute(DString("epilog"));
           const String *regionName = ((Element*)vel)->getAttribute(DString("region"));
           const String *substRegionName = ((Element*)vel)->getAttribute(DString("subst"));
 
           if (schemeName != null && substName != null)
           {
+            next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
+          }
+          else if (schemeName != null && (prologName != null || epilogName != null))
+          {
+            substName = createPrologEpilogScheme(schemeName, prologName, epilogName);
             next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
           }
           else if (regionName != null && substRegionName != null)

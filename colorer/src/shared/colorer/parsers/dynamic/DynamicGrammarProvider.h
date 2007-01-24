@@ -7,6 +7,8 @@
 
 struct ProviderStep;
 
+#define DGP_MAX_INHERIT_LEVEL 30000
+
 /**
  * Provides parser with the grammar, based on HRC language layout.
  */
@@ -48,6 +50,7 @@ protected:
     DynamicHRCModel *hrcModel;
     SchemeImpl *baseScheme;
     bool leaveBlockRequired;
+    int inheritLevel;
     
     ProviderStep *top;
 
@@ -55,7 +58,7 @@ protected:
      * Virtualization/inheritance logic.
      * Searches tree for correct schema substitution for 'top' element
      */
-    void adviceScheme(SchemeImpl *scheme);
+    void adviceScheme(SchemeNode *rootnode);
     /**
      * Comes back from inheritance step
      */
