@@ -101,9 +101,9 @@ void FarEditor::setFileType(FileType *ftype){
 void FarEditor::reloadTypeSettings()
 {
   FileType *ftype = baseEditor->getFileType();
-  HRCParser *hrcParser = parserFactory->getHRCParser();
+  HRCModel *hrcModel = parserFactory->getHRCParser();
 
-  FileType *def = hrcParser->getFileType(&DString("default"));
+  FileType *def = hrcModel->getFileType(&DString("default"));
   if (def == null){
     throw Exception(DString("No 'default' file type found"));
   }

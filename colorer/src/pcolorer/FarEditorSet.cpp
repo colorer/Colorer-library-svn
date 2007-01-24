@@ -124,7 +124,7 @@ void FarEditorSet::viewFile(const String &path){
     TextLinesStore textLinesStore;
     textLinesStore.loadFile(newPath, null, true);
     // HRC loading
-    HRCParser *hrcParser = parserFactory->getHRCParser();
+    HRCModel *hrcModel = parserFactory->getHRCParser();
     // Base editor to make primary parse
     BaseEditor baseEditor(parserFactory, &textLinesStore);
     baseEditor.setRegionMapper(regionMapper);
@@ -162,7 +162,7 @@ void FarEditorSet::chooseType()
   FileType *type = null;
 
   for(idx = 0;; idx++, num++){
-    type = hrcParser->enumerateFileTypes(idx);
+    type = hrcModel->enumerateFileTypes(idx);
     if (type == null) break;
     if (group != null && !group->equals(type->getGroup())) num++;
     group = type->getGroup();
@@ -174,7 +174,7 @@ void FarEditorSet::chooseType()
 
   group = null;
   for(idx = 0, i = 0;; idx++, i++){
-    type = hrcParser->enumerateFileTypes(idx);
+    type = hrcModel->enumerateFileTypes(idx);
     if (type == null) break;
 
 
@@ -202,7 +202,7 @@ void FarEditorSet::chooseType()
   type = null;
   group = null;
   for(int ti = 0; i; i--, ti++){
-    type = hrcParser->enumerateFileTypes(ti);
+    type = hrcModel->enumerateFileTypes(ti);
     if (group != null && !group->equals(type->getGroup())) i--;
     group = type->getGroup();
     if (!type) break;
@@ -359,14 +359,14 @@ void FarEditorSet::configure()
       }
       const char *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
       for(int idx = 0;; idx++){
-        FileType *type = hrcParser->enumerateFileTypes(idx);
+        FileType *type = hrcModel->enumerateFileTypes(idx);
         if (type == null) break;
         StringBuffer tname(type->getGroup());
         tname.append(DString(": ")).append(type->getDescription());
         marr[1] = tname.getChars();
         HANDLE scr = info->SaveScreen(0, 0, -1, -1);
         info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-        type->getBaseScheme();
+        type->compile();
         info->RestoreScreen(scr);
       };
     };
@@ -487,7 +487,7 @@ void FarEditorSet::reloadBase()
 
   try{
     parserFactory = new ParserFactory(catalogPath);
-    hrcParser = parserFactory->getHRCParser();
+    hrcModel = parserFactory->getHRCParser();
     try{
       regionMapper = parserFactory->createStyledMapper(&DString("console"), hrdName);
     }catch(ParserFactoryException &e){

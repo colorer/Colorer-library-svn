@@ -62,7 +62,7 @@ private:
   Hashtable<FarEditor*> farEditorInstances;
   ParserFactory *parserFactory;
   RegionMapper *regionMapper;
-  HRCParser *hrcParser;
+  HRCModel *hrcModel;
 
   PluginStartupInfo *info;
   HKEY hPluginRegistry;
