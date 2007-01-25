@@ -7,9 +7,10 @@ import net.sf.colorer.HRCParser;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
+import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineListener;
-import net.sf.colorer.swt.TextColorer;
+import net.sf.colorer.eclipse.jface.TextColorer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -46,6 +47,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
     int UPDATE_DELTA = 3000;
 
     private BaseEditor baseEditor;
+    private ColorerEditor fEditor;
+    private TextColorer fTextColorer;
 
     class TreeAction extends Action {
 
@@ -111,8 +114,9 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
         };
     }
 
-    public ColorerContentOutlinePage() {
+    public ColorerContentOutlinePage(TextColorer textColorer) {
         super();
+        fTextColorer = textColorer;
     }
 
     public void attach(BaseEditor baseEditor){
@@ -188,8 +192,10 @@ public class ColorerContentOutlinePage extends ContentOutlinePage implements Out
             if (baseEditor != null){
                 activeOutliner.attachOutliner(baseEditor);
             }
+            // Sync UI
             activeAction.setChecked(true);
-            //TODO? textColorer.modifyEvent(textColorer.getVisibleStart());
+            // invalidate
+            fTextColorer.invalidateSyntax();
         }
     }
 

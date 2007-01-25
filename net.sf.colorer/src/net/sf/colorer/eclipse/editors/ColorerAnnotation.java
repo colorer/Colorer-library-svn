@@ -1,34 +1,22 @@
 package net.sf.colorer.eclipse.editors;
 
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.source.Annotation;
 
-import net.sf.colorer.LineSource;
-
-public class DocumentLineSource implements LineSource {
-
-    private IDocument fDocument;
-
-    public DocumentLineSource(IDocument document)
-    {
-        if (document == null) throw new IllegalArgumentException("DocumentLineSource: document == null");
-        fDocument = document;
-    }
+/**
+ * Annotation from Colorer's parser model.
+ */
+public class ColorerAnnotation extends Annotation {
     
-    public String getLine(int lno) {
-        if (fDocument.getNumberOfLines() <= lno)
-            return null;
-        try{
-            IRegion linfo = fDocument.getLineInformation(lno);
-            String line = fDocument.get(linfo.getOffset(),linfo.getLength());
-            return line;
-        }catch(BadLocationException e){
-            return null;
-        }
+    public static final String ERROR= "org.eclipse.ui.workbench.texteditor.error"; //$NON-NLS-1$
+    public static final String WARNING= "org.eclipse.ui.workbench.texteditor.warning"; //$NON-NLS-1$
+    public static final String INFO= "org.eclipse.ui.workbench.texteditor.info"; //$NON-NLS-1$
+    
+    public ColorerAnnotation(String type, String text)
+    {        
+        super(type, false, text);
     }
-
 }
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

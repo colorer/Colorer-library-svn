@@ -65,7 +65,7 @@ public class Logger {
     
     static {
         //filter.put("RegionsTree", filter);
-        filter.put("BaseEditorNative", filter);
+        //filter.put("BaseEditor", filter);
         filter.put("ColorerEditor", filter);
     }
 

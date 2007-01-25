@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.ScrollBar;
  */
 public class TextColorer {
 
-    private final static int HLS_NONE = 0;
+    public final static int HLS_NONE = 0;
 
     public final static int HLS_XOR = 1;
 

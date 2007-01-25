@@ -84,9 +84,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements
 
         hrdSets = new Combo(p, SWT.DROP_DOWN | SWT.READ_ONLY);
         ParserFactory pf = ColorerPlugin.getDefaultPF();
-        Vector hrdList = ColorerPlugin.getDefault().getHRDList();
-        for (int idx = 0; idx < hrdList.size(); idx++) {
-            String hrd_name = (String) hrdList.elementAt(idx);
+        hrdSetsList = ColorerPlugin.getDefault().getHRDList();
+        for (int idx = 0; idx < hrdSetsList.size(); idx++) {
+            String hrd_name = (String) hrdSetsList.elementAt(idx);
             String hrd_descr = pf.getHRDescription("rgb", hrd_name);
             hrdSets.add(hrd_descr);
             if (getPreferenceStore().getString(HRD_SET).equals(hrd_name)) {

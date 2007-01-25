@@ -18,13 +18,14 @@ import net.sf.colorer.handlers.RegionMapper;
 public class BaseEditorNative implements BaseEditor {
     /** internal native object */
     private long iptr;
-    private boolean disposed = false;
-    private int wStart, wSize;
-    private int lineCount;
-    private Region defPairStart = null;
-    private Region defPairEnd = null;
-    private Vector editorListeners = new Vector();
-    private ParserFactory fParserFactory; 
+    
+    boolean disposed = false;
+    int wStart, wSize;
+    int lineCount;
+    Region defPairStart = null;
+    Region defPairEnd = null;
+    Vector editorListeners = new Vector();
+    ParserFactory fParserFactory; 
 
     //native Region getRegion(final long iptr, final String qname);
 
@@ -139,7 +140,7 @@ public class BaseEditorNative implements BaseEditor {
 
     public PairMatch getPairMatch(int lineNo, int linePos) {
         checkActive();
-        LineRegion[] lrArray = getLineRegions(iptr, lineNo);
+        LineRegion[] lrArray = getLineRegions(lineNo);
         if (lrArray.length == 0)
             return null;
 
@@ -243,9 +244,6 @@ public class BaseEditorNative implements BaseEditor {
 
     public LineRegion[] getLineRegions(int lno) {
         checkActive();
-        if (Logger.TRACE) {
-            Logger.trace("BaseEditorNative", "getLineRegions:"+lno);
-        }
         return getLineRegions(iptr, lno);
     }
 
@@ -265,20 +263,23 @@ public class BaseEditorNative implements BaseEditor {
             ((EditorListener)editorListeners.elementAt(idx)).modifyEvent(topLine);
         }
         if (Logger.TRACE) {
-            Logger.trace("BaseEditorNative", "modifyEvent:"+topLine);
+            Logger.trace("BaseEditor", "modifyEvent:"+topLine);
         }
         modifyEvent(iptr, topLine);
     }
 
     public void modifyLineEvent(int line) {
         checkActive();
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditor", "modifyLIneEvent:"+line);
+        }
         modifyLineEvent(iptr, line);
     }
 
     public void visibleTextEvent(int wStart, int wSize) {
         checkActive();
         if (Logger.TRACE) {
-            Logger.trace("BaseEditorNative", "visibleTextEvent:"+wStart+":"+wSize);
+            Logger.trace("BaseEditor", "visibleTextEvent:"+wStart+":"+wSize);
         }
         visibleTextEvent(iptr, wStart, wSize);
         this.wStart = wStart;

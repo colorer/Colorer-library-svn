@@ -1,14 +1,45 @@
-package net.sf.colorer.jface;
+package net.sf.colorer.impl;
 
-import net.sf.colorer.editor.BaseEditor;
-import net.sf.colorer.swt.ColorManager;
+import java.util.Vector;
 
-public interface SyntaxConfiguration {
+import net.sf.colorer.LineSource;
+import net.sf.colorer.ParserFactory;
+import net.sf.colorer.handlers.LineRegion;
 
-    void setColorManager(ColorManager colorManager);
+public class CachedBaseEditor extends BaseEditorNative {
 
-    BaseEditor getBaseEditor();
+    private Vector cacheVector = new Vector();
 
+    public CachedBaseEditor(ParserFactory pf, LineSource lineSource){
+        super(pf, lineSource);
+    }
+    
+    public LineRegion[] getLineRegions(int lno) {
+        LineRegion[] list = (LineRegion[])cacheVector.get(lno); 
+        if (cacheVector.get(lno) == null) {
+            list = super.getLineRegions(lno);
+            cacheVector.set(lno, list);
+        }
+        return list;
+    }
+
+    public void modifyEvent(int topLine) {
+        super.modifyEvent(topLine);
+        while (topLine < cacheVector.size()){
+            cacheVector.set(topLine, null);
+            topLine++;
+        }
+    }
+
+    public void modifyLineEvent(int line) {
+        super.modifyLineEvent(line);
+    }
+    
+    public void lineCountEvent(int newLineCount) {
+        super.lineCountEvent(newLineCount);
+        cacheVector.setSize(lineCount);
+    }
+    
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
