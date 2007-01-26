@@ -194,20 +194,18 @@ public class BaseEditorNative implements BaseEditor {
                         break;
                     slr = getLineRegions(lno);
                     li = 0;
-                }
-                ;
+                };
                 if (lno > end_line)
                     break;
                 pair = slr[li];
             } else {
-                if (li == 0) {
+                while (li == 0) {
                     lno--;
                     if (lno < start_line)
                         break;
                     slr = getLineRegions(lno);
                     li = slr.length;
-                }
-                ;
+                };
                 if (lno < start_line)
                     break;
                 li--;
@@ -244,6 +242,9 @@ public class BaseEditorNative implements BaseEditor {
 
     public LineRegion[] getLineRegions(int lno) {
         checkActive();
+        if (Logger.TRACE) {
+            Logger.trace("BaseEditor", "getLineRegions:"+lno);
+        }
         return getLineRegions(iptr, lno);
     }
 

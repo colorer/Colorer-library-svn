@@ -16,7 +16,7 @@ public class CachedBaseEditor extends BaseEditorNative {
     
     public LineRegion[] getLineRegions(int lno) {
         LineRegion[] list = (LineRegion[])cacheVector.get(lno); 
-        if (cacheVector.get(lno) == null) {
+        if (list == null) {
             list = super.getLineRegions(lno);
             cacheVector.set(lno, list);
         }
@@ -37,7 +37,7 @@ public class CachedBaseEditor extends BaseEditorNative {
     
     public void lineCountEvent(int newLineCount) {
         super.lineCountEvent(newLineCount);
-        cacheVector.setSize(lineCount);
+        cacheVector.setSize(newLineCount);
     }
     
 }

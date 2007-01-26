@@ -1,6 +1,10 @@
 package net.sf.colorer.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Logging Service class
@@ -30,7 +34,7 @@ public class Logger {
             if (msg != null) {
                 print = msg.toString();
             }
-            System.out.println("[J]["+comp+"] "+print);
+            System.out.println("[J]["+comp+"] "+print+" ["+getTimestamp()+"]");
             if (ex != null) {
                 ex.printStackTrace(System.out);
             }
@@ -43,11 +47,17 @@ public class Logger {
             if (msg != null) {
                 print = msg.toString();
             }
-            System.out.println("[J]["+comp+"] "+print);
+            System.out.println("[J]["+comp+"] "+print+" ["+getTimestamp()+"]");
             if (ex != null) {
                 ex.printStackTrace(System.out);
             }
         }
+    }
+    
+    static String getTimestamp(){
+        Calendar date = Calendar.getInstance();
+        return date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" +
+               date.get(Calendar.SECOND) + "." + date.get(Calendar.MILLISECOND);
     }
     
     // true - removes matches
@@ -66,7 +76,8 @@ public class Logger {
     static {
         //filter.put("RegionsTree", filter);
         //filter.put("BaseEditor", filter);
-        filter.put("ColorerEditor", filter);
+        //filter.put("ColorerEditor", filter);
+        //filter.put("TextColorer", filter);
     }
 
 }
