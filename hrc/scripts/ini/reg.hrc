@@ -104,6 +104,9 @@
   region00="def:PairStart" region10="def:PairEnd"
   region01="def:StringEdge" region11="def:StringEdge" 
  /> 
+ <regexp match="/\-\s*$/" region="type.dword"
+  region="ini:SymbolStrong"
+ />
  <inherit scheme="ini:comment"/>
  <inherit scheme="ini:error"/>
 </scheme>

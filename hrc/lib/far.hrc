@@ -407,7 +407,7 @@
 <!-- ALL KEYS!!! -->
 
 <scheme name="macro.keys">
-	<keywords region="macro.key" worddiv="[\s&quot;&apos;\:]">
+	<keywords region="macro.key" worddiv="[\s&quot;&apos;\:]" ignorecase="yes">
 		<word name="Alt"/>
 		<word name="AltShift"/>
 		<word name="Ctrl"/>
@@ -415,8 +415,8 @@
 		<word name="Shift"/>
 		<word name="RCtrl"/>
 		<word name="RAlt"/>
+		<symb name="\\"/>
 		<!--symb name="["/>
-		<symb name="]"/>
 		<symb name=","/>
 		<symb name='&quot;'/>
 		<symb name="."/>

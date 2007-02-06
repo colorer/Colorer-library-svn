@@ -1,5 +1,5 @@
 
-$Date$
+Date: TBD
   Fixes:
     - Forth fixes
     - Perl variable fixes
@@ -10,6 +10,7 @@ $Date$
     - picasm improvements
   New:
     - PL1 (Pavel Pleva)
+    - D (Vladimir Panteleev)
 
 
 Date: 2006-06-20 18:03:09
