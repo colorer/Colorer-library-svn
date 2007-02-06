@@ -487,6 +487,11 @@
     <filename>/\.awk$/i</filename>
     <firstline>/^# gawk/i</firstline>
   </prototype>
+  <prototype name="d" group="rare" description="D">
+    <location link="rare/d.hrc"/>
+    <filename>/\.d$/i</filename>
+  </prototype>
+  
   <!--  !! you may wish to swap next two types
   because of collision with extensions  -->
   <prototype name="dssp" group="rare" description="Dssp">
