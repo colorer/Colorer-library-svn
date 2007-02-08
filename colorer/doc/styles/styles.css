@@ -1,22 +1,27 @@
 
 body{
   font-family: Verdana, Arial, helvetica, sans-serif;
-  font-size:10pt;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 40pt;
-  padding-right: 20pt;
-  max-width: 75em;
-  /* IE hack: */
-  /*
-  width:expression(document.body.clientWidth > (500/12) * parseInt(document.body.currentStyle.fontSize) ? "500pt" : "auto" );
-  */
   color:black;
   background:white;
   background-position: top left;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-image: url(../images/background.png);
+  padding-left: 40;
+  padding-right: 20;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* IE hack for max width: */
+#wrapper, .article{
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0pt;
+  padding-right: 0pt;
+  width:expression(document.body.clientWidth > (800+40+20) ? "800" : "auto" );
+  margin-left:expression(document.body.clientWidth > (800+40+20) ? ((document.body.clientWidth-(800+40+20))/3)+"pt" : "auto" );
 }
 
 /* base elements */
@@ -27,7 +32,7 @@ p, div, ul, ol, dl, td{
   font-size:10pt;
   color:#000000;
 }
-p, blockquote{
+p, div.p, blockquote{
   margin-top:4pt;
   margin-bottom:4pt;
   xtext-align:justify;

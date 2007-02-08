@@ -26,22 +26,22 @@ div.xsdocwrap{
   padding: 3pt 3pt 3pt 8pt;
 }
 
-p.xsdocdecl a, p.xsdochead a{
+.xsdocdecl a, .xsdochead a{
   text-decoration: none;
 }
 
-p.xsdocdecl{
+.xsdocdecl{
   font-weight: bold;
   font-size: 110%;
 }
 
-p.xsdochead{
+.xsdochead{
   font-weight:bold;
   font-size:100%;
   margin: 3pt 3pt 3pt 15pt;
 }
 
-p.xsdoc{
+.xsdoc{
   margin: 3pt 0pt 8pt 20pt;
   display: block;
 }
