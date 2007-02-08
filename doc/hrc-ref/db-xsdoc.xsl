@@ -12,7 +12,7 @@
  <xsl:variable name='ann' select='xs:*[1][self::xs:annotation]'/>
 
  <anchor id='typedescr_{generate-id(/)}_{@name}'/>
- <para role='xsdocwrap'>
+ <informalexample role='xsdocwrap'>
   <para role='xsdocdecl'>Element Name:
    <literal><xsl:value-of select='@name'/></literal>
    <xsl:if test='@name'>, type:
@@ -27,7 +27,7 @@
     <para role='xsdocdecl'>Content:</para>
     <xsl:apply-templates select='.//xs:element[@name]' mode='xsdoc'/>
   </xsl:if>
- </para>
+ </informalexample>
 </xsl:template>
 
 
@@ -115,9 +115,11 @@
      <literal><xsl:value-of select='@default'/></literal>
     </xsl:if>
   </para>
-  <para role='xsdoc'>
-    <xsl:value-of select='normalize-space($ann)'/>
-  </para>
+  <xsl:if test="string-length($ann) > 0">
+    <para role='xsdoc'>
+      <xsl:value-of select='normalize-space($ann)'/>
+    </para>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
