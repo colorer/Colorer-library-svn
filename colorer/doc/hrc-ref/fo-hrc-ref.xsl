@@ -9,9 +9,6 @@
  It imports docbook.xsl stylesheet and introduce some changes into it's logic.
 -->
 
-<!--
-<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/fo/docbook.xsl"/>
--->
 <xsl:import href="@docbook-dir@/fo/docbook.xsl"/>
 
 

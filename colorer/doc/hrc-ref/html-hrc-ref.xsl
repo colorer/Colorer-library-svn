@@ -16,7 +16,6 @@ into it's logic
 
 <xsl:include href="html-titlepage.xsl"/>
 
-<xsl:output method='html' encoding="KOI8-r"/>
 
 
 <xsl:param name="html.stylesheet">../styles/styles.css ../styles/hrc-ref.css</xsl:param>
@@ -116,7 +115,21 @@ into it's logic
   </xsl:if>
 </xsl:template>
 
+<!-- output paragraphs in <div> -->
+<xsl:template name="paragraph">
+  <xsl:param name="class" select="''"/>
+  <xsl:param name="content"/>
 
+  <div class="p">
+    <xsl:if test="$class != ''">
+      <xsl:attribute name="class">
+        <xsl:value-of select="$class"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:copy-of select="$content"/>
+  </div>
+
+</xsl:template>
 
 
 <xsl:template match="programlisting//literal">
@@ -133,7 +146,7 @@ into it's logic
   </pre>
 </xsl:template>
 
-<xsl:template match="para[@role='xsdocwrap']">
+<xsl:template match="informalexample[@role='xsdocwrap']">
   <div class='xsdocwrap'>
     <xsl:apply-templates/>
   </div>
