@@ -17,6 +17,7 @@ import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
@@ -81,6 +82,11 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer)
     {
         return (IPresentationReconciler)fTextColorer.getAdapter(IPresentationReconciler.class);
+    }
+    
+    public IReconciler getReconciler(ISourceViewer sourceViewer)
+    {        
+        return (IReconciler)fTextColorer.getAdapter(IReconciler.class);
     }
     
 }

@@ -18,7 +18,8 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 /**
  * Object used to store parse tree and showup it in Outline view 
  */
-public class ParseTreeOutliner implements IWorkbenchOutlineSource, RegionHandler, EditorListener, IWorkbenchAdapter {
+public class ParseTreeOutliner implements IWorkbenchOutlineSource,
+                            RegionHandler, EditorListener, IWorkbenchAdapter {
 
     Vector listeners = new Vector();
     Vector regionsList = new Vector();

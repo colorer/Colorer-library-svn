@@ -10,11 +10,14 @@ import net.sf.colorer.RegionHandler;
  * filter out only required structure elements.
  *
  */
-public class Outliner implements RegionHandler, EditorListener{
-    protected Vector outline = new Vector();
+public class Outliner implements RegionHandler, EditorListener, IOutlineSource
+{
+    protected Vector fOutlineStorage = new Vector();
     Region searchRegion = null;
+    
     int curLevel = 0;
     int modifiedLine = -1;
+    
     private boolean changed = true;
     private boolean lineIsEmpty = true;
 
@@ -33,11 +36,11 @@ public class Outliner implements RegionHandler, EditorListener{
     }
     
     public OutlineItem getItem(int idx) {
-        return (OutlineItem) outline.elementAt(idx);
+        return (OutlineItem) fOutlineStorage.elementAt(idx);
     }
 
     public int itemCount() {
-        return outline.size();
+        return fOutlineStorage.size();
     }
 
     public Region getFilter() {
@@ -64,26 +67,39 @@ public class Outliner implements RegionHandler, EditorListener{
      * Cleans out current outline elements.
      */
     public void clear(){
-        outline.setSize(0);
+        fOutlineStorage.setSize(0);
     }
 
-    public OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
+    /**
+     * Creates an outline Item to 
+     * @param lno
+     * @param sx
+     * @param length
+     * @param curLevel
+     * @param itemLabel
+     * @param region
+     * @return
+     */
+    protected OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
         return new OutlineItem(lno, sx, length, curLevel, itemLabel, region);
     }
 
-    protected void notifyUpdate() {}
     
+    // -----------------------------------------
+
     public void modifyEvent(int topLine) {
         int new_size;
-        for (new_size = outline.size() - 1; new_size >= 0; new_size--) {
-            if (((OutlineItem) outline.elementAt(new_size)).lno < topLine)
+        for (new_size = fOutlineStorage.size() - 1; new_size >= 0; new_size--) {
+            if (((OutlineItem) fOutlineStorage.elementAt(new_size)).lno < topLine)
                 break;
         }
-        outline.setSize(new_size + 1);
+        fOutlineStorage.setSize(new_size + 1);
         modifiedLine = topLine;
         changed = true;
     }
     
+    // -----------------------------------------
+
     public void startParsing(int lno) {
         curLevel = 0;
     }
@@ -116,9 +132,9 @@ public class Outliner implements RegionHandler, EditorListener{
             itemLabel = line.substring(sx, ex);
 
         if (lineIsEmpty) {
-            outline.addElement(createItem(lno, sx, ex-sx, curLevel, itemLabel, region));
+            fOutlineStorage.addElement(createItem(lno, sx, ex-sx, curLevel, itemLabel, region));
         } else {
-            OutlineItem thisItem = (OutlineItem) outline.lastElement();
+            OutlineItem thisItem = (OutlineItem) fOutlineStorage.lastElement();
             if (itemLabel != null && thisItem.token != null && thisItem.lno == lno) {
                 if (itemLabel.length() > 1)
                     thisItem.token.append(" ");
@@ -137,6 +153,26 @@ public class Outliner implements RegionHandler, EditorListener{
         curLevel--;
     }
 
+    
+    
+    // -----------------------------------------
+    Vector listeners = new Vector();
+    
+    public void addListener(OutlineListener listener) {
+        listeners.addElement(listener);
+    }
+
+    public void removeListener(OutlineListener listener) {
+        listeners.removeElement(listener);
+    }
+    
+    protected void notifyUpdate()
+    {
+        for (int idx = 0; idx < listeners.size(); idx++)
+            ((OutlineListener) listeners.elementAt(idx)).notifyUpdate();
+    }
+    
+    
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

@@ -24,19 +24,10 @@ public class WorkbenchOutliner extends Outliner
         implements IWorkbenchAdapter, IWorkbenchOutlineSource
 {
     Hashtable iconsHash = new Hashtable();
-    Vector listeners = new Vector();
     boolean hierarchy = true;
 
     public WorkbenchOutliner(Region filter) {
         super(filter);
-    }
-
-    public void addListener(OutlineListener listener) {
-        listeners.addElement(listener);
-    }
-
-    public void removeListener(OutlineListener listener) {
-        listeners.removeElement(listener);
     }
 
     public void setHierarchy(boolean hierarchy) {
@@ -51,10 +42,6 @@ public class WorkbenchOutliner extends Outliner
         return new OutlineElement(this, lno, sx, length, curLevel, itemLabel, region);
     }
     
-    protected void notifyUpdate(){
-        for (int idx = 0; idx < listeners.size(); idx++)
-            ((OutlineListener) listeners.elementAt(idx)).notifyUpdate();
-    }
 
     // represents root of Outline structure
     public Object getAdapter(Class adapter) {
@@ -84,7 +71,7 @@ public class WorkbenchOutliner extends Outliner
                 }
             } else if (object instanceof OutlineElement) {
                 OutlineElement el = (OutlineElement) object;
-                int idx = outline.indexOf(el);
+                int idx = fOutlineStorage.indexOf(el);
                 if (idx > -1) {
                     int flevel = 0x100000;
                     for (idx++; idx < itemCount(); idx++) {

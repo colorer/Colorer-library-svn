@@ -6,6 +6,10 @@ import net.sf.colorer.Region;
 
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
+/**
+ * Outline Element to represent Scheme node, not regular Region node
+ * Contains additional fields for end of scheme location
+ */
 public class OutlineSchemeElement extends OutlineElement{
   
   public int l2no, pos2;

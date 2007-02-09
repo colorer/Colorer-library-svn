@@ -32,7 +32,8 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
  * Allows to view General Outline, Error and Internal Parse Tree for
  * currently selected editor window. 
  */
-public class ColorerContentOutlinePage extends ContentOutlinePage implements OutlineListener
+public class ColorerContentOutlinePage extends ContentOutlinePage
+                                implements OutlineListener
 {
     IWorkbenchOutlineSource structureOutliner, errorsOutliner, parseTreeOutliner;
     IWorkbenchOutlineSource activeOutliner;
