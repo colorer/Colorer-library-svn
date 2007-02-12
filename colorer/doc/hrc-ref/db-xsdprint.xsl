@@ -7,9 +7,10 @@
 
 <xsl:template name="value">
   <xsl:param name="id" select="''"/>
+  <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
   <xsl:choose>
     <xsl:when test="(parent::xs:complexType or parent::xs:complexType) and name() = 'name'">
-      <link linkend="typedescr_{generate-id(/)}_{.}"><xsl:value-of select="."/></link>
+      <link linkend="ref.{$reftype}.{.}"><xsl:value-of select="."/></link>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="."/>

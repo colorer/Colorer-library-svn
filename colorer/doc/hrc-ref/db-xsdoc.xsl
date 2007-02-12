@@ -9,9 +9,10 @@
 
 <xsl:template match="xs:complexType[@name and xs:*[1][self::xs:annotation]]" mode="xsdoc">
 
+ <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
  <xsl:variable name='ann' select='xs:*[1][self::xs:annotation]'/>
 
- <anchor id='typedescr_{generate-id(/)}_{@name}'/>
+ <anchor id='ref.{$reftype}.{@name}'/>
  <informalexample role='xsdocwrap'>
   <para role='xsdocdecl'>Element Name:
    <literal><xsl:value-of select='@name'/></literal>
@@ -33,6 +34,7 @@
 
 <xsl:template match="xs:element[@name and not(ancestor::xs:element)]" mode="xsdoc">
 
+  <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
   <xsl:variable name='ann'>
 
     <xsl:variable name='anni'
@@ -60,7 +62,7 @@
    <literal><xsl:value-of select='@name'/></literal>
    <xsl:choose>
     <xsl:when test='@type'>, type:
-    <link linkend='typedescr_{generate-id(/)}_{@type}'><literal><xsl:value-of select='@type'/></literal></link>
+      <link linkend='ref.{$reftype}.{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
     <xsl:when test='@name'>, type:
     <link linkend='xsid_{generate-id(/)}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
