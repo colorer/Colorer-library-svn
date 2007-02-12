@@ -56,14 +56,17 @@
 
 
   <para role='xsdochead'>Element:
-   <literal><xsl:value-of select='@name'/></literal>
    <xsl:choose>
-    <xsl:when test='@type'>, type:
+    <xsl:when test='@type = @name'>
       <link linkend='ref.{$reftype}.{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
-    <xsl:when test='@name'>, type:
-      <link linkend='xsid_{$reftype}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
+    <xsl:when test='@type'>
+      <literal><xsl:value-of select='@name'/></literal>, type:
+      <link linkend='ref.{$reftype}.{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
+    <xsl:otherwise>
+      <literal><xsl:value-of select='@name'/></literal>
+    </xsl:otherwise>
    </xsl:choose>
   </para>
   <para role='xsdoc'>
