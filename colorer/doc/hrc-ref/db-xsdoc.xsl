@@ -14,11 +14,8 @@
 
  <anchor id='ref.{$reftype}.{@name}'/>
  <informalexample role='xsdocwrap'>
-  <para role='xsdocdecl'>Element Name:
-   <literal><xsl:value-of select='@name'/></literal>
-   <xsl:if test='@name'>, type:
-   <link linkend='xsid_{$reftype}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
-   </xsl:if>
+  <para role='xsdocdecl'>Element:
+    <link linkend='xsid_{$reftype}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
   </para>
   <para role='xsdoc'>
     <xsl:value-of select='normalize-space($ann/xs:documentation)'/>
