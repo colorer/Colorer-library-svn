@@ -1,7 +1,7 @@
 package net.sf.colorer.editor;
 
 /**
- * Listener of BaseEditor events
+ * Listener of the common BaseEditor events
  */
 public interface EditorListener {
     /**

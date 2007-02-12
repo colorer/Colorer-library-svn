@@ -63,13 +63,13 @@ public class GeneratorDialog {
    */
 	public GeneratorDialog() {
 		display = Display.getCurrent();
-    shell = new Shell(display, SWT.APPLICATION_MODAL|SWT.TITLE|SWT.RESIZE|SWT.CLOSE);
+		shell = new Shell(display, SWT.APPLICATION_MODAL|SWT.TITLE|SWT.RESIZE|SWT.CLOSE);
 		final GridLayout gridLayout_2 = new GridLayout();
 		gridLayout_2.makeColumnsEqualWidth = true;
 		shell.setLayout(gridLayout_2);
-    shell.setText(GeneratorMessages.get("title"));
-    shell.setSize(new Point(600,500));
-    shell.setImage(ImageStore.getID("colorer_editor").createImage());
+        shell.setText(GeneratorMessages.get("title"));
+        shell.setSize(new Point(600,500));
+        shell.setImage(ImageStore.getID("colorer_editor").createImage());
 		{
 			final Composite composite = new Composite(shell, SWT.NONE);
 			composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));

@@ -24,7 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class ColorerSourceViewerInformationControl implements IInformationControl, IInformationControlExtension, DisposeListener {
+public class ColorerSourceViewerInformationControl implements IInformationControl,
+                                    IInformationControlExtension, DisposeListener {
     /** The control's shell */
     private Shell fShell;
     

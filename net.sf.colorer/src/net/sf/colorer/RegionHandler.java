@@ -13,12 +13,6 @@ package net.sf.colorer;
 */
 public interface RegionHandler {
 
-    /** Returns filter region, used by this handler.
-     *  This region is used internally to filter parser stream
-     *  and speedup JNI switches.
-     */
-    Region getFilter();
-
     /** Start of text parsing.
         Called only once, when TextParser starts
         parsing of the specified block of text.

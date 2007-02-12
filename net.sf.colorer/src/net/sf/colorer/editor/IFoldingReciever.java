@@ -1,45 +1,29 @@
-package net.sf.colorer.impl;
+package net.sf.colorer.editor;
 
-import java.util.Vector;
+/**
+ * 
+ *
+ */
+public interface IFoldingReciever {
 
-import net.sf.colorer.LineSource;
-import net.sf.colorer.ParserFactory;
-import net.sf.colorer.handlers.LineRegion;
-
-public class CachedBaseEditor extends BaseEditorNative {
-
-    private Vector cacheVector = new Vector();
-
-    public CachedBaseEditor(ParserFactory pf, LineSource lineSource){
-        super(pf, lineSource);
-    }
+    /**
+     * Called, when new folding item should be created
+     * 
+     * @param s_line Line for folding start
+     * @param s_offset Line offset for folding start
+     * @param e_line Line for folding start
+     * @param e_offset Line offset for folding start
+     * @param schema Folding content type information in terms of Colorer's HRC Schema.
+     */
+    public void notifyFoldingItem(int s_line, int s_offset, int e_line, int e_offset, String schema);
     
-    //FIXME: Should be implemented internally!!!
-    public LineRegion[] getLineRegions(int lno) {
-        LineRegion[] list = (LineRegion[])cacheVector.get(lno); 
-        if (list == null) {
-            list = super.getLineRegions(lno);
-            cacheVector.set(lno, list);
-        }
-        return list;
-    }
-
-    public void modifyEvent(int topLine) {
-        super.modifyEvent(topLine);
-        while (topLine < cacheVector.size()){
-            cacheVector.set(topLine, null);
-            topLine++;
-        }
-    }
-
-    public void modifyLineEvent(int line) {
-        super.modifyLineEvent(line);
-    }
+    /**
+     * Called for line lineno, below which all folding structure
+     * should be invalidated.
+     * @param lineno
+     */
+    public void notifyInvalidate(int lineno);
     
-    public void lineCountEvent(int newLineCount) {
-        super.lineCountEvent(newLineCount);
-        cacheVector.setSize(newLineCount);
-    }
     
 }
 

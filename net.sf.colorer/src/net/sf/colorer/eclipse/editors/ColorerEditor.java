@@ -1,18 +1,17 @@
 package net.sf.colorer.eclipse.editors;
 
 import net.sf.colorer.FileType;
-import net.sf.colorer.ParserFactory;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.jface.ColorerFoldingProvider;
 import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineSchemeElement;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.handlers.LineRegion;
-import net.sf.colorer.impl.BaseEditorNative;
 import net.sf.colorer.impl.CachedBaseEditor;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
@@ -29,10 +28,10 @@ import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
-import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -54,18 +53,18 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IColorerReloadListener, IPropertyChangeListener{
 
-    private ProjectionSupport fProjectionSupport;
-    private ProjectionAnnotationModel annotationModel;
     ISourceViewer sourceViewer;
-    ColorerSourceViewerConfiguration fColorerSVC;
     IPreferenceStore prefStore;
+    ColorerSourceViewerConfiguration fColorerSVC;
 
-    BaseEditor fBaseEditor;
-    TextColorer fTextColorer;
     StyledText text;
     IDocument fDocument;
+    TextColorer fTextColorer;
+    BaseEditor fBaseEditor;
 
     ColorerContentOutlinePage contentOutliner;
+    ProjectionSupport fProjectionSupport;
+    ColorerFoldingProvider fFoldingProvider = new ColorerFoldingProvider();
 
     VerifyListener tabReplacer = new VerifyListener() {
         public void verifyText(VerifyEvent e) {
@@ -146,11 +145,10 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         fProjectionSupport.install();
         viewer.doOperation(ProjectionViewer.TOGGLE);
         
-        annotationModel = viewer.getProjectionAnnotationModel();
-        // Test:
-        annotationModel.addAnnotation(new ProjectionAnnotation(), new Position(10, 70));
+        // Install folding provider
+        fFoldingProvider.install(this);
         
-        getSourceViewer().setRangeIndication(0, 200, false);
+        //getSourceViewer().setRangeIndication(0, 200, false);
         
         relinkColorer();
     }
@@ -186,8 +184,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
      * Reloads coloring highlighting in this editor
      */
     public void relinkColorer() {
-        ParserFactory pf = ColorerPlugin.getDefaultPF();
-
         fBaseEditor = (BaseEditor)getAdapter(BaseEditor.class);
 
         if (contentOutliner != null) {
@@ -365,6 +361,10 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
                 fBaseEditor.setRegionCompact(true);                
             }
             return fBaseEditor;
+        }
+
+        if (key.equals(ColorerFoldingProvider.class)) {
+            return fFoldingProvider;
         }
         
         if (key.equals(IContentOutlinePage.class)) {

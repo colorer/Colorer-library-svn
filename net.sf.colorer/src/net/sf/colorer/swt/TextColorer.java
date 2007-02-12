@@ -452,20 +452,6 @@ public class TextColorer {
     }
 
     /**
-     * Installs specified handler into parse process.
-     */
-    public void addRegionHandler(RegionHandler rh) {
-        baseEditor.addRegionHandler(rh, rh.getFilter());
-    }
-
-    /**
-     * Removes specified handler from the parse process.
-     */
-    public void removeRegionHandler(RegionHandler rh) {
-        baseEditor.removeRegionHandler(rh);
-    }
-
-    /**
      * Informs colorer about visible state change of the editor
      */
     public void stateChanged() {

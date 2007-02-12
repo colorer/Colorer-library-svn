@@ -4,7 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.sf.colorer.FileType;
-import net.sf.colorer.RegionHandler;
 import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.PairMatch;
@@ -18,8 +17,10 @@ import net.sf.colorer.swt.ColorManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension4;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.ITextListener;
@@ -31,7 +32,6 @@ import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.presentation.IPresentationDamager;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.IPresentationRepairer;
-import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.custom.LineBackgroundEvent;
@@ -72,9 +72,13 @@ public class TextColorer implements IAdaptable
     class AsyncReconcyler implements IPresentationReconciler,
                     ITextListener, ITextInputListener, Runnable {
 
+        static final int ASYNC_DELAY = 1000;
+        static final int MAX_SINGLE_PARSE_SIZE = 30000;
+        static final int INCREMENTAL_PARSE_SIZE = 5000;
+        
         private IRegion fDamage;
-        private Display currentDisplay;
-        private long fModTimestamp;
+        private Display fDisplay;
+        
         public IPresentationDamager getDamager(String contentType) {
             return null;
         }
@@ -86,9 +90,15 @@ public class TextColorer implements IAdaptable
             if (Logger.TRACE){
                 Logger.trace("CDR", "install");
             }
-            TextColorer.this.installViewer(viewer);
+            fViewer = viewer;
+            if (fViewer instanceof ITextViewerExtension5) {
+                fProjectionViewer = (ProjectionViewer)fViewer;
+            }
             fViewer.addTextListener(this);
             fViewer.addTextInputListener(this);
+            
+            fDisplay = Display.getCurrent();
+            new Thread(this).start();
         }
 
         public void uninstall() {
@@ -96,6 +106,7 @@ public class TextColorer implements IAdaptable
                 fViewer.removeTextListener(this);
                 fViewer.removeTextInputListener(this);
             }
+            fViewer = null;
         }
         
         void setDocument(IDocument document)
@@ -104,6 +115,12 @@ public class TextColorer implements IAdaptable
                 Logger.trace("CDR", "setDocument");
             }
             fDocument = document;
+            
+            if (fDocument == null) return;
+            
+//            fDocument.addDocumentListener(this);
+//            documentChanged(null);
+            
             prevStamp = -1;
             fColorManager = (ColorManager)fEditor.getAdapter(ColorManager.class);
 
@@ -117,13 +134,13 @@ public class TextColorer implements IAdaptable
          *  Forms damage region from damage start till end of the text,
          *  Sends document change notifications to baseEditor parser.
          */ 
-        IRegion getDamageRegion(TextEvent event)
+        IRegion getDamageRegion(DocumentEvent event)
         {
             long modStamp = -1;
-            if (event.getDocumentEvent() != null){
-                modStamp = event.getDocumentEvent().getModificationStamp();
-            };
             
+            if (event == null) return null;
+            
+            modStamp = event.getModificationStamp();
             if (modStamp != prevStamp){
                 try {        
                     if (Logger.TRACE){
@@ -133,12 +150,22 @@ public class TextColorer implements IAdaptable
                     fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
                 }catch(BadLocationException e){};
             }
-
-            Logger.trace("CDR", "getDamageRegion "+event.getOffset()+":"+(fDocument.getLength()-event.getOffset()));
-            if (event.getDocumentEvent() != null){
-                prevStamp = event.getDocumentEvent().getModificationStamp();
+            try{
+                prevStamp = event.getModificationStamp();
+                int soffset = fDocument.getLineInformationOfOffset(event.getOffset()).getOffset();
+                // Join with already existing damage
+                if (fDamage != null && soffset > fDamage.getOffset()) {
+                    soffset = fDamage.getOffset();
+                }
+                // Create new damage region
+                if (Logger.TRACE){
+                    Logger.trace("CDR", "getDamageRegion "+soffset+":"+(fDocument.getLength() - soffset));
+                }
+                return new Region(soffset, fDocument.getLength() - soffset);
+            }catch(BadLocationException e){
+                Logger.error("CDR", "getDamageRegion", e);
             }
-            return new Region(event.getOffset(), fDocument.getLength()-event.getOffset());
+            return null;
         }
 
         /**
@@ -146,12 +173,12 @@ public class TextColorer implements IAdaptable
          * @param presentation Object to fillup with styles
          * @param damage Region to recover (line-based)
          */
-        void createPresentation(TextPresentation presentation,
-                IRegion damage)
+        void createPresentation(TextPresentation presentation, IRegion damage)
         {
             if (Logger.TRACE){
                 Logger.trace("CDR", "createPresentation "+damage.getOffset()+":"+damage.getLength());
             }
+            int fpos = -1;
             try{
                 int l_start = fDocument.getLineOfOffset(damage.getOffset());
                 int l_end = fDocument.getLineOfOffset(damage.getOffset()+damage.getLength());
@@ -169,18 +196,27 @@ public class TextColorer implements IAdaptable
                         if (lr.special) continue;
                         
                         IRegion lineinfo = fDocument.getLineInformation(lno);
-                        
+
                         int start = lr.start;
                         int end = lr.end;
                         if (end == -1) end = lineinfo.getLength();
-                        end = end - start;
+                        int length = end - start;
                         start = lineinfo.getOffset() + start;
+                        
+                        if (length == 0) {
+                            continue;
+                        }
+                        
+                        if (fpos > start) {
+                            Logger.error("CDR", "------------ createPresentation inconsistent");
+                        }
+                        fpos = start+length;
 
-                        StyleRange sr = new StyleRange(start, end,
+                        StyleRange sr = new StyleRange(start, length,
                                 fColorManager.getColor(rdef.bfore, rdef.fore),
                                 fColorManager.getColor(rdef.bback, rdef.back),
                                 rdef.style);
-                        presentation.replaceStyleRange(sr);
+                        presentation.addStyleRange(sr);
                     }
                 }
                 Logger.trace("CDR", "createPresentation: filled");
@@ -192,82 +228,98 @@ public class TextColorer implements IAdaptable
         
         /**
          * Runs reconciling process for the damaged document.
-         * @see org.eclipse.jface.text.ITextListener#textChanged(org.eclipse.jface.text.TextEvent)
          */
         public void textChanged(TextEvent event) {
             if (fDocument == null) return;
-            Logger.trace("TextColorer", "textChanged");
-            IRegion newDamage = getDamageRegion(event);
             
-            if (newDamage == null) return;
+            if (Logger.TRACE){
+                Logger.trace("TextColorer", "textChanged");
+            }
+            
+            IRegion newDamage = getDamageRegion(event.getDocumentEvent());
 
-            if (fDamage == null ||
-                newDamage.getOffset() < fDamage.getOffset())
+            if (newDamage != null)
             {
                 fDamage = newDamage;
             }
             
-            repairPresentation();
+            repairPresentation(true);
+            
             fModTimestamp = System.currentTimeMillis();
         }
 
         /**
          * Activates asynchronous presentation repair.
          */
-        public void run() {
-            if (fDamage == null) return;
-            if (System.currentTimeMillis() < fModTimestamp+800) return;
-            repairPresentation();
+        public void run()
+        {
+            while(fViewer != null && !fDisplay.isDisposed())
+            {
+                fDisplay.asyncExec(new Runnable() {
+                    public void run() {
+                        if (System.currentTimeMillis() > fModTimestamp+ASYNC_DELAY-200)
+                            repairPresentation(false);
+                    }
+                });
+
+                try{
+                    Thread.sleep(ASYNC_DELAY);
+                }catch(Exception e){}
+                
+            }
         }
         
-        void repairPresentation(){
+        public void repairPresentation(boolean visual)
+        {
+            if (fDamage == null) return;
+
             if (Logger.TRACE){
                 Logger.trace("CDR", "Presentation change started");
             }
+            
             try{
-                IRegion visibleDamage = fDamage;
-                int newlen = fViewer.getBottomIndexEndOffset()-fDamage.getOffset();
+                int newlen = fViewer.getBottomIndexEndOffset() - fDamage.getOffset();
+                // Damage is below visible screen - stop repair if only visual part requested
+                if (visual && newlen <= 0){
+                    return; 
+                }
                 // Damage is below visible screen - parse incrementally
-                if (newlen <= 0) newlen = 1000;
+                if (newlen <= 0) newlen = INCREMENTAL_PARSE_SIZE;
                 // Just to be sure
                 if (newlen+10 > fDamage.getLength()) newlen = fDamage.getLength();
                 // Clip long damages to process them incrementally
-                if (newlen > 3000) newlen = 3000;
+                newlen = Math.min(newlen, MAX_SINGLE_PARSE_SIZE);
+
                 // Align length by line's end
                 int endline = fDocument.getLineOfOffset(fDamage.getOffset()+newlen);
                 newlen = fDocument.getLineOffset(endline)+fDocument.getLineLength(endline)-fDamage.getOffset();
-                
-                visibleDamage = new Region(fDamage.getOffset(), newlen);
+
+                IRegion visibleDamage = new Region(fDamage.getOffset(), newlen);
                 if (visibleDamage.getLength() == 0) return;
-    
-                TextPresentation presentation = new TextPresentation(visibleDamage, 1000);
-    
+
+                TextPresentation presentation = new TextPresentation(visibleDamage, 10+newlen/10);
+
                 createPresentation(presentation, visibleDamage);
 
+//                if (true) return;
+
                 // Clear range!
-                IRegion widgetDamage = fViewer5.modelRange2WidgetRange(visibleDamage);
+                IRegion widgetDamage = fProjectionViewer.modelRange2WidgetRange(visibleDamage);
                 text.setStyleRanges(widgetDamage.getOffset(), widgetDamage.getLength(), null, null);
 
-                fViewer.changeTextPresentation(presentation, true);
-                
-                if (Logger.TRACE){
-                    Logger.trace("CDR", "Presentation change finished");
-                }
-                
                 int newstart = visibleDamage.getOffset()+visibleDamage.getLength();
                 fDamage = new Region(newstart, fDamage.getOffset()+fDamage.getLength()-newstart);
                 
-                currentDisplay = Display.getCurrent();
-                
                 if (fDamage.getLength() == 0){
                     fDamage = null;
-                }else{
-                    new Timer().schedule(new TimerTask(){
-                        public void run() {
-                            currentDisplay.asyncExec(AsyncReconcyler.this);
-                        }
-                    }, 1000);
                 }
+
+                fViewer.changeTextPresentation(presentation, false);
+
+                if (Logger.TRACE){
+                    Logger.trace("CDR", "Presentation change finished");
+                }
+
             }catch(Exception e){
                 Logger.error("CDR", "runnable repairer failed", e);
             }
@@ -291,119 +343,8 @@ public class TextColorer implements IAdaptable
         }
     }
 
-    
-    /**
-     * Asynchronous folding structure reconcyler, 
-     * To be run incrementally in background.
-     */
-    class AsyncFolding implements IReconciler, ITextListener, Runnable {
 
-        private IRegion fDamage;
-        private Display currentDisplay;
-        private long fModTimestamp;
-        
-        public void install(ITextViewer viewer) {
-            if (Logger.TRACE){
-                Logger.trace("AsyncFolding", "install");
-            }
-            TextColorer.this.installViewer(viewer);
-            fViewer.addTextListener(this);
-        }
 
-        public void uninstall() {
-            if (fViewer != null){
-                fViewer.removeTextListener(this);
-            }
-        }
-        
-        /**
-         * Runs reconciling process for the damaged document.
-         * @see org.eclipse.jface.text.ITextListener#textChanged(org.eclipse.jface.text.TextEvent)
-         */
-        public void textChanged(TextEvent event) {
-            if (fDocument == null) return;
-            Logger.trace("TextColorer", "textChanged");
-            
-            repairFolding();
-            fModTimestamp = System.currentTimeMillis();
-        }
-
-        /**
-         * Activates asynchronous presentation repair.
-         */
-        public void run() {
-            if (fDamage == null) return;
-            if (System.currentTimeMillis() < fModTimestamp+800) return;
-            repairFolding();
-        }
-        
-        void repairFolding(){
-            if (Logger.TRACE){
-                Logger.trace("CDR", "Presentation change started");
-            }
-            try{
-                IRegion visibleDamage = fDamage;
-                int newlen = fViewer.getBottomIndexEndOffset()-fDamage.getOffset();
-                // Damage is below visible screen - parse incrementally
-                if (newlen <= 0) newlen = 1000;
-                // Just to be sure
-                if (newlen+10 > fDamage.getLength()) newlen = fDamage.getLength();
-                // Clip long damages to process them incrementally
-                if (newlen > 3000) newlen = 3000;
-                // Align length by line's end
-                int endline = fDocument.getLineOfOffset(fDamage.getOffset()+newlen);
-                newlen = fDocument.getLineOffset(endline)+fDocument.getLineLength(endline)-fDamage.getOffset();
-                
-                visibleDamage = new Region(fDamage.getOffset(), newlen);
-                if (visibleDamage.getLength() == 0) return;
-
-                TextPresentation presentation = new TextPresentation(visibleDamage, 1000);
-
-//                StyledRegion rback = (StyledRegion)fBaseEditor.getBackground();
-//                if (rback != null){
-//                    presentation.setDefaultStyleRange(new StyleRange(
-//                            visibleDamage.getOffset(),
-//                            visibleDamage.getLength(),
-//                            fColorManager.getColor(rback.bfore, rback.fore),
-//                            null, rback.style));
-//                }
-
-                //createPresentation(presentation, visibleDamage);
-
-                // TODO: Clear range!
-                IRegion widgetDamage = fViewer5.modelRange2WidgetRange(visibleDamage);
-                text.setStyleRanges(widgetDamage.getOffset(), widgetDamage.getLength(), null, null);
-
-                fViewer.changeTextPresentation(presentation, true);
-                
-                if (Logger.TRACE){
-                    Logger.trace("CDR", "Presentation change finished");
-                }
-                
-                int newstart = visibleDamage.getOffset()+visibleDamage.getLength();
-                fDamage = new Region(newstart, fDamage.getOffset()+fDamage.getLength()-newstart);
-                
-                currentDisplay = Display.getCurrent();
-                
-                if (fDamage.getLength() == 0){
-                    fDamage = null;
-                }else{
-                    new Timer().schedule(new TimerTask(){
-                        public void run() {
-                            currentDisplay.asyncExec(AsyncFolding.this);
-                        }
-                    }, 1000);
-                }
-            }catch(Exception e){
-                Logger.error("CDR", "runnable repairer failed", e);
-            }
-        }
-        
-        public IReconcilingStrategy getReconcilingStrategy(String contentType) {
-            return null;
-        }
-    }
-    
     /**
      * General StyledText widget helper. Links StyledText with colorer's
      * BaseEditor API
@@ -509,10 +450,10 @@ public class TextColorer implements IAdaptable
     int prevLine = 0;
     int visibleStart, visibleEnd;
     long prevStamp = IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
+    long fModTimestamp;
 
     boolean lineHighlighting = true;
     boolean pairsHighlighting = true;
-    boolean backParserDelay = false;
 
     private IDocument fDocument;
 
@@ -522,11 +463,10 @@ public class TextColorer implements IAdaptable
     private StyledText text;
 
     private ITextViewer fViewer;
-    private ProjectionViewer fViewer5;
+    private ProjectionViewer fProjectionViewer;
 
     private WidgetEventHandler fHandler = new WidgetEventHandler();
-    private IPresentationReconciler fReconciler = new AsyncReconcyler();
-    private IReconciler fFoldingReconciler =  new AsyncFolding();
+    private AsyncReconcyler fReconciler = new AsyncReconcyler();
 
     
     /**
@@ -541,23 +481,13 @@ public class TextColorer implements IAdaptable
         fEditor = editor;
     }
 
-    void installViewer(ITextViewer viewer) {
-        if (fViewer == null){
-            fViewer = viewer;
-            if (fViewer instanceof ITextViewerExtension5) {
-                fViewer5 = (ProjectionViewer)fViewer;
-            }
-        }
-    }
 
     /**
      * Installs this highlighter into the specified StyledText object. Client
      * can manually call detach() method, when wants to destroy this object.
      */
     void attach(StyledText parent) {
-        if (fBaseEditor == null) {
-            throw new RuntimeException("Attach after detach");
-        }
+
         text = parent;
         text.addDisposeListener(fHandler);
         text.addLineBackgroundListener(fHandler);
@@ -758,7 +688,7 @@ public class TextColorer implements IAdaptable
         if (currentPair == null)
             return false;
         try{
-            int caret = fViewer5.widgetOffset2ModelOffset(text.getCaretOffset());
+            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
             int lno = fDocument.getLineOfOffset(caret);
             PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
                     fDocument.getLineOffset(lno));
@@ -783,14 +713,13 @@ public class TextColorer implements IAdaptable
         if (currentPair == null)
             return false;
         try{
-            int caret = fViewer5.widgetOffset2ModelOffset(text.getCaretOffset());
+            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
             int lno = fDocument.getLineOfOffset(caret);
             PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
                     fDocument.getLineOffset(lno));
             fBaseEditor.searchGlobalPair(cp);
             if (cp.end == null)
                 return false;
-            int position = fDocument.getLineOffset(cp.eline);
             if (cp.topPosition)
                 fEditor.selectAndReveal(fDocument.getLineOffset(cp.sline)+
                         cp.start.start,
@@ -814,14 +743,13 @@ public class TextColorer implements IAdaptable
             return false;
         
         try{
-            int caret = fViewer5.widgetOffset2ModelOffset(text.getCaretOffset());
+            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
             int lno = fDocument.getLineOfOffset(caret);
             PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
                     fDocument.getLineOffset(lno));
             fBaseEditor.searchGlobalPair(cp);
             if (cp.end == null)
                 return false;
-            int position = fDocument.getLineOffset(cp.eline);
             if (cp.topPosition)
                 fEditor.selectAndReveal(fDocument.getLineOffset(cp.sline)+
                         cp.start.end,
@@ -847,7 +775,7 @@ public class TextColorer implements IAdaptable
     public LineRegion getCaretRegion() {
         LineRegion caretRegion = null;
         try{
-            int caret = fViewer5.widgetOffset2ModelOffset(text.getCaretOffset());
+            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
             int lno = fDocument.getLineOfOffset(caret);
         
             int linepos = caret - fDocument.getLineOffset(lno);
@@ -870,25 +798,13 @@ public class TextColorer implements IAdaptable
     }
 
     /**
-     * Installs specified handler into parse process.
-     */
-    public void addRegionHandler(RegionHandler rh) {
-        fBaseEditor.addRegionHandler(rh, rh.getFilter());
-    }
-
-    /**
-     * Removes specified handler from the parse process.
-     */
-    public void removeRegionHandler(RegionHandler rh) {
-        fBaseEditor.removeRegionHandler(rh);
-    }
-
-    /**
      * Informs colorer about visible state change of the editor
      */
     void stateChanged()
     {
-        backParserDelay = true;
+        
+        
+        fModTimestamp = System.currentTimeMillis();
 
         if (Logger.TRACE){
             Logger.trace("TextColorer", "stateChanged");
@@ -897,7 +813,7 @@ public class TextColorer implements IAdaptable
         updateViewport();
 
         try{
-            int curOffset = fViewer5.widgetOffset2ModelOffset(text.getCaretOffset());
+            int curOffset = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
             int curLine = fDocument.getLineOfOffset(curOffset);
 
             if (lineHighlighting && text.getSelectionRange().y != 0) {
@@ -965,6 +881,8 @@ public class TextColorer implements IAdaptable
 
         fBaseEditor.visibleTextEvent(visibleStart, visibleEnd - visibleStart);
         fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
+        
+        fReconciler.repairPresentation(true);
     }
 
     void pairDraw(GC gc, StyledRegion sr, int start, int end) {
@@ -1011,7 +929,7 @@ public class TextColorer implements IAdaptable
                 if (pm.sline < visibleStart || pm.sline > visibleEnd) return;
     
                 int lineOffset = fDocument.getLineOffset(pm.sline);
-                int drawStart = fViewer5.modelOffset2WidgetOffset(lineOffset);
+                int drawStart = fProjectionViewer.modelOffset2WidgetOffset(lineOffset);
                 if (drawStart == -1) return;
                 pairDraw(gc, (StyledRegion) pm.start.rdef, pm.start.start
                         + drawStart, pm.start.end + drawStart);
@@ -1020,7 +938,7 @@ public class TextColorer implements IAdaptable
                 if (pm.eline < visibleStart || pm.eline > visibleEnd) return;
     
                 int lineOffset = fDocument.getLineOffset(pm.eline);
-                int drawStart = fViewer5.modelOffset2WidgetOffset(lineOffset);
+                int drawStart = fProjectionViewer.modelOffset2WidgetOffset(lineOffset);
                 if (drawStart == -1) return;
                 pairDraw(gc, (StyledRegion) pm.end.rdef, pm.end.start + drawStart,
                         pm.end.end + drawStart);
@@ -1033,7 +951,7 @@ public class TextColorer implements IAdaptable
     void drawLine(int lno) {
         if (lno < 0 || lno >= fDocument.getNumberOfLines())
             return;
-        int widgetLine = fViewer5.modelLine2WidgetLine(lno);
+        int widgetLine = fProjectionViewer.modelLine2WidgetLine(lno);
         if (widgetLine == -1) return;
         int y = text.getLocationAtOffset(text.getOffsetAtLine(widgetLine)).y;
         int height = 0;
@@ -1055,9 +973,6 @@ public class TextColorer implements IAdaptable
     {
         if (adapter == IPresentationReconciler.class) {
             return fReconciler;
-        }
-        if (adapter == IReconciler.class) {
-            return fFoldingReconciler;
         }
         return null;
     }    

@@ -90,31 +90,40 @@ public class WorkbenchOutliner extends Outliner
     }
 
     public ImageDescriptor getImageDescriptor(Object object) {
-        String iconName = null;
+        ImageDescriptor id = null;
+        
         if (object instanceof OutlineElement) {
             OutlineElement el = (OutlineElement) object;
-            iconName = searchIcons(el.region);
-        }
-        if (iconName == null)
-            return null;
-        return ImageStore.getID(iconName);
-    }
-
-    String searchIcons(Region region) {
-        if (region == null)
-            return null;
-        if (iconsHash.get(region.getName()) != null)
-            return (String) iconsHash.get(region.getName());
-        for (; region != null; region = region.getParent()) {
-            String iconName = "outline" + File.separator
-                    + region.getName().replace(':', File.separatorChar);
-            ImageDescriptor id = ImageStore.getID(iconName);
-            if (id != null) {
-                iconsHash.put(region.getName(), iconName);
-                return iconName;
+            id = (ImageDescriptor)iconsHash.get(el.region);
+            if (id == null) {
+                String iconName = getIconName(el.region);
+                id = ImageStore.getID(iconName);
+                iconsHash.put(el.region, id);
             }
         }
-        return "outline" + File.separator + "def" + File.separator + "Outlined";
+        return id;
+    }
+
+    String getIconName(Region region) {
+        if (region == null)
+            return null;
+        
+        String iconName = null;
+        
+        for (; region != null; region = region.getParent())
+        {
+            iconName = "outline" + File.separator + region.getName().replace(':', File.separatorChar);
+            ImageDescriptor id = ImageStore.getID(iconName);
+            if (id != null) {
+                break;
+            }else{
+                iconName = null;
+            }
+        }
+        if (iconName == null) {
+            iconName = "outline" + File.separator + "def" + File.separator + "Outlined";
+        }
+        return iconName;
     }
 
     public String getLabel(Object object) {

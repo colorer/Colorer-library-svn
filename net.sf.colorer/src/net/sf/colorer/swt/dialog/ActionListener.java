@@ -1,7 +1,3 @@
-/*
- * @version $Revision$ $Date$
- *
- */
 package net.sf.colorer.swt.dialog;
 
 /**

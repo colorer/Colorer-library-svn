@@ -78,6 +78,8 @@ public class Logger {
         //filter.put("BaseEditor", filter);
         //filter.put("ColorerEditor", filter);
         //filter.put("TextColorer", filter);
+        //filter.put("FoldingReciever", filter);
+        
     }
 
 }
