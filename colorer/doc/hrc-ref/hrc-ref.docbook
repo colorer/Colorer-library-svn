@@ -184,7 +184,7 @@ and in inter-language linkage process.
 Prototypes are declared with <literal>&lt;prototype&gt;</literal> elements.
 For instance:
 
-<example><title>Prototype definition</title>
+<example id="example.hrc.prototype"><title>Prototype definition</title>
 <programlisting><![CDATA[
   <prototype name="cpp" group="main" description="C++">
     <location link="base/cpp.hrc"/>
@@ -250,7 +250,7 @@ to any file type or language.
 As for the rest, all its behavior is like prototype's one.
 For example:
 
-<example><title>Package definition</title>
+<example id="example.hrc.package"><title>Package definition</title>
 <programlisting><![CDATA[
   <package name="def" group="packages" description="core definitions">
     <location link="default.hrc"/>
@@ -367,7 +367,7 @@ as top level types.
 Each base scheme must have local (unqualified) name equal to its type name.
 Base scheme in each type is used as an entry point for parse process.
 
-<example><title>Sample type definition</title>
+<example id="example.hrc.type"><title>Sample type definition</title>
 <programlisting><![CDATA[
   <type name="somelang">
     <region name="Keyword" description="This language's keyword"/>
@@ -750,7 +750,7 @@ Everything, that doesn't looks like metacharacters, means simple character.
 
 <section id='hrcre.meta'><title>Metacharacters</title>
 
-<table><title>Metacharacters</title><tgroup cols='2'><tbody>
+<table id="table.metacharacters"><title>Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><literal>^</literal></entry><entry>Match the beginning of the line</entry></row>
 <row><entry><literal>$</literal></entry><entry>Match the end of the line</entry></row>
 <row><entry><literal>.</literal></entry><entry>Match any character (except \r\n)</entry></row>
@@ -784,7 +784,7 @@ Everything, that doesn't looks like metacharacters, means simple character.
 
 <section id='hrcre.exmeta'><title>Extended metacharacter</title>
 <para>These metacharacters are incompatible with Perl</para>
-<table><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
+<table id="table.xmetacharacters"><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><literal>\c</literal></entry><entry>Means 'not word' before</entry></row>
 <row><entry><literal>\N</literal></entry><entry>Link inside of regexp to one of its brackets.
           <literal>N</literal>  - needed brackets pair.  This operator  works
@@ -796,7 +796,7 @@ Everything, that doesn't looks like metacharacters, means simple character.
 The next operators are only available in Colorer-take5 regexp module parser,
 when in compiled for Colorer library:
 </para>
-<table><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
+<table id="table.take5metacharacters"><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of <literal>start</literal> tag).</entry></row>
 <row><entry><literal>\m</literal></entry><entry>Changes start of regexp</entry></row>
 <row><entry><literal>\M</literal></entry><entry>Changes end of regexp</entry></row>
@@ -818,7 +818,7 @@ Each operator must be applied to the appropriate character,
 metacharacter, or block of their combination (enclosed with brackets).
 </para>
 
-<table><title>Operators</title><tgroup cols='2'><tbody>
+<table id="table.operators"><title>Operators</title><tgroup cols='2'><tbody>
 <row><entry><literal>( )</literal></entry><entry>Group and remember characters to form one pattern.</entry></row>
 <row><entry><literal>(?{name} )</literal></entry><entry>Group and remember characters into the named group.</entry></row>
 <row><entry><literal>(?{} ) or (?: )</literal></entry><entry>Group but don't remember characters into the group (unnamed group).</entry></row>
@@ -841,7 +841,7 @@ Greedy operator tries to take as much in string, as it can. Nongreedy takes by m
 
 
 <section id='hrcre.exops'><title>Extended operators</title>
-<table><title>Extended Operators</title><tgroup cols='2'><tbody>
+<table id="table.xoperators"><title>Extended Operators</title><tgroup cols='2'><tbody>
 <row><entry><literal>?#N</literal></entry><entry>Look-behind. N - symbol number to look behind.</entry></row>
 <row><entry><literal>?~N</literal></entry><entry>Negative look-behind.</entry></row>
 <row><entry><literal>?=</literal></entry><entry>Look-ahead.</entry></row>
@@ -854,7 +854,7 @@ But colorer uses syntax <literal>(foobar)?=</literal>
 </section>
 
 <section id='hrcre.examples'><title>Examples</title>
-<example><title>RE examples</title>
+<example id="example.hrc.re"><title>RE examples</title>
 <para>
 
 <variablelist>
