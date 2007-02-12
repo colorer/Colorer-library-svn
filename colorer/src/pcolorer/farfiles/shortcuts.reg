@@ -1,0 +1,92 @@
+REGEDIT4
+
+; you have to create 'c' shortcut on colorer plugin!
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltL]
+"Sequence"="F11 c 1"
+"DisableOutput"=dword:00000001
+"Description"="list types [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltÑ]
+"Sequence"="F11 c 1"
+"DisableOutput"=dword:00000001
+"Description"="list types [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltR]
+"Sequence"="F11 c c Up Up Enter"
+"DisableOutput"=dword:00000001
+"Description"="reload colorer [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altä]
+"Sequence"="F11 c c Up Up Enter"
+"DisableOutput"=dword:00000001
+"Description"="reload colorer [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltK]
+"Sequence"="F11 c 7"
+"DisableOutput"=dword:00000001
+"Description"="select region [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altã]
+"Sequence"="F11 c 7"
+"DisableOutput"=dword:00000001
+"Description"="select region [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt;]
+"Sequence"="F11 c 5"
+"DisableOutput"=dword:00000001
+"Description"="list functions [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt:]
+"Sequence"="F11 c 5"
+"DisableOutput"=dword:00000001
+"Description"="list functions [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltÜ]
+"Sequence"="F11 c 5"
+"DisableOutput"=dword:00000001
+"Description"="list functions [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt']
+"Sequence"="F11 c 6"
+"DisableOutput"=dword:00000001
+"Description"="find errors [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt"]
+"Sequence"="F11 c 6"
+"DisableOutput"=dword:00000001
+"Description"="find errors [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altù]
+"Sequence"="F11 c 6"
+"DisableOutput"=dword:00000001
+"Description"="find errors [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltO]
+"Sequence"="F11 c 8"
+"DisableOutput"=dword:00000001
+"Description"="find function [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altô]
+"Sequence"="F11 c 8"
+"DisableOutput"=dword:00000001
+"Description"="find function [colorer]"
+
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt[]
+"Sequence"="F11 c 2"
+"DisableOutput"=dword:00000001
+"Description"="match pair [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altï]
+"Sequence"="F11 c 2"
+"DisableOutput"=dword:00000001
+"Description"="match pair [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Alt]]
+"Sequence"="F11 c 3"
+"DisableOutput"=dword:00000001
+"Description"="select pair [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altö]
+"Sequence"="F11 c 3"
+"DisableOutput"=dword:00000001
+"Description"="select pair [colorer]"
+
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\AltP]
+"Sequence"="F11 c 4"
+"DisableOutput"=dword:00000001
+"Description"="select block [colorer]"
+[HKEY_CURRENT_USER\Software\Far\KeyMacros\Editor\Altá]
+"Sequence"="F11 c 4"
+"DisableOutput"=dword:00000001
+"Description"="select block [colorer]"
