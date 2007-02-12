@@ -3,8 +3,8 @@
 <!DOCTYPE article[
 <!--<!ENTITY colorerloc "file:/d:/programs/devel/colorer">-->
 <!ENTITY colorerloc "../..">
-<!ENTITY fileref "&colorerloc;/doc/2003/hrc.xsd">
-<!ENTITY hrdref "&colorerloc;/doc/2003/hrd.xsd">
+<!ENTITY hrcxsd "&colorerloc;/doc/2003/hrc.xsd">
+<!ENTITY hrdxsd "&colorerloc;/doc/2003/hrd.xsd">
 <!ENTITY catalogref "&colorerloc;/doc/2003/catalog.xsd">
 ]>
 <article lang="en" xmlns:x="uri:custom:schema-db">
@@ -126,7 +126,7 @@ Each HRC file contains declaration of one or more prototypes or
 one language type. Root XML content starts with <literal>hrc</literal>
 element, which contains all other HRC definitions.
 
-<x:schemaref uri="&fileref;" role='hrc'/>
+<x:schemaref uri="&hrcxsd;" role='hrc'/>
 
 </para>
 
@@ -161,7 +161,7 @@ For instance, mostly all HRC definitions start with the next syntax:
 <para>
 Each element in HRC can be documented with XML Schema-like
 elements:
-<x:schemaref uri="&fileref;" role='annotation'/>
+<x:schemaref uri="&hrcxsd;" role='annotation'/>
 
 Annotation object can be used anywhere in the HRC context to document
 and describe any of the HRC elements.
@@ -202,7 +202,7 @@ RE mask, used to identify this type by file name extension,
 and one or more masks, used to identify type by file's first line.
 </para>
 
-<x:schemaref uri="&fileref;" role='prototype'/>
+<x:schemaref uri="&hrcxsd;" role='prototype'/>
 
 <para>
 
@@ -216,8 +216,8 @@ weight is selected to assign to the opening file.
 
 </para>
 
-<x:schemaref uri="&fileref;" role='filename'/>
-<x:schemaref uri="&fileref;" role='firstline'/>
+<x:schemaref uri="&hrcxsd;" role='filename'/>
+<x:schemaref uri="&hrcxsd;" role='firstline'/>
 
 <para>
 If any of these two operators is used more than once, each its matched
@@ -229,10 +229,10 @@ If real language definition is separated from the prototype and placed in
 other resource, it location is pointed with <literal>location</literal>
 element. Real type loading occurs when the described type will be really
 requested.
-<x:schemaref uri="&fileref;" role='location'/>
+<x:schemaref uri="&hrcxsd;" role='location'/>
 </para>
 
-<x:schemaref uri="&fileref;" role='parameters'/>
+<x:schemaref uri="&hrcxsd;" role='parameters'/>
 </section>
 
 
@@ -242,7 +242,7 @@ You can define file type with a special meaning of the internal
 type, which is used by other types and is not visible to user.
 This role is managed by the <literal>package</literal> element:
 
-<x:schemaref uri="&fileref;" role='package'/>
+<x:schemaref uri="&hrcxsd;" role='package'/>
 
 This element doesn't contain <literal>filename</literal> or
 <literal>firstline</literal> properties because it doesn't directly map
@@ -271,7 +271,7 @@ Each prototype (or package) defines its linkage with real file type, describing
 information, specific for the syntax parsing process. This information
 is stored in basic units, called <literal>type</literal>s.
 
-<x:schemaref uri="&fileref;" role='type'/>
+<x:schemaref uri="&hrcxsd;" role='type'/>
 
 Normally, each type must be defined in a separate file, which contains
 this type and optionally its prototype (if there is no this prototype
@@ -302,7 +302,7 @@ object names from the imported type into the current one.
 There can be as much import statements, as needed. Unqualified name resolving
 occurs in order of their definition.
 
-<x:schemaref uri="&fileref;" role='import'/>
+<x:schemaref uri="&hrcxsd;" role='import'/>
 
 For instance, you can write
 <programlisting>
@@ -342,7 +342,7 @@ the each of the regions, or can produce some operations over these structures.
 
 <para>
 Each region is defined using a <literal>region</literal> element:
-<x:schemaref uri="&fileref;" role='region'/>
+<x:schemaref uri="&hrcxsd;" role='region'/>
 </para>
 
 <para>
@@ -358,7 +358,7 @@ Each type can define as much schemes, as needed, provided that all of them
 have names, unique in this type scope. Scheme is defined using
 <literal>scheme</literal> element:
 
-<x:schemaref uri="&fileref;" role='scheme'/>
+<x:schemaref uri="&hrcxsd;" role='scheme'/>
 
 Each type must have one scheme, called "base scheme" - this scheme is
 required to be declared in each type. Only types, declared as
@@ -401,9 +401,9 @@ available in the HRC language.
 <para>
 This common and often used syntax construction describes a list
 of keywords with similar properties.
-<x:schemaref uri="&fileref;" role='keywords'/>
-<x:schemaref uri="&fileref;" role='word'/>
-<x:schemaref uri="&fileref;" role='symb'/>
+<x:schemaref uri="&hrcxsd;" role='keywords'/>
+<x:schemaref uri="&hrcxsd;" role='word'/>
+<x:schemaref uri="&hrcxsd;" role='symb'/>
 </para>
 <para>
 Each element in this list can define its own region assignment or
@@ -422,7 +422,7 @@ and flexible. Each RE token can be used to create a number of different
 syntax regions (up to 16).
 </para>
 
-<x:schemaref uri="&fileref;" role='regexp'/>
+<x:schemaref uri="&hrcxsd;" role='regexp'/>
 
 <para>
 
@@ -446,7 +446,7 @@ level and have their own qualified namespace.
 To include entity's value into RE, special syntax of <literal>%entityname;</literal> is used.
 </para>
 
-<x:schemaref uri="&fileref;" role='entity'/>
+<x:schemaref uri="&hrcxsd;" role='entity'/>
 
 <para>
 
@@ -474,9 +474,9 @@ would not help much.
 To express much more complex syntax and allow to declare context-free grammar
 constructions, HRC defines a special token, named "block".
 
-<x:schemaref uri="&fileref;" role='block'/>
+<x:schemaref uri="&hrcxsd;" role='block'/>
 
-<x:schemaref uri="&fileref;" role='blockInner'/>
+<x:schemaref uri="&hrcxsd;" role='blockInner'/>
 
 Each block defines its <literal>start</literal> and <literal>end</literal>
 tags, each with a RE syntax already described.
@@ -578,9 +578,9 @@ can affect special background color treatment.
 
 <section id='interscheme.inheritance'><title>Inheritance</title>
 
-<x:schemaref uri="&fileref;" role='inherit'/>
+<x:schemaref uri="&hrcxsd;" role='inherit'/>
 
-<x:schemaref uri="&fileref;" role='virtual'/>
+<x:schemaref uri="&hrcxsd;" role='virtual'/>
 
 <para>
 </para>
@@ -937,9 +937,9 @@ HRD file consists of the list of the entries, each of them describing one
 HRC Region.
 
 </para>
-<x:schemaref uri="&hrdref;" role='hrd'/>
+<x:schemaref uri="&hrdxsd;" role='hrd'/>
 
-<x:schemaref uri="&hrdref;" role='assign'/>
+<x:schemaref uri="&hrdxsd;" role='assign'/>
 
 <para>
 It is possible to maintain different HRD settings for different languages,
@@ -948,7 +948,7 @@ The former allows you to distribute recommended settings with each language,
 and the latter - to unify modifying and storing changed HRD settings with provided UI.
 
 </para>
-<x:schemaref uri="&hrdref;"/>
+<x:schemaref uri="&hrdxsd;"/>
 
 <para>
 </para>
@@ -965,7 +965,7 @@ To use this schema in other, than informational purposes, use up-to-date
 version, available on the link above.
 </para>
 
-<x:schemaref role='' uri="&fileref;"/>
+<x:schemaref role='' uri="&hrcxsd;"/>
 
 </appendix>
 
