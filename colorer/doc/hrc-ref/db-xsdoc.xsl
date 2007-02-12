@@ -17,7 +17,7 @@
   <para role='xsdocdecl'>Element Name:
    <literal><xsl:value-of select='@name'/></literal>
    <xsl:if test='@name'>, type:
-   <link linkend='xsid_{generate-id(/)}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
+   <link linkend='xsid_{$reftype}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
    </xsl:if>
   </para>
   <para role='xsdoc'>
@@ -65,7 +65,7 @@
       <link linkend='ref.{$reftype}.{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
     <xsl:when test='@name'>, type:
-    <link linkend='xsid_{generate-id(/)}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
+      <link linkend='xsid_{$reftype}_{@name}'><literal><xsl:value-of select='@name'/></literal></link>
     </xsl:when>
    </xsl:choose>
   </para>
@@ -77,6 +77,7 @@
 
 <xsl:template match="xs:attribute[@name and not(ancestor::xs:element)]" mode="xsdoc">
 
+  <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
   <xsl:variable name='ann'>
 
     <xsl:variable name='anni'
@@ -110,7 +111,7 @@
      <ulink url='http://www.w3.org/TR/xmlschema-2#{substring(@type, 4)}'><literal><xsl:value-of select='@type'/></literal></ulink>
     </xsl:when>
     <xsl:when test='@type'>, type:
-     <link linkend='xsid_{generate-id(/)}_{@type}'><literal><xsl:value-of select='@type'/></literal></link>
+     <link linkend='xsid_{$reftype}_{@type}'><literal><xsl:value-of select='@type'/></literal></link>
     </xsl:when>
    </xsl:choose>
     <xsl:if test='@default'>, default:
