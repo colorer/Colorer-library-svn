@@ -93,7 +93,7 @@ to other formats through XSLT templates.
 <para>
 HRC uses <emphasis role='strong'>Regular Expressions</emphasis> to achieve flexible recognition
 of text elements, lexemes and tokens. Still Regular Expressions (<emphasis role='strong'>RE</emphasis>) are able
-to recognise only a limited set of syntax constructions when sometimes
+to recognise only a limited set of syntax constructions when
 it is often necessary to describe more complex structures. Therefore HRC uses special
 construct named <emphasis role='strong'>&quot;scheme&quot;</emphasis> to define behaviour of
 more powerful recursive set of languages (context free). Such schemes in combination
@@ -106,20 +106,25 @@ with RE make HRC strong declarative language.
 <section id='core'>
 <title>Core Syntax</title>
 <para>
-HRC language allows describing and storing syntax rules for numerous languages.
-All language descriptions are divided into two parts:
-<emphasis role='strong'>informal</emphasis> part (used to describe different
-properties of the language, initial choose rules, service information
-- <literal>prototype</literal> element),
-and <emphasis role='strong'>formal</emphasis> part, which defines
-syntax and semantics of the target parsed language (<literal>type</literal> element).
-Prototypes are used to determine, which type should be applied to the currently opened
-file, they define some internal application-dependent properties
-and other useful information about language. Because you may separate prototype
-definition from real language definition, full type loading only occurs
-when it is really requested by the user. Also, all the prototype definitions,
-collected in one initial source file, allow user to see list of languages, supported
-by the library and guarantee fast library's bootstrap.
+HRC describes and stores syntax rules for numerous languages. All language definitions
+are divided into two parts:
+<itemizedlist>
+  <listitem><para>
+<emphasis role='strong'>informal part</emphasis> includes different non-syntax specific
+properties of a language: name, short description, common file extensions and autodetection
+rules. Informal part is also called <emphasis role='strong'>language prototype</emphasis>.
+  </para></listitem>
+  <listitem><para>
+<emphasis role='strong'>formal part</emphasis> contains actual definition of target language
+rules in terms of syntax and semantics. It is referenced as <emphasis role='strong'>language type</emphasis>.
+  </para></listitem>
+</itemizedlist>
+Prototypes are used to detect correct language type that should be applied to a file,
+they define some application-dependent properties and other useful information about
+languages. Because prototypes are separated from real language definitions, full type
+loading occurs only when language is correctly matched or requested by user. This
+guarantees fast library bootstrap. Prototype definitions grouped into one file allow
+users to get a quick overview of the languages supported by the library.
 </para>
 
 <formalpara><title>Structure</title><para>
