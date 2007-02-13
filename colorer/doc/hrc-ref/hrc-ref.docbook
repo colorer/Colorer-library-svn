@@ -128,8 +128,8 @@ users to get a quick overview of the languages supported by the library.
 </para>
 
 <formalpara><title>Structure</title><para>
-Each HRC file contains declaration of one or more prototypes or
-one language type. Root XML content starts with <literal>hrc</literal>
+Each HRC file contains either several language prototypes or
+one language type. XML content starts with root <x:hrc>hrc</x:hrc>
 element, which contains all other HRC definitions.
 
 <x:schemaref uri="&hrcxsd;" role='hrc'/>
@@ -138,10 +138,10 @@ element, which contains all other HRC definitions.
 
 
 <para>
-Each HRC language object is defined using XML elements and attributes.
-You can find definition of the HRC XML Syntax in <xref linkend='hrcxsd'/>.
-For instance, mostly all HRC definitions start with the next syntax:
-<example><title>Common HRC file</title>
+Every bit of HRC is either XML element or attribute.
+You can find formal definition of the HRC XML syntax in <xref linkend='hrcxsd'/>.
+For instance, all HRC files start with the syntax similar to following:
+<example id="example.hrc.file"><title>Common HRC file</title>
 <programlisting><![CDATA[
 <?xml version="1.0"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
@@ -165,12 +165,12 @@ For instance, mostly all HRC definitions start with the next syntax:
 </para>
 
 <para>
-Each element in HRC can be documented with XML Schema-like
-elements:
+Each element in HRC can be documented with <emphasis>XML Schema</emphasis>-like
+<x:hrc>annotation</x:hrc>:
 <x:schemaref uri="&hrcxsd;" role='annotation'/>
 
-Annotation object can be used anywhere in the HRC context to document
-and describe any of the HRC elements.
+Annotations can be used anywhere in HRC file to describe and document syntax
+elements.
 
 </para>
 </formalpara>
