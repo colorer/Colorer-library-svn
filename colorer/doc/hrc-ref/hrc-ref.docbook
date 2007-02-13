@@ -63,12 +63,11 @@
 <copyright><year>2003</year><year>2004</year><year>2005</year><holder>Igor Russkih (Cail Lomecb)</holder></copyright>
 
 <abstract><title>Abstract</title>
-<para>This reference defines syntax and semantics of the
-<acronym role='Highlighting Resource Codes'>HRC</acronym>
-language, used in Colorer-take5 Library to represent and describe
-syntax and lexical structure of target programming languages.
-This description is used by library to
-parse and colorize text in editors or other systems.
+<para>This reference describes <acronym role='Highlighting Resource Codes'>HRC</acronym>
+language, used in Colorer-take5 Library to define and represent
+syntax and lexical structure of various programming languages.
+These syntax definitions are used by library to parse and colorize
+text in editors and other software.
 </para>
 </abstract>
 </articleinfo>
