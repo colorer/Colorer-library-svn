@@ -77,25 +77,27 @@ text in editors and other software.
 <title>Introduction</title>
 
 <para>
-HRC is a script language which is describes parsing process of text files
-to produce syntax highlighting. It is based on XML markup, and defines its
-own XML vocabulary and structure. HRC language is developed to achieve
-most flexible and efficient process of describing programming language structures.
+<emphasis role='strong'>HRC</emphasis> is a script language which describes text parsing process to produce syntax
+highlighting. It is <emphasis role='strong'>XML-based</emphasis> language with its own XML vocabulary and structure.
+HRC is designed to make the process of describing structures of programming languages
+most flexible and efficient.
 </para>
 <para>
-Started nearly in year 1999, it was a simple XML-like structure, describing
-some common language constructions. But later it has grown into
-the much more complex and powerful language with complex relations between
-different languages and syntax contexts.
+Looking back to early 1999, HRC had simple XML-like structure describing several
+common language constructions. Since then it evolved into very powerful way of
+describing complex relations between different languages and syntax contexts.
+HRC is a full-fledged "XML application" and that means HRC definitions can be
+automatically generated from XML descriptions in other languages and converted
+to other formats through XSLT templates.
 </para>
 <para>
-HRC is based on Regular Expressions, which allow to achieve flexible recognition
-of text elements, lexemes and tokens. But Regular Expressions (RE) allows
-recognition of rather limited syntax constructions, and often it is needed to
-describe more complex languages. Because this, HRC language uses special
-construction, named &quot;scheme&quot;, which allows to describe more powerful,
-recursive class of languages (context free) and in combination with RE brings
-HRC to strong declarative language.
+HRC uses <emphasis role='strong'>Regular Expressions</emphasis> to achieve flexible recognition
+of text elements, lexemes and tokens. Still Regular Expressions (<emphasis role='strong'>RE</emphasis>) are able
+to recognise only a limited set of syntax constructions when sometimes
+it is often necessary to describe more complex structures. Therefore HRC uses special
+construct named <emphasis role='strong'>&quot;scheme&quot;</emphasis> to define behaviour of
+more powerful recursive set of languages (context free). Such schemes in combination
+with RE make HRC strong declarative language.
 </para>
 </section>
 
