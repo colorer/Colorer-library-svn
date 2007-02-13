@@ -112,7 +112,7 @@ public class ColorerPlugin extends AbstractUIPlugin {
             Logger.trace("EclipsecolorerPlugin", "Catalog: "+catalogPath);
             parserFactory = new ParserFactory(catalogPath);
         } catch (Throwable e) {
-            Logger.trace("EclipsecolorerPlugin", "Fault in getting parser factory", e);
+            Logger.trace("EclipsecolorerPlugin", "Fault in getting parser factory, (will try default location)", e);
             boolean error = true;
             Throwable exc = e;
             try {

@@ -6,6 +6,10 @@ import org.eclipse.jface.text.IRegion;
 
 import net.sf.colorer.LineSource;
 
+/**
+ * Text information Line source for colorer's parser
+ * Based on IDocument interface
+ */
 public class DocumentLineSource implements LineSource {
 
     private IDocument fDocument;

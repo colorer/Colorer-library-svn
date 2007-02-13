@@ -21,6 +21,10 @@ import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
 
+/**
+ * Action definitions for editor UI commands.
+ *
+ */
 public class ColorerActionContributor extends TextEditorActionContributor
 {
     ColorerEditor activeEditor = null;
@@ -214,6 +218,11 @@ public class ColorerActionContributor extends TextEditorActionContributor
         super.init(bars, page);
     }
 
+    /**
+     * TODO: Refactor with new APIs?
+     * 
+     * @see org.eclipse.ui.editors.text.TextEditorActionContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
+     */
     public void setActiveEditor(IEditorPart editor) {
         super.setActiveEditor(editor);
         if (editor instanceof ColorerEditor){

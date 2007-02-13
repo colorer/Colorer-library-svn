@@ -23,15 +23,12 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
     private ColorerContentAssistProcessor fCAP;
 
     /** Copied from org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration */
-    public String[] getIndentPrefixes(ISourceViewer sourceViewer,
-            String contentType) {
+    public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
         List list = new ArrayList();
         // prefix[0] is either '\t' or ' ' x tabWidth, depending on useSpaces
-        IPreferenceStore prefStore = ColorerPlugin.getDefault()
-                .getPreferenceStore();
+        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
         int tabWidth = prefStore.getInt(PreferencePage.TAB_WIDTH);
-        boolean useSpaces = prefStore
-                .getBoolean(PreferencePage.SPACES_FOR_TABS);
+        boolean useSpaces = prefStore.getBoolean(PreferencePage.SPACES_FOR_TABS);
         for (int i = 0; i <= tabWidth; i++) {
             StringBuffer prefix = new StringBuffer();
             if (useSpaces) {
@@ -52,16 +49,25 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
     }
 
     public int getTabWidth(ISourceViewer sourceViewer) {
-        return ColorerPlugin.getDefault().getPreferenceStore().getInt(
-                PreferencePage.TAB_WIDTH);
+        return ColorerPlugin.getDefault().getPreferenceStore().
+                getInt(PreferencePage.TAB_WIDTH);
     }
-
+    
+    /**
+     * Configuration is based on ColorerEditor and it's TextColorer adapter.
+     * TODO: remove ColorerEditor??
+     * @param uieditor
+     * @param textColorer
+     */
     public ColorerSourceViewerConfiguration(ColorerEditor uieditor, TextColorer textColorer) {
         super();
         fEditor = uieditor;
         fTextColorer = textColorer;
     }
-    
+    /**
+     * TODO: Content assistant implementation?
+     * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getContentAssistant(org.eclipse.jface.text.source.ISourceViewer)
+     */
     public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
         ContentAssistant ca = new ContentAssistant();
         fCAP = new ColorerContentAssistProcessor();
@@ -70,10 +76,14 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
         //ca.enableAutoInsert(true);
         ca.setAutoActivationDelay(500);
         ca.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
-        //TODO: ca
         return null;
     }
     
+    /**
+     * Presentation reconciler is be requested from JFace TextColorer
+     * interface as adaptable 
+     * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getPresentationReconciler(org.eclipse.jface.text.source.ISourceViewer)
+     */
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer)
     {
         return (IPresentationReconciler)fTextColorer.getAdapter(IPresentationReconciler.class);
