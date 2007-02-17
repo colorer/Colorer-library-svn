@@ -478,34 +478,33 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 
 </section>
 
-<section id='schemesyntax.contextswitch'><title>Blocked context switch</title>
+<section id='schemesyntax.contextswitch'><title>Block context switch</title>
 <para>
 Although regular expressions is very powerful feature, their syntax doesn't allow
 to express some complex language constructions. First, this is due to general
-limitation of colorer's RE parser - single line of text scope. This means that
-no regular expression can work on multiple lines of the parsed text.
-Often programming languages have constructions which could be wrapped into
-each other unlimited number of times. This is also an area, where Regular Expression
-would not help much.
+limitation of colorer's RE parser - scope is limited to a single line of text.
+Regular expression can't work on multiple lines of the parsed text. 
+Often programming languages have constructions wrapped into each other unlimited
+number of times. This is also an area where Regular Expression do not help much.
 </para>
 <para>
-To express much more complex syntax and allow to declare context-free grammar
-constructions, HRC defines a special token, named "block".
+To define much more complex syntax structures and context-free grammar constructions,
+HRC defines a special token, named <x:hrc>block</x:hrc>.
 
 <x:schemaref uri="&hrcxsd;" role='block'/>
 
 <x:schemaref uri="&hrcxsd;" role='blockInner'/>
 
-Each block defines its <literal>start</literal> and <literal>end</literal>
-tags, each with a RE syntax already described.
-Everything enwrapped within these two marks will be highligted
-as a syntax of some other <literal>scheme</literal>, also pointed in this
+Each block defines its <emphasis>&lt;start&gt;</emphasis> and <emphasis>&lt;end&gt;</emphasis>
+tags, each with the RE syntax already described.
+Everything contained within these two marks will be highlighted
+as a syntax of some other <x:hrc>scheme</x:hrc>, also pointed by this
 element's attribute.
 </para>
 <para>
-This means that using <literal>block</literal> attribute you can switch context
-between differen highligting schemas. This allows to define great number of syntax
-variations and particulars.
+This means that using <x:hrc>block</x:hrc> element you can switch context
+between different highligting schemes. This way it is possible to define
+a great number of different syntax combinations.
 </para>
 
 </section>
@@ -513,71 +512,71 @@ variations and particulars.
 <section id='schemesyntax.boundaries'><title>Scheme boundaries and priority</title>
 <para>
 Both regular expressions and block'ed scheme switches work in the same scheme context,
-and tested against text in order they were defined in HRC.
-This means that any conflict between multiple match possibilities is resolved according
-to order of RE, defined in HRC file. After RE match the parse position is increased by
-width of that RE. By default the width is from first matched symbol till last matched.
-However it is possible to redefine regular expression boundaries and therefore shift
-somehow parse position increase. This could be done with special <literal>\m</literal>
-(redefines RE start) and <literal>\M</literal> (redefines RE end) metasymbols.
-Such a behaviour allows you to define overlapped tokens, where next token parse starts
-somewere in the middle of the previous. In such a case color definitions occur in the order they are
+and tested against text in the order they defined in HRC.
+Any conflict between multiple possible matches is resolved according
+to order of elements in HRC file. After successful RE match parse position is increased by
+the width of that RE. By default the width is calculated from the first matched symbol till the last.
+However it is possible to adjust these boundaries and shift parse position.
+This could be done with special <emphasis>\m</emphasis>
+(redefines RE start) and <emphasis>\M</emphasis> (redefines RE end) metasymbols.
+It becomes possible to define overlapped tokens, where parsing of the following token starts
+somewere in the middle of the previous. In this case color definitions appear in the order they are
 parsed.
 </para>
 <section id="priority"><title>priority</title>
 <para>
-Additional selection rules are applied to a usecase, where return occurs from
-an inner scheme to its caller scheme (via <literal>end</literal> tag of the 
-<literal>block</literal> element).
-Information about relative position of the <literal>block</literal> element
-can't help here to determine, what to apply: <literal>end</literal> RE of the outer
-block, or a next regular expression/keyword/block, defined in the inner (called) scheme.
-To resolve such a conflict HRC defines a special attribute for <literal>regexp</literal>
-and <literal>block</literal> objects: <literal>priority</literal>.
-This attribute's default value is <literal>"normal"</literal>. When changed to
-<literal>low</literal> it tells Colorer not to take this object into account,
+Additional selection rules are applied in case of returning from 
+an inner scheme to its caller scheme (via <emphasis>&lt;end&gt;</emphasis> tag of the 
+<x:hrc>block</x:hrc> element for instance).
+Information about relative position of the <x:hrc>block</x:hrc> element
+can't help here to determine what to apply: <emphasis>&lt;end&gt;</emphasis> RE of the outer
+block or a next regular expression/keyword/block, defined in the inner (called) scheme.
+To resolve such conflict HRC defines a special attribute for <x:hrc>regexp</x:hrc>
+and <x:hrc>block</x:hrc> elements: <emphasis role='strong'>priority</emphasis>.
+Its default value is <emphasis>"normal"</emphasis>. If it is changed to
+<emphasis>"low"</emphasis> then Colorer does not take into account this element
 when resolving conflicts upon exit from inner scheme.
-This means that <literal>end</literal> tag of the outer <literal>block</literal> element
-will be used instead of the object with lowered priority (when a conflict will occur).
-When reviewing nested <literal>block</literal> tags, <literal>priority</literal> attribute
-relates to the inner object's <literal>start</literal> tag.
+This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
+will be used instead of the element with lowered priority (when a conflict occurs).
+In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
+relates to the <emphasis>&lt;start&gt;</emphasis> tag of inner element.
 </para>
 </section>
 <section id="content-priority"><title>content-priority</title>
 <para>
 Often it is required to define a behavior of an element dynamically, depending on
-usage context. With <literal>priority</literal> attribute it is impossible to change
-element's priority depending on called context. The element will always be the same
+usage context. With <emphasis>priority</emphasis> attribute it is impossible to change
+element's priority depending on called context. The element will always have the same
 priority. But it is possible to change whole scheme's definition priority (i.e. all
-it's elements priority) - using <literal>content-priority</literal> attribute of a
-<literal>block</literal> element.
+it's elements priority) - using <emphasis>content-priority</emphasis> attribute of a
+<x:hrc>block</x:hrc> element.
 </para>
 <para>
-When changed into <literal>low</literal> it causes all the elements of that scheme
-to change their priority to <literal>low</literal>, no matter the value of their
-particular <literal>priority</literal> attribute. 
+When changed into <emphasis>low</emphasis> it causes all the elements of that scheme
+to change their priority to <emphasis>low</emphasis> no matter what is the value of their
+particular <emphasis>priority</emphasis> attribute. 
 </para>
 </section>
 
 <section id="inner-region"><title>inner-region</title>
 <para>
-While defining scheme context switch there is a possibility to set a default region,
-used for all called scheme content. This region will be used as a "background" for
-all other regions, defined in that scheme.
-It is possible to manage boundaries this region will use while instantiation.
-In a normal case all the scheme's content including its <literal>start</literal>
-and <literal>end</literal> attributes is handled inside of this default region.
-Therefore the region starts where <literal>start</literal> token starts, and
-ends where <literal>end</literal> token ends.
+While defining scheme context switch it is possibile to set a default region,
+used for content of called scheme. The region will be used as a "background" for
+all other regions defined in that scheme.
+It is possible to manage boundaries this region will use during instantiation.
+Normally the whole scheme's content including its <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> attributes is handled inside of this default region.
+Therefore the region starts where <emphasis>&lt;start&gt;</emphasis> token starts, and
+ends where <emphasis>&lt;end&gt;</emphasis> token ends.
 </para>
 <para>
-Sometimes it is required to change this behaviour and handle <literal>start</literal>
-and <literal>end</literal> tokens (and all the regions they instantiate) outside of
-called scheme default region. This could be achieved with <literal>inner-region</literal>
-attribute with <literal>"yes"</literal> value.
-When defined it tells parser to include start/end regions outside of called scheme,
-and to change called scheme default region boundaries. In this case they start at
-the end of <literal>start</literal> token and ends just before <literal>end</literal>
+Sometimes it is necessary to change this behaviour and handle <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> tokens (and all the regions they instantiate) outside of
+default region of the called scheme. This could be achieved by setting <emphasis>inner-region</emphasis>
+attribute to <emphasis>"yes"</emphasis> value.
+When set it tells parser to include start/end regions outside of called scheme,
+and to change default region boundaries of called scheme. In this case they start at
+the end of <emphasis>&lt;start&gt;</emphasis> token and ends just before <emphasis>&lt;end&gt;</emphasis>
 token area.
 </para>
 <para>
@@ -815,10 +814,10 @@ The next operators are only available in Colorer-take5 regexp module parser,
 when in compiled for Colorer library:
 </para>
 <table id="table.take5metacharacters"><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
-<row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of <literal>start</literal> tag).</entry></row>
+<row><entry><literal>~</literal></entry><entry>Matches for the start of parent scheme (end of <emphasis>&lt;start&gt;</emphasis> tag).</entry></row>
 <row><entry><literal>\m</literal></entry><entry>Changes start of regexp</entry></row>
 <row><entry><literal>\M</literal></entry><entry>Changes end of regexp</entry></row>
-<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <literal>end</literal> token to <literal>start</literal> token param). N - required bracket pair, name - named bracket.</entry></row>
+<row><entry><literal>\yN \YN \y{name} \Y{name}</literal></entry><entry>Link to the external regexp (in <emphasis>&lt;end&gt;</emphasis> token to <emphasis>&lt;start&gt;</emphasis> token param). N - required bracket pair, name - named bracket.</entry></row>
 </tbody></tgroup></table>
 
 <para>
@@ -1000,7 +999,7 @@ Minor HRD schema clarifications.
 
 <itemizedlist><title>take5.beta4(draft), 19 February 2005</title>
 <listitem><para>
-Clarification of <literal>regexp</literal> and <literal>block</literal> regions usage.
+Clarification of <x:hrc>regexp</x:hrc> and <x:hrc>block</x:hrc> regions usage.
 </para></listitem>
 <listitem><para>
 "Scheme boundaries and priority" explained.
