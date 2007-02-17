@@ -285,17 +285,15 @@ For example:
 
 <section id='core.filetypes.type'><title>Types</title>
 <para>
-Each prototype (or package) defines its linkage with real file type, describing
-information, specific for the syntax parsing process. This information
-is stored in basic units, called <literal>type</literal>s.
+Type is a <link linkend="core">formal definition</link> of a language. It is normally contained in a separate file,
+which is referenced by <x:hrc>location</x:hrc> element of language prototype. <x:hrc>type</x:hrc>
+element is the starting point for parsing process, which holds syntax specific information.
 
 <x:schemaref uri="&hrcxsd;" role='type'/>
 
-Normally, each type must be defined in a separate file, which contains
-this type and optionally its prototype (if there is no this prototype
-definition in the global repository).
-This allows each file to be loaded only once, when required type is really requested
-by the user.
+Normally, each type is defined in a separate file, which may optionally
+contain corresponding prototype (if there is no prototype definition in
+the global repository).
 
 </para>
 </section>
