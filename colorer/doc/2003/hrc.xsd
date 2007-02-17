@@ -381,7 +381,7 @@
     <xs:attribute name="description" type="xs:string">
       <xs:annotation><xs:documentation>
         Optional description, used to represent region's purpose and
-        to show it to user in convient and friendly way.
+        to show it to user in convenient and friendly way.
       </xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>

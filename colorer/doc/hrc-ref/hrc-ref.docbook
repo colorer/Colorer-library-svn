@@ -179,7 +179,7 @@ elements.
 <section id='core.filetypes'><title>File Types</title>
 <para>HRC rules can reuse or import definitions from each other, some
 languages (like HTML) may include bits of other languages (i.e. PHP),
-so HRC files can depend on each other for correct highlightning. Therefore
+so HRC files can depend on each other for correct highlighting. Therefore
 HRC files are more like one big database than a bunch of separate
 definitions. To link them together several syntax elements are used.
 </para>
@@ -410,7 +410,7 @@ ignore this requirement because they are never used at the top level.
 Scheme element may contain <emphasis>if/unless</emphasis> attributes to customize
 parsing process according to contents of <x:hrc>parameters</x:hrc> definitions
 in the type of the schema. Parameters can be flexibly changed at runtime by the
-means of Colorer API. This allows to customize loading process and suggest
+means of Colorer API. This allows customizing load process and suggesting
 various language profiles to be chosen by user.
 
 <!-- todo provide some examples or language profiles and user choices -->
