@@ -423,63 +423,57 @@ available in the HRC language.
 
 <section id='schemesyntax.keywords'><title>Keyword lists</title>
 <para>
-This common and often used syntax construction describes a list
-of keywords with similar properties.
+This often used element describes a list of keywords with similar properties.
 <x:schemaref uri="&hrcxsd;" role='keywords'/>
 <x:schemaref uri="&hrcxsd;" role='word'/>
 <x:schemaref uri="&hrcxsd;" role='symb'/>
 </para>
 <para>
-Each element in this list can define its own region assignment or
-derive the global one, defined in <literal>keywords</literal> element.
-Symbols never checks for characters surrounding them, while words only can matches
-if they are surrounded by not-word symbols. These word dividers can be redefined
-using <literal>worddiv</literal> attribute of <literal>keywords</literal> element.
+Each element in the list may assign its own region or use region of its parent
+<x:hrc>keywords</x:hrc> element. Symbols never check surrounding characters,
+while words match only if surrounded by not-word symbols. These word delimiters can be
+redefined with <emphasis>worddiv</emphasis> attribute of <x:hrc>keywords</x:hrc>.
 </para>
 </section>
 
 <section id='schemesyntax.re'><title>Regular Expressions</title>
 <para>
-Regular expression tokens are used to create custom syntax elements.
-These elements are described with RE rules, which makes them very powerful
-and flexible. Each RE token can be used to create a number of different
-syntax regions (up to 16).
+Regular expression rules is a very powerful and flexible way to define custom
+syntax structures. Each RE token can be used to create several different syntax
+regions (up to 16).
 </para>
 
 <x:schemaref uri="&hrcxsd;" role='regexp'/>
 
 <para>
+Actual RE is contained within <emphasis role='strong'>match</emphasis> attribute of <x:hrc>regexp</x:hrc>
+element. For details of Colorer-take5 regular expressions please see <xref linkend='hrcre'/>.
+Each <x:hrc>regexp</x:hrc> can have up to 16 optional attributes named 
+<emphasis role='strong'>region0, region1, ... regionf</emphasis>. The value of each attribute is a name
+of the corresponding syntax region used to highlight text. A number in attribute's name
+means corresponding round bracket in a RE.
+<emphasis role='strong'>region0</emphasis> means whole sequence matched by RE (this can be changed with
+<emphasis>\m</emphasis> and <emphasis>\M</emphasis> RE metasymbols).
 
-For details of colorer-take5 regular expressions syntax please see <xref linkend='hrcre'/>.
-This syntax is used in <literal>match</literal> attribute.
-Each <literal>&lt;regexp&gt;</literal> region can have a number of optional attributes -
-<literal>region0, region1, ... regionf</literal> (total 16 regions). A value of each attribute is a name
-of the corresponding syntax region, which will be used to highlight text.
-A number in attribute's name means corresponding bracket in a RE.
-<literal>region0</literal> means full matched range of the RE (this could be changed with
-<literal>\m</literal> and <literal>\M</literal> RE metasymbols).
-
-Regular Expression can also include named brackets in syntax of <literal>(?{name} ... )</literal>.
+Regular Expression can also contain named brackets in the form of <emphasis>(?{name} ... )</emphasis>.
 In this case the name of the bracket itself is a name of corresponding syntax region.
 </para>
 
 <para>
 Each RE definition can include references to any predefined sequence of RE code.
-Such references are called <quote>entities</quote>. Entities are defined on a <literal>type</literal>
-level and have their own qualified namespace.
-To include entity's value into RE, special syntax of <literal>%entityname;</literal> is used.
+Such references are called <emphasis role='strong'>entities</emphasis>. Entities are
+defined in <x:hrc>type</x:hrc> element and have their own qualified namespace.
+To include entity's value into RE, special syntax of <emphasis role='strong'>%entityname;</emphasis> is used.
 </para>
 
 <x:schemaref uri="&hrcxsd;" role='entity'/>
 
 <para>
-
-Each RE has a defined priority attribute (by default it <literal>normal</literal>).
-This means normal RE priority over enwrapped syntax elements.
-Enwrapped element is an element, which waits to be matched from a top-level scheme in
-a parse sequence. <literal>low</literal> priority means that such a top-level element
-(such a <literal>end</literal> attribute of a <literal>block</literal> element) will
-be matched first, if there will be choice conflict between these two.
+Each RE has a priority attribute (by default its value is <emphasis>normal</emphasis>).
+Priority is mainly used to detect errors when closing matching region. When everything within
+the region is already matched and parser needs to close the block it applies rule to
+match closing sequence. If match fails then rule with <emphasis>low</emphasis>
+priority within the block is tested. This is explained in <xref linkend="schemesyntax.boundaries"/>
 </para>
 
 </section>
