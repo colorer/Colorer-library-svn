@@ -177,18 +177,26 @@ elements.
 
 
 <section id='core.filetypes'><title>File Types</title>
-<para>Each language prototype requires definition of
-the language's name and description. These properties are used
-to determine language in context of the other language definitions
-and in inter-language linkage process.
+<para>HRC rules can reuse or import definitions from each other, some
+languages (like HTML) may include bits of other languages (i.e. PHP),
+so HRC files can depend on each other for correct highlightning. Therefore
+HRC files are more like one big database than a bunch of separate
+definitions. To link them together several syntax elements are used.
 </para>
 
 
 <section id='core.filetypes.proto'><title>Prototypes</title>
 
 <para>
-Prototypes are declared with <literal>&lt;prototype&gt;</literal> elements.
-For instance:
+Each language is identified by name and short description. This information
+is included in language prototype. Names are used to reference languages
+in HRC rules. Prototypes are usually contained in top level file
+<emphasis role='strong'>proto.hrc</emphasis>, but considering flexible
+syntax of XML itself they could be just everywhere.
+</para>
+
+<para>
+Prototypes are defined by <x:hrc>prototype</x:hrc> elements.
 
 <example id="example.hrc.prototype"><title>Prototype definition</title>
 <programlisting><![CDATA[
@@ -202,10 +210,11 @@ For instance:
 ]]>
 </programlisting></example>
 
-declares "C++" language and it properties. These are language's group,
-description, location of HRC file with language's syntax declaration;
-RE mask, used to identify this type by file name extension,
-and one or more masks, used to identify type by file's first line.
+The example shows prototype for "C++" language. It contains short
+description, information about language group and location of HRC file
+with formal part of syntax definition. It also includes RE to identify the
+language by filename extension and one or more RE to guess the language
+by first line of file contents.
 </para>
 
 <x:schemaref uri="&hrcxsd;" role='prototype'/>
