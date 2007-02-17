@@ -21,11 +21,21 @@
     <xsl:value-of select='normalize-space($ann/xs:documentation)'/>
   </para>
   <xsl:apply-templates select='.//xs:attribute[@name]' mode='xsdoc'/>
+  <xsl:apply-templates select='.//xs:complexContent' mode='xsdoc'/>
   <xsl:if test='.//xs:element[@name]'>
     <para role='xsdocdecl'>Content:</para>
     <xsl:apply-templates select='.//xs:element[@name]' mode='xsdoc'/>
   </xsl:if>
  </informalexample>
+</xsl:template>
+
+
+<xsl:template match="xs:complexContent" mode='xsdoc'>
+  <xsl:variable name="this_att" select="xs:extension/xs:attribute" />
+  <xsl:variable name="extd_att" select="/*/xs:complexType[@name = current()/xs:extension/@base]//xs:attribute" />
+
+  <!-- process intersection for extended elements -->
+  <xsl:apply-templates select='$extd_att[@name != $this_att/@name]' mode='xsdoc'/>
 </xsl:template>
 
 
@@ -53,7 +63,6 @@
      </xsl:when>
     </xsl:choose>
   </xsl:variable>
-
 
   <para role='xsdochead'>Element:
    <xsl:choose>
