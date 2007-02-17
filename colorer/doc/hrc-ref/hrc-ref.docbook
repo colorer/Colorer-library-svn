@@ -303,20 +303,22 @@ the global repository).
 
 <section id='core.namespaces'><title>Namespaces</title>
 <para>
-Each type defines its own namespace, where different objects are resided.
-Each object must have unique identifier (name) in this namespace,
-which is used to reference to it from other objects.
-Uniqueness is only required for objects of the same type. So, you can create
-objects of different types with the same name and there will be no conflicts.
+Each type defines its own name space with its elements. Each element must have
+unique identifier (name) in this namespace, which is used to reference it
+from other elements. Within the same type all elements should be unique, but
+elements with the same name can belong to different types.
+</para>
 
-If object must be referenced from the other type, its fully
-qualified name is used in form of <literal>typename:objectname</literal>.
-But often there are too many inter-type links, so it is too tedious to use
-qualified names each time. To eliminate this, HRC language has
-an <literal>import</literal> statement. If used, it 'imports' all the
-object names from the imported type into the current one.
-There can be as much import statements, as needed. Unqualified name resolving
-occurs in order of their definition.
+<para>
+An element can be referenced from the other type with its fully
+qualified name in form of <literal>typename:elementname</literal>.
+Sometimes there are a lot of inter-type links and use of qualified names
+can become a tedious task. As a workaround HRC language has
+<x:hrc>import</x:hrc> statement. It 'imports' all element names from
+other type into the current. There can be as many import statements as
+needed. Unqualified names are resolved in order of their definition.
+
+<!-- todo clarify precendence and override rules -->
 
 <x:schemaref uri="&hrcxsd;" role='import'/>
 
@@ -324,9 +326,13 @@ For instance, you can write
 <programlisting>
   &lt;import type='def'/>
 </programlisting>
-to import all definitions from the 'def' type into the current one.
-Note, that if multiple imported types have equal local names,
-they would be resolved in order of import declarations.
+to import all definitions from the 'def' type. Note, that if several
+imported types have some identical local names, they are resolved in
+order of import statements.
+
+<!-- todo clarify which one will be used finally - the first one
+or the last one defined  -->
+
 </para>
 </section>
 
