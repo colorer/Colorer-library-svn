@@ -221,13 +221,13 @@ by first line of file contents.
 
 <para>
 
-Each language must be chosen by the library before starting syntax highlighting
-process. This is made with help of <literal>firstline</literal> and <literal>filename</literal>
-parameters. Each matched instance of one of these parameters adds some additional
-weight to the total language weight (choosing probability). This value is taken by default,
-or can be changed explicitly with <literal>weight</literal> attribute of these elements.
-When total weights of all types are evaluated, first language with maximum
-weight is selected to assign to the opening file.
+If language is not specified explicitly library needs to detect it to
+start syntax highlighting process. This is the purpose of <x:hrc>firstline</x:hrc> and <x:hrc>filename</x:hrc>
+parameters. Each matched instance of one of these parameters adds additional
+weight to the language. Default amount of points added can be specified
+explicitly with <literal>weight</literal> attribute of these elements.
+When all weights are calculated, the first language with maximum weight is
+selected to highlight the file.
 
 </para>
 
@@ -235,15 +235,16 @@ weight is selected to assign to the opening file.
 <x:schemaref uri="&hrcxsd;" role='firstline'/>
 
 <para>
-If any of these two operators is used more than once, each its matched
-instance adds a specified weight to the total language weight.
+If any of these two elements is used more than once, each matched
+instance adds specified amount to the total weight of a language.
 </para>
 
 <para>
-If real language definition is separated from the prototype and placed in
-other resource, it location is pointed with <literal>location</literal>
-element. Real type loading occurs when the described type will be really
-requested.
+Actual language definition can be separated from its prototype and placed
+into other file (or resource). In this case <x:hrc>location</x:hrc> element
+specifies where to find the definition. The file or resource specified
+will not be loaded until language matches and is selected for highlightning
+process.
 <x:schemaref uri="&hrcxsd;" role='location'/>
 </para>
 
@@ -253,16 +254,18 @@ requested.
 
 <section id='core.filetypes.package'><title>Packages</title>
 <para>
-You can define file type with a special meaning of the internal
-type, which is used by other types and is not visible to user.
-This role is managed by the <literal>package</literal> element:
+Some syntax rules are common across various languages and it makes
+sense to define them separately and reference from other definitions.
+These definitions will not be visible to end users, so they can be
+thought of as "internal types". Such internal types are represented
+by <x:hrc>package</x:hrc> element:
 
 <x:schemaref uri="&hrcxsd;" role='package'/>
 
-This element doesn't contain <literal>filename</literal> or
-<literal>firstline</literal> properties because it doesn't directly map
-to any file type or language.
-As for the rest, all its behavior is like prototype's one.
+This element doesn't contain <x:hrc>filename</x:hrc> or <x:hrc>firstline</x:hrc>
+properties, because it doesn't directly map to any type of file or language. 
+In everything else its behaviour is identical to <x:hrc>prototype</x:hrc>
+element. Packages can be found in any HRC file including <emphasis>proto.hrc</emphasis>.
 For example:
 
 <example id="example.hrc.package"><title>Package definition</title>
