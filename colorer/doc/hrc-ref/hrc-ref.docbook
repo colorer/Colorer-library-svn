@@ -304,7 +304,7 @@ the global repository).
 <section id='core.namespaces'><title>Namespaces</title>
 <para>
 Each type defines its own name space with its elements. Each element must have
-unique identifier (name) in this namespace, which is used to reference it
+unique identifier (local name) in this namespace, which is used to reference it
 from other elements. Within the same type all elements should be unique, but
 elements with the same name can belong to different types.
 </para>
@@ -343,51 +343,53 @@ or the last one defined  -->
 <section id='schemesyntax'><title>Scheme syntax</title>
 
 <para>
-
-Scheme is a common construction in the HRC language, used to express and
-describe syntax of target languages. Each scheme represents syntax
-context, which contains different syntax elements, matched in order
-of text analysis. For example, scheme for "C++" language contains different
-keywords, string and number tokens, comments, and others.
-To describe all the information, required to be highlighted, <literal>region</literal>
-objects are used. Each region defines some syntactically meaningful element.
-This element always has a name and sometimes a reference to its parent region
-(if exists). When parsed, source text is described in terms of these regions.
-This description contains groups of the regions with specified positions and lengths.
+Scheme is a generic structure of the HRC language to define syntax of programming
+languages. Every scheme contains various syntax elements, matched as text analysis
+goes on. For example, a scheme for "C++" language contains different keywords,
+strings, numbers, comments etc. The scheme is defined by <x:hrc>scheme</x:hrc>
+element, but scheme alone is not very useful for analysis. It is much more
+convenient to think about text of a language to be highlighted in terms of
+<emphasis role='strong'>regions</emphasis>. When schema matches a piece of text it
+can assign various parts of this text to different regions.
 </para>
 
 <para>
-In the next stage of the text processing, each region is associated with some
-handler. For example, a handler can assign color and font style information to
-the each of the regions, or can produce some operations over these structures.
+Each <x:hrc>region</x:hrc> defines some meaningful part of the syntax.
+This part or region always has a name and sometimes a reference to its parent
+region (if any). When parsed, source text is described as a set of these regions
+with specified positions and lengths.
+
+<!-- todo provide examples of what a region can be-->
 </para>
 
 <para>
-Each region is defined using a <literal>region</literal> element:
+Next stage of the text processing associates each region with some handler.
+A handler, for example, can assign color and font style information to
+each of the regions or apply other operations to these structures.
+</para>
+
+<para>
+Each region is defined using a <x:hrc>region</x:hrc> element:
 <x:schemaref uri="&hrcxsd;" role='region'/>
 </para>
 
 <para>
-Scheme is a common construction in the HRC language, which contains
-syntax definition of the described programming language. Each element in
-scheme, while parsing, creates one or more syntax regions which are used to highlight
-parsed text. Resulting parse information contains not only a list of the regions,
-it also contains a recursive scheme tree, which shows overall text structure.
+During parsing process each element in a scheme not only creates one or more
+syntax <x:hrc>region</x:hrc>s used to highlight parsed text. Resulting information
+also contains a recursive scheme tree showing overall text structure.
 </para>
 
 <para>
-Each type can define as much schemes, as needed, provided that all of them
-have names, unique in this type scope. Scheme is defined using
-<literal>scheme</literal> element:
+Each type may define as many schemes as needed provided that all their names are
+unique within the type. Scheme is defined using <x:hrc>scheme</x:hrc> element:
 
 <x:schemaref uri="&hrcxsd;" role='scheme'/>
 
-Each type must have one scheme, called "base scheme" - this scheme is
-required to be declared in each type. Only types, declared as
-<literal>package</literal> can ignore this requirement because they are never used
-as top level types.
-Each base scheme must have local (unqualified) name equal to its type name.
-Base scheme in each type is used as an entry point for parse process.
+Every type is required to have one scheme called <emphasis>"base scheme"</emphasis>
+which is used as an entry point for parsing process of the type. Base scheme is
+named after its type, i.e. local name of the scheme is equal to the name
+of the type. Only internal types defined with <x:hrc>package</x:hrc> element can
+ignore this requirement because they are never used at the top level.
 
 <example id="example.hrc.type"><title>Sample type definition</title>
 <programlisting><![CDATA[
@@ -405,17 +407,17 @@ Base scheme in each type is used as an entry point for parse process.
 
 </para>
 <para>
-You can customize scheme loading and overall HRC structure using
-if/unless attributes of the scheme element. If used, they have to
-reference to a common parameter declaration of this scheme's type.
+Scheme element may contain <emphasis>if/unless</emphasis> attributes to customize
+parsing process according to contents of <x:hrc>parameters</x:hrc> definitions
+in the type of the schema. Parameters can be flexibly changed at runtime by the
+means of Colorer API. This allows to customize loading process and suggest
+various language profiles to be chosen by user.
 
-These parameters values could be changed within Colorer's API, this
-allows to customize HRC loading and suggest different language
-profiles to user's choice.
+<!-- todo provide some examples or language profiles and user choices -->
 </para>
 
 <para>
-The next sections will describe different types of syntax elements,
+The following sections describe different types of syntax elements,
 available in the HRC language.
 </para>
 
