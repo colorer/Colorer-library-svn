@@ -100,7 +100,9 @@
 
          <regexp match="/(\\)(verb\*?)([^\sa-zA-Z])(.*?)(\3)/" region1="Symb"
                  region2="Word" region3="Symb" region4="BooleanConstant" region5="Symb"/>
-         <regexp match="/\M\\(?{Function}(label|(sub){0,2}section|(sub)?paragraph|appendix|part|chapter).*)/x"/>
+
+         <regexp match="/\M\\(?{def:Outlined}(label|(sub){0,2}section|(sub)?paragraph|appendix|part|chapter).*)/x"/>
+         <regexp match="/\M\\bibitem\s*\{\s*(?{def:Outlined}\S+)\s*\}/x"/>
 
          <block  start="/\\begin\{comment\}/" end="/\\end\{comment\}/" scheme="Comment"
                  region="Comment" region00="PairStart" region10="PairEnd"/>
@@ -111,8 +113,8 @@
                 region02="LargeBracket" region12="LargeBracket"
                 region03="Word" region13="Word"/>
 
-         <block start="/((\\(begin)\s*\{(lstlisting)\})).*?(\{.*\})/" end="/(\\(end)\s*\{(lstlisting)\})/x"
-                scheme="empty" region="BooleanConstant"
+         <block start="/((\\(begin)\s*\{(lstlisting)\}))/" end="/(\\(end)\s*\{(lstlisting)\})/x"
+                scheme="def:Comment" region="BooleanConstant"
                 region01="PairStart" region10="PairEnd"
                 region02="Word" region03="Word" region04="Label"
                 region05="Text"
