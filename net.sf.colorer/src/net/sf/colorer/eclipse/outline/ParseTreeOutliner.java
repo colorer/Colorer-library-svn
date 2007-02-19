@@ -174,11 +174,11 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource,
         editor.removeEditorListener(this);
     }
 
-    public void addListener(OutlineListener listener) {
+    public void addUpdateListener(OutlineListener listener) {
         listeners.addElement(listener);
     }
 
-    public void removeListener(OutlineListener listener) {
+    public void removeUpdateListener(OutlineListener listener) {
         listeners.removeElement(listener);
     }
     

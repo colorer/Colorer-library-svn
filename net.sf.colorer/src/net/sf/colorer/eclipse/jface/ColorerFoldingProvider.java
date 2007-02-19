@@ -1,8 +1,8 @@
 package net.sf.colorer.eclipse.jface;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Vector;
 
 import net.sf.colorer.editor.BaseEditor;
@@ -12,13 +12,10 @@ import net.sf.colorer.impl.Logger;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
-import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -69,7 +66,7 @@ public class ColorerFoldingProvider
             if (fLastLine >= e_line) return;
             fLastLine = e_line;
 
-            Annotation ann = new ProjectionAnnotation();
+            ProjectionAnnotation ann = new ProjectionAnnotation();
             
             if (Logger.TRACE){
                 Logger.trace("FoldingReciever", "notifyFoldingItem: "+s_line+":"+e_line);
@@ -82,8 +79,18 @@ public class ColorerFoldingProvider
                 if (Logger.TRACE){
                     Logger.trace("FoldingReciever", "notifyFoldingItem:position: "+offset+":"+len);
                 }
+                
+                Position newposition = new Position(offset, len);
 
-                additions.put(ann, new Position(offset, len));
+                // Merge annotation folding states
+                for(Enumeration e = deletions.elements(); e.hasMoreElements();){
+                    ProjectionAnnotation deleted = (ProjectionAnnotation)e.nextElement();
+                    if (newposition.equals(getModel().getPosition(deleted))){
+                        if (deleted.isCollapsed()) ann.markCollapsed();
+                    }
+                }
+                
+                additions.put(ann, newposition);
 
             }catch(BadLocationException e){
                 Logger.error("FoldingReciever", "notifyFoldingItem", e);
@@ -92,7 +99,7 @@ public class ColorerFoldingProvider
 
     }
 
-    static final int FOLDING_UPDATE_PERIOD = 2000;
+    static final int FOLDING_UPDATE_PERIOD = 1500;
     
     FoldingBuilder builder = new FoldingBuilder();
     private BaseEditor fBaseEditor;

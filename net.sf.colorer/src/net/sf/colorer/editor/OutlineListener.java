@@ -7,7 +7,8 @@ public interface OutlineListener {
     
     /**
      * Called by IOutlineSource to notify container about changes in
-     * Outliner model.
+     * Outliner model. Container may choose the strategy on how to update its
+     * visual presentation
      */
     void notifyUpdate();
   

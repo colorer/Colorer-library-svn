@@ -1,9 +1,11 @@
 package net.sf.colorer.editor;
 
+import java.util.Stack;
 import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
+import net.sf.colorer.impl.Logger;
 
 /**
  * 
@@ -25,8 +27,10 @@ public class FoldingBuilder {
 
 	public class InternalRegionHandler implements RegionHandler, EditorListener {
         
-        Vector schemeVector = new Vector();
-        private int ignoreLevel;
+        Stack schemeStack = new Stack();
+        private int fLastLine, fFirstLine;
+        private int compensateReparse;
+        private boolean compensationrun;
         
         public void addRegion(int lno, String line, int sx, int ex, Region region) {
             // TODO Auto-generated method stub
@@ -35,12 +39,12 @@ public class FoldingBuilder {
 
         public void clearLine(int lno, String line) {
             // TODO Auto-generated method stub
-
         }
 
         public void startParsing(int lno) {
-            schemeVector.setSize(0);
-            fReciever.notifyInvalidate(lno);
+            //schemeVector.setSize(0);
+            compensateReparse = 0;
+            compensationrun = true;
         }
         public void endParsing(int lno) {
         }
@@ -48,15 +52,12 @@ public class FoldingBuilder {
         public void enterScheme(int lno, String line, int sx, int ex,
                 Region region, String scheme)
         {
-            if (schemeVector.size() > 0) {
-                FoldingElement last = (FoldingElement)schemeVector.lastElement();
-                if (last.s_line == lno) {
-                    ignoreLevel++;
-                    return;
-                }
+            if (compensationrun && compensateReparse < schemeStack.size()){
+                compensateReparse++;
+            }else{
+                compensationrun = false;
+                schemeStack.push(new FoldingElement(lno, sx, scheme));
             }
-            schemeVector.addElement(new FoldingElement(lno, sx, scheme));
-
         }
 
         /** 
@@ -65,25 +66,27 @@ public class FoldingBuilder {
         public void leaveScheme(int lno, String line, int sx, int ex,
                 Region region, String scheme)
         {
-            if (ignoreLevel > 0) {
-                ignoreLevel--;
-                return;
+            if (compensationrun) {
+                Logger.error("FoldingBuilder", "leaveScheme: compensateReparse >0 !!!");
             }
 
-            FoldingElement last = (FoldingElement)schemeVector.lastElement();
+            FoldingElement last = (FoldingElement)schemeStack.pop();
             
-            if (last.s_line < lno){
+            if (!schemeStack.empty() &&
+                    last.s_line == ((FoldingElement)schemeStack.peek()).s_line) return;
+            
+            if (last.s_line < lno) {
                 fReciever.notifyFoldingItem(last.s_line, last.s_offset, lno, ex, last.scheme);
+                fLastLine = lno;
             }
-            
-            schemeVector.setSize(schemeVector.size()-1);
         }
 
         //----------------------------------------------
         
         public void modifyEvent(int topLine) {
-            // TODO Auto-generated method stub
-            
+            fReciever.notifyInvalidate(topLine);
+            fLastLine = -1;
+            fFirstLine = -1;
         }
     }
 

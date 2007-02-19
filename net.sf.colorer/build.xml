@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.sf.colorer" default="gather" basedir=".">
 
+  <property file='../../build.user.properties'/>
+  <property file='../../build.properties'/>
+
   <property name="bootclasspath" value=""/>
   <property name="eclipse.ws" value='win32'/>
   <property name="ws" value="${eclipse.ws}"/>

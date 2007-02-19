@@ -158,11 +158,11 @@ public class Outliner implements RegionHandler, EditorListener, IOutlineSource
     // -----------------------------------------
     Vector listeners = new Vector();
     
-    public void addListener(OutlineListener listener) {
+    public void addUpdateListener(OutlineListener listener) {
         listeners.addElement(listener);
     }
 
-    public void removeListener(OutlineListener listener) {
+    public void removeUpdateListener(OutlineListener listener) {
         listeners.removeElement(listener);
     }
     

@@ -2,14 +2,14 @@ package net.sf.colorer.editor;
 
 
 /**
- * Interface for outline objects, that can notify external container
+ * Interface for outline objects, that can notify external containers
  * about content changes.
  */
 public interface IOutlineSource {
 
-    void addListener(OutlineListener listener);
+    void addUpdateListener(OutlineListener listener);
 
-    void removeListener(OutlineListener listener);
+    void removeUpdateListener(OutlineListener listener);
 
 }
 /* ***** BEGIN LICENSE BLOCK *****

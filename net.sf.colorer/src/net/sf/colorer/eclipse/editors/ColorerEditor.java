@@ -38,7 +38,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
@@ -47,11 +50,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class ColorerEditor extends TextEditor implements IColorerReloadListener, IPropertyChangeListener{
+public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
 
     ISourceViewer sourceViewer;
     IPreferenceStore prefStore;
@@ -77,9 +82,9 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         }
     };
 
-    final class OutlineDoubleClickListener implements IDoubleClickListener {
+    final class OutlineSelectionListener implements ISelectionChangedListener {
         
-        public void doubleClick(DoubleClickEvent event) {
+        public void selectionChanged(SelectionChangedEvent event) {
             if (fDocument == null || event.getSelection().isEmpty()){
                 return;
             }
@@ -101,11 +106,22 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
             };
         }
     }    
+    
+    IColorerReloadListener fReloadListener = new IColorerReloadListener(){
+        public void notifyReload() {
+            if (Logger.TRACE){
+                Logger.trace("ColorerEditor", "notifyReload()");
+            }
+            fBaseEditor.dispose();
+            fBaseEditor = null;
+            relinkColorer();
+        }
+    };
 
     public ColorerEditor() {
       super();
 
-      ColorerPlugin.getDefault().addReloadListener(this);
+      ColorerPlugin.getDefault().addReloadListener(fReloadListener);
       
       prefStore = ColorerPlugin.getDefault().getPreferenceStore();
       prefStore.addPropertyChangeListener(this);
@@ -160,6 +176,12 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         });
     }
     
+    /**
+     * Forwards invalidate syntax request down to parser components
+     */
+    public void invalidateSyntax() {
+        fTextColorer.invalidateSyntax();
+    }
     
     /**
      * Selects filetype according to file name and first line of content
@@ -186,14 +208,14 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
     public void relinkColorer() {
         fBaseEditor = (BaseEditor)getAdapter(BaseEditor.class);
 
+        fTextColorer.relink();
+        fTextColorer.chooseFileType(getTitle());
+
         if (contentOutliner != null) {
-            contentOutliner.attach(fBaseEditor);
+            contentOutliner.attach(this);
         }
 
         propertyChange(null);
-
-        fTextColorer.relink();
-        fTextColorer.chooseFileType(getTitle());
     }
 
     /** Tries to match paired construction */
@@ -247,6 +269,8 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         }
         text.setSelectionRange(selstart, selend);
     }
+    
+    
 
     protected void editorContextMenuAboutToShow(IMenuManager parentMenu) {
         super.editorContextMenuAboutToShow(parentMenu);
@@ -257,15 +281,6 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectAction);
         parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
         parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
-    }
-
-    public void notifyReload() {
-        if (Logger.TRACE){
-            Logger.trace("ColorerEditor", "notifyReload()");
-        }
-        fBaseEditor.dispose();
-        fBaseEditor = null;
-        relinkColorer();
     }
 
     public void propertyChange(PropertyChangeEvent e) {
@@ -371,9 +386,9 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
             IEditorInput input = getEditorInput();
             if (input instanceof IFileEditorInput) {
                 if (contentOutliner == null){
-                    contentOutliner = new ColorerContentOutlinePage(fTextColorer);
-                    contentOutliner.addDoubleClickListener(new OutlineDoubleClickListener());
-                    contentOutliner.attach(fBaseEditor);
+                    contentOutliner = new ColorerContentOutlinePage();
+                    contentOutliner.addSelectionChangedListener(new OutlineSelectionListener());
+                    contentOutliner.attach(this);
                 }
                 return contentOutliner;
             }
@@ -404,7 +419,7 @@ public class ColorerEditor extends TextEditor implements IColorerReloadListener,
         }
         prefStore.removePropertyChangeListener(this);
         JFaceResources.getFontRegistry().removeListener(this);
-        ColorerPlugin.getDefault().removeReloadListener(this);
+        ColorerPlugin.getDefault().removeReloadListener(fReloadListener);
     }
 }
 /* ***** BEGIN LICENSE BLOCK *****

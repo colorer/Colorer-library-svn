@@ -26,6 +26,7 @@ import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension5;
+import org.eclipse.jface.text.IViewportListener;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextPresentation;
@@ -34,6 +35,8 @@ import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.IPresentationRepairer;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.custom.LineBackgroundEvent;
 import org.eclipse.swt.custom.LineBackgroundListener;
 import org.eclipse.swt.custom.StyleRange;
@@ -143,7 +146,6 @@ public class TextColorer implements IAdaptable
                                 fDocument.getLineOfOffset(event.getOffset()));
                     }
                     fBaseEditor.modifyEvent(fDocument.getLineOfOffset(event.getOffset()));
-                    fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
                 }catch(BadLocationException e){};
 //            }
             fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
@@ -168,15 +170,33 @@ public class TextColorer implements IAdaptable
 
         IRegion getVisualDamageRegion(TextEvent event) {
             if (Logger.TRACE){
-                Logger.trace("CDR", "visual TextEvent: "+event.getOffset()+":"+event.getLength()+", text:"+event.getText()+"replace:"+event.getReplacedText());
+                Logger.trace("CDR", "getVisualDamageRegion TextEvent: "+event.getOffset()+":"+event.getLength()+", replace:"+event.getReplacedText());
             }
             try {
                 // Normalize offsets to line bounds
                 int sOffset = fProjectionViewer.widgetOffset2ModelOffset(event.getOffset());
+                if (sOffset == -1) sOffset = 0;
                 sOffset = fDocument.getLineInformationOfOffset(sOffset).getOffset();
+
                 int eOffset = fProjectionViewer.widgetOffset2ModelOffset(event.getOffset()+event.getLength());
+                if (eOffset == -1) eOffset = fDocument.getLength();
                 IRegion eOffsetLine = fDocument.getLineInformationOfOffset(eOffset);
                 eOffset = eOffsetLine.getOffset() + eOffsetLine.getLength();
+
+                if (event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null) {
+                    // redraw state change, damage the whole document
+                    sOffset = 0; 
+                    eOffset = fDocument.getLength();
+                }
+
+                //Take care of general damage region:
+                if (fDamage != null && sOffset > fDamage.getOffset()) {
+                    sOffset = fDamage.getOffset();
+                }                
+
+                if (Logger.TRACE){
+                    Logger.trace("CDR", "getVisualDamageRegion return: "+sOffset+":"+(eOffset-sOffset));
+                }
                 return new Region(sOffset, eOffset-sOffset);
             }catch(BadLocationException e){
                 Logger.error("CDR", "getVisualDamageRegion", e);
@@ -190,9 +210,11 @@ public class TextColorer implements IAdaptable
         public void textChanged(TextEvent event) {
             if (fDocument == null) return;
             
-            if (Logger.TRACE){
+            if (Logger.TRACE) {
                 Logger.trace("TextColorer", "textChanged");
             }
+            
+            updateViewport();
             
             IRegion newDamage = null;
             
@@ -208,10 +230,11 @@ public class TextColorer implements IAdaptable
             }else{
                 // Visual update requested
                 newDamage = getVisualDamageRegion(event);
-                IRegion generalDamage = fDamage;
-                fDamage = newDamage;
+                if (newDamage != null)
+                {
+                    fDamage = newDamage;
+                }
                 repairPresentation(false);
-                fDamage = generalDamage;
             }
         }
 
@@ -232,6 +255,7 @@ public class TextColorer implements IAdaptable
                 if (Logger.TRACE){
                     Logger.trace("CDR", "createPresentation: filling "+l_start+":"+l_end);
                 }
+                //int fLastPos = -1;
             
                 for (int lno = l_start; lno <= l_end; lno++) {
                     LineRegion[] lrarr = fBaseEditor.getLineRegions(lno);
@@ -253,6 +277,15 @@ public class TextColorer implements IAdaptable
                         if (length == 0) {
                             continue;
                         }
+
+                        /*
+                        Logger.trace("CDR", "trace line:"+lno+"lineofset="+lineinfo.getOffset()+"linelength="+lineinfo.getLength()+" start="+start+" length="+length);
+
+                        if (fLastPos > start){
+                            Logger.error("CDR", "sequence failure");
+                        }
+                        fLastPos = start+length;
+                        */
 
                         StyleRange sr = new StyleRange(start, length,
                                 fColorManager.getColor(rdef.bfore, rdef.fore),
@@ -305,13 +338,13 @@ public class TextColorer implements IAdaptable
                 // Damage is below visible screen - parse incrementally
                 if (newlen <= 0) newlen = INCREMENTAL_PARSE_SIZE;
                 // Just to be sure
-                if (newlen+10 > fDamage.getLength()) newlen = fDamage.getLength();
+                if (newlen > fDamage.getLength()) newlen = fDamage.getLength();
                 // Clip long damages to process them incrementally
                 newlen = Math.min(newlen, MAX_SINGLE_PARSE_SIZE);
 
                 // Align length by line's end
-                int endline = fDocument.getLineOfOffset(fDamage.getOffset()+newlen);
-                newlen = fDocument.getLineOffset(endline)+fDocument.getLineLength(endline)-fDamage.getOffset();
+                IRegion endline = fDocument.getLineInformationOfOffset(fDamage.getOffset()+newlen);
+                newlen = endline.getOffset()+endline.getLength()-fDamage.getOffset();
 
                 IRegion visibleDamage = new Region(fDamage.getOffset(), newlen);
                 if (visibleDamage.getLength() == 0) return;
@@ -324,14 +357,21 @@ public class TextColorer implements IAdaptable
 
                 createPresentation(presentation, visibleDamage);
 
-                // Clear range!
-                IRegion widgetDamage = fProjectionViewer.modelRange2WidgetRange(visibleDamage);
-                text.setStyleRanges(widgetDamage.getOffset(), widgetDamage.getLength(), null, null);
+                // Clear range:
+                int widgetOffset = fProjectionViewer.modelOffset2WidgetOffset(visibleDamage.getOffset());
+                int widgetLength = fProjectionViewer.modelOffset2WidgetOffset(visibleDamage.getOffset()+visibleDamage.getLength())-widgetOffset;
+                if (Logger.TRACE){
+                    Logger.trace("CDR", "text: " + text.getText().length());
+                    Logger.trace("CDR", "text.setStyleRanges: " + widgetOffset +":"+widgetLength);
+                }
+                if (widgetOffset >= 0 && widgetLength > 0){
+                //    text.setStyleRanges(widgetOffset, widgetLength, null, null);
+                }
 
                 int newstart = visibleDamage.getOffset()+visibleDamage.getLength();
                 fDamage = new Region(newstart, fDamage.getOffset()+fDamage.getLength()-newstart);
                 
-                if (fDamage.getLength() == 0){
+                if (fDamage.getLength() <= 0){
                     fDamage = null;
                 }
 
@@ -359,11 +399,6 @@ public class TextColorer implements IAdaptable
         public IPresentationRepairer getRepairer(String contentType) {
             return null;
         }
-
-        void invalidateSyntax() {
-            fBaseEditor.modifyEvent(0);
-            fDamage = new Region(0, fDocument.getLength());
-        }
         
     }
 
@@ -376,7 +411,7 @@ public class TextColorer implements IAdaptable
     class WidgetEventHandler implements KeyListener,
             DisposeListener, LineBackgroundListener,
             PaintListener, TraverseListener, ControlListener,
-            MouseListener, SelectionListener
+            MouseListener, ISelectionChangedListener, IViewportListener
     {
     
         public void widgetDisposed(DisposeEvent e) {
@@ -397,6 +432,7 @@ public class TextColorer implements IAdaptable
             }
             if (!fullBackground)
                 return;
+            // TODO: Map to document coordinates
             LineRegion[] lr = fBaseEditor.getLineRegions(lno);
             for (int idx = 0; idx < lr.length; idx++) {
                 StyledRegion rdef = (StyledRegion) lr[idx].rdef;
@@ -446,10 +482,12 @@ public class TextColorer implements IAdaptable
         }
     
         // ------------------
-    
-        public void widgetDefaultSelected(SelectionEvent e) {
+
+        public void selectionChanged(SelectionChangedEvent event) {
+            stateChanged();
         }
-        public void widgetSelected(SelectionEvent e) {
+
+        public void viewportChanged(int verticalOffset) {
             stateChanged();
         }
     }
@@ -521,11 +559,13 @@ public class TextColorer implements IAdaptable
         text.addKeyListener(fHandler);
         text.addTraverseListener(fHandler);
         text.addMouseListener(fHandler);
-        text.addSelectionListener(fHandler);
+//        text.addSelectionListener(fHandler);
+        fProjectionViewer.addViewportListener(fHandler);
+        fProjectionViewer.addSelectionChangedListener(fHandler);
 
-        ScrollBar sb = text.getVerticalBar();
-        if (sb != null)
-            sb.addSelectionListener(fHandler);
+//        ScrollBar sb = text.getVerticalBar();
+//        if (sb != null)
+//            sb.addSelectionListener(fHandler);
     }
 
     /**
@@ -543,22 +583,25 @@ public class TextColorer implements IAdaptable
         text.removeKeyListener(fHandler);
         text.removeTraverseListener(fHandler);
         text.removeMouseListener(fHandler);
-        text.removeSelectionListener(fHandler);
-        ScrollBar sb = text.getVerticalBar();
-        if (sb != null)
-            sb.removeSelectionListener(fHandler);
+        fProjectionViewer.removeSelectionChangedListener(fHandler);
+        fProjectionViewer.removeViewportListener(fHandler);
+//        ScrollBar sb = text.getVerticalBar();
+//        if (sb != null)
+//            sb.removeSelectionListener(fHandler);
         text = null;
     }
 
     public void relink() {
-        fBaseEditor = (BaseEditor)fEditor.getAdapter(BaseEditor.class);
+        fBaseEditor = null;
+        fReconciler.setDocument(fDocument);
         updateViewport();
         invalidateSyntax();
     }
 
     public void invalidateSyntax() {
         //prevStamp = IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
-        fReconciler.invalidateSyntax();
+        fBaseEditor.modifyEvent(0);
+        fViewer.invalidateTextPresentation();
     }
     
     void checkActive() {
@@ -709,18 +752,21 @@ public class TextColorer implements IAdaptable
         if (currentPair == null)
             return false;
         try{
-            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
-            int lno = fDocument.getLineOfOffset(caret);
-            PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
-                    fDocument.getLineOffset(lno));
-            fBaseEditor.searchGlobalPair(cp);
-            if (cp.end == null)
+//            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
+//            int lno = fDocument.getLineOfOffset(caret);
+//            PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
+//                    fDocument.getLineOffset(lno));
+            if (currentPair.end == null){
+                fBaseEditor.searchGlobalPair(currentPair);
+            }
+            if (currentPair.end == null)
                 return false;
-            int position = fDocument.getLineOffset(cp.eline);
-            if (cp.topPosition)
-                position += cp.end.end;
-            else
-                position += cp.end.start;
+            int position = fDocument.getLineOffset(currentPair.eline);
+            if (currentPair.topPosition){
+                position += currentPair.end.end;
+            }else{
+                position += currentPair.end.start;
+            }
             fEditor.selectAndReveal(position, 0);
             return true;
         }catch(BadLocationException e){
@@ -734,23 +780,25 @@ public class TextColorer implements IAdaptable
         if (currentPair == null)
             return false;
         try{
-            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
-            int lno = fDocument.getLineOfOffset(caret);
-            PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
-                    fDocument.getLineOffset(lno));
-            fBaseEditor.searchGlobalPair(cp);
-            if (cp.end == null)
+//            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
+//            int lno = fDocument.getLineOfOffset(caret);
+//            PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
+//                    fDocument.getLineOffset(lno));
+            if (currentPair.end == null){
+                fBaseEditor.searchGlobalPair(currentPair);
+            }
+            if (currentPair.end == null){
                 return false;
-            if (cp.topPosition)
-                fEditor.selectAndReveal(fDocument.getLineOffset(cp.sline)+
-                        cp.start.start,
-                        fDocument.getLineOffset(cp.eline)+
-                        cp.end.end);
-            else
-                fEditor.selectAndReveal(fDocument.getLineOffset(cp.eline)+
-                        cp.end.start,
-                        fDocument.getLineOffset(cp.sline)+
-                        cp.start.end);
+            }
+            if (currentPair.topPosition) {
+                int offset = fDocument.getLineOffset(currentPair.sline)+currentPair.start.start;
+                fEditor.selectAndReveal(offset,
+                        fDocument.getLineOffset(currentPair.eline)+currentPair.end.end - offset);
+            }else{
+                int offset = fDocument.getLineOffset(currentPair.eline)+currentPair.end.start;
+                fEditor.selectAndReveal(offset,
+                        fDocument.getLineOffset(currentPair.sline)+currentPair.start.end - offset);
+            }
             return true;
         }catch(BadLocationException e){
             Assert.isTrue(false, "Never reach");
@@ -762,25 +810,26 @@ public class TextColorer implements IAdaptable
     public boolean selectContentPair() {
         if (currentPair == null)
             return false;
-        
         try{
-            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
-            int lno = fDocument.getLineOfOffset(caret);
-            PairMatch cp = fBaseEditor.getPairMatch(lno, caret-
-                    fDocument.getLineOffset(lno));
-            fBaseEditor.searchGlobalPair(cp);
-            if (cp.end == null)
+//            int caret = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
+//            int lno = fDocument.getLineOfOffset(caret);
+//            PairMatch currentPair = fBaseEditor.getPairMatch(lno, caret-
+//                    fDocument.getLineOffset(lno));
+            if (currentPair.end == null){
+                fBaseEditor.searchGlobalPair(currentPair);
+            }
+            if (currentPair.end == null){
                 return false;
-            if (cp.topPosition)
-                fEditor.selectAndReveal(fDocument.getLineOffset(cp.sline)+
-                        cp.start.end,
-                        fDocument.getLineOffset(cp.eline)+
-                        cp.end.start);
-            else
-                fEditor.selectAndReveal(fDocument.getLineOffset(cp.eline)+
-                        cp.end.end,
-                        fDocument.getLineOffset(cp.sline)+
-                        cp.start.start);
+            }
+            if (currentPair.topPosition){
+                int offset = fDocument.getLineOffset(currentPair.sline)+currentPair.start.end;
+                fEditor.selectAndReveal(offset,
+                        fDocument.getLineOffset(currentPair.eline)+currentPair.end.start - offset);
+            }else{
+                int offset = fDocument.getLineOffset(currentPair.eline)+currentPair.end.end;
+                fEditor.selectAndReveal(offset,
+                        fDocument.getLineOffset(currentPair.sline)+currentPair.start.start - offset);
+            }
             return true;
         }catch(BadLocationException e){
             Assert.isTrue(false, "Never reach");
@@ -830,6 +879,7 @@ public class TextColorer implements IAdaptable
         }
         
         updateViewport();
+        fReconciler.repairPresentation(true);
 
         try{
             int curOffset = fProjectionViewer.widgetOffset2ModelOffset(text.getCaretOffset());
@@ -899,9 +949,7 @@ public class TextColorer implements IAdaptable
         if (visibleEnd > lc) visibleEnd = lc;
         if (visibleEnd <= visibleStart) visibleEnd = visibleStart+1;
 
-        fBaseEditor.visibleTextEvent(visibleStart, visibleEnd - visibleStart);
-
-        fReconciler.repairPresentation(true);
+        fBaseEditor.visibleTextEvent(visibleStart, visibleEnd - visibleStart + 1);
     }
 
     void pairDraw(GC gc, StyledRegion sr, int start, int end) {

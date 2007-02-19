@@ -12,11 +12,15 @@ import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.eclipse.jface.TextColorer;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -35,8 +39,8 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 public class ColorerContentOutlinePage extends ContentOutlinePage
                                 implements OutlineListener
 {
-    IWorkbenchOutlineSource structureOutliner, errorsOutliner, parseTreeOutliner;
-    IWorkbenchOutlineSource activeOutliner;
+    IWorkbenchOutlineSource fStructureOutline, fErrorsOutline, fParseTreeOutline;
+    IWorkbenchOutlineSource fActiveOutlineSource;
 
     OutlineModeAction structureModeAction, errorsModeAction, parseTreeModeAction;
     OutlineModeAction activeAction;
@@ -47,9 +51,8 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
     long prevTime = 0;
     int UPDATE_DELTA = 3000;
 
-    private BaseEditor baseEditor;
+    private BaseEditor fBaseEditor;
     private ColorerEditor fEditor;
-    private TextColorer fTextColorer;
 
     class TreeAction extends Action {
 
@@ -65,7 +68,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
             setChecked(isChecked());
             ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Hierarchy",
                     isChecked());
-            activeOutliner.setHierarchy(isChecked());
+            fActiveOutlineSource.setHierarchy(isChecked());
         }
     }
 
@@ -90,7 +93,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
                 }
             });
             ColorerPlugin.getDefault().getPreferenceStore().setValue("Outline.Sort", isChecked());
-            activeOutliner.setSorting(isChecked());
+            fActiveOutlineSource.setSorting(isChecked());
         }
     }
 
@@ -104,39 +107,39 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
             this.outliner = outliner;
             this.setText(Messages.get("outline.options."+id));
             this.setImageDescriptor(ImageStore.getID("outline-options-"+id));
-            setChecked(activeOutliner == outliner);
+            setChecked(fActiveOutlineSource == outliner);
         }
 
         public void run() {
-            if (activeOutliner != outliner){
+            if (fActiveOutlineSource != outliner){
                 setActiveOutliner(outliner, this);
                 update();
             }
         };
     }
 
-    public ColorerContentOutlinePage(TextColorer textColorer) {
+    public ColorerContentOutlinePage() {
         super();
-        fTextColorer = textColorer;
     }
 
-    public void attach(BaseEditor baseEditor){
+    public void attach(ColorerEditor editor){
         detach();
 
-        this.baseEditor = baseEditor;
-        HRCParser hp = baseEditor.getParserFactory().getHRCParser();
+        fEditor = editor;
+        fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
+        HRCParser hp = fBaseEditor.getParserFactory().getHRCParser();
         
-        structureOutliner = new WorkbenchOutliner(hp.getRegion("def:Outlined"));
-        errorsOutliner = new WorkbenchOutliner(hp.getRegion("def:Error"));
-        parseTreeOutliner = new ParseTreeOutliner();
+        fStructureOutline = new WorkbenchOutliner(hp.getRegion("def:Outlined"));
+        fErrorsOutline = new WorkbenchOutliner(hp.getRegion("def:Error"));
+        fParseTreeOutline = new ParseTreeOutliner();
 
-        structureModeAction = new OutlineModeAction("Structure", structureOutliner);
-        errorsModeAction = new OutlineModeAction("Errors", errorsOutliner);
-        parseTreeModeAction = new OutlineModeAction("ParseTree", parseTreeOutliner);
+        structureModeAction = new OutlineModeAction("Structure", fStructureOutline);
+        errorsModeAction = new OutlineModeAction("Errors", fErrorsOutline);
+        parseTreeModeAction = new OutlineModeAction("ParseTree", fParseTreeOutline);
 
-        setActiveOutliner(structureOutliner, structureModeAction);
+        setActiveOutliner(fStructureOutline, structureModeAction);
 
-        activeOutliner.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean(
+        fActiveOutlineSource.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean(
                 "Outline.Hierarchy"));
 
         notifyUpdate();
@@ -163,11 +166,12 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
 
     public void detach() {
         backgroundUpdater = null;
-        baseEditor = null;
+        fBaseEditor = null;
+        fEditor = null;
         setActiveOutliner(null, null);
-        structureOutliner = null;
-        errorsOutliner = null;
-        parseTreeOutliner = null;
+        fStructureOutline = null;
+        fErrorsOutline = null;
+        fParseTreeOutline = null;
     };
 
     public void dispose() {
@@ -176,27 +180,27 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
     }
     
     void setActiveOutliner(IWorkbenchOutlineSource newOutliner, OutlineModeAction action){
-        if (activeOutliner != null){
-            activeOutliner.removeListener(this);
-            if (baseEditor != null){
-                activeOutliner.detachOutliner(baseEditor);
+        if (fActiveOutlineSource != null){
+            fActiveOutlineSource.removeUpdateListener(this);
+            if (fBaseEditor != null){
+                fActiveOutlineSource.detachOutliner(fBaseEditor);
             }
             if (activeAction != null){
                 activeAction.setChecked(false);
             }
         }
-        activeOutliner = newOutliner;
+        fActiveOutlineSource = newOutliner;
         activeAction = action;
-        if (activeOutliner != null){
-            activeOutliner.addListener(this);
-            activeOutliner.clear();
-            if (baseEditor != null){
-                activeOutliner.attachOutliner(baseEditor);
+        if (fActiveOutlineSource != null){
+            fActiveOutlineSource.addUpdateListener(this);
+            fActiveOutlineSource.clear();
+            if (fBaseEditor != null){
+                fActiveOutlineSource.attachOutliner(fBaseEditor);
             }
             // Sync UI
             activeAction.setChecked(true);
-            // invalidate
-            fTextColorer.invalidateSyntax();
+            // invalidate whole syntax to collect new outline
+            fEditor.invalidateSyntax();
         }
     }
 
@@ -206,7 +210,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         getControl().setRedraw(false);
         int hpos = getTreeViewer().getTree().getHorizontalBar().getSelection();
         int vpos = getTreeViewer().getTree().getVerticalBar().getSelection();
-        getTreeViewer().setInput(activeOutliner);
+        getTreeViewer().setInput(fActiveOutlineSource);
         getTreeViewer().expandAll();
         getControl().setRedraw(true);
         getTreeViewer().getTree().getHorizontalBar().setSelection(hpos);
@@ -223,33 +227,33 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
     public void notifyUpdate() {
         outlineModified = true;
         long cTime = System.currentTimeMillis();
-        if (cTime - prevTime > UPDATE_DELTA && activeOutliner != null) {
+        if (cTime - prevTime > UPDATE_DELTA && fActiveOutlineSource != null) {
             updateIfChanged();
             prevTime = System.currentTimeMillis();
         };
     }
 
-    Vector doubleClickListeners = new Vector();
+    private ListenerList selectionListeners = new ListenerList();
 
-    public void addDoubleClickListener(IDoubleClickListener dc) {
-        if (doubleClickListeners.indexOf(dc) == -1)
-            doubleClickListeners.add(dc);
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        selectionListeners.add(listener);
     }
 
-    public void removeDoubleClickListener(IDoubleClickListener dc) {
-        doubleClickListeners.remove(dc);
+    public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+        selectionListeners.remove(listener);
     }
 
     public void createControl(Composite parent) {
         super.createControl(parent);
 
         TreeViewer viewer = getTreeViewer();
-        viewer.addDoubleClickListener(new IDoubleClickListener(){
 
-            public void doubleClick(DoubleClickEvent event) {
-                Enumeration e = doubleClickListeners.elements();
-                for (; e.hasMoreElements();)
-                    ((IDoubleClickListener) e.nextElement()).doubleClick(event);
+        getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener(){
+            public void selectionChanged(SelectionChangedEvent event) {
+                Object[] list = selectionListeners.getListeners();
+                for(int idx = list.length-1; idx >=0; idx--) {
+                    ((ISelectionChangedListener)list[idx]).selectionChanged(event);
+                }
             }
         });
 
@@ -268,7 +272,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
 
         viewer.setContentProvider(new WorkbenchContentProvider());
         viewer.setLabelProvider(new WorkbenchLabelProvider());
-        viewer.setInput(activeOutliner);
+        viewer.setInput(fActiveOutlineSource);
     }
 
 }
