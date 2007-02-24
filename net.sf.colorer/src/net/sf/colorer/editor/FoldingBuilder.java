@@ -8,7 +8,11 @@ import net.sf.colorer.RegionHandler;
 import net.sf.colorer.impl.Logger;
 
 /**
+ * Folding Builder allows to collect folding related information from
+ * colorer's parser stream.
  * 
+ * Folding is based on scheme hierarchy, can also take into account
+ * outline items.
  */
 public class FoldingBuilder {
 
@@ -25,7 +29,7 @@ public class FoldingBuilder {
         }
     }
 
-	public class InternalRegionHandler implements RegionHandler, EditorListener {
+	class InternalRegionHandler implements RegionHandler, EditorListener {
         
         Stack schemeStack = new Stack();
         private int fLastLine, fFirstLine;
@@ -75,7 +79,7 @@ public class FoldingBuilder {
             if (!schemeStack.empty() &&
                     last.s_line == ((FoldingElement)schemeStack.peek()).s_line) return;
             
-            if (last.s_line < lno) {
+            if (last.s_line < lno && last.s_line < lno-fThreshold) {
                 fReciever.notifyFoldingItem(last.s_line, last.s_offset, lno, ex, last.scheme);
                 fLastLine = lno;
             }

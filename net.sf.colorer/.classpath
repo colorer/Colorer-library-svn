@@ -3,27 +3,21 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.2.0.v20060328.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.2.0.v20060327-1200.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.2.0.I20060329-0010.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.2.0.v20060329-1600.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt_3.2.0.v3229j.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.views_3.2.0.I20060321-0800.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.commands_3.2.0.I20060327-0010.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.ibm.icu_3.4.3.jar"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/com.jcraft.jsch_0.1.26.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.core_3.1.100.v20060330.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ant.ui_3.2.0.v20060330.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.compare_3.2.0.v20060330.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.boot_3.1.100.v20060313.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.commands_3.2.0.I20060327-0010.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.contenttype_3.2.0.v20060327.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.expressions_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filebuffers_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filesystem_1.0.0.v20060317.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.filesystem.win32.x86_1.0.0.v20051114.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.2.0.v20060327.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_3.2.0.v20060328.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources.compatibility_3.2.0.v20060313.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources.win32_3.2.0.v20060130.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.2.0.v20060327-1200.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime.compatibility_3.1.100.v20060313.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.variables_3.1.100.v20060227.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.debug.core_3.2.0.v20060329b.jar"/>
@@ -45,7 +39,9 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.doc.user_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.launching_3.2.0.v20060327b.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.ui_3.2.0.v20060330-1200.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.2.0.I20060329-0010.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.databinding_1.0.0.I20060330-1600.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.core.refactoring_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ltk.ui.refactoring_3.2.0.v20060329-1600.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.2.0.v20060328.jar"/>
@@ -60,6 +56,7 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.platform.doc.user_3.2.0.v20060327.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.rcp_3.2.0.v20051206.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_3.2.0.v20060329-1600.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt_3.2.0.v3229j.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.win32.win32.x86_3.2.0.v3229c.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.team.core_3.2.0.I200603301205.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.team.cvs.core_3.2.0.I20060330.jar"/>
@@ -80,6 +77,7 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.navigator_3.2.0.I20060330-2000.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.navigator.resources_3.2.0.I20060329-20000.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.presentations.r21_3.2.0.I20060307-0800.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.views_3.2.0.I20060321-0800.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.views.properties.tabbed_3.2.0.I20060228-0800.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.win32_3.2.0.I20060330-1200.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.2.0.I20060330-2000.jar"/>

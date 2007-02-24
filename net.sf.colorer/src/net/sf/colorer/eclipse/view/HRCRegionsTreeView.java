@@ -272,11 +272,6 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
         fillLocalToolBar(bars.getToolBarManager());
     }
 
-    private void fillLocalPullDown(IMenuManager manager) {
-        manager.add(refreshAction);
-        manager.add(new Separator());
-    }
-
     private void fillLocalToolBar(IToolBarManager manager) {
         manager.add(refreshAction);
         manager.add(loadAllAction);
@@ -440,11 +435,11 @@ class RegionTreeLabelProvider extends LabelProvider {
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

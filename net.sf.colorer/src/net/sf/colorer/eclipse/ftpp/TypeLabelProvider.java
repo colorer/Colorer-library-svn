@@ -4,7 +4,6 @@
  */
 package net.sf.colorer.eclipse.ftpp;
 
-import net.sf.colorer.FileType;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
@@ -18,52 +17,81 @@ import org.eclipse.swt.graphics.Image;
  *
  * @author Igor Russkih
  */
-class TypeParametersLabelProvider extends LabelProvider implements ITableLabelProvider{
+class TypeLabelProvider extends LabelProvider implements ITableLabelProvider{
     Image grImage = ImageStore.EDITOR_CUR_GROUP.createImage();
     Image grImageDis = ImageStore.EDITOR_GROUP.createImage();
     Image hrdImage = ImageStore.EDITOR_UPDATEHRC_A.createImage();
+    Image wwImage = ImageStore.EDITOR_PAIR_SELECT.createImage();
 
-    TypeParametersContentProvider contentProvider;
+    TypeContentProvider contentProvider;
 
-    public TypeParametersLabelProvider(TypeParametersContentProvider cp){
+    public TypeLabelProvider(TypeContentProvider cp){
         contentProvider = cp;
     }
 
     public Image getColumnImage(Object element, int columnIndex) {
-        if (TypeParametersContentProvider.HRD_SIGNATURE.equals(element)) {
+        if (ColorerPlugin.HRD_SIGNATURE.equals(element)) {
             return hrdImage;
         }
-        String value = contentProvider.type.getParameterValue((String)element);
-        if ("true".equals(value)) {
+        if (ColorerPlugin.WORD_WRAP_SIGNATURE.equals(element)) {
+            return wwImage;
+        }
+        // Parameters
+        int value = ColorerPlugin.getDefault().getPropertyParameter(contentProvider.type, element.toString());
+        if (value == 1) {
             return grImage;
-        }else {
+        }
+        if (value == 0) {
             return grImageDis;
         }
+        return null;
     }
 
     public String getColumnText(Object element, int columnIndex) {
         if (contentProvider == null) {
             return null;
         }
-        FileType type = contentProvider.type;
         /* Value of HRD scheme */
-        if (TypeParametersContentProvider.HRD_SIGNATURE.equals(element)) {
+        if (ColorerPlugin.HRD_SIGNATURE.equals(element)) {
             if (columnIndex == 0) {
                 return Messages.get("ftpp.hrd_set");
             }else {
-                String hrd = contentProvider.getAssignedHRD();
+                String hrd = ColorerPlugin.getDefault().getPropertyHRD(contentProvider.type);
                 String hrd_descr = null;
-                if (hrd == null) hrd_descr = Messages.get("ftpp.default_hrd");
+                if (hrd == null) hrd_descr = Messages.get("ftpp.default");
                 else hrd_descr = ColorerPlugin.getDefaultPF().getHRDescription("rgb", hrd); 
                 return hrd_descr;
             }
         }
+        /* Word Wrap */
+        if (ColorerPlugin.WORD_WRAP_SIGNATURE.equals(element)) {
+            if (columnIndex == 0) {
+                return Messages.get("ftpp.word_wrap");
+            }else {
+                int ww = ColorerPlugin.getDefault().getPropertyWordWrap(contentProvider.type);
+                return getDefaultTrueFalse(ww);
+            }
+        }
         /* or HRC parameter value */
         if (columnIndex == 0) {
-            return type.getParameterDescription((String)element);
+            return contentProvider.type.getParameterDescription((String)element);
         }else {
-            return type.getParameterValue((String)element);
+            int val = ColorerPlugin.getDefault().getPropertyParameter(contentProvider.type, element.toString());
+            if (val == -1){
+                String value = contentProvider.type.getParameterValue((String)element);
+                if (value.equals("true")) val = 1;
+                else if (value.equals("false")) val = 1;
+                else return value;
+            }
+            return getDefaultTrueFalse(val);
         }
+    }
+
+    private String getDefaultTrueFalse(int ww) {
+        if (ww == -1) return Messages.get("ftpp.default");
+        if (ww == 0) return Messages.get("ftpp.false");
+        if (ww == 1) return Messages.get("ftpp.true");
+        return null;
     }
 
 }

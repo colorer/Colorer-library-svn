@@ -9,7 +9,6 @@ import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.EditorListener;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
-import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
@@ -30,13 +29,7 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource,
     boolean changed = false;
     int modifiedLine = -1;
     int curLevel;
-    
 
-    
-    public Region getFilter() {
-        return null;
-    }
-    
     public void clear() {
         clear(regionsList, 0);
     }
@@ -187,6 +180,11 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource,
             ((OutlineListener) listeners.elementAt(idx)).notifyUpdate();
     }
 
+    public Object getItemByLine(int line) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     
 }
 /* ***** BEGIN LICENSE BLOCK *****
@@ -202,11 +200,11 @@ public class ParseTreeOutliner implements IWorkbenchOutlineSource,
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

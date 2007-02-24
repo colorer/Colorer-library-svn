@@ -5,14 +5,16 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import net.sf.colorer.Region;
+import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
-import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineItem;
-import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.editor.Outliner;
-import net.sf.colorer.swt.TextColorer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 /**
@@ -89,6 +91,8 @@ public class WorkbenchOutliner extends Outliner
         return elements.toArray();
     }
 
+    final static String defaultIconName = "outline" + File.separator + "def" + File.separator + "Outlined";
+    
     public ImageDescriptor getImageDescriptor(Object object) {
         ImageDescriptor id = null;
         
@@ -97,7 +101,32 @@ public class WorkbenchOutliner extends Outliner
             id = (ImageDescriptor)iconsHash.get(el.region);
             if (id == null) {
                 String iconName = getIconName(el.region);
-                id = ImageStore.getID(iconName);
+                
+                /*
+                 * Creating custom image, based on default one.
+                 */
+                if (iconName == null || iconName.equals(defaultIconName)){
+                    int textindex = el.region.getName().indexOf(':');
+                    String text = el.region.getName().substring(textindex+1, textindex+2).toUpperCase();
+                    
+                    Image i = new Image(Display.getCurrent(), 16, 16);
+                    GC gc = new GC(i);
+                    Image def = ImageStore.getID(defaultIconName).createImage();
+                    int cw = gc.getFontMetrics().getAverageCharWidth();
+                    int ch = gc.getFontMetrics().getHeight();
+                    gc.drawImage(def, 0, 0);
+                    gc.setAlpha(220);
+                    gc.setTextAntialias(SWT.ON);
+                    gc.setForeground(ColorerPlugin.getDefault().getColorManager().getColor(true, 0xDDDDDD));
+                    gc.drawText(text, 16-cw-2, 16-ch-2, SWT.DRAW_TRANSPARENT);
+                    gc.setForeground(ColorerPlugin.getDefault().getColorManager().getColor(true, 0x106010));
+                    gc.drawText(text, 16-cw-1, 16-ch-1, SWT.DRAW_TRANSPARENT);
+                    id = ImageDescriptor.createFromImageData(i.getImageData());
+                    def.dispose();
+                    gc.dispose();
+                }else{
+                    id = ImageStore.getID(iconName);
+                }
                 iconsHash.put(el.region, id);
             }
         }
@@ -120,9 +149,6 @@ public class WorkbenchOutliner extends Outliner
                 iconName = null;
             }
         }
-        if (iconName == null) {
-            iconName = "outline" + File.separator + "def" + File.separator + "Outlined";
-        }
         return iconName;
     }
 
@@ -136,6 +162,26 @@ public class WorkbenchOutliner extends Outliner
 
     public Object getParent(Object o) {
         return null;
+    }
+
+    public Object getItemByLine(int line) {
+        int s = -1;
+        int e = itemCount();
+        OutlineItem found = null;
+        for (int idx = s+(e-s)/2; e-s > 1; idx = s+(e-s)/2) {
+            OutlineItem item = getItem(idx);
+            if (item.lno == line) return item;
+            if (item.lno > line) {
+                e = idx;
+                continue;
+            }
+            if (item.lno < line) {
+                found = item;
+                s = idx;
+                continue;
+            }
+        }
+        return found;
     }
 }
 /* ***** BEGIN LICENSE BLOCK *****
@@ -151,11 +197,11 @@ public class WorkbenchOutliner extends Outliner
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

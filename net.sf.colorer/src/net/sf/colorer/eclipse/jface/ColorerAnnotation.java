@@ -1,4 +1,6 @@
-package net.sf.colorer.eclipse.editors;
+package net.sf.colorer.eclipse.jface;
+
+import net.sf.colorer.Region;
 
 import org.eclipse.jface.text.source.Annotation;
 
@@ -10,10 +12,21 @@ public class ColorerAnnotation extends Annotation {
     public static final String ERROR= "org.eclipse.ui.workbench.texteditor.error"; //$NON-NLS-1$
     public static final String WARNING= "org.eclipse.ui.workbench.texteditor.warning"; //$NON-NLS-1$
     public static final String INFO= "org.eclipse.ui.workbench.texteditor.info"; //$NON-NLS-1$
+    public static final String TASK= "org.eclipse.ui.workbench.texteditor.task"; //$NON-NLS-1$
     
     public ColorerAnnotation(String type, String text)
     {        
         super(type, false, text);
+    }
+
+    public ColorerAnnotation(Region region)
+    {      
+        super(false);
+        if (region.getName().equals("def:TODO")) setType(TASK);
+        if (region.getName().equals("def:Debug")) setType(INFO);
+        if (region.getName().equals("def:ErrorText")) setType(WARNING);
+        if (region.getName().equals("def:Error")) setType(ERROR);
+        setText(region.getDescription());
     }
 }
 

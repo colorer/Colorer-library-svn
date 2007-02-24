@@ -1,8 +1,5 @@
 package net.sf.colorer.eclipse.outline;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import net.sf.colorer.HRCParser;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
@@ -10,22 +7,25 @@ import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineListener;
-import net.sf.colorer.eclipse.jface.TextColorer;
+import net.sf.colorer.impl.Logger;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.model.WorkbenchViewerSorter;
@@ -39,20 +39,56 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 public class ColorerContentOutlinePage extends ContentOutlinePage
                                 implements OutlineListener
 {
-    IWorkbenchOutlineSource fStructureOutline, fErrorsOutline, fParseTreeOutline;
+    IWorkbenchOutlineSource fStructureOutline, fParseTreeOutline;
     IWorkbenchOutlineSource fActiveOutlineSource;
 
-    OutlineModeAction structureModeAction, errorsModeAction, parseTreeModeAction;
+    OutlineModeAction structureModeAction, parseTreeModeAction;
     OutlineModeAction activeAction;
+
+    Action fLinkToEditorAction = new Action("Link", Action.AS_CHECK_BOX){
+        public void run() {
+            prefStore.setValue("outline.link", isChecked());
+        }
+    };
 
     Thread backgroundUpdater = null;
 
     boolean outlineModified = true;
     long prevTime = 0;
-    int UPDATE_DELTA = 3000;
+    int UPDATE_DELTA = 2000;
+    boolean fProgrammaticChange = false;
 
-    private BaseEditor fBaseEditor;
-    private ColorerEditor fEditor;
+    IPreferenceStore prefStore;
+    BaseEditor fBaseEditor;
+    ColorerEditor fEditor;
+    
+    ISelectionListener thisSelectionListener = new ISelectionListener (){
+
+        public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+            ISelection sel = selection;
+            
+            if (Logger.TRACE){
+                Logger.trace("ColorerContentOutlinePage", "selectionChanged:"+selection);
+            }
+            
+            if (!fLinkToEditorAction.isChecked() || sel == null || !(sel instanceof ITextSelection))
+                return;
+            int line = ((ITextSelection)sel).getStartLine();
+            Object element = fActiveOutlineSource.getItemByLine(line);
+
+            if (element == null)
+                return;
+
+            fProgrammaticChange = true;
+            getTreeViewer().expandToLevel(element, 0);
+            getTreeViewer().setSelection(new StructuredSelection(element), true);
+
+            if (Logger.TRACE){
+                Logger.trace("ColorerContentOutlinePage", "selected:"+element);
+            }
+        }
+    };
+
 
     class TreeAction extends Action {
 
@@ -120,6 +156,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
 
     public ColorerContentOutlinePage() {
         super();
+        prefStore = ColorerPlugin.getDefault().getPreferenceStore();
     }
 
     public void attach(ColorerEditor editor){
@@ -130,20 +167,27 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         HRCParser hp = fBaseEditor.getParserFactory().getHRCParser();
         
         fStructureOutline = new WorkbenchOutliner(hp.getRegion("def:Outlined"));
-        fErrorsOutline = new WorkbenchOutliner(hp.getRegion("def:Error"));
         fParseTreeOutline = new ParseTreeOutliner();
 
         structureModeAction = new OutlineModeAction("Structure", fStructureOutline);
-        errorsModeAction = new OutlineModeAction("Errors", fErrorsOutline);
         parseTreeModeAction = new OutlineModeAction("ParseTree", fParseTreeOutline);
+
+        fLinkToEditorAction.setImageDescriptor(ImageStore.getID("regions-tree-link"));
+        fLinkToEditorAction.setToolTipText(Messages.get("outline.link"));
+        fLinkToEditorAction.setChecked(prefStore.getBoolean("outline.link"));
 
         setActiveOutliner(fStructureOutline, structureModeAction);
 
         fActiveOutlineSource.setHierarchy(ColorerPlugin.getDefault().getPreferenceStore().getBoolean(
                 "Outline.Hierarchy"));
+        
+        fEditor.getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(thisSelectionListener);
 
         notifyUpdate();
         backgroundUpdater = new Thread("backgroundUpdater"){
+            
+            Display rootDisplay = Display.getCurrent();
+
             public void run() {
                 while (true) {
                     try {
@@ -153,7 +197,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
                     };
                     if (Thread.currentThread() != backgroundUpdater)
                         break;
-                    Display.getDefault().syncExec(new Runnable(){
+                    rootDisplay.syncExec(new Runnable(){
                         public void run() {
                             updateIfChanged();
                         }
@@ -165,12 +209,14 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
     }
 
     public void detach() {
+        if (fEditor != null){
+            fEditor.getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(thisSelectionListener);
+        }
         backgroundUpdater = null;
         fBaseEditor = null;
         fEditor = null;
         setActiveOutliner(null, null);
         fStructureOutline = null;
-        fErrorsOutline = null;
         fParseTreeOutline = null;
     };
 
@@ -249,7 +295,12 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         TreeViewer viewer = getTreeViewer();
 
         getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener(){
+
             public void selectionChanged(SelectionChangedEvent event) {
+                if (fProgrammaticChange) {
+                    fProgrammaticChange = false;
+                    return;
+                }
                 Object[] list = selectionListeners.getListeners();
                 for(int idx = list.length-1; idx >=0; idx--) {
                     ((ISelectionChangedListener)list[idx]).selectionChanged(event);
@@ -261,12 +312,12 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         if (toolBarManager != null) {
             toolBarManager.add(new TreeAction());
             toolBarManager.add(new SortAction());
+            toolBarManager.add(fLinkToEditorAction);
         };
 
         IMenuManager menuManager = getSite().getActionBars().getMenuManager();
         if (menuManager != null) {
             menuManager.add(structureModeAction);
-            menuManager.add(errorsModeAction);
             menuManager.add(parseTreeModeAction);
         }
 
@@ -289,11 +340,11 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

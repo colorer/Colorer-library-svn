@@ -22,6 +22,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
     public final static String SPACES_FOR_TABS = "SPACES_FOR_TABS";
     public final static String TAB_WIDTH = "TAB_WIDTH";
     public final static String WORD_WRAP = "WORD_WRAP";
+    public final static String WORD_WRAP_PATCH = "WordWrapPatch";
     public final static String FULL_BACK = "FULL_BACK";
     public final static String VERT_CROSS = "VERT_CROSS";
     public final static String HORZ_CROSS = "HORZ_CROSS";
@@ -65,6 +66,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
         tabsnum.setValidRange(1, 16);
         addField(tabsnum);
         addField(new BooleanFieldEditor(WORD_WRAP, Messages.get(WORD_WRAP), p));
+        addField(new BooleanFieldEditor(WORD_WRAP_PATCH, Messages.get(WORD_WRAP_PATCH), p));
 
         addField(new BooleanFieldEditor(FULL_BACK, Messages.get(FULL_BACK), p));
         addField(new BooleanFieldEditor(HORZ_CROSS, Messages.get(HORZ_CROSS), p));
@@ -109,11 +111,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

@@ -5,12 +5,15 @@ import java.util.Vector;
 import net.sf.colorer.FileType;
 import net.sf.colorer.ParserFactory;
 import net.sf.colorer.eclipse.ColorerPlugin;
+import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.impl.Logger;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -18,16 +21,11 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -37,136 +35,218 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class FileTypePreferencePage extends PreferencePage implements IWorkbenchPreferencePage{
 
-    private Composite root;
-    private Tree typesTree;
-    private Button spacesAsTabs;
-    private Text spacesTabNumber;
-    private Combo hrdSchemas;
-    private Table typePropertiesTable;
-    TypeParametersContentProvider typePropertiesProvider;
-    TableViewer typePropertiesViewer;
+    class FileTypeCellModifier implements ICellModifier {
+        /**
+         * Returns the current selected value - index in the cell editor choice box
+         * 
+         * @see org.eclipse.jface.viewers.ICellModifier#getValue(java.lang.Object, java.lang.String)
+         */
+        public Object getValue(Object element, String property) {
+            if (Logger.TRACE){
+                Logger.trace("Preference", "getValue:element="+element.toString() + ", property=" + property);
+            }
 
+            if (element.equals(ColorerPlugin.HRD_SIGNATURE)) {
+                String hrd = ColorerPlugin.getDefault().getPropertyHRD(currentType);
+                return new Integer(hrdList.indexOf(hrd)+1);
+            }
+            if (element.equals(ColorerPlugin.WORD_WRAP_SIGNATURE)) {
+                return new Integer(ColorerPlugin.getDefault().getPropertyWordWrap(currentType)+1);
+            }
+            // Default choice - list of parameters
+            {
+                int val = ColorerPlugin.getDefault().getPropertyParameter(currentType, element.toString());
+                return new Integer(val);
+            }
+        }
+        
+        /**
+         * Changes the cell editor items and checks if the appropriate fields are ok
+         * to edit
+         * 
+         * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
+         */
+        public boolean canModify(Object element, String property) {
+            if (Logger.TRACE){
+                Logger.trace("Preference", "canModify:element="+element.toString() + ", property=" + property);
+            }
+            if (element.equals(ColorerPlugin.HRD_SIGNATURE)) {
+                paramCellEditor.setItems(valuesHRD);
+                return true;
+            }
+            if (element.equals(ColorerPlugin.WORD_WRAP_SIGNATURE)) {
+                paramCellEditor.setItems(values_TrueFalseDefault);
+                return true;
+            }
+            // Default choice - list of parameters
+            {
+                paramCellEditor.setItems(values_TrueFalse);
+                String pval = typePropertiesProvider.type.getParameterDefaultValue(element.toString());
+                return pval.equals("true") || pval.equals("false");
+            }
+        }
+        
+        public void modify(Object element, String property, Object value) {
+            if (Logger.TRACE){
+                Logger.trace("Preference", "modify: element="+element + ", property=" + property + ", value=" + value);
+            }
+            if (element instanceof Item) {
+                element = ((Item) element).getData();
+            }
+            
+            if (element.equals(ColorerPlugin.HRD_SIGNATURE)) {
+                int i = ((Integer)value).intValue();
+                if (i == 0){
+                    ColorerPlugin.getDefault().setPropertyHRD(currentType, "");
+                }else{
+                    ColorerPlugin.getDefault().setPropertyHRD(currentType, (String)hrdList.elementAt(i-1));
+                }
+            }
+            if (element.equals(ColorerPlugin.WORD_WRAP_SIGNATURE)) {
+                int i = ((Integer)value).intValue();
+                ColorerPlugin.getDefault().setPropertyWordWrap(currentType, i-1);
+            }
+            // Default choice - list of parameters
+            {
+                int i = ((Integer)value).intValue();
+                ColorerPlugin.getDefault().setPropertyParameter(currentType, element.toString(), i);
+            }
+            typePropertiesViewer.refresh();
+        }
+    }
+    
+    class TreeViewSelection implements ISelectionChangedListener {
+
+        public void selectionChanged(SelectionChangedEvent event) {
+            Object selection = ((IStructuredSelection) event.getSelection()).getFirstElement();
+            if (selection != null && selection instanceof FileType) {
+                currentType = (FileType) selection;
+                typePropertiesViewer.setInput(selection);
+            } else {
+                currentType = null;
+                typePropertiesViewer.setInput(null);
+            }
+            typePropertiesViewer.refresh();
+        }
+    }
+
+    TypeContentProvider typePropertiesProvider;
+    TableViewer typePropertiesViewer;
+    Table typePropertiesTable;
+    TreeViewer typeTreeViewer;
     ComboBoxCellEditor paramCellEditor;
-    String []values_TrueFalse = new String[] { "false", "true" };
-    Vector hrdList = ColorerPlugin.getDefault().getHRDList();
-    String []valuesHRD;
+    
+    FileType currentType;
+    Vector   hrdList = ColorerPlugin.getDefault().getHRDList();
+    String[] values_TrueFalseDefault = new String[3];;
+    String[] values_TrueFalse = new String[2];
+    String[] valuesHRD;
 
     public FileTypePreferencePage(){
-        //super(, FieldEditorPreferencePage.GRID);
         setPreferenceStore(ColorerPlugin.getDefault().getPreferenceStore());
+        values_TrueFalseDefault[0] = Messages.get("ftpp.default");
+        values_TrueFalseDefault[1] = Messages.get("ftpp.false");
+        values_TrueFalseDefault[2] = Messages.get("ftpp.true");
+        values_TrueFalse[0] = Messages.get("ftpp.false");
+        values_TrueFalse[1] = Messages.get("ftpp.true");
     }
     
     public void init(IWorkbench iworkbench){}
 
     public boolean performOk() {
+        currentType = null;
+        typePropertiesViewer.setInput(null);
+        typeTreeViewer.setInput(null);
+        ColorerPlugin.getDefault().reloadParserFactory();
+
+        typeTreeViewer.setInput(ColorerPlugin.getDefaultPF());        
         return true;
     }
     public boolean performCancel() {
         return true;
     }
+    protected void performDefaults() {
+        currentType = null;
+        typePropertiesViewer.setInput(null);
+        typeTreeViewer.setInput(null);
+        ColorerPlugin.getDefault().resetHRCParameters();
+        ColorerPlugin.getDefault().reloadParserFactory();
+        super.performDefaults();
+        
+        typeTreeViewer.setInput(ColorerPlugin.getDefaultPF());        
+    }
 
     
-  /**
-   * Creates visual tree and preference page
-   */    
-  public Control createContents(Composite parent){
-    Composite composite = new Composite(parent, SWT.NONE);
-    composite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-    composite.setLayout(new FillLayout(SWT.VERTICAL));
+    /**
+     * Creates visual tree and preference page
+     */
+    public Control createContents(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        // composite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+        // composite.setLayoutData(new FillData());
+        composite.setLayout(new FillLayout(SWT.VERTICAL));
 
-    ParserFactory pf = ColorerPlugin.getDefaultPF();
-    typePropertiesProvider = new TypeParametersContentProvider(getPreferenceStore());
-    
-    {
-      TreeViewer tv = new TreeViewer(composite, SWT.BORDER|SWT.V_SCROLL|SWT.FULL_SELECTION);
+        ParserFactory pf = ColorerPlugin.getDefaultPF();
+        typePropertiesProvider = new TypeContentProvider();
 
-      tv.setContentProvider(new FileTypesContentProvider());
-      tv.setLabelProvider(new FileTypesLabelProvider());
-      tv.setInput(pf);
-      tv.addPostSelectionChangedListener(new ISelectionChangedListener(){
-        public void selectionChanged(SelectionChangedEvent event) {
-            Object selection = ((IStructuredSelection)event.getSelection()).getFirstElement();
-            if (selection != null && selection instanceof FileType) {
-                typePropertiesProvider.type = (FileType)selection;
-                typePropertiesViewer.setInput(selection);
-            }else {
-                typePropertiesProvider.type = null;
-                typePropertiesViewer.setInput(null);
-            }
-            typePropertiesViewer.refresh();
+        {
+            typeTreeViewer = new TreeViewer(composite, SWT.BORDER | SWT.V_SCROLL
+                    | SWT.FULL_SELECTION);
+
+            typeTreeViewer.setContentProvider(new FileTypesContentProvider());
+            typeTreeViewer.setLabelProvider(new FileTypesLabelProvider());
+            typeTreeViewer.setInput(pf);
+            typeTreeViewer.addPostSelectionChangedListener(new TreeViewSelection());
+            typeTreeViewer.addDoubleClickListener(new IDoubleClickListener(){
+                public void doubleClick(DoubleClickEvent event) {
+                    Object source = ((IStructuredSelection)event.getSelection()).getFirstElement();
+                    ((TreeViewer)event.getViewer()).setExpandedState(source, !((TreeViewer)event.getViewer()).getExpandedState(source));
+                };
+            });
         }
-      });
+        {
+            typePropertiesViewer = new TableViewer(composite, SWT.V_SCROLL
+                    | SWT.BORDER | SWT.FULL_SELECTION);
+            typePropertiesTable = typePropertiesViewer.getTable();
+            typePropertiesViewer.setContentProvider(typePropertiesProvider);
+            typePropertiesViewer.setLabelProvider(new TypeLabelProvider(typePropertiesProvider));
+
+            TableColumn tc = new TableColumn(typePropertiesTable, SWT.LEFT);
+            tc.setText("Parameter");
+            tc.setWidth(300);
+            tc = new TableColumn(typePropertiesTable, SWT.LEFT);
+            tc.setText("Value");
+            tc.setWidth(150);
+
+            CellEditor cellEditors[] = new CellEditor[typePropertiesViewer
+                    .getTable().getColumnCount()];
+            paramCellEditor = new ComboBoxCellEditor(typePropertiesTable,
+                    values_TrueFalseDefault, SWT.READ_ONLY);
+            // paramCellEditor = new CheckboxCellEditor(typePropertiesTable);
+
+            cellEditors[1] = paramCellEditor;
+            typePropertiesViewer.setCellEditors(cellEditors);
+            typePropertiesViewer.setCellModifier(new FileTypeCellModifier());
+
+            typePropertiesViewer.setColumnProperties(new String[] { "name",
+                    "value" });
+
+            // typePropertiesTable.setLayoutData(new
+            // GridData(GridData.HORIZONTAL_ALIGN_FILL,
+            // GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+            typePropertiesTable.setHeaderVisible(true);
+            typePropertiesTable.setLinesVisible(true);
+
+            typePropertiesViewer.setInput(null);
+
+            valuesHRD = new String[hrdList.size()+1];
+            valuesHRD[0] = Messages.get("ftpp.default");
+            for (int idx = 1; idx < valuesHRD.length; idx++) {
+                valuesHRD[idx] = pf.getHRDescription("rgb", (String) hrdList.elementAt(idx-1));
+            }
+        }
+        return composite;
     }
-    {
-      typePropertiesViewer = new TableViewer(composite, SWT.V_SCROLL|SWT.BORDER|SWT.FULL_SELECTION);
-      typePropertiesTable = typePropertiesViewer.getTable();
-      typePropertiesViewer.setContentProvider(typePropertiesProvider);
-      typePropertiesViewer.setLabelProvider(new TypeParametersLabelProvider(typePropertiesProvider));
-
-      TableColumn tc = new TableColumn(typePropertiesTable, SWT.LEFT);
-      tc.setText("Parameter");
-      tc.setWidth(300);
-      tc = new TableColumn(typePropertiesTable, SWT.LEFT);
-      tc.setText("Value");
-      tc.setWidth(90);
-
-      ICellModifier cellModifier = new ICellModifier() {
-            public Object getValue(Object element, String property) {
-                Logger.trace("Preference", "getValue:"+element.toString() + " - " + property);
-                if (element.equals(TypeParametersContentProvider.HRD_SIGNATURE)) {
-                    return new Integer(2);
-                }else {
-                    String pval = typePropertiesProvider.type.getParameterValue(element.toString());
-                    return pval.equals("true") ? new Integer(1) : new Integer(0);
-                }
-            }
-            public boolean canModify(Object element, String property) {
-                Logger.trace("Preference", "canModify:"+element.toString() + " - " + property);
-                if (element.equals(TypeParametersContentProvider.HRD_SIGNATURE)) {
-                    paramCellEditor.setItems(valuesHRD);
-                    return true;
-                }else {
-                    String pval = typePropertiesProvider.type.getParameterDefaultValue(element.toString());
-                    paramCellEditor.setItems(values_TrueFalse);
-                    return pval.equals("true") || pval.equals("false");
-                }
-            }
-            public void modify(Object element, String property, Object value) {
-                Logger.trace("Preference", "modify:"+element.toString() + " - " + property + " - " + value);
-                if (value instanceof Boolean) {
-                    boolean i = ((Boolean)value).booleanValue();
-                    String pname = (String)((TableItem)element).getData();
-                    typePropertiesProvider.type.setParameterValue(pname, i ? "true" : "false");
-                    //TODO: Store parameters into the local storage
-                    typePropertiesViewer.refresh();
-                }
-            }
-      };
-
-
-      CellEditor cellEditors[] = new CellEditor[typePropertiesViewer.getTable().getColumnCount()];
-      paramCellEditor = new ComboBoxCellEditor(typePropertiesTable, values_TrueFalse, SWT.READ_ONLY);
-      //paramCellEditor = new CheckboxCellEditor(typePropertiesTable);
-      
-      cellEditors[1] = paramCellEditor;
-      typePropertiesViewer.setCellEditors(cellEditors);
-      typePropertiesViewer.setCellModifier(cellModifier);
-      
-      typePropertiesViewer.setColumnProperties(new String[] { "name", "value"});
-
-      typePropertiesTable.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
-      typePropertiesTable.setHeaderVisible(true);
-      typePropertiesTable.setLinesVisible(true);
-
-      typePropertiesViewer.setInput(null);
-      
-      valuesHRD = new String[hrdList.size()];
-      for(int idx = 0; idx < valuesHRD.length; idx++) {
-          valuesHRD[idx] = pf.getHRDescription("rgb", (String)hrdList.elementAt(idx));
-      }
-    }
-    return composite;
-  }
 
 }
 

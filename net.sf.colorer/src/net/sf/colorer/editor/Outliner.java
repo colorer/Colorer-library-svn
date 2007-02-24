@@ -10,7 +10,7 @@ import net.sf.colorer.RegionHandler;
  * filter out only required structure elements.
  *
  */
-public class Outliner implements RegionHandler, EditorListener, IOutlineSource
+public class Outliner implements IOutlineSource
 {
     protected Vector fOutlineStorage = new Vector();
     Region searchRegion = null;
@@ -20,19 +20,88 @@ public class Outliner implements RegionHandler, EditorListener, IOutlineSource
     
     private boolean changed = true;
     private boolean lineIsEmpty = true;
+    
+    private RegionHandler fRegionHandler = new RegionHandler()
+    {
+        public void startParsing(int lno) {
+            curLevel = 0;
+        }
+
+        public void endParsing(int lno) {
+            if (modifiedLine < lno){
+                modifiedLine = lno+1;
+            }
+            curLevel = 0;
+            if (changed) {
+                notifyUpdate();
+                changed = false;
+            }
+        }
+
+        public void clearLine(int lno, String line) {
+            lineIsEmpty = true;
+        }
+
+        public void addRegion(int lno, String line, int sx, int ex, Region region) {
+            if (lno < modifiedLine) {
+                return;
+            }
+            if (!isOutlined(region)) {
+                return;
+            }
+
+            String itemLabel = null;
+            if (line != null)
+                itemLabel = line.substring(sx, ex);
+
+            if (lineIsEmpty) {
+                fOutlineStorage.addElement(createItem(lno, sx, ex-sx, curLevel, itemLabel, region));
+            } else {
+                OutlineItem thisItem = (OutlineItem) fOutlineStorage.lastElement();
+                if (itemLabel != null && thisItem.token != null && thisItem.lno == lno) {
+                    if (itemLabel.length() > 1)
+                        thisItem.token.append(" ");
+                    thisItem.token.append(itemLabel);
+                }
+            }
+            changed = true;
+            lineIsEmpty = false;
+        }
+
+        public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
+            curLevel++;
+        }
+
+        public void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
+            curLevel--;
+        }
+    };
+
+    private EditorListener fEditorListener = new EditorListener(){
+        public void modifyEvent(int topLine) {
+            int new_size;
+            for (new_size = fOutlineStorage.size() - 1; new_size >= 0; new_size--) {
+                if (((OutlineItem) fOutlineStorage.elementAt(new_size)).lno < topLine)
+                    break;
+            }
+            fOutlineStorage.setSize(new_size + 1);
+            modifiedLine = topLine;
+            changed = true;
+        }
+    };
 
     public Outliner(Region searchRegion) {
         this.searchRegion = searchRegion;
     }
     
     public void attachOutliner(BaseEditor be) {
-        be.addRegionHandler(this, searchRegion);
-        be.addEditorListener(this);
+        be.addRegionHandler(fRegionHandler , searchRegion);
+        be.addEditorListener(fEditorListener);
     }
 
     public void detachOutliner(BaseEditor be) {
-        be.removeRegionHandler(this);
-        be.removeEditorListener(this);
+        be.removeRegionHandler(fRegionHandler);
+        be.removeEditorListener(fEditorListener);
     }
     
     public OutlineItem getItem(int idx) {
@@ -83,76 +152,6 @@ public class Outliner implements RegionHandler, EditorListener, IOutlineSource
     protected OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
         return new OutlineItem(lno, sx, length, curLevel, itemLabel, region);
     }
-
-    
-    // -----------------------------------------
-
-    public void modifyEvent(int topLine) {
-        int new_size;
-        for (new_size = fOutlineStorage.size() - 1; new_size >= 0; new_size--) {
-            if (((OutlineItem) fOutlineStorage.elementAt(new_size)).lno < topLine)
-                break;
-        }
-        fOutlineStorage.setSize(new_size + 1);
-        modifiedLine = topLine;
-        changed = true;
-    }
-    
-    // -----------------------------------------
-
-    public void startParsing(int lno) {
-        curLevel = 0;
-    }
-
-    public void endParsing(int lno) {
-        if (modifiedLine < lno){
-            modifiedLine = lno+1;
-        }
-        curLevel = 0;
-        if (changed) {
-            notifyUpdate();
-            changed = false;
-        }
-    }
-
-    public void clearLine(int lno, String line) {
-        lineIsEmpty = true;
-    }
-
-    public void addRegion(int lno, String line, int sx, int ex, Region region) {
-        if (lno < modifiedLine) {
-            return;
-        }
-        if (!isOutlined(region)) {
-            return;
-        }
-
-        String itemLabel = null;
-        if (line != null)
-            itemLabel = line.substring(sx, ex);
-
-        if (lineIsEmpty) {
-            fOutlineStorage.addElement(createItem(lno, sx, ex-sx, curLevel, itemLabel, region));
-        } else {
-            OutlineItem thisItem = (OutlineItem) fOutlineStorage.lastElement();
-            if (itemLabel != null && thisItem.token != null && thisItem.lno == lno) {
-                if (itemLabel.length() > 1)
-                    thisItem.token.append(" ");
-                thisItem.token.append(itemLabel);
-            }
-        }
-        changed = true;
-        lineIsEmpty = false;
-    }
-
-    public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
-        curLevel++;
-    }
-
-    public void leaveScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
-        curLevel--;
-    }
-
     
     
     // -----------------------------------------

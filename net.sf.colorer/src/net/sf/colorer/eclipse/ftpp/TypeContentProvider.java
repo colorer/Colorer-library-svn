@@ -1,35 +1,26 @@
 package net.sf.colorer.eclipse.ftpp;
 
 import net.sf.colorer.FileType;
+import net.sf.colorer.eclipse.ColorerPlugin;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
  * Content for particular file type preferences from HRC
- * @author Igor Russkih
  *
  */
-class TypeParametersContentProvider implements  IStructuredContentProvider{
+class TypeContentProvider implements  IStructuredContentProvider{
 
     public FileType type;
-    IPreferenceStore preferenceStore;
-    public final static String HRD_SIGNATURE = "@@HRD@@";
-
-    /**
-     * @param preferenceStore
-     */
-    public TypeParametersContentProvider(IPreferenceStore preferenceStore) {
-        this.preferenceStore = preferenceStore;
-    }
-
+    
     public Object[] getElements(Object inputElement) {
         type = (FileType)inputElement;
         String[] preflist = type.getParameters();
-        Object[] full_preflist = new Object[preflist.length+1];
-        System.arraycopy(preflist, 0, full_preflist, 0, preflist.length);
-        full_preflist[preflist.length] = HRD_SIGNATURE;
+        Object[] full_preflist = new Object[preflist.length+2];
+        full_preflist[0] = ColorerPlugin.HRD_SIGNATURE;
+        full_preflist[1] = ColorerPlugin.WORD_WRAP_SIGNATURE;
+        System.arraycopy(preflist, 0, full_preflist, 2, preflist.length);
         return full_preflist;
     }
 
@@ -40,14 +31,6 @@ class TypeParametersContentProvider implements  IStructuredContentProvider{
         type = (FileType)newInput;
     }
 
-    /**
-     * Returns HRD scheme, assigned with this file type
-     */
-    public String getAssignedHRD() {
-        String hrc = preferenceStore.getString(HRD_SIGNATURE+type.getName());
-        if (hrc.equals("")) return null;
-        else return hrc;
-    }
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

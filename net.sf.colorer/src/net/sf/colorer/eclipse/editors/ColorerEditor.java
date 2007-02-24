@@ -5,7 +5,9 @@ import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.jface.ColorerAnnotationProvider;
 import net.sf.colorer.eclipse.jface.ColorerFoldingProvider;
+import net.sf.colorer.eclipse.jface.LineNumberRulerColumn_Fixed;
 import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineSchemeElement;
@@ -29,8 +31,12 @@ import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.AnnotationModel;
+import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.IVerticalRulerColumn;
+import org.eclipse.jface.text.source.LineNumberChangeRulerColumn;
+import org.eclipse.jface.text.source.LineNumberRulerColumn;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
@@ -46,6 +52,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
@@ -53,12 +60,12 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
 
-    ISourceViewer sourceViewer;
     IPreferenceStore prefStore;
     ColorerSourceViewerConfiguration fColorerSVC;
 
@@ -70,6 +77,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     ColorerContentOutlinePage contentOutliner;
     ProjectionSupport fProjectionSupport;
     ColorerFoldingProvider fFoldingProvider = new ColorerFoldingProvider();
+    ColorerAnnotationProvider fAnnotationProvider = new ColorerAnnotationProvider();
 
     VerifyListener tabReplacer = new VerifyListener() {
         public void verifyText(VerifyEvent e) {
@@ -163,6 +171,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         
         // Install folding provider
         fFoldingProvider.install(this);
+        fAnnotationProvider.install(this);
         
         //getSourceViewer().setRangeIndication(0, 200, false);
         
@@ -270,7 +279,18 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         text.setSelectionRange(selstart, selend);
     }
     
-    
+    //----------------------------------------
+    /*
+     * Eclipse Bugs patching with line numbers ruler
+     */
+    protected IVerticalRulerColumn createLineNumberRulerColumn() {
+        if (prefStore.getBoolean(PreferencePage.WORD_WRAP_PATCH)) {
+            //super.createLineNumberRulerColumn();
+            return new LineNumberRulerColumn_Fixed();
+        }else{
+            return super.createLineNumberRulerColumn();
+        }
+    }
 
     protected void editorContextMenuAboutToShow(IMenuManager parentMenu) {
         super.editorContextMenuAboutToShow(parentMenu);
@@ -284,15 +304,17 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     }
 
     public void propertyChange(PropertyChangeEvent e) {
-
         
         if (e == null ||
             e.getProperty().equals(PreferencePage.USE_BACK) ||
-            e.getProperty().equals(PreferencePage.HRD_SET))
+            e.getProperty().equals(PreferencePage.HRD_SET) ||
+            e.getProperty().startsWith(ColorerPlugin.HRD_SIGNATURE))
         {
-            fTextColorer.setRegionMapper(
-                    prefStore.getString(PreferencePage.HRD_SET),
-                    prefStore.getBoolean(PreferencePage.USE_BACK));
+            String hrd = ColorerPlugin.getDefault().getPropertyHRD(getFileType());
+            if (hrd == null) {
+                hrd = prefStore.getString(PreferencePage.HRD_SET);
+            }
+            fTextColorer.setRegionMapper(hrd, prefStore.getBoolean(PreferencePage.USE_BACK));
         }
         
         if (e == null ||
@@ -311,9 +333,14 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         }
 
         if (e == null ||
-            e.getProperty().equals(PreferencePage.WORD_WRAP))
+            e.getProperty().equals(PreferencePage.WORD_WRAP) ||
+            e.getProperty().startsWith(ColorerPlugin.WORD_WRAP_SIGNATURE))
         {
-            text.setWordWrap(prefStore.getBoolean(PreferencePage.WORD_WRAP));
+            int ww = ColorerPlugin.getDefault().getPropertyWordWrap(getFileType());
+            if (ww == -1) {
+                ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
+            }
+            text.setWordWrap(ww == 1);
         }
         
         if (e == null ||
@@ -417,6 +444,9 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         if (contentOutliner != null) {
             contentOutliner.detach();
         }
+        fFoldingProvider.uninstall();
+        fAnnotationProvider.uninstall();
+
         prefStore.removePropertyChangeListener(this);
         JFaceResources.getFontRegistry().removeListener(this);
         ColorerPlugin.getDefault().removeReloadListener(fReloadListener);

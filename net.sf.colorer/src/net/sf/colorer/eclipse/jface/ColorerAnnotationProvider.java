@@ -6,25 +6,27 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import net.sf.colorer.editor.BaseEditor;
-import net.sf.colorer.editor.FoldingBuilder;
 import net.sf.colorer.editor.IFoldingReciever;
+import net.sf.colorer.editor.OutlineItem;
+import net.sf.colorer.editor.OutlineListener;
+import net.sf.colorer.editor.Outliner;
 import net.sf.colorer.impl.Logger;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.AnnotationModel;
+import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
-import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
- * Asynchronous folding structure reconcyler, 
- * To be run incrementally in background.
+ * Region-based annotation collector  
  */
-public class ColorerFoldingProvider
-{
+public class ColorerAnnotationProvider {
     /*
      * Internal folding structure handler
      */
@@ -40,7 +42,7 @@ public class ColorerFoldingProvider
 
             additions.clear();
             
-            ProjectionAnnotationModel model = getModel();
+            IAnnotationModel model = getModel();
             
             Iterator iter = model.getAnnotationIterator();
             while(iter.hasNext()){
@@ -97,38 +99,71 @@ public class ColorerFoldingProvider
         }
 
     }
+    
+    class AnnotationOutlineListener implements OutlineListener{
+
+        public void notifyUpdate() {
+            fAnnotationsUpdated = false;
+        }
+    
+    }
 
     static final int FOLDING_UPDATE_PERIOD = 1500;
     
-    FoldingBuilder builder = new FoldingBuilder();
+    private Outliner builder;
     private BaseEditor fBaseEditor;
     private IDocument fDocument;
     private ITextEditor fEditor;
+    private boolean fAnnotationsUpdated = false;
+    
+    OutlineListener outlineListener = new AnnotationOutlineListener();
     
     private Vector deletions = new Vector();
     private HashMap additions = new HashMap();
 
+    
+    
     void updateAnnotations() {
 
-        ProjectionAnnotationModel model = getModel();
+        if (fAnnotationsUpdated) return;
         
-        if (model == null) return;
+        try{
+            
+            IAnnotationModel model = getModel();
+            Iterator iter = model.getAnnotationIterator();
+            while(iter.hasNext()) model.removeAnnotation((Annotation)iter.next());
+            
+            for(int idx = 0; idx < builder.itemCount(); idx++){
+                OutlineItem item = builder.getItem(idx);
 
-        if (deletions.size() == 0 && additions.size() == 0) return;
-        
-        if (Logger.TRACE){
-            Logger.trace("AsyncFolding", "updateAnnotations");
+                int offset = fDocument.getLineOffset(item.lno) + item.pos;
+                Position position = new Position(offset, item.length);
+                model.addAnnotation(new ColorerAnnotation(item.region), position);
+            }
+        }catch(Exception e){
+            Logger.error("ColorerAnnotationProvider", "notifyUpdate", e);
         }
-        model.modifyAnnotations((Annotation[])deletions.toArray(new Annotation[]{}), additions, null);
+        fAnnotationsUpdated = true;
 
-        deletions.setSize(0);
-        additions.clear();
+//        AnnotationModel model = getModel();
+//        
+//        if (model == null) return;
+//
+//        if (deletions.size() == 0 && additions.size() == 0) return;
+//        
+//        if (Logger.TRACE){
+//            Logger.trace("AsyncFolding", "updateAnnotations");
+//        }
+//        //model.modifyAnnotations((Annotation[])deletions.toArray(new Annotation[]{}), additions, null);
+//
+//        deletions.setSize(0);
+//        additions.clear();
         
     }
     
-    ProjectionAnnotationModel getModel() {
+    IAnnotationModel getModel() {
         if (fEditor == null) return null;
-        return (ProjectionAnnotationModel)fEditor.getAdapter(ProjectionAnnotationModel.class);
+        return ((ISourceViewer)fEditor.getAdapter(ISourceViewer.class)).getAnnotationModel();
     }
 
 
@@ -140,7 +175,9 @@ public class ColorerFoldingProvider
         fDocument = editor.getDocumentProvider().getDocument(editor.getEditorInput());
         fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
         
-        builder.install(fBaseEditor, new FoldingReciever());
+        builder = new Outliner(fBaseEditor.getParserFactory().getHRCParser().getRegion("def:Error"));
+        builder.attachOutliner(fBaseEditor);
+        builder.addUpdateListener(outlineListener);
         
         new Thread(new Runnable(){
             
@@ -159,11 +196,12 @@ public class ColorerFoldingProvider
                     }catch(InterruptedException e){}
                 }
             }
-        }).start();
+        }, "ColorerAnnotationProvider").start();
     }
 
     public void uninstall() {
-        builder.uninstall();
+        builder.detachOutliner(fBaseEditor);
+        builder.removeUpdateListener(outlineListener);
     }
 
     

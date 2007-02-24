@@ -32,6 +32,13 @@ public interface IWorkbenchOutlineSource extends IOutlineSource, IAdaptable {
      */
     void detachOutliner(BaseEditor editor);
 
+    /**
+     * Searches the current outline for the item, nearest within the line parameter.
+     * @param line line number to search
+     * @return valid object for current outline tree model or null, if not found
+     */
+    Object getItemByLine(int line);
+
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -46,11 +53,11 @@ public interface IWorkbenchOutlineSource extends IOutlineSource, IAdaptable {
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is the Colorer Library.
+ * The Original Code is the Colorer Library
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2003
+ * Igor Russkih <irusskih at gmail dot com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
