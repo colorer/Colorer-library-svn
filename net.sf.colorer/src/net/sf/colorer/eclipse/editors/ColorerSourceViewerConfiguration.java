@@ -26,9 +26,10 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
     public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
         List list = new ArrayList();
         // prefix[0] is either '\t' or ' ' x tabWidth, depending on useSpaces
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int tabWidth = prefStore.getInt(PreferencePage.TAB_WIDTH);
-        boolean useSpaces = prefStore.getBoolean(PreferencePage.SPACES_FOR_TABS);
+        
+        int tabWidth = getTabWidth(sourceViewer);
+        boolean useSpaces = fPreferenceStore.getBoolean(PreferencePage.SPACES_FOR_TABS);
+
         for (int i = 0; i <= tabWidth; i++) {
             StringBuffer prefix = new StringBuffer();
             if (useSpaces) {
@@ -48,11 +49,6 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
         return (String[]) list.toArray(new String[list.size()]);
     }
 
-    public int getTabWidth(ISourceViewer sourceViewer) {
-        return ColorerPlugin.getDefault().getPreferenceStore().
-                getInt(PreferencePage.TAB_WIDTH);
-    }
-    
     /**
      * Configuration is based on ColorerEditor and it's TextColorer adapter.
      * TODO: remove ColorerEditor??
@@ -60,7 +56,7 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
      * @param textColorer
      */
     public ColorerSourceViewerConfiguration(ColorerEditor uieditor, TextColorer textColorer) {
-        super();
+        super(ColorerPlugin.getDefault().getCombinedPreferenceStore());
         fEditor = uieditor;
         fTextColorer = textColorer;
     }

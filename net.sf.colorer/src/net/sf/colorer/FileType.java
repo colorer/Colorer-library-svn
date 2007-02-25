@@ -80,7 +80,7 @@ public class FileType{
     /**
      * Retrieves parameter's user description string
      * @param name
-     * @return
+     * @return Description for this parameter, can be null.
      */
     public String getParameterDescription(String name) {
         return getParameterDescription(iptr, name);

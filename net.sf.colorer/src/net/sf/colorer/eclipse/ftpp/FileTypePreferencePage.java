@@ -190,8 +190,8 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
         typePropertiesProvider = new TypeContentProvider();
 
         {
-            typeTreeViewer = new TreeViewer(composite, SWT.BORDER | SWT.V_SCROLL
-                    | SWT.FULL_SELECTION);
+            typeTreeViewer = new TreeViewer(composite,
+                    SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
             typeTreeViewer.setContentProvider(new FileTypesContentProvider());
             typeTreeViewer.setLabelProvider(new FileTypesLabelProvider());

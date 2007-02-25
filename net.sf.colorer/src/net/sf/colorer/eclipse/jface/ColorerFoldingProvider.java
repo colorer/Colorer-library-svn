@@ -16,6 +16,7 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
+import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -139,7 +140,9 @@ public class ColorerFoldingProvider
         fEditor = editor;
         fDocument = editor.getDocumentProvider().getDocument(editor.getEditorInput());
         fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
-        
+
+        Assert.isNotNull(fBaseEditor);
+
         builder.install(fBaseEditor, new FoldingReciever());
         
         new Thread(new Runnable(){
@@ -159,7 +162,7 @@ public class ColorerFoldingProvider
                     }catch(InterruptedException e){}
                 }
             }
-        }).start();
+        }, "ColorerFoldingProvider").start();
     }
 
     public void uninstall() {

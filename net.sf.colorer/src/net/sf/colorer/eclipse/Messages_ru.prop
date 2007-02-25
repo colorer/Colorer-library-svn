@@ -10,6 +10,8 @@ init.error.pf = Ошибка в инициализации native-части библиотеки Colorer. \
 prefs.title=Настройки текстового редактора Colorer-take5
 prefs.filetypes.title=Типы файлов в Colorer-take5
 
+TextEditorsRef=Смотрите так же <A>'Text Editors'</A> для общих настроек текстового редактора.
+
 TEXT_FONT=&Шрифт, используемый в редакторе
 SPACES_FOR_TABS=Использовать &пробелы вместо табуляции.
 TAB_WIDTH=&Размер табуляции

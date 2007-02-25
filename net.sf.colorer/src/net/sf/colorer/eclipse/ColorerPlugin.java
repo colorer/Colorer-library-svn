@@ -16,7 +16,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 
@@ -33,6 +35,8 @@ public class ColorerPlugin extends AbstractUIPlugin {
     private ColorManager colorManager = new ColorManager();
     private Vector reloadListeners = new Vector();
     private Vector hrdSetsList;
+    private IPreferenceStore fCombinedPreferenceStore;
+    
     public final static String WORD_WRAP_SIGNATURE = "@@WORD_WRAP@@";
     public final static String HRD_SIGNATURE = "@@HRD@@";
 
@@ -57,10 +61,9 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault(PreferencePage.SPACES_FOR_TABS, false);
         store.setDefault(PreferencePage.WORD_WRAP, false);
         store.setDefault(PreferencePage.WORD_WRAP_PATCH, true);
-        store.setDefault(PreferencePage.TAB_WIDTH, 4);
     
-        store.setDefault(PreferencePage.FULL_BACK, false);
-        store.setDefault(PreferencePage.USE_BACK, false);
+        store.setDefault(PreferencePage.FULL_BACK, true);
+        store.setDefault(PreferencePage.USE_BACK, true);
         store.setDefault(PreferencePage.VERT_CROSS, false);
         store.setDefault(PreferencePage.HORZ_CROSS, true);
         store.setDefault(PreferencePage.PAIRS_MATCH, "PAIRS_OUTLINE");
@@ -323,6 +326,14 @@ public class ColorerPlugin extends AbstractUIPlugin {
         return resourceBundle;
     }
 
+    public IPreferenceStore getCombinedPreferenceStore() {
+        if (fCombinedPreferenceStore == null) {
+            IPreferenceStore generalTextStore= EditorsUI.getPreferenceStore(); 
+            fCombinedPreferenceStore= new ChainedPreferenceStore(new IPreferenceStore[] { getPreferenceStore(), generalTextStore });
+        }
+        return fCombinedPreferenceStore;
+    }
+    
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

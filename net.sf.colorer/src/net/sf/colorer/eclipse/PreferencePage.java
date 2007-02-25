@@ -9,18 +9,22 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.PreferencesUtil;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 
 public class PreferencePage extends FieldEditorPreferencePage implements
         IWorkbenchPreferencePage {
 
     public final static String TEXT_FONT = "net.sf.colorer.eclipse.presentation.textfont";
     public final static String SPACES_FOR_TABS = "SPACES_FOR_TABS";
-    public final static String TAB_WIDTH = "TAB_WIDTH";
     public final static String WORD_WRAP = "WORD_WRAP";
     public final static String WORD_WRAP_PATCH = "WordWrapPatch";
     public final static String FULL_BACK = "FULL_BACK";
@@ -59,12 +63,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements
     public void createFieldEditors() {
         Composite p = getFieldEditorParent();
 
-        addField(new BooleanFieldEditor(SPACES_FOR_TABS, Messages
-                .get(SPACES_FOR_TABS), p));
-        IntegerFieldEditor tabsnum = new IntegerFieldEditor(TAB_WIDTH, Messages
-                .get(TAB_WIDTH), p);
-        tabsnum.setValidRange(1, 16);
-        addField(tabsnum);
+        createHeader(p);
+
+        addField(new BooleanFieldEditor(SPACES_FOR_TABS, Messages.get(SPACES_FOR_TABS), p));
+        
         addField(new BooleanFieldEditor(WORD_WRAP, Messages.get(WORD_WRAP), p));
         addField(new BooleanFieldEditor(WORD_WRAP_PATCH, Messages.get(WORD_WRAP_PATCH), p));
 
@@ -97,6 +99,18 @@ public class PreferencePage extends FieldEditorPreferencePage implements
         }
         addField(new BooleanFieldEditor(USE_BACK, Messages.get(USE_BACK), p));
     }
+    
+    private void createHeader(Composite contents) {
+        final Link link= new Link(contents, SWT.NONE);
+        final String target= "org.eclipse.ui.preferencePages.GeneralTextEditor"; //$NON-NLS-1$
+        link.setText(Messages.get("TextEditorsRef"));
+        link.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                PreferencesUtil.createPreferenceDialogOn(link.getShell(), target, null, null);
+            }
+        });
+        //link.setToolTipText(linktooltip);
+    }    
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

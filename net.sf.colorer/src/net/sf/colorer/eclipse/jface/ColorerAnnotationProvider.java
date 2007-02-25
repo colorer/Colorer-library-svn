@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
+import net.sf.colorer.Region;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.IFoldingReciever;
 import net.sf.colorer.editor.OutlineItem;
@@ -20,6 +21,7 @@ import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
+import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -27,78 +29,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * Region-based annotation collector  
  */
 public class ColorerAnnotationProvider {
-    /*
-     * Internal folding structure handler
-     */
-    class FoldingReciever implements IFoldingReciever
-    {
-        private int fLastLine;
-
-        // -------------------------------------------------
-        public void notifyInvalidate(int lineno) {
-            if (Logger.TRACE){
-                Logger.trace("FoldingReciever", "notifyInvalidate: "+lineno);
-            }
-
-            additions.clear();
-            
-            IAnnotationModel model = getModel();
-            
-            Iterator iter = model.getAnnotationIterator();
-            while(iter.hasNext()){
-                Annotation ann = (Annotation)iter.next();
-                if (!(ann instanceof ProjectionAnnotation)) continue;
-                    
-                Position pos = model.getPosition(ann);
-                try{
-                    if (fDocument.getLineOfOffset(pos.offset) < lineno) continue;
-                }catch(BadLocationException e){
-                    Logger.error("FoldingReciever", "notifyInvalidate", e);
-                    continue;
-                }
-                
-                deletions.addElement(ann);
-            }
-            fLastLine = lineno;
-        }
-
-        public void notifyFoldingItem(int s_line, int s_offset, int e_line, int e_offset, String schema)
-        {
-            if (fLastLine >= e_line) return;
-            fLastLine = e_line;
-
-            ProjectionAnnotation ann = new ProjectionAnnotation();
-            
-            if (Logger.TRACE){
-                Logger.trace("FoldingReciever", "notifyFoldingItem: "+s_line+":"+e_line);
-            }
-
-            try{
-                int offset = fDocument.getLineOffset(s_line);
-                int len = fDocument.getLineOffset(e_line) + fDocument.getLineLength(e_line) - offset;
-            
-                if (Logger.TRACE){
-                    Logger.trace("FoldingReciever", "notifyFoldingItem:position: "+offset+":"+len);
-                }
-                
-                Position newposition = new Position(offset, len);
-
-                // Merge annotation folding states
-                for(Enumeration e = deletions.elements(); e.hasMoreElements();){
-                    ProjectionAnnotation deleted = (ProjectionAnnotation)e.nextElement();
-                    if (newposition.equals(getModel().getPosition(deleted))){
-                        if (deleted.isCollapsed()) ann.markCollapsed();
-                    }
-                }
-                
-                additions.put(ann, newposition);
-
-            }catch(BadLocationException e){
-                Logger.error("FoldingReciever", "notifyFoldingItem", e);
-            };
-        }
-
-    }
     
     class AnnotationOutlineListener implements OutlineListener{
 
@@ -108,7 +38,7 @@ public class ColorerAnnotationProvider {
     
     }
 
-    static final int FOLDING_UPDATE_PERIOD = 1500;
+    static final int UPDATE_PERIOD = 1000;
     
     private Outliner builder;
     private BaseEditor fBaseEditor;
@@ -118,47 +48,40 @@ public class ColorerAnnotationProvider {
     
     OutlineListener outlineListener = new AnnotationOutlineListener();
     
-    private Vector deletions = new Vector();
-    private HashMap additions = new HashMap();
-
-    
+    Region def_TODO;
+    Region def_ErrorText;
+    Region def_Debug;
     
     void updateAnnotations() {
 
         if (fAnnotationsUpdated) return;
         
+        IAnnotationModel model = getModel();
+        Iterator iter = model.getAnnotationIterator();
+        while(iter.hasNext()) model.removeAnnotation((Annotation)iter.next());
+
+        if (!((TextColorer)fEditor.getAdapter(TextColorer.class)).canProcess()) return;
+        
         try{
-            
-            IAnnotationModel model = getModel();
-            Iterator iter = model.getAnnotationIterator();
-            while(iter.hasNext()) model.removeAnnotation((Annotation)iter.next());
             
             for(int idx = 0; idx < builder.itemCount(); idx++){
                 OutlineItem item = builder.getItem(idx);
 
                 int offset = fDocument.getLineOffset(item.lno) + item.pos;
-                Position position = new Position(offset, item.length);
-                model.addAnnotation(new ColorerAnnotation(item.region), position);
+                Position position = new Position(offset, item.token.length());
+                
+                String type = ColorerAnnotation.ERROR;
+                if (item.region.hasParent(def_TODO)) type = ColorerAnnotation.TASK;
+                if (item.region.hasParent(def_ErrorText)) type = ColorerAnnotation.WARNING;
+                if (item.region.hasParent(def_Debug)) type = ColorerAnnotation.INFO;
+                Annotation annotation = new ColorerAnnotation(type, item.region.getDescription()+" : "+item.token);
+                
+                model.addAnnotation(annotation, position);
             }
         }catch(Exception e){
-            Logger.error("ColorerAnnotationProvider", "notifyUpdate", e);
+            Logger.error("ColorerAnnotationProvider", "updateAnnotations", e);
         }
         fAnnotationsUpdated = true;
-
-//        AnnotationModel model = getModel();
-//        
-//        if (model == null) return;
-//
-//        if (deletions.size() == 0 && additions.size() == 0) return;
-//        
-//        if (Logger.TRACE){
-//            Logger.trace("AsyncFolding", "updateAnnotations");
-//        }
-//        //model.modifyAnnotations((Annotation[])deletions.toArray(new Annotation[]{}), additions, null);
-//
-//        deletions.setSize(0);
-//        additions.clear();
-        
     }
     
     IAnnotationModel getModel() {
@@ -175,9 +98,16 @@ public class ColorerAnnotationProvider {
         fDocument = editor.getDocumentProvider().getDocument(editor.getEditorInput());
         fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
         
+        Assert.isNotNull(fBaseEditor);
+        
         builder = new Outliner(fBaseEditor.getParserFactory().getHRCParser().getRegion("def:Error"));
         builder.attachOutliner(fBaseEditor);
         builder.addUpdateListener(outlineListener);
+        
+        def_TODO = fBaseEditor.getParserFactory().getHRCParser().getRegion("def:TODO");
+        def_ErrorText = fBaseEditor.getParserFactory().getHRCParser().getRegion("def:ErrorText");
+        def_Debug = fBaseEditor.getParserFactory().getHRCParser().getRegion("def:Debug");
+
         
         new Thread(new Runnable(){
             
@@ -186,13 +116,13 @@ public class ColorerAnnotationProvider {
             public void run() {
                 while(rootDisplay != null && !rootDisplay.isDisposed())
                 {
-                    rootDisplay.asyncExec(new Runnable(){
-                        public void run() {
+//                    rootDisplay.asyncExec(new Runnable(){
+  //                      public void run() {
                             updateAnnotations();
-                        };
-                    });
+    //                    };
+      //              });
                     try{
-                        Thread.sleep(FOLDING_UPDATE_PERIOD);
+                        Thread.sleep(UPDATE_PERIOD);
                     }catch(InterruptedException e){}
                 }
             }

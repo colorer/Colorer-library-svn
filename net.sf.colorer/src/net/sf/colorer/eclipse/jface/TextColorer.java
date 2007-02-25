@@ -67,7 +67,6 @@ public class TextColorer implements IAdaptable
     class AsyncReconcyler implements IPresentationReconciler,
                     ITextListener, ITextInputListener, Runnable {
 
-        static final int ASYNC_DELAY = 1000;
         static final int MAX_SINGLE_PARSE_SIZE = 30000;
         static final int INCREMENTAL_PARSE_SIZE = 5000;
         
@@ -109,7 +108,7 @@ public class TextColorer implements IAdaptable
             
             if (fDocument == null) return;
             
-            prevStamp = -1;
+//            prevStamp = -1;
             fColorManager = (ColorManager)fEditor.getAdapter(ColorManager.class);
 
             fBaseEditor = (BaseEditor)fEditor.getAdapter(BaseEditor.class);
@@ -247,7 +246,7 @@ public class TextColorer implements IAdaptable
                 if (Logger.TRACE){
                     Logger.trace("CDR", "createPresentation: filling "+l_start+":"+l_end);
                 }
-                //int fLastPos = -1;
+                int fLastPos = -1;
             
                 for (int lno = l_start; lno <= l_end; lno++) {
                     LineRegion[] lrarr = fBaseEditor.getLineRegions(lno);
@@ -270,14 +269,14 @@ public class TextColorer implements IAdaptable
                             continue;
                         }
 
-                        /*
+//                        /*
                         Logger.trace("CDR", "trace line:"+lno+"lineofset="+lineinfo.getOffset()+"linelength="+lineinfo.getLength()+" start="+start+" length="+length);
 
                         if (fLastPos > start){
                             Logger.error("CDR", "sequence failure");
                         }
                         fLastPos = start+length;
-                        */
+//                        */
 
                         StyleRange sr = new StyleRange(start, length,
                                 fColorManager.getColor(rdef.bfore, rdef.fore),
@@ -357,7 +356,7 @@ public class TextColorer implements IAdaptable
                     Logger.trace("CDR", "text.setStyleRanges: " + widgetOffset +":"+widgetLength);
                 }
                 if (widgetOffset >= 0 && widgetLength > 0){
-                //    text.setStyleRanges(widgetOffset, widgetLength, null, null);
+                    text.setStyleRanges(widgetOffset, widgetLength, null, null);
                 }
 
                 int newstart = visibleDamage.getOffset()+visibleDamage.getLength();
@@ -485,25 +484,26 @@ public class TextColorer implements IAdaptable
     }
 
 
+    final static int ASYNC_DELAY = 500;
+
     public final static int HLS_NONE = 0;
     public final static int HLS_XOR = 1;
     public final static int HLS_OUTLINE = 2;
     public final static int HLS_OUTLINE2 = 3;
 
-    int highlightStyle = HLS_XOR;
+    private int highlightStyle = HLS_XOR;
 
-    boolean fullBackground = false;
-    boolean vertCross = false;
-    boolean horzCross = false;
+    private boolean fullBackground = false;
+    private boolean vertCross = false;
+    private boolean horzCross = false;
 
-    RegionDefine vertCrossColor = null;
-    RegionDefine horzCrossColor = null;
+    private RegionDefine vertCrossColor = null;
+    private RegionDefine horzCrossColor = null;
 
-    PairMatch currentPair = null;
+    private PairMatch currentPair = null;
 
     int prevLine = 0;
     int visibleStart, visibleEnd;
-    long prevStamp = IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
     long fModTimestamp;
 
     boolean lineHighlighting = true;
@@ -859,12 +859,16 @@ public class TextColorer implements IAdaptable
         return null;
     }
 
+    boolean canProcess() {
+        return (System.currentTimeMillis() - fModTimestamp > ASYNC_DELAY);
+    }
+    
     /**
      * Informs colorer about visible state change of the editor
      */
     void stateChanged()
     {
-        fModTimestamp = System.currentTimeMillis();
+//        fModTimestamp = System.currentTimeMillis();
 
         if (Logger.TRACE){
             Logger.trace("TextColorer", "stateChanged");

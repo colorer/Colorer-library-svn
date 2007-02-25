@@ -1,7 +1,5 @@
 package net.sf.colorer.eclipse.jface;
 
-import net.sf.colorer.Region;
-
 import org.eclipse.jface.text.source.Annotation;
 
 /**
@@ -19,15 +17,6 @@ public class ColorerAnnotation extends Annotation {
         super(type, false, text);
     }
 
-    public ColorerAnnotation(Region region)
-    {      
-        super(false);
-        if (region.getName().equals("def:TODO")) setType(TASK);
-        if (region.getName().equals("def:Debug")) setType(INFO);
-        if (region.getName().equals("def:ErrorText")) setType(WARNING);
-        if (region.getName().equals("def:Error")) setType(ERROR);
-        setText(region.getDescription());
-    }
 }
 
 

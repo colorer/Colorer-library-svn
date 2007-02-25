@@ -120,6 +120,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             if (Logger.TRACE){
                 Logger.trace("ColorerEditor", "notifyReload()");
             }
+            detachBaseEditor();
             fBaseEditor.dispose();
             fBaseEditor = null;
             relinkColorer();
@@ -131,7 +132,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
 
       ColorerPlugin.getDefault().addReloadListener(fReloadListener);
       
-      prefStore = ColorerPlugin.getDefault().getPreferenceStore();
+      prefStore = ColorerPlugin.getDefault().getCombinedPreferenceStore();
       prefStore.addPropertyChangeListener(this);
       
       JFaceResources.getFontRegistry().addListener(this);
@@ -169,12 +170,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         fProjectionSupport.install();
         viewer.doOperation(ProjectionViewer.TOGGLE);
         
-        // Install folding provider
-        fFoldingProvider.install(this);
-        fAnnotationProvider.install(this);
-        
-        //getSourceViewer().setRangeIndication(0, 200, false);
-        
+//        setRulerContextMenuId("net.sf.colorer.eclipse.editor.ColorerEditor.RulerContext");
+
         relinkColorer();
     }
     
@@ -216,6 +213,10 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
      */
     public void relinkColorer() {
         fBaseEditor = (BaseEditor)getAdapter(BaseEditor.class);
+
+        // Install folding provider
+        fFoldingProvider.install(this);
+        fAnnotationProvider.install(this);
 
         fTextColorer.relink();
         fTextColorer.chooseFileType(getTitle());
@@ -302,6 +303,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
         parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
     }
+    
+    protected void rulerContextMenuAboutToShow(IMenuManager menu) {
+        // TODO Auto-generated method stub
+        super.rulerContextMenuAboutToShow(menu);
+    }
 
     public void propertyChange(PropertyChangeEvent e) {
         
@@ -342,12 +348,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             }
             text.setWordWrap(ww == 1);
         }
-        
         if (e == null ||
-            e.getProperty().equals(PreferencePage.TAB_WIDTH))
-            if (text.getTabs() != prefStore.getInt(PreferencePage.TAB_WIDTH))
+            e.getProperty().equals(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH))
+            if (text.getTabs() != prefStore.getInt(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH))
             {
-                text.setTabs(prefStore.getInt(PreferencePage.TAB_WIDTH));
+                text.setTabs(prefStore.getInt(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH));
             }
 
         if (e == null ||
@@ -404,11 +409,11 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             }
             return fBaseEditor;
         }
-
-        if (key.equals(ColorerFoldingProvider.class)) {
-            return fFoldingProvider;
-        }
         
+        if (key.equals(TextColorer.class)) {
+            return fTextColorer;
+        }
+
         if (key.equals(IContentOutlinePage.class)) {
             IEditorInput input = getEditorInput();
             if (input instanceof IFileEditorInput) {
@@ -438,14 +443,19 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         
         return super.getAdapter(key);
     }
-
-    public void dispose() {
-        super.dispose();
+    
+    void detachBaseEditor() {
         if (contentOutliner != null) {
             contentOutliner.detach();
         }
         fFoldingProvider.uninstall();
         fAnnotationProvider.uninstall();
+    }
+
+    public void dispose() {
+        super.dispose();
+        
+        detachBaseEditor();
 
         prefStore.removePropertyChangeListener(this);
         JFaceResources.getFontRegistry().removeListener(this);
