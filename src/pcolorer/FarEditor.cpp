@@ -702,7 +702,7 @@ const int FILTER_SIZE = 40;
         if (treeLevel > visibleLevel) continue;
 
         if (!oldOutline){
-          int si = sprintf(menu[menu_size].Text, "%4d ", item->lno);
+          int si = sprintf(menu[menu_size].Text, "%4d ", item->lno+1);
           for(int lIdx = 0; lIdx < treeLevel; lIdx++){
             menu[menu_size].Text[si++] = ' ';
             menu[menu_size].Text[si++] = ' ';
