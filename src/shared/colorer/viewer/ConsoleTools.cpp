@@ -177,7 +177,11 @@ void ConsoleTools::listTypes(bool load, bool useNames){
       if (useNames){
         writer->write(StringBuffer(type->getName())+"\n");
       }else{
-        writer->write(StringBuffer(type->getGroup()) + ": " + type->getDescription()+"\n");
+        if (type->getGroup() != null){
+          writer->write(StringBuffer(type->getGroup()) + ": ");
+        }
+        writer->write(type->getDescription());
+        writer->write(DString("\n"));
       }
 
       if (load) type->getBaseScheme();
