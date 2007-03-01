@@ -88,7 +88,7 @@ common language constructions. Since then it evolved into very powerful way of
 describing complex relations between different languages and syntax contexts.
 HRC is a full-fledged "XML application" and that means HRC definitions can be
 automatically generated from XML descriptions in other languages and converted
-to other formats through XSLT templates.
+to other formats through XSLT templates or other means.
 </para>
 <para>
 HRC uses <emphasis role='strong'>Regular Expressions</emphasis> to achieve flexible recognition
@@ -192,7 +192,7 @@ Each language is identified by name and short description. This information
 is included in language prototype. Names are used to reference languages
 in HRC rules. Prototypes are usually contained in top level file
 <emphasis role='strong'>proto.hrc</emphasis>, but considering flexible
-syntax of XML itself they could be just everywhere.
+syntax of HRC they could be just everywhere.
 </para>
 
 <para>
@@ -214,7 +214,8 @@ The example shows prototype for "C++" language. It contains short
 description, information about language group and location of HRC file
 with formal part of syntax definition. It also includes RE to identify the
 language by filename extension and one or more RE to guess the language
-by first line of file contents.
+by first few lines (or several hundred bytes - depends on implementation)
+of file contents.
 </para>
 
 <x:schemaref uri="&hrcxsd;" role='prototype'/>
@@ -313,7 +314,7 @@ elements with the same name can belong to different types.
 An element can be referenced from the other type with its fully
 qualified name in form of <literal>typename:elementname</literal>.
 Sometimes there are a lot of inter-type links and use of qualified names
-can become a tedious task. As a workaround HRC language has
+can become a tedious task. To make the job easier HRC language has
 <x:hrc>import</x:hrc> statement. It 'imports' all element names from
 other type into the current. There can be as many import statements as
 needed. Unqualified names are resolved in order of their definition.
