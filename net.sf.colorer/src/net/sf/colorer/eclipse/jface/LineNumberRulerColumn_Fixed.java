@@ -12,7 +12,6 @@
 package net.sf.colorer.eclipse.jface;
 
 
-import org.eclipse.jface.internal.text.JFaceTextUtil;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;

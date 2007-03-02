@@ -19,3 +19,6 @@ GenerateHTML=—геренировать HTML
 colorerPresentation.label=EclipseColorer
 colorerEditorFontDefiniton.label=Ўрифт текста в редакторе Colorer
 colorerEditorFontDefintion.description=Ўрифт текста, который будет использован в редакторе Colorer
+
+preferenceKeywords.PreferencePage=color colorer word wrap HRC HRD style line pair match
+preferenceKeywords.FileTypePreferencePage=color colorer word wrap HRC HRD style line pair match file type syntax parameters

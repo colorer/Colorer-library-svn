@@ -314,7 +314,7 @@ public class TextColorer implements IAdaptable
         
         public void repairPresentation(boolean visual)
         {
-            if (fDamage == null) return;
+            if (fDamage == null || fViewer == null) return;
 
             if (Logger.TRACE){
                 Logger.trace("CDR", "Presentation change started");

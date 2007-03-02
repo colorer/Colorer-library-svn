@@ -5,6 +5,7 @@ import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.ftpp.FileTypePreferencePage;
 import net.sf.colorer.eclipse.jface.ColorerAnnotationProvider;
 import net.sf.colorer.eclipse.jface.ColorerFoldingProvider;
 import net.sf.colorer.eclipse.jface.LineNumberRulerColumn_Fixed;
@@ -19,6 +20,7 @@ import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -29,22 +31,13 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextViewerExtension2;
-import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.source.AnnotationModel;
-import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.IVerticalRulerColumn;
-import org.eclipse.jface.text.source.LineNumberChangeRulerColumn;
-import org.eclipse.jface.text.source.LineNumberRulerColumn;
-import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -52,16 +45,15 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
@@ -169,12 +161,38 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
            });
         fProjectionSupport.install();
         viewer.doOperation(ProjectionViewer.TOGGLE);
-        
+
 //        setRulerContextMenuId("net.sf.colorer.eclipse.editor.ColorerEditor.RulerContext");
+
+        
+        IAction fToggle= new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", this, ProjectionViewer.TOGGLE, true); //$NON-NLS-1$
+        fToggle.setChecked(true);
+        fToggle.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
+        setAction("FoldingToggle", fToggle); //$NON-NLS-1$
+        
+        IAction fExpandAll= new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", this, ProjectionViewer.EXPAND_ALL, true); //$NON-NLS-1$
+        fExpandAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
+        setAction("FoldingExpandAll", fExpandAll); //$NON-NLS-1$
+        
+        IAction fExpand= new TextOperationAction(Messages.getResourceBundle(), "Projection.Expand.", this, ProjectionViewer.EXPAND, true); //$NON-NLS-1$
+        fExpand.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND);
+        setAction("FoldingExpand", fExpand); //$NON-NLS-1$
+        
+        IAction fCollapse= new TextOperationAction(Messages.getResourceBundle(), "Projection.Collapse.", this, ProjectionViewer.COLLAPSE, true); //$NON-NLS-1$
+        fCollapse.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE);
+        setAction("FoldingCollapse", fCollapse); //$NON-NLS-1$
 
         relinkColorer();
     }
     
+    protected String[] collectContextMenuPreferencePages() {
+        String[] preferencePages = super.collectContextMenuPreferencePages();
+        String[] extendedPreferencePages = new String[preferencePages.length+2];
+        extendedPreferencePages[0] = PreferencePage.class.getName();
+        extendedPreferencePages[1] = FileTypePreferencePage.class.getName();
+        System.arraycopy(preferencePages, 0, extendedPreferencePages, 2, preferencePages.length);
+        return extendedPreferencePages;
+    };
 
     protected void initializeKeyBindingScopes(){
         setKeyBindingScopes(new String[] {
@@ -416,7 +434,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
 
         if (key.equals(IContentOutlinePage.class)) {
             IEditorInput input = getEditorInput();
-            if (input instanceof IFileEditorInput) {
+            if (input instanceof IStorageEditorInput) {
                 if (contentOutliner == null){
                     contentOutliner = new ColorerContentOutlinePage();
                     contentOutliner.addSelectionChangedListener(new OutlineSelectionListener());

@@ -4,31 +4,35 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages{
-  
-  static String RESOURCE_BUNDLE  = "net.sf.colorer.eclipse.Messages";
-  static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
-  
-  public static String format(String key, Object[] args) {
-    return MessageFormat.format(get(key), args);
-  }
-  
-  public static String get(String key) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      return "!" + key + "!";
+public class Messages {
+
+    static ResourceBundle fgResourceBundle = ResourceBundle.getBundle(Messages.class.getName());
+
+    public static String format(String key, Object[] args) {
+        return MessageFormat.format(get(key), args);
     }
-  }
-  
-  public static String get(String key, String def) {
-    try {
-      return fgResourceBundle.getString(key);
-    } catch (MissingResourceException e) {
-      if (def != null) return def;
-      return "!" + key + "!";
+
+    public static String get(String key) {
+        try {
+            return fgResourceBundle.getString(key);
+        } catch (MissingResourceException e) {
+            return "!" + key + "!";
+        }
     }
-  }
+
+    public static String get(String key, String def) {
+        try {
+            return fgResourceBundle.getString(key);
+        } catch (MissingResourceException e) {
+            if (def != null)
+                return def;
+            return "!" + key + "!";
+        }
+    }
+
+    public static ResourceBundle getResourceBundle() {
+        return fgResourceBundle;
+    }
 }
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
