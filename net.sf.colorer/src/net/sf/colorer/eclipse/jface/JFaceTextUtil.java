@@ -10,9 +10,6 @@ package net.sf.colorer.eclipse.jface;
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Rectangle;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -20,6 +17,8 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.source.ILineRange;
 import org.eclipse.jface.text.source.LineRange;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Rectangle;
 
 
 /**

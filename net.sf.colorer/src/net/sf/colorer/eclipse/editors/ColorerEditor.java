@@ -6,6 +6,7 @@ import net.sf.colorer.eclipse.IColorerReloadListener;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.ftpp.FileTypePreferencePage;
+import net.sf.colorer.eclipse.jface.ColorerAnnotation;
 import net.sf.colorer.eclipse.jface.ColorerAnnotationProvider;
 import net.sf.colorer.eclipse.jface.ColorerFoldingProvider;
 import net.sf.colorer.eclipse.jface.LineNumberRulerColumn_Fixed;
@@ -20,8 +21,8 @@ import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -53,7 +54,6 @@ import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
-import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
@@ -159,29 +159,17 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
                 return new ColorerSourceViewerInformationControl(shell);
               }
            });
+        
+        fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.ERROR);
+        fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.WARNING);
+        fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.INFO);
+        fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.TASK);
+
         fProjectionSupport.install();
         viewer.doOperation(ProjectionViewer.TOGGLE);
 
 //        setRulerContextMenuId("net.sf.colorer.eclipse.editor.ColorerEditor.RulerContext");
-
         
-        IAction fToggle= new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", this, ProjectionViewer.TOGGLE, true); //$NON-NLS-1$
-        fToggle.setChecked(true);
-        fToggle.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
-        setAction("FoldingToggle", fToggle); //$NON-NLS-1$
-        
-        IAction fExpandAll= new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", this, ProjectionViewer.EXPAND_ALL, true); //$NON-NLS-1$
-        fExpandAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
-        setAction("FoldingExpandAll", fExpandAll); //$NON-NLS-1$
-        
-        IAction fExpand= new TextOperationAction(Messages.getResourceBundle(), "Projection.Expand.", this, ProjectionViewer.EXPAND, true); //$NON-NLS-1$
-        fExpand.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND);
-        setAction("FoldingExpand", fExpand); //$NON-NLS-1$
-        
-        IAction fCollapse= new TextOperationAction(Messages.getResourceBundle(), "Projection.Collapse.", this, ProjectionViewer.COLLAPSE, true); //$NON-NLS-1$
-        fCollapse.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE);
-        setAction("FoldingCollapse", fCollapse); //$NON-NLS-1$
-
         relinkColorer();
     }
     
@@ -315,16 +303,25 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         super.editorContextMenuAboutToShow(parentMenu);
         if (!fTextColorer.pairAvailable())
             return;
-        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite().getActionBarContributor();
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairMatchAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, ec.pairSelectContentAction);
-        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator());
+//        ColorerActionContributor ec = (ColorerActionContributor) getEditorSite().getActionBarContributor();
+
+        parentMenu.insertBefore(ITextEditorActionConstants.GROUP_UNDO, new Separator("colorer"));
+        addAction(parentMenu, "colorer", ColorerActionContributor.ACTION_ID_PAIRMATCH);
+        addAction(parentMenu, "colorer", ColorerActionContributor.ACTION_ID_PAIRSELECT);
+        addAction(parentMenu, "colorer", ColorerActionContributor.ACTION_ID_PAIRSELECTCONTENT);
     }
     
     protected void rulerContextMenuAboutToShow(IMenuManager menu) {
-        // TODO Auto-generated method stub
         super.rulerContextMenuAboutToShow(menu);
+
+        MenuManager foldingsub = new MenuManager(Messages.get("Projection.Folding.label"));
+        menu.insertBefore("settings", foldingsub);
+        addAction(foldingsub, IFoldingCommandIds.FOLDING_TOGGLE);
+        addAction(foldingsub, IFoldingCommandIds.FOLDING_EXPAND_ALL);
+        addAction(foldingsub, IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
+
+        menu.insertBefore("settings", new Separator("ww"));
+        addAction(menu, "ww", WordWrapAction.class.getName());
     }
 
     public void propertyChange(PropertyChangeEvent e) {

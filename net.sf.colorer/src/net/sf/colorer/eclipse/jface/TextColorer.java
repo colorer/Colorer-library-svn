@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentExtension4;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.ITextListener;
@@ -859,6 +858,11 @@ public class TextColorer implements IAdaptable
         return null;
     }
 
+    /**
+     * Detects if there was enough idle time (no user activity) to process
+     * asynchronously any model updates.
+     * @return true, if there was enough idle
+     */
     boolean canProcess() {
         return (System.currentTimeMillis() - fModTimestamp > ASYNC_DELAY);
     }

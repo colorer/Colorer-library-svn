@@ -5,7 +5,6 @@ import java.util.Vector;
 import net.sf.colorer.FileType;
 import net.sf.colorer.LineSource;
 import net.sf.colorer.ParserFactory;
-import net.sf.colorer.RegionHandler;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.PairMatch;
 import net.sf.colorer.handlers.LineRegion;

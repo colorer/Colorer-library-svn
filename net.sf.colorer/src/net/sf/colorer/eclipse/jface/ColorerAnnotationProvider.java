@@ -1,26 +1,19 @@
 package net.sf.colorer.eclipse.jface;
 
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.editor.BaseEditor;
-import net.sf.colorer.editor.IFoldingReciever;
 import net.sf.colorer.editor.OutlineItem;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.editor.Outliner;
 import net.sf.colorer.impl.Logger;
 
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -58,7 +51,12 @@ public class ColorerAnnotationProvider {
         
         IAnnotationModel model = getModel();
         Iterator iter = model.getAnnotationIterator();
-        while(iter.hasNext()) model.removeAnnotation((Annotation)iter.next());
+        while(iter.hasNext()){
+            Annotation ann = (Annotation)iter.next();
+            if (ann instanceof ColorerAnnotation){
+                model.removeAnnotation(ann);
+            }
+        }
 
         if (!((TextColorer)fEditor.getAdapter(TextColorer.class)).canProcess()) return;
         

@@ -147,7 +147,7 @@ public class Outliner implements IOutlineSource
      * @param curLevel
      * @param itemLabel
      * @param region
-     * @return
+     * @return should return created outline item. Can be redefined.
      */
     protected OutlineItem createItem(int lno, int sx, int length, int curLevel, String itemLabel, Region region) {
         return new OutlineItem(lno, sx, length, curLevel, itemLabel, region);

@@ -8,7 +8,6 @@ import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.jface.ColorerContentAssistProcessor;
 import net.sf.colorer.eclipse.jface.TextColorer;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;

@@ -1,7 +1,6 @@
 package net.sf.colorer.editor;
 
 import java.util.Stack;
-import java.util.Vector;
 
 import net.sf.colorer.Region;
 import net.sf.colorer.RegionHandler;
@@ -37,12 +36,9 @@ public class FoldingBuilder {
         private boolean compensationrun;
         
         public void addRegion(int lno, String line, int sx, int ex, Region region) {
-            // TODO Auto-generated method stub
-
         }
 
         public void clearLine(int lno, String line) {
-            // TODO Auto-generated method stub
         }
 
         public void startParsing(int lno) {

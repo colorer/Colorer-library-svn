@@ -1,10 +1,10 @@
 package net.sf.colorer.eclipse.editors;
 
+import net.sf.colorer.LineSource;
+
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-
-import net.sf.colorer.LineSource;
 
 /**
  * Text information Line source for colorer's parser

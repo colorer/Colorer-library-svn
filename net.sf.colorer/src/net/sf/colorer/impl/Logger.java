@@ -1,10 +1,7 @@
 package net.sf.colorer.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Logging Service class

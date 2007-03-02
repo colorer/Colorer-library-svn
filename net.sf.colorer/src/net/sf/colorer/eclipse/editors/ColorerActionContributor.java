@@ -11,15 +11,17 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
+import org.eclipse.ui.texteditor.TextOperationAction;
 
 /**
  * Action definitions for editor UI commands.
@@ -27,13 +29,18 @@ import org.eclipse.ui.editors.text.TextEditorActionContributor;
  */
 public class ColorerActionContributor extends TextEditorActionContributor
 {
+    
+    public final static String ACTION_ID_PAIRMATCH = "net.sf.colorer.eclipse.editors.PairMatchAction";
+    public final static String ACTION_ID_PAIRSELECT = "net.sf.colorer.eclipse.editors.pairselect";
+    public final static String ACTION_ID_PAIRSELECTCONTENT = "net.sf.colorer.eclipse.editors.pairselectcontent";
+    
     ColorerEditor activeEditor = null;
 
-    public PairMatchAction pairMatchAction;
-    public PairSelectAction pairSelectAction;
-    public PairSelectContentAction pairSelectContentAction;
+    Action pairMatchAction = new PairMatchAction();
+    Action pairSelectAction = new PairSelectAction();
+    Action pairSelectContentAction = new PairSelectContentAction();
 
-    public Action cursorRegionAction = new Action() {
+    Action cursorRegionAction = new Action() {
         public void run(){
             activeEditor.selectCursorRegion();
         }
@@ -43,7 +50,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
         PairMatchAction() {
             super(Messages.get("pair.find"), ImageStore.EDITOR_PAIR_MATCH);
-            setActionDefinitionId("net.sf.colorer.eclipse.editors.pairmatch");
+            setActionDefinitionId(ACTION_ID_PAIRMATCH);
             setToolTipText(Messages.get("pair.find.tooltip"));
         }
 
@@ -56,7 +63,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
         PairSelectAction() {
             super(Messages.get("pair.select"), ImageStore.EDITOR_PAIR_SELECT);
-            setActionDefinitionId("net.sf.colorer.eclipse.editors.pairselect");
+            setActionDefinitionId(ACTION_ID_PAIRSELECT);
             setToolTipText(Messages.get("pair.select.tooltip"));
         }
 
@@ -69,7 +76,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
 
         PairSelectContentAction() {
             super(Messages.get("pair.selectcontent"), ImageStore.EDITOR_PAIR_SELECTCONTENT);
-            setActionDefinitionId("net.sf.colorer.eclipse.editors.pairselectcontent");
+            setActionDefinitionId(ACTION_ID_PAIRSELECTCONTENT);
             setToolTipText(Messages.get("pair.selectcontent.tooltip"));
         }
 
@@ -177,7 +184,12 @@ public class ColorerActionContributor extends TextEditorActionContributor
     }
 
 
+    TextOperationAction fToggle;
+    TextOperationAction fExpandAll;
+    TextOperationAction fCollapseAll;
 
+    WordWrapAction fWordWrapAction = new WordWrapAction();
+    
     public ColorerActionContributor() {
 
         hrcupdateAction.setText(Messages.get("editor.hrcupdate"));
@@ -192,11 +204,18 @@ public class ColorerActionContributor extends TextEditorActionContributor
         filetypeAction.setHoverImageDescriptor(ImageStore.EDITOR_FILETYPE_A);
         filetypeAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.choosetype");
 
-        pairMatchAction = new PairMatchAction();
-        pairSelectAction = new PairSelectAction();
-        pairSelectContentAction = new PairSelectContentAction();
-
         cursorRegionAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.selectregion");       
+
+        fToggle = new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", null, ProjectionViewer.TOGGLE, true);
+        fToggle.setChecked(true);
+        fToggle.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
+        
+        fExpandAll = new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", null, ProjectionViewer.EXPAND_ALL, true);
+        fExpandAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
+        
+        fCollapseAll = new TextOperationAction(Messages.getResourceBundle(), "Projection.CollapseAll.", null, ProjectionViewer.COLLAPSE_ALL, true);
+        fCollapseAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
+
     }
 
     public void contributeToToolBar(IToolBarManager toolBarManager) {
@@ -219,7 +238,6 @@ public class ColorerActionContributor extends TextEditorActionContributor
     }
 
     /**
-     * TODO: Refactor with new APIs?
      * 
      * @see org.eclipse.ui.editors.text.TextEditorActionContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
      */
@@ -231,13 +249,23 @@ public class ColorerActionContributor extends TextEditorActionContributor
             activeEditor = null;
         }
 
-        IKeyBindingService kbs = editor.getEditorSite().getKeyBindingService();
-        kbs.registerAction(hrcupdateAction);
-        kbs.registerAction(filetypeAction);
-        kbs.registerAction(pairMatchAction);
-        kbs.registerAction(pairSelectAction);
-        kbs.registerAction(pairSelectContentAction);
-        kbs.registerAction(cursorRegionAction);
+        fToggle.setEditor(activeEditor);
+        fExpandAll.setEditor(activeEditor);
+        fCollapseAll.setEditor(activeEditor);
+        fWordWrapAction.setEditor(activeEditor);
+
+        activeEditor.setAction(hrcupdateAction.getActionDefinitionId(), hrcupdateAction);
+        activeEditor.setAction(filetypeAction.getActionDefinitionId(), filetypeAction);
+        activeEditor.setAction(pairMatchAction.getActionDefinitionId(), pairMatchAction);
+        activeEditor.setAction(pairSelectAction.getActionDefinitionId(), pairSelectAction);
+        activeEditor.setAction(pairSelectContentAction.getActionDefinitionId(), pairSelectContentAction);
+        activeEditor.setAction(cursorRegionAction.getActionDefinitionId(), cursorRegionAction);
+        activeEditor.setAction(fWordWrapAction.getActionDefinitionId(), fWordWrapAction);
+        
+        activeEditor.setAction(fToggle.getActionDefinitionId(), fToggle); //$NON-NLS-1$
+        activeEditor.setAction(fExpandAll.getActionDefinitionId(), fExpandAll); //$NON-NLS-1$
+        activeEditor.setAction(fCollapseAll.getActionDefinitionId(), fCollapseAll); //$NON-NLS-1$
+        
     }
 
 }
