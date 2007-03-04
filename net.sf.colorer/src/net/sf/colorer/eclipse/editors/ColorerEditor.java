@@ -21,6 +21,7 @@ import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -35,6 +36,7 @@ import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.IVerticalRulerColumn;
+import org.eclipse.jface.text.source.projection.IProjectionListener;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -50,10 +52,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.texteditor.ResourceAction;
+import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
@@ -68,7 +73,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
 
     ColorerContentOutlinePage contentOutliner;
     ProjectionSupport fProjectionSupport;
-    ColorerFoldingProvider fFoldingProvider = new ColorerFoldingProvider();
+    ColorerFoldingProvider fFoldingProvider;
     ColorerAnnotationProvider fAnnotationProvider = new ColorerAnnotationProvider();
 
     VerifyListener tabReplacer = new VerifyListener() {
@@ -153,34 +158,84 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         fDocument = getSourceViewer().getDocument();
 
         ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
-        fProjectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(), getSharedColors());
+
+        viewer.addProjectionListener(new IProjectionListener(){
+            public void projectionEnabled() {
+                if (fFoldingProvider == null) {
+                    fFoldingProvider = new ColorerFoldingProvider();
+                    fFoldingProvider.install(ColorerEditor.this);
+                }else{
+                    fFoldingProvider.uninstall();
+                    fFoldingProvider.install(ColorerEditor.this);
+                }
+                invalidateSyntax();
+            }
+            public void projectionDisabled() {
+                if (fFoldingProvider == null) return;
+                fFoldingProvider.uninstall();
+                fFoldingProvider = null;
+            }
+        });
+        
+        fProjectionSupport = new ProjectionSupport(viewer, getAnnotationAccess(), getSharedColors());
         fProjectionSupport.setHoverControlCreator(new IInformationControlCreator() {
             public IInformationControl createInformationControl(Shell shell) {
                 return new ColorerSourceViewerInformationControl(shell);
               }
            });
-        
+
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.ERROR);
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.WARNING);
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.INFO);
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.TASK);
 
         fProjectionSupport.install();
-        viewer.doOperation(ProjectionViewer.TOGGLE);
 
-//        setRulerContextMenuId("net.sf.colorer.eclipse.editor.ColorerEditor.RulerContext");
-        
         relinkColorer();
     }
     
     protected String[] collectContextMenuPreferencePages() {
         String[] preferencePages = super.collectContextMenuPreferencePages();
         String[] extendedPreferencePages = new String[preferencePages.length+2];
-        extendedPreferencePages[0] = PreferencePage.class.getName();
-        extendedPreferencePages[1] = FileTypePreferencePage.class.getName();
+        extendedPreferencePages[0] = FileTypePreferencePage.class.getName();
+        extendedPreferencePages[1] = PreferencePage.class.getName();
         System.arraycopy(preferencePages, 0, extendedPreferencePages, 2, preferencePages.length);
         return extendedPreferencePages;
-    };
+    }
+
+    protected void createActions() {
+        super.createActions();
+        
+        final Shell shell = getSourceViewer().getTextWidget().getShell();
+        IAction action= new ResourceAction(Messages.getResourceBundle(), "Editor.RulerPreferencesAction.") {
+            public void run() {
+                String[] preferencePages= collectRulerMenuPreferencePages();
+                if (preferencePages.length > 0 && (shell == null || !shell.isDisposed()))
+                {
+                    PreferencesUtil.createPreferenceDialogOn(shell, preferencePages[0],
+                            preferencePages, fTextColorer.getFileType()).open();
+                }
+            }
+        };
+        setAction(ITextEditorActionConstants.RULER_PREFERENCES, action);
+        
+        action = new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", this, ProjectionViewer.TOGGLE, true);
+        action.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
+        setAction(action.getActionDefinitionId(), action);
+        action.setChecked(fFoldingProvider != null);
+
+        action = new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", this, ProjectionViewer.EXPAND_ALL, true);
+        action.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
+        setAction(action.getActionDefinitionId(), action);
+        
+        action = new TextOperationAction(Messages.getResourceBundle(), "Projection.CollapseAll.", this, ProjectionViewer.COLLAPSE_ALL, true);
+        action.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
+        setAction(action.getActionDefinitionId(), action);
+        
+        action = new WordWrapAction(this);
+        setAction(action.getActionDefinitionId(), action);
+        
+    }
 
     protected void initializeKeyBindingScopes(){
         setKeyBindingScopes(new String[] {
@@ -196,32 +251,12 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     }
     
     /**
-     * Selects filetype according to file name and first line of content
-     */
-    public void chooseFileType() {
-        fTextColorer.chooseFileType(getTitle());
-    }
-
-    /**
-     * Selects file's type according to the passed type name
-     */
-    public void setFileType(FileType type) {
-        fTextColorer.setFileType(type);
-    }
-    
-    /** Returns currently used file type */
-    public FileType getFileType() {
-        return fBaseEditor.getFileType();
-    }
-
-    /**
      * Reloads coloring highlighting in this editor
      */
     public void relinkColorer() {
         fBaseEditor = (BaseEditor)getAdapter(BaseEditor.class);
 
-        // Install folding provider
-        fFoldingProvider.install(this);
+        // Install annotation provider
         fAnnotationProvider.install(this);
 
         fTextColorer.relink();
@@ -234,59 +269,8 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         propertyChange(null);
     }
 
-    /** Tries to match paired construction */
-    public void matchPair() {
-        if (!fTextColorer.matchPair()) {
-            showPairError();
-        }
-    }
-
-    /** Selects paired construction */
-    public void selectPair() {
-        if (!fTextColorer.selectPair()) {
-            showPairError();
-        }
-    }
-
-    /** Selects content of paired construction */
-    public void selectContentPair() {
-        if (!fTextColorer.selectContentPair()) {
-            showPairError();
-        }
-    }
-
-    /**
-     * Retrieves current LineRegion under caret.
-     * 
-     * @return LineRegion currently under Caret
-     */
-    public LineRegion getCaretRegion() {
-        return fTextColorer.getCaretRegion();
-
-    }
-
-    void showPairError() {
-        MessageDialog.openInformation(null, Messages.get("editor.pairerr.title"),
-                Messages.get("editor.pairerr.msg"));
-    }
-    
-    /**
-     * Selects region under the cursor
-     */
-    public void selectCursorRegion() {
-        LineRegion lr = getCaretRegion();
-        if (lr == null) return;
-        
-        int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
-        int selstart = loffset+lr.start;
-        int selend = lr.end-lr.start;
-        if (lr.end == -1){
-            selend = 0;
-        }
-        text.setSelectionRange(selstart, selend);
-    }
-    
     //----------------------------------------
+
     /*
      * Eclipse Bugs patching with line numbers ruler
      */
@@ -331,7 +315,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             e.getProperty().equals(PreferencePage.HRD_SET) ||
             e.getProperty().startsWith(ColorerPlugin.HRD_SIGNATURE))
         {
-            String hrd = ColorerPlugin.getDefault().getPropertyHRD(getFileType());
+            String hrd = ColorerPlugin.getDefault().getPropertyHRD(fTextColorer.getFileType());
             if (hrd == null) {
                 hrd = prefStore.getString(PreferencePage.HRD_SET);
             }
@@ -357,7 +341,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             e.getProperty().equals(PreferencePage.WORD_WRAP) ||
             e.getProperty().startsWith(ColorerPlugin.WORD_WRAP_SIGNATURE))
         {
-            int ww = ColorerPlugin.getDefault().getPropertyWordWrap(getFileType());
+            int ww = ColorerPlugin.getDefault().getPropertyWordWrap(fTextColorer.getFileType());
             if (ww == -1) {
                 ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
             }
@@ -403,6 +387,15 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             Font textFont = JFaceResources.getFont(PreferencePage.TEXT_FONT);
             text.setFont(textFont);
         }
+        
+        if (e == null ||
+            e.getProperty().equals(PreferencePage.PROJECTION))
+        {
+            if (prefStore.getBoolean(PreferencePage.PROJECTION))
+                ((ProjectionViewer)getSourceViewer()).enableProjection();
+            else
+                ((ProjectionViewer)getSourceViewer()).disableProjection();
+        }
     }
 
     public Object getAdapter(Class key)
@@ -423,6 +416,14 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
                 fBaseEditor.setRegionCompact(true);                
             }
             return fBaseEditor;
+        }
+
+        if (key.equals(StyledText.class)) {
+            return text;
+        }
+        
+        if (key.equals(FileType.class)) {
+            return fTextColorer.getFileType();
         }
         
         if (key.equals(TextColorer.class)) {
@@ -463,7 +464,9 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         if (contentOutliner != null) {
             contentOutliner.detach();
         }
-        fFoldingProvider.uninstall();
+        if (fFoldingProvider != null){
+            fFoldingProvider.uninstall();
+        }
         fAnnotationProvider.uninstall();
     }
 

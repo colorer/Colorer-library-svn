@@ -20,6 +20,7 @@ WordWrapPatch=Исправлять некоторые ошибки при мягком переносе
 FULL_BACK=Заполнять строки &фоном полностью во вложенных языках
 HORZ_CROSS=Подсвечивать текущую &горизонтальную позицию
 VERT_CROSS=Подсвечивать текущую &вертикальную позицию -- отключено
+PROJECTION=Включить свертывание блоков в редакторе
 
 PAIRS_MATCH=Парные &конструкции:
 PAIRS_NO=Не показывать парные конструкции
@@ -30,8 +31,10 @@ PAIRS_OUTLINE2=Показывать пары жирной рамкой
 HRD_SET=&Используемая цветовая схема:
 USE_BACK=Использовать &цвет фона из указанной схемы
 
+ftpp.Parameter=Параметр
+ftpp.Value=Значение
 ftpp.hrd_set=Использовать цветовую схему
-ftpp.default=<Общий>
+ftpp.default=<Общее>
 ftpp.word_wrap=Использовать мягкий перенос слов в редакторе
 ftpp.true=Включено
 ftpp.false=Выключено
@@ -74,10 +77,13 @@ htmlgen.fault.msg=Сбой в процессе генерации.\u000A{0} файл(ов) сгенерировано в к
 
 WordWrapAction=Мягкий перенос
 
+Editor.RulerPreferencesAction.label=Настройки
+Editor.RulerPreferencesAction.tooltip=Открыть настройки для этого типа файлов
+
 Projection.Folding.label=Свертывание
 
-Projection.Toggle.label= Изменить свертывание
-Projection.Toggle.tooltip=Изменить свертывание на противоположное
+Projection.Toggle.label= Свертывание активно
+Projection.Toggle.tooltip=Активировать/отключить свертывание
 Projection.Toggle.description= Toggles folding for the current editor
 Projection.Toggle.image=
 

@@ -1,16 +1,14 @@
 package net.sf.colorer.eclipse.editors;
 
+import net.sf.colorer.FileType;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.impl.Logger;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.IUpdate;
 
 /**
@@ -18,44 +16,32 @@ import org.eclipse.ui.texteditor.IUpdate;
  */
 public class WordWrapAction extends Action implements IUpdate {
 
-    private ColorerEditor fTargetEditor;
+    private ITextEditor fTargetEditor;
 
-    public WordWrapAction() {
+    public WordWrapAction(ITextEditor targetEditor) {
         setActionDefinitionId(WordWrapAction.class.getName());
         setText(Messages.get("WordWrapAction"));
         setToolTipText(Messages.get("WordWrapAction.tooltip"));
         
-        ColorerPlugin.getDefault().getPreferenceStore().
-            addPropertyChangeListener(new IPropertyChangeListener(){
-                public void propertyChange(PropertyChangeEvent e) {
-                    if (e.getProperty().equals(PreferencePage.WORD_WRAP) ||
-                        e.getProperty().startsWith(ColorerPlugin.WORD_WRAP_SIGNATURE))
-                    {
-                        update();
-                    }
-                }
-            });
+        setEditor(targetEditor);
     }
     
-    public void setEditor(IEditorPart targetEditor) {
+    public void setEditor(ITextEditor targetEditor) {
         Logger.trace("wwra", "1");
         fTargetEditor = null;
-        Assert.isTrue(targetEditor instanceof ColorerEditor);
-        
-        fTargetEditor = (ColorerEditor)targetEditor;
-        
-        setChecked(ColorerPlugin.getDefault().getPropertyWordWrap(fTargetEditor.getFileType()) == 1);
+
+        fTargetEditor = targetEditor;
 
     }
     
     public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap(fTargetEditor.getFileType(), isChecked() ? 1 : 0);
+        ColorerPlugin.getDefault().setPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class), isChecked() ? 1 : 0);
     }
 
     public void update() {
         if (fTargetEditor == null) return;
         IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap(fTargetEditor.getFileType());
+        int ww = ColorerPlugin.getDefault().getPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class));
         if (ww == -1) {
             ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
         }

@@ -14,6 +14,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.util.Assert;
@@ -67,7 +68,7 @@ public class ColorerFoldingProvider
             fLastLine = e_line;
 
             ProjectionAnnotation ann = new ProjectionAnnotation();
-            
+
             if (Logger.TRACE){
                 Logger.trace("FoldingReciever", "notifyFoldingItem: "+s_line+":"+e_line);
             }
@@ -82,13 +83,20 @@ public class ColorerFoldingProvider
                 
                 Position newposition = new Position(offset, len);
 
+                if (schema.toLowerCase().contains("comment")){
+                    ann.markCollapsed();
+                }
+
                 // Merge annotation folding states
                 for(Enumeration e = deletions.elements(); e.hasMoreElements();){
                     ProjectionAnnotation deleted = (ProjectionAnnotation)e.nextElement();
                     if (newposition.equals(getModel().getPosition(deleted))){
                         if (deleted.isCollapsed()) ann.markCollapsed();
+                        else ann.markExpanded();
                     }
                 }
+                
+
                 
                 additions.put(ann, newposition);
 
@@ -105,6 +113,7 @@ public class ColorerFoldingProvider
     private BaseEditor fBaseEditor;
     private IDocument fDocument;
     private ITextEditor fEditor;
+    private Display rootDisplay;
     
     private Vector deletions = new Vector();
     private HashMap additions = new HashMap();
@@ -145,10 +154,10 @@ public class ColorerFoldingProvider
 
         builder.install(fBaseEditor, new FoldingReciever());
         
+        rootDisplay = Display.getCurrent();
+
         new Thread(new Runnable(){
             
-            Display rootDisplay = Display.getCurrent();
-
             public void run() {
                 while(rootDisplay != null && !rootDisplay.isDisposed())
                 {
@@ -166,6 +175,7 @@ public class ColorerFoldingProvider
     }
 
     public void uninstall() {
+        rootDisplay = null;
         builder.uninstall();
     }
 

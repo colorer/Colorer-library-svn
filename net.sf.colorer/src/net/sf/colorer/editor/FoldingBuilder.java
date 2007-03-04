@@ -126,6 +126,8 @@ public class FoldingBuilder {
     public void uninstall() {
         fBaseEditor.removeRegionHandler(fHandler);
         fBaseEditor.removeEditorListener(fHandler);
+        fBaseEditor = null;
+        fReciever = null;
     }
 
 }

@@ -422,8 +422,7 @@ public class TextColorer implements IAdaptable
             }
             if (!fullBackground)
                 return;
-            // TODO: Map to document coordinates
-            LineRegion[] lr = fBaseEditor.getLineRegions(lno);
+            LineRegion[] lr = fBaseEditor.getLineRegions(fProjectionViewer.widgetLine2ModelLine(lno));
             for (int idx = 0; idx < lr.length; idx++) {
                 StyledRegion rdef = (StyledRegion) lr[idx].rdef;
                 if (lr[idx].end == -1 && rdef != null)

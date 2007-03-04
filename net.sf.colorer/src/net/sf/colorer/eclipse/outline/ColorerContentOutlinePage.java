@@ -212,10 +212,10 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         if (fEditor != null){
             fEditor.getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(thisSelectionListener);
         }
+        setActiveOutliner(null, null);
         backgroundUpdater = null;
         fBaseEditor = null;
         fEditor = null;
-        setActiveOutliner(null, null);
         fStructureOutline = null;
         fParseTreeOutline = null;
     };

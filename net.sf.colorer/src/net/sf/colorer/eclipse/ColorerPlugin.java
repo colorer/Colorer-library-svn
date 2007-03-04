@@ -69,7 +69,9 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault(PreferencePage.PAIRS_MATCH, "PAIRS_OUTLINE");
     
         store.setDefault(PreferencePage.HRD_SET, "default");
-    
+
+        store.setDefault(PreferencePage.PROJECTION, true);
+
         store.setDefault("Outline.Hierarchy", true);
         store.setDefault("Outline.Sort", false);
 

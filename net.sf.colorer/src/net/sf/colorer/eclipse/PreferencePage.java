@@ -31,6 +31,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
     public final static String HRD_SET = "HRD_SET";
     public final static String USE_BACK = "USE_BACK";
     public final static String PAIRS_MATCH = "PAIRS_MATCH";
+    public static final String PROJECTION = "PROJECTION";
 
     Combo hrdSets;
     Vector hrdSetsList;
@@ -70,6 +71,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
 
         addField(new BooleanFieldEditor(FULL_BACK, Messages.get(FULL_BACK), p));
         addField(new BooleanFieldEditor(HORZ_CROSS, Messages.get(HORZ_CROSS), p));
+        addField(new BooleanFieldEditor(PROJECTION, Messages.get(PROJECTION), p));
 
         String[][] arrPairs = new String[4][2];
         arrPairs[0][0] = Messages.get("PAIRS_NO");

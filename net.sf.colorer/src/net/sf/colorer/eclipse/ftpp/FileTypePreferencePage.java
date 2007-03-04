@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -153,6 +154,13 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
     
     public void init(IWorkbench iworkbench){}
 
+    public void applyData(Object data) {
+        if (data != null && data instanceof FileType && typeTreeViewer != null){
+            typeTreeViewer.expandAll();
+            typeTreeViewer.setSelection(new StructuredSelection(data), true);
+        }
+    }
+    
     public boolean performOk() {
         currentType = null;
         typePropertiesViewer.setInput(null);
@@ -212,10 +220,10 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
             typePropertiesViewer.setLabelProvider(new TypeLabelProvider(typePropertiesProvider));
 
             TableColumn tc = new TableColumn(typePropertiesTable, SWT.LEFT);
-            tc.setText("Parameter");
+            tc.setText(Messages.get("ftpp.Parameter"));
             tc.setWidth(300);
             tc = new TableColumn(typePropertiesTable, SWT.LEFT);
-            tc.setText("Value");
+            tc.setText(Messages.get("ftpp.Value"));
             tc.setWidth(150);
 
             CellEditor cellEditors[] = new CellEditor[typePropertiesViewer

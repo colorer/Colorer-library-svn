@@ -5,14 +5,19 @@ import net.sf.colorer.Group;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
+import net.sf.colorer.eclipse.jface.TextColorer;
+import net.sf.colorer.handlers.LineRegion;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -21,6 +26,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.TextOperationAction;
 
 /**
@@ -33,19 +39,38 @@ public class ColorerActionContributor extends TextEditorActionContributor
     public final static String ACTION_ID_PAIRMATCH = "net.sf.colorer.eclipse.editors.PairMatchAction";
     public final static String ACTION_ID_PAIRSELECT = "net.sf.colorer.eclipse.editors.pairselect";
     public final static String ACTION_ID_PAIRSELECTCONTENT = "net.sf.colorer.eclipse.editors.pairselectcontent";
+    public final static String ACTION_ID_CHOOSETYPE = "net.sf.colorer.eclipse.editors.choosetype";
     
-    ColorerEditor activeEditor = null;
+    ITextEditor activeEditor = null;
 
     Action pairMatchAction = new PairMatchAction();
     Action pairSelectAction = new PairSelectAction();
     Action pairSelectContentAction = new PairSelectContentAction();
 
+    /**
+     * Selects region under the cursor
+     */
     Action cursorRegionAction = new Action() {
-        public void run(){
-            activeEditor.selectCursorRegion();
+        public void run()
+        {
+            if (getTextColorer() == null) return;
+            
+            LineRegion lr = getTextColorer().getCaretRegion();
+            if (lr == null) return;
+            
+            StyledText text = getStyledText();
+            
+            int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
+            int selstart = loffset+lr.start;
+            int selend = lr.end-lr.start;
+            if (lr.end == -1){
+                selend = 0;
+            }
+            text.setSelectionRange(selstart, selend);
         }
     };
 
+    /** Tries to match paired construction */
     class PairMatchAction extends Action {
 
         PairMatchAction() {
@@ -55,7 +80,10 @@ public class ColorerActionContributor extends TextEditorActionContributor
         }
 
         public void run() {
-            activeEditor.matchPair();
+            if (getTextColorer() == null) return;
+            if (!getTextColorer().matchPair()) {
+                showPairError();
+            }
         }
     }
 
@@ -68,7 +96,10 @@ public class ColorerActionContributor extends TextEditorActionContributor
         }
 
         public void run() {
-            activeEditor.selectPair();
+            if (getTextColorer() == null) return;
+            if (!getTextColorer().selectPair()) {
+                showPairError();
+            }
         }
     }
 
@@ -81,7 +112,10 @@ public class ColorerActionContributor extends TextEditorActionContributor
         }
 
         public void run() {
-            activeEditor.selectContentPair();
+            if (getTextColorer() == null) return;
+            if (!getTextColorer().selectContentPair()) {
+                showPairError();
+            }
         }
     }
 
@@ -93,7 +127,8 @@ public class ColorerActionContributor extends TextEditorActionContributor
         }
     };
 
-    FileTypeActionMenu filetypeAction;
+    FileTypeActionMenu filetypeAction = new FileTypeActionMenu();
+    
     class FileTypeActionMenu extends Action implements IMenuCreator{
 
       class FileTypeAction extends Action {
@@ -106,21 +141,25 @@ public class ColorerActionContributor extends TextEditorActionContributor
             }
 
             public void run() {
-                if (activeEditor != null) {
-                    ((ColorerEditor) activeEditor).setFileType(ftype);
+                if (getTextColorer() != null) {
+                    getTextColorer().setFileType(ftype);
                 }
             }
         }
 
         private Menu filetypeList = null;
 
-        public FileTypeActionMenu(String label) {
-            super(label);
+        public FileTypeActionMenu() {
+            super(Messages.get("editor.filetype"));
+            setToolTipText(Messages.get("editor.filetype.tooltip"));
+            setImageDescriptor(ImageStore.EDITOR_FILETYPE);
+            setHoverImageDescriptor(ImageStore.EDITOR_FILETYPE_A);
+            setActionDefinitionId(ACTION_ID_CHOOSETYPE);
             setMenuCreator(this);
         }
 
         public void run() {
-            ((ColorerEditor) activeEditor).chooseFileType();
+            getTextColorer().chooseFileType(activeEditor.getTitle());
         }
 
         Menu fillMenuTree(Group group, Menu root, FileType cftype) {
@@ -163,7 +202,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
             
             Group[] groups = ColorerPlugin.getDefaultPF().getHRCParser().getGroups();
 
-            FileType currentFileType = ((ColorerEditor)activeEditor).getFileType();
+            FileType currentFileType = getTextColorer().getFileType();
             
             /* Recursively creates menu of HRC FileTypes and Groups */
             for(int idx = 0; idx < groups.length; idx++){
@@ -183,12 +222,25 @@ public class ColorerActionContributor extends TextEditorActionContributor
     
     }
 
+    void showPairError() {
+        MessageDialog.openInformation(null, Messages.get("editor.pairerr.title"),
+                Messages.get("editor.pairerr.msg"));
+    }
+    
+    TextColorer getTextColorer(){
+        if (activeEditor == null) return null;
+        return (TextColorer)activeEditor.getAdapter(TextColorer.class);
+    }
 
-    TextOperationAction fToggle;
-    TextOperationAction fExpandAll;
-    TextOperationAction fCollapseAll;
-
-    WordWrapAction fWordWrapAction = new WordWrapAction();
+    StyledText getStyledText(){
+        if (activeEditor == null) return null;
+        return (StyledText)activeEditor.getAdapter(StyledText.class);
+    }
+    
+    IDocument getDocument(){
+        return activeEditor.getDocumentProvider().getDocument(activeEditor.getEditorInput());
+    }
+    
     
     public ColorerActionContributor() {
 
@@ -198,24 +250,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
         hrcupdateAction.setHoverImageDescriptor(ImageStore.EDITOR_UPDATEHRC_A);
         hrcupdateAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.hrcupdate");
 
-        filetypeAction = new FileTypeActionMenu(Messages.get("editor.filetype"));
-        filetypeAction.setToolTipText(Messages.get("editor.filetype.tooltip"));
-        filetypeAction.setImageDescriptor(ImageStore.EDITOR_FILETYPE);
-        filetypeAction.setHoverImageDescriptor(ImageStore.EDITOR_FILETYPE_A);
-        filetypeAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.choosetype");
-
         cursorRegionAction.setActionDefinitionId("net.sf.colorer.eclipse.editors.selectregion");       
-
-        fToggle = new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", null, ProjectionViewer.TOGGLE, true);
-        fToggle.setChecked(true);
-        fToggle.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
-        
-        fExpandAll = new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", null, ProjectionViewer.EXPAND_ALL, true);
-        fExpandAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
-        
-        fCollapseAll = new TextOperationAction(Messages.getResourceBundle(), "Projection.CollapseAll.", null, ProjectionViewer.COLLAPSE_ALL, true);
-        fCollapseAll.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
-
     }
 
     public void contributeToToolBar(IToolBarManager toolBarManager) {
@@ -243,16 +278,11 @@ public class ColorerActionContributor extends TextEditorActionContributor
      */
     public void setActiveEditor(IEditorPart editor) {
         super.setActiveEditor(editor);
-        if (editor instanceof ColorerEditor){
-            activeEditor = (ColorerEditor) editor;
+        if (editor instanceof ITextEditor){
+            activeEditor = (ITextEditor) editor;
         }else{
             activeEditor = null;
         }
-
-        fToggle.setEditor(activeEditor);
-        fExpandAll.setEditor(activeEditor);
-        fCollapseAll.setEditor(activeEditor);
-        fWordWrapAction.setEditor(activeEditor);
 
         activeEditor.setAction(hrcupdateAction.getActionDefinitionId(), hrcupdateAction);
         activeEditor.setAction(filetypeAction.getActionDefinitionId(), filetypeAction);
@@ -260,11 +290,6 @@ public class ColorerActionContributor extends TextEditorActionContributor
         activeEditor.setAction(pairSelectAction.getActionDefinitionId(), pairSelectAction);
         activeEditor.setAction(pairSelectContentAction.getActionDefinitionId(), pairSelectContentAction);
         activeEditor.setAction(cursorRegionAction.getActionDefinitionId(), cursorRegionAction);
-        activeEditor.setAction(fWordWrapAction.getActionDefinitionId(), fWordWrapAction);
-        
-        activeEditor.setAction(fToggle.getActionDefinitionId(), fToggle); //$NON-NLS-1$
-        activeEditor.setAction(fExpandAll.getActionDefinitionId(), fExpandAll); //$NON-NLS-1$
-        activeEditor.setAction(fCollapseAll.getActionDefinitionId(), fCollapseAll); //$NON-NLS-1$
         
     }
 

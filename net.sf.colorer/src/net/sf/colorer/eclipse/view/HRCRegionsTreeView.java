@@ -12,6 +12,7 @@ import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.editors.ColorerEditor;
+import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionMapper;
 import net.sf.colorer.handlers.StyledRegion;
@@ -67,13 +68,11 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
 
     ISelectionListener thisSelectionListener = new ISelectionListener (){
         public void selectionChanged(org.eclipse.ui.IWorkbenchPart part,ISelection selection){
-            ColorerEditor activeEditor = null;
+            TextColorer activeEditor = null;
             if (Logger.TRACE){
                 Logger.trace("RegionsTree", "selection changed:"+part);
             }
-            if (part instanceof ColorerEditor){
-                activeEditor = (ColorerEditor)part;
-            }
+            activeEditor = (TextColorer)part.getAdapter(TextColorer.class);
             if (activeEditor != null && linkToEditorAction.isChecked()){
                 LineRegion lr = activeEditor.getCaretRegion();
                 if (lr == null || lr.region == null) return;
