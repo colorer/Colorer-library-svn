@@ -141,7 +141,12 @@ M4 = Platform-specific fourth key -->
             description="%commands"
             id="net.sf.colorer.eclipse.editors.WordWrapAction">
       </command>
-      
+      <command
+            name="Collapse Comments"
+            description="%commands"
+            categoryId="org.eclipse.ui.category.textEditor"
+            id="net.sf.colorer.eclipse.editors.folding.collapseComments">
+      </command>
    </extension>
 
    <extension point="org.eclipse.ui.contexts">

@@ -14,7 +14,6 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.util.Assert;
@@ -44,6 +43,8 @@ public class ColorerFoldingProvider
             
             ProjectionAnnotationModel model = getModel();
             
+            if (model == null) return;
+            
             Iterator iter = model.getAnnotationIterator();
             while(iter.hasNext()){
                 Annotation ann = (Annotation)iter.next();
@@ -67,7 +68,10 @@ public class ColorerFoldingProvider
             if (fLastLine >= e_line) return;
             fLastLine = e_line;
 
-            ProjectionAnnotation ann = new ProjectionAnnotation();
+            ProjectionAnnotationModel model = getModel();
+            if (model == null) return;
+
+            ProjectionAnnotation ann = new ColorerProjectionAnnotation(schema);
 
             if (Logger.TRACE){
                 Logger.trace("FoldingReciever", "notifyFoldingItem: "+s_line+":"+e_line);
@@ -83,21 +87,15 @@ public class ColorerFoldingProvider
                 
                 Position newposition = new Position(offset, len);
 
-                if (schema.toLowerCase().contains("comment")){
-                    ann.markCollapsed();
-                }
-
                 // Merge annotation folding states
                 for(Enumeration e = deletions.elements(); e.hasMoreElements();){
                     ProjectionAnnotation deleted = (ProjectionAnnotation)e.nextElement();
-                    if (newposition.equals(getModel().getPosition(deleted))){
+                    if (newposition.equals(model.getPosition(deleted))){
                         if (deleted.isCollapsed()) ann.markCollapsed();
                         else ann.markExpanded();
                     }
                 }
-                
 
-                
                 additions.put(ann, newposition);
 
             }catch(BadLocationException e){
@@ -121,7 +119,6 @@ public class ColorerFoldingProvider
     void updateAnnotations() {
 
         ProjectionAnnotationModel model = getModel();
-        
         if (model == null) return;
 
         if (deletions.size() == 0 && additions.size() == 0) return;

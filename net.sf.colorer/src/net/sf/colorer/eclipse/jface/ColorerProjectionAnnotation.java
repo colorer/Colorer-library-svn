@@ -1,53 +1,19 @@
-package net.sf.colorer.eclipse.editors;
+package net.sf.colorer.eclipse.jface;
 
-import net.sf.colorer.FileType;
-import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.Messages;
-import net.sf.colorer.eclipse.PreferencePage;
-import net.sf.colorer.impl.Logger;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.IUpdate;
+public class ColorerProjectionAnnotation extends ProjectionAnnotation {
 
-/**
- * Action to control word wrapping in colorer's editor.
- */
-public class WordWrapAction extends Action implements IUpdate {
+    private String schema;
 
-    private ITextEditor fTargetEditor;
-
-    public WordWrapAction(ITextEditor targetEditor) {
-        setActionDefinitionId(ColorerActionContributor.ACTION_ID_WORD_WRAP);
-        setText(Messages.get("WordWrapAction"));
-        setToolTipText(Messages.get("WordWrapAction.tooltip"));
-        
-        setEditor(targetEditor);
+    public ColorerProjectionAnnotation(String schema) {
+        this.schema = schema;
     }
     
-    public void setEditor(ITextEditor targetEditor) {
-        Logger.trace("wwra", "1");
-        fTargetEditor = null;
-
-        fTargetEditor = targetEditor;
-
+    public String getSchema(){
+        return schema;
     }
     
-    public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class), isChecked() ? 1 : 0);
-    }
-
-    public void update() {
-        if (fTargetEditor == null) return;
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class));
-        if (ww == -1) {
-            ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
-        }
-        setChecked(ww == 1);
-    }
-
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

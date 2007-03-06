@@ -21,6 +21,7 @@ import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -168,12 +169,14 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
                     fFoldingProvider.uninstall();
                     fFoldingProvider.install(ColorerEditor.this);
                 }
+                getAction(IFoldingCommandIds.FOLDING_TOGGLE).setChecked(true);
                 invalidateSyntax();
             }
             public void projectionDisabled() {
                 if (fFoldingProvider == null) return;
                 fFoldingProvider.uninstall();
                 fFoldingProvider = null;
+                getAction(IFoldingCommandIds.FOLDING_TOGGLE).setChecked(false);
             }
         });
         
@@ -222,7 +225,6 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         action = new TextOperationAction(Messages.getResourceBundle(), "Projection.Toggle.", this, ProjectionViewer.TOGGLE, true);
         action.setActionDefinitionId(IFoldingCommandIds.FOLDING_TOGGLE);
         setAction(action.getActionDefinitionId(), action);
-        action.setChecked(fFoldingProvider != null);
 
         action = new TextOperationAction(Messages.getResourceBundle(), "Projection.ExpandAll.", this, ProjectionViewer.EXPAND_ALL, true);
         action.setActionDefinitionId(IFoldingCommandIds.FOLDING_EXPAND_ALL);
@@ -231,7 +233,10 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         action = new TextOperationAction(Messages.getResourceBundle(), "Projection.CollapseAll.", this, ProjectionViewer.COLLAPSE_ALL, true);
         action.setActionDefinitionId(IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
         setAction(action.getActionDefinitionId(), action);
-        
+
+        action = new CollapseCommentsAction(Messages.getResourceBundle(), "Projection.CollapseComments.", this);
+        setAction(action.getActionDefinitionId(), action);
+
         action = new WordWrapAction(this);
         setAction(action.getActionDefinitionId(), action);
         
@@ -299,13 +304,15 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         super.rulerContextMenuAboutToShow(menu);
 
         MenuManager foldingsub = new MenuManager(Messages.get("Projection.Folding.label"));
+
         menu.insertBefore("settings", foldingsub);
         addAction(foldingsub, IFoldingCommandIds.FOLDING_TOGGLE);
         addAction(foldingsub, IFoldingCommandIds.FOLDING_EXPAND_ALL);
         addAction(foldingsub, IFoldingCommandIds.FOLDING_COLLAPSE_ALL);
+        addAction(foldingsub, ColorerActionContributor.ACTION_ID_FOLDING_COLLAPSE_COMMENTS);
 
         menu.insertBefore("settings", new Separator("ww"));
-        addAction(menu, "ww", WordWrapAction.class.getName());
+        addAction(menu, "ww", ColorerActionContributor.ACTION_ID_WORD_WRAP);
     }
 
     public void propertyChange(PropertyChangeEvent e) {
@@ -466,6 +473,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         }
         if (fFoldingProvider != null){
             fFoldingProvider.uninstall();
+            fFoldingProvider = null;
         }
         fAnnotationProvider.uninstall();
     }

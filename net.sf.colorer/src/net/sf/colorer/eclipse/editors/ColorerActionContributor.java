@@ -15,7 +15,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
@@ -24,10 +23,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.editors.text.IFoldingCommandIds;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.TextOperationAction;
 
 /**
  * Action definitions for editor UI commands.
@@ -40,6 +37,9 @@ public class ColorerActionContributor extends TextEditorActionContributor
     public final static String ACTION_ID_PAIRSELECT = "net.sf.colorer.eclipse.editors.pairselect";
     public final static String ACTION_ID_PAIRSELECTCONTENT = "net.sf.colorer.eclipse.editors.pairselectcontent";
     public final static String ACTION_ID_CHOOSETYPE = "net.sf.colorer.eclipse.editors.choosetype";
+    
+    public final static String ACTION_ID_FOLDING_COLLAPSE_COMMENTS = "net.sf.colorer.eclipse.editors.folding.collapseComments";
+    public final static String ACTION_ID_WORD_WRAP = "net.sf.colorer.eclipse.editors.WordWrapAction";
     
     ITextEditor activeEditor = null;
 

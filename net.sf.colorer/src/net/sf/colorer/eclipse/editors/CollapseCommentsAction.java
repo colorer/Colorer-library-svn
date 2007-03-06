@@ -1,53 +1,54 @@
 package net.sf.colorer.eclipse.editors;
 
-import net.sf.colorer.FileType;
-import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.Messages;
-import net.sf.colorer.eclipse.PreferencePage;
-import net.sf.colorer.impl.Logger;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
+import net.sf.colorer.eclipse.jface.ColorerProjectionAnnotation;
+
+import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.ui.texteditor.ResourceAction;
 
-/**
- * Action to control word wrapping in colorer's editor.
- */
-public class WordWrapAction extends Action implements IUpdate {
+public class CollapseCommentsAction extends ResourceAction implements IUpdate {
 
     private ITextEditor fTargetEditor;
 
-    public WordWrapAction(ITextEditor targetEditor) {
-        setActionDefinitionId(ColorerActionContributor.ACTION_ID_WORD_WRAP);
-        setText(Messages.get("WordWrapAction"));
-        setToolTipText(Messages.get("WordWrapAction.tooltip"));
-        
-        setEditor(targetEditor);
-    }
-    
-    public void setEditor(ITextEditor targetEditor) {
-        Logger.trace("wwra", "1");
-        fTargetEditor = null;
-
+    CollapseCommentsAction(ResourceBundle bundle, String prefix, ITextEditor targetEditor){
+        super(bundle, prefix);
+        setActionDefinitionId(ColorerActionContributor.ACTION_ID_FOLDING_COLLAPSE_COMMENTS);
         fTargetEditor = targetEditor;
-
     }
     
-    public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class), isChecked() ? 1 : 0);
+    public void run() {
+        ProjectionAnnotationModel model = (ProjectionAnnotationModel)fTargetEditor.getAdapter(ProjectionAnnotationModel.class);
+        if (model == null) return;
+        
+        Iterator iter = model.getAnnotationIterator();
+        
+        List modified = new ArrayList();
+        while(iter.hasNext()){
+            Object ann = iter.next();
+            if (ann instanceof ColorerProjectionAnnotation){
+                String schema = ((ColorerProjectionAnnotation)ann).getSchema();
+
+                if (schema.toLowerCase().contains("comment")){
+                    ((ColorerProjectionAnnotation)ann).markCollapsed();
+                    modified.add(ann);
+                }
+            }
+        }
+        model.modifyAnnotations(null, null, (Annotation[]) modified.toArray(new Annotation[modified.size()]));        
     }
 
     public void update() {
-        if (fTargetEditor == null) return;
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap((FileType)fTargetEditor.getAdapter(FileType.class));
-        if (ww == -1) {
-            ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
-        }
-        setChecked(ww == 1);
+        ProjectionAnnotationModel model = (ProjectionAnnotationModel)fTargetEditor.getAdapter(ProjectionAnnotationModel.class);
+        setEnabled(model != null);
     }
-
+    
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
