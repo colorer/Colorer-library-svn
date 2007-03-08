@@ -11,7 +11,6 @@ import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
-import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionMapper;

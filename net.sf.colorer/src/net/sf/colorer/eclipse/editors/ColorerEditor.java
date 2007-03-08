@@ -15,18 +15,15 @@ import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
 import net.sf.colorer.eclipse.outline.OutlineSchemeElement;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineItem;
-import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.impl.CachedBaseEditor;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;

@@ -27,6 +27,7 @@ CPPFLAGS = -I$(shared_path) -I$(unzipdir)  /Fo$*.$(obj) /GX /nologo /c /wd4101 /
 include ../../shared/makefile.zlib
 include ../../shared/_dependencies.dep
 include ../../shared/makefile.objs
+include ../../shared/makefile.lines
 
 include makefile.core
 

@@ -3,10 +3,11 @@
   and there can be some problems.
 
   This version of Colorer Library comes with the native part, compilied
-  with GNU GCC 3.2 C++ compiler under Mandrake Linux 10.
+  with GNU GCC 3.2.
 
-  I've tested it with Eclipse 3.01 (gtk) under jdk1.4.1 and it works fine.
+  There could be problems related to not Sun VM usages, .so loading and others.
+  Search forums for the resolution.
 
-  However, you can encounter some problems with library dependencies.
+  I've tested it with Eclipse 3.2 (gtk) under jdk1.4.1 on Fedora 6 and it works fine.
 
   Fell free to ask or help (last is preferred).

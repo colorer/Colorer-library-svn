@@ -2,20 +2,22 @@
   MacOS Build provided with EclipseColorer was not tested at all (hope somebody will do it).
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-  You can compile Colorer Library to use it on MacOSX system.
+  This build includes MacOSX native parts for ppc and x86 platforms, compiled by
+  contributors. I don't have access to any of these platforms so can't validate
+  and resolve any issues.
 
-  You need to download C++ sources of the Colorer Library from
+  To compile colorer yourself, you have to download C++ sources of the library from
   http://sourceforge.net/project/showfiles.php?group_id=34855
-  (Colorer-take5.beta3 package).
+  (Colorer-take5.be5 package).
 
   Next, you have two ways to build Colorer for MAC OS:
 
-  I. Just build native part of the library:
+  I. Just build native part of the library (the simplest):
      
      1. Go into 'colorer/src/net.sf.colorer/libnative' folder.
      2. Run
         make -f makefile.macos
-     3. place libnet.sf.colorer.so into 'os/macosx/ppc' folder
+     3. place libnet.sf.colorer.so into 'os/macosx/ppc' or 'os/macosx/x86' folder
         of the existing EclipseColorer distribution package.
 
 
