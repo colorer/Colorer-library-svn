@@ -28,7 +28,7 @@ With help of:
          <regexp match="/\b(&amp;\O|o)([0-7]+)\b/" region="Number"/>
          <regexp match="/\b[0-9.]+(e|E[\-+]?\d+)?\b/" region="Number"/>
 <!-- Strings -->
-         <block start="/(&#34;)/" end="/(&#34;)/" scheme="vbMETA" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+         <block start="/(&#34;)/" end="/(&#34;)/" scheme="vbMETA" region="vbasic:vbString" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\()/" end="/(\))/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
 <!--regexp match="/\bend\s+if\b/i" region0="Error" lowpriority="lowpriority"/-->
