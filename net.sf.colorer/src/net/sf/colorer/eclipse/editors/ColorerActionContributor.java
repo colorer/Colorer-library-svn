@@ -282,6 +282,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
             activeEditor = (ITextEditor) editor;
         }else{
             activeEditor = null;
+            return;
         }
 
         activeEditor.setAction(hrcupdateAction.getActionDefinitionId(), hrcupdateAction);

@@ -8,9 +8,10 @@
 class JParserFactory : public ParserFactory
 {
 public:
-    JParserFactory(String *catalog):ParserFactory(catalog){
+    JParserFactory(String *catalog) : ParserFactory(catalog)
+    {
         jhp = null;
-    };
+    }
 
     JHRCParser *jhp;
 };

@@ -1,5 +1,7 @@
 package net.sf.colorer.eclipse.outline;
 
+import java.util.Vector;
+
 import net.sf.colorer.HRCParser;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
@@ -9,7 +11,6 @@ import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.OutlineListener;
 import net.sf.colorer.impl.Logger;
 
-import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -39,28 +40,12 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 public class ColorerContentOutlinePage extends ContentOutlinePage
                                 implements OutlineListener
 {
-    IWorkbenchOutlineSource fStructureOutline, fParseTreeOutline;
-    IWorkbenchOutlineSource fActiveOutlineSource;
-
-    OutlineModeAction structureModeAction, parseTreeModeAction;
-    OutlineModeAction activeAction;
-
+    
     Action fLinkToEditorAction = new Action("Link", Action.AS_CHECK_BOX){
         public void run() {
             prefStore.setValue("outline.link", isChecked());
         }
     };
-
-    Thread backgroundUpdater = null;
-
-    boolean outlineModified = true;
-    long prevTime = 0;
-    int UPDATE_DELTA = 2000;
-    boolean fProgrammaticChange = false;
-
-    IPreferenceStore prefStore;
-    BaseEditor fBaseEditor;
-    ColorerEditor fEditor;
     
     ISelectionListener thisSelectionListener = new ISelectionListener (){
 
@@ -154,6 +139,24 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         };
     }
 
+    IWorkbenchOutlineSource fStructureOutline, fParseTreeOutline;
+    IWorkbenchOutlineSource fActiveOutlineSource;
+
+    OutlineModeAction structureModeAction, parseTreeModeAction;
+    OutlineModeAction activeAction;
+    private Vector selectionListeners = new Vector();
+
+    Thread backgroundUpdater = null;
+
+    boolean outlineModified = true;
+    long prevTime = 0;
+    int UPDATE_DELTA = 2000;
+    boolean fProgrammaticChange = false;
+
+    IPreferenceStore prefStore;
+    BaseEditor fBaseEditor;
+    ColorerEditor fEditor;
+    
     public ColorerContentOutlinePage() {
         super();
         prefStore = ColorerPlugin.getDefault().getPreferenceStore();
@@ -278,9 +281,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
             prevTime = System.currentTimeMillis();
         };
     }
-
-    private ListenerList selectionListeners = new ListenerList();
-
+    
     public void addSelectionChangedListener(ISelectionChangedListener listener) {
         selectionListeners.add(listener);
     }
@@ -301,7 +302,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
                     fProgrammaticChange = false;
                     return;
                 }
-                Object[] list = selectionListeners.getListeners();
+                Object[] list = selectionListeners.toArray();
                 for(int idx = list.length-1; idx >=0; idx--) {
                     ((ISelectionChangedListener)list[idx]).selectionChanged(event);
                 }

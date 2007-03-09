@@ -354,8 +354,12 @@ public class TextColorer implements IAdaptable
                     Logger.trace("CDR", "text: " + text.getText().length());
                     Logger.trace("CDR", "text.setStyleRanges: " + widgetOffset +":"+widgetLength);
                 }
-                if (widgetOffset >= 0 && widgetLength > 0){
-                    text.setStyleRanges(widgetOffset, widgetLength, null, null);
+                try{
+                    if (widgetOffset >= 0 && widgetLength > 0){
+                        text.setStyleRanges(widgetOffset, widgetLength, null, null);
+                    }
+                }catch(Throwable e){
+                    Logger.error("CDR", "setStyleRanges: ", e);
                 }
 
                 int newstart = visibleDamage.getOffset()+visibleDamage.getLength();

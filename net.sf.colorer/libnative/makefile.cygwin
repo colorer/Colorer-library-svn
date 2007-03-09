@@ -9,7 +9,7 @@ shared_path=../../shared/
 JAVA_INCLUDE=$(subst \,/,$(JAVA_HOME))/include
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)/win32
 
-CYGWIN=-mno-cygwin
+CYGWIN=-mno-cygwin -mrtd
 
 obj_output=objs
 
@@ -20,7 +20,7 @@ include makefile.core
 DLLMAIN=_DllMain@12
 
 LIBINC = -lwininet -lstdc++
-LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=net_sf_colorer.map $(FLAGS)
+LIBFLAGS = -nostartfiles -shared -Wl,-e,$(DLLMAIN),-Map=net_sf_colorer.map $(FLAGS)
 #LIBFLAGS += -s
 #CPPFLAGS += -ggdb
 

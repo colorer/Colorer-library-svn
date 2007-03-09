@@ -25,9 +25,9 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
     public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
         List list = new ArrayList();
         // prefix[0] is either '\t' or ' ' x tabWidth, depending on useSpaces
-        
+
         int tabWidth = getTabWidth(sourceViewer);
-        boolean useSpaces = fPreferenceStore.getBoolean(PreferencePage.SPACES_FOR_TABS);
+        boolean useSpaces = ColorerPlugin.getDefault().getCombinedPreferenceStore().getBoolean(PreferencePage.SPACES_FOR_TABS);
 
         for (int i = 0; i <= tabWidth; i++) {
             StringBuffer prefix = new StringBuffer();
