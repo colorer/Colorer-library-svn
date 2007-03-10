@@ -103,8 +103,8 @@ with RE make HRC strong declarative language.
 
 
 
-<section id='core'>
-<title>Core Syntax</title>
+<section id='basics'>
+<title>Basics</title>
 <para>
 HRC describes and stores syntax rules for numerous languages. All language definitions
 are divided into two parts:
@@ -176,7 +176,7 @@ elements.
 </formalpara>
 
 
-<section id='core.filetypes'><title>File Types</title>
+<section id='basics.filetypes'><title>File Types</title>
 <para>HRC rules can reuse or import definitions from each other, some
 languages (like HTML) may include bits of other languages (i.e. PHP),
 so HRC files can depend on each other for correct highlighting. Therefore
@@ -185,7 +185,7 @@ definitions. To link them together several syntax elements are used.
 </para>
 
 
-<section id='core.filetypes.proto'><title>Prototypes</title>
+<section id='basics.filetypes.proto'><title>Prototypes</title>
 
 <para>
 Each language is identified by name and short description. This information
@@ -253,7 +253,7 @@ process.
 </section>
 
 
-<section id='core.filetypes.package'><title>Packages</title>
+<section id='basics.filetypes.package'><title>Packages</title>
 <para>
 Some syntax rules are common across various languages and it makes
 sense to define them separately and reference from other definitions.
@@ -271,7 +271,7 @@ For example:
 
 <example id="example.hrc.package"><title>Package definition</title>
 <programlisting><![CDATA[
-  <package name="def" group="packages" description="core definitions">
+  <package name="def" group="packages" description="basic definitions">
     <location link="default.hrc"/>
   </package>
   <package name="regexp" group="packages" description="Regexp common library">
@@ -284,9 +284,9 @@ For example:
 </section>
 
 
-<section id='core.filetypes.type'><title>Types</title>
+<section id='basics.filetypes.type'><title>Types</title>
 <para>
-Type is a <link linkend="core">formal definition</link> of a language. It is normally contained in a separate file,
+Type is a <link linkend="basics">formal definition</link> of a language. It is normally contained in a separate file,
 which is referenced by <x:hrc>location</x:hrc> element of language prototype. <x:hrc>type</x:hrc>
 element is the starting point for parsing process, which holds syntax specific information.
 
@@ -302,7 +302,7 @@ the global repository).
 
 </section>
 
-<section id='core.namespaces'><title>Namespaces</title>
+<section id='basics.namespaces'><title>Namespaces</title>
 <para>
 Each type defines its own name space with its elements. Each element must have
 unique identifier (local name) in this namespace, which is used to reference it
