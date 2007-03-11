@@ -17,6 +17,8 @@
  </annotation>
 
  <type name="python">
+  <scheme name="python">
+  </scheme>
  </type>
 
 </hrc>
