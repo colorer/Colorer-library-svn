@@ -17,7 +17,43 @@
  </annotation>
 
  <type name="python">
+  <region name="pyKeyword" parent="def:Keyword"/>
+ 
   <scheme name="python">
+   <!-- python keywords : http://docs.python.org/ref/keywords.html -->
+   <keywords ignorecase="no" region="pyKeyword">
+    <word name="and"/>
+    <word name="as"/>
+    <word name="assert"/>
+    <word name="break"/>
+    <word name="class"/>
+    <word name="continue"/>
+    <word name="def"/>
+    <word name="del"/>
+    <word name="elif"/>
+    <word name="else"/>
+    <word name="except"/>
+    <word name="exec"/>
+    <word name="finally"/>
+    <word name="for"/>
+    <word name="from"/>
+    <word name="global"/>
+    <word name="if"/>
+    <word name="import"/>
+    <word name="in"/>
+    <word name="is"/>
+    <word name="lambda"/>
+    <word name="not"/>
+    <word name="or"/>
+    <word name="pass"/>
+    <word name="print"/>
+    <word name="raise"/>
+    <word name="return"/>
+    <word name="try"/>
+    <word name="while"/>
+    <word name="with"/>
+    <word name="yield"/>
+   </keywords>
   </scheme>
  </type>
 
