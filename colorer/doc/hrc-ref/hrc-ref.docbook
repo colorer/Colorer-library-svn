@@ -329,7 +329,7 @@ For instance, you can write
 </programlisting>
 to import all definitions from the 'def' type. Note, that if several
 imported types have some identical local names, they are resolved in
-order of import statements.
+order of import statements, i.e. the first one is used.
 
 <!-- todo clarify which one will be used finally - the first one
 or the last one defined  -->
@@ -345,16 +345,18 @@ or the last one defined  -->
 
 <para>
 Scheme is a generic structure of the HRC language to define syntax of programming
-languages. Every scheme contains various syntax elements, matched as text analysis
+languages. Every scheme contains various syntax elements, matched or not matched
+as text analysis
 goes on. For example, a scheme for "C++" language contains different keywords,
 strings, numbers, comments etc. The scheme is defined by <x:hrc>scheme</x:hrc>
-element, but scheme alone is not very useful for analysis. It is much more
-convenient to think about text of a language to be highlighted in terms of
-<emphasis role='strong'>regions</emphasis>. When schema matches a piece of text it
-can assign various parts of this text to different regions.
+element.
 </para>
 
 <para>
+Scheme alone is not very useful for analysis. It is much more
+convenient to think about text of a language to be highlighted in terms of
+<emphasis role='strong'>regions</emphasis>. When schema matches a piece of text it
+can assign various parts of this text to different regions.
 Each <x:hrc>region</x:hrc> defines some meaningful part of the syntax.
 This part or region always has a name and sometimes a reference to its parent
 region (if any). When parsed, source text is described as a set of these regions
@@ -424,7 +426,8 @@ available in the HRC language.
 
 <section id='schemesyntax.keywords'><title>Keyword lists</title>
 <para>
-This often used element describes a list of keywords with similar properties.
+<x:hrc>keywords</x:hrc> is the most simple HRC element used to quickly define
+words with similar properties and highlight them in a text.
 <x:schemaref uri="&hrcxsd;" role='keywords'/>
 <x:schemaref uri="&hrcxsd;" role='word'/>
 <x:schemaref uri="&hrcxsd;" role='symb'/>
@@ -441,7 +444,9 @@ redefined with <emphasis>worddiv</emphasis> attribute of <x:hrc>keywords</x:hrc>
 <para>
 Regular expression rules is a very powerful and flexible way to define custom
 syntax structures. Each RE token can be used to create several different syntax
-regions (up to 16).
+regions (up to 16). Keep in mind, however, that the scope of every RE in Colorer
+is limited to one line (the only exception is <x:hrc>firstline</x:hrc> element
+matched against several lines to detect file type).
 </para>
 
 <x:schemaref uri="&hrcxsd;" role='regexp'/>
@@ -481,7 +486,7 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 
 <section id='schemesyntax.contextswitch'><title>Block context switch</title>
 <para>
-Although regular expressions is very powerful feature, their syntax doesn't allow
+Although regular expressions are very powerful feature, their syntax doesn't allow
 to express some complex language constructions. First, this is due to general
 limitation of colorer's RE parser - scope is limited to a single line of text.
 Regular expression can't work on multiple lines of the parsed text. 
