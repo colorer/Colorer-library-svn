@@ -18,6 +18,7 @@
 
  <type name="python">
   <region name="pyKeyword" parent="def:Keyword"/>
+  <region name="pyComment" parent="def:Comment"/>
  
   <scheme name="python">
    <!-- python keywords : http://docs.python.org/ref/keywords.html -->
@@ -54,6 +55,9 @@
     <word name="with"/>
     <word name="yield"/>
    </keywords>
+
+   <!-- basic python comment - consider it everything after # -->
+   <regexp match="/#.*/" region="pyComment"/>
   </scheme>
  </type>
 
