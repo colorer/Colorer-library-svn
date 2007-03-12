@@ -56,7 +56,7 @@
     <word name="yield"/>
    </keywords>
 
-   <!-- basic python comment - consider it everything after # -->
+   <!-- basic python comment - consider it everything after # till the end of line -->
    <regexp match="/#.*/" region="pyComment"/>
   </scheme>
  </type>
