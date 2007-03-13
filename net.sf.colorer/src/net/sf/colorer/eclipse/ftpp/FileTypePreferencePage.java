@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
@@ -29,6 +31,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
 
 /**
  * Preferences page for specific HRC file type settings
@@ -190,16 +194,22 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
      */
     public Control createContents(Composite parent) {
         Composite composite = new Composite(parent, SWT.NONE);
-        // composite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-        // composite.setLayoutData(new FillData());
-        composite.setLayout(new FillLayout(SWT.VERTICAL));
+        composite.setLayout(new GridLayout());
 
         ParserFactory pf = ColorerPlugin.getDefaultPF();
         typePropertiesProvider = new TypeContentProvider();
 
         {
-            typeTreeViewer = new TreeViewer(composite,
-                    SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION);
+            PatternFilter patternFilter = new PatternFilter();
+            final FilteredTree filter = new FilteredTree(composite,
+                    SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION,
+                    patternFilter);
+            GridData gd = new GridData(GridData.FILL_BOTH);
+            gd.minimumHeight = 100;
+            gd.grabExcessVerticalSpace = true;
+            filter.setLayoutData(gd);
+            
+            typeTreeViewer = filter.getViewer();
 
             typeTreeViewer.setContentProvider(new FileTypesContentProvider());
             typeTreeViewer.setLabelProvider(new FileTypesLabelProvider());
@@ -213,8 +223,8 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
             });
         }
         {
-            typePropertiesViewer = new TableViewer(composite, SWT.V_SCROLL
-                    | SWT.BORDER | SWT.FULL_SELECTION);
+            typePropertiesViewer = new TableViewer(composite,
+                    SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
             typePropertiesTable = typePropertiesViewer.getTable();
             typePropertiesViewer.setContentProvider(typePropertiesProvider);
             typePropertiesViewer.setLabelProvider(new TypeLabelProvider(typePropertiesProvider));
@@ -230,7 +240,6 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
                     .getTable().getColumnCount()];
             paramCellEditor = new ComboBoxCellEditor(typePropertiesTable,
                     values_TrueFalseDefault, SWT.READ_ONLY);
-            // paramCellEditor = new CheckboxCellEditor(typePropertiesTable);
 
             cellEditors[1] = paramCellEditor;
             typePropertiesViewer.setCellEditors(cellEditors);
@@ -239,9 +248,11 @@ public class FileTypePreferencePage extends PreferencePage implements IWorkbench
             typePropertiesViewer.setColumnProperties(new String[] { "name",
                     "value" });
 
-            // typePropertiesTable.setLayoutData(new
-            // GridData(GridData.HORIZONTAL_ALIGN_FILL,
-            // GridData.VERTICAL_ALIGN_FILL, true, true, 2, 1));
+            GridData gd = new GridData(GridData.FILL_BOTH);
+            gd.heightHint = 100;
+            gd.grabExcessVerticalSpace = true;
+            typePropertiesTable.setLayoutData(gd);
+            
             typePropertiesTable.setHeaderVisible(true);
             typePropertiesTable.setLinesVisible(true);
 

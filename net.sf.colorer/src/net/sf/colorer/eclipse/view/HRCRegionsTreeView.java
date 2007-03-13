@@ -43,6 +43,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -134,10 +136,17 @@ public class HRCRegionsTreeView extends ViewPart implements IPropertyChangeListe
         composite.setLayout(new GridLayout(1, true));
         {
             final Composite composite_1 = new Composite(composite, SWT.NONE);
-            composite_1.setLayout(new FillLayout());
+            composite_1.setLayout(new GridLayout());
             composite_1.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-            treeViewer = new TreeViewer(composite_1, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+            PatternFilter patternFilter = new PatternFilter();
+            final FilteredTree filter = new FilteredTree(composite_1,
+                    SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER,
+                    patternFilter);
+            filter.setLayoutData(new GridData(GridData.FILL_BOTH));
+            
+            treeViewer = filter.getViewer();
+
             treeViewer.setContentProvider(new RegionContentProvider());
             treeViewer.setLabelProvider(new RegionTreeLabelProvider());
 
