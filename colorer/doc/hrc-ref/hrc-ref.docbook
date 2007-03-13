@@ -141,6 +141,9 @@ element, which contains all other HRC definitions.
 Every bit of HRC is either XML element or attribute.
 You can find formal definition of the HRC XML syntax in <xref linkend='hrcxsd'/>.
 For instance, all HRC files start with the syntax similar to following:
+
+<!-- todo provide a link to the latest uptodate skeleton of HRC syntax -->
+
 <example id="example.hrc.file"><title>Common HRC file</title>
 <programlisting><![CDATA[
 <?xml version="1.0"?>
@@ -388,7 +391,7 @@ unique within the type. Scheme is defined using <x:hrc>scheme</x:hrc> element:
 
 <x:schemaref uri="&hrcxsd;" role='scheme'/>
 
-Every type is required to have one scheme called <emphasis>"base scheme"</emphasis>
+Every type is required to have one scheme called <emphasis role='strong'>"base scheme"</emphasis>
 which is used as an entry point for parsing process of the type. Base scheme is
 named after its type, i.e. local name of the scheme is equal to the name
 of the type. Only internal types defined with <x:hrc>package</x:hrc> element can
@@ -442,7 +445,7 @@ redefined with <emphasis>worddiv</emphasis> attribute of <x:hrc>keywords</x:hrc>
 
 <section id='schemesyntax.re'><title>Regular Expressions</title>
 <para>
-Regular expression rules is a very powerful and flexible way to define custom
+Regular expression rules is a powerful and flexible way to define custom
 syntax structures. Each RE token can be used to create several different syntax
 regions (up to 16). Keep in mind, however, that the scope of every RE in Colorer
 is limited to one line (the only exception is <x:hrc>firstline</x:hrc> element
@@ -453,16 +456,16 @@ matched against several lines to detect file type).
 
 <para>
 Actual RE is contained within <emphasis role='strong'>match</emphasis> attribute of <x:hrc>regexp</x:hrc>
-element. For details of Colorer-take5 regular expressions please see <xref linkend='hrcre'/>.
+element. Detailed explanation of Colorer-take5 regular expressions is in <xref linkend='hrcre'/>.
 Each <x:hrc>regexp</x:hrc> can have up to 16 optional attributes named 
-<emphasis role='strong'>region0, region1, ... regionf</emphasis>. The value of each attribute is a name
-of the corresponding syntax region used to highlight text. A number in attribute's name
-means corresponding round bracket in a RE.
+<emphasis role='strong'>region0, region1, ... regionf</emphasis> where hexadecimal digit
+corresponds to the part of RE surrounded by round brackets counted from left to right. 
 <emphasis role='strong'>region0</emphasis> means whole sequence matched by RE (this can be changed with
-<emphasis>\m</emphasis> and <emphasis>\M</emphasis> RE metasymbols).
+<emphasis role='strong'>\m</emphasis> and <emphasis role='strong'>\M</emphasis> RE metasymbols).
+The value of each attribute is a name of the syntax region used to highlight text. 
 
-Regular Expression can also contain named brackets in the form of <emphasis>(?{name} ... )</emphasis>.
-In this case the name of the bracket itself is a name of corresponding syntax region.
+Regular Expression can also contain named brackets what explicitly specify corresponding
+syntax region in the form of <emphasis role='strong'>(?{name} ... )</emphasis>.
 </para>
 
 <para>
@@ -477,7 +480,7 @@ To include entity's value into RE, special syntax of <emphasis role='strong'>%en
 <para>
 Each RE has a priority attribute (by default its value is <emphasis>normal</emphasis>).
 Priority is mainly used to detect errors when closing matching region. When everything within
-the region is already matched and parser needs to close the block it applies rule to
+the region is already matched and parser needs to close the block, it applies rule to
 match closing sequence. If match fails then rule with <emphasis>low</emphasis>
 priority within the block is tested. This is explained in <xref linkend="schemesyntax.boundaries"/>
 </para>
@@ -486,29 +489,36 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 
 <section id='schemesyntax.contextswitch'><title>Block context switch</title>
 <para>
-Although regular expressions are very powerful feature, their syntax doesn't allow
-to express some complex language constructions. First, this is due to general
-limitation of colorer's RE parser - scope is limited to a single line of text.
+Although regular expressions are very powerful feature, they do not allow
+to express some complex language constructions. This is due to general
+limitation of colorer's RE parser which scope is limited to a single line of text.
 Regular expression can't work on multiple lines of the parsed text. 
 Often programming languages have constructions wrapped into each other unlimited
 number of times. This is also an area where Regular Expression do not help much.
 </para>
 <para>
-To define much more complex syntax structures and context-free grammar constructions,
-HRC defines a special token, named <x:hrc>block</x:hrc>.
+To define more complex syntax structures and context-free grammar constructions
+HRC has a special element named <x:hrc>block</x:hrc>.
 
 <x:schemaref uri="&hrcxsd;" role='block'/>
 
 <x:schemaref uri="&hrcxsd;" role='blockInner'/>
 
-Each block defines its <emphasis>&lt;start&gt;</emphasis> and <emphasis>&lt;end&gt;</emphasis>
+Each block has <emphasis>&lt;start&gt;</emphasis> and <emphasis>&lt;end&gt;</emphasis>
 tags, each with the RE syntax already described.
 Everything contained within these two marks will be highlighted
 as a syntax of some other <x:hrc>scheme</x:hrc>, also pointed by this
-element's attribute.
+element's attribute. It is also possible to paint the portions of these matched
+tags. Much like <x:hrc>regex</x:hrc> element - <x:hrc>block</x:hrc> can contain
+up to 32 region attributes - <emphasis role='strong'>region, region00, region01, ... region1f</emphasis>.
+<emphasis>region0x</emphasis> corresponds to round brackets of <emphasis>&lt;start&gt;</emphasis> tag,
+<emphasis>region1x</emphasis> is for <emphasis>&lt;end&gt;</emphasis> tag brackets and <emphasis>region</emphasis> attribute
+contains a name of region to paint the whole block. So it is not necessary to define scheme for
+assigning region to the whole block, but since scheme is a required attribute there is a stub 
+empty scheme you can use named <emphasis role='strong'>def:empty</emphasis>
 </para>
 <para>
-This means that using <x:hrc>block</x:hrc> element you can switch context
+Using <x:hrc>block</x:hrc> element you can switch context
 between different highligting schemes. This way it is possible to define
 a great number of different syntax combinations.
 </para>
