@@ -57,7 +57,7 @@
    </keywords>
 
    <!-- basic python comment - consider it everything after # till the end of line -->
-   <block start="/#/" end="/$/" region="pyComment" scheme="def:empty"/>
+   <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
   </scheme>
  </type>
 
