@@ -530,14 +530,13 @@ a great number of different syntax combinations.
 Both regular expressions and block'ed scheme switches work in the same scheme context,
 and tested against text in the order they defined in HRC.
 Any conflict between multiple possible matches is resolved according
-to order of elements in HRC file. After successful RE match parse position is increased by
-the width of that RE. By default the width is calculated from the first matched symbol till the last.
-However it is possible to adjust these boundaries and shift parse position.
-This could be done with special <emphasis>\m</emphasis>
-(redefines RE start) and <emphasis>\M</emphasis> (redefines RE end) metasymbols.
-It becomes possible to define overlapped tokens, where parsing of the following token starts
-somewere in the middle of the previous. In this case color definitions appear in the order they are
-parsed.
+to the order of elements in HRC file. After successful RE match parse position is increased by
+the width of that RE. By default the width is calculated from the first matched symbol till the last
+inclusive. However it is possible to adjust these boundaries and shift parse position.
+This is done with special <emphasis role='strong'>\m</emphasis>
+(redefines RE start) and <emphasis role='strong'>\M</emphasis> (redefines RE end) metasymbols.
+It becomes possible to define overlapped elements, where parsing of the following element starts
+somewhere in the middle of the previous.
 </para>
 <section id="priority"><title>priority</title>
 <para>
@@ -555,17 +554,19 @@ when resolving conflicts upon exit from inner scheme.
 This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
 will be used instead of the element with lowered priority (when a conflict occurs).
 In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
-relates to the <emphasis>&lt;start&gt;</emphasis> tag of inner element.
+relates to the <emphasis>&lt;start&gt;</emphasis> tag. <emphasis>priority</emphasis>
+attribute is often used in rules that highlight syntax errors.
 </para>
 </section>
 <section id="content-priority"><title>content-priority</title>
 <para>
-Often it is required to define a behavior of an element dynamically, depending on
-usage context. With <emphasis>priority</emphasis> attribute it is impossible to change
-element's priority depending on called context. The element will always have the same
-priority. But it is possible to change whole scheme's definition priority (i.e. all
-it's elements priority) - using <emphasis>content-priority</emphasis> attribute of a
-<x:hrc>block</x:hrc> element.
+Sometimes it is required to dynamically define priority of a child scheme within a block.
+<!-- todo add example when an why it is required -->
+With <emphasis>priority</emphasis> attribute it is impossible to change element's priority
+depending on a context from where the element is called, because the element will
+always have the priority specified. Instead <emphasis>content-priority</emphasis> attribute of a
+<x:hrc>block</x:hrc> element is used to change priority for all elements of referenced
+scheme.
 </para>
 <para>
 When changed into <emphasis>low</emphasis> it causes all the elements of that scheme
@@ -576,28 +577,33 @@ particular <emphasis>priority</emphasis> attribute.
 
 <section id="inner-region"><title>inner-region</title>
 <para>
-While defining scheme context switch it is possibile to set a default region,
-used for content of called scheme. The region will be used as a "background" for
+When defining scheme context switch it is possibile to set a default region
+for content of called scheme through <emphasis>region</emphasis> attribute of
+<x:hrc>block</x:hrc> element. The region will be used as a "background" for
 all other regions defined in that scheme.
-It is possible to manage boundaries this region will use during instantiation.
-Normally the whole scheme's content including its <emphasis>&lt;start&gt;</emphasis>
-and <emphasis>&lt;end&gt;</emphasis> attributes is handled inside of this default region.
-Therefore the region starts where <emphasis>&lt;start&gt;</emphasis> token starts, and
+It is possible to manage boundaries of this region.
+Normally the whole scheme's content together with contents of <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> tokens is included in this default region.
+Region starts where <emphasis>&lt;start&gt;</emphasis> token starts, and
 ends where <emphasis>&lt;end&gt;</emphasis> token ends.
 </para>
 <para>
-Sometimes it is necessary to change this behaviour and handle <emphasis>&lt;start&gt;</emphasis>
-and <emphasis>&lt;end&gt;</emphasis> tokens (and all the regions they instantiate) outside of
+Sometimes it is desirable to change this behaviour and handle <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> tokens (and all the regions they may define) outside of
 default region of the called scheme. This could be achieved by setting <emphasis>inner-region</emphasis>
 attribute to <emphasis>"yes"</emphasis> value.
-When set it tells parser to include start/end regions outside of called scheme,
-and to change default region boundaries of called scheme. In this case they start at
-the end of <emphasis>&lt;start&gt;</emphasis> token and ends just before <emphasis>&lt;end&gt;</emphasis>
+When set it tells parser to exclude start/end tokens from default region of called scheme
+by changing default region boundaries to begin at
+the end of <emphasis>&lt;start&gt;</emphasis> token and finish just before <emphasis>&lt;end&gt;</emphasis>
 token area.
 </para>
 <para>
 Inner region feature could be used to implement special wrapped areas and in general
 can affect special background color treatment.
+<!--
+ todo example - what are special wrapped areas 
+ todo example - what is special background color treatment 
+-->
 </para>
 </section>
 
