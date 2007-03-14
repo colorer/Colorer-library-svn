@@ -57,7 +57,7 @@
    </keywords>
 
    <!-- basic python comment - consider it everything after # till the end of line -->
-   <regexp match="/#.*/" region="pyComment"/>
+   <block start="/#/" end="/$/" region="pyComment" scheme="def:empty"/>
   </scheme>
  </type>
 
