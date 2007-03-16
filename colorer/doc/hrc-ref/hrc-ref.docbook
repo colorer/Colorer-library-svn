@@ -697,8 +697,8 @@ editing process.
 Another feature Colorer-take5 library provides is a tree of valuable syntax tokens 
 with allows to quickly switch among
 them in editor. These tokens may represent programming language's functions, procedures,
-or any other logical structure of the text. During parsing process these constructions are collected
-into a special outline container, which can represent them to user in realtime or by request.
+or any other logical structures of the text. During parsing process these constructions are collected
+into a special outline container, which can present them to user in realtime or by request.
 Colorer-take5 editor implements two basic forms of outliner: functions and errors list.
 Any HRC scheme may define an element with region equal to or derived from
 <emphasis role='strong'>def:Outlined</emphasis>. All elements with this region are considered to be
@@ -761,7 +761,7 @@ Regular expression consists of a set of characters.
 Some of these are simple, and some are special (metacharacters).
 All metacharacters (escapes) are divided into three categories: first - zerolength (words boundaries and so on);
 second - class metacharacters (<emphasis>\w</emphasis>, <emphasis>\s</emphasis> <emphasis>.</emphasis>);
-and the third class is operators.
+and the third - operators.
 RE operators can be applied to a single character,
 to block, enwrapped in brackets or into other operators.
 You can use round brackets to group any sequence of characters.
@@ -773,15 +773,16 @@ There are some differences in extended operators.
 <section id='hrcre.syntax'><title>Syntax</title>
 <para>
 All regexps must be in slashes <emphasis>/.../</emphasis>.
-After the end slash there can be the next parameters:
+After the end slash there can be modifiers:
 
 <itemizedlist>
 <listitem><simpara><emphasis>i</emphasis> - ignore symbol case</simpara></listitem>
 <listitem><simpara><emphasis>x</emphasis> - ignore direct spaces and crlf (for comfort)</simpara></listitem>
-<listitem><simpara><emphasis>s</emphasis> - suppose, that regexp is single line - it means, than '.' class should include \r\n symbols (actual only for <x:hrc>firstline</x:hrc> element)</simpara></listitem>
+<listitem><simpara><emphasis>s</emphasis> - treat regexp like single line - i.e. make '.' class include \r\n symbols (works only for 
+<x:hrc>firstline</x:hrc> element) as all other RE can't exceed line boundary</simpara></listitem>
 </itemizedlist>
-Each symbol in RE is linearly compared with the target string.
-Everything that doesn't look like metacharacter means simple character.
+Each symbol in RE is sequentially compared with the target string.
+Everything that doesn't look like metacharacter is a simple character.
 </para>
 </section>
 
@@ -791,11 +792,10 @@ Everything that doesn't look like metacharacter means simple character.
 <row><entry><emphasis>^</emphasis></entry><entry>Match the beginning of the line</entry></row>
 <row><entry><emphasis>$</emphasis></entry><entry>Match the end of the line</entry></row>
 <row><entry><emphasis>.</emphasis></entry><entry>Match any character (except \r\n)</entry></row>
-<row><entry><emphasis>[...]</emphasis></entry><entry>Match characters in set</entry></row>
-<row><entry><emphasis>[^...]</emphasis></entry><entry>Match characters not in set.
-          All the operators are disabled here, but you can
-          use some other metacharacters and range operator:
-          a-z means all chars from first to second (a - z),
+<row><entry><emphasis>[...]</emphasis></entry><entry>Match any character in set</entry></row>
+<row><entry><emphasis>[^...]</emphasis></entry><entry>Match any character that is not in set.
+          None of RE operators works here, but you some metacharacters and range operator
+          are possible: a-z stands for all alphabet chars between a and z,
 <!-- todo $ and ^ metacharacters do not work, what else? -->
           <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.
           -[] - Class substraction.
@@ -832,8 +832,8 @@ Everything that doesn't look like metacharacter means simple character.
 </tbody></tgroup></table>
 
 <para>
-The next operators are only available in Colorer-take5 regexp module parser,
-when in compiled for Colorer library:
+Next operators are only available in Colorer-take5 regexp parser module,
+when it is compiled for Colorer library (means that Colorer regex module can be used separately):
 </para>
 <table id="table.take5metacharacters"><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
 <row><entry><emphasis>~</emphasis></entry><entry>Matches for the start of parent scheme (end of <emphasis>&lt;start&gt;</emphasis> tag).</entry></row>
@@ -854,27 +854,27 @@ in <xref linkend="schemesyntax.boundaries"/>.
 <para>
 Operators can't be used without some preceding character sequence.
 Each operator must be applied to the appropriate character,
-metacharacter, or block of their combination (enclosed with brackets).
+metacharacter, or their combination enclosed in brackets.
 </para>
 
 <table id="table.operators"><title>Operators</title><tgroup cols='2'><tbody>
-<row><entry><emphasis>( )</emphasis></entry><entry>Group and remember characters to form one pattern.</entry></row>
-<row><entry><emphasis>(?{name} )</emphasis></entry><entry>Group and remember characters into the named group.</entry></row>
-<row><entry><emphasis>(?{} ) or (?: )</emphasis></entry><entry>Group but don't remember characters into the group (unnamed group).</entry></row>
-<row><entry><emphasis>(?{} )</emphasis></entry><entry>Group and remember characters into the unnamed uncounted group.</entry></row>
-<row><entry><emphasis>|</emphasis></entry><entry>Match previous or next pattern.</entry></row>
-<row><entry><emphasis>*</emphasis></entry><entry>Match previous pattern 0 or more times.</entry></row>
-<row><entry><emphasis>+</emphasis></entry><entry>Match previous pattern 1 or more times.</entry></row>
-<row><entry><emphasis>?</emphasis></entry><entry>Match previous pattern 0 or 1 times.</entry></row>
+<row><entry><emphasis>( )</emphasis></entry><entry>Group and remember characters for later use.</entry></row>
+<row><entry><emphasis>(?{name} )</emphasis></entry><entry>Group and remember characters using named group.</entry></row>
+<row><entry><emphasis>(?{} ) or (?: )</emphasis></entry><entry>Group characters, but don't remember (unnamed group).</entry></row>
+<row><entry><emphasis>(?{} )</emphasis></entry><entry>Group and remember characters using unnamed uncounted group.</entry></row>
+<row><entry><emphasis>|</emphasis></entry><entry>Alternative. Match previous or next pattern.</entry></row>
+<row><entry><emphasis>*</emphasis></entry><entry>Match preceeding pattern 0 or more times.</entry></row>
+<row><entry><emphasis>+</emphasis></entry><entry>Match preceeding pattern 1 or more times.</entry></row>
+<row><entry><emphasis>?</emphasis></entry><entry>Match preceeding pattern 0 or 1 time.</entry></row>
 <row><entry><emphasis>{n}</emphasis></entry><entry>Repeat n times.</entry></row>
 <row><entry><emphasis>{n,}</emphasis></entry><entry>Repeat n or more times.</entry></row>
 <row><entry><emphasis>{n,m}</emphasis></entry><entry>Repeat from n to m times.</entry></row>
 </tbody></tgroup></table>
 
 <para>
-If you'll add <emphasis>?</emphasis> after operator, it becomes nongreedy.
+Question sign <emphasis>?</emphasis> after operator makes it nongreedy.
 For example <emphasis>*</emphasis> operator becomes nongreedy if placing <emphasis>*?</emphasis>
-Greedy operator tries to take as much in string, as it can. Nongreedy takes by minimum.
+Greedy operator tries to eat as many chars in string as possible. Nongreedy takes minimum.
 </para>
 </section>
 
@@ -895,7 +895,7 @@ But colorer uses syntax <emphasis>(foobar)?=</emphasis>
 <section id='hrcre.examples'><title>Examples</title>
 <example id="example.hrc.re"><title>RE examples</title>
 <para>
-
+<!-- todo more examples with lookaheads and back -->
 <variablelist>
 <varlistentry>
 <term><emphasis>/foobar/</emphasis></term>
@@ -943,14 +943,14 @@ But colorer uses syntax <emphasis>(foobar)?=</emphasis>
 <title>Format of <emphasis>catalog.xml</emphasis> file</title>
 <para>
 
-Catalog of all Colorer Library resources is a convenient way to
-unify creation and management of all the Colorer features.
+Catalog for Colorer Library resources is a convenient way to
+centralize maintenance and development of all Colorer features.
 
-This catalog is stored in <emphasis>catalog.xml</emphasis> file,
+This catalog is stored in <emphasis>catalog.xml</emphasis> file
 and mapped into the ParserFactory class.
 
-Catalog supports storing of all installed HRC modules, management
-of error logging and listing of available HRD sets.
+Catalog contains information about all installed HRC modules,
+error logging configudation and listing of available HRD sets.
 
 </para>
 <x:schemaref uri="&catalogref;" role='catalog'/>
@@ -969,11 +969,11 @@ of error logging and listing of available HRD sets.
 <appendix id='hrd'>
 <title>Format of <emphasis>HRD</emphasis> color schemes</title>
 <para>
+<!-- todo mention HRD somewhere in introductionary chapter -->
 <acronym role='Highlighting Resource Descriptions'>HRD</acronym>
-storage is used to assign each HRC Region with some editor-specific properties.
-Commonly, these include color and style information.
-HRD file consists of the list of the entries, each of them describing one
-HRC Region.
+files used to assign some editor-specific properties to each HRC Region.
+Usually these include color and style information.
+HRD file is a list of entries each describing one HRC Region.
 
 </para>
 <x:schemaref uri="&hrdxsd;" role='hrd'/>
@@ -981,10 +981,11 @@ HRC Region.
 <x:schemaref uri="&hrdxsd;" role='assign'/>
 
 <para>
-It is possible to maintain different HRD settings for different languages,
+It is possible to maintain different HRD files for different languages,
 or to compile them into one single HRD file.
 The former allows you to distribute recommended settings with each language,
-and the latter - to unify modifying and storing changed HRD settings with provided UI.
+while the latter to unify modification and storage of changed HRD
+settings within provided UI.
 
 </para>
 <x:schemaref uri="&hrdxsd;"/>
@@ -996,12 +997,12 @@ and the latter - to unify modifying and storing changed HRD settings with provid
 <appendix id='hrcxsd'>
 <title>XML Schema for HRC Language</title>
 <para>
-This XML Schema instance was automatically generated
+This XML Schema was automatically generated
 from the original <emphasis>hrc.xsd</emphasis> source, available at
 <ulink url="http://colorer.sf.net/2003/hrc.xsd">http://colorer.sf.net/2003/hrc.xsd</ulink>.
 All comments and documentation tags were stripped to achieve more compact format.
-To use this schema in other, than informational purposes, use up-to-date
-version, available on the link above.
+To use this schema for other than informational purposes use up-to-date
+version available from the link above.
 </para>
 
 <x:schemaref role='' uri="&hrcxsd;"/>
