@@ -631,46 +631,49 @@ can affect special background color treatment.
 </section>
 
 
-<section id='coding.std'><title>HRC Language Coding Conventions</title>
+<section id='coding.std'><title>HRC Language Features and Conventions</title>
 <para>
 Although HRC itself could be used in an arbitrary way, Colorer-take5
-library has a number of coding, naming and other conventions for
-consistency which makes easier maintenance and expansion of HRC library.
+library has a number of coding and naming conventions for consistency
+to make maintenance and expansion of HRC library easier. Features are
+implemented using special conventions Colorer library knows about and
+does extra processing.
 </para>
 
-<section id='coding.std.naming'><title>Object naming</title>
+<section id='coding.std.naming'><title>Elements naming</title>
 <para>
-All regions in Colorer-take5 HRC database are named in a same
-way: name starts with capital letter, each name-part also starts with capital
+Colorer names are case sensitive. All regions in Colorer-take5 HRC database are named
+with capital letter, each name-part also starts with capital
 letter. For instance: <emphasis>StringQuote</emphasis>. Any separate type or
 package is named in lower case and shortened if possible. So, the full name
 of a region is written as <emphasis>def:StringQuote</emphasis>.
 </para>
 
 <para>
-Scheme names are context dependent and could be used in either case.
-Dash or Dot delimiter is often used to make them more readable:
+Scheme names are context dependent and could be used with words in either case.
+Dash or Dot delimiter makes them more readable:
 <emphasis>&lt;scheme name="Comment.content"&gt;</emphasis> for instance.
 </para>
 
 <para>
-All HRC files should be named in lower-case with
+All HRC files are named in lower-case with
 possible Dash or Dot delimiters. External XML entities should be used
-to split complex HRC files in parts and simplify generation of automatically
-derived HRC schemes. Entity files carry <emphasis>ent.hrc</emphasis>
+to split complex HRC files in parts that simplifies generation of automatically
+derived HRC schemes. Entity files carry double <emphasis>ent.hrc</emphasis>
 extensions to distinguish them from ordinary HRC schemes.
 </para>
 </section>
 
-<section id='coding.std.spec'><title>Default package</title>
+<section id='coding.std.spec'><title>Default package feature</title>
 <para>
-Colorer-take5 defines framework with common syntax regions through
-special package named <emphasis role='strong'>def</emphasis>. The package simplifies support of HRC database and
-separates parse content and its presentation. It is located in
+Colorer-take5 defines a basic set of common syntax regions through
+special package named <emphasis role='strong'>def</emphasis>. Default package simplifies
+support of HRC database and separates parse content and its presentation. It is located in
 <emphasis>hrc/lib/default.hrc</emphasis>.
 The general purpose of this file is to define a basic set of syntax
-regions. All other HRC regions should be inherited from this set.
-This allows to flexibly define HRD color highlighting rules and
+regions. These regions already have assigned colors via universal
+HRD color mappings bundled with Colorer library. All other HRC regions
+should be inherited from this set to flexibly define HRD color rules and
 unify them across all supported syntaxes and languages.
 Any HRC package can explicitly import and use them or define its own
 syntax regions, derived from the defaults.
@@ -678,31 +681,32 @@ syntax regions, derived from the defaults.
 
 <section id='coding.std.spec.pairs'><title>Pair construction matching</title>
 <para>
-Colorer-take5 library itself (independently on HRC syntax) implements
-a number of extensions to make editing process more flexible. Namely
+Colorer-take5 library uses HRC syntax conventions for additional
+processing that make editing process more intuitive. This processing includes
 paired construction matching and file's structure/error list outline.
-These features are implemented through the specially defined regions.
-
-To define a matching paired construction, package should instantiate
-regions with special <emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis> values.
-Parse layout of these regions should be properly enwrapped in a valid recursive sequence.
+These features are implemented through specially defined regions.
+Matching paired construction consists of two special regions
+<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>
+that package shoud define.
+Parsing layout for these regions should be properly enwrapped in a valid recursive sequence.
 Using this information Colorer-take5 library provides user with
 ability to jump over text blocks in target language and highlight them during
 editing process.
+<!-- todo examples are highly recommended here -->
 </para>
 </section>
 
 <section id='coding.std.spec.outline'><title>Outliner construction</title>
 <para>
 Another feature Colorer-take5 library provides is a tree of valuable syntax tokens 
-with allows to quickly switch among
-them in editor. These tokens may represent programming language's functions, procedures,
+in a text. The tree allows to quickly switch among these tokens in editor.
+Tokens may represent programming language's functions, procedures,
 or any other logical structures of the text. During parsing process these constructions are collected
 into a special outline container, which can present them to user in realtime or by request.
 Colorer-take5 editor implements two basic forms of outliner: functions and errors list.
 Any HRC scheme may define an element with region equal to or derived from
 <emphasis role='strong'>def:Outlined</emphasis>. All elements with this region are considered to be
-outliner-targeted and are collected during parsing. Outliner may also analyse
+outliner-targeted and are collected during parsing. Outliner may analyse
 parse tree structure to generate tree-like text outliners.
 Moreover, any language can provide special algorithmic support or logic to implement
 parsing for special outlined regions and building valid outline tree.
@@ -713,14 +717,13 @@ items with graphic objects, not only text.
 <para>
 Outliner can generally be set up against any region type. It works as a kind of filter,
 gathering only required information from parser. This is a way Errors list works,
-where regions derived from <emphasis role='strong'>def:Error</emphasis> are collected. Each language HRC
-uses this
-region to mark problems it found while parsing text.
+where regions derived from <emphasis role='strong'>def:Error</emphasis> are collected. Every
+HRC language uses this region to mark problems it found while parsing text.
 </para>
-
 </section>
 
 </section>
+
 
 <section id='coding.rec'><title>Coding Recommendations</title>
 <para>
@@ -731,7 +734,7 @@ As a consequence there still could be some type definitions, which are
 not fully comply with general HRC conventions.
 In general these include invalid names of packages and region/schemes.
 They won't be supported in their current form and will be reworked
-one day to become more compliant with other HRC definitions.
+one day to become compliant with other HRC definitions.
 </para>
 <para>
 It may seem a good point to have an <emphasis role='strong'>import</emphasis> element in HRC,
