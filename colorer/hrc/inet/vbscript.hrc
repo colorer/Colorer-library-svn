@@ -13,8 +13,6 @@ With help of:
 
       <import type="def"/>
 
-      <region name="ClassOutline" parent="Outlined"/>
-
       <scheme name="vbMETA"/>
 
       <scheme name="vbScript">
@@ -31,22 +29,13 @@ With help of:
          <block start="/(&#34;)/" end="/(&#34;)/" scheme="vbMETA" region="vbasic:vbString" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\()/" end="/(\))/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
-<!--regexp match="/\bend\s+if\b/i" region0="Error" lowpriority="lowpriority"/-->
-         <regexp match="/\bend\s+if\b/i" region0="Keyword" priority="low"/>
-         <block start="/\b(if)\b/i" end="/\b((then\s+exit\s+(function|sub|property|for|do))|((then)(\s+[^'\s]+.*$)?=)|(end([\s])+\Y1))\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
-         <regexp match="/(\bExit\s+(function|sub|property|for|do)\b)/i" region0="Keyword"/>
 
-         <regexp match="/\b\M Class\s+(\w+)/ix" region1="ClassOutline"/>
+         <inherit scheme="vbasic:PairedConstructions">
+           <virtual scheme="vbasic:PairedConstructions" subst-scheme="vbScript"/>
+         </inherit>
+
          <inherit scheme="vbasic:Outlines"/>
 
-         <regexp match="/(\bproperty\b)?#8(\s+\b(let|set|get)\b)/i" region2="Keyword"/>
-         <regexp match="/\.(class|property)\b/i"/>
-         <block start="/\b(with|function|sub|class|property)\b/i" end="/\b(end([\s])+\Y1)\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
-         <block start="/((\bselect\b)\s+\bcase\b)/i" end="/\b(end([\s])+\Y2)\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(for(\s+each)?)\b/i" end="/([^\S]+|^)\m(\bnext)\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region12="PairEnd"/>
-         <block start="/\b(do(\s+(while|until))?)\b/i" end="/\b(loop(\s+(while|until))?)\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(while)\b/i" end="/\b(wend)\b/i" scheme="vbScript" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
-         <regexp match="/(\bOn\s+Error\s+(Resume\s+Next)|(Goto\s+0)\b)/i" region0="Keyword"/>
          <keywords ignorecase="yes" region="Keyword">
             <word name="Call"/>
             <word name="Case"/>
