@@ -23,6 +23,8 @@ With help of:
       <region name="vbId" parent="Var"/>
       <region name="vbLabel" parent="Label"/>
 
+      <region name="ClassOutline" parent="Outlined"/>
+
       <region name="DimPublicOutline" parent="Outlined"/>
       <region name="DimPrivateOutline" parent="Outlined"/>
       <region name="ConstPublicOutline" parent="Outlined"/>
@@ -41,6 +43,7 @@ With help of:
       <region name="PropertyLetOutline" parent="PropertyOutline"/>
 
       <scheme name="Outlines">
+         <regexp match="/\b\M Class\s+(\w+)/ix" region1="ClassOutline"/>
 
          <regexp match="/^\s*\M Public \s+ Function\s+(\w+)/ix" region1="FunctionPublicOutline"/>
          <regexp match="/^\s*\M Private\s+Function\s+(\w+)/ix" region1="FunctionPrivateOutline"/>
@@ -62,6 +65,28 @@ With help of:
          <regexp match="/^\s*\b\M Public\s+Const\s+(\w+)/ix" region1="ConstPublicOutline"/>
       </scheme>
 
+      <scheme name="PairedConstructions">
+         <!--regexp match="/\bend\s+if\b/i" region0="Error" lowpriority="lowpriority"/-->
+         <regexp match="/\bend\s+if\b/i" region0="Keyword" priority="low"/>
+         <block start="/\b(if)\b/i" end="/\b((then\s+exit\s+(function|sub|property|for|do))|((then)(\s+[^'\s]+.*$)?=)|(end([\s])+\Y1))\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+         <regexp match="/(\bExit\s+(function|sub|property|for|do)\b)/i" region0="Keyword"/>
+
+         <regexp match="/(\bproperty\b)?#8(\s+\b(let|set|get)\b)/i" region2="Keyword"/>
+         <regexp match="/\.(class|property)\b/i"/>
+         <block start="/\b(with|function|sub|class|property)\b/i" end="/\b(end([\s])+\Y1)\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+         <block start="/((\bselect\b)\s+\bcase\b)/i" end="/\b(end([\s])+\Y2)\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+         <block start="/\b(for(\s+each)?)\b/i" end="/([^\S]+|^)\m(\bnext)\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region12="PairEnd"/>
+         <block start="/\b(do(\s+(while|until))?)\b/i" end="/\b(loop(\s+(while|until))?)\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+         <block start="/\b(while)\b/i" end="/\b(wend)\b/i"
+                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+         <regexp match="/(\bOn\s+Error\s+(Resume\s+Next)|(Goto\s+0)\b)/i" region0="Keyword"/>
+      </scheme>
+
       <scheme name="vbasic">
 <!-- Comments -->
          <regexp match="/'.*$/" region0="vbComment"/>
@@ -76,8 +101,13 @@ With help of:
          <regexp match="/\b(_)\s*$/" region0="vbWord"/>
          <block start="/(\()/" end="/(\))/" scheme="vbasic" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="vbasic" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
-<!-- Outlines -->
+
+         <inherit scheme="PairedConstructions">
+           <virtual scheme="PairedConstructions" subst-scheme="vbasic"/>
+         </inherit>
+
          <inherit scheme="Outlines"/>
+
 <!-- Labels -->
          <regexp match="/^\w+(:)$/" region0="vbLabel" region1="vbSymb"/>
 <!-- Symbols -->
