@@ -21,8 +21,18 @@
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
   <target name="init">
-    <uptodate property="pdf.required" srcfile='hrc-ref.docbook' targetfile="hrc-ref.pdf"/>
-    <uptodate property="html.required" srcfile='hrc-ref.docbook' targetfile="index.html"/>
+
+    <uptodate property="pdf.required" targetfile="hrc-ref.pdf">
+      <srcfiles dir="." includes = "hrc-ref*.docbook"/>
+    </uptodate>
+    <uptodate property="html.required" targetfile="index.html">
+      <srcfiles dir="." includes = "hrc-ref*.docbook"/>
+    </uptodate>
+
+    <dependset>
+      <srcfileset dir="." includes = "hrc-ref*.docbook"/>
+      <targetfileset dir="." includes="hrc-ref.docbook-merged"/>
+    </dependset>
 
     <available file='${docbook-dir}/template/titlepage.xsl' property='xslt-exists'/>
     <available classname="org.apache.fop.apps.Fop" property='pdf-exists'>
@@ -115,7 +125,7 @@
   <target name="zip" description='Creates zip distribution file'>
     <zip destfile="hrc-ref.zip"
          basedir="."
-         includes="db*,fo*,html*,hrc-ref.docbook,build.xml"
+         includes="db*, fo*, html*, hrc-ref.*.docbook, build.xml"
     />
   </target>
 

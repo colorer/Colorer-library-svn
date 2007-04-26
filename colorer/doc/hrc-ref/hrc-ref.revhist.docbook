@@ -1,0 +1,65 @@
+<appendix id='history'><title>History of the changes</title>
+
+<itemizedlist><title>take5.be5, 26 April 2007</title>
+<listitem><para>
+Anatoly Techtonik:
+<programlisting>
+* disambiquation concerning language features and conventions
++ finish rewriting - file still contains some other ideas
+  for improvement in comments
++ rephrasings and fixes to chapter 5 and more
++ proofreading fixes up to part 5 - coding conventions
++ rephrase regex notes and document region features of the block
+* minor clarifications
+core syntax -> basics
++ Igor remarks
+quickly go with edit fixes till the end of 3rd chapter
+rewrote keyword lists and RE descriptions
+process attributes derived from extended types
+spellcheck
+reduce amount of text to be placed in reader's buffer to gain
+  an idea of connection between scheme and region
+name space clarifications (not complete yet)
+consistent description of what type is
+rewrap a package
+story continues - expanded prototypes language (confusing, eh?) - simplify
+core syntax - mess with the rest
+core syntax - two parts explanations simplified
+reworded introduction
+rephrased abstract
++ ids in examples and tables to fix compiler warnings
+replace confusing entities with meaningful names
+display element type only if it is different from element name
+add angle brackets to make XML nature of HRC elements obvious
+it doesn't make sense to output complexType element name twice
+consistent ids also for xsd reference
+generate consistent ids to be referenced from manual, add x:hrc reference element
+move 'parameters' complexType to be found by xslt for reference
+</programlisting>
+</para></listitem>
+</itemizedlist>
+  
+
+
+<itemizedlist><title>take5.beta4, 28 April 2005</title>
+<listitem><para>
+New <xref linkend="inner-region"/> attribute description.
+</para></listitem>
+<listitem><para>
+Minor HRD schema clarifications.
+</para></listitem>
+</itemizedlist>
+
+<itemizedlist><title>take5.beta4(draft), 19 February 2005</title>
+<listitem><para>
+Clarification of <x:hrc>regexp</x:hrc> and <x:hrc>block</x:hrc> regions usage.
+</para></listitem>
+<listitem><para>
+"Scheme boundaries and priority" explained.
+</para></listitem>
+<listitem><para>
+"HRC Language Coding Conventions" section was added.
+</para></listitem>
+</itemizedlist>
+
+</appendix>

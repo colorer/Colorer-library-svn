@@ -7,9 +7,10 @@
 
 <xsl:template name="value">
   <xsl:param name="id" select="''"/>
+  <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
   <xsl:choose>
     <xsl:when test="(parent::xs:complexType or parent::xs:complexType) and name() = 'name'">
-      <link linkend="typedescr_{generate-id(/)}_{.}"><xsl:value-of select="."/></link>
+      <link linkend="ref.{$reftype}.{.}"><xsl:value-of select="."/></link>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="."/>
@@ -34,13 +35,15 @@
   <xsl:param name="totalIndent" select="''"/>
   <xsl:param name="id" select="''"/>
 
+  <xsl:variable name='reftype' select='/xs:schema/xs:element/@name'/>
+
   <xsl:if test="parent::xs:schema">
     <xsl:call-template name="newline"/>
   </xsl:if>
 
   <xsl:if test="self::xs:complexType[@name] or self::xs:simpleType[@name]">
   <!-- or self::xs:element[@name and not(@type)] -->
-    <anchor id='{$id}_{generate-id(/)}_{@name}'/>
+    <anchor id='{$id}_{$reftype}_{@name}'/>
   </xsl:if>
 
   <xsl:value-of select="$totalIndent"/>
