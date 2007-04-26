@@ -7,6 +7,9 @@
 This stylesheet is used to transform original hrc-ref,
 resolve all the x:schemaref objects and replace them with
 schema source or schema documentation
+
+It also resolves all inline x:hrc links to corresponding
+parts of reference
 -->
 
 <xsl:include href="db-xsdprint.xsl"/>
@@ -40,6 +43,10 @@ schema source or schema documentation
 
 <xsl:template match="x:schemaref">
   <xsl:apply-templates select='document(@uri)' mode="print"/>
+</xsl:template>
+
+<xsl:template match="x:hrc">
+  <link linkend="ref.hrc.{.}">&lt;<xsl:value-of select="."/>&gt;</link>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -1,0 +1,193 @@
+<appendix id='hrcre'>
+<title>Regular Expressions syntax</title>
+
+<section id='hrcre.intro'><title>Introduction</title>
+<para>
+Colorer library and HRC language rely heavily upon regular expressions (RE).
+They allow you to create universal syntax highlighting rules in HRC. The major
+difference from other RE engines is that Colorer RE are all limited to one line
+to make text processing faster.
+</para>
+
+<para>
+Regular expression consists of a set of characters.
+Some of these are simple, and some are special (metacharacters).
+All metacharacters (escapes) are divided into three categories: first - zerolength (words boundaries and so on);
+second - class metacharacters (<emphasis>\w</emphasis>, <emphasis>\s</emphasis> <emphasis>.</emphasis>);
+and the third - operators.
+RE operators can be applied to a single character,
+to block, enwrapped in brackets or into other operators.
+You can use round brackets to group any sequence of characters.
+Regular expressions in HRC Language are much like Perl regexps in their base variant.
+There are some differences in extended operators.
+</para>
+</section>
+
+<section id='hrcre.syntax'><title>Syntax</title>
+<para>
+All regexps must be in slashes <emphasis>/.../</emphasis>.
+After the end slash there can be modifiers:
+
+<itemizedlist>
+<listitem><simpara><emphasis>i</emphasis> - ignore symbol case</simpara></listitem>
+<listitem><simpara><emphasis>x</emphasis> - ignore direct spaces and crlf (for comfort)</simpara></listitem>
+<listitem><simpara><emphasis>s</emphasis> - treat regexp like single line - i.e. make '.' class include \r\n symbols (works only for 
+<x:hrc>firstline</x:hrc> element) as all other RE can't exceed line boundary</simpara></listitem>
+</itemizedlist>
+Each symbol in RE is sequentially compared with the target string.
+Everything that doesn't look like metacharacter is a simple character.
+</para>
+</section>
+
+<section id='hrcre.meta'><title>Metacharacters</title>
+
+<table id="table.metacharacters"><title>Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><emphasis>^</emphasis></entry><entry>Match the beginning of the line</entry></row>
+<row><entry><emphasis>$</emphasis></entry><entry>Match the end of the line</entry></row>
+<row><entry><emphasis>.</emphasis></entry><entry>Match any character (except \r\n)</entry></row>
+<row><entry><emphasis>[...]</emphasis></entry><entry>Match any character in set</entry></row>
+<row><entry><emphasis>[^...]</emphasis></entry><entry>Match any character that is not in set.
+          None of RE operators works here, but you some metacharacters and range operator
+          are possible: a-z stands for all alphabet chars between a and z,
+<!-- todo $ and ^ metacharacters do not work, what else? -->
+          <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.
+          -[] - Class substraction.
+          &amp;&amp;[] - Class join (can be dropped).
+          |[] - Class intersection.
+          </entry></row>
+<row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
+<row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point</entry></row>
+<row><entry><emphasis>\B</emphasis></entry><entry>No word break at this point</entry></row>
+<row><entry><emphasis>\xHH</emphasis>, <emphasis>\x{HHHH}</emphasis></entry><entry><emphasis>HH, HHHH</emphasis> - character code (hex)</entry></row>
+<row><entry><emphasis>\n</emphasis></entry><entry>0x10 (lf)</entry></row>                                          
+<row><entry><emphasis>\r</emphasis></entry><entry>0x13 (cr)</entry></row>
+<row><entry><emphasis>\t</emphasis></entry><entry>0x09 (tab)</entry></row>
+<row><entry><emphasis>\s</emphasis></entry><entry>Whitespace character (tab/space/cr/lf)</entry></row>
+<row><entry><emphasis>\S</emphasis></entry><entry>Not whitespace</entry></row>
+<row><entry><emphasis>\w</emphasis></entry><entry>Word symbol (chars, digits, _)</entry></row>
+<row><entry><emphasis>\W</emphasis></entry><entry>Not word symbols</entry></row>
+<row><entry><emphasis>\d</emphasis></entry><entry>Digit</entry></row>
+<row><entry><emphasis>\D</emphasis></entry><entry>Not Digit</entry></row>
+<row><entry><emphasis>\u</emphasis></entry><entry>Uppercase symbol</entry></row>
+<row><entry><emphasis>\l</emphasis></entry><entry>Lowercase symbol</entry></row>
+</tbody></tgroup></table>
+</section>
+
+<section id='hrcre.exmeta'><title>Extended metacharacters</title>
+<para>These metacharacters are incompatible with Perl</para>
+<table id="table.xmetacharacters"><title>Extended Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><emphasis>\c</emphasis></entry><entry>Means 'not word' before</entry></row>
+<row><entry><emphasis>\N</emphasis></entry><entry>Reference from inside of regexp to one of its brackets.
+          <emphasis>N</emphasis>  - the number of brackets pair.  This operator  works
+          only with non-operator symbols in a bracket.
+<!-- todo - clarify, provide an example -->
+</entry></row>
+</tbody></tgroup></table>
+
+<para>
+Next operators are only available in Colorer-take5 regexp parser module,
+when it is compiled for Colorer library (means that Colorer regex module can be used separately):
+</para>
+<table id="table.take5metacharacters"><title>Colorer-take5 Parsing Metacharacters</title><tgroup cols='2'><tbody>
+<row><entry><emphasis>~</emphasis></entry><entry>Matches for the start of parent scheme (end of <emphasis>&lt;start&gt;</emphasis> tag).</entry></row>
+<row><entry><emphasis>\m</emphasis></entry><entry>Changes start of regexp</entry></row>
+<row><entry><emphasis>\M</emphasis></entry><entry>Changes end of regexp</entry></row>
+<row><entry><emphasis>\yN \YN \y{name} \Y{name}</emphasis></entry><entry>Link to the external regexp (in <emphasis>&lt;end&gt;</emphasis> token to <emphasis>&lt;start&gt;</emphasis> token param). N - required bracket pair, name - named bracket.</entry></row>
+</tbody></tgroup></table>
+
+<para>
+For more information about <emphasis>\m \M</emphasis> meaning see
+in <xref linkend="schemesyntax.boundaries"/>.
+</para>
+
+</section>
+
+
+<section id='hrcre.ops'><title>Operators</title>
+<para>
+Operators can't be used without some preceding character sequence.
+Each operator must be applied to the appropriate character,
+metacharacter, or their combination enclosed in brackets.
+</para>
+
+<table id="table.operators"><title>Operators</title><tgroup cols='2'><tbody>
+<row><entry><emphasis>( )</emphasis></entry><entry>Group and remember characters for later use.</entry></row>
+<row><entry><emphasis>(?{name} )</emphasis></entry><entry>Group and remember characters using named group.</entry></row>
+<row><entry><emphasis>(?{} ) or (?: )</emphasis></entry><entry>Group characters, but don't remember (unnamed group).</entry></row>
+<row><entry><emphasis>(?{} )</emphasis></entry><entry>Group and remember characters using unnamed uncounted group.</entry></row>
+<row><entry><emphasis>|</emphasis></entry><entry>Alternative. Match previous or next pattern.</entry></row>
+<row><entry><emphasis>*</emphasis></entry><entry>Match preceeding pattern 0 or more times.</entry></row>
+<row><entry><emphasis>+</emphasis></entry><entry>Match preceeding pattern 1 or more times.</entry></row>
+<row><entry><emphasis>?</emphasis></entry><entry>Match preceeding pattern 0 or 1 time.</entry></row>
+<row><entry><emphasis>{n}</emphasis></entry><entry>Repeat n times.</entry></row>
+<row><entry><emphasis>{n,}</emphasis></entry><entry>Repeat n or more times.</entry></row>
+<row><entry><emphasis>{n,m}</emphasis></entry><entry>Repeat from n to m times.</entry></row>
+</tbody></tgroup></table>
+
+<para>
+Question sign <emphasis>?</emphasis> after operator makes it nongreedy.
+For example <emphasis>*</emphasis> operator becomes nongreedy if placing <emphasis>*?</emphasis>
+Greedy operator tries to eat as many chars in string as possible. Nongreedy takes minimum.
+</para>
+</section>
+
+
+<section id='hrcre.exops'><title>Extended operators</title>
+<table id="table.xoperators"><title>Extended Operators</title><tgroup cols='2'><tbody>
+<row><entry><emphasis>?#N</emphasis></entry><entry>Look-behind. N - symbol number to look behind.</entry></row>
+<row><entry><emphasis>?~N</emphasis></entry><entry>Negative look-behind.</entry></row>
+<row><entry><emphasis>?=</emphasis></entry><entry>Look-ahead.</entry></row>
+<row><entry><emphasis>?!</emphasis></entry><entry>Negative Look-ahead.</entry></row>
+</tbody></tgroup></table>
+<para>
+Note, that two last operators exist in Perl - in form of <emphasis>(?=foobar)</emphasis>.
+But colorer uses syntax <emphasis>(foobar)?=</emphasis>
+</para>
+</section>
+
+<section id='hrcre.examples'><title>Examples</title>
+<example id="example.hrc.re"><title>RE examples</title>
+<para>
+<!-- todo more examples with lookaheads and back -->
+<variablelist>
+<varlistentry>
+<term><emphasis>/foobar/</emphasis></term>
+<listitem><para>will match "foobar", "foobar barfoo"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/ FOO bar /ix</emphasis></term>
+<listitem><para>will match "foobar" "FOOBAR" "foobar and two other foos"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/(foo)?bar/</emphasis></term>
+<listitem><para>will match "foobar", "bar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/^foobar$/</emphasis></term>
+<listitem><para>will match _only_ with "foobar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/([\d\.])+/</emphasis></term>
+<listitem><para>will match any number</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/(foo|bar)+/</emphasis></term>
+<listitem><para>will match "foofoofoobarfoobar", "bar"</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis>/f[obar]+r/</emphasis></term>
+<listitem><para>will match "foobar", "for", "far"</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para>
+</example>
+</section>
+
+</appendix>

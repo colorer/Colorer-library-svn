@@ -171,28 +171,7 @@
       <xs:element name="location" type='location' minOccurs="0"/>
       <xs:element name="filename" type="filename" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="firstline" type="firstline" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="parameters" minOccurs='0'>
-        <xs:annotation><xs:documentation>
-          Custom parameters, used to specify additional properties of this language type.
-          These can include different language resources (icons, templates and so on).
-          Also these parameters could be referenced from schema declaration,
-          this allows to customize schemes loading process.
-        </xs:documentation></xs:annotation>
-        <xs:complexType>
-          <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="param">
-              <xs:annotation><xs:documentation>
-                Single parameter [name,value] pair.
-              </xs:documentation></xs:annotation>
-              <xs:complexType>
-                <xs:attribute name="name" type="xs:string" use="required"/>
-                <xs:attribute name="value" type="xs:string" use="required"/>
-                <xs:attribute name="description" type="xs:string" use="optional"/>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="parameters" type="parameters" minOccurs='0'/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:NCName" use="required">
       <xs:annotation><xs:documentation>
@@ -265,6 +244,27 @@
         </xs:attribute>
       </xs:extension>
     </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="parameters">
+    <xs:annotation><xs:documentation>
+      Custom parameters, used to specify additional properties of this language type.
+      These can include different language resources (icons, templates and so on).
+      Also these parameters could be referenced from schema declaration,
+      this allows to customize schemes loading process.
+    </xs:documentation></xs:annotation>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="param">
+        <xs:annotation><xs:documentation>
+          Single parameter [name,value] pair.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+          <xs:attribute name="value" type="xs:string" use="required"/>
+          <xs:attribute name="description" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
   </xs:complexType>
 
 
@@ -381,7 +381,7 @@
     <xs:attribute name="description" type="xs:string">
       <xs:annotation><xs:documentation>
         Optional description, used to represent region's purpose and
-        to show it to user in convient and friendly way.
+        to show it to user in convenient and friendly way.
       </xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
