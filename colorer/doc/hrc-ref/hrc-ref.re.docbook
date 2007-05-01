@@ -36,6 +36,13 @@ After the end slash there can be modifiers:
 </itemizedlist>
 Each symbol in RE is sequentially compared with the target string.
 Everything that doesn't look like metacharacter is a simple character.
+It is important to remember that HRC is a XML language, therefore quotes
+in attributes of its elements like <x:hrc>regex</x:hrc> should be escaped
+with entities like <emphasis>&amp;quot;</emphasis> (or <emphasis>&#34;</emphasis>)
+unlike other languages where <emphasis>\"</emphasis> is often used to escape
+the quote. The same point should be kept in mind when using other entities
+inside regexp. For example, to match <emphasis>&amp;amp;</emphasis> sequence
+with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
 </para>
 </section>
 
@@ -48,12 +55,11 @@ Everything that doesn't look like metacharacter is a simple character.
 <row><entry><emphasis>[...]</emphasis></entry><entry>Match any character in set</entry></row>
 <row><entry><emphasis>[^...]</emphasis></entry><entry>Match any character that is not in set.
           None of RE operators works here, but you some metacharacters and range operator
-          are possible: a-z stands for all alphabet chars between a and z,
-<!-- todo $ and ^ metacharacters do not work, what else? -->
-          <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.
-          -[] - Class substraction.
-          &amp;&amp;[] - Class join (can be dropped).
-          |[] - Class intersection.
+          are possible:<simpara>a-z stands for all alphabet chars between a and z,</simpara>
+          <simpara><emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.</simpara>
+          <simpara>&amp;amp;[] - Class join (can be dropped).</simpara>
+          <simpara>-[] - Class substraction.</simpara>
+          <simpara>|[] - Class intersection.</simpara>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
 <row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point</entry></row>
