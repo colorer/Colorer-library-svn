@@ -19,6 +19,8 @@
  <type name="python">
   <region name="pyKeyword" parent="def:Keyword"/>
   <region name="pyComment" parent="def:Comment"/>
+  <region name="pyString" parent="def:String"/>
+
  
   <scheme name="python">
    <!-- python keywords : http://docs.python.org/ref/keywords.html -->
@@ -58,6 +60,10 @@
 
    <!-- basic python comment - consider it everything after # till the end of line -->
    <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
+
+   <!-- python strings : http://docs.python.org/ref/strings.html -->
+   <regexp match="/((u|U)?(r|R)?)(&quot;|&quot;{3}|&apos;|&apos;{3}).*?\4/" region="pyString"/>
+
   </scheme>
  </type>
 
