@@ -1,47 +1,67 @@
-package net.sf.colorer.eclipse.editors;
+package net.sf.colorer.eclipse.compare;
 
-import net.sf.colorer.FileType;
 import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.Messages;
 import net.sf.colorer.eclipse.PreferencePage;
+import net.sf.colorer.eclipse.editors.DocumentLineSource;
 import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
+import net.sf.colorer.eclipse.jface.TextColorer;
+import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.impl.CachedBaseEditor;
+import net.sf.colorer.swt.ColorManager;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.jface.text.source.SourceViewer;
 
-/**
- * Action to control word wrapping in colorer's editor.
- */
-public class WordWrapAction extends Action implements IUpdate {
+public class StubTextEditor implements IColorerEditorAdapter {
 
-    private IColorerEditorAdapter fTargetEditor;
+    private BaseEditor fBaseEditor;
+    private SourceViewer fSourceViewer;
+    private TextColorer fTextColorer;
 
-    public WordWrapAction(IColorerEditorAdapter targetEditor) {
-        setActionDefinitionId(ColorerActionContributor.ACTION_ID_WORD_WRAP);
-        setText(Messages.get("WordWrapAction"));
-        setToolTipText(Messages.get("WordWrapAction.tooltip"));
-        
-        setEditor(targetEditor);
+    public StubTextEditor(SourceViewer viewer)
+    {
+        fSourceViewer = viewer;
+        fTextColorer = new TextColorer(this);
+
+        System.out.println(fSourceViewer.getInput());
     }
     
-    public void setEditor(IColorerEditorAdapter targetEditor) {
-        fTargetEditor = targetEditor;
-    }
-    
-    public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap(fTargetEditor.getTextColorer().getFileType(), isChecked() ? 1 : 0);
-    }
-
-    public void update() {
-        if (fTargetEditor == null) return;
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap(fTargetEditor.getTextColorer().getFileType());
-        if (ww == -1) {
-            ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
+    public BaseEditor getBaseEditor() {
+        if (fBaseEditor == null){
+            
+            fBaseEditor = new CachedBaseEditor(ColorerPlugin.getDefaultPF(),
+                    new DocumentLineSource(fSourceViewer.getDocument()));
+            fBaseEditor.setRegionCompact(true);                
         }
-        setChecked(ww == 1);
+        return fBaseEditor;
     }
+    
+    public void handleAttachComplete() {
+        fTextColorer.chooseFileType("xx.xml");
+
+        String hrd = ColorerPlugin.getDefault().getPropertyHRD(fTextColorer.getFileType());
+        if (hrd == null) {
+            hrd = ColorerPlugin.getDefault().getPreferenceStore().getString(PreferencePage.HRD_SET);
+        }
+        fTextColorer.setRegionMapper(hrd, ColorerPlugin.getDefault().getPreferenceStore().getBoolean(PreferencePage.USE_BACK));
+    }
+    
+    public ColorManager getColorManager() {
+        return ColorerPlugin.getDefault().getColorManager();
+    }
+    
+    public void selectAndReveal(int position, int i) {
+        fSourceViewer.setSelectedRange(position, i);
+    }
+
+    public TextColorer getTextColorer() {
+        return fTextColorer;
+    }
+
+    public Object getAdapter(Class adapter) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 }
 

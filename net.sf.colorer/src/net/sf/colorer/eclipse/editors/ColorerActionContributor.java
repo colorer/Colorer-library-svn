@@ -5,9 +5,11 @@ import net.sf.colorer.Group;
 import net.sf.colorer.eclipse.ColorerPlugin;
 import net.sf.colorer.eclipse.ImageStore;
 import net.sf.colorer.eclipse.Messages;
+import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
 import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.handlers.LineRegion;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
@@ -59,6 +61,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
             if (lr == null) return;
             
             StyledText text = getStyledText();
+            Assert.isNotNull(text);
             
             int loffset = text.getOffsetAtLine(text.getLineAtOffset(text.getCaretOffset()));
             int selstart = loffset+lr.start;
@@ -229,7 +232,7 @@ public class ColorerActionContributor extends TextEditorActionContributor
     
     TextColorer getTextColorer(){
         if (activeEditor == null) return null;
-        return (TextColorer)activeEditor.getAdapter(TextColorer.class);
+        return ((IColorerEditorAdapter)activeEditor).getTextColorer();
     }
 
     StyledText getStyledText(){

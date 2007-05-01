@@ -1,48 +1,46 @@
-package net.sf.colorer.eclipse.editors;
+package net.sf.colorer.eclipse.jface;
 
-import net.sf.colorer.FileType;
-import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.Messages;
-import net.sf.colorer.eclipse.PreferencePage;
-import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
+import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.swt.ColorManager;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.core.runtime.IAdaptable;
+
 
 /**
- * Action to control word wrapping in colorer's editor.
+ * Editor support, required for colorer functionality implementation.
+ * Basically editor should manage the resources below and
+ * provide them to the different colorer's services via this API
  */
-public class WordWrapAction extends Action implements IUpdate {
+public interface IColorerEditorAdapter extends IAdaptable {
 
-    private IColorerEditorAdapter fTargetEditor;
-
-    public WordWrapAction(IColorerEditorAdapter targetEditor) {
-        setActionDefinitionId(ColorerActionContributor.ACTION_ID_WORD_WRAP);
-        setText(Messages.get("WordWrapAction"));
-        setToolTipText(Messages.get("WordWrapAction.tooltip"));
-        
-        setEditor(targetEditor);
-    }
+    /**
+     * Should return valid BaseEditor object implementation for this editor.
+     * The editor may not be yet atached.
+     */
+    BaseEditor getBaseEditor();
     
-    public void setEditor(IColorerEditorAdapter targetEditor) {
-        fTargetEditor = targetEditor;
-    }
+    /**
+     * Should return color manager for this editor colors allocation
+     * @return
+     */
+    ColorManager getColorManager();
+
+    /**
+     * Selection callback service.
+     */
+    void selectAndReveal(int position, int i);
+
+    /**
+     * TextColorer object for this editor.
+     */
+    TextColorer getTextColorer();
+
+    /**
+     * Callback method from TextColorer to let editor know that
+     * final setup could be managed (file type, highlight style etc.)
+     */
+    void handleAttachComplete();
     
-    public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap(fTargetEditor.getTextColorer().getFileType(), isChecked() ? 1 : 0);
-    }
-
-    public void update() {
-        if (fTargetEditor == null) return;
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap(fTargetEditor.getTextColorer().getFileType());
-        if (ww == -1) {
-            ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
-        }
-        setChecked(ww == 1);
-    }
-
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

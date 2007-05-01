@@ -18,7 +18,7 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 public class ColorerSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
     private TextColorer fTextColorer;
-    private ColorerEditor fEditor;
+//    private ColorerEditor fEditor;
     private ColorerContentAssistProcessor fCAP;
 
     /** Copied from org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration */
@@ -54,9 +54,9 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
      * @param uieditor
      * @param textColorer
      */
-    public ColorerSourceViewerConfiguration(ColorerEditor uieditor, TextColorer textColorer) {
+    public ColorerSourceViewerConfiguration(TextColorer textColorer) {
         super(ColorerPlugin.getDefault().getCombinedPreferenceStore());
-        fEditor = uieditor;
+//        fEditor = uieditor;
         fTextColorer = textColorer;
     }
     /**
@@ -81,7 +81,7 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
      */
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer)
     {
-        return (IPresentationReconciler)fTextColorer.getAdapter(IPresentationReconciler.class);
+        return fTextColorer.getPresentationReconciler();
     }
     
 }

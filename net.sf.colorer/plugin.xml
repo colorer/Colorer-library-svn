@@ -40,6 +40,42 @@
             id="net.sf.colorer.eclipse.editors.ColorerEditor.XML">
       </editor>
    </extension>
+   <!-- Comparsion contributors -->
+   <extension
+         point="org.eclipse.compare.contentViewers">
+      <viewer
+            extensions="adb,adc,ads,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs,c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs,awk,bat,bbj,dbm,diff,dpk,dpr,ini,patch,pls,pm,prg,pro,project,properties,prop,pro,props,reg,sources,txt,xom,mak,makefile,xml,xsd,xsl,dtd,hrc,hrd,html,htm,xhtml,asp,aspx,jsp,fo,svg,dbk,docbook,jhtml,jspf,php,php3,php4,phtml,sgm,sgml,shtm,shtml"
+            class="net.sf.colorer.eclipse.compare.CompareViewerCreator"
+            id="net.sf.colorer.eclipse.compare.CompareViewerCreator">
+      </viewer>
+      <contentTypeBinding
+			contentTypeId="org.eclipse.core.runtime.text"
+            contentViewerId="net.sf.colorer.eclipse.compare.CompareViewerCreator">
+	  </contentTypeBinding>
+      <contentTypeBinding
+			contentTypeId="org.eclipse.core.runtime.xml"
+            contentViewerId="net.sf.colorer.eclipse.compare.CompareViewerCreator">
+	  </contentTypeBinding>
+      
+   </extension>
+
+   <extension
+         point="org.eclipse.compare.contentMergeViewers">
+      <viewer
+            extensions="adb,adc,ads,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs,c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs,awk,bat,bbj,dbm,diff,dpk,dpr,ini,patch,pls,pm,prg,pro,project,properties,prop,pro,props,reg,sources,txt,xom,mak,makefile,xml,xsd,xsl,dtd,hrc,hrd,html,htm,xhtml,asp,aspx,jsp,fo,svg,dbk,docbook,jhtml,jspf,php,php3,php4,phtml,sgm,sgml,shtm,shtml"
+            class="net.sf.colorer.eclipse.compare.CompareMergeViewerCreator"
+            id="net.sf.colorer.eclipse.compare.CompareMergeViewerCreator">
+
+      </viewer>
+      <contentTypeBinding
+			contentTypeId="org.eclipse.core.runtime.text"
+            contentMergeViewerId="net.sf.colorer.eclipse.compare.CompareMergeViewerCreator">
+	  </contentTypeBinding>
+      <contentTypeBinding
+			contentTypeId="org.eclipse.core.runtime.xml"
+            contentMergeViewerId="net.sf.colorer.eclipse.compare.CompareMergeViewerCreator">
+	  </contentTypeBinding>
+   </extension>
 
    <!-- Preferences pages -->
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import net.sf.colorer.eclipse.jface.ColorerProjectionAnnotation;
+import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
 
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
@@ -15,9 +16,9 @@ import org.eclipse.ui.texteditor.ResourceAction;
 
 public class CollapseCommentsAction extends ResourceAction implements IUpdate {
 
-    private ITextEditor fTargetEditor;
+    private IColorerEditorAdapter fTargetEditor;
 
-    CollapseCommentsAction(ResourceBundle bundle, String prefix, ITextEditor targetEditor){
+    CollapseCommentsAction(ResourceBundle bundle, String prefix, IColorerEditorAdapter targetEditor){
         super(bundle, prefix);
         setActionDefinitionId(ColorerActionContributor.ACTION_ID_FOLDING_COLLAPSE_COMMENTS);
         fTargetEditor = targetEditor;

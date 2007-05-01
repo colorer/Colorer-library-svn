@@ -166,7 +166,7 @@ public class ColorerContentOutlinePage extends ContentOutlinePage
         detach();
 
         fEditor = editor;
-        fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
+        fBaseEditor = editor.getBaseEditor();
         HRCParser hp = fBaseEditor.getParserFactory().getHRCParser();
         
         fStructureOutline = new WorkbenchOutliner(hp.getRegion("def:Outlined"));

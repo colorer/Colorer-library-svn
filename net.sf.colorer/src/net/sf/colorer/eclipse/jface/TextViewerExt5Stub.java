@@ -1,46 +1,55 @@
-package net.sf.colorer.eclipse.editors;
+package net.sf.colorer.eclipse.jface;
 
-import net.sf.colorer.FileType;
-import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.Messages;
-import net.sf.colorer.eclipse.PreferencePage;
-import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewerExtension5;
 
 /**
- * Action to control word wrapping in colorer's editor.
+ * Stubbed ext5 interface for source viewers without projection support
  */
-public class WordWrapAction extends Action implements IUpdate {
+public class TextViewerExt5Stub implements ITextViewerExtension5 {
 
-    private IColorerEditorAdapter fTargetEditor;
-
-    public WordWrapAction(IColorerEditorAdapter targetEditor) {
-        setActionDefinitionId(ColorerActionContributor.ACTION_ID_WORD_WRAP);
-        setText(Messages.get("WordWrapAction"));
-        setToolTipText(Messages.get("WordWrapAction.tooltip"));
-        
-        setEditor(targetEditor);
-    }
-    
-    public void setEditor(IColorerEditorAdapter targetEditor) {
-        fTargetEditor = targetEditor;
-    }
-    
-    public void run(){
-        ColorerPlugin.getDefault().setPropertyWordWrap(fTargetEditor.getTextColorer().getFileType(), isChecked() ? 1 : 0);
+    public boolean exposeModelRange(IRegion modelRange) {
+        return false;
     }
 
-    public void update() {
-        if (fTargetEditor == null) return;
-        IPreferenceStore prefStore = ColorerPlugin.getDefault().getPreferenceStore();
-        int ww = ColorerPlugin.getDefault().getPropertyWordWrap(fTargetEditor.getTextColorer().getFileType());
-        if (ww == -1) {
-            ww = prefStore.getBoolean(PreferencePage.WORD_WRAP) ? 1 : 0;
-        }
-        setChecked(ww == 1);
+    public IRegion[] getCoveredModelRanges(IRegion modelRange) {
+        return null;
+    }
+
+    public IRegion getModelCoverage() {
+        return null;
+    }
+
+    public int modelLine2WidgetLine(int modelLine) {
+        return modelLine;
+    }
+
+    public int modelOffset2WidgetOffset(int modelOffset) {
+        return modelOffset;
+    }
+
+    public IRegion modelRange2WidgetRange(IRegion modelRange) {
+        return modelRange;
+    }
+
+    public int widgetLine2ModelLine(int widgetLine) {
+        return widgetLine;
+    }
+
+    public int widgetLineOfWidgetOffset(int widgetOffset) {
+        return widgetOffset;
+    }
+
+    public int widgetOffset2ModelOffset(int widgetOffset) {
+        return widgetOffset;
+    }
+
+    public IRegion widgetRange2ModelRange(IRegion widgetRange) {
+        return widgetRange;
+    }
+
+    public int widgetlLine2ModelLine(int widgetLine) {
+        return widgetLine;
     }
 
 }

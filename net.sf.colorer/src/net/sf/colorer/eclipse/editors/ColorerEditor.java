@@ -9,6 +9,7 @@ import net.sf.colorer.eclipse.ftpp.FileTypePreferencePage;
 import net.sf.colorer.eclipse.jface.ColorerAnnotation;
 import net.sf.colorer.eclipse.jface.ColorerAnnotationProvider;
 import net.sf.colorer.eclipse.jface.ColorerFoldingProvider;
+import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
 import net.sf.colorer.eclipse.jface.LineNumberRulerColumn_Fixed;
 import net.sf.colorer.eclipse.jface.TextColorer;
 import net.sf.colorer.eclipse.outline.ColorerContentOutlinePage;
@@ -59,7 +60,10 @@ import org.eclipse.ui.texteditor.ResourceAction;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class ColorerEditor extends TextEditor implements IPropertyChangeListener{
+public class ColorerEditor
+       extends TextEditor
+       implements IPropertyChangeListener, IColorerEditorAdapter
+{
 
     IPreferenceStore prefStore;
     ColorerSourceViewerConfiguration fColorerSVC;
@@ -133,7 +137,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
       JFaceResources.getFontRegistry().addListener(this);
 
       fTextColorer =  new TextColorer(this);
-      fColorerSVC = new ColorerSourceViewerConfiguration(this, fTextColorer);
+      fColorerSVC = new ColorerSourceViewerConfiguration(fTextColorer);
       
       setSourceViewerConfiguration(fColorerSVC);
     }
@@ -151,9 +155,6 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     public void createPartControl(Composite parent)
     {
         super.createPartControl(parent);
-
-        text = getSourceViewer().getTextWidget();
-        fDocument = getSourceViewer().getDocument();
 
         ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
 
@@ -190,8 +191,6 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.TASK);
 
         fProjectionSupport.install();
-
-        relinkColorer();
     }
     
     protected String[] collectContextMenuPreferencePages() {
@@ -256,7 +255,7 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
      * Reloads coloring highlighting in this editor
      */
     public void relinkColorer() {
-        fBaseEditor = (BaseEditor)getAdapter(BaseEditor.class);
+        fBaseEditor = getBaseEditor();
 
         // Install annotation provider
         fAnnotationProvider.install(this);
@@ -409,31 +408,20 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
             return getSourceViewer();
         }
         
-        if (key.equals(ColorManager.class)) {
-            return ColorerPlugin.getDefault().getColorManager();
+        /**
+         * For Annotation/Folding providers
+         */
+        if (key.equals(IDocument.class)) {
+            return getSourceViewer().getDocument();
         }
 
-        if (key.equals(BaseEditor.class)) {
-            if (fBaseEditor == null){
-                fBaseEditor = new CachedBaseEditor(ColorerPlugin.getDefaultPF(),
-                        new DocumentLineSource(getSourceViewer().getDocument()));
-                fBaseEditor.setRegionCompact(true);                
-            }
-            return fBaseEditor;
-        }
-
+        /**
+         * For the cursorRegionAction
+         */
         if (key.equals(StyledText.class)) {
             return text;
         }
         
-        if (key.equals(FileType.class)) {
-            return fTextColorer.getFileType();
-        }
-        
-        if (key.equals(TextColorer.class)) {
-            return fTextColorer;
-        }
-
         if (key.equals(IContentOutlinePage.class)) {
             IEditorInput input = getEditorInput();
             if (input instanceof IStorageEditorInput) {
@@ -476,13 +464,36 @@ public class ColorerEditor extends TextEditor implements IPropertyChangeListener
     }
 
     public void dispose() {
-        super.dispose();
-        
         detachBaseEditor();
 
         prefStore.removePropertyChangeListener(this);
         JFaceResources.getFontRegistry().removeListener(this);
         ColorerPlugin.getDefault().removeReloadListener(fReloadListener);
+
+        super.dispose();
+    }
+
+    public BaseEditor getBaseEditor() {
+        if (fBaseEditor == null){
+            fBaseEditor = new CachedBaseEditor(ColorerPlugin.getDefaultPF(),
+                    new DocumentLineSource(getSourceViewer().getDocument()));
+            fBaseEditor.setRegionCompact(true);                
+        }
+        return fBaseEditor;
+    }
+
+    public ColorManager getColorManager() {
+        return ColorerPlugin.getDefault().getColorManager();
+    }
+
+    public TextColorer getTextColorer() {
+        return fTextColorer;
+    }
+
+    public void handleAttachComplete() {
+        text = getSourceViewer().getTextWidget();
+        fDocument = getSourceViewer().getDocument();
+        relinkColorer();
     }
 }
 /* ***** BEGIN LICENSE BLOCK *****

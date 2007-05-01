@@ -16,9 +16,8 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * Asynchronous folding structure reconcyler, 
@@ -107,10 +106,10 @@ public class ColorerFoldingProvider
 
     static final int FOLDING_UPDATE_PERIOD = 1500;
     
-    FoldingBuilder builder = new FoldingBuilder();
+    FoldingBuilder builder;
     private BaseEditor fBaseEditor;
     private IDocument fDocument;
-    private ITextEditor fEditor;
+    private IColorerEditorAdapter fEditor;
     private Display rootDisplay;
     
     private Vector deletions = new Vector();
@@ -118,6 +117,8 @@ public class ColorerFoldingProvider
 
     void updateAnnotations() {
 
+        if (rootDisplay == null) return;
+        
         ProjectionAnnotationModel model = getModel();
         if (model == null) return;
 
@@ -139,16 +140,18 @@ public class ColorerFoldingProvider
     }
 
 
-    public void install(ITextEditor editor) {
+    public void install(IColorerEditorAdapter editor) {
         if (Logger.TRACE){
             Logger.trace("AsyncFolding", "install");
         }
         fEditor = editor;
-        fDocument = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-        fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
+        fDocument = (IDocument)fEditor.getAdapter(IDocument.class);
+        fBaseEditor = fEditor.getBaseEditor();
 
         Assert.isNotNull(fBaseEditor);
 
+        builder = new FoldingBuilder();
+        
         builder.install(fBaseEditor, new FoldingReciever());
         
         rootDisplay = Display.getCurrent();
@@ -174,6 +177,7 @@ public class ColorerFoldingProvider
     public void uninstall() {
         rootDisplay = null;
         builder.uninstall();
+        builder = null;
     }
 
     

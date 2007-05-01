@@ -14,7 +14,7 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -33,10 +33,10 @@ public class ColorerAnnotationProvider {
 
     static final int UPDATE_PERIOD = 1000;
     
-    private Outliner builder;
+    private volatile Outliner builder;
     private BaseEditor fBaseEditor;
     private IDocument fDocument;
-    private ITextEditor fEditor;
+    private IColorerEditorAdapter fEditor;
     private boolean fAnnotationsUpdated = false;
     
     OutlineListener outlineListener = new AnnotationOutlineListener();
@@ -50,6 +50,8 @@ public class ColorerAnnotationProvider {
         if (fAnnotationsUpdated) return;
         
         IAnnotationModel model = getModel();
+        if (model == null) return;
+        
         Iterator iter = model.getAnnotationIterator();
         while(iter.hasNext()){
             Annotation ann = (Annotation)iter.next();
@@ -58,7 +60,7 @@ public class ColorerAnnotationProvider {
             }
         }
 
-        if (!((TextColorer)fEditor.getAdapter(TextColorer.class)).canProcess()) return;
+        if (!(fEditor.getTextColorer().canProcess())) return;
         
         try{
             
@@ -88,13 +90,13 @@ public class ColorerAnnotationProvider {
     }
 
 
-    public void install(ITextEditor editor) {
+    public void install(IColorerEditorAdapter editor) {
         if (Logger.TRACE){
             Logger.trace("AsyncFolding", "install");
         }
         fEditor = editor;
-        fDocument = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-        fBaseEditor = (BaseEditor)editor.getAdapter(BaseEditor.class);
+        fDocument = (IDocument)fEditor.getAdapter(IDocument.class);
+        fBaseEditor = fEditor.getBaseEditor();
         
         Assert.isNotNull(fBaseEditor);
         
@@ -112,13 +114,15 @@ public class ColorerAnnotationProvider {
             Display rootDisplay = Display.getCurrent();
 
             public void run() {
-                while(rootDisplay != null && !rootDisplay.isDisposed())
+                while(builder != null && rootDisplay != null && !rootDisplay.isDisposed())
                 {
+                    synchronized (builder) {
 //                    rootDisplay.asyncExec(new Runnable(){
   //                      public void run() {
-                            updateAnnotations();
+                        if (builder != null) updateAnnotations();
     //                    };
       //              });
+                    }
                     try{
                         Thread.sleep(UPDATE_PERIOD);
                     }catch(InterruptedException e){}
@@ -128,8 +132,11 @@ public class ColorerAnnotationProvider {
     }
 
     public void uninstall() {
-        builder.detachOutliner(fBaseEditor);
-        builder.removeUpdateListener(outlineListener);
+        synchronized (builder) {
+            builder.detachOutliner(fBaseEditor);
+            builder.removeUpdateListener(outlineListener);
+            builder = null;
+        }
     }
 
     

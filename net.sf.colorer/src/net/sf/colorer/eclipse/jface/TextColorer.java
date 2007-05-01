@@ -51,12 +51,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * JFace based syntax highlighting implementation using
  * Colorer library. <a href='http://colorer.sf.net/'>http://colorer.sf.net/</a>
  */
-public class TextColorer implements IAdaptable
+public class TextColorer
 {
 
     /**
@@ -79,7 +81,10 @@ public class TextColorer implements IAdaptable
             fViewer = viewer;
             if (fViewer instanceof ITextViewerExtension5) {
                 fProjectionViewer = (ProjectionViewer)fViewer;
+            } else {
+                fProjectionViewer = new TextViewerExt5Stub();  
             }
+                
             fViewer.addTextListener(this);
             fViewer.addTextInputListener(this);
             
@@ -87,6 +92,7 @@ public class TextColorer implements IAdaptable
             new Thread(this).start();
 
             attach(fViewer.getTextWidget());
+            
         }
 
         public void uninstall() {
@@ -108,9 +114,9 @@ public class TextColorer implements IAdaptable
             if (fDocument == null) return;
             
 //            prevStamp = -1;
-            fColorManager = (ColorManager)fEditor.getAdapter(ColorManager.class);
+            fColorManager = fEditor.getColorManager();
 
-            fBaseEditor = (BaseEditor)fEditor.getAdapter(BaseEditor.class);
+            fBaseEditor = fEditor.getBaseEditor();
             fBaseEditor.setRegionCompact(true);
             fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
 
@@ -385,6 +391,7 @@ public class TextColorer implements IAdaptable
         public void inputDocumentChanged(IDocument oldInput, IDocument newInput) {
             if (newInput != null){
                 setDocument(newInput);
+                fEditor.handleAttachComplete();
             }
         }
         public IPresentationDamager getDamager(String contentType) {
@@ -515,11 +522,11 @@ public class TextColorer implements IAdaptable
 
     private ColorManager fColorManager;
     private BaseEditor fBaseEditor;
-    private ColorerEditor fEditor;
+    private IColorerEditorAdapter fEditor;
     private StyledText text;
 
     private ITextViewer fViewer;
-    private ProjectionViewer fProjectionViewer;
+    private ITextViewerExtension5 fProjectionViewer;
 
     private WidgetEventHandler fHandler = new WidgetEventHandler();
     private AsyncReconcyler fReconciler = new AsyncReconcyler();
@@ -532,7 +539,7 @@ public class TextColorer implements IAdaptable
      * @param pf Parser factory, used to create all coloring text parsers.
      * @param cm Color Manager, used to store cached color objects
      */
-    public TextColorer(ColorerEditor editor)
+    public TextColorer(IColorerEditorAdapter editor)
     {
         fEditor = editor;
     }
@@ -554,8 +561,8 @@ public class TextColorer implements IAdaptable
         text.addTraverseListener(fHandler);
         text.addMouseListener(fHandler);
 //        text.addSelectionListener(fHandler);
-        fProjectionViewer.addViewportListener(fHandler);
-        fProjectionViewer.addSelectionChangedListener(fHandler);
+        fViewer.addViewportListener(fHandler);
+//        fProjectionViewer.addSelectionChangedListener(fHandler);
 
 //        ScrollBar sb = text.getVerticalBar();
 //        if (sb != null)
@@ -577,14 +584,18 @@ public class TextColorer implements IAdaptable
         text.removeKeyListener(fHandler);
         text.removeTraverseListener(fHandler);
         text.removeMouseListener(fHandler);
-        fProjectionViewer.removeSelectionChangedListener(fHandler);
-        fProjectionViewer.removeViewportListener(fHandler);
+//        fViewer.removeSelectionChangedListener(fHandler);
+        fViewer.removeViewportListener(fHandler);
 //        ScrollBar sb = text.getVerticalBar();
 //        if (sb != null)
 //            sb.removeSelectionListener(fHandler);
         text = null;
     }
-
+    
+    /**
+     * Updates all the references to external colorer objects
+     * and invalidates current text presesntation
+     */
     public void relink() {
         fBaseEditor = null;
         fReconciler.setDocument(fDocument);
@@ -592,6 +603,9 @@ public class TextColorer implements IAdaptable
         invalidateSyntax();
     }
 
+    /**
+     * Makes the syntax presentation invalid and forces redraw
+     */
     public void invalidateSyntax() {
         //prevStamp = IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
         fBaseEditor.modifyEvent(0);
@@ -636,13 +650,6 @@ public class TextColorer implements IAdaptable
     public FileType getFileType() {
         checkActive();
         return fBaseEditor.getFileType();
-    }
-
-    /**
-     * Returns current low-level BaseEditor object implementation
-     */
-    public BaseEditor getBaseEditor() {
-        return fBaseEditor;
     }
 
     /**
@@ -800,7 +807,9 @@ public class TextColorer implements IAdaptable
         return false;
     }
 
-    /** Selects an internal part of the currently selected paired content */
+    /**
+     * Selects an internal part of the currently selected paired content
+     */
     public boolean selectContentPair() {
         if (currentPair == null)
             return false;
@@ -877,6 +886,8 @@ public class TextColorer implements IAdaptable
     {
 //        fModTimestamp = System.currentTimeMillis();
 
+        if (fDocument == null) return;
+
         if (Logger.TRACE){
             Logger.trace("TextColorer", "stateChanged");
         }
@@ -936,6 +947,8 @@ public class TextColorer implements IAdaptable
     void updateViewport() {
         checkActive();
         
+        if (fDocument == null) return;
+
         if (Logger.TRACE){
             Logger.trace("TextColorer", "updateViewport");
         }
@@ -1034,17 +1047,13 @@ public class TextColorer implements IAdaptable
         text.redraw(0, y, width, height, false);
     }
 
-    
-    
-    
-    
-    
-    public Object getAdapter(Class adapter)
+    /**
+     * Returns a PresentationReconciler this TextColorer provides
+     * @return
+     */
+    public IPresentationReconciler getPresentationReconciler()
     {
-        if (adapter == IPresentationReconciler.class) {
-            return fReconciler;
-        }
-        return null;
+        return fReconciler;
     }    
 
 }
