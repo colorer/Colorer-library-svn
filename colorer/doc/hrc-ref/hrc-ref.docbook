@@ -513,7 +513,7 @@ to express some complex language constructions. This is due to general
 limitation of colorer's RE parser which scope is limited to a single line of text.
 Regular expression can't work on multiple lines of the parsed text. 
 Often programming languages have constructions wrapped into each other unlimited
-number of times. This is also an area where Regular Expression do not help much.
+number of times. This is also an area where Regular Expressions do not help much.
 </para>
 <para>
 To define more complex syntax structures and context-free grammar constructions
