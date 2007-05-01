@@ -186,6 +186,7 @@ void FarEditorSet::chooseType()
 
     const char *groupChars = null;
     if (group != null) groupChars = group->getChars();
+    else groupChars = "<no group>";
     sprintf(menuels[i].Text, "%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getChars());
     if(type == fe->getFileType()) menuels[i].Selected = 1;
   };
@@ -361,8 +362,12 @@ void FarEditorSet::configure()
       for(int idx = 0;; idx++){
         FileType *type = hrcParser->enumerateFileTypes(idx);
         if (type == null) break;
-        StringBuffer tname(type->getGroup());
-        tname.append(DString(": ")).append(type->getDescription());
+        StringBuffer tname;
+        if (type->getGroup() != null) {
+            tname.append(type->getGroup());
+            tname.append(DString(": "));
+        }
+        tname.append(type->getDescription());
         marr[1] = tname.getChars();
         HANDLE scr = info->SaveScreen(0, 0, -1, -1);
         info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);

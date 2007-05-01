@@ -487,7 +487,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       scheme->nodes.addElement(next);
       next = null;
       continue;
-    };
+    }
 
     
     if (*tmpel->getNodeName() == "block"){
@@ -527,14 +527,14 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         }
         delete next;
         continue;
-      };
+      }
       if (!(endParam = useEntities(eParam))){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'end' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
         delete next;
         continue;
-      };
+      }
       const String *schemeName = ((Element*)tmpel)->getAttribute(DString("scheme"));
       if (schemeName == null || schemeName->length() == 0){
         if (errorHandler != null){
@@ -543,7 +543,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         delete startParam;
         delete endParam;
         continue;
-      };
+      }
       next->schemeName = new SString(schemeName);
       next->lowPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       next->lowContentPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("content-priority")));
@@ -575,10 +575,10 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       scheme->nodes.addElement(next);
       next = null;
       continue;
-    };
+    }
 
     if (*tmpel->getNodeName() == "keywords"){
-      bool isCase = ((Element*)tmpel)->getAttribute(DString("ignorecase")) ? false : true;
+      bool isCase = !DString("yes").equals(((Element*)tmpel)->getAttribute(DString("ignorecase")));
       next->lowPriority = !DString("normal").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       const Region *brgn = getNCRegion((Element*)tmpel, DString("region"));
       if (brgn == null){

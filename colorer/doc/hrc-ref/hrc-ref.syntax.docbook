@@ -1,0 +1,69 @@
+<appendix id='catalog.xml'>
+<title>Format of <emphasis>catalog.xml</emphasis> file</title>
+<para>
+
+Catalog for Colorer Library resources is a convenient way to
+centralize maintenance and development of all Colorer features.
+
+This catalog is stored in <emphasis>catalog.xml</emphasis> file
+and mapped into the ParserFactory class.
+
+Catalog contains information about all installed HRC modules,
+error logging configudation and listing of available HRD sets.
+
+</para>
+<x:schemaref uri="&catalogref;" role='catalog'/>
+
+<x:schemaref uri="&catalogref;" role='hrc-sets'/>
+<x:schemaref uri="&catalogref;" role='hrd-sets'/>
+<x:schemaref uri="&catalogref;" role='hrd-entry'/>
+<x:schemaref uri="&catalogref;" role='location'/>
+
+<x:schemaref uri="&catalogref;"/>
+
+<para>
+</para>
+</appendix>
+
+<appendix id='hrd'>
+<title>Format of <emphasis>HRD</emphasis> color schemes</title>
+<para>
+<!-- todo mention HRD somewhere in introductionary chapter -->
+<acronym role='Highlighting Resource Descriptions'>HRD</acronym>
+files used to assign some editor-specific properties to each HRC Region.
+Usually these include color and style information.
+HRD file is a list of entries each describing one HRC Region.
+
+</para>
+<x:schemaref uri="&hrdxsd;" role='hrd'/>
+
+<x:schemaref uri="&hrdxsd;" role='assign'/>
+
+<para>
+It is possible to maintain different HRD files for different languages,
+or to compile them into one single HRD file.
+The former allows you to distribute recommended settings with each language,
+while the latter to unify modification and storage of changed HRD
+settings within provided UI.
+
+</para>
+<x:schemaref uri="&hrdxsd;"/>
+
+<para>
+</para>
+</appendix>
+
+<appendix id='hrcxsd'>
+<title>XML Schema for HRC Language</title>
+<para>
+This XML Schema was automatically generated
+from the original <emphasis>hrc.xsd</emphasis> source, available at
+<ulink url="http://colorer.sf.net/2003/hrc.xsd">http://colorer.sf.net/2003/hrc.xsd</ulink>.
+All comments and documentation tags were stripped to achieve more compact format.
+To use this schema for other than informational purposes use up-to-date
+version available from the link above.
+</para>
+
+<x:schemaref role='' uri="&hrcxsd;"/>
+
+</appendix>
