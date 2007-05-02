@@ -28,6 +28,7 @@
   <region name="pyNumberFloat" parent="def:NumberFloat"/>
   <region name="pyNumberSuffix" parent="def:NumberSuffix"/>
   <region name="pyOperator" parent="def:Operator"/>
+  <region name="pyDelimiter" parent="def:Symbol"/>
 
 
   <scheme name="StringCommon"> <!-- common escapes for all types of Python strings -->
@@ -85,26 +86,26 @@
 
    <!-- python operators : http://docs.python.org/ref/keywords.html -->
    <keywords region="pyOperator">
-    <word name="+"/>
-    <word name="-"/>
-    <word name="*"/>
-    <word name="**"/>
-    <word name="/"/>
-    <word name="//"/>
-    <word name="%"/>
-    <word name="&lt;&lt;"/>
-    <word name=">>"/>
-    <word name="&amp;"/>
-    <word name="|"/>
-    <word name="^"/>
-    <word name="~"/>
-    <word name="&lt;"/>
-    <word name=">"/>
-    <word name="&lt;="/>
-    <word name=">="/>
-    <word name="=="/>
-    <word name="!="/>
-    <word name="&lt;>"/>
+    <symb name="+"/>
+    <symb name="-"/>
+    <symb name="*"/>
+    <symb name="**"/>
+    <symb name="/"/>
+    <symb name="//"/>
+    <symb name="%"/>
+    <symb name="&lt;&lt;"/>
+    <symb name=">>"/>
+    <symb name="&amp;"/>
+    <symb name="|"/>
+    <symb name="^"/>
+    <symb name="~"/>
+    <symb name="&lt;"/>
+    <symb name=">"/>
+    <symb name="&lt;="/>
+    <symb name=">="/>
+    <symb name="=="/>
+    <symb name="!="/>
+    <symb name="&lt;>"/>
    </keywords>
 
 
@@ -119,7 +120,7 @@
    <!-- python floats and imaginary numbers : http://docs.python.org/ref/floating.html -->
    <!-- placed before integers to avoid confusion with octals, where exponent will get an error -->
    <regexp match="/\B\.\d+([Ee][-+]?\d+)?([jJ])?(\w*)\b/" region0="pyNumberFloat" region2="pyNumberSuffix" region3="def:Error" />
-   <regexp match="/\b\d+\.\d*([Ee][-+]?\d+)?([jJ])?(\w*)\b/" region0="pyNumberFloat" region2="pyNumberSuffix" region3="def:Error" />
+   <regexp match="/\b\d+\.\d*([Ee][-+]?\d+)?([jJ])?(\w*)/" region0="pyNumberFloat" region2="pyNumberSuffix" region3="def:Error" />
    <regexp match="/\b\d+([jJ])(\w*)\b/" region0="pyNumber" region1="pyNumberSuffix" region2="def:Error" />
 
 
@@ -130,6 +131,37 @@
    <regexp match="/\b(0[0-7]*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
    <!-- decimal -->
    <regexp match="/\b([1-9]\d*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
+
+
+   <!-- python delimiters : http://docs.python.org/ref/delimiters.html -->
+   <keywords region="pyDelimiter">
+    <symb name="+"/>
+    <symb name="("/>
+    <symb name=")"/>
+    <symb name="["/>
+    <symb name="]"/>
+    <symb name="{"/>
+    <symb name="}"/>
+    <symb name="@"/>
+    <symb name=","/>
+    <symb name=":"/>
+    <symb name="."/>
+    <symb name="`"/>
+    <symb name="="/>
+    <symb name=";"/>
+    <symb name="+="/>
+    <symb name="-="/>
+    <symb name="*="/>
+    <symb name="/="/>
+    <symb name="//="/>
+    <symb name="%="/>
+    <symb name="&amp;="/>
+    <symb name="|="/>
+    <symb name="^="/>
+    <symb name=">>="/>
+    <symb name="&lt;&lt;="/>
+    <symb name="**="/>
+   </keywords>
 
   </scheme>
  </type>
