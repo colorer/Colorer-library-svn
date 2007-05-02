@@ -511,7 +511,7 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 Although regular expressions are very powerful feature, they do not allow
 to express some complex language constructions. This is due to general
 limitation of colorer's RE parser which scope is limited to a single line of text.
-Regular expression can't work on multiple lines of the parsed text. 
+Regular expression can't work on multiple lines of parsed text. 
 Often programming languages have constructions wrapped into each other unlimited
 number of times. This is also an area where Regular Expressions do not help much.
 </para>
@@ -573,8 +573,9 @@ when resolving conflicts upon exit from inner scheme.
 This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
 will be used instead of the element with lowered priority (when a conflict occurs).
 In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
-relates to the <emphasis>&lt;start&gt;</emphasis> tag. <emphasis>priority</emphasis>
-attribute is often used in rules that highlight syntax errors.
+relates to the <emphasis>&lt;start&gt;</emphasis> tag. Note that in rule with lowered priority
+<emphasis>$</emphasis> metacharacter (end of line) in RE matches the end of parent block area.
+<emphasis>priority</emphasis> attribute is often used in rules that highlight syntax errors.
 </para>
 </section>
 <section id="content-priority"><title>content-priority</title>
