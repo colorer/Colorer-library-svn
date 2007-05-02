@@ -20,7 +20,12 @@
   <region name="pyKeyword" parent="def:Keyword"/>
   <region name="pyComment" parent="def:Comment"/>
   <region name="pyString" parent="def:String"/>
+  <region name="pyStringEscape" parent="def:StringContent"/>
 
+
+  <scheme name="StringCommon"> <!-- common escapes for all types of Python strings -->
+    <regexp match="/\\./" region="pyStringEscape" />
+  </scheme>
  
   <scheme name="python">
    <!-- python keywords : http://docs.python.org/ref/keywords.html -->
@@ -62,7 +67,7 @@
    <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
 
    <!-- python strings : http://docs.python.org/ref/strings.html -->
-   <block start="/((u|U)?(r|R)?)(&quot;|&quot;{3}|&apos;|&apos;{3})/" end="/\y4/" scheme="def:empty" region="pyString"/>
+   <block start="/((u|U)?(r|R)?)(&quot;|&quot;{3}|&apos;|&apos;{3})/" end="/\y4/" scheme="StringCommon" region="pyString"/>
 
   </scheme>
  </type>
