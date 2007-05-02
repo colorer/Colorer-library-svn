@@ -87,12 +87,12 @@
    <block start="/((u|U)?(r|R)?)(&quot;)/"              end="/\y4/" scheme="StringDouble" region="pyString"/>
 
    <!-- python integers : http://docs.python.org/ref/integers.html -->
+   <!-- hex -->
+   <regexp match="/\b(0[xX][0-9a-fA-F]*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
    <!-- octal -->
    <regexp match="/\b(0[0-7]*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
    <!-- decimal -->
    <regexp match="/\b([1-9]\d*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
-   <!-- hex -->
-   <regexp match="/\b(0[xX][0-9a-fA-F]*)([Ll])?(\w*)\b/" region1="pyNumber" region2="pyNumberSuffix" region3="def:Error" />
 
   </scheme>
  </type>
