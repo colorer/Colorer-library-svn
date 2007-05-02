@@ -27,6 +27,7 @@
   <region name="pyNumberHex" parent="def:NumberHex"/>
   <region name="pyNumberFloat" parent="def:NumberFloat"/>
   <region name="pyNumberSuffix" parent="def:NumberSuffix"/>
+  <region name="pyOperator" parent="def:Operator"/>
 
 
   <scheme name="StringCommon"> <!-- common escapes for all types of Python strings -->
@@ -81,6 +82,31 @@
     <word name="with"/>
     <word name="yield"/>
    </keywords>
+
+   <!-- python operators : http://docs.python.org/ref/keywords.html -->
+   <keywords region="pyOperator">
+    <word name="+"/>
+    <word name="-"/>
+    <word name="*"/>
+    <word name="**"/>
+    <word name="/"/>
+    <word name="//"/>
+    <word name="%"/>
+    <word name="&lt;&lt;"/>
+    <word name=">>"/>
+    <word name="&amp;"/>
+    <word name="|"/>
+    <word name="^"/>
+    <word name="~"/>
+    <word name="&lt;"/>
+    <word name=">"/>
+    <word name="&lt;="/>
+    <word name=">="/>
+    <word name="=="/>
+    <word name="!="/>
+    <word name="&lt;>"/>
+   </keywords>
+
 
    <!-- basic python comment - consider it everything after # till the end of line -->
    <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
