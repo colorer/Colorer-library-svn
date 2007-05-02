@@ -62,7 +62,7 @@
    <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
 
    <!-- python strings : http://docs.python.org/ref/strings.html -->
-   <regexp match="/((u|U)?(r|R)?)(&quot;|&quot;{3}|&apos;|&apos;{3}).*?\4/" region="pyString"/>
+   <block start="/((u|U)?(r|R)?)(&quot;|&quot;{3}|&apos;|&apos;{3})/" end="/\y4/" scheme="def:empty" region="pyString"/>
 
   </scheme>
  </type>
