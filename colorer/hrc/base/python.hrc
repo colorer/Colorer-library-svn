@@ -22,6 +22,9 @@
   <region name="pyString" parent="def:String"/>
   <region name="pyStringEscape" parent="def:StringContent"/>
   <region name="pyNumber" parent="def:Number"/>
+  <region name="pyNumberDec" parent="def:NumberDec"/>
+  <region name="pyNumberOct" parent="def:NumberOct"/>
+  <region name="pyNumberHex" parent="def:NumberHex"/>
   <region name="pyNumberFloat" parent="def:NumberFloat"/>
   <region name="pyNumberSuffix" parent="def:NumberSuffix"/>
 
@@ -87,10 +90,12 @@
    <block start="/((u|U)?(r|R)?)(&apos;)/"              end="/\y4/" scheme="StringSingle" region="pyString"/>
    <block start="/((u|U)?(r|R)?)(&quot;)/"              end="/\y4/" scheme="StringDouble" region="pyString"/>
 
-   <!-- python floats : http://docs.python.org/ref/floating.html -->
+   <!-- python floats and imaginary numbers : http://docs.python.org/ref/floating.html -->
    <!-- placed before integers to avoid confusion with octals, where exponent will get an error -->
-   <regexp match="/\B\.\d+([Ee][-+]?\d+)?(\w*)\b/" region0="pyNumberFloat" region2="def:Error" />
-   <regexp match="/\b\d+\.\d*([Ee][-+]?\d+)?(\w*)\b/" region0="pyNumberFloat" region2="def:Error" />
+   <regexp match="/\B\.\d+([Ee][-+]?\d+)?([jJ])?(\w*)\b/" region0="pyNumberFloat" region2="pyNumberSuffix" region3="def:Error" />
+   <regexp match="/\b\d+\.\d*([Ee][-+]?\d+)?([jJ])?(\w*)\b/" region0="pyNumberFloat" region2="pyNumberSuffix" region3="def:Error" />
+   <regexp match="/\b\d+([jJ])(\w*)\b/" region0="pyNumber" region1="pyNumberSuffix" region2="def:Error" />
+
 
    <!-- python integers : http://docs.python.org/ref/integers.html -->
    <!-- hex -->
