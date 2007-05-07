@@ -507,8 +507,13 @@
     <location link="rare/baan.hrc"/>
     <filename>/\.cln$/i</filename>
   </prototype>
-  <prototype name="cobol" group="rare" description="Cobol">
+  <prototype name="cobol" group="rare" description="Cobol Fixed format">
     <location link="rare/cobol.hrc"/>
+    <filename>/\.(cob|cbl)$/i</filename>
+  </prototype>
+  <prototype name="cobolfr" group="rare" description="Cobol Free format">
+    <location link="rare/cobolfr.hrc"/>
+    <firstline>/SOURCEFORMAT\"FREE\"/i</firstline>
     <filename>/\.(cob|cbl)$/i</filename>
   </prototype>
   <prototype name="cache" group="rare" description="Cache/Open-M">
@@ -560,6 +565,7 @@
     <location link="rare/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby)$/i</filename>
     <filename>/Rakefile$/i</filename>
+    <firstline>/bin\/ruby/i</firstline>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>

@@ -4,50 +4,108 @@
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-<!--
-   COBOL Syntax description
-   Written by Alexey Matiushkin <matiushkin@hotmail.com>
-   Thanks to Cail Lomecb!
-
-   Known bugs:
-   1. I was forced to make a choice between identifiers (LOOP-VAR) and directives (PROGRAM-ID). I'll solve this!
--->
    <type name="cobol">
+      <annotation>
+         <documentation><![CDATA[
+           COBOL Syntax description
+
+           Known bugs:
+           1. I was forced to make a choice between identifiers (LOOP-VAR) and directives (PROGRAM-ID). I'll solve this!
+
+           Cobol keywords according to following standards:  
+             ANSI'74 COBOL (X3.23-1974)
+             ANSI'85 COBOL (X3.23-1985)
+             Micro Focus COBOL
+
+           Cobol FIXED FORMAT reference source line has 72 chars:
+           columns   1-6: sequence number area [.]
+                       7: indicator area [dD\*\-\/ ]
+                    8-11: area A [.]
+                   12-72: area B [.]
+           in case of EXTENDED length, line has 80 chars and:
+                   72-80: comment area [.]
+
+           TODO:
+           margins within EXEC statements should be coloured with scheme name="cobolmargins"
+           unended string ' (resp. ") should end at column 72, while so far all the source is colored until next ' (resp. " or -) is found
+         ]]></documentation>
+         <contributors><![CDATA[
+           Alexey Matiushkin <matiushkin@hotmail.com>
+           Pavel Pleva
+         ]]></contributors>
+      </annotation>
 
       <import type="def"/>
 
-      <region name="cobIdent" parent="String"/>
-      <region name="cobDirect" parent="Directive"/>
-      <region name="cobString" parent="String"/>
+      <region name="cobDbg" parent="Debug"/>
+      <region name="cobIdent" parent="Text"/>
       <region name="cobComment" parent="Comment"/>
+      <region name="cobSeqNum" parent="Comment"/>
+      <region name="cobIndicator" parent="Symbol"/>
+      <region name="cobSymb" parent="Symbol"/>
+      <region name="cobSymbDot" parent="SymbolStrong"/>
       <region name="cobWord" parent="Keyword"/>
-      <region name="cobSymb" parent="Keyword"/>
+      <region name="cobDirect" parent="Directive"/>
+      <region name="cobExec" parent="Label"/>
       <region name="cobNumb" parent="Number"/>
+      <region name="cobString" parent="String"/>
 
-      <region name='SectionOutline' parent='def:Outlined'/>
+   <!-- Sequence number area and Comment area -->
+      <scheme name="cobolmargins">
+         <regexp match="/^.{0,6}$/" region="cobSeqNum"/>
+         <regexp match="/^\M(.{6})/" region1="cobSeqNum"/>
+         <regexp match="/^\M.{72}(.+)/" region1="cobComment"/><!-- comment also everything after column 80 -->
+      </scheme>
+
+
+   <!-- Exec statement is usually SQL -->
+      <scheme name="cobolexec">
+         <regexp match="/^(.{6})/" region1="cobSeqNum"/>
+         <inherit scheme="cobolmargins"/>
+         <inherit scheme="sql:sql"/>
+      </scheme>
+
 
       <scheme name="cobol">
-         <regexp match="/^(?{SectionOutline}[A-Z_]+[A-Z_\-\s\.]*)\.$/i" region="Label"/>
-<!-- Comments-->
-         <regexp match="/\M^.{6}?([^\s\-].*)$/" region1="cobComment"/>
-         <regexp match="/\M^.{72}?\s*(.*)$/" region1="cobComment"/>
-         <regexp match="/\M^.{6,}?(\*&gt;.*)$/" region1="cobComment"/>
-<!--
-   <block start="/^.\M.{72}/" end="/~.{71}\m.*$/" scheme="cobol" region10="cobComment"/>
-   -->
-<!-- Standard COBOL Identifiers -->
-         <regexp match="/^.{6}?[\s\-]+\m(\b[\w\d]+)(\-)([\s]+)\M\-/" region1="cobDirect" region2="cobDirect" region3="cobDirect"/>
-         <inherit scheme="def:Number"/>
-         <block start="/\&#34;/" end="/\&#34;/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
-         <regexp match="/('..??.??.??')/" region0="cobString"/>
-<!-- Multyline Strings ... -->
-         <block start="/\&#34;/" end="/^.{6}\-/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
-<!-- Standard COBOL Symbols -->
+         <inherit scheme="cobolmargins"/>
+      <!-- Debug lines -->
+         <regexp match="/^.{6}(D.{0,65}).*$/i" region1="cobDbg"/>
+      <!-- Comment lines -->
+         <regexp match="/^.{6}([\*\/])(.{0,65}).*$/" region1="cobIndicator" region2="cobComment"/>
+      <!-- process area A+B -->
+         <block start="/^.{6}/" end="/.{0,66}\m(.*)$/" scheme="cobolcore" region10="cobComment"/>
+      </scheme>
+
+
+      <scheme name="cobolcore">
+      <!-- Special comments -->
+         <regexp match="/\s+(REMARKS)(\.)(.+)$/i" region1="cobWord" region2="cobSymbDot" region3="cobComment"/>
+         <regexp match="/\s+(AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)(.+)$/i" region1="cobDirect" region2="cobSymbDot" region3="cobComment"/>
+      <!-- Variable declarations -->
+         <regexp match="/\M\s+(\b\d\d)\s+([\w\:\-]+).*/" region1="cobNumb" region2="cobIdent"/>
+      <!-- Sections and Divisions -->
+         <regexp match="/([\w\-]+\s+(SECTION|DIVISION))\M\s*\./i" region1="cobDirect"/>
+      <!-- Oneline strings -->
+         <block start="/\'/" end="/\'/" scheme="StandardString" region="cobString" region00="PairStart" region10="PairEnd"/>
+      <!-- Multiline strings
+           http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/igy3lr31/1.6.4.2.1?SHELF=&DT=20060329140556&CASE=
+           multiline string "aaa<spaces>bbb<spaces>ccc":
+           000000 "aaa         //string can start everywhere in area A+B
+           000001-    "bbb     //so far ignoring rule that area A must be blank in this line
+           000002-    "ccc"    //so far ignoring rule that area A must be blank in this line
+        -->
+         <block start="/\&#34;/" end="/( (\&#34;)\M | ^.{6}\M(\-) )/x" scheme="cobolmargins" region="cobString" region00="PairStart" region12="PairEnd" region13="PairEnd"/>
+      <!-- Embedded EXEC statements -->
+         <block start="/(EXEC|EXECUTE)/i" end="/(END-EXEC)/i" scheme="cobolexec" region00="PairStart" region01="cobExec" region10="PairEnd" region11="cobExec"/>
+
+      <!-- Standard COBOL Symbols -->
+         <keywords region="cobSymb" worddiv="[\W\d]"> <!-- minus can be part of identifier -->
+            <word name="-"/>
+         </keywords>
          <keywords region="cobSymb">
             <symb name=";"/>
             <symb name="="/>
             <symb name="+"/>
-            <symb name="-"/>
             <symb name="/"/>
             <symb name="*"/>
             <symb name="&amp;"/>
@@ -57,8 +115,8 @@
             <symb name=")"/>
             <symb name="["/>
             <symb name="]"/>
+            <symb name="." region="cobSymbDot"/>
             <symb name=","/>
-            <symb name="."/>
             <symb name=":"/>
             <symb name="!"/>
             <symb name="~"/>
@@ -69,8 +127,8 @@
             <symb name="}"/>
             <symb name="?"/>
          </keywords>
-<!-- COBOL Directives -->
-         <keywords ignorecase="yes" region="cobDirect">
+      <!-- COBOL Directives -->
+         <keywords ignorecase="yes" region="cobDirect" worddiv="[\W-[\-]]">
             <word name="AUTHOR"/>
             <word name="CONFIGURATION"/>
             <word name="DATA"/>
@@ -82,16 +140,20 @@
             <word name="FILE-CONTROL"/>
             <word name="IDENTIFICATION"/>
             <word name="INPUT-OUTPUT"/>
+            <word name="INSTALLATION"/>
+            <word name="I-O-CONTROL"/>
             <word name="LINKAGE"/>
             <word name="OBJECT-COMPUTER"/>
             <word name="PROCEDURE"/>
             <word name="PROGRAM-ID"/>
             <word name="SECTION"/>
+            <word name="SECURITY"/>
             <word name="SOURCE-COMPUTER"/>
+            <word name="SPECIAL-NAMES"/>
             <word name="WORKING-STORAGE"/>
          </keywords>
-<!-- COBOL KeyWords -->
-         <keywords ignorecase="yes" region="cobWord">
+      <!-- COBOL KeyWords -->
+         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
             <word name="ACCEPT"/>
             <word name="ACCESS"/>
             <word name="ADD"/>
@@ -104,7 +166,6 @@
             <word name="ALPHABETIC-UPPER"/>
             <word name="ALPHANUMERIC"/>
             <word name="ALPHANUMERIC-EDITED"/>
-            <word name="ALPHBET"/>
             <word name="ALSO"/>
             <word name="ALTER"/>
             <word name="ALTERNATE"/>
@@ -113,6 +174,7 @@
             <word name="ARE"/>
             <word name="AREA"/>
             <word name="AREAS"/>
+            <word name="AS"/>
             <word name="ASCENDING"/>
             <word name="ASSIGN"/>
             <word name="AT"/>
@@ -143,7 +205,6 @@
             <word name="COMP"/>
             <word name="COMPUTATIONAL"/>
             <word name="COMPUTE"/>
-            <word name="CONSOLE"/>
             <word name="CONTAINS"/>
             <word name="CONTENT"/>
             <word name="CONTINUE"/>
@@ -154,24 +215,20 @@
             <word name="CORR"/>
             <word name="CORRESPONDING"/>
             <word name="COUNT"/>
-            <word name="CRT"/>
             <word name="CURRENCY"/>
-            <word name="CURSOR"/>
+            <word name="CURRENT-DATE"/>
             <word name="DATE"/>
-            <word name="DATE-COMPILED"/>
-            <word name="DATE-WRITTEN"/>
             <word name="DAY"/>
             <word name="DAY-OF-WEEK"/>
             <word name="DE"/>
-            <word name="DEBUB-SUB1"/>
             <word name="DEBUG-CONTENTS"/>
             <word name="DEBUG-ITEM"/>
             <word name="DEBUG-LINE"/>
             <word name="DEBUG-NAME"/>
-            <word name="DEBUG-SUB2"/>
-            <word name="DEBUG-SUB3"/>
+            <word name="DEBUG-SUB-1"/>
+            <word name="DEBUG-SUB-2"/>
+            <word name="DEBUG-SUB-3"/>
             <word name="DEBUGGING"/>
-            <word name="DECIMAL"/>
             <word name="DECIMAL-POINT"/>
             <word name="DECLARATIVES"/>
             <word name="DELETE"/>
@@ -181,11 +238,13 @@
             <word name="DESCENDING"/>
             <word name="DESTINATION"/>
             <word name="DETAIL"/>
+            <word name="DFHRESP"/>
+            <word name="DFHVALUE"/>
             <word name="DISABLE"/>
             <word name="DISPLAY"/>
             <word name="DIVIDE"/>
             <word name="DOWN"/>
-            <word name="DUPLICATE"/>
+            <word name="DUPLICATES"/>
             <word name="DYNAMIC"/>
             <word name="EGI"/>
             <word name="ELSE"/>
@@ -203,17 +262,16 @@
             <word name="END-OF-PAGE"/>
             <word name="END-PERFORM"/>
             <word name="END-READ"/>
-            <word name="END-RECIEVE"/>
+            <word name="END-RECEIVE"/>
             <word name="END-RETURN"/>
             <word name="END-REWRITE"/>
             <word name="END-SEARCH"/>
             <word name="END-START"/>
             <word name="END-STRING"/>
-            <word name="END-SUBSTRACT"/>
+            <word name="END-SUBTRACT"/>
             <word name="END-UNSTRING"/>
             <word name="END-WRITE"/>
             <word name="ENTER"/>
-            <word name="EOF"/>
             <word name="EOP"/>
             <word name="EQUAL"/>
             <word name="ERROR"/>
@@ -232,11 +290,11 @@
             <word name="FOOTING"/>
             <word name="FOR"/>
             <word name="FROM"/>
-            <word name="FROM"/>
             <word name="FUNCTION"/>
+            <word name="FUNCTION-POINTER"/>
             <word name="GENERATE"/>
             <word name="GIVING"/>
-            <word name="GLOVAL"/>
+            <word name="GLOBAL"/>
             <word name="GO"/>
             <word name="GREATER"/>
             <word name="GROUP"/>
@@ -244,7 +302,6 @@
             <word name="HIGH-VALUE"/>
             <word name="HIGH-VALUES"/>
             <word name="I-O"/>
-            <word name="I-O-CONTROL"/>
             <word name="IF"/>
             <word name="IN"/>
             <word name="INDEX"/>
@@ -255,7 +312,6 @@
             <word name="INITIATE"/>
             <word name="INPUT"/>
             <word name="INSPECT"/>
-            <word name="INSTALLATION"/>
             <word name="INTO"/>
             <word name="INVALID"/>
             <word name="IS"/>
@@ -268,7 +324,6 @@
             <word name="LEFT"/>
             <word name="LENGTH"/>
             <word name="LESS"/>
-            <word name="LICK"/>
             <word name="LIMIT"/>
             <word name="LIMITS"/>
             <word name="LINAGE"/>
@@ -284,10 +339,10 @@
             <word name="MESSAGE"/>
             <word name="MODE"/>
             <word name="MODULES"/>
-            <word name="MORE"/>
             <word name="MOVE"/>
             <word name="MULTIPLE"/>
             <word name="MULTIPLY"/>
+            <word name="NATIONAL"/>
             <word name="NATIVE"/>
             <word name="NEGATIVE"/>
             <word name="NEXT"/>
@@ -313,14 +368,12 @@
             <word name="PADDING"/>
             <word name="PAGE"/>
             <word name="PAGE-COUNTER"/>
-            <word name="PAGES"/>
             <word name="PERFORM"/>
             <word name="PF"/>
             <word name="PH"/>
             <word name="PIC"/>
             <word name="PICTURE"/>
             <word name="PLUS"/>
-            <word name="POINT"/>
             <word name="POINTER"/>
             <word name="POSITION"/>
             <word name="POSITIVE"/>
@@ -335,7 +388,7 @@
             <word name="RANDOM"/>
             <word name="RD"/>
             <word name="READ"/>
-            <word name="RECIEVE"/>
+            <word name="RECEIVE"/>
             <word name="RECORD"/>
             <word name="RECORDS"/>
             <word name="REDEFINES"/>
@@ -364,10 +417,8 @@
             <word name="ROUNDED"/>
             <word name="RUN"/>
             <word name="SAME"/>
-            <word name="SCREEN"/>
             <word name="SD"/>
             <word name="SEARCH"/>
-            <word name="SECURITY"/>
             <word name="SEGMENT"/>
             <word name="SEGMENT-LIMIT"/>
             <word name="SELECT"/>
@@ -384,7 +435,6 @@
             <word name="SOURCE"/>
             <word name="SPACE"/>
             <word name="SPACES"/>
-            <word name="SPECIAL-NAMES"/>
             <word name="STANDARD"/>
             <word name="STANDARD-1"/>
             <word name="STANDARD-2"/>
@@ -401,6 +451,7 @@
             <word name="SYMBOLIC"/>
             <word name="SYNC"/>
             <word name="SYNCHRONIZED"/>
+            <word name="TABLE"/>
             <word name="TALLYING"/>
             <word name="TAPE"/>
             <word name="TERMINAL"/>
@@ -433,13 +484,25 @@
             <word name="WITH"/>
             <word name="WORDS"/>
             <word name="WRITE"/>
-            <word name="WRTIE"/>
             <word name="ZERO"/>
             <word name="ZEROES"/>
             <word name="ZEROS"/>
          </keywords>
-         <regexp match="/(\b\w+)(\-)([^\s\,\.]+)/" region1="cobIdent" region2="cobIdent" region3="cobIdent"/>
-      </scheme>
+      <!-- Additional COBOL Keywords - extension to standards mentioned above -->
+         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
+            <word name="ADDRESS"/>
+            <word name="CONSOLE"/>
+            <word name="CRT"/>
+            <word name="DEBUG-SUB"/>
+            <word name="OTHERWISE"/>
+            <word name="POINT"/>
+            <word name="POINTS"/>
+            <word name="PROCESS"/>
+            <word name="RECORDING"/>
+            <word name="REMARKS"/>
+            <word name="SCREEN"/>
+         </keywords>
+      </scheme> <!-- cobolcore -->
 
    </type>
 </hrc>
@@ -464,6 +527,8 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   -  Pavel Pleva
+   -  Alexey Matiushkin
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
