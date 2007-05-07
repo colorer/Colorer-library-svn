@@ -628,6 +628,9 @@ public class TextColorer
     public FileType chooseFileType(String filename) {
         checkActive();
         FileType selected = fBaseEditor.chooseFileType(filename);
+        if (Logger.TRACE){
+            Logger.trace("TextColorer", "chooseFileType: "+ filename + " - " + selected.getName());
+        }
         invalidateSyntax();
         return selected;
     }

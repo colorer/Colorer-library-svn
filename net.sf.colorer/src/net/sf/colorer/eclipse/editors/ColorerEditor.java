@@ -20,6 +20,7 @@ import net.sf.colorer.impl.CachedBaseEditor;
 import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -120,8 +121,6 @@ public class ColorerEditor
                 Logger.trace("ColorerEditor", "notifyReload()");
             }
             detachBaseEditor();
-            fBaseEditor.dispose();
-            fBaseEditor = null;
             relinkColorer();
         }
     };
@@ -144,19 +143,12 @@ public class ColorerEditor
 
     protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
         
-        ISourceViewer viewer = new ProjectionViewer(parent, ruler,
+        ProjectionViewer viewer = new ProjectionViewer(parent, ruler,
                 getOverviewRuler(), isOverviewRulerVisible(), styles);
 
         getSourceViewerDecorationSupport(viewer);
-        
-        return viewer;
-    }
-    
-    public void createPartControl(Composite parent)
-    {
-        super.createPartControl(parent);
 
-        ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
+//        ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
 
         viewer.addProjectionListener(new IProjectionListener(){
             public void projectionEnabled() {
@@ -191,8 +183,10 @@ public class ColorerEditor
         fProjectionSupport.addSummarizableAnnotationType(ColorerAnnotation.TASK);
 
         fProjectionSupport.install();
-    }
-    
+        
+        return viewer;
+    }    
+   
     protected String[] collectContextMenuPreferencePages() {
         String[] preferencePages = super.collectContextMenuPreferencePages();
         String[] extendedPreferencePages = new String[preferencePages.length+2];
@@ -261,7 +255,7 @@ public class ColorerEditor
         fAnnotationProvider.install(this);
 
         fTextColorer.relink();
-        fTextColorer.chooseFileType(getTitle());
+        fTextColorer.chooseFileType(getEditorInput().getToolTipText());
 
         if (contentOutliner != null) {
             contentOutliner.attach(this);
@@ -461,6 +455,8 @@ public class ColorerEditor
             fFoldingProvider = null;
         }
         fAnnotationProvider.uninstall();
+        fBaseEditor.dispose();
+        fBaseEditor = null;
     }
 
     public void dispose() {

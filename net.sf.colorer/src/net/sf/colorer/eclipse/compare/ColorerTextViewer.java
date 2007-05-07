@@ -33,7 +33,8 @@ public class ColorerTextViewer extends Viewer {
     
     ColorerTextViewer(Composite parent) {
         fSourceViewer= new SourceViewer(parent, null, SWT.H_SCROLL + SWT.V_SCROLL);
-        fTextColorer = new TextColorer(new StubTextEditor(fSourceViewer));
+        // TODO? Title??
+        fTextColorer = new TextColorer(new StubTextEditor(fSourceViewer, ""));
         fSourceViewer.configure(new ColorerSourceViewerConfiguration(fTextColorer));
 
         fSourceViewer.setEditable(false);

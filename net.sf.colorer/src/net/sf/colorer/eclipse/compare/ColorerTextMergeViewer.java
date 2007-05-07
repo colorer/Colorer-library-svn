@@ -1,15 +1,15 @@
 package net.sf.colorer.eclipse.compare;
 
-import net.sf.colorer.eclipse.ColorerPlugin;
-import net.sf.colorer.eclipse.PreferencePage;
 import net.sf.colorer.eclipse.editors.ColorerSourceViewerConfiguration;
 import net.sf.colorer.eclipse.jface.IColorerEditorAdapter;
-import net.sf.colorer.eclipse.jface.TextColorer;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.text.TextViewer;
-import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.widgets.Composite;
 
 public class ColorerTextMergeViewer extends TextMergeViewer {
@@ -24,12 +24,17 @@ public class ColorerTextMergeViewer extends TextMergeViewer {
      * @see org.eclipse.compare.contentmergeviewer.TextMergeViewer#configureTextViewer(org.eclipse.jface.text.TextViewer)
      */
     protected void configureTextViewer(TextViewer textViewer) {
-        if (textViewer instanceof SourceViewer) {
-            colorerAdapter = new StubTextEditor((SourceViewer)textViewer);
-            ((SourceViewer)textViewer).configure(new ColorerSourceViewerConfiguration(colorerAdapter.getTextColorer()));
+        if (textViewer instanceof ISourceViewer) {
+            colorerAdapter = new StubTextEditor(textViewer, getCompareConfiguration().getLeftLabel(getInput()));
+            ((ISourceViewer)textViewer).configure(new ColorerSourceViewerConfiguration(colorerAdapter.getTextColorer()));
         }
     }
     
+    protected void handleDispose(DisposeEvent event) {
+        colorerAdapter.dispose();
+        super.handleDispose(event);
+    }
+        
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

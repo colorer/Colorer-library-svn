@@ -9,34 +9,35 @@ import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.impl.CachedBaseEditor;
 import net.sf.colorer.swt.ColorManager;
 
-import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.jface.text.ITextViewer;
 
 public class StubTextEditor implements IColorerEditorAdapter {
 
     private BaseEditor fBaseEditor;
-    private SourceViewer fSourceViewer;
+    private ITextViewer fViewer;
     private TextColorer fTextColorer;
+    private String fTitle;
 
-    public StubTextEditor(SourceViewer viewer)
+    public StubTextEditor(ITextViewer viewer, String title)
     {
-        fSourceViewer = viewer;
+        fViewer = viewer;
+        // Workaround - can't retrieve file's name ;(
+        fTitle = title.replaceFirst("\\s\\d+$", "");
         fTextColorer = new TextColorer(this);
-
-        System.out.println(fSourceViewer.getInput());
     }
     
     public BaseEditor getBaseEditor() {
         if (fBaseEditor == null){
             
             fBaseEditor = new CachedBaseEditor(ColorerPlugin.getDefaultPF(),
-                    new DocumentLineSource(fSourceViewer.getDocument()));
+                    new DocumentLineSource(fViewer.getDocument()));
             fBaseEditor.setRegionCompact(true);                
         }
         return fBaseEditor;
     }
     
     public void handleAttachComplete() {
-        fTextColorer.chooseFileType("xx.xml");
+        fTextColorer.chooseFileType(fTitle);
 
         String hrd = ColorerPlugin.getDefault().getPropertyHRD(fTextColorer.getFileType());
         if (hrd == null) {
@@ -50,7 +51,7 @@ public class StubTextEditor implements IColorerEditorAdapter {
     }
     
     public void selectAndReveal(int position, int i) {
-        fSourceViewer.setSelectedRange(position, i);
+        fViewer.setSelectedRange(position, i);
     }
 
     public TextColorer getTextColorer() {
@@ -62,6 +63,10 @@ public class StubTextEditor implements IColorerEditorAdapter {
         return null;
     }
 
+    public void dispose() {
+        fBaseEditor.dispose();
+        fBaseEditor = null;
+    }
 
 }
 

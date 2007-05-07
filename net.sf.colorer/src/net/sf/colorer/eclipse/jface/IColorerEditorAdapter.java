@@ -40,6 +40,8 @@ public interface IColorerEditorAdapter extends IAdaptable {
      * final setup could be managed (file type, highlight style etc.)
      */
     void handleAttachComplete();
+
+    void dispose();
     
 }
 
