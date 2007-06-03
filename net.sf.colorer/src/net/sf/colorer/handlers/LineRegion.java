@@ -11,13 +11,18 @@ public class LineRegion{
   public RegionDefine rdef;
   
   public boolean special;
-  /** Region start position. */
+  /**
+   * Region's start position
+   */
   public int start;
-  /** Region end position. Always more, than start,
-      but can be -1 in case of region till end of line.
-  */
+  /**
+   * Region's end position. Always more, than start,
+   * but can be -1 in case of region till end of line.
+   */
   public int end;
-  /** Region scheme. */
+  /**
+   * Region's scheme
+   */
   public Scheme scheme;
 
   public LineRegion(Region region, RegionDefine rdef, boolean special,

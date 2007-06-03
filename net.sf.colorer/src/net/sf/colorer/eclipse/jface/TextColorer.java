@@ -3,6 +3,7 @@ package net.sf.colorer.eclipse.jface;
 import net.sf.colorer.FileType;
 import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.editor.BaseEditor;
+import net.sf.colorer.editor.DeepLevelCounter;
 import net.sf.colorer.editor.PairMatch;
 import net.sf.colorer.handlers.LineRegion;
 import net.sf.colorer.handlers.RegionDefine;
@@ -119,6 +120,7 @@ public class TextColorer
             fBaseEditor = fEditor.getBaseEditor();
             fBaseEditor.setRegionCompact(true);
             fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
+            fDeepLevelCounter.install(fBaseEditor);
 
             // Reinit damage region
             fDamage = new Region(0, fDocument.getLength());
@@ -283,9 +285,11 @@ public class TextColorer
                         fLastPos = start+length;
 //                        */
 
+                        int deepLevel = fDeepLevelCounter.getLineDeepLevel(lno);
+
                         StyleRange sr = new StyleRange(start, length,
-                                fColorManager.getColor(rdef.bfore, rdef.fore),
-                                fColorManager.getColor(rdef.bback, rdef.back),
+                                getDeepColor(true, deepLevel, rdef.bfore, rdef.fore),
+                                getDeepColor(true, deepLevel, rdef.bback, rdef.back),
                                 rdef.style);
                         presentation.addStyleRange(sr);
                     }
@@ -404,6 +408,27 @@ public class TextColorer
     }
 
 
+    Color getDeepColor(boolean fore, int deepLevel, boolean bcolor, int color) {
+        int r = color >> 16;
+        int g = (color&0xFF00) >> 8;
+        int b = (color&0xFF);
+        
+        if (deepLevel > 20) deepLevel = 20;
+        if (fore) deepLevel = -deepLevel;
+
+        r -= r*deepLevel/60;
+        r = Math.max(r, 0);
+        r = Math.min(r, 255);
+        g -= g*deepLevel/60;
+        g = Math.max(g, 0);
+        g = Math.min(g, 255);
+        b -= b*deepLevel/60;
+        b = Math.max(b, 0);
+        b = Math.min(b, 255);
+        int newbg = b + (g<<8) + (r<<16);
+        return fColorManager.getColor(bcolor, newbg);
+        
+    }
 
     /**
      * General StyledText widget helper. Links StyledText with colorer's
@@ -436,8 +461,21 @@ public class TextColorer
             LineRegion[] lr = fBaseEditor.getLineRegions(fProjectionViewer.widgetLine2ModelLine(lno));
             for (int idx = 0; idx < lr.length; idx++) {
                 StyledRegion rdef = (StyledRegion) lr[idx].rdef;
-                if (lr[idx].end == -1 && rdef != null)
+                if (lr[idx].end == -1 && rdef != null) {
                     e.lineBackground = fColorManager.getColor(rdef.bback, rdef.back);
+                }
+            }
+            int deepLevel = fDeepLevelCounter.getLineDeepLevel(fProjectionViewer.widgetLine2ModelLine(lno));
+            if (deepLevel > 0) {
+                Color bg = e.lineBackground;
+                if (bg == null){
+                    bg = text.getBackground();
+                }
+                int r = bg.getRed();
+                int g = bg.getGreen();
+                int b = bg.getBlue();
+                
+                e.lineBackground = getDeepColor(false, deepLevel, true, b + (g<<8)+(r<<16)); 
             }
         }
     
@@ -530,6 +568,7 @@ public class TextColorer
 
     private WidgetEventHandler fHandler = new WidgetEventHandler();
     private AsyncReconcyler fReconciler = new AsyncReconcyler();
+    private DeepLevelCounter fDeepLevelCounter = new DeepLevelCounter(); 
 
     
     /**

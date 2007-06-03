@@ -55,11 +55,10 @@ public interface BaseEditor {
     /**
      * Adds specified RegionHandler object into the parse process.
      * 
-     * @param filter
-     *            If not null, handler would be activated only if passed regions
-     *            have specified <code>filter</code> parent. This allows to
-     *            optimize performance and disable unnecesary JNI context
-     *            switches.
+     * @param filter If not null, RegionHandler.addRegion() will be activated only if passed regions
+     * have specified <code>filter</code> parent. This allows to
+     * optimize performance and disable unnecesary JNI context
+     * switches.
      */
     void addRegionHandler(RegionHandler rh, Region filter);
 
