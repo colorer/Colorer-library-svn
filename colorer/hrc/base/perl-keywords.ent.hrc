@@ -43,7 +43,6 @@
       <word name="require"/>
       <word name="sub"/>
       <word name="split"/>
-      <word name="strict"/>
       <word name="tie"/>
       <word name="tied"/>
       <word name="untie"/>
@@ -59,6 +58,7 @@
       <word name="AUTOLOAD"/>
       <word name="BEGIN"/>
       <word name="INIT"/>
+      <word name="INITCHECK"/>
       <word name="CHECK"/>
       <word name="CORE"/>
       <word name="DESTROY"/>
@@ -66,6 +66,7 @@
       <word name="SUPER"/>
       <word name="UNIVERSAL"/>
    
+      <word name="strict"/>
       <word name="subs"/>
       <word name="vars"/>
       <word name="refs"/>
@@ -413,16 +414,27 @@
       <word name="Xbase"/>
       <word name="YAML"/>
       <word name="dTemplate"/>
-      <word name="diagnostics"/>
+      <word name="namespace"/>
       <word name="enum"/>
+   </keywords>   
+   <keywords region="packages"> <!-- pragmas -->
+      <word name="blib"/>
+      <word name="diagnostics"/>
+      <word name="feature"/>
+      <word name="fields"/>
       <word name="less"/>
       <word name="lib"/>
       <word name="locale"/>
-      <word name="namespace"/>
+      <word name="mro"/>
       <word name="overload"/>
+      <word name="re"/>
       <word name="sigtrap"/>
+      <word name="sort"/>
       <word name="strict"/>
-   </keywords>   
+      <word name="threads"/>
+      <word name="var"/>
+      <word name="warnings"/>
+   </keywords>
    <keywords region="packages">
       <word name="ex::constant::vars"/>
       <word name="ex::implements"/>
