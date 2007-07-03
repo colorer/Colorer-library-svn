@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
@@ -71,6 +72,8 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault(PreferencePage.HRD_SET, "default");
 
         store.setDefault(PreferencePage.PROJECTION, true);
+        
+        store.setDefault(PreferencePage.BACK_SCALE, 1);
 
         store.setDefault("Outline.Hierarchy", true);
         store.setDefault("Outline.Sort", false);
@@ -85,7 +88,7 @@ public class ColorerPlugin extends AbstractUIPlugin {
         store.setDefault("g.UseLineNumbers", true);
         store.setDefault("g.OutputEncoding", "default");
         store.setDefault("g.TargetDirectory", "/");
-        store.setDefault("g.LinkSource", "");
+        store.setDefault("g.LinkSource", "");        
     }
 
     /**

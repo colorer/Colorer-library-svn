@@ -34,7 +34,7 @@ include makefile.core
 LIBFLAGS = $(objs) wininet.lib /MAP /DLL $(LIB_DEBUG)
 
 $(obj_output_slash)net_sf_colorer.$(obj):
-	$(CPP) $(CPPFLAGS) -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE_MD) net_sf_colorer.cpp
+	$(CPP) $(CPPFLAGS) -I"$(JAVA_INCLUDE)" -I"$(JAVA_INCLUDE_MD)" net_sf_colorer.cpp
 
 $(TARGET): $(objs)
 	$(LINK) $(LIBFLAGS)

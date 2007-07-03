@@ -1,7 +1,6 @@
 package net.sf.colorer.eclipse.jface;
 
 import net.sf.colorer.FileType;
-import net.sf.colorer.eclipse.editors.ColorerEditor;
 import net.sf.colorer.editor.BaseEditor;
 import net.sf.colorer.editor.DeepLevelCounter;
 import net.sf.colorer.editor.PairMatch;
@@ -13,7 +12,6 @@ import net.sf.colorer.impl.Logger;
 import net.sf.colorer.swt.ColorManager;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -111,18 +109,23 @@ public class TextColorer
                 Logger.trace("CDR", "setDocument");
             }
             fDocument = document;
+
+            if (fDeepLevelCounter != null) {
+                fDeepLevelCounter.uninstall();
+                fDeepLevelCounter = null;
+            }
             
-            if (fDocument == null) return;
+            if (fDocument == null) {
+                return;
+            }
             
-//            prevStamp = -1;
             fColorManager = fEditor.getColorManager();
 
             fBaseEditor = fEditor.getBaseEditor();
             fBaseEditor.setRegionCompact(true);
             fBaseEditor.lineCountEvent(fDocument.getNumberOfLines());
-            fDeepLevelCounter.install(fBaseEditor);
-
-            // Reinit damage region
+            
+            // Re-init damage region
             fDamage = new Region(0, fDocument.getLength());
         }
 
@@ -285,11 +288,9 @@ public class TextColorer
                         fLastPos = start+length;
 //                        */
 
-                        int deepLevel = fDeepLevelCounter.getLineDeepLevel(lno);
-
                         StyleRange sr = new StyleRange(start, length,
-                                getDeepColor(true, deepLevel, rdef.bfore, rdef.fore),
-                                getDeepColor(true, deepLevel, rdef.bback, rdef.back),
+                                getDeepFGColor(fDeepLevelCounter, lno, rdef),
+                                getDeepBGColor(fDeepLevelCounter, lno, rdef),
                                 rdef.style);
                         presentation.addStyleRange(sr);
                     }
@@ -299,6 +300,7 @@ public class TextColorer
                 Logger.error("CDR", "StyleRange fill error", e);
             };
         }
+
 
         /**
          * Activates asynchronous presentation repair.
@@ -407,26 +409,85 @@ public class TextColorer
         
     }
 
-
-    Color getDeepColor(boolean fore, int deepLevel, boolean bcolor, int color) {
-        int r = color >> 16;
-        int g = (color&0xFF00) >> 8;
-        int b = (color&0xFF);
+    private Color getDeepFGColor(DeepLevelCounter deepLevelCounter, int lno, StyledRegion rdef) {
         
-        if (deepLevel > 20) deepLevel = 20;
-        if (fore) deepLevel = -deepLevel;
+        if (!rdef.bfore) return null;
 
-        r -= r*deepLevel/60;
-        r = Math.max(r, 0);
-        r = Math.min(r, 255);
-        g -= g*deepLevel/60;
-        g = Math.max(g, 0);
-        g = Math.min(g, 255);
-        b -= b*deepLevel/60;
-        b = Math.max(b, 0);
-        b = Math.min(b, 255);
+        int r = rdef.fore >> 16;
+        int g = (rdef.fore&0xFF00) >> 8;
+        int b = (rdef.fore&0xFF);
+
+        if (deepLevelCounter != null && fBackgroundScale > 0)
+        {
+            int level = deepLevelCounter.getLineDeepLevel(lno);
+            int maxlevel = deepLevelCounter.getMaxDeepLevel();
+    
+            r += (255-r)*level/maxlevel  *fBackgroundScale/10  /8;
+            r = Math.max(0, Math.min(r, 255));
+            g += (255-g)*level/maxlevel  *fBackgroundScale/10  /8;
+            g = Math.max(0, Math.min(g, 255));
+            b += (255-b)*level/maxlevel  *fBackgroundScale/10  /8;
+            b = Math.max(0, Math.min(b, 255));
+        }
+        
+        int newc = b + (g<<8) + (r<<16);
+        
+        return fColorManager.getColor(true, newc);
+    }
+    
+    private Color getDeepBGColor(DeepLevelCounter deepLevelCounter, int lno, StyledRegion rdef) {
+        
+        if (!rdef.bback) return null;
+
+        int r = rdef.back >> 16;
+        int g = (rdef.back&0xFF00) >> 8;
+        int b = (rdef.back&0xFF);
+
+        if (deepLevelCounter != null && fBackgroundScale > 0)
+        {
+            int level = deepLevelCounter.getLineDeepLevel(lno);
+            int maxlevel = deepLevelCounter.getMaxDeepLevel();
+    
+            r -= r*level/maxlevel/6  *fBackgroundScale/5;
+            r = Math.max(0, Math.min(r, 255));
+            g -= g*level/maxlevel/6  *fBackgroundScale/5;
+            g = Math.max(0, Math.min(g, 255));
+            b -= b*level/maxlevel/6  *fBackgroundScale/5;
+            b = Math.max(0, Math.min(b, 255));
+        }
+        
         int newbg = b + (g<<8) + (r<<16);
-        return fColorManager.getColor(bcolor, newbg);
+        
+        return fColorManager.getColor(true, newbg);
+    }
+
+    Color getDeepBGColor(DeepLevelCounter deepLevelCounter, int lno, Color color) {
+
+        
+        if (deepLevelCounter != null && fBackgroundScale > 0)
+        {
+            int level = deepLevelCounter.getLineDeepLevel(lno);
+            int maxlevel = deepLevelCounter.getMaxDeepLevel();
+    
+            if (level == 0) return color;
+            
+            int r = color.getRed();
+            int g = color.getGreen();
+            int b = color.getBlue();
+    
+            r -= r*level/maxlevel/6  *fBackgroundScale/5;
+            r = Math.max(0, Math.min(r, 255));
+            g -= g*level/maxlevel/6  *fBackgroundScale/5;
+            g = Math.max(0, Math.min(g, 255));
+            b -= b*level/maxlevel/6  *fBackgroundScale/5;
+            b = Math.max(0, Math.min(b, 255));
+
+            int newbg = b + (g<<8) + (r<<16);
+            
+            return fColorManager.getColor(true, newbg);
+        }
+
+        return color;
         
     }
 
@@ -465,18 +526,8 @@ public class TextColorer
                     e.lineBackground = fColorManager.getColor(rdef.bback, rdef.back);
                 }
             }
-            int deepLevel = fDeepLevelCounter.getLineDeepLevel(fProjectionViewer.widgetLine2ModelLine(lno));
-            if (deepLevel > 0) {
-                Color bg = e.lineBackground;
-                if (bg == null){
-                    bg = text.getBackground();
-                }
-                int r = bg.getRed();
-                int g = bg.getGreen();
-                int b = bg.getBlue();
-                
-                e.lineBackground = getDeepColor(false, deepLevel, true, b + (g<<8)+(r<<16)); 
-            }
+            e.lineBackground = getDeepBGColor(fDeepLevelCounter, fProjectionViewer.widgetLine2ModelLine(lno),
+                    e.lineBackground == null ? text.getBackground() : e.lineBackground);            
         }
     
         public void paintControl(PaintEvent e) {
@@ -568,7 +619,9 @@ public class TextColorer
 
     private WidgetEventHandler fHandler = new WidgetEventHandler();
     private AsyncReconcyler fReconciler = new AsyncReconcyler();
-    private DeepLevelCounter fDeepLevelCounter = new DeepLevelCounter(); 
+    private DeepLevelCounter fDeepLevelCounter;
+
+    private int fBackgroundScale = 0;
 
     
     /**
@@ -585,7 +638,7 @@ public class TextColorer
 
 
     /**
-     * Installs this highlighter into the specified StyledText object. Client
+     * Installs this highlighted into the specified StyledText object. Client
      * can manually call detach() method, when wants to destroy this object.
      */
     void attach(StyledText parent) {
@@ -633,7 +686,7 @@ public class TextColorer
     
     /**
      * Updates all the references to external colorer objects
-     * and invalidates current text presesntation
+     * and invalidates current text presentation
      */
     public void relink() {
         fBaseEditor = null;
@@ -1096,6 +1149,26 @@ public class TextColorer
     public IPresentationReconciler getPresentationReconciler()
     {
         return fReconciler;
+    }
+
+    /**
+     * Sets the required level of background darkening
+     * @param back_scale Integer from 0 (off) to 10 (max)
+     */
+    public void setBackgroundScale(int back_scale) {
+        fBackgroundScale = back_scale;
+        
+        if (fBackgroundScale == 0) {
+            if (fDeepLevelCounter != null) {
+                fDeepLevelCounter.uninstall();
+                fDeepLevelCounter = null;
+            }
+        }else{
+            if (fDeepLevelCounter == null) {
+                fDeepLevelCounter = new DeepLevelCounter();
+                fDeepLevelCounter.install(fBaseEditor);
+            }
+        }
     }    
 
 }

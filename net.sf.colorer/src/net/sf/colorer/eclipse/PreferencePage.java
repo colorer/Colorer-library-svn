@@ -7,6 +7,7 @@ import net.sf.colorer.ParserFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.preference.ScaleFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,6 +33,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements
     public final static String USE_BACK = "USE_BACK";
     public final static String PAIRS_MATCH = "PAIRS_MATCH";
     public static final String PROJECTION = "PROJECTION";
+    public static final String BACK_SCALE = "BACK_SCALE";
 
     Combo hrdSets;
     Vector hrdSetsList;
@@ -97,7 +99,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements
                 hrdSets.select(hrdSets.getItemCount() - 1);
             }
         }
+        hrdSets.setVisibleItemCount(10);
+        
         addField(new BooleanFieldEditor(USE_BACK, Messages.get(USE_BACK), p));
+        ScaleFieldEditor back_scale = new ScaleFieldEditor(BACK_SCALE, Messages.get(BACK_SCALE), p, 0, 10, 1, 5);
+        addField(back_scale);
     }
     
     private void createHeader(Composite contents) {

@@ -6,20 +6,41 @@ import org.eclipse.core.runtime.Assert;
 
 import net.sf.colorer.Region;
 
+/**
+ * DeepLevelCounter could be used to calculate 'weight' of each line in the parsed file.
+ * Weight is about the level of scheme inclusion, this particular line is.
+ * Could be used for level visualization.
+ */
 public class DeepLevelCounter {
 
     private Vector lineVector = new Vector();
     private BaseEditor fBaseEditor;
+    private int fDeepLevel;
+    private int fMaxDeepLevel = 0;
     
+    /*
+     * Installs this DeepLevelCounter over the specified base editor
+     */
     public void install(BaseEditor baseEditor) {
-        if (fBaseEditor != null) {
-            fBaseEditor.removeRegionHandler(fRegionHandler);
-        }
         fBaseEditor = baseEditor;
-        // TODO: Using quite a rare region nave to prevent invocation of addRegion() at all
+        // TODO: Using quite a rare region to prevent invocation of addRegion() at all
         fBaseEditor.addRegionHandler(fRegionHandler, fBaseEditor.getParserFactory().getHRCParser().getRegion("def:EmbeddedTag"));
+        fMaxDeepLevel = 0;
     }
     
+    /*
+     * Uninstalls this DeepLevelCounter from the base editor
+     */
+    public void uninstall() {
+        if (fBaseEditor != null) {
+            fBaseEditor.removeRegionHandler(fRegionHandler);
+            fBaseEditor = null;
+        }
+    }
+    
+    /*
+     * Request current level from the line number
+     */
     public int getLineDeepLevel(int lineNo) {
         if (lineNo < 0 || lineNo >= lineVector.size()){
             return 0;
@@ -29,12 +50,17 @@ public class DeepLevelCounter {
         return deepLevel.intValue();
     }
     
+    /*
+     * maximum reached level for the parse
+     */
+    public int getMaxDeepLevel() {
+        return fMaxDeepLevel;
+    }
+    
     private RegionHandler fRegionHandler = new RegionHandler();
 
     private class RegionHandler implements net.sf.colorer.RegionHandler {
         
-        private int fDeepLevel;
-
         public void addRegion(int lno, String line, int sx, int ex, Region region) {
         }
 
@@ -53,6 +79,7 @@ public class DeepLevelCounter {
         public void enterScheme(int lno, String line, int sx, int ex, Region region, String scheme) {
             ensureCapacity(lno);
             fDeepLevel++;
+            fMaxDeepLevel = Math.max(fDeepLevel, fMaxDeepLevel);
             // check fake enterScheme calls
             if (sx == 0 && ex == 0) return;
             lineVector.setElementAt(new Integer(fDeepLevel), lno);

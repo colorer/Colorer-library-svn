@@ -14,6 +14,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 
 public class ColorerSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
@@ -56,7 +57,7 @@ public class ColorerSourceViewerConfiguration extends TextSourceViewerConfigurat
      */
     public ColorerSourceViewerConfiguration(TextColorer textColorer) {
         super(ColorerPlugin.getDefault().getCombinedPreferenceStore());
-//        fEditor = uieditor;
+
         fTextColorer = textColorer;
     }
     /**

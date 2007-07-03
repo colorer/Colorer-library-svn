@@ -146,9 +146,7 @@ public class ColorerEditor
         ProjectionViewer viewer = new ProjectionViewer(parent, ruler,
                 getOverviewRuler(), isOverviewRulerVisible(), styles);
 
-        getSourceViewerDecorationSupport(viewer);
-
-//        ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
+        getSourceViewerDecorationSupport(viewer).setCursorLinePainterPreferenceKeys(null, null);
 
         viewer.addProjectionListener(new IProjectionListener(){
             public void projectionEnabled() {
@@ -393,6 +391,15 @@ public class ColorerEditor
             else
                 ((ProjectionViewer)getSourceViewer()).disableProjection();
         }
+        
+        if (e == null ||
+                e.getProperty().equals(PreferencePage.BACK_SCALE))
+        {
+            int back_scale = prefStore.getInt(PreferencePage.BACK_SCALE);
+            fTextColorer.setBackgroundScale(back_scale);
+        }
+            
+                        
     }
 
     public Object getAdapter(Class key)
