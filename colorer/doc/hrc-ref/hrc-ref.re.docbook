@@ -50,10 +50,13 @@ Everything that doesn't look like metacharacter is a simple character.
           None of RE operators works here, but you some metacharacters and range operator
           are possible: a-z stands for all alphabet chars between a and z,
 <!-- todo $ and ^ metacharacters do not work, what else? -->
-          <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.
-          -[] - Class substraction.
-          &amp;&amp;[] - Class join (can be dropped).
-          |[] - Class intersection.
+          <para>
+          Unicode class reference could be used from RE in form of
+          <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis>.
+          Additional boolean operations: <emphasis>-[]</emphasis> - Class substraction.
+          <emphasis>&amp;&amp;[]</emphasis> - Class intersection.
+          See <ulink url='http://www.unicode.org/reports/tr18/'>Unicode RE TR#18</ulink> for more information.
+          </para>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
 <row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point</entry></row>
