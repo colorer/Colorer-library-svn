@@ -4,43 +4,72 @@
 #include"JBaseEditor.h"
 
 jclass cStyledRegion = null;
+jclass cTextRegion = null;
 jclass cLineRegion  = null;
 
 jmethodID idStyledRegionConstr;
+jmethodID idTextRegionConstr;
 jmethodID idLineRegionConstr;
 
 int jbe_count = 0;
 
-void createJNInfo(JNIEnv *env){
+void createJNInfo(JNIEnv *env) {
   if (cStyledRegion == null){
-    CLR_TRACE("BaseEditorNative", "createStyledRegion: on null");
+    CLR_TRACE("BaseEditorNative", "createJNInfo: on null");
     cStyledRegion = (jclass)env->NewGlobalRef(env->FindClass("net/sf/colorer/handlers/StyledRegion"));
+    cTextRegion = (jclass)env->NewGlobalRef(env->FindClass("net/sf/colorer/handlers/TextRegion"));
     cLineRegion = (jclass)env->NewGlobalRef(env->FindClass("net/sf/colorer/handlers/LineRegion"));
 
+    if (cStyledRegion == null || cTextRegion == null || cLineRegion == null) {
+      throw_exc(env, "FATAL: createJNInfo NewGlobalRef failed");
+      return;
+    }
+
     idStyledRegionConstr = env->GetMethodID(cStyledRegion, "<init>", "(ZZIII)V");
+    idTextRegionConstr = env->GetMethodID(cTextRegion, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
     idLineRegionConstr = env->GetMethodID(cLineRegion, "<init>", "(Lnet/sf/colorer/Region;Lnet/sf/colorer/handlers/RegionDefine;ZIILnet/sf/colorer/Scheme;)V");
+    
+    if (idStyledRegionConstr == null || idTextRegionConstr == null || idLineRegionConstr == null) {
+      throw_exc(env, "FATAL: createJNInfo failed");
+      return;
+    }
+
   }
 }
 
-void dropJNInfo(JNIEnv *env){
+void dropJNInfo(JNIEnv *env) {
   env->DeleteGlobalRef(cStyledRegion);
+  env->DeleteGlobalRef(cTextRegion);
   cStyledRegion = null;
+  cTextRegion = null;
   env->DeleteGlobalRef(cLineRegion);
+  cLineRegion = null;
 }
 
+#define JSTRING(string) ((string == null) ? null : env->NewString(string->getWChars(), string->length()))
 
-jobject createStyledRegion(JNIEnv *env, const RegionDefine *rd){
+jobject createRegionDefine(JNIEnv *env, const RegionDefine *rd)
+{
   if (rd == null) return null;
 
   createJNInfo(env);
   
-  const StyledRegion *styled = StyledRegion::cast(rd);
-  if (styled == null){
-    return null;
+  if (rd->type == STYLED_REGION) {
+    const StyledRegion *styled = StyledRegion::cast(rd);
+    if (styled == null) {
+      return null;
+    }
+    return env->NewObject(cStyledRegion, idStyledRegionConstr, styled->bfore, styled->bback, styled->fore, styled->back, styled->style);
   }
-  return env->NewObject(cStyledRegion, idStyledRegionConstr, styled->bfore, styled->bback, styled->fore, styled->back, styled->style);
+  if (rd->type == TEXT_REGION) {
+    const TextRegion *texted = TextRegion::cast(rd);
+    if (texted == null) {
+      return null;
+    }
+    return env->NewObject(cTextRegion, idTextRegionConstr, JSTRING(texted->stext), JSTRING(texted->etext), JSTRING(texted->sback), JSTRING(texted->eback));
+  }
+  return null;
 }
-
 
 
 extern "C"{
@@ -133,7 +162,12 @@ JNIEXPORT void JNICALL JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegi
 (JNIEnv *env, jobject obj, jlong iptr, jstring cls, jstring name)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  be->setRegionMapper(&JString(env, cls), &JString(env, name));
+  try{
+    be->setRegionMapper(&JString(env, cls), &JString(env, name));
+  }catch(Exception &e){
+    throw_exc(env, e.getMessage()->getChars());
+    return;
+  }
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper__JLnet_sf_colorer_handlers_RegionMapper_2
@@ -143,12 +177,19 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setRegionMapper
 
   jclass jClass = env->FindClass("net/sf/colorer/handlers/RegionMapper");
   jfieldID id_iptr = env->GetFieldID(jClass, "iptr", "J");
-  RegionMapper *regionMapper = (RegionMapper*)env->GetLongField(jClass, id_iptr);
+  RegionMapper *regionMapper = (RegionMapper*)env->GetLongField(jregionMapper, id_iptr);
   if (regionMapper == null){
     CLR_ERROR("JBaseEditor", "Disposed RegionMapper was used");
     return;
   }
-  be->setRegionMapper(regionMapper);
+
+  try{
+    be->setRegionMapper(regionMapper);
+  }catch(Exception &e){
+    throw_exc(env, e.getMessage()->getChars());
+    return;
+  }
+
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_addRegionHandler
@@ -187,17 +228,17 @@ JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_removeRegionHan
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getBackground(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  return createStyledRegion(env, be->rd_def_Text);
+  return createRegionDefine(env, be->rd_def_Text);
 }
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getVertCross(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  return createStyledRegion(env, be->rd_def_VertCross);
+  return createRegionDefine(env, be->rd_def_VertCross);
 }
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getHorzCross(JNIEnv *env, jobject obj, jlong iptr)
 {
   JBaseEditor *be = JBaseEditor::get(env, iptr);
-  return createStyledRegion(env, be->rd_def_HorzCross);
+  return createRegionDefine(env, be->rd_def_HorzCross);
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_impl_BaseEditorNative_setBackParse
@@ -249,7 +290,7 @@ JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLine
 
   int idx = 0;
   for(next = lregion; next != null; next = next->next, idx++){
-    jobject sr = createStyledRegion(env, next->styled());
+    jobject sr = createRegionDefine(env, next->rdef);
     jobject region = null;
     if (next->region) region = be->pf->jhp->getRegion(env, next->region->getName());
     jobject lr = env->NewObject(cLineRegion, idLineRegionConstr, region, sr, next->special, next->start, next->end, null);

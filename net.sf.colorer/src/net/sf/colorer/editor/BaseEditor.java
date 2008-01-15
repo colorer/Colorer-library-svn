@@ -49,7 +49,7 @@ public interface BaseEditor {
     /** Installs specified external RegionMapper. */
     void setRegionMapper(RegionMapper regionMapper);
 
-    /** Installs specified internal RegionMapper. */
+    /** Installs a styled RegionMapper with the provided HRD class and name. */
     void setRegionMapper(String hrdClass, String hrdName);
 
     /**

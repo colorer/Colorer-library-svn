@@ -25,7 +25,9 @@ public class BaseEditorNative implements BaseEditor {
     Region defPairStart = null;
     Region defPairEnd = null;
     Vector editorListeners = new Vector();
-    ParserFactory fParserFactory; 
+    ParserFactory fParserFactory;
+    RegionMapper regionMapper;
+ 
 
     //native Region getRegion(final long iptr, final String qname);
 
@@ -55,6 +57,7 @@ public class BaseEditorNative implements BaseEditor {
     public void dispose() {
         checkActive();
         disposed = true;
+        this.regionMapper = null;
         finalize(iptr);
         if (Logger.TRACE) {
             Logger.trace("BaseEditor", "dispose");
@@ -91,6 +94,8 @@ public class BaseEditorNative implements BaseEditor {
     public void setRegionMapper(RegionMapper regionMapper) {
         checkActive();
         setRegionMapper(iptr, regionMapper);
+        // Save object reference
+        this.regionMapper = regionMapper;
         modifyEvent(iptr, 0);
     }
 

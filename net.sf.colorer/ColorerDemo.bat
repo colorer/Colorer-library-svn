@@ -7,13 +7,13 @@ rem in %HOME%/.colorer5catalog  file.
 
 set ECLIPSEHOME=d:\programs\eclipse\
 
-rem set ECLIPSEVER=2.1.0
-set ECLIPSEVER=3.0.1
-
-set SWT_JAR=%ECLIPSEHOME%\plugins\org.eclipse.swt.win32_%ECLIPSEVER%\ws\win32\swt.jar
+set SWT_JAR=%ECLIPSEHOME%\plugins\org.eclipse.swt.win32.win32.x86_3.3.0.v3346.jar
 set SWT_LIB=%ECLIPSEHOME%\plugins\org.eclipse.swt.win32_%ECLIPSEVER%\os\win32\x86
 
-set classpath=colorer.jar;%SWT_JAR%;%classpath%
-set path=./os/win32/x86;%SWT_LIB%;%path%
+set COLORER5CATALOG=D:\projects\Colorer-take5.be5\catalog.xml
 
-java net.sf.colorer.swt.ColorerDemo
+set classpath=colorer.jar;%SWT_JAR%;%classpath%
+set path=libnative;./os/win32/x86;%SWT_LIB%;%path%
+
+rem java net.sf.colorer.swt.ColorerDemo
+%*

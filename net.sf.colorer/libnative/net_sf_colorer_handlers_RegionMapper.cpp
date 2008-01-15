@@ -22,7 +22,7 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDef
       return null;
     }
 
-    return createStyledRegion(env, rdef);
+    return createRegionDefine(env, rdef);
 }
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDefine__JLjava_lang_String_2
@@ -40,7 +40,8 @@ JNIEXPORT jobject JNICALL Java_net_sf_colorer_handlers_RegionMapper_getRegionDef
       CLR_WARN("JRegionMapper", "Region define is empty");
       return null;
     }
-    return createStyledRegion(env, rdef);
+
+    return createRegionDefine(env, rdef);
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_handlers_RegionMapper_finalize

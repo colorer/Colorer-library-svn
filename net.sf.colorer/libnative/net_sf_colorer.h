@@ -10,4 +10,4 @@
 
 void throw_exc(JNIEnv *env, const char *msg);
 
-jobject createStyledRegion(JNIEnv *env, const RegionDefine *rd);
+jobject createRegionDefine(JNIEnv *env, const RegionDefine *rd);
