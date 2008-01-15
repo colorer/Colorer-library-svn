@@ -27,10 +27,12 @@ public:
     etext = _etext;
     sback = _sback;
     eback = _eback;
+    type = TEXT_REGION;
   }
 
   TextRegion(){
     stext = etext = sback = eback = null;
+    type = TEXT_REGION;
   }
 
   /**
@@ -49,8 +51,12 @@ public:
    */
   static const TextRegion *cast(const RegionDefine *rd){
     if (rd == null) return null;
+    if (rd->type != TEXT_REGION) {
+      int a = 0;
+      int b = 10/a;
+      throw Exception(DString("Bad type cast exception into TextRegion"));
+    }
     const TextRegion *tr = (const TextRegion *)(rd);
-    if (tr == null)  throw Exception(DString("Bad type cast exception into TextRegion"));
     return tr;
   }
 
@@ -82,6 +88,7 @@ public:
     etext = rd->etext;
     sback = rd->sback;
     eback = rd->eback;
+    type  = rd->type;
   }
 
   RegionDefine *clone() const{
