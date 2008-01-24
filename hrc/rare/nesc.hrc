@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+   <type name="nesc">
+   
+   <import type="def"/>
+   
+      <annotation>
+         <documentation><![CDATA[
+           nesC Syntax
+           <filename>/\.nc$/i</filename>
+         ]]></documentation>
+         <contributors>
+           Rasmus Ulslev Pedersen (rasmus.ulslev.pedersen@gmail.com)
+         </contributors>
+      </annotation>
+
+      <region name="String" parent="def:String"/>
+      
+      <region name="nescTypes" parent="def:KeywordStrong"/>   
+			<region name="nescNetworkTypes" parent="def:KeywordStrong"/>
+			
+
+      <region name="nescKeyword" parent="def:Keyword"/>
+      <region name="KeywordANSI" parent="def:Keyword"/>
+      
+      <region name="ncSymbol" parent="def:Symbol"/>
+      <region name="ncSymbolStrong" parent="def:SymbolStrong"/>
+      <region name="LineComment" parent="def:LineComment"/>
+      <region name="ncComment" parent="def:Comment"/>
+      
+      <region name="ModuleOutline" parent="def:Outlined"/>
+      <region name="ImplementationOutline" parent="def:Outlined"/>          
+
+       
+      <scheme name="nesc">
+         <regexp match="/\/\/.*$/" region0="ncComment"/>
+ 
+         <block start="/\/\*/" end="/\*\//" scheme="Comment"
+              region="Comment" region00="PairStart" region10="PairEnd"/>              
+
+        <block start="/(\{)/" end="/(\})/" scheme="nesc"
+          region00="SymbolStrong" region01="PairStart" region10="SymbolStrong" region11="PairEnd"/>
+
+         <inherit scheme="nescKeywords"/>
+         
+         <keywords region="ncSymbol">
+			      <symb name=";" region="ncSymbolStrong"/><symb name="="/>
+			      <symb name="+"/><symb name="-"/>
+			      <symb name="/"/><symb name="*"/>
+			      <symb name="&amp;"/><symb name="^"/>
+			      <symb name="|"/><symb name=":"/>
+			      <symb name="("/><symb name=")"/>
+			      <symb name="["/><symb name="]"/>
+			      <symb name=","/><symb name="."/>
+			      <symb name="!"/><symb name="~"/>
+			      <symb name="&lt;"/><symb name="&gt;"/>
+			      <symb name="%"/><symb name="?"/>
+			      <symb name="{"/><symb name="}"/>
+			      <symb name="#"/><symb name="@"/>
+        </keywords>
+        <inherit scheme="PairedBrackets"/>
+        <inherit scheme="ncOutlines"/>
+        
+      </scheme> 
+      
+      <scheme name="nescKeywords">
+         <keywords region="nescKeyword">
+            <word name="as"/>
+            <word name="attribute"/>
+            <word name="call"/>
+            <word name="command"/>
+            <word name="component"/>
+            <word name="components"/>
+            <word name="configuration"/>
+            <word name="default"/>
+            <word name="event"/>
+            <word name="external"/>
+            <word name="generic"/>
+            <word name="implementation"/>
+            <word name="interface"/>
+            <word name="module"/>
+            <word name="provides"/>
+            <word name="signal"/>
+            <word name="task"/>
+            <word name="uses"/>
+         </keywords>    
+         
+         <!-- nesC Keywords: datatypes -->
+			   <keywords region="nescTypes">
+			      <word name="char"/>
+			      <word name="const"/>
+			      <word name="double"/>
+			      <word name="float"/>
+			      <word name="int"/>
+			      <word name="long"/>
+			      <word name="short"/>
+			      <word name="signed"/>
+			      <word name="unsigned"/>
+			      <word name="void"/>
+			      <word name="int8_t"/>
+			      <word name="uint8_t"/>
+			      <word name="int16_t"/>
+			      <word name="uint16_t"/>
+			      <word name="int32_t"/>
+			      <word name="uint32_t"/>
+			      <word name="int64_t"/>
+			      <word name="uint64_t"/>
+			   </keywords>
+			   
+			   <!-- nesC Keywords: network types-->
+			   <keywords region="nescNetworkTypes">
+			      <word name="nx_int8_t"/>
+			      <word name="nx_int16_t"/>
+			      <word name="nx_int32_t"/>
+			      <word name="nx_int64_t"/>
+			      <word name="nx_uint8_t"/>
+			      <word name="nx_uint16_t"/>
+			      <word name="nx_uint32_t"/>
+			      <word name="nx_uint64_t"/>
+			      <word name="nxle_int8_t"/>
+			      <word name="nxle_int16_t"/>
+			      <word name="nxle_int32_t"/>
+			      <word name="nxle_int64_t"/>
+			      <word name="nxle_uint8_t"/>
+			      <word name="nxle_uint16_t"/>
+			      <word name="nxle_uint32_t"/>
+			      <word name="nxle_uint64_t"/>  
+			   </keywords>  
+			   
+				<!-- See c.hrc -->
+				<keywords region="KeywordANSI">
+		      <word name="asm"/>
+		      <word name="auto"/>
+		      <word name="break"/>
+		      <word name="case"/>
+		      <word name="cdecl"/>
+		      <word name="continue"/>
+		      <word name="default"/>
+		      <word name="defined"/>
+		      <word name="do"/>
+		      <word name="else"/>
+		      <word name="enum"/>
+		      <word name="explicit"/>
+		      <word name="export"/>
+		      <word name="extern"/>
+		      <word name="far"/>
+		      <word name="fastcall"/>
+		      <word name="finally"/>
+		      <word name="for"/>
+		      <word name="fortran"/>
+		      <word name="huge"/>
+		      <word name="if"/>
+		      <word name="import"/>
+		      <word name="inline"/>
+		      <word name="interrupt"/>
+		      <word name="near"/>
+		      <word name="pascal"/>
+		      <word name="register"/>
+		      <word name="return"/>
+		      <word name="sizeof"/>
+		      <word name="static"/>
+		      <word name="stdcall"/>
+		      <word name="struct"/>
+		      <word name="switch"/>
+		      <word name="this"/>
+		      <word name="typedef"/>
+		      <word name="union"/>
+		      <word name="using"/>
+		      <word name="volatile"/>
+		      <word name="while"/>
+		      <word name="_cdecl"/>
+		      <word name="_export"/>
+		      <word name="_fastcall"/>
+		      <word name="_import"/>
+		      <word name="_pascal"/>
+		      <word name="_stdcall"/>
+		      <word name="__cdecl"/>
+		      <word name="__declspec"/>
+		      <word name="__except"/>
+		      <word name="__export"/>
+		      <word name="__far"/>
+		      <word name="__far16"/>
+		      <word name="__fastcall"/>
+		      <word name="__finally"/>
+		      <word name="__fortran"/>
+		      <word name="__huge"/>
+		      <word name="__import"/>
+		      <word name="__inline"/>
+		      <word name="__interrupt"/>
+		      <word name="__leave"/>
+		      <word name="__loadds"/>
+		      <word name="__near"/>
+		      <word name="__nounwind"/>
+		      <word name="__pascal"/>
+		      <word name="__property"/>
+		      <word name="__ptr64"/>
+		      <word name="__published"/>
+		      <word name="__restrict"/>
+		      <word name="__resume"/>
+		      <word name="__rtti"/>
+		      <word name="__saveregs"/>
+		      <word name="__segment"/>
+		      <word name="__segname"/>
+		      <word name="__stdcall"/>
+		      <word name="__sysapi"/>
+		      <word name="__syscall"/>
+		      <word name="__thiscall"/>
+		      <word name="__thread"/>
+		      <word name="__try"/>
+		      <word name="__unaligned"/>
+		   </keywords>
+	     
+      </scheme>   
+
+		<scheme name="ncOutlines">
+		   <annotation>
+		    <documentation>
+		     nc outlines.
+		    </documentation>
+		    <appinfo></appinfo>
+		   </annotation>
+		
+       <regexp><![CDATA[
+		     /^ \M \s* (module) \s+
+		     (?{ModuleOutline} [\:\w_&~<>]+
+		     [\w_:<>\s]*? [^;] )($|\{)/x
+		   ]]></regexp>
+		
+       <regexp><![CDATA[
+		     /^ \M \s* (implementation) \s+
+		     (?{ImplementationOutline} [\:\w_&~<>]+
+		     [\w_:<>\s]*? [^;] )($|\{)/x
+		   ]]></regexp>
+		   
+		  </scheme>
+
+      
+   </type>
+</hrc>
