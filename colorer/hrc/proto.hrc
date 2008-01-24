@@ -105,6 +105,21 @@
     <filename>/\.(bas|vbp|frm|cls)$/i</filename>
     <firstline>/^(VERSION|VBWIZARD) \d+.\d+/</firstline>
   </prototype>
+  <prototype name="python" group="main" description="Python">
+    <location link="base/python.hrc"/>
+    <filename>/\.(py|pyw|pys)$/i</filename>
+  </prototype>
+  <prototype name="ruby" group="main" description="Ruby">
+    <location link="base/ruby.hrc"/>
+    <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/Rakefile$/i</filename>
+    <firstline>/bin\/ruby/i</firstline>
+  </prototype>
+  <prototype name="tcltk" group="main" description="Tcl/Tk">
+    <location link="base/tcltk.hrc"/>
+    <filename>/\.(tcl|tk)$/i</filename>
+    <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
+  </prototype>
 
   <!--  inet languages  -->
   <package name="html-entity" description="(x)html entities">
@@ -543,6 +558,10 @@
     <filename>/\.(mod|ob2|odf|def)$/i</filename>
     <firstline>/\(\*|MODULE|DEFINITION|IMPLEMENTATION|&lt;\*/</firstline>
   </prototype>
+  <prototype name="nesc" group="rare" description="nesC">
+    <location link="rare/nesc.hrc"/>
+    <filename>/\.nc$/i</filename>
+  </prototype>
   <prototype name="picasm" group="rare" description="PicAsm">
     <location link="rare/picasm.hrc"/>
     <filename>/\.(asm|pic)$/i</filename>
@@ -551,21 +570,11 @@
     <location link="rare/pl1.hrc"/>
     <filename>/\.(pl1|pli)$/i</filename>
   </prototype>
-  <prototype name="python" group="rare" description="Python">
-    <location link="rare/python.hrc"/>
-    <filename>/\.(py|pyw|pys)$/i</filename>
-  </prototype>
   <prototype name="rexx" group="rare" description="Rexx">
     <location link="rare/rexx.hrc"/>
     <filename>/\.(rex|cmd)$/i</filename>
     <firstline>/(REM)\/\*/i</firstline>
     <firstline>/^# regina/i</firstline>
-  </prototype>
-  <prototype name="ruby" group="rare" description="Ruby">
-    <location link="rare/ruby.hrc"/>
-    <filename>/\.(rb|rbw|ruby)$/i</filename>
-    <filename>/Rakefile$/i</filename>
-    <firstline>/bin\/ruby/i</firstline>
   </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
@@ -574,11 +583,6 @@
   <prototype name="ocaml" group="rare" description="OCaml">
     <location link="rare/ocaml.hrc"/>
     <filename>/\.(ml|mli|mlp)$/i</filename>
-  </prototype>
-  <prototype name="tcltk" group="rare" description="Tcl/Tk">
-    <location link="rare/tcltk.hrc"/>
-    <filename>/\.(tcl|tk)$/i</filename>
-    <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
   <prototype name="sicstusProlog" group="rare" description="Sicstus Prolog">
     <location link="rare/sprolog.hrc"/>
