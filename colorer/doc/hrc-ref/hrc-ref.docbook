@@ -701,13 +701,11 @@ syntax regions, derived from the defaults.
 
 <section id='coding.std.spec.pairs'><title>Pair construction matching</title>
 <para>
-Colorer-take5 library uses HRC syntax conventions for additional
-processing that make editing process more intuitive. This processing includes
-paired construction matching and file's structure/error list outline.
-These features are implemented through specially defined regions.
-Matching paired construction consists of two special regions
-<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>
-that package shoud define.
+In addition to coloring rules, Colorer-take5 library uses some naming conventions to
+provide such features as pair matching, error lists and file structure outlines.
+Conventions include several special regions. Paired constructions 
+are defined using 
+<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>.
 Parsing layout for these regions should be properly enwrapped in a valid recursive sequence.
 Using this information Colorer-take5 library provides user with
 ability to jump over text blocks in target language and highlight them during

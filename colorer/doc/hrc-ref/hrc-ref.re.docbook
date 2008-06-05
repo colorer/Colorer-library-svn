@@ -62,7 +62,7 @@ with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
           <simpara>|[] - Class intersection.</simpara>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
-<row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point</entry></row>
+<row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point (immediately before or after any word character)</entry></row>
 <row><entry><emphasis>\B</emphasis></entry><entry>No word break at this point</entry></row>
 <row><entry><emphasis>\xHH</emphasis>, <emphasis>\x{HHHH}</emphasis></entry><entry><emphasis>HH, HHHH</emphasis> - character code (hex)</entry></row>
 <row><entry><emphasis>\n</emphasis></entry><entry>0x10 (lf)</entry></row>                                          
