@@ -27,11 +27,17 @@ public class BaseEditorNative implements BaseEditor {
     Vector editorListeners = new Vector();
     ParserFactory fParserFactory;
     RegionMapper regionMapper;
+
+    static boolean invalidUsage = false;
  
 
     //native Region getRegion(final long iptr, final String qname);
 
     public BaseEditorNative(ParserFactory pf, LineSource lineSource) {
+        
+        if (invalidUsage) {
+            throw new RuntimeException("Colorer:BaseEditorNative: Invalid global state: dispose() should be called explicitly!");
+        }
         iptr = init(pf, lineSource);
         fParserFactory = pf;
         HRCParser hrcParser = pf.getHRCParser();
@@ -65,9 +71,12 @@ public class BaseEditorNative implements BaseEditor {
     }
 
     protected void finalize() throws Throwable {
-        if (disposed) return;
-        dispose();
-    };
+        if (!disposed){
+            invalidUsage = true;
+        }
+        //Memory leak instead!!!
+        //dispose();
+    }
 
     public void setRegionCompact(boolean compact) {
         checkActive();

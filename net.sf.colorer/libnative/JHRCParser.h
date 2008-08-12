@@ -7,24 +7,29 @@
 class JHRCParser{
   Hashtable<jobject> regions;
   Hashtable<jobject> fileTypes;
+  Hashtable<jobject> schemesCache;
 
 public:
   HRCParser *hrcParser;
   jobject jHRCParser;
 
-  jobject getRegion(JNIEnv *env, int index){
+  jobject getRegion(JNIEnv *env, int index)
+  {
     CLR_TRACE("NSC:JHRCParser:getRegion", "index:%d, hp=%d", index, hrcParser);
     const Region *nreg = hrcParser->getRegion(index);
-    if (nreg == null){
+    if (nreg == null)
+    {
       return null;
     }
     CLR_TRACE("NSC:JHRCParser:getRegion", "region:%s", nreg->getName()->getChars());
     return getRegion(env, nreg->getName());
   }
 
-  jobject getRegion(JNIEnv *env, const String *regname){
+  jobject getRegion(JNIEnv *env, const String *regname)
+  {
     jobject reg = regions.get(regname);
-    if (reg == null){
+    if (reg == null)
+    {
       const Region *nreg = hrcParser->getRegion(regname);
       if (nreg == null) return null;
 
@@ -42,9 +47,28 @@ public:
       regions.put(regname, reg);
     }
     return reg;
-  };
+  }
 
-  jobject enumerateFileTypes(JNIEnv *env, int idx){
+  jobject getScheme(JNIEnv *env, const Scheme *scheme)
+  {
+    jobject jscheme = schemesCache.get(scheme->getName());
+    if (jscheme == null)
+    {
+      jclass cScheme = env->FindClass("net/sf/colorer/Scheme");
+      jmethodID idSchemeConstr = env->GetMethodID(cScheme, "<init>", "(Ljava/lang/String;Lnet/sf/colorer/FileType;)V");
+
+      jscheme = env->NewObject(cScheme, idSchemeConstr,
+                           env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()),
+                           getFileType(env, scheme->getFileType())
+                          );
+      jscheme = env->NewGlobalRef(jscheme);
+      schemesCache.put(scheme->getName(), jscheme);
+    }
+    return jscheme;
+  }
+
+  jobject enumerateFileTypes(JNIEnv *env, int idx)
+  {
     FileType *filetype = hrcParser->enumerateFileTypes(idx);
     if (filetype == null) return null;
     return getFileType(env, filetype);
@@ -52,7 +76,8 @@ public:
 
   jobject getFileType(JNIEnv *env, FileType *filetype){
     jobject jtype = fileTypes.get(filetype->getName());
-    if (jtype == null){
+    if (jtype == null)
+    {
       jclass cFileType = env->FindClass("net/sf/colorer/FileType");
       jmethodID idFileTypeConstr = env->GetMethodID(cFileType, "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
       jtype = env->NewObject(cFileType, idFileTypeConstr, (jlong)filetype,

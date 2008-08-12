@@ -10,7 +10,7 @@ public class Logger {
 
     public final static boolean FILTER = true;
 
-    public final static boolean TRACE = true;
+    public final static boolean TRACE = false;
     
     public final static boolean ERROR = true; 
     

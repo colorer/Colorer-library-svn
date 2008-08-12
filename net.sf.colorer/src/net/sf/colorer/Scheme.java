@@ -1,8 +1,33 @@
 package net.sf.colorer;
 
+/*
+ * HRC Scheme class mapping
+ */
+public class Scheme
+{
+    String name;
+    FileType type;
+    
+    public Scheme(String name, FileType type)
+    {
+        this.name = name;
+        this.type = type;
+    }
 
-public class Scheme{
-  
+    public String getName()
+    {
+        return name;
+    }
+
+    public FileType getFileType()
+    {
+        return type;
+    }
+
+    public String toString()
+    {
+        return name;
+    }
   
 };
 

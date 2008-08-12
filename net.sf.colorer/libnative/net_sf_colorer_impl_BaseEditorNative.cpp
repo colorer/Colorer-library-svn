@@ -293,7 +293,9 @@ JNIEXPORT jobjectArray JNICALL Java_net_sf_colorer_impl_BaseEditorNative_getLine
     jobject sr = createRegionDefine(env, next->rdef);
     jobject region = null;
     if (next->region) region = be->pf->jhp->getRegion(env, next->region->getName());
-    jobject lr = env->NewObject(cLineRegion, idLineRegionConstr, region, sr, next->special, next->start, next->end, null);
+    jobject scheme = null;
+    if (next->scheme) scheme = be->pf->jhp->getScheme(env, next->scheme);
+    jobject lr = env->NewObject(cLineRegion, idLineRegionConstr, region, sr, next->special, next->start, next->end, scheme);
     env->SetObjectArrayElement(lrArray, idx, lr);
     if (sr != null) env->DeleteLocalRef(sr);
     env->DeleteLocalRef(lr);
