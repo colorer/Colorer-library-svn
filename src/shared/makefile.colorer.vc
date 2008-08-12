@@ -15,3 +15,6 @@ include ../shared/makefile.zlib
 include ../shared/_dependencies.dep
 include ../shared/makefile.objs
 include ../shared/makefile.lines
+
+.cpp.obj:
+	$(CPP) $<
