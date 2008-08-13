@@ -19,8 +19,8 @@ obj_output_slash = $(obj_output)\\
 
 CPPFLAGS_CUSTOM = /O2tiyb2 -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET
 #CPPFLAGS_CUSTOM += /Zi -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_FULL
-#CPPFLAGS_CUSTOM=/Zi
-LIB_DEBUG = /debug /incremental:no /NODEFAULTLIB:libc libcmt.lib
+#CPPFLAGS_CUSTOM=/Zi /debug
+LIB_DEBUG =  /incremental:no /NODEFAULTLIB:libc libcmt.lib
                                          #  
 CPPFLAGS = -I$(shared_path) -I$(unzipdir) /Fo$*.$(obj) /EHsc /nologo /c /wd4101 /W3 -D_CRT_SECURE_NO_DEPRECATE $(CPPFLAGS_CUSTOM)
 

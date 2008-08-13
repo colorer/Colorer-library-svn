@@ -56,45 +56,51 @@ public class HTMLGenerator {
                 boolean useLineNumbers,
                 boolean useHtmlSubst,
                 boolean useInfoHeader,
-                boolean useHeaderFooter) throws IOException{
+                boolean useHeaderFooter) throws IOException
+  {
     
-    BaseEditor be = new BaseEditorNative(pf, lineSource);
-    be.setRegionCompact(true);
-    be.setRegionMapper("rgb", hrdSchema);
-    be.lineCountEvent(lineSource.getLineCount());
-    be.visibleTextEvent(0, lineSource.getLineCount());
-    be.chooseFileType(fileName);
+    BaseEditor be = null;
+    try {
+      be = new BaseEditorNative(pf, lineSource);
+      be.setRegionCompact(true);
+      be.setRegionMapper("rgb", hrdSchema);
+      be.lineCountEvent(lineSource.getLineCount());
+      be.visibleTextEvent(0, lineSource.getLineCount());
+      be.chooseFileType(fileName);
 
-    if (useHeaderFooter){
-      commonWriter.write("<html>\n<head>\n<style></style>\n</head>\n<body style='");
-      ParsedLineWriter.writeStyle(commonWriter, (StyledRegion)be.getBackground());
-      commonWriter.write("'><pre>\n");
-    };
-              
-    if (useInfoHeader){
-      commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType().getName()+"'\n\n");
-    };
-  
-    int lni = 0;
-    int lwidth = 1;
-    int lncount = lineSource.getLineCount();
-    for(lni = lncount/10; lni > 0; lni = lni/10, lwidth++);
+      if (useHeaderFooter){
+        commonWriter.write("<html>\n<head>\n<style></style>\n</head>\n<body style='");
+        ParsedLineWriter.writeStyle(commonWriter, (StyledRegion)be.getBackground());
+        commonWriter.write("'><pre>\n");
+      };
+                
+      if (useInfoHeader){
+        commonWriter.write("Created with Colorer-take5 Library. Type '"+be.getFileType().getName()+"'\n\n");
+      };
+    
+      int lni = 0;
+      int lwidth = 1;
+      int lncount = lineSource.getLineCount();
+      for(lni = lncount/10; lni > 0; lni = lni/10, lwidth++);
 
-    for(int idx = 0; idx < lineSource.getLineCount(); idx++){
-      if (useLineNumbers){
-        int iwidth = 1;
-        for(lni = idx/10; lni > 0; lni = lni/10, iwidth++);
-        for(lni = iwidth; lni < lwidth; lni++) commonWriter.write(' ');
-        commonWriter.write(String.valueOf(idx));
-        commonWriter.write(": ");
-      }
-      ParsedLineWriter.htmlRGBWrite(commonWriter, escapedWriter, lineSource.getLine(idx), be.getLineRegions(idx));
-      commonWriter.write("\n");
-    };
-    if (useHeaderFooter){
-      commonWriter.write("</pre></body></html>\n");
-    };
-    commonWriter.close();
+      for(int idx = 0; idx < lineSource.getLineCount(); idx++){
+        if (useLineNumbers){
+          int iwidth = 1;
+          for(lni = idx/10; lni > 0; lni = lni/10, iwidth++);
+          for(lni = iwidth; lni < lwidth; lni++) commonWriter.write(' ');
+          commonWriter.write(String.valueOf(idx));
+          commonWriter.write(": ");
+        }
+        ParsedLineWriter.htmlRGBWrite(commonWriter, escapedWriter, lineSource.getLine(idx), be.getLineRegions(idx));
+        commonWriter.write("\n");
+      };
+      if (useHeaderFooter){
+        commonWriter.write("</pre></body></html>\n");
+      };
+      commonWriter.close();
+    }finally{
+      if (be != null) be.dispose();
+    }
   }
   
   
