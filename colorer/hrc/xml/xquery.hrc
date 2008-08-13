@@ -216,7 +216,7 @@
  
 
 <scheme name="FunctionDecl">
-    <block start="/(~|^)\s*(%xpath2:QName;)\s*(\()/" end="/(\))/" scheme="ParamList" 
+    <block start="/(~|^)\s*(%xpath2:QName;)?\s*(\()/" end="/(\))/" scheme="ParamList" 
         region00="xpath2:func.quote" region03="def:PairStart"
         region10="xpath2:func.quote" region11="def:PairEnd"
         region02="xpath2:qn.name"
