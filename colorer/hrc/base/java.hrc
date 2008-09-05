@@ -112,7 +112,7 @@
        </inherit>
        -->
        <inherit scheme="NetAddresses"/>
-       <regexp match="/~\*{3,}/"/>
+       <regexp match="/~\*{3,}/" priority="low"/>
        <keywords region="CommentContent">
           <symb name="*"/><symb name=","/>
           <symb name=":"/><symb name=";"/>

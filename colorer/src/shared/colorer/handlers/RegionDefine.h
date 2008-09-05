@@ -2,6 +2,18 @@
 #define _COLORER_REGIONDEFINE_H_
 
 /**
+ * Enumeration to distinguish different types of region mapping
+ * Do not use RTTI because of compatibility problems
+ *
+ * @ingroup colorer_handlers
+ */
+enum RegionDefineType{
+  UNKNOWN_REGION = 0,
+  STYLED_REGION  = 1,
+  TEXT_REGION    = 2,
+};
+
+/**
  * Object contains information about region mapping into real colors or other properties.
  * This class represents abstract mapping information and declares required methods
  * to be implemented in it's subclasses.
@@ -10,6 +22,12 @@
  */
 class RegionDefine{
 public:
+  
+  /**
+   * Class type identifier
+   */
+  RegionDefineType type;
+
   /**
    * Completes region define values with it's parent values.
    * If region define has some incomplete information (fe some
@@ -39,6 +57,7 @@ public:
    * To be implemented in subclasses.
    */
   virtual RegionDefine *clone() const = 0;
+
   /** Default Destructor */
   virtual ~RegionDefine(){};
 };
@@ -60,8 +79,8 @@ public:
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
- * Portions created by the Initial Developer are Copyright (C) 1999-2005
+ * Cail Lomecb <irusskih at gmail.com>.
+ * Portions created by the Initial Developer are Copyright (C) 1999-2007
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

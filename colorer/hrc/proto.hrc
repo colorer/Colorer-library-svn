@@ -79,10 +79,6 @@
     <filename>/\.(\~?pas|dpr|dpk|inc|int)$/i</filename>
     <firstline>/^(\{|\/\/|resourcestring)/i</firstline>
   </prototype>
-  <prototype name="python" group="main" description="Python">
-    <location link="base/python.hrc"/>
-    <filename>/\.(py|pyw|pys)$/i</filename>
-  </prototype>
   <prototype name="csharp" group="main" description="C#">
     <location link="base/csharp.hrc"/>
     <filename>/\.cs$/i</filename>
@@ -108,6 +104,21 @@
     <location link="base/vbasic.hrc"/>
     <filename>/\.(bas|vbp|frm|cls)$/i</filename>
     <firstline>/^(VERSION|VBWIZARD) \d+.\d+/</firstline>
+  </prototype>
+  <prototype name="python" group="main" description="Python">
+    <location link="base/python.hrc"/>
+    <filename>/\.(py|pyw|pys)$/i</filename>
+  </prototype>
+  <prototype name="ruby" group="main" description="Ruby">
+    <location link="base/ruby.hrc"/>
+    <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/Rakefile$/i</filename>
+    <firstline>/bin\/ruby/i</firstline>
+  </prototype>
+  <prototype name="tcltk" group="main" description="Tcl/Tk">
+    <location link="base/tcltk.hrc"/>
+    <filename>/\.(tcl|tk)$/i</filename>
+    <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
 
   <!--  inet languages  -->
@@ -511,8 +522,13 @@
     <location link="rare/baan.hrc"/>
     <filename>/\.cln$/i</filename>
   </prototype>
-  <prototype name="cobol" group="rare" description="Cobol">
+  <prototype name="cobol" group="rare" description="Cobol Fixed format">
     <location link="rare/cobol.hrc"/>
+    <filename>/\.(cob|cbl)$/i</filename>
+  </prototype>
+  <prototype name="cobolfr" group="rare" description="Cobol Free format">
+    <location link="rare/cobolfr.hrc"/>
+    <firstline>/SOURCEFORMAT\"FREE\"/i</firstline>
     <filename>/\.(cob|cbl)$/i</filename>
   </prototype>
   <prototype name="cache" group="rare" description="Cache/Open-M">
@@ -542,6 +558,10 @@
     <filename>/\.(mod|ob2|odf|def)$/i</filename>
     <firstline>/\(\*|MODULE|DEFINITION|IMPLEMENTATION|&lt;\*/</firstline>
   </prototype>
+  <prototype name="nesc" group="rare" description="nesC">
+    <location link="rare/nesc.hrc"/>
+    <filename>/\.nc$/i</filename>
+  </prototype>
   <prototype name="picasm" group="rare" description="PicAsm">
     <location link="rare/picasm.hrc"/>
     <filename>/\.(asm|pic)$/i</filename>
@@ -556,11 +576,6 @@
     <firstline>/(REM)\/\*/i</firstline>
     <firstline>/^# regina/i</firstline>
   </prototype>
-  <prototype name="ruby" group="rare" description="Ruby">
-    <location link="rare/ruby.hrc"/>
-    <filename>/\.(rb|rbw|ruby)$/i</filename>
-    <filename>/Rakefile$/i</filename>
-  </prototype>
   <prototype name="sml" group="rare" description="Standard ML">
     <location link="rare/sml.hrc"/>
     <filename>/\.(sml|sig)$/i</filename>
@@ -568,11 +583,6 @@
   <prototype name="ocaml" group="rare" description="OCaml">
     <location link="rare/ocaml.hrc"/>
     <filename>/\.(ml|mli|mlp)$/i</filename>
-  </prototype>
-  <prototype name="tcltk" group="rare" description="Tcl/Tk">
-    <location link="rare/tcltk.hrc"/>
-    <filename>/\.(tcl|tk)$/i</filename>
-    <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
   <prototype name="sicstusProlog" group="rare" description="Sicstus Prolog">
     <location link="rare/sprolog.hrc"/>

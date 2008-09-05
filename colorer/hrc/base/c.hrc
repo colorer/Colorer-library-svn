@@ -207,6 +207,11 @@
    <inherit scheme="asm:baseasm"/>
   </scheme>
 
+  <scheme name="GnuAsmCode">
+   <block start="/\(/" end="/\)/" scheme="GnuAsmCode" region00="def:PairStart" region10="def:PairEnd"/>
+   <inherit scheme="AsmCode"/>
+  </scheme>
+
   <scheme name="PragmaText">
    <block start="/\/\//" end="/$/" scheme="def:Comment" region="Comment"/>
    <block start="/\/\*/" end="/\*\//" scheme="def:Comment" region="Comment"
@@ -323,9 +328,13 @@
    <block start="/(\{)/" end="/(\})/" scheme="c"
           region00="SymbolStrong" region01="PairStart" region10="SymbolStrong" region11="PairEnd"/>
 
-   <!-- thanx to andrei somsikov for bug -->
+   <!-- Assembler -->
    <block start="/(\b_?_?asm)\s*?(\{|$)/" end="/(\})/" scheme="AsmCode"
           region01="AsmCode" region02="StructureSymbol" region10="StructureSymbol" region00="def:PairStart" region11="def:PairEnd"/>
+   <!-- Gnu Assembler -->
+   <block start="/\b (asm) \s* \( /ix"    end="/ \) /ix" scheme="GnuAsmCode"
+          region01="AsmCode" region00="def:PairStart" region10="def:PairEnd"/>
+   <!-- Inline Assembler ? -->
    <block start="/\b_?_?asm\b/" end="/$/" scheme="AsmCode" region00="AsmCode"/>
 
    <inherit scheme="Outlines"/>

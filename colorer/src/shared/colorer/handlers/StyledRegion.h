@@ -30,6 +30,7 @@ public:
 
   /** Common constructor */
   StyledRegion(bool _bfore, bool _bback, unsigned int _fore, unsigned int _back, unsigned int _style){
+    type = STYLED_REGION;
     bfore = _bfore;
     bback = _bback;
     fore = _fore;
@@ -39,6 +40,7 @@ public:
 
   /** Empty constructor */
   StyledRegion(){
+    type = STYLED_REGION;
     bfore = bback = false;
     fore = back = 0;
     style = 0;
@@ -56,10 +58,10 @@ public:
       StyledRegion class.
       @throw Exception If casing is not available.
   */
-  static const StyledRegion *cast(const RegionDefine *rd){
+  static const StyledRegion *cast(const RegionDefine *rd) {
     if (rd == null) return null;
+    if (rd->type != STYLED_REGION) throw Exception(DString("Bad type cast exception into StyledRegion"));
     const StyledRegion *sr = (const StyledRegion *)(rd);
-    if (sr == null) throw Exception(DString("Bad type cast exception into StyledRegion"));
     return sr;
   }
   /** Completes region define with it's parent values.
@@ -87,6 +89,7 @@ public:
     back  = rd->back;
     bback = rd->bback;
     style = rd->style;
+    type  = rd->type;
   }
 
   RegionDefine *clone() const {
