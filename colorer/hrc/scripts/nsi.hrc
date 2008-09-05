@@ -366,6 +366,9 @@
       <scheme name="nsiPageEx">
          <inherit scheme="nsiAttr"/>
          <!-- TODO: filter invalid attributes -->
+         <keywords ignorecase="yes" region="nsiWord">
+            <word name="PageCallbacks"/>
+         </keywords>
       </scheme>
 
 
@@ -405,6 +408,7 @@
             <word name="Page"/>
             <word name="PageEx"/>
             <word name="Section"/>
+            <word name="UninstPage"/>
          </keywords>
       </scheme>
 
