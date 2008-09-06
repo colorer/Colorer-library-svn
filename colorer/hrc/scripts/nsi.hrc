@@ -22,6 +22,7 @@
   * attributes and instructions are updated for NSIS v2.39
   * fixed outliner
   * added Var, Page and paired PageEx
+  * compiler commands and defines are updated
 2003/06/10  Artem
   + Colorer.take5.beta1
 2003/06/10  Artem
@@ -66,25 +67,40 @@
             <word name="Var"/>
          </keywords>
 
+         <!-- Compiler utility commands -->
          <keywords ignorecase="yes" region="nsiDir">
-            <!-- Compiler utility commands -->
-            <word name="!system"/>
             <word name="!include"/>
+            <word name="!addincludedir"/>
+            <word name="!addplugindir"/>
+            <word name="!appendfile"/>
             <word name="!cd"/>
+            <word name="!delfile"/>
+            <word name="!echo"/>
+            <word name="!error"/>
+            <word name="!execute"/>
             <word name="!packhdr"/>
-            <!-- Compiler defines/conditional compilation -->
+            <word name="!system"/>
+            <word name="!tempfile"/>
+            <word name="!warning"/>
+            <word name="!verbose"/>
+         </keywords>
+         <!-- Compiler defines/conditional compilation -->
+         <regexp match="/!else\s+if(def|ndef|macrodef|macrondef)?\b/" region="nsiDir"/>
+         <keywords ignorecase="yes" region="nsiDir">
             <word name="!define"/>
             <word name="!undef"/>
             <word name="!ifdef"/>
             <word name="!ifndef"/>
-            <word name="!endif"/>
+            <word name="!if"/>
+            <word name="!ifmacrodef"/>
+            <word name="!ifmacrondef"/>
             <word name="!else"/>
-            <word name="!else ifdef"/>
-            <word name="!else ifndef"/>
+            <word name="!endif"/>
+            <word name="!insertmacro"/>
             <word name="!macro"/>
             <word name="!macroend"/>
-            <word name="!insertmacro"/>
          </keywords>
+
          <!-- Compiler flags -->
          <keywords ignorecase="yes" region="nsiWord">
             <word name="AllowSkipFiles"/>
@@ -409,6 +425,8 @@
             <word name="PageEx"/>
             <word name="Section"/>
             <word name="UninstPage"/>
+            <word name="SectionGroup"/>
+            <word name="SectionGroupEnd"/>
          </keywords>
       </scheme>
 
