@@ -18,11 +18,8 @@
     * variables list is in NSIS Source\build.cpp on the top
 
 
-2008/09/05  techtonik
-  * attributes and instructions are updated for NSIS v2.39
-  * fixed outliner
-  * added Var, Page and paired PageEx
-  * compiler commands and defines are updated
+2008/09/09  techtonik
+  * syntax updated for NSIS v2.39
 2003/06/10  Artem
   + Colorer.take5.beta1
 2003/06/10  Artem
@@ -53,10 +50,18 @@
       <scheme name="nsiCore">
          <!-- Comments -->
          <regexp match="/\s*([;#].*$)/" region0="nsiComment"/>
+         <block start="/\/\*/" end="/\*\//" scheme="def:Comment" region="nsiComment" region00="PairStart" region10="PairEnd"/>
          <!-- Numbers -->
          <regexp match="/\b\d+\b/" region0="nsiNumber"/>
          <regexp match="/\b(0)+[0-8]+\b/" region0="nsiNumber"/>
          <regexp match="/\b(0x)+[\da-fA-F]+\b/" region0="nsiNumber"/>
+         <!-- Strings -->
+         <block start="/&#34;/" end="/(\$\\)?~2(&#34;)|[^\\]?#1\s*$/" scheme="nsiVars1"
+                region="nsiString" region00="PairStart" region12="PairEnd"/>
+         <block start="/'/" end="/(\$\\)?~2'|[^\\]?#1\s*$/" scheme="nsiVars1"
+                region="nsiString" region00="PairStart" region10="PairEnd"/>
+         <block start="/`/" end="/(\$\\)?~2`|[^\\]?#1\s*$/" scheme="nsiVars1"
+                region="nsiString" region00="PairStart" region10="PairEnd"/>
          <!-- Variables -->
          <regexp match="/\$[\d\w]+/" region="Var"/>
          <regexp match="/\$R?\d/" region0="Var"/>
@@ -117,7 +122,6 @@
       </scheme>
 
       <scheme name="nsiAttr">
-         <inherit scheme="nsiCore"/>
          <!-- Installer attributes -->
          <keywords ignorecase="yes" region="nsiWord">
             <!-- General installer configuration -->
@@ -388,7 +392,7 @@
       </scheme>
 
 
-      <scheme name="nsiSect">
+      <scheme name="nsiSection">
          <inherit scheme="nsiFS"/>
          <keywords ignorecase="yes" region="nsiWord">
             <word name="SectionIn"/>
@@ -401,32 +405,26 @@
          </keywords>
       </scheme>
 
+      <scheme name="nsiSectionGroup">
+         <block start="/^\s*(Section)\b/" end="/\b(SectionEnd)\b/" scheme="nsiSection" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
+         <inherit scheme="nsiCore"/>
+      </scheme>
+
       <scheme name="nsi">
          <!-- Outliner -->
          <regexp match="/\M^\s*(?{nsiOutline}(Function|Page(Ex)?|Section)\s+(\&#34;[^\&#34;]+\&#34;|[^\&#34;\s]+))/i"/>
          <!-- Paired -->
-         <block start="/^\s*(\!if[n]?def)\b/" end="/^\s*(\!endif)\b/" scheme="nsi" region00="nsiDir" region01="PairStart" region10="nsiDir" region11="PairEnd"/>
-         <block start="/^\s*(Function)\s+/" end="/\b(FunctionEnd)\b/" scheme="nsiFunc" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
-         <block start="/^\s*(PageEx)\s+/" end="/\b(PageExEnd)\b/" scheme="nsiPageEx" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
-         <block start="/^\s*(Section)\s+/" end="/\b(SectionEnd)\b/" scheme="nsiSect" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
-         <!-- Strings -->
-         <block start="/&#34;/" end="/(\$\\)?~2(&#34;)|[^\\]?#1\s*$/" scheme="nsiVars1"
-                region="nsiString" region00="PairStart" region12="PairEnd"/>
-         <block start="/'/" end="/'|[^\\]?#1\s*$/" scheme="nsiVars1"
-                region="nsiString" region00="PairStart" region10="PairEnd"/>
-         <block start="/`/" end="/`|[^\\]?#1\s*$/" scheme="nsiVars1"
-                region="nsiString" region00="PairStart" region10="PairEnd"/>
+         <block start="/^\s*(\!if(macro)?[n]?def)\b/" end="/^\s*(\!endif)\b/" scheme="nsi" region00="nsiDir" region01="PairStart" region10="nsiDir" region11="PairEnd"/>
+         <block start="/^\s*(\!macro)\b/" end="/^\s*(\!macroend)\b/" scheme="nsi" region00="nsiDir" region01="PairStart" region10="nsiDir" region11="PairEnd"/>
+         <block start="/^\s*(Function)\b/" end="/\b(FunctionEnd)\b/" scheme="nsiFunc" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
+         <block start="/^\s*(PageEx)\b/" end="/\b(PageExEnd)\b/" scheme="nsiPageEx" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
+         <block start="/^\s*(Section)\b/" end="/\b(SectionEnd)\b/" scheme="nsiSection" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
+         <block start="/^\s*(SectionGroup)\b/" end="/\b(SectionGroupEnd)\b/" scheme="nsiSectionGroup" region00="nsiWord" region01="PairStart" region10="nsiWord" region11="PairEnd"/>
          <inherit scheme="nsiCore"/>
          <inherit scheme="nsiAttr"/>
          <keywords ignorecase="yes" region="nsiWord">
             <!-- Keywords for incompletely entered paired constructions -->
-            <word name="Function"/>
-            <word name="Page"/>
-            <word name="PageEx"/>
-            <word name="Section"/>
             <word name="UninstPage"/>
-            <word name="SectionGroup"/>
-            <word name="SectionGroupEnd"/>
          </keywords>
       </scheme>
 
