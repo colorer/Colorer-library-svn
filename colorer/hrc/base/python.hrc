@@ -29,6 +29,7 @@
   <region name="pyNumberSuffix" parent="def:NumberSuffix"/>
   <region name="pyOperator" parent="def:Operator"/>
   <region name="pyDelimiter" parent="def:Symbol"/>
+  <region name="pyOutline" parent="def:Outlined"/>
 
 
   <scheme name="StringCommon"> <!-- common escapes for all types of Python strings -->
@@ -47,8 +48,8 @@
     <inherit scheme="StringCommon" />
   </scheme>
 
- 
-  <scheme name="python">
+
+  <scheme name="Keywords">
    <!-- python keywords : http://docs.python.org/ref/keywords.html -->
    <keywords ignorecase="no" region="pyKeyword">
     <word name="and"/>
@@ -83,6 +84,14 @@
     <word name="with"/>
     <word name="yield"/>
    </keywords>
+  </scheme>
+
+  <scheme name="python">
+   <!-- python outliner: class, def and __main__ -->
+   <regexp match="/\M(?{pyOutline}^\s*(class|def)\s+\w+)/" />
+   <regexp match="/\M(?{pyOutline}^if\s+__name__\s+==\s+\&#34;__main__\&#34;)/x"/>
+
+   <inherit scheme="Keywords"/>
 
    <!-- python operators : http://docs.python.org/ref/keywords.html -->
    <keywords region="pyOperator">
