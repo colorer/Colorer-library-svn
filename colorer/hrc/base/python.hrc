@@ -31,6 +31,7 @@
   <region name="pyDelimiter" parent="def:Symbol"/>
   <region name="pyOutline" parent="def:Outlined"/>
   <region name="pySpecialName" parent="def:ParameterStrong"/>
+  <region name="pyFunction" parent="def:FunctionKeyword"/>
 
 
   <scheme name="StringCommon"> <!-- common escapes for all types of Python strings -->
@@ -88,14 +89,144 @@
   </scheme>
 
 
+  <scheme name="Functions">
+    <keywords ignorecase="no" region="pyFunction">
+      <!-- built-in functions -->
+      <word name="__import__"/>
+      <word name="abs"/>
+      <word name="all"/>
+      <word name="any"/>
+      <word name="basestring"/>
+      <word name="bool"/>
+      <word name="callable"/>
+      <word name="chr"/>
+      <word name="classmethod"/>
+      <word name="cmp"/>
+      <word name="compile"/>
+      <word name="complex"/>
+      <word name="delattr"/>
+      <word name="dict"/>
+      <word name="dir"/>
+      <word name="divmod"/>
+      <word name="enumerate"/>
+      <word name="eval"/>
+      <word name="execfile"/>
+      <word name="file"/>
+      <word name="filter"/>
+      <word name="float"/>
+      <word name="frozenset"/>
+      <word name="getattr"/>
+      <word name="globals"/>
+      <word name="hasattr"/>
+      <word name="hash"/>
+      <word name="help"/>
+      <word name="hex"/>
+      <word name="id"/>
+      <word name="input"/>
+      <word name="int"/>
+      <word name="isinstance"/>
+      <word name="issubclass"/>
+      <word name="iter"/>
+      <word name="len"/>
+      <word name="list"/>
+      <word name="locals"/>
+      <word name="long"/>
+      <word name="map"/>
+      <word name="max"/>
+      <word name="min"/>
+      <word name="object"/>
+      <word name="oct"/>
+      <word name="open"/>
+      <word name="ord"/>
+      <word name="pow"/>
+      <word name="property"/>
+      <word name="range"/>
+      <word name="raw_input"/>
+      <word name="reduce"/>
+      <word name="reload"/>
+      <word name="repr"/>
+      <word name="reversed"/>
+      <word name="round"/>
+      <word name="set"/>
+      <word name="setattr"/>
+      <word name="slice"/>
+      <word name="sorted"/>
+      <word name="staticmethod"/>
+      <word name="str"/>
+      <word name="sum"/>
+      <word name="super"/>
+      <word name="tuple"/>
+      <word name="type"/>
+      <word name="unichr"/>
+      <word name="unicode"/>
+      <word name="vars"/>
+      <word name="xrange"/>
+      <word name="zip"/>
+    </keywords>
+  </scheme>
+
+
   <scheme name="SpecialNames">
-   <!-- python magic -->
    <keywords ignorecase="no" region="pySpecialName">
-     <!-- The standard type hierarchy : http://docs.python.org/ref/types.html -->
+     <!-- Built-in Constants : http://docs.python.org/lib/node8.html -->
+     <word name="False"/>
+     <word name="True"/>
      <word name="None"/>
      <word name="NotImplemented"/>
      <word name="Ellipsis"/>
-     <word name="None"/>
+     <!-- Built-in Exceptions: http://docs.python.org/lib/module-exceptions.html -->
+     <word name="BaseException"/>
+     <word name="SystemExit"/>
+     <word name="KeyboardInterrupt"/>
+     <word name="Exception"/>
+     <word name="GeneratorExit"/>
+     <word name="StopIteration"/>
+     <word name="StandardError"/>
+     <word name="ArithmeticError"/>
+     <word name="FloatingPointError"/>
+     <word name="OverflowError"/>
+     <word name="ZeroDivisionError"/>
+     <word name="AssertionError"/>
+     <word name="AttributeError"/>
+     <word name="EnvironmentError"/>
+     <word name="IOError"/>
+     <word name="OSError"/>
+     <word name="WindowsError"/>
+     <word name="VMSError"/>
+     <word name="EOFError"/>
+     <word name="ImportError"/>
+     <word name="LookupError"/>
+     <word name="IndexError"/>
+     <word name="KeyError"/>
+     <word name="MemoryError"/>
+     <word name="NameError"/>
+     <word name="UnboundLocalError"/>
+     <word name="ReferenceError"/>
+     <word name="RuntimeError"/>
+     <word name="NotImplementedError"/>
+     <word name="SyntaxError"/>
+     <word name="IndentationError"/>
+     <word name="TabError"/>
+     <word name="SystemError"/>
+     <word name="TypeError"/>
+     <word name="ValueError"/>
+     <word name="UnicodeError"/>
+     <word name="UnicodeDecodeError"/>
+     <word name="UnicodeEncodeError"/>
+     <word name="UnicodeTranslateError"/>
+     <word name="Warning"/>
+     <word name="DeprecationWarning"/>
+     <word name="PendingDeprecationWarning"/>
+     <word name="RuntimeWarning"/>
+     <word name="SyntaxWarning"/>
+     <word name="UserWarning"/>
+     <word name="FutureWarning"/>
+     <word name="ImportWarning"/>
+     <word name="UnicodeWarning"/>
+   </keywords>
+
+   <!-- python magic -->
+   <keywords ignorecase="no" region="pySpecialName">
      <!-- User-defined functions special attributes -->
      <word name="func_doc"/>
      <word name="__doc__"/>
@@ -224,6 +355,7 @@
 
    <inherit scheme="Keywords"/>
    <inherit scheme="SpecialNames"/>
+   <inherit scheme="Functions"/>
 
    <!-- encoding declaration : http://docs.python.org/ref/encodings.html
         todo - make it match only at file start -->
