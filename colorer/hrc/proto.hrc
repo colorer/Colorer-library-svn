@@ -411,6 +411,27 @@
       <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
     </parameters>
   </prototype>
+  
+  <prototype name="makefile" group="scripts" description="makefile">
+    <location link="scripts/makefile.hrc"/>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
+    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
+    <firstline>/^\!if/i</firstline-->
+    <firstline>/makefile/s</firstline>
+    <parameters>
+      <param name="gnu" value="true" description="use GNU make only"/>
+    </parameters>
+  </prototype>
+  <prototype name="qmake" group="scripts" description="Qt qmake">
+    <location link="scripts/qmake.hrc"/>
+    <filename>/\.pr[oif]$/i</filename>
+  </prototype>
+  
+  <prototype name="resources" group="scripts" description="Resources">
+    <location link="scripts/resrc.hrc"/>
+    <filename>/\.(rc|dlg)$/i</filename>
+  </prototype>
+  
   <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
     <location link="scripts/javacc.hrc"/>
     <filename>/\.(jjt?)$/i</filename>
@@ -432,20 +453,6 @@
     <filename>/\.y+$/i</filename>
   </prototype>
   
-  <prototype name="makefile" group="scripts" description="makefile">
-    <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
-    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
-    <firstline>/^\!if/i</firstline-->
-    <firstline>/makefile/s</firstline>
-    <parameters>
-      <param name="gnu" value="true" description="use GNU make only"/>
-    </parameters>
-  </prototype>
-  <prototype name="resources" group="scripts" description="Resources">
-    <location link="scripts/resrc.hrc"/>
-    <filename>/\.(rc|dlg)$/i</filename>
-  </prototype>
   <prototype name="rtf" group="scripts" description="RTF text">
     <location link="scripts/rtf.hrc"/>
     <filename>/\.rtf$/i</filename>
