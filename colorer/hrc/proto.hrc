@@ -412,6 +412,10 @@
     </parameters>
   </prototype>
   
+  
+  <package name="old-makefile" description="old makefile package">
+    <location link="scripts/makefile.old.hrc"/>
+  </package>
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
     <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
