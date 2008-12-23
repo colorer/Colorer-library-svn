@@ -402,12 +402,21 @@
      (?{ClassOutline} [\:\w_&~<>]+ )
      [\w_:<>\s]*? [^;] $/x
    ]]></regexp>
-<! - -   -->
+
    <regexp><![CDATA[
      /^ \M \s* (typedef\s+)? (struct) \s+
      (?{StructOutline} [\:\w_&~<>]+
      [\w_:<>\s]*? [^;] )($|\{)/x
-   ]]></regexp>
+   ]]></regexp>-->
+   
+  <regexp><![CDATA[
+    /^ \M \s*
+    (typedef\s+)?
+    (
+     (struct) \s+ (?{StructOutline} [\w_]+) | (?{StructOutline} struct )
+    )\s*;?!
+    ($|\{)/x
+  ]]></regexp>
 
    <inherit scheme="SharedOutlines"/>
   </scheme>
@@ -419,16 +428,37 @@
     </documentation>
    </annotation>
 
+   <!--
    <regexp><![CDATA[
      /^ \M \s* (typedef\s+)? (union) \s+
      (?{UnionOutline} [\:\w_&~<>]+ )
      [\w_:<>\s]*? [^;] ($|\{)/x
    ]]></regexp>
+   
    <regexp><![CDATA[
      /^ \M \s* (typedef\s+)? (enum) \s+
      (?{EnumOutline}  [\:\w_&~<>]+ )
      [\w_:<>\s]*? [^;] ($|\{)/x
-   ]]></regexp>
+   ]]></regexp>-->
+  <regexp><![CDATA[
+    /^ \M \s*
+    (typedef\s+)?
+    (
+     (union) \s+ (?{UnionOutline} [\w_]+) | (?{UnionOutline} union )
+    )\s*;?!
+    ($|\{)/x
+  ]]></regexp>
+ 
+  <regexp><![CDATA[
+    /^ \M \s*
+    (typedef\s+)?
+    (
+     (enum) \s+ (?{EnumOutline} [\w_]+) | (?{EnumOutline} enum )
+    )\s*;?!
+    ($|\{)/x
+  ]]></regexp>
+  
+   
   </scheme>
 
 
@@ -6672,7 +6702,7 @@
    -
    - The Initial Developer of the Original Code is
    - Cail Lomecb <cail@nm.ru>.
-   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - Portions created by the Initial Developer are Copyright (C) 1999-2008
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
