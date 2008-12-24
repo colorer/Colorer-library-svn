@@ -135,6 +135,7 @@
   regexp match="/^\s*(private|protected|public)(:)/"
    region1="c:KeywordANSI" region2="c:Label"
   /-->
+  <inherit scheme="cpp-qt-label"/>
 
   <keywords region="c:KeywordANSI">
    <word name="and"/>
@@ -186,9 +187,21 @@
   <inherit scheme="c:Expression">
    <virtual scheme="c:Expression" subst-scheme="Expression"/>
   </inherit>
-
+  <inherit scheme="cpp-qt"/>
+  
   <inherit scheme="Keywords-STL"/>
  </scheme>
+ 
+ <scheme name="cpp-qt" if='qt-defines'>
+  <inherit scheme="cpp-qt:Expression"/>
+ </scheme>
+ 
+ <scheme name="cpp-qt-label" if='qt-defines'>
+  <inherit scheme="cpp-qt:Labels"/>
+ </scheme>
+ 
+ 
+ 
 
  <scheme name="AFX-block" if="afx-defines">
   <!-- paired block -->

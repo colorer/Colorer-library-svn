@@ -37,6 +37,7 @@
     <firstline>/\#include/</firstline>
     <firstline>/\#define|\#if/</firstline>
     <parameters>
+      <param name="qt-defines" value="true" description="Use QT specific keywords"/>
       <param name="stl-defines" value="true" description="Use STL specific keywords"/>
       <param name="afx-defines" value="true" description="Highlight MFC autogenerateg block"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
@@ -44,6 +45,10 @@
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
     </parameters>
   </prototype>
+  <package name="cpp-qt" description="C++ + Qt">
+   <location link="base/cpp-qt.hrc"/>
+  </package>
+  
   <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
     <filename>/\.(mac|asm|inc|i32)$/i</filename>
@@ -240,7 +245,7 @@
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml|gi2|gpr)$/i</filename>
+    <filename>/\.(xml|gi2|gpr|ui)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
   </prototype>
