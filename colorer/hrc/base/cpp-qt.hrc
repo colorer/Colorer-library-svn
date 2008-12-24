@@ -15,7 +15,7 @@
 </annotation>
 
 <region name="declare" parent="def:Directive"/>
-<region name="declare-strong" parent="def:Label"/>
+<region name="declare-content" parent="def:Text"/>
 <region name="class" parent="c:KeywordStructure"/>
 <region name="glob-fun" parent="c:KeywordLibFunctions"/>
 
@@ -45,7 +45,50 @@
 	<inherit scheme="Globals"/>
 </scheme>
 
+
+<scheme name="qProp">
+	<keywords region='def:Error'>
+		<symb name=','/>
+		<symb name=';'/>
+	</keywords>
+	
+	<keywords region='c:KeywordANSI'>
+		<word name='READ'/>
+		<word name='WRITE'/>
+		<word name='RESET'/>
+		<word name='DESIGNABLE'/>
+		<word name='SCRIPTABLE'/>
+		<word name='STORED'/>
+		<word name='USER'/>
+		
+		<word name='true'/>
+		<word name='false'/>
+		<word name='bool'/>
+	</keywords>
+	
+	<inherit scheme="Classes"/>
+	<inherit scheme="c:Expression"/>
+</scheme>
+
+<scheme name="qDecl">
+	<regexp match="/[^\w\s]/" region="def:Error" priority="low"/>
+</scheme>
+
 <scheme name="Declares">
+	<block start="/\b(Q_PROPERTY)\s*((\())/" end="/(\))/"
+		scheme="qProp" region="declare-content"
+		region00="def:Symbol" region10="def:Symbol"
+		region02="def:PairStart" region11="def:PairEnd"
+		region01="declare"
+	/>
+	<block start="/\b(Q_(ENUM|FLAG|INTERFACE)S)\s*((\())/" end="/(\))/"
+		scheme="qProp" region="declare-content"
+		region00="def:Symbol" region10="def:Symbol"
+		region03="def:PairStart" region11="def:PairEnd"
+		region01="declare"
+	/>
+	
+	
 	<keywords region="declare">
 		<!-- QObject -->
 		<word name="Q_OBJECT" /> <!-- region="declare-strong" -->
@@ -54,7 +97,7 @@
 		<word name="Q_ENUMS"/>
 		<word name="Q_FLAGS"/>
 		<word name="Q_INTERFACES"/>
-		<word name="Q_PROPERTY"/> <!-- todo: READ/WRITE etc -->
+		<word name="Q_PROPERTY"/> 
 		<!-- plugins -->
 		<word name="Q_DECLARE_INTERFACE"/> <!-- todo: iface string -->
 		<word name="Q_EXPORT_PLUGIN2"/>
@@ -68,6 +111,7 @@
 		<word name="tr"/>
 		<word name="arg"/>
 		
+		<word name='qFindChildren'/>
 		<word name='qAbs'/>
 		<word name='qBound'/>
 		<word name='qCritical'/>
@@ -100,6 +144,10 @@
 		<word name="Q_SIGNALS"/>
 		<word name="Q_SLOTS"/>
 		<word name="Q_EMIT"/>
+		
+		<!-- QDir -->
+		<word name="Q_CLEANUP_RESOURCE"/>
+		<word name="Q_INIT_RESOURCE"/>
 		
 		<!-- QtGlobal -->
 		<word name='Q_ASSERT'/>

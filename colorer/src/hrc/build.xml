@@ -149,6 +149,11 @@
    <property name="this" value="${this}/xsieve"/>
    <property name="bin" value="${root}/hrc/auto/gen"/>
  </ant>
+ 
+ <ant dir="qrc" antfile="build.xml" target="${target}">
+   <property name="this" value="${this}/qrc"/>
+   <property name="bin" value="${root}/hrc/auto/gen"/>
+ </ant>
 
 </target>
 

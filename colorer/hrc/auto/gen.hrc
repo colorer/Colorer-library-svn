@@ -65,7 +65,7 @@
     <location link="gen/htc.hrc"/>
     <filename weight='3'>/\.(htc)$/i</filename>
   </prototype>
-  <prototype name="xbl" group="inet" description="Mozilla XBL">
+  <prototype name="xbl" group="inet" description="Mozilla XBL" targetNamespace="http://www.mozilla.org/xbl">
     <location link="gen/xbl.hrc"/>
     <filename>/\.(xml)/i</filename>
     <firstline weight="5">/\bxmlns\s*=\s*(["'])http:\/\/www\.mozilla\.org\/xbl\1/</firstline>
@@ -87,6 +87,10 @@
     <filename>/\.(xsl)$/i</filename>
     <firstline weight='5'>/\bxmlns:s\s*=\s*(["'])http:\/\/xsieve\.sourceforge\.net\1/</firstline>
   </prototype>  
+  <prototype name="qrc" group="scripts" description="qrc">
+    <location link="gen/qrc.hrc"/>
+    <filename>/\.qrc$/ix</filename>
+  </prototype>
   
 
 </hrc>

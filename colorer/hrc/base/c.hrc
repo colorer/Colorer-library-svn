@@ -251,7 +251,8 @@
            region0="String" region1="def:PairStart" region2="def:PairEnd"/-->
    <inherit scheme="String"/>
    <inherit scheme="Character"/>
-   <block start="/\b pragma \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
+   <block start="/\b pragma | error \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
+   
    <regexp match="/~ \s* \M define \s+ ([\w_]+) /x" region1="DefineOutline"/>
    <regexp match="/~ \s* \M include \s* ([\w_&lt;&gt;\x22\x27\\\/\.]+) /x" region1="IncludeOutline"/>
    <!-- can make bugs
