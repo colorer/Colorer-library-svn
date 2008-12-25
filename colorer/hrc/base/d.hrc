@@ -13,6 +13,13 @@
 		Eugene Efremov <4mirror@mail.ru>
 		Vladimir Panteleev <thecybershadow@gmail.com>
 	]]></contributors>
+	<appinfo><todo>
+		- Fix delegate outlines (how?)
+		- Check phobos keywords for correctly
+		- DDOC comments support
+		- D 2.0 syntax support
+		- Optional win32 keywords from c.hrc (it's need?)
+	</todo></appinfo>
 </annotation>
 
 <region name='comment' parent='def:Comment'/>
@@ -371,15 +378,6 @@
 		<word name='alias'/>
 		
 		<!-- type class -->
-		
-		<word name='typedef'/>
-		<word name='struct'/>
-		<word name='union'/>
-		<word name='class'/>
-		<word name='interface'/>
-		<word name='enum'/>
-		<word name='function'/>
-		<word name='delegate'/>
 	</keywords>
 	
 	<keywords region='symb'>
@@ -401,6 +399,18 @@
 			region1='symb' region2='def:PairEnd'
 		/>
 	</block>
+	
+	<keywords region='key.type'>
+		<word name='typedef'/>
+		<word name='struct'/>
+		<word name='union'/>
+		<word name='class'/>
+		<word name='interface'/>
+		<word name='enum'/>
+		<word name='function'/>
+		<word name='delegate'/>
+		<word name='return'/>
+	</keywords>
 </scheme>
 
 
@@ -689,10 +699,11 @@
 </scheme> 
 
 <scheme name='decl.fun'>
-	<regexp match='/\M(?{fun.out}%id;(\s*\([^\);]*?\)){1,2})[^;]*$/'/>
+	<!-- bug: with delegates it's work incorrect -->
+	<regexp match='/\M(?{fun.out}%id;(\s*\([^\);]*?\)){1,2})[^;]*($|\{)/'/>
 	
 	<block scheme='tpl.fun.proxy'>
-		<start match='/\M%id;\s*\([^\(\);]*?\)\s*\([^\);]*?\)[^;]*$/'/>
+		<start match='/\M%id;\s*\([^\(\);]*?\)\s*\([^\);]*?\)[^;]*($|\{)/'/>
 		<end match='/\)?#1/'/>
 	</block>   
 	
