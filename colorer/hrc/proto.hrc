@@ -48,6 +48,14 @@
   <package name="cpp-qt" description="C++ + Qt">
    <location link="base/cpp-qt.hrc"/>
   </package>
+  <prototype name="d" group="main" description="D">
+    <location link="base/d.hrc"/>
+    <filename>/\.d$/i</filename>
+    <parameters>
+      <param name="format-str" value="true" description="Highlight printf-like %format in strnigs"/>
+      <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
+    </parameters>
+  </prototype>
   
   <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
@@ -517,10 +525,6 @@
     <location link="rare/awk.hrc"/>
     <filename>/\.awk$/i</filename>
     <firstline>/^# gawk/i</firstline>
-  </prototype>
-  <prototype name="d" group="rare" description="D">
-    <location link="rare/d.hrc"/>
-    <filename>/\.d$/i</filename>
   </prototype>
   
   <!--  !! you may wish to swap next two types

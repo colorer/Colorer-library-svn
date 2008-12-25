@@ -218,6 +218,7 @@
           region00="def:PairStart" region10="def:PairEnd"/>
    <regexp match="/&#34;(\\.|[^\\&#34;])*?&#34;/" region="String"/>
   </scheme>
+  
 
   <scheme name="Character">
    <regexp match="/[Ll]?'(\\\D | \\[0-7]{1,3} | \\x[\da-fA-F]{2} | [^\\']){1,4}'/x" region="Character"/>
@@ -239,6 +240,18 @@
    <regexp match="/[^\\\&#34;]$/" region="def:Error"/>
    <inherit scheme="TabsAsErrors"/>
   </scheme>
+  
+  <scheme name="PreprocLine">
+   <block start='/line\s+(\d+)\s+(("))/' end='/(")/'
+    scheme="def:Path" region="PreprocInclude" 
+    region00="PreprocWord" region01="def:Number"
+    region02="PreprocIncludeEdge" region10="PreprocIncludeEdge"
+    region03="def:PairStart" region11="def:PairEnd"
+   /> 
+   <regexp match='/line\s+(\d+)/' 
+    region0="PreprocWord" region1="def:Number"
+   />
+  </scheme>
 
   <scheme name="Preproc">
    <block start="/\/\//" end="/$/" scheme="def:Comment" region="LineComment"/>
@@ -252,6 +265,7 @@
    <inherit scheme="String"/>
    <inherit scheme="Character"/>
    <block start="/\b pragma | error \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
+   <inherit scheme="PreprocLine"/>
    
    <regexp match="/~ \s* \M define \s+ ([\w_]+) /x" region1="DefineOutline"/>
    <regexp match="/~ \s* \M include \s* ([\w_&lt;&gt;\x22\x27\\\/\.]+) /x" region1="IncludeOutline"/>
