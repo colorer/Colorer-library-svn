@@ -102,14 +102,19 @@
       </inherit>
     </scheme>
 
-    <scheme name="php">
-      <inherit scheme="def:unixCommentDirective"/>
+    <scheme name="php.lang">
       <inherit scheme="asp:html">
         <virtual scheme="asp:InverseInsertion" subst-scheme="InverseInsertion"/>
         <virtual scheme="asp:Insertion" subst-scheme="Insertion"/>
         <virtual scheme="asp:targetLanguage" subst-scheme="phpScript"/>
         <virtual scheme="asp:html" subst-scheme="html"/>
       </inherit>
+    </scheme>
+
+    <scheme name='php'>
+    	<inherit scheme='def:unixCommentFirstline'>
+    		<virtual scheme="def:def" subst-scheme="php.lang"/>
+    	</inherit>
     </scheme>
 
     
