@@ -11,6 +11,7 @@
 		D syntax description
 	</documentation><contributors><![CDATA[
 		Eugene Efremov <4mirror@mail.ru>
+		Vladimir Panteleev <thecybershadow@gmail.com>
 	]]></contributors>
 </annotation>
 
@@ -44,6 +45,7 @@
 <region name='key.lib.const' parent='def:Constant'/>
 <region name='key.lib.type' parent='def:ClassKeyword'/>
 <region name='key.lib.fun' parent='def:FunctionKeyword'/>
+<region name='key.fun.main' parent='key.lib.fun'/>
 
 <region name='decl.module' parent='def:Directive'/>
 <region name='decl' parent='def:Directive'/>
@@ -750,6 +752,13 @@
 		<word name='opSlice'/>
 		<word name='opSliceAssign'/>
 	</keywords>
+	
+	<!-- from Vladimir Panteleev's d.hrc -->
+	<keywords region='key.fun.main'>
+		<word name="main"/>
+		<word name="WinMain"/>
+		<word name="DllMain"/>
+	</keywords>
 </scheme> 
 
 
@@ -821,11 +830,8 @@
 	</keywords>
 	
 	
-	
-	
 	<regexp match='/%id;\s*(:)/' region0='label' region1='label.mark'/>
 </scheme>
-
 
 
 <scheme name='d.decldef'>
@@ -838,6 +844,7 @@
 	<!--inherit scheme='tpl'/-->
 	<inherit scheme='tpl'/>
 	<inherit scheme='decl.fun'/>
+	
 	
 	<!--
 	
@@ -1014,7 +1021,6 @@
 <scheme name='keys.custom'>
 	<inherit scheme='d.property'/>
 	<keywords region='key.lib.fun'>
-		<word name='main'/>
 		<word name='print'/>
 		<word name='toString'/>
 		<word name='toHash'/>
@@ -1681,6 +1687,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   - Vladimir Panteleev <thecybershadow@gmail.com>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or
