@@ -392,7 +392,7 @@
 		/>
 	</block>
 	<block scheme='d.expr'>
-		<start match='/\b(function|delegate)\s*((\())/' 
+		<start match='/\b(function|delegate|typeof)\s*((\())/' 
 			region1='key' region2='symb' region3='def:PairStart'
 		/>
 		<end match='/((\)))/' 
@@ -700,7 +700,7 @@
 
 <scheme name='decl.fun'>
 	<!-- bug: with delegates it's work incorrect -->
-	<regexp match='/\M(?{fun.out}%id;(\s*\([^\);]*?\)){1,2})[^;]*($|\{)/'/>
+	<regexp match='/\M(?{fun.out}(\bout\b)?!%id;(\s*\([^\);]*?\)){1,2})[^;]*($|\{)/'/>
 	
 	<block scheme='tpl.fun.proxy'>
 		<start match='/\M%id;\s*\([^\(\);]*?\)\s*\([^\);]*?\)[^;]*($|\{)/'/>
