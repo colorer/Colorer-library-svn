@@ -23,7 +23,7 @@
      - change regions routing
      - add labels
      - preproc: fix #include and add #if((n)def)-#endif pairs
-     - move win32 & goxygen to separate files
+     - move win32 & doxygen to separate files
     Mike Gorchak <mike@malva.ua>
      - updated functions according to OpenGL 1.5, GLU 1.3, GLX 1.4
   ]]></contributors>
@@ -77,15 +77,15 @@
   <region name="IncludeOutline" parent="def:Outlined"/>
 
   <scheme name="doxygen">
-   <inherit scheme="goxygen:doc-comment"/>
+   <inherit scheme="doxygen:doc-comment"/>
    <inherit scheme="TabsAsErrors"/>
    <inherit scheme="SpacesAsErrors"/>
   </scheme>
 
   <scheme name="doxygen-comments" if="doxygen-comments">
    <!-- Doxygen Comments -->
-   <inherit scheme="goxygen:goxygen">
-    <virtual scheme="goxygen:doc-comment" subst-scheme="doxygen"/>
+   <inherit scheme="doxygen:doxygen">
+    <virtual scheme="doxygen:doc-comment" subst-scheme="doxygen"/>
    </inherit>
   </scheme>
   

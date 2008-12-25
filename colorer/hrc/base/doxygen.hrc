@@ -5,15 +5,16 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
- <type name="goxygen">
+ <type name="doxygen">
   <annotation><documentation>
     Doxygen documentation system
   </documentation><contributors><![CDATA[
-    Vladimir Tarasov <tsoftgroup@chat.ru>
-    Timur Safin <timur@lanit.ru>
-    cail: split into two schemes: c and cpp
-    Stanislav V. Mekhanoshin <stas@titania.spb.su>
-    Eugene Efremov <4mirror@mail.ru>:
+    c.hrc contributors, before split:
+     Vladimir Tarasov <tsoftgroup@chat.ru>
+     Timur Safin <timur@lanit.ru>
+     cail: split into two schemes: c and cpp
+     Stanislav V. Mekhanoshin <stas@titania.spb.su>
+     Eugene Efremov <4mirror@mail.ru>:
   ]]></contributors>
   </annotation>
 
@@ -132,7 +133,7 @@
   </scheme>
 
   
-  <scheme name='goxygen'>
+  <scheme name='doxygen'>
    <!-- Doxygen Comments -->
    <regexp match="/\/\*\*\//" region="def:CommentDoc"/>
    <block start="/\/\/\//" end="/$/" scheme="doc-comment" region="def:CommentDoc"/>
