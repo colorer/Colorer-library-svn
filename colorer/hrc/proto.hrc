@@ -48,9 +48,6 @@
   <package name="cpp-qt" description="C++ + Qt">
    <location link="base/cpp-qt.hrc"/>
   </package>
-  <package name="doxygen" description="Doxygen">
-   <location link="base/doxygen.hrc"/>
-  </package>
   <prototype name="d" group="main" description="D">
     <location link="base/d.hrc"/>
     <filename>/\.d$/i</filename>
@@ -698,6 +695,9 @@
   </package>
   <package name="msg" description="message package">
     <location link="lib/message.hrc"/>
+  </package>
+  <package name="doxygen" description="Doxygen">
+   <location link="lib/doxygen.hrc"/>
   </package>
 
 </hrc>
