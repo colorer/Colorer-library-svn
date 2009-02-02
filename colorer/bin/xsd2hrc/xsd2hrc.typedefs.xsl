@@ -147,7 +147,9 @@
         <inherit scheme="{$anonymous}elementContent">
           <xsl:if test="self::xs:complexType and not(xs:simpleContent)">
             <virtual scheme="xml:element"  subst-scheme="{$typename}-content"/>
-            <!--xsl:choose>  broken in hrc.xsd
+            <!-- broken in hrc.xsd -->
+            <xsl:choose>  
+               <!--
               <xsl:when test="not( xs:complexContent/@mixed and (
                                    string(xs:complexContent/@mixed) = 'true'
                                    or string(xs:complexContent/@mixed) = '1')
@@ -155,9 +157,12 @@
                                    not(xs:complexContent/@mixed) and
                                    (string(@mixed) = 'true' or string(@mixed) = '1')
                               )">
+                              -->
+                              <!-- TODO: must be completly re-writen: we cannot detect error in 'xs:complexContent' -->
+              <xsl:when test="not(xs:complexContent or (string(@mixed) = 'true' or string(@mixed) = '1'))">
                 <virtual scheme="xml:content.cdata" subst-scheme="xml:badChar"/>
               </xsl:when>
-            </xsl:choose-->
+            </xsl:choose>
           </xsl:if>
           <!-- Allows to parse simpleType content in CDATA sections content -->
           <xsl:if test="self::xs:simpleType or xs:simpleContent or xs:complexContent">
