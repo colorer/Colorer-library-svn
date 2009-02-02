@@ -166,7 +166,7 @@
            region0="String" region1="def:PairStart" region2="def:PairEnd"/-->
    <inherit scheme="String"/>
    <inherit scheme="Character"/>
-   <block start="/\b pragma | error \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
+   <block start="/~ \s* (pragma | error) \s/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
    <inherit scheme="PreprocLine"/>
    
    <regexp match="/~ \s* \M define \s+ ([\w_]+) /x" region1="DefineOutline"/>
