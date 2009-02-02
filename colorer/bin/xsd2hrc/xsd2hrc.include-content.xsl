@@ -76,7 +76,7 @@
     </regexp>
   </xsl:template>
 
-  <xsl:template match="xs:simpleType/xs:restriction" mode="include-content">
+  <xsl:template match="xs:simpleType/xs:restriction | xs:simpleContent/xs:restriction" mode="include-content">
     <xsl:apply-templates mode="include-content"/>
     <xsl:if test="not(xs:enumeration | xs:pattern)">
       <inherit>
