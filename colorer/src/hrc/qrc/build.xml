@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="src.xbl" default="all" basedir=".">
+<project name="src.qrc" default="all" basedir=".">
 
 <property name="root" value="../../.." description="colorer root location"/>
 
