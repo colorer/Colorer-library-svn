@@ -19,7 +19,7 @@
 	<target type='svg' place='hrc/inet'/>
 	<target type='webapp' place='hrc/auto/gen'/>
 	<target type='wsc' place='hrc/auto/gen'/>
-	<target type='colorer' place='hrc/scripts'/>
+	<target type='colorer' place='hrc/scripts/colorer'/>
 	<target type='calcset' place='hrc/auto/gen/'/>
 	<target type='esc' place='hrc/auto/gen/'/>
 	<target type='rdf' place='hrc/auto/gen'/>

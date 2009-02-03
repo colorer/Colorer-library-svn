@@ -154,7 +154,7 @@
 
 <target name="clean">
 	<delete failonerror='false'>
-		<fileset dir="${bin}" includes="hrc.hrc, hrd.hrc"/>
+		<fileset dir="${bin}" includes="hrc.hrc, hrd.hrc, ent.hrc.hrc"/>
 		<fileset dir="${bin.extra}" includes="xsd2hrc.custom.hrc, bkt.hrc, colorer5catalog.hrc"/>
 		<fileset dir="${obj}" includes="*.*"/>
 	</delete>
