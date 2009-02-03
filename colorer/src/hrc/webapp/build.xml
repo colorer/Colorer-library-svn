@@ -13,12 +13,53 @@
 
 
 
+<!-- hrc util -->
+
+<target name="hrc.prop">
+	<property name="jsrc" value="define me!"/>
+	<property name="ver" value="0"/>
+	<property name="hrctype" value="web-app.2.${ver}"/>
+</target>
+
+<target name="hrc.check" depends="hrc.prop">
+ <dependset>
+  <srcfilelist dir="." files = "build.xml"/>
+  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
+  <srcfileset dir="${jsrc}" includes = "*.xsd"/>
+  <targetfilelist dir="${bin}" files="${hrctype}.hrc"/>
+ </dependset>
+</target>
+
+<target name="hrc" depends="hrc.check, hrc.prop">
+ <ant antfile="${util}" target="xsd2hrc">
+   <property name="util.input" value="${jsrc}/web-app_2_${ver}.xsd"/>
+   <property name="util.output" value="${bin}/${hrctype}.hrc"/>
+   <property name='xsd2hrc.hrctype' value='${hrctype}'/>
+   <property name='xsd2hrc.top-level-element' value='web-app'/>
+   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
+ </ant>
+</target>
+
+
+<target name="hrc.taglib" depends="hrc.check, hrc.prop">
+ <ant antfile="${util}" target="xsd2hrc">
+   <property name="util.input" value="${jsrc}/taglib.xsd"/>
+   <property name="util.output" value="${bin}/${hrctype}.hrc"/>
+   <property name='xsd2hrc.hrctype' value='${hrctype}'/>
+   <property name='xsd2hrc.top-level-element' value='taglib'/>
+   <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
+   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
+ </ant>
+</target>
+
+
+
 <!-- version 2.3 -->
 
 <!-- generate xsd from dtd -->
 
 <target name="23.xsd.check">
- <uptodate property="23.xsd.check" targetfile="${obj}/web-app.xsd">
+ <uptodate property="23.xsd.check" targetfile="${obj}/web-app_2_3.xsd">
   <srcfiles dir="${src}" includes="web-app_2_3.dtd, web-jsptaglibrary_1_2.dtd"/>
  </uptodate>
 </target>
@@ -27,7 +68,7 @@
  <mkdir dir="${obj}"/>
  <ant antfile="${util}" target="dtd2xsd">
   <property name="util.input" value="${src}/web-app_2_3.dtd"/>
-  <property name="util.output" value="${obj}/web-app.xsd"/>
+  <property name="util.output" value="${obj}/web-app_2_3.xsd"/>
   <property name="dtd2xsd.alias" value="yes"/>
   <property name="dtd2xsd.skipxmlattr" value="yes"/>
   <property name="dtd2xsd.pre" value="wa"/>
@@ -43,78 +84,37 @@
  </ant>
 </target>
 
+<!-- generate hrc from xsd -->
 
-<!-- hrc -->
-
-<target name="23.hrc.check">
- <dependset>
-  <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
-  <srcfileset dir="${obj}" includes = "*.xsd"/>
-  <targetfilelist dir="${bin}" files="web-app.2.3.hrc, taglib.hrc"/>
- </dependset>
-</target>
-
-<target name="23.hrc" depends="23.xsd, 23.hrc.check">
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${obj}/web-app.xsd"/>
-   <property name="util.output" value="${bin}/web-app.2.3.hrc"/>
-   <property name='xsd2hrc.hrctype' value='web-app.2.3'/>
-   <property name='xsd2hrc.top-level-element' value='web-app'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
- </ant>
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${obj}/taglib.xsd"/>
-   <property name="util.output" value="${bin}/taglib.hrc"/>
-   <property name='xsd2hrc.hrctype' value='taglib'/>
-   <property name='xsd2hrc.top-level-element' value='taglib'/>
-   <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
- </ant>
+<target name="23.hrc" depends="23.xsd">
+	<ant target="hrc">
+		<property name="jsrc" value="${obj}"/>
+		<property name="ver" value="3"/>
+	</ant>
+	<ant target="hrc.taglib">
+		<property name="jsrc" value="${obj}"/>
+		<property name="hrctype" value="taglib"/>
+	</ant>
 </target>
 
 
 <!-- version 2.4 -->
 
-<target name="24.hrc.check">
- <dependset>
-  <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
-  <srcfileset dir="${src}/j2ee" includes = "*.xsd"/>
-  <targetfilelist dir="${bin}" files="web-app.2.4.hrc"/>
- </dependset>
-</target>
-
-<target name="24.hrc" depends="24.hrc.check">
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${src}/j2ee/web-app_2_4.xsd"/>
-   <property name="util.output" value="${bin}/web-app.2.4.hrc"/>
-   <property name='xsd2hrc.hrctype' value='web-app.2.4'/>
-   <property name='xsd2hrc.top-level-element' value='web-app'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
- </ant>
+<target name="24.hrc">
+	<ant target="hrc">
+		<property name="jsrc" value="${src}/j2ee"/>
+		<property name="ver" value="4"/>
+	</ant>
 </target>
 
 
-<!-- version 2.4 -->
+<!-- version 2.5 -->
 
-<target name="25.hrc.check">
- <dependset>
-  <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
-  <srcfileset dir="${src}/javaee" includes = "*.xsd"/>
-  <targetfilelist dir="${bin}" files="web-app.2.5.hrc"/>
- </dependset>
-</target>
-
-<target name="25.hrc" depends="25.hrc.check">
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${src}/javaee/web-app_2_5.xsd"/>
-   <property name="util.output" value="${bin}/web-app.2.5.hrc"/>
-   <property name='xsd2hrc.hrctype' value='web-app.2.5'/>
-   <property name='xsd2hrc.top-level-element' value='web-app'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
- </ant>
+<target name="25.hrc">
+	<ant target="hrc">
+		<property name="jsrc" value="${src}/javaee"/>
+		<property name="ver" value="5"/>
+	</ant>
 </target>
 
 
