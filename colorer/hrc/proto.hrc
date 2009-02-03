@@ -404,8 +404,9 @@
   </prototype>
   <prototype name="xsd2hrc.custom" group="scripts.colorer" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
     <location link="scripts/xsd2hrc.custom.hrc"/>
-    <filename>/custom\..*?\.xml$/ix</filename>
+    <filename weight='2'>/custom\..*?\.xml$/ix</filename>
     <firstline weight='5'>/uri:colorer:custom/s</firstline>
+    <firstline weight='3'>/&lt;!DOCTYPE custom\b/s</firstline>
   </prototype>
 
 

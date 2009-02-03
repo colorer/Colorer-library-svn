@@ -49,7 +49,7 @@
 <target name="23.hrc.check">
  <dependset>
   <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.webapp.xml"/>
+  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
   <srcfileset dir="${obj}" includes = "*.xsd"/>
   <targetfilelist dir="${bin}" files="web-app.2.3.hrc, taglib.hrc"/>
  </dependset>
@@ -73,14 +73,13 @@
  </ant>
 </target>
 
-<!-- final -->
 
-<!-- version 2.3 -->
+<!-- version 2.4 -->
 
 <target name="24.hrc.check">
  <dependset>
   <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.webapp.xml"/>
+  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
   <srcfileset dir="${src}/j2ee" includes = "*.xsd"/>
   <targetfilelist dir="${bin}" files="web-app.2.4.hrc"/>
  </dependset>
@@ -97,12 +96,36 @@
 </target>
 
 
-<target name="all" depends="23.hrc,24.hrc"/>
+<!-- version 2.4 -->
+
+<target name="25.hrc.check">
+ <dependset>
+  <srcfilelist dir="." files = "build.xml"/>
+  <srcfilelist dir="${src}" files = "custom.webapp.xml,webapp.ent.xml,webapp.ent.hrc"/>
+  <srcfileset dir="${src}/javaee" includes = "*.xsd"/>
+  <targetfilelist dir="${bin}" files="web-app.2.5.hrc"/>
+ </dependset>
+</target>
+
+<target name="25.hrc" depends="25.hrc.check">
+ <ant antfile="${util}" target="xsd2hrc">
+   <property name="util.input" value="${src}/javaee/web-app_2_5.xsd"/>
+   <property name="util.output" value="${bin}/web-app.2.5.hrc"/>
+   <property name='xsd2hrc.hrctype' value='web-app.2.5'/>
+   <property name='xsd2hrc.top-level-element' value='web-app'/>
+   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.webapp.xml'/>
+ </ant>
+</target>
+
+
+<!-- final -->
+
+<target name="all" depends="23.hrc,24.hrc,25.hrc"/>
 
 <target name="clean">
  <delete failonerror='false'>
   <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="taglib.hrc, web-app.hrc"/>
+  <fileset dir="${bin}" includes="taglib.hrc, web-app.2.?.hrc"/>
  </delete>
 </target>
 

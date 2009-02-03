@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
-
+<!DOCTYPE custom [
+    <!ENTITY hrc SYSTEM "webapp.ent.hrc">
+    <!ENTITY cst SYSTEM "webapp.ent.xml">
+]>
 <custom xmlns="uri:colorer:custom">
 
 <custom-type targetNamespace='http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd'>
@@ -7,45 +10,38 @@
 	<empty-prefix/>
 </custom-type>
 
+
 <custom-type targetNamespace='http://java.sun.com/dtd/web-app_2_3.dtd'>
 	<prefix>wa</prefix>
-	<empty-prefix/>
+	&cst;
 </custom-type>
+
 
 <custom-type targetNamespace="http://java.sun.com/xml/ns/j2ee">
 	<prefix>j2ee</prefix>
-	<empty-prefix/>
+	&cst;
 	
 	<type xmlns="http://colorer.sf.net/2003/hrc">
-		<scheme name="java-identifierType-content">
-		<!--
-    Warning: RE pattern used. Possible compatibility faults
-    Original RE: ($|_|\p{L})(\p{L}|\p{Nd}|_|$)*
-    <regexp region="Enumeration" priority="low" match="/($|_|{L})({L}|{Nd}|_|$)*/"/>
-   -->
-			<regexp match='/[\$\w_][\$\w\d_]*/' region="Enumeration" priority="low"/>
-		</scheme>
-		
-		<scheme name="java-typeType-content"><!--
-    Warning: RE pattern used. Possible compatibility faults
-    Original RE: [^\p{Z}]*-->
-			<regexp match='/[\S]/' region="Enumeration" priority="low"/>
-		</scheme>
-		
-		<scheme name="localeType-content"><!--
-    Warning: RE pattern used. Possible compatibility faults
-    Original RE: [a-z]{2}(_|-)?([\p{L}\-\p{Nd}]{2})?-->
-			<regexp match='/([a-z]{2})(_|-)?([\d\w\-]{2})?/' region="Enumeration" region1='def:Prefix' priority="low"/>
-		</scheme>
-		
-		<scheme name="mime-typeType-content"><!--
-    Warning: RE pattern used. Possible compatibility faults
-    Original RE: [^\p{Cc}^\s]+/[^\p{Cc}^\s]+-->
-    		<regexp match='/[^\s\x00-\x1f]{2,}/' region="Enumeration" priority="low"/>
-		</scheme>
+		&hrc;
 	</type>
 	
+</custom-type>
+
+
+<custom-type targetNamespace="http://java.sun.com/xml/ns/javaee">
+	<prefix>javaee</prefix>
+	&cst;
 	
+	<type xmlns="http://colorer.sf.net/2003/hrc">
+		&hrc;
+		
+		<scheme name="http-methodType-content">
+			<!--
+			    Warning: RE pattern used. Possible compatibility faults
+			    Original RE: [!-~-[\(\)<>@,;:"/\[\]?=\{\}\\\p{Z}]]+-->
+			<regexp region="Enumeration" priority="low" match="/[!-\~-[\(\)&lt;&gt;@,;:&#34;\/\[\]?\=\{\}\\\s]]+/"/>
+		</scheme>
+	</type>
 </custom-type>
 
 </custom>
