@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE custom [
-    <!ENTITY hrc SYSTEM "webapp.ent.hrc">
-    <!ENTITY cst SYSTEM "webapp.ent.xml">
+    <!ENTITY hrc SYSTEM "entity.j2ee.hrc">
+    <!ENTITY cst SYSTEM "entity.web-app.xml">
 ]>
 <custom xmlns="uri:colorer:custom">
+
 
 <custom-type targetNamespace='http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd'>
 	<prefix>tgl</prefix>

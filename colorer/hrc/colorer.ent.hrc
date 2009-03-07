@@ -1,6 +1,7 @@
 <prototype name="ent.hrc" group="scripts.colorer" description="Entities for HRC">
   <location link="scripts/colorer/ent.hrc.hrc"/>
   <filename>/\.ent\.hrc$/i</filename>
+  <filename>/\bentity\..*?\.hrc$/i</filename>
 </prototype>
 <prototype name="hrc" group="scripts.colorer" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
   <location link="scripts/colorer/hrc.hrc"/>
