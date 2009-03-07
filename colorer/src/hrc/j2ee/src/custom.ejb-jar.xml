@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE custom [
     <!ENTITY hrc SYSTEM "entity.j2ee.hrc">
-    <!ENTITY cst SYSTEM "entity.web-app.xml">
+    <!ENTITY cst SYSTEM "entity.ejb-jar.xml">
 ]>
 <custom xmlns="uri:colorer:custom">
 
-<custom-type targetNamespace='http://java.sun.com/dtd/web-app_2_3.dtd'>
-    <prefix>web-app_2_3</prefix>
-    &cst;
+
+<custom-type targetNamespace='http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd'>
+    <prefix>ejb-jar_1_1</prefix>
+    <empty-prefix/>
+</custom-type>
+
+<custom-type targetNamespace='http://java.sun.com/dtd/ejb-jar_2_0.dtd'>
+    <prefix>ejb-jar_2_0</prefix>
+    <empty-prefix/>
 </custom-type>
 
 <custom-type targetNamespace="http://java.sun.com/xml/ns/j2ee">

@@ -11,122 +11,283 @@
 <property name="obj" value="objs" description="this project temp"/>
 
 
-
-
 <!-- hrc util -->
 
 <target name="hrc.prop">
-	<property name="jsrc" value="define me!"/>
-	<property name="ver" value="0"/>
-	<property name="hrctype" value="web-app.2.${ver}"/>
+  <property name="jsrc" value="define me!"/>
+  <property name="hrcname" value="define me!"/>
+  <property name="rootname" value="define me!"/>
+  <property name="allow-unknown-elements" value="no"/>
 </target>
 
 <target name="hrc.check" depends="hrc.prop">
- <dependset>
-  <srcfilelist dir="." files = "build.xml"/>
-  <srcfilelist dir="${src}" files = "custom.web-app.xml,entity.j2ee.hrc,entity.web-app.xml"/>
-  <srcfileset dir="${jsrc}" includes = "*.xsd"/>
-  <targetfilelist dir="${bin}" files="${hrctype}.hrc"/>
- </dependset>
+  <dependset>
+    <srcfilelist dir="." files = "build.xml"/>
+    <srcfilelist dir="${src}" files = "custom.*.xml,*.ent.xml,*.ent.hrc"/>
+    <srcfileset dir="${jsrc}" includes = "*.xsd"/>
+    <targetfilelist dir="${bin}" files="${hrcname}.hrc"/>
+  </dependset>
 </target>
 
 <target name="hrc" depends="hrc.check, hrc.prop">
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${jsrc}/web-app_2_${ver}.xsd"/>
-   <property name="util.output" value="${bin}/${hrctype}.hrc"/>
-   <property name='xsd2hrc.hrctype' value='${hrctype}'/>
-   <property name='xsd2hrc.top-level-element' value='web-app'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.web-app.xml'/>
- </ant>
+  <ant antfile="${util}" target="xsd2hrc">
+    <property name="util.input" value="${jsrc}/${hrcname}.xsd"/>
+    <property name="util.output" value="${bin}/${hrcname}.hrc"/>
+    <property name='xsd2hrc.hrctype' value='${hrcname}'/>
+    <property name='xsd2hrc.top-level-element' value='${rootname}'/>
+    <property name='xsd2hrc.allow-unknown-elements' value='${allow-unknown-elements}'/>
+    <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.${rootname}.xml'/>
+  </ant>
 </target>
 
-
-<target name="hrc.taglib" depends="hrc.check, hrc.prop">
- <ant antfile="${util}" target="xsd2hrc">
-   <property name="util.input" value="${jsrc}/taglib.xsd"/>
-   <property name="util.output" value="${bin}/${hrctype}.hrc"/>
-   <property name='xsd2hrc.hrctype' value='${hrctype}'/>
-   <property name='xsd2hrc.top-level-element' value='taglib'/>
-   <property name='xsd2hrc.allow-unknown-elements' value='yes'/>
-   <property name='xsd2hrc.custom-defines' value='${this}/${src}/custom.web-app.xml'/>
- </ant>
-</target>
-
-
-
-<!-- version 2.3 -->
-
+<!-- j2ee version 1.2 - 1.3 -->
 <!-- generate xsd from dtd -->
 
-<target name="23.xsd.check">
- <uptodate property="23.xsd.check" targetfile="${obj}/web-app_2_3.xsd">
-  <srcfiles dir="${src}/dtd" includes="web-app_2_3.dtd, web-jsptaglibrary_1_2.dtd"/>
- </uptodate>
+<target name="13.xsd.check">
+  <uptodate property="23.xsd.check" targetfile="${obj}/web-app_2_3.xsd">
+    <srcfiles dir="${src}" includes="application_1_?.dtd, connector_1_0.dtd, ejb-jar_?_?.dtd, web-app_2_3.dtd, web-jsptaglibrary_1_?.dtd"/>
+  </uptodate>
 </target>
 
-<target name="23.xsd" depends="23.xsd.check"  unless="23.xsd.check">
- <mkdir dir="${obj}"/>
- <ant antfile="${util}" target="dtd2xsd">
-  <property name="util.input" value="${src}/dtd/web-app_2_3.dtd"/>
-  <property name="util.output" value="${obj}/web-app_2_3.xsd"/>
-  <property name="dtd2xsd.alias" value="yes"/>
-  <property name="dtd2xsd.skipxmlattr" value="yes"/>
-  <property name="dtd2xsd.pre" value="wa"/>
-  <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-app_2_3.dtd"/>
- </ant>
- <ant antfile="${util}" target="dtd2xsd">
-  <property name="util.input" value="${src}/dtd/web-jsptaglibrary_1_2.dtd"/>
-  <property name="util.output" value="${obj}/taglib.xsd"/>
-  <property name="dtd2xsd.alias" value="yes"/>
-  <property name="dtd2xsd.skipxmlattr" value="yes"/>
-  <property name="dtd2xsd.pre" value="tld"/>
-  <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd"/>
- </ant>
+<target name="13.xsd" depends="13.xsd.check"  unless="13.xsd.check">
+  <mkdir dir="${obj}"/>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/application_1_2.dtd"/>
+    <property name="util.output" value="${obj}/application_1_2.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="application_1_2"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/j2ee/dtds/application_1_2.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/application_1_3.dtd"/>
+    <property name="util.output" value="${obj}/application_1_3.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="application_1_3"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/application_1_3.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/connector_1_0.dtd"/>
+    <property name="util.output" value="${obj}/connector_1_0.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="connector_1_0"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/connector_1_0.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/ejb-jar_1_1.dtd"/>
+    <property name="util.output" value="${obj}/ejb-jar_1_1.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="ejb-jar_1_1"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/ejb-jar_2_0.dtd"/>
+    <property name="util.output" value="${obj}/ejb-jar_2_0.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="ejb-jar_2_0"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/ejb-jar_2_0.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/web-facesconfig_1_0.dtd"/>
+    <property name="util.output" value="${obj}/web-facesconfig_1_0.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="web-facesconfig_1_0"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-facesconfig_1_0.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/web-facesconfig_1_1.dtd"/>
+    <property name="util.output" value="${obj}/web-facesconfig_1_1.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="web-facesconfig_1_1"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-facesconfig_1_1.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/web-app_2_3.dtd"/>
+    <property name="util.output" value="${obj}/web-app_2_3.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="web-app_2_3"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-app_2_3.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/web-jsptaglibrary_1_1.dtd"/>
+    <property name="util.output" value="${obj}/web-jsptaglibrary_1_1.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="web-jsptaglibrary_1_1"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd"/>
+  </ant>
+  <ant antfile="${util}" target="dtd2xsd">
+    <property name="util.input" value="${src}/dtd/web-jsptaglibrary_1_2.dtd"/>
+    <property name="util.output" value="${obj}/web-jsptaglibrary_1_2.xsd"/>
+    <property name="dtd2xsd.alias" value="yes"/>
+    <property name="dtd2xsd.skipxmlattr" value="yes"/>
+    <property name="dtd2xsd.pre" value="web-jsptaglibrary_1_2"/>
+    <property name="dtd2xsd.ns" value="http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd"/>
+  </ant>
 </target>
 
+<!-- j2ee version 1.2 - 1.3 -->
 <!-- generate hrc from xsd -->
-
-<target name="23.hrc" depends="23.xsd">
-	<ant target="hrc">
-		<property name="jsrc" value="${obj}"/>
-		<property name="ver" value="3"/>
-	</ant>
-	<ant target="hrc.taglib">
-		<property name="jsrc" value="${obj}"/>
-		<property name="hrctype" value="taglib"/>
-	</ant>
+<target name="13.hrc" depends="13.xsd">
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="application_1_2"/>
+    <property name="rootname" value="application"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="application_1_3"/>
+    <property name="rootname" value="application"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="connector_1_0"/>
+    <property name="rootname" value="connector"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="ejb-jar_1_1"/>
+    <property name="rootname" value="ejb-jar"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="ejb-jar_2_0"/>
+    <property name="rootname" value="ejb-jar"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="web-facesconfig_1_0"/>
+    <property name="rootname" value="faces-config"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="web-facesconfig_1_1"/>
+    <property name="rootname" value="faces-config"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="web-app_2_3"/>
+    <property name="rootname" value="web-app"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="web-jsptaglibrary_1_1"/>
+    <!--<property name="allow-unknown-elements" value="yes"/>-->
+    <property name="rootname" value="taglib"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${obj}"/>
+    <property name="hrcname" value="web-jsptaglibrary_1_2"/>
+    <!--<property name="allow-unknown-elements" value="yes"/>-->
+    <property name="rootname" value="taglib"/>
+  </ant>
 </target>
 
 
-<!-- version 2.4 -->
-
-<target name="24.hrc">
-	<ant target="hrc">
-		<property name="jsrc" value="${src}/j2ee"/>
-		<property name="ver" value="4"/>
-	</ant>
+<!-- j2ee version 1.4 -->
+<target name="14.hrc">
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="application_1_4"/>
+    <property name="rootname" value="application"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="application-client_1_4"/>
+    <property name="rootname" value="application-client"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="connector_1_5"/>
+    <property name="rootname" value="connector"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="ejb-jar_2_1"/>
+    <property name="rootname" value="ejb-jar"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="j2ee_jaxrpc_mapping_1_1"/>
+    <property name="rootname" value="java-wsdl-mapping"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="web-app_2_4"/>
+    <property name="rootname" value="web-app"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="web-jsptaglibrary_2_0"/>
+    <property name="rootname" value="taglib"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/j2ee"/>
+    <property name="hrcname" value="j2ee_web_services_1_1"/>
+    <property name="rootname" value="webservices"/>
+  </ant>
 </target>
 
-
-<!-- version 2.5 -->
-
-<target name="25.hrc">
-	<ant target="hrc">
-		<property name="jsrc" value="${src}/javaee"/>
-		<property name="ver" value="5"/>
-	</ant>
+<!-- j2ee version 5.0 -->
+<target name="50.hrc">
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="application_5"/>
+    <property name="rootname" value="application"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="application-client_5"/>
+    <property name="rootname" value="application-client"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="ejb-jar_3_0"/>
+    <property name="rootname" value="ejb-jar"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="web-facesconfig_1_2"/>
+    <property name="rootname" value="faces-config"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="javaee_web_services_metadata_handler_2_0"/>
+    <property name="rootname" value="handler-chains"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="web-app_2_5"/>
+    <property name="rootname" value="web-app"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="web-jsptaglibrary_2_1"/>
+    <property name="rootname" value="taglib"/>
+  </ant>
+  <ant target="hrc">
+    <property name="jsrc" value="${src}/javaee"/>
+    <property name="hrcname" value="javaee_web_services_1_2"/>
+    <property name="rootname" value="webservices"/>
+  </ant>
 </target>
 
 
 <!-- final -->
-
-<target name="all" depends="23.hrc,24.hrc,25.hrc"/>
+<target name="all" depends="13.hrc,14.hrc,50.hrc"/>
 
 <target name="clean">
- <delete failonerror='false'>
-  <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
-  <fileset dir="${bin}" includes="taglib.hrc, web-app.2.?.hrc"/>
- </delete>
+  <delete failonerror='false'>
+    <fileset dir="${obj}" includes="*.*" excludes='.empty'/>
+    <fileset dir="${bin}" includes="application*.hrc, application-client*.hrc, connector*.hrc, ejb-jar*.hrc, web-app*.hrc, web-jsptaglibrary*.hrc"/>
+  </delete>
 </target>
 
 </project>
