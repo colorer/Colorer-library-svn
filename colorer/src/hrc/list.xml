@@ -17,7 +17,7 @@
 	<target type='docbook' place='hrc/auto/gen/'/>
 	<target type='mathml' place='hrc/auto/gen/'/>
 	<target type='svg' place='hrc/inet'/>
-	<target type='webapp' place='hrc/auto/gen'/>
+	<target type='j2ee' place='hrc/auto/gen/j2ee/'/>
 	<target type='wsc' place='hrc/auto/gen'/>
 	<target type='colorer' place='hrc/scripts/colorer'/>
 	<target type='calcset' place='hrc/auto/gen/'/>

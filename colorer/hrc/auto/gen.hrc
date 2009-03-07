@@ -25,27 +25,6 @@
     <location link="gen/wml.hrc"/>
     <filename>/\.wml$/i</filename>
   </prototype>
-
-  <prototype name="taglib" group="inet" description="JSP taglib">
-    <location link="gen/taglib.hrc"/>
-    <filename>/\.tld/i</filename>
-  </prototype>
-  <prototype name="web-app.2.3" group="inet" description="web-app.2.3" targetNamespace="http://java.sun.com/dtd/web-app_2_3.dtd">
-    <location link="gen/web-app.2.3.hrc"/>
-    <filename weight='4'>/web\.xml/ix</filename>
-  </prototype>
-  <prototype name="web-app.2.4" group="inet" description="web-app.2.4" targetNamespace="http://java.sun.com/xml/ns/j2ee">
-    <location link="gen/web-app.2.4.hrc"/>
-    <filename weight='2'>/web\.xml/ix</filename>
-    <firstline weight='4'>/xmlns\s*=\s*(['"])http:\/\/java\.sun\.com\/xml\/ns\/j2ee\1/</firstline>
-  </prototype>
-  <prototype name="web-app.2.5" group="inet" description="web-app.2.5" targetNamespace="http://java.sun.com/xml/ns/javaee">
-    <location link="gen/web-app.2.5.hrc"/>
-    <filename weight='2'>/web\.xml/ix</filename>
-    <firstline weight='4'>/xmlns\s*=\s*(['"])http:\/\/java\.sun\.com\/xml\/ns\/javaee\1/</firstline>
-  </prototype>
-  
-
   <prototype name="parser" group="inet" description="Parser">
     <location link="gen/parser.hrc"/>
     <filename>/\.(p|html)$/i</filename>
