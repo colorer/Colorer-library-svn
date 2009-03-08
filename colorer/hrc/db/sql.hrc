@@ -957,14 +957,6 @@ With help of:
 <!-- strings -->
          <regexp match="/(&#34;(\\.|[^\\&#34;])*?&#34;)/" region="sqlQuotedIdentifier"/>
          <block start="/'/" end="/'/" scheme="stringApost" region="sqlString"/>
-<!-- Numbers -->
-         <inherit scheme="CHexNumber"/>
-         <inherit scheme="FloatNumber"/>
-         <inherit scheme="DecNumber"/>
-<!-- Variables -->
-         <regexp match="/\@\@\w*/" region0="Var"/>
-         <regexp match="/\@\w*/" region0="Var"/>
-         <regexp match="/\:\w*/" region0="Var"/>
          <regexp match="/^\s*(&lt;&lt;)[\w_\$\@]+(&gt;&gt;)/" region0="Label" region1="PairStart" region2="PairEnd"/>
 <!-- objects -->
          <regexp match="/^\M\s* create\s+(or\s+replace\s+)?            (procedure|function|trigger|package(\s+body)?|type(\s+body)?|table|view|sequence|constraint|user|(unique\s+)?index)            \s*(?{ObjectOutline}.*$)/ix"/>
@@ -978,6 +970,31 @@ With help of:
          <block start="/\b(loop)\b/i" end="/\b(end([\s])*loop)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(begin)\b/i" end="/\b(end)\b/ix" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(create(\s)*or(\s)*replace(\s)*(package(\s+body)?|type\s+body)\s+(\b\S+\b)(\s)+(is|as))\b/i" end="/\b(end)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd" region07="Text"/>
+         
+         <inherit scheme='noxml-content'/>
+         <inherit scheme='sql-content'/>
+      </scheme>
+      
+      
+      <!-- suppot sql in xml -->
+      <scheme name='noxml-content'>
+         <keywords region="sqlSymb">
+            <symb name="&amp;"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+         </keywords>
+      </scheme>
+      
+      <scheme name="sql-content">
+<!-- Numbers -->
+         <inherit scheme="CHexNumber"/>
+         <inherit scheme="FloatNumber"/>
+         <inherit scheme="DecNumber"/>
+<!-- Variables -->
+         <regexp match="/\@\@\w*/" region0="Var"/>
+         <regexp match="/\@\w*/" region0="Var"/>
+         <regexp match="/\:\w*/" region0="Var"/>
+         
 <!-- standard SQL symbols -->
          <keywords region="sqlSymb">
             <symb name=";"/>

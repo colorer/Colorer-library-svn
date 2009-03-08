@@ -82,7 +82,23 @@
     <filename>/\.qrc$/ix</filename>
   </prototype>
   
+  <prototype name="ibatis2-sql-map" group="inet.other" description="iBATIS 2 SQL Map"
+   targetNamespace="http://http://www.ibatis.com/dtd/sql-map-2.dtd">
+    <location link="gen/ibatis2-sql-map.hrc"/>
+    <firstline weight="6">/http:\/\/www.ibatis.com\/dtd\/sql-map-2\.dtd/</firstline>
+    <filename weight="0.5">/\.xml$/i</filename>
+  </prototype>
+  <prototype name="ibatis2-sql-map-config" group="inet.other" description="iBATIS 2 SQL Map Config"
+   targetNamespace="http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+    <location link="gen/ibatis2-sql-map-config.hrc"/>
+    <firstline weight="6">/http:\/\/www.ibatis.com\/dtd\/sql-map-config-2\.dtd/</firstline>
+    <filename weight="0.5">/\.xml$/i</filename>
+  </prototype>
+  <package name='ibatis2-sql-map-pack'>
+    <location link="gen/ibatis2-sql-map-pack.hrc"/>
+  </package>
 
+  
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
