@@ -1,0 +1,149 @@
+.Language=English,English
+.PluginContents=colorer
+
+@contents
+$^#colorer library. version take five
+
+    ~plugin setup.~@config@
+
+    ~command line support.~@cmdline@
+
+    ~plugin's menus.~@menu@
+
+    ~about author.~@author@
+
+@config
+$^#colorer's settings.#
+
+  #[x] turn off colorer#
+     Turns off Colorer.
+
+  #catalog.xml file:#
+     Full file path sets default catalog file for colorer.
+     If this field is empty colorer tries to find the file automatically
+     in the following order:
+        - Path in %COLORER5CATALOG%
+        - Path in file %HOME%/.colorer5catalog
+        - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
+        - Directory with plugin's dll, parent, parent of parent directory.
+
+
+  #Color scheme:#
+     Selected color scheme to use for text highlighting.
+
+  #Time before showing cancel dialog (msec)#
+     After this time interval colorer shows cancelling dialog.
+     anyway, you can stop parsing with ESC at any time.
+
+  #[ Reload ]#
+     Reloads HRC database.
+
+  #[ Reload all ]#
+     Reloads HRC database and loads all types.
+
+  #[ Ok ]#
+     Closes dialog.
+
+@cmdline
+$# Command line support
+    You can use the plugin from FAR's command line with prefix 'clr:'
+to view files with syntax highlighting in colorer's internal viewer.
+To view file you have to specify file name after the 'clr:' prefix
+in FAR's command line. This function is equal to #colorer.exe# program
+features, but doesn't load HRC database each time, so it works faster.
+
+@add
+$# Outliner
+    Here you can see a list of all functions or syntax errors found.
+Choose any item to go to corresponding line in text.
+    
+    You can use keyboard filter to quickly search for required items:
+
+    #Ctrl-Left/Right#
+      Expand-Collapse level of Outliner
+
+    #Ctrl-Up/Down#
+      Move to next/previous item both in outliner and in source code
+
+    #Ctrl-Enter#
+      Close the outliner and insert current item into the cursor position
+    
+    #Enter#
+      Close the outliner and jump to the selected item
+
+    #Any symbol keys#
+      Filter out the outliner items against entered filter
+
+@menu
+$#Colorer operation
+
+  #1 List types#          ~Alt-L~
+    Lists all supported file types. You can choose any of them to use
+with current editor.
+
+  #2 Match pair#          ~Alt-[~
+    Searches paired bracket (or any other pair structure) of the
+current region under cursor and jumps there.
+
+  #3 Select block#        ~Alt-]~
+    Moves cursor to start of block and selects it all. You can call this
+function as on block limits as inside it. In second case colorer will find
+start and end of nearest block automatically.
+
+  #4 Select pair#         ~Alt-P~
+    Selects pair block - but don't selects pair structures at start and end.
+
+  #5 Outliner List#      ~Alt-;~
+    Shows all outlined regions in current file.
+There you can choose and jump into any of them, also you can use there any
+alphabetic symbols to create filters.
+
+  #6 Errors List#         ~Alt-'~
+    As previous - but shows all errors in the text.
+
+  #7 Select region#       ~Alt-K~
+    Selects region under cursor.
+
+  #*# All these features are depend on the content of HRC files.
+All information is taken from syntax regions analysis.
+
+  #8 Find function#       ~Alt-O~
+    Searches function name under cursor in outliner view, and jumps there.
+
+  #9 Update highlight#
+    Updates syntax highlighting in current editor. Use it, if
+some problems occurs in current syntax.
+
+  #A Select encoding#
+    Show dialog, allowing you to change current FAR text encoding.
+
+  #C Configuration#
+    Calls colorer ~configuration menu~@config@.
+
+@encodings
+$# Encoding selection
+    List of all available encodings. You can choose what you need.
+
+@hrd
+$# Color scheme selection
+    List of all available color schemes. You can choose what you need.
+
+@exception
+$# Exception occured
+    Exception happened while colorer work.
+All further processing would be disabled. You can re-enable
+colorer from it's settings menu after locating and removing
+exception cause. All extended information in colorer logging
+file (colorer.log by default)
+
+@author
+$^#Colorer library. FAR Manager plugin. version take5.#
+    #Igor Ruskih#(Cail Lomecb). Copyright (c) 1999-2006.
+    I've wrote this program for you and for myself; because it, I don't
+making any limitations of using colorer.
+    You just have to send me registration form.
+
+                   email  :  irusskih at gmail dot com
+                   web    :  http://cail.nm.ru
+                             http://colorer.sf.net
+                             http://plugring.farmanager.com/

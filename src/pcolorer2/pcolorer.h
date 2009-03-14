@@ -1,9 +1,9 @@
 #ifndef _PCOLORER_H_
 #define _PCOLORER_H_
 
-#include<farplugin/plugin.hpp>
-#include<farplugin/farcolor.hpp>
-#include<farplugin/farkeys.hpp>
+#include<far2plugin/plugin.hpp>
+#include<far2plugin/farcolor.hpp>
+#include<far2plugin/farkeys.hpp>
 
 /** FAR .lng file identifiers. */
 enum {
