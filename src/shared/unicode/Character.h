@@ -7,7 +7,7 @@
 //typedef wchar_t wchar;
 
 /// default unicode char definition
-typedef unsigned short wchar;
+typedef wchar_t wchar;
 
 /// wide unicode char definition
 typedef unsigned long w4char;

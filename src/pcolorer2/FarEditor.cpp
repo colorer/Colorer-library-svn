@@ -678,13 +678,13 @@ const int FILTER_SIZE = 40;
 
           int labelLength = item->token->length();
           if (labelLength+si > 110) labelLength = 110;
-          wcsncpy(menuItem+si, (const wchar_t*)*item->token, labelLength);
+          wcsncpy(menuItem+si, item->token->getWChars(), labelLength);
           menuItem[si+labelLength] = 0;
         }else{
           String *line = getLine(item->lno);
           int labelLength = line->length();
           if (labelLength > 110) labelLength = 110;
-          wcsncpy(menuItem, (const wchar_t*)*line, labelLength);
+          wcsncpy(menuItem, line->getWChars(), labelLength);
           menuItem[labelLength] = 0;
         }
 
