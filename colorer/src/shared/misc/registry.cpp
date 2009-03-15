@@ -1,11 +1,11 @@
 #include<windows.h>
 
-LONG rSetValue(HKEY hReg, char *VName, DWORD val)
+LONG rSetValue(HKEY hReg, const char *VName, DWORD val)
 {
   return RegSetValueEx(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
 };
 
-LONG rSetValue(HKEY hReg, char *VName, DWORD Type, char *Data, DWORD Len)
+LONG rSetValue(HKEY hReg, const char *VName, DWORD Type, const char *Data, DWORD Len)
 {
   return RegSetValueEx(hReg, VName, 0, Type, (const UCHAR*)Data, Len);
 };
@@ -18,13 +18,13 @@ DWORD rGetValue(HKEY hReg, char *name)
   return data;
 };
 
-DWORD rGetValue(HKEY hReg, char *name, char *Data, DWORD Len)
+DWORD rGetValue(HKEY hReg, const char *name, char *Data, DWORD Len)
 {
   DWORD i = RegQueryValueEx(hReg, name, 0, NULL, (PBYTE)Data, &Len);
   return i?0:Len;
 };
 
-HKEY rOpenKey(HKEY hReg, char *Name)
+HKEY rOpenKey(HKEY hReg, const char *Name)
 {
 HKEY hKey = 0;
   RegCreateKeyEx(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE,
@@ -32,14 +32,14 @@ HKEY hKey = 0;
   return hKey;
 };
 
-HKEY rOpenKeyEx(HKEY hReg, char *Name)
+HKEY rOpenKeyEx(HKEY hReg, const char *Name)
 {
 HKEY hKey = 0;
   RegOpenKeyEx(hReg, Name, 0, KEY_ALL_ACCESS, &hKey);
   return hKey;
 };
 
-DWORD rCheckAndSet(HKEY hReg, char *Name, DWORD Val)
+DWORD rCheckAndSet(HKEY hReg, const char *Name, DWORD Val)
 {
 DWORD i;
   if (RegQueryValueEx(hReg, Name, 0, NULL, NULL, &i)){
@@ -49,7 +49,7 @@ DWORD i;
   return FALSE;
 };
 
-DWORD rCheckAndSet(HKEY hReg, char *Name, DWORD Type, char* Data, DWORD Len)
+DWORD rCheckAndSet(HKEY hReg, const char *Name, DWORD Type, char* Data, DWORD Len)
 {
 DWORD i;
   if (RegQueryValueEx(hReg,Name,0,NULL,NULL,&i)){
