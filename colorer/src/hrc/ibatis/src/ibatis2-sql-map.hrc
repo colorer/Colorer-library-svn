@@ -18,6 +18,7 @@
 
 <scheme name='sql-content'>
 	<regexp match='/#\w+(\[\])?#/' region='var' region1='symb'/>
+	<regexp match='/\$\w+(\[\])?\$/' region='var' region1='symb'/>
 	
 	<inherit scheme="sql:sql-content">
 		<virtual scheme="sql:plSqlKeywords" subst-scheme="def:empty"/>
