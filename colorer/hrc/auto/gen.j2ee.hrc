@@ -125,6 +125,11 @@
     <filename>/\.tld/i</filename>
     <firstline weight='4'>/http:\/\/java\.sun\.com\/xml\/ns\/javaee\/web-jsptaglibrary_2_1\.xsd/</firstline>
   </prototype>
+  <prototype name="j2ee_web_services_1_0" group="inet.j2ee" description="J2EE WebServices 1.0" targetNamespace="http://www.ibm.com/webservices/dtd/j2ee_web_services_1_0.dtd">
+    <location link="gen/j2ee/j2ee_web_services_1_0.hrc"/>
+    <filename>/webservices\.xml/i</filename>
+    <firstline weight='4'>/http:\/\/www\.ibm\.com\/webservices\/dtd\/j2ee_web_services_1_0\.dtd/</firstline>
+  </prototype>
   <prototype name="j2ee_web_services_1_1" group="inet.j2ee" description="J2EE WebServices 1.1" targetNamespace="http://java.sun.com/xml/ns/j2ee">
     <location link="gen/j2ee/j2ee_web_services_1_1.hrc"/>
     <filename>/webservices\.xml/i</filename>

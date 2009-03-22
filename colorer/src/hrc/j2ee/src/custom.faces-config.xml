@@ -5,8 +5,13 @@
 ]>
 <custom xmlns="uri:colorer:custom">
 
-<custom-type targetNamespace='http://java.sun.com/dtd/web-app_2_3.dtd'>
-    <prefix>web-app_2_3</prefix>
+<custom-type targetNamespace='http://java.sun.com/dtd/web-facesconfig_1_0.dtd'>
+    <prefix>web-facesconfig_1_0</prefix>
+    &cst;
+</custom-type>
+
+<custom-type targetNamespace='http://java.sun.com/dtd/web-facesconfig_1_1.dtd'>
+    <prefix>web-facesconfig_1_1</prefix>
     &cst;
 </custom-type>
 

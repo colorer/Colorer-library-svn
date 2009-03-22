@@ -20,7 +20,7 @@ $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
 $validDir = "_valid";
 
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-$currentDir = sprintf("__%d-%02d-%02d %02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
+$currentDir = sprintf("__%d-%02d-%02d_%02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
 
 if (!mkdir $currentDir, 0777){
 #  die "Can't create dir - already exists" ;
