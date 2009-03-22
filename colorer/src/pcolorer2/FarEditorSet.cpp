@@ -20,7 +20,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
   info = fedi;
 
   wchar_t key[255];
-  swprintf(key, 255, L"%s\\colorer", info->RootKey);
+  _snwprintf(key, 255, L"%s\\colorer", info->RootKey); // EE: g++ not supporyt swprintf(wchar_t, int...)
   hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
 
   parserFactory = null;
@@ -184,12 +184,12 @@ void FarEditorSet::chooseType()
     if (group != null) groupChars = group->getWChars();
     else groupChars = L"<no group>";
     menuels[i].Text = new wchar_t[255];
-	swprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
+	_snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
     if(type == fe->getFileType()) menuels[i].Selected = 1;
   };
 
   wchar_t bottom[20];
-  swprintf(bottom, 20, GetMsg(mTotalTypes), idx);
+  _snwprintf(bottom, 20, GetMsg(mTotalTypes), idx);
 
   i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
                      GetMsg(mSelectSyntax), bottom, L"contents", null, null, menuels, i);
@@ -283,7 +283,10 @@ void FarEditorSet::configure()
 
     wchar_t hrdName[32]  = {0};
     rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
-    DString &shrdName = DString("default");
+    
+    DString tmpdstring("default");
+    DString &shrdName = tmpdstring;
+    //DString &shrdName = DString("default"); // EE: not allowed under g++
     if (hrdName[0]){
       shrdName = DString(hrdName);
     }
