@@ -10,14 +10,14 @@ FarEditorSet *editorSet = null;
 /**
  * Returns message from FAR current language.
  */
-const char *GetMsg(int msg){
+const wchar_t *GetMsg(int msg){
   return(Info.GetMsg(Info.ModuleNumber, msg));
 };
 
 /**
  * Plugin initialization and creation of editor set support class.
  */
-void WINAPI SetStartupInfo(const struct PluginStartupInfo *fei)
+void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 {
   memset(&Info, 0, sizeof(Info));
   memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
@@ -28,24 +28,24 @@ void WINAPI SetStartupInfo(const struct PluginStartupInfo *fei)
 /**
  * Plugin strings in FAR interface.
  */
-void WINAPI GetPluginInfo(struct PluginInfo *Info)
+void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
-static char* PluginMenuStrings;
+static wchar_t* PluginMenuStrings;
   memset(Info, 0, sizeof(*Info));
   Info->Flags = PF_EDITOR | PF_DISABLEPANELS;
   Info->StructSize = sizeof(*Info);
   Info->PluginConfigStringsNumber = 1;
   Info->PluginMenuStringsNumber = 1;
-  PluginMenuStrings = (char*)GetMsg(mName);
+  PluginMenuStrings = (wchar_t*)GetMsg(mName);
   Info->PluginConfigStrings = &PluginMenuStrings;
   Info->PluginMenuStrings = &PluginMenuStrings;
-  Info->CommandPrefix = "clr";
+  Info->CommandPrefix = L"clr";
 };
 
 /**
  * On FAR exit. Destroys all internal structures.
  */
-void WINAPI ExitFAR()
+void WINAPI ExitFARW()
 {
   delete editorSet;
 };
@@ -53,12 +53,12 @@ void WINAPI ExitFAR()
 /**
  * Open plugin configuration of actions dialog.
  */
-HANDLE WINAPI OpenPlugin(int OpenFrom, int Item)
+HANDLE WINAPI OpenPluginW(int OpenFrom, int Item)
 {
   if (OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();
   }else if (OpenFrom == OPEN_COMMANDLINE){
-    char *path = (char*)Item;
+    wchar_t *path = (wchar_t*)Item;
     editorSet->viewFile(DString(path));
   }else
     editorSet->configure();
@@ -68,7 +68,7 @@ HANDLE WINAPI OpenPlugin(int OpenFrom, int Item)
 /**
  * Configures plugin.
  */
-int WINAPI Configure(int ItemNumber)
+int WINAPI ConfigureW(int ItemNumber)
 {
   editorSet->configure();
   return 1;
@@ -78,11 +78,11 @@ int WINAPI Configure(int ItemNumber)
  * Processes FAR editor events and
  * makes text colorizing here.
  */
-int WINAPI ProcessEditorEvent(int Event, void *Param)
+int WINAPI ProcessEditorEventW(int Event, void *Param)
 {
   return editorSet->editorEvent(Event, Param);
 };
-int WINAPI ProcessEditorInput(const INPUT_RECORD*ir)
+int WINAPI ProcessEditorInputW(const INPUT_RECORD*ir)
 {
   return editorSet->editorInput(ir);
 }
