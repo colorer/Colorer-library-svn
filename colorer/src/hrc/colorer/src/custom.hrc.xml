@@ -86,7 +86,7 @@
 	
 	
 	<scheme name="REstring-content">
-		<block start="/(\/)/" end="/(\/([igsx]*))/" scheme="RE-String"
+		<block start="/(\/)/" end="/(\/([igsxm]*))/" scheme="RE-String"
 			region00="BracketStart" region01="PairStart"
 			region10="BracketEnd" region11="PairEnd" 
 			region12="regexp:SpecArea"
