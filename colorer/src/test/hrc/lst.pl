@@ -1,26 +1,9 @@
 #!/usr/bin/perl 
 use strict;
+use File::Find;
 
-my %files;
-my $curd='';
-
-foreach(`ls -R @ARGV`)
+find sub
 {
-	chomp;
-	next unless $_;
-	
-	if(m/^(.+?):/)
-	{
-		$curd=$1;
-		$files{$curd} = 'd';
-		next;
-	}
-	
-	$files{"$curd/$_"} = 'f' foreach split/\s+/;
-}
-
-foreach(sort keys %files)
-{
-	next if $files{$_} eq 'd';
-	print "$_\n";
-}
+	$File::Find::prune = /^[\._]\w+/;
+	print "$File::Find::name\n" unless -d;
+}, @ARGV;
