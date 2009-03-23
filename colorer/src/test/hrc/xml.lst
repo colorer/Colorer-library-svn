@@ -8,9 +8,9 @@ xml/full/cpp.hrc
 xml/full/ibatis.xml
 xml/full/xlala.xml
 xml/full/xml.xml
-xml/web-app/2.3/web.xml
-xml/web-app/2.4/web.xml
-xml/web-app/2.5/web.xml
+xml/full/web-app/2.3/web.xml
+xml/full/web-app/2.4/web.xml
+xml/full/web-app/2.5/web.xml
 xslt/aposquot.xsl
 xslt/test.xsl
 xslt/xpath-bug.xq
