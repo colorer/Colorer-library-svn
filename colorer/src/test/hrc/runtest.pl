@@ -4,10 +4,10 @@
 # Validates a set of source files against a given
 # set of their previous parse strucure.
 #
-#  --full   - test all
+#  --full   - test all (default)
 #  --quick  - test all exclude **/full/*.*
 #  --list   - test listed dirs
-#  file.lst - test list from file
+#  file.lst - test list from file(s)
 #
 
 use strict;
@@ -39,9 +39,7 @@ my @prnlist = @ARGV;
 unless($runMode =~ /^--\w+/)
 {
 	unshift @ARGV, $runMode;
-	#open LIST, $runMode or die "Can't open test list: $runMode";
 	@retlist = <>;
-	#close LIST;
 }
 else
 {
@@ -51,7 +49,7 @@ else
 		$File::Find::prune = /^[\._]\w+/;
 		return if $File::Find::dir eq '.';
 		$File::Find::prune += /^full/ if $runMode eq '--quick';
-		push @retlist, $File::Find::name."\n" unless -d;
+		push @retlist, $File::Find::name unless -d;
 	}, @lst;
 }
 
@@ -105,7 +103,7 @@ foreach (@retlist)
 	
 	if ($cres != 0 or $res != 0 or !-r "$fname.html")
 	{
-		#print "failed: $cres, $res, ".(-r "$fname.html")."\n";
+		print "failed: $cres, $res, ".(-r "$fname.html")."\n";
 		$failed .= "$_<br/>";
 		$testFailed++;
 	}

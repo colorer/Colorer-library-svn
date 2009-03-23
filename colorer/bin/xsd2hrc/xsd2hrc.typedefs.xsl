@@ -164,9 +164,12 @@
               </xsl:when>
             </xsl:choose>
           </xsl:if>
+          
           <!-- Allows to parse simpleType content in CDATA sections content -->
           <xsl:if test="self::xs:simpleType or xs:simpleContent or xs:complexContent">
             <virtual scheme="xml:CDSect.content.stream" subst-scheme="{$typename}-content-cdsect"/>
+          </xsl:if>
+          <xsl:if test="self::xs:simpleType or xs:simpleContent"><!--  or xs:complexContent" -->
             <virtual scheme="xml:content.cdata.stream"  subst-scheme="{$typename}-content-error"/><!-- changed !! -->
             <virtual scheme="xml:element" subst-scheme="def:empty"/>
           </xsl:if>
