@@ -4,7 +4,7 @@
 <custom-type targetNamespace='http://jakarta.apache.org/log4j/'>
 	<empty-prefix/>
 	
-	<strict-prefix>
+	<force-prefix>
 		<element name='configuration'/>
 		<element name='eventSet'/>
 		<element name='event'/>
@@ -16,7 +16,7 @@
 		<element name='data'/>
 		
 		<prefix>log4j</prefix>
-	</strict-prefix>
+	</force-prefix>
 	
 	<top-level>
 	        <element>configuration</element>

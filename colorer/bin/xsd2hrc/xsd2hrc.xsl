@@ -257,7 +257,7 @@
         <entity name="ns-real-prefix" value="{$ns-real-prefix}"/>
         <entity name="nsprefix" value="{$nsprefix}"/>
         <entity name="attr-nsprefix" value="{$attr-nsprefix}"/>
-        <xsl:apply-templates select='$custom-type/c:strict-prefix' mode='nsprefix-strict'/>
+        <xsl:apply-templates select='$custom-type/c:force-prefix' mode='nsprefix-strict'/>
         <xsl:call-template name='crlf'/>
 
         <!-- These schemes was cloned from xml.hrc

@@ -45,7 +45,7 @@
   </xs:element>
 
   
-  <xs:complexType name='strict-prefix-Type'>
+  <xs:complexType name='prefs-Type'>
     <xs:sequence>
       <xs:element name="element" minOccurs="1" maxOccurs="unbounded">
         <xs:complexType>
@@ -67,7 +67,7 @@
       <xs:element name="any-prefix" minOccurs="0">
         <xs:complexType/>
       </xs:element-->
-      <xs:element name='strict-prefix' type='strict-prefix-Type' minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name='force-prefix' type='prefs-Type' minOccurs="0" maxOccurs="unbounded"/>
       
       <xs:element name="contributors" type="xs:string"/>
       <xs:element name="top-level" minOccurs="0">

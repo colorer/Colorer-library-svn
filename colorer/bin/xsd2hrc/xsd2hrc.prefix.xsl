@@ -51,9 +51,9 @@
 
 
 
-<!--xsl:apply-templates select='$custom-type/c:strict-prefix' mode='nsprefix-strict'/-->
+<!--xsl:apply-templates select='$custom-type/c:force-prefix' mode='nsprefix-strict'/-->
 
-<xsl:template match='c:strict-prefix' mode='nsprefix-strict'>
+<xsl:template match='c:force-prefix' mode='nsprefix-strict'>
 	<xsl:apply-templates select='c:element' mode='nsprefix-strict'/>
 </xsl:template>
 
@@ -71,7 +71,7 @@
 	<xsl:param name="tag"/>
 	
 	<xsl:text>nsprefix</xsl:text>
-	<xsl:if test='$custom-type/c:strict-prefix/c:element[@name = $tag]'>
+	<xsl:if test='$custom-type/c:force-prefix/c:element[@name = $tag]'>
 		<xsl:text>-</xsl:text>
 		<xsl:value-of select='$tag'/>
 	</xsl:if>
