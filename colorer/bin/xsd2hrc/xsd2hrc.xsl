@@ -19,6 +19,7 @@
   <xsl:include href="xsd2hrc.root-elements.xsl"/>
   <xsl:include href="xsd2hrc.xmlss.xsl"/>
   <xsl:include href="xsd2hrc.subst-group.xsl"/>
+  <xsl:include href="xsd2hrc.prefix.xsl"/>
 
 
   <xsl:output indent="yes" encoding="utf-8"
@@ -71,8 +72,9 @@
 
   <!-- possible used namespace prefixes -->
 
+  <!-- EE:new - ->
   <xsl:variable name="ns-map" select="$custom-type/c:prefix | $custom-type/c:empty-prefix | $custom-type/c:any-prefix"/>
-  <!-- EE:new -->
+  <!- - EE:new - ->
   <xsl:template name="ns-real-prefix">
    <xsl:param name="nscolon"/>
     <xsl:if test="$ns-map">
@@ -106,11 +108,31 @@
     </xsl:if>
   </xsl:variable>
 
-  <xsl:variable name="attr-nsprefix"><!-- EE:new -->
+  <xsl:variable name="attr-nsprefix"><!- - EE:new - ->
   	<xsl:call-template name="ns-real-prefix">
   		<xsl:with-param name="nscolon" select="'Attribute.nscolon'"/>
   	</xsl:call-template>
   </xsl:variable>
+  -->
+  
+  <xsl:variable name="ns-real-prefix">
+  	<xsl:apply-templates mode='nsprefix-real' select='$custom-type'/>
+  </xsl:variable>
+  
+  <xsl:variable name="nsprefix">
+  	<xsl:apply-templates mode='nsprefix' select='$custom-type'/>
+    <!--xsl:if test="$ns-real-prefix != ''">
+      <xsl:value-of select="$ns-real-prefix"/>
+      <xsl:if test="$custom-type/c:empty-prefix">?</xsl:if>
+    </xsl:if-->
+  </xsl:variable>
+
+  <xsl:variable name="attr-nsprefix">
+  	<xsl:apply-templates mode='nsprefix-real' select='$custom-type'>
+  		<xsl:with-param name="nscolon" select="'Attribute.nscolon'"/>
+  	</xsl:apply-templates>
+  </xsl:variable>
+  
   
   
   <!-- New line character -->
@@ -229,10 +251,13 @@
             </xsl:attribute>
           </region>
         </xsl:for-each>
+        
+        <!-- prefixies -->
         <xsl:call-template name='crlf'/>
         <entity name="ns-real-prefix" value="{$ns-real-prefix}"/>
         <entity name="nsprefix" value="{$nsprefix}"/>
-        <entity name="attr-nsprefix" value="{$attr-nsprefix}"/><!-- EE:new -->
+        <entity name="attr-nsprefix" value="{$attr-nsprefix}"/>
+        <xsl:apply-templates select='$custom-type/c:strict-prefix' mode='nsprefix-strict'/>
         <xsl:call-template name='crlf'/>
 
         <!-- These schemes was cloned from xml.hrc
@@ -382,7 +407,7 @@
    -
    - The Initial Developer of the Original Code is
    - Cail Lomecb <cail@nm.ru>.
-   - Portions created by the Initial Developer are Copyright (C) 1999-2006
+   - Portions created by the Initial Developer are Copyright (C) 1999-2009
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):

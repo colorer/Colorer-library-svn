@@ -18,7 +18,7 @@
 <!-- dtd2xsd  -->
 
 <target name="dtd2xsd.prop">
- <property name="dtd2xsd.map" value="define me!"/>
+ <property name="dtd2xsd.map" value="${dtd2xsd}/empty.map"/>
  <property name="dtd2xsd.pre" value="define me!"/>
  <property name="dtd2xsd.ns"  value="http://www.w3.org/XML/1998/namespace"/>
 </target>
@@ -26,7 +26,7 @@
 <target name="dtd2xsd" depends="dtd2xsd.prop">
  <echo level="info" message="Transform dtd to xsd"/>
  <exec executable="perl" output="${util.output}">
-  <arg line='${dtd2xsd}/dtd2xsd.pl -mapfile ${dtd2xsd.map} -prefix ${dtd2xsd.pre} -ns "${dtd2xsd.ns}" ${util.input}'/>
+  <arg line='${dtd2xsd}/dtd2xsd.pl -mapfile ${dtd2xsd.map} -prefix ${dtd2xsd.pre} -ns "${dtd2xsd.ns}"  ${util.input}'/>
  </exec> 
  <delete>
   <fileset dir="." includes="*.out"/>

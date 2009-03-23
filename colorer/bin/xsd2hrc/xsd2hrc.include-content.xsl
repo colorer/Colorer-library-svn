@@ -204,18 +204,26 @@
 
       <xsl:otherwise>
         <xsl:variable name='custom-type-outline' select='$custom-type/c:outline/c:element[@name = current()/@name]'/>
+        
+        <xsl:variable name='prefix'>
+        	<xsl:call-template name='nsprefix'>
+        		<xsl:with-param name='tag' select='@name'/>
+        	</xsl:call-template>
+        </xsl:variable>
+        
+        
         <xsl:if test='$custom-type-outline'>
           <xsl:if test='$custom-type-outline/@extract = "attributeValue"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (([\x22\x27])(.*?)(\3)) )/{$ric}x" region4="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %{$prefix};{@name} \b.*? (([\x22\x27])(.*?)(\3)) )/{$ric}x" region4="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "withAttribute"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b\s*.*? (([\x22\x27])(.*?)(\3))? )([\/>\s]|$)/{$ric}x" region1="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %{$prefix};{@name} \b\s*.*? (([\x22\x27])(.*?)(\3))? )([\/>\s]|$)/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "fullElement"'>
-            <regexp match="/\M (&lt; %nsprefix;{@name} \b.*? (>|$) )/{$ric}x" region1="{@name}Outlined"/>
+            <regexp match="/\M (&lt; %{$prefix};{@name} \b.*? (>|$) )/{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
           <xsl:if test='$custom-type-outline/@extract = "tillNext"'>
-            <regexp match="/\M &lt; %nsprefix;{@name} \b.*? &gt; (.{{2,}}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
+            <regexp match="/\M &lt; %{$prefix};{@name} \b.*? &gt; (.{{2,}}?) (&lt;|$) /{$ric}x" region1="{@name}Outlined"/>
           </xsl:if>
         </xsl:if>
 

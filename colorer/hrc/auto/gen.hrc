@@ -60,6 +60,12 @@
     <filename>/\.(xml)/i</filename>
     <firstline weight="5">/\bxmlns\s*=\s*(["'])http:\/\/www\.mozilla\.org\/xbl\1/</firstline>
   </prototype>
+  
+  <prototype name="log4j" group="inet" description="Apache Log4j Config" targetNamespace="http://jakarta.apache.org/log4j/">
+    <location link="gen/log4j.hrc"/>
+    <firstline weight='4'>/&lt;!DOCTYPE\s+log4j:configuration\b/</firstline>
+    <filename weight='2'>/\.xml/ix</filename>
+  </prototype>
 
 
   <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">

@@ -20,7 +20,20 @@
  </xs:annotation>
 
   <xs:import namespace="http://colorer.sf.net/2003/hrc" schemaLocation="../../../doc/2003/hrc.xsd"/>
+  
+  <xs:group name='prefs'>
+    <xs:sequence>
+      <xs:element name="prefix" type="xs:NCName" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="empty-prefix" minOccurs="0">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="any-prefix" minOccurs="0">
+        <xs:complexType/>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
 
+  
   <xs:element name="custom">
     <xs:complexType>
       <xs:sequence>
@@ -31,15 +44,31 @@
     </xs:complexType>
   </xs:element>
 
+  
+  <xs:complexType name='strict-prefix-Type'>
+    <xs:sequence>
+      <xs:element name="element" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="name" type="xs:NCName" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:group ref="prefs"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  
   <xs:complexType name="custom-type-Type">
     <xs:sequence>
-      <xs:element name="prefix" type="xs:NCName" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="prefs"/>
+      <!--xs:element name="prefix" type="xs:NCName" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="empty-prefix" minOccurs="0">
         <xs:complexType/>
       </xs:element>
       <xs:element name="any-prefix" minOccurs="0">
         <xs:complexType/>
-      </xs:element>
+      </xs:element-->
+      <xs:element name='strict-prefix' type='strict-prefix-Type' minOccurs="0" maxOccurs="unbounded"/>
+      
       <xs:element name="contributors" type="xs:string"/>
       <xs:element name="top-level" minOccurs="0">
         <xs:complexType>
