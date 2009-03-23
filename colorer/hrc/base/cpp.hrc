@@ -109,7 +109,7 @@
      /xs
     ]]>
    </start>
-   <end region0="def:PairEnd" region1="c:StructureSymbol">/(&gt;)/</end>
+   <end match='/(&gt;)/' region0="def:PairEnd" region1="c:StructureSymbol"/>
   </block>
 
 <!--
