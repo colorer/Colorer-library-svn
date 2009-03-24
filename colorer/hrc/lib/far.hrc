@@ -12,6 +12,7 @@
  
 <package name="far.macro.string.internal"/>
 <package name="far.macro.string-quot.internal"/>
+<package name="far.macro.string-xquot.internal"/>
 
 <type name="far.macro.string.internal">
 	<entity name="quote" value="&quot;"/>
@@ -23,6 +24,13 @@
 <type name="far.macro.string-quot.internal">
 	<entity name="quote" value="\\&quot;"/>
 	<entity name="slash" value="\\\\"/>
+	
+	&far-macro-string;
+</type>
+
+<type name="far.macro.string-xquot.internal">
+	<entity name="quote" value="&amp;quot;"/>
+	<entity name="slash" value="\\"/>
 	
 	&far-macro-string;
 </type>
@@ -254,6 +262,29 @@
 			subst-scheme="far.macro.string-quot.internal:string.content"
 		/>
 	</inherit>
+</scheme>
+
+<scheme name="macro.sequense-qoute.xml">
+	<inherit scheme="macro.sequense">
+		<virtual scheme="macro.sequense" subst-scheme="macro.sequense-qoute"/>
+		<virtual 
+			scheme="far.macro.string.internal:string" 
+			subst-scheme="far.macro.string-xquot.internal:string"
+		/>
+		<virtual 
+			scheme="far.macro.string.internal:string.content" 
+			subst-scheme="far.macro.string-xquot.internal:string.content"
+		/>
+	</inherit>
+</scheme>
+
+<!-- XML support  -->
+<scheme name='QuotMacro'> <!-- 'macro', quot allow -->
+ <inherit scheme="macro.sequense"/>
+</scheme>
+
+<scheme name='AposMacro'> <!-- "macro", quot deny -->
+ <inherit scheme="macro.sequense-qoute.xml"/>
 </scheme>
 
 

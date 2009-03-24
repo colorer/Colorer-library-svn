@@ -243,6 +243,15 @@
    </xs:restriction>
   </xs:simpleType>
  </xs:attribute>
+ <xs:attribute name="auto">
+  <xs:simpleType>
+   <xs:restriction base='xs:string'>
+    <xs:enumeration value='off'/>
+    <xs:enumeration value='oncreate'/>
+    <xs:enumeration value='onload'/>
+   </xs:restriction>
+  </xs:simpleType>
+ </xs:attribute>
  <xs:attribute name="silent" type="esc:onoff"/>
  <xs:attribute name="enable" type="esc:onoff"/>
 </xs:complexType>

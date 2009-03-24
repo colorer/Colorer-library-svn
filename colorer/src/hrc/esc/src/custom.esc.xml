@@ -10,13 +10,19 @@
   <outline>
    <element name='type' extract='withAttribute' description='type setting'/>
   </outline>
+  
+  <script-n-style>
+  	<attribute language="far" scheme-suffix="Macro"/>
+  </script-n-style>
 
   <type xmlns="http://colorer.sf.net/2003/hrc">
 
+   <!-- xmlss support -->
    <scheme name="farmacro-content">
-    <inherit scheme="far:macro.string"/>
-    <inherit scheme="farmacro-content-old"/>
+    <inherit scheme="xmlss-far-Macro-attr"/>
    </scheme>
+   
+   <!-- TODO: fix xsd for remove 'errors' schemes... -->
    <scheme name="farmacro-content-error">
     <inherit scheme="farmacro-content"/>
    </scheme>
