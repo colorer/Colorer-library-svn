@@ -10,6 +10,7 @@
 
 <target name="hrd2css.prop">
  <property file="hrd2css.properties"/>
+ 
  <xmlcatalog id="xsd2hrcdtd">
   <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
        location="../../doc/2003/hrc.dtd"/>
@@ -21,11 +22,13 @@
        location="../../../doc/2003/XMLSchema.dtd"/>
  </xmlcatalog>
 </target>
- 
+
+
 <target name="hrd2css" depends="hrd2css.prop">
- <xslt in="${input}" out="${output}" style="../../bin/hrd2css/hrd2css.xsl" classpath="${xslt-classpath}">
-  <xmlcatalog refid="xsd2hrcdtd"/>
- </xslt>  
+	<xslt basedir='${input}' destdir='${output}' style="../../bin/hrd2css/hrd2css.xsl" classpath="${xslt-classpath}">
+		<xmlcatalog refid="xsd2hrcdtd"/>
+		<mapper type='glob'  from="*.hrd" to="*.css"/>
+	</xslt>  
 </target>
 
 </project>
