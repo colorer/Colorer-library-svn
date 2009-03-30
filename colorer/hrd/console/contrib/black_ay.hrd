@@ -51,6 +51,7 @@
   <assign name="def:Symbol" fore="#F"/>
   <assign name="def:SymbolStrong" fore="#C"/>
   <assign name="def:Prefix" fore="#2"/>
+  <assign name="def:PrefixStrong" fore="#E"/>
 
   <assign name="def:Keyword" fore="#F"/>
   <assign name="def:TypeKeyword" fore="#C"/>

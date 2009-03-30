@@ -49,6 +49,7 @@
     <region name="SymbolStrong" parent="Symbol" description="Strong Symbol"/>
     <region name="Operator" parent="Symbol" description="Symbolic or Literal Operator"/>
     <region name="Prefix" description="Prefix"/>
+    <region name="PrefixStrong" parent="Prefix" description="Other prefix"/>
 
     <region name="Keyword"  description="Common Keyword"/>
     <region name="KeywordStrong" parent="Keyword" description="Strong Keyword"/>

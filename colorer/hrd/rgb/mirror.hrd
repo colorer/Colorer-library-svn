@@ -26,6 +26,7 @@
    <assign name="def:Symbol" fore="#FFFF55" style="1"/>
    <assign name="def:SymbolStrong" fore="#FF5555" style="1"/>
    <assign name="def:Prefix" fore="#00AAAA"/>
+   <assign name="def:PrefixStrong" fore="#CC22AA"/>
    <assign name="def:Operator" fore="#FFFF55"/>
    <assign name="def:Keyword" fore="#FFFFFF"/>
    <assign name="def:KeywordStrong" fore="#00AAAA"/>

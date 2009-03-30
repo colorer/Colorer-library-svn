@@ -56,7 +56,7 @@
     <type xmlns="http://colorer.sf.net/2003/hrc">
 
     <!-- EE begin -->
-      <region name="Scheme.nsprefix" parent="xml:Attribute.nsprefix"/>
+      <region name="Scheme.nsprefix" parent="xml:Attribute.defined.nsprefix"/>
       <region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
       <region name="Scheme.name" parent="def:String"/>
 

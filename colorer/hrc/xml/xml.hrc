@@ -80,12 +80,16 @@
 
     <region name="element.defined.start.name" parent="Keyword"/>
     <region name="element.defined.end.name"   parent="Keyword"/>
+    <region name="element.defined.nsprefix"   parent="Keyword"/>
 
-    <region name="Attribute.name"         parent="ParameterUnknown"/>
-    <region name="Attribute.defined.name" parent="Parameter"/>
-    <region name="Attribute.nsprefix"     parent="Prefix"/>
-    <region name="Attribute.nscolon"      parent="SymbolStrong"/>
-    <region name="Attribute.eq"           parent="Symbol"/>
+    <region name="Attribute.name"             parent="ParameterUnknown"/>
+    <region name="Attribute.defined.name"     parent="Parameter"/>
+    <region name="Attribute.nsprefix"         parent="PrefixStrong"/>
+    <region name="Attribute.defined.nsprefix" parent="Prefix"/>
+    <region name="Attribute.nscolon"          parent="SymbolStrong"/>
+    <region name="Attribute.eq"               parent="Symbol"/>
+    <region name="Attribute.xmlns"            parent="Attribute.defined.nsprefix"/> 
+    <region name="Attribute.xmlns.syffix"     parent="Attribute.defined.name"/>
 
     <region name="AttValue"          parent="String"/>
     <region name="AttValue.start"    parent="AttValue"/>
@@ -233,10 +237,9 @@
     <region name='XMLTagOutline' parent='Outlined'/>
 
 
-
       <scheme name="xmlns-attribute">
          <block start="/(\s?#1|^)(xmlns)((:)(%NCName;))?\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.nsprefix" region04="Attribute.nscolon" region05="Attribute.defined.name"
+                region02="Attribute.xmlns" region04="Attribute.nscolon" region05="Attribute.xmlns.syffix"
                 scheme="xmlschema:anyURI-AttributeContent"/>
       </scheme>
       
@@ -244,16 +247,16 @@
       
       <scheme name="xsi-attributeGroup">
          <block start="/(\s?#1|^)(xsi)(:)(schemaLocation)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
+                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
                 scheme="xmlschema:anyURI-AttributeContent"/>
          <block start="/(\s?#1|^)(xsi)(:)(noNamespaceSchemaLocation)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
+                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
                 scheme="xmlschema:anyURI-AttributeContent"/>
          <block start="/(\s?#1|^)(xsi)(:)(type)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
+                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
                 scheme="xmlschema:QName-AttributeContent"/>
          <block start="/(\s?#1|^)(xsi)(:)(nil)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
+                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
                 scheme="xmlschema:boolean-AttributeContent"/>
       </scheme>
 
@@ -474,7 +477,9 @@
     </scheme>
     <scheme name="Attribute.any">
       <!-- FIX bounds !!! -->
-      <block start="/(\s?#1|^)(%Name;)\M([\s\=]|$)/" end="/[&quot;&apos;]?#1/" scheme="AttributeContent"
+      <block start="/(\s?#1|^)(((%NCName;)(:))?%Name;)\M([\s\=]|$)/" 
+             region03='Attribute.nsprefix' region05='Attribute.nscolon'
+             end="/[&quot;&apos;]?#1/" scheme="AttributeContent"
              region02="Attribute.name"/>
     </scheme>
     <scheme name="AttributeContent">

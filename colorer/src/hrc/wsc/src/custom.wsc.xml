@@ -51,7 +51,7 @@
 		
 		<scheme name="classid-content">
 			<regexp match="/(clsid)(:)%guid;/" 
-				region1="xml:Attribute.nsprefix" region2="guid.bra"
+				region1="xml:Attribute.defined.nsprefix" region2="guid.bra"
 			/>
 		</scheme>
 		

@@ -49,6 +49,7 @@ F - white
   <assign name="def:Symbol" fore="#C"/>
   <assign name="def:SymbolStrong" fore="#3"/>
   <assign name="def:Prefix" fore="#E"/>
+  <assign name="def:PrefixStrong" fore="#F"/>
 
   <assign name="def:Keyword" fore="#E"/>
   <assign name="def:TypeKeyword" fore="#C"/>

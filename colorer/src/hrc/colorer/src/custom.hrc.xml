@@ -24,7 +24,7 @@
 	
 	<region name="BracketStart" parent="StringEdge"/>
 	<region name="BracketEnd"   parent="StringEdge"/>
-	<region name="Scheme.nsprefix" parent="xml:Attribute.nsprefix"/>
+	<region name="Scheme.nsprefix" parent="xml:Attribute.defined.nsprefix"/>
 	<region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
 	<region name="Scheme.name" parent="def:String"/>
 	<region name="Scheme.keyword" parent="def:StringContent"/>

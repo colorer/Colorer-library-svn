@@ -301,7 +301,7 @@
          /><!-- ([%@])? region11="SubProt" -->
          
          <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="Word"/>
-         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_']+) /x" region="Word"/>
+         <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_':]+) /x" region="Word"/>
 
 <!-- linear comments -->
          <inherit scheme="Comment"/>

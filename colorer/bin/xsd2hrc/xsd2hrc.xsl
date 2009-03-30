@@ -227,11 +227,11 @@
         <region name="element.start.gt"   parent="xml:element.start.gt"/>
         <region name="element.end.lt"     parent="xml:element.end.lt"/>
         <region name="element.end.gt"     parent="xml:element.end.gt"/>
-        <region name="element.nsprefix"   parent="element.start.name"/>
+        <region name="element.nsprefix"   parent="xml:element.defined.nsprefix"/>
         <region name="element.nscolon"    parent="xml:element.nscolon"/>
 
         <region name="Attribute.name"     parent="xml:Attribute.defined.name"/>
-        <region name="Attribute.nsprefix" parent="xml:Attribute.nsprefix"/>
+        <region name="Attribute.nsprefix" parent="xml:Attribute.defined.nsprefix"/>
         <region name="Attribute.nscolon"  parent="xml:Attribute.nscolon"/>
 
         <region name="AttValue"           parent="xml:AttValue.defined"/>
