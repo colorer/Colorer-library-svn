@@ -56,17 +56,10 @@
     <type xmlns="http://colorer.sf.net/2003/hrc">
 
     <!-- EE begin -->
-      <region name="Scheme.nsprefix" parent="xml:Attribute.defined.nsprefix"/>
-      <region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
+      <region name="Scheme.nsprefix" parent="xml:nsprefix"/>
+      <region name="Scheme.nscolon"  parent="xml:nscolon"/>
       <region name="Scheme.name" parent="def:String"/>
 
-      <region name="uri.scheme" parent="Scheme.nsprefix"/>
-      <region name="uri.nscolon" parent="Scheme.nscolon"/>
-      <region name="uri.delit" parent="def:Keyword"/>
-      <region name="uri.authority" parent="def:URL"/>
-      <region name="uri.path" parent="def:Path"/>
-      <region name="uri.query" parent="def:ParameterStrong"/>
-      <region name="uri.fragment" parent="def:Constant"/>
 
       <!-- QName -->
 
@@ -123,32 +116,7 @@
       <!-- URI -->
 
       <scheme name="anyURI-content">
-       <annotation><documentation><![CDATA[
-         RFC 2396:
-
-        ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?
-              12            3  4          5    6   7      8  9
-
-         scheme    = $2
-         authority = $4
-         path      = $5
-         query     = $7
-         fragment  = $9
-
-       ]]></documentation></annotation>
-       <regexp
-         match="/ (([^:/?#\s]+):)? (//([^/?#\s]*))? ([^?#\s]*) (\?([^#\s]*))? (#(\S*))? /x"
-         region1="uri.nscolon" region2="uri.scheme"
-         region3="uri.delit" region4="uri.authority"
-         region5="uri.path"
-         region6="uri.delit" region7="uri.query"
-         region8="uri.delit" region9="uri.fragment"
-         priority="low"
-        />
-        <!--
-         <inherit scheme="def:NetURL"/>
-         <inherit scheme="string-content"/>
-        -->
+      	<inherit scheme='uri:uri'/>
       </scheme>
 
     <!-- EE end -->

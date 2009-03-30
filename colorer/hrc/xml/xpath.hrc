@@ -42,7 +42,7 @@
 ]]></contributors></annotation>
 
 
-<region name="path.separator" parent="xmlschema:uri.delit"/>
+<region name="path.separator" parent="uri:delit"/>
 <region name="path.or" parent="def:SymbolStrong"/><!-- ? -->
 
 <region name="expr.quote" parent="def:Symbol"/>
@@ -55,14 +55,14 @@
 <region name="axis" parent="def:Label"/>
 <region name="axis.abbr" parent="def:SymbolStrong"/>
 <region name="axis.name" parent="axis"/><!-- ? -->
-<region name="axis.separator" parent="xmlschema:uri.delit"/>
+<region name="axis.separator" parent="uri:delit"/>
 
 <region name="node.type" parent="def:TypeKeyword"/>
 <region name="node.type.abbr" parent="def:Symbol"/>
-<region name="node.name" parent="xmlschema:uri.path"/> <!-- "def:String,  def:Text ?" -->
+<region name="node.name" parent="uri:path"/> <!-- "def:String,  def:Text ?" -->
 <region name="node.name.all" parent="expr.op"/><!-- == 'mul' :-( -->
-<region name="node.nsprefix" parent="xmlschema:Scheme.nsprefix"/>
-<region name="node.nscolon" parent="xmlschema:Scheme.nscolon"/>
+<region name="node.nsprefix" parent="uri:nsprefix"/>
+<region name="node.nscolon" parent="uri:nscolon"/>
 
 
 <region name="var" parent="def:Var"/>

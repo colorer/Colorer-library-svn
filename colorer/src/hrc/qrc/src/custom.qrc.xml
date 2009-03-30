@@ -12,7 +12,7 @@
 			
 			<scheme name="path-content">
 				<regexp match="/(\/?)[^/?#:*|,&lt;&gt;\s]*/" 
-					region="xmlschema:uri.path" region1="xmlschema:uri.delit"
+					region="uri:path" region1="uri:delit"
 					priority="low"
 				/>
 			</scheme>

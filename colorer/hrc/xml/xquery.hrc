@@ -465,7 +465,7 @@
     </inherit>
 </scheme>
 <scheme name="UriLiteralContent">
-    <inherit scheme="xmlschema:anyURI-content"/>
+    <inherit scheme="uri:uri"/>
     <inherit scheme="StringLiteralContent"/>
 </scheme>
 

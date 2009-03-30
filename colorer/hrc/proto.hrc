@@ -657,6 +657,9 @@
   <package name="def" description="core definitions">
     <location link="lib/default.hrc"/>
   </package>
+  <package name="uri" description="URI (RFC 2396)">
+    <location link="lib/uri.hrc"/>
+  </package>
   <package name="ole" description="OLE Commons">
     <location link="lib/ole.hrc"/>
   </package>

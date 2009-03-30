@@ -66,6 +66,9 @@
 
     <region name="CharRef"       parent="def:Parameter" description="Character Reference"/>
     <region name="EntityRef"     parent="def:ParameterStrong" description="XML Entity Reference"/>
+    
+    <region name="nsprefix" parent="uri:nsprefix"/>
+    <region name="nscolon"  parent="uri:nscolon"/>
 
     <region name="element.start.name" parent="def:Tag"/>
     <region name="element.start.lt"   parent="def:OpenTag"/>
@@ -73,8 +76,8 @@
     <region name="element.end.name"   parent="def:Tag"/>
     <region name="element.end.lt"     parent="def:CloseTag"/>
     <region name="element.end.gt"     parent="def:CloseTag"/>
-    <region name="element.nsprefix"   parent="def:Prefix"/>
-    <region name="element.nscolon"    parent="def:SymbolStrong"/>
+    <region name="element.nsprefix"   parent="nsprefix"/>
+    <region name="element.nscolon"    parent="nscolon"/>
                                               
     <region name="element.defined.start.name" parent="def:Keyword"/>
     <region name="element.defined.end.name"   parent="def:Keyword"/>
@@ -83,8 +86,8 @@
     <region name="Attribute.name"             parent="def:ParameterUnknown"/>
     <region name="Attribute.defined.name"     parent="def:Parameter"/>
     <region name="Attribute.nsprefix"         parent="def:PrefixStrong"/>
-    <region name="Attribute.defined.nsprefix" parent="def:Prefix"/>
-    <region name="Attribute.nscolon"          parent="def:SymbolStrong"/>
+    <region name="Attribute.defined.nsprefix" parent="nsprefix"/>
+    <region name="Attribute.nscolon"          parent="nscolon"/>
     <region name="Attribute.eq"               parent="def:Symbol"/>
     <region name="Attribute.xmlns"            parent="Attribute.defined.nsprefix"/> 
     <region name="Attribute.xmlns.syffix"     parent="Attribute.defined.name"/>

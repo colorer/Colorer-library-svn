@@ -27,13 +27,19 @@
 
     
     <region name="doctype.keyword"    parent="def:Keyword"/>
-    
+    <region name='Literal'            parent="xml:AttValue"/>
+    <region name='Literal.start'      parent="xml:AttValue.start"/>
+    <region name='Literal.end'        parent="xml:AttValue.end"/>
     
     <region name="ExternalID"         parent="doctype.keyword"/>
     <region name="ExternalID.SYSTEM"  parent="ExternalID"/>
     <region name="ExternalID.PUBLIC"  parent="ExternalID"/>
-    <region name="PubidLiteral"       parent="def:String"/>
-    <region name="SystemLiteral"      parent="def:String"/>
+    <region name="PubidLiteral"       parent="Literal"/>
+    <region name="SystemLiteral"      parent="Literal"/>
+    
+    <region name="PubidLiteral.own"   parent="uri:nsprefix"/>
+    <region name="PubidLiteral.sep"   parent="uri:delit"/>
+    
 
     <region name="markupdecl"         parent="def:default"/>
     <region name="markupdecl.start"   parent="xml:element.start.lt"/>
@@ -149,20 +155,6 @@
     </scheme>
 
 
-    <scheme name="EntityValue">
-      <annotation><documentation><![CDATA[
-        [9]    EntityValue  ::=   '"' ([^%&"] | PEReference | Reference)* '"' | "'" ([^%&'] | PEReference | Reference)* "'"
-      ]]></documentation></annotation>
-      <block start="/([&quot;&apos;])/" end="/\y1/"
-             scheme="EntityValue.content" region="EntityValue"/>
-    </scheme>
-
-    <scheme name="EntityValue.content">
-      <inherit scheme="xml:Reference"/>
-      <inherit scheme="PEReference"/>
-      <regexp match="/[&amp;\%[^%xml:Char;]]/" region="badChar"/>
-    </scheme>
-
 
     
     <!--  doctype: used in xml only -->
@@ -195,18 +187,28 @@
       <annotation><documentation><![CDATA[
         [11]   SystemLiteral   ::=   ('"' [^"]* '"') | ("'" [^']* "'")
       ]]></documentation></annotation>
-      <block start="/([&quot;&apos;])/" end="/\y1/"
-             scheme="def:empty" region="PubidLiteral"/>
+      <block start="/([&quot;&apos;])/" end="/(\y1)/"
+             region00='Literal.start' region01='PairStart'
+             region10='Literal.end'   region11='PairEnd'
+             scheme="uri:uri" region="SystemLiteral"/>
     </scheme>
 
     <scheme name="PubidLiteral">
       <annotation><documentation><![CDATA[
         [12]   PubidLiteral    ::=   '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
       ]]></documentation></annotation>
-      <block start="/([&quot;&apos;])/" end="/\y1/"
+      <block start="/([&quot;&apos;])/" end="/(\y1)/"
+             region00='Literal.start' region01='PairStart'
+             region10='Literal.end'   region11='PairEnd'
              scheme="PubidLiteral.content" region="PubidLiteral"/>
     </scheme>
+    
     <scheme name="PubidLiteral.content">
+      <regexp match='/~ISO/' region='PubidLiteral.own'/>
+      <regexp match='/~[\-+]\M\/{2}\S/' region='PubidLiteral.own'/>
+      <regexp match='/\S?#1\/{2}\M\S/' region='PubidLiteral.sep'/>
+      <regexp match='/~.+/' region0="badChar" priority="low"/>
+      
       <regexp match="/[^%xml:PubidChar;]+/" region0="badChar" priority="low"/>
     </scheme>
 
@@ -214,9 +216,12 @@
       <annotation><documentation><![CDATA[
         [75]   ExternalID      ::=   'SYSTEM' S SystemLiteral | 'PUBLIC' S PubidLiteral S SystemLiteral
       ]]></documentation></annotation>
-      <regexp match="/\bSYSTEM\b/" region="ExternalID.SYSTEM"/>
+      <!--regexp match="/\bSYSTEM\b/" region="ExternalID.SYSTEM"/-->
       <block  start="/\bPUBLIC\b/" end="/[&quot;&apos;]?#1/"
               scheme="PubidLiteral" region00="ExternalID.PUBLIC"/>
+      <block  start="/\bSYSTEM\b/" end="/[&quot;&apos;]?#1/"
+              scheme="SystemLiteral" region00="ExternalID.SYSTEM"/>
+      <!-- PUBLIC, arg 2 (cannot intercept) -->
       <inherit scheme="SystemLiteral"/>
     </scheme>
 
@@ -233,7 +238,7 @@
 [64]   ignoreSectContents   ::=   Ignore ('<![' ignoreSectContents ']]]]><![CDATA[>' Ignore)*
 [65]   Ignore               ::=   Char* - (Char* ('<![' | ']]]]><![CDATA[>') Char*)
       ]]></documentation></annotation>
-      <block start="/(&lt;!\[)/" end="/(\]\]&gt;)/"
+      <block start="/(&lt;!\[)/" end="/\](\]&gt;)/"
              scheme="conditionalSect.content" region="conditionalSect"
              region00="PairStart" region01="conditionalSect.start"
              region10="PairEnd" region11="conditionalSect.end"/>
@@ -242,10 +247,11 @@
     <scheme name="conditionalSect.content">
       <regexp match="/\b(INCLUDE|IGNORE)\b/" region="conditionalSect.spec"/>
       <inherit scheme="PEReference"/>
-      <block start="/(\[)/" end="/\M(\])\]\>/"
+      <block start="/(\[)/" end="/\M((\]))\]\>/"
              scheme="extSubsetDecl"
-             region00="PairStart" region01="conditionalSect.start"
-             region11="PairEnd"/>
+             region00="PairStart" region01="markupdecl.start"
+             region11="PairEnd"   region12="markupdecl.end"
+      />
     </scheme>
 
     <scheme name="markupdecl">
@@ -371,7 +377,7 @@
       ]]></documentation></annotation>
       <block start="/(\b%xml:Name;\b|%PEReference;)/" end="/\M\>/" scheme="AttDef"
              region01="AttlistDecl.name"/>
-      <inherit scheme="xml:badChar"/>
+      <inherit scheme="badChar"/>
     </scheme>
 
     <scheme name="AttDef">
@@ -415,6 +421,7 @@
 
 
 
+    
     <scheme name="EntityDecl">
       <annotation><documentation><![CDATA[
         [70]   EntityDecl    ::=   GEDecl | PEDecl
@@ -425,16 +432,35 @@
         [76]   NDataDecl     ::=   S 'NDATA' S Name
       ]]></documentation></annotation>
       <inherit scheme="PEReference"/>
-      <regexp match="/\%/" region="EntityDecl.PE"/>
-      <inherit scheme="ExternalID"/>
       <inherit scheme="EntityValue"/>
+      <regexp match="/\%/" region="EntityDecl.PE"/>
+      
+      <inherit scheme="ExternalID"/>
       <regexp match="/\bNDATA\b/" region="NDataDecl"/>
       <regexp match="/\b%xml:Name;\b/" region="EntityDecl.name"/>
 
       <inherit scheme="badChar"/>
     </scheme>
 
+    <scheme name="EntityValue">
+      <annotation><documentation><![CDATA[
+        [9]    EntityValue  ::=   '"' ([^%&"] | PEReference | Reference)* '"' | "'" ([^%&'] | PEReference | Reference)* "'"
+      ]]></documentation></annotation>
+      <block start="/([&quot;&apos;])/" end="/(\y1)/"
+             region00='Literal.start' region01='PairStart'
+             region10='Literal.end'   region11='PairEnd'
+             scheme="EntityValue.content" region="EntityValue"/>
+    </scheme>
 
+    <scheme name="EntityValue.content">
+      <inherit scheme="xml:Reference"/>
+      <inherit scheme="PEReference"/>
+      <regexp match="/[&amp;\%[^%xml:Char;]]/" region="badChar"/>
+    </scheme>
+
+
+    
+    
     <scheme name="NotationDecl">
       <annotation><documentation><![CDATA[
         [82]   NotationDecl  ::=   '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'

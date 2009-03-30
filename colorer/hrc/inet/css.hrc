@@ -405,7 +405,7 @@
     </scheme>
     <scheme name="urlFunc">
       <block start="/\b(url)(\s)*((\(\s*)([&quot;&apos;]?))/" end="/(\y5)(\s*\))/"
-       scheme="xmlschema:anyURI-content" region="String"
+       scheme="uri:uri" region="String"
        region01="PropertyFunc" region03="def:PairStart" region04="Symbol" region05="String"
        region10="def:PairEnd" region11="String" region12="Symbol"
       />
