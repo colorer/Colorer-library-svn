@@ -2,6 +2,7 @@ xml/build.xml
 xml/ex1.wsdl
 xml/journal.dtd
 xml/xxx.xml
+xml/full/animals.rdf
 xml/full/book-order.xml
 xml/full/bxml.xml
 xml/full/cpp.hrc

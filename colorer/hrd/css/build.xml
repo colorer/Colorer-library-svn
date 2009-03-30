@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
-
-<project name="hrd2css" default="hrd2css" basedir=".">
+<project name="hrd2css" default="all" basedir=".">
 
 <!-- all properties -->
-
 <property name="xslt-classpath" value=""/>
+<property name='input' value='../rgb' />
+<property name='output' value='.' />
 
 <!-- dtd2xsd  -->
 
 <target name="hrd2css.prop">
- <property file="hrd2css.properties"/>
- 
  <xmlcatalog id="xsd2hrcdtd">
   <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
        location="../../doc/2003/hrc.dtd"/>
@@ -30,5 +28,14 @@
 		<mapper type='glob'  from="*.hrd" to="*.css"/>
 	</xslt>  
 </target>
+
+<target name='all' depends="hrd2css"/>
+
+<target name="clean">
+ <delete failonerror='false'>
+  <fileset dir="${output}" includes="**/*.css"/>
+ </delete>
+</target>
+
 
 </project>
