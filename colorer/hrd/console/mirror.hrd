@@ -69,6 +69,7 @@
   
   <assign name="def:Directive" fore="#A" style='1'/>
   <assign name="def:DirectiveContent" fore="#2" style='1'/>
+  <assign name="def:DirectiveEdge" fore="#2" style='1'/>
   <assign name="def:Parameter" fore="#A" style='2'/>
   <assign name="def:ParameterStrong" fore="#D" style='2'/>
 

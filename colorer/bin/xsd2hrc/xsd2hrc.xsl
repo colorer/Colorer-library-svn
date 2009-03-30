@@ -71,49 +71,6 @@
   
 
   <!-- possible used namespace prefixes -->
-
-  <!-- EE:new - ->
-  <xsl:variable name="ns-map" select="$custom-type/c:prefix | $custom-type/c:empty-prefix | $custom-type/c:any-prefix"/>
-  <!- - EE:new - ->
-  <xsl:template name="ns-real-prefix">
-   <xsl:param name="nscolon"/>
-    <xsl:if test="$ns-map">
-      <xsl:text>(?{}</xsl:text>
-      <xsl:choose>
-        <xsl:when test="$ns-map/self::c:any-prefix">
-          <xsl:text>%xml:NCName;</xsl:text>
-        </xsl:when>
-        <xsl:when test="$ns-map/self::c:prefix">
-          <xsl:text>(?{}</xsl:text>
-          <xsl:for-each select="$ns-map/self::c:prefix">
-            <xsl:value-of select="."/>
-            <xsl:if test="position() != last()">|</xsl:if>
-          </xsl:for-each>
-          <xsl:text>)</xsl:text>
-        </xsl:when>
-      </xsl:choose>
-      <xsl:text>(?{</xsl:text>
-      	<xsl:value-of select="$nscolon"/>
-      <xsl:text>}:))</xsl:text>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:variable name="ns-real-prefix">
-  	<xsl:call-template name="ns-real-prefix"/>
-  </xsl:variable>
-  <xsl:variable name="nsprefix">
-    <xsl:if test="$ns-map">
-      <xsl:value-of select="$ns-real-prefix"/>
-      <xsl:if test="$ns-map/self::c:empty-prefix">?</xsl:if>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:variable name="attr-nsprefix"><!- - EE:new - ->
-  	<xsl:call-template name="ns-real-prefix">
-  		<xsl:with-param name="nscolon" select="'Attribute.nscolon'"/>
-  	</xsl:call-template>
-  </xsl:variable>
-  -->
   
   <xsl:variable name="ns-real-prefix">
   	<xsl:apply-templates mode='nsprefix-real' select='$custom-type'/>

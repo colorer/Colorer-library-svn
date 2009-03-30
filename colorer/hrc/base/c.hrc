@@ -43,9 +43,10 @@
   <region name="StructureSymbol" parent="def:SymbolStrong"/>
   <region name="PrefixSymbol" parent="def:SymbolStrong"/> <!-- !!EE: new -->
 
-  <region name="Preproc" parent="def:Directive"/>
+  <region name="Preproc"     parent="def:DirectiveContent"/>
+  <region name="PreprocPref" parent="def:DirectiveEdge"/> <!-- # -->
   <region name="PreprocSpec" parent="def:KeywordStrong"/>
-  <region name="PreprocWord" parent="def:DirectiveContent"/> <!-- !!EE: def:Keyword -->
+  <region name="PreprocWord" parent="def:Directive"/> <!-- !!EE: def:Keyword -->
   <region name="PreprocInclude" parent="def:Path"/>
   <region name="PreprocIncludeEdge" parent="def:StringEdge"/>
   <region name="AsmCode" parent="def:Directive"/>
@@ -231,15 +232,15 @@
   <scheme name="PreprocComment">
    <regexp match="/(\/\/.*$)/" region="LineComment"/>
    <block start="/\/\*/" end="/\*\//" scheme="def:Comment" region="Comment"/>
-   <block start="/^\s*#\s*if/" end="/^\s*\#\s*endif/" scheme="PreprocComment" region="Comment"/>
+   <block start="/^\s*(#)\s*if/" end="/^\s*\#\s*endif/" scheme="PreprocComment" region="Comment"/>
   </scheme>
 
   <scheme name="c">
    <!-- c preprocessor -->
    <block start="/^\s*\#\s*if\s+0\s*$/" end="/^\s*(?{Directive}\#\s*(endif|else))/"
           scheme="PreprocComment" region00="def:Directive" region="def:Comment"/>
-   <block start="/^\s*#/" end="/(^ | [^\\]?#1) $/x"
-          scheme="Preproc" region="Preproc"/>
+   <block start="/^\s*(#)/" end="/(^ | [^\\]?#1) $/x"
+          scheme="Preproc" region="Preproc" region01='PreprocPref'/>
 
 
    <block start="/(\{)/" end="/(\})/" scheme="c"
@@ -433,8 +434,8 @@
   #endif
     )
    -->
-   <block start="/^\s*#/" end="/(^ | [^\\]?#1) $/x"
-          scheme="Preproc" region="Preproc"/>
+   <block start="/^\s*(#)/" end="/(^ | [^\\]?#1) $/x"
+          scheme="Preproc" region="Preproc" region01='PreprocPref'/>
 
    <!-- Numbers -->
    <inherit scheme="def:Number"/>

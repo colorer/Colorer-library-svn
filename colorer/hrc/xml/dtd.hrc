@@ -18,26 +18,27 @@
     <region name="EntityValue"   parent="def:String"/>
     
     
+    <region name="doctypedecl"        parent="xml:decl"/>
+    <region name="doctypedecl.start"  parent="xml:decl.start"/>
+    <region name="doctypedecl.end"    parent="xml:decl.end"/>
+    <region name="doctypedecl.tag"    parent="def:Keyword"/> <!-- xml:decl.name -->
     
-    <region name="doctypedecl"        parent="def:default"/>
-    <region name="doctypedecl.start"  parent="def:Directive"/>
-    <region name="doctypedecl.end"    parent="def:Directive"/>
-    <region name="doctypedecl.tag"    parent="def:Directive"/>
-    <region name="doctypedecl.name"   parent="def:DirectiveContent"/>
+    <region name="doctypedecl.name"   parent="def:KeywordStrong"/>
+    <region name="doctypedecl.attr"   parent="xml:decl.name"/>
 
-    
-    <region name="doctype.keyword"    parent="def:Keyword"/>
+   
     <region name='Literal'            parent="xml:AttValue"/>
     <region name='Literal.start'      parent="xml:AttValue.start"/>
     <region name='Literal.end'        parent="xml:AttValue.end"/>
     
-    <region name="ExternalID"         parent="doctype.keyword"/>
+    
+    <region name="ExternalID"         parent="doctypedecl.attr"/>
     <region name="ExternalID.SYSTEM"  parent="ExternalID"/>
     <region name="ExternalID.PUBLIC"  parent="ExternalID"/>
     <region name="PubidLiteral"       parent="Literal"/>
     <region name="SystemLiteral"      parent="Literal"/>
     
-    <region name="PubidLiteral.own"   parent="uri:nsprefix"/>
+    <region name="PubidLiteral.own"   parent="def:Directive"/>
     <region name="PubidLiteral.sep"   parent="uri:delit"/>
     
 
@@ -90,7 +91,7 @@
     <!-- attr name -->
     <region name="AttDef.name"        parent="AttlistDecl.name"/>
     <!-- ID, IDREF ... -->
-    <region name="AttType.spec"       parent="doctype.keyword"/>
+    <region name="AttType.spec"       parent="doctypedecl.attr"/>
     <!-- NOTATION -->
     <region name="NotationType.spec"  parent="AttType.spec"/>
     <!-- #REQUIRED #IMPLIED #FIXED -->
@@ -116,7 +117,7 @@
     <!-- % -->
     <region name="EntityDecl.PE"      parent="contentspec.op"/>
     <!-- NDATA -->
-    <region name="NDataDecl"          parent="doctype.keyword"/>
+    <region name="NDataDecl"          parent="doctypedecl.attr"/>
 
     <!-- <!NOTATION name PUBLIC "aaa"> -->
     <region name="NotationDecl"       parent="doctypedecl"/>

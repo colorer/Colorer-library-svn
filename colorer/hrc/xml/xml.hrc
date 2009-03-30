@@ -101,21 +101,28 @@
     <region name="AttValue.defined.end"   parent="AttValue.end"/>
 
 
-    <region name="CDStart" parent="def:CommentEdge"/>
+    <region name="decl"         parent="def:default" description="Directives like &lt;! ... gt;"/>
+    <region name="decl.start"   parent="def:DirectiveEdge"/>
+    <region name="decl.end"     parent="def:DirectiveEdge"/>
+    <region name="decl.name"    parent="def:Directive"/>
+    <region name="decl.content" parent="def:DirectiveContent"/>
+
+    
+    <region name="PI.start"   parent="decl.start"   description="Processing Instruction [&lt;?]"/>
+    <region name="PI.name"    parent="decl.name"    description="Processing Instruction Name"/>
+    <region name="PI.content" parent="decl.content" description="Processing Instruction Content"/>
+    <region name="PI.end"     parent="decl.end"     description="Processing Instruction [?&gt;]"/> 
+
+    
+    <region name="CDStart" parent="decl.start"/>
     <region name="CData"   parent="def:default"/>
-    <region name="CDEnd"   parent="def:CommentEdge"/>
+    <region name="CDEnd"   parent="decl.end"/>
 
-    <region name="PI.start"   parent="def:Directive"         description="Processing Instruction [&lt;?]"/>
-    <region name="PI.name"    parent="def:Directive"         description="Processing Instruction Name"/>
-    <region name="PI.content" parent="def:DirectiveContent"  description="Processing Instruction Content"/>
-    <region name="PI.end"     parent="def:Directive"         description="Processing Instruction [?&gt;]"/> 
-
+    
     <!-- autogenrateted PI ... -->
-    <region name="PI.name.defined" parent="element.defined.start.name"/>
-            <!-- parent="" def:Label  -->
-    <region name="PI.start.defined" parent="PI.content"/>
-            <!-- parent="element.defined.lt" def:Label -->
-    <region name="PI.end.defined" parent="PI.start.defined"/>
+    <region name="PI.name.defined"  parent="element.defined.start.name"/>
+    <region name="PI.start.defined" parent="PI.start"/>
+    <region name="PI.end.defined"   parent="PI.end"/>
 
     
     <region name="XMLDecl" parent="PI.content"/>

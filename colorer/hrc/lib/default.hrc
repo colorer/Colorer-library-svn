@@ -73,6 +73,7 @@
 
     <region name="Directive" description="Compiler/Preprocessor directive"/>
     <region name="DirectiveContent" parent="Directive" description="Internal directive text"/>
+    <region name="DirectiveEdge"    parent="DirectiveContent" description="Directive edges"/>
 
     <region name="Parameter" description="Parameter declaration"/>
     <region name="ParameterStrong" parent="Parameter" description="Special parameter"/>
