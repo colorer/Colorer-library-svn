@@ -14,6 +14,7 @@
 	<target type='relaxng' place='hrc/xml/'/>
 	<target type='sch' place='hrc/auto/gen/'/>
 	<target type='wsdl' place='hrc/xml/'/>
+	<target type='xmlcatalog' place='hrc/auto/gen'/>
 	<target type='docbook' place='hrc/auto/gen/'/>
 	<target type='mathml' place='hrc/auto/gen/'/>
 	<target type='svg' place='hrc/inet'/>

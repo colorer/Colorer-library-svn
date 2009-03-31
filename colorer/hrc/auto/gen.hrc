@@ -5,6 +5,12 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
+  
+  <prototype name="xmlcatalog" group="xml" description="XML Catalog" targetNamespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <location link="gen/xmlcatalog.hrc"/>
+    <filename>/\.xml$/ix</filename>
+    <firstline weight='5'>/-\/{2}OASIS\/{2}DTD Entity Resolution XML Catalog V1\.0\/{2}EN/</firstline>
+  </prototype>  
   <prototype name="xslfo" group="xml" description="xslfo 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="gen/xslfo.hrc"/>
     <filename>/\.(xslfo?|fo)$/i</filename>
