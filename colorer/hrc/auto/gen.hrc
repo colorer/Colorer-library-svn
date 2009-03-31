@@ -31,6 +31,13 @@
     <location link="gen/wml.hrc"/>
     <filename>/\.wml$/i</filename>
   </prototype>
+  <package name="rdfs" description="RDF schema" targetNamespace="http://www.w3.org/2000/01/rdf-schema#">
+    <location link="gen/rdfs.hrc"/>
+  </package>
+  <prototype name="rdf" group="xml" description="RDF" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <location link="gen/rdf.hrc"/>
+    <filename>/\.rdf$/ix</filename>
+  </prototype>
   <prototype name="parser" group="inet" description="Parser">
     <location link="gen/parser.hrc"/>
     <filename>/\.(p|html)$/i</filename>
@@ -43,13 +50,6 @@
   <prototype name="wsf" group="inet" description="wsf">
     <location link="gen/wsf.hrc"/>
     <filename>/\.wsf$/i</filename>
-  </prototype>
-  <package name="rdfs" description="RDF schema" targetNamespace="http://www.w3.org/2000/01/rdf-schema#">
-    <location link="gen/rdfs.hrc"/>
-  </package>
-  <prototype name="rdf" group="xml" description="RDF" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <location link="gen/rdf.hrc"/>
-    <filename>/\.rdf$/ix</filename>
   </prototype>
   <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
     <location link="gen/rss.hrc"/>
@@ -109,6 +109,11 @@
   <package name='ibatis2-sql-map-pack'>
     <location link="gen/ibatis2-sql-map-pack.hrc"/>
   </package>
+  <prototype name="yml" group="inet.other" description="Yandex Market Language" targetNamespace="/">
+    <location link="gen/yml.hrc"/>
+    <firstline weight='4'>/&lt;!DOCTYPE\s+yml_catalog\b/</firstline>
+    <filename weight='2'>/\.xml/ix</filename>
+  </prototype>
 
   
 </hrc>

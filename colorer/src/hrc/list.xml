@@ -32,5 +32,6 @@
 	<target type='qrc' place='hrc/auto/gen'/>
 	<target type='ibatis' place='hrc/auto/gen'/>
 	<target type='log4j' place='hrc/auto/gen'/>
+	<target type='yml' place='hrc/auto/gen'/>
 </target-list>
 
