@@ -279,6 +279,10 @@
     <location link="xml/dtd.hrc"/>
     <filename>/\.(dtd|ent|mod)$/i</filename>
   </prototype>
+  <prototype name="dtdcatalog" group="xml" description="dtd/sgml catalog">
+    <location link="xml/dtdcatalog.hrc"/>
+    <filename>/\.(cat|soc)$/i</filename>
+  </prototype>
 
   <prototype name="xslt" group="xml" description="xslt 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="xml/xslt.hrc"/>

@@ -35,11 +35,6 @@
     <region name="ExternalID"         parent="doctypedecl.attr"/>
     <region name="ExternalID.SYSTEM"  parent="ExternalID"/>
     <region name="ExternalID.PUBLIC"  parent="ExternalID"/>
-    <region name="PubidLiteral"       parent="Literal"/>
-    <region name="SystemLiteral"      parent="Literal"/>
-    
-    <region name="PubidLiteral.own"   parent="def:Directive"/>
-    <region name="PubidLiteral.sep"   parent="uri:delit"/>
     
 
     <region name="markupdecl"         parent="def:default"/>
@@ -188,35 +183,25 @@
       <annotation><documentation><![CDATA[
         [11]   SystemLiteral   ::=   ('"' [^"]* '"') | ("'" [^']* "'")
       ]]></documentation></annotation>
-      <block start="/([&quot;&apos;])/" end="/(\y1)/"
-             region00='Literal.start' region01='PairStart'
-             region10='Literal.end'   region11='PairEnd'
-             scheme="uri:uri" region="SystemLiteral"/>
+      
+      <inherit scheme='dtdcatalog:FSI.literal'/>
     </scheme>
 
+    
     <scheme name="PubidLiteral">
       <annotation><documentation><![CDATA[
         [12]   PubidLiteral    ::=   '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
       ]]></documentation></annotation>
-      <block start="/([&quot;&apos;])/" end="/(\y1)/"
-             region00='Literal.start' region01='PairStart'
-             region10='Literal.end'   region11='PairEnd'
-             scheme="PubidLiteral.content" region="PubidLiteral"/>
-    </scheme>
-    
-    <scheme name="PubidLiteral.content">
-      <regexp match='/~ISO/' region='PubidLiteral.own'/>
-      <regexp match='/~[\-+]\M\/{2}\S/' region='PubidLiteral.own'/>
-      <regexp match='/\S?#1\/{2}\M\S/' region='PubidLiteral.sep'/>
-      <regexp match='/~.+/' region0="badChar" priority="low"/>
       
-      <regexp match="/[^%xml:PubidChar;]+/" region0="badChar" priority="low"/>
+      <inherit scheme='dtdcatalog:FPI.literal'/>
     </scheme>
 
+    
     <scheme name="ExternalID">
       <annotation><documentation><![CDATA[
         [75]   ExternalID      ::=   'SYSTEM' S SystemLiteral | 'PUBLIC' S PubidLiteral S SystemLiteral
       ]]></documentation></annotation>
+      
       <!--regexp match="/\bSYSTEM\b/" region="ExternalID.SYSTEM"/-->
       <block  start="/\bPUBLIC\b/" end="/[&quot;&apos;]?#1/"
               scheme="PubidLiteral" region00="ExternalID.PUBLIC"/>

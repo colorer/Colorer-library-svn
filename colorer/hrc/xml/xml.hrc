@@ -186,17 +186,6 @@
       <scheme name="id-attribute">
          <inherit scheme="xmlns:id-attribute"/>
       </scheme>
-      <!-- support old hrc... -->
-            <scheme name="base-attribute">
-                <inherit scheme="xmlns:base-attribute"/>
-            </scheme>
-            <scheme name="lang-attribute">
-                <inherit scheme="xmlns:lang-attribute"/>
-            </scheme>
-            <scheme name="space-attribute">
-                <inherit scheme="xmlns:space-attribute"/>
-            </scheme>
-
 
 
 
