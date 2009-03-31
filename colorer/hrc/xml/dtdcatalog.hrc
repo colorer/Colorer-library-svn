@@ -43,6 +43,7 @@
 <region name="PubId.own"         parent="def:Directive"/>
 <region name="PubId.sep"         parent="uri:delit"/>
 <region name="PubId.own.content" parent="def:DirectiveContent"/>
+<region name="PubId.nonformal"   parent="def:ErrorText"/>
 
 <!--  FSI -->
 <region name="SysId"       parent="Literal"/>
@@ -98,7 +99,7 @@
 	
 	<regexp match='/~[\-+]\M\/{2}\S/' region='PubId.own'/>
 	<regexp match='/\S?#1\/{2}\M\S/' region='PubId.sep'/>
-	<regexp match='/~.+/' region0="badChar" priority="low"/>
+	<regexp match='/~.+/' region0="PubId.nonformal" priority="low"/>
 	
 	<inherit scheme='FPI.error'/>
 </scheme>

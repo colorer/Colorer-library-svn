@@ -55,7 +55,7 @@
    <assign name="def:Insertion" back="#d3d3d3"/>
    <assign name="def:InsertionEmbed" fore="#303570" back="#f5f5f5"/>
    <assign name="def:Error" fore="#a9a9a9" back="#ff1493" style="7"/>
-   <assign name="def:ErrorText" fore="#da70d6" style="2"/>
+   <assign name="def:ErrorText" fore="#ff1493" style="2"/>
    <assign name="def:TODO" fore="#00bfff" back="#0078b0"/>
    <assign name="def:Debug" fore="#a9a9a9" back="#da70d6"/>
    <assign name="def:URI" fore="#0078b0" style="4"/>

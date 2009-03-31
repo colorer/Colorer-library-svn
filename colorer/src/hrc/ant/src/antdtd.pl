@@ -46,6 +46,7 @@ while(<XMLIN>)
 <!ENTITY \% string \"CDATA\">
 <!ENTITY \% restring \"CDATA\">
 <!ENTITY \% rplstring \"CDATA\">
+<!ENTITY \% FPI \"CDATA\">
           
 <!ELEMENT stlist (#PCDATA)>
 <!ELEMENT stcheckin (#PCDATA)>
@@ -53,6 +54,7 @@ while(<XMLIN>)
 \n|g;
 
 
+ s/publicid CDATA #IMPLIED/publicid %FPI; #IMPLIED/g;
  s|<!ELEMENT fail EMPTY>|<!ELEMENT fail (#PCDATA)>|g;
  s@<!ELEMENT ant EMPTY>@<!ELEMENT ant (property|reference)*>@g;
 

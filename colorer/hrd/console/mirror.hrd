@@ -95,7 +95,7 @@
 
   
   <assign name="def:Error" fore="#0" back="#4" style='7'/>
-  <assign name="def:ErrorText" fore="#D" style='2'/>
+  <assign name="def:ErrorText" fore="#4" style='2'/>
 
   <assign name="def:TODO" fore="#F" back="#9"/>
   <assign name="def:Debug" fore="#0" back="#D"/>
