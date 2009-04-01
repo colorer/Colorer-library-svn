@@ -51,8 +51,11 @@
     <region name="elementdecl"        parent="doctypedecl"/>
     <!-- element name -->
     <region name="elementdecl.name"   parent="doctypedecl.name"/>
+    
     <!-- internal element names -->
-    <region name="elementdecl.spec"/>
+    <region name="elementdecl.value"  parent="markupdecl"/>
+    <region name="elementdecl.valref" parent="PEReference"/>
+    
     <!-- ELEMENT -->
     <region name="elementdecl.tag"    parent="doctypedecl.tag"/>
     <!-- <! > -->
@@ -60,7 +63,8 @@
     <region name="elementdecl.end"    parent="doctypedecl.end"/>
 
     <!-- EMPTY ANY #PCDATA -->
-    <region name="contentspec.spec"   parent="def:Keyword"/>
+    <region name="contentspec.spec"   parent="doctypedecl.attr"/>
+    <region name="contentspec.value"  parent="elementdecl.value"/>
     <!-- ( ) -->
     <region name="contentspec.start"  parent="def:Symbol"/>
     <region name="contentspec.end"    parent="def:Symbol"/>
@@ -231,7 +235,7 @@
     </scheme>
 
     <scheme name="conditionalSect.content">
-      <regexp match="/\b(INCLUDE|IGNORE)\b/" region="conditionalSect.spec"/>
+      <inherit scheme="conditionalSect.keywords"/>
       <inherit scheme="PEReference"/>
       <block start="/(\[)/" end="/\M((\]))\]\>/"
              scheme="extSubsetDecl"
@@ -239,6 +243,12 @@
              region11="PairEnd"   region12="markupdecl.end"
       />
     </scheme>
+    
+    <scheme name="conditionalSect.keywords">
+      <regexp match="/\b(INCLUDE|IGNORE)\b/" region="conditionalSect.spec"/>
+    </scheme>
+    
+    
 
     <scheme name="markupdecl">
       <annotation><documentation><![CDATA[
@@ -261,10 +271,16 @@
              scheme="AttlistDecl" region="AttlistDecl"
              region00="PairStart" region01="AttlistDecl.start" region02="AttlistDecl.tag"
              region10="PairEnd" region11="AttlistDecl.end"/>
+             
+      <block start="/(&lt;!)(ENTITY)\M\s+\%/" end="/(&gt;)/"
+             scheme="EntityDecl.PE" region="EntityDecl"
+             region00="PairStart" region01="EntityDecl.start" region02="EntityDecl.tag"
+             region10="PairEnd" region11="EntityDecl.end"/>
       <block start="/(&lt;!)(ENTITY)/" end="/(&gt;)/"
              scheme="EntityDecl" region="EntityDecl"
              region00="PairStart" region01="EntityDecl.start" region02="EntityDecl.tag"
              region10="PairEnd" region11="EntityDecl.end"/>
+             
       <block start="/(&lt;!)(NOTATION)/" end="/(&gt;)/"
              scheme="NotationDecl" region="NotationDecl"
              region00="PairStart" region01="NotationDecl.start" region02="NotationDecl.tag"
@@ -304,15 +320,25 @@
         [46]   contentspec   ::=   'EMPTY' | 'ANY' | Mixed | children
         [47]   children      ::=   (choice | seq) ('?' | '*' | '+')?
       ]]></documentation></annotation>
-      <regexp match="/\b(EMPTY|ANY)\b/" region="contentspec.spec"/>
+      <inherit scheme='contentspec.keywords'/>
+      <inherit scheme='contentspec.markup'/>
       <inherit scheme="PEReference"/>
-      <block start="/(\()/" end="/(\)([\?\*\+]?))/" scheme="Mixed-childred"
-             region00="PairStart" region10="PairEnd"
-             region01="contentspec.start" region11="contentspec.end" region12="contentspec.op"/>
       <regexp match="/\s+/"/>
       <regexp match="/\S+/" region0="badChar" priority="low"/>
     </scheme>
+    
+    <scheme name='contentspec.keywords'>
+      <regexp match="/\b(EMPTY|ANY)\b/" region="contentspec.spec"/>
+    </scheme>
+    
 
+    <scheme name="contentspec.markup">
+      <block start="/(\()/" end="/(\)([\?\*\+]?))/" scheme="Mixed-childred"
+             region00="PairStart" region10="PairEnd"
+             region01="contentspec.start" region11="contentspec.end" region12="contentspec.op"/>
+    </scheme>
+    
+    
     <scheme name="choice-seq">
       <annotation><documentation><![CDATA[
         [48]   cp            ::=   (Name | choice | seq) ('?' | '*' | '+')?
@@ -323,15 +349,21 @@
              region00="PairStart" region10="PairEnd"
              region01="contentspec.start" region11="contentspec.end"
              region12="contentspec.op"/>
-      <regexp match="/\b%xml:Name;\b([\?\*\+]?)/"
-              region="elementdecl.spec" region1="contentspec.op"/>
-      <inherit scheme="PEReference"/> <!-- ???? -->
-      <regexp match="/[\,\|]/" region="contentspec.op"/>
+      <regexp match="/(\b(%xml:Name;)\b|(%PEReference;))([\?\*\+]?)/"
+              region2="elementdecl.value" region3='elementdecl.valref' region4="contentspec.op"/>
+              
+      <!--inherit scheme="PEReference"/> <!- - ???? -->
+      <inherit scheme="choice-seq.op"/>
       <inherit scheme="badChar"/>
+    </scheme>
+    
+    <scheme name='choice-seq.op'>
+      <regexp match="/[\,\|]/" region="contentspec.op"/>
     </scheme>
 
     <scheme name="Mixed-childred">
-      <block start="/\#PCDATA\b/" end="/\M\)([\*\>\s]|$)?=/x" scheme="Mixed"
+      <regexp match="/(\#PCDATA)\M\s*\)([&quot;&apos;&gt;\s]|$)/" region1="contentspec.spec"/>
+      <block start="/\#PCDATA\b/" end="/\M\)\*/x" scheme="Mixed"
              region00="contentspec.spec"/>
       <inherit scheme="choice-seq"/>
     </scheme>
@@ -345,7 +377,7 @@
              region00="contentspec.op" region11="elementdecl.spec" region12="PEReference"/>
       -->
       <regexp match="/\|/" region="contentspec.op"/>
-      <regexp match="/\b%xml:Name;\b/" region="contentspec.spec"/>
+      <regexp match="/\b%xml:Name;\b/" region="contentspec.value"/>
       <inherit scheme="PEReference"/>
 
       <inherit scheme="badChar"/>
@@ -361,8 +393,8 @@
       <annotation><documentation><![CDATA[
         [52]   AttlistDecl    ::=   '<!ATTLIST' S Name AttDef* S? '>'
       ]]></documentation></annotation>
-      <block start="/(\b%xml:Name;\b|%PEReference;)/" end="/\M\>/" scheme="AttDef"
-             region01="AttlistDecl.name"/>
+      <block start="/(\b%xml:Name;\b|%PEReference;)\M(\s|$)/" end="/\M\>/" scheme="AttDef"
+             region01="AttlistDecl.name"/><!--  -->
       <inherit scheme="badChar"/>
     </scheme>
 
@@ -377,27 +409,42 @@
         [59]   Enumeration    ::=   '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
         [60]   DefaultDecl    ::=   '#REQUIRED' | '#IMPLIED' | (('#FIXED' S)? AttValue)
       ]]></documentation></annotation>
-      <keywords region="AttType.spec">
-        <word name="CDATA"/>
-        <word name="ID"/><word name="IDREF"/><word name="IDREFS"/>
-        <word name="ENTITY"/><word name="ENTITIES"/>
-        <word name="NMTOKEN"/><word name="NMTOKENS"/>
-      </keywords>
-      <keywords region="NotationType.spec">
-        <word name="NOTATION"/>
-      </keywords>
+      <inherit scheme="AttDef.keywords"/>
       <regexp match="/\b%xml:Name;\b/" region="AttDef.name"/>
       <inherit scheme="PEReference"/>
       <block start="/(\()/" end="/(\))/" scheme="Enumeration"
              region00="PairStart" region10="PairEnd"
              region01="Enumeration.start" region11="Enumeration.end"/>
-      <keywords region="DefaultDecl.spec">
-        <word name="#REQUIRED"/><word name="#IMPLIED"/><word name="#FIXED"/>
-      </keywords>
-      <inherit scheme="xml:AttValue"/>
+      <inherit scheme="AttValue"/>
       <inherit scheme="badChar"/>
     </scheme>
+    
+    <scheme name='AttDef.keywords'>
+      <keywords region="AttType.spec">
+        <word name="CDATA"/>
+        <word name="ID"/>
+        <word name="IDREF"/>
+        <word name="IDREFS"/>
+        <word name="ENTITY"/>
+        <word name="ENTITIES"/>
+        <word name="NMTOKEN"/>
+        <word name="NMTOKENS"/>
+        <word name="NOTATION" region="NotationType.spec"/>
+      </keywords>
+      <keywords region="DefaultDecl.spec">
+        <word name="#REQUIRED"/>
+        <word name="#IMPLIED"/>
+        <word name="#FIXED"/>
+      </keywords>
+    </scheme>
 
+    <scheme name="AttValue">
+    	<inherit scheme="xml:AttValue">
+    		<virtual scheme='xml:AttValue.content.stream' subst-scheme='PEReference'/>
+    	</inherit>
+    </scheme>
+    
+    
     <scheme name="Enumeration">
       <regexp match="/%xml:Nmtoken;/" region="Enumeration.spec"/>
       <regexp match="/\|/" region="Enumeration.op"/>
@@ -418,6 +465,8 @@
         [76]   NDataDecl     ::=   S 'NDATA' S Name
       ]]></documentation></annotation>
       <inherit scheme="PEReference"/>
+      
+      
       <inherit scheme="EntityValue"/>
       <regexp match="/\%/" region="EntityDecl.PE"/>
       
@@ -428,6 +477,13 @@
       <inherit scheme="badChar"/>
     </scheme>
 
+    <scheme name="EntityDecl.PE">
+    	<inherit scheme='EntityDecl'>
+    		<virtual scheme='EntityValue.content' subst-scheme='EntityValue.content.markup'/>
+    	</inherit>
+    </scheme>
+    
+    
     <scheme name="EntityValue">
       <annotation><documentation><![CDATA[
         [9]    EntityValue  ::=   '"' ([^%&"] | PEReference | Reference)* '"' | "'" ([^%&'] | PEReference | Reference)* "'"
@@ -437,11 +493,38 @@
              region10='Literal.end'   region11='PairEnd'
              scheme="EntityValue.content" region="EntityValue"/>
     </scheme>
-
+    
+    
     <scheme name="EntityValue.content">
       <inherit scheme="xml:Reference"/>
       <inherit scheme="PEReference"/>
       <regexp match="/[&amp;\%[^%xml:Char;]]/" region="badChar"/>
+    </scheme>
+    
+    <scheme name="EntityValue.content.markup">
+      <annotation><documentation>
+         * REC-XML:
+           Validity constraint: Proper Declaration/PE Nesting
+            
+            Parameter-entity replacement text MUST be properly nested
+            with markup declarations. That is to say, if either the
+            first character or the last character of a markup
+            declaration (markupdecl above) is contained in the
+            replacement text for a parameter-entity reference, both
+            MUST be contained in the same replacement text.
+            
+         * Morale: 
+           Brackets must be paired.
+      </documentation></annotation>
+      
+      <inherit scheme='EntityValue.content'/>
+      <inherit scheme='contentspec.markup'> <!-- paired brackets -->
+          <virtual scheme='badChar' subst-scheme='Enumeration'/> <!-- hack for attrs -->
+      </inherit>
+      <inherit scheme="AttDef.keywords"/>
+      <inherit scheme='contentspec.keywords'/>
+      <inherit scheme="choice-seq.op"/>
+      <inherit scheme="conditionalSect.keywords"/>
     </scheme>
 
 

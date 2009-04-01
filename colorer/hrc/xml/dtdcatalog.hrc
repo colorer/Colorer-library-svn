@@ -51,7 +51,7 @@
 <region name="SysId.end"   parent="Literal.end"/>
 
 <region name='content' parent='dtd:doctypedecl.name'/>
-<region name='Names'   parent='Names'/>
+<region name='Names'   parent='content'/>
 
 <region name='Keyword'       parent='xml:decl.name'/> <!-- or   dtd:doctypedecl.attr ? -->
 <region name='Keyword.param' parent='xml:decl.content'/>
