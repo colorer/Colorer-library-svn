@@ -32,7 +32,10 @@
        Dmitry Kirsanov <dmitry@kirsanov.com>
        Eugene Efremov <4mirror@mail.ru>
      ]]></documentation>
-    </annotation>
+     <appinfo>
+     	<mime type='text/xml'/>
+     	<mime type='application/xml'/>
+    </appinfo></annotation>
 
     <!--import type="def"/-->
 

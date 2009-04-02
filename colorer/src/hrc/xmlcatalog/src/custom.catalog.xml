@@ -9,7 +9,7 @@
 	
 	<type xmlns="http://colorer.sf.net/2003/hrc">
 		<scheme name="publicIdentifier-content">
-			<inherit scheme="dtdcatalog:FPI.content"/>
+			<inherit scheme="uri:FPI"/>
 			<!--inherit scheme="pubIdChars-content"/-->
 		</scheme>
 		<scheme name="publicIdentifier-content-error">

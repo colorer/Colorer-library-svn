@@ -38,6 +38,11 @@
     <location link="gen/rdf.hrc"/>
     <filename>/\.rdf$/ix</filename>
   </prototype>
+  <prototype name="schematron" group="xml" description="schematron" targetNamespace="http://www.ascc.net/xml/schematron">
+    <location link="gen/schematron.hrc"/>
+    <filename>/\.sch$/ix</filename>
+  </prototype>
+  
   <prototype name="parser" group="inet" description="Parser">
     <location link="gen/parser.hrc"/>
     <filename>/\.(p|html)$/i</filename>

@@ -7,7 +7,12 @@
 
 <type name="dtd">
 
-    <!--import type="def"/> - bad, but 1000s of them... -->
+    <annotation><documentation>
+      XML DTD basic syntax
+    </documentation><appinfo>
+    	<mime type='application/xml-dtd'/>
+    </appinfo></annotation>
+    
     
     <entity name="PEReference" value="\%%xml:Name;\;"/>
     
@@ -207,10 +212,14 @@
       ]]></documentation></annotation>
       
       <!--regexp match="/\bSYSTEM\b/" region="ExternalID.SYSTEM"/-->
-      <block  start="/\bPUBLIC\b/" end="/[&quot;&apos;]?#1/"
+      <block  start="/\bPUBLIC\b(\s+%)?!/" end="/[&quot;&apos;]?#1/"
               scheme="PubidLiteral" region00="ExternalID.PUBLIC"/>
-      <block  start="/\bSYSTEM\b/" end="/[&quot;&apos;]?#1/"
+      <block  start="/\bSYSTEM\b(\s+%)?!/" end="/[&quot;&apos;]?#1/"
               scheme="SystemLiteral" region00="ExternalID.SYSTEM"/>
+              
+      <regexp match='/\bPUBLIC\b/' region='ExternalID.PUBLIC'/>
+      <regexp match='/\bSYSTEM\b/' region='ExternalID.SYSTEM'/>
+      
       <!-- PUBLIC, arg 2 (cannot intercept) -->
       <inherit scheme="SystemLiteral"/>
     </scheme>

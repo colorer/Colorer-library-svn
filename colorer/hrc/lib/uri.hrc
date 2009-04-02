@@ -28,6 +28,17 @@
 <region name="fragment" parent="def:Constant"/>
 
 
+<region name="FPI"             parent="def:String"/>
+<region name="FPI.own"         parent="def:Directive"/>
+<region name="FPI.sep"         parent="delit"/>
+<region name="FPI.own.content" parent="def:DirectiveContent"/>
+<region name="FPI.nonformal"   parent="def:ErrorText"/>
+<region name="FPI.w3s"   parent="def:Identifier"/>
+
+
+
+
+<!-- uri itself -->
 
 <scheme name="uri">
  <annotation><documentation><![CDATA[
@@ -52,6 +63,62 @@
    priority="low"
   />
 </scheme>
+
+
+
+
+<!-- Formal public ID (SGML) -->
+
+<scheme name='FPI'>
+	<annotation><documentation><![CDATA[
+			(SGML FAQ):
+		[79] formal public identifier = owner identifier, "//", text identifier
+		[80] owner identifier = ISO owner identifier I registered owner identifier I unregistered 
+			owner identifier
+		[81] ISO owner identifier = minimum data
+		[82] registered owner identifier = "+//", minimum data
+		[83] unregistered owner identifier = "-//", minimum data
+		[84] text identifier = public text class, SPACE, unavailable text indicator'?, public text
+			description, "//", ( public text language I public text designating sequence), ("//", public text
+			display version)?
+	]]></documentation></annotation>
+	
+	<block start='/~(ISO)\M.+?\S\/{2}\S/' end='/~.+?\S\m(\/{2})\M\S/'
+		scheme='FPI.error' region='FPI.own.content'
+		region01='FPI.own' region11='FPI.sep'
+	/>
+	<regexp match='/~ISO/' region='FPI.own'/>
+	
+	<regexp match='/~[\-+]\M\/{2}\S/' region='FPI.own'/>
+	<regexp match='/\S?#1\/{2}\M\S/' region='FPI.sep'/>
+	<inherit scheme='FPI.w3s'/>
+	<regexp match='/~.+/' region0="FPI.nonformal" priority="low"/>
+	
+	<inherit scheme='FPI.error'/>
+</scheme>
+
+
+<scheme name='FPI.w3s'>
+	<annotation><documentation><![CDATA[
+		W3S used some non-normative 
+		strings for his FPIs
+	]]></documentation></annotation>
+	
+	<keywords region='FPI.w3s'>
+		<word name='datatypes'/>
+		<word name='structures'/>
+		<word name='REC-xml-1998-0210'/>
+		<word name='http://www.w3.org/1999/XSL/Transform'/>
+	</keywords>
+</scheme>
+
+
+<scheme name='FPI.error'>
+	<regexp match="/[^%xml:PubidChar;]+/" region0="def:Error" priority="low"/>
+</scheme>
+
+
+
 
 
 </type>

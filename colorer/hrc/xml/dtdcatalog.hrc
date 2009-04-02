@@ -21,7 +21,9 @@
 		
 		Hovewer, SGML standart ISO 8879:1986 not allowed for free.
 		Colorer is free, therefore colorer cannot complete support SGML.
-	</problem></appinfo>
+	</problem>
+		<mime type='application/sgml-open-catalog'/>
+	</appinfo>
 </annotation>
 
 <region name="badChar" parent="dtd:badChar" description="bad stream"/>
@@ -29,7 +31,6 @@
 <region name="Comment"       parent="xml:Comment"/>
 <region name="Comment.start" parent="xml:Comment.start"/>
 <region name="Comment.end"   parent="xml:Comment.end"/>
-
 
 <region name='Literal'       parent='dtd:Literal'/>
 <region name='Literal.start' parent='dtd:Literal.start'/>
@@ -40,16 +41,12 @@
 <region name="PubId.start" parent="Literal.start"/>
 <region name="PubId.end"   parent="Literal.end"/>
 
-<region name="PubId.own"         parent="def:Directive"/>
-<region name="PubId.sep"         parent="uri:delit"/>
-<region name="PubId.own.content" parent="def:DirectiveContent"/>
-<region name="PubId.nonformal"   parent="def:ErrorText"/>
-
 <!--  FSI -->
 <region name="SysId"       parent="Literal"/>
 <region name="SysId.start" parent="Literal.start"/>
 <region name="SysId.end"   parent="Literal.end"/>
 
+<!--  other -->
 <region name='content' parent='dtd:doctypedecl.name'/>
 <region name='Names'   parent='content'/>
 
@@ -73,35 +70,8 @@
 
 <!-- FPI -->
 
-<scheme name='FPI.error'>
-	<regexp match="/[^%xml:PubidChar;]+/" region0="badChar" priority="low"/>
-</scheme>
-
 <scheme name='FPI.content'>
-	<annotation><documentation><![CDATA[
-			(SGML FAQ):
-		[79] formal public identifier = owner identifier, "//", text identifier
-		[80] owner identifier = ISO owner identifier I registered owner identifier I unregistered 
-			owner identifier
-		[81] ISO owner identifier = minimum data
-		[82] registered owner identifier = "+//", minimum data
-		[83] unregistered owner identifier = "-//", minimum data
-		[84] text identifier = public text class, SPACE, unavailable text indicator'?, public text
-			description, "//", ( public text language I public text designating sequence), ("//", public text
-			display version)?
-	]]></documentation></annotation>
-	
-	<block start='/~(ISO)\M.+?\S\/{2}\S/' end='/~.+?\S\m(\/{2})\M\S/'
-		scheme='FPI.error' region='PubId.own.content'
-		region01='PubId.own' region11='PubId.sep'
-	/>
-	<regexp match='/~ISO/' region='PubId.own'/>
-	
-	<regexp match='/~[\-+]\M\/{2}\S/' region='PubId.own'/>
-	<regexp match='/\S?#1\/{2}\M\S/' region='PubId.sep'/>
-	<regexp match='/~.+/' region0="PubId.nonformal" priority="low"/>
-	
-	<inherit scheme='FPI.error'/>
+	<inherit scheme='uri:FPI'/>
 </scheme>
 
 <scheme name='FPI.literal'>
@@ -160,6 +130,19 @@
 
 
 
+<!-- 
+	ugly hack 
+	
+	I want:
+	<choice>
+		<when match='/\bSYSTEM\b/' region0='Keyword' scheme='SysId.conetnt'/>
+		<when match='/\b(PUBLIC|DTDDECL|DELEGATE)\b/' region0='Keyword' scheme='SysId.conetnt'/>
+		....
+	</choice>
+-->
+<entity name='newkey' value='\M\b(PUBLIC|SYSTEM|(DTD|SGML)DECL|DELEGATE|ENTITY|(DOC|LINK)TYPE|NOTATION|DOCUMENT|BASE|CATALOG|OVERRIDE)\b'/>
+
+
 <!-- pubId -->
 <scheme name='PubId.content'>
 	<annotation><documentation><![CDATA[
@@ -176,7 +159,7 @@
 		("DELEGATE", ps+, partial public identifier, ps+, FSI specification)
 	]]></documentation></annotation>
 	
-	<block start='/\b(PUBLIC|DTDDECL|DELEGATE)\b/' end='/$/'
+	<block start='/\b(PUBLIC|DTDDECL|DELEGATE)\b/' end='/%newkey;/'
 		scheme='PubId.content' region00='Keyword' region='content'
 	/>
 </scheme>
@@ -193,7 +176,7 @@
 </scheme>
 
 <scheme name='SysId'>
-	<block start='/\bSYSTEM\b/' end='/$/' region='content'
+	<block start='/\bSYSTEM\b/' end='/%newkey;/' region='content'
 		scheme='SysId.content' region00='Keyword'
 	/>
 </scheme>
@@ -217,7 +200,7 @@
 		name keyword = "ENTITY" | "DOCTYPE" | "LINKTYPE" | "NOTATION"
 	]]></documentation></annotation>
 	
-	<block start='/\b(ENTITY|(DOC|LINK)TYPE|NOTATION)\b/' end='/$/'
+	<block start='/\b(ENTITY|(DOC|LINK)TYPE|NOTATION)\b/' end='/%newkey;/'
 		scheme='Named.content' region00='Keyword' region='content'
 	/>
 </scheme>
@@ -237,7 +220,7 @@
 		noname keyword = "SGMLDECL" | "DOCUMENT" | "BASE" | "CATALOG"
 	]]></documentation></annotation>
 	
-	<block start='/\b(SGMLDECL|DOCUMENT|BASE|CATALOG)\b/' end='/$/'
+	<block start='/\b(SGMLDECL|DOCUMENT|BASE|CATALOG)\b/' end='/%newkey;/'
 		scheme='NoNamed.content' region00='Keyword' region='content'
 	/>
 </scheme>

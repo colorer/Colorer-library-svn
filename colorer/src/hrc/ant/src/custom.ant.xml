@@ -78,7 +78,7 @@
    
    <scheme name='FPI-content'>
     <!-- http://ant.apache.org/manual/CoreTypes/xmlcatalog.html -->
-    <inherit scheme='dtdcatalog:FPI.content'/>
+    <inherit scheme='uri:FPI'/>
     <inherit scheme='string-content-old'/>
    </scheme>
 

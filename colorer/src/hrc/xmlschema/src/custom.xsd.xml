@@ -92,6 +92,12 @@
       	<regexp match="/\battribute::|\@/" region="def:Error"/>
       	<inherit scheme="Pattern"/>
       </scheme>
+      
+      <!-- FPI -->
+      <scheme name='public-content'>
+      	<inherit scheme='uri:FPI'/>
+      	<inherit scheme='public-content-old'/>
+      </scheme>
 
 
       <!-- Regexp -->
