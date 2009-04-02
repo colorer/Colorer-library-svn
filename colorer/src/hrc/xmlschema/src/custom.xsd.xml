@@ -211,7 +211,8 @@
         <inherit scheme="normalizedString-content"/>
       </scheme>
       <scheme name="language-content">
-        <regexp match="/\b([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*\b/ix"/>
+      	<inherit scheme='uri:lang'/>
+        <!--regexp match="/\b([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*\b/ix"/-->
       </scheme>
       <scheme name="NMTOKEN-content">
         <regexp match="/\b %xml:Nmtoken; \b/ix"/>

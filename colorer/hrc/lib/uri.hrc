@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="Windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-	"http://colorer.sf.net/2003/hrc.dtd">
+	"http://colorer.sf.net/2003/hrc.dtd" 
+	[
+		<!ENTITY uri-lang SYSTEM "uri.lang.ent.hrc">
+]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
  >
-	
+
 <type name="uri">
 	<annotation><documentation>
 		URI scheme, 
 		as defined in RFC 2396
+		
+		and realted standarts
+		
 	</documentation><contributors><![CDATA[
 		Eugene Efremov <4mirror@mail.ru>
 	]]></contributors>
@@ -33,9 +39,12 @@
 <region name="FPI.sep"         parent="delit"/>
 <region name="FPI.own.content" parent="def:DirectiveContent"/>
 <region name="FPI.nonformal"   parent="def:ErrorText"/>
-<region name="FPI.w3s"   parent="def:Identifier"/>
+<region name="FPI.w3s"         parent="def:Identifier"/>
 
 
+<region name='lang'      parent='authority'/>
+<region name='lang.name' parent='def:KeywordStrong' description="ISO 639 names"/>
+<region name='lang.sep'  parent='delit' description="-"/>
 
 
 <!-- uri itself -->
@@ -118,7 +127,35 @@
 </scheme>
 
 
+<!-- lang -->
 
+<scheme name='lang'>
+	<annotation><documentation><![CDATA[
+		ftp://ftp.rfc-editor.org/in-notes/bcp/bcp47.txt
+	]]></documentation></annotation>
+	
+	<block start='/~\M[a-zA-Z]{2,3}\b/' end='/~[a-zA-Z]{2,3}\b\m/'
+		region='lang' scheme='lang.names'
+	/>
+	
+	<regexp match='/(-)[a-zA-Z]{1,8}/' region0='lang' region1='lang.sep'/>
+	
+	<regexp match="/~(\b[iI](-)[a-zA-Z]+|[xX](-)[a-zA-Z]{1,8}\b)/ix"
+		 region0='lang' region2='lang.sep' region3='lang.sep'
+	/>
+	
+	<inherit scheme='lang.error'/>
+</scheme>
+
+<scheme name='lang.names'>
+	&uri-lang;
+	
+	<inherit scheme='lang.error'/>
+</scheme>
+
+<scheme name='lang.error'>
+	<regexp match='/./' region='def:Error' priority='low'/>
+</scheme>
 
 
 </type>
