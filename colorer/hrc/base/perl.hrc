@@ -5,6 +5,7 @@
 <!ENTITY perl-vars     SYSTEM "perl-vars.ent.hrc">
 <!ENTITY perl-heredoc  SYSTEM "perl-heredoc.ent.hrc">
 <!ENTITY perl-keywords SYSTEM "perl-keywords.ent.hrc">
+<!ENTITY perl-keywordp SYSTEM "perl-keyword-pack.ent.hrc">
 
 ]>
 
@@ -106,6 +107,7 @@
       <region name="SubProt" parent="Var"/>
       <region name="SubOutline" parent="def:Outlined"/>
       <region name="PackageOutline" parent="def:Outlined"/>
+      <region name="UseOutline" parent="def:Outlined"/>
       <region name="DataOutline" parent="def:Outlined"/>
       <region name="PodOutline" parent="def:Outlined"/>
 
@@ -234,12 +236,12 @@
       <entity name="PerlData" value="__(?{}END|DATA)__|[\x1A\x04]"/>
       
       <scheme name="PerlDataOn" if="data-code">
-        <block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
+        <block start="/%PerlData;/" end="/$never^/"
                 region00="DataName" scheme="perl"
         />
       </scheme>
       <scheme name="PerlDataOff" unless="data-code">
-        <block start="/(?{DataOutline}%PerlData;)/" end="/$never^/"
+        <block start="/%PerlData;/" end="/$never^/"
                 scheme="PerlDataOff" region="Comment"
                 region00="DataName" 
         />
@@ -247,6 +249,7 @@
         <inherit scheme="def:Comment"/>
       </scheme>
       <scheme name="PerlDATA">
+        <regexp match='/\M(?{DataOutline}%PerlData;)/'/>
         <inherit scheme="PerlDataOn"/>
         <inherit scheme="PerlDataOff"/>
       </scheme>
@@ -290,18 +293,31 @@
          </keywords>
       </scheme>
       
+      <scheme name='v-strings'>
+      	<regexp match='/\./' region='StringEdge'/>
+      	<regexp match='/[^\d]/' region='def:Error' priority='low'/>
+      </scheme>
 
       <scheme name="perl-core">
 <!-- Variables -->
          <inherit scheme="Vars"/>
-         <block start="/\b(sub)\s+(?{SubOutline}[\w_]+)\s*((\())/" 
+         
+         
+         <regexp match="/\M \b(sub) \s+ (?{SubOutline}[\w_:']+) /x" />
+         
+         <block start="/\b(sub)\s+[^\(\{#]*\s*((\())/" 
                 end="/(\))/" scheme="SubProt"
                 region01="Word" region02="Symb" region03="def:PairStart"
                 region10="Symb" region11="def:PairEnd"
          /><!-- ([%@])? region11="SubProt" -->
+        
          
+         <!--
          <regexp match="/\b(sub) \s+ \M (?{SubOutline}[\w_']+) /x" region="Word"/>
          <regexp match="/\b(package) \s+ \M (?{PackageOutline}[\w_':]+) /x" region="Word"/>
+         -->
+         
+         <inherit scheme='outlines'/>
 
 <!-- linear comments -->
          <inherit scheme="Comment"/>
@@ -313,8 +329,14 @@
 
 
 <!-- perl 5.6.0 number-encoded strings -->
-         <regexp match="/\bv(\d+)(\.\d+)*\b/" region0="String"/>
-         <regexp match="/\b(\d+)(\.\d+){2,}\b/" region0="String"/>
+         <block start="/\b(v)\M(\d+)/" end="/~(\d+)(\.\d+)*\m/" 
+         	region="String" scheme='v-strings' 
+         	region01="ReType"
+         />
+         <block start="/\b\M(\d+)(\.\d+){2,}/" end="/~(\d+)(\.\d+)*\m/" 
+         	region="String" scheme='v-strings' 
+         />
+         
 <!-- perl numbers  -->
          <inherit scheme="BinNumb"/>
          <regexp match="/\b0[xX][\da-fA-F_]+/" region0="Numb"/>
@@ -383,8 +405,8 @@
    <block start="/(eval)\s+<<'([^']+)'/i" end="/^(\y2)$/" scheme="def:Perl" region1="def:Inserts" region2="Word" region3="Word" region4="Word"-->
 <!-- pod stuff -->
          <block start="/\M^=/" end="/^=(head|cut)\m/" scheme="Pod" region="Pod" region10="PodSym"/>
-         <block start="/\M%PerlData;/" end="/$NeVeReAcH^/" 
-          scheme="PerlDATA" region00="DataName"/>
+         
+         <inherit scheme="PerlDATA"/>
 <!-- streams and globs with html </script> hack -->
 
          <block start="/(&lt;) \M (\/script)?! [^\s\%\@\{\}]*? &gt;/ix"
@@ -475,6 +497,7 @@
       </scheme>
 
     &perl-keywords;
+    &perl-keywordp;
 <!--    &perl-genkeywords-->
 
    </type>
