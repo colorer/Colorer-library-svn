@@ -329,11 +329,11 @@
 
 
 <!-- perl 5.6.0 number-encoded strings -->
-         <block start="/\b(v)\M(\d+)/" end="/~(\d+)(\.\d+)*\m/" 
+         <block start="/\b(v)\M(\d+)\b/" end="/~(\d+)(\.\d+)*\b\m/" 
          	region="String" scheme='v-strings' 
          	region01="ReType"
          />
-         <block start="/\b\M(\d+)(\.\d+){2,}/" end="/~(\d+)(\.\d+)*\m/" 
+         <block start="/\b\M(\d+)(\.\d+){2,}\b/" end="/~(\d+)(\.\d+)*\b\m/" 
          	region="String" scheme='v-strings' 
          />
          
