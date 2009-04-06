@@ -511,7 +511,7 @@
 
 <!-- ISO 639-1 -->
 
-<keywords region='lang.name'>
+<keywords region='lang.name' ignorecase='yes'>
 	<word name='aa'/>
 	<word name='ab'/>
 	<word name='af'/>

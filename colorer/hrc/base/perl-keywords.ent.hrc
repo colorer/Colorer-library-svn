@@ -153,6 +153,44 @@
       <word name="DESTROY"/>
       <word name="END"/>
       <word name="SUPER"/>
+      
+      <!-- named unary opreators -->
+		<word name='alarm'/>
+		<word name='chdir'/>
+		<word name='chroot'/>
+		<word name='cos'/>
+		<word name='delete'/>
+		<word name='exists'/>
+		<word name='gethostbyname'/>
+		<word name='getnetbyname'/>
+		<word name='getpgrp'/>
+		<word name='getprotobyname'/>
+		<word name='gmtime'/>
+		<word name='hex'/>
+		<word name='int'/>
+		<word name='lc'/>
+		<word name='lcfirst'/>
+		<word name='length'/>
+		<word name='localtime'/>
+		<word name='lock'/>
+		<word name='log'/>
+		<word name='lstat'/>
+		<word name='oct'/>
+		<word name='ord'/>
+		<word name='quotemeta'/>
+		<word name='rand'/>
+		<word name='readlink'/>
+		<word name='rmdir'/>
+		<word name='scalar'/>
+		<word name='sin'/>
+		<word name='sleep'/>
+		<word name='sqrt'/>
+		<word name='srand'/>
+		<word name='stat'/>
+		<word name='uc'/>
+		<word name='ucfirst'/>
+		<word name='umask'/>
+		<word name='undef'/>
    
    </keywords>
    
