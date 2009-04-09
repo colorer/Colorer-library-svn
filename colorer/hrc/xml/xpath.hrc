@@ -94,18 +94,12 @@
 <!-- Expression -->
 
 <scheme name="Expr">
-    <keywords region="expr.op">
+    
+    <inherit scheme="xpath-lt.internal.hack:expr-op"/>
+
+    <keywords region="expr.op" worddiv="[\s]">
         <word name="or"/>
         <word name="and"/>
-        <symb name="!="/>
-        <symb name="="/>
-        <symb name="&gt;="/>
-        <symb name="&lt;="/>
-        <symb name="&gt;"/>
-        <symb name="&lt;"/>
-        <symb name="+"/>
-        <symb name="-"/>
-        <symb name="*"/>
         <word name="div"/>
         <word name="mod"/>
         <symb name="|" region="path.or"/>

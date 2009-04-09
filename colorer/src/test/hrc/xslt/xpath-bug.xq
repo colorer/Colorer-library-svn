@@ -4,8 +4,8 @@ declare namespace def = "colorer://hrc/lib/default.hrc";
 
 declare variable 
 	(: типы от потолка (: из hrc :) берем :)
-	$def:test1 as def:empty := aaa/bbb; 
-declare variable $def:test2 := aaa/bbb;
+	$def:test1 as def:empty := aaa/bbb/ccc; 
+declare variable $def:test2 := aaa/bbb/ccc + ccc; (: отвалилось... :)
 declare variable $def:test3:=aaa/bbb;
 declare variable $test4:=aaa/bbb; (: глюка :)
 
