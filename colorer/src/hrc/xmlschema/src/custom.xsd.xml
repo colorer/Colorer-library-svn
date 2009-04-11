@@ -282,6 +282,13 @@
       </scheme>
     </type>
   </custom-type>
+  
+  <custom-type targetNamespace="http://www.w3.org/2001/XMLSchema-instance">
+    <prefix>xsi</prefix>
+    <top-level/><!-- package -->
+    <contributors>Eugene Efremov</contributors>
+  </custom-type>
+  
 </custom>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

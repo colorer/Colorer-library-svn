@@ -268,7 +268,7 @@
 
 
       <regexp match="/\M&lt;!ELEMENT \s* (\S+)/x" region1="TagElementOutlined"/>
-      <!--<regexp match="/\M&lt;!ATTLIST \s* (%xml:Name;)/x" region1="AttlistOutlined"/>-->
+      <regexp match="/\M&lt;!ATTLIST \s* (\S+)/x" region1="AttlistOutlined"/>
       <regexp match="/\M&lt;!ENTITY \s* \% \s* (%xml:Name;)/x" region1="EntityOutlined"/>
       <regexp match="/\M&lt;!NOTATION \s* (%xml:Name;)/x" region1="NotationOutlined"/>
 

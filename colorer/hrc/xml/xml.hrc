@@ -164,21 +164,9 @@
                 scheme="xmlschema:anyURI-AttributeContent"/>
       </scheme>
       
-      <!-- EE: todo: package for http://www.w3.org/2001/XMLSchema-instance -->
-      
+      <!-- move to xsi package -->
       <scheme name="xsi-attributeGroup">
-         <block start="/(\s?#1|^)(xsi)(:)(schemaLocation)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
-                scheme="xmlschema:anyURI-AttributeContent"/>
-         <block start="/(\s?#1|^)(xsi)(:)(noNamespaceSchemaLocation)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
-                scheme="xmlschema:anyURI-AttributeContent"/>
-         <block start="/(\s?#1|^)(xsi)(:)(type)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
-                scheme="xmlschema:QName-AttributeContent"/>
-         <block start="/(\s?#1|^)(xsi)(:)(nil)\M([\s\=]|$)/" end="/[&#34;']?#1/"
-                region02="Attribute.defined.nsprefix" region03="Attribute.nscolon" region04="Attribute.defined.name"
-                scheme="xmlschema:boolean-AttributeContent"/>
+         <inherit scheme='xsi:xsi-attributeGroup'/>
       </scheme>
 
       <!-- EE: move attributes to package and ':' fixed -->
