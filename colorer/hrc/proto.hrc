@@ -262,9 +262,6 @@
   <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/gen/xmlns.hrc"/>
   </package>
-  <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
-    <location link="xml/gen/xmlns.hrc"/>
-  </package>
   <package name="xlink" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
     <location link="xml/gen/xlink.hrc"/>
   </package>

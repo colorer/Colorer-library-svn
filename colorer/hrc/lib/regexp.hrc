@@ -96,17 +96,28 @@
  <regexp match='/./' region0="def:Error" priority="low"/>
 </scheme>
 
-<scheme name="std.regexp">
- <inherit scheme="string"/>
- <!--regexp match="/\\c\[/" region0="Symbol"/-->
+
+
+<scheme name='std.regexp.include'>
  <block start="/(\()/" end="/(\))/" scheme="std.regexp"
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
  />
+</scheme>
+
+<scheme name='std.class.include'>
  <block start="/(\[)/" end="/([^\\]\[)?~2((\]))/x" scheme="std.class"
   region00="Quote" region01="def:PairStart"
   region12="Quote" region13="def:PairEnd"
  />
+</scheme>
+
+<scheme name="std.regexp">
+ <inherit scheme="string"/>
+ <!--regexp match="/\\c\[/" region0="Symbol"/-->
+ <inherit scheme="std.regexp.include"/>
+ <inherit scheme="std.class.include"/>
+ 
  <regexp match="/(\{)([\d\w\s\,]+)(\})/"
   region0="Quote" region2="def:Number"
   region1="def:PairStart" region3="def:PairEnd"
@@ -376,8 +387,18 @@
  <inherit scheme="std.base"/>
 </scheme>
 
+<scheme name='xsd.class'>
+ <inherit scheme='std.class.include'>
+  <virtual scheme="std.class" subst-scheme="xsd.class"/>
+ </inherit>
+ <inherit scheme="std.class">
+  <virtual scheme="std.base" subst-scheme="xsd.base"/>
+ </inherit>
+</scheme>
+
 <scheme name="xsd.regexp">
  <inherit scheme="std.regexp">
+  <virtual scheme="std.class" subst-scheme="xsd.class"/>
   <virtual scheme="std.base" subst-scheme="xsd.base"/>
  </inherit>
 </scheme>
@@ -430,7 +451,9 @@
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
  />
- <block start="/(\[)/" end="/(\])/" scheme="unicode.charter"
+ 
+ <!-- is valid??? -->
+ <block start="/(\[)/" end="/(\])/" scheme="hrc.class"
   region00="Quote" region01="def:PairStart"
   region10="Quote" region11="def:PairEnd"
  />

@@ -24,9 +24,9 @@
 	
 	<region name="BracketStart" parent="StringEdge"/>
 	<region name="BracketEnd"   parent="StringEdge"/>
-	<region name="Scheme.nsprefix" parent="xml:Attribute.defined.nsprefix"/>
-	<region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
-	<region name="Scheme.name" parent="def:String"/>
+	<region name="Scheme.nsprefix" parent="xml:QName.nsprefix"/>
+	<region name="Scheme.nscolon"  parent="xml:QName.nscolon"/>
+	<region name="Scheme.name"     parent="xml:QName.name"/>
 	<region name="Scheme.keyword" parent="def:StringContent"/>
 	
 	
@@ -86,12 +86,13 @@
 	
 	
 	<scheme name="REstring-content">
-		<block start="/(\/)/" end="/(\/([igsxm]*))/" scheme="RE-String"
-			region00="BracketStart" region01="PairStart"
+		<block start="/(~|^\s*)(\/)/" end="/(\/([igsxm]*))/" scheme="RE-String"
+			region00="BracketStart" region02="PairStart"
 			region10="BracketEnd" region11="PairEnd" 
 			region12="regexp:SpecArea"
 		/>
 	</scheme>
+	
 	
 	
 	<!--

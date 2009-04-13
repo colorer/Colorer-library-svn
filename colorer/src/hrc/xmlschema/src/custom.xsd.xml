@@ -49,16 +49,19 @@
     	<element-attributes name="pattern">
     		<xs:attribute name="value" type="xs:REstring"/>
     	</element-attributes>
-
+    	
     	<attribute language="xpath" scheme-suffix="XML.Pattern" region="def:default"/>
     </script-n-style>
 
     <type xmlns="http://colorer.sf.net/2003/hrc">
 
     <!-- EE begin -->
-      <region name="Scheme.nsprefix" parent="xml:nsprefix"/>
-      <region name="Scheme.nscolon"  parent="xml:nscolon"/>
-      <region name="Scheme.name" parent="def:String"/>
+      <region name="Scheme.nsprefix" parent="xml:QName.nsprefix"/>
+      <region name="Scheme.nscolon"  parent="xml:QName.nscolon"/>
+      <region name="Scheme.name"     parent="xml:QName.name"/>
+      
+      <region name='ns.spec'      parent='xml:nsprefix'/>
+      <region name='ns.spec.mark' parent='uri:delit'/>
 
 
       <!-- QName -->
@@ -123,6 +126,23 @@
 
       <scheme name="anyURI-content">
       	<inherit scheme='uri:uri'/>
+      </scheme>
+      
+      <scheme name='namespaceList-list'>
+      	<keywords region='ns.spec' worddiv='[\s#&apos;&quot;]'>
+      		<word name='any'/>
+      		<word name='other'/>
+      		<word name='local'/>
+      		<word name='targetNamespace'/>
+      	</keywords>
+      	<inherit scheme="xml:badChar"/>
+      </scheme>
+      
+      <scheme name="namespaceList-content">
+      	<block start='/(~|\s?#1)(##)\M\w+\b/' end='/~\w+\b\m/'
+      		scheme='namespaceList-list' region02='ns.spec.mark'
+      	/>
+      	<inherit scheme='anyURI-content'/>
       </scheme>
 
     <!-- EE end -->

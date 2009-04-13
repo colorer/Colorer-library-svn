@@ -143,6 +143,12 @@
     <region name="SDDecl"        parent="def:DirectiveContent"/>
     <region name="SDDecl.yn"     parent="AttValue"/>
     
+    <!-- QNames -->
+    <region name="QName.nsprefix" parent="nsprefix"/>
+    <region name="QName.nscolon"  parent="nscolon"/>
+    <region name="QName.name" parent="def:String"/>
+    
+    
 
 
     <!-- Enumeration -->

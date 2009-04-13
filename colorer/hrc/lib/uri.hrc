@@ -116,8 +116,11 @@
 	<keywords region='FPI.w3s'>
 		<word name='datatypes'/>
 		<word name='structures'/>
-		<word name='REC-xml-1998-0210'/>
 		<word name='http://www.w3.org/1999/XSL/Transform'/>
+		
+		<!-- They uses both. It's error? -->
+		<word name='REC-xml-1998-0210'/>
+		<word name='REC-xml-19980210'/>
 	</keywords>
 </scheme>
 

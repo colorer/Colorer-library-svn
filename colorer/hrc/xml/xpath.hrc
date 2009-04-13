@@ -66,8 +66,8 @@
 
 
 <region name="var" parent="def:Var"/>
-<region name="var.nsprefix" parent="node.nsprefix"/>
-<region name="var.nscolon" parent="node.nscolon"/>
+<region name="var.nsprefix" parent="xml:QName.nsprefix"/>
+<region name="var.nscolon"  parent="xml:QName.nscolon"/>
 
 <region name="literal" parent="def:String"/>
 <region name="literal.quote" parent="def:StringEdge"/>
