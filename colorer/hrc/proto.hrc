@@ -168,7 +168,7 @@
 
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
-    <filename>/\.(jsp|jspf)$/i</filename>
+    <filename>/\.(jspf?|tag)$/i</filename>
   </prototype>
 
   <prototype name="php" group="inet" description="php">

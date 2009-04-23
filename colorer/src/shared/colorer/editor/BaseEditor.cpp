@@ -4,6 +4,9 @@
 
 #define IDLE_PARSE(time) (100+time*4)
 
+const int CHOOSE_STR = 10;
+const int CHOOSE_LEN = 200 * CHOOSE_STR;
+
 ErrorHandler *eh;
 
 BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
@@ -120,13 +123,13 @@ FileType *BaseEditor::chooseFileType(const String *fileName){
   }else{
     StringBuffer textStart;
     int totalLength = 0;
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < CHOOSE_STR; i++){
       String *iLine = lineSource->getLine(i);
       if (iLine == null) break;
       textStart.append(iLine);
       textStart.append(DString("\n"));
       totalLength += iLine->length();
-      if (totalLength > 500) break;
+      if (totalLength > CHOOSE_LEN) break;
     }
     currentFileType = hrcParser->chooseFileType(fileName, &textStart);
   }
