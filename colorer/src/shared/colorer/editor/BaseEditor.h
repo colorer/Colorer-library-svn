@@ -241,6 +241,9 @@ public:
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
 
 private:
+
+  FileType *chooseFileTypeCh(const String *fileName, int chooseStr, int chooseLen);
+
   HRCParser *hrcParser;
   TextParser *textParser;
   ParserFactory *parserFactory;

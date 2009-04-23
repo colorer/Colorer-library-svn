@@ -258,6 +258,12 @@
     <filename>/\.(xml|gi2|gpr|ui)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
+    <parameters>
+      <!-- firstline -->
+      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
+      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
+    </parameters>
+    
   </prototype>
   <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/gen/xmlns.hrc"/>
@@ -667,6 +673,9 @@
       <param name="fullback" value="yes" description="If yes, draws background in inlined languages till end of the screen"/>
       <param name="default-fore" value="" description="User-defined foreground color for this particular type"/>
       <param name="default-back" value="" description="User-defined foreground color for this particular type"/>
+      <!-- firstline -->
+      <param name='firstlines'     value='4'   description="lines for 'firstline'"/>
+      <param name='firstlinebytes' value='500' description="bytes for 'firstline'"/>
     </parameters>
   </prototype>
 
