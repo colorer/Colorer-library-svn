@@ -1,7 +1,6 @@
 
 #include<common/Logging.h>
 #include<colorer/editor/BaseEditor.h>
-#include<unicode/UnicodeTools.h>
 
 #define IDLE_PARSE(time) (100+time*4)
 
@@ -134,14 +133,11 @@ FileType *BaseEditor::chooseFileTypeCh(const String *fileName, int chooseStr, in
   }
   currentFileType = hrcParser->chooseFileType(fileName, &textStart);
   
-  int chooseStrNext=0, chooseLenNext=0;
-  UnicodeTools::getNumber(currentFileType->getParamValue(DString("firstlines")), &chooseStrNext);
-  UnicodeTools::getNumber(currentFileType->getParamValue(DString("firstlinebytes")), &chooseLenNext);
+  int chooseStrNext=currentFileType->getParamValueInt(DString("firstlines"), chooseStr);
+  int chooseLenNext=currentFileType->getParamValueInt(DString("firstlinebytes"), chooseLen);
   
-  if((chooseStrNext || chooseLenNext) && (chooseStrNext != chooseStr || chooseLenNext != chooseLen))
+  if(chooseStrNext != chooseStr || chooseLenNext != chooseLen)
   {
-    if(!chooseStrNext) chooseStrNext = chooseStr;
-    if(!chooseLenNext) chooseLenNext = chooseLen;
     currentFileType = chooseFileTypeCh(fileName, chooseStrNext, chooseLenNext);
   }
   return currentFileType;
@@ -158,8 +154,11 @@ FileType *BaseEditor::chooseFileType(const String *fileName)
     int chooseStr=CHOOSE_STR, chooseLen=CHOOSE_LEN;
     
     FileType *def = hrcParser->getFileType(&DString("default"));
-    UnicodeTools::getNumber(def->getParamValue(DString("firstlines")), &chooseStr);
-    UnicodeTools::getNumber(def->getParamValue(DString("firstlinebytes")), &chooseLen);
+    if(def)
+    {
+      chooseStr = def->getParamValueInt(DString("firstlines"), chooseStr);
+      chooseLen = def->getParamValueInt(DString("firstlinebytes"), chooseLen);
+    }
     
     currentFileType = chooseFileTypeCh(fileName, chooseStr, chooseLen);
   }
