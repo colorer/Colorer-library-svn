@@ -140,6 +140,8 @@ FileType *BaseEditor::chooseFileTypeCh(const String *fileName, int chooseStr, in
   
   if((chooseStrNext || chooseLenNext) && (chooseStrNext != chooseStr || chooseLenNext != chooseLen))
   {
+    if(!chooseStrNext) chooseStrNext = chooseStr;
+    if(!chooseLenNext) chooseLenNext = chooseLen;
     currentFileType = chooseFileTypeCh(fileName, chooseStrNext, chooseLenNext);
   }
   return currentFileType;
