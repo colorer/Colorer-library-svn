@@ -34,9 +34,12 @@
 		<word name='slots'/>
 		<word name='emit'/>
 		<word name='connect' region='c:KeywordLibFunctions'/>
+		<word name='disconnect' region='c:KeywordLibFunctions'/>
+		<word name='METHOD'/>
 		<word name='SIGNAL'/>
 		<word name='SLOT'/>
 		<word name='qobject_cast'/>
+		<word name='qvariant_cast'/>
 		<word name='qgraphicsitem_cast'/>
 	</keywords>
 	

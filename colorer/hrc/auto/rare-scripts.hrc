@@ -76,7 +76,7 @@
 
   <prototype name="linkdef" group="scripts.rare" description="Link Defines">
     <location link="types/linkdef.hrc"/>
-    <filename>/\.def$/i</filename>
+    <filename weight='3'>/\.def$/i</filename>
   </prototype>
 
   <!-- flex extension conflicts -->

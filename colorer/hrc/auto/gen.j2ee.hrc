@@ -109,6 +109,11 @@
     <location link="gen/j2ee/web-jsptaglibrary_1_1.hrc"/>
     <filename>/\.tld/i</filename>
     <firstline weight='4'>/http:\/\/java\.sun\.com\/j2ee\/dtds\/web-jsptaglibrary_1_1\.dtd/</firstline>
+    <parameters>
+      <!-- firstline -->
+      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
+      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
+    </parameters>
   </prototype>
   <prototype name="web-jsptaglibrary_1_2" group="inet.j2ee" description="JSP Tag Library 1.2" targetNamespace="http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
     <location link="gen/j2ee/web-jsptaglibrary_1_2.hrc"/>
