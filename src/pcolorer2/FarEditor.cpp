@@ -53,6 +53,7 @@ FarEditor::~FarEditor(){
   delete structOutliner;
   delete errorOutliner;
   delete baseEditor;
+  delete ret_str;
 }
 
 
