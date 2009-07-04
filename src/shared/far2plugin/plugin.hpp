@@ -4,7 +4,7 @@
 /*
   plugin.hpp
 
-  Plugin API for FAR Manager 2.0 build 679
+  Plugin API for FAR Manager 2.0 build 1017
 */
 
 /*
@@ -41,7 +41,7 @@ other possible license with no implications from the above license on them.
 
 #define FARMANAGERVERSION_MAJOR 2
 #define FARMANAGERVERSION_MINOR 0
-#define FARMANAGERVERSION_BUILD 679
+#define FARMANAGERVERSION_BUILD 1017
 
 #ifndef RC_INVOKED
 
@@ -310,7 +310,6 @@ enum FarMessagesProc{
   DM_SETCOMBOBOXEVENT,
   DM_GETCOMBOBOXEVENT,
 
-  DM_FREEDLGITEM,
   DM_GETCONSTTEXTPTR,
   DM_GETDLGITEMSHORT,
   DM_SETDLGITEMSHORT,
@@ -368,6 +367,8 @@ enum LISTITEMFLAGS {
   LIF_CHECKED            = 0x00020000UL,
   LIF_SEPARATOR          = 0x00040000UL,
   LIF_DISABLE            = 0x00080000UL,
+  LIF_GRAYED             = 0x00100000UL,
+  LIF_HIDDEN             = 0x00200000UL,
   LIF_DELETEUSERDATA     = 0x80000000UL,
 };
 
@@ -609,6 +610,8 @@ enum MENUITEMFLAGS {
   MIF_CHECKED    = 0x00020000UL,
   MIF_SEPARATOR  = 0x00040000UL,
   MIF_DISABLE    = 0x00080000UL,
+  MIF_GRAYED     = 0x00100000UL,
+  MIF_HIDDEN     = 0x00200000UL,
   MIF_USETEXTPTR = 0x80000000UL,
 };
 
@@ -628,10 +631,6 @@ enum FARMENUFLAGS{
   FMENU_REVERSEAUTOHIGHLIGHT = 0x00000008,
   FMENU_USEEXT               = 0x00000020,
   FMENU_CHANGECONSOLETITLE   = 0x00000040,
-
-  FMENU_TRUNCPATH            = 0x10000000,
-  FMENU_TRUNCSTR             = 0x20000000,
-  FMENU_TRUNCSTREND          = 0x30000000,
 };
 
 typedef int (WINAPI *FARAPIMENU)(
@@ -705,18 +704,13 @@ struct PanelInfo
   int PanelType;
   int Plugin;
   RECT PanelRect;
-  struct PluginPanelItem *PanelItems;
   int ItemsNumber;
-  struct PluginPanelItem **SelectedItems;
   int SelectedItemsNumber;
   int CurrentItem;
   int TopPanelItem;
   int Visible;
   int Focus;
   int ViewMode;
-  wchar_t *lpwszColumnTypes;
-  wchar_t *lpwszColumnWidths;
-  wchar_t *lpwszCurDir;
   int ShortNames;
   int SortMode;
   DWORD Flags;
@@ -759,18 +753,25 @@ enum FILE_CONTROL_COMMANDS{
   FCTL_GETCMDLINESELECTEDTEXT,
   FCTL_SETCMDLINESELECTION,
   FCTL_GETCMDLINESELECTION,
-  FCTL_GETPANELSHORTINFO,
   FCTL_CHECKPANELSEXIST,
   FCTL_SETNUMERICSORT,
-  FCTL_FREEPANELINFO,
   FCTL_GETUSERSCREEN,
   FCTL_ISACTIVEPANEL,
+	FCTL_GETPANELITEM,
+	FCTL_GETSELECTEDPANELITEM,
+	FCTL_GETCURRENTPANELITEM,
+	FCTL_GETCURRENTDIRECTORY,
+	FCTL_GETCOLUMNTYPES,
+	FCTL_GETCOLUMNWIDTHS,
+	FCTL_BEGINSELECTION,
+	FCTL_ENDSELECTION,
 };
 
 typedef int (WINAPI *FARAPICONTROL)(
   HANDLE hPlugin,
   int Command,
-  void *Param
+	int Param1,
+	LONG_PTR Param2
 );
 
 typedef void (WINAPI *FARAPITEXT)(
@@ -906,7 +907,7 @@ enum ADVANCED_CONTROL_COMMANDS{
   ACTL_GETDIALOGSETTINGS    = 22,
   ACTL_GETSHORTWINDOWINFO   = 23,
   ACTL_REDRAWALL            = 27,
-  ACTL_FREEWINDOWINFO       = 28,
+  ACTL_SYNCHRO              = 28,
 };
 
 
@@ -1062,8 +1063,10 @@ struct WindowInfo
   int  Type;
   int  Modified;
   int  Current;
-  const wchar_t *TypeName;
-  const wchar_t *Name;
+  wchar_t *TypeName;
+  int TypeNameSize;
+  wchar_t *Name;
+  int NameSize;
 };
 
 typedef INT_PTR (WINAPI *FARAPIADVCONTROL)(
@@ -1085,7 +1088,7 @@ enum VIEWER_CONTROL_COMMANDS {
 
 enum VIEWER_OPTIONS {
   VOPT_SAVEFILEPOSITION=1,
-  VOPT_AUTODETECTTABLE=2,
+  VOPT_AUTODETECTCODEPAGE=2,
 };
 
 enum VIEWER_SETMODE_TYPES {
@@ -1181,6 +1184,10 @@ enum DIALOG_EVENTS {
   DE_DLGPROCEND     =2,
 };
 
+enum SYNCHRO_EVENTS {
+  SE_COMMONSYNCHRO  =0,
+};
+
 #define EEREDRAW_ALL    (void*)0
 #define EEREDRAW_CHANGE (void*)1
 #define EEREDRAW_LINE   (void*)2
@@ -1212,13 +1219,14 @@ enum EDITOR_CONTROL_COMMANDS {
   ECTL_GETBOOKMARKS,
   ECTL_TURNOFFMARKINGBLOCK,
   ECTL_DELETEBLOCK,
-  ECTL_FREEINFO, //!!!!!
   ECTL_ADDSTACKBOOKMARK,
   ECTL_PREVSTACKBOOKMARK,
   ECTL_NEXTSTACKBOOKMARK,
   ECTL_CLEARSTACKBOOKMARKS,
   ECTL_DELETESTACKBOOKMARK,
   ECTL_GETSTACKBOOKMARKS,
+  ECTL_UNDOREDO,
+  ECTL_GETFILENAME,
 };
 
 enum EDITOR_SETPARAMETER_TYPES {
@@ -1227,7 +1235,7 @@ enum EDITOR_SETPARAMETER_TYPES {
   ESPT_AUTOINDENT,
   ESPT_CURSORBEYONDEOL,
   ESPT_CHARCODEBASE,
-  ESPT_CHARTABLE,
+  ESPT_CODEPAGE,
   ESPT_SAVEFILEPOSITION,
   ESPT_LOCKMODE,
   ESPT_SETWORDDIV,
@@ -1246,6 +1254,21 @@ struct EditorSetParameter
   } Param;
   DWORD Flags;
   DWORD Reserved2;
+};
+
+
+enum EDITOR_UNDOREDO_COMMANDS {
+  EUR_BEGIN,
+  EUR_END,
+  EUR_UNDO,
+  EUR_REDO
+};
+
+
+struct EditorUndoRedo
+{
+  int Command;
+  DWORD_PTR Reserved[3];
 };
 
 struct EditorGetString
@@ -1280,7 +1303,7 @@ enum EDITOR_OPTIONS {
   EOPT_DELREMOVESBLOCKS  = 0x00000004,
   EOPT_AUTOINDENT        = 0x00000008,
   EOPT_SAVEFILEPOSITION  = 0x00000010,
-  EOPT_AUTODETECTTABLE   = 0x00000020,
+  EOPT_AUTODETECTCODEPAGE   = 0x00000020,
   EOPT_CURSORBEYONDEOL   = 0x00000040,
   EOPT_EXPANDONLYNEWTABS = 0x00000080,
 };
@@ -1302,7 +1325,6 @@ enum EDITOR_CURRENTSTATE {
 struct EditorInfo
 {
   int EditorID;
-  const wchar_t *FileName;
   int WindowSizeX;
   int WindowSizeY;
   int TotalLines;
@@ -1427,7 +1449,7 @@ typedef int     (WINAPIV *FARSTDSSCANF)(const wchar_t *Buffer, const wchar_t *Fo
 typedef void    (WINAPI *FARSTDQSORT)(void *base, size_t nelem, size_t width, int (__cdecl *fcmp)(const void *, const void *));
 typedef void    (WINAPI *FARSTDQSORTEX)(void *base, size_t nelem, size_t width, int (__cdecl *fcmp)(const void *, const void *,void *userparam),void *userparam);
 typedef void   *(WINAPI *FARSTDBSEARCH)(const void *key, const void *base, size_t nelem, size_t width, int (__cdecl *fcmp)(const void *, const void *));
-typedef int     (WINAPI *FARSTDGETFILEOWNER)(const wchar_t *Computer,const wchar_t *Name,wchar_t *Owner);
+typedef int     (WINAPI *FARSTDGETFILEOWNER)(const wchar_t *Computer,const wchar_t *Name,wchar_t *Owner,int Size);
 typedef int     (WINAPI *FARSTDGETNUMBEROFLINKS)(const wchar_t *Name);
 typedef int     (WINAPI *FARSTDATOI)(const wchar_t *s);
 typedef __int64 (WINAPI *FARSTDATOI64)(const wchar_t *s);
@@ -1440,7 +1462,7 @@ typedef wchar_t   *(WINAPI *FARSTDTRUNCSTR)(wchar_t *Str,int MaxLength);
 typedef wchar_t   *(WINAPI *FARSTDTRUNCPATHSTR)(wchar_t *Str,int MaxLength);
 typedef wchar_t   *(WINAPI *FARSTDQUOTESPACEONLY)(wchar_t *Str);
 typedef const wchar_t*   (WINAPI *FARSTDPOINTTONAME)(const wchar_t *Path);
-typedef void    (WINAPI *FARSTDGETPATHROOT)(const wchar_t *Path,wchar_t *Root);
+typedef int     (WINAPI *FARSTDGETPATHROOT)(const wchar_t *Path,wchar_t *Root, int DestSize);
 typedef BOOL    (WINAPI *FARSTDADDENDSLASH)(wchar_t *Path);
 typedef int     (WINAPI *FARSTDCOPYTOCLIPBOARD)(const wchar_t *Data);
 typedef wchar_t *(WINAPI *FARSTDPASTEFROMCLIPBOARD)(void);
@@ -1507,8 +1529,8 @@ enum MKLINKOP{
   FLINK_DONOTUPDATEPANEL = 0x20000,
 };
 typedef int     (WINAPI *FARSTDMKLINK)(const wchar_t *Src,const wchar_t *Dest,DWORD Flags);
-typedef int     (WINAPI *FARCONVERTNAMETOREAL)(const char *Src,char *Dest, int DestSize);
-typedef int     (WINAPI *FARGETREPARSEPOINTINFO)(const char *Src,char *Dest,int DestSize);
+typedef int     (WINAPI *FARCONVERTNAMETOREAL)(const wchar_t *Src, wchar_t *Dest, int DestSize);
+typedef int     (WINAPI *FARGETREPARSEPOINTINFO)(const wchar_t *Src, wchar_t *Dest,int DestSize);
 
 typedef struct FarStandardFunctions
 {
@@ -1639,8 +1661,8 @@ struct PluginInfo
 
 struct InfoPanelLine
 {
-  wchar_t Text[80];
-  wchar_t Data[80];
+  const wchar_t *Text;
+  const wchar_t *Data;
   int  Separator;
 };
 
@@ -1718,8 +1740,6 @@ enum OPERATION_MODES {
   OPM_QUICKVIEW  =0x0040,
 };
 
-#define MAXSIZE_SHORTCUTDATA  8192
-
 struct OpenPluginInfo
 {
   int                   StructSize;
@@ -1752,6 +1772,7 @@ enum OPENPLUGIN_OPENFROM{
   OPEN_VIEWER       = 6,
   OPEN_FILEPANEL    = 7,
   OPEN_DIALOG       = 8,
+  OPEN_FROMMACRO    = 0x10000,
 };
 
 enum FAR_PKF_FLAGS {
@@ -1827,6 +1848,7 @@ int    WINAPI _export ProcessEditorInputW(const INPUT_RECORD *Rec);
 int    WINAPI _export ProcessEventW(HANDLE hPlugin,int Event,void *Param);
 int    WINAPI _export ProcessHostFileW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int OpMode);
 int    WINAPI _export ProcessKeyW(HANDLE hPlugin,int Key,unsigned int ControlState);
+int    WINAPI _export ProcessSynchroEventW(int Event,void *Param);
 int    WINAPI _export ProcessViewerEventW(int Event,void *Param);
 int    WINAPI _export PutFilesW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,int OpMode);
 int    WINAPI _export SetDirectoryW(HANDLE hPlugin,const wchar_t *Dir,int OpMode);

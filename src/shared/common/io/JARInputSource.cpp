@@ -69,23 +69,42 @@ const byte *JARInputSource::openStream()
   fill_mem_filefunc(&zlib_ff, mf);
 
   unzFile fid = unzOpen2(null, &zlib_ff);
-  if (fid == 0) throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
+
+  if (fid == 0) {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
+  }
   int ret = unzLocateFile(fid, inJarLocation->getChars(), 0);
-  if (ret != UNZ_OK) throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
+  if (ret != UNZ_OK)  {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
+  }
   unz_file_info file_info;
   ret = unzGetCurrentFileInfo(fid, &file_info, null, 0, null, 0, null, 0);
-  if (ret != UNZ_OK) throw InputSourceException(StringBuffer("Can't retrieve current file in JAR content: '")+inJarLocation+"'");
+  if (ret != UNZ_OK)  {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Can't retrieve current file in JAR content: '")+inJarLocation+"'");
+  }
 
   len = file_info.uncompressed_size;
   stream = new byte[len];
   ret = unzOpenCurrentFile(fid);
-  if (ret != UNZ_OK) throw InputSourceException(StringBuffer("Can't open current file in JAR content: '")+inJarLocation+"'");
+  if (ret != UNZ_OK)  {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Can't open current file in JAR content: '")+inJarLocation+"'");
+  }
   ret = unzReadCurrentFile(fid, stream, len);
-  if (ret <= 0) throw InputSourceException(StringBuffer("Can't read current file in JAR content: '")+inJarLocation+"' ("+SString(ret)+")");
+  if (ret <= 0) {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Can't read current file in JAR content: '")+inJarLocation+"' ("+SString(ret)+")");
+  }
   ret = unzCloseCurrentFile(fid);
-  if (ret == UNZ_CRCERROR) throw InputSourceException(StringBuffer("Bad JAR file CRC"));
+  if (ret == UNZ_CRCERROR) {
+	  delete mf;
+	  throw InputSourceException(StringBuffer("Bad JAR file CRC"));
+  }
   ret = unzClose(fid);
-
+  delete mf;
   return stream;
 }
 

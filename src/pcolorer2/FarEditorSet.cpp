@@ -20,7 +20,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
   info = fedi;
 
   wchar_t key[255];
-  swprintf(key, 255, L"%s\\colorer", info->RootKey);
+  _snwprintf(key, 255, L"%s\\colorer", info->RootKey);
   hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
 
   parserFactory = null;
@@ -184,12 +184,12 @@ void FarEditorSet::chooseType()
     if (group != null) groupChars = group->getWChars();
     else groupChars = L"<no group>";
     menuels[i].Text = new wchar_t[255];
-	swprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
+	_snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
     if(type == fe->getFileType()) menuels[i].Selected = 1;
   };
 
   wchar_t bottom[20];
-  swprintf(bottom, 20, GetMsg(mTotalTypes), idx);
+  _snwprintf(bottom, 20, GetMsg(mTotalTypes), idx);
 
   i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
                      GetMsg(mSelectSyntax), bottom, L"contents", null, null, menuels, i);
@@ -283,7 +283,7 @@ void FarEditorSet::configure()
 
     wchar_t hrdName[32]  = {0};
     rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
-    DString &shrdName = DString("default");
+    DString shrdName = DString("default");
     if (hrdName[0]){
       shrdName = DString(hrdName);
     }
@@ -539,7 +539,20 @@ FarEditor *FarEditorSet::getCurrentEditor(){
     editor = new FarEditor(info, parserFactory);
     farEditorInstances.put(&SString(ei.EditorID), editor);
 
-    DString fnpath(ei.FileName);
+    
+    LPWSTR FileName=NULL;
+    size_t FileNameSize=info->EditorControl(ECTL_GETFILENAME,NULL);
+    if(FileNameSize)
+    {
+      FileName=new wchar_t[FileNameSize];
+      if(FileName)
+      {
+        info->EditorControl(ECTL_GETFILENAME,FileName);
+      }
+    }
+    
+    DString fnpath(FileName);
+
     int slash_idx = fnpath.lastIndexOf('\\');
     if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
     DString fn = DString(fnpath, slash_idx+1);
@@ -550,6 +563,7 @@ FarEditor *FarEditorSet::getCurrentEditor(){
     editor->setDrawSyntax(drawSyntax);
     editor->setOutlineStyle(oldOutline);
     editor->setMaxTime(rMaxTime);
+    delete[] FileName;
   };
   return editor;
 }

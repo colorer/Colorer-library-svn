@@ -668,14 +668,14 @@ const int FILTER_SIZE = 40;
 
         wchar_t * menuItem = new wchar_t[255];
         if (!oldOutline){
-          int si = swprintf(menuItem, 255, L"%4d ", item->lno+1);
+          int si = _snwprintf(menuItem, 255, L"%4d ", item->lno+1);
           for(int lIdx = 0; lIdx < treeLevel; lIdx++){
             menuItem[si++] = ' ';
             menuItem[si++] = ' ';
           };
           const String *region = item->region->getName();
           wchar_t cls = Character::toLowerCase((*region)[region->indexOf(':')+1]);
-          si += swprintf(menuItem+si, 255-si, L"%c ", cls);
+          si += _snwprintf(menuItem+si, 255-si, L"%c ", cls);
 
           int labelLength = item->token->length();
           if (labelLength+si > 110) labelLength = 110;
@@ -741,7 +741,7 @@ const int FILTER_SIZE = 40;
       wcsncat(captionfilter, autofilter+flen, aflen-flen);
       captionfilter[aflen+1] = 0;
     }
-    swprintf(top, 128, topline, captionfilter);
+    _snwprintf(top, 128, topline, captionfilter);
 
     int sel = 0;
     sel = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,

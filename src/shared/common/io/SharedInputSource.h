@@ -31,6 +31,7 @@ public:
     ref_count--;
     if (ref_count <= 0){
       delete this;
+	  return -1;
     }
     return ref_count;
   }
