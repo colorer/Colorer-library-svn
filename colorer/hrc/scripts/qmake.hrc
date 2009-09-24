@@ -161,7 +161,7 @@
 		<symb name=':' region='def:SymbolStrong'/>
 	</keywords>
 	
-	<regexp match='/\MdefineReplace\s*\((\s*[\w_]+)\s*\)/' region1='function'/>
+	<regexp match='/\Mdefine(Test|Replace)\s*\(\s*([\w_]+)\s*\)/' region2='function'/>
 	<inherit scheme='fun'/>
 </scheme>
 
@@ -541,6 +541,7 @@
 		<word name='if'/>
 		<word name='else'/>
 		<word name='return'/>
+		<word name='defineTest'/>
 		<word name='defineReplace'/>
 		
 		<word name='basename'/>
