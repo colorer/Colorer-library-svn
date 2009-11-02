@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
+  "http://colorer.sf.net/2003/hrc.dtd"[
+<!ENTITY kw  SYSTEM "ruby.kw.ent.hrc">
+]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
@@ -12,6 +14,7 @@
       ]]></documentation>
       <contributors><![CDATA[
         Vic Zus <vvitiok@yahoo.com>
+        Igor Russkih
       ]]></contributors>
     </annotation>
 
@@ -46,6 +49,18 @@
       <block start='/\%[Qqx](.)/' end='/\y1/' scheme="String" region='String'/>
 
 
+      <!-- stolen from perl -->
+      <block start="/((\=|\! \~) |
+               [^&lt;\]\}\)\+\-\w\s\/] |
+               (\bif) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
+              \s*
+              ((?{def:PairStart}\/))
+             /x"
+        end="/(\y7([cmiogxes]*) )/x"
+        scheme="regexp:perl.regexp"
+        region="String" region01="Symb" region07="regexp:SpecQuote"
+        region10="regexp:SpecQuote" region11="def:PairEnd" region12="regexp:SpecArea"/>
+
       <regexp match='/ (?{Keyword}alias) \s+ (?{AliasOutline}\S+ \s+ \S+)/x'/>
       <regexp match='/\M class \s+ (?{ClassOutline}\S+)/x'/>
 
@@ -60,15 +75,15 @@
              region00='Keyword' region10='Keyword'
              region01='def:PairStart' region11='def:PairEnd'
              />
+      <block start='/\s*(do)\b/' end='/\b(end)\b/' scheme="ruby"
+             region00='Keyword' region10='Keyword'
+             region01='def:PairStart' region11='def:PairEnd'
+             />
 
       <inherit scheme="def:PairedBrackets">
         <virtual scheme='def:PairedBrackets' subst-scheme='ruby'/>
       </inherit>
 
-      <keywords region="def:Symbol">
-        <symb name='+'/><symb name='-'/><symb name='/'/><symb name='*'/><symb name='='/><symb name='!='/>
-        <symb name='.'/>
-      </keywords>
       <keywords region="Keyword">
         <word name="BEGIN"/>
         <word name="END"/>
@@ -113,60 +128,12 @@
       </keywords>
 
       <keywords region="def:FunctionKeyword">
-        <word name="Array"/>
-        <word name="Float"/>
-        <word name="Integer"/>
-        <word name="String"/>
-        <word name="at_exit"/>
-        <word name="autoload"/>
-        <word name="binding"/>
-        <word name="caller"/>
-        <word name="catch"/>
-        <word name="chop"/>
-        <word name="chop!"/>
-        <word name="chomp"/>
-        <word name="chomp!"/>
-        <word name="eval"/>
-        <word name="exec"/>
-        <word name="exit"/>
-        <word name="exit!"/>
-        <word name="fail"/>
-        <word name="fork"/>
-        <word name="format"/>
-        <word name="gets"/>
-        <word name="global_variables"/>
-        <word name="gsub"/>
-        <word name="gsub!"/>
-        <word name="iterator?"/>
-        <word name="lambda"/>
-        <word name="load"/>
-        <word name="local_variables"/>
-        <word name="loop"/>
-        <word name="open"/>
-        <word name="p"/>
-        <word name="print"/>
-        <word name="printf"/>
-        <word name="proc"/>
-        <word name="putc"/>
-        <word name="puts"/>
-        <word name="raise"/>
-        <word name="rand"/>
-        <word name="readline"/>
-        <word name="readlines"/>
-        <word name="require"/>
-        <word name="select"/>
-        <word name="sleep"/>
-        <word name="split"/>
-        <word name="sprintf"/>
-        <word name="srand"/>
-        <word name="sub"/>
-        <word name="sub!"/>
-        <word name="syscall"/>
-        <word name="system"/>
-        <word name="test"/>
-        <word name="trace_var"/>
-        <word name="trap"/>
-        <word name="untrace_var"/>
+        &kw;
+      </keywords>
+
+      <keywords region="def:Symbol">
+        <symb name='+'/><symb name='-'/><symb name='/'/><symb name='*'/><symb name='='/><symb name='!='/>
+        <symb name="$'"/><symb name="$`"/>
       </keywords>
 
     </scheme>
