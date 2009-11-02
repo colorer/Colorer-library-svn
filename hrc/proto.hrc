@@ -455,10 +455,14 @@
     <location link="scripts/tex.hrc"/>
     <filename>/\.(tex|cls|sty|ltx|ltr|dtx)$/i</filename>
   </prototype>
-   <prototype name="dcl" group="scripts" description="OpenVMS DCL">
-     <location link="scripts/dcl.hrc"/>
-     <filename>/\.com$/i</filename>
-   </prototype>
+  <prototype name="graphviz" group="scripts" description="GraphViz dot">
+    <location link="scripts/graphviz.hrc"/>
+    <filename>/\.dot+$/i</filename>
+  </prototype>
+  <prototype name="dcl" group="scripts" description="OpenVMS DCL">
+    <location link="scripts/dcl.hrc"/>
+    <filename>/\.com$/i</filename>
+  </prototype>
   <prototype name="vrml" group="scripts" description="VRML">
     <location link="scripts/vrml.hrc"/>
     <filename>/\.wrl$/i</filename>
