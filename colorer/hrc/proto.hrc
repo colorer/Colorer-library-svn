@@ -541,6 +541,10 @@
     <filename>/\.(rsa|ro|rtn|inc|int|mac|cdl)$/i</filename>
     <firstline>/^(Cache|OpenM)[^\^]+\^(IN[TC]|MAC)[^\^]*\^.*$/i</firstline>
   </prototype>
+  <prototype name="cup" group="rare" description="CUP">
+    <location link="rare/cup.hrc"/>
+    <filename>/\.(cup)$/i</filename>
+  </prototype>  
   <prototype name="eiffel" group="rare" description="Eiffel">
     <location link="rare/eiffel.hrc"/>
     <filename>/\.e$/i</filename>
