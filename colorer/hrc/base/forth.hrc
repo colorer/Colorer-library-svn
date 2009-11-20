@@ -39,8 +39,10 @@ With Help of
    <regexp match='/(\s|^)(\"\")/' region2="forWord"/>
    <!-- generic strings -->
    <regexp match='/(\s|^)(\S+(\"\s))(.*?)(\")/' region2="forWord" region4="forString" region5="forWord"/>
-   <!-- single quote strigns -->
+   <!-- single quote strings -->
    <block start='/(\s|^)\"(\s|$)/' end='/\"/' scheme="Comment" region="forString" region00="forWord" region10="forWord"/>
+   <!-- AsQName strings -->
+   <regexp match='/(\s|^)(`)(.*?)\M(\s|$)/' region2="forResWord" region3="forString"/>
 
    <!-- Numbers -->
    <!-- hexadecimal -->
@@ -48,7 +50,7 @@ With Help of
    <!-- decimal -->
    <regexp match="/(\s|^)\m-?\d+\M(\s|$)/" region="forNumb"/>
    <!-- float -->
-   <regexp match="/(\s|^)\m-?\d?\.?\d+[eE]((-\d)?\d*)?\M(\s|$)/" region="forNumb"/>
+   <regexp match="/(\s|^)\m-?\d*\.?\d*[eE](-?\d+)?\M(\s|$)/" region="forNumb"/>
 
    <keywords ignorecase="yes" worddiv="[\s]" region="forWord">
      <word name="CLOSE-FILE"/>
@@ -287,7 +289,6 @@ With Help of
       <word name="U>"/>
       <word name="UM*"/>
       <word name="UMOD"/>
-      <word name="UNLOOP"/>
       <word name="W!"/>
       <word name="W,"/>
       <word name="W@"/>
@@ -399,9 +400,9 @@ With Help of
    <block start="/(\s|^)\m\[\M(\s|$)/" end="/(\s|^)(\]|\;)\M(\s|$)/" scheme="forth" region="Insertion" region00="forResWord" region10="forResWord"/>
 
    <!-- LNM: Local variables -->
-   <regexp match="/(\s|^)(\{)\s+((.*?\s+)*?)((\||\\)\s+((.*?\s+)*?))?((\-\-)\s+(.*?))?(\}\M(\s|$))/"
-           region2="forWord" region6="forWord" region7="forNumb"
-           regiona="forWord" regionb="forComment" regionc="forWord"/>
+   <regexp match="/(\s|^)(\{)\s?=(.*?)(\s(\||\\)\s?=(.*?))?(\s(\-\-)\s?=(.*?))?(\s\}\M(\s|$))/"
+           region2="forWord" region5="forWord" region6="forNumb"
+           region8="forWord" region9="forComment" regiona="forWord"/>
            <!-- region3="forNumb" -->
 
    <!-- general syntax constructs -->
@@ -472,8 +473,10 @@ With Help of
    <regexp match="/(\s|^)(VOCABULARY)\s+(\S+)/i"      region="Function" region2="forWord" region3="forWordDefinition"/>
    <regexp match="/(\s|^)(VECT)\s+(\S+)/i"            region="Function" region2="forWord" region3="forWordDefinition"/>
    <regexp match="/(\s|^)(F?VALUE)\s+(\S+)/i"         region="Function" region2="forWord" region3="forWordDefinition"/>
-   <regexp match="/(\s|^)(--)\s+(\S+)/"              region="Function" region2="forWord" region3="forWordDefinition"/>
+   <regexp match="/(\s|^)(--)\s+(\S+)/"               region="Function" region2="forWord" region3="forWordDefinition"/>
    <regexp match="/(\s|^)(CODE)\s+(\S+)/i"            region="Function" region2="forWord" region3="forWordDefinition"/>
+
+   <regexp match="/(\s|^)(TASK:)\s+(\S+)/i"           region="Function" region2="forWord" region3="forWordDefinition"/>
 
    <regexp match="/(\s|^)(REQUIRE)\s+(\S+)\s+(\S+)/i"  region2="forWord" region3="forWord" region4="Path"/>
    <regexp match="/(\s|^)(CHAR)\s+(\S+)/i" region2="forWord" region3="forString"/>
