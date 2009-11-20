@@ -593,6 +593,10 @@
     <location link="rare/sprolog.hrc"/>
     <filename>/\.pl$/i</filename>
   </prototype>
+  <prototype name="stata" group="rare" description="STATA">
+    <location link="rare/stata.hrc"/>
+    <filename>/\.a?do$/i</filename>
+  </prototype>  
   <prototype name="turboProlog" group="rare" description="Turbo Prolog">
     <location link="rare/tprolog.hrc"/>
     <filename>/\.tpl$/i</filename>
