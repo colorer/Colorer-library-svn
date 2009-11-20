@@ -455,6 +455,11 @@
     <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
       <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
     </copy>
+    <mkdir dir="${eclipseplugin-dir}/os/macosx/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/macosx/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+    </copy>
+
   </target>
 
   <target name="eclipseplugin-native-solaris">
