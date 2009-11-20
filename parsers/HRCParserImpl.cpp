@@ -404,6 +404,45 @@ void HRCParserImpl::addScheme(Element *elem)
   addSchemeNodes(scheme, elem->getFirstChild());
 }
 
+String *HRCParserImpl::createPrologEpilogScheme(const String *schemeName, const String *prologName, const String *epilogName)
+{
+    StringBuffer *targetName = new StringBuffer(parseType->getName());
+    targetName->append(DString(":__hrcint_"));
+    targetName->append(schemeName);
+    if (prologName != null) targetName->append(DString(":")).append(prologName);
+    if (epilogName != null) targetName->append(DString(":")).append(epilogName);
+
+    SchemeImpl *scheme = new SchemeImpl(targetName);
+    scheme->fileType = parseType;
+
+    schemeHash.put(scheme->schemeName, scheme);
+
+    if (prologName != null) {
+    	SchemeNode *prolog = new SchemeNode();
+    	prolog->type = SNT_INHERIT;
+    	prolog->schemeName = new SString(prologName);
+    	prolog->includeTag = false;
+    	scheme->nodes.addElement(prolog);
+	}
+
+    SchemeNode *orig = new SchemeNode();
+    orig->type = SNT_INHERIT;
+    orig->schemeName = new SString(schemeName);
+    orig->includeTag = true;
+    scheme->nodes.addElement(orig);
+
+    if (epilogName != null) {
+    	SchemeNode *epilog = new SchemeNode();
+    	epilog->type = SNT_INHERIT;
+    	epilog->schemeName = new SString(epilogName);
+    	epilog->includeTag = false;
+    	scheme->nodes.addElement(epilog);
+	}
+	
+	return targetName;
+
+}
+
 void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 {
   SchemeNode *next = null;
@@ -414,44 +453,71 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next = new SchemeNode();
     }
 
-    if (*tmpel->getNodeName() == "inherit"){
+    if (*tmpel->getNodeName() == "inherit" || *tmpel->getNodeName() == "include")
+    {
       const String *nqSchemeName = ((Element*)tmpel)->getAttribute(DString("scheme"));
       if (nqSchemeName == null || nqSchemeName->length() == 0){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("empty scheme name in inheritance operator in scheme '")+scheme->schemeName+"'");
         }
         continue;
-      };
+      }
       next->type = SNT_INHERIT;
       next->schemeName = new SString(nqSchemeName);
       String *schemeName = qualifyForeignName(nqSchemeName, QNT_SCHEME, false);
-      if (schemeName == null){
-//        if (errorHandler != null) errorHandler->warning(StringBuffer("forward inheritance of '")+nqSchemeName+"'. possible inherit loop with '"+scheme->schemeName+"'");
-//        delete next;
-//        continue;
-      }else
+      if (schemeName != null)
+      {
         next->scheme = schemeHash.get(schemeName);
-      if (schemeName != null){
         delete next->schemeName;
         next->schemeName = schemeName;
-      };
+      }
+      next->includeTag = (*tmpel->getNodeName() == "include");
 
-      if (tmpel->getFirstChild() != null){
-        for(Node *vel = tmpel->getFirstChild(); vel; vel = vel->getNextSibling()){
+      if (tmpel->getFirstChild() != null)
+      {
+        for(Node *vel = tmpel->getFirstChild(); vel; vel = vel->getNextSibling())
+        {
           if (*vel->getNodeName() != "virtual"){
             continue;
           }
           const String *schemeName = ((Element*)vel)->getAttribute(DString("scheme"));
           const String *substName = ((Element*)vel)->getAttribute(DString("subst-scheme"));
-          if (schemeName == null || substName == null){
-            if (errorHandler != null){
-              errorHandler->error(StringBuffer("bad virtualize attributes in scheme '")+scheme->schemeName+"'");
+          const String *prologName = ((Element*)vel)->getAttribute(DString("prolog"));
+          const String *epilogName = ((Element*)vel)->getAttribute(DString("epilog"));
+          const String *regionName = ((Element*)vel)->getAttribute(DString("region"));
+          const String *substRegionName = ((Element*)vel)->getAttribute(DString("subst"));
+
+          if (schemeName != null && substName != null)
+          {
+            next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
             }
-            continue;
-          };
+          else if (schemeName != null && (prologName != null || epilogName != null))
+          {
+            substName = createPrologEpilogScheme(schemeName, prologName, epilogName);
           next->virtualEntryVector.addElement(new VirtualEntry(schemeName, substName));
-        };
-      };
+          }
+          else if (regionName != null && substRegionName != null)
+          {
+            const Region *region = getNCRegion(regionName, true);
+            const Region *substRegion = getNCRegion(substRegionName, true);
+            
+            if (region == null || substRegion == null){
+              if (errorHandler != null)
+                errorHandler->error(StringBuffer("bad region virtualize attributes in scheme '")+scheme->schemeName+"'");
+              continue;
+            }
+
+            next->regionPairVector.addElement(region);
+            next->regionPairVector.addElement(substRegion);
+          }
+          else
+          {
+            if (errorHandler != null)
+              errorHandler->error(StringBuffer("bad virtualize attributes in scheme '")+scheme->schemeName+"'");
+            continue;
+          }
+        }
+      }
       scheme->nodes.addElement(next);
       next = null;
       continue;
@@ -469,14 +535,13 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         delete next;
         continue;
       };
-      String *entMatchParam = useEntities(matchParam);
+      next->start_re = useEntities(matchParam);
       next->lowPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       next->type = SNT_RE;
-      next->start = new CRegExp(entMatchParam);
+      next->start = new CRegExp(next->start_re);
       next->start->setPositionMoves(false);
       if (!next->start || !next->start->isOk())
-        if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+entMatchParam+"' in scheme '"+scheme->schemeName+"'");
-      delete entMatchParam;
+        if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+next->start_re+"' in scheme '"+scheme->schemeName+"'");
       next->end = 0;
       
       loadRegions(next, (Element*)tmpel, true);
@@ -519,16 +584,14 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       	}
       }
 
-      String *startParam;
-      String *endParam;
-      if (!(startParam = useEntities(sParam))){
+      if (!(next->start_re = useEntities(sParam))){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'start' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
         delete next;
         continue;
       }
-      if (!(endParam = useEntities(eParam))){
+      if (!(next->end_re = useEntities(eParam))){
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'end' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
@@ -540,8 +603,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         if (errorHandler != null){
           errorHandler->error(StringBuffer("block with bad scheme attribute in scheme '")+scheme->getName()+"'");
         }
-        delete startParam;
-        delete endParam;
         continue;
       }
       next->schemeName = new SString(schemeName);
@@ -549,26 +610,23 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->lowContentPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("content-priority")));
       next->innerRegion = DString("yes").equals(((Element*)tmpel)->getAttribute(DString("inner-region")));
       next->type = SNT_SCHEME;
-      next->start = new CRegExp(startParam);
+      next->start = new CRegExp(next->start_re);
       next->start->setPositionMoves(false);
       if (!next->start->isOk()){
         if (errorHandler != null){
-          errorHandler->error(StringBuffer("fault compiling regexp '")+startParam+"' in scheme '"+scheme->schemeName+"'");
+          errorHandler->error(StringBuffer("fault compiling regexp '")+next->start_re+"' in scheme '"+scheme->schemeName+"'");
         }
       }
       next->end = new CRegExp();
       next->end->setPositionMoves(true);
       next->end->setBackRE(next->start);
-      next->end->setRE(endParam);
+      next->end->setRE(next->end_re);
       if (!next->end->isOk()){
         if (errorHandler != null){
-          errorHandler->error(StringBuffer("fault compiling regexp '")+endParam+"' in scheme '"+scheme->schemeName+"'");
+          errorHandler->error(StringBuffer("fault compiling regexp '")+next->end_re+"' in scheme '"+scheme->schemeName+"'");
         }
       }
-      delete startParam;
-      delete endParam;
 
-      // !! EE
       loadBlockRegions(next, (Element*)tmpel);
       loadRegions(next, eStart, true);
       loadRegions(next, eEnd, false);
@@ -586,17 +644,17 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       }
       const String *worddiv = ((Element*)tmpel)->getAttribute(DString("worddiv"));
 
-      next->worddiv = null;
+      next->kwList = new KeywordList();
+      next->kwList->worddiv = null;
       if (worddiv){
         String *entWordDiv = useEntities(worddiv);
-        next->worddiv = CharacterClass::createCharClass(*entWordDiv, 0, null);
-        if(next->worddiv == null){
+        next->kwList->worddiv = CharacterClass::createCharClass(*entWordDiv, 0, null);
+        if(next->kwList->worddiv == null){
           if (errorHandler != null) errorHandler->warning(StringBuffer("fault compiling worddiv regexp '")+entWordDiv+"' in scheme '"+scheme->schemeName+"'");
         }
         delete entWordDiv;
       };
 
-      next->kwList = new KeywordList;
       for(Node *keywrd_count = tmpel->getFirstChild(); keywrd_count; keywrd_count = keywrd_count->getNextSibling()){
         if (*keywrd_count->getNodeName() == "word" ||
             *keywrd_count->getNodeName() == "symb")
@@ -901,7 +959,7 @@ const Region* HRCParserImpl::getNCRegion(Element *el, const String &tag){
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

@@ -78,6 +78,7 @@ friend class FileTypeImpl;
   String *qualifyOwnName(const String *name);
   bool checkNameExist(const String *name, FileTypeImpl *parseType, QualifyNameType qntype, bool logErrors);
   String *qualifyForeignName(const String *name, QualifyNameType qntype, bool logErrors);
+  String *createPrologEpilogScheme(const String *schemeName, const String *prologName, const String *epilogName);
 
   void updateLinks();
   String *useEntities(const String *name);

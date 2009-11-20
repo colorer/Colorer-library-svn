@@ -42,6 +42,7 @@ public:
   int num;
   int matchCase;
   int minKeywordLength;
+  CharacterClass *worddiv;
   CharacterClass *firstChar;
   KeywordInfo *kwList;
   KeywordList();
@@ -81,6 +82,7 @@ enum SchemeNodeType { SNT_EMPTY, SNT_RE, SNT_SCHEME, SNT_KEYWORDS, SNT_INHERIT }
 extern char*schemeNodeTypeNames[];
 
 typedef Vector<VirtualEntry*> VirtualEntryVector;
+typedef Vector<const Region*> RegionPairVector;
 
 /** Scheme node.
     @ingroup colorer_parsers
@@ -94,8 +96,9 @@ public:
   SchemeImpl *scheme;
 
   VirtualEntryVector virtualEntryVector;
+  bool includeTag;
+  RegionPairVector regionPairVector;
   KeywordList *kwList;
-  CharacterClass *worddiv;
 
   const Region* region;
   const Region* regions[REGIONS_NUM];
@@ -103,6 +106,7 @@ public:
   const Region* regione[REGIONS_NUM];
   const Region* regionen[NAMED_REGIONS_NUM];
   CRegExp *start, *end;
+  String *start_re, *end_re;
   bool innerRegion, lowPriority, lowContentPriority;
 
 #define CNAME "SchemeNode"

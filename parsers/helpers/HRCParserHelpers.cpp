@@ -2,58 +2,20 @@
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 #include<stdlib.h>
 
-/*
-KeywordInfo::KeywordInfo(){
-  keyword = null;
-  ssShorter = -1;
-  isSymbol = false;
-  region = null;
-};
-void KeywordInfo::swapWith(KeywordInfo *kwi){
-  const SString *_keyword = keyword;
-  bool _isSymbol = isSymbol;
-  const Region *_region = region;
-  int _ssShorter = ssShorter;
-  keyword   = kwi->keyword;
-  isSymbol  = kwi->isSymbol;
-  region    = kwi->region;
-  ssShorter = kwi->ssShorter;
-
-  kwi->keyword   = _keyword;
-  kwi->isSymbol  = _isSymbol;
-  kwi->region    = _region;
-  kwi->ssShorter = _ssShorter;
-};
-KeywordInfo::KeywordInfo(KeywordInfo &ki){
-  keyword = new SString(ki.keyword);
-  region = ki.region;
-  isSymbol = ki.isSymbol;
-  ssShorter = ki.ssShorter;
-};
-KeywordInfo &KeywordInfo::operator=(KeywordInfo &ki){
-  delete keyword;
-  keyword = new SString(ki.keyword);
-  region = ki.region;
-  isSymbol = ki.isSymbol;
-  ssShorter = ki.ssShorter;
-  return *this;
-};
-KeywordInfo::~KeywordInfo(){
-  delete keyword;
-};
-*/
-
-KeywordList::KeywordList(){
+KeywordList::KeywordList()
+{
   num = 0;
   matchCase = false;
   minKeywordLength = 0;
   kwList = null;
+  worddiv = null;
   firstChar = new CharacterClass();
 };
 KeywordList::~KeywordList(){
   for(int idx = 0; idx < num; idx++) {
     delete kwList[idx].keyword;
   }
+  delete worddiv;
   delete[] kwList;
   delete   firstChar;
 };
@@ -91,42 +53,43 @@ void KeywordList::substrIndex(){
     };
 };
 
-
 char*schemeNodeTypeNames[] =  { "EMPTY", "RE", "SCHEME", "KEYWORDS", "INHERIT" };
 
 
-SchemeNode::SchemeNode() : virtualEntryVector(5){
+SchemeNode::SchemeNode() : virtualEntryVector(5), regionPairVector(4) {
   type = SNT_EMPTY;
   schemeName = null;
   scheme = null;
   kwList = null;
-  worddiv = null;
   start = end = null;
+  start_re = end_re = null;
   lowPriority = 0;
+  includeTag = false;
 
-  //!!regions cleanup
   region = null;
   memset(regions, 0, sizeof(regions));
   memset(regionsn, 0, sizeof(regionsn));
   memset(regione, 0, sizeof(regione));
   memset(regionen, 0, sizeof(regionen));
-};
+}
 
 SchemeNode::~SchemeNode(){
   if (type == SNT_RE || type == SNT_SCHEME){
     delete start;
     delete end;
-  };
+    delete start_re;
+    delete end_re;
+  }
   if (type == SNT_KEYWORDS){
     delete kwList;
-    delete worddiv;
-  };
+  }
   if (type == SNT_INHERIT){
     for(int idx = 0; idx < virtualEntryVector.size(); idx++)
       delete virtualEntryVector.elementAt(idx);
-  };
+  }
   delete schemeName;
-};
+}
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -144,7 +107,7 @@ SchemeNode::~SchemeNode(){
  * The Original Code is the Colorer Library.
  *
  * The Initial Developer of the Original Code is
- * Cail Lomecb <cail@nm.ru>.
+ * Igor Russkih <irusskih at gmail.com>
  * Portions created by the Initial Developer are Copyright (C) 1999-2005
  * the Initial Developer. All Rights Reserved.
  *

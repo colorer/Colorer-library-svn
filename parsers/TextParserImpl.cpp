@@ -220,15 +220,15 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
     if (cr == 0 && right-left == 1){
       bool badbound = false;
       if (!node->kwList->kwList[pos].isSymbol){
-        if (!node->worddiv){
+        if (!node->kwList->worddiv){
           if (gx && (Character::isLetterOrDigit((*str)[gx-1]) || (*str)[gx-1] == '_')) badbound = true;
           if (gx + kwlen < lowlen &&
           (Character::isLetterOrDigit((*str)[gx + kwlen]) || (*str)[gx + kwlen] == '_')) badbound = true;
         }else{
         // custom check for word bound
-          if (gx && !node->worddiv->inClass((*str)[gx-1])) badbound = true;
+          if (gx && !node->kwList->worddiv->inClass((*str)[gx-1])) badbound = true;
           if (gx + kwlen < lowlen &&
-            !node->worddiv->inClass((*str)[gx + kwlen])) badbound = true;
+            !node->kwList->worddiv->inClass((*str)[gx + kwlen])) badbound = true;
         };
       };
       if (!badbound){
