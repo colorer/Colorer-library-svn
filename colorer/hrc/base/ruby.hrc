@@ -58,7 +58,7 @@
              /x"
         end="/(\y7([cmiogxes]*) )/x"
         scheme="regexp:perl.regexp"
-        region="String" region01="Symb" region07="regexp:SpecQuote"
+        region="String" region01="def:Symbol" region07="regexp:SpecQuote"
         region10="regexp:SpecQuote" region11="def:PairEnd" region12="regexp:SpecArea"/>
 
       <regexp match='/ (?{Keyword}alias) \s+ (?{AliasOutline}\S+ \s+ \S+)/x'/>
