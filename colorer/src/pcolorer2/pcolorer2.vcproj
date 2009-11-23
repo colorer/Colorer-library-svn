@@ -457,31 +457,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\zlib\infblock.c"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\infblock.h"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\infcodes.c"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\infcodes.h"
-				>
-			</File>
-			<File
 				RelativePath="..\zlib\inffast.c"
 				>
 			</File>
 			<File
 				RelativePath="..\zlib\inffast.h"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\inffixed.h"
 				>
 			</File>
 			<File
@@ -497,23 +477,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\zlib\infutil.c"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\infutil.h"
-				>
-			</File>
-			<File
 				RelativePath="..\zlib\uncompr.c"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\contrib\minizip\zconf.h"
-				>
-			</File>
-			<File
-				RelativePath="..\zlib\zlib.h"
 				>
 			</File>
 			<File
@@ -541,6 +505,10 @@
 				</File>
 				<File
 					RelativePath="..\zlib\contrib\minizip\unzip.h"
+					>
+				</File>
+				<File
+					RelativePath="..\zlib\contrib\minizip\zip.h"
 					>
 				</File>
 			</Filter>
