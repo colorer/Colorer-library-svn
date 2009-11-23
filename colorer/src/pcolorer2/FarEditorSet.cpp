@@ -358,7 +358,8 @@ void FarEditorSet::configure()
       if (_wcsicmp(oTime, fdi[IDX_TIME_EDIT].PtrData)) i = IDX_RELOAD;
 
       if (rDisabled != !fdi[IDX_DISABLED].Selected){
-        i = IDX_RELOAD;
+		  disableColorer();
+		  i = IDX_RELOAD;
       }
 
     }
@@ -603,7 +604,11 @@ const wchar_t *FarEditorSet::GetMsg(int msg){
 
 void FarEditorSet::disableColorer(){
   rDisabled = true;
-  rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
+  for(FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next()){
+	  fe->cleanEditor();
+	  delete fe;  
+  };
+  farEditorInstances.clear();
 }
 
 

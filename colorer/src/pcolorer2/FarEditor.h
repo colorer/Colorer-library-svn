@@ -87,6 +87,8 @@ public:
   /** Dispatch editor input event */
   int  editorInput(const INPUT_RECORD *ir);
 
+  void cleanEditor();
+
 private:
   EditorInfo ei;
   PluginStartupInfo *info;

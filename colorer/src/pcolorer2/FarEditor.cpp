@@ -891,6 +891,20 @@ const wchar_t *FarEditor::GetMsg(int msg){
   return(info->GetMsg(info->ModuleNumber, msg));
 }
 
+void FarEditor::cleanEditor()
+{
+  int col=(int)info->AdvControl(info->ModuleNumber,ACTL_GETCOLOR,(void *)COL_EDITORTEXT );
+  for (int i=0;i<ei.TotalLines;i++){
+    EditorGetString egs;
+    egs.StringNumber=i;
+    info->EditorControl(ECTL_GETSTRING,&egs);
+    if (ei.LeftPos + ei.WindowSizeX>egs.StringLength)
+      addFARColor(i,0,ei.LeftPos + ei.WindowSizeX,col);
+    else
+      addFARColor(i,0,egs.StringLength,col);
+  }
+}
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
