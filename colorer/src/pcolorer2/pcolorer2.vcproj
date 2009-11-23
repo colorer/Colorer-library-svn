@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="0"
-				AdditionalIncludeDirectories="../shared;../zlib"
+				AdditionalIncludeDirectories="../shared;../zlib;./far2sdk"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=FALSE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -508,19 +508,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\shared\farplugin\farcolor.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\FarEditor.h"
 				>
 			</File>
 			<File
 				RelativePath=".\FarEditorSet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\shared\farplugin\farkeys.hpp"
 				>
 			</File>
 			<File
@@ -668,10 +660,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\shared\farplugin\plugin.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\shared\colorer\Region.h"
 				>
 			</File>
@@ -800,11 +788,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\zlib\contrib\minizip\zconf.h"
+				RelativePath="..\zlib\zconf.h"
 				>
 			</File>
 			<File
-				RelativePath="..\zlib\zconf.h"
+				RelativePath="..\zlib\contrib\minizip\zconf.h"
 				>
 			</File>
 			<File
@@ -823,6 +811,26 @@
 			>
 			<File
 				RelativePath=".\pcolorer2.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="far2sdk"
+			>
+			<File
+				RelativePath=".\far2sdk\farcolor.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\far2sdk\farkeys.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\far2sdk\farversion.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\far2sdk\plugin.hpp"
 				>
 			</File>
 		</Filter>
