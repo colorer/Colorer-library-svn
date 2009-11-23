@@ -91,7 +91,7 @@
 <entity name="end" value="\M($|;)"/>
 
 <scheme name="param.content">
- <block start="/hex(\(([27])\))?(:)/" end="/%ini:hex;{2}\s*\m%end;/" scheme="type.hex"
+ <block start="/hex(\(([27b])\))?(:)/" end="/%ini:hex;{2}\s*\m%end;/" scheme="type.hex"
   region00="type" region03="ini:SymbolStrong"
   region01="ini:Symbol" region02="ini:Number"
   
@@ -104,9 +104,6 @@
   region00="def:PairStart" region10="def:PairEnd"
   region01="def:StringEdge" region11="def:StringEdge" 
  /> 
- <regexp match="/\-\s*$/" region="type.dword"
-  region="ini:SymbolStrong"
- />
  <inherit scheme="ini:comment"/>
  <inherit scheme="ini:error"/>
 </scheme>

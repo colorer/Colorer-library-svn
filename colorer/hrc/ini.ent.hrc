@@ -16,7 +16,7 @@
   
   <prototype name="reg" group="scripts.ini" description="Regedit">
     <location link="scripts/ini/reg.hrc"/>
-    <filename>/\.(reg)$/i</filename>
+    <filename>/\.(reg|key)$/i</filename>
     <firstline>/^\s*(REGEDIT4|FARREG\d\d|Windows Registry Editor Version \d\.\d\d)\s*$/</firstline>
   </prototype>
 
