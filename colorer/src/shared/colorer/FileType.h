@@ -61,6 +61,7 @@ public:
       @return Value (changed or default) of this parameter
   */
   virtual const String *getParamValue(const String &name) = 0;
+  virtual int getParamValueInt(const String &name, int def) = 0;
 
   /** Returns parameter's default value of this file type.
       Default values are the values, explicitly pointed with
