@@ -472,8 +472,8 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       delete editor;
       return 0;
     };
+	if (Event != EE_REDRAW) return 0;
     editor = getCurrentEditor();
-    if (Event != EE_REDRAW) return 0;
     return editor->editorEvent(Event, Param);
   }catch(Exception &e){
     const wchar_t* exceptionMessage[5];
@@ -498,9 +498,8 @@ void FarEditorSet::reloadBase()
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
   const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
 
-  readRegistry();
-
   dropAllEditors();
+  readRegistry();
 
   delete regionMapper;
   delete parserFactory;

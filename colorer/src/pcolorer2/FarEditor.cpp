@@ -382,7 +382,7 @@ void FarEditor::locateFunction(){
     esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
     if (esp.TopScreenLine < 0) esp.TopScreenLine = 0;
     info->EditorControl(ECTL_SETPOSITION, &esp);
-    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+    info->EditorControl(ECTL_REDRAW, NULL);
     info->EditorControl(ECTL_GETINFO, &ei);
     return;
   };
@@ -403,7 +403,7 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
       idleCount = 10;
     }
     baseEditor->idleJob(idleCount*10);
-    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+    info->EditorControl(ECTL_REDRAW, NULL);
   }else if(ir->EventType == KEY_EVENT){
     idleCount = 0;
   };
@@ -575,7 +575,7 @@ int FarEditor::editorEvent(int event, void *param)
 
   if (param != EEREDRAW_ALL){
     inRedraw = true;
-    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+    info->EditorControl(ECTL_REDRAW, NULL);
     inRedraw = false;
   };
   return true;
@@ -772,7 +772,7 @@ const int FILTER_SIZE = 40;
         esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
         if (esp.TopScreenLine < 0) esp.TopScreenLine = 0;
         info->EditorControl(ECTL_SETPOSITION, &esp);
-        info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+        info->EditorControl(ECTL_REDRAW, NULL);
         info->EditorControl(ECTL_GETINFO, &ei);
         break;
       }
@@ -787,7 +787,7 @@ const int FILTER_SIZE = 40;
         esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
         if (esp.TopScreenLine < 0) esp.TopScreenLine = 0;
         info->EditorControl(ECTL_SETPOSITION, &esp);
-        info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+        info->EditorControl(ECTL_REDRAW, NULL);
         info->EditorControl(ECTL_GETINFO, &ei);
         break;
       }
