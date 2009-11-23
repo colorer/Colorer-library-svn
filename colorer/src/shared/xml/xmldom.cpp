@@ -272,7 +272,6 @@ void DocumentBuilder::consumeContent(Node *root){
 void DocumentBuilder::appendToLastTextNode(Node *root, String *stext){
   if (stext == null) return;
   Node *last = root->getLastChild();
-  Text *text = null;
   if (last == null || last->getNodeType() != Node::TEXT_NODE){
     root->appendChild(doc->createTextNode(stext));
   }else{

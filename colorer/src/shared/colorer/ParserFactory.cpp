@@ -26,7 +26,6 @@ void ParserFactory::init()
 {
   hrcParser = null;
   fileErrorHandler = null;
-  const byte *stream = null;
   try{
     catalogFIS = InputSource::newInstance(catalogPath);
     catalog = docbuilder.parse(catalogFIS);

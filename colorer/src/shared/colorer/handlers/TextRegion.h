@@ -52,8 +52,6 @@ public:
   static const TextRegion *cast(const RegionDefine *rd){
     if (rd == null) return null;
     if (rd->type != TEXT_REGION) {
-      int a = 0;
-      int b = 10/a;
       throw Exception(DString("Bad type cast exception into TextRegion"));
     }
     const TextRegion *tr = (const TextRegion *)(rd);

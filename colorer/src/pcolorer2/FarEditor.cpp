@@ -100,7 +100,8 @@ void FarEditor::setFileType(FileType *ftype){
 
 void FarEditor::reloadTypeSettings()
 {
-  FileType *ftype = baseEditor->getFileType();
+  // we need this?
+  //FileType *ftype = baseEditor->getFileType();
   HRCParser *hrcParser = parserFactory->getHRCParser();
 
   FileType *def = hrcParser->getFileType(&DString("default"));
@@ -481,9 +482,6 @@ int FarEditor::editorEvent(int event, void *param)
     };
     bool vertCrossDone = false;
 
-    int syns = 0;
-    int syne = 0;
-
     if (drawSyntax)
     for(; l1; l1 = l1->next){
       if (l1->special) continue;
@@ -606,7 +604,8 @@ const int FILTER_SIZE = 40;
   int keys_size = 0;
   while (breakKeys[keys_size] !=0) keys_size++;
 
-  int outputEnc = Encodings::getEncodingIndex("cp866");
+  //we need this?
+  //int outputEnc = Encodings::getEncodingIndex("cp866");
 
   wchar_t prefix[FILTER_SIZE+1];
   wchar_t autofilter[FILTER_SIZE+1];

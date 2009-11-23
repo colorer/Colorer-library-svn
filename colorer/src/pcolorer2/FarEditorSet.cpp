@@ -138,7 +138,8 @@ void FarEditorSet::viewFile(const String &path){
     TextLinesStore textLinesStore;
     textLinesStore.loadFile(newPath, null, true);
     // HRC loading
-    HRCParser *hrcParser = parserFactory->getHRCParser();
+	//we need this?
+    //HRCParser *hrcParser = parserFactory->getHRCParser();
     // Base editor to make primary parse
     BaseEditor baseEditor(parserFactory, &textLinesStore);
     baseEditor.setRegionMapper(regionMapper);

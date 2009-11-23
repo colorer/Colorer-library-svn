@@ -462,7 +462,6 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
           continue;
         };
       };
-      int ox = gx;
       int oy = gy;
       int re_result = searchRE(baseScheme, gy, matchend.s[0], len);
       if ((re_result == MATCH_SCHEME && (oy != gy || matchend.s[0] < gx)) ||

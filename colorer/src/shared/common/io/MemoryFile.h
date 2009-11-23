@@ -30,7 +30,8 @@ uLong ZCALLBACK mem_read_file_func (voidpf opaque, voidpf stream, void *buf, uLo
 
 uLong ZCALLBACK mem_write_file_func (voidpf opaque, voidpf stream, const void *buf, uLong size)
 {
-  MemoryFile *mf = (MemoryFile*)opaque;
+  // we need this?
+  //MemoryFile *mf = (MemoryFile*)opaque;
   return 0;
 }
 
