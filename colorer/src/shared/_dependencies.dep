@@ -218,12 +218,12 @@ $(obj_output_slash)FarEditor.$(obj): $(shared_path)../pcolorer/FarEditor.cpp  \
   $(shared_path)colorer/editor/PairMatch.h \
   $(shared_path)colorer/editor/Outliner.h \
   $(shared_path)colorer/editor/OutlineItem.h $(shared_path)../pcolorer/pcolorer.h \
-  $(shared_path)farplugin/plugin.hpp \
-  $(shared_path)farplugin/farkeys.hpp $(shared_path)common/Logging.h \
+  far2sdk/plugin.hpp \
+  far2sdk/farkeys.hpp $(shared_path)common/Logging.h \
    
 
 $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.cpp \
-   $(shared_path)farplugin/farcolor.hpp \
+   far2sdk/farcolor.hpp \
   $(shared_path)misc/registry.cpp \
   $(shared_path)unicode/Encodings.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
@@ -260,7 +260,7 @@ $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.c
   $(shared_path)colorer/editor/PairMatch.h \
   $(shared_path)colorer/viewer/TextLinesStore.h \
   $(shared_path)../pcolorer/FarEditorSet.h $(shared_path)../pcolorer/pcolorer.h \
-  $(shared_path)farplugin/plugin.hpp $(shared_path)farplugin/farkeys.hpp \
+  far2sdk/plugin.hpp far2sdk/farkeys.hpp \
   $(shared_path)../pcolorer/FarEditor.h $(shared_path)colorer/editor/Outliner.h \
   $(shared_path)colorer/editor/OutlineItem.h
 
