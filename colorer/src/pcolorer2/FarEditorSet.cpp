@@ -372,9 +372,8 @@ void FarEditorSet::configure()
 
     rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 
-    rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD) 2 * (wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1));
-    rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD) 2 * (wcslen(fdi[IDX_TIME_EDIT].PtrData)+1));
-
+	rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)( 2 * (wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
+	rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD) (2 * (wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
     readRegistry();
 
     if (i == IDX_HRD_SELECT){

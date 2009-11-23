@@ -113,6 +113,7 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
     dest[0] = (wc>>8)&0xFF;
     return 2;
   };
+#if 0 // impossible for 16-bit wchar
   if (encoding == ENC_UTF32){
     dest[0] = wc&0xFF;
     dest[1] = (wc>>8)&0xFF;
@@ -120,6 +121,7 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
     dest[3] = (wc>>14)&0xFF;
     return 4;
   };
+
   if (encoding == ENC_UTF32BE){
     dest[3] = wc&0xFF;
     dest[2] = (wc>>8)&0xFF;
@@ -127,6 +129,7 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
     dest[0] = (wc>>14)&0xFF;
     return 4;
   };
+#endif
   throw UnsupportedEncodingException(SString(encoding));
   return 0;
 }

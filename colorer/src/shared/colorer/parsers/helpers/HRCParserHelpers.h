@@ -49,6 +49,7 @@ public:
   void sortList();
   void substrIndex();
 
+#undef CNAME
 #define CNAME "KeywordList"
 #include<common/MemoryOperator.h>
 
@@ -72,6 +73,7 @@ public:
     delete substSchemeName;
   };
 
+#undef CNAME
 #define CNAME "VirtualEntry"
 #include<common/MemoryOperator.h>
 
@@ -105,6 +107,7 @@ public:
   CRegExp *start, *end;
   bool innerRegion, lowPriority, lowContentPriority;
 
+#undef CNAME
 #define CNAME "SchemeNode"
 #include<common/MemoryOperator.h>
 
@@ -124,6 +127,7 @@ public:
   const String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
 
+#undef CNAME
 #define CNAME "SchemeImpl"
 #include<common/MemoryOperator.h>
 

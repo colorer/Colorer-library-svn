@@ -321,7 +321,7 @@ void ConsoleTools::genOutput(bool useTokens){
     if (!useTokens){
       try{
         mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
-      }catch(ParserFactoryException &e){
+      }catch(ParserFactoryException &){
         useMarkup = true;
         mapper = pf.createTextMapper(hrdName);
       }

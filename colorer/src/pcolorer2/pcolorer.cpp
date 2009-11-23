@@ -53,7 +53,7 @@ void WINAPI ExitFARW()
 /**
  * Open plugin configuration of actions dialog.
  */
-HANDLE WINAPI OpenPluginW(int OpenFrom, int Item)
+HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
   if (OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();

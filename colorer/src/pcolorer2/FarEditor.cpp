@@ -698,7 +698,7 @@ const int FILTER_SIZE = 40;
         wcscpy(autofilter, prefix);
       }
     }
-    autoIncremented = wcslen(autofilter) - wcslen(filter);
+    autoIncremented = (int)(wcslen(autofilter) - wcslen(filter));
 
 
     wchar_t top[128];

@@ -35,8 +35,6 @@ void TextParserImpl::setRegionHandler(RegionHandler *rh){
 
 int TextParserImpl::parse(int from, int num, TextParseMode mode)
 {
-  int i;
-
   gx = 0;
   gy = from;
   gy2 = from+num;

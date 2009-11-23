@@ -52,7 +52,7 @@ void ParserFactory::init()
         try{
           fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);
           colorer_logger_set_target(dfis->getLocation()->getChars());
-        }catch(Exception &e){
+        }catch(Exception &){
           fileErrorHandler = null;
         };
         delete dfis;
@@ -151,7 +151,7 @@ String *ParserFactory::searchPath()
     try{
       tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
       if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-    }catch(InputSourceException &e){};
+    }catch(InputSourceException &){};
   };
 
   // /usr/share/colorer/catalog.xml
@@ -166,7 +166,7 @@ String *ParserFactory::searchPath()
   if (c != null) try{
     tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
     if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-  }catch(InputSourceException &e){};
+  }catch(InputSourceException &){};
 #endif
 
   String *right_path = null;
@@ -179,7 +179,7 @@ String *ParserFactory::searchPath()
         is->openStream();
         right_path = new SString(path);
         delete is;
-      }catch(InputSourceException &e){
+      }catch(InputSourceException &){
         delete is;
       };
     };
