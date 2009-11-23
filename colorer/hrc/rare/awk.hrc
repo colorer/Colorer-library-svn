@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding='Windows-1251'?>
+<?xml version="1.0" encoding="Windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -6,7 +6,7 @@
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
    <type name="awk">
       <!--
-          AWK Syntax description (for GAWK 3.1.3) Oct 3 2003
+          AWK Syntax description (for GAWK 3.1.6) Oct 3 2003
       With help of:
           Valentin Skirdin <vskirdin@mail.ru>
       -->
@@ -23,20 +23,43 @@
       <region name="awkConst" parent="Parameter"/>
       <region name="awkControl" parent="Keyword"/>
       <region name="awkIOstat" parent="Keyword"/>
-      <region name="awkIOredir" parent="Keyword"/>
+      <region name="awkIOredir" parent="Parameter"/>
       <region name="awkArithmetic" parent="Keyword"/>
       <region name="awkStrFunc" parent="Keyword"/>
       <region name="awkTimestampFunc" parent="Keyword"/>
       <region name="awkFunctions" parent="Keyword"/>
       <region name="awkBitFunc" parent="Keyword"/>
       <region name="awkStrTransFunc" parent="Keyword"/>
+      <region name="awkExtFunc" parent="Keyword"/>
+      <region name="FuncOutline" parent="Outlined"/>
+      <region name="PattOutline" parent="Outlined"/>
+
+      <scheme name="awkComment">
+         <inherit scheme="Comment"/>
+         <inherit scheme="text"/>
+      </scheme>
 
 
       <scheme name="awk">
+<!-- Outline lists -->
+         <regexp><![CDATA[
+            /^ \M \s* (?{PattOutline} (BEGIN) | (END) ) [\s\W] .*? $/x
+         ]]></regexp>
+         <regexp><![CDATA[
+            /^ \M \s* (?{PattOutline} (\/) ([^\\]|\\.)*? (\/) ) [\s\W] .*? $/x
+         ]]></regexp>
+         <regexp><![CDATA[
+            /^ \M \s* func(tion)? \s* (?{FuncOutline} \w+? ) \s* \( .*? $/x
+         ]]></regexp>
 <!-- Linear Comments -->
-         <regexp match="/(\#.*$)/" region0="awkComment"/>
+         <block start="/\#/" end="/$/" scheme="awkComment" region="awkComment"/>
+<!-- I/O redirection -->
+         <regexp match="/'((\/dev\/(stderr|stdin|stdout|pid|ppid|pgrpid|user|(fd\/\d)))|(\/inet\/(tcp|udp|raw)\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?))'/" region="awkIOredir"/>
+         <regexp match="/&#34;((\/dev\/(stderr|stdin|stdout|pid|ppid|pgrpid|user|(fd\/\d)))|(\/inet\/(tcp|udp|raw)\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?))&#34;/" region="awkIOredir"/>
 <!-- Argument -->
-         <regexp match="/(\$\w+?)\b/" region0="awkArg"/>
+         <regexp match="/(\$[0-9]+)([^0-9\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)]*)/" region0="awkArg" region2="Error"/>
+         <regexp match="/\$[a-zA-Z\_]+([a-zA-Z0-9\_]*)([^a-zA-Z0-9\_\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)]*)/" region0="awkArg" region2="Error"/>
+         <regexp match="/\$[^a-zA-Z0-9\_]*/" region="Error"/>
 <!-- Numbers -->
          <inherit scheme="CHexNumber"/>
          <inherit scheme="FloatNumber"/>
@@ -48,7 +71,9 @@
          <inherit scheme="PairedBrackets">
             <virtual scheme="PairedBrackets" subst-scheme="awk"/>
          </inherit>
+<!-- symbols -->
          <keywords region="awkSymb">
+            <symb name="|&amp;" region="awkIOredir"/>
             <symb name=";"/>
             <symb name="="/>
             <symb name="+"/>
@@ -74,7 +99,6 @@
             <symb name="}"/>
             <symb name="?"/>
             <symb name="&#34;&#34;" region="awkString"/>
-            <symb name="$" region="awkArg"/>
          </keywords>
          <keywords region="awkPatterns">
 <!-- two special kinds of  patterns -->
@@ -137,12 +161,6 @@
             <word name="system"/>
             <word name="printf"/>
          </keywords>
-         <keywords region="awkIOredir">
-<!-- I/O redirection -->
-            <word name="/dev/stderr"/>
-            <word name="/dev/stdin"/>
-            <word name="/dev/stdot"/>
-         </keywords>
          <keywords region="awkArithmetic">
 <!-- pre-defined arithmetic functions -->
             <word name="atan2"/>
@@ -198,6 +216,11 @@
             <word name="func"/>
             <word name="function"/>
             <word name="return"/>
+         </keywords>
+         <keywords region="awkExtFunc">
+<!-- ExtFunc -->
+            <word name="adump"/>
+            <word name="stopme"/>
          </keywords>
       </scheme>
 
