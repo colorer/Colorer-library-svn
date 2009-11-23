@@ -76,7 +76,7 @@
        ``ant eclipseplugin''   - Eclipse IDE plugin.
        ``ant farplugin''       - FAR Manager plugin.
        ``ant hrcupdate''       - Builds zip with current HRC for
-                                 separate distribution.
+                                 separate distribution. (see Paragraph 4)
 
        Test builds:
 
@@ -97,6 +97,12 @@
       - Full Library   - Used as it is,
       - Linux package  - ready to compile and install linux/unix version.
 
+  4.  Build zip with current HRC in Windows
+		To build without errors to be done
+     a. Apache ANT tool (http://ant.apache.org), version 1.5.4
+     b. Xalan-j (http://xalan.apache.org/index.html), version 2.7.1
+		 c. copy xml-apis.jar, xercesImpl.jar, xalan.jar, serializer.jar to ant\lib 
+     d. before starting ``ant hrcupdate'' run command 'SET JAVA_HOME='
 
   Igor Russkih
     irusskih at gmail dot com
