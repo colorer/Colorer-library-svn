@@ -1,4 +1,3 @@
-#include<stdlib.h>
 #include<misc/registry_wide.cpp>
 #include<unicode/Encodings.h>
 #include<common/Logging.h>
@@ -14,6 +13,25 @@
 #define REG_PAIRSDONTDRAW   L"pairsDontDraw"
 #define REG_SYNTAXDONTDRAW  L"syntaxDontDraw"
 #define REG_OLDOUTLINE      L"oldOutlineView"
+
+wchar_t* rtrim(wchar_t* str)
+{
+    wchar_t* ptr = str;
+    str += wcslen(str);
+    while (iswspace(*(--str))) *str = 0;
+    return ptr;
+}
+
+wchar_t* ltrim(wchar_t* str)
+{
+    while (iswspace(*(str++)));
+    return str - 1;
+}
+
+wchar_t* trim(wchar_t* str)
+{
+    return ltrim(rtrim(str));
+}
 
 FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
@@ -277,16 +295,18 @@ void FarEditorSet::configure()
 
 	wchar_t tempCatalogEdit[255] = {0};
     rGetValue(hPluginRegistry, REG_CATALOG, tempCatalogEdit, 255);
-	fdi[IDX_CATALOG_EDIT].PtrData = tempCatalogEdit;
+	fdi[IDX_CATALOG_EDIT].PtrData = trim(tempCatalogEdit);
 
     fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 
     wchar_t hrdName[32]  = {0};
-    rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
+    int len=rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
     DString shrdName = DString("default");
-    if (hrdName[0]){
-      shrdName = DString(hrdName);
-    }
+	if (len > 1) {
+    wchar_t* temp=trim(hrdName);
+    if (wcslen(temp)>1)
+      shrdName = DString(temp); 
+	}
     const String *descr = null;
     if (parserFactory != null){
       descr = parserFactory->getHRDescription(DString("console"), shrdName);
@@ -300,7 +320,7 @@ void FarEditorSet::configure()
 
     wchar_t tempMaxTime[255] = {0};
     rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 512);
-    fdi[IDX_TIME_EDIT].PtrData = tempMaxTime;
+    fdi[IDX_TIME_EDIT].PtrData = trim(tempMaxTime);
 
     fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
     fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
@@ -324,9 +344,9 @@ void FarEditorSet::configure()
     fdi[IDX_SYNTAX].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
     fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
 
-    fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0);
-    fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0);
-
+    fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+    fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0));
+ 
     if (i == IDX_OK)
     {
 	  wchar_t oName[512] = {0};
@@ -350,14 +370,14 @@ void FarEditorSet::configure()
 
     rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 
-    rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD) 2 * wcslen(fdi[IDX_CATALOG_EDIT].PtrData));
-    rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD) 2 * wcslen(fdi[IDX_TIME_EDIT].PtrData));
+    rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD) 2 * (wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1));
+    rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD) 2 * (wcslen(fdi[IDX_TIME_EDIT].PtrData)+1));
 
     readRegistry();
 
     if (i == IDX_HRD_SELECT){
       const String *newname = chooseHRDName(&shrdName);
-      rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, newname->getWChars(), 2 * newname->length());
+      rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, newname->getWChars(), 2 * (newname->length()+1));
       configure();
       i = IDX_RELOAD;
     };
@@ -480,8 +500,6 @@ void FarEditorSet::reloadBase()
   readRegistry();
 
   dropAllEditors();
-  // reason?
-  dropAllEditors();
 
   delete regionMapper;
   delete parserFactory;
@@ -497,11 +515,20 @@ void FarEditorSet::reloadBase()
   wchar_t regstring[512];
   len = rGetValue(hPluginRegistry, REG_HRD_NAME, regstring, 512);
   SString *hrdName = null;
-  if (len > 1) hrdName = new SString(DString(regstring));
+  if (len > 1) {
+    wchar_t* temp=trim(regstring);
+    if (wcslen(temp)>1)
+      hrdName = new SString(DString(temp));
+  }
+ 
+  regstring[0]='\0';
 
   len = rGetValue(hPluginRegistry, REG_CATALOG, regstring, 512);
   SString *catalogPath = null;
-  if (len > 1) catalogPath = new SString(DString(regstring));
+  if (len > 1) {
+      if (wcslen(trim(regstring))>1)
+        catalogPath = new SString(DString(regstring));
+  }
 
   try{
     parserFactory = new ParserFactory(catalogPath);
@@ -593,9 +620,11 @@ void FarEditorSet::readRegistry()
 
   rMaxTime = 3000;
   int len = rGetValue(hPluginRegistry, REG_MAXTIME, mt, 64);
-  if (len){
-    rMaxTime = _wtoi(mt);
-  }
+  if (len>0){
+    wchar_t* temp=trim(mt);
+    if (wcslen(temp)>0)
+      rMaxTime = _wtoi(mt);
+	}
 
   for(FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next()){
     fe->setDrawCross(drawCross);
