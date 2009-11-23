@@ -1,0 +1,15 @@
+
+farobj=$(obj_output_slash)pcolorer.$(obj) \
+       $(obj_output_slash)FarEditorSet.$(obj) \
+       $(obj_output_slash)FarEditor.$(obj)
+
+objs = $(farobj) $(coreobjects)
+
+$(obj_output_slash)pcolorer.$(obj): pcolorer.cpp *.h
+	$(CPP) $(CPPFLAGS) pcolorer.cpp
+
+$(obj_output_slash)FarEditorSet.$(obj): FarEditorSet.cpp *.h
+	$(CPP) $(CPPFLAGS) FarEditorSet.cpp
+
+$(obj_output_slash)FarEditor.$(obj): FarEditor.cpp *.h
+	$(CPP) $(CPPFLAGS) FarEditor.cpp

@@ -1,0 +1,841 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- PUBLIC "-//OASIS//DTD DocBook V4.2//EN" -->
+<!DOCTYPE article[
+<!ENTITY hrcxsd "file:../../doc/2003/hrc.xsd">
+<!ENTITY hrdxsd "file:../../doc/2003/hrd.xsd">
+<!ENTITY catalogref "file:../../doc/2003/catalog.xsd">
+
+<!ENTITY hrc-ref.revhist SYSTEM "file:./hrc-ref.revhist.docbook">
+<!ENTITY hrc-ref.re SYSTEM "file:./hrc-ref.re.docbook">
+<!ENTITY hrc-ref.syntax SYSTEM "file:./hrc-ref.syntax.docbook">
+
+]>
+<article lang="en" xmlns:x="uri:custom:schema-db">
+
+<articleinfo>
+
+<releaseinfo>Colorer-take5 beta4 library HRC Reference. April 2005</releaseinfo>
+<title>HRC Language Reference</title>
+
+<pubdate>26 April 2007</pubdate>
+
+<revhistory>
+<revision>
+  <revnumber>take5.be5</revnumber>
+  <date>26 April 2007</date>
+  <revremark>(Available as
+    <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
+    <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
+    <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
+  </revremark>
+</revision>
+<revision>
+  <revnumber>take5.beta4</revnumber>
+  <date>28 April 2005</date>
+</revision>
+<revision>
+  <revnumber>take5.beta4(draft)</revnumber>
+  <date>19 February 2005</date>
+</revision>
+<revision>
+  <revnumber>take5.beta3</revnumber>
+  <date>30 January 2004</date>
+</revision>
+<revision>
+  <revnumber>take5.beta2</revnumber>
+  <date>12 September 2003</date>
+</revision>
+<revision>
+  <revnumber>take5.beta1</revnumber>
+  <date>30 March 2003</date>
+</revision>
+<revision>
+  <revnumber>take5.alpha3</revnumber>
+  <date>1 March 2003</date>
+</revision>
+<revision>
+  <revnumber>take5.alpha2</revnumber>
+  <date>30 January 2003</date>
+</revision>
+</revhistory>
+<author>
+  <firstname>Igor</firstname><surname>Russkih</surname>
+  <affiliation>
+    <address>
+      <email>irusskih at gmail.com</email>
+    </address>
+  </affiliation>
+</author>
+<author>
+  <firstname>Anatoly</firstname><surname>Technonik</surname>
+  <affiliation>
+    <address>
+      <email>techtonik at gmail.com</email>
+    </address>
+  </affiliation>
+</author>
+
+
+<copyright>
+<year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year>
+<holder>Igor Russkih (Cail Lomecb)</holder>
+</copyright>
+
+<abstract><title>Abstract</title>
+<para>This reference describes <acronym role='Highlighting Resource Codes'>HRC</acronym>
+language, used in Colorer-take5 Library to define and represent
+syntax and lexical structure of various programming languages.
+These syntax definitions are used by library to parse and colorize
+text in editors and other software.
+</para>
+</abstract>
+</articleinfo>
+
+
+<section id='introduction'>
+<title>Introduction</title>
+
+<para>
+<emphasis role='strong'>HRC</emphasis> is a script language which describes text parsing process to produce syntax
+highlighting. It is <emphasis role='strong'>XML-based</emphasis> language with its own XML vocabulary and structure.
+HRC is designed to make the process of describing structures of programming languages
+most flexible and efficient.
+</para>
+<para>
+Looking back to early 1999, HRC had simple XML-like structure describing several
+common language constructions. Since then it evolved into very powerful way of
+describing complex relations between different languages and syntax contexts.
+HRC is a full-fledged "XML application" and that means HRC definitions can be
+automatically generated from XML descriptions in other languages and converted
+to other formats through XSLT templates or other means.
+</para>
+<para>
+HRC uses <emphasis role='strong'>Regular Expressions</emphasis> to achieve flexible recognition
+of text elements, lexemes and tokens. Still Regular Expressions (<emphasis role='strong'>RE</emphasis>) are able
+to recognise only a limited set of syntax constructions when
+it is often necessary to describe more complex structures. Therefore HRC uses special
+construct named <emphasis role='strong'>&quot;scheme&quot;</emphasis> to define behaviour of
+more powerful recursive set of languages (context free). Such schemes in combination
+with RE make HRC strong declarative language.
+</para>
+</section>
+
+
+
+<section id='basics'>
+<title>Basics</title>
+<para>
+HRC describes and stores syntax rules for numerous languages. All language definitions
+are divided into two parts:
+<itemizedlist>
+  <listitem><para>
+<emphasis role='strong'>informal part</emphasis> includes different non-syntax specific
+properties of a language: name, short description, common file extensions and autodetection
+rules. Informal part is also called <emphasis role='strong'>language prototype</emphasis>.
+  </para></listitem>
+  <listitem><para>
+<emphasis role='strong'>formal part</emphasis> contains actual definition of target language
+rules in terms of syntax and semantics. It is referenced as <emphasis role='strong'>language type</emphasis>.
+  </para></listitem>
+</itemizedlist>
+Prototypes are used to detect correct language type that should be applied to a file,
+they define some application-dependent properties and other useful information about
+languages. Because prototypes are separated from real language definitions, full type
+loading occurs only when language is correctly matched or requested by user. This
+guarantees fast library bootstrap. Prototype definitions grouped into one file allow
+users to get a quick overview of the languages supported by the library.
+</para>
+
+<formalpara><title>Structure</title><para>
+Each HRC file contains either several language prototypes or
+one language type. XML content starts with root <x:hrc>hrc</x:hrc>
+element, which contains all other HRC definitions.
+
+<x:schemaref uri="&hrcxsd;" role='hrc'/>
+
+</para>
+
+
+<para>
+Every bit of HRC is either XML element or attribute.
+You can find formal definition of the HRC XML syntax in <xref linkend='hrcxsd'/>.
+For instance, all HRC files start with the syntax similar to following:
+
+<!-- todo provide a link to the latest uptodate skeleton of HRC syntax -->
+
+<example id="example.hrc.file"><title>Common HRC file</title>
+<programlisting><![CDATA[
+<?xml version="1.0"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc
+                         http://colorer.sf.net/2003/hrc.xsd">
+  <annotation>
+   <documentation>
+   your documentation...
+   </documentation>
+  </annotation>
+
+  your definitions...
+
+</hrc>
+]]>
+</programlisting></example>
+
+</para>
+
+<para>
+Each element in HRC can be documented with <emphasis>XML Schema</emphasis>-like
+<x:hrc>annotation</x:hrc>:
+<x:schemaref uri="&hrcxsd;" role='annotation'/>
+
+Annotations can be used anywhere in HRC file to describe and document syntax
+elements.
+
+</para>
+</formalpara>
+
+
+<section id='basics.filetypes'><title>File Types</title>
+<para>HRC rules can reuse or import definitions from each other, some
+languages (like HTML) may include bits of other languages (i.e. PHP),
+so HRC files can depend on each other for correct highlighting. Therefore
+HRC files are more like one big database than a bunch of separate
+definitions. To link them together several syntax elements are used.
+</para>
+
+
+<section id='basics.filetypes.proto'><title>Prototypes</title>
+
+<para>
+Each language is identified by name and short description. This information
+is included in language prototype. Names are used to reference languages
+in HRC rules. Prototypes are usually contained in top level file
+<emphasis role='strong'>proto.hrc</emphasis>, but considering flexible
+syntax of HRC they could be just everywhere.
+</para>
+
+<para>
+Prototypes are defined by <x:hrc>prototype</x:hrc> elements.
+
+<example id="example.hrc.prototype"><title>Prototype definition</title>
+<programlisting><![CDATA[
+  <prototype name="cpp" group="main" description="C++">
+    <location link="base/cpp.hrc"/>
+    <filename>/\.(cpp|cxx|cc|hpp|h)$/i</filename>
+    <firstline>/^\s*(\/\* | \/\/)/xi</firstline>
+    <firstline>/\#include/</firstline>
+    <firstline>/\#define|\#if/</firstline>
+  </prototype>
+]]>
+</programlisting></example>
+
+The example shows prototype for "C++" language. It contains short
+description, information about language group and location of HRC file
+with formal part of syntax definition. It also includes RE to identify the
+language by filename extension and one or more RE to guess the language
+by first few lines (or several hundred bytes - depends on implementation)
+of file contents.
+</para>
+
+<x:schemaref uri="&hrcxsd;" role='prototype'/>
+
+<para>
+
+If language is not specified explicitly library needs to detect it to
+start syntax highlighting process. This is the purpose of <x:hrc>firstline</x:hrc> and <x:hrc>filename</x:hrc>
+parameters. Each matched instance of one of these parameters adds additional
+weight to the language. Default amount of points added can be specified
+explicitly with <emphasis>weight</emphasis> attribute of these elements.
+When all weights are calculated, the first language with maximum weight is
+selected to highlight the file.
+
+</para>
+
+<x:schemaref uri="&hrcxsd;" role='filename'/>
+<x:schemaref uri="&hrcxsd;" role='firstline'/>
+
+<para>
+If any of these two elements is used more than once, each matched
+instance adds specified amount to the total weight of a language.
+</para>
+
+<para>
+Actual language definition can be separated from its prototype and placed
+into other file (or resource). In this case <x:hrc>location</x:hrc> element
+specifies where to find the definition. The file or resource specified
+will not be loaded until language matches and is selected for highlightning
+process.
+<x:schemaref uri="&hrcxsd;" role='location'/>
+</para>
+
+<x:schemaref uri="&hrcxsd;" role='parameters'/>
+</section>
+
+
+<section id='basics.filetypes.package'><title>Packages</title>
+<para>
+Some syntax rules are common across various languages and it makes
+sense to define them separately and reference from other definitions.
+These definitions will not be visible to end users, so they can be
+thought of as "internal types". Such internal types are represented
+by <x:hrc>package</x:hrc> element:
+
+<x:schemaref uri="&hrcxsd;" role='package'/>
+
+This element doesn't contain <x:hrc>filename</x:hrc> or <x:hrc>firstline</x:hrc>
+properties, because it doesn't directly map to any type of file or language. 
+In everything else its behaviour is identical to <x:hrc>prototype</x:hrc>
+element. Packages can be found in any HRC file including <emphasis>proto.hrc</emphasis>.
+For example:
+
+<example id="example.hrc.package"><title>Package definition</title>
+<programlisting><![CDATA[
+  <package name="def" group="packages" description="basic definitions">
+    <location link="default.hrc"/>
+  </package>
+  <package name="regexp" group="packages" description="Regexp common library">
+    <location link="lib/regexp.hrc"/>
+  </package>
+]]>
+</programlisting></example>
+</para>
+
+</section>
+
+
+<section id='basics.filetypes.type'><title>Types</title>
+<para>
+Type is a <link linkend="basics">formal definition</link> of a language. It is normally contained in a separate file,
+which is referenced by <x:hrc>location</x:hrc> element of language prototype. <x:hrc>type</x:hrc>
+element is the starting point for parsing process, which holds syntax specific information.
+
+<x:schemaref uri="&hrcxsd;" role='type'/>
+
+Normally, each type is defined in a separate file, which may optionally
+contain corresponding prototype (if there is no prototype definition in
+the global repository).
+
+</para>
+</section>
+
+
+</section>
+
+<section id='basics.namespaces'><title>Namespaces</title>
+<para>
+Each type defines its own name space with its elements. Each element must have
+unique identifier (local name) in this namespace, which is used to reference it
+from other elements. Within the same type all elements should be unique, but
+elements with the same name can belong to different types.
+</para>
+
+<para>
+An element can be referenced from the other type with its fully
+qualified name in form of <emphasis>typename:elementname</emphasis>.
+Sometimes there are a lot of inter-type links and use of qualified names
+can become a tedious task. To make the job easier HRC language has
+<x:hrc>import</x:hrc> statement. It 'imports' all element names from
+other type into the current. There can be as many import statements as
+needed. Unqualified names are resolved in order of their definition.
+
+<!-- todo clarify precendence and override rules -->
+
+<x:schemaref uri="&hrcxsd;" role='import'/>
+
+For instance, you can write
+<programlisting>
+  &lt;import type='def'/>
+</programlisting>
+to import all definitions from the 'def' type. Note, that if several
+imported types have some identical local names, they are resolved in
+order of import statements, i.e. the first one is used.
+
+<!-- todo clarify which one will be used finally - the first one
+or the last one defined  -->
+
+</para>
+</section>
+
+</section>
+
+
+
+<section id='schemesyntax'><title>Scheme syntax</title>
+
+<para>
+Scheme is a generic structure of the HRC language to define syntax of programming
+languages. Every scheme contains various syntax elements, matched or not matched
+as text analysis
+goes on. For example, a scheme for "C++" language contains different keywords,
+strings, numbers, comments etc. The scheme is defined by <x:hrc>scheme</x:hrc>
+element.
+</para>
+
+<para>
+Scheme alone is not very useful for analysis. It is much more
+convenient to think about text of a language to be highlighted in terms of
+<emphasis role='strong'>regions</emphasis>. When schema matches a piece of text it
+can assign various parts of this text to different regions.
+Each <x:hrc>region</x:hrc> defines some meaningful part of the syntax.
+This part or region always has a name and sometimes a reference to its parent
+region (if any). When parsed, source text is described as a set of these regions
+with specified positions and lengths.
+
+<!-- todo provide examples of what a region can be-->
+</para>
+
+<para>
+Next stage of the text processing associates each region with some handler.
+A handler, for example, can assign color and font style information to
+each of the regions or apply other operations to these structures.
+</para>
+
+<para>
+Each region is defined using a <x:hrc>region</x:hrc> element:
+<x:schemaref uri="&hrcxsd;" role='region'/>
+</para>
+
+<para>
+During parsing process each element in a scheme not only creates one or more
+syntax <x:hrc>region</x:hrc>s used to highlight parsed text. Resulting information
+also contains a recursive scheme tree showing overall text structure.
+</para>
+
+<para>
+Each type may define as many schemes as needed provided that all their names are
+unique within the type. Scheme is defined using <x:hrc>scheme</x:hrc> element:
+
+<x:schemaref uri="&hrcxsd;" role='scheme'/>
+
+Every type is required to have one scheme called <emphasis role='strong'>"base scheme"</emphasis>
+which is used as an entry point for parsing process of the type. Base scheme is
+named after its type, i.e. local name of the scheme is equal to the name
+of the type. Only internal types defined with <x:hrc>package</x:hrc> element can
+ignore this requirement because they are never used at the top level.
+
+<example id="example.hrc.type"><title>Sample type definition</title>
+<programlisting><![CDATA[
+  <type name="somelang">
+    <region name="Keyword" description="This language's keyword"/>
+    <scheme name="somelang">
+      <keywords region="Keyword">
+        <word name='word1'/><word name='word2'/>
+        <word name='otherkeyword'/>
+      </keywords>
+      <regexp match="/other(keyword)?/i" region="Keyword"/>
+    </scheme>
+  </type>
+]]></programlisting></example>
+
+</para>
+<para>
+Scheme element may contain <emphasis>if/unless</emphasis> attributes to customize
+parsing process according to contents of <x:hrc>parameters</x:hrc> definitions
+in the type of the schema. Parameters can be flexibly changed at runtime by the
+means of Colorer API. This allows customizing load process and suggesting
+various language profiles to be chosen by user.
+
+<!-- todo provide some examples or language profiles and user choices -->
+</para>
+
+<para>
+The following sections describe different types of syntax elements,
+available in the HRC language.
+</para>
+
+<section id='schemesyntax.keywords'><title>Keyword lists</title>
+<para>
+<x:hrc>keywords</x:hrc> is the most simple HRC element used to quickly define
+words with similar properties and highlight them in a text.
+<x:schemaref uri="&hrcxsd;" role='keywords'/>
+<x:schemaref uri="&hrcxsd;" role='word'/>
+<x:schemaref uri="&hrcxsd;" role='symb'/>
+</para>
+<para>
+Each element in the list may assign its own region or use region of its parent
+<x:hrc>keywords</x:hrc> element. Symbols never check surrounding characters,
+while words match only if surrounded by not-word symbols. These word delimiters can be
+redefined with <emphasis>worddiv</emphasis> attribute of <x:hrc>keywords</x:hrc>.
+</para>
+</section>
+
+<section id='schemesyntax.re'><title>Regular Expressions</title>
+<para>
+Regular expression rules is a powerful and flexible way to define custom
+syntax structures. Each RE token can be used to create several different syntax
+regions (up to 16). Keep in mind, however, that the scope of every RE in Colorer
+is limited to one line (the only exception is <x:hrc>firstline</x:hrc> element
+matched against several lines to detect file type).
+</para>
+
+<x:schemaref uri="&hrcxsd;" role='regexp'/>
+
+<para>
+Actual RE is contained within <emphasis role='strong'>match</emphasis> attribute of <x:hrc>regexp</x:hrc>
+element. Detailed explanation of Colorer-take5 regular expressions is in <xref linkend='hrcre'/>.
+Each <x:hrc>regexp</x:hrc> can have up to 16 optional attributes named 
+<emphasis role='strong'>region0, region1, ... regionf</emphasis> where hexadecimal digit
+corresponds to the part of RE surrounded by round brackets counted from left to right. 
+<emphasis role='strong'>region0</emphasis> means whole sequence matched by RE (this can be changed with
+<emphasis role='strong'>\m</emphasis> and <emphasis role='strong'>\M</emphasis> RE metasymbols).
+The value of each attribute is a name of the syntax region used to highlight text. 
+
+Regular Expression can also contain named brackets what explicitly specify corresponding
+syntax region in the form of <emphasis role='strong'>(?{name} ... )</emphasis>.
+</para>
+
+<para>
+Each RE definition can include references to any predefined sequence of RE code.
+Such references are called <emphasis role='strong'>entities</emphasis>. Entities are
+defined in <x:hrc>type</x:hrc> element and have their own qualified namespace.
+To include entity's value into RE, special syntax of <emphasis role='strong'>%entityname;</emphasis> is used.
+</para>
+
+<x:schemaref uri="&hrcxsd;" role='entity'/>
+
+<para>
+Each RE has a priority attribute (by default its value is <emphasis>normal</emphasis>).
+Priority is mainly used to detect errors when closing matching region. When everything within
+the region is already matched and parser needs to close the block, it applies rule to
+match closing sequence. If match fails then rule with <emphasis>low</emphasis>
+priority within the block is tested. This is explained in <xref linkend="schemesyntax.boundaries"/>
+</para>
+
+</section>
+
+<section id='schemesyntax.contextswitch'><title>Block context switch</title>
+<para>
+Although regular expressions are very powerful feature, they do not allow
+to express some complex language constructions. This is due to general
+limitation of colorer's RE parser which scope is limited to a single line of text.
+Regular expression can't work on multiple lines of the parsed text. 
+Often programming languages have constructions wrapped into each other unlimited
+number of times. This is also an area where Regular Expression do not help much.
+</para>
+<para>
+To define more complex syntax structures and context-free grammar constructions
+HRC has a special element named <x:hrc>block</x:hrc>.
+
+<x:schemaref uri="&hrcxsd;" role='block'/>
+
+<x:schemaref uri="&hrcxsd;" role='blockInner'/>
+
+Each block has <emphasis>&lt;start&gt;</emphasis> and <emphasis>&lt;end&gt;</emphasis>
+tags, each with the RE syntax already described.
+Everything contained within these two marks will be highlighted
+as a syntax of some other <x:hrc>scheme</x:hrc>, also pointed by this
+element's attribute. It is also possible to paint the portions of these matched
+tags. Much like <x:hrc>regex</x:hrc> element - <x:hrc>block</x:hrc> can contain
+up to 32 region attributes - <emphasis role='strong'>region, region00, region01, ... region1f</emphasis>.
+<emphasis>region0x</emphasis> corresponds to round brackets of <emphasis>&lt;start&gt;</emphasis> tag,
+<emphasis>region1x</emphasis> is for <emphasis>&lt;end&gt;</emphasis> tag brackets and <emphasis>region</emphasis> attribute
+contains a name of region to paint the whole block. So it is not necessary to define scheme for
+assigning region to the whole block, but since scheme is a required attribute there is a stub 
+empty scheme you can use named <emphasis role='strong'>def:empty</emphasis>
+</para>
+<para>
+Using <x:hrc>block</x:hrc> element you can switch context
+between different highligting schemes. This way it is possible to define
+a great number of different syntax combinations.
+</para>
+
+</section>
+
+<section id='schemesyntax.boundaries'><title>Scheme boundaries and priority</title>
+<para>
+Both regular expressions and block'ed scheme switches work in the same scheme context,
+and tested against text in the order they defined in HRC.
+Any conflict between multiple possible matches is resolved according
+to the order of elements in HRC file. After successful RE match parse position is increased by
+the width of that RE. By default the width is calculated from the first matched symbol till the last
+inclusive. However it is possible to adjust these boundaries and shift parse position.
+This is done with special <emphasis role='strong'>\m</emphasis>
+(redefines RE start) and <emphasis role='strong'>\M</emphasis> (redefines RE end) metasymbols.
+It becomes possible to define overlapped elements, where parsing of the following element starts
+somewhere in the middle of the previous.
+</para>
+<section id="priority"><title>priority</title>
+<para>
+Additional selection rules are applied in case of returning from 
+an inner scheme to its caller scheme (via <emphasis>&lt;end&gt;</emphasis> tag of the 
+<x:hrc>block</x:hrc> element for instance).
+Information about relative position of the <x:hrc>block</x:hrc> element
+can't help here to determine what to apply: <emphasis>&lt;end&gt;</emphasis> RE of the outer
+block or a next regular expression/keyword/block, defined in the inner (called) scheme.
+To resolve such conflict HRC defines a special attribute for <x:hrc>regexp</x:hrc>
+and <x:hrc>block</x:hrc> elements: <emphasis role='strong'>priority</emphasis>.
+Its default value is <emphasis>"normal"</emphasis>. If it is changed to
+<emphasis>"low"</emphasis> then Colorer does not take into account this element
+when resolving conflicts upon exit from inner scheme.
+This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
+will be used instead of the element with lowered priority (when a conflict occurs).
+In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
+relates to the <emphasis>&lt;start&gt;</emphasis> tag. <emphasis>priority</emphasis>
+attribute is often used in rules that highlight syntax errors.
+</para>
+</section>
+<section id="content-priority"><title>content-priority</title>
+<para>
+Sometimes it is required to dynamically define priority of a child scheme within a block.
+<!-- todo add example when an why it is required -->
+With <emphasis>priority</emphasis> attribute it is impossible to change element's priority
+depending on a context from where the element is called, because the element will
+always have the priority specified. Instead <emphasis>content-priority</emphasis> attribute of a
+<x:hrc>block</x:hrc> element is used to change priority for all elements of referenced
+scheme.
+</para>
+<para>
+When changed into <emphasis>low</emphasis> it causes all the elements of that scheme
+to change their priority to <emphasis>low</emphasis> no matter what is the value of their
+particular <emphasis>priority</emphasis> attribute. 
+</para>
+</section>
+
+<section id="inner-region"><title>inner-region</title>
+<para>
+When defining scheme context switch it is possibile to set a default region
+for content of called scheme through <emphasis>region</emphasis> attribute of
+<x:hrc>block</x:hrc> element. The region will be used as a "background" for
+all other regions defined in that scheme.
+It is possible to manage boundaries of this region.
+Normally the whole scheme's content together with contents of <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> tokens is included in this default region.
+Region starts where <emphasis>&lt;start&gt;</emphasis> token starts, and
+ends where <emphasis>&lt;end&gt;</emphasis> token ends.
+</para>
+<para>
+Sometimes it is desirable to change this behaviour and handle <emphasis>&lt;start&gt;</emphasis>
+and <emphasis>&lt;end&gt;</emphasis> tokens (and all the regions they may define) outside of
+default region of the called scheme. This could be achieved by setting <emphasis>inner-region</emphasis>
+attribute to <emphasis>"yes"</emphasis> value.
+When set it tells parser to exclude start/end tokens from default region of called scheme
+by changing default region boundaries to begin at
+the end of <emphasis>&lt;start&gt;</emphasis> token and finish just before <emphasis>&lt;end&gt;</emphasis>
+token area.
+</para>
+<para>
+Inner region feature could be used to implement special wrapped areas and in general
+can affect special background color treatment.
+<!--
+ todo example - what are special wrapped areas 
+ todo example - what is special background color treatment 
+-->
+</para>
+</section>
+
+</section>
+
+</section>
+
+
+
+<section id='interscheme'><title>Inter-scheme links</title>
+
+<section id='interscheme.inheritance'><title>Inheritance</title>
+
+<x:schemaref uri="&hrcxsd;" role='inherit'/>
+
+<x:schemaref uri="&hrcxsd;" role='virtual'/>
+
+<para>
+</para>
+</section>
+
+<section id='interscheme.substitution'><title>Scheme substitutions</title>
+<para></para>
+</section>
+</section>
+
+
+<section id='coding.std'><title>HRC Language Features and Conventions</title>
+<para>
+Although HRC itself could be used in an arbitrary way, Colorer-take5
+library has a number of coding and naming conventions for consistency
+to make maintenance and expansion of HRC library easier. Features are
+implemented using special conventions Colorer library knows about and
+does extra processing.
+</para>
+
+<section id='coding.std.naming'><title>Elements naming</title>
+<para>
+Colorer names are case sensitive. All regions in Colorer-take5 HRC database are named
+with capital letter, each name-part also starts with capital
+letter. For instance: <emphasis>StringQuote</emphasis>. Any separate type or
+package is named in lower case and shortened if possible. So, the full name
+of a region is written as <emphasis>def:StringQuote</emphasis>.
+</para>
+
+<para>
+Scheme names are context dependent and could be used with words in either case.
+Dash or Dot delimiter makes them more readable:
+<emphasis>&lt;scheme name="Comment.content"&gt;</emphasis> for instance.
+</para>
+
+<para>
+All HRC files are named in lower-case with
+possible Dash or Dot delimiters. External XML entities should be used
+to split complex HRC files in parts that simplifies generation of automatically
+derived HRC schemes. Entity files carry double <emphasis>ent.hrc</emphasis>
+extensions to distinguish them from ordinary HRC schemes.
+</para>
+</section>
+
+<section id='coding.std.spec'><title>Default package feature</title>
+<para>
+Colorer-take5 defines a basic set of common syntax regions through
+special package named <emphasis role='strong'>def</emphasis>. Default package simplifies
+support of HRC database and separates parse content and its presentation. It is located in
+<emphasis>hrc/lib/default.hrc</emphasis>.
+The general purpose of this file is to define a basic set of syntax
+regions. These regions already have assigned colors via universal
+HRD color mappings bundled with Colorer library. All other HRC regions
+should be inherited from this set to flexibly define HRD color rules and
+unify them across all supported syntaxes and languages.
+Any HRC package can explicitly import and use them or define its own
+syntax regions, derived from the defaults.
+</para>
+
+<section id='coding.std.spec.pairs'><title>Pair construction matching</title>
+<para>
+Colorer-take5 library uses HRC syntax conventions for additional
+processing that make editing process more intuitive. This processing includes
+paired construction matching and file's structure/error list outline.
+These features are implemented through specially defined regions.
+Matching paired construction consists of two special regions
+<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>
+that package shoud define.
+Parsing layout for these regions should be properly enwrapped in a valid recursive sequence.
+Using this information Colorer-take5 library provides user with
+ability to jump over text blocks in target language and highlight them during
+editing process.
+<!-- todo examples are highly recommended here -->
+</para>
+</section>
+
+<section id='coding.std.spec.outline'><title>Outliner construction</title>
+<para>
+Another feature Colorer-take5 library provides is a tree of valuable syntax tokens 
+in a text. The tree allows to quickly switch among these tokens in editor.
+Tokens may represent programming language's functions, procedures,
+or any other logical structures of the text. During parsing process these constructions are collected
+into a special outline container, which can present them to user in realtime or by request.
+Colorer-take5 editor implements two basic forms of outliner: functions and errors list.
+Any HRC scheme may define an element with region equal to or derived from
+<emphasis role='strong'>def:Outlined</emphasis>. All elements with this region are considered to be
+outliner-targeted and are collected during parsing. Outliner may analyse
+parse tree structure to generate tree-like text outliners.
+Moreover, any language can provide special algorithmic support or logic to implement
+parsing for special outlined regions and building valid outline tree.
+For instance EclipseColorer editor evaluates a name of each outlined region and searches
+an icon with such name. If found, it uses this icon to customize outliner window
+items with graphic objects, not only text.
+</para>
+<para>
+Outliner can generally be set up against any region type. It works as a kind of filter,
+gathering only required information from parser. This is a way Errors list works,
+where regions derived from <emphasis role='strong'>def:Error</emphasis> are collected. Every
+HRC language uses this region to mark problems it found while parsing text.
+</para>
+</section>
+
+</section>
+
+
+<section id='coding.rec'><title>Coding Recommendations</title>
+<para>
+HRC database has a long history, during which the format,
+syntax and meaning of its compounds were changed to reach more logical and formal structure.
+
+As a consequence there still could be some type definitions, which are
+not fully comply with general HRC conventions.
+In general these include invalid names of packages and region/schemes.
+They won't be supported in their current form and will be reworked
+one day to become compliant with other HRC definitions.
+</para>
+<para>
+It may seem a good point to have an <emphasis role='strong'>import</emphasis> element in HRC,
+which allows to use objects from other package with unqualified names,
+but in general this should not be overused to avoid confusion. It is much more convenient
+to use fully qualified regions and scheme names to explicitly show additional package
+usage/intersections.
+
+</para>
+</section>
+
+</section>
+
+&hrc-ref.re;
+
+&hrc-ref.syntax;
+
+&hrc-ref.revhist;
+
+<bibliography id='bibliography'><title>References</title>
+ 
+ <bibliomixed id="xml-rec">
+ <abbrev>XML 1.0</abbrev>Tim Bray, Jean Paoli, and C. M. Sperberg-McQueen, Eve Maler, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/REC-xml">Extensible Markup Language (XML) 1.0 Second Edition</ulink></citetitle>.
+ W3C (World Wide Web Consortium), 2000.
+ </bibliomixed>
+ 
+ <bibliomixed id="xslt-rec">
+ <abbrev>XSLT 1.0</abbrev>James Clark, editor.
+ <citetitle><ulink url="http://www.w3.org/TR/xslt">XSL Transformations (XSLT) 1.0</ulink></citetitle>.
+ W3C (World Wide Web Consortium), 1999.
+ </bibliomixed>
+
+ <bibliomixed id="xmlschema-1">
+ <abbrev>W3C XML Schema Structures</abbrev>
+ Henry S. Thompson, David Beech, Murray Maloney, Noah Mendelsohn, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/xmlschema-1/">XML Schema Part 1: Structures</ulink></citetitle>.
+  W3C (World Wide Web Consortium), 2001.
+ </bibliomixed>
+
+ <bibliomixed id="xmlschema-2">
+ <abbrev>W3C XML Schema Datatypes</abbrev>Paul V. Biron, Ashok Malhotra, editors.
+ <citetitle><ulink url="http://www.w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes</ulink></citetitle>.
+  W3C (World Wide Web Consortium), 2001.
+ </bibliomixed>
+
+</bibliography>
+
+</article>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Colorer Library.
+   -
+   - The Initial Developer of the Original Code is
+   -   Igor Russkih <irusskih at gmail dot com>.
+   - Portions created by the Initial Developer are Copyright (C) 1999-2007
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Anatoly Techtonik <techtonik at gmail dot com>
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

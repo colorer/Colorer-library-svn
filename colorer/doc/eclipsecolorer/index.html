@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="syntax highlighting, colorer, colorizer, coloring, syntax check, text parsing, cail lomecb, color, coloring, highliting, выделение цветом, колорер, расцветка, редактор, Colorizer, text"/>
+<title>Eclipse platform plugin</title>
+<link href="../styles/styles.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="../images/logo-small.png"/>
+</head>
+<body>
+<div class='back'><a href='../index.html'><img alt='back' src='../images/back.png' width='40' height='18'/></a></div>
+
+
+<h1>Eclipse platform plugin</h1>
+
+<p>
+New experimental build <em>0.8.0</em> of an EclipseColorer plugin is available with many of features!
+</p>
+<ul>
+ <li>Enchanced and fixed word wrapping mode.<br/>
+ </li>
+ <li>Automatic folding support for mostly all (150+) supported languages<br/>
+     <a href="../sshots/neweclipse4.png"><img src="worddiv.png"/></a>
+ </li>
+ <li>Per-type customizable color schemas and editor parameters.</li>
+ <li>Automatic errors and todo comments annotation.<br/>
+     <a href="../sshots/neweclipse1.png"><img src="annotations.png"/></a>
+ </li>
+ <li>Find more in <a href="../sshots/index.html">screenshots</a> section.</li>
+ <li><strong>Notices:</strong>
+   <ol>
+      <li>
+      This build is only available via direct download and installation.
+      Eclipse update manager still refers to the old 0.7.2 version, which is more stable.
+      </li>
+      <li>
+      You may have to delete 0.7.2 version bundle manually to allow 0.8.0 to run.
+      </li>
+      <li>
+      EclipseColorer on unix flavor systems have problems with GNU VM.
+      Please use SUN JVM to allow colorer to run normally.
+      </li>
+   </ol>
+   
+   </li>
+</ul>
+
+<h2>Installation</h2>
+<p>To install Colorer for Eclipse you should have
+EclipseColorer-take5.x.x.x.zip package.
+<img style="float: right;" src="eclipse.png" width="416" height="272"/>
+</p>
+<div class="download">
+<a href="http://sourceforge.net/project/showfiles.php?group_id=34855&package_id=75558">Get EclipseColorer</a>
+</div>
+<p>
+This package contains
+EclipseColorer plugin with sources, packed Colorer's HRC database and
+native library component.
+It contains sources both for native part and top-level Colorer Java API.
+Note, that it doesn't contains sources of the Colorer Library. If you want
+to rebuild native part of the plugin, you have to download latest Colorer Library
+development package.
+</p>
+<p>Unpack content of plugin's package into <code>%ECLIPSEHOME%/plugins/</code>
+folder and restart Eclipse.
+</p>
+
+<p>
+You can choose another way to install colorer - using build-in
+<strong>Eclipse Update Manager</strong>.
+</p>
+<p>
+Create new location
+<strong>http://colorer.sf.net/eclipsecolorer/</strong> using update manager,
+and Eclipse will allow you to automatically install EclipseColorer.
+Later you can use this way to simply and efficiently update colorer and
+check for its new versions.
+</p>
+<p>If you already have development Colorer-take5 Library installed in your system
+(f.e. from full library package version), you can delete <code>colorer</code>
+directory and specify path to your <code>catalog.xml</code> file with one of the
+<a href='../api/classParserFactory.html'>standard locations</a>.
+This way is useful for HRC development and for sole HRC catalog location.
+</p>
+
+<h2>Common features</h2>
+<p>Colorer for Eclipse IDE supports:</p>
+<ul>
+ <li>Default Eclipse editor with syntax highlighting capabilities.<br/>
+     This editor inherits from standard Eclipse Text Editor, thus allowing to use all
+     default feature of Eclipse Editor. You can reuse all default short-cuts, all actions and so on.
+     Note, that colorer knows nothing about Java Editor or CDT Editor, so you can't use their extended capabilities
+     simultaneously with EclipseColorer.
+ </li>
+ <li>Paired constructions highlighting and matching.<br/>
+     <img src="pairs.png" width="271" height="131"/>
+ </li>
+ <li>Shortcuts for pairs matching.</li>
+ <li>Different color schemes.</li>
+ <li>Choosing currently used file type in editor (list of all available types).</li>
+ <li>Dynamic library reloading.</li>
+ <li>Powerful and flexible outliner for all common languages.<br/>
+     <img src="outline.png" width="252" height="144"/>
+ </li>
+ <li>Errors list is included into the outliner view.</li>
+ <li>Colored sources generation into HTML files (Available in the navigator's context menu).<br/>
+     <img src="gen.png" width="300" height="220"/>
+ </li>
+ <li>Replace tabs with spaces option.</li>
+ <li>Soft linebreakes option.</li>
+
+</ul>
+
+
+<h2>Customization</h2>
+<p>You can use <code>Windows/Preferences</code> menu option to open
+Eclipse configuration dialog. Entry <code>Colorer Library</code> contains
+several options, managing Editor's look and feel.
+These includes: </p>
+<ul>
+ <li>Current editor line highlighting.</li>
+ <li>Editor word-wrap setting.</li>
+ <li>Editor tabulation size.</li>
+ <li>Current coloring style (one of available).</li>
+ <li>Background usage setting (Use default system background or
+     current scheme's explicitly).</li>
+</ul>
+<p>To use paired constructions matching, you can
+open a context menu, when the caret is placed on a paired region.
+There you can choose commands to find and position caret on the other pair,
+or to select all the text content between paired structures.
+These commands could be runned from toolbar buttons also.
+</p>
+<p>
+If you want to customize icons used to display items in structure
+tree (outline), place them in
+<code>eclipse\plugins\net.sf.colorer_x.x.x\icons\outline\&lt;schemename></code>
+and name as your regions (use existing files for example).
+</p>
+<p>If you want to customize icon for your file type, copy <code>&lt;editor></code> entry
+  under
+   <code>&lt;extension point="org.eclipse.ui.editors"></code> entry and replace
+   <code>id, name, icon, extensions</code> attributes with your values.
+</p>
+
+</body>
+</html>
