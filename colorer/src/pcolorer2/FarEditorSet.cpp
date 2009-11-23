@@ -608,6 +608,7 @@ void FarEditorSet::disableColorer(){
 	  delete fe;  
   };
   farEditorInstances.clear();
+  rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
 }
 
 

@@ -46,7 +46,7 @@ const byte *HTTPInputSource::openStream()
   if (ihandle == NULL) throw InputSourceException(StringBuffer("Can't create internet connection"));
 
   DWORD dw;
-  HINTERNET iurl = InternetOpenUrl(ihandle, baseLocation->getChars(), NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE|INTERNET_FLAG_NO_UI, (DWORD_PTR)&dw);
+  HINTERNET iurl = InternetOpenUrl(ihandle, baseLocation->getChars(), NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE|INTERNET_FLAG_NO_UI, (DWORD_PTR)(size_t)&dw);
   if (iurl == NULL) throw InputSourceException(StringBuffer("Can't access URL '")+baseLocation+"'");
 
   len = 0;
