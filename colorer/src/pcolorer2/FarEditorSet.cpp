@@ -1,4 +1,3 @@
-#include<misc/registry_wide.cpp>
 #include<unicode/Encodings.h>
 #include<common/Logging.h>
 #include<colorer/viewer/TextConsoleViewer.h>

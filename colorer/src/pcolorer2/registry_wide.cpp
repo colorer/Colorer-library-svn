@@ -1,4 +1,4 @@
-#include<windows.h>
+#include "registry_wide.h"
 
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD val)
 {

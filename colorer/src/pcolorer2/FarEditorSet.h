@@ -4,6 +4,7 @@
 #include<colorer/handlers/FileErrorHandler.h>
 #include<colorer/handlers/LineRegionsSupport.h>
 #include<colorer/handlers/StyledHRDMapper.h>
+#include "registry_wide.h"
 
 #include"pcolorer.h"
 
