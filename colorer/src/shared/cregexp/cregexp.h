@@ -1,7 +1,7 @@
 #ifndef __CREGEXP__
 #define __CREGEXP__
 
-#include<unicode/uString.h>
+#include<unicode/String.h>
 #include<unicode/CharacterClass.h>
 
 /**

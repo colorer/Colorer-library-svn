@@ -1,7 +1,7 @@
 #ifndef _COLORER_STRINGBUFFER_H_
 #define _COLORER_STRINGBUFFER_H_
 
-#include<unicode/uString.h>
+#include<unicode/String.h>
 
 /** Unicode growable StringBuffer.
     @ingroup unicode

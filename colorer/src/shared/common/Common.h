@@ -19,7 +19,7 @@ typedef unsigned int dword;
 
 #include<common/Features.h>
 
-#include<unicode/uString.h>
+#include<unicode/String.h>
 #include<common/MemoryChunks.h>
 
 #endif
