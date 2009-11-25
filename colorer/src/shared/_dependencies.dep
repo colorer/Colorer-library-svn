@@ -224,7 +224,7 @@ $(obj_output_slash)FarEditor.$(obj): $(shared_path)../pcolorer/FarEditor.cpp  \
 
 $(obj_output_slash)FarEditorSet.$(obj): $(shared_path)../pcolorer/FarEditorSet.cpp \
    far2sdk/farcolor.hpp \
-  $(shared_path)misc/registry.cpp \
+  registry_wide.h \
   $(shared_path)unicode/Encodings.h $(shared_path)unicode/String.h \
   $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
   $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -748,40 +748,19 @@ $(obj_output_slash)cregexp.$(obj): $(shared_path)/./cregexp/cregexp.cpp $(shared
   $(shared_path)unicode/UnicodeTools.h
 
 
-$(obj_output_slash)infblock.$(obj): $(shared_path)/../zlib/infblock.c $(shared_path)/../zlib/zutil.h \
-  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
-  $(shared_path)/../zlib/infblock.h $(shared_path)/../zlib/inftrees.h \
-  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h
-
-
-$(obj_output_slash)infcodes.$(obj): $(shared_path)/../zlib/infcodes.c $(shared_path)/../zlib/zutil.h \
-  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
-  $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/infblock.h \
-  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h \
-  $(shared_path)/../zlib/inffast.h
-
-
 $(obj_output_slash)inffast.$(obj): $(shared_path)/../zlib/inffast.c $(shared_path)/../zlib/zutil.h \
   $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
-  $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/infblock.h \
-  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h \
+  $(shared_path)/../zlib/inftrees.h \
   $(shared_path)/../zlib/inffast.h
 
 
 $(obj_output_slash)inflate.$(obj): $(shared_path)/../zlib/inflate.c $(shared_path)/../zlib/zutil.h \
-  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
-  $(shared_path)/../zlib/infblock.h
+  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h
 
 
 $(obj_output_slash)inftrees.$(obj): $(shared_path)/../zlib/inftrees.c $(shared_path)/../zlib/zutil.h \
   $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
   $(shared_path)/../zlib/inftrees.h $(shared_path)/../zlib/inffixed.h
-
-
-$(obj_output_slash)infutil.$(obj): $(shared_path)/../zlib/infutil.c $(shared_path)/../zlib/zutil.h \
-  $(shared_path)/../zlib/zlib.h $(shared_path)/../zlib/zconf.h \
-  $(shared_path)/../zlib/infblock.h $(shared_path)/../zlib/inftrees.h \
-  $(shared_path)/../zlib/infcodes.h $(shared_path)/../zlib/infutil.h
 
 
 $(obj_output_slash)ioapi.$(obj): $(shared_path)/../zlib/contrib/minizip/ioapi.c  \

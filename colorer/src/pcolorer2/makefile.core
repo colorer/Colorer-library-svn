@@ -1,7 +1,8 @@
 
 farobj=$(obj_output_slash)pcolorer.$(obj) \
        $(obj_output_slash)FarEditorSet.$(obj) \
-       $(obj_output_slash)FarEditor.$(obj)
+       $(obj_output_slash)FarEditor.$(obj) \
+			 $(obj_output_slash)registry_wide.$(obj) \
 
 objs = $(farobj) $(coreobjects)
 
@@ -13,3 +14,6 @@ $(obj_output_slash)FarEditorSet.$(obj): FarEditorSet.cpp *.h
 
 $(obj_output_slash)FarEditor.$(obj): FarEditor.cpp *.h
 	$(CPP) $(CPPFLAGS) FarEditor.cpp
+
+$(obj_output_slash)registry_wide.$(obj): registry_wide.cpp *.h
+	$(CPP) $(CPPFLAGS) registry_wide.cpp

@@ -39,7 +39,7 @@ $(obj_output_slash)FarEditor.$(obj): FarEditor.cpp  \
 
 
 $(obj_output_slash)FarEditorSet.$(obj): FarEditorSet.cpp \
- $(shared_path)farplugin/farcolor.hpp $(shared_path)misc/registry.cpp \
+ $(shared_path)farplugin/farcolor.hpp registry_wide.h \
  $(shared_path)unicode/Encodings.h $(shared_path)unicode/String.h \
  $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
  $(shared_path)common/Common.h $(shared_path)common/Features.h \

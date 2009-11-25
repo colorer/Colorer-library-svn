@@ -55,6 +55,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
 			<Tool
@@ -140,6 +141,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
 			<Tool
@@ -218,9 +220,9 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="0"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../shared;../zlib;./far2sdk"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;COLORER_SE_EXPORTS;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
@@ -230,6 +232,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
+				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
 			<Tool
@@ -254,7 +257,7 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="0"
+				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -312,9 +315,9 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="0"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../shared;../zlib;./far2sdk"
-				PreprocessorDefinitions="_WIN64;NDEBUG;_USRDLL;COLORER_SE_EXPORTS;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
+				PreprocessorDefinitions="_WIN64;NDEBUG;_USRDLL;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
@@ -324,6 +327,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
+				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
 			<Tool
@@ -348,7 +352,7 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="0"
+				LinkTimeCodeGeneration="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="17"
@@ -993,7 +997,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="mics"
+				Name="misc"
 				>
 				<File
 					RelativePath="..\shared\misc\malloc.c"
