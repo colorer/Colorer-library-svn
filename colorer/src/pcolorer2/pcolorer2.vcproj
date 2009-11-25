@@ -808,14 +808,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\shared\unicode\String.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\shared\unicode\String.h"
-					>
-				</File>
-				<File
 					RelativePath="..\shared\unicode\StringBuffer.cpp"
 					>
 				</File>
@@ -829,6 +821,14 @@
 				</File>
 				<File
 					RelativePath="..\shared\unicode\UnicodeTools.h"
+					>
+				</File>
+				<File
+					RelativePath="..\shared\unicode\uString.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\shared\unicode\uString.h"
 					>
 				</File>
 				<File

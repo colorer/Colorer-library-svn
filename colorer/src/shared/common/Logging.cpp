@@ -1,7 +1,7 @@
 
 #include<string.h>
 #include"common/Logging.h"
-#include"unicode/String.h"
+#include"unicode/uString.h"
 
 static const char *levelNames[] = {"QUIET", "ERROR", "WARN", "TRACE", "INFO"};
 

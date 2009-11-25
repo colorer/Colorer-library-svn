@@ -54,7 +54,7 @@ public:
   InputSourceException(const String& msg);
 };
 
-#include<unicode/String.h>
+#include<unicode/uString.h>
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

@@ -1,7 +1,7 @@
 #ifndef _COLORER_CHARACTERCLASS_H_
 #define _COLORER_CHARACTERCLASS_H_
 
-#include<unicode/String.h>
+#include<unicode/uString.h>
 #include<unicode/BitArray.h>
 
 /** Character classes store implementation.

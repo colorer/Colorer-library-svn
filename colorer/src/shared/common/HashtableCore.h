@@ -2,7 +2,7 @@
 #define _COLORER_HASHTABLECORE_H_
 
 #include<memory.h>
-#include<unicode/String.h>
+#include<unicode/uString.h>
 
 #define DEFAULT_LOAD_FACTOR 0.75
 #define DEFAULT_CAPACITY    20

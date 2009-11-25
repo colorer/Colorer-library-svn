@@ -1,7 +1,7 @@
 #ifndef _COLORER_DSTRING_H_
 #define _COLORER_DSTRING_H_
 
-#include<unicode/String.h>
+#include<unicode/uString.h>
 
 /** Dynamic string class.
     Simple unicode wrapper over any other source.

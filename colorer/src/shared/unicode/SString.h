@@ -1,7 +1,7 @@
 #ifndef _COLORER_SSTRING_H_
 #define _COLORER_SSTRING_H_
 
-#include<unicode/String.h>
+#include<unicode/uString.h>
 
 /**
  * Static unicode string.
