@@ -1,10 +1,10 @@
 
 #include<windows.h>
-
 #include"pcolorer.h"
 #include"FarEditorSet.h"
 
-PluginStartupInfo Info;
+static struct PluginStartupInfo Info;
+static struct FarStandardFunctions FSF;
 FarEditorSet *editorSet = null;
 
 /**
@@ -19,8 +19,11 @@ const wchar_t *GetMsg(int msg){
  */
 void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 {
-  memset(&Info, 0, sizeof(Info));
-  memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
+	Info = *fei;
+	FSF = *fei->FSF;
+	Info.FSF = &FSF;
+  //memset(&Info, 0, sizeof(Info));
+ // memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
 
   editorSet = new FarEditorSet(&Info);
 };
@@ -55,14 +58,27 @@ void WINAPI ExitFARW()
  */
 HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
-  if (OpenFrom == OPEN_EDITOR){
-    editorSet->openMenu();
-  }else if (OpenFrom == OPEN_COMMANDLINE){
-    wchar_t *path = (wchar_t*)Item;
-    editorSet->viewFile(DString(path));
-  }else
-    editorSet->configure();
-  return INVALID_HANDLE_VALUE;
+	if (OpenFrom == OPEN_EDITOR){
+		editorSet->openMenu();
+	}
+	else if (OpenFrom == OPEN_COMMANDLINE)
+	{      
+		wchar_t * ptrCurDir;
+		wchar_t *file = (wchar_t*)Item;
+
+		DWORD Size=FSF.GetCurrentDirectory(0,NULL);
+		if(Size)
+		{
+			ptrCurDir=new WCHAR[Size+lstrlen(file)+8];
+			FSF.GetCurrentDirectory(Size,ptrCurDir);
+			lstrcat(ptrCurDir,TEXT("\\"));
+			lstrcat(ptrCurDir,file);
+		}
+		editorSet->viewFile(DString(ptrCurDir));
+		delete[] ptrCurDir;
+	}else
+		editorSet->configure();
+	return INVALID_HANDLE_VALUE;
 };
 
 /**
