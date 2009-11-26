@@ -27,6 +27,7 @@ public:
    * @param str source string, can't be null.
    */
   SString(char *str, int enc = -1);
+  SString(wchar *str);
 
   /**
    * Static string constructor from integer number

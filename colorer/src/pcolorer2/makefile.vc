@@ -33,7 +33,7 @@ shared_path=../shared/
 
 CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /D "COLORER_FEATURE_USE_DL_MALLOC=FALSE" /D "COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE"
 CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /I "./far2sdk"
-CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /Fo"$(obj_output)\\" /D "_USRDLL"  /D "_CRT_SECURE_NO_DEPRECATE" /D "_WINDLL" /D "_MBCS"
+CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /Fo"$(obj_output)\\" /D "_USRDLL"  /D "_CRT_SECURE_NO_DEPRECATE" /D "_WINDLL" /D "_UNICODE" /D "UNICODE"
 
 include ../shared/makefile.colorer.vc
 include _dependencies.dep

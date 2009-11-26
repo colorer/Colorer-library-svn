@@ -20,6 +20,10 @@ SString::SString(char *str, int enc){
   DString ds(str, 0, -1, enc);
   construct(&ds, 0, ds.length());
 }
+SString::SString(wchar *str){
+   DString ds(str, 0, -1);
+   construct(&ds, 0, ds.length());
+}
 SString::SString(int no){
   char text[40];
   sprintf(text, "%d", no);

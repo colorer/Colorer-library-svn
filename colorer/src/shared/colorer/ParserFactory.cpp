@@ -125,9 +125,9 @@ String *ParserFactory::searchPath()
 
 #ifdef _WIN32
   // image_path/  image_path/..  image_path/../..
-  char cname[256];
+  TCHAR cname[256];
   HMODULE hmod;
-  hmod = GetModuleHandle("colorer");
+  hmod = GetModuleHandle(TEXT("colorer"));
   if (hmod == null) hmod = GetModuleHandle(null);
   int len = GetModuleFileName(hmod, cname, 256) - 1;
   DString module(cname, 0, len);
@@ -263,11 +263,11 @@ HRCParser* ParserFactory::getHRCParser(){
       if (ret != -1 && (st.st_mode & S_IFDIR)){
 #ifdef _WIN32
         WIN32_FIND_DATA ffd;
-        HANDLE dir = FindFirstFile((StringBuffer(path)+"\\*.*").getChars(), &ffd);
+        HANDLE dir = FindFirstFile((StringBuffer(path)+"\\*.*").getTChars(), &ffd);
         if (dir != INVALID_HANDLE_VALUE){
           while(true){
             if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)){
-              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+ffd.cFileName), catalogFIS);
+              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+SString(ffd.cFileName)), catalogFIS);
               try{
                 hrcParser->loadSource(dfis);
                 delete dfis;

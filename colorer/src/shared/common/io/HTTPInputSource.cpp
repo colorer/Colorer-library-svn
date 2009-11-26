@@ -42,11 +42,11 @@ const byte *HTTPInputSource::openStream()
   Vector<byte*> streamVector;
   Vector<int> streamSizeVector;
 
-  HINTERNET ihandle = InternetOpen("Colorer-take5 library connector", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+  HINTERNET ihandle = InternetOpen(TEXT("Colorer-take5 library connector"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
   if (ihandle == NULL) throw InputSourceException(StringBuffer("Can't create internet connection"));
 
   DWORD dw;
-  HINTERNET iurl = InternetOpenUrl(ihandle, baseLocation->getChars(), NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE|INTERNET_FLAG_NO_UI, (DWORD_PTR)(size_t)&dw);
+  HINTERNET iurl = InternetOpenUrl(ihandle, baseLocation->getTChars(), NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE|INTERNET_FLAG_NO_UI, (DWORD_PTR)(size_t)&dw);
   if (iurl == NULL) throw InputSourceException(StringBuffer("Can't access URL '")+baseLocation+"'");
 
   len = 0;
