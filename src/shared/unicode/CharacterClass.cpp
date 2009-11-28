@@ -26,7 +26,10 @@ CharacterClass cc_temp;
 bool inverse = false;
 wchar prev_char = BAD_WCHAR;
 
-  if (ccs[pos] != '[') return null;
+  if (ccs[pos] != '['){
+    delete cc;
+    return null;
+  }
   pos++;
   if (ccs[pos] == '^'){
     inverse = true;
