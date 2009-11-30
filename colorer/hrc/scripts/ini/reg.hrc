@@ -32,7 +32,7 @@
 </scheme>
 
 <scheme name="group.name">
- <inherit scheme="ini:group.name"/>
+ <regexp match="/~\M(?{def:Outlined}[^\]]+)/"/>
  <keywords region="group.name" ignorecase="no" worddiv="[\[\-\\]">
   <word name="HKEY_LOCAL_MACHINE"/>
   <word name="HKEY_CURRENT_USER"/>
@@ -91,6 +91,7 @@
 <entity name="end" value="\M($|;)"/>
 
 <scheme name="param.content">
+ <regexp match="/-/" region="group-del"/>
  <block start="/hex(\(([27b])\))?(:)/" end="/%ini:hex;{2}\s*\m%end;/" scheme="type.hex"
   region00="type" region03="ini:SymbolStrong"
   region01="ini:Symbol" region02="ini:Number"
@@ -130,10 +131,15 @@
 <!-- far support -->
 
 <scheme name="group-far">
- <inherit scheme="ini:group">
-  <virtual scheme="ini:group.name" subst-scheme="group.name"/>
-  <virtual scheme="ini:param" subst-scheme="param-far"/> 
- </inherit> 
+ <block start="/(\[)/" end="/(\])$/" 
+  scheme="group.name" region="ini:group.name"
+  region00="def:PairStart" region10="def:PairEnd"
+  region01="ini:group.quot" region11="ini:group.quot"
+ />
+ <block start="/\M^[^\=]+\=/" end="/$/" 
+  scheme="param-far" region="ini:param.content"
+ />
+ <inherit scheme="ini:item.content"/>
 </scheme>
 
 <scheme name="param-far">
