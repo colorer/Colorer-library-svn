@@ -13,16 +13,15 @@
 <region name="header" parent="def:Keyword"/>
 
 <scheme name="far.macro">
+  <regexp match="/^\s*;;.*?$/" region="def:Comment"/>
 	<block start="/^\s*Macro\s+\M(?{def:Outlined}\w+:\s*\w+)/" end="/$/" 
 		scheme="header" region00="header"
 	/>
 	<regexp match="/^\s*(\#Description)(:)\s*.+$/" 
 		region="def:String" region1="header" region2="far:struct"
 	/>
-	<block start="/(\{)/" end="/(\})/" scheme="far:macro.sequense"
-		region00="far:struct" region01="def:PairStart"
-		region10="far:struct" region11="def:PairEnd"
-	/>
+ <inherit scheme="far:macro.sequense"/>
+
 </scheme>
 
 <scheme name="header">

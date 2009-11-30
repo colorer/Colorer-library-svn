@@ -169,7 +169,8 @@
 
 
 <scheme name="macro.expr">
-	
+	<regexp match="/^\s*;;.*?$/" region="def:Comment"/>
+	<regexp match="/\\[\\nr&quot;&apos;]/" region="def:StringContent"/>
 	<block start="/(\()/" end="/(\))/" scheme="macro.expr"
 		region00="oper" region01="def:PairStart"
 		region10="oper" region11="def:PairEnd"
@@ -260,6 +261,8 @@
 
 
 <scheme name="macro.sequense">
+	<regexp match="/^\s*;;.*?$/" region="def:Comment"/>
+	<regexp match="/\\[\\nr&quot;&apos;]/" region="def:StringContent"/>
 	<inherit scheme="macro.command"/>
 	<inherit scheme="macro.expr"/>	
 	<inherit scheme="macro.keys"/>
@@ -485,10 +488,9 @@
 		<word name="F12"/>
 		<word name="MsWheelUp"/>
 		<word name="MsWheelDown"/>
-		
 	</keywords>  
  	<regexp match="/\b[a-z]\b/i" region="macro.key"/> 
-	<regexp match="/\b((Alt)|(Ctrl)|(Shift)|(RAlt)|(RCtrl))\S*\b/i" region="macro.key"/>
+	<regexp match="/\b((Alt)|(Ctrl)|(Shift)|(RAlt)|(RCtrl))\w*\b/i" region="macro.key"/>
 	
 </scheme>
 

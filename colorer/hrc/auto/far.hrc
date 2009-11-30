@@ -28,8 +28,9 @@
   </prototype>
 
   <prototype name="far.macro" group="scripts.far" description="Far macros">
-    <location link="far/macro.hrc"/>
+    <location link="jar:types/auto.jar!far/macro.hrc"/>
     <filename>/\.macro$/</filename>
+		<filename>/\.(fmm)$/i</filename>
   </prototype>
   
   <!-- old -->
