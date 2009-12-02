@@ -11,6 +11,9 @@ obj_output=objs
 #CPPFLAGS_CUSTOM = -DCOLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_TRACE
 #LIB_DEBUG = /incremental:no
 
+CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /D "COLORER_FEATURE_USE_DL_MALLOC=FALSE" /D "COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE"
+CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /Fo"$(obj_output)\\"
+
 include ../shared/makefile.colorer.vc
 
 LIBFLAGS = $(objs) $(LIB_DEBUG) /map /fixed:no /out:$(TARGET) /nologo /subsystem:console wininet.lib
