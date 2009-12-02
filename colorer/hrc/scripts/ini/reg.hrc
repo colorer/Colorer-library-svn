@@ -19,16 +19,12 @@
 <region name="slash" parent="def:KeywordStrong"/>
 
 
-<scheme name="group">
+<scheme name="group"> 
+ <inherit scheme="ini:comment"/>
  <block start="/\M^\[HKEY.*\\Software\\Far.*\]/i" end="/\M^\[[^\]]+\]/" scheme="group-far"/>  
  <block start="/\M^\[HKEY.*\]/" end="/\M^\[[^\]]+\]/" scheme="group-add"/>  
  <block start="/\M^\[\-HKEY.*\]/" end="/\M^\[[^\]]+\]/" scheme="group-del"/>  
- <inherit scheme="ini:comment"/>
  <inherit scheme="ini:error"/>
- <!--inherit scheme="ini:group">
-  <virtual scheme="ini:group.name" subst-scheme="ini:error"/>
-  <virtual scheme="ini:item.content" subst-scheme="ini:error"/>
- </inherit--> 
 </scheme>
 
 <scheme name="group.name">
@@ -47,25 +43,32 @@
 </scheme>
 
 
-<!-- del -->
-
 <scheme name="group-del">
- <inherit scheme="ini:group">
-  <virtual scheme="ini:group.name" subst-scheme="group.name"/>
-  <virtual scheme="ini:param" subst-scheme="ini:error"/>
-  <virtual scheme="ini:item.content" subst-scheme="ini:error"/>
- </inherit> 
+ <inherit scheme="ini:comment"/>
+ <block start="/~(\[)/" end="/(\])$/" 
+  scheme="group.name" region="ini:group.name"
+  region00="def:PairStart" region10="def:PairEnd"
+  region01="ini:group.quot" region11="ini:group.quot"
+ />
+ <block start="/\M^\s*&quot;[^\=]+\=/" end="/$/" 
+  scheme="ini:error" region="ini:param.content"
+ />
+ <inherit scheme="ini:error"/>
 </scheme>
-
-
-<!-- add -->
 
 <scheme name="group-add">
- <inherit scheme="ini:group">
-  <virtual scheme="ini:group.name" subst-scheme="group.name"/>
-  <virtual scheme="ini:param" subst-scheme="param"/> <!-- no prefix. Its default -->
- </inherit> 
+ <inherit scheme="ini:comment"/>
+ <block start="/~(\[)/" end="/(\])$/" 
+  scheme="group.name" region="ini:group.name"
+  region00="def:PairStart" region10="def:PairEnd"
+  region01="ini:group.quot" region11="ini:group.quot"
+ />
+ <block start="/\M^\s*&quot;[^\=]+\=/" end="/$/" 
+  scheme="param" region="ini:param.content"
+ />
+ <inherit scheme="ini:error"/>
 </scheme>
+
 
 <scheme name="param">
  <inherit scheme="ini:param">
@@ -126,20 +129,19 @@
  <regexp match="/,?#1\\\s*%end;/" region="slash"/>
 </scheme>
 
-
-
 <!-- far support -->
 
 <scheme name="group-far">
- <block start="/(\[)/" end="/(\])$/" 
+ <inherit scheme="ini:comment"/>
+ <block start="/~(\[)/" end="/(\])$/" 
   scheme="group.name" region="ini:group.name"
   region00="def:PairStart" region10="def:PairEnd"
   region01="ini:group.quot" region11="ini:group.quot"
  />
- <block start="/\M^[^\=]+\=/" end="/$/" 
+ <block start="/\M^\s*&quot;[^\=]+\=/" end="/$/" 
   scheme="param-far" region="ini:param.content"
  />
- <inherit scheme="ini:item.content"/>
+ <inherit scheme="ini:error"/>
 </scheme>
 
 <scheme name="param-far">
@@ -195,7 +197,6 @@
  <regexp match="/^(REGEDIT4|FARREG\d\d|Windows Registry Editor Version \d\.\d\d)\s*$/" 
   region="def:Label"
  />
- <!--block start="/\M^\[[^\]]+\]/" end="/\M^\[[^\]]+\]/" scheme="group"/--> 
  <inherit scheme="group"/>
 </scheme>
 

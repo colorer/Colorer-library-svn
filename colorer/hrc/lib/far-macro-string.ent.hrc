@@ -10,6 +10,11 @@
 		region00='string.quote' region01="def:PairStart"
 		region10='string.quote' region11="def:PairEnd"
 	/>
+	<block start="/(%apos;)/" end="/(%apos;)/"
+		scheme="string.content" region="string"
+		region00='string.quote' region01="def:PairStart"
+		region10='string.quote' region11="def:PairEnd"
+	/>
 </scheme>
 
 <scheme name="string.content">
