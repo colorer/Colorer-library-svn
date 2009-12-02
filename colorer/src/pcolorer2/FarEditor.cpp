@@ -101,7 +101,8 @@ void FarEditor::setFileType(FileType *ftype){
 void FarEditor::reloadTypeSettings()
 {
   // we need this?
-  //FileType *ftype = baseEditor->getFileType();
+  FileType *ftype = baseEditor->getFileType();
+
   HRCParser *hrcParser = parserFactory->getHRCParser();
 
   FileType *def = hrcParser->getFileType(&DString("default"));
@@ -136,6 +137,35 @@ void FarEditor::reloadTypeSettings()
   };
   value = def->getParamValue(DString("cross-zorder"));
   if (value != null && value->equals("top")) crossZOrder = 1;
+
+   // installs custom file properties
+  backparse = ftype->getParamValueInt(DString("backparse"), backparse);
+  maxLineLength = ftype->getParamValueInt(DString("maxlinelength"), maxLineLength);
+  newfore = ftype->getParamValueInt(DString("default-fore"), newfore);
+  newback = ftype->getParamValueInt(DString("default-back"), newback);
+
+  value = ftype->getParamValue(DString("fullback"));
+  if (value != null && value->equals("no")) fullBackground = false;
+  value = ftype->getParamValue(DString("show-cross"));
+  if (value != null && value->equals("none")){
+    showHorizontalCross = false;
+    showVerticalCross   = false;
+  };
+  if (value != null && value->equals("vertical")){
+    showHorizontalCross = false;
+    showVerticalCross   = true;
+  };
+  if (value != null && value->equals("horizontal")){
+    showHorizontalCross = true;
+    showVerticalCross   = false;
+  };
+  if (value != null && value->equals("both")){
+    showHorizontalCross = true;
+    showVerticalCross   = true;
+  };
+  value = ftype->getParamValue(DString("cross-zorder"));
+  if (value != null && value->equals("top")) crossZOrder = 1;
+
   
   baseEditor->setBackParse(backparse);
 }
