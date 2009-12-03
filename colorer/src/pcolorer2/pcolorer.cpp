@@ -63,19 +63,26 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	}
 	else if (OpenFrom == OPEN_COMMANDLINE)
 	{      
-		wchar_t * ptrCurDir;
 		wchar_t *file = (wchar_t*)Item;
-
-		DWORD Size=FSF.GetCurrentDirectory(0,NULL);
-		if(Size)
+		if (wcsstr(file,TEXT(":"))!=NULL)
 		{
-			ptrCurDir=new WCHAR[Size+lstrlen(file)+8];
-			FSF.GetCurrentDirectory(Size,ptrCurDir);
-			lstrcat(ptrCurDir,TEXT("\\"));
-			lstrcat(ptrCurDir,file);
+			editorSet->viewFile(DString(file));
 		}
-		editorSet->viewFile(DString(ptrCurDir));
-		delete[] ptrCurDir;
+		else
+		{
+			wchar_t * ptrCurDir;
+			DWORD Size=FSF.GetCurrentDirectory(0,NULL);
+			if(Size)
+			{
+				ptrCurDir=new WCHAR[Size+lstrlen(file)+8];
+				FSF.GetCurrentDirectory(Size,ptrCurDir);
+				lstrcat(ptrCurDir,TEXT("\\"));
+				lstrcat(ptrCurDir,file);
+			}
+			editorSet->viewFile(DString(ptrCurDir));
+			delete[] ptrCurDir;
+		}
+
 	}else
 		editorSet->configure();
 	return INVALID_HANDLE_VALUE;
