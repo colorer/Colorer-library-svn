@@ -21,6 +21,8 @@ CharacterClass::~CharacterClass(){
 */
 CharacterClass *CharacterClass::createCharClass(const String &ccs, int pos, int *retPos)
 {
+	if (ccs[pos] != '[') return null;
+
 CharacterClass *cc = new CharacterClass();
 CharacterClass cc_temp;
 bool inverse = false;
