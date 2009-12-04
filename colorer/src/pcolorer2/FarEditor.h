@@ -49,7 +49,7 @@ public:
   /**
    * Change editor properties. These overwrites default HRC settings
    */
-  void setDrawCross(bool drawCross);
+  void setDrawCross(int drawCross);
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);

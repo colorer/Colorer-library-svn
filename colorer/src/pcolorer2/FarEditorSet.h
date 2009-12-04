@@ -70,7 +70,8 @@ private:
 
   /** registry settings */
   bool rDisabled;
-  bool drawCross, drawPairs, drawSyntax;
+  int drawCross;
+  bool drawPairs, drawSyntax;
   bool oldOutline;
   int  rMaxTime;
 };

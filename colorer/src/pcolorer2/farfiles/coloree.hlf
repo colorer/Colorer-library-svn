@@ -1,22 +1,34 @@
 .Language=English,English
-.PluginContents=colorer
+.PluginContents=Colorer
 
 @contents
-$^#colorer library. version take five
+$^#Colorer
 
-    ~plugin setup.~@config@
+    ~Plugin setup.~@config@
 
-    ~command line support.~@cmdline@
+    ~Command line support.~@cmdline@
 
-    ~plugin's menus.~@menu@
+    ~Plugin's menus.~@menu@
 
-    ~about author.~@author@
+    ~About authors.~@author@
 
 @config
-$^#colorer's settings.#
+$^#Colorer's settings.#
 
-  #[x] turn off colorer#
+  #Turn off colorer#
      Turns off Colorer.
+
+
+  #Cross#
+     [ ] Do not show ever
+     [?] Show if included in the scheme
+     [x] Always Show
+
+  #Pairs#
+     Allocate or not paired language elements (brackets, quotes)
+
+  #Syntax#
+     Turns on display of syntax
 
   #catalog.xml file:#
      Full file path sets default catalog file for colorer.
@@ -137,13 +149,12 @@ exception cause. All extended information in colorer logging
 file (colorer.log by default)
 
 @author
-$^#Colorer library. FAR Manager plugin. version take5.#
-    #Igor Ruskih#(Cail Lomecb). Copyright (c) 1999-2006.
-    I've wrote this program for you and for myself; because it, I don't
-making any limitations of using colorer.
-    You just have to send me registration form.
+$^#Colorer is a syntax highlighting plugin for FAR Manager.
+    #Igor Ruskih# (Cail Lomecb) Copyright (c) 1999-2009
+                   email  : irusskih at gmail dot com
+                   web    : http://cail.nm.ru
+			    http://colorer.sf.net
 
-                   email  :  irusskih at gmail dot com
-                   web    :  http://cail.nm.ru
-                             http://colorer.sf.net
-                             http://plugring.farmanager.com/
+    #Sonar#  (Dobrunov Aleksey)	
+                   email  : ctapmex at gmail dot com
+                   web    : http://dobrih.net

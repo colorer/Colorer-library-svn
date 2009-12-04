@@ -175,14 +175,23 @@ FileType *FarEditor::getFileType(){
   return baseEditor->getFileType();
 }
 
-void FarEditor::setDrawCross(bool drawCross)
+void FarEditor::setDrawCross(int drawCross)
 {
-  if (!drawCross){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  }else{
-    reloadTypeSettings();
-  }
+		switch (drawCross)
+		{
+		case 0: 
+				showHorizontalCross = false;
+				showVerticalCross   = false;
+				break;
+		case 1:
+				showHorizontalCross = true;
+				showVerticalCross   = true;
+				break;
+		case 2: 
+				reloadTypeSettings();
+				break;
+		}
+
 }
 
 void FarEditor::setDrawPairs(bool drawPairs)

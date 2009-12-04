@@ -8,7 +8,7 @@
 #define REG_HRD_NAME        L"hrdName"
 #define REG_CATALOG         L"catalog"
 #define REG_MAXTIME         L"maxTime"
-#define REG_CROSSDONTDRAW   L"crossDontDraw"
+#define REG_CROSSDRAW   L"CrossDraw"
 #define REG_PAIRSDONTDRAW   L"pairsDontDraw"
 #define REG_SYNTAXDONTDRAW  L"syntaxDontDraw"
 #define REG_OLDOUTLINE      L"oldOutlineView"
@@ -256,7 +256,7 @@ void FarEditorSet::configure()
                                                                              
       { DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,    
                                                                                
-      { DI_CHECKBOX,6,5,0,0,FALSE,0,0,0,L""},                                //IDX_CROSS,         
+      { DI_CHECKBOX,6,5,0,0,FALSE,0,DIF_3STATE,0,L""},                                //IDX_CROSS,         
       { DI_CHECKBOX,19,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,       
       { DI_CHECKBOX,32,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,      
                                                                                
@@ -279,7 +279,7 @@ void FarEditorSet::configure()
     fdi[IDX_DISABLED].Selected = !rGetValue(hPluginRegistry, REG_DISABLED);
 
     fdi[IDX_CROSS].PtrData = GetMsg(mCross);
-    fdi[IDX_CROSS].Selected = !rGetValue(hPluginRegistry, REG_CROSSDONTDRAW);
+    fdi[IDX_CROSS].Selected = rGetValue(hPluginRegistry, REG_CROSSDRAW);
 
     fdi[IDX_PAIRS].PtrData = GetMsg(mPairs);
     fdi[IDX_PAIRS].Selected = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
@@ -364,7 +364,7 @@ void FarEditorSet::configure()
 
     }
 
-    rSetValue(hPluginRegistry, REG_CROSSDONTDRAW, !fdi[IDX_CROSS].Selected);
+    rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
     rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
     rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
     rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
@@ -617,7 +617,7 @@ void FarEditorSet::readRegistry()
 
   rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 
-  drawCross = !rGetValue(hPluginRegistry, REG_CROSSDONTDRAW);
+  drawCross = rGetValue(hPluginRegistry, REG_CROSSDRAW);
   drawPairs = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
   drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
   oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
