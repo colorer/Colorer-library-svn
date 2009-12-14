@@ -95,12 +95,12 @@ regf dfg dg dfg "
 ""$test\\\d "="dd"
 "$test\ hhh"="dd fvfg \' fgg \\ hff$sh\  %dfvdfv% dfsd \t \"" \\\1 \"\"
 ; имена папок
-"\\\\?\\server\\dfsdf\\1.txt"=""
+"\\\\?\\c:\\server\\dfsdf\\1.txt"=""
 "D:\\projects\\Far\\svn_clean\\farmanager\\1.txt"="\\\"
 ""D:\\projects\\Far\\svn_clean\\farmanager\1.txt"= """
 "\D:\\projects\\Far\\svn_clean\\farmanager\\\1.txt"=""
 "{E0F158E1-CB04-11D0-BD4E-00A0C911CE86}"=""
-"C:\\LOCALS~1\\TEMP\\FTMP00GO.5Q1\\http---forum_kaspersky_com-index_php act=Attach&type=post&id=1097.htm"="1|ru_RU||*"
+"\\\\?\\C:\\LOCALS~1\\TEMP\\FTMP00GO.5Q1\\http---forum_kaspersky_com-index_php act=Attach&type=post&id=1097.htm"="1|ru_RU||*"
 
 ;разное
 "~`!@#$%^&*()=/*-+|/[]{};:,.'?<>"=""
