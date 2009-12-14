@@ -94,7 +94,7 @@
  	</scheme>
 
  	<scheme name="string.path">
- 		<regexp match="/\M(((([a-zA-Z])\:)|(\\\\\\\\[a-z0-9]+))\\\\([^\:*?\\\/&quot;&gt;&lt;\|]*\\\\)*([^\:*?\\\/&quot;&gt;&lt;\|]*))/" 
+ 		<regexp match="/\M(((([a-zA-Z])\:)|(\\\\\\\\[a-z0-9\?]+))\\\\([^\:*?\\\/&quot;&gt;&lt;\|]*\\\\)*([^\:*?\\\/&quot;&gt;&lt;\|]*))/" 
  			region1="def:Var"
  		/>
  	</scheme>
