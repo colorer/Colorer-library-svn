@@ -89,8 +89,13 @@
   <xsl:template name="element-call">
     <xsl:param name="name"/>
     <xsl:param name="type"/>
+    <xsl:variable name='prefix'>
+    	<xsl:call-template name='nsprefix'>
+    		<xsl:with-param name='tag' select='$name'/>
+    	</xsl:call-template>
+    </xsl:variable>
 
-    <block start="/\M &lt; (%nsprefix;{$name} ([\s\/&gt;]|$) )/{$ric}x" end="/ &gt; /x">
+    <block start="/\M &lt; (%{$prefix};{$name} ([\s\/&gt;]|$) )/{$ric}x" end="/ &gt; /x">
       <xsl:attribute name="scheme">
         <xsl:call-template name="qname2hrcname">
           <xsl:with-param name="qname" select="$type"/>

@@ -11,8 +11,9 @@
 <outline>
     <element name='stylesheet' extract='withAttribute' description='Stylesheet root'/>
     <element name='transform' extract='withAttribute' description='Stylesheet root'/>
-    <element name='import' extract='withAttribute' description='Stylesheet Import'/>
-    <element name='include' extract='withAttribute' description='Stylesheet Include'/>
+    <element name='import' extract='attributeValue' description='Stylesheet Import'/>
+    <element name='include' extract='attributeValue' description='Stylesheet Include'/>
     <element name='template' extract='withAttribute' description='Template definition'/>
+    <element name='key' extract='withAttribute' description='Key declaration'/>
 </outline>
 

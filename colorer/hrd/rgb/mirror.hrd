@@ -26,6 +26,7 @@
    <assign name="def:Symbol" fore="#FFFF55" style="1"/>
    <assign name="def:SymbolStrong" fore="#FF5555" style="1"/>
    <assign name="def:Prefix" fore="#00AAAA"/>
+   <assign name="def:PrefixStrong" fore="#CC22AA"/>
    <assign name="def:Operator" fore="#FFFF55"/>
    <assign name="def:Keyword" fore="#FFFFFF"/>
    <assign name="def:KeywordStrong" fore="#00AAAA"/>
@@ -54,7 +55,7 @@
    <assign name="def:Insertion" back="#777777"/>
    <assign name="def:InsertionEmbed" fore="#AAAAAA" back="#0000AA"/>
    <assign name="def:Error" fore="#000000" back="#AA0000" style="7"/>
-   <assign name="def:ErrorText" fore="#FF55FF" style="2"/>
+   <assign name="def:ErrorText" fore="#AA0000" style="2"/>
    <assign name="def:TODO" fore="#FFFFFF" back="#5555FF"/>
    <assign name="def:Debug" fore="#000000" back="#FF55FF"/>
    <assign name="def:URI" fore="#5555FF" style="4"/>

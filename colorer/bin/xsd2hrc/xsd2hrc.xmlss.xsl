@@ -104,8 +104,14 @@
 <xsl:template match="c:element/c:language[@expr]" mode="scriptdef" priority='1'>
 	<xsl:param name="tag" select="'script'"/>
 	
+	<xsl:variable name='prefix'>
+		<xsl:call-template name='nsprefix'>
+			<xsl:with-param name='tag' select='$tag'/>
+		</xsl:call-template>
+	</xsl:variable>
+	
 	<!-- [\d\.]* ?? -->
-	<block start="/\M &lt;%nsprefix;{$tag}\b [^&gt;]+ {@expr} [^&gt;]* (&gt;|$) /six" 
+	<block start="/\M &lt;%{$prefix};{$tag}\b [^&gt;]+ {@expr} [^&gt;]* (&gt;|$) /six" 
 		end="/&gt;/" scheme="xmlss-{@name}-elementContent"
 	/> 
 </xsl:template>
@@ -115,8 +121,13 @@
 
 <xsl:template match="c:element/c:default | c:element/c:language" mode="scriptdef">
 	<xsl:param name="tag" select="'script'"/>
+	<xsl:variable name='prefix'>
+		<xsl:call-template name='nsprefix'>
+			<xsl:with-param name='tag' select='$tag'/>
+		</xsl:call-template>
+	</xsl:variable>
 	
-	<block start="/\M &lt;%nsprefix;{$tag}\b [^&gt;]* (&gt;|$)/{$ric}x" 
+	<block start="/\M &lt;%{$prefix};{$tag}\b [^&gt;]* (&gt;|$)/{$ric}x" 
 		end="/&gt;/" scheme="xmlss-{@name}-elementContent"
 	/> 
 </xsl:template>

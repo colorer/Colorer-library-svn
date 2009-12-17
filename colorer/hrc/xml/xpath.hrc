@@ -42,7 +42,7 @@
 ]]></contributors></annotation>
 
 
-<region name="path.separator" parent="xmlschema:uri.delit"/>
+<region name="path.separator" parent="uri:delit"/>
 <region name="path.or" parent="def:SymbolStrong"/><!-- ? -->
 
 <region name="expr.quote" parent="def:Symbol"/>
@@ -55,19 +55,19 @@
 <region name="axis" parent="def:Label"/>
 <region name="axis.abbr" parent="def:SymbolStrong"/>
 <region name="axis.name" parent="axis"/><!-- ? -->
-<region name="axis.separator" parent="xmlschema:uri.delit"/>
+<region name="axis.separator" parent="uri:delit"/>
 
 <region name="node.type" parent="def:TypeKeyword"/>
 <region name="node.type.abbr" parent="def:Symbol"/>
-<region name="node.name" parent="xmlschema:uri.path"/> <!-- "def:String,  def:Text ?" -->
+<region name="node.name" parent="uri:path"/> <!-- "def:String,  def:Text ?" -->
 <region name="node.name.all" parent="expr.op"/><!-- == 'mul' :-( -->
-<region name="node.nsprefix" parent="xmlschema:Scheme.nsprefix"/>
-<region name="node.nscolon" parent="xmlschema:Scheme.nscolon"/>
+<region name="node.nsprefix" parent="uri:nsprefix"/>
+<region name="node.nscolon" parent="uri:nscolon"/>
 
 
 <region name="var" parent="def:Var"/>
-<region name="var.nsprefix" parent="node.nsprefix"/>
-<region name="var.nscolon" parent="node.nscolon"/>
+<region name="var.nsprefix" parent="xml:QName.nsprefix"/>
+<region name="var.nscolon"  parent="xml:QName.nscolon"/>
 
 <region name="literal" parent="def:String"/>
 <region name="literal.quote" parent="def:StringEdge"/>
@@ -94,18 +94,12 @@
 <!-- Expression -->
 
 <scheme name="Expr">
-    <keywords region="expr.op">
+    
+    <inherit scheme="xpath-lt.internal.hack:expr-op"/>
+
+    <keywords region="expr.op" worddiv="[\s]">
         <word name="or"/>
         <word name="and"/>
-        <symb name="!="/>
-        <symb name="="/>
-        <symb name="&gt;="/>
-        <symb name="&lt;="/>
-        <symb name="&gt;"/>
-        <symb name="&lt;"/>
-        <symb name="+"/>
-        <symb name="-"/>
-        <symb name="*"/>
         <word name="div"/>
         <word name="mod"/>
         <symb name="|" region="path.or"/>

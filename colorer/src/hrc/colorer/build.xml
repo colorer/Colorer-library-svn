@@ -8,7 +8,7 @@
 <property name="src" value="src" description="this project sourse"/>
 <property name="src.extra" value="${root}/doc/2003" description="this project sourse"/>
 <property name="bin" value="ready" description="this project binary|hrc"/>
-<property name="bin.extra" value="ready"/>
+<property name="bin.extra" value="${bin}"/>
 <property name="obj" value="objs" description="this project temp"/>
 
 <target name="check.all">
@@ -154,7 +154,7 @@
 
 <target name="clean">
 	<delete failonerror='false'>
-		<fileset dir="${bin}" includes="hrc.hrc, hrd.hrc"/>
+		<fileset dir="${bin}" includes="hrc.hrc, hrd.hrc, ent.hrc.hrc"/>
 		<fileset dir="${bin.extra}" includes="xsd2hrc.custom.hrc, bkt.hrc, colorer5catalog.hrc"/>
 		<fileset dir="${obj}" includes="*.*"/>
 	</delete>

@@ -1,4 +1,6 @@
 
+our $VERSION = v1.00.23.45;
+
 $result .= '('.join(',',Dumper(@$call{10..$#$call})).')' if $call->[4];
 
 print 0x1_0_0x0x1 x 0x1."\n"; # ??

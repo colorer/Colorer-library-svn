@@ -25,7 +25,7 @@
 <element name="body" type="soap:bodyType"/>
 <complexType name="bodyType">
 	<attribute name="encodingStyle" type="anyURI" use="optional"/>
-	<attribute name="parts" type="NMTOKENS" use="optional"/>
+	<attribute name="part" type="NMTOKENS" use="optional"/>
 	<attribute name="use" type="soap:useChoice" use="optional"/>
 	<attribute name="namespace" type="anyURI" use="optional"/>
 </complexType>

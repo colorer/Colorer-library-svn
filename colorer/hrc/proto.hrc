@@ -4,6 +4,7 @@
 <!-- include -->
 <!ENTITY ini-protos  SYSTEM "ini.ent.hrc">
 <!ENTITY msg-protos  SYSTEM "msg.ent.hrc">
+<!ENTITY colorer-protos  SYSTEM "colorer.ent.hrc">
 <!-- auto -->
 <!ENTITY php-proto-gen  SYSTEM "php-prot.ent.hrc">
 ]>
@@ -37,6 +38,7 @@
     <firstline>/\#include/</firstline>
     <firstline>/\#define|\#if/</firstline>
     <parameters>
+      <param name="qt-defines" value="true" description="Use QT specific keywords"/>
       <param name="stl-defines" value="true" description="Use STL specific keywords"/>
       <param name="afx-defines" value="true" description="Highlight MFC autogenerateg block"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
@@ -44,6 +46,18 @@
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
     </parameters>
   </prototype>
+  <package name="cpp-qt" description="C++ + Qt">
+   <location link="base/cpp-qt.hrc"/>
+  </package>
+  <prototype name="d" group="main" description="D">
+    <location link="base/d.hrc"/>
+    <filename>/\.d$/i</filename>
+    <parameters>
+      <param name="format-str" value="true" description="Highlight printf-like %format in strnigs"/>
+      <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
+    </parameters>
+  </prototype>
+  
   <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
     <filename>/\.(mac|asm|inc|i32)$/i</filename>
@@ -241,10 +255,11 @@
     <filename>/\.(vbs)$/i</filename>
   </prototype>
 
+  
   <!--  xml types  -->
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
-    <filename>/\.(xml|gi2|gpr)$/i</filename>
+    <filename>/\.(xml|gi2|gpr|ui)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
     <parameters>
@@ -255,13 +270,13 @@
     
   </prototype>
   <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
-    <location link="xml/xmlns.hrc"/>
+    <location link="xml/gen/xmlns.hrc"/>
   </package>
   <package name="xlink" description="xlink" targetNamespace="http://www.w3.org/1999/xlink">
-    <location link="xml/xlink.hrc"/>
+    <location link="xml/gen/xlink.hrc"/>
   </package>
   <package name="xinclude" description="xinclude" targetNamespace="http://www.w3.org/1999/xinclude">
-    <location link="xml/xinclude.hrc"/>
+    <location link="xml/gen/xinclude.hrc"/>
   </package>
   <package name="xpath" description="xpath 1.0">
     <location link="xml/xpath.hrc"/>
@@ -275,16 +290,20 @@
     <location link="xml/dtd.hrc"/>
     <filename>/\.(dtd|ent|mod)$/i</filename>
   </prototype>
+  <prototype name="dtdcatalog" group="xml" description="dtd/sgml catalog">
+    <location link="xml/dtdcatalog.hrc"/>
+    <filename>/\.(cat|soc)$/i</filename>
+  </prototype>
 
   <prototype name="xslt" group="xml" description="xslt 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
-    <location link="xml/xslt.hrc"/>
+    <location link="xml/gen/xslt.hrc"/>
     <filename>/\.(xslt?)$/i</filename>
     <firstline>/ xsl:stylesheet /x</firstline>
     <firstline>/ XSL\/Transform /x</firstline>
   </prototype>
   <!-- targetNamespace duplicate. It's not good... -->
   <prototype name="xslt2" group="xml" description="xslt 2.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
-    <location link="xml/xslt2.hrc"/>
+    <location link="xml/gen/xslt2.hrc"/>
     <filename>/\.(xslt?2?)$/i</filename>
     <firstline weight="3">/\b(stylesheet|transform)\s+ .* \bversion\s*=\s*([&quot;&apos;])2\.0\2 /sx</firstline>
   </prototype>
@@ -295,23 +314,38 @@
   </prototype>
 
   <prototype name="xmlschema" group="xml" description="XML Schema" targetNamespace="http://www.w3.org/2001/XMLSchema">
-    <location link="xml/xmlschema.hrc"/>
+    <location link="xml/gen/xmlschema.hrc"/>
     <filename>/\.(xsd?)$/i</filename>
   </prototype>
+  <package name="xsi" description="XML Schema instance" targetNamespace="http://www.w3.org/2001/XMLSchema-instance">
+    <location link="xml/gen/xmlschema-instance.hrc"/>
+  </package>
+  
   <prototype name="relaxng" group="xml" description="Relax NG" targetNamespace="http://relaxng.org/ns/structure/1.0">
-    <location link="xml/relaxng.hrc"/>
+    <location link="xml/gen/relaxng.hrc"/>
     <filename>/\.rng/ix</filename>
+  </prototype>
+  <prototype name="schematron" group="xml" description="schematron" targetNamespace="http://www.ascc.net/xml/schematron">
+    <location link="xml/gen/schematron.hrc"/>
+    <filename>/\.sch$/ix</filename>
   </prototype>
   
   
   <package name="wsdl-soap" description="wsdl soap binding" targetNamespace="http://schemas.xmlsoap.org/wsdl/soap/">
-    <location link="xml/wsdl-soap.hrc"/>
+    <location link="xml/gen/wsdl-soap.hrc"/>
   </package>
   <prototype name="wsdl" group="xml" description="wsdl 1.1" targetNamespace="http://schemas.xmlsoap.org/wsdl/">
-    <location link="xml/wsdl.hrc"/>
+    <location link="xml/gen/wsdl.hrc"/>
     <filename>/\.wsdl$/ix</filename>
   </prototype>
 
+  <package name="rdfs" description="RDF schema" targetNamespace="http://www.w3.org/2000/01/rdf-schema#">
+    <location link="xml/gen/rdfs.hrc"/>
+  </package>
+  <prototype name="rdf" group="xml" description="RDF" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <location link="xml/gen/rdf.hrc"/>
+    <filename>/\.rdf$/ix</filename>
+  </prototype>
   
 
   <!--  database languages  -->
@@ -375,35 +409,7 @@
   </prototype>
 
 
-  <prototype name="ent.hrc" group="scripts.colorer" description="Entities for HRC">
-    <location link="scripts/ent.hrc.hrc"/>
-    <filename>/\.ent\.hrc$/i</filename>
-  </prototype>
-  <prototype name="hrc" group="scripts.colorer" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
-    <location link="scripts/hrc.hrc"/>
-    <filename>/\.hrc$/i</filename>
-    <parameters>
-      <param name="show-cross" value="both"/>
-    </parameters>
-  </prototype>
-  <prototype name="hrd" group="scripts.colorer" description="Colorer HRD" targetNamespace="http://colorer.sf.net/2003/hrd">
-    <location link="scripts/hrd.hrc"/>
-    <filename>/\.hrd$/i</filename>
-  </prototype>
-  <prototype name="bkt" group="scripts.colorer" description="bkt" targetNamespace="uri:bkt">
-    <location link="scripts/bkt.hrc"/>
-    <filename>/\.bkt$/i</filename>
-  </prototype>
-  <prototype name="colorer5catalog" group="scripts.colorer" description="Colorer-take5 catalog.xml" targetNamespace="http://colorer.sf.net/2003/catalog">
-    <location link="scripts/colorer5catalog.hrc"/>
-    <filename>/\bcatalog\.xml$/ix</filename>
-    <firstline weight='5'>/DTD Colorer CATALOG/s</firstline>
-  </prototype>
-  <prototype name="xsd2hrc.custom" group="scripts.colorer" description="xsd2hrc.custom" targetNamespace="uri:colorer:custom">
-    <location link="scripts/xsd2hrc.custom.hrc"/>
-    <filename>/custom\..*?\.xml$/ix</filename>
-    <firstline weight='5'>/uri:colorer:custom/s</firstline>
-  </prototype>
+  &colorer-protos;
 
 
 
@@ -421,6 +427,31 @@
       <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
     </parameters>
   </prototype>
+  
+  
+  <package name="old-makefile" description="old makefile package">
+    <location link="scripts/makefile.old.hrc"/>
+  </package>
+  <prototype name="makefile" group="scripts" description="makefile">
+    <location link="scripts/makefile.hrc"/>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
+    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
+    <firstline>/^\!if/i</firstline-->
+    <firstline>/makefile/s</firstline>
+    <parameters>
+      <param name="gnu" value="true" description="use GNU make only"/>
+    </parameters>
+  </prototype>
+  <prototype name="qmake" group="scripts" description="Qt qmake">
+    <location link="scripts/qmake.hrc"/>
+    <filename>/\.pr[oif]$/i</filename>
+  </prototype>
+  
+  <prototype name="resources" group="scripts" description="Resources">
+    <location link="scripts/resrc.hrc"/>
+    <filename>/\.(rc|dlg)$/i</filename>
+  </prototype>
+  
   <prototype name="javacc" group="scripts" description="Java Compiler Compiler">
     <location link="scripts/javacc.hrc"/>
     <filename>/\.(jjt?)$/i</filename>
@@ -442,20 +473,6 @@
     <filename>/\.y+$/i</filename>
   </prototype>
   
-  <prototype name="makefile" group="scripts" description="makefile">
-    <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
-    <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
-    <firstline>/^\!if/i</firstline-->
-    <firstline>/makefile/s</firstline>
-    <parameters>
-      <param name="gnu" value="true" description="use GNU make only"/>
-    </parameters>
-  </prototype>
-  <prototype name="resources" group="scripts" description="Resources">
-    <location link="scripts/resrc.hrc"/>
-    <filename>/\.(rc|dlg)$/i</filename>
-  </prototype>
   <prototype name="rtf" group="scripts" description="RTF text">
     <location link="scripts/rtf.hrc"/>
     <filename>/\.rtf$/i</filename>
@@ -515,10 +532,6 @@
     <location link="rare/awk.hrc"/>
     <filename>/\.awk$/i</filename>
     <firstline>/^# gawk/i</firstline>
-  </prototype>
-  <prototype name="d" group="rare" description="D">
-    <location link="rare/d.hrc"/>
-    <filename>/\.d$/i</filename>
   </prototype>
   
   <!--  !! you may wish to swap next two types
@@ -693,6 +706,9 @@
   <package name="def" description="core definitions">
     <location link="lib/default.hrc"/>
   </package>
+  <package name="uri" description="URI (RFC 2396)">
+    <location link="lib/uri.hrc"/>
+  </package>
   <package name="ole" description="OLE Commons">
     <location link="lib/ole.hrc"/>
   </package>
@@ -704,6 +720,9 @@
   </package>
   <package name="msg" description="message package">
     <location link="lib/message.hrc"/>
+  </package>
+  <package name="doxygen" description="Doxygen">
+   <location link="lib/doxygen.hrc"/>
   </package>
 
 </hrc>

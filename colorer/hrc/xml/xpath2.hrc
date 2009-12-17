@@ -167,11 +167,6 @@
     <regexp match="/\b(treat|cast(able)?)\s+as\b/" region="expr.key"/>
     
     <keywords region="expr.op" worddiv="[\s]">
-        <!--word name=""/>
-        <word name=""/>
-        <word name=""/>
-        <word name=""/>
-        <word name=""/-->
         <word name="mod"/>
         <word name="div"/>
         <word name="idiv"/>

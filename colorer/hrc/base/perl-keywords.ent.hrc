@@ -1,8 +1,99 @@
 
 <region name="WordFun" parent="def:FunctionKeyword"/>
 <region name="packages" parent="WordExt"/>
+<region name="packages.pragmas" parent="Word"/>
+<region name="packages.user" parent="def:Directive"/>
+
+
+<scheme name='outlines'>
+	<regexp match="/\M\b(package)\s+(?{PackageOutline}[\w_':]+)/"/>
+	<block start="/\b(package)\s+/"
+		end='/;/' scheme='package.content'
+		region01="Word" region10="MainSymb"
+	/>
+	<regexp match="/\M\b(use|no|require)\s+(?{UseOutline}[\w_':]+)/"/>
+	<block start="/\b(use|no|require)\s+/"
+		end='/;/' scheme='use.content'
+		region01="Word" region10="MainSymb"
+	/>
+</scheme>
+
+<scheme name='package.content'>
+	<inherit scheme='packages.any.ex'/>
+	<regexp match="/\b\w[\w\d]*\b/" region="packages.user"/>
+	<regexp match='/\S/' region='def:Error' priority='low'/>
+</scheme>
+
+<scheme name='use.content'>
+	<inherit scheme='pragmas'/>
+	<inherit scheme='perl-core'>
+		<virtual scheme='packages.any' subst-scheme='packages.any.ex'/>
+	</inherit>
+	<inherit scheme='packages.any.ex'/>
+</scheme>
+
+
+<scheme name='packages.any'>
+	<regexp match="/\b\w[\w\d]*(::)\M\w[\w\d]*\b/" region="packages" region1="Symb"/>
+	<regexp match="/(::)?#2\w[\w\d]*\b(\s*\()?!/" region="packages"/>
+</scheme>
+
+<scheme name='packages.any.ex'>
+	<regexp match="/\b\w[\w\d]*(::)\M\w[\w\d]*\b/" region="packages.user" region1="Symb" priority='low'/>
+	<regexp match="/(::)?#2\w[\w\d]*\b/" region="packages.user"  priority='low'/>
+</scheme>
+
+
+
+<scheme name='pragmas'>
+   <keywords region="packages.pragmas">
+      <word name="strict"/>
+      <word name="subs"/>
+      <word name="vars"/>
+      <word name="refs"/>
+      <word name="diagnostics"/>
+      <word name="integer"/>
+      
+      <word name='autouse'/>
+      <word name='butes'/>
+      <word name='charnames'/>
+      <word name='constant'/>
+      <word name='filetest'/>
+      <word name='open'/>
+      
+      <word name="attributes"/>
+      <word name="base"/>
+      <word name="blib"/>
+      <word name="diagnostics"/>
+      <word name="feature"/>
+      <word name="fields"/>
+      <word name="less"/>
+      <word name="lib"/>
+      <word name="locale"/>
+      <word name="mro"/>
+      <word name="overload"/>
+      <word name="re"/>
+      <word name="sigtrap"/>
+      <word name="sort"/>
+      <word name="strict"/>
+      <word name="threads"/>
+      <word name="var"/>
+      <word name="warnings"/>
+   </keywords>
+   <keywords region="packages">
+      <word name="ex::constant::vars"/>
+      <word name="ex::implements"/>
+      <word name="ex::interface"/>
+      <word name="ex::override"/>
+   </keywords>
+   
+   <!--inherit scheme='all-packages'/-->
+</scheme>
+
+
 <scheme name="Keywords">
    <!-- base syntax -->
+   
    <keywords region="Word">
       <word name="bless"/>
       <word name="caller"/>
@@ -16,7 +107,7 @@
       <word name="elsif"/>
       <word name="exec"/>
       <word name="exit"/>
-      <word name="exist"/>
+      <!--word name="exist"/-->
       <word name="eval"/>
       <word name="fork"/>
       <word name="foreach"/>
@@ -52,9 +143,7 @@
       <word name="use"/>
       <word name="while"/>
       
-      <word name="__DATA__" region="Rare"/>
-      <word name="__END__" region="Rare"/>
-      
+      <word name="UNIVERSAL" region='packages'/>
       <word name="AUTOLOAD"/>
       <word name="BEGIN"/>
       <word name="INIT"/>
@@ -64,14 +153,45 @@
       <word name="DESTROY"/>
       <word name="END"/>
       <word name="SUPER"/>
-      <word name="UNIVERSAL"/>
+      
+      <!-- named unary opreators -->
+		<word name='alarm'/>
+		<word name='chdir'/>
+		<word name='chroot'/>
+		<word name='cos'/>
+		<word name='delete'/>
+		<word name='exists'/>
+		<word name='gethostbyname'/>
+		<word name='getnetbyname'/>
+		<word name='getpgrp'/>
+		<word name='getprotobyname'/>
+		<word name='gmtime'/>
+		<word name='hex'/>
+		<word name='int'/>
+		<word name='lc'/>
+		<word name='lcfirst'/>
+		<word name='length'/>
+		<word name='localtime'/>
+		<word name='lock'/>
+		<word name='log'/>
+		<word name='lstat'/>
+		<word name='oct'/>
+		<word name='ord'/>
+		<word name='quotemeta'/>
+		<word name='rand'/>
+		<word name='readlink'/>
+		<word name='rmdir'/>
+		<word name='scalar'/>
+		<word name='sin'/>
+		<word name='sleep'/>
+		<word name='sqrt'/>
+		<word name='srand'/>
+		<word name='stat'/>
+		<word name='uc'/>
+		<word name='ucfirst'/>
+		<word name='umask'/>
+		<word name='undef'/>
    
-      <word name="strict"/>
-      <word name="subs"/>
-      <word name="vars"/>
-      <word name="refs"/>
-      <word name="diagnostics"/>
-      <word name="integer"/>
    </keywords>
    
    
@@ -252,194 +372,4 @@
    </keywords>
    
    <inherit scheme="all-packages"/>
-</scheme>
-
-<scheme name="all-packages" if="use-packages">   
-   <keywords region="packages">
-      <word name="ARS"/>
-      <word name="AppConfig"/>
-      <word name="Archie"/>
-      <word name="AsciiDB"/>
-      <word name="Async"/>
-      <word name="AtExit"/>
-      <word name="AudioCD"/>
-      <word name="AutoLoader"/>
-      <word name="AutoSplit"/>
-      <word name="BBDB"/>
-      <word name="BTRIEVE"/>
-      <word name="Barcode"/>
-      <word name="Benchmark"/>
-      <word name="BerkeleyDB"/>
-      <word name="Bit"/>
-      <word name="BnP"/>
-      <word name="CGI_Lite"/>
-      <word name="CIPP"/>
-      <word name="CPAN"/>
-      <word name="CSS"/>
-      <word name="Calendar"/>
-      <word name="Callback"/>
-      <word name="Catalog"/>
-      <word name="Chatbot"/>
-      <word name="Cisco"/>
-      <word name="CompBio"/>
-      <word name="Continuus"/>
-      <word name="ControlX10"/>
-      <word name="Coy"/>
-      <word name="Cwd"/>
-      <word name="DBM"/>
-      <word name="DBZ_File"/>
-      <word name="DDL"/>
-      <word name="DNS"/>
-      <word name="DWH_File"/>
-      <word name="Debug"/>
-      <word name="Des"/>
-      <word name="Dialog"/>
-      <word name="Dir"/>
-      <word name="DirHandle"/>
-      <word name="DynaLoader"/>
-      <word name="Emacs"/>
-      <word name="Email"/>
-      <word name="End"/>
-      <word name="English"/>
-      <word name="Errno"/>
-      <word name="Error"/>
-      <word name="Event"/>
-      <word name="Exporter"/>
-      <word name="FAQ"/>
-      <word name="FCGI"/>
-      <word name="FFI"/>
-      <word name="Fcntl"/>
-      <word name="FileCache"/>
-      <word name="FindBin"/>
-      <word name="FreezeThaw"/>
-      <word name="GDBM_File"/>
-      <word name="GDS2"/>
-      <word name="GIFgraph"/>
-      <word name="Gedcom"/>
-      <word name="Geography"/>
-      <word name="Getargs"/>
-      <word name="Gimp"/>
-      <word name="Gnome"/>
-      <word name="GnuPG"/>
-      <word name="GraphViz"/>
-      <word name="HPUX"/>
-      <word name="Hash"/>
-      <word name="Hints"/>
-      <word name="HyperWave"/>
-      <word name="IMAP"/>
-      <word name="IPChains"/>
-      <word name="IPTables"/>
-      <word name="Imager"/>
-      <word name="Include"/>
-      <word name="Ingperl"/>
-      <word name="LEGO"/>
-      <word name="MIDI"/>
-      <word name="MLDBM"/>
-      <word name="MQSeries"/>
-      <word name="MVS"/>
-      <word name="MailBot"/>
-      <word name="Make"/>
-      <word name="Memoize"/>
-      <word name="Msql"/>
-      <word name="MySQL"/>
-      <word name="Mysql"/>
-      <word name="NDBM_File"/>
-      <word name="NEXT"/>
-      <word name="NNML"/>
-      <word name="O"/>
-      <word name="ODBM_File"/>
-      <word name="ObjStore"/>
-      <word name="Opcode"/>
-      <word name="OpenGL"/>
-      <word name="OurNet"/>
-      <word name="PApp"/>
-      <word name="PCL"/>
-      <word name="PGP"/>
-      <word name="PGPLOT"/>
-      <word name="POSIX"/>
-      <word name="PPresenter"/>
-      <word name="PV"/>
-      <word name="Palm"/>
-      <word name="Penguin"/>
-      <word name="Perf"/>
-      <word name="Perl"/>
-      <word name="PerlIO"/>
-      <word name="Perlbug"/>
-      <word name="Pg"/>
-      <word name="PgSQL"/>
-      <word name="Pogo"/>
-      <word name="Postgres"/>
-      <word name="Ptty"/>
-      <word name="Qt"/>
-      <word name="R3"/>
-      <word name="Rc"/>
-      <word name="Rcs"/>
-      <word name="Real"/>
-      <word name="Ref"/>
-      <word name="Religion"/>
-      <word name="RenderMan"/>
-      <word name="Resources"/>
-      <word name="Roman"/>
-      <word name="Router"/>
-      <word name="SAP"/>
-      <word name="SDBM_File"/>
-      <word name="SelectSaver"/>
-      <word name="SelfLoader"/>
-      <word name="Server"/>
-      <word name="ShellScript"/>
-      <word name="Slash"/>
-      <word name="Socket6"/>
-      <word name="Softref"/>
-      <word name="Spectrum"/>
-      <word name="Sprite"/>
-      <word name="Stat"/>
-      <word name="Storable"/>
-      <word name="Sx"/>
-      <word name="Syntax"/>
-      <word name="TFTP"/>
-      <word name="Taint"/>
-      <word name="Tangram"/>
-      <word name="Tcl"/>
-      <word name="Thesaurus"/>
-      <word name="Tivoli"/>
-      <word name="UNIVERSAL"/>
-      <word name="Usage"/>
-      <word name="Video"/>
-      <word name="WAIT"/>
-      <word name="WDDX"/>
-      <word name="Wais"/>
-      <word name="WebCache"/>
-      <word name="WebFS"/>
-      <word name="XBase"/>
-      <word name="Xbase"/>
-      <word name="YAML"/>
-      <word name="dTemplate"/>
-      <word name="namespace"/>
-      <word name="enum"/>
-   </keywords>   
-   <keywords region="packages"> <!-- pragmas -->
-      <word name="blib"/>
-      <word name="diagnostics"/>
-      <word name="feature"/>
-      <word name="fields"/>
-      <word name="less"/>
-      <word name="lib"/>
-      <word name="locale"/>
-      <word name="mro"/>
-      <word name="overload"/>
-      <word name="re"/>
-      <word name="sigtrap"/>
-      <word name="sort"/>
-      <word name="strict"/>
-      <word name="threads"/>
-      <word name="var"/>
-      <word name="warnings"/>
-   </keywords>
-   <keywords region="packages">
-      <word name="ex::constant::vars"/>
-      <word name="ex::implements"/>
-      <word name="ex::interface"/>
-      <word name="ex::override"/>
-   </keywords>
-   <regexp match="/\b\w[\w\d]*\s*(::)\s*\w[\w\d]*\b/" region="packages" region1="Symb"/>
 </scheme>

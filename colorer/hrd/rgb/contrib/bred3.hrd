@@ -33,6 +33,7 @@
   <assign name="def:Symbol" fore="#806030"/>
   <assign name="def:SymbolStrong" fore="#806030"/>
   <assign name="def:Prefix" fore="#00dddd"/>
+  <assign name="def:PrefixStrong" fore="#007997"/>
 
   <assign name="def:Operator" fore="#44aadd"/>
 

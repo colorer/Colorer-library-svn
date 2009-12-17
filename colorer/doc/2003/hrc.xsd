@@ -11,7 +11,7 @@
     </xs:documentation></xs:annotation>
     <xs:restriction base="xs:string">
       <xs:whiteSpace value="collapse"/>
-      <xs:pattern value="/.*/[ix]*"/>
+      <xs:pattern value="/.*/[igsxm]*"/>
     </xs:restriction>
   </xs:simpleType>
 

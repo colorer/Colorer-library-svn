@@ -236,6 +236,14 @@
     </fail>
   </target>
 
+  <target name="hrd" depends='init' description='Generates all HRD (and CSS from HRD files)'>
+    <ant dir='hrd' antfile='build.xml' target='all'/>
+  </target>
+
+  <target name="hrd.clean" depends='init' description='Cleans all the generated HRD and CSS files'>
+    <ant dir='hrd' antfile='build.xml' target='clean'/>
+  </target>
+
   <target name="hrc" depends='init' description='Generates all required HRC files'>
     <ant dir='src/hrc' antfile='build.xml' target='all'/>
   </target>
@@ -314,7 +322,7 @@
     </antcall>
   </target>
 
-  <target name="library" depends='init, hrc, doc' description='Builds Colorer-take5 Library source distribution package'>
+  <target name="library" depends='init, hrc, hrd, doc' description='Builds Colorer-take5 Library source distribution package'>
 
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
@@ -362,7 +370,7 @@
     </antcall>
   </target>
 
-  <target name="library-linux" depends='init, hrc, doc' description='Builds Colorer-take5 Library linux package'>
+  <target name="library-linux" depends='init, hrc, hrd, doc' description='Builds Colorer-take5 Library linux package'>
 
     <mkdir dir='${library-linux-dir}'/>
 

@@ -49,24 +49,20 @@
     	<element-attributes name="pattern">
     		<xs:attribute name="value" type="xs:REstring"/>
     	</element-attributes>
-
+    	
     	<attribute language="xpath" scheme-suffix="XML.Pattern" region="def:default"/>
     </script-n-style>
 
     <type xmlns="http://colorer.sf.net/2003/hrc">
 
     <!-- EE begin -->
-      <region name="Scheme.nsprefix" parent="xml:Attribute.nsprefix"/>
-      <region name="Scheme.nscolon" parent="xml:Attribute.nscolon"/>
-      <region name="Scheme.name" parent="def:String"/>
+      <region name="Scheme.nsprefix" parent="xml:QName.nsprefix"/>
+      <region name="Scheme.nscolon"  parent="xml:QName.nscolon"/>
+      <region name="Scheme.name"     parent="xml:QName.name"/>
+      
+      <region name='ns.spec'      parent='xml:nsprefix'/>
+      <region name='ns.spec.mark' parent='uri:delit'/>
 
-      <region name="uri.scheme" parent="Scheme.nsprefix"/>
-      <region name="uri.nscolon" parent="Scheme.nscolon"/>
-      <region name="uri.delit" parent="def:Keyword"/>
-      <region name="uri.authority" parent="def:URL"/>
-      <region name="uri.path" parent="def:Path"/>
-      <region name="uri.query" parent="def:ParameterStrong"/>
-      <region name="uri.fragment" parent="def:Constant"/>
 
       <!-- QName -->
 
@@ -99,6 +95,12 @@
       	<regexp match="/\battribute::|\@/" region="def:Error"/>
       	<inherit scheme="Pattern"/>
       </scheme>
+      
+      <!-- FPI -->
+      <scheme name='public-content'>
+      	<inherit scheme='uri:FPI'/>
+      	<inherit scheme='public-content-old'/>
+      </scheme>
 
 
       <!-- Regexp -->
@@ -123,32 +125,24 @@
       <!-- URI -->
 
       <scheme name="anyURI-content">
-       <annotation><documentation><![CDATA[
-         RFC 2396:
-
-        ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?
-              12            3  4          5    6   7      8  9
-
-         scheme    = $2
-         authority = $4
-         path      = $5
-         query     = $7
-         fragment  = $9
-
-       ]]></documentation></annotation>
-       <regexp
-         match="/ (([^:/?#\s]+):)? (//([^/?#\s]*))? ([^?#\s]*) (\?([^#\s]*))? (#(\S*))? /x"
-         region1="uri.nscolon" region2="uri.scheme"
-         region3="uri.delit" region4="uri.authority"
-         region5="uri.path"
-         region6="uri.delit" region7="uri.query"
-         region8="uri.delit" region9="uri.fragment"
-         priority="low"
-        />
-        <!--
-         <inherit scheme="def:NetURL"/>
-         <inherit scheme="string-content"/>
-        -->
+      	<inherit scheme='uri:uri'/>
+      </scheme>
+      
+      <scheme name='namespaceList-list'>
+      	<keywords region='ns.spec' worddiv='[\s#&apos;&quot;]'>
+      		<word name='any'/>
+      		<word name='other'/>
+      		<word name='local'/>
+      		<word name='targetNamespace'/>
+      	</keywords>
+      	<inherit scheme="xml:badChar"/>
+      </scheme>
+      
+      <scheme name="namespaceList-content">
+      	<block start='/(~|\s?#1)(##)\M\w+\b/' end='/~\w+\b\m/'
+      		scheme='namespaceList-list' region02='ns.spec.mark'
+      	/>
+      	<inherit scheme='anyURI-content'/>
       </scheme>
 
     <!-- EE end -->
@@ -237,7 +231,8 @@
         <inherit scheme="normalizedString-content"/>
       </scheme>
       <scheme name="language-content">
-        <regexp match="/\b([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*\b/ix"/>
+      	<inherit scheme='uri:lang'/>
+        <!--regexp match="/\b([a-zA-Z]{2}|[iI]-[a-zA-Z]+|[xX]-[a-zA-Z]{1,8})(-[a-zA-Z]{1,8})*\b/ix"/-->
       </scheme>
       <scheme name="NMTOKEN-content">
         <regexp match="/\b %xml:Nmtoken; \b/ix"/>
@@ -307,6 +302,13 @@
       </scheme>
     </type>
   </custom-type>
+  
+  <custom-type targetNamespace="http://www.w3.org/2001/XMLSchema-instance">
+    <prefix>xsi</prefix>
+    <top-level/><!-- package -->
+    <contributors>Eugene Efremov</contributors>
+  </custom-type>
+  
 </custom>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

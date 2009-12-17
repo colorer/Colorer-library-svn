@@ -5,6 +5,12 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
+  
+  <prototype name="xmlcatalog" group="xml" description="XML Catalog" targetNamespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <location link="gen/xmlcatalog.hrc"/>
+    <filename>/\.xml$/ix</filename>
+    <firstline weight='5'>/-\/{2}OASIS\/{2}DTD Entity Resolution XML Catalog V1\.0\/{2}EN/</firstline>
+  </prototype>  
   <prototype name="xslfo" group="xml" description="xslfo 1.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
     <location link="gen/xslfo.hrc"/>
     <filename>/\.(xslfo?|fo)$/i</filename>
@@ -25,16 +31,7 @@
     <location link="gen/wml.hrc"/>
     <filename>/\.wml$/i</filename>
   </prototype>
-
-  <prototype name="web-app" group="inet" description="web-app" targetNamespace="http://java.sun.com/dtd/web-app_2_3.dtd">
-    <location link="gen/web-app.hrc"/>
-    <filename weight='4'>/web\.xml/ix</filename>
-  </prototype>
-  <prototype name="taglib" group="inet" description="JSP taglib">
-    <location link="gen/taglib.hrc"/>
-    <filename>/\.tld/i</filename>
-  </prototype>
-
+  
   <prototype name="parser" group="inet" description="Parser">
     <location link="gen/parser.hrc"/>
     <filename>/\.(p|html)$/i</filename>
@@ -48,13 +45,6 @@
     <location link="gen/wsf.hrc"/>
     <filename>/\.wsf$/i</filename>
   </prototype>
-  <package name="rdfs" description="RDF schema" targetNamespace="http://www.w3.org/2000/01/rdf-schema#">
-    <location link="gen/rdfs.hrc"/>
-  </package>
-  <prototype name="rdf" group="xml" description="RDF" targetNamespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <location link="gen/rdf.hrc"/>
-    <filename>/\.rdf$/ix</filename>
-  </prototype>
   <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
     <location link="gen/rss.hrc"/>
     <filename>/^rss|\.(rss|xml|rdf)$/i</filename>
@@ -65,17 +55,23 @@
     <location link="gen/htc.hrc"/>
     <filename weight='3'>/\.(htc)$/i</filename>
   </prototype>
-  <prototype name="xbl" group="inet" description="Mozilla XBL">
+  <prototype name="xbl" group="inet" description="Mozilla XBL" targetNamespace="http://www.mozilla.org/xbl">
     <location link="gen/xbl.hrc"/>
     <filename>/\.(xml)/i</filename>
     <firstline weight="5">/\bxmlns\s*=\s*(["'])http:\/\/www\.mozilla\.org\/xbl\1/</firstline>
+  </prototype>
+  
+  <prototype name="log4j" group="inet" description="Apache Log4j Config" targetNamespace="http://jakarta.apache.org/log4j/">
+    <location link="gen/log4j.hrc"/>
+    <firstline weight='4'>/&lt;!DOCTYPE\s+log4j:configuration\b/</firstline>
+    <filename weight='2'>/\.xml/ix</filename>
   </prototype>
 
 
   <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
     <location link="gen/ant.hrc"/>
-    <filename weight='5'>/\bbuild\.xml$/ix</filename>
-    <firstline weight='2'>/&lt;project\b/s</firstline>
+    <filename weight='4'>/\bbuild\.xml$/ix</filename>
+    <firstline weight='5'>/&lt;project\b/</firstline>
   </prototype>
   
   
@@ -87,8 +83,33 @@
     <filename>/\.(xsl)$/i</filename>
     <firstline weight='5'>/\bxmlns:s\s*=\s*(["'])http:\/\/xsieve\.sourceforge\.net\1/</firstline>
   </prototype>  
+  <prototype name="qrc" group="scripts" description="qrc">
+    <location link="gen/qrc.hrc"/>
+    <filename>/\.qrc$/ix</filename>
+  </prototype>
   
+  <prototype name="ibatis2-sql-map" group="inet.other" description="iBATIS 2 SQL Map"
+   targetNamespace="http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    <location link="gen/ibatis2-sql-map.hrc"/>
+    <firstline weight="6">/http:\/\/(ibatis\.apache\.org|www\.ibatis\.com)\/dtd\/sql-map-2\.dtd/</firstline>
+    <filename weight="0.5">/\.xml$/i</filename>
+  </prototype>
+  <prototype name="ibatis2-sql-map-config" group="inet.other" description="iBATIS 2 SQL Map Config"
+   targetNamespace="http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+    <location link="gen/ibatis2-sql-map-config.hrc"/>
+    <firstline weight="6">/http:\/\/(ibatis\.apache\.org|www\.ibatis\.com)\/dtd\/sql-map-config-2\.dtd/</firstline>
+    <filename weight="0.5">/\.xml$/i</filename>
+  </prototype>
+  <package name='ibatis2-sql-map-pack'>
+    <location link="gen/ibatis2-sql-map-pack.hrc"/>
+  </package>
+  <prototype name="yml" group="inet.other" description="Yandex Market Language" targetNamespace="/">
+    <location link="gen/yml.hrc"/>
+    <firstline weight='4'>/&lt;!DOCTYPE\s+yml_catalog\b/</firstline>
+    <filename weight='2'>/\.xml/ix</filename>
+  </prototype>
 
+  
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

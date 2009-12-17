@@ -1,53 +1,65 @@
+#!/usr/bin/perl 
 #
 # Perl module for automatic HRC changes tests.
 # Validates a set of source files against a given
 # set of their previous parse strucure.
 #
+#  --full   - test all (default)
+#  --quick  - test all exclude **/full/*.*
+#  --list   - test listed dirs
+#  file.lst - test list from file(s)
+#
 
-#$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer -c D:\\projects\\colorer\\catalog.xml";
+use strict;
+use File::Find;
+use File::Path;
 
-$diff  = 'diff -U 1 -bB';
 
-$hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
+my $colorer_path = "..\\..\\..";
+my $colorer  = "$colorer_path\\bin\\colorer -c $colorer_path\\catalog.xml";
+my $diff  = 'diff -U 1 -bB';
 
-#%modes = (
-#  full  =>   ".",
-#  quick =>   '(?!full\/)',
-#  perl  =>   '^perl\/',
-#);
+my $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
 
-$validDir = "_valid";
 
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-$currentDir = sprintf("__%d-%02d-%02d %02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
+my $validDir = "_valid";
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+my $currentDir = sprintf("__%d-%02d-%02d_%02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
 
-if (!mkdir $currentDir, 0777){
-#  die "Can't create dir - already exists" ;
+die "Can't create dir - already exists" unless mkdir $currentDir, 0777;
+
+
+
+my $runMode = '--full';
+$runMode = shift @ARGV if @ARGV;
+
+my @retlist = ();
+my @prnlist = @ARGV;
+
+unless($runMode =~ /^--\w+/)
+{
+	unshift @ARGV, $runMode;
+	@retlist = <>;
+}
+else
+{
+	my @lst = ($runMode eq '--list') ? @ARGV : ('.');
+	find sub
+	{
+		$File::Find::prune = /^[\._]\w+/;
+		return if $File::Find::dir eq '.';
+		$File::Find::prune += /^full/ if $runMode eq '--quick';
+		push @retlist, $File::Find::name unless -d;
+	}, @lst;
 }
 
-$runMode = shift @ARGV;
 
-$runMode = "full" if (!$runMode);
 
-if ($runMode ne "quick" and  $runMode ne "full" ){
-  $runList = $runMode;
-}
+print "Running test mode: $runMode @prnlist\n";
 
-if ($runList){
-  open LIST, $runList or die "Can't open test list: $runList";
-  @retlist = <LIST>;
-  close LIST;
-}else{
-  @retlist = collectDirs('.');
-}
-
-print "Running test mode: $runMode\n";
-
-$testRuns = 0;
-$testFailed = 0;
-
-$timeStart = time();
+my $testRuns = 0;
+my $testFailed = 0;
+my $timeStart = time();
 
 unlink "$currentDir/fails.html";
 
@@ -61,36 +73,50 @@ print FAILS <<"FL";
 FL
 close FAILS;
 
-foreach (@retlist){
-  chomp $_;
 
-  my $origname = "$validDir/$_";
-  my $fname = "$currentDir/$_";
-  print "Processing (".($testRuns+1)."/".($#retlist+1).") $_:\n";
 
-  open FAILS, ">>$currentDir/fails.html";
-  print FAILS "\n<b>$_</b>:</pre></pre><pre>\n";
-  close FAILS;
-  checkDir($currentDir, $_);
-  
-  $cres = system "$colorer -ht \"$_\" -dc -dh -ln -o \"$fname.html\"";
+# start tests
 
-  $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
+my $failed = '';
 
-  if ($cres != 0 or $res != 0 or !-r "$fname.html"){
-    #print "failed: $cres, $res, ".(-r "$fname.html")."\n";
-    $failed .= "$_<br/>";
-    $testFailed++;
-  }else{
-  }
-  $testRuns++;
+foreach (@retlist)
+{
+	chomp $_;
+	s/^\.\///;
+	
+	my $origname = "$validDir/$_";
+	my $fname = "$currentDir/$_";
+	my $fdir = $fname;
+	$fdir =~ s/\/[^\/]+$//;
+	
+	print "Processing (".($testRuns+1)."/".($#retlist+1).") $_:\n";
+	
+	open FAILS, ">>$currentDir/fails.html";
+	print FAILS "\n<b>$_</b>:</pre></pre><pre>\n";
+	close FAILS;
+	
+	mkpath($fdir);
+	
+	my $cres = system "$colorer -ht \"$_\" -dc -dh -ln -o \"$fname.html\"";
+	
+	my $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
+	
+	if ($cres != 0 or $res != 0 or !-r "$fname.html")
+	{
+		print "failed: $cres, $res, ".(-r "$fname.html")."\n";
+		$failed .= "$_<br/>";
+		$testFailed++;
+	}
+	$testRuns++;
 }
 
-$timeEnd = time();
 
-$perc = sprintf "%.0d", ($testRuns-$testFailed)*100/$testRuns;
+#final
 
-$result = "Test time: ".($timeEnd-$timeStart)." sec, Executed: $testRuns, Passed: ".($testRuns-$testFailed).", Failed: $testFailed, Passed:".$perc."%\n";
+my $timeEnd = time();
+
+my $perc = sprintf "%.0d", ($testRuns-$testFailed)*100/$testRuns;
+my $result = "Test time: ".($timeEnd-$timeStart)." sec, Executed: $testRuns, Passed: ".($testRuns-$testFailed).", Failed: $testFailed, Passed:".$perc."%\n";
 
 print $result;
 
@@ -99,56 +125,4 @@ print FAILS "</pre></pre></pre><h2>$result</h2>";
 print FAILS "<h2>Failed tests</h2><br/>$failed";
 close FAILS;
 
-exit;
-
-
-
-
-
-sub collectDirs{
-  my $cdir = shift @_;
-  my $prefix = "";
-  $prefix = "$cdir/" if ($cdir ne ".");
-
-  opendir DIR, $cdir or die "Can't open dir $cdir";
-
-  my @retlist;
-  my @dirlist = readdir DIR;
-  my @flist = grep {/^(?!CVS)[^_.]/ && -f "$cdir/$_" } @dirlist;
-   @dirlist = grep {/^(?!CVS)[^_.]/ && -d "$cdir/$_" } @dirlist;
-
-  closedir DIR;
-
-  foreach(@flist){
-    my $torun = 1;
-    my $cname = $prefix.$_;
-
-    if ($runMode eq "quick" and $cname =~ /\/full\//ix){
-      $torun = 0;
-    }
-    if ($torun == 0 || $prefix eq ""){
-      next;
-    };
-    push @retlist, $cname;
-  };
-
-  foreach(@dirlist){
-    push @retlist, collectDirs($prefix.$_);
-  };
-  return @retlist;
-}
-
-sub checkDir{
-  my $currentDir = shift @_;
-  my $fname = shift @_;
-  $fname =~ /^(.*?)\/[^\/]+$/;
-  my $dir = $1;
-  if (!-d "$currentDir/$dir"){
-    my $dirs = "/";
-    foreach(split /\//, $dir){
-      $dirs .= $_;
-      mkdir $currentDir.$dirs, 0777;
-      $dirs .= "/";
-    }
-  }
-}
+#exit;

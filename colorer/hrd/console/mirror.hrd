@@ -42,6 +42,7 @@
   <assign name="def:Symbol" fore="#E" style='1'/>
   <assign name="def:SymbolStrong" fore="#C" style='1'/>
   <assign name="def:Prefix" fore="#3"/>
+  <assign name="def:PrefixStrong" fore="#5"/>
   
   <assign name="def:Operator" fore="#E"/>
   
@@ -68,6 +69,7 @@
   
   <assign name="def:Directive" fore="#A" style='1'/>
   <assign name="def:DirectiveContent" fore="#2" style='1'/>
+  <assign name="def:DirectiveEdge" fore="#2" style='1'/>
   <assign name="def:Parameter" fore="#A" style='2'/>
   <assign name="def:ParameterStrong" fore="#D" style='2'/>
 
@@ -93,7 +95,7 @@
 
   
   <assign name="def:Error" fore="#0" back="#4" style='7'/>
-  <assign name="def:ErrorText" fore="#D" style='2'/>
+  <assign name="def:ErrorText" fore="#4" style='2'/>
 
   <assign name="def:TODO" fore="#F" back="#9"/>
   <assign name="def:Debug" fore="#0" back="#D"/>

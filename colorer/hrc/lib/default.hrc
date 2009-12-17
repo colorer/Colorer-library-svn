@@ -49,6 +49,7 @@
     <region name="SymbolStrong" parent="Symbol" description="Strong Symbol"/>
     <region name="Operator" parent="Symbol" description="Symbolic or Literal Operator"/>
     <region name="Prefix" description="Prefix"/>
+    <region name="PrefixStrong" parent="Prefix" description="Other prefix"/>
 
     <region name="Keyword"  description="Common Keyword"/>
     <region name="KeywordStrong" parent="Keyword" description="Strong Keyword"/>
@@ -72,6 +73,7 @@
 
     <region name="Directive" description="Compiler/Preprocessor directive"/>
     <region name="DirectiveContent" parent="Directive" description="Internal directive text"/>
+    <region name="DirectiveEdge"    parent="DirectiveContent" description="Directive edges"/>
 
     <region name="Parameter" description="Parameter declaration"/>
     <region name="ParameterStrong" parent="Parameter" description="Special parameter"/>
@@ -233,10 +235,15 @@
       </block>
     </scheme>
 
+    
     <scheme name="unixCommentDirective">
       <regexp match="/^#!\s*([\S]+)( .*)?$/" 
         region0="Comment" region1="VarStrong" region2="KeywordStrong" 
       />
+    </scheme>
+    <scheme name="unixCommentFirstline"> <!-- first line in file only -->
+      <inherit scheme='unixCommentDirective'/>
+      <block start="//" end="/%neverMatch;/" scheme="def"/>
     </scheme>
     
     

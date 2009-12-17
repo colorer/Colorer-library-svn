@@ -1,0 +1,37 @@
+<target-list>
+	<target type='perl' place='hrc/base'/>
+	<target type='php' place='hrc/inet'/>
+	<target type='sh' place='hrc/scripts'/>
+	<target type='ant' place='hrc/auto/gen'/>
+	<target type='entity' place='hrc/inet'/>
+	<target type='xhtml' place='hrc/inet'/>
+	<target type='wml' place='hrc/auto/gen'/>
+	<target type='xml' place='hrc/xml/gen'/>
+	<target type='xlink' place='hrc/xml/gen'/>
+	<target type='xslt' place='hrc/xml/gen'/>
+	<target type='xslfo' place='hrc/auto/gen'/>
+	<target type='xmlschema' place='hrc/xml/gen'/>
+	<target type='relaxng' place='hrc/xml/gen'/>
+	<target type='sch' place='hrc/xml/gen'/>
+	<target type='wsdl' place='hrc/xml/gen'/>
+	<target type='xmlcatalog' place='hrc/auto/gen'/>
+	<target type='docbook' place='hrc/auto/gen'/>
+	<target type='mathml' place='hrc/auto/gen'/>
+	<target type='svg' place='hrc/inet'/>
+	<target type='j2ee' place='hrc/auto/gen/j2ee'/>
+	<target type='wsc' place='hrc/auto/gen'/>
+	<target type='colorer' place='hrc/scripts/colorer'/>
+	<target type='calcset' place='hrc/auto/gen'/>
+	<target type='esc' place='hrc/auto/gen/'/>
+	<target type='rdf' place='hrc/xml/gen'/>
+	<target type='htc' place='hrc/auto/gen'/>
+	<target type='parser' place='hrc/auto/gen'/>
+	<target type='rss' place='hrc/auto/gen'/>
+	<target type='xbl' place='hrc/auto/gen'/>
+	<target type='xsieve' place='hrc/auto/gen'/>
+	<target type='qrc' place='hrc/auto/gen'/>
+	<target type='ibatis' place='hrc/auto/gen'/>
+	<target type='log4j' place='hrc/auto/gen'/>
+	<target type='yml' place='hrc/auto/gen'/>
+</target-list>
+
