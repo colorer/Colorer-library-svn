@@ -57,8 +57,8 @@
          <regexp match="/'((\/dev\/(stderr|stdin|stdout|pid|ppid|pgrpid|user|(fd\/\d)))|(\/inet\/(tcp|udp|raw)\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?))'/" region="awkIOredir"/>
          <regexp match="/&#34;((\/dev\/(stderr|stdin|stdout|pid|ppid|pgrpid|user|(fd\/\d)))|(\/inet\/(tcp|udp|raw)\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?\/[a-zA-Z0-9\.\-\_]+?))&#34;/" region="awkIOredir"/>
 <!-- Argument -->
-         <regexp match="/(\$[0-9]+)([^0-9\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)]*)/" region0="awkArg" region2="Error"/>
-         <regexp match="/\$[a-zA-Z\_]+([a-zA-Z0-9\_]*)([^a-zA-Z0-9\_\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)]*)/" region0="awkArg" region2="Error"/>
+         <regexp match="/(\$[0-9]+)([^0-9\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)\]]*)/" region0="awkArg" region2="Error"/>
+         <regexp match="/\$[a-zA-Z\_]+([a-zA-Z0-9\_]*)([^a-zA-Z0-9\_\s\+\-\*\/\=\;\:\^&amp;\%\!\,\)\]]*)/" region0="awkArg" region2="Error"/>
          <regexp match="/\$[^a-zA-Z0-9\_]*/" region="Error"/>
 <!-- Numbers -->
          <inherit scheme="CHexNumber"/>

@@ -233,9 +233,7 @@ With help of:
 
       <scheme name="ConfCommonRight">
 <!-- Linear Comments -->
-         <block start="/(\s*);/" end="/$/" scheme="Comment" region="Comment"/>
-         <block start="/(\s*)\/\//" end="/$/" scheme="Comment" region="Comment"/>
-         <block start="/(\s*)\#/" end="/$/" scheme="Comment" region="Comment"/>
+         <block start="/(^|\s*)(;|\#|\/\/)/" end="/$/" scheme="Comment" region="Comment"/>
          <regexp match="/(^|\s{3,})(&amp;&amp;.*$)/" region2="Comment"/>
          <regexp match="/(^|\s{3,})(\*.*$)/" region2="Comment"/>
          <inherit scheme="ConfCore"/>
