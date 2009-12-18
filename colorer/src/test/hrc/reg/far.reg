@@ -1,5 +1,7 @@
 Windows Registry Editor Version 5.00
 
+[HKEY_CURRENT_USER\Software\Far2\Test\rem~`!@#$%^&*()=/*-+|/[]{};:,.'?<>] ;ddgdfgdf
+[HKEY_CURRENT_USER\Software\Far2\Test\rem=]][]]]
 ;комментарий
 ;[HKEY_CURRENT_USER\Software\Far2]
  
@@ -11,7 +13,7 @@ Windows Registry Editor Version 5.00
 ;"DelRemovesBlocks"=dword:00000001
 "EditBlock"=dword:00000000
 "AutoComplete"=dword:00000001
-
+"~`!@#$%^&*()=/*-+|/[]{};:,.'?<>"=""
 ;неверное имя группы
 [jHKEY_CURRENT_USER\Software\Far2\Colors\Highlight\Group1]
 
@@ -31,6 +33,7 @@ Windows Registry Editor Version 5.00
 ;удаление значения
 [HKEY_CURRENT_USER\Software\Far2\Colors\Highlight\Group2]
 "Mask"=-
+;jjj
 [HKEY_CURRENT_USER\Software\Far2\Colors\Highlight\Group2]
 "Mask"=----
 
@@ -83,26 +86,43 @@ regf dfg dg dfg "
 ;экранируемые символы
 [HKEY_CLASSES_ROOT\.dbg\PersistentHandler]
 "=fvdf"="{098f2470-bae0-11cd-b579-08002b30bfeb}"
+"dd"="@device:cm:{E0F158E1-CB04-11D0-BD4E-00A0C911CE86}\\Default \DirectSound Device"
+"\""= "\\pphkjhj"
+"\"\\\\" ="\\pphkjhj"
+"\\=\\\\ " = " \\pphkjhj"
+"\"=\\" ="\\pphkjhj"
+"Par\"a\"=meter"=""
+;переменные
+"Test"="%1"   ;dfssd
+"%Test%"="%1"
+"$test\\"="dd"
+"%Test"="\\" ;"
+"gdfgdfg\"=dwordggdfg"=dword:00000000 
+
+[HKEY_CLASSES_ROOT\.dbg\PersistentHandler]
+"=fvdf"="{098f2470-bae0-11cd-b579-08002b30bfeb}"
 "\sdd"="@device:cm:{E0F158E1-CB04-11D0-BD4E-00A0C911CE86}\\Default \DirectSound Device"
-"\"\"= "\\pphkjhj"
+"\""= "\\pphkjhj"
 "\"\\\n\\" ="\\pphkjhj"
 "\\"=\\\\\ " = " "\\pphkjhj"
 "\"=\\\ \ \ " ="\\pphkjhj"
 "Par"a"=meter"=""
 ;переменные
-"\%Test"="%1"   ;dfssd
-"%Test%\"="%1"
-""$test\\\d "="dd"
-"$test\ hhh"="dd fvfg \' fgg \\ hff$sh\  %dfvdfv% dfsd \t \"" \\\1 \"\"
+"$test\\\d "="dd"
+"%Test"="\"" ;"
+
+
+@="" ;"
+"$test\ hhh"="dd fvfg \' fgg \\ hff$sh\  %dfvdfv% dfsd \t \""
 ; имена папок
 "\\\\?\\c:\\server\\dfsdf\\1.txt"=""
-"D:\\projects\\Far\\svn_clean\\farmanager\\1.txt"="\\\"
-""D:\\projects\\Far\\svn_clean\\farmanager\1.txt"= """
+"D:\\projects\\Far\\svn_clean\\farmanager\\1.txt"="D:\\projects\\Far\\svn_clean"
+"D:\\projects\\Far\\svn_clean\\farmanager\1.txt"= ""
 "\D:\\projects\\Far\\svn_clean\\farmanager\\\1.txt"=""
 "{E0F158E1-CB04-11D0-BD4E-00A0C911CE86}"=""
 "\\\\?\\C:\\LOCALS~1\\TEMP\\FTMP00GO.5Q1\\http---forum_kaspersky_com-index_php act=Attach&type=post&id=1097.htm"="1|ru_RU||*"
 
-;разное
+;разное   http://forum.farmanager.com/viewtopic.php?f=5&t=1573&p=55875#p55875
 "~`!@#$%^&*()=/*-+|/[]{};:,.'?<>"=""
 ""="default"
 ; \r \n \t ошибка
@@ -122,9 +142,9 @@ regf dfg dg dfg "
 "Item61"="0,0,0,0,0,\"$D:\\projects\\Far\\svn_clean\\farmanager\\unicode_far\\HACKING-RU\""
 "Item62"="4556,0,0,0,0,\"D:\\projects\\Far\\svn_clean\\farmanager\\unicode_far\\MAINTAINERS\""
 
-[-HKEY_CURRENT_USER\Software\Far2\KeyMacros\Shell\Ctrl{}{}{[]][]]
-[HKEY_CURRENT_USER\Software\Far2\KeyMacros\Shell\Ctrl====]
-[HKEY_CURRENT_USER\Software\Fasdfr2\KeyMacros\Shell\Ctrl[]=]
+[HKEY_CURRENT_USER\Software\Fhhar2\KeyMacros\Shell\Ctrl{}{}{[]][]]
+[HKEY_CURRENT_USER\Software\Feeear2\KeyMacros\Shell\Ctrl=====]
+[HKEY_CURRENT_USER\Software\Faeesdfr2\KeyMacros\Shell\Ctrl[]=]
 ;небольшой тест макросов
 [HKEY_CURRENT_USER\Software\Far2\KeyMacros\Shell\Ctrl]
 "Sequence"="~"
@@ -150,7 +170,7 @@ regf dfg dg dfg "
 ;"Sequence"="a"
 "Sequence"="%a=Editor.Pos(0,5)-1;"
 
-[HKEY_CURRENT_USER\Software\Fdsdfsar2\KeyMacros\Shell\Ins]
+[HKEY_CURRENT_USER\Software\Frgar2\KeyMacros\Shell\Ins]
 "Sequence"="$if ((fexist(11)) == 1) fexist(1+1) $end"
 "Sequence"="$if (fexist(1,(11+1)+0x12) == 1) fexist() $end"
 "Sequence"="$if (fexistr() == 1) $end"
