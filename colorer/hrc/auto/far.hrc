@@ -29,8 +29,11 @@
 
   <prototype name="far.macro" group="scripts.far" description="Far macros">
     <location link="jar:types/auto.jar!far/macro.hrc"/>
-    <filename>/\.macro$/</filename>
-		<filename>/\.(fmm)$/i</filename>
+		<filename>/\.macro$/i</filename>
+    <filename>/\.mcr$/i</filename>
+    <filename>/\.fmm$/i</filename>
+    <filename>/^Sequence$/</filename>
+    <filename>/^\%\%\w+$/</filename>
   </prototype>
   
   <!-- old -->

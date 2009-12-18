@@ -59,12 +59,12 @@
 <scheme name="group-add">
  <inherit scheme="ini:comment"/>
  <block start="/~(\[)/" end="/(\])\M[^\]]*$/" 
-  scheme="group.name" region="group.name"
+  scheme="group.name" region="ini:group.name"
   region00="def:PairStart" region10="def:PairEnd"
   region01="group.quot" region11="group.quot"
  />
  <block start="/\M^[^\=\[]+\=/" end="/$/" 
-  scheme="param" region="param.content"
+  scheme="param" region="ini:param.content"
  />
  <inherit scheme="ini:item.content"/>
 </scheme>
