@@ -53,7 +53,7 @@
 <region name="func" parent="def:FunctionKeyword"/>
 <region name="flag" parent="def:Parameter"/>
 <region name="flag.dot" parent="struct"/>
-<region name="farConst"   parent="def:Symbol"/>
+<region name="farConst"   parent="def:Const"/>
 <region name="selmacroBlocks"     parent="def:LabelStrong"/>
 <!-- macro key -->
 <region name="macro.key" parent="def:Label"/>

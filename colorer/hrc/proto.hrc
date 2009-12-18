@@ -404,7 +404,7 @@
   </prototype>
   <prototype name="config" group="scripts" description="Config, INI and CTL">
     <location link="scripts/config.hrc"/>
-    <filename weight='1'>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
+    <filename>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
     <firstline>/^[;\[\#]/</firstline>
   </prototype>
 
