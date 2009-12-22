@@ -1,5 +1,4 @@
 #include<stdlib.h>
-#include "registry.cpp"
 #include<unicode/Encodings.h>
 #include<common/Logging.h>
 #include<colorer/viewer/TextConsoleViewer.h>

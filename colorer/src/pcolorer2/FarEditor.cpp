@@ -100,7 +100,6 @@ void FarEditor::setFileType(FileType *ftype){
 
 void FarEditor::reloadTypeSettings()
 {
-  // we need this?
   FileType *ftype = baseEditor->getFileType();
 
   HRCParser *hrcParser = parserFactory->getHRCParser();
