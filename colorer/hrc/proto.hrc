@@ -153,6 +153,11 @@
     <filename weight="0">/\.(css)$/i</filename>
   </prototype>
 
+  <prototype name="haml" group="inet" description="HAML">
+    <location link="inet/haml.hrc"/>
+    <filename>/\.(haml)$/i</filename>
+  </prototype>
+
   <prototype name="jsp" group="inet" description="jsp">
     <location link="inet/jsp.hrc"/>
     <filename>/\.(jsp|jspf)$/i</filename>
