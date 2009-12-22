@@ -1,3 +1,8 @@
+#revision 1170
+  ctapmex 22.12.2009 20:09
+	1. исправлен makefile.vc для pcolorer2. таргет clean работал не правильно, не мог вызвать rmdir
+	2. из shared/_dependencies.dep удалены ненужные упоминания файлов плагина для фара
+
 #revision 1169
   ctapmex 18.12.2009 21:33
   1. colorer\hrc\auto\far.hrc переименован в colorer\hrc\auto\fartypes.hrc - часто создается путаница

@@ -52,4 +52,6 @@ rc:
 	move pcolorer2.res $(obj_output)\\pcolorer2.res
 
 clean:
-	rmdir /q /s $(obj_output)
+	echo cleaning
+	for %%i in ("$(obj_output)\*.*" "*.idb" ) do @if exist %%i del /q /f %%i
+	rd /q $(obj_output)
