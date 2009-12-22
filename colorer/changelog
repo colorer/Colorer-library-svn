@@ -1,3 +1,7 @@
+#revision 1172 
+  ctapmex 22.12.2009 21:20
+  1. исправлены файлы помощи и языковые файлы плагина pcolorer
+
 #revision 1171
   ctapmex 22.12.2009 21:08
 	1. исправлен makefile.vc для pcolorer.
