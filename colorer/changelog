@@ -1,3 +1,9 @@
+#revision 1171
+  ctapmex 22.12.2009 21:08
+	1. исправлен makefile.vc для pcolorer.
+	2. обновлен farsdk
+	3. плагин pcolorer приведен к состоянию собирается/работает
+
 #revision 1170
   ctapmex 22.12.2009 20:09
 	1. исправлен makefile.vc для pcolorer2. таргет clean работал не правильно, не мог вызвать rmdir
