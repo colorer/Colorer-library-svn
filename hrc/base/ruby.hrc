@@ -31,7 +31,7 @@
     
 
     <scheme name="String">
-
+      <regexp match="/\\[^\\]/"/>
     </scheme>
 
     <scheme name="ruby">
@@ -83,6 +83,13 @@
       <inherit scheme="def:PairedBrackets">
         <virtual scheme='def:PairedBrackets' subst-scheme='ruby'/>
       </inherit>
+
+      <inherit scheme='rubyKeywords'/>
+    
+    </scheme>
+    
+    <scheme name='rubyKeywords'>
+      <regexp match='/ :(?{Keyword}[\w_]+) /x'/>
 
       <keywords region="Keyword">
         <word name="BEGIN"/>
