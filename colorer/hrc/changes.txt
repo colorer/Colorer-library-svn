@@ -1,5 +1,5 @@
 
-Date: TBD
+Date: 2009-12-23 13:39:00
   Fixes:
     - Forth fixes
     - Perl variable fixes
@@ -9,12 +9,24 @@ Date: TBD
     - Foxpro (Vadim Zaharenko)
     - picasm improvements
     - Ruby improvements
+		- awk fixes
+		- reg fixes
+		- js
+		- perl
+		- xpath
+		- far macros
+		- config.hrc
   New:
     - PL1 (Pavel Pleva)
     - D (Vladimir Panteleev)
     - Graphviz
     - Stata from John Aponte
-
+    - git status, git diff
+		- Qt C++, Qt make
+		- j2ee
+		- web-app
+		- erlang
+    - haml initial version
 
 Date: 2006-06-20 18:03:09
   Fixes:

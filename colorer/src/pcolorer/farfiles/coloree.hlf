@@ -31,8 +31,8 @@ $^#Colorer's settings.#
 
   #Classic ou&tline style#
      In classic style displays only the name of the function. Otherwise show
-     first line number, the first letter in the function, and the very name of 
-     the function.
+     the beginning of the line number, then the first letter in the function 
+     and the function name itself.
 
   #catalog.xml file:#
      Full file path sets default catalog file for colorer.
