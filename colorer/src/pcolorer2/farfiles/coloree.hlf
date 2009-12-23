@@ -15,9 +15,8 @@ $^#Colorer
 @config
 $^#Colorer's settings.#
 
-  #Turn off colorer#
-     Turns off Colorer.
-
+  #Colorer enabled#
+     Enable/Disable Colorer.
 
   #Cross#
      [ ] Do not show ever
@@ -29,6 +28,11 @@ $^#Colorer's settings.#
 
   #Syntax#
      Turns on display of syntax
+
+  #Classic ou&tline style#
+     In classic style displays only the name of the function. Otherwise show
+     first line number, the first letter in the function, and the very name of 
+     the function.
 
   #catalog.xml file:#
      Full file path sets default catalog file for colorer.
