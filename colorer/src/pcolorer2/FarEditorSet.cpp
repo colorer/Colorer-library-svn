@@ -319,7 +319,7 @@ void FarEditorSet::configure()
     fdi[IDX_TIME].PtrData = GetMsg(mMaxTime);
 
     wchar_t tempMaxTime[255] = {0};
-    rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 512);
+    rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 255);
     fdi[IDX_TIME_EDIT].PtrData = trim(tempMaxTime);
 
     fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
@@ -525,8 +525,9 @@ void FarEditorSet::reloadBase()
   len = rGetValue(hPluginRegistry, REG_CATALOG, regstring, 512);
   SString *catalogPath = null;
   if (len > 1) {
-      if (wcslen(trim(regstring))>1)
-        catalogPath = new SString(DString(regstring));
+		  wchar_t* temp=trim(regstring);
+      if (wcslen(temp)>1)
+        catalogPath = new SString(DString(temp));
   }
 
   try{

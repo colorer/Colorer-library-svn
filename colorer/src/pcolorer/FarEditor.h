@@ -45,7 +45,7 @@ public:
   /**
    * Change editor properties. These overwrites default HRC settings
    */
-  void setDrawCross(bool drawCross);
+  void setDrawCross(int drawCross);
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);
@@ -85,6 +85,8 @@ public:
   int editorEvent(int event, void *param);
   /** Dispatch editor input event */
   int  editorInput(const INPUT_RECORD *ir);
+
+  void cleanEditor();
 
 private:
   EditorInfo ei;

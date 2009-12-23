@@ -1,6 +1,4 @@
-
 #include<windows.h>
-
 #include"pcolorer.h"
 #include"FarEditorSet.h"
 
@@ -53,7 +51,7 @@ void WINAPI ExitFAR()
 /**
  * Open plugin configuration of actions dialog.
  */
-HANDLE WINAPI OpenPlugin(int OpenFrom, int Item)
+HANDLE WINAPI OpenPlugin(int OpenFrom, INT_PTR Item)
 {
   if (OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();

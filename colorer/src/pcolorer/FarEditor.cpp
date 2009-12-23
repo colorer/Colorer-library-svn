@@ -52,6 +52,7 @@ FarEditor::~FarEditor(){
   delete structOutliner;
   delete errorOutliner;
   delete baseEditor;
+  delete ret_str;
 }
 
 
@@ -136,7 +137,35 @@ void FarEditor::reloadTypeSettings()
   };
   value = def->getParamValue(DString("cross-zorder"));
   if (value != null && value->equals("top")) crossZOrder = 1;
-  
+
+   // installs custom file properties
+  backparse = ftype->getParamValueInt(DString("backparse"), backparse);
+  maxLineLength = ftype->getParamValueInt(DString("maxlinelength"), maxLineLength);
+  newfore = ftype->getParamValueInt(DString("default-fore"), newfore);
+  newback = ftype->getParamValueInt(DString("default-back"), newback);
+
+  value = ftype->getParamValue(DString("fullback"));
+  if (value != null && value->equals("no")) fullBackground = false;
+  value = ftype->getParamValue(DString("show-cross"));
+  if (value != null && value->equals("none")){
+    showHorizontalCross = false;
+    showVerticalCross   = false;
+  };
+  if (value != null && value->equals("vertical")){
+    showHorizontalCross = false;
+    showVerticalCross   = true;
+  };
+  if (value != null && value->equals("horizontal")){
+    showHorizontalCross = true;
+    showVerticalCross   = false;
+  };
+  if (value != null && value->equals("both")){
+    showHorizontalCross = true;
+    showVerticalCross   = true;
+  };
+  value = ftype->getParamValue(DString("cross-zorder"));
+  if (value != null && value->equals("top")) crossZOrder = 1;
+
   baseEditor->setBackParse(backparse);
 }
 
@@ -145,14 +174,23 @@ FileType *FarEditor::getFileType(){
   return baseEditor->getFileType();
 }
 
-void FarEditor::setDrawCross(bool drawCross)
+void FarEditor::setDrawCross(int drawCross)
 {
-  if (!drawCross){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  }else{
-    reloadTypeSettings();
-  }
+		switch (drawCross)
+		{
+		case 0: 
+				showHorizontalCross = false;
+				showVerticalCross   = false;
+				break;
+		case 1:
+				showHorizontalCross = true;
+				showVerticalCross   = true;
+				break;
+		case 2: 
+				reloadTypeSettings();
+				break;
+		}
+
 }
 
 void FarEditor::setDrawPairs(bool drawPairs)
@@ -922,6 +960,20 @@ void FarEditor::addFARColor(int lno, int s, int e, int col)
 
 const char *FarEditor::GetMsg(int msg){
   return(info->GetMsg(info->ModuleNumber, msg));
+}
+
+void FarEditor::cleanEditor()
+{
+  int col=(int)info->AdvControl(info->ModuleNumber,ACTL_GETCOLOR,(void *)COL_EDITORTEXT );
+  for (int i=0;i<ei.TotalLines;i++){
+    EditorGetString egs;
+    egs.StringNumber=i;
+    info->EditorControl(ECTL_GETSTRING,&egs);
+    if (ei.LeftPos + ei.WindowSizeX>egs.StringLength)
+      addFARColor(i,0,ei.LeftPos + ei.WindowSizeX,col);
+    else
+      addFARColor(i,0,egs.StringLength,col);
+  }
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
