@@ -28,7 +28,7 @@
   
   <prototype name="ini" group="scripts.ini" description="Other INI">
     <location link="scripts/ini/ini.hrc"/>
-    <filename>/\.(ini|inf|cfg)$/i</filename>
+    <filename>/\.(ini|inf)$/i</filename>
     <!--|conf[^\.]* (ctl|tpl|ini|cfg|inf|srg|types|tab|dof|dsk|lng) -->
     <firstline>/^[;\[]/</firstline>
   </prototype>
