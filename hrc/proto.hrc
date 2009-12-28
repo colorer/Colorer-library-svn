@@ -128,7 +128,7 @@
   </package>
   <prototype name="html" group="inet" description="html">
     <location link="inet/html.hrc"/>
-    <filename>/\.[^pt]??html?$/i</filename>
+    <filename>/\.[^ptr]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
   </prototype>
 
@@ -156,6 +156,10 @@
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>
     <filename>/\.(haml)$/i</filename>
+  </prototype>
+  <prototype name="erb" group="inet" description="ERB">
+    <location link="inet/erb.hrc"/>
+    <filename weight='2'>/\.(erb|rhtml)$/i</filename>
   </prototype>
 
   <prototype name="jsp" group="inet" description="jsp">

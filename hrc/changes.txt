@@ -14,6 +14,7 @@ Date: TBD
     - D (Vladimir Panteleev)
     - Graphviz
     - Stata from John Aponte
+    - Ruby, HAML, ERB syntaxes
 
 
 Date: 2006-06-20 18:03:09

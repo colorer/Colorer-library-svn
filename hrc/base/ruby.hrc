@@ -34,6 +34,15 @@
       <regexp match="/\\[^\\]/"/>
     </scheme>
 
+    <scheme name="Strings">
+      <block start='/([\x22\x27\`])/' end='/\y1/' scheme="String" region='String'/>
+
+      <block start='/\%[QqxWw](\{)/' end='/\}/' scheme="String" region='String'/>
+      <block start='/\%[QqxWw](\[)/' end='/\]/' scheme="String" region='String'/>
+      <block start='/\%[QqxWw](\()/' end='/\)/' scheme="String" region='String'/>
+      <block start='/\%[QqxWw](.)/' end='/\y1/' scheme="String" region='String'/>
+    </scheme>
+
     <scheme name="ruby">
 
       <block start='/\#/' end='/$/' scheme='def:Comment' region='Comment'/>
@@ -41,13 +50,7 @@
 
       <inherit scheme="def:Number"/>
 
-      <block start='/([\x22\x27\`])/' end='/\y1/' scheme="String" region='String'/>
-
-      <block start='/\%[Qqx](\{)/' end='/\}/' scheme="String" region='String'/>
-      <block start='/\%[Qqx](\[)/' end='/\]/' scheme="String" region='String'/>
-      <block start='/\%[Qqx](\()/' end='/\)/' scheme="String" region='String'/>
-      <block start='/\%[Qqx](.)/' end='/\y1/' scheme="String" region='String'/>
-
+      <inherit scheme='Strings'/>
 
       <!-- stolen from perl -->
       <block start="/((\=|\! \~) |
@@ -84,11 +87,11 @@
         <virtual scheme='def:PairedBrackets' subst-scheme='ruby'/>
       </inherit>
 
-      <inherit scheme='rubyKeywords'/>
+      <inherit scheme='Keywords'/>
     
     </scheme>
     
-    <scheme name='rubyKeywords'>
+    <scheme name='Keywords'>
       <regexp match='/ :(?{Keyword}[\w_]+) /x'/>
 
       <keywords region="Keyword">
