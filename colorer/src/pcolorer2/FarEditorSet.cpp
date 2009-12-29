@@ -32,6 +32,75 @@ wchar_t* trim(wchar_t* str)
     return ltrim(rtrim(str));
 }
 
+/*
+function tries to allocate a substring from a string terminated by a space, 
+long no more than 'size'. Otherwise returns 'size'
+*/
+int get_string(int size,wchar_t *source)
+{
+	wchar_t *res1,*res2,*src;
+	src=source;
+	res1=src;
+	do
+	{
+		res2=res1;
+		res1=wcsstr(src,L" ");
+		src=res1+1;
+	}
+	while ((res1!=null)&&((int)(res1 - source + 1)<=size));
+
+	if (res1==null)
+		if (res2==source) return size;
+		else
+		return (int)(res2 - source + 1);
+	if ((int)(res1 - source + 1)<=size) return (int)(res1 - source + 1);
+	else return (int)(res2 - source + 1);
+}
+
+/*
+Function creates a message from the provided string, placing 
+them among the '\n'. If the passed string is greater than the width 
+of the screen, then it is divided into parts
+*/
+wchar_t *build_message(int c,...)
+{
+	CONSOLE_SCREEN_BUFFER_INFO csbiInfo; 
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
+	int len_console=csbiInfo.dwSize.X-14;
+
+	va_list uk_arg;
+	va_start(uk_arg,c);
+	wchar_t *str=(wchar_t*)malloc(sizeof(wchar_t));
+	*str='\0';
+	int len_str=1;
+	while (c>0)
+	{
+		c--;
+		wchar_t *s = va_arg( uk_arg, wchar_t* );
+		while (wcslen(s)>len_console )
+		{
+			int i=get_string(len_console,s);
+			wchar_t *temp=(wchar_t*)malloc((i+1)*sizeof(wchar_t));
+			wcsncpy(temp,s,i);
+			temp[i]='\0';
+		
+			len_str=len_str+i+1;
+			str=(wchar_t*)realloc(str,len_str*sizeof(wchar_t));
+			wcscat(str,temp);	
+		  wcscat(str,L"\n");	
+			s=s+i;
+			free(temp);
+
+		}
+		len_str=len_str+wcslen(s)+1;
+		str=(wchar_t*)realloc(str,len_str*sizeof(wchar_t));
+		wcscat(str,s);	
+		if (c!=0) wcscat(str,L"\n");	
+	}
+	va_end(uk_arg);
+	return str;
+}
+
 FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
   info = fedi;
@@ -155,12 +224,13 @@ void FarEditorSet::viewFile(const String &path){
     viewer.view();
     delete newPath;
   }catch(Exception &e){
-    const wchar_t* exceptionMessage[5];
+    const wchar_t* exceptionMessage[6];
     exceptionMessage[0] = GetMsg(mName);
     exceptionMessage[1] = GetMsg(mCantOpenFile);
-    exceptionMessage[3] = GetMsg(mDie);
-    exceptionMessage[2] = e.getMessage()->getWChars();
-    info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 4, 1);
+		exceptionMessage[2] = path.getWChars();
+    exceptionMessage[4] = GetMsg(mDie);
+    exceptionMessage[3] = e.getMessage()->getWChars();
+    info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 5, 1);
   };
 }
 
@@ -490,65 +560,66 @@ int FarEditorSet::editorEvent(int Event, void *Param)
   return 0;
 }
 
-
-
 void FarEditorSet::reloadBase()
 {
-  const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-  const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
+	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 
-  dropAllEditors();
-  readRegistry();
+	dropAllEditors();
+	readRegistry();
 
-  delete regionMapper;
-  delete parserFactory;
-  parserFactory = null;
-  regionMapper = null;
+	delete regionMapper;
+	delete parserFactory;
+	parserFactory = null;
+	regionMapper = null;
 
-  if (rDisabled) return;
+	if (rDisabled) return;
 
-  HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-  info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
 
-  int len;
-  wchar_t regstring[512];
-  len = rGetValue(hPluginRegistry, REG_HRD_NAME, regstring, 512);
-  SString *hrdName = null;
-  if (len > 1) {
-    wchar_t* temp=trim(regstring);
-    if (wcslen(temp)>1)
-      hrdName = new SString(DString(temp));
-  }
- 
-  regstring[0]='\0';
+	int len;
+	wchar_t regstring[512];
+	len = rGetValue(hPluginRegistry, REG_HRD_NAME, regstring, 512);
+	SString *hrdName = null;
+	if (len > 1) {
+		wchar_t* temp=trim(regstring);
+		if (wcslen(temp)>1)
+			hrdName = new SString(DString(temp));
+	}
 
-  len = rGetValue(hPluginRegistry, REG_CATALOG, regstring, 512);
-  SString *catalogPath = null;
-  if (len > 1) {
-		  wchar_t* temp=trim(regstring);
-      if (wcslen(temp)>1)
-        catalogPath = new SString(DString(temp));
-  }
+	regstring[0]='\0';
 
-  try{
-    parserFactory = new ParserFactory(catalogPath);
-    hrcParser = parserFactory->getHRCParser();
-    try{
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), hrdName);
-    }catch(ParserFactoryException &e){
-      if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), null);
-    };
-  }catch(Exception &e){
-	errload[2] = e.getMessage()->getWChars();
-    if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
-    info->Message(info->ModuleNumber, 0, null, &errload[0], 5, 1);
-    disableColorer();
-  };
-  delete catalogPath;
-  delete hrdName;
+	len = rGetValue(hPluginRegistry, REG_CATALOG, regstring, 512);
+	SString *catalogPath = null;
+	if (len > 1) {
+		wchar_t* temp=trim(regstring);
+		if (wcslen(temp)>1)
+			catalogPath = new SString(DString(temp));
+	}
 
-  info->RestoreScreen(scr);
+	try{
+		parserFactory = new ParserFactory(catalogPath);
+		hrcParser = parserFactory->getHRCParser();
+		try{
+			regionMapper = parserFactory->createStyledMapper(&DString("console"), hrdName);
+		}catch(ParserFactoryException &e){
+			if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
+			regionMapper = parserFactory->createStyledMapper(&DString("console"), null);
+		};
+	}
+	catch(Exception &e)
+	{
+		wchar_t *c;
+		c=build_message(5,GetMsg(mName),GetMsg(mCantLoad),e.getMessage()->getWChars(),GetMsg(mFatal),GetMsg(mDie));
+		if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
+		info->Message(info->ModuleNumber, FMSG_ALLINONE|FMSG_WARNING, null, (wchar_t **)c, 0, 1);
+		free(c);
+		disableColorer();
+	};
+	delete catalogPath;
+	delete hrdName;
+
+	info->RestoreScreen(scr);
 }
 
 
