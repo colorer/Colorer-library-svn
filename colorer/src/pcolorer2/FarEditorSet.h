@@ -15,65 +15,66 @@
  * Manages all library resources and creates FarEditor class instances.
  * @ingroup far_plugin
  */
-class FarEditorSet{
-public:
-  /** Creates set and initialises it with PluginStartupInfo structure */
-  FarEditorSet(PluginStartupInfo *fedi);
-  /** Standard destructor */
-  ~FarEditorSet();
+class FarEditorSet
+{
+	public:
+		/** Creates set and initialises it with PluginStartupInfo structure */
+		FarEditorSet(PluginStartupInfo *fedi);
+		/** Standard destructor */
+		~FarEditorSet();
 
-  /** Shows editor actions menu */
-  void openMenu();
-  /** Shows plugin's configuration dialog */
-  void configure();
-  /** Views current file with internal viewer */
-  void viewFile(const String &path);
+		/** Shows editor actions menu */
+		void openMenu();
+		/** Shows plugin's configuration dialog */
+		void configure();
+		/** Views current file with internal viewer */
+		void viewFile(const String &path);
 
-  /** Dispatch editor event in the opened editor */
-  int  editorEvent(int Event, void *Param);
-  /** Dispatch editor input event in the opened editor */
-  int  editorInput(const INPUT_RECORD *ir);
+		/** Dispatch editor event in the opened editor */
+		int  editorEvent(int Event, void *Param);
+		/** Dispatch editor input event in the opened editor */
+		int  editorInput(const INPUT_RECORD *ir);
 
-private:
-  /** Returns current global error handler. */
-  ErrorHandler *getErrorHandler();
-  /** Returns currently active editor. */
-  FarEditor *getCurrentEditor();
-  /**
-   * Reloads HRC database.
-   * Drops all currently opened editors and their
-   * internal structures. Prepares to work with newly
-   * loaded database.
-   */
-  void reloadBase();
+	private:
+		/** Returns current global error handler. */
+		ErrorHandler *getErrorHandler();
+		/** Returns currently active editor. */
+		FarEditor *getCurrentEditor();
+		/**
+		 * Reloads HRC database.
+		 * Drops all currently opened editors and their
+		 * internal structures. Prepares to work with newly
+		 * loaded database.
+		 */
+		void reloadBase();
 
-  /** Shows dialog of file type selection */
-  void chooseType();
-  /** Shows dialog with HRD scheme selection */
-  const String *chooseHRDName(const String *current);
-  /** FAR localized messages */
-  const wchar_t *GetMsg(int msg);
-  /** Reads all registry settings into variables */
-  void readRegistry();
-  /** Kills all currently opened editors */
-  void dropAllEditors();
-  /** Disables all plugin processing */
-  void disableColorer();
+		/** Shows dialog of file type selection */
+		void chooseType();
+		/** Shows dialog with HRD scheme selection */
+		const String *chooseHRDName(const String *current);
+		/** FAR localized messages */
+		const wchar_t *GetMsg(int msg);
+		/** Reads all registry settings into variables */
+		void readRegistry();
+		/** Kills all currently opened editors */
+		void dropAllEditors();
+		/** Disables all plugin processing */
+		void disableColorer();
 
-  Hashtable<FarEditor*> farEditorInstances;
-  ParserFactory *parserFactory;
-  RegionMapper *regionMapper;
-  HRCParser *hrcParser;
+		Hashtable<FarEditor*> farEditorInstances;
+		ParserFactory *parserFactory;
+		RegionMapper *regionMapper;
+		HRCParser *hrcParser;
 
-  PluginStartupInfo *info;
-  HKEY hPluginRegistry;
+		PluginStartupInfo *info;
+		HKEY hPluginRegistry;
 
-  /** registry settings */
-  bool rDisabled;
-  int drawCross;
-  bool drawPairs, drawSyntax;
-  bool oldOutline;
-  int  rMaxTime;
+		/** registry settings */
+		bool rDisabled;
+		int drawCross;
+		bool drawPairs, drawSyntax;
+		bool oldOutline;
+		int  rMaxTime;
 };
 
 #endif

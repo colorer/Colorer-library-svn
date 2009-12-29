@@ -1,4 +1,4 @@
-
+#include<vld.h>
 #include<windows.h>
 #include"pcolorer.h"
 #include"FarEditorSet.h"
@@ -10,8 +10,9 @@ FarEditorSet *editorSet = null;
 /**
  * Returns message from FAR current language.
  */
-const wchar_t *GetMsg(int msg){
-  return(Info.GetMsg(Info.ModuleNumber, msg));
+const wchar_t *GetMsg(int msg)
+{
+	return(Info.GetMsg(Info.ModuleNumber, msg));
 };
 
 /**
@@ -22,10 +23,9 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 	Info = *fei;
 	FSF = *fei->FSF;
 	Info.FSF = &FSF;
-  //memset(&Info, 0, sizeof(Info));
- // memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
-
-  editorSet = new FarEditorSet(&Info);
+	//memset(&Info, 0, sizeof(Info));
+// memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
+	editorSet = new FarEditorSet(&Info);
 };
 
 /**
@@ -33,16 +33,16 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
  */
 void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
-static wchar_t* PluginMenuStrings;
-  memset(Info, 0, sizeof(*Info));
-  Info->Flags = PF_EDITOR | PF_DISABLEPANELS;
-  Info->StructSize = sizeof(*Info);
-  Info->PluginConfigStringsNumber = 1;
-  Info->PluginMenuStringsNumber = 1;
-  PluginMenuStrings = (wchar_t*)GetMsg(mName);
-  Info->PluginConfigStrings = &PluginMenuStrings;
-  Info->PluginMenuStrings = &PluginMenuStrings;
-  Info->CommandPrefix = L"clr";
+	static wchar_t* PluginMenuStrings;
+	memset(Info, 0, sizeof(*Info));
+	Info->Flags = PF_EDITOR | PF_DISABLEPANELS;
+	Info->StructSize = sizeof(*Info);
+	Info->PluginConfigStringsNumber = 1;
+	Info->PluginMenuStringsNumber = 1;
+	PluginMenuStrings = (wchar_t*)GetMsg(mName);
+	Info->PluginConfigStrings = &PluginMenuStrings;
+	Info->PluginMenuStrings = &PluginMenuStrings;
+	Info->CommandPrefix = L"clr";
 };
 
 /**
@@ -50,7 +50,7 @@ static wchar_t* PluginMenuStrings;
  */
 void WINAPI ExitFARW()
 {
-  delete editorSet;
+	delete editorSet;
 };
 
 /**
@@ -58,12 +58,14 @@ void WINAPI ExitFARW()
  */
 HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
-	if (OpenFrom == OPEN_EDITOR){
+	if (OpenFrom == OPEN_EDITOR)
+	{
 		editorSet->openMenu();
 	}
 	else if (OpenFrom == OPEN_COMMANDLINE)
-	{      
+	{
 		wchar_t *file = (wchar_t*)Item;
+
 		if (wcsstr(file,TEXT(":"))!=NULL)
 		{
 			editorSet->viewFile(DString(file));
@@ -72,19 +74,22 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		{
 			wchar_t * ptrCurDir;
 			DWORD Size=FSF.GetCurrentDirectory(0,NULL);
-			if(Size)
+
+			if (Size)
 			{
 				ptrCurDir=new WCHAR[Size+lstrlen(file)+8];
 				FSF.GetCurrentDirectory(Size,ptrCurDir);
 				lstrcat(ptrCurDir,TEXT("\\"));
 				lstrcat(ptrCurDir,file);
 			}
+
 			editorSet->viewFile(DString(ptrCurDir));
 			delete[] ptrCurDir;
 		}
-
-	}else
+	}
+	else
 		editorSet->configure();
+
 	return INVALID_HANDLE_VALUE;
 };
 
@@ -93,8 +98,8 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
  */
 int WINAPI ConfigureW(int ItemNumber)
 {
-  editorSet->configure();
-  return 1;
+	editorSet->configure();
+	return 1;
 };
 
 /**
@@ -103,11 +108,11 @@ int WINAPI ConfigureW(int ItemNumber)
  */
 int WINAPI ProcessEditorEventW(int Event, void *Param)
 {
-  return editorSet->editorEvent(Event, Param);
+	return editorSet->editorEvent(Event, Param);
 };
 int WINAPI ProcessEditorInputW(const INPUT_RECORD*ir)
 {
-  return editorSet->editorInput(ir);
+	return editorSet->editorInput(ir);
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

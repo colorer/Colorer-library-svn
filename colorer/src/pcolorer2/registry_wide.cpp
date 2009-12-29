@@ -2,61 +2,67 @@
 
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD val)
 {
-  return RegSetValueExW(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
+	return RegSetValueExW(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
 };
 
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD Type, const void *Data, DWORD Len)
 {
-  return RegSetValueExW(hReg, VName, 0, Type, (const BYTE*)Data, Len);
+	return RegSetValueExW(hReg, VName, 0, Type, (const BYTE*)Data, Len);
 };
 
 DWORD rGetValue(HKEY hReg, wchar_t *name)
 {
-  DWORD data = 0;
-  DWORD i = 4;
-  RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i);
-  return data;
+	DWORD data = 0;
+	DWORD i = 4;
+	RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i);
+	return data;
 };
 
 DWORD rGetValue(HKEY hReg, const wchar_t *name, wchar_t *Data, DWORD Len)
 {
-  DWORD i = RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
-  return i?0:Len;
+	DWORD i = RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
+	return i?0:Len;
 };
 
 HKEY rOpenKey(HKEY hReg, const wchar_t *Name)
 {
-HKEY hKey = 0;
-  RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE,
-    KEY_ALL_ACCESS, NULL, &hKey, NULL);
-  return hKey;
+	HKEY hKey = 0;
+	RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE,
+	                KEY_ALL_ACCESS, NULL, &hKey, NULL);
+	return hKey;
 };
 
 HKEY rOpenKeyEx(HKEY hReg, const wchar_t *Name)
 {
-HKEY hKey = 0;
-  RegOpenKeyExW(hReg, Name, 0, KEY_ALL_ACCESS, &hKey);
-  return hKey;
+	HKEY hKey = 0;
+	RegOpenKeyExW(hReg, Name, 0, KEY_ALL_ACCESS, &hKey);
+	return hKey;
 };
 
 DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Val)
 {
-DWORD i;
-  if (RegQueryValueExW(hReg, Name, 0, NULL, NULL, &i)){
-    rSetValue(hReg,Name,Val);
-    return TRUE;
-  };
-  return FALSE;
+	DWORD i;
+
+	if (RegQueryValueExW(hReg, Name, 0, NULL, NULL, &i))
+	{
+		rSetValue(hReg,Name,Val);
+		return TRUE;
+	};
+
+	return FALSE;
 };
 
 DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Type, wchar_t* Data, DWORD Len)
 {
-DWORD i;
-  if (RegQueryValueExW(hReg,Name,0,NULL,NULL,&i)){
-    rSetValue(hReg,Name,Type,Data,Len);
-    return TRUE;
-  };
-  return FALSE;
+	DWORD i;
+
+	if (RegQueryValueExW(hReg,Name,0,NULL,NULL,&i))
+	{
+		rSetValue(hReg,Name,Type,Data,Len);
+		return TRUE;
+	};
+
+	return FALSE;
 };
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
