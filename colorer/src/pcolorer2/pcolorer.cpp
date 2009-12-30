@@ -23,8 +23,6 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 	Info = *fei;
 	FSF = *fei->FSF;
 	Info.FSF = &FSF;
-	//memset(&Info, 0, sizeof(Info));
-// memmove(&Info, fei, (fei->StructSize > sizeof(Info)) ? sizeof(Info) : fei->StructSize);
 	editorSet = new FarEditorSet(&Info);
 };
 
@@ -65,6 +63,8 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	else if (OpenFrom == OPEN_COMMANDLINE)
 	{
 		wchar_t *file = (wchar_t*)Item;
+		wchar_t file_ex[1024];
+		if (ExpandEnvironmentStrings(file,file_ex,1024)) file=file_ex;
 
 		if (wcsstr(file,TEXT(":"))!=NULL)
 		{
