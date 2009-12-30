@@ -122,9 +122,44 @@ String *ParserFactory::searchPath()
   Vector<String*> paths;
   TextLinesStore tls;
 
+  // %COLORER5CATALOG%
+  char *c = getenv("COLORER5CATALOG");
+  if (c != null) paths.addElement(new SString(c));
+
+#ifdef __unix__
+  // %HOME%/.colorer5catalog
+  c = getenv("HOME");
+  if (c != null){
+    try{
+      tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
+      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
+    }catch(InputSourceException &){};
+  };
+
+   // /usr/share/colorer/catalog.xml
+  paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
+  paths.addElement(new SString("/usr/local/share/colorer/catalog.xml"));
+#endif
 
 #ifdef _WIN32
-  // image_path/  image_path/..  image_path/../..
+    // %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
+  char *b = getenv("HOMEDRIVE");
+  c = getenv("HOMEPATH");
+  if ((c != null)&&(b != null)){
+    try{
+      tls.loadFile(&StringBuffer(b).append(&StringBuffer(c).append(DString("/.colorer5catalog"))), null, false);
+      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
+    }catch(InputSourceException &){};
+  };
+  // %SYSTEMROOT%/.colorer5catalog
+  c = getenv("SYSTEMROOT");
+  if (c == null) c = getenv("WINDIR");
+  if (c != null) try{
+    tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
+    if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
+  }catch(InputSourceException &){};
+
+    // image_path/  image_path/..  image_path/../..
   TCHAR cname[256];
   HMODULE hmod;
   hmod = GetModuleHandle(TEXT("colorer"));
@@ -138,35 +173,7 @@ String *ParserFactory::searchPath()
   for(int idx = 0; idx < 3; idx++)
     if (pos[idx] >= 0)
       paths.addElement(&(new StringBuffer(DString(module, 0, pos[idx])))->append(DString("\\catalog.xml")));
-#endif
 
-  // %COLORER5CATALOG%
-  char *c = getenv("COLORER5CATALOG");
-  if (c != null) paths.addElement(new SString(c));
-
-  // %HOME%/.colorer5catalog or %HOMEPATH%
-  c = getenv("HOME");
-  if (c == null) c = getenv("HOMEPATH");
-  if (c != null){
-    try{
-      tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
-      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-    }catch(InputSourceException &){};
-  };
-
-  // /usr/share/colorer/catalog.xml
-#ifdef __unix__
-  paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
-  paths.addElement(new SString("/usr/local/share/colorer/catalog.xml"));
-#endif
-#ifdef _WIN32
-  // %SYSTEMROOT%/.colorer5catalog
-  c = getenv("SYSTEMROOT");
-  if (c == null) c = getenv("WINDIR");
-  if (c != null) try{
-    tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
-    if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-  }catch(InputSourceException &){};
 #endif
 
   String *right_path = null;

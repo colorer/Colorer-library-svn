@@ -1,3 +1,19 @@
+#revision 1183
+	ctapmex 30.12.2009 09:48
+	1. в ParserFactory.SearchPath поиск catalog.xml шёл не в том порядке, как написанно в хелпе для pcolorer2.
+		Так же не учитывалось, что HOMEPATH в Windows не содержит имя диска
+		установим такой порядок поиска
+		для Windows 
+		- %COLORER5CATALOG%
+		- %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
+		- %SYSTEMROOT%/.colorer5catalog (или %WINDIR% в w9x)
+		- Каталог с dll плагина, на уровень выше, на два уровня выше.
+		для nix 
+		- %COLORER5CATALOG%
+		- %HOME%\.colorer5catalog
+		- /usr/share/colorer/catalog.xml
+		- /usr/local/share/colorer/catalog.xml		
+
 #revision 1182 
   ctapmex 29.12.2009 16:06
 	1. повторяю слова t-rex, реально запарило.
