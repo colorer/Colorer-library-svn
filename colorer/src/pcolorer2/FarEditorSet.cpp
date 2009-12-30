@@ -71,7 +71,7 @@ wchar_t *build_message(int c,...)
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
-	int len_console=csbiInfo.dwSize.X-14;
+	size_t len_console=csbiInfo.dwSize.X-14;
 	va_list uk_arg;
 	va_start(uk_arg,c);
 	wchar_t *str=(wchar_t*)malloc(sizeof(wchar_t));
@@ -673,6 +673,9 @@ void FarEditorSet::reloadBase()
 	if (len > 1)
 	{
 		wchar_t* temp=trim(regstring);
+		regstring[0]='\0';
+
+		if (ExpandEnvironmentStrings(temp,regstring,512)) temp=regstring;
 
 		if (wcslen(temp)>1)
 			catalogPath = new SString(DString(temp));
