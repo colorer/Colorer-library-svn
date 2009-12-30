@@ -251,13 +251,10 @@ void FarEditorSet::viewFile(const String &path)
 	}
 	catch (Exception &e)
 	{
-		const wchar_t* exceptionMessage[6];
-		exceptionMessage[0] = GetMsg(mName);
-		exceptionMessage[1] = GetMsg(mCantOpenFile);
-		exceptionMessage[2] = path.getWChars();
-		exceptionMessage[4] = GetMsg(mDie);
-		exceptionMessage[3] = e.getMessage()->getWChars();
-		info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 5, 1);
+		wchar_t *c;
+		c=build_message(3,GetMsg(mName),e.getMessage()->getWChars(),GetMsg(mDie));
+		info->Message(info->ModuleNumber, FMSG_ALLINONE|FMSG_WARNING, L"exception", (wchar_t **)c, 0, 1);
+		free(c);
 	};
 }
 

@@ -39,7 +39,7 @@ $^#Colorer's settings.#
      If this field is empty colorer tries to find the file automatically
      in the following order:
         - Path in %COLORER5CATALOG%
-        - Path in file %HOME%/.colorer5catalog
+        - Path in file %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
         - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
         - Directory with plugin's dll, parent, parent of parent directory.
 
