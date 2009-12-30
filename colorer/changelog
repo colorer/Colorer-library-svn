@@ -1,3 +1,8 @@
+#revision 1184
+	ctapmex 30.12.2009 09:56
+	1. в TextConsoleViewer::view  в вызове CreateConsoleScreenBuffer установил разрешение на чтение/запись. Иначе 
+		приводит к "зависанию" некоторых программ. "При использовании команды clr:!.! для просмотра файлов far "зависает". В ConEmu." (C)Maximus5
+
 #revision 1183
 	ctapmex 30.12.2009 09:48
 	1. в ParserFactory.SearchPath поиск catalog.xml шёл не в том порядке, как написанно в хелпе для pcolorer2.

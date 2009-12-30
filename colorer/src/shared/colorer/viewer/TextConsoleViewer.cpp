@@ -25,7 +25,7 @@ INPUT_RECORD ir;
 
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-  hCon = CreateConsoleScreenBuffer(GENERIC_WRITE|GENERIC_READ, 0, 0, CONSOLE_TEXTMODE_BUFFER, 0);
+  hCon = CreateConsoleScreenBuffer(GENERIC_WRITE|GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, 0, CONSOLE_TEXTMODE_BUFFER, 0);
   SetConsoleActiveScreenBuffer(hCon);
   GetConsoleScreenBufferInfo(hCon, &csbi);
   CONSOLE_CURSOR_INFO cci;
