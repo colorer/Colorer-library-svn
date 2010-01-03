@@ -62,30 +62,41 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	}
 	else if (OpenFrom == OPEN_COMMANDLINE)
 	{
+		//имя файла, которое нам передали
 		wchar_t *file = (wchar_t*)Item;
-		wchar_t file_ex[1024];
-		if (ExpandEnvironmentStrings(file,file_ex,1024)) file=file_ex;
-
-		if (wcsstr(file,TEXT(":"))!=NULL)
-		{
-			editorSet->viewFile(DString(file));
-		}
+		int l=wcslen(file);
+		
+		// заменяем переменные окружения на их значения
+		wchar_t *file_exp=(wchar_t*)calloc(l,sizeof(wchar_t));
+		int k=ExpandEnvironmentStrings(file,file_exp,l);
+		if (!k) 
+			wcscpy_s(file_exp,l,file);
 		else
-		{
-			wchar_t * ptrCurDir;
-			DWORD Size=FSF.GetCurrentDirectory(0,NULL);
-
-			if (Size)
+			if (k>=l) 
 			{
-				ptrCurDir=new WCHAR[Size+lstrlen(file)+8];
-				FSF.GetCurrentDirectory(Size,ptrCurDir);
-				lstrcat(ptrCurDir,TEXT("\\"));
-				lstrcat(ptrCurDir,file);
+				l=k;
+				file_exp=(wchar_t*)realloc(file_exp,l*sizeof(wchar_t));
+				if (!ExpandEnvironmentStrings(file,file_exp,l)) wcscpy_s(file_exp,l,file);
 			}
 
-			editorSet->viewFile(DString(ptrCurDir));
-			delete[] ptrCurDir;
+		// получаем полный путь до файла, преобразовывая всякие ../ ./  и т.п.
+		wchar_t *temp=NULL;
+		int p=FSF.ConvertPath(CPM_FULL,file_exp,temp,0);
+		temp=(wchar_t*)calloc(p,sizeof(wchar_t));
+		FSF.ConvertPath(CPM_FULL,file_exp,temp,p);
+		
+		// для нормальной работы с длинными путями, путь нужно преобразовать в UNC
+		if (wcsstr(temp,L"\\\\?\\")==NULL){
+			file_exp=(wchar_t*)realloc(file_exp,(p+7)*sizeof(wchar_t));
+			wcscpy(file_exp,L"\\\\?\\");
+			wcscat(file_exp,temp);
+			editorSet->viewFile(DString(file_exp));
 		}
+		else
+			editorSet->viewFile(DString(temp));
+
+		free(temp);
+		free(file_exp);
 	}
 	else
 		editorSet->configure();

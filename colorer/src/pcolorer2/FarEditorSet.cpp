@@ -35,79 +35,6 @@ wchar_t* trim(wchar_t* str)
 	return ltrim(rtrim(str));
 }
 
-/*
-function tries to allocate a substring from a string terminated by a space,
-long no more than 'size'. Otherwise returns 'size'
-*/
-int get_string(int size,wchar_t *source)
-{
-	wchar_t *res1,*res2,*src;
-	src=source;
-	res1=src;
-
-	do
-	{
-		res2=res1;
-		res1=wcsstr(src,L" ");
-		src=res1+1;
-	}
-	while ((res1!=null)&&((int)(res1 - source + 1)<=size));
-
-	if (res1==null)
-		if (res2==source) return size;
-		else
-			return (int)(res2 - source + 1);
-
-	if ((int)(res1 - source + 1)<=size) return (int)(res1 - source + 1);
-	else return (int)(res2 - source + 1);
-}
-
-/*
-Function creates a message from the provided string, placing
-them among the '\n'. If the passed string is greater than the width
-of the screen, then it is divided into parts
-*/
-wchar_t *build_message(int c,...)
-{
-	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
-	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
-	size_t len_console=csbiInfo.dwSize.X-14;
-	va_list uk_arg;
-	va_start(uk_arg,c);
-	wchar_t *str=(wchar_t*)malloc(sizeof(wchar_t));
-	*str='\0';
-	int len_str=1;
-
-	while (c>0)
-	{
-		c--;
-		wchar_t *s = va_arg(uk_arg, wchar_t*);
-
-		while (wcslen(s)>len_console)
-		{
-			int i=get_string(len_console,s);
-			wchar_t *temp=(wchar_t*)malloc((i+1)*sizeof(wchar_t));
-			wcsncpy(temp,s,i);
-			temp[i]='\0';
-			len_str=len_str+i+1;
-			str=(wchar_t*)realloc(str,len_str*sizeof(wchar_t));
-			wcscat(str,temp);
-			wcscat(str,L"\n");
-			s=s+i;
-			free(temp);
-		}
-
-		len_str=len_str+wcslen(s)+1;
-		str=(wchar_t*)realloc(str,len_str*sizeof(wchar_t));
-		wcscat(str,s);
-
-		if (c!=0) wcscat(str,L"\n");
-	}
-
-	va_end(uk_arg);
-	return str;
-}
-
 FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
 	info = fedi;
@@ -209,7 +136,7 @@ void FarEditorSet::openMenu()
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 }
@@ -251,10 +178,12 @@ void FarEditorSet::viewFile(const String &path)
 	}
 	catch (Exception &e)
 	{
-		wchar_t *c;
-		c=build_message(3,GetMsg(mName),e.getMessage()->getWChars(),GetMsg(mDie));
-		info->Message(info->ModuleNumber, FMSG_ALLINONE|FMSG_WARNING, L"exception", (wchar_t **)c, 0, 1);
-		free(c);
+		const wchar_t* exceptionMessage[5];
+		exceptionMessage[0] = GetMsg(mName);
+		exceptionMessage[1] = GetMsg(mCantOpenFile);
+		exceptionMessage[3] = GetMsg(mDie);
+		exceptionMessage[2] = e.getMessage()->getWChars();
+		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 	};
 }
 
@@ -544,7 +473,7 @@ void FarEditorSet::configure()
 		if (getErrorHandler() != null)
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 }
@@ -632,7 +561,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, 0, L"exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 
@@ -642,6 +571,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 void FarEditorSet::reloadBase()
 {
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+	const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
 	dropAllEditors();
 	readRegistry();
 	delete regionMapper;
@@ -699,13 +629,11 @@ void FarEditorSet::reloadBase()
 	}
 	catch (Exception &e)
 	{
-		wchar_t *c;
-		c=build_message(5,GetMsg(mName),GetMsg(mCantLoad),e.getMessage()->getWChars(),GetMsg(mFatal),GetMsg(mDie));
+		errload[2] = e.getMessage()->getWChars();
 
 		if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_ALLINONE|FMSG_WARNING, null, (wchar_t **)c, 0, 1);
-		free(c);
+		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
 		disableColorer();
 	};
 
