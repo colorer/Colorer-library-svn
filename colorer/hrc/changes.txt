@@ -1,3 +1,9 @@
+Date: TBD
+  Fixes:
+    - c++ environment-variable fix
+		- Ruby, HAML fix
+	New:
+		- ERB syntaxes
 
 Date: 2009-12-23 13:39:00
   Fixes:
