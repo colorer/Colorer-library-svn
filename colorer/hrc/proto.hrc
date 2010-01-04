@@ -433,6 +433,11 @@
     <location link="scripts/javapolicy.hrc"/>
     <filename>/\.policy$/i</filename>
   </prototype>
+  <prototype name="asn1" group="scripts" description="ASN.1/ECN">
+    <location link="scripts/asn1.hrc"/>
+    <filename>/\.(asn|asn1|ecn|edm|elm|mib)$/i</filename>
+    <filename>/-mib$/i</filename>
+  </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
     <filename>/\.(l|f?lex)+$/i</filename>
