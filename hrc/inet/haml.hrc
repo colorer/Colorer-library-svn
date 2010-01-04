@@ -33,14 +33,15 @@
 
     <scheme name="haml">
 
-      <regexp match='/(?{def:OpenTag} \% ) (?{def:Tag}\w+)/ix'/>
-      <regexp match='/(?{def:OpenTag} \. ) (?{Class}\w+)/ix'/>
-      <regexp match='/(?{def:OpenTag} \# ) (?{ID}\w+)/ix'/>
+      <regexp match='/(?{def:OpenTag} \% ) (?{def:Tag}[\w\-]+)/ix' region='def:Keyword'/>
+      <regexp match='/(?{def:OpenTag} \. ) (?{Class}[\w\-]+)/ix' region='def:Keyword'/>
+      <regexp match='/(?{def:OpenTag} \# ) (?{ID}[\w\-]+)/ix' region='def:Keyword'/>
 
       <block start='/\{/' end='/\}/' region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
 
-      <block start='/\-/' end='/$/' scheme='SimpleRuby' region00='def:Insertion'/>
-      <block start='/\=/' end='/$/' scheme='SimpleRuby' region00='def:Insertion'/>
+      <block start='/[\=\-]\#/' end='/$/' scheme='def:empty' region='def:Comment'/>
+      <block start='/\-/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
+      <block start='/\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
 
       <block start='/\(/' end='/\)/' region00='def:PairStart' region10='def:PairEnd' scheme='SimpleAttributes'/>
 

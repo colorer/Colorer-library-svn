@@ -112,7 +112,7 @@
   </prototype>
   <prototype name="ruby" group="main" description="Ruby">
     <location link="base/ruby.hrc"/>
-    <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/\.(rb|rbw|ruby|rake)$/i</filename>
     <filename>/Rakefile$/i</filename>
     <firstline>/bin\/ruby/i</firstline>
   </prototype>
@@ -159,7 +159,7 @@
   </prototype>
   <prototype name="erb" group="inet" description="ERB">
     <location link="inet/erb.hrc"/>
-    <filename weight='2'>/\.(erb|rhtml)$/i</filename>
+    <filename weight='4'>/\.(erb|rhtml|html\.erb)$/i</filename>
   </prototype>
 
   <prototype name="jsp" group="inet" description="jsp">
