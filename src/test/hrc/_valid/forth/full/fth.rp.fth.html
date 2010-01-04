@@ -25,7 +25,7 @@
  24:     aliashandle <span class='forth-forWord def-Keyword'>@</span> getPhandleProperty<span class='forth-forComment def-Comment def-Syntax'> ( Adr Len 0 | 1 )</span><span class='forth-forWord def-Keyword'> ;</span>
  25: 
  26: <span class='forth-forComment def-Comment def-Syntax'>\ Concatenate 2 string and 1 symbol to shead string</span>
- 27: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>conc2str&amp;symb</span><span class='forth-forComment def-Comment def-Syntax'> ( AStr1 LStr1 AStr2 LStr2 Symb -- A L )</span> <span class='forth-forWord def-Keyword'>{</span> symb <span class='forth-forWord def-Keyword'>--</span> <span class='forth-forWord def-Keyword'>}</span>
+ 27: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>conc2str&amp;symb</span><span class='forth-forComment def-Comment def-Syntax'> ( AStr1 LStr1 AStr2 LStr2 Symb -- A L )</span> <span class='forth-forWord def-Keyword'>{</span> symb <span class='forth-forWord def-Keyword'>--</span><span class='forth-forWord def-Keyword'> }</span>
  28:     <span class='forth-forWord def-Keyword'>2swap</span><span class='forth-forComment def-Comment def-Syntax'> ( AStr2 LStr2 AStr1 LStr1 )</span>
  29:     shead st!<span class='forth-forComment def-Comment def-Syntax'> \ Story count in shead</span>
  30:     shead <span class='forth-forWord def-Keyword'>2dup</span> <span class='forth-forWord def-Keyword'>+</span> symb <span class='forth-forWord def-Keyword'>swap</span> <span class='forth-forWord def-Keyword'>c!</span><span class='forth-forComment def-Comment def-Syntax'> ( AStr2 LStr2 Ash Lsh )</span>

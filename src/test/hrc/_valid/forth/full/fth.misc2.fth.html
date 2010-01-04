@@ -129,7 +129,7 @@
 128:     <span class='forth-forResWord def-Label'>then</span>
 129: <span class='forth-forWord def-Keyword'>;</span>
 130: 
-131: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>WITHIN</span> <span class='forth-forWord def-Keyword'>{</span> n1 n2 n3 <span class='forth-forWord def-Keyword'>--</span> <span class='forth-forComment def-Comment def-Syntax'>flag </span><span class='forth-forWord def-Keyword'>}</span>
+131: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>WITHIN</span> <span class='forth-forWord def-Keyword'>{</span> n1 n2 n3 <span class='forth-forWord def-Keyword'>--</span><span class='forth-forComment def-Comment def-Syntax'> flag</span><span class='forth-forWord def-Keyword'> }</span>
 132:     n2 n3 &lt;=
 133:     <span class='forth-forResWord def-Label'>IF</span>
 134:         n2 n1 &lt;=
@@ -199,7 +199,7 @@
 198: 
 199: 
 200: <span class='forth-forComment def-Comment def-Syntax'>\ Search for substring S2 in S1</span>
-201: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>SEARCH</span> <span class='forth-forWord def-Keyword'>{</span> addr1 cnt1 addr2 cnt2 <span class='forth-forWord def-Keyword'>|</span> <span class='forth-forNumb def-Number'>addr3 cnt3 flag </span><span class='forth-forWord def-Keyword'>--</span>  <span class='forth-forComment def-Comment def-Syntax'>addr3 cnt3 flag </span><span class='forth-forWord def-Keyword'>}</span>
+201: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>SEARCH</span> <span class='forth-forWord def-Keyword'>{</span> addr1 cnt1 addr2 cnt2 <span class='forth-forWord def-Keyword'>|</span><span class='forth-forNumb def-Number'> addr3 cnt3 flag</span> <span class='forth-forWord def-Keyword'>--</span><span class='forth-forComment def-Comment def-Syntax'>  addr3 cnt3 flag</span><span class='forth-forWord def-Keyword'> }</span>
 202: <span class='forth-forComment def-Comment def-Syntax'>\ ." Search for " addr2 cnt2 type  ."  in "  addr1 cnt1 type cr</span>
 203: <span class='forth-forComment def-Comment def-Syntax'>\ if true, s1 contains s2 at addr3 with cnt3 chars remaining</span>
 204: <span class='forth-forComment def-Comment def-Syntax'>\ if false, s3 = s1    </span>
