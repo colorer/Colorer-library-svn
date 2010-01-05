@@ -110,6 +110,10 @@
     <filename>/\.(py|pyw|pys)$/i</filename>
     <firstline weight='2'>/^#!\S*(python)/</firstline>
   </prototype>
+  <prototype name="lua" group="main" description="Lua">
+    <location link="base/lua.hrc"/>
+    <filename>/\.(lua)$/i</filename>
+  </prototype>  
   <prototype name="ruby" group="main" description="Ruby">
     <location link="base/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby|rake)$/i</filename>
