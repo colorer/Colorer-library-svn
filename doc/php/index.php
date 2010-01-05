@@ -16,6 +16,9 @@
 <p>This is a web interface to the Colorer-take5 Library.<br/>
 It produces highlighted source text through the web interface.</p>
 
+<h3>Sorry, this is now disabled on sf.net because of difficulties
+with running native executables in sf.net web environment</h3>
+
 <form enctype="multipart/form-data" action="generator.php" method="post">
  <table border="1">
   <tr><td colspan="2"><input value="colorize!" type="submit"/></td></tr>
@@ -88,6 +91,18 @@ It produces highlighted source text through the web interface.</p>
   <tr><td colspan="2"><input value="colorize!" type="submit"/></td></tr>
  </table>
 </form>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://sourceforge.net/apps/piwik/colorer/" : "http://sourceforge.net/apps/piwik/colorer/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 1;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p><img src="http://sourceforge.net/apps/piwik/colorer/piwik.php?idsite=1" alt="piwik"/></p></noscript></object>
+<!-- End Piwik Tag -->
 
 </body>
 </html>
