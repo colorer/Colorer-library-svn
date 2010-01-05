@@ -97,8 +97,6 @@ class FarEditor : public LineSource
 		ParserFactory *parserFactory;
 		BaseEditor *baseEditor;
 
-		bool oldFAR;
-
 		int  maxLineLength;
 		bool fullBackground;
 

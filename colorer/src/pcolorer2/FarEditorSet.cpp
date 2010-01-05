@@ -192,12 +192,10 @@ void FarEditorSet::chooseType()
 {
 	FarEditor *fe = getCurrentEditor();
 	int num = 0;
-	int i = 0;
-	int idx = 0;
 	const String *group = null;
 	FileType *type = null;
 
-	for (idx = 0;; idx++, num++)
+	for (int idx = 0;; idx++, num++)
 	{
 		type = hrcParser->enumerateFileTypes(idx);
 
@@ -208,12 +206,12 @@ void FarEditorSet::chooseType()
 		group = type->getGroup();
 	};
 
-	char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMxx";
-	FarMenuItem *menuels = new FarMenuItem[num+2];
-	memset(menuels, 0, sizeof(FarMenuItem)*(num+2));
+	char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+	FarMenuItem *menuels = new FarMenuItem[num];
+	memset(menuels, 0, sizeof(FarMenuItem)*(num));
 	group = null;
 
-	for (idx = 0, i = 0;; idx++, i++)
+	for (int idx = 0, i = 0;; idx++, i++)
 	{
 		type = hrcParser->enumerateFileTypes(idx);
 
@@ -233,17 +231,18 @@ void FarEditorSet::chooseType()
 		else groupChars = L"<no group>";
 
 		menuels[i].Text = new wchar_t[255];
-		_snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
+		_snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
 
 		if (type == fe->getFileType()) menuels[i].Selected = 1;
 	};
 
 	wchar_t bottom[20];
-	_snwprintf(bottom, 20, GetMsg(mTotalTypes), idx);
+	int i;
+	_snwprintf(bottom, 20, GetMsg(mTotalTypes), num);
 	i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-	               GetMsg(mSelectSyntax), bottom, L"contents", null, null, menuels, i);
+	               GetMsg(mSelectSyntax), bottom, L"contents", null, null, menuels, num);
 
-	for (int idx = 0; idx < num+2; idx++)
+	for (int idx = 0; idx < num; idx++)
 		if (menuels[idx].Text) delete[] menuels[idx].Text;
 
 	delete[] menuels;

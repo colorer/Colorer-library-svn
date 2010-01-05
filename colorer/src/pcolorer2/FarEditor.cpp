@@ -9,7 +9,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	baseEditor = new BaseEditor(parserFactory, this);
 	this->info = info;
 	info->EditorControl(ECTL_GETINFO, &ei);
-	oldFAR = info->StructSize < sizeof(PluginStartupInfo);
 	cursorRegion = null;
 	unicodeEncodingIndex = -1;
 	farEncodingIndex = -3;
@@ -538,13 +537,10 @@ int FarEditor::editorEvent(int event, void *param)
 	if (event != EE_REDRAW || inRedraw) return 0;
 
 	enterHandler();
-
-	if (WindowSizeX != ei.WindowSizeX || WindowSizeY != ei.WindowSizeY)
-	{
-		WindowSizeX = ei.WindowSizeX;
-		WindowSizeY = ei.WindowSizeY;
-	};
-
+	
+	WindowSizeX = ei.WindowSizeX;
+	WindowSizeY = ei.WindowSizeY;
+	
 	baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
 
 	baseEditor->lineCountEvent(ei.TotalLines);
@@ -556,7 +552,7 @@ int FarEditor::editorEvent(int event, void *param)
 		ignoreChange = false;
 	};
 
-	if (oldFAR || param == EEREDRAW_CHANGE)
+	if (param == EEREDRAW_CHANGE)
 	{
 		int ml = (prevLinePosition < ei.CurLine ? prevLinePosition : ei.CurLine)-1;
 

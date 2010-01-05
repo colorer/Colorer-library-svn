@@ -29,18 +29,18 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 /**
  * Plugin strings in FAR interface.
  */
-void WINAPI GetPluginInfoW(struct PluginInfo *Info)
+void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
 {
 	static wchar_t* PluginMenuStrings;
-	memset(Info, 0, sizeof(*Info));
-	Info->Flags = PF_EDITOR | PF_DISABLEPANELS;
-	Info->StructSize = sizeof(*Info);
-	Info->PluginConfigStringsNumber = 1;
-	Info->PluginMenuStringsNumber = 1;
+	memset(nInfo, 0, sizeof(*nInfo));
+	nInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
+	nInfo->StructSize = sizeof(*nInfo);
+	nInfo->PluginConfigStringsNumber = 1;
+	nInfo->PluginMenuStringsNumber = 1;
 	PluginMenuStrings = (wchar_t*)GetMsg(mName);
-	Info->PluginConfigStrings = &PluginMenuStrings;
-	Info->PluginMenuStrings = &PluginMenuStrings;
-	Info->CommandPrefix = L"clr";
+	nInfo->PluginConfigStrings = &PluginMenuStrings;
+	nInfo->PluginMenuStrings = &PluginMenuStrings;
+	nInfo->CommandPrefix = L"clr";
 };
 
 /**
