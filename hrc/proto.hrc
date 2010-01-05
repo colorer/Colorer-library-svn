@@ -22,7 +22,7 @@
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
     <parameters>
-      <param name="ansi-defines" value="true" description="Use ANSI C standart library keywords"/>
+      <param name="ansi-defines" value="true" description="Use ANSI C standard library keywords"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
       <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
@@ -144,8 +144,8 @@
     <location link="inet/html-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
     <parameters>
-     <param name="ie-css" value="true" description="Use non-standart MSIE css extensions"/>
-     <param name="moz-css" value="true" description="Use non-standart Gecho-based css extensions"/>
+     <param name="ie-css" value="true" description="Use non-standard MSIE css extensions"/>
+     <param name="moz-css" value="true" description="Use non-standard Gecho-based css extensions"/>
     </parameters>
   </prototype>
   <prototype name="svg-css" group="inet" description="css for svg">

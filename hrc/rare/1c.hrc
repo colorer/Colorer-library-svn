@@ -107,7 +107,7 @@
             <word name="Ёкспорт"/>
             <word name="Export"/>
          </keywords>
-<!-- 1C Standart Functions -->
+<!-- 1C Standard Functions -->
          <keywords ignorecase="yes" region="c1cWord2">
             <word name="ќкр"/>
             <word name="Round"/>
@@ -380,7 +380,7 @@
             <word name="ќткрыть‘ормућодально"/>
             <word name="OpenFormModal"/>
          </keywords>
-<!-- 1C Standart Standart Variables and Objects -->
+<!-- 1C Standard Variables and Objects -->
          <keywords ignorecase="yes" region="c1cVar">
             <word name="–азделитель—траниц"/>
             <word name="PageBreak"/>
