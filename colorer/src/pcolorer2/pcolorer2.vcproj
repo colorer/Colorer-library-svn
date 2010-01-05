@@ -726,11 +726,11 @@
 					Name="parser"
 					>
 					<File
-						RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.cpp"
+						RelativePath="..\shared\colorer\parsers\HRCParserImpl.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\shared\colorer\parsers\HRCParserImpl.cpp"
+						RelativePath="..\shared\colorer\parsers\HRCParserImpl.h"
 						>
 					</File>
 					<File
@@ -746,6 +746,10 @@
 						>
 						<File
 							RelativePath="..\shared\colorer\parsers\helpers\FileTypeImpl.h"
+							>
+						</File>
+						<File
+							RelativePath="..\shared\colorer\parsers\helpers\HRCParserHelpers.cpp"
 							>
 						</File>
 						<File

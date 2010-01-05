@@ -56,11 +56,10 @@ void FarEditor::endJob(int lno)
 
 String *FarEditor::getLine(int lno)
 {
-	EditorGetString es;
-	int len = 0;
-
 	if (ret_strNumber == lno && ret_str != null) return ret_str;
 
+	EditorGetString es;
+	int len = 0;
 	ret_strNumber = lno;
 
 	if (inHandler)
@@ -258,24 +257,17 @@ void FarEditor::matchPair()
 	enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
-	if (pm == null)
-	{
-		leaveHandler();
-		return;
-	}
-
 	leaveHandler();
-
-	if (pm->eline == -1) return;
+	if ((pm == null)||(pm->eline == -1))	return;
 
 	esp.CurTabPos = -1;
 	esp.LeftPos = -1;
 	esp.Overtype = -1;
 	esp.TopScreenLine = -1;
 	esp.CurLine = pm->eline;
-	esp.CurPos = pm->end->end-1;
 
 	if (!pm->topPosition) esp.CurPos = pm->end->start;
+	else esp.CurPos = pm->end->end-1;
 
 	if (esp.CurLine < ei.TopScreenLine || esp.CurLine > ei.TopScreenLine+ei.WindowSizeY)
 	{
@@ -295,23 +287,19 @@ void FarEditor::selectPair()
 	int X1, X2, Y1, Y2;
 	enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
-
-	if (pm == null)
-	{
-		leaveHandler();
-		return;
-	}
-
+	
 	leaveHandler();
+	
+	if ((pm == null)||(pm->eline == -1))return;
 
-	if (pm->eline == -1) return;
-
-	X1 = pm->start->end;
-	X2 = pm->end->start-1;
-	Y1 = pm->sline;
-	Y2 = pm->eline;
-
-	if (!pm->topPosition)
+	if (pm->topPosition)
+	{
+		X1 = pm->start->end;
+		X2 = pm->end->start-1;
+		Y1 = pm->sline;
+		Y2 = pm->eline;
+	}
+	else
 	{
 		X2 = pm->start->start-1;
 		X1 = pm->end->end;
@@ -320,13 +308,9 @@ void FarEditor::selectPair()
 	};
 
 	es.BlockType = BTYPE_STREAM;
-
 	es.BlockStartLine = Y1;
-
 	es.BlockStartPos = X1;
-
 	es.BlockHeight = Y2 - Y1 + 1;
-
 	es.BlockWidth = X2 - X1 + 1;
 
 	info->EditorControl(ECTL_SELECT, &es);
@@ -343,22 +327,18 @@ void FarEditor::selectBlock()
 	enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
-	if (pm == null)
-	{
-		leaveHandler();
-		return;
-	}
-
 	leaveHandler();
+	
+	if ((pm == null)||(pm->eline == -1))return;
 
-	if (pm->eline == -1) return;
-
-	X1 = pm->start->start;
-	X2 = pm->end->end-1;
-	Y1 = pm->sline;
-	Y2 = pm->eline;
-
-	if (!pm->topPosition)
+	if (pm->topPosition)
+	{
+		X1 = pm->start->start;
+		X2 = pm->end->end-1;
+		Y1 = pm->sline;
+		Y2 = pm->eline;
+	}
+	else
 	{
 		X2 = pm->start->end-1;
 		X1 = pm->end->start;
@@ -367,13 +347,9 @@ void FarEditor::selectBlock()
 	};
 
 	es.BlockType = BTYPE_STREAM;
-
 	es.BlockStartLine = Y1;
-
 	es.BlockStartPos = X1;
-
 	es.BlockHeight = Y2 - Y1 + 1;
-
 	es.BlockWidth = X2 - X1 + 1;
 
 	info->EditorControl(ECTL_SELECT, &es);
