@@ -1,23 +1,58 @@
 
-Date: TBD
+Date: --not released-- r1193
   Fixes:
-    - Forth fixes
-    - Perl variable fixes
-    - c/cpp i128 support
-    - TeX verbatim mode improvements, etc
-    - NSI fixes
-    - Foxpro (Vadim Zaharenko)
-    - picasm improvements
-    - Ruby improvements
+    - HAML
+    - Ruby
   New:
+    - ASN.1/ECN notations
+    - ERB - Rails HTML syntax
+                 
+
+Date: 2009-12-23 18:47:53 r1178 (FarColorer 1.0.2.1)
+  Reorg:
+    - Python, Ruby, Tcl/Tk are not "rare" anymore
+  Fixes:
+    - Ruby improvements
+    - SH script highlighter is detected by shebang line
+    - NSIS syntax updated to v2.39 (anatoly techtonik)
+    - XQuery func param list
+    - JavaDoc coloring error
+    - Cobol enhancements (Pavel Pleva)
+    - VBasic fixes for paired constructs
+    - Updated OpenGL keywords (Mike Gorchak)
+    - VB script highlighting
+    - REG autodetection fix
+    - Windows batch highlight errors
+    - Forth fixes
+    - Perl improvements
+    - C/CPP i128 support, GNU Asm fixes
+    - TeX verbatim mode improvements, etc
+    - Foxpro (Vadim Zaharenko)
+  New:
+    - HAML
+    - CUP (Ostrovskiy Alex)
+    - Stata (John Aponte)
+    - Graphviz
+    - nesC (Rasmus Ulslev Pedersen)
     - PL1 (Pavel Pleva)
     - D (Vladimir Panteleev)
-    - Graphviz
-    - Stata from John Aponte
-    - Ruby, HAML, ERB syntaxes
+  
+
+Date: 2006-11-27 12:39:58 r843 (FarColorer take5.be5)
+  Reorg:
+    - RTF syntax migrated from rare.scripts to scripts
+  Fixes:
+    - picasm improvements
+    - Ruby fixes
+    - lower ANT detection precendence
+  New:
+    - GNU Make Files Syntax (Eugene Efremov)
+    - ANSI C standard library keywords (Eugene Efremov)
+    - recognize Ruby Rakefiles
+    - recognize CakePHP template
 
 
-Date: 2006-06-20 18:03:09
+Date: 2006-06-20 18:03:09 r772
   Fixes:
     - Perl improvements
     - FAR packages fixes
