@@ -731,7 +731,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 	FarMenuItem *menu;
 	EditorSetPosition esp;
 	bool moved = false;
-	int i, code = 0;
+	int code = 0;
 	const int FILTER_SIZE = 40;
 	int breakKeys[] =
 	{
@@ -765,6 +765,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 
 	while (!stopMenu)
 	{
+		int i;
 		memset(menu, 0, sizeof(FarMenuItem)*items_num);
 		// items in FAR's menu;
 		int menu_size = 0;
@@ -1006,7 +1007,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 
 				if (flen == FILTER_SIZE || code > keys_size) break;
 
-				filter[flen] = (char)Character::toLowerCase(breakKeys[code]);
+				filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code]);
 				filter[++flen] = 0;
 				break;
 		}

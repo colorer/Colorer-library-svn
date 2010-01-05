@@ -41,6 +41,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 	wchar_t key[255];
 	_snwprintf(key, 255, L"%s\\colorer", info->RootKey);
 	hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
+	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 	parserFactory = null;
 	regionMapper = null;
 	reloadBase();
@@ -291,6 +292,7 @@ void FarEditorSet::configure()
 			IDX_OK,
 			IDX_CANCEL,
 		};
+
 		FarDialogItem fdi[] =
 		{
 			{ DI_DOUBLEBOX,3,1,49,19,0,0,0,0,L""},                                 //IDX_BOX,
@@ -314,6 +316,7 @@ void FarEditorSet::configure()
 			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,L""}, // ok                       //IDX_OK,
 			{ DI_BUTTON,38,18,0,0,FALSE,0,0,0,L""},   // cancel                    //IDX_CANCEL,
 		}; // type, x1, y1, x2, y2, focus, sel, fl, def, data
+
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
 		fdi[IDX_DISABLED].PtrData = GetMsg(mTurnOff);
 		fdi[IDX_DISABLED].Selected = !rGetValue(hPluginRegistry, REG_DISABLED);
@@ -326,10 +329,13 @@ void FarEditorSet::configure()
 		fdi[IDX_OLDOUTLINE].PtrData = GetMsg(mOldOutline);
 		fdi[IDX_OLDOUTLINE].Selected = rGetValue(hPluginRegistry, REG_OLDOUTLINE);
 		fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
-		wchar_t tempCatalogEdit[255] = {0};
-		rGetValue(hPluginRegistry, REG_CATALOG, tempCatalogEdit, 255);
+		
+		wchar_t tempCatalogEdit[512] = {0};
+		rGetValue(hPluginRegistry, REG_CATALOG, tempCatalogEdit, 512);
 		fdi[IDX_CATALOG_EDIT].PtrData = trim(tempCatalogEdit);
+		
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
+		
 		wchar_t hrdName[32]  = {0};
 		int len=rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
 		DString shrdName = DString("default");
@@ -356,9 +362,11 @@ void FarEditorSet::configure()
 
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
 		fdi[IDX_TIME].PtrData = GetMsg(mMaxTime);
+		
 		wchar_t tempMaxTime[255] = {0};
 		rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 255);
 		fdi[IDX_TIME_EDIT].PtrData = trim(tempMaxTime);
+
 		fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
 		fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
 		fdi[IDX_OK].PtrData = GetMsg(mOk);
@@ -395,10 +403,15 @@ void FarEditorSet::configure()
 
 			if (_wcsicmp(oTime, fdi[IDX_TIME_EDIT].PtrData)) i = IDX_RELOAD;
 
-			if (rDisabled != !fdi[IDX_DISABLED].Selected)
+			if (!rDisabled && !fdi[IDX_DISABLED].Selected)
 			{
 				disableColorer();
 				i = IDX_RELOAD;
+			}
+			else
+			if (rDisabled && fdi[IDX_DISABLED].Selected)
+			{
+				rDisabled = false;
 			}
 		}
 
@@ -571,14 +584,15 @@ void FarEditorSet::reloadBase()
 {
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 	const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
+
+	if (rDisabled) return;
+
 	dropAllEditors();
 	readRegistry();
 	delete regionMapper;
 	delete parserFactory;
 	parserFactory = null;
 	regionMapper = null;
-
-	if (rDisabled) return;
 
 	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
 	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);

@@ -93,7 +93,6 @@ void ConsoleTools::setHRDName(const String &str) {
 }
 void ConsoleTools::setLinkSource(const String &str){
   InputSource *linkSource = null;
-  const byte *stream = null;
   DocumentBuilder docbuilder;
   Document *linkSourceTree = null;
   try{

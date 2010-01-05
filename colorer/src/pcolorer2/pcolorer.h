@@ -1,6 +1,12 @@
 #ifndef _PCOLORER_H_
 #define _PCOLORER_H_
 
+// Visual Leak Detector http://sites.google.com/site/dmoulding/vld
+// optional
+#ifdef _DEBUG
+#include<vld.h>
+#endif
+
 #include<plugin.hpp>
 #include<farcolor.hpp>
 #include<farkeys.hpp>

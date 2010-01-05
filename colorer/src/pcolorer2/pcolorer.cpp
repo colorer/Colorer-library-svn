@@ -1,6 +1,5 @@
-#include<vld.h>
-#include<windows.h>
 #include"pcolorer.h"
+#include<windows.h>
 #include"FarEditorSet.h"
 
 static struct PluginStartupInfo Info;
