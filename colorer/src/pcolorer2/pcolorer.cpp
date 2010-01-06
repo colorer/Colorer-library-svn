@@ -65,8 +65,16 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		wchar_t *file = (wchar_t*)Item;
 		int l=wcslen(file);
 		
-		// заменяем переменные окружения на их значения
 		wchar_t *file_exp=(wchar_t*)calloc(l,sizeof(wchar_t));
+		// убираем кавычки, если присутствуют
+		// ориентируясь по первому символу - если он " то убираем и первый и последний.
+		// если первый кавычка,  а последний нет - ну это не наши проблемы, и так и так ошибка
+		if ((l>0)&&(*file==L'"'))
+		{
+			wcsncpy_s(file_exp,l, &file[1],l-2);
+			wcscpy_s(file,l,file_exp);
+		}
+		// заменяем переменные окружения на их значения
 		int k=ExpandEnvironmentStrings(file,file_exp,l);
 		if (!k) 
 			wcscpy_s(file_exp,l,file);
