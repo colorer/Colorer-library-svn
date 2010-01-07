@@ -179,3 +179,7 @@ a.rss, a.rss:hover, a.rss:active{
   margin-left: 1em;
   font-size: 8pt;
 }
+
+#papers li {
+  margin-top: 10px;
+}
