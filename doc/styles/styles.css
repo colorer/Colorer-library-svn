@@ -20,10 +20,9 @@ p, div, ul, ol, dl, td{
 p, div.p, blockquote{
   margin-top:4pt;
   margin-bottom:4pt;
-  xtext-align:justify;
 }
 code, pre, tt{
-  font-family: Lucida Console, Andale Mono, Courier New, Courier, monospace;
+  font-family: "Lucida Console", "Andale Mono", "Courier New", Courier, monospace;
   color:#202040;
 }
 
@@ -33,7 +32,7 @@ strong{
   color:#233961;
 }
 .small{
-  font: 80%;
+  font-size: 80%;
 }
 
 div.back{
@@ -62,9 +61,6 @@ dt{ font-weight: bold; }
 
 
 /* hyperlinks */
-a {
-  xfont-weight:bold;
-}
 a[href]{
   text-decoration: underline;
 }
@@ -90,10 +86,10 @@ div.back a:hover {
 
 h1, h2, h3{ color: #303570; font-weight: normal; }
 h1, h2{ margin: 5pt 7pt 14pt 0pt; }
-h1{ font: 190%; text-align: center; }
-h2{ font: 150%; }
-h3{ font: 120%; margin: 14pt 4pt 8pt 4pt; }
-h4{ font: small-caps 100%; font-weight: bold; }
+h1{ font-size: 190%; text-align: center; }
+h2{ font-size: 150%; }
+h3{ font-size: 120%; margin: 14pt 4pt 8pt 4pt; }
+h4{ font-variant: small-caps; font-size: 100%; font-weight: bold; }
 
 .smalllic{
   font-size: 8pt;
