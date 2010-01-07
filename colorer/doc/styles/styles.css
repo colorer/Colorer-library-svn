@@ -7,27 +7,12 @@ body{
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-image: url(../images/background.png);
-  padding-left: 40;
-  padding-right: 20;
   max-width: 50em;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* IE hack for max width: */
-#wrapper, .article{
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0pt;
-  padding-right: 0pt;
-  width:expression(document.body.clientWidth > (800+40+20) ? "800" : "auto" );
-  margin-left:expression(document.body.clientWidth > (800+40+20) ? ((document.body.clientWidth-(800+40+20))/3)+"pt" : "auto" );
-}
-
 /* base elements */
-b, i, em{
-  background:transparent;
-}
 p, div, ul, ol, dl, td{
   font-size:10pt;
   color:#000000;
@@ -46,14 +31,11 @@ code{ white-space: nowrap }
 
 strong{
   color:#233961;
-  font-weight:bold;
-  background:transparent;
 }
 .small{
   font: 80%;
 }
 
-div.back a:hover{ background : transparent }
 div.back{
   /*position:fixed;*/
   position:absolute;
@@ -65,7 +47,6 @@ div.back{
   margin: 2pt 1pt 1pt 1pt;
 }
 
-li{}
 img{ border: none; }
 
 table{
@@ -79,8 +60,9 @@ th{
 }
 dt{ font-weight: bold; }
 
-/* hyperlink */
-a{
+
+/* hyperlinks */
+a {
   xfont-weight:bold;
 }
 a[href]{
@@ -88,11 +70,9 @@ a[href]{
 }
 a:link {
   color: #4045A7;
-  background: transparent;
 }
 a:visited {
   color: #6075B1;
-  background: transparent;
 }
 a[href]:active {
   color: #5369B1;
@@ -103,6 +83,10 @@ a[href]:hover{
   background: #f2f2ff;
   text-decoration: underline;
 }
+div.back a:hover {
+  background : transparent;
+}
+
 
 h1, h2, h3{ color: #303570; font-weight: normal; }
 h1, h2{ margin: 5pt 7pt 14pt 0pt; }
