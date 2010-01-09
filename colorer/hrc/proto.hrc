@@ -601,7 +601,7 @@
   </prototype>
   <prototype name="ocaml" group="rare" description="OCaml">
     <location link="rare/ocaml.hrc"/>
-    <filename>/\.(ml|mli|mlp)$/i</filename>
+    <filename>/\.ml[ilp]?$/i</filename>
   </prototype>
   <prototype name="sicstusProlog" group="rare" description="Sicstus Prolog">
     <location link="rare/sprolog.hrc"/>
