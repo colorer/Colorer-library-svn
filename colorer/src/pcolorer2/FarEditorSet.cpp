@@ -44,7 +44,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 	parserFactory = null;
 	regionMapper = null;
-	reloadBase();
+	FullReloadBase();
 }
 
 FarEditorSet::~FarEditorSet()
@@ -287,7 +287,7 @@ void FarEditorSet::configure()
 			IDX_HRD_SELECT,
 			IDX_TIME,
 			IDX_TIME_EDIT,
-			IDX_RELOAD,//8
+			IDX_RELOAD,
 			IDX_RELOAD_ALL,
 			IDX_OK,
 			IDX_CANCEL,
@@ -296,64 +296,57 @@ void FarEditorSet::configure()
 		FarDialogItem fdi[] =
 		{
 			{ DI_DOUBLEBOX,3,1,49,19,0,0,0,0,L""},                                 //IDX_BOX,
-
 			{ DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
-
-			{ DI_CHECKBOX,6,5,0,0,FALSE,0,DIF_3STATE,0,L""},                                //IDX_CROSS,
+			{ DI_CHECKBOX,6,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
 			{ DI_CHECKBOX,19,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
 			{ DI_CHECKBOX,32,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
-
 			{ DI_CHECKBOX,6,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
-
 			{ DI_TEXT,6,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
-			{ DI_EDIT,10,10,40,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},       //IDX_CATALOG_EDIT
-			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,L""},    // hrd                         //IDX_HRD,
-			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,L""}, // hrd button                  //IDX_HRD_SELECT,
+			{ DI_EDIT,10,10,40,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
+			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
+			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
 			{ DI_TEXT,6,13,0,0,FALSE,0,0,0,L""},                                   //IDX_TIME,
-			{ DI_EDIT,10,14,25,5,FALSE,(DWORD_PTR)L"clr_time",DIF_HISTORY,0,L""},      //IDX_TIME_EDIT,
-			{ DI_BUTTON,6,16,0,0,FALSE,0,0,0,L""},    // reload                    //IDX_RELOAD,//8
-			{ DI_BUTTON,26,16,0,0,FALSE,0,0,0,L""},   // all                       //IDX_RELOAD_ALL,
-			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,L""}, // ok                       //IDX_OK,
-			{ DI_BUTTON,38,18,0,0,FALSE,0,0,0,L""},   // cancel                    //IDX_CANCEL,
-		}; // type, x1, y1, x2, y2, focus, sel, fl, def, data
+			{ DI_EDIT,10,14,25,5,FALSE,(DWORD_PTR)L"clr_time",DIF_HISTORY,0,L""},  //IDX_TIME_EDIT,
+			{ DI_BUTTON,6,16,0,0,FALSE,0,0,0,L""},                                 //IDX_RELOAD,
+			{ DI_BUTTON,26,16,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+			{ DI_BUTTON,38,18,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
 		fdi[IDX_DISABLED].PtrData = GetMsg(mTurnOff);
-		fdi[IDX_DISABLED].Selected = !rGetValue(hPluginRegistry, REG_DISABLED);
+		fdi[IDX_DISABLED].Selected = !rGetValueDw(hPluginRegistry, REG_DISABLED);
 		fdi[IDX_CROSS].PtrData = GetMsg(mCross);
-		fdi[IDX_CROSS].Selected = rGetValue(hPluginRegistry, REG_CROSSDRAW);
+		fdi[IDX_CROSS].Selected = rGetValueDw(hPluginRegistry, REG_CROSSDRAW);
 		fdi[IDX_PAIRS].PtrData = GetMsg(mPairs);
-		fdi[IDX_PAIRS].Selected = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
+		fdi[IDX_PAIRS].Selected = !rGetValueDw(hPluginRegistry, REG_PAIRSDONTDRAW);
 		fdi[IDX_SYNTAX].PtrData = GetMsg(mSyntax);
-		fdi[IDX_SYNTAX].Selected = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
+		fdi[IDX_SYNTAX].Selected = !rGetValueDw(hPluginRegistry, REG_SYNTAXDONTDRAW);
 		fdi[IDX_OLDOUTLINE].PtrData = GetMsg(mOldOutline);
-		fdi[IDX_OLDOUTLINE].Selected = rGetValue(hPluginRegistry, REG_OLDOUTLINE);
+		fdi[IDX_OLDOUTLINE].Selected = rGetValueDw(hPluginRegistry, REG_OLDOUTLINE);
 		fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
 		
-		wchar_t tempCatalogEdit[512] = {0};
-		rGetValue(hPluginRegistry, REG_CATALOG, tempCatalogEdit, 512);
-		fdi[IDX_CATALOG_EDIT].PtrData = trim(tempCatalogEdit);
+		wchar_t *tempCatalogEdit = null;
+		rGetValueSz(hPluginRegistry, REG_CATALOG, tempCatalogEdit);
+		fdi[IDX_CATALOG_EDIT].PtrData = tempCatalogEdit;
 		
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 		
-		wchar_t hrdName[32]  = {0};
-		int len=rGetValue(hPluginRegistry, REG_HRD_NAME, hrdName, 32);
-		DString shrdName = DString("default");
-
-		if (len > 1)
-		{
-			wchar_t* temp=trim(hrdName);
-
-			if (wcslen(temp)>1)
-				shrdName = DString(temp);
-		}
-
+		wchar_t *hrdName = null;
+		DString shrdName; // используетс€ дл€ хранени€ hrd_name по всей функции
+		int len=rGetValueSz(hPluginRegistry, REG_HRD_NAME, hrdName);
+		if (len<=1)  // при пустой строке записываетс€ '\0' 
+			hrdName = L"default";
+		
+		shrdName = DString(hrdName);
 		const String *descr = null;
-
+		int getDescr = true;
 		if (parserFactory != null)
 		{
 			descr = parserFactory->getHRDescription(DString("console"), shrdName);
 		}
+		else
+			getDescr = false;
 
 		if (descr == null)
 		{
@@ -363,9 +356,9 @@ void FarEditorSet::configure()
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
 		fdi[IDX_TIME].PtrData = GetMsg(mMaxTime);
 		
-		wchar_t tempMaxTime[255] = {0};
-		rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 255);
-		fdi[IDX_TIME_EDIT].PtrData = trim(tempMaxTime);
+		wchar_t *tempMaxTime = null;
+		rGetValueSz(hPluginRegistry, REG_MAXTIME, tempMaxTime);
+		fdi[IDX_TIME_EDIT].PtrData = tempMaxTime;
 
 		fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
 		fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
@@ -377,36 +370,112 @@ void FarEditorSet::configure()
 		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 53, 21, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
 		int i = info->DialogRun(hDlg);
 
+		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
+		{
+			if (i == IDX_HRD_SELECT)
+			{
+				if (parserFactory != null)
+				{
+					shrdName=chooseHRDName(&shrdName);
+
+					// сохран€ем значение shrdName, иначе при ReloadBase оно затираетс€
+					delete[] hrdName;
+					hrdName= new wchar_t[shrdName.length()];
+					wcscpy(hrdName,shrdName.getWChars());
+					shrdName=DString(hrdName);
+
+					descr = parserFactory->getHRDescription(DString("console"), shrdName);
+
+					if (descr == null)
+					{
+						descr = &shrdName;
+					}
+					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
+				}
+			}
+
+			if ((i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
+			{
+				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+				QuickReloadBase(hrdName,catalog);
+
+				//случай когда плагин был отключен и название цветовой схемы имеет не то название 
+				if (!getDescr)
+				{
+					descr = null;
+					if (parserFactory != null)
+					{
+						descr = parserFactory->getHRDescription(DString("console"), shrdName);
+					}
+					
+					if (descr == null)
+					{
+						descr = &shrdName;
+					}
+					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
+					getDescr = true;
+				}
+			}
+
+			if (i == IDX_RELOAD_ALL){
+				const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+
+				for (int idx = 0;; idx++)
+				{
+					FileType *type = hrcParser->enumerateFileTypes(idx);
+
+					if (type == null) break;
+
+					StringBuffer tname;
+
+					if (type->getGroup() != null)
+					{
+						tname.append(type->getGroup());
+						tname.append(DString(": "));
+					}
+
+					tname.append(type->getDescription());
+					marr[1] = tname.getWChars();
+					HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+					info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+					type->getBaseScheme();
+					info->RestoreScreen(scr);
+				};
+			}
+
+			i = info->DialogRun(hDlg);
+		};
+
 		if (i == IDX_CANCEL || i == -1)
 		{
 			info->DialogFree(hDlg);
+			// нужно перезагрузить все настройки на случай попыток подгрузить другую базу
+			FullReloadBase();
 			return;
 		}
 
-		fdi[IDX_DISABLED].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_DISABLED, 0);
-		fdi[IDX_CROSS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_CROSS, 0);
-		fdi[IDX_PAIRS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
-		fdi[IDX_SYNTAX].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
-		fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
-		fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
-		fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0));
-
 		if (i == IDX_OK)
 		{
-			wchar_t oName[512] = {0};
-			rGetValue(hPluginRegistry, REG_CATALOG, oName, 512);
+			fdi[IDX_DISABLED].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_DISABLED, 0);
+			fdi[IDX_CROSS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_CROSS, 0);
+			fdi[IDX_PAIRS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
+			fdi[IDX_SYNTAX].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
+			fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
+			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+			fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0));
 
-			if (_wcsicmp(oName, fdi[IDX_CATALOG_EDIT].PtrData)) i = IDX_RELOAD;
-
-			wchar_t oTime[32] = {0};
-			rGetValue(hPluginRegistry, REG_MAXTIME, oTime, 32);
-
-			if (_wcsicmp(oTime, fdi[IDX_TIME_EDIT].PtrData)) i = IDX_RELOAD;
+			rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
+			rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
+			rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
+			rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
+			rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
+			rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
+			rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
+			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, shrdName.getWChars(), (DWORD)(2 *(shrdName.length()+1)));
 
 			if (!rDisabled && !fdi[IDX_DISABLED].Selected)
 			{
 				disableColorer();
-				i = IDX_RELOAD;
 			}
 			else
 			if (rDisabled && fdi[IDX_DISABLED].Selected)
@@ -414,63 +483,8 @@ void FarEditorSet::configure()
 				rDisabled = false;
 			}
 		}
-
-		rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
-		rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
-		rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
-		rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
-		rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
-		rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
-		rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
-		readRegistry();
-
-		if (i == IDX_HRD_SELECT)
-		{
-			const String *newname = chooseHRDName(&shrdName);
-			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, newname->getWChars(), 2 *(newname->length()+1));
-			configure();
-			i = IDX_RELOAD;
-		};
-
-		if (i == IDX_RELOAD)
-		{
-			reloadBase();
-		}
-
-		if (i == IDX_RELOAD_ALL)
-		{
-			reloadBase();
-
-			if (rDisabled)
-			{
-				info->DialogFree(hDlg);
-				return;
-			}
-
-			const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-
-			for (int idx = 0;; idx++)
-			{
-				FileType *type = hrcParser->enumerateFileTypes(idx);
-
-				if (type == null) break;
-
-				StringBuffer tname;
-
-				if (type->getGroup() != null)
-				{
-					tname.append(type->getGroup());
-					tname.append(DString(": "));
-				}
-
-				tname.append(type->getDescription());
-				marr[1] = tname.getWChars();
-				HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-				info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-				type->getBaseScheme();
-				info->RestoreScreen(scr);
-			};
-		};
+		info->DialogFree(hDlg);
+		FullReloadBase();
 	}
 	catch (Exception &e)
 	{
@@ -522,9 +536,6 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 
 	return parserFactory->enumerateHRDInstances(DString("console"), result);
 }
-
-
-
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
@@ -580,78 +591,101 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 	return 0;
 }
 
-void FarEditorSet::reloadBase()
+void FarEditorSet::QuickReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath)
 {
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-	const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
-
-	if (rDisabled) return;
-
+	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	
 	dropAllEditors();
-	readRegistry();
+	ReloadBase(hrdName,catalogPath, false);
+	
+	info->RestoreScreen(scr);
+
+}
+
+void FarEditorSet::ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath, int dis)
+{
 	delete regionMapper;
 	delete parserFactory;
 	parserFactory = null;
 	regionMapper = null;
 
-	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-	int len;
-	wchar_t regstring[512];
-	len = rGetValue(hPluginRegistry, REG_HRD_NAME, regstring, 512);
-	SString *hrdName = null;
+	SString *hrdNameS = null;
+	if ((hrdName)&&(wcslen(hrdName)))
+		hrdNameS = new SString(DString(hrdName));
 
-	if (len > 1)
+	// читаем путь до catalog.xml
+	SString *catalogPathS = null;
+	if ((catalogPath)&&(wcslen(catalogPath)))
 	{
-		wchar_t* temp=trim(regstring);
-
-		if (wcslen(temp)>1)
-			hrdName = new SString(DString(temp));
+		wchar_t *temp = null;
+		int i;
+		// провер€ем на переменные окружени€
+		i=ExpandEnvironmentStrings(catalogPath,temp,0);
+		if (i)
+		{
+			temp=new wchar_t[i];
+			ExpandEnvironmentStrings(catalogPath,temp,i);
+			catalogPathS = new SString(DString(temp));
+		}
+		else
+			catalogPathS = new SString(DString(catalogPath));
+		delete[] temp;
 	}
-
-	regstring[0]='\0';
-	len = rGetValue(hPluginRegistry, REG_CATALOG, regstring, 512);
-	SString *catalogPath = null;
-
-	if (len > 1)
-	{
-		wchar_t* temp=trim(regstring);
-		regstring[0]='\0';
-
-		if (ExpandEnvironmentStrings(temp,regstring,512)) temp=regstring;
-
-		if (wcslen(temp)>1)
-			catalogPath = new SString(DString(temp));
-	}
-
+	
 	try
 	{
-		parserFactory = new ParserFactory(catalogPath);
+		parserFactory = new ParserFactory(catalogPathS);
 		hrcParser = parserFactory->getHRCParser();
 
 		try
 		{
-			regionMapper = parserFactory->createStyledMapper(&DString("console"), hrdName);
+			regionMapper = parserFactory->createStyledMapper(&DString("console"), hrdNameS);
 		}
 		catch (ParserFactoryException &e)
 		{
 			if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
-
 			regionMapper = parserFactory->createStyledMapper(&DString("console"), null);
 		};
 	}
 	catch (Exception &e)
 	{
+		const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
+
 		errload[2] = e.getMessage()->getWChars();
 
 		if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
 
 		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
-		disableColorer();
+		if (dis)
+			disableColorer();
 	};
 
-	delete catalogPath;
-	delete hrdName;
+}
+
+void FarEditorSet::FullReloadBase()
+{
+	if (rDisabled) return;
+	
+	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	
+	dropAllEditors();
+	readRegistry();
+	
+	wchar_t *hrd = null;
+	rGetValueSz(hPluginRegistry,REG_HRD_NAME,hrd);
+	
+	wchar_t *catalog = null;
+	rGetValueSz(hPluginRegistry,REG_CATALOG,catalog);
+
+	ReloadBase(hrd, catalog,true);
+	
+	delete[] catalog;
+	delete[] hrd;
+
 	info->RestoreScreen(scr);
 }
 
@@ -716,7 +750,8 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 void FarEditorSet::disableColorer()
 {
 	rDisabled = true;
-
+	rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
+	
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
 	{
 		fe->cleanEditor();
@@ -724,8 +759,11 @@ void FarEditorSet::disableColorer()
 	};
 
 	farEditorInstances.clear();
-
-	rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
+	
+	delete regionMapper;
+	delete parserFactory;
+	parserFactory = null;
+	regionMapper = null;
 }
 
 

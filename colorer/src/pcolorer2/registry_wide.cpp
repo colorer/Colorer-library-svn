@@ -24,6 +24,32 @@ DWORD rGetValue(HKEY hReg, const wchar_t *name, wchar_t *Data, DWORD Len)
 	return i?0:Len;
 };
 
+DWORD rGetValueSz(HKEY hReg, const wchar_t *name, wchar_t *&Data)
+{
+	DWORD i, Len=0;
+	i=RegQueryValueExW(hReg, name, 0, NULL, NULL, &Len);
+	if (i==ERROR_SUCCESS)
+	{
+		int l=Len / sizeof(wchar_t);
+		Data=new wchar_t[l];
+		i=RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
+		if (i==ERROR_SUCCESS)
+		{
+			return l;
+		}
+		else return 0;
+	}
+	else return 0;
+};
+
+DWORD rGetValueDw(HKEY hReg, wchar_t *name)
+{
+	DWORD data = 0;
+	DWORD i = sizeof(DWORD);
+	RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i);
+	return data;
+};
+
 HKEY rOpenKey(HKEY hReg, const wchar_t *Name)
 {
 	HKEY hKey = 0;

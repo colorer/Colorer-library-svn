@@ -44,9 +44,15 @@ class FarEditorSet
 		 * Reloads HRC database.
 		 * Drops all currently opened editors and their
 		 * internal structures. Prepares to work with newly
-		 * loaded database.
+		 * loaded database. Read settings from registry
 		 */
-		void reloadBase();
+		void FullReloadBase();
+		/**
+		 * same as FullReloadBase, but not read settings from registry,
+		 * and not disablecolorer on error
+		 */
+		void QuickReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath);
+		void ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath, int dis);
 
 		/** Shows dialog of file type selection */
 		void chooseType();
@@ -56,9 +62,9 @@ class FarEditorSet
 		const wchar_t *GetMsg(int msg);
 		/** Reads all registry settings into variables */
 		void readRegistry();
-		/** Kills all currently opened editors */
+		/** Kills all currently opened editors without cleaning paint*/
 		void dropAllEditors();
-		/** Disables all plugin processing */
+		/** Disables all plugin processing and clean paint*/
 		void disableColorer();
 
 		Hashtable<FarEditor*> farEditorInstances;
