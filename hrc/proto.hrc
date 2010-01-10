@@ -465,6 +465,10 @@
     <location link="scripts/resrc.hrc"/>
     <filename>/\.(rc|dlg)$/i</filename>
   </prototype>
+  <prototype name="scons" group="scripts" description="SCons">
+    <location link="scripts/scons.hrc"/>
+    <filename>/(SConstruct|SConscript)$/i</filename>
+  </prototype>
   <prototype name="rtf" group="scripts" description="RTF text">
     <location link="scripts/rtf.hrc"/>
     <filename>/\.rtf$/i</filename>
