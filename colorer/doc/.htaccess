@@ -1,2 +1,0 @@
-RedirectMatch 404 /\\.svn(/|$)
-DirectoryIndex index.html index.php
