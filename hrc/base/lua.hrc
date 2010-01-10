@@ -4,7 +4,7 @@
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-	<type name="lua" access="public">
+	<type name="lua">
 		<annotation>
 			<documentation><![CDATA[
 				Lua 5.1 Syntax 0.2 ftp://ftp.velest.ru
