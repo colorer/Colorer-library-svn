@@ -62,9 +62,9 @@ class FarEditorSet
 		const wchar_t *GetMsg(int msg);
 		/** Reads all registry settings into variables */
 		void readRegistry();
-		/** Kills all currently opened editors without cleaning paint*/
+		/** Kills all currently opened editors*/
 		void dropAllEditors();
-		/** Disables all plugin processing and clean paint*/
+		/** Disables all plugin processing*/
 		void disableColorer();
 
 		Hashtable<FarEditor*> farEditorInstances;

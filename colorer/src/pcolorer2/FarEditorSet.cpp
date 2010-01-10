@@ -62,11 +62,11 @@ void FarEditorSet::openMenu()
 	{
 		mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 		mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
-		mUpdateHighlight, mConfigure
+		mUpdateHighlight, mReloadBase, mConfigure
 	};
 	FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
 	memset(menuElements, 0, sizeof(menuElements));
-
+	
 	try
 	{
 		if (rDisabled)
@@ -121,6 +121,9 @@ void FarEditorSet::openMenu()
 				getCurrentEditor()->updateHighlighting();
 				break;
 			case 10:
+				FullReloadBase();
+				break;
+			case 11:
 				configure();
 				break;
 		};
@@ -369,6 +372,7 @@ void FarEditorSet::configure()
 		 */
 		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 53, 21, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
 		int i = info->DialogRun(hDlg);
+		int reload = false;
 
 		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
 		{
@@ -376,14 +380,17 @@ void FarEditorSet::configure()
 			{
 				if (parserFactory != null)
 				{
-					shrdName=chooseHRDName(&shrdName);
+					const String *p=chooseHRDName(&shrdName);
 
 					// сохраняем значение shrdName, иначе при ReloadBase оно затирается
-					delete[] hrdName;
-					hrdName= new wchar_t[shrdName.length()];
-					wcscpy(hrdName,shrdName.getWChars());
-					shrdName=DString(hrdName);
+					if (p->compareTo(DString(hrdName)))
+					{
+						delete[] hrdName;
+						hrdName= new wchar_t[p->length()];
+						wcscpy(hrdName,p->getWChars());
+						shrdName=DString(hrdName);
 
+					}
 					descr = parserFactory->getHRDescription(DString("console"), shrdName);
 
 					if (descr == null)
@@ -398,6 +405,7 @@ void FarEditorSet::configure()
 			{
 				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 				QuickReloadBase(hrdName,catalog);
+				reload = true;
 
 				//случай когда плагин был отключен и название цветовой схемы имеет не то название 
 				if (!getDescr)
@@ -450,7 +458,8 @@ void FarEditorSet::configure()
 		{
 			info->DialogFree(hDlg);
 			// нужно перезагрузить все настройки на случай попыток подгрузить другую базу
-			FullReloadBase();
+			if (reload)
+				FullReloadBase();
 			return;
 		}
 
@@ -473,18 +482,24 @@ void FarEditorSet::configure()
 			rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
 			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, shrdName.getWChars(), (DWORD)(2 *(shrdName.length()+1)));
 
-			if (!rDisabled && !fdi[IDX_DISABLED].Selected)
+			// если плагин был включен а мы его отключаем или
+			// он был выключен но мы делали загрузку баз то отключаем 
+			if ((!rDisabled && !fdi[IDX_DISABLED].Selected)||(rDisabled && reload))
 			{
 				disableColorer();
+				reload = false;
 			}
 			else
 			if (rDisabled && fdi[IDX_DISABLED].Selected)
 			{
 				rDisabled = false;
+				FullReloadBase();
+				reload=false;
 			}
 		}
 		info->DialogFree(hDlg);
-		FullReloadBase();
+		if (reload)
+			FullReloadBase();
 	}
 	catch (Exception &e)
 	{
@@ -752,13 +767,7 @@ void FarEditorSet::disableColorer()
 	rDisabled = true;
 	rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
 	
-	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
-	{
-		fe->cleanEditor();
-		delete fe;
-	};
-
-	farEditorInstances.clear();
+	dropAllEditors();
 	
 	delete regionMapper;
 	delete parserFactory;
@@ -800,6 +809,7 @@ void FarEditorSet::dropAllEditors()
 {
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
 	{
+		fe->cleanEditor();
 		delete fe;
 	};
 

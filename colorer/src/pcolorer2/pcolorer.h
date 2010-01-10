@@ -20,7 +20,7 @@ enum
 	mCatalogFile, mHRDName, mMaxTime,
 	mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 	mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
-	mUpdateHighlight, mChooseEncoding, mConfigure,
+	mUpdateHighlight, mReloadBase, mConfigure,
 	mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
 	mGotcha, mChoose,
 	mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,

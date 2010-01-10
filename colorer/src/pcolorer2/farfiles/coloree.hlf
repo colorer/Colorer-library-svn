@@ -43,19 +43,22 @@ $^#Colorer's settings.#
         - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
         - Directory with plugin's dll, parent, parent of parent directory.
 
-
   #Color scheme:#
-     Selected color scheme to use for text highlighting.
+     Choose a color scheme, which will be used for coloring text. 
+     The choice does not work if the plugin is disabled.
 
   #Time before showing cancel dialog (msec)#
      After this time interval colorer shows cancelling dialog.
      anyway, you can stop parsing with ESC at any time.
 
   #[ Reload ]#
-     Reloads HRC database.
+     Tests the ability to load the current type of paint and color scheme
+     taking the path to catalog.xml and the name of the color scheme from the 
+     settings window. By indeed it is simply checking the availability catalog.xml.
 
   #[ Reload all ]#
-     Reloads HRC database and loads all types.
+     Tests the ability to load all types of paint and color schemes taking the 
+     path to catalog.xml and the name of the color scheme from the settings window.
 
   #[ Ok ]#
      Closes dialog.
@@ -130,8 +133,8 @@ All information is taken from syntax regions analysis.
     Updates syntax highlighting in current editor. Use it, if
 some problems occurs in current syntax.
 
-  #A Select encoding#
-    Show dialog, allowing you to change current FAR text encoding.
+  #R Reload hrc database#
+    Reload the configuration plugin and database types of coloring.
 
   #C Configuration#
     Calls colorer ~configuration menu~@config@.
