@@ -4,12 +4,12 @@
 <listitem><para>
 Anatoly Techtonik:
 <programlisting>
-* disambiquation concerning language features and conventions
+* disambiguation concerning language features and conventions
 + finish rewriting - file still contains some other ideas
   for improvement in comments
-+ rephrasings and fixes to chapter 5 and more
++ rephrasing and fixes to chapter 5 and more
 + proofreading fixes up to part 5 - coding conventions
-+ rephrase regex notes and document region features of the block
++ rephrase regexp notes and document region features of the block
 * minor clarifications
 core syntax -> basics
 + Igor remarks

@@ -537,7 +537,7 @@ empty scheme you can use named <emphasis role='strong'>def:empty</emphasis>
 </para>
 <para>
 Using <x:hrc>block</x:hrc> element you can switch context
-between different highligting schemes. This way it is possible to define
+between different highlighting schemes. This way it is possible to define
 a great number of different syntax combinations.
 </para>
 
@@ -561,7 +561,7 @@ somewhere in the middle of the previous.
 Sometimes a conflict occurs between the rule that closes block
 (i.e. <emphasis>&lt;end&gt;</emphasis> tag of the <x:hrc>block</x:hrc> element)
 and a matching rule inside this block. By default the rule inside block always
-wins. But sometimes rule that closes block should take precendence. For this
+wins. But sometimes rule that closes block should take precedence. For this
 purpose HRC defines <emphasis role='strong'>priority</emphasis>
 attribute for <x:hrc>regexp</x:hrc> and <x:hrc>block</x:hrc> elements.
 Its default value is <emphasis>"normal"</emphasis>, but if it is changed to
@@ -571,7 +571,7 @@ if inner element has lowered priority then <emphasis>&lt;end&gt;</emphasis> tag
 of the outer <x:hrc>block</x:hrc> element is used. 
 In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
 affects only conflicts with its <emphasis>&lt;start&gt;</emphasis> tag.
-<emphasis>&lt;end&gt;</emphasis> tag of nested block will always take precendence
+<emphasis>&lt;end&gt;</emphasis> tag of nested block will always take precedence
 over the similar <emphasis>&lt;end&gt;</emphasis> tag of enclosing block.
 </para>
 <para>
@@ -600,7 +600,7 @@ particular <emphasis>priority</emphasis> attribute.
 
 <section id="inner-region"><title>inner-region</title>
 <para>
-When defining scheme context switch it is possibile to set a default region
+When defining scheme context switch it is possible to set a default region
 for content of called scheme through <emphasis>region</emphasis> attribute of
 <x:hrc>block</x:hrc> element. The region will be used as a "background" for
 all other regions defined in that scheme.

@@ -57,7 +57,7 @@ with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
           are possible:<simpara>a-z stands for all alphabet chars between a and z,</simpara>
           <simpara><emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.</simpara>
           <simpara>&amp;amp;[] - Class join (can be dropped).</simpara>
-          <simpara>-[] - Class substraction.</simpara>
+          <simpara>-[] - Class subtraction.</simpara>
           <simpara>|[] - Class intersection.</simpara>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
@@ -121,18 +121,18 @@ metacharacter, or their combination enclosed in brackets.
 <row><entry><emphasis>(?{} ) or (?: )</emphasis></entry><entry>Group characters, but don't remember (unnamed group).</entry></row>
 <row><entry><emphasis>(?{} )</emphasis></entry><entry>Group and remember characters using unnamed uncounted group.</entry></row>
 <row><entry><emphasis>|</emphasis></entry><entry>Alternative. Match previous or next pattern.</entry></row>
-<row><entry><emphasis>*</emphasis></entry><entry>Match preceeding pattern 0 or more times.</entry></row>
-<row><entry><emphasis>+</emphasis></entry><entry>Match preceeding pattern 1 or more times.</entry></row>
-<row><entry><emphasis>?</emphasis></entry><entry>Match preceeding pattern 0 or 1 time.</entry></row>
+<row><entry><emphasis>*</emphasis></entry><entry>Match preceding pattern 0 or more times.</entry></row>
+<row><entry><emphasis>+</emphasis></entry><entry>Match preceding pattern 1 or more times.</entry></row>
+<row><entry><emphasis>?</emphasis></entry><entry>Match preceding pattern 0 or 1 time.</entry></row>
 <row><entry><emphasis>{n}</emphasis></entry><entry>Repeat n times.</entry></row>
 <row><entry><emphasis>{n,}</emphasis></entry><entry>Repeat n or more times.</entry></row>
 <row><entry><emphasis>{n,m}</emphasis></entry><entry>Repeat from n to m times.</entry></row>
 </tbody></tgroup></table>
 
 <para>
-Question sign <emphasis>?</emphasis> after operator makes it nongreedy.
-For example <emphasis>*</emphasis> operator becomes nongreedy if placing <emphasis>*?</emphasis>
-Greedy operator tries to eat as many chars in string as possible. Nongreedy takes minimum.
+Question sign <emphasis>?</emphasis> after operator makes it non-greedy.
+For example <emphasis>*</emphasis> operator becomes non-greedy if placing <emphasis>*?</emphasis>
+Greedy operator tries to eat as many chars in string as possible. Non-greedy takes minimum.
 </para>
 </section>
 
