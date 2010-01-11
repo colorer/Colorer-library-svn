@@ -14,10 +14,8 @@
          location="../2003/catalog.dtd"/>
   </xmlcatalog>
 
-  <property file='../../build.user.properties'/>
+  <import file="../../common.xml"/>
 
-  <property file='../../build.properties'/>
-	
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
   <target name="init">
