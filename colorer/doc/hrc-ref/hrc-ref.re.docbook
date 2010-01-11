@@ -36,12 +36,11 @@ After the end slash there can be modifiers:
 </itemizedlist>
 Each symbol in RE is sequentially compared with the target string.
 Everything that doesn't look like metacharacter is a simple character.
-It is important to remember that HRC is a XML language, therefore quotes
-in attributes of its elements like <x:hrc>regex</x:hrc> should be escaped
-with entities like <emphasis>&amp;quot;</emphasis> (or <emphasis>&#34;</emphasis>)
-unlike other languages where <emphasis>\"</emphasis> is often used to escape
-the quote. The same point should be kept in mind when using other entities
-inside regexp. For example, to match <emphasis>&amp;amp;</emphasis> sequence
+HRC file is also a valid XML file, therefore quotes in attributes of elements
+such as <x:hrc>regexp</x:hrc> should be escaped with entities 
+<emphasis>&amp;quot;</emphasis> or <emphasis>&#34;</emphasis>. Other XML
+entities inside <x:hrc>regexp</x:hrc> are also expanded and should be escaped
+when needed. For example, to match <emphasis>&amp;amp;</emphasis> sequence
 with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
 </para>
 </section>
