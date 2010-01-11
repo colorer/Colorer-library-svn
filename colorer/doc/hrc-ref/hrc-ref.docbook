@@ -508,12 +508,11 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 
 <section id='schemesyntax.contextswitch'><title>Block context switch</title>
 <para>
-Although regular expressions are very powerful feature, they do not allow
-to express some complex language constructions. This is due to general
-limitation of colorer's RE parser which scope is limited to a single line of text.
-Regular expression can't work on multiple lines of parsed text. 
-Often programming languages have constructions wrapped into each other unlimited
-number of times. This is also an area where Regular Expressions do not help much.
+Regular expressions are very powerful, but some complex language constructions
+still can not be described with their help. For example, syntax elements that
+allow recursion, i.e. braces inside braces that can be wrapped into each other
+multiple number of times. There is also a limitation of Colorer's RE parser
+that it can not see beyond a single line of text. 
 </para>
 <para>
 To define more complex syntax structures and context-free grammar constructions
@@ -528,7 +527,7 @@ tags, each with the RE syntax already described.
 Everything contained within these two marks will be highlighted
 as a syntax of some other <x:hrc>scheme</x:hrc>, also pointed by this
 element's attribute. It is also possible to paint the portions of these matched
-tags. Much like <x:hrc>regex</x:hrc> element - <x:hrc>block</x:hrc> can contain
+tags. Much like <x:hrc>regexp</x:hrc> element - <x:hrc>block</x:hrc> can contain
 up to 32 region attributes - <emphasis role='strong'>region, region00, region01, ... region1f</emphasis>.
 <emphasis>region0x</emphasis> corresponds to round brackets of <emphasis>&lt;start&gt;</emphasis> tag,
 <emphasis>region1x</emphasis> is for <emphasis>&lt;end&gt;</emphasis> tag brackets and <emphasis>region</emphasis> attribute
@@ -548,8 +547,8 @@ a great number of different syntax combinations.
 <para>
 Both regular expressions and block'ed scheme switches work in the same scheme context,
 and tested against text in the order they defined in HRC.
-Any conflict between multiple possible matches is resolved according
-to the order of elements in HRC file. After successful RE match parse position is increased by
+If current text is matched by several rules, the first rule wins. 
+After successful RE match parse position is increased by
 the width of that RE. By default the width is calculated from the first matched symbol till the last
 inclusive. However it is possible to adjust these boundaries and shift parse position.
 This is done with special <emphasis role='strong'>\m</emphasis>
@@ -559,23 +558,27 @@ somewhere in the middle of the previous.
 </para>
 <section id="priority"><title>priority</title>
 <para>
-Additional selection rules are applied in case of returning from 
-an inner scheme to its caller scheme (via <emphasis>&lt;end&gt;</emphasis> tag of the 
-<x:hrc>block</x:hrc> element for instance).
-Information about relative position of the <x:hrc>block</x:hrc> element
-can't help here to determine what to apply: <emphasis>&lt;end&gt;</emphasis> RE of the outer
-block or a next regular expression/keyword/block, defined in the inner (called) scheme.
-To resolve such conflict HRC defines a special attribute for <x:hrc>regexp</x:hrc>
-and <x:hrc>block</x:hrc> elements: <emphasis role='strong'>priority</emphasis>.
-Its default value is <emphasis>"normal"</emphasis>. If it is changed to
+Sometimes a conflict occurs between the rule that closes block
+(i.e. <emphasis>&lt;end&gt;</emphasis> tag of the <x:hrc>block</x:hrc> element)
+and a matching rule inside this block. By default the rule inside block always
+wins. But sometimes rule that closes block should take precendence. For this
+purpose HRC defines <emphasis role='strong'>priority</emphasis>
+attribute for <x:hrc>regexp</x:hrc> and <x:hrc>block</x:hrc> elements.
+Its default value is <emphasis>"normal"</emphasis>, but if it is changed to
 <emphasis>"low"</emphasis> then Colorer does not take into account this element
-when resolving conflicts upon exit from inner scheme.
-This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
-will be used instead of the element with lowered priority (when a conflict occurs).
+when resolving conflicts upon exit from inner scheme. I.e. in case of conflict
+if inner element has lowered priority then <emphasis>&lt;end&gt;</emphasis> tag
+of the outer <x:hrc>block</x:hrc> element is used. 
 In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
-relates to the <emphasis>&lt;start&gt;</emphasis> tag. Note that in rule with lowered priority
-<emphasis>$</emphasis> metacharacter (end of line) in RE matches the end of parent block area.
-<emphasis>priority</emphasis> attribute is often used in rules that highlight syntax errors.
+affects only conflicts with its <emphasis>&lt;start&gt;</emphasis> tag.
+<emphasis>&lt;end&gt;</emphasis> tag of nested block will always take precendence
+over the similar <emphasis>&lt;end&gt;</emphasis> tag of enclosing block.
+</para>
+<para>
+For regular expressions with lowered priority EOL metacharacter
+<emphasis>$</emphasis> in case of conflict matches the end of parent block area.
+This allows to use low <emphasis>priority</emphasis> to highlight syntax errors.
+<!-- todo example -->
 </para>
 </section>
 <section id="content-priority"><title>content-priority</title>
