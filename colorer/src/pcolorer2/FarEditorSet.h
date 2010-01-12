@@ -46,18 +46,20 @@ class FarEditorSet
 		 * internal structures. Prepares to work with newly
 		 * loaded database. Read settings from registry
 		 */
-		void FullReloadBase();
+		void ReloadBase();
 		/**
-		 * same as FullReloadBase, but not read settings from registry,
-		 * and not disablecolorer on error
+		 * trying to load the database on the specified path
 		 */
-		void QuickReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath);
-		void ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath, int dis);
+		void TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+
+		/** Expand environment string*/
+		SString *ExpandEnvironment(const wchar_t *catalogPath);
 
 		/** Shows dialog of file type selection */
 		void chooseType();
 		/** Shows dialog with HRD scheme selection */
 		const String *chooseHRDName(const String *current);
+		/** Get the description of HRD, or parameter name if description=null */
 		int getHRDescription(const String &name,const String *&descr);
 		/** FAR localized messages */
 		const wchar_t *GetMsg(int msg);

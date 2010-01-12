@@ -44,7 +44,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 	parserFactory = null;
 	regionMapper = null;
-	FullReloadBase();
+	ReloadBase();
 }
 
 FarEditorSet::~FarEditorSet()
@@ -121,7 +121,7 @@ void FarEditorSet::openMenu()
 				getCurrentEditor()->updateHighlighting();
 				break;
 			case 10:
-				FullReloadBase();
+				ReloadBase();
 				break;
 			case 11:
 				configure();
@@ -381,7 +381,6 @@ void FarEditorSet::configure()
 		 */
 		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 53, 21, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
 		int i = info->DialogRun(hDlg);
-		int reload = false;
 
 		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
 		{
@@ -399,44 +398,16 @@ void FarEditorSet::configure()
 				}
 			}
 
-			if ((i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
+			if ((i == IDX_RELOAD))
 			{
 				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
-				QuickReloadBase(hrdName,catalog);
-				reload = true;
-
-				//case when the plug was disconnected and the name of the color scheme may not coincide with the real
-				if (!getDescr)
-				{
-					getDescr = getHRDescription(*hrdNameSS,descr);
-					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
-				}
+				TestLoadBase(hrdNameSS->getWChars(),catalog,false);
 			}
 
-			if (i == IDX_RELOAD_ALL){
-				const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-
-				for (int idx = 0;; idx++)
-				{
-					FileType *type = hrcParser->enumerateFileTypes(idx);
-
-					if (type == null) break;
-
-					StringBuffer tname;
-
-					if (type->getGroup() != null)
-					{
-						tname.append(type->getGroup());
-						tname.append(DString(": "));
-					}
-
-					tname.append(type->getDescription());
-					marr[1] = tname.getWChars();
-					HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-					info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-					type->getBaseScheme();
-					info->RestoreScreen(scr);
-				};
+			if (i == IDX_RELOAD_ALL)
+			{
+				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+				TestLoadBase(hrdNameSS->getWChars(),catalog,true);
 			}
 
 			i = info->DialogRun(hDlg);
@@ -445,9 +416,6 @@ void FarEditorSet::configure()
 		if (i == IDX_CANCEL || i == -1)
 		{
 			info->DialogFree(hDlg);
-			// need to reload all the settings in case of attempts to load another database
-			if (reload)
-				FullReloadBase();
 			return;
 		}
 
@@ -461,6 +429,21 @@ void FarEditorSet::configure()
 			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 			fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0));
 
+			int i = false;
+			wchar_t *tempC = null;
+			rGetValueSz(hPluginRegistry, REG_CATALOG, tempC);
+			if (wcsicmp(tempC, fdi[IDX_CATALOG_EDIT].PtrData)) 
+				i = true;
+			else
+			{
+				delete[] tempC;
+				tempC=null;
+				rGetValueSz(hPluginRegistry, REG_HRD_NAME, tempC);
+				if (wcsicmp(tempC, fdi[IDX_CATALOG_EDIT].PtrData))
+					i = true;
+			}
+			delete [] tempC;
+
 			rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
 			rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
 			rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
@@ -470,24 +453,20 @@ void FarEditorSet::configure()
 			rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
 			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, hrdNameSS->getWChars(), (DWORD)(2 *(hrdNameSS->length()+1)));
 
-			// if the plugin has been included, and we will disable or
-			// he was off, but we did load the bases then disable
-			if ((!rDisabled && !fdi[IDX_DISABLED].Selected)||(rDisabled && reload))
+			// if the plugin has been included, and we will disable
+			if ((!rDisabled && !fdi[IDX_DISABLED].Selected))
 			{
 				disableColorer();
-				reload = false;
 			}
 			else
-			if (rDisabled && fdi[IDX_DISABLED].Selected)
+			if ((rDisabled && fdi[IDX_DISABLED].Selected)||(i))
 			{
 				rDisabled = false;
-				FullReloadBase();
-				reload=false;
+				ReloadBase();
 			}
 		}
 		info->DialogFree(hDlg);
-		if (reload)
-			FullReloadBase();
+
 	}
 	catch (Exception &e)
 	{
@@ -594,32 +573,9 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 	return 0;
 }
 
-void FarEditorSet::QuickReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath)
+SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
 {
-	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-	
-	dropAllEditors();
-	ReloadBase(hrdName,catalogPath, false);
-	
-	info->RestoreScreen(scr);
-
-}
-
-void FarEditorSet::ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath, int dis)
-{
-	delete regionMapper;
-	delete parserFactory;
-	parserFactory = null;
-	regionMapper = null;
-
-	SString *hrdNameS = null;
-	if ((hrdName)&&(wcslen(hrdName)))
-		hrdNameS = new SString(DString(hrdName));
-
-	// читаем путь до catalog.xml
-	SString *catalogPathS = null;
+	SString *S = null;
 	if ((catalogPath)&&(wcslen(catalogPath)))
 	{
 		wchar_t *temp = null;
@@ -630,12 +586,122 @@ void FarEditorSet::ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath
 		{
 			temp=new wchar_t[i];
 			ExpandEnvironmentStrings(catalogPath,temp,i);
-			catalogPathS = new SString(DString(temp));
+			S = new SString(DString(temp));
 		}
 		else
-			catalogPathS = new SString(DString(catalogPath));
+			S = new SString(DString(catalogPath));
 		delete[] temp;
 	}
+	return S;
+}
+
+void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
+{
+	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+
+	ParserFactory *parserFactoryLocal = null;
+	RegionMapper *regionMapperLocal = null;
+	HRCParser *hrcParserLocal = null;
+
+	SString *hrdNameS = null;
+	if ((hrdName)&&(wcslen(hrdName)))
+		hrdNameS = new SString(DString(hrdName));
+
+	SString *catalogPathS = null;
+	catalogPathS=ExpandEnvironment(catalogPath);
+
+	try
+	{
+		parserFactoryLocal = new ParserFactory(catalogPathS);
+		hrcParserLocal = parserFactoryLocal->getHRCParser();
+
+		try
+		{
+			regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), hrdNameS);
+		}
+		catch (ParserFactoryException &e)
+		{
+			if ((parserFactoryLocal != null)&&(parserFactoryLocal->getErrorHandler()!=null))
+				parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+			regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), null);
+		};
+
+		info->RestoreScreen(scr);
+		if (full)
+		{
+			const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+
+			for (int idx = 0;; idx++)
+			{
+				FileType *type = hrcParserLocal->enumerateFileTypes(idx);
+
+				if (type == null) break;
+
+				StringBuffer tname;
+
+				if (type->getGroup() != null)
+				{
+					tname.append(type->getGroup());
+					tname.append(DString(": "));
+				}
+
+				tname.append(type->getDescription());
+				marr[1] = tname.getWChars();
+				scr = info->SaveScreen(0, 0, -1, -1);
+				info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+				type->getBaseScheme();
+				info->RestoreScreen(scr);
+			}
+		}
+	}
+	catch (Exception &e)
+	{
+		const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
+
+		errload[2] = e.getMessage()->getWChars();
+
+		if ((parserFactoryLocal != null)&&(parserFactoryLocal->getErrorHandler()!=null))
+				parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+
+		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
+		info->RestoreScreen(scr);
+
+	};
+
+	delete regionMapperLocal;
+	delete parserFactoryLocal;
+}
+
+void FarEditorSet::ReloadBase()
+{
+	if (rDisabled) return;
+	
+	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
+	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	
+	dropAllEditors();
+	readRegistry();
+	
+	wchar_t *hrdName = null;
+	rGetValueSz(hPluginRegistry,REG_HRD_NAME,hrdName);
+	
+	wchar_t *catalogPath = null;
+	rGetValueSz(hPluginRegistry,REG_CATALOG,catalogPath);
+
+	delete regionMapper;
+	delete parserFactory;
+	parserFactory = null;
+	regionMapper = null;
+
+	SString *hrdNameS = null;
+	if ((hrdName)&&(wcslen(hrdName)))
+		hrdNameS = new SString(DString(hrdName));
+
+	SString *catalogPathS = null;
+	catalogPathS=ExpandEnvironment(catalogPath);
 	
 	try
 	{
@@ -661,37 +727,15 @@ void FarEditorSet::ReloadBase(const wchar_t *hrdName, const wchar_t *catalogPath
 		if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
 
 		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
-		if (dis)
-			disableColorer();
+
+		disableColorer();
 	};
 
-}
-
-void FarEditorSet::FullReloadBase()
-{
-	if (rDisabled) return;
-	
-	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
-	
-	dropAllEditors();
-	readRegistry();
-	
-	wchar_t *hrd = null;
-	rGetValueSz(hPluginRegistry,REG_HRD_NAME,hrd);
-	
-	wchar_t *catalog = null;
-	rGetValueSz(hPluginRegistry,REG_CATALOG,catalog);
-
-	ReloadBase(hrd, catalog,true);
-	
-	delete[] catalog;
-	delete[] hrd;
+	delete[] catalogPath;
+	delete[] hrdName;
 
 	info->RestoreScreen(scr);
 }
-
 
 ErrorHandler *FarEditorSet::getErrorHandler()
 {
