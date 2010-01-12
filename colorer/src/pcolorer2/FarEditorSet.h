@@ -58,6 +58,7 @@ class FarEditorSet
 		void chooseType();
 		/** Shows dialog with HRD scheme selection */
 		const String *chooseHRDName(const String *current);
+		int getHRDescription(const String &name,const String *&descr);
 		/** FAR localized messages */
 		const wchar_t *GetMsg(int msg);
 		/** Reads all registry settings into variables */

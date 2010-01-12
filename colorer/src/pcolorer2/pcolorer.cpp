@@ -61,20 +61,21 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	}
 	else if (OpenFrom == OPEN_COMMANDLINE)
 	{
-		//имя файла, которое нам передали
+		//file name, which we received
 		wchar_t *file = (wchar_t*)Item;
 		int l=wcslen(file);
 		
 		wchar_t *file_exp=new wchar_t[l];
-		// убираем кавычки, если присутствуют
-		// ориентируясь по первому символу - если он " то убираем и первый и последний.
-		// если первый кавычка,  а последний нет - ну это не наши проблемы, и так и так ошибка
+		// we remove quotes, if they are present, focusing on the first character
+		// if he quote it away and the first and last character
+		// If the first character quote, but the latter does not - well, it's not our 
+		// problem, and so and so error
 		if ((l>0)&&(*file==L'"'))
 		{
 			wcsncpy_s(file_exp,l, &file[1],l-2);
 			wcscpy_s(file,l,file_exp);
 		}
-		// заменяем переменные окружения на их значения
+		// replace the environment variables to their values
 		int k=ExpandEnvironmentStrings(file,file_exp,l);
 		if (!k) 
 			wcscpy_s(file_exp,l,file);

@@ -271,6 +271,23 @@ void FarEditorSet::chooseType()
 	if (type != null) fe->setFileType(type);
 }
 
+int FarEditorSet::getHRDescription(const String &name,const String *&descr)
+{
+	int i = true;
+	if (parserFactory != null)
+	{
+		descr = parserFactory->getHRDescription(DString("console"), name);
+	}
+	else
+		i = false;
+
+	if (descr == null)
+	{
+		descr = &name;
+	}
+
+	return i;
+}
 
 void FarEditorSet::configure()
 {
@@ -336,25 +353,17 @@ void FarEditorSet::configure()
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 		
 		wchar_t *hrdName = null;
-		DString shrdName; // используется для хранения hrd_name по всей функции
 		int len=rGetValueSz(hPluginRegistry, REG_HRD_NAME, hrdName);
-		if (len<=1)  // при пустой строке записывается '\0' 
+		if (len<=1)  // with a blank line is written '\0'
 			hrdName = L"default";
-		
-		shrdName = DString(hrdName);
-		const String *descr = null;
-		int getDescr = true;
-		if (parserFactory != null)
-		{
-			descr = parserFactory->getHRDescription(DString("console"), shrdName);
-		}
-		else
-			getDescr = false;
 
-		if (descr == null)
-		{
-			descr = &shrdName;
-		}
+		SString *hrdNameSS;
+		hrdNameSS = new SString(DString(hrdName));
+		delete[] hrdName;
+
+		const String *descr = null;
+		int getDescr;
+		getDescr = getHRDescription(*hrdNameSS,descr);
 
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
 		fdi[IDX_TIME].PtrData = GetMsg(mMaxTime);
@@ -380,23 +389,12 @@ void FarEditorSet::configure()
 			{
 				if (parserFactory != null)
 				{
-					const String *p=chooseHRDName(&shrdName);
+					const String *p=chooseHRDName(hrdNameSS);
+					delete hrdNameSS;
+					hrdNameSS=new SString(p);
 
-					// сохраняем значение shrdName, иначе при ReloadBase оно затирается
-					if (p->compareTo(DString(hrdName)))
-					{
-						delete[] hrdName;
-						hrdName= new wchar_t[p->length()];
-						wcscpy(hrdName,p->getWChars());
-						shrdName=DString(hrdName);
+					getHRDescription(*hrdNameSS,descr);
 
-					}
-					descr = parserFactory->getHRDescription(DString("console"), shrdName);
-
-					if (descr == null)
-					{
-						descr = &shrdName;
-					}
 					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
 				}
 			}
@@ -407,21 +405,11 @@ void FarEditorSet::configure()
 				QuickReloadBase(hrdName,catalog);
 				reload = true;
 
-				//случай когда плагин был отключен и название цветовой схемы имеет не то название 
+				//case when the plug was disconnected and the name of the color scheme may not coincide with the real
 				if (!getDescr)
 				{
-					descr = null;
-					if (parserFactory != null)
-					{
-						descr = parserFactory->getHRDescription(DString("console"), shrdName);
-					}
-					
-					if (descr == null)
-					{
-						descr = &shrdName;
-					}
+					getDescr = getHRDescription(*hrdNameSS,descr);
 					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
-					getDescr = true;
 				}
 			}
 
@@ -457,7 +445,7 @@ void FarEditorSet::configure()
 		if (i == IDX_CANCEL || i == -1)
 		{
 			info->DialogFree(hDlg);
-			// нужно перезагрузить все настройки на случай попыток подгрузить другую базу
+			// need to reload all the settings in case of attempts to load another database
 			if (reload)
 				FullReloadBase();
 			return;
@@ -480,10 +468,10 @@ void FarEditorSet::configure()
 			rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 			rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
 			rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
-			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, shrdName.getWChars(), (DWORD)(2 *(shrdName.length()+1)));
+			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, hrdNameSS->getWChars(), (DWORD)(2 *(hrdNameSS->length()+1)));
 
-			// если плагин был включен а мы его отключаем или
-			// он был выключен но мы делали загрузку баз то отключаем 
+			// if the plugin has been included, and we will disable or
+			// he was off, but we did load the bases then disable
 			if ((!rDisabled && !fdi[IDX_DISABLED].Selected)||(rDisabled && reload))
 			{
 				disableColorer();
