@@ -54,11 +54,15 @@ with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
 <row><entry><emphasis>[...]</emphasis></entry><entry>Match any character in set</entry></row>
 <row><entry><emphasis>[^...]</emphasis></entry><entry>Match any character that is not in set.
           None of RE operators works here, but you some metacharacters and range operator
-          are possible:<simpara>a-z stands for all alphabet chars between a and z,</simpara>
-          <simpara><emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference.</simpara>
-          <simpara>&amp;amp;[] - Class join (can be dropped).</simpara>
-          <simpara>-[] - Class subtraction.</simpara>
-          <simpara>|[] - Class intersection.</simpara>
+          are possible:
+          <simpara><emphasis>a-z</emphasis> stands for all alphabet chars between a and z,</simpara>
+          <simpara><emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference in RE.</simpara>
+          Additional boolean operations:
+          <simpara><emphasis>-[]</emphasis> - Class subtraction.</simpara>
+          <simpara><emphasis>|[]</emphasis> - Class intersection.</simpara>
+          <simpara>
+          See <ulink url='http://www.unicode.org/reports/tr18/'>Unicode RE TR#18</ulink> for more information.
+          </simpara>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
 <row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point (immediately before or after any word character)</entry></row>

@@ -581,7 +581,7 @@ Both regular expressions and block'ed scheme switches work in the same scheme co
 and tested against text in the order they defined in HRC.
 If current text is matched by several rules, the first rule wins. 
 After successful RE match parse position is increased by
-the width of that RE. By default the width is calculated from the first matched symbol till the last
+the length of that RE. By default the width is calculated from the first matched symbol till the last
 inclusive. However it is possible to adjust these boundaries and shift parse position.
 This is done with special <emphasis role='strong'>\m</emphasis>
 (redefines RE start) and <emphasis role='strong'>\M</emphasis> (redefines RE end) metasymbols.
