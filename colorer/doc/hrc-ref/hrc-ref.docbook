@@ -14,20 +14,24 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta4 library HRC Reference. April 2005</releaseinfo>
+<releaseinfo>Colorer-take5 be5 library HRC Reference. January 2010</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>26 April 2007</pubdate>
+<pubdate>12 January 2010</pubdate>
 
 <revhistory>
 <revision>
-  <revnumber>take5.be5</revnumber>
-  <date>26 April 2007</date>
+  <revnumber>take5.be5 (rev2)</revnumber>
+  <date>12 January 2010</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
   </revremark>
+</revision>
+<revision>
+  <revnumber>take5.be5</revnumber>
+  <date>26 April 2007</date>
 </revision>
 <revision>
   <revnumber>take5.beta4</revnumber>
@@ -77,7 +81,7 @@
 
 
 <copyright>
-<year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year>
+<year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2010</year>
 <holder>Igor Russkih (Cail Lomecb)</holder>
 </copyright>
 
@@ -124,6 +128,33 @@ with RE make HRC strong declarative language.
 
 <section id='basics'>
 <title>Basics</title>
+
+<section id='basics.parsing'>
+<title>Syntax processing overview</title>
+<para>
+When Colorer starts it reads available HRC files to know what syntax highlight
+rules are available and to which files they apply to. HRC file usually
+contains rules to colorize specific content type. Each of these rules is called
+"scheme" and is defined by XML <x:hrc>scheme</x:hrc> element. Content types are
+defined with XML <x:hrc>type</x:hrc> element with "name" attribute
+(such as <emphasis>&lt;type name="python"&gt;</emphasis>). Schemes for this
+content type are placed inside of <x:hrc>type</x:hrc>. HRC syntax allows several
+<x:hrc>type</x:hrc> elements in HRC file, but usually only one is included.
+When colorer knows which type to apply to the given content it starts
+processing with <x:hrc>scheme</x:hrc> element that that has the same name
+as enclosed type (i.e. <emphasis>&lt;scheme name="python"&gt;</emphasis> will be the
+"main() function" for the python <x:hrc>type</x:hrc> above).
+</para>
+<para>
+Matching <x:hrc>type</x:hrc> to content is made using information from
+<x:hrc>prototype</x:hrc> element that contains filename masks and content
+tests (see below). HRC is very flexible in layout, and for convenience all
+prototypes are extracted into main <emphasis>proto.hrc</emphasis> file.
+</para>
+</section>
+
+<section id='basics.hrc.syntax'>
+<title>HRC syntax components</title>
 <para>
 HRC describes and stores syntax rules for numerous languages. All language definitions
 are divided into two parts:
@@ -196,6 +227,7 @@ elements.
 
 </para>
 </formalpara>
+</section>
 
 
 <section id='basics.filetypes'><title>File Types</title>
