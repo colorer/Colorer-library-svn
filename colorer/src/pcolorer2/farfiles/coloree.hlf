@@ -52,16 +52,16 @@ $^#Colorer's settings.#
      anyway, you can stop parsing with ESC at any time.
 
   #[ Reload ]#
-     Tests the ability to load the current type of paint and color scheme
-     taking the path to catalog.xml and the name of the color scheme from the 
-     settings window. By indeed it is simply checking the availability catalog.xml.
+     Tests ability to load the base configuration file catalog.xml,
+     list of language and color schemes from it, taking the path to 
+     it from the Settings window
 
   #[ Reload all ]#
-     Tests the ability to load all types of paint and color schemes taking the 
-     path to catalog.xml and the name of the color scheme from the settings window.
+     Tests ability to load all the language of schemes, taking the path to
+     catalog.xml from the Settings window.
 
   #[ Ok ]#
-     Closes dialog.
+     Closes dialog and save settings.
 
 @cmdline
 $# Command line support
@@ -138,10 +138,6 @@ some problems occurs in current syntax.
 
   #C Configuration#
     Calls colorer ~configuration menu~@config@.
-
-@encodings
-$# Encoding selection
-    List of all available encodings. You can choose what you need.
 
 @hrd
 $# Color scheme selection

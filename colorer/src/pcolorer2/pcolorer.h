@@ -24,8 +24,7 @@ enum
 	mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
 	mGotcha, mChoose,
 	mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-	mFatal, mNeedColorer, mWait,
-	mSelectEncoding, mSelectHRD
+	mFatal, mNeedColorer, mWait, mSelectHRD
 };
 
 #endif
