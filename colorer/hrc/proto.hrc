@@ -23,7 +23,7 @@
     <location link="base/c.hrc"/>
     <filename>/\.c$/i</filename>
     <parameters>
-      <param name="ansi-defines" value="true" description="Use ANSI C standart library keywords"/>
+      <param name="ansi-defines" value="true" description="Use ANSI C standard library keywords"/>
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
       <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
@@ -127,9 +127,13 @@
 			<param name="show-cross" value="both"/>
 		</parameters>
   </prototype>
+  <prototype name="lua" group="main" description="Lua">
+    <location link="base/lua.hrc"/>
+    <filename>/\.(lua)$/i</filename>
+  </prototype>  
   <prototype name="ruby" group="main" description="Ruby">
     <location link="base/ruby.hrc"/>
-    <filename>/\.(rb|rbw|ruby)$/i</filename>
+    <filename>/\.(rb|rbw|ruby|rake)$/i</filename>
     <filename>/Rakefile$/i</filename>
     <firstline>/bin\/ruby/i</firstline>
   </prototype>
@@ -161,8 +165,8 @@
     <location link="inet/html-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
     <parameters>
-     <param name="ie-css" value="true" description="Use non-standart MSIE css extensions"/>
-     <param name="moz-css" value="true" description="Use non-standart Gecho-based css extensions"/>
+     <param name="ie-css" value="true" description="Use non-standard MSIE css extensions"/>
+     <param name="moz-css" value="true" description="Use non-standard Gecho-based css extensions"/>
     </parameters>
   </prototype>
   <prototype name="svg-css" group="inet" description="css for svg">
@@ -176,7 +180,7 @@
   </prototype>
   <prototype name="erb" group="inet" description="ERB">
     <location link="inet/erb.hrc"/>
-    <filename weight='2'>/\.(erb|rhtml)$/i</filename>
+    <filename weight='4'>/\.(erb|rhtml|html\.erb)$/i</filename>
   </prototype>
 
   <prototype name="jsp" group="inet" description="jsp">
@@ -473,6 +477,11 @@
     <location link="scripts/javapolicy.hrc"/>
     <filename>/\.policy$/i</filename>
   </prototype>
+  <prototype name="asn1" group="scripts" description="ASN.1/ECN">
+    <location link="scripts/asn1.hrc"/>
+    <filename>/\.(asn|asn1|ecn|edm|elm|mib)$/i</filename>
+    <filename>/-mib$/i</filename>
+  </prototype>
   <prototype name="lex" group="scripts" description="Lex">
     <location link="scripts/lex.hrc"/>
     <filename>/\.(l|f?lex)+$/i</filename>
@@ -482,6 +491,10 @@
     <filename>/\.y+$/i</filename>
   </prototype>
   
+  <prototype name="scons" group="scripts" description="SCons">
+    <location link="scripts/scons.hrc"/>
+    <filename>/(SConstruct|SConscript)$/i</filename>
+  </prototype>
   <prototype name="rtf" group="scripts" description="RTF text">
     <location link="scripts/rtf.hrc"/>
     <filename>/\.rtf$/i</filename>
@@ -626,7 +639,7 @@
   </prototype>
   <prototype name="ocaml" group="rare" description="OCaml">
     <location link="rare/ocaml.hrc"/>
-    <filename>/\.(ml|mli|mlp)$/i</filename>
+    <filename>/\.ml[ilp]?$/i</filename>
   </prototype>
   <prototype name="sicstusProlog" group="rare" description="Sicstus Prolog">
     <location link="rare/sprolog.hrc"/>

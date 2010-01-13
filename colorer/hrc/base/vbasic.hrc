@@ -67,23 +67,23 @@ With help of:
 
       <scheme name="PairedConstructions">
          <!--regexp match="/\bend\s+if\b/i" region0="Error" lowpriority="lowpriority"/-->
-         <regexp match="/\bend\s+if\b/i" region0="Keyword" priority="low"/>
+         <regexp match="/\bend\s+if\b/i" region0="vbWord" priority="low"/>
          <block start="/\b(if)\b/i" end="/\b((then\s+exit\s+(function|sub|property|for|do))|((then)(\s+[^'\s]+.*$)?=)|(end([\s])+\Y1))\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region11="PairEnd"/>
          <regexp match="/(\bExit\s+(function|sub|property|for|do)\b)/i" region0="Keyword"/>
 
          <regexp match="/(\bproperty\b)?#8(\s+\b(let|set|get)\b)/i" region2="Keyword"/>
          <regexp match="/\.(class|property)\b/i"/>
          <block start="/\b(with|function|sub|class|property)\b/i" end="/\b(end([\s])+\Y1)\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region11="PairEnd"/>
          <block start="/((\bselect\b)\s+\bcase\b)/i" end="/\b(end([\s])+\Y2)\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(for(\s+each)?)\b/i" end="/([^\S]+|^)\m(\bnext)\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region12="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region12="PairEnd"/>
          <block start="/\b(do(\s+(while|until))?)\b/i" end="/\b(loop(\s+(while|until))?)\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(while)\b/i" end="/\b(wend)\b/i"
-                scheme="PairedConstructions" region00="Keyword" region10="Keyword" region01="PairStart" region11="PairEnd"/>
+                scheme="PairedConstructions" region00="vbWord" region10="vbWord" region01="PairStart" region11="PairEnd"/>
          <regexp match="/(\bOn\s+Error\s+(Resume\s+Next)|(Goto\s+0)\b)/i" region0="Keyword"/>
       </scheme>
 

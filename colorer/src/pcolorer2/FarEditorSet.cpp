@@ -38,7 +38,7 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
 	info = fedi;
 	wchar_t key[255];
-	_snwprintf(key, 255, L"%s\\colorer", info->RootKey);
+	_snwprintf_s(key,255, 255, L"%s\\colorer", info->RootKey);
 	hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 	parserFactory = null;

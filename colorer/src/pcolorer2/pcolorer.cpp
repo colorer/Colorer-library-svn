@@ -98,8 +98,8 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		if (wcsstr(temp,L"\\\\?\\")==NULL){
 			delete[] file_exp;
 			file_exp=new wchar_t[p+7];
-			wcscpy(file_exp,L"\\\\?\\");
-			wcscat(file_exp,temp);
+			wcscpy_s(file_exp,p+7,L"\\\\?\\");
+			wcscat_s(file_exp,p+7,temp);
 			editorSet->viewFile(DString(file_exp));
 		}
 		else
