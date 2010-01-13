@@ -36,6 +36,12 @@ After the end slash there can be modifiers:
 </itemizedlist>
 Each symbol in RE is sequentially compared with the target string.
 Everything that doesn't look like metacharacter is a simple character.
+HRC file is also a valid XML file, therefore quotes in attributes of elements
+such as <x:hrc>regexp</x:hrc> should be escaped with entities 
+<emphasis>&amp;quot;</emphasis> or <emphasis>&#34;</emphasis>. Other XML
+entities inside <x:hrc>regexp</x:hrc> are also expanded and should be escaped
+when needed. For example, to match <emphasis>&amp;amp;</emphasis> sequence
+with your rule - use <emphasis>&amp;amp;amp;</emphasis> construction.
 </para>
 </section>
 
@@ -48,18 +54,18 @@ Everything that doesn't look like metacharacter is a simple character.
 <row><entry><emphasis>[...]</emphasis></entry><entry>Match any character in set</entry></row>
 <row><entry><emphasis>[^...]</emphasis></entry><entry>Match any character that is not in set.
           None of RE operators works here, but you some metacharacters and range operator
-          are possible: a-z stands for all alphabet chars between a and z,
-<!-- todo $ and ^ metacharacters do not work, what else? -->
-          <para>
-          Unicode class reference could be used from RE in form of
-          <emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis>.
-          Additional boolean operations: <emphasis>-[]</emphasis> - Class substraction.
-          <emphasis>&amp;&amp;[]</emphasis> - Class intersection.
+          are possible:
+          <simpara><emphasis>a-z</emphasis> stands for all alphabet chars between a and z,</simpara>
+          <simpara><emphasis>[{ASSIGNED}-[{Lu}]-[{Ll}]]</emphasis> - unicode classes reference in RE.</simpara>
+          Additional boolean operations:
+          <simpara><emphasis>-[]</emphasis> - Class subtraction.</simpara>
+          <simpara><emphasis>|[]</emphasis> - Class intersection.</simpara>
+          <simpara>
           See <ulink url='http://www.unicode.org/reports/tr18/'>Unicode RE TR#18</ulink> for more information.
-          </para>
+          </simpara>
           </entry></row>
 <row><entry><emphasis>\#</emphasis></entry><entry>The symbol '#' after slash (except a-z and 1-9)</entry></row>
-<row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point</entry></row>
+<row><entry><emphasis>\b</emphasis></entry><entry>Word break at this point (immediately before or after any word character)</entry></row>
 <row><entry><emphasis>\B</emphasis></entry><entry>No word break at this point</entry></row>
 <row><entry><emphasis>\xHH</emphasis>, <emphasis>\x{HHHH}</emphasis></entry><entry><emphasis>HH, HHHH</emphasis> - character code (hex)</entry></row>
 <row><entry><emphasis>\n</emphasis></entry><entry>0x10 (lf)</entry></row>                                          
@@ -119,18 +125,18 @@ metacharacter, or their combination enclosed in brackets.
 <row><entry><emphasis>(?{} ) or (?: )</emphasis></entry><entry>Group characters, but don't remember (unnamed group).</entry></row>
 <row><entry><emphasis>(?{} )</emphasis></entry><entry>Group and remember characters using unnamed uncounted group.</entry></row>
 <row><entry><emphasis>|</emphasis></entry><entry>Alternative. Match previous or next pattern.</entry></row>
-<row><entry><emphasis>*</emphasis></entry><entry>Match preceeding pattern 0 or more times.</entry></row>
-<row><entry><emphasis>+</emphasis></entry><entry>Match preceeding pattern 1 or more times.</entry></row>
-<row><entry><emphasis>?</emphasis></entry><entry>Match preceeding pattern 0 or 1 time.</entry></row>
+<row><entry><emphasis>*</emphasis></entry><entry>Match preceding pattern 0 or more times.</entry></row>
+<row><entry><emphasis>+</emphasis></entry><entry>Match preceding pattern 1 or more times.</entry></row>
+<row><entry><emphasis>?</emphasis></entry><entry>Match preceding pattern 0 or 1 time.</entry></row>
 <row><entry><emphasis>{n}</emphasis></entry><entry>Repeat n times.</entry></row>
 <row><entry><emphasis>{n,}</emphasis></entry><entry>Repeat n or more times.</entry></row>
 <row><entry><emphasis>{n,m}</emphasis></entry><entry>Repeat from n to m times.</entry></row>
 </tbody></tgroup></table>
 
 <para>
-Question sign <emphasis>?</emphasis> after operator makes it nongreedy.
-For example <emphasis>*</emphasis> operator becomes nongreedy if placing <emphasis>*?</emphasis>
-Greedy operator tries to eat as many chars in string as possible. Nongreedy takes minimum.
+Question sign <emphasis>?</emphasis> after operator makes it non-greedy.
+For example <emphasis>*</emphasis> operator becomes non-greedy if placing <emphasis>*?</emphasis>
+Greedy operator tries to eat as many chars in string as possible. Non-greedy takes minimum.
 </para>
 </section>
 

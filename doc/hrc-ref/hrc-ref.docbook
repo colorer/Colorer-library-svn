@@ -14,20 +14,24 @@
 
 <articleinfo>
 
-<releaseinfo>Colorer-take5 beta4 library HRC Reference. April 2005</releaseinfo>
+<releaseinfo>Colorer-take5 be5 library HRC Reference. January 2010</releaseinfo>
 <title>HRC Language Reference</title>
 
-<pubdate>26 April 2007</pubdate>
+<pubdate>12 January 2010</pubdate>
 
 <revhistory>
 <revision>
-  <revnumber>take5.be5</revnumber>
-  <date>26 April 2007</date>
+  <revnumber>take5.be5 (rev2)</revnumber>
+  <date>12 January 2010</date>
   <revremark>(Available as
     <ulink url='http://colorer.sf.net/hrc-ref/'>HTML</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.pdf'>PDF</ulink>,
     <ulink url='http://colorer.sf.net/hrc-ref/hrc-ref.zip'>DocBook</ulink>)
   </revremark>
+</revision>
+<revision>
+  <revnumber>take5.be5</revnumber>
+  <date>26 April 2007</date>
 </revision>
 <revision>
   <revnumber>take5.beta4</revnumber>
@@ -67,7 +71,7 @@
   </affiliation>
 </author>
 <author>
-  <firstname>Anatoly</firstname><surname>Technonik</surname>
+  <firstname>Anatoly</firstname><surname>Techtonik</surname>
   <affiliation>
     <address>
       <email>techtonik at gmail.com</email>
@@ -77,7 +81,7 @@
 
 
 <copyright>
-<year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year>
+<year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2010</year>
 <holder>Igor Russkih (Cail Lomecb)</holder>
 </copyright>
 
@@ -124,6 +128,33 @@ with RE make HRC strong declarative language.
 
 <section id='basics'>
 <title>Basics</title>
+
+<section id='basics.parsing'>
+<title>Syntax processing overview</title>
+<para>
+When Colorer starts it reads available HRC files to know what syntax highlight
+rules are available and to which files they apply to. HRC file usually
+contains rules to colorize specific content type. Each of these rules is called
+"scheme" and is defined by XML <x:hrc>scheme</x:hrc> element. Content types are
+defined with XML <x:hrc>type</x:hrc> element with "name" attribute
+(such as <emphasis>&lt;type name="python"&gt;</emphasis>). Schemes for this
+content type are placed inside of <x:hrc>type</x:hrc>. HRC syntax allows several
+<x:hrc>type</x:hrc> elements in HRC file, but usually only one is included.
+When colorer knows which type to apply to the given content it starts
+processing with <x:hrc>scheme</x:hrc> element that that has the same name
+as enclosed type (i.e. <emphasis>&lt;scheme name="python"&gt;</emphasis> will be the
+"main() function" for the python <x:hrc>type</x:hrc> above).
+</para>
+<para>
+Matching <x:hrc>type</x:hrc> to content is made using information from
+<x:hrc>prototype</x:hrc> element that contains filename masks and content
+tests (see below). HRC is very flexible in layout, and for convenience all
+prototypes are extracted into main <emphasis>proto.hrc</emphasis> file.
+</para>
+</section>
+
+<section id='basics.hrc.syntax'>
+<title>HRC syntax components</title>
 <para>
 HRC describes and stores syntax rules for numerous languages. All language definitions
 are divided into two parts:
@@ -196,6 +227,7 @@ elements.
 
 </para>
 </formalpara>
+</section>
 
 
 <section id='basics.filetypes'><title>File Types</title>
@@ -508,12 +540,11 @@ priority within the block is tested. This is explained in <xref linkend="schemes
 
 <section id='schemesyntax.contextswitch'><title>Block context switch</title>
 <para>
-Although regular expressions are very powerful feature, they do not allow
-to express some complex language constructions. This is due to general
-limitation of colorer's RE parser which scope is limited to a single line of text.
-Regular expression can't work on multiple lines of the parsed text. 
-Often programming languages have constructions wrapped into each other unlimited
-number of times. This is also an area where Regular Expression do not help much.
+Regular expressions are very powerful, but some complex language constructions
+still can not be described with their help. For example, syntax elements that
+allow recursion, i.e. braces inside braces that can be wrapped into each other
+multiple number of times. There is also a limitation of Colorer's RE parser
+that it can not see beyond a single line of text. 
 </para>
 <para>
 To define more complex syntax structures and context-free grammar constructions
@@ -528,7 +559,7 @@ tags, each with the RE syntax already described.
 Everything contained within these two marks will be highlighted
 as a syntax of some other <x:hrc>scheme</x:hrc>, also pointed by this
 element's attribute. It is also possible to paint the portions of these matched
-tags. Much like <x:hrc>regex</x:hrc> element - <x:hrc>block</x:hrc> can contain
+tags. Much like <x:hrc>regexp</x:hrc> element - <x:hrc>block</x:hrc> can contain
 up to 32 region attributes - <emphasis role='strong'>region, region00, region01, ... region1f</emphasis>.
 <emphasis>region0x</emphasis> corresponds to round brackets of <emphasis>&lt;start&gt;</emphasis> tag,
 <emphasis>region1x</emphasis> is for <emphasis>&lt;end&gt;</emphasis> tag brackets and <emphasis>region</emphasis> attribute
@@ -538,7 +569,7 @@ empty scheme you can use named <emphasis role='strong'>def:empty</emphasis>
 </para>
 <para>
 Using <x:hrc>block</x:hrc> element you can switch context
-between different highligting schemes. This way it is possible to define
+between different highlighting schemes. This way it is possible to define
 a great number of different syntax combinations.
 </para>
 
@@ -548,9 +579,9 @@ a great number of different syntax combinations.
 <para>
 Both regular expressions and block'ed scheme switches work in the same scheme context,
 and tested against text in the order they defined in HRC.
-Any conflict between multiple possible matches is resolved according
-to the order of elements in HRC file. After successful RE match parse position is increased by
-the width of that RE. By default the width is calculated from the first matched symbol till the last
+If current text is matched by several rules, the first rule wins. 
+After successful RE match parse position is increased by
+the length of that RE. By default the width is calculated from the first matched symbol till the last
 inclusive. However it is possible to adjust these boundaries and shift parse position.
 This is done with special <emphasis role='strong'>\m</emphasis>
 (redefines RE start) and <emphasis role='strong'>\M</emphasis> (redefines RE end) metasymbols.
@@ -559,22 +590,27 @@ somewhere in the middle of the previous.
 </para>
 <section id="priority"><title>priority</title>
 <para>
-Additional selection rules are applied in case of returning from 
-an inner scheme to its caller scheme (via <emphasis>&lt;end&gt;</emphasis> tag of the 
-<x:hrc>block</x:hrc> element for instance).
-Information about relative position of the <x:hrc>block</x:hrc> element
-can't help here to determine what to apply: <emphasis>&lt;end&gt;</emphasis> RE of the outer
-block or a next regular expression/keyword/block, defined in the inner (called) scheme.
-To resolve such conflict HRC defines a special attribute for <x:hrc>regexp</x:hrc>
-and <x:hrc>block</x:hrc> elements: <emphasis role='strong'>priority</emphasis>.
-Its default value is <emphasis>"normal"</emphasis>. If it is changed to
+Sometimes a conflict occurs between the rule that closes block
+(i.e. <emphasis>&lt;end&gt;</emphasis> tag of the <x:hrc>block</x:hrc> element)
+and a matching rule inside this block. By default the rule inside block always
+wins. But sometimes rule that closes block should take precedence. For this
+purpose HRC defines <emphasis role='strong'>priority</emphasis>
+attribute for <x:hrc>regexp</x:hrc> and <x:hrc>block</x:hrc> elements.
+Its default value is <emphasis>"normal"</emphasis>, but if it is changed to
 <emphasis>"low"</emphasis> then Colorer does not take into account this element
-when resolving conflicts upon exit from inner scheme.
-This means that <emphasis>&lt;end&gt;</emphasis> tag of the outer <x:hrc>block</x:hrc> element
-will be used instead of the element with lowered priority (when a conflict occurs).
+when resolving conflicts upon exit from inner scheme. I.e. in case of conflict
+if inner element has lowered priority then <emphasis>&lt;end&gt;</emphasis> tag
+of the outer <x:hrc>block</x:hrc> element is used. 
 In case of nested <x:hrc>block</x:hrc> tag, <emphasis>priority</emphasis> attribute
-relates to the <emphasis>&lt;start&gt;</emphasis> tag. <emphasis>priority</emphasis>
-attribute is often used in rules that highlight syntax errors.
+affects only conflicts with its <emphasis>&lt;start&gt;</emphasis> tag.
+<emphasis>&lt;end&gt;</emphasis> tag of nested block will always take precedence
+over the similar <emphasis>&lt;end&gt;</emphasis> tag of enclosing block.
+</para>
+<para>
+For regular expressions with lowered priority EOL metacharacter
+<emphasis>$</emphasis> in case of conflict matches the end of parent block area.
+This allows to use low <emphasis>priority</emphasis> to highlight syntax errors.
+<!-- todo example -->
 </para>
 </section>
 <section id="content-priority"><title>content-priority</title>
@@ -596,7 +632,7 @@ particular <emphasis>priority</emphasis> attribute.
 
 <section id="inner-region"><title>inner-region</title>
 <para>
-When defining scheme context switch it is possibile to set a default region
+When defining scheme context switch it is possible to set a default region
 for content of called scheme through <emphasis>region</emphasis> attribute of
 <x:hrc>block</x:hrc> element. The region will be used as a "background" for
 all other regions defined in that scheme.
@@ -700,13 +736,11 @@ syntax regions, derived from the defaults.
 
 <section id='coding.std.spec.pairs'><title>Pair construction matching</title>
 <para>
-Colorer-take5 library uses HRC syntax conventions for additional
-processing that make editing process more intuitive. This processing includes
-paired construction matching and file's structure/error list outline.
-These features are implemented through specially defined regions.
-Matching paired construction consists of two special regions
-<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>
-that package shoud define.
+In addition to coloring rules, Colorer-take5 library uses some naming conventions to
+provide such features as pair matching, error lists and file structure outlines.
+Conventions include several special regions. Paired constructions 
+are defined using 
+<emphasis role='strong'>def:PairStart</emphasis> and <emphasis role='strong'>def:PairEnd</emphasis>.
 Parsing layout for these regions should be properly enwrapped in a valid recursive sequence.
 Using this information Colorer-take5 library provides user with
 ability to jump over text blocks in target language and highlight them during

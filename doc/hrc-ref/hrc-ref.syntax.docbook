@@ -9,7 +9,7 @@ This catalog is stored in <emphasis>catalog.xml</emphasis> file
 and mapped into the ParserFactory class.
 
 Catalog contains information about all installed HRC modules,
-error logging configudation and listing of available HRD sets.
+error logging configuration and listing of available HRD sets.
 
 </para>
 <x:schemaref uri="&catalogref;" role='catalog'/>
