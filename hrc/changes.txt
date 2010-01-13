@@ -10,7 +10,8 @@ Date: --not released-- r1193
     - SCons scripts support (anatoly techtonik)
 
 
-Date: 2009-12-23 18:47:53 r1178 (FarColorer 1.0.2.1)
+Date: 2009-12-23 18:47:53 r1178
+(trunk changes merged into dev branch for FarColorer 1.0.2.1)
   Reorg:
     - Python, Ruby, Tcl/Tk are not "rare" anymore
   Fixes:
