@@ -35,30 +35,25 @@ $^#Colorer's settings.#
      and the function name itself.
 
   #catalog.xml file:#
-     Full file path sets default catalog file for colorer.
-     If this field is empty colorer tries to find the file automatically
+     Full file path sets default catalog file for Colorer.
+     If this field is empty Colorer tries to find the file automatically
      in the following order:
         - Path in %COLORER5CATALOG%
         - Path in file %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
         - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
         - Directory with plugin's dll, parent, parent of parent directory.
 
-  #Color scheme:#
-     Choose a color scheme, which will be used for coloring text. 
+  #Color style:#
+     Choose a color style, which will be used for coloring text. 
      The choice does not work if the plugin is disabled.
 
-  #Time before showing cancel dialog (msec)#
-     After this time interval colorer shows cancelling dialog.
-     anyway, you can stop parsing with ESC at any time.
+  #[ Test catalog.xml ]#
+     Tests ability to load the base configuration file catalog.xml, list of 
+     language scheme and color styles, taking the path to it from the settings window.
 
-  #[ Reload ]#
-     Tests ability to load the base configuration file catalog.xml,
-     list of language and color schemes from it, taking the path to 
-     it from the Settings window
-
-  #[ Reload all ]#
+  #[ Test schema library ]#
      Tests ability to load all the language of schemes, taking the path to
-     catalog.xml from the Settings window.
+     catalog.xml from the settings window.
 
   #[ Ok ]#
      Closes dialog and save settings.
@@ -66,7 +61,7 @@ $^#Colorer's settings.#
 @cmdline
 $# Command line support
     You can use the plugin from FAR's command line with prefix 'clr:'
-to view files with syntax highlighting in colorer's internal viewer.
+to view files with syntax highlighting in Colorer's internal viewer.
 To view file you have to specify file name after the 'clr:' prefix
 in FAR's command line. This function is equal to #colorer.exe# program
 features, but doesn't load HRC database each time, so it works faster.
@@ -106,7 +101,7 @@ current region under cursor and jumps there.
 
   #3 Select block#        ~Alt-]~
     Moves cursor to start of block and selects it all. You can call this
-function as on block limits as inside it. In second case colorer will find
+function as on block limits as inside it. In second case Colorer will find
 start and end of nearest block automatically.
 
   #4 Select pair#         ~Alt-P~
@@ -133,22 +128,22 @@ All information is taken from syntax regions analysis.
     Updates syntax highlighting in current editor. Use it, if
 some problems occurs in current syntax.
 
-  #R Reload hrc database#
-    Reload the configuration plugin and database types of coloring.
+  #R Reload schema library#
+    Reload the configuration plugin and library schemes.
 
   #C Configuration#
-    Calls colorer ~configuration menu~@config@.
+    Calls Colorer ~configuration menu~@config@.
 
 @hrd
-$# Color scheme selection
+$# Color style selection
     List of all available color schemes. You can choose what you need.
 
 @exception
 $# Exception occured
-    Exception happened while colorer work.
+    Exception happened while Colorer work.
 All further processing would be disabled. You can re-enable
-colorer from it's settings menu after locating and removing
-exception cause. All extended information in colorer logging
+Colorer from it's settings menu after locating and removing
+exception cause. All extended information in Colorer logging
 file (colorer.log by default)
 
 @author

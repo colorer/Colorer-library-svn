@@ -7,7 +7,6 @@
 #define REG_DISABLED        L"disabled"
 #define REG_HRD_NAME        L"hrdName"
 #define REG_CATALOG         L"catalog"
-#define REG_MAXTIME         L"maxTime"
 #define REG_CROSSDRAW   L"CrossDraw"
 #define REG_PAIRSDONTDRAW   L"pairsDontDraw"
 #define REG_SYNTAXDONTDRAW  L"syntaxDontDraw"
@@ -305,8 +304,6 @@ void FarEditorSet::configure()
 			IDX_CATALOG_EDIT,
 			IDX_HRD,
 			IDX_HRD_SELECT,
-			IDX_TIME,
-			IDX_TIME_EDIT,
 			IDX_RELOAD,
 			IDX_RELOAD_ALL,
 			IDX_OK,
@@ -315,22 +312,20 @@ void FarEditorSet::configure()
 
 		FarDialogItem fdi[] =
 		{
-			{ DI_DOUBLEBOX,3,1,49,19,0,0,0,0,L""},                                 //IDX_BOX,
-			{ DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
-			{ DI_CHECKBOX,6,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
-			{ DI_CHECKBOX,19,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
-			{ DI_CHECKBOX,32,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
-			{ DI_CHECKBOX,6,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
-			{ DI_TEXT,6,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
-			{ DI_EDIT,10,10,40,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
-			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
-			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
-			{ DI_TEXT,6,13,0,0,FALSE,0,0,0,L""},                                   //IDX_TIME,
-			{ DI_EDIT,10,14,25,5,FALSE,(DWORD_PTR)L"clr_time",DIF_HISTORY,0,L""},  //IDX_TIME_EDIT,
-			{ DI_BUTTON,6,16,0,0,FALSE,0,0,0,L""},                                 //IDX_RELOAD,
-			{ DI_BUTTON,26,16,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-			{ DI_BUTTON,38,18,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+			{ DI_DOUBLEBOX,3,1,50,17,0,0,0,0,L""},                                 //IDX_BOX,
+			{ DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
+			{ DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
+			{ DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
+			{ DI_CHECKBOX,31,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
+			{ DI_CHECKBOX,5,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
+			{ DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
+			{ DI_EDIT,9,10,40,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
+			{ DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
+			{ DI_BUTTON,11,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
+			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                 //IDX_RELOAD,
+			{ DI_BUTTON,25,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+			{ DI_BUTTON,29,16,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+			{ DI_BUTTON,37,16,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
 		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -366,11 +361,6 @@ void FarEditorSet::configure()
 		getDescr = getHRDescription(*hrdNameSS,descr);
 
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
-		fdi[IDX_TIME].PtrData = GetMsg(mMaxTime);
-		
-		wchar_t *tempMaxTime = null;
-		rGetValueSz(hPluginRegistry, REG_MAXTIME, tempMaxTime);
-		fdi[IDX_TIME_EDIT].PtrData = tempMaxTime;
 
 		fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
 		fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
@@ -379,7 +369,7 @@ void FarEditorSet::configure()
 		/*
 		 * Dialog activation
 		 */
-		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 53, 21, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
+		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 54, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
 		int i = info->DialogRun(hDlg);
 
 		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
@@ -389,8 +379,10 @@ void FarEditorSet::configure()
 				if (parserFactory != null)
 				{
 					const String *p=chooseHRDName(hrdNameSS);
+					SString *tempSS;
+					tempSS = new SString(p);
 					delete hrdNameSS;
-					hrdNameSS=new SString(p);
+					hrdNameSS=tempSS;
 
 					getHRDescription(*hrdNameSS,descr);
 
@@ -427,7 +419,6 @@ void FarEditorSet::configure()
 			fdi[IDX_SYNTAX].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
 			fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
 			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
-			fdi[IDX_TIME_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_TIME_EDIT,0));
 
 			int i = false;
 			wchar_t *tempC = null;
@@ -450,7 +441,6 @@ void FarEditorSet::configure()
 			rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
 			rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 			rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
-			rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_TIME_EDIT].PtrData)+1)));
 			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, hrdNameSS->getWChars(), (DWORD)(2 *(hrdNameSS->length()+1)));
 
 			// if the plugin has been included, and we will disable
@@ -780,7 +770,6 @@ FarEditor *FarEditorSet::getCurrentEditor()
 		editor->setDrawPairs(drawPairs);
 		editor->setDrawSyntax(drawSyntax);
 		editor->setOutlineStyle(oldOutline);
-		editor->setMaxTime(rMaxTime);
 		delete[] FileName;
 	};
 
@@ -810,29 +799,17 @@ void FarEditorSet::disableColorer()
 
 void FarEditorSet::readRegistry()
 {
-	wchar_t mt[64];
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 	drawCross = rGetValue(hPluginRegistry, REG_CROSSDRAW);
 	drawPairs = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
 	drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
 	oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
-	rMaxTime = 3000;
-	int len = rGetValue(hPluginRegistry, REG_MAXTIME, mt, 64);
-
-	if (len>0)
-	{
-		wchar_t* temp=trim(mt);
-
-		if (wcslen(temp)>0)
-			rMaxTime = _wtoi(mt);
-	}
 
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
 	{
 		fe->setDrawCross(drawCross);
 		fe->setDrawPairs(drawPairs);
 		fe->setDrawSyntax(drawSyntax);
-		fe->setMaxTime(rMaxTime);
 		fe->setOutlineStyle(oldOutline);
 	}
 }

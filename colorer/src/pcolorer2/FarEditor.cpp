@@ -28,7 +28,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	vertCrossColor = 0x0E;
 	drawPairs = drawSyntax = true;
 	oldOutline = false;
-	maxTime = 3000;
 	newback = newfore = -1;
 	rdBackground = null;
 	visibleLevel = 100;
@@ -232,10 +231,6 @@ void FarEditor::setOutlineStyle(bool oldStyle)
 	this->oldOutline = oldStyle;
 }
 
-void FarEditor::setMaxTime(int maxTime)
-{
-	this->maxTime = maxTime;
-}
 
 void FarEditor::setRegionMapper(RegionMapper *rs)
 {

@@ -13,13 +13,12 @@
 "Classic ou&tline style"
 
 "&OK"
-"&Reload database"
-"&Load full database"
+"&Test catalog.xml"
+"Test schema &library"
 "&Cancel"
 
 "c&atalog.xml file:"
-"Color sche&ma:"
-"T&ime before showing cancel dialog (msec):"
+"Color st&yle:"
 
 "&1 List types"
 "&2 Match pair"
@@ -30,7 +29,7 @@
 "&7 Select region"
 "&8 Find Function"
 "&9 Update highlighting"
-"&R Reload hrc database"
+"&R Reload schema library"
 "&C Configure"
 
 "Total %d types"
@@ -40,14 +39,13 @@
 "Gotcha"
 "[Ctrl]Enter, Tab, Ctrl-Cursor, [a-z:_]"
 
-"Reloading colorer..."
-"Problem with colorer"
+"Reloading schema library..."
+"Problem with Colorer"
 "Can't open file:"
-"Die"
-"Bad colorer version:"
+"Ok"
+"Bad Colorer version:"
 "Try anyway"
-"Fatal hrc base load error"
-"Need colorer"
-"Working (ESC to cancel)"
+"Fatal error loading the library schemes"
+"Need Colorer"
 
-"Select color schema"
+"Select color style"
