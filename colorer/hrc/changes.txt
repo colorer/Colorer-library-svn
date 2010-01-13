@@ -1,4 +1,5 @@
-Date: TBD
+Date: 2010-01-13 23:29:00 r1242
+(trunk changes merged into dev branch for FarColorer 1.0.2.2)
   Fixes:
     - HAML
     - Ruby
@@ -8,7 +9,6 @@ Date: TBD
     - ERB - Rails HTML syntax
     - Lua
     - SCons scripts support (anatoly techtonik)
-
 
 Date: 2009-12-23 18:47:53 r1178
 (trunk changes merged into dev branch for FarColorer 1.0.2.1)
