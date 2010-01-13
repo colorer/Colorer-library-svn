@@ -579,6 +579,12 @@
     <location link="rare/lisp.hrc"/>
     <filename>/\.(lsp|lisp|scm|elc|el)$/i</filename>
   </prototype>
+  <prototype name="mako" group="rare" description="Mako templates">
+    <location link="rare/mako.hrc"/>
+    <!-- extension conflicts with Makefile, hence weight is less than 2 -->
+    <filename weight="1.5">/\.(mako|mak)$/i</filename>
+    <firstline>/\<%/</firstline>
+  </prototype>
   <prototype name="matlab" group="rare" description="MatLab">
     <location link="rare/matlab.hrc"/>
     <filename>/\.m$/i</filename>
