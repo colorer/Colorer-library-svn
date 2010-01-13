@@ -1,5 +1,4 @@
 #include<stdlib.h>
-#include<farplugin/farcolor.hpp>
 #include<misc/registry.cpp>
 #include<unicode/Encodings.h>
 #include<common/Logging.h>
@@ -204,9 +203,9 @@ void FarEditorSet::chooseType()
   group = null;
   for(int ti = 0; i; i--, ti++){
     type = hrcParser->enumerateFileTypes(ti);
+    if (!type) break;
     if (group != null && !group->equals(type->getGroup())) i--;
     group = type->getGroup();
-    if (!type) break;
   };
   if (type != null) fe->setFileType(type);
 }

@@ -1,8 +1,6 @@
 
 #include<windows.h>
 
-#include<farplugin/plugin.hpp>
-
 #include"pcolorer.h"
 #include"FarEditorSet.h"
 

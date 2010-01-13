@@ -7,27 +7,12 @@ body{
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-image: url(../images/background.png);
-  padding-left: 40;
-  padding-right: 20;
   max-width: 50em;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* IE hack for max width: */
-#wrapper, .article{
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0pt;
-  padding-right: 0pt;
-  width:expression(document.body.clientWidth > (800+40+20) ? "800" : "auto" );
-  margin-left:expression(document.body.clientWidth > (800+40+20) ? ((document.body.clientWidth-(800+40+20))/3)+"pt" : "auto" );
-}
-
 /* base elements */
-b, i, em{
-  background:transparent;
-}
 p, div, ul, ol, dl, td{
   font-size:10pt;
   color:#000000;
@@ -35,10 +20,9 @@ p, div, ul, ol, dl, td{
 p, div.p, blockquote{
   margin-top:4pt;
   margin-bottom:4pt;
-  xtext-align:justify;
 }
 code, pre, tt{
-  font-family: Lucida Console, Andale Mono, Courier New, Courier, monospace;
+  font-family: "Lucida Console", "Andale Mono", "Courier New", Courier, monospace;
   color:#202040;
 }
 
@@ -46,14 +30,11 @@ code{ white-space: nowrap }
 
 strong{
   color:#233961;
-  font-weight:bold;
-  background:transparent;
 }
 .small{
-  font: 80%;
+  font-size: 80%;
 }
 
-div.back a:hover{ background : transparent }
 div.back{
   /*position:fixed;*/
   position:absolute;
@@ -65,7 +46,6 @@ div.back{
   margin: 2pt 1pt 1pt 1pt;
 }
 
-li{}
 img{ border: none; }
 
 table{
@@ -79,20 +59,16 @@ th{
 }
 dt{ font-weight: bold; }
 
-/* hyperlink */
-a{
-  xfont-weight:bold;
-}
+
+/* hyperlinks */
 a[href]{
   text-decoration: underline;
 }
 a:link {
   color: #4045A7;
-  background: transparent;
 }
 a:visited {
   color: #6075B1;
-  background: transparent;
 }
 a[href]:active {
   color: #5369B1;
@@ -103,13 +79,17 @@ a[href]:hover{
   background: #f2f2ff;
   text-decoration: underline;
 }
+div.back a:hover {
+  background : transparent;
+}
+
 
 h1, h2, h3{ color: #303570; font-weight: normal; }
 h1, h2{ margin: 5pt 7pt 14pt 0pt; }
-h1{ font: 190%; text-align: center; }
-h2{ font: 150%; }
-h3{ font: 120%; margin: 14pt 4pt 8pt 4pt; }
-h4{ font: small-caps 100%; font-weight: bold; }
+h1{ font-size: 190%; text-align: center; }
+h2{ font-size: 150%; }
+h3{ font-size: 120%; margin: 14pt 4pt 8pt 4pt; }
+h4{ font-variant: small-caps; font-size: 100%; font-weight: bold; }
 
 .smalllic{
   font-size: 8pt;
@@ -148,7 +128,6 @@ h4{ font: small-caps 100%; font-weight: bold; }
   color: #202567;
   background: transparent;
   white-space: nowrap;
-  text-shadow: 2px 2px black;
 }
 
 .newsdiv{
@@ -179,4 +158,8 @@ a.rss, a.rss:hover, a.rss:active{
   padding: 0 0 5px 20px;
   margin-left: 1em;
   font-size: 8pt;
+}
+
+#papers li {
+  margin-top: 10px;
 }

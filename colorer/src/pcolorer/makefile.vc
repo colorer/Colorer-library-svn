@@ -13,7 +13,7 @@ include _dependencies.dep
 include makefile.core
 
 #/debug
-LIBFLAGS = $(objs) /map /out:colorer.dll /DLL /def:pcolorer.def wininet.lib kernel32.lib user32.lib advapi32.lib /nologo /subsystem:console
+LIBFLAGS = $(objs) /map /out:colorer.dll /DLL /def:pcolorer.def wininet.lib kernel32.lib user32.lib advapi32.lib /nologo
 
 colorer.dll: $(objs)
 	$(LINK) $(LIBFLAGS)

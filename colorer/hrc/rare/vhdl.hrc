@@ -11,7 +11,7 @@
     Credits: Czo <Olivier.Sirol@lip6.fr> (vim syntax)
     Last Change:  4 Dec 2001
 
-    Uses standarts:
+    Uses standards:
       ANSI/IEEE Std 1076-1987 (VHDL'87)
       ANSI/IEEE Std 1076-1993 (VHDL'93)
       STD.standard package

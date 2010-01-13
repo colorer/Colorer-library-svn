@@ -2,6 +2,7 @@
 #define _PCOLORER_H_
 
 #include<farplugin/plugin.hpp>
+#include<farplugin/farcolor.hpp>
 #include<farplugin/farkeys.hpp>
 
 /** FAR .lng file identifiers. */

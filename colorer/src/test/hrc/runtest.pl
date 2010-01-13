@@ -3,19 +3,16 @@
 # Validates a set of source files against a given
 # set of their previous parse strucure.
 #
+# use `runtest.pl quick` to ignore 'full' test cases
+# use `runtest.pl perl` to run only tests with 'perl' in their name
+#
+use File::Spec;
 
-#$colorer  = "D:/projects/colorer/bin/colorer.exe"; -- moved into %path%
-$colorer  = "colorer -c D:\\projects\\colorer\\catalog.xml";
+$colorer  = File::Spec->catfile("..", "..", "..", "bin", "colorer");
 
 $diff  = 'diff -U 1 -bB';
 
 $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
-
-#%modes = (
-#  full  =>   ".",
-#  quick =>   '(?!full\/)',
-#  perl  =>   '^perl\/',
-#);
 
 $validDir = "_valid";
 
@@ -23,24 +20,12 @@ $validDir = "_valid";
 $currentDir = sprintf("__%d-%02d-%02d %02d-%02d", $year+1900, $mon+1, $mday, $hour, $min);
 
 if (!mkdir $currentDir, 0777){
-#  die "Can't create dir - already exists" ;
+  print "WARN: Can't create dir - already exists" ;
 }
 
 $runMode = shift @ARGV;
 
-$runMode = "full" if (!$runMode);
-
-if ($runMode ne "quick" and  $runMode ne "full" ){
-  $runList = $runMode;
-}
-
-if ($runList){
-  open LIST, $runList or die "Can't open test list: $runList";
-  @retlist = <LIST>;
-  close LIST;
-}else{
-  @retlist = collectDirs('.');
-}
+@retlist = collectDirs('.');
 
 print "Running test mode: $runMode\n";
 
@@ -72,18 +57,23 @@ foreach (@retlist){
   print FAILS "\n<b>$_</b>:</pre></pre><pre>\n";
   close FAILS;
   checkDir($currentDir, $_);
-  
+
   $cres = system "$colorer -ht \"$_\" -dc -dh -ln -o \"$fname.html\"";
 
   $res = system "$diff \"$origname.html\" \"$fname.html\" 1>>\"$currentDir/fails.html\"";
 
   if ($cres != 0 or $res != 0 or !-r "$fname.html"){
-    #print "failed: $cres, $res, ".(-r "$fname.html")."\n";
+    print "  failed\n"; #: $cres, $res, ".(-r "$fname.html")."\n";
     $failed .= "$_<br/>";
     $testFailed++;
   }else{
   }
   $testRuns++;
+}
+
+if ($testRuns <= 0) {
+  print "Nothing to run\n";
+  exit;
 }
 
 $timeEnd = time();
@@ -114,8 +104,8 @@ sub collectDirs{
 
   my @retlist;
   my @dirlist = readdir DIR;
-  my @flist = grep {/^(?!CVS)[^_.]/ && -f "$cdir/$_" } @dirlist;
-   @dirlist = grep {/^(?!CVS)[^_.]/ && -d "$cdir/$_" } @dirlist;
+  my @flist = grep {/^(?!CVS)[^._]/ && -f "$cdir/$_" } @dirlist;
+   @dirlist = grep {/^(?!CVS)[^._]/ && -d "$cdir/$_" } @dirlist;
 
   closedir DIR;
 
@@ -124,6 +114,9 @@ sub collectDirs{
     my $cname = $prefix.$_;
 
     if ($runMode eq "quick" and $cname =~ /\/full\//ix){
+      $torun = 0;
+    }
+    if ($runMode ne "quick" and $cname !~ /$runMode/i){
       $torun = 0;
     }
     if ($torun == 0 || $prefix eq ""){

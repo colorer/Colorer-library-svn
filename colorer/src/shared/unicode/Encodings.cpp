@@ -1,6 +1,7 @@
 
 #include<unicode/Encodings.h>
 #include<unicode/x_encodings.h>
+#include<string.h>
 
 UnsupportedEncodingException::UnsupportedEncodingException(){};
 UnsupportedEncodingException::UnsupportedEncodingException(const String& msg){
