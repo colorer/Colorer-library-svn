@@ -21,7 +21,7 @@ p, div.p, blockquote{
   margin-top:4pt;
   margin-bottom:4pt;
 }
-code, pre, tt{
+code, pre{
   font-family: "Lucida Console", "Andale Mono", "Courier New", Courier, monospace;
   color:#202040;
 }

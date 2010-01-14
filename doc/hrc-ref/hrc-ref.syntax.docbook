@@ -1,5 +1,5 @@
 <appendix id='catalog.xml'>
-<title>Format of <emphasis>catalog.xml</emphasis> file</title>
+<title>Format of catalog.xml file</title>
 <para>
 
 Catalog for Colorer Library resources is a convenient way to
@@ -26,7 +26,7 @@ error logging configuration and listing of available HRD sets.
 </appendix>
 
 <appendix id='hrd'>
-<title>Format of <emphasis>HRD</emphasis> color schemes</title>
+<title>Format of HRD color schemes</title>
 <para>
 <!-- todo mention HRD somewhere in introductionary chapter -->
 <acronym role='Highlighting Resource Descriptions'>HRD</acronym>

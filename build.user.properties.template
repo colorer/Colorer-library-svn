@@ -40,10 +40,10 @@ use-dot=NO
 #
 # This assumes that required files are unpacked into tools/
 #
-docbook-dir=${project-root}/tools/docbook-xsl
-fop-dir=${project-root}/tools/fop-0.95
+docbook-dir=${project-root}/tools/docbook-xsl-1.67.2
+fop-dir=${project-root}/tools/fop-0.20.5
 # path to xsl transformer if default doesn't work
-# saxon 6.5.5 and docbook xsl templates 1.62.4 are known to work ok
+# saxon 6.5.5 is known to work ok
 xslt-classpath=${project-root}/tools/saxon/saxon.jar
+#xslt-classpath=${project-root}/tools\xalan-j_2_7_1\xalan.jar
 #xslt-classpath=${project-root}/tools/saxon9he.jar
-#xslt-classpath=tools\xalan-j_2_7_1\xalan.jar
