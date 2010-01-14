@@ -33,14 +33,7 @@
     </dependset>
 
     <available file='${docbook-dir}/template/titlepage.xsl' property='xslt-exists'/>
-    <available classname="org.apache.fop.apps.Fop" property='pdf-exists'>
-      <classpath>
-        <pathelement path="${java.class.path}"/>
-        <pathelement location="${fop-dir}/build/fop.jar"/>
-        <pathelement location="${fop-dir}/lib/avalon-framework-cvs-20020806.jar"/>
-        <pathelement location="${fop-dir}/lib/batik.jar"/>
-      </classpath>
-    </available>
+    <available file='${fop-dir}/build/fop.jar' property='pdf-exists'/>
     <condition property='hrc-ref-available'>
       <and>
         <isset property='xslt-exists'/>
@@ -91,17 +84,13 @@
       <xmlcatalog refid="DTDs"/>
     </xslt>
     <delete file='fo-hrc-ref-temporary.xsl'/>
-
-    <java classname="org.apache.fop.apps.Fop" fork="true" failonerror='true'>
-      <arg value="hrc-ref.fo"/>
-      <arg value="hrc-ref.pdf"/>
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
       <classpath>
-        <pathelement path="${java.class.path}"/>
         <pathelement location="${fop-dir}/build/fop.jar"/>
-        <pathelement location="${fop-dir}/lib/avalon-framework-cvs-20020806.jar"/>
-        <pathelement location="${fop-dir}/lib/batik.jar"/>
+        <fileset dir="${fop-dir}/lib" includes="*.jar"/>
       </classpath>
-   </java>
+    </taskdef>
+    <fop format="application/pdf" fofile="hrc-ref.fo" outfile="hrc-ref.pdf"/>
   </target>
 
   <!-- TODO add Colorer as DocBook's highlighting engine -->
