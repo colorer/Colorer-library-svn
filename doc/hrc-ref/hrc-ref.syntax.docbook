@@ -36,7 +36,7 @@ HRD file is a list of entries each describing one HRC Region.
 
 </para>
 <x:schemaref uri="&hrdxsd;" role='hrd'/>
-
+<x:schemaref uri="&hrdxsd;" role='documentation'/>
 <x:schemaref uri="&hrdxsd;" role='assign'/>
 
 <para>
