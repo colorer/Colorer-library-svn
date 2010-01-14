@@ -17,6 +17,12 @@
   <import file="../../common.xml"/>
 
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
+  <pathconvert property='xslt-docbook-classpath'>
+      <path>
+          <pathelement path="${xslt-classpath}"/>
+          <pathelement path="${docbook-dir}/extensions/xalan27.jar"/>
+      </path>
+  </pathconvert>
 
   <target name="init">
 
@@ -65,13 +71,13 @@
   </target>
 
   <target name="merge">
-    <xslt in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl' classpath="${xslt-classpath}">
+    <xslt in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl' classpath="${xslt-docbook-classpath}">
       <xmlcatalog refid="DTDs"/>
     </xslt>
   </target>
 
   <target name="pdf" if='hrc-ref-available' depends='init, merge' description='Builds PDF presentation' unless='pdf.required'>
-    <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath="${xslt-classpath}">
+    <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath="${xslt-docbook-classpath}">
       <xmlcatalog refid="DTDs"/>
     </xslt>
 
@@ -80,7 +86,7 @@
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
       </filterset>
     </copy>
-    <xslt in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref-temporary.xsl' classpath="${xslt-classpath}">
+    <xslt in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref-temporary.xsl' classpath="${xslt-docbook-classpath}">
       <xmlcatalog refid="DTDs"/>
     </xslt>
     <delete file='fo-hrc-ref-temporary.xsl'/>
@@ -95,7 +101,7 @@
 
   <!-- TODO add Colorer as DocBook's highlighting engine -->
   <target name="html" if='xslt-exists' depends='init, merge' description='Builds HTML presentation' unless='html.required'>
-    <xslt in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath='${xslt-classpath}'>
+    <xslt in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath='${xslt-docbook-classpath}'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
     <copy file='html-hrc-ref.xsl' tofile='html-hrc-ref-temporary.xsl' overwrite='true'>
@@ -103,7 +109,7 @@
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
      </filterset>
     </copy>
-    <xslt in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref-temporary.xsl' classpath='${xslt-classpath}'>
+    <xslt in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref-temporary.xsl' classpath='${xslt-docbook-classpath}'>
       <xmlcatalog refid="DTDs"/>
     </xslt>
     <delete file='html-hrc-ref-temporary.xsl'/>
