@@ -40,7 +40,7 @@ use-dot=NO
 #
 # This assumes that required files are unpacked into tools/
 #
-docbook-dir=${project-root}/tools/docbook-xsl-1.67.2
+docbook-dir=${project-root}/tools/docbook-xsl-1.70.1
 fop-dir=${project-root}/tools/fop-0.20.5
 # path to xsl transformer if default doesn't work
 # saxon 6.5.5 is known to work ok
