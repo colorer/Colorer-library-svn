@@ -350,7 +350,10 @@ void FarEditorSet::configure()
 		wchar_t *hrdName = null;
 		int len=rGetValueSz(hPluginRegistry, REG_HRD_NAME, hrdName);
 		if (len<=1)  // with a blank line is written '\0'
-			hrdName = L"default";
+		{
+			hrdName = new wchar_t[wcslen(L"default")];
+			wcscpy(hrdName, L"default");
+		}
 
 		SString *hrdNameSS;
 		hrdNameSS = new SString(DString(hrdName));
