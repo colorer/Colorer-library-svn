@@ -195,7 +195,7 @@ For instance, all HRC files start with the syntax similar to following:
 <!-- todo provide a link to the latest uptodate skeleton of HRC syntax -->
 
 <example id="example.hrc.file"><title>Common HRC file</title>
-<programlisting><![CDATA[
+<programlisting language="xml"><![CDATA[
 <?xml version="1.0"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
@@ -253,7 +253,7 @@ syntax of HRC they could be just everywhere.
 Prototypes are defined by <x:hrc>prototype</x:hrc> elements.
 
 <example id="example.hrc.prototype"><title>Prototype definition</title>
-<programlisting><![CDATA[
+<programlisting language="xml"><![CDATA[
   <prototype name="cpp" group="main" description="C++">
     <location link="base/cpp.hrc"/>
     <filename>/\.(cpp|cxx|cc|hpp|h)$/i</filename>
@@ -324,7 +324,7 @@ element. Packages can be found in any HRC file including <emphasis>proto.hrc</em
 For example:
 
 <example id="example.hrc.package"><title>Package definition</title>
-<programlisting><![CDATA[
+<programlisting language="xml"><![CDATA[
   <package name="def" group="packages" description="basic definitions">
     <location link="default.hrc"/>
   </package>
@@ -378,7 +378,7 @@ needed. Unqualified names are resolved in order of their definition.
 <x:schemaref uri="&hrcxsd;" role='import'/>
 
 For instance, you can write
-<programlisting>
+<programlisting language="xml">
   &lt;import type='def'/>
 </programlisting>
 to import all definitions from the 'def' type. Note, that if several
@@ -449,7 +449,7 @@ of the type. Only internal types defined with <x:hrc>package</x:hrc> element can
 ignore this requirement because they are never used at the top level.
 
 <example id="example.hrc.type"><title>Sample type definition</title>
-<programlisting><![CDATA[
+<programlisting language="xml"><![CDATA[
   <type name="somelang">
     <region name="Keyword" description="This language's keyword"/>
     <scheme name="somelang">
