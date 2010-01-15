@@ -118,7 +118,7 @@ alphabetic symbols to create filters.
   #7 Select region#       ~Alt-K~
     Selects region under cursor.
 
-  #*# All these features are depend on the content of HRC files.
+  #*# All these features are depend on the content of language scheme.
 All information is taken from syntax regions analysis.
 
   #8 Find function#       ~Alt-O~

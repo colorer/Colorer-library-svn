@@ -312,18 +312,18 @@ void FarEditorSet::configure()
 
 		FarDialogItem fdi[] =
 		{
-			{ DI_DOUBLEBOX,3,1,50,17,0,0,0,0,L""},                                 //IDX_BOX,
+			{ DI_DOUBLEBOX,3,1,51,17,0,0,0,0,L""},                                 //IDX_BOX,
 			{ DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
 			{ DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
 			{ DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
 			{ DI_CHECKBOX,31,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
 			{ DI_CHECKBOX,5,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
 			{ DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
-			{ DI_EDIT,9,10,40,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
+			{ DI_EDIT,6,10,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
 			{ DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
 			{ DI_BUTTON,11,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
 			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                 //IDX_RELOAD,
-			{ DI_BUTTON,25,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+			{ DI_BUTTON,26,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
 			{ DI_BUTTON,29,16,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
 			{ DI_BUTTON,37,16,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
 		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
@@ -372,7 +372,7 @@ void FarEditorSet::configure()
 		/*
 		 * Dialog activation
 		 */
-		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 54, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
+		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
 		int i = info->DialogRun(hDlg);
 
 		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
