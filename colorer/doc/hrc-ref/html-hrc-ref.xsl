@@ -20,6 +20,7 @@ into it's logic
 
 
 <xsl:param name="html.stylesheet">../styles/styles.css ../styles/hrc-ref.css</xsl:param>
+<xsl:param name="highlight.source" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="generate.component.toc" select="1"/>
 

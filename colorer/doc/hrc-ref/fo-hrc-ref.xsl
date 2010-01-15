@@ -16,6 +16,7 @@
 
 <xsl:output method='xml' encoding="UTF-8"/>
 
+<xsl:param name="highlight.source" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="generate.component.toc" select="1"/>
 <xsl:param name="draft.watermark.image" select="''"/>
