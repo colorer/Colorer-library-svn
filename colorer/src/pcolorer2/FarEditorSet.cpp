@@ -420,20 +420,33 @@ void FarEditorSet::configure()
 			fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
 			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 
-			int i = false;
-			wchar_t *tempC = null;
-			rGetValueSz(hPluginRegistry, REG_CATALOG, tempC);
-			if (wcsicmp(tempC, fdi[IDX_CATALOG_EDIT].PtrData)) 
-				i = true;
-			else
+			int k = false;
+			wchar_t *a = null;
+			rGetValueSz(hPluginRegistry, REG_CATALOG, a);
+			if (a!=null)
 			{
-				delete[] tempC;
-				tempC=null;
-				rGetValueSz(hPluginRegistry, REG_HRD_NAME, tempC);
-				if (wcsicmp(tempC, fdi[IDX_CATALOG_EDIT].PtrData))
-					i = true;
+				if (wcsicmp(a, fdi[IDX_CATALOG_EDIT].PtrData)) 
+					k = true;
 			}
-			delete [] tempC;
+			else
+				if (wcslen(fdi[IDX_CATALOG_EDIT].PtrData)>0)
+					k=true;
+			delete[] a;
+
+			if (!k)
+			{
+				wchar_t *b = null;
+				rGetValueSz(hPluginRegistry, REG_HRD_NAME, b);
+				if (b!=null)
+				{
+					if (wcsicmp(b, hrdNameSS->getWChars()))
+						k = true;
+				}
+				else
+					if (wcslen(hrdNameSS->getWChars())>0)
+						k=true;
+				delete[] b;
+			}
 
 			rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
 			rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
@@ -449,7 +462,7 @@ void FarEditorSet::configure()
 				disableColorer();
 			}
 			else
-			if ((rDisabled && fdi[IDX_DISABLED].Selected)||(i))
+			if ((rDisabled && fdi[IDX_DISABLED].Selected)||(k))
 			{
 				rDisabled = false;
 				ReloadBase();
@@ -621,8 +634,6 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 		info->RestoreScreen(scr);
 		if (full)
 		{
-			const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-
 			for (int idx = 0;; idx++)
 			{
 				FileType *type = hrcParserLocal->enumerateFileTypes(idx);
