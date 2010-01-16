@@ -12,7 +12,7 @@ HKEY rOpenKeyEx(HKEY hReg, const wchar_t *Name);
 DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Val);
 DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Type, wchar_t* Data, DWORD Len);
 
-DWORD rGetValueSz(HKEY hReg, const wchar_t *name, wchar_t *&Data);
+wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name);
 DWORD rGetValueDw(HKEY hReg, wchar_t *name);
 
 #endif

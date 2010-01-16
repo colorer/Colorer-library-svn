@@ -41,8 +41,8 @@ FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 	_snwprintf_s(key,255, 255, L"%s\\colorer", info->RootKey);
 	hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
-	parserFactory = null;
-	regionMapper = null;
+	parserFactory = NULL;
+	regionMapper = NULL;
 	ReloadBase();
 }
 
@@ -151,14 +151,14 @@ void FarEditorSet::viewFile(const String &path)
 	{
 		if (rDisabled) throw Exception(DString("Colorer is disabled"));
 
-		String *newPath = null;
+		String *newPath = NULL;
 
 		if (path[0] == '\"') newPath = new DString(path, 1, path.length()-2);
 		else newPath = new DString(path);
 
 		// Creates store of text lines
 		TextLinesStore textLinesStore;
-		textLinesStore.loadFile(newPath, null, true);
+		textLinesStore.loadFile(newPath, NULL, true);
 		// HRC loading
 		//we need this?
 		//HRCParser *hrcParser = parserFactory->getHRCParser();
@@ -172,7 +172,7 @@ void FarEditorSet::viewFile(const String &path)
 		int background = 0x1F;
 		const StyledRegion *rd = StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
 
-		if (rd != null && rd->bfore && rd->bback) background = rd->fore + (rd->back<<4);
+		if (rd != NULL && rd->bfore && rd->bback) background = rd->fore + (rd->back<<4);
 
 		// File viewing in console window
 		TextConsoleViewer viewer(&baseEditor, &textLinesStore, background, -1);
@@ -195,16 +195,16 @@ void FarEditorSet::chooseType()
 {
 	FarEditor *fe = getCurrentEditor();
 	int num = 0;
-	const String *group = null;
-	FileType *type = null;
+	const String *group = NULL;
+	FileType *type = NULL;
 
 	for (int idx = 0;; idx++, num++)
 	{
 		type = hrcParser->enumerateFileTypes(idx);
 
-		if (type == null) break;
+		if (type == NULL) break;
 
-		if (group != null && !group->equals(type->getGroup())) num++;
+		if (group != NULL && !group->equals(type->getGroup())) num++;
 
 		group = type->getGroup();
 	};
@@ -212,15 +212,15 @@ void FarEditorSet::chooseType()
 	char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
 	FarMenuItem *menuels = new FarMenuItem[num];
 	memset(menuels, 0, sizeof(FarMenuItem)*(num));
-	group = null;
+	group = NULL;
 
 	for (int idx = 0, i = 0;; idx++, i++)
 	{
 		type = hrcParser->enumerateFileTypes(idx);
 
-		if (type == null) break;
+		if (type == NULL) break;
 
-		if (group != null && !group->equals(type->getGroup()))
+		if (group != NULL && !group->equals(type->getGroup()))
 		{
 			menuels[i].Separator = 1;
 			i++;
@@ -228,9 +228,9 @@ void FarEditorSet::chooseType()
 
 		group = type->getGroup();
 
-		const wchar_t *groupChars = null;
+		const wchar_t *groupChars = NULL;
 
-		if (group != null) groupChars = group->getWChars();
+		if (group != NULL) groupChars = group->getWChars();
 		else groupChars = L"<no group>";
 
 		menuels[i].Text = new wchar_t[255];
@@ -243,7 +243,7 @@ void FarEditorSet::chooseType()
 	int i;
 	_snwprintf(bottom, 20, GetMsg(mTotalTypes), num);
 	i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-	               GetMsg(mSelectSyntax), bottom, L"contents", null, null, menuels, num);
+	               GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
 
 	for (int idx = 0; idx < num; idx++)
 		if (menuels[idx].Text) delete[] menuels[idx].Text;
@@ -253,8 +253,8 @@ void FarEditorSet::chooseType()
 	if (i == -1) return;
 
 	i++;
-	type = null;
-	group = null;
+	type = NULL;
+	group = NULL;
 
 	for (int ti = 0; i; i--, ti++)
 	{
@@ -262,25 +262,25 @@ void FarEditorSet::chooseType()
 
 		if (!type) break;
 
-		if (group != null && !group->equals(type->getGroup())) i--;
+		if (group != NULL && !group->equals(type->getGroup())) i--;
 
 		group = type->getGroup();
 	};
 
-	if (type != null) fe->setFileType(type);
+	if (type != NULL) fe->setFileType(type);
 }
 
 int FarEditorSet::getHRDescription(const String &name,const String *&descr)
 {
 	int i = true;
-	if (parserFactory != null)
+	if (parserFactory != NULL)
 	{
 		descr = parserFactory->getHRDescription(DString("console"), name);
 	}
 	else
 		i = false;
 
-	if (descr == null)
+	if (descr == NULL)
 	{
 		descr = &name;
 	}
@@ -341,17 +341,15 @@ void FarEditorSet::configure()
 		fdi[IDX_OLDOUTLINE].Selected = rGetValueDw(hPluginRegistry, REG_OLDOUTLINE);
 		fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
 		
-		wchar_t *tempCatalogEdit = null;
-		rGetValueSz(hPluginRegistry, REG_CATALOG, tempCatalogEdit);
+		wchar_t *tempCatalogEdit = rGetValueSz(hPluginRegistry, REG_CATALOG);
 		fdi[IDX_CATALOG_EDIT].PtrData = tempCatalogEdit;
 		
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 		
-		wchar_t *hrdName = null;
-		int len=rGetValueSz(hPluginRegistry, REG_HRD_NAME, hrdName);
-		if (len<=1)  // with a blank line is written '\0'
+		wchar_t *hrdName = rGetValueSz(hPluginRegistry, REG_HRD_NAME);
+		if (!hrdName)  // with a blank line is written '\0'
 		{
-			hrdName = new wchar_t[wcslen(L"default")];
+			hrdName = new wchar_t[7];
 			wcscpy(hrdName, L"default");
 		}
 
@@ -359,7 +357,7 @@ void FarEditorSet::configure()
 		hrdNameSS = new SString(DString(hrdName));
 		delete[] hrdName;
 
-		const String *descr = null;
+		const String *descr = NULL;
 		int getDescr;
 		getDescr = getHRDescription(*hrdNameSS,descr);
 
@@ -379,7 +377,7 @@ void FarEditorSet::configure()
 		{
 			if (i == IDX_HRD_SELECT)
 			{
-				if (parserFactory != null)
+				if (parserFactory != NULL)
 				{
 					const String *p=chooseHRDName(hrdNameSS);
 					SString *tempSS;
@@ -424,9 +422,8 @@ void FarEditorSet::configure()
 			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 
 			int k = false;
-			wchar_t *a = null;
-			rGetValueSz(hPluginRegistry, REG_CATALOG, a);
-			if (a!=null)
+			wchar_t *a = rGetValueSz(hPluginRegistry, REG_CATALOG);
+			if (a!=NULL)
 			{
 				if (wcsicmp(a, fdi[IDX_CATALOG_EDIT].PtrData)) 
 					k = true;
@@ -438,9 +435,8 @@ void FarEditorSet::configure()
 
 			if (!k)
 			{
-				wchar_t *b = null;
-				rGetValueSz(hPluginRegistry, REG_HRD_NAME, b);
-				if (b!=null)
+				wchar_t *b = rGetValueSz(hPluginRegistry, REG_HRD_NAME);
+				if (b!=NULL)
 				{
 					if (wcsicmp(b, hrdNameSS->getWChars()))
 						k = true;
@@ -484,7 +480,7 @@ void FarEditorSet::configure()
 		StringBuffer msg("configure: ");
 		exceptionMessage[2] = (msg+e.getMessage()).getWChars();
 
-		if (getErrorHandler() != null)
+		if (getErrorHandler() != NULL)
 			getErrorHandler()->error(*e.getMessage());
 
 		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
@@ -496,9 +492,9 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 {
 	int count = 0;
 
-	if (parserFactory == null) return current;
+	if (parserFactory == NULL) return current;
 
-	while (parserFactory->enumerateHRDInstances(DString("console"), count) != null) count++;
+	while (parserFactory->enumerateHRDInstances(DString("console"), count) != NULL) count++;
 
 	FarMenuItem *menuElements = new FarMenuItem[count];
 	memset(menuElements, 0, sizeof(FarMenuItem)*count);
@@ -508,7 +504,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 		const String *name = parserFactory->enumerateHRDInstances(DString("console"), i);
 		const String *descr = parserFactory->getHRDescription(DString("console"), *name);
 
-		if (descr == null) descr = name;
+		if (descr == NULL) descr = name;
 
 		menuElements[i].Text = descr->getWChars();
 
@@ -544,7 +540,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
 	try
 	{
-		FarEditor *editor = null;
+		FarEditor *editor = NULL;
 
 		if (Event == EE_CLOSE)
 		{
@@ -581,10 +577,10 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
 SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
 {
-	SString *S = null;
+	SString *S = NULL;
 	if ((catalogPath)&&(wcslen(catalogPath)))
 	{
-		wchar_t *temp = null;
+		wchar_t *temp = NULL;
 		int i;
 		// проверяем на переменные окружения
 		i=ExpandEnvironmentStrings(catalogPath,temp,0);
@@ -605,17 +601,17 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 {
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
 
-	ParserFactory *parserFactoryLocal = null;
-	RegionMapper *regionMapperLocal = null;
-	HRCParser *hrcParserLocal = null;
+	ParserFactory *parserFactoryLocal = NULL;
+	RegionMapper *regionMapperLocal = NULL;
+	HRCParser *hrcParserLocal = NULL;
 
-	SString *hrdNameS = null;
-	if ((hrdName)&&(wcslen(hrdName)))
+	SString *hrdNameS = NULL;
+	if (hrdName)
 		hrdNameS = new SString(DString(hrdName));
 
-	SString *catalogPathS = null;
+	SString *catalogPathS = NULL;
 	catalogPathS=ExpandEnvironment(catalogPath);
 
 	try
@@ -629,9 +625,9 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 		}
 		catch (ParserFactoryException &e)
 		{
-			if ((parserFactoryLocal != null)&&(parserFactoryLocal->getErrorHandler()!=null))
+			if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL))
 				parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
-			regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), null);
+			regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
 		};
 
 		info->RestoreScreen(scr);
@@ -641,11 +637,11 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 			{
 				FileType *type = hrcParserLocal->enumerateFileTypes(idx);
 
-				if (type == null) break;
+				if (type == NULL) break;
 
 				StringBuffer tname;
 
-				if (type->getGroup() != null)
+				if (type->getGroup() != NULL)
 				{
 					tname.append(type->getGroup());
 					tname.append(DString(": "));
@@ -654,7 +650,7 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 				tname.append(type->getDescription());
 				marr[1] = tname.getWChars();
 				scr = info->SaveScreen(0, 0, -1, -1);
-				info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+				info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
 				type->getBaseScheme();
 				info->RestoreScreen(scr);
 			}
@@ -666,10 +662,10 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 
 		errload[2] = e.getMessage()->getWChars();
 
-		if ((parserFactoryLocal != null)&&(parserFactoryLocal->getErrorHandler()!=null))
+		if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL))
 				parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 		info->RestoreScreen(scr);
 
 	};
@@ -684,27 +680,24 @@ void FarEditorSet::ReloadBase()
 	
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, null, &marr[0], 2, 0);
+	info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
 	
 	dropAllEditors();
 	readRegistry();
 	
-	wchar_t *hrdName = null;
-	rGetValueSz(hPluginRegistry,REG_HRD_NAME,hrdName);
-	
-	wchar_t *catalogPath = null;
-	rGetValueSz(hPluginRegistry,REG_CATALOG,catalogPath);
+	wchar_t *hrdName = rGetValueSz(hPluginRegistry,REG_HRD_NAME);
+	wchar_t *catalogPath =rGetValueSz(hPluginRegistry,REG_CATALOG);
 
 	delete regionMapper;
 	delete parserFactory;
-	parserFactory = null;
-	regionMapper = null;
+	parserFactory = NULL;
+	regionMapper = NULL;
 
-	SString *hrdNameS = null;
-	if ((hrdName)&&(wcslen(hrdName)))
+	SString *hrdNameS = NULL;
+	if (hrdName)
 		hrdNameS = new SString(DString(hrdName));
 
-	SString *catalogPathS = null;
+	SString *catalogPathS = NULL;
 	catalogPathS=ExpandEnvironment(catalogPath);
 	
 	try
@@ -718,8 +711,8 @@ void FarEditorSet::ReloadBase()
 		}
 		catch (ParserFactoryException &e)
 		{
-			if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
-			regionMapper = parserFactory->createStyledMapper(&DString("console"), null);
+			if (getErrorHandler() != NULL) getErrorHandler()->error(*e.getMessage());
+			regionMapper = parserFactory->createStyledMapper(&DString("console"), NULL);
 		};
 	}
 	catch (Exception &e)
@@ -728,9 +721,9 @@ void FarEditorSet::ReloadBase()
 
 		errload[2] = e.getMessage()->getWChars();
 
-		if (getErrorHandler() != null) getErrorHandler()->error(*e.getMessage());
+		if (getErrorHandler() != NULL) getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, null, &errload[0], 5, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 
 		disableColorer();
 	};
@@ -743,7 +736,7 @@ void FarEditorSet::ReloadBase()
 
 ErrorHandler *FarEditorSet::getErrorHandler()
 {
-	if (parserFactory == null) return null;
+	if (parserFactory == NULL) return NULL;
 
 	return parserFactory->getErrorHandler();
 }
@@ -755,7 +748,7 @@ FarEditor *FarEditorSet::getCurrentEditor()
 	info->EditorControl(ECTL_GETINFO, &ei);
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
-	if (editor == null)
+	if (editor == NULL)
 	{
 		editor = new FarEditor(info, parserFactory);
 		farEditorInstances.put(&SString(ei.EditorID), editor);
@@ -806,8 +799,8 @@ void FarEditorSet::disableColorer()
 	
 	delete regionMapper;
 	delete parserFactory;
-	parserFactory = null;
-	regionMapper = null;
+	parserFactory = NULL;
+	regionMapper = NULL;
 }
 
 
@@ -819,7 +812,7 @@ void FarEditorSet::readRegistry()
 	drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
 	oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
 
-	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
+	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{
 		fe->setDrawCross(drawCross);
 		fe->setDrawPairs(drawPairs);
@@ -830,7 +823,7 @@ void FarEditorSet::readRegistry()
 
 void FarEditorSet::dropAllEditors()
 {
-	for (FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next())
+	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{
 		fe->cleanEditor();
 		delete fe;

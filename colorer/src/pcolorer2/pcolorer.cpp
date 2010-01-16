@@ -4,7 +4,7 @@
 
 static struct PluginStartupInfo Info;
 static struct FarStandardFunctions FSF;
-FarEditorSet *editorSet = null;
+FarEditorSet *editorSet = NULL;
 
 /**
  * Returns message from FAR current language.
