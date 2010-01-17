@@ -67,10 +67,10 @@ slow or ugly ( it works fine for me, that's enough :) .
 
 <!-- \move(<x1>,<y1>,<x2>,<y2>[,<t1>,<t2>]) -->
 <scheme name="assStyleFunctMove">
-  <regexp match="/\(?#1\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*\)?=/" region="assStyler"
+  <regexp match="/\(?#1\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)?=/" region="assStyler"
     region1="assStyle" region2="assStyle" region3="assStyle" region4="assStyle"
   />
-  <regexp match="/\(?#1\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*,\s*(\d+)\s*,(\d+)\s*\)?=/" region="assStyler"
+  <regexp match="/\(?#1\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*,\s*(\d+(\.\d+)?)\s*,(\d+(\.\d+)?)\s*\)?=/" region="assStyler"
     region1="assStyle" region2="assStyle" region3="assStyle" region4="assStyle" region5="assStyle" region6="assStyle"
   />
   <regexp match="/\(?#1[^\)]*/" region="assError" />
@@ -105,10 +105,10 @@ slow or ugly ( it works fine for me, that's enough :) .
   <regexp match="/[\}\s]?#1(c)(\{?=|\s|$)/"
     region1="assKeyword" region="assNumber"
   />
-  <regexp match="/[\}\s]?#1(b)(\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+)+(\{?=|\s|$)/"
+  <regexp match="/[\}\s]?#1(b)(\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+))+(\{?=|\s|$)/"
     region1="assKeyword" region="assNumber"
   />
-  <regexp match="/[\}\s]?#1(s)(\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+)(\s+\d+\s+\d+)+(\{?=|\s|$)/"
+  <regexp match="/[\}\s]?#1(s)(\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+)(\s+\d+\s+\d+)*(\{?=|\s|$)/"
     region1="assKeyword" region="assNumber"
   />
   <regexp match="/[^\s]/" region="assError" priority="low" />
@@ -134,7 +134,7 @@ slow or ugly ( it works fine for me, that's enough :) .
 <!-- \org(<x>,<y>) -->
 <!-- \fad(<x>,<y>) -->
 <scheme name="assStyleFunct2p">
-  <regexp match="/\(?#1\s*(-?\d+)\s*,\s*(-?\d+)\s*\)?=/" region="assStyler"
+  <regexp match="/\(?#1\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*\)?=/" region="assStyler"
     region1="assStyle" region2="assStyle" region3="assStyle" region4="assStyle"
   />
   <regexp match="/\(?#1[^\)]*/" region="assError" />
@@ -151,10 +151,13 @@ slow or ugly ( it works fine for me, that's enough :) .
   <regexp match="/(\\)(r)([^\}\\\)]*)/"
     region1="assStyleOverrideSeparator" region2="assStyler" region3="assStyle"
   />
-  <regexp match="/(\\)(b|bord|shad|fs|fsc[xy]|fsp|fe|[kK])(\d+)[\\\}\)]?=/"
+  <regexp match="/(\\)(bord|shad|fs|fscx)(\d+(\.\d+)?)[\\\}\)]?=/"
     region1="assStyleOverrideSeparator" region2="assStyler" region3="assStyle"
-  /><!-- ?? what are the valid values for bord and shad? -->
-  <regexp match="/(\\)(fr[xyz]|fr)(-?\d+[\\\}\)]?=)/"
+	/>
+  <regexp match="/(\\)(b|fscy|fsp|fe|[kK]|k[of])(\d+)[\\\}\)]?=/"
+    region1="assStyleOverrideSeparator" region2="assStyler" region3="assStyle"
+  />
+  <regexp match="/(\\)(fr[xyz]|fr)(-?\d+(\.\d+)?[\\\}\)]?=)/"
     region1="assStyleOverrideSeparator" region2="assStyler" region3="assStyle"
   />
   <regexp match="/(\\)([1234]?c\&amp;)(H[\da-fA-F]{0,6})(\&amp;)[\\\}\)]?=/"
@@ -448,7 +451,7 @@ slow or ugly ( it works fine for me, that's enough :) .
   />
 </scheme>
 <scheme name="assV4PS_ScaleX">
-  <block start="/%Integer;/" end="/$/"
+  <block start="/%Real;/" end="/$/"
     region04="assMoreStyle" region01="def:Text" region02="assNumber"
     scheme="assV4PS_ScaleY"
   />
@@ -458,7 +461,7 @@ slow or ugly ( it works fine for me, that's enough :) .
   />
 </scheme>
 <scheme name="assV4PS_ScaleY">
-  <block start="/%Integer;/" end="/$/"
+  <block start="/%Real;/" end="/$/"
     region04="assMoreStyle" region01="def:Text" region02="assNumber"
     scheme="assV4PS_Spacing"
   />
@@ -498,8 +501,8 @@ slow or ugly ( it works fine for me, that's enough :) .
   />
 </scheme>
 <scheme name="assV4PS_Outline">
-  <block start="/%Int0-4;/" end="/$/"
-    region03="assMoreStyle" region01="def:Text" region02="assNumber"
+  <block start="/%Real;/" end="/$/"
+		region05="assMoreStyle" region01="def:Text" region02="assLabel"
     scheme="assV4PS_Shadow"
   />
   <block start="/%Error;/" end="/$/"
@@ -508,8 +511,8 @@ slow or ugly ( it works fine for me, that's enough :) .
   />
 </scheme>
 <scheme name="assV4PS_Shadow">
-  <block start="/%Int0-4;/" end="/$/"
-    region03="assMoreStyle" region01="def:Text" region02="assNumber"
+  <block start="/%Real;/" end="/$/"
+    region05="assMoreStyle" region01="def:Text" region02="assLabel"
     scheme="assV4PS_Alignment"
   />
   <block start="/%Error;/" end="/$/"
