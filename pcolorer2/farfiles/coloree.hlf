@@ -1,0 +1,163 @@
+.Language=English,English
+.PluginContents=Colorer
+
+@contents
+$^#Colorer
+
+    ~Plugin setup.~@config@
+
+    ~Command line support.~@cmdline@
+
+    ~Plugin's menus.~@menu@
+
+    ~About authors.~@author@
+
+@config
+$^#Colorer's settings.#
+
+  #Colorer enabled#
+     Enable/Disable Colorer.
+
+  #Cross#
+     [ ] Do not show ever
+     [?] Show if included in the scheme
+     [x] Always Show
+
+  #Pairs#
+     Allocate or not paired language elements (brackets, quotes)
+
+  #Syntax#
+     Turns on display of syntax
+
+  #Classic ou&tline style#
+     In classic style displays only the name of the function. Otherwise show
+     the beginning of the line number, then the first letter in the function 
+     and the function name itself.
+
+  #catalog.xml file:#
+     Full file path sets default catalog file for Colorer.
+     If this field is empty Colorer tries to find the file automatically
+     in the following order:
+        - Path in %COLORER5CATALOG%
+        - Path in file %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
+        - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
+        - Directory with plugin's dll, parent, parent of parent directory.
+
+  #Color style:#
+     Choose a color style, which will be used for coloring text. 
+     The choice does not work if the plugin is disabled.
+
+  #[ Test catalog.xml ]#
+     Tests ability to load the base configuration file catalog.xml, list of 
+     language scheme and color styles, taking the path to it from the settings window.
+
+  #[ Test schema library ]#
+     Tests ability to load all the language of schemes, taking the path to
+     catalog.xml from the settings window.
+
+  #[ Ok ]#
+     Closes dialog and save settings.
+
+@cmdline
+$# Command line support
+    You can use the plugin from FAR's command line with prefix 'clr:'
+to view files with syntax highlighting in Colorer's internal viewer.
+To view file you have to specify file name after the 'clr:' prefix
+in FAR's command line. This function is equal to #colorer.exe# program
+features, but doesn't load HRC database each time, so it works faster.
+
+@add
+$# Outliner
+    Here you can see a list of all functions or syntax errors found.
+Choose any item to go to corresponding line in text.
+    
+    You can use keyboard filter to quickly search for required items:
+
+    #Ctrl-Left/Right#
+      Expand-Collapse level of Outliner
+
+    #Ctrl-Up/Down#
+      Move to next/previous item both in outliner and in source code
+
+    #Ctrl-Enter#
+      Close the outliner and insert current item into the cursor position
+    
+    #Enter#
+      Close the outliner and jump to the selected item
+
+    #Any symbol keys#
+      Filter out the outliner items against entered filter
+
+@menu
+$#Colorer operation
+
+  #1 List types#          ~Alt-L~
+    Lists all supported file types. You can choose any of them to use
+with current editor.
+
+  #2 Match pair#          ~Alt-[~
+    Searches paired bracket (or any other pair structure) of the
+current region under cursor and jumps there.
+
+  #3 Select block#        ~Alt-]~
+    Moves cursor to start of block and selects it all. You can call this
+function as on block limits as inside it. In second case Colorer will find
+start and end of nearest block automatically.
+
+  #4 Select pair#         ~Alt-P~
+    Selects pair block - but don't selects pair structures at start and end.
+
+  #5 Outliner List#      ~Alt-;~
+    Shows all outlined regions in current file.
+There you can choose and jump into any of them, also you can use there any
+alphabetic symbols to create filters.
+
+  #6 Errors List#         ~Alt-'~
+    As previous - but shows all errors in the text.
+
+  #7 Select region#       ~Alt-K~
+    Selects region under cursor.
+
+  #*# All these features are depend on the content of language scheme.
+All information is taken from syntax regions analysis.
+
+  #8 Find function#       ~Alt-O~
+    Searches function name under cursor in outliner view, and jumps there.
+
+  #9 Update highlight#
+    Updates syntax highlighting in current editor. Use it, if
+some problems occurs in current syntax.
+
+  #R Reload schema library#
+    Reload the configuration plugin and library schemes.
+
+  #C Configuration#
+    Calls Colorer ~configuration menu~@config@.
+
+@hrd
+$# Color style selection
+    List of all available color schemes. You can choose what you need.
+
+@exception
+$# Exception occured
+    Exception happened while Colorer work.
+All further processing would be disabled. You can re-enable
+Colorer from it's settings menu after locating and removing
+exception cause. All extended information in Colorer logging
+file (colorer.log by default)
+
+@author
+$^#Colorer is a syntax highlighting plugin for FAR Manager.
+    #Plugin home site#
+           http://colorer.sf.net
+
+    #Igor Ruskih# (Cail Lomecb) Copyright (c) 1999-2009
+           email  : irusskih at gmail dot com
+           web    : http://cail.nm.ru
+
+    #Eugene Efremov#
+           email  : 4mirror at mail dot ru
+
+    #Sonar# (Dobrunov Aleksey)
+           email  : ctapmex at gmail dot com
+           web    : http://dobrih.net
