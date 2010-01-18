@@ -1,3 +1,9 @@
+#revision 1273
+	ctapmex 18.01.2010 15:03
+	1. исправим умолчание в proto.hrc  - use GNU make only = false , иначе мейки от VC отображаются коряво
+	2. исправим в proto.hrc вес для plain text , иначе, например xml файлы по содержанию, но по имени похожем
+		на install*.* отображаются как plain text
+
 #revision 1268
 	ctapmex 17.01.2010 15:29
 	1. поправлена схема assa.hrc. Но нужны доп. правки. описание в todo.txt, а примеры в папке test
