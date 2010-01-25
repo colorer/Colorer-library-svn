@@ -1,7 +1,7 @@
 #include <wchar.h>
 #include "tests.h"
 
-enum JobType { JT_NOTHING, JT_TEST1 };
+enum JobType { JT_NOTHING, JT_TEST1,JT_TEST2,JT_TEST3 };
 
 int loops = 1;
 JobType job = JT_NOTHING;
@@ -13,8 +13,12 @@ void printError(){
     L" Commands:\n"
     L"  -t<n>      Run the test number <n>\n"
     L" Parameters:\n"
-    L"  -c<n>      Number of test runs\n",
+    L"  -c<n>      Number of test runs\n"
     L"  -b<path>   Uses specified 'catalog.xml' file\n"
+    L" Test:\n"
+    L"   1         TestParserFactoryConstructor\n"
+    L"   2         TestParserFactoryHRCParser\n"
+    L"   3         TestParserFactoryStyledMapper\n"
     );
 };
 
@@ -73,7 +77,13 @@ int wmain(int argc, wchar_t *argv[])
       printError();
       break;
     case JT_TEST1:
-      TestParserFactory(loops, catalogPath);
+      TestParserFactoryConstructor(loops, catalogPath);
+      break;
+    case JT_TEST2:
+      TestParserFactoryHRCParser(loops, catalogPath);
+      break;
+    case JT_TEST3:
+      TestParserFactoryStyledMapper(loops, catalogPath);
       break;
     }
   }catch(Exception e){
