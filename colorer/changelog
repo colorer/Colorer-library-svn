@@ -1,3 +1,21 @@
+#revision 1278
+	ctapmex 25.01.2010 10:21
+	1. переделал r1183 , т.к. оказалось, что хелп pcolorer2 не соответсвовал описанию в ParserFactory.h
+		но так же учитываем, что HOMEPATH в Windows не содержит имя диска
+		итого, сейчас следующий порядок поиска
+		для Windows 
+		- Каталог с dll плагина, на уровень выше, на два уровня выше.
+		- %COLORER5CATALOG%
+		- %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
+		- %SYSTEMROOT%/.colorer5catalog (или %WINDIR% в w9x)
+		для nix 
+		- $COLORER5CATALOG
+		- $HOME\.colorer5catalog
+		- $HOMEPATH/.colorer5catalog
+		- /usr/share/colorer/catalog.xml
+		- /usr/local/share/colorer/catalog.xml	
+	2. изменения отражены в хелпе
+
 #revision 1273
 	ctapmex 18.01.2010 15:03
 	1. исправим умолчание в proto.hrc  - use GNU make only = false , иначе мейки от VC отображаются коряво

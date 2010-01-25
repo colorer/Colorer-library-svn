@@ -38,11 +38,10 @@ $^#Colorer's settings.#
      Full file path sets default catalog file for colorer.
      If this field is empty colorer tries to find the file automatically
      in the following order:
+        - Directory with plugin's dll, parent, parent of parent directory.
         - Path in %COLORER5CATALOG%
         - Path in file %HOME%/.colorer5catalog
         - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
-        - Directory with plugin's dll, parent, parent of parent directory.
-
 
   #Color scheme:#
      Selected color scheme to use for text highlighting.
