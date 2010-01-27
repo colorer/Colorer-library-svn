@@ -9,6 +9,7 @@ using namespace std;
 */
 void TestParserFactoryConstructor(int count, SString *catalogPath)
 {
+  cout<<"TestParserFactoryConstructor"<<endl;
   double all_time = 0, t;
   for (int i=0; i<=count; i++)
   {
@@ -25,7 +26,7 @@ void TestParserFactoryConstructor(int count, SString *catalogPath)
     }
     delete parserFactoryLocal;
   }
-  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."; 
+  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."<<endl; 
 }
 
 /* 
@@ -34,6 +35,7 @@ void TestParserFactoryConstructor(int count, SString *catalogPath)
 */
 void TestParserFactoryHRCParser(int count, SString *catalogPath)
 {
+  cout<<"TestParserFactoryHRCParser"<<endl;
   double all_time = 0, t;
   for (int i=0; i<=count; i++)
   {
@@ -52,7 +54,7 @@ void TestParserFactoryHRCParser(int count, SString *catalogPath)
     }
     delete parserFactoryLocal;
   }
-  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."; 
+  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."<<endl; 
 }
 
 /* 
@@ -61,6 +63,7 @@ void TestParserFactoryHRCParser(int count, SString *catalogPath)
 */
 void TestParserFactoryStyledMapper(int count, SString *catalogPath)
 {
+  cout<<"TestParserFactoryStyledMapper"<<endl;
   double all_time = 0, t;
   for (int i=0; i<=count; i++)
   {
@@ -81,7 +84,7 @@ void TestParserFactoryStyledMapper(int count, SString *catalogPath)
     delete regionMapperLocal;
     delete parserFactoryLocal;
   }
-  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."; 
+  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."<<endl; 
 }
 
 /* 
@@ -89,6 +92,7 @@ void TestParserFactoryStyledMapper(int count, SString *catalogPath)
 */
 void TestParserFactoryLoadAllHRCScheme(int count, SString *catalogPath)
 {
+  cout<<"TestParserFactoryLoadAllHRCScheme"<<endl;
   double all_time = 0, t;
   for (int i=0; i<=count; i++)
   {
@@ -114,7 +118,7 @@ void TestParserFactoryLoadAllHRCScheme(int count, SString *catalogPath)
     }
     delete parserFactoryLocal;
   }
-  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."; 
+  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."<<endl; 
 }
 
 
@@ -141,6 +145,7 @@ FileType *selectType(HRCParser *hrcParser, LineSource *lineSource, SString *test
 */
 void TestColoringFile(int count, SString *catalogPath, SString *testFile)
 {
+  cout<<"TestColoringFile"<<endl;
   double all_time = 0, t;
   for (int i=0; i<=count; i++)
   {
@@ -173,5 +178,5 @@ void TestColoringFile(int count, SString *catalogPath, SString *testFile)
     }
     delete parserFactoryLocal;
   }
-  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."; 
+  cout<< "the average time for "<<count<<" tests "<<all_time/count << " sec."<<endl; 
 }
