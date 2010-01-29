@@ -88,13 +88,20 @@ class FarEditor : public LineSource
 		int  editorInput(const INPUT_RECORD *ir);
 
 		void cleanEditor();
+    
+    DWORD ThreadID;
+    HANDLE ThreadH;
+    HANDLE Mutex;
+    HANDLE changeEvent;
+    HANDLE stopEvent;
+    void Colorize();
 
 	private:
 		EditorInfo ei;
 		PluginStartupInfo *info;
-
+    BaseEditor *baseEditor;
 		ParserFactory *parserFactory;
-		BaseEditor *baseEditor;
+		
 
 		int  maxLineLength;
 		bool fullBackground;
@@ -133,6 +140,8 @@ class FarEditor : public LineSource
 		void showOutliner(Outliner *outliner);
 		void addFARColor(int lno, int s, int e, int col);
 		const wchar_t *GetMsg(int msg);
+
+    
 };
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

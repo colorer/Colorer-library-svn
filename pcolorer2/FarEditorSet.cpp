@@ -523,12 +523,13 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
-	if (rDisabled)
+	/*if (rDisabled)
 	{
 		return 0;
-	}
+	}*/
 
 	return getCurrentEditor()->editorInput(ir);
+  //return 0;
 }
 
 int FarEditorSet::editorEvent(int Event, void *Param)
@@ -741,6 +742,12 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 	return parserFactory->getErrorHandler();
 }
 
+DWORD WINAPI ColorizeThread(LPVOID lpvThreadParm)
+{
+  FarEditor *editor=(FarEditor *)lpvThreadParm;
+  editor->Colorize();
+  return 0;
+} 
 
 FarEditor *FarEditorSet::getCurrentEditor()
 {
@@ -772,12 +779,13 @@ FarEditor *FarEditorSet::getCurrentEditor()
 
 		DString fn = DString(fnpath, slash_idx+1);
 		editor->chooseFileType(&fn);
+    delete[] FileName;
 		editor->setRegionMapper(regionMapper);
 		editor->setDrawCross(drawCross);
 		editor->setDrawPairs(drawPairs);
 		editor->setDrawSyntax(drawSyntax);
 		editor->setOutlineStyle(oldOutline);
-		delete[] FileName;
+    editor->ThreadH = CreateThread(NULL,0,ColorizeThread,editor,0,&editor->ThreadID); 
 	};
 
 	return editor;

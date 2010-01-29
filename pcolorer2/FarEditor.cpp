@@ -31,6 +31,10 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	newback = newfore = -1;
 	rdBackground = NULL;
 	visibleLevel = 100;
+  Mutex=NULL;
+  Mutex=CreateMutex(NULL,FALSE,NULL);
+  changeEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+  stopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	const Region *def_Outlined = pf->getHRCParser()->getRegion(&DString("def:Outlined"));
 	const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
 	structOutliner = new Outliner(baseEditor, def_Outlined);
@@ -39,11 +43,16 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
 FarEditor::~FarEditor()
 {
+  SetEvent(stopEvent);
+  WaitForSingleObject(ThreadH,50);
+
 	delete cursorRegion;
 	delete structOutliner;
 	delete errorOutliner;
 	delete baseEditor;
 	delete ret_str;
+  CloseHandle(Mutex);
+  CloseHandle(changeEvent);
 }
 
 
@@ -482,24 +491,63 @@ void FarEditor::updateHighlighting()
 
 int FarEditor::editorInput(const INPUT_RECORD *ir)
 {
-	if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0)
-	{
-		idleCount++;
+	//if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0)
+	//{
+	//	idleCount++;
 
-		if (idleCount > 10)
-		{
-			idleCount = 10;
-		}
+	//	if (idleCount > 10)
+	//	{
+	//		idleCount = 10;
+	//	}
 
-		baseEditor->idleJob(idleCount*10);
-		info->EditorControl(ECTL_REDRAW, NULL);
-	}
-	else if (ir->EventType == KEY_EVENT)
-	{
-		idleCount = 0;
-	};
+	//	baseEditor->idleJob(idleCount*10);
+	//	info->EditorControl(ECTL_REDRAW, NULL);
+	//}
+	//else if (ir->EventType == KEY_EVENT)
+	//{
+	//	idleCount = 0;
+	//};
 
 	return 0;
+}
+
+void FarEditor::Colorize()
+{
+  EditorInfo eilocal;
+  info->EditorControl(ECTL_GETINFO, &eilocal);
+  baseEditor->lineCountEvent(eilocal.TotalLines);
+  bool poll=true, DoColorize=true;
+  DWORD msec;
+  HANDLE handles[2];
+  handles[0]=changeEvent;
+  handles[1]=stopEvent;
+
+  while (poll)
+	{
+    if (DoColorize)
+      msec=2;
+    else
+      msec=INFINITE;
+
+    DWORD wfmo=WaitForMultipleObjects(sizeof(handles)/sizeof(handles[0]),handles,FALSE,msec);
+
+    switch(wfmo)
+    {
+      case WAIT_OBJECT_0:
+        ResetEvent(changeEvent);
+        break;
+      case WAIT_OBJECT_0+1:
+        poll = false;
+        break;
+      case WAIT_TIMEOUT:
+        WaitForSingleObject(Mutex,INFINITE);
+        DoColorize = baseEditor->idleJobFar(100);
+        ReleaseMutex(Mutex);
+        break;
+    }
+
+  }
+
 }
 
 int FarEditor::editorEvent(int event, void *param)
@@ -512,9 +560,9 @@ int FarEditor::editorEvent(int event, void *param)
 	WindowSizeX = ei.WindowSizeX;
 	WindowSizeY = ei.WindowSizeY;
 	
-	baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
+	//baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
 
-	baseEditor->lineCountEvent(ei.TotalLines);
+	//baseEditor->lineCountEvent(ei.TotalLines);
 
 	// Hack against FAR's bad EEREDRAW_CHANGE events
 	if (param == EEREDRAW_CHANGE && ignoreChange == true)
@@ -531,7 +579,10 @@ int FarEditor::editorEvent(int event, void *param)
 
 		if (blockTopPosition != -1 && ml > blockTopPosition) ml = blockTopPosition;
 
+    WaitForSingleObject(Mutex,INFINITE);
 		baseEditor->modifyEvent(ml);
+    ReleaseMutex(Mutex);
+    SetEvent(changeEvent);
 	};
 
 	prevLinePosition = ei.CurLine;
@@ -549,6 +600,7 @@ int FarEditor::editorEvent(int event, void *param)
 
 	if (rdBackground == NULL) throw Exception(DString("HRD Background region 'def:Text' not found"));
 
+  WaitForSingleObject(Mutex,INFINITE);
 	for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++)
 	{
 		if (lno >= ei.TotalLines) break;
@@ -643,6 +695,7 @@ int FarEditor::editorEvent(int event, void *param)
 			info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
 			addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor+0x10000);
 		};
+     
 	};
 
 	/// pair brackets
@@ -707,7 +760,7 @@ int FarEditor::editorEvent(int event, void *param)
 
 		baseEditor->releasePairMatch(pm);
 	};
-
+  ReleaseMutex(Mutex);
 	leaveHandler();
 
 	if (param != EEREDRAW_ALL)
@@ -1035,7 +1088,9 @@ void FarEditor::showOutliner(Outliner *outliner)
 void FarEditor::enterHandler()
 {
 	inHandler = true;
+  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_GETINFO, &ei);
+  ReleaseMutex(Mutex);
 	ret_strNumber = -1;
 }
 
@@ -1049,7 +1104,9 @@ void FarEditor::leaveHandler()
 	esp.LeftPos = ei.LeftPos;
 	esp.CurTabPos = -1;
 	esp.Overtype = -1;
+  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_SETPOSITION, &esp);
+  ReleaseMutex(Mutex);
 	inHandler = false;
 }
 
@@ -1089,7 +1146,9 @@ void FarEditor::addFARColor(int lno, int s, int e, int col)
 	ec.EndPos = e-1;
 	ec.Color = col;
 	CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
+  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_ADDCOLOR, &ec);
+  ReleaseMutex(Mutex);
 	CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
 }
 

@@ -463,6 +463,15 @@ void BaseEditor::idleJob(int time)
   }
 }
 
+bool BaseEditor::idleJobFar(int time)
+{
+  if (invalidLine < lineCount) {
+    validate(invalidLine+IDLE_PARSE(time), false);
+    if (invalidLine < lineCount)
+      return true;
+  }
+  return false;
+}
 
 
 void BaseEditor::startParsing(int lno){

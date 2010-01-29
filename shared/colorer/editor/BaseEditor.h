@@ -185,6 +185,7 @@ public:
    *             available for this job.
    */
   void idleJob(int time);
+  bool idleJobFar(int time);
 
   /**
    * Informs BaseEditor object about text modification event.
