@@ -77,16 +77,20 @@ String *FarEditor::getLine(int lno)
 		es.StringText = NULL;
 		esp.CurLine = lno;
 		esp.CurPos = esp.CurTabPos = esp.TopScreenLine = esp.LeftPos = esp.Overtype = -1;
+    WaitForSingleObject(Mutex,INFINITE);
 		info->EditorControl(ECTL_SETPOSITION, &esp);
 
 		if (info->EditorControl(ECTL_GETSTRING, &es)) len = es.StringLength;
+    ReleaseMutex(Mutex);
 	}
 	else
 	{
 		es.StringNumber = lno;
 		es.StringText = NULL;
 
+    WaitForSingleObject(Mutex,INFINITE);
 		if (info->EditorControl(ECTL_GETSTRING, &es)) len = es.StringLength;
+    ReleaseMutex(Mutex);
 	};
 
 	if (len > maxLineLength && maxLineLength > 0) len = maxLineLength;
@@ -514,9 +518,13 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
 void FarEditor::Colorize()
 {
   EditorInfo eilocal;
+  WaitForSingleObject(Mutex,INFINITE);
   info->EditorControl(ECTL_GETINFO, &eilocal);
   baseEditor->lineCountEvent(eilocal.TotalLines);
-  bool poll=true, DoColorize=true;
+  ReleaseMutex(Mutex);
+
+  bool poll=true;
+  int DoColorize=true;
   DWORD msec;
   HANDLE handles[2];
   handles[0]=changeEvent;
@@ -534,15 +542,22 @@ void FarEditor::Colorize()
     switch(wfmo)
     {
       case WAIT_OBJECT_0:
+        WaitForSingleObject(Mutex,INFINITE);
+        info->EditorControl(ECTL_GETINFO, &eilocal);
+        baseEditor->lineCountEvent(eilocal.TotalLines);
         ResetEvent(changeEvent);
+        ReleaseMutex(Mutex);
         break;
       case WAIT_OBJECT_0+1:
         poll = false;
         break;
       case WAIT_TIMEOUT:
         WaitForSingleObject(Mutex,INFINITE);
-        DoColorize = baseEditor->idleJobFar(100);
+        info->EditorControl(ECTL_GETINFO, &eilocal);
+        DoColorize = baseEditor->idleJobFar(100,eilocal.CurLine);
         ReleaseMutex(Mutex);
+        if (DoColorize==2)
+          info->EditorControl(ECTL_REDRAW, NULL);
         break;
     }
 
@@ -554,7 +569,7 @@ int FarEditor::editorEvent(int event, void *param)
 {
 	// ignore event
 	if (event != EE_REDRAW || inRedraw) return 0;
-
+  WaitForSingleObject(Mutex,INFINITE);
 	enterHandler();
 	
 	WindowSizeX = ei.WindowSizeX;
@@ -564,7 +579,7 @@ int FarEditor::editorEvent(int event, void *param)
 
 	//baseEditor->lineCountEvent(ei.TotalLines);
 
-	// Hack against FAR's bad EEREDRAW_CHANGE events
+	 //Hack against FAR's bad EEREDRAW_CHANGE events
 	if (param == EEREDRAW_CHANGE && ignoreChange == true)
 	{
 		param = EEREDRAW_ALL;
@@ -579,9 +594,9 @@ int FarEditor::editorEvent(int event, void *param)
 
 		if (blockTopPosition != -1 && ml > blockTopPosition) ml = blockTopPosition;
 
-    WaitForSingleObject(Mutex,INFINITE);
+
 		baseEditor->modifyEvent(ml);
-    ReleaseMutex(Mutex);
+
     SetEvent(changeEvent);
 	};
 
@@ -590,17 +605,19 @@ int FarEditor::editorEvent(int event, void *param)
 
 	if (ei.BlockType != BTYPE_NONE) blockTopPosition = ei.BlockStartLine;
 
-	// hack against tabs in FAR's editor
+	 //hack against tabs in FAR's editor
 	EditorConvertPos ecp, ecp_cl;
 	ecp.StringNumber = -1;
 	ecp.SrcPos = ei.CurPos;
+
 	info->EditorControl(ECTL_REALTOTAB, &ecp);
+
 	delete cursorRegion;
 	cursorRegion = NULL;
 
 	if (rdBackground == NULL) throw Exception(DString("HRD Background region 'def:Text' not found"));
 
-  WaitForSingleObject(Mutex,INFINITE);
+
 	for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++)
 	{
 		if (lno >= ei.TotalLines) break;
@@ -698,7 +715,7 @@ int FarEditor::editorEvent(int event, void *param)
      
 	};
 
-	/// pair brackets
+	 //pair brackets
 	PairMatch *pm = NULL;
 
 	if (drawPairs)
@@ -760,8 +777,8 @@ int FarEditor::editorEvent(int event, void *param)
 
 		baseEditor->releasePairMatch(pm);
 	};
-  ReleaseMutex(Mutex);
 	leaveHandler();
+  ReleaseMutex(Mutex);
 
 	if (param != EEREDRAW_ALL)
 	{
@@ -1106,8 +1123,8 @@ void FarEditor::leaveHandler()
 	esp.Overtype = -1;
   WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_SETPOSITION, &esp);
+  inHandler = false;
   ReleaseMutex(Mutex);
-	inHandler = false;
 }
 
 int FarEditor::convert(const StyledRegion *rd)
@@ -1146,9 +1163,7 @@ void FarEditor::addFARColor(int lno, int s, int e, int col)
 	ec.EndPos = e-1;
 	ec.Color = col;
 	CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
-  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_ADDCOLOR, &ec);
-  ReleaseMutex(Mutex);
 	CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
 }
 
