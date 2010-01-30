@@ -33,13 +33,24 @@
 
     <scheme name="haml">
 
+      <regexp match='/\M (?{def:Outlined} \% [\w\-]+)/ix'/>
+
       <regexp match='/(?{def:OpenTag} \% ) (?{def:Tag}[\w\-]+)/ix' region='def:Keyword'/>
       <regexp match='/(?{def:OpenTag} \. ) (?{Class}[\w\-]+)/ix' region='def:Keyword'/>
       <regexp match='/(?{def:OpenTag} \# ) (?{ID}[\w\-]+)/ix' region='def:Keyword'/>
 
       <block start='/\{/' end='/\}/' region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
 
-      <block start='/[\=\-]\#/' end='/$/' scheme='def:empty' region='def:Comment'/>
+      <block start='/^!!!/' end='/^\M(\S|$)/' region='def:Insertion'
+         region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
+      <block start='/^:(ruby)/' end='/^\M(\S|$)/' region='def:Insertion' region01='def:Outlined'
+         region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
+      <block start='/^:(javascript)/' end='/^\M(\S|$)/' region='def:Insertion' region01='def:Outlined'
+         region00='def:PairStart' region10='def:PairEnd' scheme='jScript:jScript'/>
+      <block start='/^:(plain|cdata|escaped|preserve|textile|\w+)/' end='/^\M(\S|$)/' region01='def:Outlined'
+         region='def:Insertion' region00='def:PairStart' region10='def:PairEnd' scheme='def:empty'/>
+
+      <block start='/[\=\-]\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
       <block start='/\-/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
       <block start='/\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
 
