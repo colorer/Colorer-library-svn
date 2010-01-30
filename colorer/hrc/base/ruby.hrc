@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY kw  SYSTEM "ruby.kw.ent.hrc">
+<!ENTITY kw        SYSTEM "ruby.kw.ent.hrc">
+<!ENTITY kw-class  SYSTEM "ruby.kw-class.ent.hrc">
 ]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -28,10 +29,11 @@
 
     <region name="ClassOutline" parent="def:Outlined"/>
     <region name="AliasOutline" parent="def:Outlined"/>
+    <region name="MethodOutline" parent="def:Outlined"/>
     
 
     <scheme name="String">
-      <regexp match="/\\[^\\]/"/>
+      <regexp match="/\\\M[^\\]/"/>
     </scheme>
 
     <scheme name="Strings">
@@ -55,22 +57,26 @@
       <!-- stolen from perl -->
       <block start="/((\=|\! \~) |
                [^&lt;\]\}\)\+\-\w\s\/] |
-               (\bif) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
+               (\bif) | (\bwhen) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
               \s*
               ((?{def:PairStart}\/))
              /x"
-        end="/(\y7([cmiogxes]*) )/x"
+        end="/(\/([cmiogxes]*) )/x"
         scheme="regexp:perl.regexp"
         region="String" region01="def:Symbol" region07="regexp:SpecQuote"
         region10="regexp:SpecQuote" region11="def:PairEnd" region12="regexp:SpecArea"/>
 
+      <block start='/\%([^\w&lt;&gt;])/' end='/\y1/' scheme='def:Comment' region='CommentDoc'/>
+
       <regexp match='/ (?{Keyword}alias) \s+ (?{AliasOutline}\S+ \s+ \S+)/x'/>
       <regexp match='/\M class \s+ (?{ClassOutline}\S+)/x'/>
+      <regexp match='/\M def \s+ (?{MethodOutline}\S+)/x'/>
+      
 
       <block start='/(?{def:PairStart}(?{Keyword}def)) \s+ (\S+?) (\(.*?\))?/x' end='/\b(?{def:PairEnd}(?{Keyword}end))\b/' scheme='ruby'/>
 
 
-      <block start='/^\s*(case|class|do|for|while|unless|until|module)\b/' end='/\b(end)\b/' scheme="ruby"
+      <block start='/^\s*(case|class|do|begin|for|while|unless|until|module)\b/' end='/\b(end)\b/' scheme="ruby"
              region00='Keyword' region10='Keyword'
              region01='def:PairStart' region11='def:PairEnd'
              />
@@ -135,6 +141,10 @@
         <word name="next"/>
         <word name="return"/>
         <word name="until"/>
+      </keywords>
+      
+      <keywords region="def:ClassKeyword">
+        &kw-class;
       </keywords>
 
       <keywords region="def:FunctionKeyword">
