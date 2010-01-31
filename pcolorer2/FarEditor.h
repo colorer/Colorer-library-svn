@@ -91,12 +91,8 @@ class FarEditor : public LineSource
     
     DWORD ThreadID;
     HANDLE ThreadH;
-    HANDLE Mutex;
-    HANDLE changeEvent;
-    HANDLE stopEvent;
     void Colorize();
-    int DoColorize;
-
+    bool InColorize();
 	private:
 		EditorInfo ei;
 		PluginStartupInfo *info;
@@ -141,6 +137,11 @@ class FarEditor : public LineSource
 		void showOutliner(Outliner *outliner);
 		void addFARColor(int lno, int s, int e, int col);
 		const wchar_t *GetMsg(int msg);
+
+    int DoColorize;
+    HANDLE Mutex;
+    HANDLE changeEvent;
+    HANDLE stopEvent;
 };
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

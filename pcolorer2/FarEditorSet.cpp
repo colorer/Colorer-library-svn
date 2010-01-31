@@ -363,8 +363,8 @@ void FarEditorSet::configure()
 		wchar_t *hrdName = rGetValueSz(hPluginRegistry, REG_HRD_NAME);
 		if (!hrdName)  // with a blank line is written '\0'
 		{
-			hrdName = new wchar_t[7];
-			wcscpy(hrdName, L"default");
+			hrdName = new wchar_t[8];
+			wcscpy_s(hrdName,8, L"default");
 		}
 
 		SString *hrdNameSS;
@@ -545,10 +545,10 @@ int FarEditorSet::editorInput(const INPUT_RECORD *ir)
   editor = getCurrentEditor();
   if (editor)
   {
-    if (editor->DoColorize && ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
+    if (editor->InColorize() && ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
     {
       const wchar_t* MsgItems[]={GetMsg(mName),GetMsg(mStopQuestion),GetMsg(mButtonYes),GetMsg(mButtonNo)};
-      bool ContinueThread=info->Message(info->ModuleNumber,FMSG_WARNING,NULL,MsgItems,sizeof(MsgItems)/sizeof(MsgItems[0]),2); 
+      int ContinueThread=info->Message(info->ModuleNumber,FMSG_WARNING,NULL,MsgItems,sizeof(MsgItems)/sizeof(MsgItems[0]),2); 
       if (!ContinueThread)
       {
         EditorInfo ei;

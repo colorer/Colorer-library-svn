@@ -517,6 +517,14 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
 	return 0;
 }
 
+bool FarEditor::InColorize()
+{
+  WaitForSingleObject(Mutex,INFINITE);
+  int c = DoColorize;
+  ReleaseMutex(Mutex);
+  return c;
+}
+
 void FarEditor::Colorize()
 {
   //получаем кол-во строк для старта
