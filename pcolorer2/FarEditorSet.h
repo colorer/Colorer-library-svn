@@ -38,8 +38,10 @@ class FarEditorSet
 	private:
 		/** Returns current global error handler. */
 		ErrorHandler *getErrorHandler();
-		/** Returns currently active editor. */
+		/** Returns currently active editor or NULL if not */
 		FarEditor *getCurrentEditor();
+
+		FarEditor *addNewEditor();
 		/**
 		 * Reloads HRC database.
 		 * Drops all currently opened editors and their

@@ -89,35 +89,46 @@ void FarEditorSet::openMenu()
 
 		menuElements[0].Selected = 1;
 
+    FarEditor *fe = getCurrentEditor();
+
 		switch (info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
 			case 0:
-				chooseType();
+				if (fe)
+          chooseType();
 				break;
 			case 1:
-				getCurrentEditor()->matchPair();
+        if (fe)
+          fe->matchPair();
 				break;
 			case 2:
-				getCurrentEditor()->selectBlock();
+        if (fe)
+				  fe->selectBlock();
 				break;
 			case 3:
-				getCurrentEditor()->selectPair();
+        if (fe)
+				  fe->selectPair();
 				break;
 			case 4:
-				getCurrentEditor()->listFunctions();
+        if (fe)
+				  fe->listFunctions();
 				break;
 			case 5:
-				getCurrentEditor()->listErrors();
+        if (fe)
+				  fe->listErrors();
 				break;
 			case 6:
-				getCurrentEditor()->selectRegion();
+        if (fe)
+				  fe->selectRegion();
 				break;
 			case 7:
-				getCurrentEditor()->locateFunction();
+        if (fe)
+				  fe->locateFunction();
 				break;
 			case 9:
-				getCurrentEditor()->updateHighlighting();
+        if (fe)
+				  fe->updateHighlighting();
 				break;
 			case 10:
 				ReloadBase();
@@ -194,80 +205,83 @@ void FarEditorSet::viewFile(const String &path)
 void FarEditorSet::chooseType()
 {
 	FarEditor *fe = getCurrentEditor();
-	int num = 0;
-	const String *group = NULL;
-	FileType *type = NULL;
+  if (fe)
+  {
+    int num = 0;
+    const String *group = NULL;
+    FileType *type = NULL;
 
-	for (int idx = 0;; idx++, num++)
-	{
-		type = hrcParser->enumerateFileTypes(idx);
+    for (int idx = 0;; idx++, num++)
+    {
+      type = hrcParser->enumerateFileTypes(idx);
 
-		if (type == NULL) break;
+      if (type == NULL) break;
 
-		if (group != NULL && !group->equals(type->getGroup())) num++;
+      if (group != NULL && !group->equals(type->getGroup())) num++;
 
-		group = type->getGroup();
-	};
+      group = type->getGroup();
+    };
 
-	char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
-	FarMenuItem *menuels = new FarMenuItem[num];
-	memset(menuels, 0, sizeof(FarMenuItem)*(num));
-	group = NULL;
+    char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+    FarMenuItem *menuels = new FarMenuItem[num];
+    memset(menuels, 0, sizeof(FarMenuItem)*(num));
+    group = NULL;
 
-	for (int idx = 0, i = 0;; idx++, i++)
-	{
-		type = hrcParser->enumerateFileTypes(idx);
+    for (int idx = 0, i = 0;; idx++, i++)
+    {
+      type = hrcParser->enumerateFileTypes(idx);
 
-		if (type == NULL) break;
+      if (type == NULL) break;
 
-		if (group != NULL && !group->equals(type->getGroup()))
-		{
-			menuels[i].Separator = 1;
-			i++;
-		};
+      if (group != NULL && !group->equals(type->getGroup()))
+      {
+        menuels[i].Separator = 1;
+        i++;
+      };
 
-		group = type->getGroup();
+      group = type->getGroup();
 
-		const wchar_t *groupChars = NULL;
+      const wchar_t *groupChars = NULL;
 
-		if (group != NULL) groupChars = group->getWChars();
-		else groupChars = L"<no group>";
+      if (group != NULL) groupChars = group->getWChars();
+      else groupChars = L"<no group>";
 
-		menuels[i].Text = new wchar_t[255];
-		_snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
+      menuels[i].Text = new wchar_t[255];
+      _snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
 
-		if (type == fe->getFileType()) menuels[i].Selected = 1;
-	};
+      if (type == fe->getFileType()) menuels[i].Selected = 1;
+    };
 
-	wchar_t bottom[20];
-	int i;
-	_snwprintf(bottom, 20, GetMsg(mTotalTypes), num);
-	i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-	               GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
+    wchar_t bottom[20];
+    int i;
+    _snwprintf(bottom, 20, GetMsg(mTotalTypes), num);
+    i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+      GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
 
-	for (int idx = 0; idx < num; idx++)
-		if (menuels[idx].Text) delete[] menuels[idx].Text;
+    for (int idx = 0; idx < num; idx++)
+      if (menuels[idx].Text) delete[] menuels[idx].Text;
 
-	delete[] menuels;
+    delete[] menuels;
 
-	if (i == -1) return;
+    if (i == -1) return;
 
-	i++;
-	type = NULL;
-	group = NULL;
+    i++;
+    type = NULL;
+    group = NULL;
 
-	for (int ti = 0; i; i--, ti++)
-	{
-		type = hrcParser->enumerateFileTypes(ti);
+    for (int ti = 0; i; i--, ti++)
+    {
+      type = hrcParser->enumerateFileTypes(ti);
 
-		if (!type) break;
+      if (!type) break;
 
-		if (group != NULL && !group->equals(type->getGroup())) i--;
+      if (group != NULL && !group->equals(type->getGroup())) i--;
 
-		group = type->getGroup();
-	};
+      group = type->getGroup();
+    };
 
-	if (type != NULL) fe->setFileType(type);
+    if (type != NULL) fe->setFileType(type);
+  }
 }
 
 int FarEditorSet::getHRDescription(const String &name,const String *&descr)
@@ -523,13 +537,30 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
-	/*if (rDisabled)
+	if (rDisabled)
 	{
-		return 0;
-	}*/
-
-	return getCurrentEditor()->editorInput(ir);
-  //return 0;
+    return 0;
+	}
+  FarEditor *editor = NULL;
+  editor = getCurrentEditor();
+  if (editor)
+  {
+    if (editor->DoColorize && ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
+    {
+      const wchar_t* MsgItems[]={GetMsg(mName),GetMsg(mStopQuestion),GetMsg(mButtonYes),GetMsg(mButtonNo)};
+      bool ContinueThread=info->Message(info->ModuleNumber,FMSG_WARNING,NULL,MsgItems,sizeof(MsgItems)/sizeof(MsgItems[0]),2); 
+      if (!ContinueThread)
+      {
+        EditorInfo ei;
+        info->EditorControl(ECTL_GETINFO, &ei);
+        farEditorInstances.remove(&SString(ei.EditorID));
+        delete editor;
+      }
+      return 1;
+    }
+    return editor->editorInput(ir);
+  }
+  return 0;
 }
 
 int FarEditorSet::editorEvent(int Event, void *Param)
@@ -541,20 +572,28 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
 	try
 	{
-		FarEditor *editor = NULL;
-
-		if (Event == EE_CLOSE)
-		{
-			editor = farEditorInstances.get(&SString(*((int*)Param)));
-			farEditorInstances.remove(&SString(*((int*)Param)));
-			delete editor;
-			return 0;
-		};
-
-		if (Event != EE_REDRAW) return 0;
-
-		editor = getCurrentEditor();
-		return editor->editorEvent(Event, Param);
+    FarEditor *editor = NULL;
+    switch (Event)
+    {
+      case EE_REDRAW:
+        editor = getCurrentEditor();
+        if (editor)
+          return editor->editorEvent(Event, Param);
+        else return 0;
+        break;
+      case EE_READ:
+        addNewEditor();
+        return 0;
+        break;
+      case EE_CLOSE:
+        editor = farEditorInstances.get(&SString(*((int*)Param)));
+        farEditorInstances.remove(&SString(*((int*)Param)));
+        delete editor;
+        return 0;
+        break;
+      default:
+        return 0;
+    }
 	}
 	catch (Exception &e)
 	{
@@ -749,45 +788,49 @@ DWORD WINAPI ColorizeThread(LPVOID lpvThreadParm)
   return 0;
 } 
 
+FarEditor *FarEditorSet::addNewEditor()
+{
+  EditorInfo ei;
+  info->EditorControl(ECTL_GETINFO, &ei);
+
+  FarEditor *editor = new FarEditor(info, parserFactory);
+  farEditorInstances.put(&SString(ei.EditorID), editor);
+  LPWSTR FileName=NULL;
+  size_t FileNameSize=info->EditorControl(ECTL_GETFILENAME,NULL);
+
+  if (FileNameSize)
+  {
+    FileName=new wchar_t[FileNameSize];
+
+    if (FileName)
+    {
+      info->EditorControl(ECTL_GETFILENAME,FileName);
+    }
+  }
+
+  DString fnpath(FileName);
+  int slash_idx = fnpath.lastIndexOf('\\');
+
+  if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
+
+  DString fn = DString(fnpath, slash_idx+1);
+  editor->chooseFileType(&fn);
+  delete[] FileName;
+  editor->setRegionMapper(regionMapper);
+  editor->setDrawCross(drawCross);
+  editor->setDrawPairs(drawPairs);
+  editor->setDrawSyntax(drawSyntax);
+  editor->setOutlineStyle(oldOutline);
+  editor->ThreadH = CreateThread(NULL,0,ColorizeThread,editor,0,&editor->ThreadID); 
+
+  return editor;
+}
+
 FarEditor *FarEditorSet::getCurrentEditor()
 {
 	EditorInfo ei;
 	info->EditorControl(ECTL_GETINFO, &ei);
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
-
-	if (editor == NULL)
-	{
-		editor = new FarEditor(info, parserFactory);
-		farEditorInstances.put(&SString(ei.EditorID), editor);
-		LPWSTR FileName=NULL;
-		size_t FileNameSize=info->EditorControl(ECTL_GETFILENAME,NULL);
-
-		if (FileNameSize)
-		{
-			FileName=new wchar_t[FileNameSize];
-
-			if (FileName)
-			{
-				info->EditorControl(ECTL_GETFILENAME,FileName);
-			}
-		}
-
-		DString fnpath(FileName);
-		int slash_idx = fnpath.lastIndexOf('\\');
-
-		if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
-
-		DString fn = DString(fnpath, slash_idx+1);
-		editor->chooseFileType(&fn);
-    delete[] FileName;
-		editor->setRegionMapper(regionMapper);
-		editor->setDrawCross(drawCross);
-		editor->setDrawPairs(drawPairs);
-		editor->setDrawSyntax(drawSyntax);
-		editor->setOutlineStyle(oldOutline);
-    editor->ThreadH = CreateThread(NULL,0,ColorizeThread,editor,0,&editor->ThreadID); 
-	};
-
 	return editor;
 }
 

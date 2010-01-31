@@ -95,6 +95,7 @@ class FarEditor : public LineSource
     HANDLE changeEvent;
     HANDLE stopEvent;
     void Colorize();
+    int DoColorize;
 
 	private:
 		EditorInfo ei;
@@ -140,8 +141,6 @@ class FarEditor : public LineSource
 		void showOutliner(Outliner *outliner);
 		void addFARColor(int lno, int s, int e, int col);
 		const wchar_t *GetMsg(int msg);
-
-    
 };
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

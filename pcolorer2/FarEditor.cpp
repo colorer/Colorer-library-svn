@@ -31,11 +31,13 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	newback = newfore = -1;
 	rdBackground = NULL;
 	visibleLevel = 100;
-  Mutex=NULL;
+  //содаем события и мютекс
   Mutex=CreateMutex(NULL,FALSE,NULL);
   changeEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
   stopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-	const Region *def_Outlined = pf->getHRCParser()->getRegion(&DString("def:Outlined"));
+  DoColorize=false;
+
+  const Region *def_Outlined = pf->getHRCParser()->getRegion(&DString("def:Outlined"));
 	const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
 	structOutliner = new Outliner(baseEditor, def_Outlined);
 	errorOutliner = new Outliner(baseEditor, def_Error);
@@ -43,8 +45,11 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
 FarEditor::~FarEditor()
 {
+  // завершаем поток раскраски, ждем его завершения
+  WaitForSingleObject(Mutex,INFINITE);
   SetEvent(stopEvent);
-  WaitForSingleObject(ThreadH,50);
+  ReleaseMutex(Mutex);
+  WaitForSingleObject(ThreadH,100);
 
 	delete cursorRegion;
 	delete structOutliner;
@@ -53,6 +58,7 @@ FarEditor::~FarEditor()
 	delete ret_str;
   CloseHandle(Mutex);
   CloseHandle(changeEvent);
+  CloseHandle(stopEvent);
 }
 
 
@@ -77,20 +83,16 @@ String *FarEditor::getLine(int lno)
 		es.StringText = NULL;
 		esp.CurLine = lno;
 		esp.CurPos = esp.CurTabPos = esp.TopScreenLine = esp.LeftPos = esp.Overtype = -1;
-    WaitForSingleObject(Mutex,INFINITE);
 		info->EditorControl(ECTL_SETPOSITION, &esp);
 
 		if (info->EditorControl(ECTL_GETSTRING, &es)) len = es.StringLength;
-    ReleaseMutex(Mutex);
 	}
 	else
 	{
 		es.StringNumber = lno;
 		es.StringText = NULL;
 
-    WaitForSingleObject(Mutex,INFINITE);
 		if (info->EditorControl(ECTL_GETSTRING, &es)) len = es.StringLength;
-    ReleaseMutex(Mutex);
 	};
 
 	if (len > maxLineLength && maxLineLength > 0) len = maxLineLength;
@@ -106,11 +108,16 @@ void FarEditor::chooseFileType(String *fname)
 	setFileType(ftype);
 }
 
-
 void FarEditor::setFileType(FileType *ftype)
 {
-	baseEditor->setFileType(ftype);
+  WaitForSingleObject(Mutex,INFINITE);
+	
+  baseEditor->setFileType(ftype);
 	reloadTypeSettings();
+  
+  //сообщаем потоку об изменениях
+  SetEvent(changeEvent);
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::reloadTypeSettings()
@@ -262,10 +269,12 @@ void FarEditor::setRegionMapper(RegionMapper *rs)
 void FarEditor::matchPair()
 {
 	EditorSetPosition esp;
-	enterHandler();
+  WaitForSingleObject(Mutex,INFINITE);
+	
+  enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
-
 	leaveHandler();
+
 	if ((pm == NULL)||(pm->eline == -1))	return;
 
 	esp.CurTabPos = -1;
@@ -283,21 +292,23 @@ void FarEditor::matchPair()
 
 		if (esp.TopScreenLine < 0) esp.TopScreenLine = 0;
 	};
-
+  
 	info->EditorControl(ECTL_SETPOSITION, &esp);
 	baseEditor->releasePairMatch(pm);
 	ignoreChange = true;
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::selectPair()
 {
 	EditorSelect es;
 	int X1, X2, Y1, Y2;
+  WaitForSingleObject(Mutex,INFINITE);
 	enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 	
 	leaveHandler();
-	
+  	
 	if ((pm == NULL)||(pm->eline == -1))return;
 
 	if (pm->topPosition)
@@ -322,21 +333,21 @@ void FarEditor::selectPair()
 	es.BlockWidth = X2 - X1 + 1;
 
 	info->EditorControl(ECTL_SELECT, &es);
-
 	baseEditor->releasePairMatch(pm);
-
 	ignoreChange = true;
+
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::selectBlock()
 {
 	EditorSelect es;
 	int X1, X2, Y1, Y2;
+  WaitForSingleObject(Mutex,INFINITE);
 	enterHandler();
 	PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
 	leaveHandler();
-	
 	if ((pm == NULL)||(pm->eline == -1))return;
 
 	if (pm->topPosition)
@@ -363,8 +374,8 @@ void FarEditor::selectBlock()
 	info->EditorControl(ECTL_SELECT, &es);
 
 	baseEditor->releasePairMatch(pm);
-
 	ignoreChange = true;
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::selectRegion()
@@ -372,6 +383,7 @@ void FarEditor::selectRegion()
 	EditorSelect es;
 	EditorGetString egs;
 	egs.StringNumber = ei.CurLine;
+  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_GETSTRING, &egs);
 	int end = cursorRegion->end;
 
@@ -386,31 +398,36 @@ void FarEditor::selectRegion()
 		es.BlockWidth = end - cursorRegion->start;
 		info->EditorControl(ECTL_SELECT, &es);
 	};
-
 	ignoreChange = true;
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::listFunctions()
 {
+  WaitForSingleObject(Mutex,INFINITE);
 	enterHandler();
 	baseEditor->validate(-1, false);
 	leaveHandler();
 	showOutliner(structOutliner);
 	ignoreChange = true;
+  ReleaseMutex(Mutex);
 }
 
 void FarEditor::listErrors()
 {
+  WaitForSingleObject(Mutex,INFINITE);
 	enterHandler();
 	baseEditor->validate(-1, false);
 	leaveHandler();
 	showOutliner(errorOutliner);
 	ignoreChange = true;
+  ReleaseMutex(Mutex);
 }
 
 
 void FarEditor::locateFunction()
 {
+  WaitForSingleObject(Mutex,INFINITE);
 	// extract word
 	String &curLine = *getLine(ei.CurLine);
 	int cpos = ei.CurPos;
@@ -483,40 +500,26 @@ void FarEditor::locateFunction()
 		info->EditorControl(ECTL_GETINFO, &ei);
 		return;
 	};
-
+  ReleaseMutex(Mutex);
 	const wchar_t *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
 	info->Message(info->ModuleNumber, 0, 0, msg, 2, 1);
 }
 
 void FarEditor::updateHighlighting()
 {
+  WaitForSingleObject(Mutex,INFINITE);
 	baseEditor->validate(ei.TopScreenLine, true);
+  ReleaseMutex(Mutex);
 }
 
 int FarEditor::editorInput(const INPUT_RECORD *ir)
 {
-	//if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0)
-	//{
-	//	idleCount++;
-
-	//	if (idleCount > 10)
-	//	{
-	//		idleCount = 10;
-	//	}
-
-	//	baseEditor->idleJob(idleCount*10);
-	//	info->EditorControl(ECTL_REDRAW, NULL);
-	//}
-	//else if (ir->EventType == KEY_EVENT)
-	//{
-	//	idleCount = 0;
-	//};
-
 	return 0;
 }
 
 void FarEditor::Colorize()
 {
+  //получаем кол-во строк для старта
   EditorInfo eilocal;
   WaitForSingleObject(Mutex,INFINITE);
   info->EditorControl(ECTL_GETINFO, &eilocal);
@@ -524,33 +527,42 @@ void FarEditor::Colorize()
   ReleaseMutex(Mutex);
 
   bool poll=true;
-  int DoColorize=true;
+  DoColorize=true;
   DWORD msec;
   HANDLE handles[2];
   handles[0]=changeEvent;
   handles[1]=stopEvent;
 
+  //основной цикл процедуры парсинга
   while (poll)
 	{
+    //если мы все еще не до парсили файл до конца, 
+    //то проверим состояние объектов и идем дальше
+    //иначе ждем событие
     if (DoColorize)
-      msec=2;
+      msec=0;
     else
       msec=INFINITE;
-
+    //ждем события  - изменение текста, закрытие редактора
     DWORD wfmo=WaitForMultipleObjects(sizeof(handles)/sizeof(handles[0]),handles,FALSE,msec);
 
     switch(wfmo)
     {
+      // изменился текст
       case WAIT_OBJECT_0:
         WaitForSingleObject(Mutex,INFINITE);
         info->EditorControl(ECTL_GETINFO, &eilocal);
         baseEditor->lineCountEvent(eilocal.TotalLines);
+        DoColorize = true;
         ResetEvent(changeEvent);
         ReleaseMutex(Mutex);
         break;
+      // выходим
       case WAIT_OBJECT_0+1:
         poll = false;
+        DoColorize = false;
         break;
+      // событий не произошло, можем парсить дальше
       case WAIT_TIMEOUT:
         WaitForSingleObject(Mutex,INFINITE);
         info->EditorControl(ECTL_GETINFO, &eilocal);
@@ -569,15 +581,17 @@ int FarEditor::editorEvent(int event, void *param)
 {
 	// ignore event
 	if (event != EE_REDRAW || inRedraw) return 0;
+  
   WaitForSingleObject(Mutex,INFINITE);
+
 	enterHandler();
 	
 	WindowSizeX = ei.WindowSizeX;
 	WindowSizeY = ei.WindowSizeY;
 	
-	//baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
+	baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
 
-	//baseEditor->lineCountEvent(ei.TotalLines);
+	baseEditor->lineCountEvent(ei.TotalLines);
 
 	 //Hack against FAR's bad EEREDRAW_CHANGE events
 	if (param == EEREDRAW_CHANGE && ignoreChange == true)
@@ -594,9 +608,7 @@ int FarEditor::editorEvent(int event, void *param)
 
 		if (blockTopPosition != -1 && ml > blockTopPosition) ml = blockTopPosition;
 
-
 		baseEditor->modifyEvent(ml);
-
     SetEvent(changeEvent);
 	};
 
@@ -616,7 +628,6 @@ int FarEditor::editorEvent(int event, void *param)
 	cursorRegion = NULL;
 
 	if (rdBackground == NULL) throw Exception(DString("HRD Background region 'def:Text' not found"));
-
 
 	for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++)
 	{
@@ -1105,9 +1116,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 void FarEditor::enterHandler()
 {
 	inHandler = true;
-  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_GETINFO, &ei);
-  ReleaseMutex(Mutex);
 	ret_strNumber = -1;
 }
 
@@ -1121,10 +1130,8 @@ void FarEditor::leaveHandler()
 	esp.LeftPos = ei.LeftPos;
 	esp.CurTabPos = -1;
 	esp.Overtype = -1;
-  WaitForSingleObject(Mutex,INFINITE);
 	info->EditorControl(ECTL_SETPOSITION, &esp);
   inHandler = false;
-  ReleaseMutex(Mutex);
 }
 
 int FarEditor::convert(const StyledRegion *rd)
