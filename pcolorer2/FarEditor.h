@@ -22,7 +22,8 @@ class FarEditor : public LineSource
 		/** Drops this editor */
 		~FarEditor();
 
-		void endJob(int lno);
+		void startJob(int lno);
+    void endJob(int lno);
 		/**
 		 Returns line number "lno" from FAR interface. Line is only valid until next call of this function,
 		 it also should not be disposed, this function takes care of this.
@@ -112,7 +113,8 @@ class FarEditor : public LineSource
 		int WindowSizeX;
 		int WindowSizeY;
 		int farEncodingIndex, unicodeEncodingIndex;
-		bool inRedraw, inHandler, ignoreChange;
+		bool inRedraw, ignoreChange;
+    int inHandler;
 		int idleCount;
 
 		int prevLinePosition, blockTopPosition;

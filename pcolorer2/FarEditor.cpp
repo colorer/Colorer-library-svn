@@ -15,7 +15,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	prevLinePosition = 0;
 	blockTopPosition = -1;
 	inRedraw = false;
-	inHandler = false;
+	inHandler = 0;
 	ignoreChange = false;
 	idleCount = 0;
 	ret_str = NULL;
@@ -66,6 +66,12 @@ void FarEditor::endJob(int lno)
 {
 	delete ret_str;
 	ret_str = NULL;
+	leaveHandler();
+}
+
+void FarEditor::startJob(int lno)
+{
+	enterHandler();
 }
 
 String *FarEditor::getLine(int lno)
@@ -1137,23 +1143,29 @@ void FarEditor::showOutliner(Outliner *outliner)
 
 void FarEditor::enterHandler()
 {
-	inHandler = true;
-	info->EditorControl(ECTL_GETINFO, &ei);
-	ret_strNumber = -1;
+  if (!inHandler)
+  {
+    info->EditorControl(ECTL_GETINFO, &ei);
+    ret_strNumber = -1;
+  }
+  inHandler++;
 }
 
 void FarEditor::leaveHandler()
 {
 	// restoring position
-	EditorSetPosition esp;
-	esp.CurLine = ei.CurLine;
-	esp.CurPos = ei.CurPos;
-	esp.TopScreenLine = ei.TopScreenLine;
-	esp.LeftPos = ei.LeftPos;
-	esp.CurTabPos = -1;
-	esp.Overtype = -1;
-	info->EditorControl(ECTL_SETPOSITION, &esp);
-  inHandler = false;
+  inHandler--;
+  if (!inHandler)
+  {
+    EditorSetPosition esp;
+    esp.CurLine = ei.CurLine;
+    esp.CurPos = ei.CurPos;
+    esp.TopScreenLine = ei.TopScreenLine;
+    esp.LeftPos = ei.LeftPos;
+    esp.CurTabPos = -1;
+    esp.Overtype = -1;
+    info->EditorControl(ECTL_SETPOSITION, &esp);
+  }
 }
 
 int FarEditor::convert(const StyledRegion *rd)
