@@ -18,14 +18,13 @@ enum
 	mCross, mPairs, mSyntax, mOldOutline,
 	mOk, mReload, mReloadAll, mCancel,
 	mCatalogFile, mHRDName,
-	mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+	mStop,mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 	mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
 	mUpdateHighlight, mReloadBase, mConfigure,
 	mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
 	mGotcha, mChoose,
 	mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-	mFatal, mNeedColorer,  mSelectHRD,
-  mStopQuestion, mButtonYes, mButtonNo
+	mFatal, mNeedColorer,  mSelectHRD
 };
 
 #endif

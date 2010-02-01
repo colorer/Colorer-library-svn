@@ -86,6 +86,8 @@ class FarEditorSet
 		bool drawPairs, drawSyntax;
 		bool oldOutline;
 		int  rMaxTime;
+
+    void StopCurrentEditor();
 };
 
 #endif

@@ -138,6 +138,7 @@ class FarEditor : public LineSource
 		void addFARColor(int lno, int s, int e, int col);
 		const wchar_t *GetMsg(int msg);
 
+    int idleJobFar(int time, int pos);
     int DoColorize;
     HANDLE Mutex;
     HANDLE changeEvent;

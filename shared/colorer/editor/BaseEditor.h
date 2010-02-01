@@ -185,7 +185,6 @@ public:
    *             available for this job.
    */
   void idleJob(int time);
-  int idleJobFar(int time, int pos);
 
   /**
    * Informs BaseEditor object about text modification event.
@@ -241,6 +240,8 @@ public:
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
 
+  int GetInvalidLine(){return invalidLine;}
+  int GetLineCount(){return lineCount;}
 private:
 
   FileType *chooseFileTypeCh(const String *fileName, int chooseStr, int chooseLen);

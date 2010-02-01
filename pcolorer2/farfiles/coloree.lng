@@ -20,6 +20,7 @@
 "c&atalog.xml file:"
 "Color st&yle:"
 
+"&0 Stop highlite"
 "&1 List types"
 "&2 Match pair"
 "&3 Select block"
@@ -49,6 +50,3 @@
 "Need Colorer"
 
 "Select color style"
-"Are you want to stop highlite this file?"
-"Yes"
-"No"

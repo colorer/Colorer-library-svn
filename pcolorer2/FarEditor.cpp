@@ -517,6 +517,20 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
 	return 0;
 }
 
+
+int FarEditor::idleJobFar(int time, int pos)
+{
+  if (baseEditor->GetInvalidLine() < baseEditor->GetLineCount()) {
+    int k=baseEditor->GetInvalidLine();
+    baseEditor->validate(baseEditor->GetInvalidLine()+100+4*time, false);
+    if ((pos>=k)&&(pos<=baseEditor->GetInvalidLine()))
+      return 2;
+    if (baseEditor->GetInvalidLine() < baseEditor->GetLineCount())
+      return 1;
+  }
+  return 0;
+}
+
 bool FarEditor::InColorize()
 {
   WaitForSingleObject(Mutex,INFINITE);
@@ -574,7 +588,7 @@ void FarEditor::Colorize()
       case WAIT_TIMEOUT:
         WaitForSingleObject(Mutex,INFINITE);
         info->EditorControl(ECTL_GETINFO, &eilocal);
-        DoColorize = baseEditor->idleJobFar(100,eilocal.CurLine);
+        DoColorize =idleJobFar(100,eilocal.CurLine);
         ReleaseMutex(Mutex);
         if (DoColorize==2)
           info->EditorControl(ECTL_REDRAW, NULL);

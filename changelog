@@ -1,3 +1,8 @@
+#revision 1290
+	ctapmex 01.02.2010 15:12
+	1. BaseEditor::idleJobFar перенесен в FarEditor::idleJobFar
+	2. отключение раскраски/парсинга файла  через меню, а не кнопкой Ecs
+
 #revision 1289
 	ctapmex 31.01.2010 16:32
 	1. небольшие изменения

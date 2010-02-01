@@ -463,20 +463,6 @@ void BaseEditor::idleJob(int time)
   }
 }
 
-int BaseEditor::idleJobFar(int time, int pos)
-{
-  if (invalidLine < lineCount) {
-    int k=invalidLine;
-    validate(invalidLine+IDLE_PARSE(time), false);
-    if ((pos>=k)&&(pos<=invalidLine))
-      return 2;
-    if (invalidLine < lineCount)
-      return 1;
-  }
-  return 0;
-}
-
-
 void BaseEditor::startParsing(int lno){
   lrSupport->startParsing(lno);
   for(int idx = 0; idx < regionHandlers.size(); idx++)

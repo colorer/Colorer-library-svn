@@ -59,7 +59,7 @@ void FarEditorSet::openMenu()
 {
 	int iMenuItems[] =
 	{
-		mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+		mStop,mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 		mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
 		mUpdateHighlight, mReloadBase, mConfigure
 	};
@@ -94,46 +94,50 @@ void FarEditorSet::openMenu()
 		switch (info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
-			case 0:
+      case 0:
+        if (fe)
+          StopCurrentEditor();
+        break;
+			case 1:
 				if (fe)
           chooseType();
 				break;
-			case 1:
+			case 2:
         if (fe)
           fe->matchPair();
 				break;
-			case 2:
+			case 3:
         if (fe)
 				  fe->selectBlock();
 				break;
-			case 3:
+			case 4:
         if (fe)
 				  fe->selectPair();
 				break;
-			case 4:
+			case 5:
         if (fe)
 				  fe->listFunctions();
 				break;
-			case 5:
+			case 6:
         if (fe)
 				  fe->listErrors();
 				break;
-			case 6:
+			case 7:
         if (fe)
 				  fe->selectRegion();
 				break;
-			case 7:
+			case 8:
         if (fe)
 				  fe->locateFunction();
 				break;
-			case 9:
+			case 10:
         if (fe)
 				  fe->updateHighlighting();
 				break;
-			case 10:
+			case 11:
 				ReloadBase();
 				break;
-			case 11:
+			case 12:
 				configure();
 				break;
 		};
@@ -535,29 +539,25 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 	return parserFactory->enumerateHRDInstances(DString("console"), result);
 }
 
+void FarEditorSet::StopCurrentEditor()
+{
+  FarEditor *editor = getCurrentEditor();
+  EditorInfo ei;
+  info->EditorControl(ECTL_GETINFO, &ei);
+  farEditorInstances.remove(&SString(ei.EditorID));
+  delete editor;
+}
+
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
 	if (rDisabled)
 	{
     return 0;
 	}
-  FarEditor *editor = NULL;
-  editor = getCurrentEditor();
+
+  FarEditor *editor = getCurrentEditor();
   if (editor)
   {
-    if (editor->InColorize() && ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
-    {
-      const wchar_t* MsgItems[]={GetMsg(mName),GetMsg(mStopQuestion),GetMsg(mButtonYes),GetMsg(mButtonNo)};
-      int ContinueThread=info->Message(info->ModuleNumber,FMSG_WARNING,NULL,MsgItems,sizeof(MsgItems)/sizeof(MsgItems[0]),2); 
-      if (!ContinueThread)
-      {
-        EditorInfo ei;
-        info->EditorControl(ECTL_GETINFO, &ei);
-        farEditorInstances.remove(&SString(ei.EditorID));
-        delete editor;
-      }
-      return 1;
-    }
     return editor->editorInput(ir);
   }
   return 0;
