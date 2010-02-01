@@ -595,9 +595,9 @@ void FarEditor::Colorize()
         WaitForSingleObject(Mutex,INFINITE);
         info->EditorControl(ECTL_GETINFO, &eilocal);
         DoColorize =idleJobFar(100,eilocal.CurLine);
-        ReleaseMutex(Mutex);
         if (DoColorize==2)
           info->EditorControl(ECTL_REDRAW, NULL);
+        ReleaseMutex(Mutex);
         break;
     }
 
@@ -817,7 +817,6 @@ int FarEditor::editorEvent(int event, void *param)
 		baseEditor->releasePairMatch(pm);
 	};
 	leaveHandler();
-  ReleaseMutex(Mutex);
 
 	if (param != EEREDRAW_ALL)
 	{
@@ -825,6 +824,7 @@ int FarEditor::editorEvent(int event, void *param)
 		info->EditorControl(ECTL_REDRAW, NULL);
 		inRedraw = false;
 	};
+  ReleaseMutex(Mutex);
 
 	return true;
 }
