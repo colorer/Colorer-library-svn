@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:transform 
 	version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
@@ -36,12 +36,16 @@
 		<xsl:value-of select='$prep'/>
 	</xsl:variable>
 	
-	<xsl:variable name='val' select="substring-after(@rgb, '#')"/>
+	<xsl:variable name='rgb'> <!-- #RRGGBB → 00BBGGRR -->
+		<xsl:value-of select='substring(@rgb,6,2)'/>
+		<xsl:value-of select='substring(@rgb,4,2)'/>
+		<xsl:value-of select='substring(@rgb,2,2)'/>
+	</xsl:variable>
 	
 	<xsl:text>"ColorTable</xsl:text>
 	<xsl:value-of select='$name'/>
 	<xsl:text>"=dword:00</xsl:text>
-	<xsl:value-of select='$val'/>
+	<xsl:value-of select='$rgb'/>
 	<xsl:call-template name="cr-lf"/>
 </xsl:template>
 
