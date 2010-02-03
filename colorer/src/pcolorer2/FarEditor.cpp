@@ -477,7 +477,9 @@ void FarEditor::locateFunction()
 
 void FarEditor::updateHighlighting()
 {
+  enterHandler();
 	baseEditor->validate(ei.TopScreenLine, true);
+  leaveHandler();
 }
 
 int FarEditor::editorInput(const INPUT_RECORD *ir)

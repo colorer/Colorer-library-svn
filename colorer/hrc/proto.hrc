@@ -273,6 +273,7 @@
   <prototype name="xml" group="xml" description="xml">
     <location link="xml/xml.hrc"/>
     <filename>/\.(xml|gi2|gpr|ui)$/i</filename>
+    <filename>/\.(wxs|fb2)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
     <parameters>
@@ -699,7 +700,7 @@
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
-    <filename weight='0.5'>/(read\.?me|\.txt$|\.rus|\.nfo|install*|*ChangeLog*|AUTHORS|COPYING|FAQ|TODO$)/i</filename>
+    <filename>/(read\.?me|\.txt$|\.rus|\.nfo|install*|*ChangeLog*|AUTHORS|COPYING|FAQ|LICENSE|TODO$)/i</filename>
     <filename>/\.spo/ix</filename>
   </prototype>
 
