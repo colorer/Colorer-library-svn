@@ -424,14 +424,14 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
 
   if (!layoutChanged){
     /* Text modification only event */
-    if (invalidLine < parseTo){
+    if (invalidLine <= parseTo){
       parseFrom = invalidLine;
       tpmode = TPM_CACHE_UPDATE;
     }
   }
 
   /* Text modification general ajustment */
-  if (invalidLine < parseFrom){
+  if (invalidLine <= parseFrom){
     parseFrom = invalidLine;
     tpmode = TPM_CACHE_UPDATE;
   }
@@ -462,8 +462,6 @@ void BaseEditor::idleJob(int time)
     validate(invalidLine+IDLE_PARSE(time), false);
   }
 }
-
-
 
 void BaseEditor::startParsing(int lno){
   lrSupport->startParsing(lno);

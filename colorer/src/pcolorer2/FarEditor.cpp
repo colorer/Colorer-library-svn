@@ -490,8 +490,9 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
 		{
 			idleCount = 10;
 		}
-
+    enterHandler();
 		baseEditor->idleJob(idleCount*10);
+    leaveHandler();
 		info->EditorControl(ECTL_REDRAW, NULL);
 	}
 	else if (ir->EventType == KEY_EVENT)
