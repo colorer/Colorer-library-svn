@@ -1,5 +1,17 @@
 #include "registry_wide.h"
 
+DWORD rOpenKey(HKEY hReg, const wchar_t *Name, HKEY &hKey)
+{
+  DWORD dwDisposition;
+	if (RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+                      NULL, &hKey, &dwDisposition)==ERROR_SUCCESS)
+  {
+    return dwDisposition;
+  }
+  return 0;
+
+};
+
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD val)
 {
 	return RegSetValueExW(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
@@ -10,91 +22,45 @@ LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD Type, const void *Data, DW
 	return RegSetValueExW(hReg, VName, 0, Type, (const BYTE*)Data, Len);
 };
 
-DWORD rGetValue(HKEY hReg, wchar_t *name)
+wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name, const wchar_t *DefaultValue)
 {
-	DWORD data = 0;
-	DWORD i = 4;
-	RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i);
-	return data;
-};
-
-DWORD rGetValue(HKEY hReg, const wchar_t *name, wchar_t *Data, DWORD Len)
-{
-	DWORD i = RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
-	return i?0:Len;
-};
-
-wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name)
-{
-    wchar_t *Data;
-    DWORD i, Len=0;
-    i=RegQueryValueExW(hReg, name, 0, NULL, NULL, &Len);
+  wchar_t *Data;
+  DWORD i, Len=0;
+  i=RegQueryValueExW(hReg, name, 0, NULL, NULL, &Len);
+  if (i==ERROR_SUCCESS)
+  {
+    int l=Len / sizeof(wchar_t);
+    Data=new wchar_t[l];
+    i=RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
     if (i==ERROR_SUCCESS)
     {
-        int l=Len / sizeof(wchar_t);
-        Data=new wchar_t[l];
-        i=RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
-        if (i==ERROR_SUCCESS)
-        {
-            return Data;
-        }
-        else 
-		{
-            delete [] Data;
-            return NULL;
-        }
+      return Data;
     }
-    else return NULL;
+    else 
+    {
+      delete [] Data;
+    }
+  }
+  if (DefaultValue)
+  {
+    int k = wcslen(DefaultValue);
+    Data = new wchar_t[k+1];
+    wcscpy_s(Data,k+1,DefaultValue);
+    return Data;
+  }
+  return NULL;
 };
 
-DWORD rGetValueDw(HKEY hReg, wchar_t *name)
+DWORD rGetValueDw(HKEY hReg, const wchar_t *name, DWORD DefaultValue)
 {
 	DWORD data = 0;
 	DWORD i = sizeof(DWORD);
-	RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i);
-	return data;
+	if (RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i) == ERROR_SUCCESS)
+    return data;
+  else
+    return DefaultValue;
 };
 
-HKEY rOpenKey(HKEY hReg, const wchar_t *Name)
-{
-	HKEY hKey = 0;
-	RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE,
-	                KEY_ALL_ACCESS, NULL, &hKey, NULL);
-	return hKey;
-};
-
-HKEY rOpenKeyEx(HKEY hReg, const wchar_t *Name)
-{
-	HKEY hKey = 0;
-	RegOpenKeyExW(hReg, Name, 0, KEY_ALL_ACCESS, &hKey);
-	return hKey;
-};
-
-DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Val)
-{
-	DWORD i;
-
-	if (RegQueryValueExW(hReg, Name, 0, NULL, NULL, &i))
-	{
-		rSetValue(hReg,Name,Val);
-		return TRUE;
-	};
-
-	return FALSE;
-};
-
-DWORD rCheckAndSet(HKEY hReg, const wchar_t *Name, DWORD Type, wchar_t* Data, DWORD Len)
-{
-	DWORD i;
-
-	if (RegQueryValueExW(hReg,Name,0,NULL,NULL,&i))
-	{
-		rSetValue(hReg,Name,Type,Data,Len);
-		return TRUE;
-	};
-
-	return FALSE;
-};
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

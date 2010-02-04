@@ -4,14 +4,6 @@
 
 #include"FarEditorSet.h"
 
-#define REG_DISABLED        L"disabled"
-#define REG_HRD_NAME        L"hrdName"
-#define REG_CATALOG         L"catalog"
-#define REG_CROSSDRAW   L"CrossDraw"
-#define REG_PAIRSDONTDRAW   L"pairsDontDraw"
-#define REG_SYNTAXDONTDRAW  L"syntaxDontDraw"
-#define REG_OLDOUTLINE      L"oldOutlineView"
-
 wchar_t* rtrim(wchar_t* str)
 {
 	wchar_t* ptr = str;
@@ -37,10 +29,17 @@ wchar_t* trim(wchar_t* str)
 FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
 {
 	info = fedi;
+
 	wchar_t key[255];
 	_snwprintf_s(key,255, 255, L"%s\\colorer", info->RootKey);
-	hPluginRegistry = rOpenKey(HKEY_CURRENT_USER, key);
-	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
+  
+  DWORD res =rOpenKey(HKEY_CURRENT_USER, key, hPluginRegistry);
+  if (res == REG_CREATED_NEW_KEY)
+  {
+    SetDefaultSettings();
+  }
+  
+	rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
 	parserFactory = NULL;
 	regionMapper = NULL;
 	ReloadBase();
@@ -68,7 +67,7 @@ void FarEditorSet::openMenu()
 	
 	try
 	{
-		if (rDisabled)
+		if (!rEnabled)
 		{
 			menuElements[0].Text = GetMsg(mConfigure);
 			menuElements[0].Selected = 1;
@@ -149,7 +148,7 @@ void FarEditorSet::viewFile(const String &path)
 {
 	try
 	{
-		if (rDisabled) throw Exception(DString("Colorer is disabled"));
+		if (!rEnabled) throw Exception(DString("Colorer is disabled"));
 
 		String *newPath = NULL;
 
@@ -330,31 +329,24 @@ void FarEditorSet::configure()
 
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
 		fdi[IDX_DISABLED].PtrData = GetMsg(mTurnOff);
-		fdi[IDX_DISABLED].Selected = !rGetValueDw(hPluginRegistry, REG_DISABLED);
+		fdi[IDX_DISABLED].Selected = rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
 		fdi[IDX_CROSS].PtrData = GetMsg(mCross);
-		fdi[IDX_CROSS].Selected = rGetValueDw(hPluginRegistry, REG_CROSSDRAW);
+		fdi[IDX_CROSS].Selected = rGetValueDw(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault);
 		fdi[IDX_PAIRS].PtrData = GetMsg(mPairs);
-		fdi[IDX_PAIRS].Selected = !rGetValueDw(hPluginRegistry, REG_PAIRSDONTDRAW);
+		fdi[IDX_PAIRS].Selected = rGetValueDw(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault);
 		fdi[IDX_SYNTAX].PtrData = GetMsg(mSyntax);
-		fdi[IDX_SYNTAX].Selected = !rGetValueDw(hPluginRegistry, REG_SYNTAXDONTDRAW);
+		fdi[IDX_SYNTAX].Selected = rGetValueDw(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault);
 		fdi[IDX_OLDOUTLINE].PtrData = GetMsg(mOldOutline);
-		fdi[IDX_OLDOUTLINE].Selected = rGetValueDw(hPluginRegistry, REG_OLDOUTLINE);
+		fdi[IDX_OLDOUTLINE].Selected = rGetValueDw(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault);
 		fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
 		
-		wchar_t *tempCatalogEdit = rGetValueSz(hPluginRegistry, REG_CATALOG);
+		wchar_t *tempCatalogEdit = rGetValueSz(hPluginRegistry, cRegCatalog, cCatalogDefault);
 		fdi[IDX_CATALOG_EDIT].PtrData = tempCatalogEdit;
 		
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 		
-		wchar_t *hrdName = rGetValueSz(hPluginRegistry, REG_HRD_NAME);
-		if (!hrdName)  // with a blank line is written '\0'
-		{
-			hrdName = new wchar_t[7];
-			wcscpy(hrdName, L"default");
-		}
-
-		SString *hrdNameSS;
-		hrdNameSS = new SString(DString(hrdName));
+		wchar_t *hrdName = rGetValueSz(hPluginRegistry, cRegHrdName, cHrdNameDefault);
+		SString *hrdNameSS = new SString(DString(hrdName));
 		delete[] hrdName;
 
 		const String *descr = NULL;
@@ -422,7 +414,7 @@ void FarEditorSet::configure()
 			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 
 			int k = false;
-			wchar_t *a = rGetValueSz(hPluginRegistry, REG_CATALOG);
+			wchar_t *a = rGetValueSz(hPluginRegistry, cRegCatalog, NULL);
 			if (a!=NULL)
 			{
 				if (wcsicmp(a, fdi[IDX_CATALOG_EDIT].PtrData)) 
@@ -435,7 +427,7 @@ void FarEditorSet::configure()
 
 			if (!k)
 			{
-				wchar_t *b = rGetValueSz(hPluginRegistry, REG_HRD_NAME);
+				wchar_t *b = rGetValueSz(hPluginRegistry, cRegHrdName, NULL);
 				if (b!=NULL)
 				{
 					if (wcsicmp(b, hrdNameSS->getWChars()))
@@ -447,23 +439,23 @@ void FarEditorSet::configure()
 				delete[] b;
 			}
 
-			rSetValue(hPluginRegistry, REG_CROSSDRAW, fdi[IDX_CROSS].Selected);
-			rSetValue(hPluginRegistry, REG_PAIRSDONTDRAW, !fdi[IDX_PAIRS].Selected);
-			rSetValue(hPluginRegistry, REG_SYNTAXDONTDRAW, !fdi[IDX_SYNTAX].Selected);
-			rSetValue(hPluginRegistry, REG_OLDOUTLINE, fdi[IDX_OLDOUTLINE].Selected);
-			rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
-			rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
-			rSetValue(hPluginRegistry, REG_HRD_NAME, REG_SZ, hrdNameSS->getWChars(), (DWORD)(2 *(hrdNameSS->length()+1)));
+			rSetValue(hPluginRegistry, cRegCrossDraw, fdi[IDX_CROSS].Selected);
+			rSetValue(hPluginRegistry, cRegPairsDraw, fdi[IDX_PAIRS].Selected);
+			rSetValue(hPluginRegistry, cRegSyntaxDraw, fdi[IDX_SYNTAX].Selected);
+			rSetValue(hPluginRegistry, cRegOldOutLine, fdi[IDX_OLDOUTLINE].Selected);
+			rSetValue(hPluginRegistry, cRegEnabled, fdi[IDX_DISABLED].Selected);
+			rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, fdi[IDX_CATALOG_EDIT].PtrData, (DWORD)(2 *(wcslen(fdi[IDX_CATALOG_EDIT].PtrData)+1)));
+			rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, hrdNameSS->getWChars(), (DWORD)(2 *(hrdNameSS->length()+1)));
 
 			// if the plugin has been included, and we will disable
-			if ((!rDisabled && !fdi[IDX_DISABLED].Selected))
+			if (rEnabled && !fdi[IDX_DISABLED].Selected)
 			{
 				disableColorer();
 			}
 			else
-			if ((rDisabled && fdi[IDX_DISABLED].Selected)||(k))
+			if ((!rEnabled && fdi[IDX_DISABLED].Selected)||(k))
 			{
-				rDisabled = false;
+				rEnabled = true;
 				ReloadBase();
 			}
 		}
@@ -523,17 +515,15 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
-	if (rDisabled)
-	{
-		return 0;
-	}
-
-	return getCurrentEditor()->editorInput(ir);
+	if (rEnabled)
+		return getCurrentEditor()->editorInput(ir);
+  else
+    return 0;
 }
 
 int FarEditorSet::editorEvent(int Event, void *Param)
 {
-	if (rDisabled)
+	if (!rEnabled)
 	{
 		return 0;
 	}
@@ -676,7 +666,7 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 
 void FarEditorSet::ReloadBase()
 {
-	if (rDisabled) return;
+	if (!rEnabled) return;
 	
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
@@ -685,17 +675,15 @@ void FarEditorSet::ReloadBase()
 	dropAllEditors();
 	readRegistry();
 	
-	wchar_t *hrdName = rGetValueSz(hPluginRegistry,REG_HRD_NAME);
-	wchar_t *catalogPath =rGetValueSz(hPluginRegistry,REG_CATALOG);
+	wchar_t *hrdName = rGetValueSz(hPluginRegistry, cRegHrdName, cHrdNameDefault);
+	wchar_t *catalogPath = rGetValueSz(hPluginRegistry, cRegCatalog, cCatalogDefault);
 
 	delete regionMapper;
 	delete parserFactory;
 	parserFactory = NULL;
 	regionMapper = NULL;
 
-	SString *hrdNameS = NULL;
-	if (hrdName)
-		hrdNameS = new SString(DString(hrdName));
+	SString *hrdNameS = new SString(DString(hrdName));
 
 	SString *catalogPathS = NULL;
 	catalogPathS=ExpandEnvironment(catalogPath);
@@ -792,8 +780,8 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 
 void FarEditorSet::disableColorer()
 {
-	rDisabled = true;
-	rSetValue(hPluginRegistry, REG_DISABLED, rDisabled);
+	rEnabled = false;
+	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
 	
 	dropAllEditors();
 	
@@ -806,11 +794,12 @@ void FarEditorSet::disableColorer()
 
 void FarEditorSet::readRegistry()
 {
-	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
-	drawCross = rGetValue(hPluginRegistry, REG_CROSSDRAW);
-	drawPairs = !rGetValue(hPluginRegistry, REG_PAIRSDONTDRAW);
-	drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
-	oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
+  // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
+	rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
+	drawCross = rGetValueDw(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault);
+	drawPairs = !!rGetValueDw(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault);
+	drawSyntax = !!rGetValueDw(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault);
+	oldOutline = !!rGetValueDw(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault);
 
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{
@@ -830,6 +819,17 @@ void FarEditorSet::dropAllEditors()
 	};
 
 	farEditorInstances.clear();
+}
+
+void FarEditorSet::SetDefaultSettings()
+{
+  rSetValue(hPluginRegistry, cRegEnabled, cEnabledDefault); 
+  rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, cHrdNameDefault, sizeof(wchar_t)*(wcslen(cHrdNameDefault)+1));
+  rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, cCatalogDefault, sizeof(wchar_t)*(wcslen(cCatalogDefault)+1));
+  rSetValue(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault); 
+  rSetValue(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault); 
+  rSetValue(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault); 
+  rSetValue(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault); 
 }
 
 

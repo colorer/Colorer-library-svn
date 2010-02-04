@@ -4,11 +4,28 @@
 #include<colorer/handlers/FileErrorHandler.h>
 #include<colorer/handlers/LineRegionsSupport.h>
 #include<colorer/handlers/StyledHRDMapper.h>
+
+#include "pcolorer.h"
+#include "FarEditor.h"
 #include "registry_wide.h"
 
-#include"pcolorer.h"
+//registry keys
+const wchar_t cRegEnabled[] = L"Enabled";
+const wchar_t cRegHrdName[] = L"HrdName";
+const wchar_t cRegCatalog[] = L"Catalog";
+const wchar_t cRegCrossDraw[] = L"CrossDraw";
+const wchar_t cRegPairsDraw[] = L"PairsDraw";
+const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
+const wchar_t cRegOldOutLine[] = L"OldOutlineView";
 
-#include"FarEditor.h"
+//values of registry keys by default
+const bool cEnabledDefault = true;
+const wchar_t cHrdNameDefault[] = L"default";
+const wchar_t cCatalogDefault[] = L"";
+const int cCrossDrawDefault = 2;
+const bool cPairsDrawDefault = true;
+const bool cSyntaxDrawDefault = true;
+const bool cOldOutLineDefault = true;
 
 /**
  * FAR Editors container.
@@ -65,6 +82,9 @@ class FarEditorSet
 		const wchar_t *GetMsg(int msg);
 		/** Reads all registry settings into variables */
 		void readRegistry();
+		/** writes the default settings in the registry*/
+    void SetDefaultSettings();
+
 		/** Kills all currently opened editors*/
 		void dropAllEditors();
 		/** Disables all plugin processing*/
@@ -79,11 +99,11 @@ class FarEditorSet
 		HKEY hPluginRegistry;
 
 		/** registry settings */
-		bool rDisabled;
+		bool rEnabled; // status plugin
 		int drawCross;
-		bool drawPairs, drawSyntax;
+		bool drawPairs; 
+    bool drawSyntax;
 		bool oldOutline;
-		int  rMaxTime;
 };
 
 #endif

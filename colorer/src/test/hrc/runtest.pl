@@ -16,7 +16,7 @@ use File::Path;
 
 
 my $colorer_path = "..\\..\\..";
-my $colorer  = "$colorer_path\\bin\\colorer -c $colorer_path\\catalog.xml";
+my $colorer  = "colorer -c \"d:\\projects\\Far\\test_bin\\plugins\\colorer\\catalog.xml\"";
 my $diff  = 'diff -U 1 -bB';
 
 my $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';

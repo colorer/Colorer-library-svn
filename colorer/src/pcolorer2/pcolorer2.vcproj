@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\..\..\test_dir\plugins\colorer_se\bin"
+			OutputDirectory="..\..\..\..\..\test_bin\plugins\colorer\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -413,7 +413,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="pcolorer"
+			Name="pcolorer2"
 			>
 			<File
 				RelativePath=".\FarEditor.cpp"
