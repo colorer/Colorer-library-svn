@@ -22,12 +22,13 @@
       <import type="asp"/>
  
       <scheme name="ruby">
-         <regexp match="/\/\/.*? \M (\%&gt;|$)/ix" region="def:Comment"/>
+         <regexp match="/\#.*? \M (\%&gt;|$)/ix" region="def:Comment"/>
+
          <inherit scheme="InverseInsertion">
            <virtual scheme="targetLanguage" subst-scheme="ruby"/>
          </inherit>
          <inherit scheme="ruby:ruby">
-            <virtual scheme="ruby:ruby" subst-scheme="ruby"/>
+            <virtual scheme="ruby:ruby" subst-scheme="ruby"/>            
          </inherit>
       </scheme>
 

@@ -90,7 +90,7 @@
 
       <scheme name="MakInlineFiles">
 <!-- nmake version -->
-         <block start="/.\m(&lt;&lt;)/" end="/^(&lt;&lt;)((NO)?KEEP)?/" region="Insertion" region01="Directive" region11="Directive" region12="Keyword" region00="PairStart" region10="PairEnd" scheme="MakEx"/>
+         <block start="/[^#\n\r]\m(&lt;&lt;)/" end="/^(&lt;&lt;)((NO)?KEEP)?/" region="Insertion" region01="Directive" region11="Directive" region12="Keyword" region00="PairStart" region10="PairEnd" scheme="MakEx"/>
 <!-- borland make -->
          <block start="/(&amp;&amp;)([^\s\#\\])/" end="/^(\y2)/" region="Insertion" region01="Directive" region02="Directive" region11="Directive" region00="PairStart" region10="PairEnd" scheme="MakEx"/>
       </scheme>

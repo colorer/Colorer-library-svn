@@ -135,6 +135,7 @@
     <location link="base/ruby.hrc"/>
     <filename>/\.(rb|rbw|ruby|rake)$/i</filename>
     <filename>/Rakefile$/i</filename>
+    <firstline weight='4'>/-\*- ruby -\*-/i</firstline>
     <firstline>/bin\/ruby/i</firstline>
   </prototype>
   <prototype name="tcltk" group="main" description="Tcl/Tk">
