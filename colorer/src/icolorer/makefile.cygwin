@@ -17,7 +17,7 @@ include ../shared/makefile.colorer
 
 OBJS = icolorer.$(OBJ) iregexp.$(OBJ) ishared.$(OBJ) $(COREOBJS)
 LIBINC = -lstdc++ -lwininet
-LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=icolorer.map $(FLAGS)
+LIBFLAGS = -mdll -Wl,-e,$(DLLMAIN),-Map=icolorer.map $(FLAGS)
 
 icolorer.dll: $(OBJS)
 	$(LINK) $(LIBFLAGS) -o nul -Wl,--base-file,icolorer.dll.base $(OBJS) $(LIBINC)

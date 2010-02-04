@@ -20,7 +20,7 @@ include makefile.core
 DLLMAIN=_DllMain@12
 
 LIBINC = -lwininet -lstdc++
-LIBFLAGS = -nostartfiles -mdll -Wl,-e,$(DLLMAIN),-Map=net_sf_colorer.map $(FLAGS)
+LIBFLAGS = -mdll -Wl,-e,$(DLLMAIN),-Map=net_sf_colorer.map $(FLAGS)
 #LIBFLAGS += -s
 #CPPFLAGS += -ggdb
 
