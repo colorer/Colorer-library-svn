@@ -1,3 +1,12 @@
+Date: 2010-02-04 12:00:00 r1299
+(trunk changes merged into dev branch for FarColorer 1.0.2.4)
+  Fixes:
+    - HAML
+    - Ruby
+		- ERB
+    - SubStation Alpha (assa)
+		- makefile
+
 Date: 2010-01-13 23:29:00 r1242
 (trunk changes merged into dev branch for FarColorer 1.0.2.2)
   Fixes:
