@@ -85,7 +85,7 @@ class FarEditor : public LineSource
 		/** Handle passed FAR editor event */
 		int editorEvent(int event, void *param);
 		/** Dispatch editor input event */
-		int  editorInput(const INPUT_RECORD *ir);
+		int editorInput(const INPUT_RECORD *ir);
 
 		void cleanEditor();
 

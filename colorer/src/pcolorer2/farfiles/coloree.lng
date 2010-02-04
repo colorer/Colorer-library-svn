@@ -37,7 +37,7 @@
 "Outliner [%s]"
 "Nothing found"
 "Gotcha"
-"[Ctrl]Enter, Tab, Ctrl-Cursor, [a-z:_]"
+"[Ctrl]Enter, Tab, Ctrl-Cursor, [0-9a-z;:-_]"
 
 "Reloading schema library..."
 "Problem with Colorer"

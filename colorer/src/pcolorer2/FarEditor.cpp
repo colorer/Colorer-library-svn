@@ -733,18 +733,16 @@ void FarEditor::showOutliner(Outliner *outliner)
 	const int FILTER_SIZE = 40;
 	int breakKeys[] =
 	{
-		VK_BACK, VK_RETURN, 0xBA, 0xBD, VK_TAB,
+		VK_BACK, VK_RETURN, VK_OEM_1, VK_OEM_MINUS, VK_TAB,
 		(PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
 		(PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
-		(PKF_CONTROL<<16)+VK_RETURN,
+		(PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, (PKF_SHIFT<<16)+VK_OEM_MINUS,
 		'0','1','2','3','4','5','6','7','8','9',
 		'A','B','C','D','E','F','G','H','I','J',
 		'K','L','M','N','O','P','Q','R','S','T',
-		'U','V','W','X','Y','Z',' ', 0,
-	};
-	int keys_size = 0;
-
-	while (breakKeys[keys_size] !=0) keys_size++;
+		'U','V','W','X','Y','Z',' ', 0
+  };
+	int keys_size = sizeof(breakKeys)/sizeof(int)-1;
 
 	//we need this?
 	//int outputEnc = Encodings::getEncodingIndex("cp866");
@@ -770,6 +768,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 		int selectedItem = 0;
 		Vector<int> treeStack;
 
+    enterHandler();
 		for (i = 0; i < items_num; i++)
 		{
 			OutlineItem *item = outliner->getItem(i);
@@ -827,6 +826,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 				menu_size++;
 			};
 		}
+    leaveHandler();
 
 		if (selectedItem > 0) menu[selectedItem].Selected = 1;
 
@@ -922,18 +922,18 @@ void FarEditor::showOutliner(Outliner *outliner)
 				moved = true;
 				break;
 			}
-			case 2: // :
+			case 2: // ;
 
 				if (flen == FILTER_SIZE) break;
 
-				filter[flen]= ':';
+				filter[flen]= ';';
 				filter[++flen]= 0;
 				break;
-			case 3: // _
+			case 3: // -
 
 				if (flen == FILTER_SIZE) break;
 
-				filter[flen]= '_';
+				filter[flen]= '-';
 				filter[++flen]= 0;
 				break;
 			case 4: // VK_TAB
@@ -997,10 +997,24 @@ void FarEditor::showOutliner(Outliner *outliner)
 			case 9:  // ctrl-return
 			{
 				OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
-				info->EditorControl(ECTL_INSERTTEXT, (void*)item->token->getChars());
+				info->EditorControl(ECTL_INSERTTEXT, (void*)item->token->getWChars());
 				stopMenu = true;
 				break;
 			}
+      case 10: // :
+
+				if (flen == FILTER_SIZE) break;
+
+				filter[flen]= ':';
+				filter[++flen]= 0;
+				break;
+			case 11: // _
+
+				if (flen == FILTER_SIZE) break;
+
+				filter[flen]= '_';
+				filter[++flen]= 0;
+				break;
 			default:
 
 				if (flen == FILTER_SIZE || code > keys_size) break;

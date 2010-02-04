@@ -85,7 +85,10 @@ Choose any item to go to corresponding line in text.
     #Enter#
       Close the outliner and jump to the selected item
 
-    #Any symbol keys#
+    #Tab#
+      Complementing filter symbols, written after '?' in the field of display filter
+
+    #Symbol keys [0-9a-z;:-_]#
       Filter out the outliner items against entered filter
 
 @menu
