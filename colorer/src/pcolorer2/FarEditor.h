@@ -4,6 +4,7 @@
 #include<colorer/editor/BaseEditor.h>
 #include<colorer/handlers/StyledRegion.h>
 #include<colorer/editor/Outliner.h>
+#include<common/Logging.h>
 
 #include"pcolorer.h"
 

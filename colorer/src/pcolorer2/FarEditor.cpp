@@ -1,7 +1,4 @@
-
-#include<stdlib.h>
 #include"FarEditor.h"
-#include<common/Logging.h>
 
 FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 {

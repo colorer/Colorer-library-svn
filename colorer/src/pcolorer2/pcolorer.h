@@ -1,8 +1,10 @@
 #ifndef _PCOLORER_H_
 #define _PCOLORER_H_
 
-// Visual Leak Detector http://sites.google.com/site/dmoulding/vld
-// optional
+/*
+  Visual Leak Detector http://sites.google.com/site/dmoulding/vld .
+  Optional 
+*/
 #ifdef _DEBUG
 #include<vld.h>
 #endif
@@ -10,6 +12,13 @@
 #include<plugin.hpp>
 #include<farcolor.hpp>
 #include<farkeys.hpp>
+
+#include<windows.h>
+#include "registry_wide.h"
+
+extern PluginStartupInfo Info;
+static FarStandardFunctions FSF;
+
 
 /** FAR .lng file identifiers. */
 enum

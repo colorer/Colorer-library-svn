@@ -4,10 +4,12 @@
 #include<colorer/handlers/FileErrorHandler.h>
 #include<colorer/handlers/LineRegionsSupport.h>
 #include<colorer/handlers/StyledHRDMapper.h>
+#include<colorer/viewer/TextConsoleViewer.h>
+#include<common/Logging.h>
+#include<unicode/Encodings.h>
 
 #include "pcolorer.h"
 #include "FarEditor.h"
-#include "registry_wide.h"
 
 //registry keys
 const wchar_t cRegEnabled[] = L"Enabled";
@@ -36,7 +38,7 @@ class FarEditorSet
 {
 	public:
 		/** Creates set and initialises it with PluginStartupInfo structure */
-		FarEditorSet(PluginStartupInfo *fedi);
+		FarEditorSet();
 		/** Standard destructor */
 		~FarEditorSet();
 
@@ -95,7 +97,6 @@ class FarEditorSet
 		RegionMapper *regionMapper;
 		HRCParser *hrcParser;
 
-		PluginStartupInfo *info;
 		HKEY hPluginRegistry;
 
 		/** registry settings */

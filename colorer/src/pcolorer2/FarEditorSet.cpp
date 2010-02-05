@@ -1,7 +1,3 @@
-#include<unicode/Encodings.h>
-#include<common/Logging.h>
-#include<colorer/viewer/TextConsoleViewer.h>
-
 #include"FarEditorSet.h"
 
 wchar_t* rtrim(wchar_t* str)
@@ -26,12 +22,10 @@ wchar_t* trim(wchar_t* str)
 	return ltrim(rtrim(str));
 }
 
-FarEditorSet::FarEditorSet(PluginStartupInfo *fedi)
+FarEditorSet::FarEditorSet()
 {
-	info = fedi;
-
 	wchar_t key[255];
-	_snwprintf_s(key,255, 255, L"%s\\colorer", info->RootKey);
+	_snwprintf_s(key,255, 255, L"%s\\colorer", Info.RootKey);
   
   DWORD res =rOpenKey(HKEY_CURRENT_USER, key, hPluginRegistry);
   if (res == REG_CREATED_NEW_KEY)
@@ -72,7 +66,7 @@ void FarEditorSet::openMenu()
 			menuElements[0].Text = GetMsg(mConfigure);
 			menuElements[0].Selected = 1;
 
-			if (info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0)
+			if (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0)
 				configure();
 
 			return;
@@ -88,7 +82,7 @@ void FarEditorSet::openMenu()
 
 		menuElements[0].Selected = 1;
 
-		switch (info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+		switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
 			case 0:
@@ -138,7 +132,7 @@ void FarEditorSet::openMenu()
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 }
@@ -185,7 +179,7 @@ void FarEditorSet::viewFile(const String &path)
 		exceptionMessage[1] = GetMsg(mCantOpenFile);
 		exceptionMessage[3] = GetMsg(mDie);
 		exceptionMessage[2] = e.getMessage()->getWChars();
-		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 	};
 }
 
@@ -241,7 +235,7 @@ void FarEditorSet::chooseType()
 	wchar_t bottom[20];
 	int i;
 	_snwprintf(bottom, 20, GetMsg(mTotalTypes), num);
-	i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+	i = Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
 	               GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
 
 	for (int idx = 0; idx < num; idx++)
@@ -362,8 +356,8 @@ void FarEditorSet::configure()
 		/*
 		 * Dialog activation
 		 */
-		HANDLE hDlg = info->DialogInit(info->ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, info->DefDlgProc, 0);
-		int i = info->DialogRun(hDlg);
+		HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, Info.DefDlgProc, 0);
+		int i = Info.DialogRun(hDlg);
 
 		while ((i == IDX_HRD_SELECT)||(i == IDX_RELOAD)||(i == IDX_RELOAD_ALL))
 		{
@@ -379,39 +373,39 @@ void FarEditorSet::configure()
 
 					getHRDescription(*hrdNameSS,descr);
 
-					info->SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
+					Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
 				}
 			}
 
 			if ((i == IDX_RELOAD))
 			{
-				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+				wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 				TestLoadBase(hrdNameSS->getWChars(),catalog,false);
 			}
 
 			if (i == IDX_RELOAD_ALL)
 			{
-				wchar_t *catalog = trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+				wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 				TestLoadBase(hrdNameSS->getWChars(),catalog,true);
 			}
 
-			i = info->DialogRun(hDlg);
+			i = Info.DialogRun(hDlg);
 		};
 
 		if (i == IDX_CANCEL || i == -1)
 		{
-			info->DialogFree(hDlg);
+			Info.DialogFree(hDlg);
 			return;
 		}
 
 		if (i == IDX_OK)
 		{
-			fdi[IDX_DISABLED].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_DISABLED, 0);
-			fdi[IDX_CROSS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_CROSS, 0);
-			fdi[IDX_PAIRS].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
-			fdi[IDX_SYNTAX].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
-			fdi[IDX_OLDOUTLINE].Selected = (int)info->SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
-			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)info->SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+			fdi[IDX_DISABLED].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_DISABLED, 0);
+			fdi[IDX_CROSS].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_CROSS, 0);
+			fdi[IDX_PAIRS].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
+			fdi[IDX_SYNTAX].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
+			fdi[IDX_OLDOUTLINE].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
+			fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
 
 			int k = false;
 			wchar_t *a = rGetValueSz(hPluginRegistry, cRegCatalog, NULL);
@@ -459,7 +453,7 @@ void FarEditorSet::configure()
 				ReloadBase();
 			}
 		}
-		info->DialogFree(hDlg);
+		Info.DialogFree(hDlg);
 
 	}
 	catch (Exception &e)
@@ -475,7 +469,7 @@ void FarEditorSet::configure()
 		if (getErrorHandler() != NULL)
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 }
@@ -503,7 +497,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 		if (current->equals(name)) menuElements[i].Selected = 1;
 	};
 
-	int result = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
+	int result = Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
 	                        GetMsg(mSelectHRD), 0, L"hrd",
 	                        NULL, NULL, menuElements, count);
 	delete[] menuElements;
@@ -558,7 +552,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 
@@ -590,8 +584,8 @@ SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
 void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
 {
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
+	HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
+	Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 
 	ParserFactory *parserFactoryLocal = NULL;
 	RegionMapper *regionMapperLocal = NULL;
@@ -620,7 +614,7 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 			regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
 		};
 
-		info->RestoreScreen(scr);
+		Info.RestoreScreen(scr);
 		if (full)
 		{
 			for (int idx = 0;; idx++)
@@ -639,10 +633,10 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 
 				tname.append(type->getDescription());
 				marr[1] = tname.getWChars();
-				scr = info->SaveScreen(0, 0, -1, -1);
-				info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
+				scr = Info.SaveScreen(0, 0, -1, -1);
+				Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 				type->getBaseScheme();
-				info->RestoreScreen(scr);
+				Info.RestoreScreen(scr);
 			}
 		}
 	}
@@ -655,8 +649,8 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 		if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL))
 				parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
-		info->RestoreScreen(scr);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
+		Info.RestoreScreen(scr);
 
 	};
 
@@ -669,8 +663,8 @@ void FarEditorSet::ReloadBase()
 	if (!rEnabled) return;
 	
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
-	HANDLE scr = info->SaveScreen(0, 0, -1, -1);
-	info->Message(info->ModuleNumber, 0, NULL, &marr[0], 2, 0);
+	HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
+	Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 	
 	dropAllEditors();
 	readRegistry();
@@ -711,7 +705,7 @@ void FarEditorSet::ReloadBase()
 
 		if (getErrorHandler() != NULL) getErrorHandler()->error(*e.getMessage());
 
-		info->Message(info->ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
+		Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 
 		disableColorer();
 	};
@@ -719,7 +713,7 @@ void FarEditorSet::ReloadBase()
 	delete[] catalogPath;
 	delete[] hrdName;
 
-	info->RestoreScreen(scr);
+	Info.RestoreScreen(scr);
 }
 
 ErrorHandler *FarEditorSet::getErrorHandler()
@@ -733,15 +727,15 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 FarEditor *FarEditorSet::getCurrentEditor()
 {
 	EditorInfo ei;
-	info->EditorControl(ECTL_GETINFO, &ei);
+	Info.EditorControl(ECTL_GETINFO, &ei);
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
 	if (editor == NULL)
 	{
-		editor = new FarEditor(info, parserFactory);
+		editor = new FarEditor(&Info, parserFactory);
 		farEditorInstances.put(&SString(ei.EditorID), editor);
 		LPWSTR FileName=NULL;
-		size_t FileNameSize=info->EditorControl(ECTL_GETFILENAME,NULL);
+		size_t FileNameSize=Info.EditorControl(ECTL_GETFILENAME,NULL);
 
 		if (FileNameSize)
 		{
@@ -749,7 +743,7 @@ FarEditor *FarEditorSet::getCurrentEditor()
 
 			if (FileName)
 			{
-				info->EditorControl(ECTL_GETFILENAME,FileName);
+				Info.EditorControl(ECTL_GETFILENAME,FileName);
 			}
 		}
 
@@ -774,7 +768,7 @@ FarEditor *FarEditorSet::getCurrentEditor()
 
 const wchar_t *FarEditorSet::GetMsg(int msg)
 {
-	return(info->GetMsg(info->ModuleNumber, msg));
+	return(Info.GetMsg(Info.ModuleNumber, msg));
 }
 
 

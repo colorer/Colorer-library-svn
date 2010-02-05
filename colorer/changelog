@@ -1,3 +1,8 @@
+#revision 1312
+	ctapmex 05.02.2010 16:22
+	1. Убрал info (PluginStartupInfo) из FarEditorSet. Вместо него используется глобальная
+    переменная Info.
+
 #revision 1302
 	ctapmex 04.02.2010 23:40
 	1. рефакторинг работы с реестром

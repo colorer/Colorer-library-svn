@@ -1,10 +1,8 @@
 #include"pcolorer.h"
-#include<windows.h>
 #include"FarEditorSet.h"
 
-static struct PluginStartupInfo Info;
-static struct FarStandardFunctions FSF;
 FarEditorSet *editorSet = NULL;
+PluginStartupInfo Info;
 
 /**
  * Returns message from FAR current language.
@@ -22,7 +20,7 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 	Info = *fei;
 	FSF = *fei->FSF;
 	Info.FSF = &FSF;
-	editorSet = new FarEditorSet(&Info);
+	editorSet = new FarEditorSet();
 };
 
 /**
