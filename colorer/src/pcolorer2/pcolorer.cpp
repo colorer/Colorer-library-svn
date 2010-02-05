@@ -107,7 +107,10 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		delete[] file_exp;
 	}
 	else
+  {
+    editorSet->ReadSettings();
 		editorSet->configure();
+  }
 
 	return INVALID_HANDLE_VALUE;
 };
@@ -117,6 +120,7 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
  */
 int WINAPI ConfigureW(int ItemNumber)
 {
+  editorSet->ReadSettings();
 	editorSet->configure();
 	return 1;
 };

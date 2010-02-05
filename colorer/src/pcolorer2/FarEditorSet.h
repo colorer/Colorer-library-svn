@@ -29,6 +29,13 @@ const bool cPairsDrawDefault = true;
 const bool cSyntaxDrawDefault = true;
 const bool cOldOutLineDefault = true;
 
+enum
+{ IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
+  IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD, IDX_RELOAD_ALL,
+  IDX_OK, IDX_CANCEL};
+
+LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
+
 /**
  * FAR Editors container.
  * Manages all library resources and creates FarEditor class instances.
@@ -54,6 +61,19 @@ class FarEditorSet
 		/** Dispatch editor input event in the opened editor */
 		int  editorInput(const INPUT_RECORD *ir);
 
+    /** Get the description of HRD, or parameter name if description=null */
+		const String *getHRDescription(const String &name);
+    /** Shows dialog with HRD scheme selection */
+		const String *chooseHRDName(const String *current);
+		
+    /** Reads all registry settings into variables */
+		void ReadSettings();
+		/**
+		 * trying to load the database on the specified path
+		 */
+		void TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+
+    SString *sTempHrdName;
 	private:
 		/** Returns current global error handler. */
 		ErrorHandler *getErrorHandler();
@@ -66,26 +86,19 @@ class FarEditorSet
 		 * loaded database. Read settings from registry
 		 */
 		void ReloadBase();
-		/**
-		 * trying to load the database on the specified path
-		 */
-		void TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
 
 		/** Expand environment string*/
 		SString *ExpandEnvironment(const wchar_t *catalogPath);
 
 		/** Shows dialog of file type selection */
 		void chooseType();
-		/** Shows dialog with HRD scheme selection */
-		const String *chooseHRDName(const String *current);
-		/** Get the description of HRD, or parameter name if description=null */
-		int getHRDescription(const String &name,const String *&descr);
 		/** FAR localized messages */
 		const wchar_t *GetMsg(int msg);
-		/** Reads all registry settings into variables */
-		void readRegistry();
+    /** Reads all registry settings into variables */
+		void ApplySettingsToEditor();
 		/** writes the default settings in the registry*/
     void SetDefaultSettings();
+    void SaveSettings();
 
 		/** Kills all currently opened editors*/
 		void dropAllEditors();
@@ -105,6 +118,9 @@ class FarEditorSet
 		bool drawPairs; 
     bool drawSyntax;
 		bool oldOutline;
+    SString *sHrdName;
+	  SString *sCatalogPath;
+    SString *sCatalogPathExp;
 };
 
 #endif
