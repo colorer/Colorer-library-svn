@@ -28,8 +28,15 @@
 </scheme>
 
 <scheme name="group.name">
- <regexp match="/~\M(?{def:Outlined}[^\]]+)/"/>
- <regexp match="/\[?#1\m(\-HKEY.*?\\)/" region="def:SymbolStrong"/>
+ <inherit scheme="ini:group.name">
+ 	<virtual scheme='ini:group.name.error' subst-scheme='def:empty'/>
+ </inherit>
+ <!-- 
+ 	todo: this must be realised via ini:group.name.content
+ 	all concept must be revised....
+ -->
+ 
+ <regexp match="/\[?#1(\-)\MHKEY.*?\\/" region1="def:SymbolStrong"/>
  <keywords region="group.name" ignorecase="no" worddiv="[\[\-\\]">
   <word name="HKEY_LOCAL_MACHINE"/>
   <word name="HKEY_CURRENT_USER"/>
@@ -57,16 +64,10 @@
 <!-- add -->
 
 <scheme name="group-add">
- <inherit scheme="ini:comment"/>
- <block start="/~(\[)/" end="/(\])\M[^\]]*$/" 
-  scheme="group.name" region="ini:group.name"
-  region00="def:PairStart" region10="def:PairEnd"
-  region01="group.quot" region11="group.quot"
- />
- <block start="/\M^[^\=\[]+\=/" end="/$/" 
-  scheme="param" region="ini:param.content"
- />
- <inherit scheme="ini:item.content"/>
+ <inherit scheme="ini:group">
+  <virtual scheme="ini:group.name" subst-scheme="group.name"/>
+  <virtual scheme="ini:param" subst-scheme="param"/> 
+ </inherit> 
 </scheme>
 
 
@@ -84,14 +85,14 @@
 <scheme name="param.name">
  <regexp match="/@/" region="param.name"/>
  <block start='/(&quot;)/' end='/(&quot;)/'
-  scheme="group.param.name.content" region="ini:String"
+  scheme="param.name.content" region="ini:String"
   region00="def:PairStart" region10="def:PairEnd"
   region01="param.quote" region11="param.quote" 
  />
  <inherit scheme="ini:error"/>
 </scheme>
 
- 	<scheme name="group.param.name.content">
+ 	<scheme name="param.name.content">
  		<inherit scheme="ini:clsid"/>
 		<inherit scheme="string.path"/>
 		<inherit scheme="escape.word"/>
@@ -171,7 +172,7 @@
 </scheme>
 
 <scheme name="param-far">
- <block start='/\M\s*&quot;(Masks|Mask\d+|UpperGroup\d+)&quot;/i' end="/$/" scheme="param-far.mask"/>
+ <block start='/\M\s*&quot;(Mask(s|\d*)|UpperGroup\d*)&quot;/i' end="/$/" scheme="param-far.mask"/>
  <block start='/\M\s*&quot;Sequence&quot;/i' end="/$/" scheme="param-far.macro"/>
  <inherit scheme="param"/>
 </scheme>

@@ -110,13 +110,13 @@
 
 <scheme name="group">
  <inherit scheme="comment"/>
- <block start="/~(\[)/" end="/(\])/" 
-  scheme="group.name" region="group.name"
+ <block start="/~(\[)/" end="/(\])\M[^\]]*$/" 
+  scheme="group.name" region="ini:group.name"
   region00="def:PairStart" region10="def:PairEnd"
   region01="group.quot" region11="group.quot"
  />
- <block start="/\M^[^\=]+\=/" end="/$/" 
-  scheme="param" region="param.content"
+ <block start="/\M^[^\=\[]+\=/" end="/$/" 
+  scheme="param" region="ini:param.content"
  />
  <inherit scheme="item.content"/>
 </scheme>
@@ -137,10 +137,16 @@
 
 <scheme name="group.name">
  <regexp match="/~\M(?{def:Outlined}[^\]]+)/"/>
+ <inherit scheme='group.name.error'/>
+</scheme>
+
+<scheme name="group.name.error">
  <keywords region="def:Error">
   <symb name="["/>
+  <symb name="]"/>
  </keywords>
 </scheme>
+
 
 
 <scheme name="ini">

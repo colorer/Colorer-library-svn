@@ -1,7 +1,5 @@
-colorer.log:
+﻿colorer.log:
 
-error: unqualified name 'group.quot' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/scripts/ini/reg.hrc]
-error: unqualified name 'group.quot' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/scripts/ini/reg.hrc]
 error: unqualified name 'apos' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/lib/far.hrc]
 error: unqualified name 'apos' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/lib/far.hrc]
 error: scheme 'far:macro.func.content', referenced in type 'far', is not defined

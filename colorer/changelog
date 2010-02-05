@@ -2,6 +2,7 @@
 	$Author$ $Date$
 	1. Фиксим hrc
 	1.1 awk.hrc -> scripts, +regexp
+	1.2 reg.hrc
 	
 #Revision: 1306 
 	formirror 2010-02-05 04:55:39 +0300 (Пт, 05 фев 2010)
