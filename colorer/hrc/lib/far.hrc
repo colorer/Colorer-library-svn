@@ -8,15 +8,20 @@
 	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
  >
 
-<!-- win-registry -->
  
 <package name="far.macro.string.internal"/>
 <package name="far.macro.string-quot.internal"/>
+<package name="far.macro.string-xml-noquot.internal"/>
+<package name="far.macro.string-xml-noapos.internal"/>
+
+
+<!-- win-registry -->
 
 <type name="far.macro.string.internal">
 	<entity name="quote" value="&quot;"/>
 	<entity name="slash" value="\\"/>
-
+	<entity name="apos" value="&apos;"/>
+	
 	&far-macro-string;
 </type>
 
@@ -27,6 +32,26 @@
 	
 	&far-macro-string;
 </type>
+
+
+<!-- for xml -->
+
+<type name="far.macro.string-xml-noquot.internal">
+	<entity name="quote" value="&amp;quot;"/>
+	<entity name="slash" value="\\"/>
+	<entity name="apos" value="(?{}&amp;apos;|')"/>
+	
+	&far-macro-string;
+</type>
+
+<type name="far.macro.string-xml-noapos.internal">
+	<entity name="quote" value='(?{}&amp;quot;|")'/>
+	<entity name="slash" value="\\"/>
+	<entity name="apos" value="&amp;apos;"/>
+	
+	&far-macro-string;
+</type>
+
 
 
 <!-- Far package begin here... -->
@@ -217,6 +242,46 @@
 		/>
 	</inherit>
 </scheme>
+
+<scheme name="macro.sequense-qoute.xml.apos">
+	<inherit scheme="macro.sequense">
+		<virtual scheme="macro.sequense" subst-scheme="macro.sequense-qoute"/>
+		<virtual 
+			scheme="far.macro.string.internal:string" 
+			subst-scheme="far.macro.string-xml-noquot.internal:string"
+		/>
+		<virtual 
+			scheme="far.macro.string.internal:string.content" 
+			subst-scheme="far.macro.string-xml-noquot.internal:string.content"
+		/>
+	</inherit>
+</scheme>
+
+<scheme name="macro.sequense-qoute.xml.quot">
+	<inherit scheme="macro.sequense">
+		<virtual scheme="macro.sequense" subst-scheme="macro.sequense-qoute"/>
+		<virtual 
+			scheme="far.macro.string.internal:string" 
+			subst-scheme="far.macro.string-xml-noapos.internal:string"
+		/>
+		<virtual 
+			scheme="far.macro.string.internal:string.content" 
+			subst-scheme="far.macro.string-xml-noapos.internal:string.content"
+		/>
+	</inherit>
+</scheme>
+
+
+<!-- XML (ESC) support  -->
+<scheme name='QuotMacro'> <!-- 'macro', quot allow -->
+	<inherit scheme="macro.sequense-qoute.xml.quot"/>
+</scheme>
+
+<scheme name='AposMacro'> <!-- "macro", quot deny -->
+	<inherit scheme="macro.sequense-qoute.xml.apos"/>
+</scheme>
+
+
 
 <scheme name="macro.func">
 	<keywords region="func" ignorecase="yes">
