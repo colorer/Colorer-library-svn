@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="colorer"
 	ProjectGUID="{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -42,7 +43,7 @@
 				AdditionalOptions=""
 				Optimization="0"
 				AdditionalIncludeDirectories="../shared;../zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=FALSE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=FALSE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_TRACE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -71,6 +72,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -90,9 +93,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -156,6 +156,8 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -175,9 +177,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

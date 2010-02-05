@@ -5,6 +5,7 @@ CPP     = gcc
 LINK    = g++
 RM      = @rm -f
 obj     = o
+MKDIR   = @mkdir
 DLLTOOL = @dlltool
 
 obj_output_slash = $(obj_output)/
