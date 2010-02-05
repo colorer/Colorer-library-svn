@@ -428,11 +428,11 @@
     <xs:attribute name="content-priority" type="priority" default="normal"/>
     <xs:attribute name="inner-region" default="no">
       <xs:annotation><xs:documentation>
-        Defines if this scheme region to be located inside of
-        the start/end region edges. In this case all the block's regions
+        If set to "yes" then the region of referenced scheme does not include
+        text matched by start/end attributes. I.e. all the block's regions
         are located outside of the scheme region.
-        By default ("no" value) scheme region is a background region
-        for all this block's start/end regions, and wraps them all.
+        By default ("no" value) scheme region wraps start/end tokens of the
+        block and defines background for their own regions.
       </xs:documentation></xs:annotation>
       <xs:simpleType>
         <xs:restriction base="xs:string">

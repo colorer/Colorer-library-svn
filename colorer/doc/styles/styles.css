@@ -37,7 +37,7 @@ p, div.p, blockquote{
   margin-bottom:4pt;
   xtext-align:justify;
 }
-code, pre, tt{
+code, pre{
   font-family: Lucida Console, Andale Mono, Courier New, Courier, monospace;
   color:#202040;
 }

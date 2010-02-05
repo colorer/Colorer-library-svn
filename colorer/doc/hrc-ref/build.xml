@@ -20,6 +20,20 @@
 	
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
+  <macrodef name="xslt-hrc-ref">
+    <attribute name="in"/>
+    <attribute name="out"/>
+    <attribute name="style"/>
+    <sequential>
+      <xslt in="@{in}" out="@{out}" style="@{style}">
+        <xmlcatalog refid="DTDs"/>
+        <classpath>
+          <pathelement path="${xslt-classpath}"/>
+        </classpath>
+      </xslt>
+    </sequential>
+  </macrodef>
+
   <target name="init">
 
     <uptodate property="pdf.required" targetfile="hrc-ref.pdf">
@@ -35,14 +49,7 @@
     </dependset>
 
     <available file='${docbook-dir}/template/titlepage.xsl' property='xslt-exists'/>
-    <available classname="org.apache.fop.apps.Fop" property='pdf-exists'>
-      <classpath>
-        <pathelement path="${java.class.path}"/>
-        <pathelement location="${fop-dir}/build/fop.jar"/>
-        <pathelement location="${fop-dir}/lib/avalon-framework-cvs-20020806.jar"/>
-        <pathelement location="${fop-dir}/lib/batik.jar"/>
-      </classpath>
-    </available>
+    <available file='${fop-dir}/build/fop.jar' property='pdf-exists'/>
     <condition property='hrc-ref-available'>
       <and>
         <isset property='xslt-exists'/>
@@ -74,51 +81,37 @@
   </target>
 
   <target name="merge">
-    <xslt in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl' classpath="${xslt-classpath}">
-      <xmlcatalog refid="DTDs"/>
-    </xslt>
+    <xslt-hrc-ref in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl'/>
   </target>
 
   <target name="pdf" if='hrc-ref-available' depends='init, merge' description='Builds PDF presentation' unless='pdf.required'>
-    <xslt in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath="${xslt-classpath}">
-      <xmlcatalog refid="DTDs"/>
-    </xslt>
+    <xslt-hrc-ref in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl'/>
 
     <copy file='fo-hrc-ref.xsl' tofile='fo-hrc-ref-temporary.xsl' overwrite='true'>
      <filterset>
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
       </filterset>
     </copy>
-    <xslt in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref-temporary.xsl' classpath="${xslt-classpath}">
-      <xmlcatalog refid="DTDs"/>
-    </xslt>
+    <xslt-hrc-ref in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref-temporary.xsl'/>
     <delete file='fo-hrc-ref-temporary.xsl'/>
-
-    <java classname="org.apache.fop.apps.Fop" fork="true" failonerror='true'>
-      <arg value="hrc-ref.fo"/>
-      <arg value="hrc-ref.pdf"/>
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
       <classpath>
-        <pathelement path="${java.class.path}"/>
         <pathelement location="${fop-dir}/build/fop.jar"/>
-        <pathelement location="${fop-dir}/lib/avalon-framework-cvs-20020806.jar"/>
-        <pathelement location="${fop-dir}/lib/batik.jar"/>
+        <fileset dir="${fop-dir}/lib" includes="*.jar"/>
       </classpath>
-   </java>
+    </taskdef>
+    <fop format="application/pdf" fofile="hrc-ref.fo" outfile="hrc-ref.pdf"/>
   </target>
 
   <!-- TODO add Colorer as DocBook's highlighting engine -->
   <target name="html" if='xslt-exists' depends='init, merge' description='Builds HTML presentation' unless='html.required'>
-    <xslt in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl' classpath='${xslt-classpath}'>
-      <xmlcatalog refid="DTDs"/>
-    </xslt>
+    <xslt-hrc-ref in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl'/>
     <copy file='html-hrc-ref.xsl' tofile='html-hrc-ref-temporary.xsl' overwrite='true'>
      <filterset>
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
      </filterset>
     </copy>
-    <xslt in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref-temporary.xsl' classpath='${xslt-classpath}'>
-      <xmlcatalog refid="DTDs"/>
-    </xslt>
+    <xslt-hrc-ref in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref-temporary.xsl'/>
     <delete file='html-hrc-ref-temporary.xsl'/>
   </target>
 

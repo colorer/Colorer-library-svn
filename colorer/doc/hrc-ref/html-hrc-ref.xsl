@@ -12,6 +12,7 @@ into it's logic
 -->
 
 <!--<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/xhtml/docbook.xsl"/>-->
+<!--by XSLT limitation it is impossible to use <xsl:param/> here-->
 <xsl:import href="@docbook-dir@/xhtml/docbook.xsl"/>
 
 <xsl:include href="html-titlepage.xsl"/>
@@ -19,9 +20,26 @@ into it's logic
 
 
 <xsl:param name="html.stylesheet">../styles/styles.css ../styles/hrc-ref.css</xsl:param>
+<xsl:param name="highlight.source" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="generate.component.toc" select="1"/>
 
+
+<!-- generate consistent element ids (thanks David N. Welton for the hint) -->
+<xsl:template name="object.id">
+  <xsl:param name="object" select="."/>
+  <xsl:choose>
+    <xsl:when test="$object/@id">
+      <xsl:value-of select="$object/@id"/>
+    </xsl:when>
+    <xsl:when test="$object/@xml:id">
+      <xsl:value-of select="$object/@xml:id"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="local-name($object)"/><xsl:number level="multiple"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 
 <xsl:template name="newline"><xsl:text>&#xA;</xsl:text></xsl:template>
