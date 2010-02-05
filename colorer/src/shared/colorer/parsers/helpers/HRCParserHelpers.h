@@ -29,7 +29,6 @@ struct KeywordInfo{
   const Region* region;
   int  ssShorter;
 
-//#define CNAME "KeywordInfo"
 //#include<common/MemoryOperator.h>
 
 };
@@ -49,7 +48,6 @@ public:
   void sortList();
   void substrIndex();
 
-#define CNAME "KeywordList"
 #include<common/MemoryOperator.h>
 
 };
@@ -72,7 +70,6 @@ public:
     delete substSchemeName;
   };
 
-#define CNAME "VirtualEntry"
 #include<common/MemoryOperator.h>
 
 };
@@ -105,7 +102,6 @@ public:
   CRegExp *start, *end;
   bool innerRegion, lowPriority, lowContentPriority;
 
-#define CNAME "SchemeNode"
 #include<common/MemoryOperator.h>
 
   SchemeNode();
@@ -124,7 +120,6 @@ public:
   const String *getName() const { return schemeName; };
   FileType *getFileType() const { return (FileType*)fileType; };
 
-#define CNAME "SchemeImpl"
 #include<common/MemoryOperator.h>
 
 protected:
