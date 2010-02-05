@@ -422,6 +422,11 @@
     <filename>/\.(ctl|tpl|ini|cfg|inf|srg|conf[^\.]*|types|tab|dof|dsk|lng)$/i</filename>
     <firstline>/^[;\[\#]/</firstline>
   </prototype>
+  <prototype name="awk" group="scripts" description="AWK">
+    <location link="scripts/awk.hrc"/>
+    <filename weight='5'>/\.awk$/i</filename>
+    <firstline>/^# gawk/i</firstline>
+  </prototype>
 
 
   &colorer-protos;
@@ -551,11 +556,6 @@
   <prototype name="AutoIt" group="rare" description="AutoIt 2.x">
     <location link="rare/autoit.hrc"/>
     <filename>/\.aut$/i</filename>
-  </prototype>
-  <prototype name="awk" group="rare" description="AWK">
-    <location link="rare/awk.hrc"/>
-    <filename weight='5'>/\.awk$/i</filename>
-    <firstline>/^# gawk/i</firstline>
   </prototype>
   
   <!--  !! you may wish to swap next two types

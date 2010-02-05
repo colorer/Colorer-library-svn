@@ -35,12 +35,17 @@
       <region name="PattOutline" parent="Outlined"/>
 
       <scheme name="awkComment">
+         <regexp match="/~\s+(gawk\b)( .*)?$/" 
+         	region0="def:Comment" region1="def:VarStrong" region2="def:KeywordStrong" 
+         />
+
          <inherit scheme="Comment"/>
-         <inherit scheme="text"/>
+         <!--inherit scheme="text"/ ??? -->
       </scheme>
 
 
       <scheme name="awk">
+         <!--inherit scheme="def:unixCommentDirective"/-->
 <!-- Outline lists -->
          <regexp><![CDATA[
             /^ \M \s* (?{PattOutline} (BEGIN) | (END) ) [\s\W] .*? $/x
@@ -65,9 +70,21 @@
          <inherit scheme="FloatNumber"/>
          <inherit scheme="DecNumber"/>
 <!-- Strings -->
-         <inherit scheme="CString"/>
+         <!--inherit scheme="CString"/-->
+         <block start='/(")/' end='/(")/' 
+         	scheme='c:StringContent' region='awkString'
+         	region00="StringEdge" region01="def:PairStart"
+         	region10="StringEdge" region11="def:PairEnd"
+         />
+         
          <regexp match="/('(\\.|[^\\'])*?')/" region="awkString"/>
-         <regexp match="/(\/) ([^\\]|\\.)*? (\/)/x" region0="awkString" region1="StringEdge" region3="StringEdge"/>
+         <!--regexp match="/(\/) ([^\\]|\\.)*? (\/)/x" region0="awkString" region1="StringEdge" region3="StringEdge"/-->
+         <block start='/((\/))\M ([^\\]|\\.)*? (\/)/x' end='/(\/)/'
+         	scheme='regexp:posix.regexp' region='awkString'
+         	region01="StringEdge" region02="def:PairStart"
+         	region10="StringEdge" region11="def:PairEnd"
+         />  <!-- todo: it's real POSIX regexp? -->
+         
          <inherit scheme="PairedBrackets">
             <virtual scheme="PairedBrackets" subst-scheme="awk"/>
          </inherit>
@@ -247,6 +264,8 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   -  Valentin Skirdin <vskirdin@mail.ru>
+   -  Eugene Efremov <4mirror@mail.ru>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

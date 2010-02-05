@@ -4,8 +4,6 @@ error: unqualified name 'group.quot' doesn't belong to any imported type [I:\WOR
 error: unqualified name 'group.quot' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/scripts/ini/reg.hrc]
 error: unqualified name 'apos' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/lib/far.hrc]
 error: unqualified name 'apos' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/lib/far.hrc]
-error: unqualified name 'text' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/rare/awk.hrc]
-error: cannot resolve scheme name 'text' in scheme 'awk:awkComment'
 error: scheme 'far:macro.func.content', referenced in type 'far', is not defined
 error: cannot resolve scheme name 'far:macro.func.content' in scheme 'far.macro:flaglist'
 error: duplicate scheme name 'yml:xmlss-uri-elementContent'
