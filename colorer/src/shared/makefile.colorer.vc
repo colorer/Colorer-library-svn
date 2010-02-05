@@ -4,6 +4,7 @@
 CPP  = @cl
 LINK = @link
 RM   = @del
+MKDIR= @mkdir
 obj  = obj
 
 obj_output_slash = $(obj_output)\\
