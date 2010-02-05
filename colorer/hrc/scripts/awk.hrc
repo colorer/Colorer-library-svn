@@ -71,13 +71,13 @@
          <inherit scheme="DecNumber"/>
 <!-- Strings -->
          <!--inherit scheme="CString"/-->
-         <block start='/(")/' end='/(")/' 
+         <block start='/(("))\M(\\.|[^\\"])*?"/' end='/(")/' 
          	scheme='c:StringContent' region='awkString'
-         	region00="StringEdge" region01="def:PairStart"
+         	region01="StringEdge" region02="def:PairStart"
          	region10="StringEdge" region11="def:PairEnd"
          />
          
-         <regexp match="/('(\\.|[^\\'])*?')/" region="awkString"/>
+         <regexp match="/('(\\.|[^\\'])*?')/" region="awkString"/> <!-- ??? -->
          <!--regexp match="/(\/) ([^\\]|\\.)*? (\/)/x" region0="awkString" region1="StringEdge" region3="StringEdge"/-->
          <block start='/((\/))\M ([^\\]|\\.)*? (\/)/x' end='/(\/)/'
          	scheme='regexp:posix.regexp' region='awkString'
