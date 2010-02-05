@@ -41,7 +41,6 @@ public:
 
   bool inClass(wchar c) const;
 
-#define CNAME "CharacterClass"
 #include<common/MemoryOperator.h>
 
 };
