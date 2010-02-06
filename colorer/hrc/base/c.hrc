@@ -33,6 +33,7 @@
 
   <region name="String" parent="def:String"/>
   <region name="StringEscape" parent="def:StringContent"/>
+  <region name="StringFormat" parent="def:VarStrong"/>
   <region name="Character" parent='def:Character'/>
 
   <region name="LineComment" parent="def:LineComment"/>
@@ -133,17 +134,15 @@
           scheme="StringContent" region="String" inner-region="yes"/>
   </scheme>
 
+  <entity name='format' value='[\-\+\#0]*?[\d\*]*(?{}\.[\d\*]+)?[Ll]?[SsCcsuidopxXnEefgG]'/>
   <scheme name="StringContent">
    <regexp match="/\\\\$/" region="def:Error"/>
-   <!-- printf("%d%f - fail",...)
-	 <regexp match="/(\%)\w+(\%)/" region="def:Constant" region1="def:PairStart" region2="def:PairEnd"/>
-	 -->
-	 <!-- TODO: Constant ??? -->
+	 <regexp match="/((\%)[\dA-Z_]{2,}(\%))(%format;|%)?!/" region1="def:Var" region2="def:PairStart" region3="def:PairEnd"/>
    <regexp match="/\\[^xX\d]/" region="StringEscape"/>
    <regexp match="/\\$/" region="StringEscape"/>
    <regexp match="/\\x[\da-fA-F]{1,8}/i" region="StringEscape"/>
    <regexp match="/\\[0-7]{1,12}/" region="StringEscape"/>
-   <regexp match="/\%[\-\+\#0]*?[\d\*]*(\.[\d\*]+)?[Ll]?[SsCcsuidopxXnEefgG]/" region="StringEscape"/>
+   <regexp match="/\%(%format;|\%)/" region="StringFormat"/>
    <regexp match="/[^\\\&#34;]$/" region="def:Error"/>
    <inherit scheme="TabsAsErrors"/>
   </scheme>

@@ -164,6 +164,7 @@ regf dfg dg dfg "
 [HKEY_CURRENT_USER\Software\Farsdas2\KeyMacros\Shell\Ctrl]
 "Sequence"="~"
 "Sequence"="'"
+"Sequence"="' \ \\ AltCtrl\ AltCtrl\\"
 "Sequence"="fgdfgdfgdf "
 "Sequence"="; # $ % { } ?"
 "Sequence"="."

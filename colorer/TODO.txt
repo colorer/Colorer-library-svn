@@ -3,13 +3,14 @@
 error: duplicate scheme name 'yml:xmlss-uri-elementContent'
 error: unqualified name 'perfomace_type-element' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/auto\gen/yml.hrc]
 error: cannot resolve scheme name 'perfomace_type-element' in scheme 'yml:_hrc_int_d12e53-content'
-(уф. Эти кончились. Осталась только схема от яндекса. Это уже мой косяк...)
+(Осталась только схема от яндекса. Это уже мой косяк... 
+UPD: Дело не в схеме — там ошибка в xsd2hrc, из-за которой xmlss дублируется...)
 
 ...И разобраться с обоими makefile.hrc. Пока переключил все назад на GNU-only, но это не дело...
-А еще в рег сбилась подсветка '[' ']'. 
 
 «1. r1273 пункт 2 отменим, и переделаем по другому - добавим в тип xml расширение wxs и fb2» — надо будет 
-сделать для них свои схемы, раз уж они здесь появились...
+сделать для них свои схемы, раз уж они здесь появились... UPD: wxs подождет до нового конвертора схем, через xsd2hrc его
+хрен нормально сделаешь...
 
 
 =========================
