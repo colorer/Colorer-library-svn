@@ -36,13 +36,21 @@
       <regexp match="/\\\M[^\\]/"/>
     </scheme>
 
+    <scheme name="InterpolatedString">
+      <block start='/\#\{/' end='/\}/' scheme="ruby" region='def:Insertion' region00='def:PairStart' region10='def:PairEnd'/>
+      <regexp match="/\\\M[^\\]/"/>
+    </scheme>
+    
+
     <scheme name="Strings">
-      <block start='/([\x22\x27\`])/' end='/\y1/' scheme="String" region='String'/>
+      <block start='/([\x27])/' end='/\y1/' scheme="String" region='String'/>
+      <block start='/([\x22\`])/' end='/\y1/' scheme="InterpolatedString" region='String'/>
 
       <block start='/\%[QqxWw](\{)/' end='/\}/' scheme="String" region='String'/>
       <block start='/\%[QqxWw](\[)/' end='/\]/' scheme="String" region='String'/>
       <block start='/\%[QqxWw](\()/' end='/\)/' scheme="String" region='String'/>
       <block start='/\%[QqxWw](.)/' end='/\y1/' scheme="String" region='String'/>
+      <block start='/&lt;&lt;(\-?)([\w_]+)/' end='/\y2/' scheme="String" region='String'/>
     </scheme>
 
     <scheme name="ruby">
@@ -56,7 +64,7 @@
 
       <!-- stolen from perl -->
       <block start="/((\=|\! \~) |
-               [^&lt;\]\}\)\+\-\w\s\/] |
+               [^&lt;\]\}\)\+\-\w\s\/\$] |
                (\bif) | (\bwhen) | (\bunless) | (\bsplit) | (\bor) | grep |^ )
               \s*
               ((?{def:PairStart}\/))
@@ -66,7 +74,7 @@
         region="String" region01="def:Symbol" region07="regexp:SpecQuote"
         region10="regexp:SpecQuote" region11="def:PairEnd" region12="regexp:SpecArea"/>
 
-      <block start='/\%([^\w&lt;&gt;])/' end='/\y1/' scheme='def:Comment' region='CommentDoc'/>
+      <block start='/\%([^\s\w&lt;&gt;])/' end='/\y1/' scheme='def:Comment' region='CommentDoc'/>
 
       <regexp match='/ (?{Keyword}alias) \s+ (?{AliasOutline}\S+ \s+ \S+)/x'/>
       <regexp match='/\M class \s+ (?{ClassOutline}\S+)/x'/>
@@ -153,7 +161,9 @@
 
       <keywords region="def:Symbol">
         <symb name='+'/><symb name='-'/><symb name='/'/><symb name='*'/><symb name='='/><symb name='!='/>
-        <symb name="$'"/><symb name="$`"/>
+        <symb name="$'"/>
+        <symb name="$/"/>
+        <symb name="$`"/>
       </keywords>
 
     </scheme>
