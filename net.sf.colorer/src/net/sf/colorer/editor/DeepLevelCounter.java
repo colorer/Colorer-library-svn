@@ -24,7 +24,8 @@ public class DeepLevelCounter {
     public void install(BaseEditor baseEditor) {
         fBaseEditor = baseEditor;
         // TODO: Using quite a rare region to prevent invocation of addRegion() at all
-        fBaseEditor.addRegionHandler(fRegionHandler, fBaseEditor.getParserFactory().getHRCParser().getRegion("def:EmbeddedTag"));
+        fBaseEditor.addRegionHandler(fRegionHandler,
+                fBaseEditor.getParserFactory().getHRCParser().getRegion("def:EmbeddedTag"));
         fMaxDeepLevel = 0;
     }
     

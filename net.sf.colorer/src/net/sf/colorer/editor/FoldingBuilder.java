@@ -116,7 +116,8 @@ public class FoldingBuilder {
     public void install(BaseEditor baseEditor, IFoldingReciever reciever) {
         fBaseEditor = baseEditor;
         fReciever = reciever;
-        fBaseEditor.addRegionHandler(fHandler, null);
+        fBaseEditor.addRegionHandler(fHandler,
+                fBaseEditor.getParserFactory().getHRCParser().getRegion("def:EmbeddedTag"));
         fBaseEditor.addEditorListener(fHandler);
     }
     
