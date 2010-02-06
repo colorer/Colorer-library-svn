@@ -7,11 +7,11 @@
     <dtd publicid="-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
          location="web-app_2_2.dtd"/>
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-         location="../2003/hrc.dtd"/>
+         location="${project-root}/src/dtd/hrc.dtd"/>
     <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
-         location="../2003/hrd.dtd"/>
+         location="${project-root}/src/dtd/hrd.dtd"/>
     <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-         location="../2003/catalog.dtd"/>
+         location="${project-root}/src/dtd/catalog.dtd"/>
   </xmlcatalog>
 
   <import file="../../common.xml"/>
