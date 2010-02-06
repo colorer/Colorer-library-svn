@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- PUBLIC "-//OASIS//DTD DocBook V4.2//EN" -->
 <!DOCTYPE article[
-<!ENTITY hrcxsd "file:../../doc/2003/hrc.xsd">
-<!ENTITY hrdxsd "file:../../doc/2003/hrd.xsd">
-<!ENTITY catalogref "file:../../doc/2003/catalog.xsd">
+<!ENTITY hrcxsd "file:../dtd/hrc.xsd">
+<!ENTITY hrdxsd "file:../dtd/hrd.xsd">
+<!ENTITY catalogref "file:../dtd/catalog.xsd">
 
-<!ENTITY hrc-ref.revhist SYSTEM "file:./hrc-ref.revhist.docbook">
-<!ENTITY hrc-ref.re SYSTEM "file:./hrc-ref.re.docbook">
-<!ENTITY hrc-ref.syntax SYSTEM "file:./hrc-ref.syntax.docbook">
+<!ENTITY hrc-ref.revhist SYSTEM "file:hrc-ref.revhist.docbook">
+<!ENTITY hrc-ref.re SYSTEM "file:hrc-ref.re.docbook">
+<!ENTITY hrc-ref.syntax SYSTEM "file:hrc-ref.syntax.docbook">
 
 ]>
 <article lang="en" xmlns:x="uri:custom:schema-db">

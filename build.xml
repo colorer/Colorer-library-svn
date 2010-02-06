@@ -6,11 +6,7 @@
     It contains tasks, used to build and distribute Colorer-take5 library packages.
   </description>
 
-  <!-- Chance to redefine properties without changing default build.properties file -->
-  <property file='build.user.properties'/>
-
-  <property file='build.properties'/>
-
+  <import file="common.xml"/>
 
   <property name='build-dir' value='distr'/>
 
@@ -186,16 +182,16 @@
 
   <target name="doc.clean">
     <delete file='src\shared\colorer_doc\warn_out'/>
-    <ant dir='doc/hrc-ref' antfile='build.xml' target='clean'/>
+    <ant dir='src/hrc-ref' antfile='build.xml' target='clean'/>
     <delete dir='doc/api'/>
     <delete dir='doc/java'/>
   </target>
 
-  <target name="doc.hrc-ref" depends='init'>
-    <ant dir='doc/hrc-ref' antfile='build.xml' target='all'/>
+  <target name="hrc-ref" depends='init'>
+    <ant dir='src/hrc-ref' antfile='build.xml' target='all'/>
   </target>
 
-  <target name="doc" depends='init, doc.javadoc, doc.doxygen, doc.hrc-ref' description='Builds all the documentation files'>
+  <target name="doc" depends='init, doc.javadoc, doc.doxygen, hrc-ref' description='Builds all the documentation files'>
   </target>
 
   <target name="doc.javadoc" depends='init' description='Generates Java classes documentation' unless='doc.javadoc.required'>
