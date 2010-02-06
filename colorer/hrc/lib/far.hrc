@@ -78,8 +78,11 @@
 <region name="func" parent="def:FunctionKeyword"/>
 <region name="flag" parent="def:Parameter"/>
 <region name="flag.dot" parent="struct"/>
-<region name="farConst"   parent="def:Constant"/>
 <region name="selmacroBlocks"     parent="def:LabelStrong"/>
+
+<region name="farConst"   parent="def:Constant"/>
+<region name="farConstUser"   parent="farConst"/>
+
 <!-- macro key -->
 <region name="macro.key" parent="def:Label"/>
 
@@ -240,6 +243,10 @@
 			scheme="far.macro.string.internal:string.content" 
 			subst-scheme="far.macro.string-quot.internal:string.content"
 		/>
+		<virtual 
+			scheme="far.macro.string.internal:macro.key.addon" 
+			subst-scheme="far.macro.string-quot.internal:macro.key.addon"
+		/>
 	</inherit>
 </scheme>
 
@@ -341,6 +348,7 @@
 		<word name="BM.Next"/>
 		<word name="BM.Prev"/>
 		<word name="BM.Stat"/>
+		<word name="callplugin"/>
 	</keywords>
 </scheme>
 
@@ -521,7 +529,7 @@
 <!-- ALL KEYS!!! -->
 
 <scheme name="macro.keys">
-	<keywords region="macro.key" ignorecase="yes" worddiv="[\s&quot;\(\)=]">
+	<keywords region="macro.key" ignorecase="yes" worddiv="[\s&quot;&apos;\(\)=]">
     <word name="Alt"/>
     <word name="Ctrl"/>
     <word name="RCtrl"/>
@@ -597,7 +605,7 @@
 		<word name="'"/>
 		<word name="~"/>
 		<word name="/"/>
-		<word name="\"/>
+		<!--word name="\"/-->
 		<word name="MsWheelUp"/>
 		<word name="MsWheelDown"/>
 		
@@ -1011,6 +1019,7 @@
 		<word name="ShiftEnter"/>
 		<word name="AltShiftEnter"/>
 		<word name="CtrlAltEnter"/>
+		<word name="AltEnter"/>
 		<word name="CtrlShiftEnter"/>
 		<word name="CtrlApps"/>
 		<word name="AltApps"/>
@@ -1034,7 +1043,10 @@
 		<word name="AltMsWheelUp"/>
 		<word name="CtrlMsWheelUp"/>
 	</keywords>  
-	<regexp match="/\b\w\b/" region="macro.key"/>	
+	<inherit scheme='far.macro.string.internal:macro.key.addon'/>
+	<regexp match="/\b(Ctrl|Alt|Shift){1,3}[`@\#\$\%\=\(\)\[\]\{\}?\|*+\-.,;:'~\/]/" region="macro.key"/>
+	<regexp match="/\b\w\b/" region="macro.key"/>
+	
 	<regexp match="/\S/" region="def:Error" priority="low"/>
 </scheme>
 
@@ -1225,6 +1237,12 @@
      <word name="PANEL_OPIFLAGS_RIGHTALIGNNAMES"/>
      <word name="PANEL_OPIFLAGS_PRESERVECASE"/>
 	</keywords>
+	
+	<keywords ignorecase="yes" region="farConstUser">
+		<word name='PanelTabs'/>
+		<word name="ConEmu"/>
+	</keywords>
+
 </scheme>
 
 <!-- 

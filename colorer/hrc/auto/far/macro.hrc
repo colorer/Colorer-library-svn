@@ -36,10 +36,14 @@
 </scheme>
 
 <scheme name="flaglist">
-	<inherit scheme="far:macro.func.content">
-		<virtual scheme="far:macro.expr" subst-scheme="far:macro.flags.registry"/>
-	</inherit>
+	<block start="/(\()/" end="/(\))/" scheme="flaglist"
+		region00="far:oper" region01="def:PairStart"
+		region10="far:oper" region11="def:PairEnd"
+	/>
+	<inherit scheme="far:macro.flags.registry"/>
 </scheme>
+
+<!-- is where anyone here for used this? -->
 
 </type>
 </hrc>

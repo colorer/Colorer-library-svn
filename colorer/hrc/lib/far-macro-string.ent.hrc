@@ -3,6 +3,8 @@
 <region name="string" parent="def:String"/>
 <region name="string.content" parent="def:StringContent"/>
 <region name="string.quote" parent="def:StringEdge"/> <!-- def:String? -->
+<region name="macro.key" parent="def:Label"/>
+
 
 <scheme name="string">
 	<block start="/(%quote;)/" end="/(%quote;)/"
@@ -24,3 +26,7 @@
 	<regexp match="/%slash;x[\dA-Fa-f]{2}/" region="string.content"/>
 </scheme>
 
+<scheme name="macro.key.addon">
+	<regexp match="/%slash;/" region="macro.key"/>
+	<regexp match="/\b(Ctrl|Alt|Shift){0,3}%slash;/" region="macro.key"/>
+</scheme>
