@@ -1,0 +1,16 @@
+#Language group names mapping
+main=Базовые языки
+inet=Интернет
+database=Базы данных
+xml=Стандарты XML
+scripts=Скрипты и конфигурация
+scripts.ini=Скрипты INI
+scripts.colorer=Скрипты для Colorer
+scripts.install=Системы установки
+scripts.far=Плагины к ФАРу
+scripts.rare=Редкие и неиспользуемые скрипты
+scripts.quorum=Скрипты Quorum
+messages=Скрипты текстовых сообщений
+messages.far=Скрипты текстовых сообщений для FAR
+rare=Редкие языки
+other=Другое
