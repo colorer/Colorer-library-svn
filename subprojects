@@ -1,0 +1,24 @@
+Current:
+
+shared 
+	shared colorer xml schemes
+	
+hrc 
+	HRC base & generators
+	required: 'shared'
+	
+hrd
+	HRD base, generators & addons
+	required: 'shared'
+
+
+TODO:
+
+shared-xslt
+	xsl templates library
+	
+dtd2xml
+	DTD convertor (DTD -> XML -> XSD or CXR)
+	
+cxrcs
+	"Colorer XML resources custom schema" (multiconverter)

@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+   <type name="cobolfr">
+      <annotation>
+         <documentation>
+           COBOL Syntax description
+
+           Cobol keywords according to following standards:  
+             ANSI'74 COBOL (X3.23-1974)
+             ANSI'85 COBOL (X3.23-1985)
+             Micro Focus COBOL
+
+           Cobol reference source line in FREE FORMAT format has no fixed margin and
+           first six columns are considered part of normal source. Column one takes
+           role of indicator area: [dD\*\/\$], or with any other character is treated
+           as normal source line.
+         </documentation>
+         <contributors>
+           Pavel Pleva
+         </contributors>
+      </annotation>
+
+      <import type="def"/>
+      <import type="sql"/>
+
+      <region name="cobDbg" parent="Debug"/>
+      <region name="cobSpecial" parent="Label"/>
+      <region name="cobIdent" parent="Text"/>
+      <region name="cobComment" parent="Comment"/>
+      <region name="cobIndicator" parent="Symbol"/>
+      <region name="cobSymb" parent="Symbol"/>
+      <region name="cobSymbDot" parent="SymbolStrong"/>
+      <region name="cobWord" parent="Keyword"/>
+      <region name="cobDirect" parent="Directive"/>
+      <region name="cobExec" parent="Label"/>
+      <region name="cobNumb" parent="Number"/>
+      <region name="cobString" parent="String"/>
+
+      <scheme name="cobolfr">
+      <!-- Debug lines -->
+         <regexp match="/^D\ .*$/i" region0="cobDbg"/>
+      <!-- Special lines -->
+         <regexp match="/^\$.*$/" region0="cobSpecial"/>
+      <!-- Comment lines -->
+         <regexp match="/^([\*\/])(.*)$/" region1="cobIndicator" region2="cobComment"/>
+      <!-- Special comments -->
+         <regexp match="/^\s*(REMARKS)(\.)(.+)$/i" region1="cobWord" region2="cobSymbDot" region3="cobComment"/>
+         <regexp match="/^\s*(AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)(.+)$/i" region1="cobDirect" region2="cobSymbDot" region3="cobComment"/>
+      <!-- Variable declarations -->
+         <regexp match="/\M\s*(\b\d\d)\s+([\w\:\-]+).*/" region1="cobNumb" region2="cobIdent"/>
+      <!-- Sections and Divisions -->
+         <regexp match="/([\w\-]+\s+(SECTION|DIVISION))\M\s*\./i" region1="cobDirect"/>
+      <!-- Strings -->
+         <block start="/\'/" end="/\'/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
+         <block start="/\&#34;/" end="/\&#34;/" scheme="Comment" region="cobString" region00="PairStart" region10="PairEnd"/>
+      <!-- Embedded EXEC statements -->
+         <block start="/(EXEC|EXECUTE)/i" end="/(END-EXEC)/i" scheme="sql" region00="PairStart" region01="cobExec" region10="PairEnd" region11="cobExec"/>
+
+      <!-- Standard COBOL Symbols -->
+         <keywords region="cobSymb" worddiv="[\W\d]"> <!-- minus can be part of identifier -->
+            <word name="-"/>
+         </keywords>
+         <keywords region="cobSymb">
+            <symb name=";"/>
+            <symb name="="/>
+            <symb name="+"/>
+            <symb name="/"/>
+            <symb name="*"/>
+            <symb name="&amp;"/>
+            <symb name="|"/>
+            <symb name="^"/>
+            <symb name="("/>
+            <symb name=")"/>
+            <symb name="["/>
+            <symb name="]"/>
+            <symb name="." region="cobSymbDot"/>
+            <symb name=","/>
+            <symb name=":"/>
+            <symb name="!"/>
+            <symb name="~"/>
+            <symb name="&lt;"/>
+            <symb name="&gt;"/>
+            <symb name="%"/>
+            <symb name="{"/>
+            <symb name="}"/>
+            <symb name="?"/>
+         </keywords>
+      <!-- COBOL Directives -->
+         <keywords ignorecase="yes" region="cobDirect" worddiv="[\W-[\-]]">
+            <word name="AUTHOR"/>
+            <word name="CONFIGURATION"/>
+            <word name="DATA"/>
+            <word name="DATE-COMPILED"/>
+            <word name="DATE-WRITTEN"/>
+            <word name="DIVISION"/>
+            <word name="ENVIRONMENT"/>
+            <word name="FILE"/>
+            <word name="FILE-CONTROL"/>
+            <word name="IDENTIFICATION"/>
+            <word name="INPUT-OUTPUT"/>
+            <word name="INSTALLATION"/>
+            <word name="I-O-CONTROL"/>
+            <word name="LINKAGE"/>
+            <word name="OBJECT-COMPUTER"/>
+            <word name="PROCEDURE"/>
+            <word name="PROGRAM-ID"/>
+            <word name="SECTION"/>
+            <word name="SECURITY"/>
+            <word name="SOURCE-COMPUTER"/>
+            <word name="SPECIAL-NAMES"/>
+            <word name="WORKING-STORAGE"/>
+         </keywords>
+      <!-- COBOL KeyWords -->
+         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
+            <word name="ACCEPT"/>
+            <word name="ACCESS"/>
+            <word name="ADD"/>
+            <word name="ADVANCING"/>
+            <word name="AFTER"/>
+            <word name="ALL"/>
+            <word name="ALPHABET"/>
+            <word name="ALPHABETIC"/>
+            <word name="ALPHABETIC-LOWER"/>
+            <word name="ALPHABETIC-UPPER"/>
+            <word name="ALPHANUMERIC"/>
+            <word name="ALPHANUMERIC-EDITED"/>
+            <word name="ALSO"/>
+            <word name="ALTER"/>
+            <word name="ALTERNATE"/>
+            <word name="AND"/>
+            <word name="ANY"/>
+            <word name="ARE"/>
+            <word name="AREA"/>
+            <word name="AREAS"/>
+            <word name="AS"/>
+            <word name="ASCENDING"/>
+            <word name="ASSIGN"/>
+            <word name="AT"/>
+            <word name="BEFORE"/>
+            <word name="BINARY"/>
+            <word name="BLANK"/>
+            <word name="BLOCK"/>
+            <word name="BOTTOM"/>
+            <word name="BY"/>
+            <word name="CALL"/>
+            <word name="CANCEL"/>
+            <word name="CD"/>
+            <word name="CF"/>
+            <word name="CH"/>
+            <word name="CHARACTER"/>
+            <word name="CHARACTERS"/>
+            <word name="CLASS"/>
+            <word name="CLOCK-UNITS"/>
+            <word name="CLOSE"/>
+            <word name="COBOL"/>
+            <word name="CODE"/>
+            <word name="CODE-SET"/>
+            <word name="COLLATING"/>
+            <word name="COLUMN"/>
+            <word name="COMMA"/>
+            <word name="COMMON"/>
+            <word name="COMMUNICATION"/>
+            <word name="COMP"/>
+            <word name="COMPUTATIONAL"/>
+            <word name="COMPUTE"/>
+            <word name="CONTAINS"/>
+            <word name="CONTENT"/>
+            <word name="CONTINUE"/>
+            <word name="CONTROL"/>
+            <word name="CONTROLS"/>
+            <word name="CONVERTING"/>
+            <word name="COPY"/>
+            <word name="CORR"/>
+            <word name="CORRESPONDING"/>
+            <word name="COUNT"/>
+            <word name="CURRENCY"/>
+            <word name="CURRENT-DATE"/>
+            <word name="DATE"/>
+            <word name="DAY"/>
+            <word name="DAY-OF-WEEK"/>
+            <word name="DE"/>
+            <word name="DEBUG-CONTENTS"/>
+            <word name="DEBUG-ITEM"/>
+            <word name="DEBUG-LINE"/>
+            <word name="DEBUG-NAME"/>
+            <word name="DEBUG-SUB-1"/>
+            <word name="DEBUG-SUB-2"/>
+            <word name="DEBUG-SUB-3"/>
+            <word name="DEBUGGING"/>
+            <word name="DECIMAL-POINT"/>
+            <word name="DECLARATIVES"/>
+            <word name="DELETE"/>
+            <word name="DELIMITED"/>
+            <word name="DELIMITER"/>
+            <word name="DEPENDING"/>
+            <word name="DESCENDING"/>
+            <word name="DESTINATION"/>
+            <word name="DETAIL"/>
+            <word name="DFHRESP"/>
+            <word name="DFHVALUE"/>
+            <word name="DISABLE"/>
+            <word name="DISPLAY"/>
+            <word name="DIVIDE"/>
+            <word name="DOWN"/>
+            <word name="DUPLICATES"/>
+            <word name="DYNAMIC"/>
+            <word name="EGI"/>
+            <word name="ELSE"/>
+            <word name="EMI"/>
+            <word name="ENABLE"/>
+            <word name="END"/>
+            <word name="END-ADD"/>
+            <word name="END-CALL"/>
+            <word name="END-COMPUTE"/>
+            <word name="END-DELETE"/>
+            <word name="END-DIVIDE"/>
+            <word name="END-EVALUATE"/>
+            <word name="END-IF"/>
+            <word name="END-MULTIPLY"/>
+            <word name="END-OF-PAGE"/>
+            <word name="END-PERFORM"/>
+            <word name="END-READ"/>
+            <word name="END-RECEIVE"/>
+            <word name="END-RETURN"/>
+            <word name="END-REWRITE"/>
+            <word name="END-SEARCH"/>
+            <word name="END-START"/>
+            <word name="END-STRING"/>
+            <word name="END-SUBTRACT"/>
+            <word name="END-UNSTRING"/>
+            <word name="END-WRITE"/>
+            <word name="ENTER"/>
+            <word name="EOP"/>
+            <word name="EQUAL"/>
+            <word name="ERROR"/>
+            <word name="ESI"/>
+            <word name="EVALUATE"/>
+            <word name="EVERY"/>
+            <word name="EXCEPTION"/>
+            <word name="EXIT"/>
+            <word name="EXTEND"/>
+            <word name="EXTERNAL"/>
+            <word name="FALSE"/>
+            <word name="FD"/>
+            <word name="FILLER"/>
+            <word name="FINAL"/>
+            <word name="FIRST"/>
+            <word name="FOOTING"/>
+            <word name="FOR"/>
+            <word name="FROM"/>
+            <word name="FUNCTION"/>
+            <word name="FUNCTION-POINTER"/>
+            <word name="GENERATE"/>
+            <word name="GIVING"/>
+            <word name="GLOBAL"/>
+            <word name="GO"/>
+            <word name="GREATER"/>
+            <word name="GROUP"/>
+            <word name="HEADING"/>
+            <word name="HIGH-VALUE"/>
+            <word name="HIGH-VALUES"/>
+            <word name="I-O"/>
+            <word name="IF"/>
+            <word name="IN"/>
+            <word name="INDEX"/>
+            <word name="INDEXED"/>
+            <word name="INDICATE"/>
+            <word name="INITIAL"/>
+            <word name="INITIALIZE"/>
+            <word name="INITIATE"/>
+            <word name="INPUT"/>
+            <word name="INSPECT"/>
+            <word name="INTO"/>
+            <word name="INVALID"/>
+            <word name="IS"/>
+            <word name="JUST"/>
+            <word name="JUSTIFIED"/>
+            <word name="KEY"/>
+            <word name="LABEL"/>
+            <word name="LAST"/>
+            <word name="LEADING"/>
+            <word name="LEFT"/>
+            <word name="LENGTH"/>
+            <word name="LESS"/>
+            <word name="LIMIT"/>
+            <word name="LIMITS"/>
+            <word name="LINAGE"/>
+            <word name="LINAGE-COUNTER"/>
+            <word name="LINE"/>
+            <word name="LINE-COUNTER"/>
+            <word name="LINES"/>
+            <word name="LOCK"/>
+            <word name="LOW-VALUE"/>
+            <word name="LOW-VALUES"/>
+            <word name="MEMORY"/>
+            <word name="MERGE"/>
+            <word name="MESSAGE"/>
+            <word name="MODE"/>
+            <word name="MODULES"/>
+            <word name="MOVE"/>
+            <word name="MULTIPLE"/>
+            <word name="MULTIPLY"/>
+            <word name="NATIONAL"/>
+            <word name="NATIVE"/>
+            <word name="NEGATIVE"/>
+            <word name="NEXT"/>
+            <word name="NO"/>
+            <word name="NOT"/>
+            <word name="NUMBER"/>
+            <word name="NUMERIC"/>
+            <word name="NUMERIC-EDITED"/>
+            <word name="OCCURS"/>
+            <word name="OF"/>
+            <word name="OFF"/>
+            <word name="OMITTED"/>
+            <word name="ON"/>
+            <word name="OPEN"/>
+            <word name="OPTIONAL"/>
+            <word name="OR"/>
+            <word name="ORDER"/>
+            <word name="ORGANIZATION"/>
+            <word name="OTHER"/>
+            <word name="OUTPUT"/>
+            <word name="OVERFLOW"/>
+            <word name="PACKED-DECIMAL"/>
+            <word name="PADDING"/>
+            <word name="PAGE"/>
+            <word name="PAGE-COUNTER"/>
+            <word name="PERFORM"/>
+            <word name="PF"/>
+            <word name="PH"/>
+            <word name="PIC"/>
+            <word name="PICTURE"/>
+            <word name="PLUS"/>
+            <word name="POINTER"/>
+            <word name="POSITION"/>
+            <word name="POSITIVE"/>
+            <word name="PRINTING"/>
+            <word name="PROCEDURES"/>
+            <word name="PROCEED"/>
+            <word name="PROGRAM"/>
+            <word name="PURGE"/>
+            <word name="QUEUE"/>
+            <word name="QUOTE"/>
+            <word name="QUOTES"/>
+            <word name="RANDOM"/>
+            <word name="RD"/>
+            <word name="READ"/>
+            <word name="RECEIVE"/>
+            <word name="RECORD"/>
+            <word name="RECORDS"/>
+            <word name="REDEFINES"/>
+            <word name="REEL"/>
+            <word name="REFERENCE"/>
+            <word name="REFERENCES"/>
+            <word name="RELATIVE"/>
+            <word name="RELEASE"/>
+            <word name="REMAINDER"/>
+            <word name="REMOVAL"/>
+            <word name="RENAMES"/>
+            <word name="REPLACE"/>
+            <word name="REPLACING"/>
+            <word name="REPORT"/>
+            <word name="REPORTING"/>
+            <word name="REPORTS"/>
+            <word name="RERUN"/>
+            <word name="RESERVE"/>
+            <word name="RETURN"/>
+            <word name="REVERSED"/>
+            <word name="REWIND"/>
+            <word name="REWRITE"/>
+            <word name="RF"/>
+            <word name="RH"/>
+            <word name="RIGHT"/>
+            <word name="ROUNDED"/>
+            <word name="RUN"/>
+            <word name="SAME"/>
+            <word name="SD"/>
+            <word name="SEARCH"/>
+            <word name="SEGMENT"/>
+            <word name="SEGMENT-LIMIT"/>
+            <word name="SELECT"/>
+            <word name="SEND"/>
+            <word name="SENTENCE"/>
+            <word name="SEPARATE"/>
+            <word name="SEQUENCE"/>
+            <word name="SEQUENTIAL"/>
+            <word name="SET"/>
+            <word name="SIGN"/>
+            <word name="SIZE"/>
+            <word name="SORT"/>
+            <word name="SORT-MERGE"/>
+            <word name="SOURCE"/>
+            <word name="SPACE"/>
+            <word name="SPACES"/>
+            <word name="STANDARD"/>
+            <word name="STANDARD-1"/>
+            <word name="STANDARD-2"/>
+            <word name="START"/>
+            <word name="STATUS"/>
+            <word name="STOP"/>
+            <word name="STRING"/>
+            <word name="SUB-QUEUE-1"/>
+            <word name="SUB-QUEUE-2"/>
+            <word name="SUB-QUEUE-3"/>
+            <word name="SUBTRACT"/>
+            <word name="SUM"/>
+            <word name="SUPPRESS"/>
+            <word name="SYMBOLIC"/>
+            <word name="SYNC"/>
+            <word name="SYNCHRONIZED"/>
+            <word name="TABLE"/>
+            <word name="TALLYING"/>
+            <word name="TAPE"/>
+            <word name="TERMINAL"/>
+            <word name="TERMINATE"/>
+            <word name="TEST"/>
+            <word name="TEXT"/>
+            <word name="THAN"/>
+            <word name="THEN"/>
+            <word name="THROUGH"/>
+            <word name="THRU"/>
+            <word name="TIME"/>
+            <word name="TIMES"/>
+            <word name="TO"/>
+            <word name="TOP"/>
+            <word name="TRAILING"/>
+            <word name="TRUE"/>
+            <word name="TYPE"/>
+            <word name="UNIT"/>
+            <word name="UNSTRING"/>
+            <word name="UNTIL"/>
+            <word name="UP"/>
+            <word name="UPON"/>
+            <word name="USAGE"/>
+            <word name="USE"/>
+            <word name="USING"/>
+            <word name="VALUE"/>
+            <word name="VALUES"/>
+            <word name="VARYING"/>
+            <word name="WHEN"/>
+            <word name="WITH"/>
+            <word name="WORDS"/>
+            <word name="WRITE"/>
+            <word name="ZERO"/>
+            <word name="ZEROES"/>
+            <word name="ZEROS"/>
+         </keywords>
+      <!-- Additional COBOL Keywords - addition to standards mentioned above -->
+         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
+            <word name="ADDRESS"/>
+            <word name="CONSOLE"/>
+            <word name="CRT"/>
+            <word name="DEBUG-SUB"/>
+            <word name="OTHERWISE"/>
+            <word name="POINT"/>
+            <word name="POINTS"/>
+            <word name="PROCESS"/>
+            <word name="RECORDING"/>
+            <word name="REMARKS"/>
+            <word name="SCREEN"/>
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Colorer Library.
+   -
+   - The Initial Developer of the Original Code is
+   - Igor Russkih <irusskih at gmail dot com>.
+   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
