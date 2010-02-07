@@ -11,8 +11,8 @@
 10:     <span class='ruby-Keyword def-Keyword'>def</span> format<span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span>, formatter<span class='def-Symbol'>)</span>:
 11:         <span class='ruby-Comment def-Comment def-Syntax'>#type to pass to colorer</span>
 12:         type<span class='def-Symbol'>=</span><span class='def-FunctionKeyword def-Keyword'>string</span>.<span class='def-FunctionKeyword def-Keyword'>strip</span><span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span>.kw<span class='def-Symbol'>[</span><span class='ruby-String def-String'>'format_args'</span><span class='def-Symbol'>]</span><span class='def-Symbol'>)</span>
-13:         <span class='def-FunctionKeyword def-Keyword'>options</span><span class='def-Symbol'>=</span><span class='ruby-String def-String'>'-dc -dh -h -t%s'</span> <span class='ruby-CommentDoc def-CommentDoc def-Comment def-Syntax'>% type</span>
-14: <span class='ruby-CommentDoc def-CommentDoc def-Comment def-Syntax'> </span>       cmd <span class='def-Symbol'>=</span> <span class='ruby-String def-String'>'colorer '</span> <span class='def-Symbol'>+</span> <span class='def-FunctionKeyword def-Keyword'>options</span>
+13:         <span class='def-FunctionKeyword def-Keyword'>options</span><span class='def-Symbol'>=</span><span class='ruby-String def-String'>'-dc -dh -h -t%s'</span> % type
+14:         cmd <span class='def-Symbol'>=</span> <span class='ruby-String def-String'>'colorer '</span> <span class='def-Symbol'>+</span> <span class='def-FunctionKeyword def-Keyword'>options</span>
 15:         try:
 16:             fromchild, tochild, errchild <span class='def-Symbol'>=</span> popen2.popen3<span class='def-Symbol'>(</span>cmd<span class='def-Symbol'>)</span>
 17:             tochild.<span class='def-FunctionKeyword def-Keyword'>write</span><span class='def-Symbol'>(</span><span class='ruby-Keyword def-Keyword'>self</span>.raw<span class='def-Symbol'>)</span>
