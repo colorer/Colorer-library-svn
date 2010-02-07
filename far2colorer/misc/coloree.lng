@@ -1,0 +1,51 @@
+.Language=English,English
+
+"Colorer"
+
+"Colorer's settings"
+
+"Colorer &enabled"
+
+"Cro&ss"
+"&Pairs"
+"S&yntax"
+
+"Class&ic outline style"
+
+"&OK"
+"&Test catalog.xml"
+"Test schema &library"
+"&Cancel"
+
+"c&atalog.xml file:"
+"Colo&r style:"
+
+"&1 List types"
+"&2 Match pair"
+"&3 Select block"
+"&4 Select pair"
+"&5 Outliner list"
+"&6 Errors list"
+"&7 Select region"
+"&8 Find Function"
+"&9 Update highlighting"
+"&R Reload schema library"
+"&C Configure"
+
+"Total %d types"
+"Select syntax"
+"Outliner [%s]"
+"Nothing found"
+"Gotcha"
+"[Ctrl]Enter, Tab, Ctrl-Cursor, [0-9a-z;:-_]"
+
+"Reloading schema library..."
+"Problem with Colorer"
+"Can't open file:"
+"Ok"
+"Bad Colorer version:"
+"Try anyway"
+"Fatal error loading the library schemes"
+"Need Colorer"
+
+"Select color style"
