@@ -230,6 +230,7 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
         };
       };
       if (!badbound){
+        CLR_TRACE("TextParserImpl", "KW matched. gx=%d, region=%s", gx, node->kwList->kwList[pos].region->getName()->getChars());
         addRegion(gy, gx, gx + kwlen, node->kwList->kwList[pos].region);
         gx += kwlen;
         return MATCH_RE;
@@ -289,6 +290,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
       case SNT_RE:
         if (!schemeNode->start->parse(str, gx, schemeNode->lowPriority?lowLen:hiLen, &match, schemeStart))
           break;
+        CLR_TRACE("TextParserImpl", "RE matched. gx=%d", gx);
         for (i = 0; i < match.cMatch; i++)
           addRegion(gy, match.s[i], match.e[i], schemeNode->regions[i]);
         for (i = 0; i < match.cnMatch; i++)
@@ -304,7 +306,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         if (!schemeNode->start->parse(str, gx,
              schemeNode->lowPriority?lowLen:hiLen, &match, schemeStart)) break;
 
-        CLR_TRACE("TextParserImpl", "scheme matched");
+        CLR_TRACE("TextParserImpl", "Scheme matched. gx=%d", gx);
 
         gx = match.e[0];
         ssubst = vtlist->pushvirt(schemeNode->scheme);
@@ -465,10 +467,10 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
       if ((re_result == MATCH_SCHEME && (oy != gy || matchend.s[0] < gx)) ||
           (re_result == MATCH_RE && matchend.s[0] < gx)){
         len = -1;
-        if (oy == gy) len = parent_len;
         ret = LINE_REPARSE;
         break;
       };
+      if (oy == gy) len = parent_len;
       if (re_result == MATCH_NOTHING) gx++;
     };
     if (ret == LINE_REPARSE) continue;
