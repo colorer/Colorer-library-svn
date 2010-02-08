@@ -103,14 +103,8 @@ $(obj_output_slash)syntax.$(obj):
 $(obj_output_slash)tools.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/tools.cpp
 
-$(obj_output_slash)clipbrd.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/clipbrd.cpp
-
 $(obj_output_slash)malloc.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/malloc.c
-
-$(obj_output_slash)registry.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/registry.cpp
 
 $(obj_output_slash)BitArray.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./unicode/BitArray.cpp
@@ -182,12 +176,6 @@ $(obj_output_slash)example.$(obj):
 $(obj_output_slash)gzio.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/gzio.c
 
-$(obj_output_slash)infblock.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/infblock.c
-
-$(obj_output_slash)infcodes.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/infcodes.c
-
 $(obj_output_slash)inffast.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/inffast.c
 
@@ -196,9 +184,6 @@ $(obj_output_slash)inflate.$(obj):
 
 $(obj_output_slash)inftrees.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/inftrees.c
-
-$(obj_output_slash)infutil.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/infutil.c
 
 $(obj_output_slash)maketree.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/../zlib/maketree.c

@@ -1,13 +1,12 @@
-/* iowin32.c -- IO base function header for compress/uncompress .zip 
+/* iowin32.c -- IO base function header for compress/uncompress .zip
    files using zlib + zip or unzip API
    This IO API version uses the Win32 API (for Microsoft Windows)
 
-   Version 0.20, September 01th, 2002
+   Version 1.01e, February 12th, 2005
 
-   Copyright (C) 1998-2002 Gilles Vollant
+   Copyright (C) 1998-2005 Gilles Vollant
 */
 
-#include <windows.h>
 #include <stdlib.h>
 
 #include "zlib.h"
@@ -49,7 +48,7 @@ long ZCALLBACK win32_seek_file_func OF((
    uLong offset,
    int origin));
 
-long ZCALLBACK win32_close_file_func OF((
+int ZCALLBACK win32_close_file_func OF((
    voidpf opaque,
    voidpf stream));
 
@@ -95,7 +94,7 @@ voidpf ZCALLBACK win32_open_file_func (opaque, filename, mode)
     }
 
     if ((filename!=NULL) && (dwDesiredAccess != 0))
-        hFile = CreateFile(filename, dwDesiredAccess, dwShareMode, NULL,
+        hFile = CreateFile((LPCTSTR)filename, dwDesiredAccess, dwShareMode, NULL,
                       dwCreationDisposition, dwFlagsAndAttributes, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -192,7 +191,7 @@ long ZCALLBACK win32_seek_file_func (opaque, stream, offset, origin)
 {
     DWORD dwMoveMethod=0xFFFFFFFF;
     HANDLE hFile = NULL;
-    
+
     long ret=-1;
     if (stream!=NULL)
         hFile = ((WIN32FILE_IOWIN*)stream) -> hf;
@@ -225,12 +224,12 @@ long ZCALLBACK win32_seek_file_func (opaque, stream, offset, origin)
     return ret;
 }
 
-long ZCALLBACK win32_close_file_func (opaque, stream)
+int ZCALLBACK win32_close_file_func (opaque, stream)
    voidpf opaque;
    voidpf stream;
 {
-    long ret=-1;
-    
+    int ret=-1;
+
     if (stream!=NULL)
     {
         HANDLE hFile;
@@ -240,7 +239,7 @@ long ZCALLBACK win32_close_file_func (opaque, stream)
             CloseHandle(hFile);
             ret=0;
         }
-        free(stream);   
+        free(stream);
     }
     return ret;
 }

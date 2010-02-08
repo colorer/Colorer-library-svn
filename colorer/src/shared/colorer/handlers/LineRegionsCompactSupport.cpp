@@ -7,7 +7,6 @@ LineRegionsCompactSupport::~LineRegionsCompactSupport(){};
 void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
 {
   LineRegion *lstart = getLineRegions(lno);
-  LineRegion *fnormal = null;
   ladd->next = null;
   ladd->prev = ladd;
 
@@ -102,7 +101,6 @@ void LineRegionsCompactSupport::addLineRegion(int lno, LineRegion *ladd)
       ladd->next = lnext->next;
       if (lnext->next) lnext->next->prev = ladd;
       else lstart->prev = ladd;
-      LineRegion *lntemp = lnext->next;
       delete lnext;
       lnext = ladd;
       continue;

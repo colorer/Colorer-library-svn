@@ -72,17 +72,20 @@ const byte *JARInputSource::openStream()
 
   if (fid == 0) {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
   }
   int ret = unzLocateFile(fid, inJarLocation->getChars(), 0);
   if (ret != UNZ_OK)  {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Can't locate file in JAR content: '")+inJarLocation+"'");
   }
   unz_file_info file_info;
   ret = unzGetCurrentFileInfo(fid, &file_info, null, 0, null, 0, null, 0);
   if (ret != UNZ_OK)  {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Can't retrieve current file in JAR content: '")+inJarLocation+"'");
   }
 
@@ -91,16 +94,19 @@ const byte *JARInputSource::openStream()
   ret = unzOpenCurrentFile(fid);
   if (ret != UNZ_OK)  {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Can't open current file in JAR content: '")+inJarLocation+"'");
   }
   ret = unzReadCurrentFile(fid, stream, len);
   if (ret <= 0) {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Can't read current file in JAR content: '")+inJarLocation+"' ("+SString(ret)+")");
   }
   ret = unzCloseCurrentFile(fid);
   if (ret == UNZ_CRCERROR) {
 	  delete mf;
+	  unzClose(fid);
 	  throw InputSourceException(StringBuffer("Bad JAR file CRC"));
   }
   ret = unzClose(fid);

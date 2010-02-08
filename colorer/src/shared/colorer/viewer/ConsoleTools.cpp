@@ -93,7 +93,6 @@ void ConsoleTools::setHRDName(const String &str) {
 }
 void ConsoleTools::setLinkSource(const String &str){
   InputSource *linkSource = null;
-  const byte *stream = null;
   DocumentBuilder docbuilder;
   Document *linkSourceTree = null;
   try{
@@ -321,7 +320,7 @@ void ConsoleTools::genOutput(bool useTokens){
     if (!useTokens){
       try{
         mapper = pf.createStyledMapper(&DString("rgb"), hrdName);
-      }catch(ParserFactoryException &e){
+      }catch(ParserFactoryException &){
         useMarkup = true;
         mapper = pf.createTextMapper(hrdName);
       }

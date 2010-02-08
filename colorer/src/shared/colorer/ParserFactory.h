@@ -22,8 +22,7 @@
  * - win32 systems:
  *   - image_start_dir, image_start_dir/../, image_start_dir/../../
  *   - \%COLORER5CATALOG%
- *   - \%HOME%/.colorer5catalog
- *   - \%HOMEPATH%/.colorer5catalog
+ *   - \%HOMEDRIVE%%HOMEPATH%/.colorer5catalog
  *   - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
  *
  * - unix/macos systems:

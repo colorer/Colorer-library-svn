@@ -26,7 +26,6 @@ void ParserFactory::init()
 {
   hrcParser = null;
   fileErrorHandler = null;
-  const byte *stream = null;
   try{
     catalogFIS = InputSource::newInstance(catalogPath);
     catalog = docbuilder.parse(catalogFIS);
@@ -53,7 +52,7 @@ void ParserFactory::init()
         try{
           fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);
           colorer_logger_set_target(dfis->getLocation()->getChars());
-        }catch(Exception &e){
+        }catch(Exception &){
           fileErrorHandler = null;
         };
         delete dfis;
@@ -123,12 +122,11 @@ String *ParserFactory::searchPath()
   Vector<String*> paths;
   TextLinesStore tls;
 
-
 #ifdef _WIN32
   // image_path/  image_path/..  image_path/../..
-  char cname[256];
+  TCHAR cname[256];
   HMODULE hmod;
-  hmod = GetModuleHandle("colorer");
+  hmod = GetModuleHandle(TEXT("colorer"));
   if (hmod == null) hmod = GetModuleHandle(null);
   int len = GetModuleFileName(hmod, cname, 256) - 1;
   DString module(cname, 0, len);
@@ -145,6 +143,7 @@ String *ParserFactory::searchPath()
   char *c = getenv("COLORER5CATALOG");
   if (c != null) paths.addElement(new SString(c));
 
+#ifdef __unix__
   // %HOME%/.colorer5catalog or %HOMEPATH%
   c = getenv("HOME");
   if (c == null) c = getenv("HOMEPATH");
@@ -155,19 +154,29 @@ String *ParserFactory::searchPath()
     }catch(InputSourceException &e){};
   };
 
-  // /usr/share/colorer/catalog.xml
-#ifdef __unix__
+   // /usr/share/colorer/catalog.xml
   paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
   paths.addElement(new SString("/usr/local/share/colorer/catalog.xml"));
 #endif
+
 #ifdef _WIN32
+    // %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
+  char *b = getenv("HOMEDRIVE");
+  c = getenv("HOMEPATH");
+  if ((c != null)&&(b != null)){
+    try{
+      tls.loadFile(&StringBuffer(b).append(&StringBuffer(c).append(DString("/.colorer5catalog"))), null, false);
+      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
+    }catch(InputSourceException &){};
+  };
   // %SYSTEMROOT%/.colorer5catalog
   c = getenv("SYSTEMROOT");
   if (c == null) c = getenv("WINDIR");
   if (c != null) try{
     tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
     if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-  }catch(InputSourceException &e){};
+  }catch(InputSourceException &){};
+
 #endif
 
   String *right_path = null;
@@ -180,7 +189,7 @@ String *ParserFactory::searchPath()
         is->openStream();
         right_path = new SString(path);
         delete is;
-      }catch(InputSourceException &e){
+      }catch(InputSourceException &){
         delete is;
       };
     };
@@ -264,11 +273,11 @@ HRCParser* ParserFactory::getHRCParser(){
       if (ret != -1 && (st.st_mode & S_IFDIR)){
 #ifdef _WIN32
         WIN32_FIND_DATA ffd;
-        HANDLE dir = FindFirstFile((StringBuffer(path)+"\\*.*").getChars(), &ffd);
+        HANDLE dir = FindFirstFile((StringBuffer(path)+"\\*.*").getTChars(), &ffd);
         if (dir != INVALID_HANDLE_VALUE){
           while(true){
             if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)){
-              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+ffd.cFileName), catalogFIS);
+              InputSource *dfis = InputSource::newInstance(&(StringBuffer(relPath)+"\\"+SString(ffd.cFileName)), catalogFIS);
               try{
                 hrcParser->loadSource(dfis);
                 delete dfis;

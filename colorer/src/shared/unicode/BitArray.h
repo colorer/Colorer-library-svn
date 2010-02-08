@@ -38,6 +38,7 @@ public:
   /** Returns bit value at position @c pos. */
   bool getBit(int pos);
 
+#define CNAME "BitArray"
 #include<common/MemoryOperator.h>
 
 private:

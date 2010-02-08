@@ -114,6 +114,11 @@ private:
   wchar *ret_wchar_val;
 };
 
+#ifdef _UNICODE
+# define getTChars getWChars
+#else
+# define getTChars getChars
+#endif
 #include<unicode/DString.h>
 #include<unicode/SString.h>
 #include<unicode/StringBuffer.h>
