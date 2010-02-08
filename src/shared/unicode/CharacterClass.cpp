@@ -21,15 +21,14 @@ CharacterClass::~CharacterClass(){
 */
 CharacterClass *CharacterClass::createCharClass(const String &ccs, int pos, int *retPos)
 {
+	if (ccs[pos] != '[') return null;
+
 CharacterClass *cc = new CharacterClass();
 CharacterClass cc_temp;
 bool inverse = false;
 wchar prev_char = BAD_WCHAR;
 
-  if (ccs[pos] != '['){
-    delete cc;
-    return null;
-  }
+  if (ccs[pos] != '[') return null;
   pos++;
   if (ccs[pos] == '^'){
     inverse = true;

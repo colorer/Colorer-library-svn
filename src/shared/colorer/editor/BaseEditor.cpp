@@ -4,6 +4,9 @@
 
 #define IDLE_PARSE(time) (100+time*4)
 
+const int CHOOSE_STR = 4;
+const int CHOOSE_LEN = 200 * CHOOSE_STR;
+
 ErrorHandler *eh;
 
 BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
@@ -114,25 +117,55 @@ FileType *BaseEditor::setFileType(const String &fileType){
   return currentFileType;
 }
 
-FileType *BaseEditor::chooseFileType(const String *fileName){
-  if (lineSource == null){
+
+FileType *BaseEditor::chooseFileTypeCh(const String *fileName, int chooseStr, int chooseLen)
+{
+  StringBuffer textStart;
+  int totalLength = 0;
+  for(int i = 0; i < chooseStr; i++)
+  {
+    String *iLine = lineSource->getLine(i);
+    if (iLine == null) break;
+    textStart.append(iLine);
+    textStart.append(DString("\n"));
+    totalLength += iLine->length();
+    if (totalLength > chooseLen) break;
+  }
+  currentFileType = hrcParser->chooseFileType(fileName, &textStart);
+  
+  int chooseStrNext=currentFileType->getParamValueInt(DString("firstlines"), chooseStr);
+  int chooseLenNext=currentFileType->getParamValueInt(DString("firstlinebytes"), chooseLen);
+  
+  if(chooseStrNext != chooseStr || chooseLenNext != chooseLen)
+  {
+    currentFileType = chooseFileTypeCh(fileName, chooseStrNext, chooseLenNext);
+  }
+  return currentFileType;
+}
+
+FileType *BaseEditor::chooseFileType(const String *fileName)
+{
+  if (lineSource == null)
+  {
     currentFileType = hrcParser->chooseFileType(fileName, null);
-  }else{
-    StringBuffer textStart;
-    int totalLength = 0;
-    for(int i = 0; i < 4; i++){
-      String *iLine = lineSource->getLine(i);
-      if (iLine == null) break;
-      textStart.append(iLine);
-      textStart.append(DString("\n"));
-      totalLength += iLine->length();
-      if (totalLength > 500) break;
+  }
+  else
+  {
+    int chooseStr=CHOOSE_STR, chooseLen=CHOOSE_LEN;
+    
+    FileType *def = hrcParser->getFileType(&DString("default"));
+    if(def)
+    {
+      chooseStr = def->getParamValueInt(DString("firstlines"), chooseStr);
+      chooseLen = def->getParamValueInt(DString("firstlinebytes"), chooseLen);
     }
-    currentFileType = hrcParser->chooseFileType(fileName, &textStart);
+    
+    currentFileType = chooseFileTypeCh(fileName, chooseStr, chooseLen);
   }
   setFileType(currentFileType);
   return currentFileType;
 }
+
 
 FileType *BaseEditor::getFileType(){
   return currentFileType;
@@ -391,14 +424,14 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
 
   if (!layoutChanged){
     /* Text modification only event */
-    if (invalidLine < parseTo){
+    if (invalidLine <= parseTo){
       parseFrom = invalidLine;
       tpmode = TPM_CACHE_UPDATE;
     }
   }
 
   /* Text modification general ajustment */
-  if (invalidLine < parseFrom){
+  if (invalidLine <= parseFrom){
     parseFrom = invalidLine;
     tpmode = TPM_CACHE_UPDATE;
   }
@@ -429,8 +462,6 @@ void BaseEditor::idleJob(int time)
     validate(invalidLine+IDLE_PARSE(time), false);
   }
 }
-
-
 
 void BaseEditor::startParsing(int lno){
   lrSupport->startParsing(lno);

@@ -5,12 +5,12 @@
 
 #include<common/MemoryChunks.h>
 
-int total_req = 0;
+size_t total_req = 0;
 int new_calls = 0;
 int free_calls = 0;
 
 extern "C" {
-  int get_total_req(){ return total_req; }
+  size_t get_total_req(){ return total_req; }
   int get_new_calls(){ return new_calls; }
   int get_free_calls(){ return free_calls; }
 }
@@ -102,7 +102,7 @@ void *chunk_alloc(size_t size){
     currentChunkAlloc = 0;
   };
   void *retVal = (void*)(currentChunk+currentChunkAlloc);
-  currentChunkAlloc += size;
+  currentChunkAlloc += (int)size;
   allocCount++;
   //printf("ca:%d - %db, all=%dKb\n", allocCount, size, ((chunks->size()-1)*CHUNK_SIZE+currentChunkAlloc)/1024);
   //printf("calloc\t%d\n", clock());

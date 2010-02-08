@@ -2,6 +2,7 @@
 #define _COLORER_FILETYPEIMPL_H_
 
 #include<colorer/parsers/HRCParserImpl.h>
+#include<unicode/UnicodeTools.h>
 
 /**
  * File Type storage implementation.
@@ -43,6 +44,13 @@ public:
     if (val == null) return getParamDefaultValue(name);
     return val;
   }
+  int getParamValueInt(const String &name, int def)
+  {
+  	int val = def;
+  	UnicodeTools::getNumber(getParamValue(name), &val);
+  	return val;
+  }
+
   const String *getParamDefaultValue(const String &name) {
     return paramDefaultHash.get(&name);
   }

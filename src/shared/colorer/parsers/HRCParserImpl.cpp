@@ -240,7 +240,8 @@ void HRCParserImpl::addPrototype(Element *elem)
         continue;
       };
       int ctype = *content->getNodeName() == "filename" ? 0 : 1;
-      double prior = *content->getNodeName() == "filename" ? 2 : 1;
+      //double prior = *content->getNodeName() == "filename" ? 2 : 1;
+      double prior = ctype ? 1 : 2;
       UnicodeTools::getNumber(((Element*)content)->getAttribute(DString("weight")), &prior);
       FileTypeChooser *ftc = new FileTypeChooser(ctype, prior, matchRE);
       type->chooserVector.addElement(ftc);

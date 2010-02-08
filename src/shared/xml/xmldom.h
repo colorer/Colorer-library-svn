@@ -129,7 +129,7 @@ public:
    * Changes entity resolver, used while parsing external entity references.
    */
   void setEntityResolver(EntityResolver *_er){
-    er = er;
+    er = _er;
   }
 
   /**
