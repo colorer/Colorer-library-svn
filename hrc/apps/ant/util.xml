@@ -3,11 +3,15 @@
 <project name="util" default="info" basedir=".">
 
 <!-- paths properties -->
+<property file='${root}/path.properties'/>
 
-<property name="dtd2xsd" value="${root}/bin/dtd2xsd" description="dtd2xsd location"/>
-<property name="xsd2hrc" value="${root}/bin/xsd2hrc" description="xsd2hrc location"/>
-<property name="ent2hrc" value="${root}/bin/ent2hrc" description="ent2hrc location"/>
-<property name="bracket" value="${root}/bin/bracket" description="bracket location"/>
+<property name="dtd2xsd" value="${root}/apps/dtd2xsd" description="dtd2xsd location"/>
+<property name="xsd2hrc" value="${root}/apps/xsd2hrc" description="xsd2hrc location"/>
+<property name="ent2hrc" value="${root}/apps/ent2hrc" description="ent2hrc location"/>
+<property name="bracket" value="${root}/apps/bracket" description="bracket location"/>
+
+<property name='shemes' value="${root}/${path.shared}" description='path to dtd, xsd, etc.'/>
+
 
 <!-- all properties -->
 
@@ -39,15 +43,15 @@
  <property file="${xsd2hrc}/xsd2hrc.properties"/>
  <xmlcatalog id="xsd2hrcdtd">
   <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-       location="../../../doc/2003/hrc.dtd"/>
+       location="${shemes}/2003/hrc.dtd"/>
   <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
-       location="../../../doc/2003/hrd.dtd"/>
+       location="${shemes}/2003/hrd.dtd"/>
   <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-       location="../../../doc/2003/catalog.dtd"/>
+       location="${shemes}/2003/catalog.dtd"/>
   <dtd publicid="-//W3C//DTD XMLSCHEMA 200102//EN"
-       location="../../../src/dtd/XMLSchema.dtd"/>
+       location="${shemes}/extern/XMLSchema.dtd"/>
   <dtd publicid="datatypes"
-       location="../../../src/dtd/datatypes.dtd"/>
+       location="${shemes}/extern/datatypes.dtd"/>
  </xmlcatalog>
 </target>
  

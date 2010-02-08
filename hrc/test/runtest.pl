@@ -15,8 +15,10 @@ use File::Find;
 use File::Path;
 
 
-my $colorer_path = "..\\..\\..\\colorer";
-my $colorer  = "$colorer_path\\bin\\colorer -c ..\\catalog.xml";
+my $colorer_path = "../../../colorer";
+my $hrd_path = "../../hrd";
+
+my $colorer  = "$colorer_path/bin/colorer -c $hrd_path/catalog.xml";
 my $diff  = 'diff -U 1 -bB';
 
 my $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
@@ -67,7 +69,7 @@ open FAILS, ">$currentDir/fails.html";
 print FAILS <<"FL";
 <html>
 <head>
-	<link href="../../../../hrd/css/$hrd.css" rel="stylesheet" type="text/css"/>
+	<link href="$hrd_path/css/$hrd.css" rel="stylesheet" type="text/css"/>
 </head>
 <body><pre>
 FL

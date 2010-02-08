@@ -6,9 +6,9 @@
 
 <xsl:template match='target-list'>
 	<project name="src.all.lst" default="all" basedir=".">
-		<property name="root" value="../../.." description="colorer root location"/>
-		<property name="util" value="${{root}}/bin/ant/util.xml" description="ant utils location"/>
-		<property name="this" value="../../src/hrc" description="this project location"/>
+		<property name="root" value="../.." description="colorer root location"/>
+		<property name="util" value="${{root}}/apps/ant/util.xml" description="ant utils location"/>
+		<property name="this" value="../../src" description="this project location"/>
 		
 		<property name="src" value="src" description="this project sourse"/>
 		<property name="bin" value="ready" description="this project binary|hrc"/>

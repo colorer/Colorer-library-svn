@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <project name="src.colorer" default="all" basedir=".">
 
-<property name="root" value="../../../" description="root location"/>
-<property name="util" value="../../../bin/ant/util.xml" description="ant utils location"/>
-<property name="this" value="../../src/hrc/colorer" description="this project location"/>
+<property name="root" value="../.." description="root location"/>
+<property name="util" value="${root}/apps/ant/util.xml" description="ant utils location"/>
+<property name="this" value="../../src/colorer" description="this project location"/>
+
+<property file='${root}/path.properties'/>
 
 <property name="src" value="src" description="this project sourse"/>
-<property name="src.extra" value="${root}/doc/2003" description="this project sourse"/>
+<property name="src.extra" value="${root}/${path.shared}/2003" description="colorer schemes src"/>
+
 <property name="bin" value="ready" description="this project binary|hrc"/>
 <property name="bin.extra" value="${bin}"/>
 <property name="obj" value="objs" description="this project temp"/>
