@@ -1,25 +1,17 @@
-<?xml version="1.0" encoding="Windows-1251"?>
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
-
   <!--  quorum languages  -->
-  <prototype name="dii" group="scripts.quorum" description="Quorum Dictionaries">
-    <location link="qrm/dii.hrc"/>
+  <prototype name="dii" group="rare.quorum" description="Quorum Dictionaries">
+    <location link="rare/qrm/dii.hrc"/>
     <filename>/\.dii$/i</filename>
   </prototype>
-  <prototype name="atl" group="scripts.quorum" description="Quorum Atlantis v1.5">
-    <location link="qrm/atl.hrc"/>
+  <prototype name="atl" group="rare.quorum" description="Quorum Atlantis v1.5">
+    <location link="rare/qrm/atl.hrc"/>
     <filename>/\.(vip|atl|def|rc)$/i</filename>
   </prototype>
-  <prototype name="rpt" group="scripts.quorum" description="Quorum Reporter">
-    <location link="qrm/rpt.hrc"/>
+  <prototype name="rpt" group="rare.quorum" description="Quorum Reporter">
+    <location link="rare/qrm/rpt.hrc"/>
     <filename>/(^int_\d{0,3}\.\d{0,3})|(\.(rpt|prc|dlg|for))$/i</filename>
   </prototype>
-
-</hrc>
+  
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
    -

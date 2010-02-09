@@ -1,134 +1,122 @@
-<?xml version="1.0" encoding="Windows-1251"?>
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
-  <prototype name="aditor" group="scripts.rare" description="Aditor highlight">
-    <location link="types/aditor.hrc"/>
+  <prototype name="aditor" group="rare.scripts" description="Aditor highlight">
+    <location link="rare/scripts/aditor.hrc"/>
     <filename>/\.(hgh)$/i</filename>
   </prototype>
-  <prototype name="ass" group="scripts.rare" description="(Advanced) SubStation Alpha script">
-    <location link="types/assa.hrc"/>
-    <filename>/\.(ssa|ass)$/</filename>
-    <firstline weight='2'>/^(...)?\[Script Info\]/</firstline>
-  </prototype>
-
-  <prototype name="mason" group="scripts.rare" description="mason">
-    <location link="types/mason.hrc"/>
-    <filename>/\.(mc)$/i</filename>
-  </prototype>
-  <prototype name="pagemakerscript" group="scripts.rare" description="PageMaker Script">
-    <location link="types/spt.hrc"/>
+  <prototype name="pagemakerscript" group="rare.scripts" description="PageMaker Script">
+    <location link="rare/scripts/spt.hrc"/>
     <filename>/\.spt$/i</filename>
   </prototype>
-  <prototype name="postscript" group="scripts.rare" description="PostScript">
-    <location link="types/postscript.hrc"/>
-    <filename>/\.((e)?ps|pfa|gsf)$/i</filename>
-    <firstline weight="3">/^\%\!PS/</firstline>
-    <firstline>/^\%\!/</firstline>
-  </prototype>
-  <prototype name="lss" group="scripts.rare" description="LotusScript">
-    <location link="types/lss.hrc"/>
+  <prototype name="lss" group="rare.scripts" description="LotusScript">
+    <location link="rare/scripts/lss.hrc"/>
     <filename>/\.lss$/i</filename>
   </prototype>
-  <prototype name="kixtart" group="scripts.rare" description="Kixtart">
-    <location link="types/kixtart.hrc"/>
+  <prototype name="kixtart" group="rare.scripts" description="Kixtart">
+    <location link="rare/scripts/kixtart.hrc"/>
     <filename>/\.(kix)+$/i</filename>
   </prototype>
-  <prototype name="pvwave" group="scripts.rare" description="Pv-Wave">
-    <location link="types/pvwave.hrc"/>
+  <prototype name="pvwave" group="rare.scripts" description="Pv-Wave">
+    <location link="rare/scripts/pvwave.hrc"/>
     <filename>/\.pvw$/i</filename>
   </prototype>
-  <prototype name="mntrackscript" group="scripts.rare" description="MNTrack Script">
-    <location link="types/scn.hrc"/>
+  <prototype name="mntrackscript" group="rare.scripts" description="MNTrack Script">
+    <location link="rare/scripts/scn.hrc"/>
     <filename>/\.scn$/i</filename>
   </prototype>
 
-  <prototype name="sl" group="scripts.rare" description="Renderman Shading Language">
-    <location link="types/sl.hrc"/>
+  <prototype name="sl" group="rare.scripts" description="Renderman Shading Language">
+    <location link="rare/scripts/sl.hrc"/>
     <filename>/\.(sl|slim|sli|str|stree)$/i</filename>
   </prototype>
-  <prototype name="rib" group="scripts.rare" description="Renderman RIB">
-    <location link="types/rib.hrc"/>
+  <prototype name="rib" group="rare.scripts" description="Renderman RIB">
+    <location link="rare/scripts/rib.hrc"/>
     <filename>/\.rib$/i</filename>
   </prototype>
-  <prototype name="mel3dmax" group="scripts.rare" description="3D Max Script">
-    <location link="types/mel.hrc"/>
+  <prototype name="mel3dmax" group="rare.scripts" description="3D Max Script">
+    <location link="rare/scripts/mel.hrc"/>
     <filename>/\.(mel|ms)$/i</filename>
   </prototype>
 
-  <prototype name="ppWizard" group="scripts.rare" description="ppWizard">
-    <location link="types/ppwizard.hrc"/>
+  <prototype name="ppWizard" group="rare.scripts" description="ppWizard">
+    <location link="rare/scripts/ppwizard.hrc"/>
     <filename>/\.i(t|h)$/i</filename>
   </prototype>
 
-  <prototype name="RSMac" group="scripts.rare" description="R-Style macrofile">
-    <location link="types/rsmac.hrc"/>
+  <prototype name="RSMac" group="rare.scripts" description="R-Style macrofile">
+    <location link="rare/scripts/rsmac.hrc"/>
     <filename>/\.(rsl|mac)$/i</filename>
   </prototype>
 
-  <prototype name="adm" group="scripts.rare" description="ADM - Policy Template">
-    <location link="types/adm.hrc"/>
+  <prototype name="adm" group="rare.scripts" description="ADM - Policy Template">
+    <location link="rare/scripts/adm.hrc"/>
     <filename>/\.adm$/i</filename>
   </prototype>
 
-  <prototype name="linkdef" group="scripts.rare" description="Link Defines">
-    <location link="types/linkdef.hrc"/>
-    <filename weight='3'>/\.def$/i</filename>
-  </prototype>
 
-  <!-- flex extension conflicts -->
-  <prototype name="flex" group="scripts.rare" description="FlexScript">
-    <location link="types/flex.hrc"/>
-    <filename>/\.(src|inc|inf)$/i</filename>
-    <firstline>/\*{10}/</firstline>
-  </prototype>
 
-  <prototype name="gpss" group="scripts.rare" description="gpss">
-    <location link="types/gpss.hrc"/>
+  <prototype name="gpss" group="rare.scripts" description="gpss">
+    <location link="rare/scripts/gpss.hrc"/>
     <filename>/\.gps$/i</filename>
   </prototype>
 
-  <prototype name="sdml" group="scripts.rare" description="sdml">
-    <location link="types/sdml.hrc"/>
+  <prototype name="sdml" group="rare.scripts" description="sdml">
+    <location link="rare/scripts/sdml.hrc"/>
     <filename>/\.sdml$/i</filename>
   </prototype>
 
-  <prototype name="irclog" group="scripts.rare" description="irc logs">
-    <location link="types/irclog.hrc"/>
+  <prototype name="irclog" group="rare.scripts" description="irc logs">
+    <location link="rare/scripts/irclog.hrc"/>
     <filename>/^\.irclog/i</filename>
   </prototype>
-  <prototype name="micqlog" group="scripts.rare" description="micq logs">
-    <location link="types/micqlog.hrc"/>
+  <prototype name="micqlog" group="rare.scripts" description="micq logs">
+    <location link="rare/scripts/micqlog.hrc"/>
     <filename>/^[\._]log/i</filename>
     <firstline>/^&lt;$/i</firstline>
   </prototype>
 
-  <prototype name="mancolorer" group="scripts.rare" description="man colorer">
-    <location link="types/mancolor.hrc"/>
+  <prototype name="mancolorer" group="rare.scripts" description="man colorer">
+    <location link="rare/scripts/mancolor.hrc"/>
     <filename weight='5'>/^man\s?colorer/i</filename>
   </prototype>
-  <prototype name="urq" group="scripts.rare" description="URQ">
-    <location link="types/urq.hrc"/>
+  <prototype name="urq" group="rare.scripts" description="URQ">
+    <location link="rare/scripts/urq.hrc"/>
     <filename>/\.qst$/i</filename>
   </prototype>
-  <prototype name="vismod" group="scripts.rare" description="Visual Modeler">
-    <location link="types/vismod.hrc"/>
+  <prototype name="vismod" group="rare.scripts" description="Visual Modeler">
+    <location link="rare/scripts/vismod.hrc"/>
     <filename>/\.mdl$/i</filename>
   </prototype>
 
- <prototype name="m4" group="scripts.rare" description="M4">
-    <location link="types/m4.hrc"/>
-    <filename>/\.m4$/i</filename>
-  </prototype>
-  <prototype name="edif" group="scripts.rare" description="EDIF">
-    <location link="types/edif.hrc"/>
+  <prototype name="edif" group="rare.scripts" description="EDIF">
+    <location link="rare/scripts/edif.hrc"/>
     <filename>/\.ed(i?f|n|o)$/i</filename>
   </prototype>
 
-</hrc>
+  
+  <prototype name="vim" group="rare.scripts" description="VIM">
+    <location link="rare/scripts/vim.hrc"/>
+    <filename>/\.vim$/i</filename>
+  </prototype>
+  
+  <prototype name="litestep_steprc" group="rare.scripts" description="Litestep .steprc">
+    <location link="rare/scripts/litestep.hrc"/>
+    <filename>/step\.rc$/i</filename>
+  </prototype>
+  
+  
+  <prototype name="csql" group="rare.database" description="EmbeddedSQL for C">
+    <filename>/\.sc$/i</filename>
+    <location link="rare/scripts/csql.hrc"/>
+  </prototype>
+  <prototype name="cppsql" group="rare.database" description="EmbeddedSQL for C++">
+    <filename>/\.(ecpp)$/i</filename>
+    <location link="rare/scripts/cppsql.hrc"/>
+  </prototype>
+  <prototype name="cobolsql" group="rare.database" description="EmbeddedSQL for COBOL">
+    <filename>/\.sco$/i</filename>
+    <location link="rare/scripts/cobolsql.hrc"/>
+  </prototype>
+
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
    -
