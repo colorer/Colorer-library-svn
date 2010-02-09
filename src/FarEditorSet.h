@@ -71,7 +71,9 @@ class FarEditorSet
 		/**
 		 * trying to load the database on the specified path
 		 */
-		void TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+		bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+    SString *GetCatalogPath() {return sCatalogPath;}
+    bool GetPluginStatus() {return rEnabled;}
 
     SString *sTempHrdName;
 	private:

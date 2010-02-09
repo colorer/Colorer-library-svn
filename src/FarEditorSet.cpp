@@ -295,16 +295,14 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
       switch (Param1)
       {
         case IDX_HRD_SELECT:
-          const String *p;
-          SString *tempSS;
-          const String *descr;
-          p=fes->chooseHRDName(fes->sTempHrdName);
-          tempSS = new SString(p);
-          delete fes->sTempHrdName;
-          fes->sTempHrdName=tempSS;
-          descr=fes->getHRDescription(*fes->sTempHrdName);
-          Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
-          return true;
+          {
+            SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdName));
+            delete fes->sTempHrdName;
+            fes->sTempHrdName=tempSS;
+            const String *descr=fes->getHRDescription(*fes->sTempHrdName);
+            Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
+            return true;
+          }
           break;
         case IDX_RELOAD:
           {
@@ -323,6 +321,18 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
             Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true,0);
             return true;
           }
+          break;
+        case IDX_OK:
+          const wchar_t *temp = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
+          int k = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_ENABLED, 0);
+
+          if (fes->GetCatalogPath()->compareTo(DString(temp))|| (!fes->GetPluginStatus() && k)) 
+            if (fes->TestLoadBase(fes->sTempHrdName->getWChars(),temp,false))
+              return false;
+            else
+              return true;
+
+          return false;
           break;
       }
   }
@@ -365,7 +375,6 @@ void FarEditorSet::configure()
 		fdi[IDX_OLDOUTLINE].Selected = oldOutline;
 		fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
 		fdi[IDX_CATALOG_EDIT].PtrData = sCatalogPath->getWChars();
-		
 		fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
 
 		const String *descr = NULL;
@@ -373,7 +382,6 @@ void FarEditorSet::configure()
 		descr=getHRDescription(*sTempHrdName);
 
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
-
 		fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
 		fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
 		fdi[IDX_OK].PtrData = GetMsg(mOk);
@@ -383,11 +391,6 @@ void FarEditorSet::configure()
 		 */
     HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
-    if (i == IDX_CANCEL || i == -1)
-    {
-      Info.DialogFree(hDlg);
-      return;
-    }
 
     if (i == IDX_OK)
     {
@@ -395,10 +398,10 @@ void FarEditorSet::configure()
       //check whether or not to reload the base
       int k = false;
 
-      if (sCatalogPath->compareTo(DString(fdi[IDX_CATALOG_EDIT].PtrData))==0) 
+      if (sCatalogPath->compareTo(DString(fdi[IDX_CATALOG_EDIT].PtrData))) 
         k = true;
       if (!k)
-        if (sHrdName->compareTo(*sTempHrdName)==0)
+        if (sHrdName->compareTo(*sTempHrdName))
           k = true;
 
       fdi[IDX_ENABLED].Selected = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_ENABLED, 0);
@@ -411,9 +414,7 @@ void FarEditorSet::configure()
       sHrdName = sTempHrdName;
       sCatalogPath = new SString(DString(fdi[IDX_CATALOG_EDIT].PtrData));
 
-      rSetValue(hPluginRegistry, cRegEnabled, fdi[IDX_ENABLED].Selected);
-
-      // if the plugin has been included, and we will disable
+      // if the plugin has been enable, and we will disable
       if (rEnabled && !fdi[IDX_ENABLED].Selected)
       {
         rEnabled = false;
@@ -433,6 +434,11 @@ void FarEditorSet::configure()
           ApplySettingsToEditor();
         }
     }
+    //if (i == IDX_CANCEL || i == -1)
+    //{
+    //  Info.DialogFree(hDlg);
+    //  return;
+    //}
     Info.DialogFree(hDlg);
 
 	}
@@ -561,8 +567,9 @@ SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
 	return S;
 }
 
-void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
+bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
 {
+  bool res = true;
 	const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
 	HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
 	Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
@@ -631,11 +638,13 @@ void FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 
 		Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 		Info.RestoreScreen(scr);
-
+    res = false;
 	};
 
 	delete regionMapperLocal;
 	delete parserFactoryLocal;
+
+  return res;
 }
 
 void FarEditorSet::ReloadBase()
@@ -692,7 +701,6 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 	return parserFactory->getErrorHandler();
 }
 
-
 FarEditor *FarEditorSet::getCurrentEditor()
 {
 	EditorInfo ei;
@@ -734,12 +742,10 @@ FarEditor *FarEditorSet::getCurrentEditor()
 	return editor;
 }
 
-
 const wchar_t *FarEditorSet::GetMsg(int msg)
 {
 	return(Info.GetMsg(Info.ModuleNumber, msg));
 }
-
 
 void FarEditorSet::disableColorer()
 {
