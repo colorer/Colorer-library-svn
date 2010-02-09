@@ -1,38 +1,27 @@
-<?xml version="1.0" encoding="Windows-1251"?>
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-	"http://colorer.sf.net/2003/hrc.dtd">
-<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
- >
-
-<prototype name="ie.baf" group="rare" description="Infinity Engine: BAF">
-	<location link="ie-weidu/baf.hrc"/>
+<prototype name="ie.baf" group="rare.ie" description="Infinity Engine: BAF">
+	<location link="rare/ie-weidu/baf.hrc"/>
 	<filename>/\.baf$/i</filename>
 </prototype>
 
-<prototype name="ie.d" group="rare" description="Infinity Engine: dialogs">
-	<location link="ie-weidu/dialog.hrc"/>
+<prototype name="ie.d" group="rare.ie" description="Infinity Engine: dialogs">
+	<location link="rare/ie-weidu/dialog.hrc"/>
 	<filename>/\.d$/i</filename>
 	<firstline weight='4'>/^\/\/.+[\w_#]{1,8}\.DLG/im</firstline>
 	<!-- <firstline weight='5'>/^%ie.d:action;/m</firstline>  - NOT WORK, DUPLICATE :-(  -->
 	<firstline weight='5'>/^\s*(BEGIN|APPEND|CHAIN|INTERJECT|EXTEND|ADD|REPLACE|ALTER|SET_WEIGHT|[RA]_[ST]_T|R_A_T|I_C)(\b|_[A-Z]+)/m</firstline>
 </prototype>
 
-<prototype name="ie.tra" group="rare" description="WeiDU translations">
-	<location link="ie-weidu/tra.hrc"/>
+<prototype name="ie.tra" group="rare.ie" description="WeiDU translations">
+	<location link="rare/ie-weidu/tra.hrc"/>
 	<filename>/\.tra$/i</filename>
 </prototype>
 
-<prototype name="ie.tp2" group="rare" description="WeiDU TP2 script">
-	<location link="ie-weidu/tp2.hrc"/>
+<prototype name="ie.tp2" group="rare.ie" description="WeiDU TP2 script">
+	<location link="rare/ie-weidu/tp2.hrc"/>
 	<filename weight='6'>/\.tp2$/i</filename> <!-- highest than dialog  -->
 </prototype>
 
-<prototype name="ie.tph" group="rare" description="WeiDU TP2 component">
-	<location link="ie-weidu/tp2h.hrc"/>
-	<filename>/\.tp[ahp]$/i</filename>
+<prototype name="ie.tph" group="rare.ie" description="WeiDU TP2 component">
+	<location link="rare/ie-weidu/tp2h.hrc"/>
+	<filename weight='6'>/\.tp[ahp]$/i</filename>
 </prototype>
-
-
-</hrc>
