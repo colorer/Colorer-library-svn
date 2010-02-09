@@ -3,27 +3,25 @@
 
 <!-- all properties -->
 <property name="xslt-classpath" value=""/>
-<property name='input' value='../rgb' />
+<property name='input' value='../hrd/rgb' />
 <property name='output' value='.' />
 
-<!-- dtd2xsd  -->
+<property file='../../path.properties'/>
+<property name='shemes' value="../../${path.shared}" description='path to dtd, xsd, etc.'/>
+
+<!-- hrd2css  -->
 
 <target name="hrd2css.prop">
- <xmlcatalog id="xsd2hrcdtd">
-  <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-       location="../../doc/2003/hrc.dtd"/>
-  <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
-       location="../../doc/2003/hrd.dtd"/>
-  <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-       location="../../doc/2003/catalog.dtd"/>
-  <dtd publicid="-//W3C//DTD XMLSCHEMA 200102//EN"
-       location="../../../doc/2003/XMLSchema.dtd"/>
- </xmlcatalog>
+	<xmlcatalog id="xsd2hrcdtd">
+		<catalogpath>
+			<fileset dir='${shemes}' includes='colorer.cat'/>
+		</catalogpath>
+	</xmlcatalog>
 </target>
 
 
 <target name="hrd2css" depends="hrd2css.prop">
-	<xslt basedir='${input}' destdir='${output}' style="../../bin/hrd2css/hrd2css.xsl" classpath="${xslt-classpath}">
+	<xslt basedir='${input}' destdir='${output}' style="../apps/hrd2css/hrd2css.xsl" classpath="${xslt-classpath}">
 		<xmlcatalog refid="xsd2hrcdtd"/>
 		<mapper type='glob'  from="*.hrd" to="*.css"/>
 	</xslt>  
@@ -32,9 +30,9 @@
 <target name='all' depends="hrd2css"/>
 
 <target name="clean">
- <delete failonerror='false'>
-  <fileset dir="${output}" includes="**/*.css"/>
- </delete>
+	<delete failonerror='false'>
+		<fileset dir="${output}" includes="**/*.css"/>
+	</delete>
 </target>
 
 
