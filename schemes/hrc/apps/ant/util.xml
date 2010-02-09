@@ -40,19 +40,13 @@
 <!-- xsd2hrc  -->
 
 <target name="xsd2hrc.prop">
- <property file="${xsd2hrc}/xsd2hrc.properties"/>
- <xmlcatalog id="xsd2hrcdtd">
-  <dtd publicid="-//Cail Lomecb//DTD Colorer HRC take5//EN"
-       location="${shemes}/2003/hrc.dtd"/>
-  <dtd publicid="-//Cail Lomecb//DTD Colorer HRD take5//EN"
-       location="${shemes}/2003/hrd.dtd"/>
-  <dtd publicid="-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
-       location="${shemes}/2003/catalog.dtd"/>
-  <dtd publicid="-//W3C//DTD XMLSCHEMA 200102//EN"
-       location="${shemes}/extern/XMLSchema.dtd"/>
-  <dtd publicid="datatypes"
-       location="${shemes}/extern/datatypes.dtd"/>
- </xmlcatalog>
+	<property file="${xsd2hrc}/xsd2hrc.properties"/>
+	<xmlcatalog id="xsd2hrcdtd">
+		<catalogpath>
+			<!--fileset dir='${shemes}' includes='colorer-cat.xml'/-->
+			<fileset dir='${shemes}' includes='colorer.cat'/>
+		</catalogpath>
+	</xmlcatalog>
 </target>
  
 <target name="xsd2hrc" depends="xsd2hrc.prop">

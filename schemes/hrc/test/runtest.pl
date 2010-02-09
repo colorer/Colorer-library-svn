@@ -14,9 +14,11 @@ use strict;
 use File::Find;
 use File::Path;
 
+my %prop_path;
+set_prop_path("../path.properties");
 
-my $colorer_path = "../../../colorer";
-my $hrd_path = "../../hrd";
+my $colorer_path = '../'.$prop_path{colorer}; 
+my $hrd_path = '../'.$prop_path{hrd};
 
 my $colorer  = "$colorer_path/bin/colorer -c $hrd_path/catalog.xml";
 my $diff  = 'diff -U 1 -bB';
@@ -124,7 +126,21 @@ print $result;
 
 open FAILS, ">>$currentDir/fails.html";
 print FAILS "</pre></pre></pre><h2>$result</h2>";
-print FAILS "<h2>Failed tests</h2><br/>$failed";
+print FAILS "<h2>Failed tests</h2><br/>$failed" if $testFailed;
 close FAILS;
 
 #exit;
+
+
+# read ant props
+sub set_prop_path
+{
+	open PATH, $_[0];
+	while(<PATH>)
+	{
+		chomp;
+		next if /^\s*#/;
+		$prop_path{$1} = $2 if /^\s*path\.(\w+)\s*=\s*(\S+)/;
+	}
+	close PATH;
+}
