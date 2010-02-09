@@ -1,41 +1,41 @@
 <target-list>
 	
 	<!-- php must be runed BEFORE any xml, because it create php-proto-gen.ent.hrc -->
-	<target type='perl' place='ready/base'/>
-	<target type='php' place='ready/inet'/>
-	<target type='sh' place='ready/scripts'/>
+	<target type='perl' place='hrc/base'/>
+	<target type='php' place='hrc/inet'/>
+	<target type='sh' place='hrc/scripts'/>
 	
 	<!-- here we can run xml... -->
-	<target type='ant' place='ready/auto/gen'/>
-	<target type='entity' place='ready/inet'/>
-	<target type='xhtml' place='ready/inet'/>
-	<target type='wml' place='ready/auto/gen'/>
-	<target type='xml' place='ready/xml/gen'/>
-	<target type='xlink' place='ready/xml/gen'/>
-	<target type='xslt' place='ready/xml/gen'/>
-	<target type='xslfo' place='ready/auto/gen'/>
-	<target type='xmlschema' place='ready/xml/gen'/>
-	<target type='relaxng' place='ready/xml/gen'/>
-	<target type='sch' place='ready/xml/gen'/>
-	<target type='wsdl' place='ready/xml/gen'/>
-	<target type='xmlcatalog' place='ready/auto/gen'/>
-	<target type='docbook' place='ready/auto/gen'/>
-	<target type='mathml' place='ready/auto/gen'/>
-	<target type='svg' place='ready/inet'/>
-	<target type='j2ee' place='ready/auto/gen/j2ee'/>
-	<target type='wsc' place='ready/auto/gen'/>
-	<target type='colorer' place='ready/scripts/colorer'/>
-	<target type='calcset' place='ready/auto/gen'/>
-	<target type='esc' place='ready/auto/gen/'/>
-	<target type='rdf' place='ready/xml/gen'/>
-	<target type='htc' place='ready/auto/gen'/>
-	<target type='parser' place='ready/auto/gen'/>
-	<target type='rss' place='ready/auto/gen'/>
-	<target type='xbl' place='ready/auto/gen'/>
-	<target type='xsieve' place='ready/auto/gen'/>
-	<target type='qrc' place='ready/auto/gen'/>
-	<target type='ibatis' place='ready/auto/gen'/>
-	<target type='log4j' place='ready/auto/gen'/>
-	<target type='yml' place='ready/auto/gen'/>
+	<target type='ant' place='hrc/auto/gen'/>
+	<target type='entity' place='hrc/inet'/>
+	<target type='xhtml' place='hrc/inet'/>
+	<target type='wml' place='hrc/auto/gen'/>
+	<target type='xml' place='hrc/xml/gen'/>
+	<target type='xlink' place='hrc/xml/gen'/>
+	<target type='xslt' place='hrc/xml/gen'/>
+	<target type='xslfo' place='hrc/auto/gen'/>
+	<target type='xmlschema' place='hrc/xml/gen'/>
+	<target type='relaxng' place='hrc/xml/gen'/>
+	<target type='sch' place='hrc/xml/gen'/>
+	<target type='wsdl' place='hrc/xml/gen'/>
+	<target type='xmlcatalog' place='hrc/auto/gen'/>
+	<target type='docbook' place='hrc/auto/gen'/>
+	<target type='mathml' place='hrc/auto/gen'/>
+	<target type='svg' place='hrc/inet'/>
+	<target type='j2ee' place='hrc/auto/gen/j2ee'/>
+	<target type='wsc' place='hrc/auto/gen'/>
+	<target type='colorer' place='hrc/scripts/colorer'/>
+	<target type='calcset' place='hrc/auto/gen'/>
+	<target type='esc' place='hrc/auto/gen/'/>
+	<target type='rdf' place='hrc/xml/gen'/>
+	<target type='htc' place='hrc/auto/gen'/>
+	<target type='parser' place='hrc/auto/gen'/>
+	<target type='rss' place='hrc/auto/gen'/>
+	<target type='xbl' place='hrc/auto/gen'/>
+	<target type='xsieve' place='hrc/auto/gen'/>
+	<target type='qrc' place='hrc/auto/gen'/>
+	<target type='ibatis' place='hrc/auto/gen'/>
+	<target type='log4j' place='hrc/auto/gen'/>
+	<target type='yml' place='hrc/auto/gen'/>
 </target-list>
 
