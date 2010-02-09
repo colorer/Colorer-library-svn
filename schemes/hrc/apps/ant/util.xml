@@ -3,14 +3,14 @@
 <project name="util" default="info" basedir=".">
 
 <!-- paths properties -->
-<property file='${root}/path.properties'/>
+<property file='${root}/../path.properties'/>
 
 <property name="dtd2xsd" value="${root}/apps/dtd2xsd" description="dtd2xsd location"/>
 <property name="xsd2hrc" value="${root}/apps/xsd2hrc" description="xsd2hrc location"/>
 <property name="ent2hrc" value="${root}/apps/ent2hrc" description="ent2hrc location"/>
 <property name="bracket" value="${root}/apps/bracket" description="bracket location"/>
 
-<property name='shemes' value="${root}/${path.shared}" description='path to dtd, xsd, etc.'/>
+<property name='shemes' value="${root}/../${path.shared}" description='path to dtd, xsd, etc.'/>
 
 
 <!-- all properties -->

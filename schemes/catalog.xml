@@ -2,11 +2,12 @@
 <!DOCTYPE catalog PUBLIC "-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
   "http://colorer.sf.net/2003/catalog.dtd"[
   
-<!ENTITY hrc "../hrc/ready">
+<!ENTITY hrc "hrc/hrc">
+<!ENTITY hrd "hrd/hrd">
  
-<!ENTITY catalog-console SYSTEM "ready/catalog-console.xml">
-<!ENTITY catalog-rgb SYSTEM "ready/catalog-rgb.xml">
-<!ENTITY catalog-text SYSTEM "ready/catalog-text.xml">
+<!ENTITY catalog-console SYSTEM "hrd/hrd/catalog-console.xml">
+<!ENTITY catalog-rgb SYSTEM "hrd/hrd/catalog-rgb.xml">
+<!ENTITY catalog-text SYSTEM "hrd/hrd/catalog-text.xml">
 
 ]>
 
@@ -15,7 +16,7 @@
          xsi:schemaLocation="http://colorer.sf.net/2003/catalog
                              http://colorer.sf.net/2003/catalog.xsd">
 
-  <hrc-sets log-location="&hrc;/../colorer.log">
+  <hrc-sets log-location="colorer.log">
 
     <location link="&hrc;/proto.hrc"/>
     <location link="&hrc;/auto"/>
