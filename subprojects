@@ -12,9 +12,9 @@ hrd
 	required: 'shared'
 
 
-TODO:
+TODO (colorer 6):
 
-shared-xslt
+xsltlib
 	xsl templates library
 	
 dtd2xml
