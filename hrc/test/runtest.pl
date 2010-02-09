@@ -74,7 +74,7 @@ open FAILS, ">$currentDir/fails.html";
 print FAILS <<"FL";
 <html>
 <head>
-	<link href="$hrd_path/css/$hrd.css" rel="stylesheet" type="text/css"/>
+	<link href="../$hrd_path/css/$hrd.css" rel="stylesheet" type="text/css"/>
 </head>
 <body><pre>
 FL
