@@ -32,9 +32,6 @@
     <hrd class="console" name="mirror" description="Extended NC-like colors">
       <location link="&hrd;/console/mirror.hrd"/>
     </hrd>
-    <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">
-      <location link="&hrd;/console/mirror-conemu.hrd"/>
-    </hrd>
 
     <hrd class="console" name="ocean" description="Ocean Vladimir Fonarev">
       <location link="&hrd;/console/contrib/ocean.hrd"/>
@@ -53,6 +50,10 @@
     </hrd>
     <hrd class="console" name="Cyberpunk" description="Cyberpunk black from 4ekucT">
       <location link="&hrd;/console/contrib/cyberpunk.hrd"/>
+    </hrd>
+    
+    <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">
+      <location link="&hrd;/console/emu/mirror.hrd"/>
     </hrd>
 
   </hrd-sets>
