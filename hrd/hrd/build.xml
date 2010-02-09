@@ -3,7 +3,7 @@
 
 <!-- build all -->
 
-<property name="target" value="con2rgb" description="default subproject target"/>
+<property name="target" value="all" description="default subproject target"/>
 
 
 <target name="xsl.check">

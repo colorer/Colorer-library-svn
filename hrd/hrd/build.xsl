@@ -28,7 +28,9 @@
 	<ant dir='../apps/{../@target}' antfile="build.xml" target="${{target}}">
 		<property name="input" value="{@in}"/>
 		<property name="output" value="{@out}"/>
-		<property name="hcd" value="{@palette}"/>
+		<xsl:if test='@palette'>
+			<property name="hcd" value="{@palette}"/>
+		</xsl:if>
 	</ant>
 </xsl:template>
 
