@@ -3,13 +3,21 @@
 
 <property name="target" value="all" description="default subproject target"/>
 
+<target name='hrd2hrd'>
+	<ant antfile="build.xml" dir='hrd' target="${target}"/>
+</target>
 
 
-<target name='hrd2css'>
+<target name='hrd2css' depends="hrd2hrd">
 	<ant antfile="build.xml" dir='css' target="${target}"/>
 </target>
 
-<target name='all' depends="hrd2css"/>
+<target name='hcd2reg'>
+	<ant antfile="build.xml" dir='reg.addons' target="${target}"/>
+</target>
+
+
+<target name='all' depends="hrd2css, hrd2hrd, hcd2reg"/>
 
 
 <target name="clean">
