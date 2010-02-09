@@ -13,6 +13,7 @@
 		<property name="src" value="src" description="this project sourse"/>
 		<property name="bin" value="ready" description="this project binary|hrc"/>
 		<property name="target" value="all" description="default subproject target"/>
+		<property name="bin.prot" value="${{root}}/hrc" description="this project proto.hrc addon"/>
 		
 		<target name="all">
 			<xsl:apply-templates/>

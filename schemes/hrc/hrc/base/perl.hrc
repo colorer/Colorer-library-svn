@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd"[
-<!ENTITY perl-brackets SYSTEM "perl-brackets.ent.hrc">
+<!ENTITY perl-brackets SYSTEM "gen/perl-brackets.ent.hrc">
 <!ENTITY perl-vars     SYSTEM "perl-vars.ent.hrc">
 <!ENTITY perl-heredoc  SYSTEM "perl-heredoc.ent.hrc">
 <!ENTITY perl-keywords SYSTEM "perl-keywords.ent.hrc">

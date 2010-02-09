@@ -13,7 +13,7 @@
 	<!ENTITY rare-j2ee-protos  SYSTEM "rare.j2ee.ent.hrc">
 	<!ENTITY rare-qrm-protos  SYSTEM "rare.qrm.ent.hrc">
 	<!ENTITY rare-scripts-protos  SYSTEM "rare.scripts.ent.hrc">
-	<!ENTITY rare-xml-protos  SYSTEM "rare.xml.ent.hrc">
+	<!ENTITY rare-gen-protos  SYSTEM "rare.gen.ent.hrc">
 	
 	<!-- auto -->
 	<!ENTITY php-proto-gen  SYSTEM "php-prot.ent.hrc">
@@ -157,7 +157,7 @@
 
   <!--  inet languages  -->
   <package name="html-entity" description="(x)html entities">
-   <location link="inet/html-entity.hrc"/>
+   <location link="inet/gen/html-entity.hrc"/>
   </package>
   <prototype name="html" group="inet" description="html">
     <location link="inet/html.hrc"/>
@@ -213,21 +213,21 @@
   </prototype>
 
   <prototype name="xhtml-trans" group="inet" description="xhtml transitional" targetNamespace="http://www.w3.org/1999/xhtml">
-    <location link="inet/xhtml-trans.hrc"/>
+    <location link="inet/gen/xhtml-trans.hrc"/>
     <filename>/\.html?/ix</filename>
     <filename>/\.xhtml?/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Transitional/i</firstline>
   </prototype>
   <prototype name="xhtml-strict" group="inet" description="xhtml strict" targetNamespace="http://www.w3.org/1999/xhtml">
-    <location link="inet/xhtml-strict.hrc"/>
+    <location link="inet/gen/xhtml-strict.hrc"/>
     <filename>/\.html?/ix</filename>
     <filename>/\.xhtml?/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Strict/i</firstline>
   </prototype>
   <prototype name="xhtml-frameset" group="inet" description="xhtml frameset" targetNamespace="http://www.w3.org/1999/xhtml">
-    <location link="inet/xhtml-frameset.hrc"/>
+    <location link="inet/gen/xhtml-frameset.hrc"/>
     <filename>/\.html?/ix</filename>
     <filename>/\.xhtml?/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
@@ -260,7 +260,7 @@
     <firstline>/&lt;\%/i</firstline>
   </prototype>
   <prototype name="svg" group="inet" description="SVG 1.0" targetNamespace="http://www.w3.org/2000/svg">
-    <location link="inet/svg.hrc"/>
+    <location link="inet/gen/svg.hrc"/>
     <filename>/\.svg/ix</filename>
   </prototype>
   <prototype name="coldfusion" group="inet" description="ColdFusion">
@@ -282,7 +282,7 @@
 
   <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
     <location link="inet/gen/rss.hrc"/>
-    <filename>/^rss|\.(rss|xml|rdf)$/i</filename>
+    <filename>/^rss|\.(rss)$/i</filename>
     <firstline>/xmlns="http:\/\/purl\.org\/rss\/1\.0\/"/</firstline>
     <firstline>/&lt;rss version="0\.91"&gt;/</firstline>
   </prototype>
@@ -292,7 +292,7 @@
   </prototype>
   <prototype name="xbl" group="inet" description="Mozilla XBL" targetNamespace="http://www.mozilla.org/xbl">
     <location link="inet/gen/xbl.hrc"/>
-    <filename>/\.(xml)/i</filename>
+    <filename weight='0.5'>/\.(xml)/i</filename>
     <firstline weight="5">/\bxmlns\s*=\s*(["'])http:\/\/www\.mozilla\.org\/xbl\1/</firstline>
   </prototype>
   <prototype name="wml" group="inet" description="wml" targetNamespace="http://www.wapforum.org/2001/wml">
@@ -626,7 +626,7 @@
   <!--  rare languages  -->
   
 	&rare-j2ee-protos;
-	&rare-xml-protos;
+	&rare-gen-protos;
 	&rare-scripts-protos;
 	&rare-qrm-protos;
 	&rare-ie-weidu-protos;
