@@ -3,9 +3,14 @@
 
 <property name="target" value="all" description="default subproject target"/>
 
-<target name='all'>
+
+
+<target name='hrd2css'>
 	<ant antfile="build.xml" dir='css' target="${target}"/>
 </target>
+
+<target name='all' depends="hrd2css"/>
+
 
 <target name="clean">
 	<antcall target='all'>

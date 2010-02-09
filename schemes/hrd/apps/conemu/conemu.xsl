@@ -11,11 +11,19 @@
 	doctype-system="http://colorer.sf.net/2003/hrd.dtd"
 />
 
+<xsl:param name='bold' select="'#c'"/>
+<xsl:param name='italic' select="'#e'"/>
+
+
 <xsl:template match="h:assign[@style][not(@back)]">
 	<xsl:variable name='style'>
 		<xsl:choose>
-			<xsl:when test='(@style mod 2) &gt;= 1'>#c</xsl:when>
-			<xsl:when test='((@style div 2) mod 2) &gt;= 1'>#e</xsl:when>
+			<xsl:when test='(@style mod 2) &gt;= 1'>
+				<xsl:value-of select='$bold'/>
+			</xsl:when>
+			<xsl:when test='((@style div 2) mod 2) &gt;= 1'>
+				<xsl:value-of select='$italic'/>
+			</xsl:when>
 			<xsl:otherwise>not</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
