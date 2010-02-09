@@ -14,14 +14,17 @@ use strict;
 use File::Find;
 use File::Path;
 
+my $root_path = '../../';
 my %prop_path;
-set_prop_path("../path.properties");
+set_prop_path($root_path."/path.properties");
 
-my $colorer_path = '../'.$prop_path{colorer}; 
-my $hrd_path = '../'.$prop_path{hrd};
+my $colorer_path = $root_path.$prop_path{colorer}; 
+my $catalog_path = $root_path.$prop_path{catalog};
+my $hrd_path     = $root_path.$prop_path{hrd};
 
-my $colorer  = "$colorer_path/bin/colorer -c $hrd_path/catalog.xml";
+my $colorer  = "$colorer_path/bin/colorer -c $catalog_path";
 my $diff  = 'diff -U 1 -bB';
+
 
 my $hrd = (defined $ENV{COLORER5HRD}) ? $ENV{COLORER5HRD} : 'white';
 
