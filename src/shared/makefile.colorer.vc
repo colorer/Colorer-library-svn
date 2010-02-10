@@ -5,10 +5,9 @@ CPP  = @cl
 LINK = @link
 RM   = @del
 obj  = obj
+MKDIR= mkdir
 
 obj_output_slash = $(obj_output)\\
-
-#!!!! USE_DL_PREFIX need for malloc.c !!!!
 
 !ifndef DEBUG
 CPPFLAGS =/O2 /Oi /Ot /GL  /GF /FD /EHsc /MT /GS- /Gy /GR-
@@ -19,10 +18,18 @@ CPPFLAGS =/Od /Gm /EHsc /RTC1 /MTd /ZI
 CPPFLAGS = $(CPPFLAGS) /I $(shared_path) /I $(unzipdir) /D "USE_DL_PREFIX"  /wd4996 /W3 /nologo /c  $(CPPFLAGS_CUSTOM)
 
 # ms nmake faults to substitute $(shared_path) here :(
-include ../shared/makefile.zlib
-include ../shared/_dependencies.dep
-include ../shared/makefile.objs
-include ../shared/makefile.lines
+
+!ifdef INC_DEPTH_LOCAL
+include ../../src/shared/makefile.zlib
+include ../../src/shared/_dependencies.dep
+include ../../src/shared/makefile.objs
+include ../../src/shared/makefile.lines
+!else
+include ../../colorer/src/shared/makefile.zlib
+include ../../colorer/src/shared/_dependencies.dep
+include ../../colorer/src/shared/makefile.objs
+include ../../colorer/src/shared/makefile.lines
+!endif
 
 .cpp.obj:
 	$(CPP) $<
