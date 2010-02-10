@@ -1,4 +1,3 @@
-all: colorer.dll
 
 !ifndef DEBUG
 obj_output=release
@@ -11,6 +10,8 @@ obj_output=$(obj_output).32
 !else
 obj_output=$(obj_output).64
 !endif 
+
+all: $(obj_output)\\colorer.dll
 
 !ifndef DEBUG
 CPPFLAGS_CUSTOM=/D "NDEBUG" /D "COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET"
@@ -29,26 +30,23 @@ LIBFLAGS=$(LIBFLAGS) /MACHINE:x64
 !endif 
 
 
-shared_path=../shared/
+shared_path=../../colorer/src/shared/
 
 CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /D "COLORER_FEATURE_USE_DL_MALLOC=FALSE" /D "COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE"
-CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /I "./far2sdk"
+CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /I "../far2sdk"
 CPPFLAGS_CUSTOM = $(CPPFLAGS_CUSTOM) /Fo"$(obj_output)\\" /D "_USRDLL"  /D "_CRT_SECURE_NO_DEPRECATE" /D "_WINDLL" /D "_UNICODE" /D "UNICODE"
 
-include ../shared/makefile.colorer.vc
+include ../../colorer/src/shared/makefile.colorer.vc
 include _dependencies.dep
 include makefile.core
 
 LIBFLAGS = $(objs) $(LIBFLAGS) /map /out:$(obj_output)\\colorer.dll /DLL /MANIFEST /MANIFESTFILE:"$(obj_output)\\colorer.dll.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /def:pcolorer.def  /SUBSYSTEM:CONSOLE /DYNAMICBASE:NO wininet.lib kernel32.lib user32.lib advapi32.lib /nologo
 
-colorer.dll: dirs $(objs) rc
+$(obj_output)\\colorer.dll: $(obj_output) $(objs) $(obj_output)\\pcolorer2.res
 	$(LINK) $(LIBFLAGS) $(obj_output)\\pcolorer2.res
 
-dirs:
-	if not exist $(obj_output) mkdir $(obj_output)
-
-rc:
-	rc.exe /d /fo"pcolorer2.res" .\pcolorer2.rc
+$(obj_output)\\pcolorer2.res:
+	rc.exe /d /fo"$(obj_output)\\pcolorer2.res" .\pcolorer2.rc
 	move pcolorer2.res $(obj_output)\\pcolorer2.res
 
 clean:
