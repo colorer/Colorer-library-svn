@@ -6,6 +6,7 @@ LINK    = gcc
 RM      = @rm -f
 obj     = o
 DLLTOOL = dlltool
+MKDIR   = mkdir -p
 
 obj_output_slash = $(obj_output)/
 
