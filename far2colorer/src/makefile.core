@@ -6,6 +6,9 @@ farobj=$(obj_output_slash)pcolorer.$(obj) \
 
 objs = $(farobj) $(coreobjects)
 
+$(obj_output):
+	$(MKDIR) $(obj_output)
+
 $(obj_output_slash)pcolorer.$(obj): pcolorer.cpp *.h
 	$(CPP) $(CPPFLAGS) pcolorer.cpp
 

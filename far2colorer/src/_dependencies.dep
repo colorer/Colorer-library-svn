@@ -34,12 +34,12 @@ $(obj_output_slash)FarEditor.$(obj): FarEditor.cpp  \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/editor/Outliner.h \
  $(shared_path)colorer/editor/OutlineItem.h pcolorer.h \
- far2sdk/plugin.hpp \
- far2sdk/farkeys.hpp $(shared_path)common/Logging.h
+ ../far2sdk/plugin.hpp \
+ ../far2sdk/farkeys.hpp $(shared_path)common/Logging.h
 
 
 $(obj_output_slash)FarEditorSet.$(obj): FarEditorSet.cpp \
- far2sdk/farcolor.hpp registry_wide.h \
+ ../far2sdk/farcolor.hpp registry_wide.h \
  $(shared_path)unicode/Encodings.h $(shared_path)unicode/String.h \
  $(shared_path)common/Exception.h $(shared_path)unicode/Character.h \
  $(shared_path)common/Common.h $(shared_path)common/Features.h \
@@ -74,14 +74,14 @@ $(obj_output_slash)FarEditorSet.$(obj): FarEditorSet.cpp \
  $(shared_path)colorer/handlers/LineRegionsCompactSupport.h \
  $(shared_path)colorer/editor/PairMatch.h \
  $(shared_path)colorer/viewer/TextLinesStore.h FarEditorSet.h pcolorer.h \
- far2sdk/plugin.hpp far2sdk/farkeys.hpp \
+ ../far2sdk/plugin.hpp ../far2sdk/farkeys.hpp \
  FarEditor.h $(shared_path)colorer/editor/Outliner.h \
  $(shared_path)colorer/editor/OutlineItem.h
 
 
 $(obj_output_slash)pcolorer.$(obj): pcolorer.cpp \
- far2sdk/plugin.hpp pcolorer.h \
- far2sdk/farkeys.hpp FarEditorSet.h \
+ ../far2sdk/plugin.hpp pcolorer.h \
+ ../far2sdk/farkeys.hpp FarEditorSet.h \
  $(shared_path)colorer/handlers/FileErrorHandler.h \
  $(shared_path)common/io/StreamWriter.h $(shared_path)common/io/Writer.h \
  $(shared_path)unicode/String.h $(shared_path)common/Exception.h \
