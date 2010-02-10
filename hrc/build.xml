@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project name="hrd" default="all" basedir=".">
+
+<property name="target" value="all" description="default subproject target"/>
+
+<target name='hrc'>
+	<ant antfile="build.xml" dir='src' target="${target}"/>
+</target>
+
+<target name='all' depends="hrc"/>
+
+<target name="clean">
+	<antcall target='all'>
+		<param name='target' value='clean'/>
+	</antcall>
+</target>
+
+</project>
