@@ -1,0 +1,4 @@
+
+NOTE!
+
+You MUST copy saxon*.jar to your %JAVA_HOME%/jre/lib/endorsed/ directory.
