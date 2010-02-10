@@ -22,4 +22,9 @@
 	</antcall>
 </target>
 
+<!-- no copy anything by default -->
+<target name='copy'/>
+<target name='copy.clean'/>
+
+
 </project>

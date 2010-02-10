@@ -36,4 +36,18 @@
 </target>
 
 
+<property name='copy-path' value='../../${path.colorer}/hrd/css'/>
+
+<target name='copy'>
+	<copy todir='${copy-path}'>
+		<fileset dir='.' includes='**/*.css'/>
+	</copy>
+</target>
+
+<target name="copy.clean">
+	<delete failonerror='false' dir='${copy-path}'/>
+</target>
+
+
+
 </project>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="schemes" default="all" basedir=".">
+<project name="schemes" default="copy" basedir=".">
 
 <property name="target" value="all" description="default subproject target"/>
 <property file='path.properties'/>
@@ -15,14 +15,27 @@
 
 <target name='all' depends="hrc, hrd"/>
 
-<target name="clean">
+
+
+<target name="copy">
+	<antcall target='all'>
+		<param name='target' value='copy'/>
+	</antcall>
+</target>
+
+<target name="copy.clean">
+	<antcall target='all'>
+		<param name='target' value='copy.clean'/>
+	</antcall>
+</target>
+
+
+<target name="clean" depends='copy.clean'>
 	<antcall target='all'>
 		<param name='target' value='clean'/>
 	</antcall>
 </target>
 
-<!-- 
-	TODO: copy to ${path.colorer}
--->
+
 
 </project>
