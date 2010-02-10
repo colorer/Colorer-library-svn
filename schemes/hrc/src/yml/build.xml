@@ -2,7 +2,6 @@
 <project name="src.yml" default="all" basedir=".">
 
 <property name="root" value="../.." description="colorer root location"/>
-
 <property name="util" value="${root}/apps/ant/util.xml" description="ant utils location"/>
 <property name="this" value="../../src/yml" description="this project location"/>
 
