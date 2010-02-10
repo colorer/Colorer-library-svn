@@ -15,4 +15,28 @@
 	</antcall>
 </target>
 
+
+
+<property file='../path.properties'/>
+<property name='copy-path' value='../${path.colorer}/hrc'/>
+
+<target name="copy.build">
+	<antcall target='all'>
+		<param name='target' value='all'/>
+	</antcall>
+</target>
+
+<target name='copy' depends='copy.build'>
+	<copy todir='${copy-path}'>
+		<fileset dir='hrc' includes='**/*.hrc'/>
+	</copy>
+</target>
+
+<target name="copy.clean">
+	<delete failonerror='false' includeemptydirs="true">
+		<fileset dir="${copy-path}" includes="**/*.hrc"/>
+	</delete>
+</target>
+
+
 </project>

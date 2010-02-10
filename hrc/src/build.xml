@@ -28,4 +28,8 @@
 	</antcall>
 </target>
 
+
+<target name='copy'/>
+<target name='copy.clean'/>
+
 </project>

@@ -26,4 +26,23 @@
 	</antcall>
 </target>
 
+
+<target name="copy.build">
+	<antcall target='all'>
+		<param name='target' value='all'/>
+	</antcall>
+</target>
+
+<target name="copy" depends='copy.build'>
+	<antcall target='all'>
+		<param name='target' value='copy'/>
+	</antcall>
+</target>
+
+<target name="copy.clean">
+	<antcall target='all'>
+		<param name='target' value='copy.clean'/>
+	</antcall>
+</target>
+
 </project>

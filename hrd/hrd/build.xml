@@ -31,4 +31,20 @@
 </target>
 
 
+
+<property file='../../path.properties'/>
+<property name='copy-path' value='../../${path.colorer}/hrd'/>
+
+<target name='copy'>
+	<copy todir='${copy-path}'>
+		<fileset dir='.' includes='**/*.hrd, catalog*.xml'/>
+	</copy>
+</target>
+
+<target name="copy.clean">
+	<delete failonerror='false' includeemptydirs="true">
+		<fileset dir="${copy-path}" includes="**/*.hrd, catalog*.xml"/>
+	</delete>
+</target>
+
 </project>
