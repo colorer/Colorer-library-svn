@@ -12,7 +12,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_enumerateParameters
   if (param_name == null){
     return null;
   }
-  return env->NewString(param_name->getWChars(), param_name->length());
+  return env_NewString(param_name);
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParameterDescription
@@ -25,7 +25,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParameterDescription
   if (param_descr == null){
     return null;
   }
-  return env->NewString(param_descr->getWChars(), param_descr->length());
+  return env_NewString(param_descr);
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParamValue
@@ -38,7 +38,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParamValue
   if (param_value == null){
     return null;
   }
-  return env->NewString(param_value->getWChars(), param_value->length());
+  return env_NewString(param_value);
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParamDefaultValue
@@ -51,7 +51,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_FileType_getParamDefaultValue
   if (param_value == null){
     return null;
   }
-  return env->NewString(param_value->getWChars(), param_value->length());
+  return env_NewString(param_value);
 }
 
 JNIEXPORT void JNICALL Java_net_sf_colorer_FileType_setParamValue

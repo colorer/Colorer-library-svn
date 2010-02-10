@@ -53,7 +53,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateFileTypes
   ParserFactory *pf = (JParserFactory*)iptr;
   FileType *ft = pf->getHRCParser()->enumerateFileTypes(idx);
   if (ft == null) return null;
-  return env->NewString(ft->getName()->getWChars(), ft->getName()->length());
+  return env_NewString(ft->getName());
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeDescription
@@ -61,7 +61,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeDescripti
   ParserFactory *pf = (JParserFactory*)iptr;
   FileType *ft = pf->getHRCParser()->getFileType(&JString(env, ftypename));
   if (ft == null) return null;
-  return env->NewString(ft->getDescription()->getWChars(), ft->getDescription()->length());
+  return env_NewString(ft->getDescription());
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeGroup
@@ -69,14 +69,14 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getFileTypeGroup
   ParserFactory *pf = (JParserFactory*)iptr;
   FileType *ft = pf->getHRCParser()->getFileType(&JString(env, ftypename));
   if (ft == null) return null;
-  return env->NewString(ft->getGroup()->getWChars(), ft->getGroup()->length());
+  return env_NewString(ft->getGroup());
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateHRDClasses(JNIEnv *env, jobject obj, jlong iptr, jint idx){
   ParserFactory *pf = (JParserFactory*)iptr;
   const String *str = pf->enumerateHRDClasses(idx);
   if (str == null) return null;
-  return env->NewString(str->getWChars(), str->length());
+  return env_NewString(str);
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateHRDInstances
@@ -84,7 +84,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_enumerateHRDInstance
   ParserFactory *pf = (JParserFactory*)iptr;
   const String *str = pf->enumerateHRDInstances(JString(env, hrdClass), idx);
   if (str == null) return null;
-  return env->NewString(str->getWChars(), str->length());
+  return env_NewString(str);
 }
 
 JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getHRDescription
@@ -92,7 +92,7 @@ JNIEXPORT jstring JNICALL Java_net_sf_colorer_ParserFactory_getHRDescription
   ParserFactory *pf = (JParserFactory*)iptr;
   const String *str = pf->getHRDescription(JString(env, hrdClass), JString(env, hrdName));
   if (str == null) return null;
-  return env->NewString(str->getWChars(), str->length());
+  return env_NewString(str);
 }
 
 JNIEXPORT jobject JNICALL Java_net_sf_colorer_ParserFactory_getHRCParser(JNIEnv *env, jobject obj, jlong iptr){

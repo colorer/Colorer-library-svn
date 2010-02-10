@@ -46,22 +46,22 @@ public:
   }
   void clearLine(int lno, String *line){
     // make original Java string passing!!!
-    env->CallVoidMethod(regionHandler, clID, lno, env->NewString(line->getWChars(), line->length()));
+    env->CallVoidMethod(regionHandler, clID, lno, env_NewString(line));
   }
   void addRegion(int lno, String *line, int sx, int ex, const Region *region){
     if (filter != null && !region->hasParent(filter)) return;
     jobject jr = hrcParser->getRegion(env, region->getName());
-    env->CallVoidMethod(regionHandler, arID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr);
+    env->CallVoidMethod(regionHandler, arID, lno, env_NewString(line), sx, ex, jr);
   }
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
     jobject jr = null;
     if (region != null) jr = hrcParser->getRegion(env, region->getName());
-    env->CallVoidMethod(regionHandler, esID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()));
+    env->CallVoidMethod(regionHandler, esID, lno, env_NewString(line), sx, ex, jr, env_NewString(scheme->getName()));
   }
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
     jobject jr = null;
     if (region != null) jr = hrcParser->getRegion(env, region->getName());
-    env->CallVoidMethod(regionHandler, lsID, lno, env->NewString(line->getWChars(), line->length()), sx, ex, jr, env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()));
+    env->CallVoidMethod(regionHandler, lsID, lno, env_NewString(line), sx, ex, jr, env_NewString(scheme->getName()));
   }
 };
 

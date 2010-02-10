@@ -46,8 +46,6 @@ void dropJNInfo(JNIEnv *env) {
   cLineRegion = null;
 }
 
-#define JSTRING(string) ((string == null) ? null : env->NewString(string->getWChars(), string->length()))
-
 jobject createRegionDefine(JNIEnv *env, const RegionDefine *rd)
 {
   if (rd == null) return null;
@@ -66,7 +64,7 @@ jobject createRegionDefine(JNIEnv *env, const RegionDefine *rd)
     if (texted == null) {
       return null;
     }
-    return env->NewObject(cTextRegion, idTextRegionConstr, JSTRING(texted->stext), JSTRING(texted->etext), JSTRING(texted->sback), JSTRING(texted->eback));
+    return env->NewObject(cTextRegion, idTextRegionConstr, env_NewString_or_null(texted->stext), env_NewString_or_null(texted->etext), env_NewString_or_null(texted->sback), env_NewString_or_null(texted->eback));
   }
   return null;
 }

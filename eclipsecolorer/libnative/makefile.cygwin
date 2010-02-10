@@ -5,17 +5,17 @@
 TARGET = net_sf_colorer.dll
 all: $(TARGET)
 
-shared_path=../../shared/
+shared_path=../../colorer/src/shared/
 JAVA_INCLUDE=$(subst \,/,$(JAVA_HOME))/include
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)/win32
 
 CYGWIN=-mno-cygwin -mrtd
+CPPFLAGS_CUSTOM += -DCOLORER_FEATURE_USE_DL_MALLOC=FALSE -DCOLORER_FEATURE_USE_CHUNK_ALLOC=FALSE
 
 obj_output=objs
 
 include $(shared_path)makefile.colorer.cygwin
 include makefile.core
-
 
 DLLMAIN=_DllMain@12
 

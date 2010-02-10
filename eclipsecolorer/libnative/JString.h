@@ -3,6 +3,10 @@
 
 #include<unicode/String.h>
 
+#define env_NewString(s) env->NewString((jchar*)s->getWChars(), s->length())
+
+#define env_NewString_or_null(string) ((string == null) ? null : env_NewString(string))
+
 class JString : public String{
 public:
   JString(JNIEnv *env, jstring jdstring){

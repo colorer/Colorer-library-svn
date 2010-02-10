@@ -5,11 +5,12 @@
 TARGET = libnet_sf_colorer.so
 all: $(TARGET)
 
-shared_path=../../shared/
+shared_path=../../colorer/src/shared/
 JAVA_INCLUDE=$(JAVA_HOME)/include/
 JAVA_INCLUDE_MD=$(JAVA_INCLUDE)solaris/
 
 obj_output=objs
+OPTS=-DCOLORER_FEATURE_USE_DL_MALLOC=FALSE -DCOLORER_FEATURE_USE_CHUNK_ALLOC=FALSE
 
 include $(shared_path)makefile.colorer.solarisgcc
 include makefile.core

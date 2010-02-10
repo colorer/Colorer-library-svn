@@ -37,8 +37,8 @@ public:
       jmethodID idRegionConstr = env->GetMethodID(cRegion, "<init>", "(Ljava/lang/String;Ljava/lang/String;Lnet/sf/colorer/Region;IJ)V");
 
       reg = env->NewObject(cRegion, idRegionConstr,
-                          env->NewString(nreg->getName()->getWChars(), nreg->getName()->length()),
-                          nreg->getDescription() ? env->NewString(nreg->getDescription()->getWChars(), nreg->getDescription()->length()) : null,
+                          env_NewString(nreg->getName()),
+                          nreg->getDescription() ? env_NewString(nreg->getDescription()) : null,
                           nreg->getParent() ? getRegion(env, nreg->getParent()->getName()) : null,
                           nreg->getID(),
                           (jlong)nreg
@@ -58,7 +58,7 @@ public:
       jmethodID idSchemeConstr = env->GetMethodID(cScheme, "<init>", "(Ljava/lang/String;Lnet/sf/colorer/FileType;)V");
 
       jscheme = env->NewObject(cScheme, idSchemeConstr,
-                           env->NewString(scheme->getName()->getWChars(), scheme->getName()->length()),
+                           env_NewString(scheme->getName()),
                            getFileType(env, scheme->getFileType())
                           );
       jscheme = env->NewGlobalRef(jscheme);
@@ -81,9 +81,9 @@ public:
       jclass cFileType = env->FindClass("net/sf/colorer/FileType");
       jmethodID idFileTypeConstr = env->GetMethodID(cFileType, "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
       jtype = env->NewObject(cFileType, idFileTypeConstr, (jlong)filetype,
-                          env->NewString(filetype->getName()->getWChars(), filetype->getName()->length()),
-                          filetype->getGroup() ? env->NewString(filetype->getGroup()->getWChars(), filetype->getGroup()->length()) : null,
-                          filetype->getDescription() ? env->NewString(filetype->getDescription()->getWChars(), filetype->getDescription()->length()) : null
+                          env_NewString(filetype->getName()),
+                          filetype->getGroup() ? env_NewString(filetype->getGroup()) : null,
+                          filetype->getDescription() ? env_NewString(filetype->getDescription()) : null
                         );
       jtype = env->NewGlobalRef(jtype);
       fileTypes.put(filetype->getName(), jtype);
