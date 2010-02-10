@@ -10,7 +10,7 @@ MKDIR   = mkdir -p
 
 obj_output_slash = $(obj_output)/
 
-FLAGS =  $(CYGWIN)
+FLAGS =  $(CYGWIN) -DUSE_DL_PREFIX
 CPPFLAGS =  -Wp,-I$(shared_path),-I$(unzipdir),-w -o $*.$(obj)  -c $(FLAGS) $(CPPFLAGS_CUSTOM) -D_WIN32 -U__unix__
 
 CPPFLAGS += -O3

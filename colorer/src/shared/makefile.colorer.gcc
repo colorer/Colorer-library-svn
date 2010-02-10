@@ -6,10 +6,11 @@ LINK    = g++
 RM      = @rm -f
 obj     = o
 DLLTOOL = @dlltool
+MKDIR   = mkdir
 
 obj_output_slash = $(obj_output)/
 
-FLAGS = -s $(CYGWIN)
+FLAGS = -s $(CYGWIN) -DUSE_DL_PREFIX
 CPPFLAGS = -O3 -Wp,-I$(shared_path),-I$(unzipdir),-w -o $*.$(obj) $(ARCHFLAGS) -c $(FLAGS) $(CPPFLAGS_CUSTOM) -D__unix__ -DCOLORER_FEATURE_HTTPINPUTSOURCE=FALSE $(OPTS)
 
 include $(shared_path)makefile.zlib
