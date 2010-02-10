@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<project name="schemes" default="all" basedir=".">
+
+<property name="target" value="all" description="default subproject target"/>
+<property file='path.properties'/>
+
+
+<target name='hrd'>
+	<ant antfile="build.xml" dir='${path.hrd}' target="${target}"/>
+</target>
+
+<target name='hrc'>
+	<ant antfile="build.xml" dir='${path.hrc}' target="${target}"/>
+</target>
+
+<target name='all' depends="hrc, hrd"/>
+
+<target name="clean">
+	<antcall target='all'>
+		<param name='target' value='clean'/>
+	</antcall>
+</target>
+
+<!-- 
+	TODO: copy to ${path.colorer}
+-->
+
+</project>
