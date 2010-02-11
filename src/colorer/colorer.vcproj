@@ -43,15 +43,15 @@
 				AdditionalOptions=""
 				Optimization="0"
 				AdditionalIncludeDirectories="../shared;../zlib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=FALSE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_TRACE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=FALSE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;USE_DL_PREFIX;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4308,4307"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -128,13 +128,13 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../shared;../zlib"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;USE_DL_PREFIX"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4308,4307"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -287,10 +287,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\shared\misc\registry.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\shared\common\io\SharedInputSource.cpp"
 					>
 				</File>
@@ -315,14 +311,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\zlib\infblock.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\infcodes.c"
-					>
-				</File>
-				<File
 					RelativePath="..\zlib\inffast.c"
 					>
 				</File>
@@ -332,10 +320,6 @@
 				</File>
 				<File
 					RelativePath="..\zlib\inftrees.c"
-					>
-				</File>
-				<File
-					RelativePath="..\zlib\infutil.c"
 					>
 				</File>
 				<File
