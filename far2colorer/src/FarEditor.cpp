@@ -13,7 +13,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	blockTopPosition = -1;
 	inRedraw = false;
 	inHandler = false;
-	ignoreChange = false;
 	idleCount = 0;
 	ret_str = NULL;
 	ret_strNumber = -1;
@@ -270,7 +269,6 @@ void FarEditor::matchPair()
 
 	info->EditorControl(ECTL_SETPOSITION, &esp);
 	baseEditor->releasePairMatch(pm);
-	ignoreChange = true;
 }
 
 void FarEditor::selectPair()
@@ -308,8 +306,6 @@ void FarEditor::selectPair()
 	info->EditorControl(ECTL_SELECT, &es);
 
 	baseEditor->releasePairMatch(pm);
-
-	ignoreChange = true;
 }
 
 void FarEditor::selectBlock()
@@ -347,8 +343,6 @@ void FarEditor::selectBlock()
 	info->EditorControl(ECTL_SELECT, &es);
 
 	baseEditor->releasePairMatch(pm);
-
-	ignoreChange = true;
 }
 
 void FarEditor::selectRegion()
@@ -371,7 +365,6 @@ void FarEditor::selectRegion()
 		info->EditorControl(ECTL_SELECT, &es);
 	};
 
-	ignoreChange = true;
 }
 
 void FarEditor::listFunctions()
@@ -380,7 +373,6 @@ void FarEditor::listFunctions()
 	baseEditor->validate(-1, false);
 	leaveHandler();
 	showOutliner(structOutliner);
-	ignoreChange = true;
 }
 
 void FarEditor::listErrors()
@@ -389,7 +381,6 @@ void FarEditor::listErrors()
 	baseEditor->validate(-1, false);
 	leaveHandler();
 	showOutliner(errorOutliner);
-	ignoreChange = true;
 }
 
 
@@ -425,7 +416,6 @@ void FarEditor::locateFunction()
 		enterHandler();
 		baseEditor->validate(-1, false);
 		leaveHandler();
-		ignoreChange = true;
 		EditorSetPosition esp;
 		OutlineItem *item_found = NULL;
 		OutlineItem *item_last = NULL;
@@ -505,7 +495,8 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
 int FarEditor::editorEvent(int event, void *param)
 {
 	// ignore event
-	if (event != EE_REDRAW || inRedraw) return 0;
+	if (event != EE_REDRAW || (event == EE_REDRAW && param == EEREDRAW_ALL && inRedraw))
+    return 0;
 
 	enterHandler();
 	
@@ -515,13 +506,6 @@ int FarEditor::editorEvent(int event, void *param)
 	baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
 
 	baseEditor->lineCountEvent(ei.TotalLines);
-
-	// Hack against FAR's bad EEREDRAW_CHANGE events
-	if (param == EEREDRAW_CHANGE && ignoreChange == true)
-	{
-		param = EEREDRAW_ALL;
-		ignoreChange = false;
-	};
 
 	if (param == EEREDRAW_CHANGE)
 	{
