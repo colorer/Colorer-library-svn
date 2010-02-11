@@ -79,6 +79,8 @@ class FarEditorSet
 	private:
 		/** Returns current global error handler. */
 		ErrorHandler *getErrorHandler();
+    /** Returns new editor. */
+    FarEditor *addNewEditor();
 		/** Returns currently active editor. */
 		FarEditor *getCurrentEditor();
 		/**
@@ -96,8 +98,8 @@ class FarEditorSet
 		void chooseType();
 		/** FAR localized messages */
 		const wchar_t *GetMsg(int msg);
-    /** Reads all registry settings into variables */
-		void ApplySettingsToEditor();
+    /** Applies the current settings for editors*/
+		void ApplySettingsToEditors();
 		/** writes the default settings in the registry*/
     void SetDefaultSettings();
     void SaveSettings();
