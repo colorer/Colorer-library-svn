@@ -1,4 +1,6 @@
 
-NOTE!
+NOTE! 
 
-You MUST copy saxon*.jar to your %JAVA_HOME%/jre/lib/endorsed/ directory.
+For install all libs just run ANT here. 
+Or copy *.jar from here to %ANT_HOME%/lib manually
+
