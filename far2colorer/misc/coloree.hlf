@@ -47,10 +47,6 @@ $^#Colorer's settings.#
      Choose a color style, which will be used for coloring text. 
      The choice does not work if the plugin is disabled.
 
-  #[ Test catalog.xml ]#
-     Tests ability to load the base configuration file catalog.xml, list of 
-     language scheme and color styles, taking the path to it from the settings window.
-
   #[ Test schema library ]#
      Tests ability to load all the language of schemes, taking the path to
      catalog.xml from the settings window.

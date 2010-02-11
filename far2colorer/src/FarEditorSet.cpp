@@ -304,15 +304,6 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
             return true;
           }
           break;
-        case IDX_RELOAD:
-          {
-            Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , false,0);
-            wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
-            fes->TestLoadBase(fes->sTempHrdName->getWChars(),catalog,false);
-            Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true,0);
-            return true;
-          }
-          break;
         case IDX_RELOAD_ALL:
           {
             Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , false,0);
@@ -354,10 +345,9 @@ void FarEditorSet::configure()
 			{ DI_CHECKBOX,5,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
 			{ DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
 			{ DI_EDIT,6,10,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
-			{ DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
-			{ DI_BUTTON,11,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
-			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                 //IDX_RELOAD,
-			{ DI_BUTTON,26,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+			{ DI_TEXT,5,12,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
+			{ DI_BUTTON,20,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
+			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
 			{ DI_BUTTON,29,16,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
 			{ DI_BUTTON,37,16,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
 		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
@@ -382,7 +372,6 @@ void FarEditorSet::configure()
 		descr=getHRDescription(*sTempHrdName);
 
 		fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
-		fdi[IDX_RELOAD].PtrData = GetMsg(mReload);
 		fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
 		fdi[IDX_OK].PtrData = GetMsg(mOk);
 		fdi[IDX_CANCEL].PtrData = GetMsg(mCancel);
