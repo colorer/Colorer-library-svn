@@ -9,6 +9,7 @@
 #include<unicode/Encodings.h>
 
 #include "pcolorer.h"
+#include "tools.h"
 #include "FarEditor.h"
 
 //registry keys
@@ -90,9 +91,6 @@ class FarEditorSet
 		 * loaded database. Read settings from registry
 		 */
 		void ReloadBase();
-
-		/** Expand environment string*/
-		SString *ExpandEnvironment(const wchar_t *catalogPath);
 
 		/** Shows dialog of file type selection */
 		void chooseType();

@@ -455,6 +455,14 @@
 				RelativePath=".\resource.h"
 				>
 			</File>
+			<File
+				RelativePath=".\tools.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tools.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="zlib"

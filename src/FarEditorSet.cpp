@@ -1,27 +1,5 @@
 #include"FarEditorSet.h"
 
-wchar_t* rtrim(wchar_t* str)
-{
-	wchar_t* ptr = str;
-	str += wcslen(str);
-
-	while (iswspace(*(--str))) *str = 0;
-
-	return ptr;
-}
-
-wchar_t* ltrim(wchar_t* str)
-{
-	while (iswspace(*(str++)));
-
-	return str - 1;
-}
-
-wchar_t* trim(wchar_t* str)
-{
-	return ltrim(rtrim(str));
-}
-
 FarEditorSet::FarEditorSet()
 {
 	wchar_t key[255];
@@ -180,7 +158,7 @@ void FarEditorSet::viewFile(const String &path)
 	}
 	catch (Exception &e)
 	{
-		const wchar_t* exceptionMessage[5];
+		const wchar_t* exceptionMessage[4];
 		exceptionMessage[0] = GetMsg(mName);
 		exceptionMessage[1] = GetMsg(mCantOpenFile);
 		exceptionMessage[3] = GetMsg(mDie);
@@ -530,28 +508,6 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 	return 0;
 }
 
-SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
-{
-	SString *S = NULL;
-	if ((catalogPath)&&(wcslen(catalogPath)))
-	{
-		wchar_t *temp = NULL;
-		int i;
-		// проверяем на переменные окружения
-		i=ExpandEnvironmentStrings(catalogPath,temp,0);
-		if (i)
-		{
-			temp=new wchar_t[i];
-			ExpandEnvironmentStrings(catalogPath,temp,i);
-			S = new SString(DString(temp));
-		}
-		else
-			S = new SString(DString(catalogPath));
-		delete[] temp;
-	}
-	return S;
-}
-
 bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
 {
   bool res = true;
@@ -568,8 +524,11 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 		hrdNameS = new SString(DString(hrdName));
 
 	SString *catalogPathS = NULL;
-	catalogPathS=ExpandEnvironment(catalogPath);
-
+  wchar_t *t=PathToFool(catalogPath,false);
+  if (t)
+    catalogPathS=new SString(DString(t));
+  delete[] t;
+ 
 	try
 	{
 		parserFactoryLocal = new ParserFactory(catalogPathS);
@@ -784,10 +743,16 @@ void FarEditorSet::ReadSettings()
   delete sHrdName;
   delete sCatalogPath;
   delete sCatalogPathExp;
+ sHrdName = NULL;
+  sCatalogPath = NULL;
+  sCatalogPathExp = NULL;
 
   sHrdName = new SString(DString(hrdName));
 	sCatalogPath = new SString(DString(catalogPath));
-  sCatalogPathExp = ExpandEnvironment(catalogPath);
+  wchar_t *t=PathToFool(catalogPath,false);
+  if (t)
+    sCatalogPathExp=new SString(DString(t));
+  delete[] t;
 
   delete[] hrdName;
   delete[] catalogPath;
