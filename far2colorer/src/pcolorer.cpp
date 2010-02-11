@@ -70,20 +70,20 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		// problem, and so and so error
 		if ((l>0)&&(*file==L'"'))
 		{
-			wcsncpy_s(file_exp,l, &file[1],l-2);
-			wcscpy_s(file,l,file_exp);
+			wcsncpy(file_exp,&file[1],l-2);
+			wcscpy(file,file_exp);
 		}
 		// replace the environment variables to their values
 		int k=ExpandEnvironmentStrings(file,file_exp,l);
 		if (!k) 
-			wcscpy_s(file_exp,l,file);
+			wcscpy(file_exp,file);
 		else
 			if (k>=l) 
 			{
 				l=k;
 				delete[] file_exp;
 				file_exp=new wchar_t[l];
-				if (!ExpandEnvironmentStrings(file,file_exp,l)) wcscpy_s(file_exp,l,file);
+				if (!ExpandEnvironmentStrings(file,file_exp,l)) wcscpy(file_exp,file);
 			}
 
 		// получаем полный путь до файла, преобразовывая всякие ../ ./  и т.п.
@@ -96,8 +96,8 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 		if (wcsstr(temp,L"\\\\?\\")==NULL){
 			delete[] file_exp;
 			file_exp=new wchar_t[p+7];
-			wcscpy_s(file_exp,p+7,L"\\\\?\\");
-			wcscat_s(file_exp,p+7,temp);
+			wcscpy(file_exp,L"\\\\?\\");
+			wcscat(file_exp,temp);
 			editorSet->viewFile(DString(file_exp));
 		}
 		else
