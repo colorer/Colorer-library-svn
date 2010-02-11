@@ -25,7 +25,7 @@ wchar_t* trim(wchar_t* str)
 FarEditorSet::FarEditorSet()
 {
 	wchar_t key[255];
-	_snwprintf_s(key,255, 255, L"%s\\colorer", Info.RootKey);
+	_snwprintf(key,255, L"%s\\colorer", Info.RootKey);
   
   DWORD res =rOpenKey(HKEY_CURRENT_USER, key, hPluginRegistry);
   if (res == REG_CREATED_NEW_KEY)

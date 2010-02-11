@@ -13,6 +13,8 @@
 #include<farcolor.hpp>
 #include<farkeys.hpp>
 
+#include<wctype.h>
+#include<wchar.h>
 #include<windows.h>
 #include "registry_wide.h"
 
