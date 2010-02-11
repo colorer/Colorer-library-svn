@@ -1,4 +1,4 @@
-- есть пожелание: отображать ошибки в базе, типа файл не найден и другие
+﻿- есть пожелание: отображать ошибки в базе, типа файл не найден и другие
 	примерное решение
 		FarEditorSet.cpp:
   	parserFactory->getHRCParser()->setErrorHandler(mySuperCoolErrorHandler);
