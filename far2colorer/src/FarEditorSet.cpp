@@ -431,14 +431,10 @@ void FarEditorSet::configure()
         else
         {
           SaveSettings();
-          ApplySettingsToEditor();
+          ApplySettingsToEditors();
         }
     }
-    //if (i == IDX_CANCEL || i == -1)
-    //{
-    //  Info.DialogFree(hDlg);
-    //  return;
-    //}
+
     Info.DialogFree(hDlg);
 
 	}
@@ -701,6 +697,43 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 	return parserFactory->getErrorHandler();
 }
 
+FarEditor *FarEditorSet::addNewEditor()
+{
+  EditorInfo ei;
+  Info.EditorControl(ECTL_GETINFO, &ei);
+
+  FarEditor *editor = new FarEditor(&Info, parserFactory);
+  farEditorInstances.put(&SString(ei.EditorID), editor);
+  LPWSTR FileName=NULL;
+  size_t FileNameSize=Info.EditorControl(ECTL_GETFILENAME,NULL);
+
+  if (FileNameSize)
+  {
+    FileName=new wchar_t[FileNameSize];
+
+    if (FileName)
+    {
+      Info.EditorControl(ECTL_GETFILENAME,FileName);
+    }
+  }
+
+  DString fnpath(FileName);
+  int slash_idx = fnpath.lastIndexOf('\\');
+
+  if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
+
+  DString fn = DString(fnpath, slash_idx+1);
+  editor->chooseFileType(&fn);
+  delete[] FileName;
+  editor->setRegionMapper(regionMapper);
+  editor->setDrawCross(drawCross);
+  editor->setDrawPairs(drawPairs);
+  editor->setDrawSyntax(drawSyntax);
+  editor->setOutlineStyle(oldOutline);
+
+  return editor;
+}
+
 FarEditor *FarEditorSet::getCurrentEditor()
 {
 	EditorInfo ei;
@@ -708,36 +741,7 @@ FarEditor *FarEditorSet::getCurrentEditor()
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
 	if (editor == NULL)
-	{
-		editor = new FarEditor(&Info, parserFactory);
-		farEditorInstances.put(&SString(ei.EditorID), editor);
-		LPWSTR FileName=NULL;
-		size_t FileNameSize=Info.EditorControl(ECTL_GETFILENAME,NULL);
-
-		if (FileNameSize)
-		{
-			FileName=new wchar_t[FileNameSize];
-
-			if (FileName)
-			{
-				Info.EditorControl(ECTL_GETFILENAME,FileName);
-			}
-		}
-
-		DString fnpath(FileName);
-		int slash_idx = fnpath.lastIndexOf('\\');
-
-		if (slash_idx == -1) slash_idx = fnpath.lastIndexOf('/');
-
-		DString fn = DString(fnpath, slash_idx+1);
-		editor->chooseFileType(&fn);
-		editor->setRegionMapper(regionMapper);
-		editor->setDrawCross(drawCross);
-		editor->setDrawPairs(drawPairs);
-		editor->setDrawSyntax(drawSyntax);
-		editor->setOutlineStyle(oldOutline);
-		delete[] FileName;
-	};
+		editor = addNewEditor();
 
 	return editor;
 }
@@ -761,7 +765,7 @@ void FarEditorSet::disableColorer()
 }
 
 
-void FarEditorSet::ApplySettingsToEditor()
+void FarEditorSet::ApplySettingsToEditors()
 {
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{

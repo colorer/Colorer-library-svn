@@ -1,5 +1,11 @@
 ﻿$Revision$
   $Author$ $Date$
+	1. опечатка в r1369
+	2. поправил название функции ApplySettingsToEditors, для отображения действительности
+	3. из getCurrentEditor выделил код в отдельную функцию addNewEditor
+
+#Revision: 1369
+  Author: ctapmex Date: 2010-02-11 15:13:01 +0500 (Чт, 11 фев 2010)
 	1. продолжение r1368.2
 
 #Revision: 1368
