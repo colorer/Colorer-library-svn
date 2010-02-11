@@ -3,16 +3,16 @@ Current:
 shared 
 	shared colorer xml schemes
 	
-classpath
+javalib
 	required java libs
 	
 hrc 
 	HRC base & generators
-	required: 'shared', 'classpath'
+	required: 'shared', 'javalib'
 	
 hrd
 	HRD base, generators & addons
-	required: 'shared', 'classpath'
+	required: 'shared', 'javalib'
 
 
 TODO (colorer 6):
