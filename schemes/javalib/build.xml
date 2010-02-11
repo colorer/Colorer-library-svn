@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<project name="java.lib" default="install" basedir=".">
-
-<target name='install'>
-	<copy todir='${ant.library.dir}'>
-		<fileset dir='.' includes='*.jar'/>
-	</copy>
-</target>
-</project>
