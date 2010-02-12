@@ -53,7 +53,7 @@ class FarEditorSet
 		/** Shows editor actions menu */
 		void openMenu();
 		/** Shows plugin's configuration dialog */
-		void configure();
+		void configure(bool fromEditor);
 		/** Views current file with internal viewer */
 		void viewFile(const String &path);
 
@@ -109,7 +109,7 @@ class FarEditorSet
 		/** Disables all plugin processing*/
 		void disableColorer();
     /** Enables plugin processing*/
-    void enableColorer();
+    void enableColorer(bool fromEditor);
 
 		Hashtable<FarEditor*> farEditorInstances;
 		ParserFactory *parserFactory;

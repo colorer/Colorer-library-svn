@@ -50,7 +50,7 @@ void FarEditorSet::openMenu()
 			if (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0)
       {
         ReadSettings();
-        configure();
+        configure(true);
       }
 
 			return;
@@ -112,7 +112,7 @@ void FarEditorSet::openMenu()
 				ReloadBase();
 				break;
 			case 11:
-				configure();
+				configure(true);
 				break;
 		};
 	}
@@ -321,13 +321,13 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
   return Info.DefDlgProc(hDlg, Msg, Param1, Param2);
 }
 
-void FarEditorSet::configure()
+void FarEditorSet::configure(bool fromEditor)
 {
 	try
 	{
 		FarDialogItem fdi[] =
 		{
-			{ DI_DOUBLEBOX,3,1,51,17,0,0,0,0,L""},                                 //IDX_BOX,
+			{ DI_DOUBLEBOX,3,1,51,16,0,0,0,0,L""},                                 //IDX_BOX,
 			{ DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
 			{ DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
 			{ DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
@@ -338,8 +338,8 @@ void FarEditorSet::configure()
 			{ DI_TEXT,5,12,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
 			{ DI_BUTTON,20,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
 			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-			{ DI_BUTTON,29,16,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-			{ DI_BUTTON,37,16,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+			{ DI_BUTTON,31,15,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+			{ DI_BUTTON,39,15,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
 		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -368,7 +368,7 @@ void FarEditorSet::configure()
 		/*
 		 * Dialog activation
 		 */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 18, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK)
@@ -405,7 +405,7 @@ void FarEditorSet::configure()
         {
           rEnabled = true;
           SaveSettings();
-          enableColorer();
+          enableColorer(fromEditor);
         }
         else
         {
@@ -737,12 +737,13 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 	return(Info.GetMsg(Info.ModuleNumber, msg));
 }
 
-void FarEditorSet::enableColorer()
+void FarEditorSet::enableColorer(bool fromEditor)
 {
   rEnabled = true;
 	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
   ReloadBase();
-  addCurrentEditor();
+  if (fromEditor)
+    addCurrentEditor();
 }
 
 void FarEditorSet::disableColorer()
