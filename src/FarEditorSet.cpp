@@ -183,6 +183,9 @@ void FarEditorSet::viewFile(const String &path)
 void FarEditorSet::chooseType()
 {
 	FarEditor *fe = getCurrentEditor();
+  if (!fe)
+    return;
+
 	int num = 0;
 	const String *group = NULL;
 	FileType *type = NULL;

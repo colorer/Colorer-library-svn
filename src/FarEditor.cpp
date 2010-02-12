@@ -7,8 +7,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	this->info = info;
 	info->EditorControl(ECTL_GETINFO, &ei);
 	cursorRegion = NULL;
-	unicodeEncodingIndex = -1;
-	farEncodingIndex = -3;
 	prevLinePosition = 0;
 	blockTopPosition = -1;
 	inRedraw = false;
