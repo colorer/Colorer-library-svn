@@ -88,21 +88,6 @@ $(obj_output_slash)Writer.$(obj):
 $(obj_output_slash)cregexp.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./cregexp/cregexp.cpp
 
-$(obj_output_slash)blockdef.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/blockdef.cpp
-
-$(obj_output_slash)exparse.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/exparse.cpp
-
-$(obj_output_slash)sarg.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/sarg.cpp
-
-$(obj_output_slash)syntax.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/syntax.cpp
-
-$(obj_output_slash)tools.$(obj):
-	$(CPP) $(CPPFLAGS) $(shared_path)/./exparse/tools.cpp
-
 $(obj_output_slash)malloc.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./misc/malloc.c
 
