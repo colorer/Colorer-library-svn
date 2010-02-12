@@ -80,8 +80,8 @@ class FarEditorSet
 	private:
 		/** Returns current global error handler. */
 		ErrorHandler *getErrorHandler();
-    /** Returns new editor. */
-    FarEditor *addNewEditor();
+    /** add current active editor and return him. */
+    FarEditor *addCurrentEditor();
 		/** Returns currently active editor. */
 		FarEditor *getCurrentEditor();
 		/**
@@ -104,8 +104,12 @@ class FarEditorSet
 
 		/** Kills all currently opened editors*/
 		void dropAllEditors(bool clean);
+		/** kill the current editor*/
+    void dropCurrentEditor(bool clean);
 		/** Disables all plugin processing*/
 		void disableColorer();
+    /** Enables plugin processing*/
+    void enableColorer();
 
 		Hashtable<FarEditor*> farEditorInstances;
 		ParserFactory *parserFactory;

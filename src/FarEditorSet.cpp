@@ -65,36 +65,48 @@ void FarEditorSet::openMenu()
 		};
 
 		menuElements[0].Selected = 1;
-
+    
+    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
+    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
+    FarEditor *editor = getCurrentEditor();
 		switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
 			case 0:
-				chooseType();
+        if (editor)
+          chooseType();
 				break;
 			case 1:
-				getCurrentEditor()->matchPair();
+        if (editor)
+          editor->matchPair();
 				break;
 			case 2:
-				getCurrentEditor()->selectBlock();
+        if (editor)
+          editor->selectBlock();
 				break;
 			case 3:
-				getCurrentEditor()->selectPair();
+        if (editor)
+          editor->selectPair();
 				break;
 			case 4:
-				getCurrentEditor()->listFunctions();
+        if (editor)
+          editor->listFunctions();
 				break;
 			case 5:
-				getCurrentEditor()->listErrors();
+        if (editor)
+          editor->listErrors();
 				break;
 			case 6:
-				getCurrentEditor()->selectRegion();
+        if (editor)
+          editor->selectRegion();
 				break;
 			case 7:
-				getCurrentEditor()->locateFunction();
+        if (editor)
+          editor->locateFunction();
 				break;
 			case 9:
-				getCurrentEditor()->updateHighlighting();
+        if (editor)
+          editor->updateHighlighting();
 				break;
 			case 10:
 				ReloadBase();
@@ -393,7 +405,7 @@ void FarEditorSet::configure()
         {
           rEnabled = true;
           SaveSettings();
-          ReloadBase();
+          enableColorer();
         }
         else
         {
@@ -459,13 +471,23 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
 	if (rEnabled)
-		return getCurrentEditor()->editorInput(ir);
-  else
-    return 0;
+  {
+    FarEditor *editor = getCurrentEditor();
+    if (editor)
+      return editor->editorInput(ir);
+  }
+  return 0;
 }
 
 int FarEditorSet::editorEvent(int Event, void *Param)
 {
+  // check whether all the editors cleaned
+  if (!rEnabled && farEditorInstances.size() && Event==EE_GOTFOCUS)
+  {
+    dropCurrentEditor(true);
+    return 0;
+  }
+
 	if (!rEnabled)
 	{
 		return 0;
@@ -473,20 +495,39 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
 	try
 	{
-		FarEditor *editor = NULL;
-
-		if (Event == EE_CLOSE)
-		{
-			editor = farEditorInstances.get(&SString(*((int*)Param)));
-			farEditorInstances.remove(&SString(*((int*)Param)));
-			delete editor;
-			return 0;
-		};
-
-		if (Event != EE_REDRAW) return 0;
-
-		editor = getCurrentEditor();
-		return editor->editorEvent(Event, Param);
+    FarEditor *editor = NULL;
+    switch (Event)
+    {
+      case EE_REDRAW:
+        {
+          editor = getCurrentEditor();
+          if (editor)
+            return editor->editorEvent(Event, Param);
+          else return 0;
+        }
+        break;
+      case EE_GOTFOCUS:
+        {
+          if (!getCurrentEditor())
+            addCurrentEditor();
+          return 0;
+        }
+        break;
+      case EE_READ:
+        {
+          addCurrentEditor();
+          return 0;
+        }
+        break;
+      case EE_CLOSE:
+        {
+          editor = farEditorInstances.get(&SString(*((int*)Param)));
+          farEditorInstances.remove(&SString(*((int*)Param)));
+          delete editor;
+          return 0;
+        }
+        break;
+    }
 	}
 	catch (Exception &e)
 	{
@@ -645,7 +686,7 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 	return parserFactory->getErrorHandler();
 }
 
-FarEditor *FarEditorSet::addNewEditor()
+FarEditor *FarEditorSet::addCurrentEditor()
 {
   EditorInfo ei;
   Info.EditorControl(ECTL_GETINFO, &ei);
@@ -688,9 +729,6 @@ FarEditor *FarEditorSet::getCurrentEditor()
 	Info.EditorControl(ECTL_GETINFO, &ei);
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
-	if (editor == NULL)
-		editor = addNewEditor();
-
 	return editor;
 }
 
@@ -699,12 +737,20 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 	return(Info.GetMsg(Info.ModuleNumber, msg));
 }
 
+void FarEditorSet::enableColorer()
+{
+  rEnabled = true;
+	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
+  ReloadBase();
+  addCurrentEditor();
+}
+
 void FarEditorSet::disableColorer()
 {
 	rEnabled = false;
 	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
-	
-	dropAllEditors(true);
+
+  dropCurrentEditor(true);
 	
 	delete regionMapper;
 	delete parserFactory;
@@ -722,6 +768,21 @@ void FarEditorSet::ApplySettingsToEditors()
 		fe->setDrawSyntax(drawSyntax);
 		fe->setOutlineStyle(oldOutline);
 	}
+}
+
+void FarEditorSet::dropCurrentEditor(bool clean)
+{
+  EditorInfo ei;
+	Info.EditorControl(ECTL_GETINFO, &ei);
+	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
+  if (editor)
+  {
+    if (clean)
+      editor->cleanEditor();
+    farEditorInstances.remove(&SString(ei.EditorID));
+    delete editor;
+  }
+  Info.EditorControl(ECTL_REDRAW, NULL);
 }
 
 void FarEditorSet::dropAllEditors(bool clean)
