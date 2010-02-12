@@ -19,7 +19,7 @@ FarEditorSet::FarEditorSet()
 
 FarEditorSet::~FarEditorSet()
 {
-	dropAllEditors();
+	dropAllEditors(false);
 	RegCloseKey(hPluginRegistry);
   delete sHrdName;
   delete sCatalogPath;
@@ -599,7 +599,7 @@ void FarEditorSet::ReloadBase()
 	HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
 	Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 	
-	dropAllEditors();
+	dropAllEditors(false);
 	delete regionMapper;
 	delete parserFactory;
 	parserFactory = NULL;
@@ -704,7 +704,7 @@ void FarEditorSet::disableColorer()
 	rEnabled = false;
 	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
 	
-	dropAllEditors();
+	dropAllEditors(true);
 	
 	delete regionMapper;
 	delete parserFactory;
@@ -724,11 +724,12 @@ void FarEditorSet::ApplySettingsToEditors()
 	}
 }
 
-void FarEditorSet::dropAllEditors()
+void FarEditorSet::dropAllEditors(bool clean)
 {
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{
-		fe->cleanEditor();
+    if (clean)
+      fe->cleanEditor();
 		delete fe;
 	};
 
@@ -743,7 +744,7 @@ void FarEditorSet::ReadSettings()
   delete sHrdName;
   delete sCatalogPath;
   delete sCatalogPathExp;
- sHrdName = NULL;
+  sHrdName = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
 

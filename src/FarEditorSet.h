@@ -103,7 +103,7 @@ class FarEditorSet
     void SaveSettings();
 
 		/** Kills all currently opened editors*/
-		void dropAllEditors();
+		void dropAllEditors(bool clean);
 		/** Disables all plugin processing*/
 		void disableColorer();
 

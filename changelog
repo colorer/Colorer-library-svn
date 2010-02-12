@@ -1,5 +1,12 @@
 ﻿$Revision$
   $Author$ $Date$
+	1. поправлены makefile для учета нового tools.cpp
+		!!Но, в shared в непонятной (не нужной?) папке exparse есть свой tools... надо что то делать
+	2. для dropAllEditors добавлен параметр "чистить или нет последствия работы"
+	3. ускоряем cleanEditor() за счет хака far
+
+#Revision: 1378
+  Author: ctapmex Date: 2010-02-11 23:43:09 +0500 (Чт, 11 фев 2010)
 	1. вспомогательные функции (trim, ExpandEnvironment) вынесены из FarEditorSet.cpp в 
 		отдельный модуль tools.cpp
 	2. новая функция PathToFool - конвертирует путь до файла в полный или UNC, проверяя на переменные окружения,
