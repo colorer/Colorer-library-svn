@@ -7,8 +7,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	this->info = info;
 	info->EditorControl(ECTL_GETINFO, &ei);
 	cursorRegion = NULL;
-	unicodeEncodingIndex = -1;
-	farEncodingIndex = -3;
 	prevLinePosition = 0;
 	blockTopPosition = -1;
 	inRedraw = false;
@@ -41,7 +39,6 @@ FarEditor::~FarEditor()
 	delete baseEditor;
 	delete ret_str;
 }
-
 
 void FarEditor::endJob(int lno)
 {
@@ -88,7 +85,6 @@ void FarEditor::chooseFileType(String *fname)
 	FileType *ftype = baseEditor->chooseFileType(fname);
 	setFileType(ftype);
 }
-
 
 void FarEditor::setFileType(FileType *ftype)
 {
@@ -188,7 +184,6 @@ void FarEditor::reloadTypeSettings()
 	baseEditor->setBackParse(backparse);
 }
 
-
 FileType *FarEditor::getFileType()
 {
 	return baseEditor->getFileType();
@@ -227,7 +222,6 @@ void FarEditor::setOutlineStyle(bool oldStyle)
 	this->oldOutline = oldStyle;
 }
 
-
 void FarEditor::setRegionMapper(RegionMapper *rs)
 {
 	baseEditor->setRegionMapper(rs);
@@ -239,8 +233,6 @@ void FarEditor::setRegionMapper(RegionMapper *rs)
 
 	if (vertCrossColor == 0) vertCrossColor = 0x0E;
 }
-
-
 
 void FarEditor::matchPair()
 {
@@ -1100,6 +1092,7 @@ void FarEditor::cleanEditor()
 {
 	int col=(int)info->AdvControl(info->ModuleNumber,ACTL_GETCOLOR,(void *)COL_EDITORTEXT);
 
+  enterHandler();
 	for (int i=0; i<ei.TotalLines; i++)
 	{
 		EditorGetString egs;
@@ -1111,6 +1104,7 @@ void FarEditor::cleanEditor()
 		else
 			addFARColor(i,0,egs.StringLength,col);
 	}
+  leaveHandler();
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

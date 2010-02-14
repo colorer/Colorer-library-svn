@@ -19,7 +19,7 @@
 #include "registry_wide.h"
 
 extern PluginStartupInfo Info;
-static FarStandardFunctions FSF;
+extern FarStandardFunctions FSF;
 
 
 /** FAR .lng file identifiers. */

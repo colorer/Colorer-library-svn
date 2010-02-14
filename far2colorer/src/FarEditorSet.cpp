@@ -1,27 +1,5 @@
 #include"FarEditorSet.h"
 
-wchar_t* rtrim(wchar_t* str)
-{
-	wchar_t* ptr = str;
-	str += wcslen(str);
-
-	while (iswspace(*(--str))) *str = 0;
-
-	return ptr;
-}
-
-wchar_t* ltrim(wchar_t* str)
-{
-	while (iswspace(*(str++)));
-
-	return str - 1;
-}
-
-wchar_t* trim(wchar_t* str)
-{
-	return ltrim(rtrim(str));
-}
-
 FarEditorSet::FarEditorSet()
 {
 	wchar_t key[255];
@@ -41,7 +19,7 @@ FarEditorSet::FarEditorSet()
 
 FarEditorSet::~FarEditorSet()
 {
-	dropAllEditors();
+	dropAllEditors(false);
 	RegCloseKey(hPluginRegistry);
   delete sHrdName;
   delete sCatalogPath;
@@ -72,7 +50,7 @@ void FarEditorSet::openMenu()
 			if (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0)
       {
         ReadSettings();
-        configure();
+        configure(true);
       }
 
 			return;
@@ -87,42 +65,54 @@ void FarEditorSet::openMenu()
 		};
 
 		menuElements[0].Selected = 1;
-
+    
+    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
+    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
+    FarEditor *editor = getCurrentEditor();
 		switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
 			case 0:
-				chooseType();
+        if (editor)
+          chooseType();
 				break;
 			case 1:
-				getCurrentEditor()->matchPair();
+        if (editor)
+          editor->matchPair();
 				break;
 			case 2:
-				getCurrentEditor()->selectBlock();
+        if (editor)
+          editor->selectBlock();
 				break;
 			case 3:
-				getCurrentEditor()->selectPair();
+        if (editor)
+          editor->selectPair();
 				break;
 			case 4:
-				getCurrentEditor()->listFunctions();
+        if (editor)
+          editor->listFunctions();
 				break;
 			case 5:
-				getCurrentEditor()->listErrors();
+        if (editor)
+          editor->listErrors();
 				break;
 			case 6:
-				getCurrentEditor()->selectRegion();
+        if (editor)
+          editor->selectRegion();
 				break;
 			case 7:
-				getCurrentEditor()->locateFunction();
+        if (editor)
+          editor->locateFunction();
 				break;
 			case 9:
-				getCurrentEditor()->updateHighlighting();
+        if (editor)
+          editor->updateHighlighting();
 				break;
 			case 10:
 				ReloadBase();
 				break;
 			case 11:
-				configure();
+				configure(true);
 				break;
 		};
 	}
@@ -180,7 +170,7 @@ void FarEditorSet::viewFile(const String &path)
 	}
 	catch (Exception &e)
 	{
-		const wchar_t* exceptionMessage[5];
+		const wchar_t* exceptionMessage[4];
 		exceptionMessage[0] = GetMsg(mName);
 		exceptionMessage[1] = GetMsg(mCantOpenFile);
 		exceptionMessage[3] = GetMsg(mDie);
@@ -193,6 +183,9 @@ void FarEditorSet::viewFile(const String &path)
 void FarEditorSet::chooseType()
 {
 	FarEditor *fe = getCurrentEditor();
+  if (!fe)
+    return;
+
 	int num = 0;
 	const String *group = NULL;
 	FileType *type = NULL;
@@ -331,13 +324,13 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
   return Info.DefDlgProc(hDlg, Msg, Param1, Param2);
 }
 
-void FarEditorSet::configure()
+void FarEditorSet::configure(bool fromEditor)
 {
 	try
 	{
 		FarDialogItem fdi[] =
 		{
-			{ DI_DOUBLEBOX,3,1,51,17,0,0,0,0,L""},                                 //IDX_BOX,
+			{ DI_DOUBLEBOX,3,1,51,16,0,0,0,0,L""},                                 //IDX_BOX,
 			{ DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
 			{ DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
 			{ DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
@@ -348,8 +341,8 @@ void FarEditorSet::configure()
 			{ DI_TEXT,5,12,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
 			{ DI_BUTTON,20,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
 			{ DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-			{ DI_BUTTON,29,16,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-			{ DI_BUTTON,37,16,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+			{ DI_BUTTON,31,15,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+			{ DI_BUTTON,39,15,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
 		};// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
 		fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -378,7 +371,7 @@ void FarEditorSet::configure()
 		/*
 		 * Dialog activation
 		 */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 19, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 18, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK)
@@ -415,7 +408,7 @@ void FarEditorSet::configure()
         {
           rEnabled = true;
           SaveSettings();
-          ReloadBase();
+          enableColorer(fromEditor);
         }
         else
         {
@@ -481,13 +474,23 @@ const String *FarEditorSet::chooseHRDName(const String *current)
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 {
 	if (rEnabled)
-		return getCurrentEditor()->editorInput(ir);
-  else
-    return 0;
+  {
+    FarEditor *editor = getCurrentEditor();
+    if (editor)
+      return editor->editorInput(ir);
+  }
+  return 0;
 }
 
 int FarEditorSet::editorEvent(int Event, void *Param)
 {
+  // check whether all the editors cleaned
+  if (!rEnabled && farEditorInstances.size() && Event==EE_GOTFOCUS)
+  {
+    dropCurrentEditor(true);
+    return 0;
+  }
+
 	if (!rEnabled)
 	{
 		return 0;
@@ -495,20 +498,39 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
 	try
 	{
-		FarEditor *editor = NULL;
-
-		if (Event == EE_CLOSE)
-		{
-			editor = farEditorInstances.get(&SString(*((int*)Param)));
-			farEditorInstances.remove(&SString(*((int*)Param)));
-			delete editor;
-			return 0;
-		};
-
-		if (Event != EE_REDRAW) return 0;
-
-		editor = getCurrentEditor();
-		return editor->editorEvent(Event, Param);
+    FarEditor *editor = NULL;
+    switch (Event)
+    {
+      case EE_REDRAW:
+        {
+          editor = getCurrentEditor();
+          if (editor)
+            return editor->editorEvent(Event, Param);
+          else return 0;
+        }
+        break;
+      case EE_GOTFOCUS:
+        {
+          if (!getCurrentEditor())
+            addCurrentEditor();
+          return 0;
+        }
+        break;
+      case EE_READ:
+        {
+          addCurrentEditor();
+          return 0;
+        }
+        break;
+      case EE_CLOSE:
+        {
+          editor = farEditorInstances.get(&SString(*((int*)Param)));
+          farEditorInstances.remove(&SString(*((int*)Param)));
+          delete editor;
+          return 0;
+        }
+        break;
+    }
 	}
 	catch (Exception &e)
 	{
@@ -530,28 +552,6 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 	return 0;
 }
 
-SString *FarEditorSet::ExpandEnvironment(const wchar_t *catalogPath)
-{
-	SString *S = NULL;
-	if ((catalogPath)&&(wcslen(catalogPath)))
-	{
-		wchar_t *temp = NULL;
-		int i;
-		// проверяем на переменные окружения
-		i=ExpandEnvironmentStrings(catalogPath,temp,0);
-		if (i)
-		{
-			temp=new wchar_t[i];
-			ExpandEnvironmentStrings(catalogPath,temp,i);
-			S = new SString(DString(temp));
-		}
-		else
-			S = new SString(DString(catalogPath));
-		delete[] temp;
-	}
-	return S;
-}
-
 bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
 {
   bool res = true;
@@ -568,8 +568,11 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
 		hrdNameS = new SString(DString(hrdName));
 
 	SString *catalogPathS = NULL;
-	catalogPathS=ExpandEnvironment(catalogPath);
-
+  wchar_t *t=PathToFool(catalogPath,false);
+  if (t)
+    catalogPathS=new SString(DString(t));
+  delete[] t;
+ 
 	try
 	{
 		parserFactoryLocal = new ParserFactory(catalogPathS);
@@ -640,7 +643,7 @@ void FarEditorSet::ReloadBase()
 	HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
 	Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 	
-	dropAllEditors();
+	dropAllEditors(false);
 	delete regionMapper;
 	delete parserFactory;
 	parserFactory = NULL;
@@ -686,7 +689,7 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 	return parserFactory->getErrorHandler();
 }
 
-FarEditor *FarEditorSet::addNewEditor()
+FarEditor *FarEditorSet::addCurrentEditor()
 {
   EditorInfo ei;
   Info.EditorControl(ECTL_GETINFO, &ei);
@@ -729,9 +732,6 @@ FarEditor *FarEditorSet::getCurrentEditor()
 	Info.EditorControl(ECTL_GETINFO, &ei);
 	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
-	if (editor == NULL)
-		editor = addNewEditor();
-
 	return editor;
 }
 
@@ -740,12 +740,21 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 	return(Info.GetMsg(Info.ModuleNumber, msg));
 }
 
+void FarEditorSet::enableColorer(bool fromEditor)
+{
+  rEnabled = true;
+	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
+  ReloadBase();
+  if (fromEditor)
+    addCurrentEditor();
+}
+
 void FarEditorSet::disableColorer()
 {
 	rEnabled = false;
 	rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
-	
-	dropAllEditors();
+
+  dropCurrentEditor(true);
 	
 	delete regionMapper;
 	delete parserFactory;
@@ -765,11 +774,27 @@ void FarEditorSet::ApplySettingsToEditors()
 	}
 }
 
-void FarEditorSet::dropAllEditors()
+void FarEditorSet::dropCurrentEditor(bool clean)
+{
+  EditorInfo ei;
+	Info.EditorControl(ECTL_GETINFO, &ei);
+	FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
+  if (editor)
+  {
+    if (clean)
+      editor->cleanEditor();
+    farEditorInstances.remove(&SString(ei.EditorID));
+    delete editor;
+  }
+  Info.EditorControl(ECTL_REDRAW, NULL);
+}
+
+void FarEditorSet::dropAllEditors(bool clean)
 {
 	for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next())
 	{
-		fe->cleanEditor();
+    if (clean)
+      fe->cleanEditor();
 		delete fe;
 	};
 
@@ -784,10 +809,16 @@ void FarEditorSet::ReadSettings()
   delete sHrdName;
   delete sCatalogPath;
   delete sCatalogPathExp;
+  sHrdName = NULL;
+  sCatalogPath = NULL;
+  sCatalogPathExp = NULL;
 
   sHrdName = new SString(DString(hrdName));
 	sCatalogPath = new SString(DString(catalogPath));
-  sCatalogPathExp = ExpandEnvironment(catalogPath);
+  wchar_t *t=PathToFool(catalogPath,false);
+  if (t)
+    sCatalogPathExp=new SString(DString(t));
+  delete[] t;
 
   delete[] hrdName;
   delete[] catalogPath;

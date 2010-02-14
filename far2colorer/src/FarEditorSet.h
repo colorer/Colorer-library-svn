@@ -9,6 +9,7 @@
 #include<unicode/Encodings.h>
 
 #include "pcolorer.h"
+#include "tools.h"
 #include "FarEditor.h"
 
 //registry keys
@@ -52,7 +53,7 @@ class FarEditorSet
 		/** Shows editor actions menu */
 		void openMenu();
 		/** Shows plugin's configuration dialog */
-		void configure();
+		void configure(bool fromEditor);
 		/** Views current file with internal viewer */
 		void viewFile(const String &path);
 
@@ -79,8 +80,8 @@ class FarEditorSet
 	private:
 		/** Returns current global error handler. */
 		ErrorHandler *getErrorHandler();
-    /** Returns new editor. */
-    FarEditor *addNewEditor();
+    /** add current active editor and return him. */
+    FarEditor *addCurrentEditor();
 		/** Returns currently active editor. */
 		FarEditor *getCurrentEditor();
 		/**
@@ -90,9 +91,6 @@ class FarEditorSet
 		 * loaded database. Read settings from registry
 		 */
 		void ReloadBase();
-
-		/** Expand environment string*/
-		SString *ExpandEnvironment(const wchar_t *catalogPath);
 
 		/** Shows dialog of file type selection */
 		void chooseType();
@@ -105,9 +103,13 @@ class FarEditorSet
     void SaveSettings();
 
 		/** Kills all currently opened editors*/
-		void dropAllEditors();
+		void dropAllEditors(bool clean);
+		/** kill the current editor*/
+    void dropCurrentEditor(bool clean);
 		/** Disables all plugin processing*/
 		void disableColorer();
+    /** Enables plugin processing*/
+    void enableColorer(bool fromEditor);
 
 		Hashtable<FarEditor*> farEditorInstances;
 		ParserFactory *parserFactory;

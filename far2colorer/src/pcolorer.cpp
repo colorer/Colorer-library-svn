@@ -1,8 +1,10 @@
 #include"pcolorer.h"
+#include"tools.h"
 #include"FarEditorSet.h"
 
 FarEditorSet *editorSet = NULL;
 PluginStartupInfo Info;
+FarStandardFunctions FSF;
 
 /**
  * Returns message from FAR current language.
@@ -61,56 +63,13 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	{
 		//file name, which we received
 		wchar_t *file = (wchar_t*)Item;
-		int l=wcslen(file);
-		
-		wchar_t *file_exp=new wchar_t[l];
-		// we remove quotes, if they are present, focusing on the first character
-		// if he quote it away and the first and last character
-		// If the first character quote, but the latter does not - well, it's not our 
-		// problem, and so and so error
-		if ((l>0)&&(*file==L'"'))
-		{
-			wcsncpy(file_exp,&file[1],l-2);
-			wcscpy(file,file_exp);
-		}
-		// replace the environment variables to their values
-		int k=ExpandEnvironmentStrings(file,file_exp,l);
-		if (!k) 
-			wcscpy(file_exp,file);
-		else
-			if (k>=l) 
-			{
-				l=k;
-				delete[] file_exp;
-				file_exp=new wchar_t[l];
-				if (!ExpandEnvironmentStrings(file,file_exp,l)) wcscpy(file_exp,file);
-			}
-
-		// получаем полный путь до файла, преобразовывая всякие ../ ./  и т.п.
-		wchar_t *temp=NULL;
-		int p=FSF.ConvertPath(CPM_FULL,file_exp,temp,0);
-		temp=new wchar_t[p];
-		FSF.ConvertPath(CPM_FULL,file_exp,temp,p);
-		
-		// для нормальной работы с длинными путями, путь нужно преобразовать в UNC
-		if (wcsstr(temp,L"\\\\?\\")==NULL){
-			delete[] file_exp;
-			file_exp=new wchar_t[p+7];
-			wcscpy(file_exp,L"\\\\?\\");
-			wcscat(file_exp,temp);
-			editorSet->viewFile(DString(file_exp));
-		}
-		else
-			editorSet->viewFile(DString(temp));
-
-		delete[] temp;
-		delete[] file_exp;
+    
+    wchar_t *nfile= NULL;
+    nfile = PathToFool(file,true);
+    editorSet->viewFile(DString(nfile));
+    
+    delete[] nfile;
 	}
-	else
-  {
-    editorSet->ReadSettings();
-		editorSet->configure();
-  }
 
 	return INVALID_HANDLE_VALUE;
 };
@@ -121,7 +80,7 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 int WINAPI ConfigureW(int ItemNumber)
 {
   editorSet->ReadSettings();
-	editorSet->configure();
+	editorSet->configure(false);
 	return 1;
 };
 
