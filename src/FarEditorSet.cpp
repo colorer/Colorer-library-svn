@@ -33,7 +33,7 @@ void FarEditorSet::openMenu()
 {
 	int iMenuItems[] =
 	{
-		mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+		mOffEditor, mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 		mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
 		mUpdateHighlight, mReloadBase, mConfigure
 	};
@@ -56,6 +56,12 @@ void FarEditorSet::openMenu()
 			return;
 		};
 
+    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
+    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
+    FarEditor *editor = getCurrentEditor();
+    if (!editor->InWork())
+      iMenuItems[0] = mOnEditor;
+
 		for (int i = sizeof(iMenuItems) / sizeof(iMenuItems[0]) - 1; i >= 0; i--)
 		{
 			if (iMenuItems[i] == -1)
@@ -66,52 +72,58 @@ void FarEditorSet::openMenu()
 
 		menuElements[0].Selected = 1;
     
-    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
-    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
-    FarEditor *editor = getCurrentEditor();
+
 		switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
 		                   menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
 		{
-			case 0:
+      case 0:
         if (editor)
-          chooseType();
+        {
+          editor->SetWork(!editor->InWork());
+          if (!editor->InWork())
+            editor->cleanEditor();
+        }
 				break;
 			case 1:
         if (editor)
-          editor->matchPair();
+          chooseType();
 				break;
 			case 2:
         if (editor)
-          editor->selectBlock();
+          editor->matchPair();
 				break;
 			case 3:
-        if (editor)
-          editor->selectPair();
+        if (editor && editor->InWork())
+          editor->selectBlock();
 				break;
 			case 4:
-        if (editor)
-          editor->listFunctions();
+        if (editor && editor->InWork())
+          editor->selectPair();
 				break;
 			case 5:
-        if (editor)
-          editor->listErrors();
+        if (editor && editor->InWork())
+          editor->listFunctions();
 				break;
 			case 6:
-        if (editor)
-          editor->selectRegion();
+        if (editor && editor->InWork())
+          editor->listErrors();
 				break;
 			case 7:
-        if (editor)
+        if (editor && editor->InWork())
+          editor->selectRegion();
+				break;
+			case 8:
+        if (editor && editor->InWork())
           editor->locateFunction();
 				break;
-			case 9:
-        if (editor)
+			case 10:
+        if (editor && editor->InWork())
           editor->updateHighlighting();
 				break;
-			case 10:
+			case 11:
 				ReloadBase();
 				break;
-			case 11:
+			case 12:
 				configure(true);
 				break;
 		};
@@ -476,7 +488,7 @@ int FarEditorSet::editorInput(const INPUT_RECORD *ir)
 	if (rEnabled)
   {
     FarEditor *editor = getCurrentEditor();
-    if (editor)
+    if (editor && editor->InWork())
       return editor->editorInput(ir);
   }
   return 0;
@@ -504,7 +516,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       case EE_REDRAW:
         {
           editor = getCurrentEditor();
-          if (editor)
+          if (editor && editor->InWork())
             return editor->editorEvent(Event, Param);
           else return 0;
         }

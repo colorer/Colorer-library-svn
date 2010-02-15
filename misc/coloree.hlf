@@ -90,6 +90,9 @@ Choose any item to go to corresponding line in text.
 @menu
 $#Colorer operation
 
+  #0 On/off highlite#
+    Stop highlite current file.
+
   #1 List types#          ~Alt-L~
     Lists all supported file types. You can choose any of them to use
 with current editor.
