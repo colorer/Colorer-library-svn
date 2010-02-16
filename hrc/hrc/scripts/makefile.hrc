@@ -14,7 +14,7 @@
 	]]></contributors>
 </annotation>
 
-
+<!--
 <scheme name="makefile">
 	<inherit scheme='gnumake'/>
 	<inherit scheme='old-makefile'/>
@@ -23,7 +23,7 @@
 <scheme name="old-makefile" unless='gnu'>
 	<inherit scheme='old-makefile:makefile'/>
 </scheme>
-
+-->
 
 
 <region name='symbs' parent='def:Symbol'/>
@@ -57,6 +57,8 @@
 <region name='foreign' parent='def:Debug' description="other makefiles minimal support"/>
 
 
+
+
 <scheme name='comments'>
 	<block start='/\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
 </scheme>
@@ -80,6 +82,14 @@
 		region1='def:PairStart' region3='def:PairEnd'
 	/>
 </scheme>
+
+
+
+<!--
+ !
+ ! var
+ !
+ !-->
 
 <entity name='var-name' value='[^\s:=#\(\)]+'/>
 <scheme name='var-names'>
@@ -107,6 +117,11 @@
 		<word name='filter'/>
 		<word name='filter-out'/>
 		<word name='sort'/>
+		<word name='word'/>
+		<word name='words'/>
+		<word name='firstword'/>
+		<word name='lastword'/>
+		<word name='wordlist'/>
 		<word name='dir'/>
 		<word name='notdir'/>
 		<word name='suffix'/>
@@ -114,10 +129,6 @@
 		<word name='addsuffix'/>
 		<word name='addprefix'/>
 		<word name='join'/>
-		<word name='word'/>
-		<word name='words'/>
-		<word name='wordlist'/>
-		<word name='firstword'/>
 		<word name='wildcard'/>
 		<word name='error'/>
 		<word name='warning'/>
@@ -125,6 +136,17 @@
 		<word name='origin'/>
 		<word name='foreach'/>
 		<word name='call'/>
+		<word name='if'/>
+		<word name='realpath'/>
+		<word name='abspath'/>
+		<word name='or'/>
+		<word name='and'/>
+		<word name='value'/>
+		<word name='eval'/>
+		<word name='flavor'/>
+		<word name='error'/>
+		<word name='warning'/>
+		<word name='info'/>
 	</keywords>
 </scheme>
 
@@ -167,6 +189,15 @@
 	</block>
 	<inherit scheme='vars'/>
 </scheme>
+
+
+
+
+<!--
+ !
+ ! rule
+ !
+ !-->
 
 <scheme name='rule-tag-spec'>
 	<keywords region='rule-tag-spec'>
@@ -213,6 +244,9 @@
 	<inherit scheme='vars'/>
 	<regexp match='/@/' region0='silent'/>
 	<regexp match='/;/' region0='rule-tag-colon'/>
+	<inherit scheme='keywords-cond'>
+		<virtual scheme='makefile' subst-scheme='rule-content'/>
+	</inherit>
 </scheme>
 
 <scheme name='rule'>
@@ -223,9 +257,25 @@
 	
 	<inherit scheme='rule-content'/>
 	<block start='/\\?#1$/' end='/^\s*/' scheme='def:empty'/>
-	<regexp match='/^\t?!\s+/' region0='def:Error' priority='low'/>
+	<inherit scheme='rule-err'/>
 	<!-- rule defs here -->
 </scheme>
+
+<scheme name='rule-err' if='gnu'>
+	<regexp match='/^\t?!\s+/' region0='def:Error' priority='low'/>
+</scheme>
+
+
+
+
+<!--
+ !
+ ! keywords
+ !
+ !-->
+
+
+<entity name='k-pre' value="(?{foreign}!)?"/>
 
 <scheme name='keyword-if-head'>
 	<block scheme='vars'>
@@ -245,8 +295,8 @@
 </scheme>
 
 <scheme name='keyword-if-content'>
-	<regexp match='/^\s*else\b/' region0='keyword'/>
-	<inherit scheme='gnumake'/>
+	<regexp match='/^\s*%k-pre;else\b/' region0='keyword'/>
+	<inherit scheme='makefile'/>
 </scheme>
 
 <scheme name='keyword-if'>
@@ -256,6 +306,7 @@
 	</block>
 	<inherit scheme='keyword-if-content'/>
 </scheme>
+
 
 <scheme name='keywords'>
 	<block scheme='rule-content'>
@@ -272,40 +323,62 @@
 	<block start='/^\s*vpath\b/' end='/\\?~1$/' 
 		region00='keyword' scheme='template' region='in-directive'
 	/>
-	<block start='/^\s*([\-s]|(?{foreign}!))?include\M\s+(?{include-outline}.+?)\s*$/' 
+	<block start='/^\s*([\-s]|%k-pre;)?include\M\s+(?{include-outline}.+?)\s*$/' 
 		end='/$/' region00='keyword' scheme='vars' region='in-directive'
 	/>
 	
+	<inherit scheme='keywords-cond'/>
+</scheme>
+<scheme name='keywords-cond'>
 	<block scheme='keyword-if'>
-		<start match='/^\s*(ifn?eq)\b/'
+		<start match='/^\s*(%k-pre;ifn?eq)\b/'
 			region0='keyword' region1='def:PairStart'
 		/>
-		<end match='/^\s*(endif)/' 
+		<end match='/^\s*(%k-pre;endif)/' 
 			region0='keyword' region1='def:PairEnd'
 		/>
 	</block>
 	
 	<block scheme='keyword-if-content'>
-		<start match='/^\s*(ifn?def)\s+(%var-name;)/'
+		<start match='/^\s*(%k-pre;ifn?def)\s+(%var-name;)/'
 			region0='keyword' region1='def:PairStart' region2='var'
 		/>
-		<end match='/^\s*(endif)/' 
+		<end match='/^\s*(%k-pre;endif)/' 
 			region0='keyword' region1='def:PairEnd'
 		/>
 	</block>
 </scheme>
 
-<scheme name="gnumake" if='gnu'>
+
+
+<!--scheme name="gnumake" if='gnu'-->
+
+<!--
+ !
+ ! main
+ !
+ !-->
+
+<entity name='rule-name' value='[\w_.%$\{].*?'/>
+
+<scheme name="makefile">
 	<inherit scheme='keywords'/>
 	<block scheme='var-defs'  region='var-content'>
 		<start match='/^\M\s*(override|export)?\s*%var-name;\s*%var-equ;/' />
 		<end match='/\\?~1$/'/>
 	</block>
+	
 	<block scheme='rule'>
-		<start match="/^\M(?{rule-outline}[\w_.%$].*?):/"/>
+		<start match="/^\M(?{rule-outline}%rule-name;):/"/>
 		<end match="/^\s?!/"/>
 		<!--end match="/^\M[^\s#]/"/  ^\s*$|-->
 	</block>
+	<block scheme='rule-tag' region="rule-tag">
+		<start match="/^\M(%rule-name;)\\$/"/>
+		<end match="/\\?#1$/"/>
+	</block>
+	
+	<inherit scheme='var'/>
 	<inherit scheme='comments'/>
 	<regexp match='/\S/' region='def:Error' priority='low'/>
 </scheme>
