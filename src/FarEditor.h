@@ -89,8 +89,6 @@ class FarEditor : public LineSource
 		int editorInput(const INPUT_RECORD *ir);
 
 		void cleanEditor();
-    bool InWork(){return work;}
-    void SetWork(bool swork){ work=swork;}
 
 	private:
 		EditorInfo ei;
@@ -98,7 +96,7 @@ class FarEditor : public LineSource
 
 		ParserFactory *parserFactory;
 		BaseEditor *baseEditor;
-    bool work;
+
 		int  maxLineLength;
 		bool fullBackground;
 

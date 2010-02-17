@@ -5,7 +5,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 	parserFactory = pf;
 	baseEditor = new BaseEditor(parserFactory, this);
 	this->info = info;
-  work = true;
 	info->EditorControl(ECTL_GETINFO, &ei);
 	cursorRegion = NULL;
 	prevLinePosition = 0;

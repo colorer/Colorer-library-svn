@@ -29,7 +29,7 @@ enum
 	mCross, mPairs, mSyntax, mOldOutline,
 	mOk, mReloadAll, mCancel,
 	mCatalogFile, mHRDName,
-	mOnEditor, mOffEditor, mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+	mListTypes, mMatchPair, mSelectBlock, mSelectPair,
 	mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
 	mUpdateHighlight, mReloadBase, mConfigure,
 	mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
