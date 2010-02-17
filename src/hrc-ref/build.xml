@@ -81,17 +81,32 @@
   <target name="merge">
     <xslt-hrc-ref in='hrc-ref.docbook' out='hrc-ref.docbook-merged' style='db-merge.xsl'/>
   </target>
+  
+  
+  <target name='xsltgen'>
+  	<xslt in="db-import-in.xsl" out="${outxsl}" style="import-param.xsl">
+  		<param name="docbook-path" expression="${dbpath}"/>
+  	</xslt>
+  </target>
+  
+  
 
   <target name="pdf" if='hrc-ref-available' depends='init, merge' description='Builds PDF presentation' unless='pdf.required'>
     <xslt-hrc-ref in='fo-titlepage.tmpl' out='fo-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl'/>
 
-    <copy file='fo-hrc-ref.xsl' tofile='fo-hrc-ref-temporary.xsl' overwrite='true'>
+    <!--copy file='fo-hrc-ref.xsl' tofile='fo-hrc-ref-temporary.xsl' overwrite='true'>
      <filterset>
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
       </filterset>
-    </copy>
+    </copy-->
+    
+    <antcall target='xsltgen'>
+    	<param name='outxsl' value='db-import-fo.xsl'/>
+    	<param name='dbpath' value='${docbook-dir-url}/fo'/>
+    </antcall>
+    
     <xslt-hrc-ref in='hrc-ref.docbook-merged' out='hrc-ref.fo' style='fo-hrc-ref-temporary.xsl'/>
-    <delete file='fo-hrc-ref-temporary.xsl'/>
+    <!--delete file='fo-hrc-ref-temporary.xsl'/-->
     <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
       <classpath>
         <pathelement location="${fop-dir}/build/fop.jar"/>
@@ -104,13 +119,19 @@
   <!-- TODO add Colorer as DocBook's highlighting engine -->
   <target name="html" if='xslt-exists' depends='init, merge' description='Builds HTML presentation' unless='html.required'>
     <xslt-hrc-ref in='html-titlepage.tmpl' out='html-titlepage.xsl' style='${docbook-dir}/template/titlepage.xsl'/>
-    <copy file='html-hrc-ref.xsl' tofile='html-hrc-ref-temporary.xsl' overwrite='true'>
+    
+    <!--copy file='html-hrc-ref.xsl' tofile='html-hrc-ref-temporary.xsl' overwrite='true'>
      <filterset>
        <filter token="docbook-dir" value="${docbook-dir-url}"/>
      </filterset>
-    </copy>
+    </copy-->
+    <antcall target='xsltgen'>
+    	<param name='outxsl' value='db-import-xhtml.xsl'/>
+    	<param name='dbpath' value='${docbook-dir-url}/xhtml'/>
+    </antcall>
+    
     <xslt-hrc-ref in='hrc-ref.docbook-merged' out='index.html' style='html-hrc-ref-temporary.xsl'/>
-    <delete file='html-hrc-ref-temporary.xsl'/>
+    <!--delete file='html-hrc-ref-temporary.xsl'/-->
   </target>
 
   <target name="zip" description='Creates zip distribution file'>
