@@ -171,6 +171,10 @@ regf dfg dg dfg "
 ;"Sequence"="a"
 "Sequence"="%a=Editor.Pos(0,5)-1;"
 
+[HKEY_CURRENT_USER\Software\Far2\Plugins\AirBrush]
+"ColorizeAll"=hex(4):01
+"aaaaa"=hex:0,1,2,3
+
 [HKEY_CURRENT_USER\Software\Frgar2\KeyMacros\Shell\Ins]
 "Sequence"="$if ((fexist(11)) == 1) fexist(1+1) $end"
 "Sequence"="$if (fexist(1,(11+1)+0x12) == 1) fexist() $end"
