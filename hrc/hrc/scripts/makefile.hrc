@@ -9,9 +9,19 @@
 <type name="makefile">
 	<annotation><documentation>
 		GNU Make Files Syntax
+		Microsoft NMake Syntax
 	</documentation><contributors><![CDATA[
 		Eugene Efremov <4mirror@mail.ru>
 	]]></contributors>
+	<appinfo><todo>
+		GNU:
+			- vars defines in rules
+		MS:
+			- inlinetext «[KEEP | NOKEEP]
+			- check "IF-bla-bla" for correct...
+		ALL:
+			- regions revision
+	</todo></appinfo>
 </annotation>
 
 <!--
@@ -28,12 +38,15 @@
 
 <region name='symbs' parent='def:Symbol'/>
 <region name='symbs-rare' parent='regexp:Operator'/>
+<region name='if.op' parent='symbs'/>
 
 <region name='quoted' parent='def:CommentEdge'/><!-- def:StringContent'/>-->
 
 <region name='rule-tag' parent='def:Label'/>
 <region name='rule-tag-spec' parent='def:LabelStrong'/>
 <region name='rule-tag-colon' parent='symbs-rare'/>
+<region name='rule-tag-quote' parent='symbs-rare'/>
+
 <region name='rule-string' parent='def:String'/>
 <region name='var' parent='def:Var'/>
 <region name='var-ref' parent='def:SymbolStrong'/>
@@ -48,30 +61,72 @@
 <region name='silent' parent='def:KeywordStrong'/>
 
 <region name='keyword' parent='def:Directive'/>
+
 <region name='override' parent='keyword'/>
 <region name='in-directive' parent='def:String'/>
 
 <region name='rule-outline' parent='def:Outlined'/>
 <region name='include-outline' parent='def:Outlined'/>
 
-<region name='foreign' parent='def:Debug' description="other makefiles minimal support"/>
+<region name='if.op' parent='symbs'/>
+<region name='if.content' parent='rule-string'/>
+
+<!--region name='foreign' parent='def:Debug' description="other makefiles minimal support"/-->
 
 
 
 
 <scheme name='comments'>
-	<block start='/\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
+	<block start='/\^?~1\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
 </scheme>
 
 
+<scheme name='quote.v'/>
+<scheme name='quote'>
+	<block scheme='quote.v'>
+		<start match='/(")/' region0='symbs' region1='def:PairStart' />
+		<end   match='/(")/' region0='symbs' region1='def:PairEnd' />
+	</block>
+	<block scheme='quote.v'>
+		<start match="/(')/" region0='symbs' region1='def:PairStart' />
+		<end   match="/(')/" region0='symbs' region1='def:PairEnd' />
+	</block>
+</scheme>
+
+<scheme name='quote.ms' unless='gnu'>
+	<inherit scheme='quote'/>
+</scheme>
+
+
+<scheme name='specvars.ms' unless='gnu'>
+	<regexp match='/\${2}\@/' region='var'/>
+	<regexp match='/\$\*{2}/' region='var'/>
+	<regexp match='/\$\((([@*?&lt;]|\$\@|\*{2})[FDBR])\)/' region0='var' region1='var-names'/>
+</scheme>
+
 <scheme name='specvars'>
+	<inherit scheme='specvars.ms'/>
 	<regexp match='/\${2}/' region='quoted'/>
 	<regexp match='/\$[\%@&lt;\?\^\+\*\w]/' region='var'/>
 	<regexp match='/\$\(([@*%&lt;\^\+\?][FD])\)/' region0='var' region1='var-names'/>
 </scheme>
 
-<scheme name='template'>
+
+<scheme name='template.gnu' if='gnu'>
 	<regexp match='/\\(.|$)/' region='quoted'/>
+</scheme>
+
+<scheme name='template.ms' unless='gnu'>
+	<regexp match='/\\$/' region='quoted'/>
+	<regexp match='/\^[:;#()$\^\\{}!@\—]/' region='quoted'/>
+	<regexp match='/%{2,}/' region='quoted'/>
+	<regexp match='/%(s|\|[dpfe]{0,4}F)/' region='template'/>
+	<regexp match='/&lt;{2}/' region='template'/>
+</scheme>
+
+<scheme name='template'>
+	<inherit scheme='template.gnu'/>
+	<inherit scheme='template.ms'/>
 	<regexp match='/%/' region='template'/>
 	
 	<regexp match='/[\.\/]/' region0='path-symb'/>
@@ -100,6 +155,8 @@
 		<word name='MAKELEVEL'/>
 		<word name='MAKEFLAGS'/>
 		<word name='MAKECMDGOALS'/>
+		<word name='MAKEDIR'/>
+		<word name='MAKEFLAGS'/>
 		<word name='MAKE'/>
 		<word name='VPATH'/>
 		<word name='SHELL'/>
@@ -171,7 +228,14 @@
 	<regexp match='/~\s*%var-name;/' region0='var' priority='low'/>
 </scheme>
 
-<scheme name='vars'>
+
+<scheme name='vars.msq' unless='gnu'>
+	<inherit scheme='quote'>
+		<virtual scheme='quote.v' subst-scheme='vars.all'/>
+	</inherit>
+</scheme>
+
+<scheme name='vars.all'>
 	<inherit scheme='specvars'/>
 	<block scheme='var' region='var-content'>
 		<start match="/(\$\()/" region0='var-ref' region1='def:PairStart'/>
@@ -179,6 +243,14 @@
 	</block>
 	<inherit scheme='template'/>
 	<!--regexp match='/\$\S+/' region='var'-->
+</scheme>
+
+<scheme name='vars'>
+	<inherit scheme='vars.all'/>
+	<inherit scheme='vars.msq'/>
+	<inherit scheme='keywords-cond'>
+		<virtual scheme='makefile' subst-scheme='vars'/>
+	</inherit>
 </scheme>
 
 <entity name='var-equ' value='[=:?+]?\=' />
@@ -216,15 +288,53 @@
 	<!--regexp match='/\w+/' region0='def:Error' priority='low'/-->
 </scheme>
 
+<scheme name='rule-tag-dir.content'>
+	<keywords region='symbs'>
+		<symb name=';'/>
+		<symb name='\'/>
+	</keywords>
+	<inherit scheme='vars'/>
+</scheme>
 
+<scheme name='rule-tag-dir' unless='gnu'>
+	<block scheme='rule-tag-dir.content' region='def:Path'>
+		<start match="/(\{)/" region0='rule-tag-quote' region1='def:PairStart'/>
+		<end   match="/(\})/" region0='rule-tag-quote' region1='def:PairEnd'/>
+	</block>
+	<keywords region='symbs'>
+		<symb name='\'/>
+	</keywords>
+</scheme>
+
+<scheme name='rule-tag.ms' unless='gnu'>
+	<inherit scheme='quote'>
+		<virtual scheme='quote.v' subst-scheme='rule-tag.all'/>
+	</inherit>
+</scheme>
+
+<scheme name='rule-tag.all'>
+	<inherit scheme='rule-tag-spec'/>
+	<inherit scheme='rule-tag-dir'/>
+	<inherit scheme='vars'/>
+</scheme>
 
 <scheme name='rule-tag'>
-	<inherit scheme='rule-tag-spec'/>
-	<!--block scheme='rule-tag-spec' region="rule-tag">
-		<start match="/~(\.)\M\w+/" region1='rule-tag-spec'/>
-		<end match="/~\w+\m/"/>
-	</block-->
+	<inherit scheme='rule-tag.all'/>
+	<inherit scheme='rule-tag.ms'/>
+</scheme>
+
+
+
+<scheme name='rule-string.ms' unless='gnu'>
+	<inherit scheme='quote'>
+		<virtual scheme='quote.v' subst-scheme='rule-string.all'/>
+	</inherit>
+</scheme>
+
+<scheme name='rule-string.all'>
+	<inherit scheme='comments'/>
 	<inherit scheme='vars'/>
+	<!-- rule string here -->
 </scheme>
 
 <scheme name='rule-string'>
@@ -232,22 +342,43 @@
 		<start match="/~/"/>
 		<end match="/:{1,2}/" region0='rule-tag-colon'/>
 	</block>
-	
-	<inherit scheme='comments'/>
-	<inherit scheme='vars'/>
-	<!-- rule string here -->
+	<inherit scheme='rule-string.all'/>
+	<inherit scheme='rule-string.ms'/>
 </scheme>
 
 
-<scheme name='rule-content'>
+
+<scheme name='rule-content.ms' unless='gnu'>
+	<regexp match='/!/' region0='silent' priority='low'/>
+	<regexp match='/-(\[)(\d+)(\])/' 
+		region='silent' region2='def:Number'
+		region1='def:PairStart' region3='def:PairEnd'
+	/>
+</scheme>
+
+<scheme name='rule-content.msq' unless='gnu'>
+	<inherit scheme='quote'>
+		<virtual scheme='quote.v' subst-scheme='rule-content.all'/>
+	</inherit>
+</scheme>
+
+<scheme name='rule-content.all'>
 	<inherit scheme='comments'/>
 	<inherit scheme='vars'/>
+	<inherit scheme='rule-content.ms'/>
 	<regexp match='/@/' region0='silent'/>
 	<regexp match='/;/' region0='rule-tag-colon'/>
+</scheme>
+
+<scheme name='rule-content'>
+	<inherit scheme='rule-content.all'/>
+	<inherit scheme='rule-content.msq'/>
 	<inherit scheme='keywords-cond'>
 		<virtual scheme='makefile' subst-scheme='rule-content'/>
 	</inherit>
 </scheme>
+
+
 
 <scheme name='rule'>
 	<block scheme='rule-string' region="rule-string">
@@ -284,18 +415,13 @@
 		/>
 		<end match='/(\))/' region0='symbs' region1='def:PairEnd'/>
 	</block>
-	<block scheme='vars'>
-		<start match='/(")/' region0='symbs' region1='def:PairStart' />
-		<end   match='/(")/' region0='symbs' region1='def:PairEnd' />
-	</block>
-	<block scheme='vars'>
-		<start match="/(')/" region0='symbs' region1='def:PairStart' />
-		<end   match="/(')/" region0='symbs' region1='def:PairEnd' />
-	</block>
+	<inherit scheme='quote'>
+		<virtual scheme='quote.v' subst-scheme='vars.all'/>
+	</inherit>
 </scheme>
 
 <scheme name='keyword-if-content'>
-	<regexp match='/^\s*%k-pre;else\b/' region0='keyword'/>
+	<regexp match='/^\s*else\b/' region0='keyword'/>
 	<inherit scheme='makefile'/>
 </scheme>
 
@@ -323,32 +449,144 @@
 	<block start='/^\s*vpath\b/' end='/\\?~1$/' 
 		region00='keyword' scheme='template' region='in-directive'
 	/>
-	<block start='/^\s*([\-s]|%k-pre;)?include\M\s+(?{include-outline}.+?)\s*$/' 
+	<block start='/^\s*([\-s])?include\M\s+(?{include-outline}.+?)\s*$/' 
 		end='/$/' region00='keyword' scheme='vars' region='in-directive'
 	/>
 	
+	<inherit scheme='keywords.ms'/>
 	<inherit scheme='keywords-cond'/>
 </scheme>
+
 <scheme name='keywords-cond'>
 	<block scheme='keyword-if'>
-		<start match='/^\s*(%k-pre;ifn?eq)\b/'
+		<start match='/^\s*(ifn?eq)\b/'
 			region0='keyword' region1='def:PairStart'
 		/>
-		<end match='/^\s*(%k-pre;endif)/' 
+		<end match='/^\s*(endif)/' 
 			region0='keyword' region1='def:PairEnd'
 		/>
 	</block>
 	
 	<block scheme='keyword-if-content'>
-		<start match='/^\s*(%k-pre;ifn?def)\s+(%var-name;)/'
+		<start match='/^\s*(ifn?def)\s+(%var-name;)/'
 			region0='keyword' region1='def:PairStart' region2='var'
 		/>
-		<end match='/^\s*(%k-pre;endif)/' 
+		<end match='/^\s*(endif)/' 
 			region0='keyword' region1='def:PairEnd'
 		/>
 	</block>
+	<inherit scheme='keywords-cond.ms'/>
 </scheme>
 
+
+
+<!-- keywors.ms -->
+
+<scheme name='keywords.ms.content'>
+	<inherit scheme='vars.all'/>
+</scheme>
+
+<scheme name='keywords.ms.include'>
+	<inherit scheme='keywords.ms.content'/>
+	<block scheme='keywords.ms.content' >
+		<start match='/(&lt;)/' region0='symbs' region1='def:PairStart' />
+		<end   match='/(&gt;)/' region0='symbs' region1='def:PairEnd' />
+	</block>
+</scheme>
+
+<scheme name='keywords.ms' unless='gnu'>
+	<block scheme='keywords.ms.content' region='in-directive'>
+		<start match='/!(CMDSWITCHES|ERROR|MESSAGE)\b/i' region0='keyword'/>
+		<end match='/$/'/>
+	</block>
+	<block scheme='keywords.ms.content' region='var'>
+		<start match='/!UNDEF\b/i' region0='keyword'/>
+		<end match='/$/'/>
+	</block>
+	
+	<block scheme='keywords.ms.include' region='in-directive'>
+		<start match='/(!INCLUDE)\M\s+(?{include-outline}.+?)\s*$/i' region1='keyword'/>
+		<end match='/$/'/>
+	</block>
+</scheme>
+
+
+
+<scheme name='keywords-cond.ms.if.expr'>
+	<block scheme='keywords-cond.ms.if.def' region='var'>
+		<start match='/\b(DEFINED)\s*(\()/i' region0='symbs' region1='keyword' region2='def:PairStart'/>
+		<end match='/(\))/' region0='symbs' region1='def:PairEnd'/>
+	</block>
+	
+	<block scheme='rule-tag-dir.content' region='def:Path'>
+		<start match='/\b(EXISTS?)\s*(\()/i' region0='symbs' region1='keyword' region2='def:PairStart'/>
+		<end match='/(\))/' region0='symbs' region1='def:PairEnd'/>
+	</block>
+	
+	<inherit scheme='vars.msq'/>
+	
+	<keywords region='if.op'>
+		<symb name='!'/>
+		<symb name='~'/>
+		<symb name='-'/>
+		
+		<symb name='&amp;'/>
+		<symb name='&lt;'/>
+		<symb name='&gt;'/>
+		<symb name='='/>
+		<symb name='+'/>
+		<symb name='*'/>
+		<symb name='/'/>
+		<symb name='%'/>
+		<symb name='|'/>
+		<symb name='^'/>
+		<symb name=''/>
+		<symb name=''/>
+	</keywords>
+</scheme>
+
+
+
+<scheme name='keywords-cond.ms.if.def'>
+	<inherit scheme='comments'/>
+</scheme>
+
+
+<scheme name='keywords-cond.ms.if.content'>
+	<block scheme='keywords-cond.ms.if.expr' region='if.content'>
+		<start match='/~(IF)\b/i' region0='keyword' region1='def:PairStart'/>
+		<end match='/$/'/>
+	</block>
+	<block scheme='keywords-cond.ms.if.def' region='var'>
+		<start match='/~(IFN?DEF)\b/i' region0='keyword' region1='def:PairStart'/>
+		<end match='/$/'/>
+	</block>
+	
+	<regexp match='/!(ELSE)\b/i' region='keyword' priority='low'/>
+	<inherit scheme='makefile'/>
+</scheme>
+
+<scheme name='keywords-cond.ms.if'>
+	<block scheme='keywords-cond.ms.if.content'  >
+		<start match='/~\M(IF\w*)\b/i'/>
+		<end match='/\M((!ENDIF)\b|(!ELSE)\s*IF\w*)/i' />
+	</block>
+	
+	<block scheme='keywords-cond.ms.if.content'>
+		<start match='/!(ELSE)\s*\M(IF\w*)\b/i' region0='keyword' region1='def:PairEnd'/>
+		<end match='/\M((!ENDIF)\b|(!ELSE)\s*IF\w*)/i' />
+	</block>
+	
+	<regexp match='/!(ENDIF)\b/i' region='keyword' region1='def:PairEnd'/>
+	
+</scheme>
+
+<scheme name='keywords-cond.ms' unless='gnu'>
+	<block scheme='keywords-cond.ms.if'>
+		<start match='/!\MIF\w*\b/i' region0='keyword'/>
+		<end match='/!ENDIF\m/i'/>
+	</block>
+</scheme>
 
 
 <!--scheme name="gnumake" if='gnu'-->
@@ -359,13 +597,13 @@
  !
  !-->
 
-<entity name='rule-name' value='[\w_.%$\{].*?'/>
+<entity name='rule-name' value='[\w_.%$"\{].*?'/>
 
 <scheme name="makefile">
 	<inherit scheme='keywords'/>
 	<block scheme='var-defs'  region='var-content'>
 		<start match='/^\M\s*(override|export)?\s*%var-name;\s*%var-equ;/' />
-		<end match='/\\?~1$/'/>
+		<end match='/(endif)?~5[\\\^]?~1$/i'/>
 	</block>
 	
 	<block scheme='rule'>

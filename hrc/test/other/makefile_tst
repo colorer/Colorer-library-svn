@@ -1,5 +1,8 @@
 #GNU
 
+include tstfile
+!include <tstfile>
+
 objects := $(patsubst %.c,%.o,$(wildcard *.c))
 
 foo : $(objects)
@@ -38,6 +41,7 @@ ifeq ($(CC),gcc)
 else
 	$(CC) -o foo $(objects) $(normal_libs)
 endif
+	foo $** $$@ $? $<
 
 
 define PROGRAM_template
@@ -62,8 +66,9 @@ enable sep inclib 8bit 8to7 newjis xabcx dollar noeol bkslashes \
 appquit fasts uniq manis linecnt khadafy allsub flipcase space modulo \
 y-bracket y-newline insert::
 	$(SEDENV) $(SED) -f $(srcdir)/$@.sed
-
 #MS
+# its coment
+^# its not comment
     
 aa: bb
 	cc
@@ -72,6 +77,7 @@ aa: bb
 
 {dbi\}.cpp{$(ODIR)}.obj::
         $(CC) $(CFLAGS) $(YUDBI) $<
+        -[1]tst
 
 {ilstore\}.cpp{$(ODIR)}.obj::
         $(CC) $(CFLAGS) $<
@@ -96,3 +102,43 @@ aa: bb
 
 {src\cvr\}.cpp{$(ODIR)}.obj::
         $(CC) $(CFLAGS) $<
+
+O = .
+S = .
+Objs = $O/foo1.obj $O/foo2.obj $O/foo2.obj $O/foo3.obj $O/foo4.obj
+CFLAGS = -nologo
+
+all : $(Objs)
+
+xx: yy
+!ifdef Batch
+	foo
+!elseif NOBatch
+	bar
+!else
+	baz
+!endif
+	zab
+
+
+
+!ifdef NOBatch
+{$S}.cpp{$O}.obj:
+!else
+{$S}.cpp{$O}.obj::
+!endif
+   $(CC) $(CFLAGS) -Fd$O\ -c $< #fail
+
+$(Objs) :
+
+!if exist(make_vc_defs)
+!include make_vc_defs
+!endif
+!if !defined(INSTALL) && defined(DEFINSTALL)
+INSTALL=$(DEFINSTALL)
+!endif
+
+!include ./makefile_vc_getmode
+
+
+#end of makefile
