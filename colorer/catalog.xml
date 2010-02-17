@@ -21,9 +21,9 @@
     <location link="&hrc;/proto.hrc"/>
     <location link="&hrc;/auto"/>
 
-    <!-- Test HRC set
+    <!-- Test HRC set -->
     <location link="src/test/parser/hrc"/>
-     -->
+     <!-- -->
 
   </hrc-sets>
 
