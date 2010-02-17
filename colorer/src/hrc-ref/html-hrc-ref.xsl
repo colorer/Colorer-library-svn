@@ -13,7 +13,8 @@ into it's logic
 
 <!--<xsl:import href="file:/d:\programs\xml\docbook/docbook-xsl/xhtml/docbook.xsl"/>-->
 <!--by XSLT limitation it is impossible to use <xsl:param/> here-->
-<xsl:import href="@docbook-dir@/xhtml/docbook.xsl"/>
+<xsl:import href="db-import-xhtml.xsl"/>
+<!--xsl:import href="@docbook-dir@/xhtml/docbook.xsl"/-->
 
 <xsl:include href="html-titlepage.xsl"/>
 

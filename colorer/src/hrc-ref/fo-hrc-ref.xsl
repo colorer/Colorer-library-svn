@@ -9,7 +9,8 @@
  It imports docbook.xsl stylesheet and introduce some changes into it's logic.
 -->
 
-<xsl:import href="@docbook-dir@/fo/docbook.xsl"/>
+<xsl:import href="db-import-fo.xsl"/>
+<!--xsl:import href="@docbook-dir@/fo/docbook.xsl"/-->
 
 
 <xsl:include href="fo-titlepage.xsl"/>
@@ -24,7 +25,7 @@
 <xsl:param name="ulink.show" select="0"/>
 <xsl:param name="fop.extensions" select="1"/>
 <xsl:param name="shade.verbatim" select="1"/>
-<xsl:param name="paper.type" select="A4"/>
+<xsl:param name="paper.type" select="'A4'"/>
 
 <xsl:template match="author" mode="titlepage.mode">
   <fo:block keep-with-next="always" font-weight="bold">Author:</fo:block>
