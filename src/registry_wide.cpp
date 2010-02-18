@@ -3,10 +3,9 @@
 DWORD rOpenKey(HKEY hReg, const wchar_t *Name, HKEY &hKey)
 {
   DWORD dwDisposition;
-	if (RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
-                      NULL, &hKey, &dwDisposition)==ERROR_SUCCESS)
-  {
-    return dwDisposition;
+  if (RegCreateKeyExW(hReg, Name, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
+    NULL, &hKey, &dwDisposition)==ERROR_SUCCESS){
+      return dwDisposition;
   }
   return 0;
 
@@ -14,12 +13,12 @@ DWORD rOpenKey(HKEY hReg, const wchar_t *Name, HKEY &hKey)
 
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD val)
 {
-	return RegSetValueExW(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
+  return RegSetValueExW(hReg, VName, 0, REG_DWORD, (UCHAR*)(&val), 4);
 };
 
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD Type, const void *Data, DWORD Len)
 {
-	return RegSetValueExW(hReg, VName, 0, Type, (const BYTE*)Data, Len);
+  return RegSetValueExW(hReg, VName, 0, Type, (const BYTE*)Data, Len);
 };
 
 wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name, const wchar_t *DefaultValue)
@@ -27,22 +26,18 @@ wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name, const wchar_t *DefaultValue
   wchar_t *Data;
   DWORD i, Len=0;
   i=RegQueryValueExW(hReg, name, 0, NULL, NULL, &Len);
-  if (i==ERROR_SUCCESS)
-  {
+  if (i==ERROR_SUCCESS){
     int l=Len / sizeof(wchar_t);
     Data=new wchar_t[l];
     i=RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)Data, &Len);
-    if (i==ERROR_SUCCESS)
-    {
+    if (i==ERROR_SUCCESS){
       return Data;
     }
-    else 
-    {
+    else{
       delete [] Data;
     }
   }
-  if (DefaultValue)
-  {
+  if (DefaultValue){
     int k = wcslen(DefaultValue);
     Data = new wchar_t[k+1];
     wcscpy(Data,DefaultValue);
@@ -53,12 +48,14 @@ wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name, const wchar_t *DefaultValue
 
 DWORD rGetValueDw(HKEY hReg, const wchar_t *name, DWORD DefaultValue)
 {
-	DWORD data = 0;
-	DWORD i = sizeof(DWORD);
-	if (RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i) == ERROR_SUCCESS)
+  DWORD data = 0;
+  DWORD i = sizeof(DWORD);
+  if (RegQueryValueExW(hReg, name, 0, NULL, (PBYTE)&data, &i) == ERROR_SUCCESS){
     return data;
-  else
+  }
+  else{
     return DefaultValue;
+  }
 };
 
 /* ***** BEGIN LICENSE BLOCK *****

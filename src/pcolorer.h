@@ -1,7 +1,7 @@
 #ifndef _PCOLORER_H_
 #define _PCOLORER_H_
 
-/*
+/**
   Visual Leak Detector http://sites.google.com/site/dmoulding/vld .
   Optional 
 */
@@ -25,17 +25,17 @@ extern FarStandardFunctions FSF;
 /** FAR .lng file identifiers. */
 enum
 {
-	mName, mSetup, mTurnOff,
-	mCross, mPairs, mSyntax, mOldOutline,
-	mOk, mReloadAll, mCancel,
-	mCatalogFile, mHRDName,
-	mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-	mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
-	mUpdateHighlight, mReloadBase, mConfigure,
-	mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
-	mGotcha, mChoose,
-	mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-	mFatal, mNeedColorer,  mSelectHRD
+  mName, mSetup, mTurnOff,
+  mCross, mPairs, mSyntax, mOldOutline,
+  mOk, mReloadAll, mCancel,
+  mCatalogFile, mHRDName,
+  mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+  mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
+  mUpdateHighlight, mReloadBase, mConfigure,
+  mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
+  mGotcha, mChoose,
+  mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
+  mFatal, mNeedColorer,  mSelectHRD
 };
 
 #endif
