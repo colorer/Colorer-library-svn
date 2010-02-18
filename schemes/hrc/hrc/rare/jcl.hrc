@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+<!--
+    JCL syntax. Based on:
+    
+    REXX Syntax 4ever
+    3dcraze version was made by Vladimir Komarov <doublew@iname.com>
+
+    Upgrade for Colorer4u and 4ever Igor Paikin <exemok@mail.ru>
+                with help of Vladimir Komarov <doublew@iname.com>:
+    1) adding some more keywords
+    2) do .. end works as brackets
+    3) also added (modified?) odinary brackets - [..] and (..)
+    4) Nested comments support (is it really works?)
+    5) Unneeded end's are in error color
+    6) Inserted functions - thanks to Vladimir Komarov
+
+    Thanks to:
+    IBM - for that stupid language JCL
+    Eugene Roshal and Far group - for FAR
+    cail lomecb - for colorer and some help in writing of this file
+    Vladimir Komarov <doublew@iname.com> - author of 3dcraze version of REXX syntax
+                                           and soauthor of 4u and 4ever version
+    You - that are use (or read, modify and send me notes) this hrc file
+-->
+   <type name="jcl">
+
+      <import type="def"/>
+
+      <region name="jclString" parent="String"/>
+      <region name="jclComment" parent="Comment"/>
+      <region name="jclSymb" parent="Symbol"/>
+      <region name="jclWord" parent="Keyword"/>
+      <region name="jclParam" parent="Parameter"/>
+      <region name="jclParam2" parent="ParameterStrong"/>
+
+
+
+      <scheme name="jcl">
+<!-- Strings -->
+        <regexp match="/(\&#39;(.*?[^\&#39;])??\&#39;)/" region0="jclString"/>
+        <regexp match="/(\&#34;(.*?[^\&#34;])??\&#34;)/" region0="jclString"/>
+<!-- Numbers  -->
+         <inherit scheme="DecNumber"/>
+         <keywords ignorecase="yes" region="Error">
+            <word name="end"/>
+<!--no begin for this end -->
+            <word name="*/"/>
+<!-- no open comment for this close comment -->
+         </keywords>
+<!-- Symbols -->
+         <keywords region="jclSymb">
+            <symb name="("/>
+            <symb name=")"/>
+            <symb name="["/>
+            <symb name="]"/>
+            <symb name="+"/>
+            <symb name="-"/>
+            <symb name="*"/>
+            <symb name="/"/>
+            <symb name=","/>
+            <symb name="."/>
+            <symb name=";"/>
+            <symb name="="/>
+            <symb name="!"/>
+            <symb name="|"/>
+ 	    <symb name="GT"/>
+ 	    <symb name="GE"/>
+ 	    <symb name="EQ"/>
+ 	    <symb name="LT"/>
+ 	    <symb name="LE"/>
+ 	    <symb name="NE"/>
+         </keywords>
+<!-- Words -->
+         <keywords ignorecase="yes" region="jclWord">
+	    <word name="command"/>
+            <word name="exec"/>
+            <word name="job"/>
+            <word name="dd"/>
+	    <word name="jcllib"/>
+	    <word name="cntl"/>
+	    <word name="endcntl"/>
+	    <word name="dsname"/>
+	    <word name="if"/>
+	    <word name="else"/>
+	    <word name="then"/>
+	    <word name="endif"/>
+	    <word name="and"/>
+	    <word name="or"/>
+	    <word name="proc"/>
+	    <word name="pend"/>
+	    <word name="include"/>
+	    <word name="set"/>
+	    <word name="xmit"/>
+            <word name="/*jobparam"/>
+            <word name="/*message"/>
+            <word name="/*metacct"/>
+            <word name="/*notify"/>
+            <word name="/*output"/>
+            <word name="/*priority"/>
+            <word name="/*route"/>
+            <word name="/*setup"/>
+            <word name="/*signof"/>
+            <word name="/*signon"/>
+            <word name="/*xeq"/>
+            <word name="/*xmit"/>
+         </keywords>
+         <keywords ignorecase="yes" region="jclParam">
+<!-- JOB operator parameters begin -->
+            <word name="bytes"/>
+	    <word name="cards"/>
+	    <word name="ccsid"/>
+            <word name="class"/>
+	    <word name="group"/>
+            <word name="lines"/>
+            <word name="msgclass"/>
+            <word name="msglevel"/>
+            <word name="notify"/>
+            <word name="pages"/>
+            <word name="prty"/>
+	    <word name="restart"/>
+	    <word name="seclabel"/>
+	    <word name="schev"/>
+            <word name="typerun"/>
+	    <word name="user"/>
+<!-- JOB operator parameters begin -->
+<!-- EXEC operator parameters begin -->
+            <word name="acct"/>
+	    <word name="addrspc"/>
+	    <word name="ccsid"/>
+	    <word name="cond"/>
+	    <word name="dynamnbr"/>
+	    <word name="parm"/>
+ 	    <word name="perform"/>
+            <word name="pgm"/>
+            <word name="proc"/>
+	    <word name="rd"/>
+            <word name="region"/>
+	    <word name="time"/>
+<!-- EXEC operator parameters end -->
+            <word name="notify"/>
+            <word name="order"/>
+	    <word name="parm"/>
+<!-- INCLUDE operator parameters -->
+	    <word name="member"/>
+<!-- output parameters begin -->
+	    <word name="address"/>
+	    <word name="affstats"/>           
+	    <word name="building"/>
+	    <word name="burst"/>           
+	    <word name="chars"/>
+	    <word name="ckptline"/>
+	    <word name="ckptrace"/>
+	    <word name="ckptsec"/>
+	    <word name="class"/>
+	    <word name="colormap"/>
+	    <word name="compact"/>
+	    <word name="comsetupe"/>
+	    <word name="control"/>
+	    <word name="ckptline"/>
+	    <word name="datack"/>
+	    <word name="default"/>
+	    <word name="dept"/>
+	    <word name="dest"/>
+	    <word name="dpagelbl"/>
+	    <word name="duplex"/>
+	    <word name="fcb"/>
+	    <word name="flash"/>
+	    <word name="formdef"/> 
+	    <word name="formlen"/>  
+ 	    <word name="fssdata"/>  
+	    <word name="groupid"/>  
+	    <word name="index"/>  
+            <word name="intray"/>  
+	    <word name="jesds"/>  
+	    <word name="lindex"/>
+	    <word name="linect"/>
+	    <word name="mailbcc"/>  
+	    <word name="mailcc"/> 
+            <word name="mailfromc"/> 
+            <word name="mailto"/> 
+            <word name="mailfile"/>
+	    <word name="modify"/>      
+            <word name="outdisp"/>  
+            <word name="name"/> 
+            <word name="notify"/>
+            <word name="oftsetxb"/>  
+            <word name="oftsetyb"/>
+            <word name="oftsetyf"/>
+            <word name="outbin"/>      
+            <word name="overlayb"/>  
+            <word name="overlayf"/>  
+            <word name="ovfl"/>  
+            <word name="pagedef"/>
+            <word name="pimsg"/>
+            <word name="portno"/>
+            <word name="prmode"/>        
+            <word name="prtattrs"/>  
+            <word name="prterror"/>  
+            <word name="prtoptns"/>
+            <word name="prtqueue"/>
+            <word name="prty"/> 
+            <word name="replyto"/>
+            <word name="resfmt"/>
+            <word name="retains"/>           
+            <word name="retainf"/>           
+            <word name="retryl"/>           
+            <word name="retryt"/>
+            <word name="room"/>
+            <word name="sysarea"/>
+            <word name="threshld"/>                                            
+            <word name="title"/>
+            <word name="trc"/> 
+            <word name="ucs"/>
+            <word name="userdata"/>                                           
+            <word name="userlib"/>                                           
+            <word name="userpath"/>
+            <word name="writer"/>                                                                                      
+<!-- output parameters end -->
+<!-- dd parameters begin-->
+	    <word name="accode"/>
+	    <word name="amp"/>
+            <word name="avgrec"/>
+	    <word name="burst"/>
+	    <word name="ccsid"/>
+            <word name="chars"/>
+            <word name="chkpt"/>
+            <word name="cntl"/>
+            <word name="dataclas"/>
+            <word name="dcb"/>
+            <word name="ddname"/>
+            <word name="dest"/>
+            <word name="disp"/>
+            <word name="dlm"/>
+            <word name="dsid"/>
+            <word name="dsn"/>
+            <word name="dsname"/>
+            <word name="dsntype"/>
+            <word name="expdt"/>
+            <word name="fcb"/>
+            <word name="filedata"/>
+            <word name="flash"/>
+            <word name="free"/>
+            <word name="hold"/>
+            <word name="keylen"/>
+            <word name="keyoff"/>
+            <word name="label"/>
+            <word name="like"/>
+            <word name="lrecl"/>
+            <word name="mgmtclas"/>
+            <word name="modify"/>
+            <word name="outlim"/>
+            <word name="output"/>
+            <word name="path"/>
+            <word name="pathdisp"/>
+            <word name="pathmod"/>
+            <word name="pathopts"/>
+            <word name="protect"/>
+            <word name="qname"/>
+            <word name="recfm"/>
+            <word name="recorg"/>
+            <word name="refdd"/>
+            <word name="retpd"/>
+            <word name="secmodel"/>
+            <word name="segment"/>
+            <word name="space"/>
+            <word name="spin"/>
+            <word name="storclas"/>
+            <word name="subsys"/>
+            <word name="sysout"/>
+            <word name="term"/>
+            <word name="ucs"/>
+            <word name="unit"/>
+            <word name="volume"/>
+            <word name="vol=ser"/>
+<!-- dd parameters end -->
+<!-- /*jobparms parameters begin -->
+            <word name="forms"/>
+            <word name="nolog"/>
+            <word name="proclib"/>
+            <word name="sysaff"/>
+            <word name="copies"/>
+<!-- /*jobparms parameters end -->
+<!-- /*output parameters begin -->
+            <word name="ckptpgs"/>
+            <word name="copyg"/>
+            <word name="flashc"/>
+            <word name="modtrc"/>
+<!-- /*output parameters end -->
+<!-- /*route parameters begin -->
+            <word name="print"/>
+            <word name="punch"/>
+            <word name="rmt"/>
+            <word name="xeq"/>
+<!-- /*route parameters end -->
+         </keywords>
+	<keywords ignorecase="yes" region="jclParam2">
+            <word name="new"/>
+            <word name="delete"/>
+            <word name="mod"/>
+            <word name="keep"/>
+	    <word name="old"/>
+            <word name="pass"/>
+	    <word name="trk"/>
+	    <word name="cyl"/>
+	    <word name="vio"/>
+<!-- addrspc options begin -->
+	    <word name="virt"/>
+	    <word name="real"/>
+<!-- addrspc  options end -->
+<!-- cond options begin -->
+	    <word name="even"/>
+	    <word name="real"/>
+<!-- cond  options end -->
+<!-- rd options begin -->
+	    <word name="r"/>
+	    <word name="rnc"/>
+	    <word name="nr"/>
+	    <word name="nc"/>
+<!-- rd options end -->
+<!-- time options begin -->
+	    <word name="nolimit"/>
+	    <word name="maximum"/>
+<!-- time options end -->
+<!-- pages options begin -->
+            <word name="cancel"/>
+	    <word name="dump"/>
+	    <word name="warning"/>
+<!-- pages options end  -->
+<!-- typrun options begin -->
+            <word name="copy"/>
+	    <word name="hold"/>
+	    <word name="jclhold"/>
+            <word name="scan"/>
+<!-- typrun options end  -->
+<!-- output parameters begin -->
+	    <word name="yes"/>
+	    <word name="no"/>
+	    <word name="y"/>
+	    <word name="n"/>   
+	    <word name="none"/>   
+	    <word name="std"/>
+	    <word name="dump"/>
+	    <word name="program"/>
+	    <word name="single"/>
+	    <word name="double"/>
+	    <word name="triple"/>        
+	    <word name="normal"/>
+	    <word name="tumble"/>
+	    <word name="std"/>
+	    <word name="in"/>
+	    <word name="cm"/>
+            <word name="point"/>
+            <word name="pells"/>
+            <word name="mm"/>    
+ 	    <word name="all"/>
+	    <word name="jcl"/> 
+	    <word name="log"/>     
+	    <word name="msg"/>  
+            <word name="write"/>  
+            <word name="hold"/>  
+            <word name="keep"/>  
+            <word name="leave"/>  
+            <word name="purge"/>  
+            <word name="on"/>  
+            <word name="off"/>  
+            <word name="line"/>  
+            <word name="page"/>  
+            <word name="default"/>  
+            <word name="quit"/>  
+            <word name="hold"/>
+            <word name="p240"/>  
+            <word name="p300"/>
+            <word name="forever"/>      
+<!-- output parameters end -->
+<!-- dd sub-parameters begin -->
+            <word name="amorg"/>
+            <word name="bufnd"/>
+            <word name="bufni"/>
+            <word name="bufsp"/>
+            <word name="crops"/>
+            <word name="rck"/>
+            <word name="nck"/>
+            <word name="nre"/>
+            <word name="nrc"/>
+            <word name="frlog"/>
+            <word name="none"/>
+            <word name="redo"/>
+            <word name="optcd"/>
+            <word name="i"/>
+            <word name="l"/>
+            <word name="il"/>
+           
+            <word name="f"/>
+            <word name="fb"/>
+            <word name="v"/>
+            <word name="vb"/>
+            <word name="strno"/>
+            <word name="synad"/>
+            <word name="trace"/>
+            <word name="u"/>
+            <word name="k"/>
+            <word name="m"/>
+            <word name="eov"/>
+            <word name="local"/>
+            <word name="anylocal"/>
+            <word name="delete"/>
+            <word name="keep"/>
+            <word name="pass"/>
+            <word name="catlg"/>
+            <word name="uncatlg"/>
+            <word name="library"/>
+            <word name="hf"/>
+            <word name="pds"/>
+            <word name="pipe"/>
+            <word name="align"/>
+            <word name="verify"/>
+            <word name="binary"/>
+            <word name="text"/>
+            <word name="end"/>
+            <word name="close"/>
+            <word name="rlse"/>
+            <word name="contig"/>
+            <word name="mxig"/>
+            <word name="alx"/>
+            <word name="round"/>
+            <word name="abstr"/>
+            <word name="unalloc"/>
+            <word name="ts"/>
+            <word name="aff"/>
+            <word name="retain"/>
+            <word name="ref"/>
+<!-- dd sub-parameters end -->
+         </keywords>
+      </scheme>
+
+   </type>
+</hrc>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Colorer Library.
+   -
+   - The Initial Developer of the Original Code is
+   - Cail Lomecb <cail@nm.ru>.
+   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

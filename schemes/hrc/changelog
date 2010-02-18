@@ -1,5 +1,16 @@
 ﻿$Revision$
 	$Author$ $Date$
+	
+#Revision: 1398
+	formirror 2010-02-18 21:20:46 +0300 (Чт, 18 фев 2010)
+	- makefile.hrc: поддержка nmake, убрал makefile.old.hrc
+	- reg.hrc: bugfix
+	- diff.hrc: patch
+	- проставил 'firstlines' для cpp, d и xslt
+	- добавил commons-net в javalib: без нее ант собирается неправильно.
+	
+#Revision: 1349 
+	formirror 2010-02-10 03:10:19 +0300 (Ср, 10 фев 2010) 
 	Реструктуризация
 	- Теперь ant обращается к схемам через XMLcatalog.
 	- Убирается все из hrc/auto. Теперь там будет только то, что положит туда юзер.
