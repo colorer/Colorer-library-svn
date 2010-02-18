@@ -1,5 +1,8 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- makefile.hrc: поддержка nmake, убрал makefile.old.hrc
+	- reg.hrc: bugfix
+	- diff.hrc: patch
 	
 #Revision: 1349 
 	formirror Date: 2010-02-10 03:10:19 +0300 (Ср, 10 фев 2010) 
