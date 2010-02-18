@@ -257,6 +257,8 @@ LINK_LIBS=kernel32.lib user32.lib winspool.lib advapi32.lib shell32.lib mpr.lib 
 
 DEFINES=\
 	/D "UNICODE"\
+	/D "_CRT_SECURE_NO_WARNINGS"\
+	/D "_CRT_NON_CONFORMING_SWPRINTFS"\
 	/D "_UNICODE"\
 	/D "$(USEDEBUG)"\
 !if defined(DEBUG) || defined(EXCEPTION_TEST)
