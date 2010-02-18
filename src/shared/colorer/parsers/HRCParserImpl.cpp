@@ -658,7 +658,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
 
 void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
 {
-	static char rg_tmpl[0x10] = "region\0\0";
+	static char rg_tmpl[8] = "region\0";
 	
 	if(el)
 	{
@@ -690,11 +690,11 @@ void HRCParserImpl::loadRegions(SchemeNode *node, Element *el, bool st)
 void HRCParserImpl::loadBlockRegions(SchemeNode *node, Element *el)
 {
 int i;
-static char rg_tmpl[0x10] = "region";
+static char rg_tmpl[9] = "region\0\0";
 
   node->region = getNCRegion(el, DString("region"));
   for (i = 0; i < REGIONS_NUM; i++){
-      rg_tmpl[6] = '0'; rg_tmpl[7] = (i<0xA?i:i+7)+'0'; rg_tmpl[8] = 0;
+      rg_tmpl[6] = '0'; rg_tmpl[7] = (i<0xA?i:i+7+32)+'0';
       node->regions[i] = getNCRegion(el, DString(rg_tmpl));
       rg_tmpl[6] = '1';
       node->regione[i] = getNCRegion(el, DString(rg_tmpl));

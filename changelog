@@ -1,0 +1,4 @@
+﻿$Revision$
+  $Author$ $Date$
+	1. исправление в HRCParserImpl::loadBlockRegions - в названии региона должны
+		быть маленькие буквы. Плюс уменьшен размер массива.
