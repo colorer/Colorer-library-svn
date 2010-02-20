@@ -46,6 +46,7 @@ void HRCParserImpl::loadSource(InputSource *is){
   try{
     parseHRC(is);
   }catch(Exception &e){
+    curInputSource = istemp;
     throw e;
   }
   curInputSource = istemp;

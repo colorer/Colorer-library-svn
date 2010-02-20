@@ -1,4 +1,8 @@
-﻿#Revision: 1395
+﻿$Revision$
+  $Author$ $Date$
+	1. HRCParserImpl::loadSource при exception не востанавливалось значение curInputSource.
+
+#Revision: 1395
   #Author: ctapmex Date: 2010-02-18 10:03:58 +0500 (Чт, 128 фев 2010)
 	1. исправление в HRCParserImpl::loadBlockRegions - в названии региона должны
 		быть маленькие буквы. Плюс уменьшен размер массива.
