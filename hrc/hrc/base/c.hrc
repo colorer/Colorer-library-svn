@@ -131,7 +131,9 @@
 
   <scheme name="String">
    <block start="/(?{def:StringEdge}[Ll]?&#34;)/" end="/(?{def:StringEdge}&#34;)/"
-          scheme="StringContent" region="String" inner-region="yes"/>
+          scheme="StringContent" region="String" inner-region="yes"
+          region00='def:PairStart' region10='def:PairEnd'
+   />
   </scheme>
 
   <entity name='format' value='[\-\+\#0]*?[\d\*]*(?{}\.[\d\*]+)?[Ll]?[SsCcsuidopxXnEefgG]'/>

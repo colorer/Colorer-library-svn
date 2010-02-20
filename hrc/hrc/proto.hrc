@@ -828,7 +828,7 @@
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
     <parameters>
-      <param name="space-err" value="false" description="Make lead spaces as error"/>
+      <param name="space-err" value="false" description="Mark trailing spaces as error"/>
     </parameters>
   </prototype>
   <prototype name="text" group="other" description="plain text">
