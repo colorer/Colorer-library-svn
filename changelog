@@ -1,5 +1,10 @@
 ﻿$Revision$
   $Author$ $Date$
+	1. ParserFactory::searchPath кидала много исключений, пытаясь открыть ".colorer5catalog". хотя 
+		он должен обрабатываться одним из последних.
+
+#Revision: 1401
+  $Author: ctapmex Date: 2010-02-20 14:19:19 +0500 (Сб, 20 фев 2010)
 	1. HRCParserImpl::loadSource при exception не востанавливалось значение curInputSource.
 
 #Revision: 1395

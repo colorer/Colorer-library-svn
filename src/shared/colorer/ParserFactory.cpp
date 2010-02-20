@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<io.h>
 #include<stdlib.h>
 #include<sys/stat.h>
 #ifdef __unix__
@@ -165,17 +166,31 @@ String *ParserFactory::searchPath()
   c = getenv("HOMEPATH");
   if ((c != null)&&(b != null)){
     try{
-      tls.loadFile(&StringBuffer(b).append(&StringBuffer(c).append(DString("/.colorer5catalog"))), null, false);
-      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
+      StringBuffer *d=new StringBuffer(b);
+      d->append(&StringBuffer(c).append(DString("/.colorer5catalog")));
+      if (_access(d->getChars(),0) != -1){
+        tls.loadFile(d, null, false);
+        if (tls.getLineCount() > 0){
+          paths.addElement(new SString(tls.getLine(0)));
+        }
+      }
     }catch(InputSourceException &){};
   };
   // %SYSTEMROOT%/.colorer5catalog
   c = getenv("SYSTEMROOT");
   if (c == null) c = getenv("WINDIR");
-  if (c != null) try{
-    tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
-    if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-  }catch(InputSourceException &){};
+  if (c != null){ 
+    try{
+      StringBuffer *d=new StringBuffer(c);
+      d->append(DString("/.colorer5catalog"));
+      if (_access(d->getChars(),0) != -1){
+        tls.loadFile(d, null, false);
+        if (tls.getLineCount() > 0){
+          paths.addElement(new SString(tls.getLine(0)));
+        }
+      }
+    }catch(InputSourceException &){};
+  };
 
 #endif
 
