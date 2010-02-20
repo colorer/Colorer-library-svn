@@ -14,7 +14,7 @@
          location="${project-root}/src/dtd/catalog.dtd"/>
   </xmlcatalog>
 
-  <import file="../../common.xml"/>
+  <property file="../build.properties"/>
 
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
