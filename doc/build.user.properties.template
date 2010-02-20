@@ -1,0 +1,49 @@
+#
+# Machine-specific build settings for Colorer library.
+# 
+# Edit this file to override global properties from
+# 'build.properties'. Use ${project-root} to specify paths
+# relative to the root of the project.
+
+#
+# Platform for native C++ compiler available on your machine
+#
+# vc,bcc,cygwin - win32
+# gcc           - *nix
+# macos         - MacOSX
+# solarisgcc    - Solaris (GCC)
+#
+#platform=vc
+
+
+#
+# Path to Eclipse IDE dir.
+# Used to compile EclipseColorer plugin
+#
+#eclipse.dir=d:/programs/devel/eclipse
+#this.eclipse.dir=d:/programs/devel/eclipseplugins/eclipse
+
+#
+# FAR Manager directory for debug build purposes
+#
+#this.far-dir=c:/far/plugins/colorer
+
+#
+# Paths for documentation build:
+# Doxygen and DOT paths for API reference
+doxygen=d:/programs/devel/doxygen/bin/doxygen.exe
+dot-path=d:/programs/devel/graphviz/Graphviz/bin/
+# YES or NO
+use-dot=NO
+#
+# DocBook XSL paths, FOP installation directory for HRC ref
+#
+# This assumes that required files are unpacked into tools/
+#
+docbook-dir=${project-root}/tools/docbook-xsl-1.71.0
+fop-dir=${project-root}/tools/fop-0.20.5
+# path to xsl transformer if default doesn't work
+# saxon 6.5.5 is known to work ok
+xslt-classpath=${project-root}/tools/saxon/saxon.jar
+#xslt-classpath=${project-root}/tools\xalan-j_2_7_1\xalan.jar
+#xslt-classpath=${project-root}/tools/saxon9he.jar
