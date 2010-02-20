@@ -258,6 +258,8 @@
         <word name="version"/>
         <word name="vlink"/>
         <word name="vspace"/>
+        
+        <word name="repeat"/>
       </keywords>
     
     </scheme>
@@ -384,6 +386,18 @@
         <word name="var"/>
         <word name="wbr"/>
         <word name="xmp"/>
+        
+        <!-- HTML5 -->
+        <word name="footer"/>
+        <word name="section"/>
+        <word name="video"/>
+        <word name="audio"/>
+        <word name="progress"/>
+        <word name="nav"/>
+        <word name="meter"/>
+        <word name="time"/>
+        <word name="aside"/>
+        <word name="canvas"/>
       </keywords>
     </scheme>
 
