@@ -1,6 +1,6 @@
 #
 # Settings for building Colorer documentation.
-# Use 'build.user.properties' to override the settings below.
+# Copy this file to 'build.properties' and edit for your system.
 #
 
 #
