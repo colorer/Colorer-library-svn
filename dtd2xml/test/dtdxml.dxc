@@ -1,0 +1,2 @@
+BASE "../main/"
+IMPORT "dtdxml.dtd"

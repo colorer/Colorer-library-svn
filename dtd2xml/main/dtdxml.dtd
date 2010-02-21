@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- doctype -->
+
+<?CATALOG 
+	DOCUMENT "-//Colorer//DTD2XML DTD scheme//EN"
+	DOCTYPE "dtd:doctype"
+?>
+
+<!-- namespace -->
+
+<!ENTITY % xmlns "http://colorer.sf.net/2010/dtdxml">
+
+<!ENTITY % p "dtd:">
+<!ENTITY % n ":dtd">
+<!ENTITY % ns "xmlns%n;">
+
+<!-- types -->
+
+<!ENTITY % uri.type 	"CDATA">
+<!ENTITY % FPI.type 	"CDATA">
+
+<!ENTITY % role.type	"
+	(attlist|attrib|element|item|string|conduction|name|prefix|include|unknow)
+">
+
+
+<!-- names -->
+
+<!ENTITY % doctype.name  '%p;doctype'>
+
+<!ENTITY % document.name  '%p;document'>
+<!ENTITY % attlist.name  '%p;attlist'>
+<!ENTITY % attrib.name  '%p;attrib'>
+<!ENTITY % choice.name  '%p;choice'>
+<!ENTITY % conduction.name  '%p;conduction'>
+<!ENTITY % content.name  '%p;content'>
+<!ENTITY % element.name  '%p;element'>
+<!ENTITY % entity.name  '%p;entity'>
+<!ENTITY % fixed.name  '%p;fixed'>
+<!ENTITY % include-ref.name  '%p;include-ref'>
+<!ENTITY % item.name  '%p;item'>
+<!ENTITY % name.name  '%p;name'>
+<!ENTITY % notation.name  '%p;notation'>
+<!ENTITY % ref.name  '%p;ref'>
+<!ENTITY % seq.name  '%p;seq'>
+<!ENTITY % type.name  '%p;type'>
+<!ENTITY % unknow.name  '%p;unknow'>
+<!ENTITY % xml-ref.name  '%p;xml-ref'>
+
+
+<!-- attribs -->
+
+<!ENTITY % FPSI.attlist "
+	system	%uri.type;	#IMPLIED
+	public	%FPI.type;	#IMPLIED
+	href	%uri.type;	#IMPLIED
+">
+
+<!ENTITY % rname.attlist "
+	name	NMTOKEN 	#REQUIRED
+">
+
+<!ENTITY % refname.attlist "
+	name	NMTOKEN 	#IMPLIED
+	ref 	NMTOKEN 	#IMPLIED
+">
+
+
+<!ENTITY % pre.attlist "
+	pre     	NMTOKEN 	#IMPLIED
+">
+
+<!ENTITY % prerefname.attlist "
+	%refname.attlist;
+	%pre.attlist;
+	pre-ref 	NMTOKEN 	#IMPLIED
+">
+
+<!ENTITY % role.attlist "
+	role	%role.type;   'unknow'
+">
+
+
+<!ENTITY % occurs.attlist "
+	occurs	(nul-one|nul-inf|one-inf) 	#IMPLIED 
+">
+
+<!ENTITY % type.attlist "
+	type	(cdata|idref|idrefs|entity|entyties|nmtoken|nmtokens|notation)	#IMPLIED
+">
+
+
+<!-- elements -->
+
+<!ENTITY % markup.group 
+	"(%entity.name; | %include-ref.name; | %xml-ref.name;| %notation.name;| %element.name;| %conduction.name;| %attlist.name;)*"
+>
+
+<!ENTITY % element.group 
+	"%choice.name; | %seq.name;"
+>
+
+<!ENTITY % content.group 
+	"%item.name; | %ref.name; | %element.group; "
+>
+
+<!ENTITY % attrib.group 
+	"((%ref.name; | %choice.name;)?, %fixed.name;?)"
+>
+
+
+
+<!ENTITY % entity.content "
+	(%content.name;|%element.group;|%attrib.name;+|%attrib.group; | %name.name;|%type.name;|%unknow.name;)
+">
+
+
+<!-- stucture -->
+<!-- top level -->
+
+<!ELEMENT %doctype.name; (%markup.group;|%document.name;)>
+
+<!ATTLIST %doctype.name;
+	%FPSI.attlist;
+	%ns;	%uri.type;	#FIXED	"%xmlns;"
+	root	NMTOKEN 	#IMPLIED
+>
+
+<!ELEMENT %document.name; %markup.group;>
+
+<!ATTLIST %document.name;
+	%rname.attlist;
+	%pre.attlist;
+	%FPSI.attlist;
+>
+
+
+
+<!ELEMENT %entity.name; %entity.content;>
+
+<!ATTLIST %entity.name;
+	%rname.attlist;
+	%FPSI.attlist;
+	%role.attlist;
+>
+
+<!ELEMENT %xml-ref.name; ANY>
+
+<!ATTLIST %xml-ref.name;
+	%rname.attlist;
+	%FPSI.attlist;
+	ndata	NMTOKEN	#IMPLIED
+>
+
+<!ELEMENT %notation.name; EMPTY>
+
+<!ATTLIST %notation.name;
+	%rname.attlist;
+	%FPSI.attlist;
+>
+
+<!ELEMENT %include-ref.name; EMPTY>
+
+<!ATTLIST %include-ref.name;
+	%rname.attlist;
+>
+
+
+<!ELEMENT %conduction.name; %markup.group;>
+<!ATTLIST %conduction.name; 
+	%refname.attlist;
+>
+
+
+<!ELEMENT %element.name; (%content.name;|%ref.name;)>
+
+<!ATTLIST %element.name; 
+	%prerefname.attlist;
+>
+
+<!ELEMENT %attlist.name; (%attrib.name;|%ref.name;)+>
+
+<!ATTLIST %attlist.name; 
+	%prerefname.attlist;
+>
+
+
+<!-- element sub -->
+
+<!ELEMENT %content.name; (%element.group; | %ref.name; )?>
+
+<!ATTLIST %content.name; 
+	type	(strict|pcdata|any|empty)	#REQUIRED
+>
+
+
+
+<!ELEMENT %choice.name; (%content.group;)+>
+<!ELEMENT %seq.name;    (%content.group;)+>
+
+<!ATTLIST %choice.name; %occurs.attlist;>
+<!ATTLIST %seq.name;    %occurs.attlist;>
+
+
+<!ELEMENT %item.name; EMPTY>
+
+<!ATTLIST %item.name;
+	%prerefname.attlist;
+	%occurs.attlist;
+>
+
+
+<!-- attlist sub -->
+
+<!ELEMENT %attrib.name; %attrib.group; >
+
+<!ATTLIST %attrib.name;
+	%prerefname.attlist;
+	%type.attlist;
+	mode	(required|implied|fixed)	#IMPLIED
+>
+
+
+<!ELEMENT %fixed.name; (#PCDATA | %ref.name;)*> 
+
+
+<!--  entity sub -->
+
+<!ELEMENT %name.name; EMPTY>
+<!ATTLIST %name.name;
+	%prerefname.attlist;
+>
+
+<!ELEMENT %type.name; (%choice.name;)?>
+
+<!ATTLIST %type.name;
+	%type.attlist;
+>
+
+<!ELEMENT %unknow.name; (#PCDATA)>
+
+
+<!-- allways -->
+
+<!ELEMENT %ref.name; EMPTY>
+
+<!ATTLIST %ref.name;
+	%prerefname.attlist;
+	%role.attlist;
+>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is DTD2XML.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 2009-2010
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

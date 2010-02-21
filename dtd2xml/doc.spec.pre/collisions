@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+1 ============
+
+if 
+
+<dtd:entity name="ref.foo" role="name">
+	<dtd:name name="foo"/>
+</dtd:entity>
+
+then
+
+<dtd:choice>
+	<dtd:ref name="ref.foo" role="item"/>
+</dtd:choice>
+
+equ
+
+<dtd:choice>
+	<dtd:item ref="ref.foo"/>
+</dtd:choice>
+
+2 ============
+
+if
+
+<dtd:entity name="gruop" role="item">
+	<dtd:seq>
+		<dtd:item name="foo"/>
+		<dtd:item name="bar"/>
+	</dtd:seq>
+</dtd:entity>
+
+then
+
+<dtd:element name="block">
+	<dtd:ref name="group" role="element"/>
+</dtd:element>
+
+equ
+
+<dtd:element name="block">
+	<dtd:content type="strict">
+		<dtd:ref name="group" role="item"/>
+	</dtd:content>
+</dtd:element>

@@ -15,13 +15,16 @@ hrd
 	required: 'shared', 'javalib'
 
 
+for colorer 6:
+
+dtd2xml
+	DTD convertor: DTD -> XML -> XSD // todo:  XML -> CXR
+
+
 TODO (colorer 6):
 
 xsltlib
 	xsl templates library
-	
-dtd2xml
-	DTD convertor (DTD -> XML -> XSD or CXR)
 	
 cxrcs
 	"Colorer XML resources custom schema" (multiconverter)

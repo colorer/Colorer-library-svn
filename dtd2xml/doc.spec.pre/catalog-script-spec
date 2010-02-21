@@ -1,0 +1,187 @@
+﻿=================================
+ DXC -- DTD2XML extended catalog
+=================================
+
+0. Когда запускается скрипт:
+	* Внутри <?CATALOG ... ?>
+	* В файлах с расширением .cat .soc и .dxc
+	
+	
+В остальных случаях
+	Встретив 
+	<!DOCTYPE ...> - Выполняется DOCTYPE <PUBLIC> <SYSETM>
+	
+	Встретив 
+	%entity;	- Выполняется IMPORT <entity>
+	
+	Встертив 
+	<! ... > или <? ?> - Парсятся команды
+	
+	Встретив что-то иное (например разметку XML) - конец парсинга и переход к следующему файлу в очереди
+	
+=================================
+	
+Ограничения: 
+	
+	1.
+		\n - значимый символ!
+		Каждая комманда должна наичанться с новой строки!
+		
+	2.
+		Аргументы должны быть в кавычках (за исключением OVERRIDE)
+		
+	
+=================================
+
+Реализация:
+	
+	Сделано:
+		
+		INCLUDE
+		IMPORT
+		OUTBASE
+		OUTPUT
+		ROLE
+		
+		BASE
+		CATALOG
+		PUBLIC
+		SYSTEM
+		DOCUMENT
+		DOCTYPE
+		
+	TODO (будет сделано... возможно):
+		
+		PARSE (?)
+		SYSBASE
+		
+		OVERRIDE
+		ENTIY    
+		DELEGATE (?)
+		
+	Не будет поддерживаться (ибо незачем):
+		
+		NOTATION
+		LINKTYPE
+		SGMLDECL
+		DTDDECL
+		
+=================================
+
+
+INCLUDE <URI>
+	Подгуржает файл и запустакет его в обработку. Файл считаестя файлом каталога/скрипта
+	_Файл не сохраняется_
+	+ ok
+	
+IMPORT <URI>
+	Записывает файл в список для обработки. Он будет обрабатываться после текущего.
+	+ ok
+	
+================
+1. Разница между IMPORT и INCLUDE.
+	INCLUDE: Файл считается частью текущего и обрабатываетс в момент включения. Не включается в очередь, не сохраняется.
+	IMPORT: Файл записывается в список иморта/записи и обрабатывается, когда до него дойдет очередь. СОхраняется.
+================
+
+PARSE <FPI>|<URI>
+	Немедленно начинает парсинг нового файла
+	+ todo
+	-is need?
+	
+	
+SYSBASE <URI> <URI>
+	Работает аналогино SYSTEM но для BASE
+	+ todo
+	
+================
+2. Работа SYSTEM и SYSBASE
+	SYSTEM <uri> <fsi> При нахождении <fsi> ищет файл по адерсу uri
+	SYSBASE <from> <to> При нахождении файла по адресу, начинающемуся с <from>, заменяет в результирущем <fsi> <from> на <to>
+================
+	
+	
+OUTBASE <URI>
+	Корень для вывода
+	+ ok
+	
+OUTPUT <URI> <FPI|FSI>
+	Определяет выходной файл для FPI
+	Работает относительно OUTBASE
+	По умолчанию - s/\.dtd$//; $_.='-dtd.xml'
+	+ ok
+	
+ROLE <name> <role>
+	Принудительно устанавливает роль для неопрделенной сущности
+	+ ok
+	
+	
+====================================================================
+Остальные команды соответствуют OASIS Technical Resolution 9401:1997
+====================================================================
+	
+BASE <URI>
+	* input baseURI
+	+ ok
+	
+CATALOG <URI>
+	* INCLUDE subcatalog 
+	* alias of INCLUDE
+	+ normal
+	+ ok
+	
+OVERRIDE YES|NO
+	* YES - impored replace current
+	* NO  - imporertd ignore if defined
+	+ todo
+	
+	
+PUBLIC <FPI> <FSI>?
+	public decatration
+	* for @public & @system attribs
+	* find path
+	+ ok
+	
+SYSTEM <URI> <FSI>
+	system decatration
+	* for @system attrib
+	* find path for <FSI>
+	+ ok
+	
+DOCUMENT <FPI> <URI>?
+	* @public (& @system) attrib for _current_ document
+	+ ok
+	
+DOCTYPE <name> <FPI>? 
+	* set @root for <FPI> (or current unless FPI)
+	* IMPORT FPI if FPI
+	+ ok
+	
+	
+DELEGATE <FPI> <URI>
+	* place for find unknow FPI
+	+ todo
+	
+ENTIY <name> (<FPI>|<URI>)
+	* Add entity to store. 
+	+ todo
+	
+	
+NOTATION <name> (<FPI>|<URI>)
+	* Nothing to do with notations.
+	+ newer
+	
+LINKTYPE ....
+	* ignore
+	+ newer
+	
+SGMLDECL ....
+	* ignore
+	+ newer
+	
+DTDDECL <FPI> <URI>?
+	* ignore
+	+ newer
+	
+	
+
