@@ -5,8 +5,8 @@
 	xpath-default-namespace='http://colorer.sf.net/2010/dtdxml'
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
-	xmlns:p='colorer://namespace.xml/xslt/dtdxml/prep'
-	xmlns:l='colorer://namespace.xml/xslt/lib'
+	xmlns:p='colorer://xslt.ns.xml/dtdxml/prep'
+	xmlns:l='colorer://xslt.ns.xml/lib'
 >
 <xsl:import href='lib.xsl'/>
 

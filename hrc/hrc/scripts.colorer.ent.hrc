@@ -29,3 +29,12 @@
   <firstline weight='5'>/uri:colorer:custom/s</firstline>
   <firstline weight='3'>/&lt;!DOCTYPE custom\b/s</firstline>
 </prototype>
+
+<prototype name="cxr" group="scripts.colorer" description="Colorer XML resources custom schema" targetNamespace="http://colorer.sf.net/2010/cxrcs">
+	<location link="scripts/colorer/cxr.hrc"/>
+	<filename>/\.cxr$/i</filename>
+</prototype>
+<prototype name="dtdxml" group="scripts.colorer" description="DTD2XML" targetNamespace="http://colorer.sf.net/2010/dtdxml">
+	<location link="scripts/colorer/dtdxml.hrc"/>
+	<filename weight='4'>/-dtd\.xml$/i</filename>
+</prototype>

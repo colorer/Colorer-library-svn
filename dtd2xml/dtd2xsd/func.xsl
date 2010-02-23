@@ -6,9 +6,9 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs='http://www.w3.org/2001/XMLSchema'
 	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
-	xmlns:l='colorer://namespace.xml/xslt/lib'
-	xmlns:p='colorer://namespace.xml/xslt/dtdxml/prep'
-	xmlns:f='colorer://namespace.xml/xslt/dtdxml/func'
+	xmlns:l='colorer://xslt.ns.xml/lib'
+	xmlns:p='colorer://xslt.ns.xml/dtdxml/prep'
+	xmlns:f='colorer://xslt.ns.xml/dtdxml/func'
 >
 <xsl:import href='prep.xsl'/>
 

@@ -1,0 +1,1560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
+	xmlns:hrc="http://colorer.sf.net/2003/hrc"
+	targetNamespace="http://colorer.sf.net/2010/cxrcs"
+	elementFormDefault="qualified"
+ >
+
+<!-- NOTE!! This is not final version of this scheme. Syntax may be completely changed... -->
+ 
+<xs:annotation>
+	<xs:documentation xml:lang='en'>
+		Colorer XML resources custom schema
+		Written © Eugene Efremov, 2009-2010
+		
+			root:  cxr:schema
+			FPI:   -//Colorer//XML resources custom schema//EN
+			xmlns: http://colorer.sf.net/2010/cxrcs
+		
+	</xs:documentation><xs:documentation xml:lang='en'>
+		
+		TODO: Translate annotations to English...
+		
+	</xs:documentation><xs:documentation xml:lang='ru'><![CDATA[
+		TODO
+			1. <virtual> - динамическая замена имен.
+			2. trans-names - предусмотреть возможнось импорта части содержимого.
+			3. Более четко определить допустимось аттрибутов (@action, @if)
+				3.1 Может быть разрешить для них choice, как в rng?
+			4. Может быть можно задать их (и @name/@ref) соответстие через ключи?
+			5. xs:simpleTypes и hrc:scheme должны относиться к своим пространствам имен!
+				5.1 Нужна поддержка элементов из чужих пространств имен...
+			6. <namespace> - что делать при include/import?
+			7. Совместиость с hrc (как транслировать будем?)
+	]]></xs:documentation>
+</xs:annotation>
+
+
+<xs:import namespace="http://colorer.sf.net/2003/hrc" schemaLocation='http://colorer.sf.net/2003/hrc.xsd'/>
+<xs:import namespace="http://www.w3.org/2001/XMLSchema" schemaLocation='http://www.w3.org/2001/XMLSchema.xsd'/>
+
+
+
+
+<!--
+ !
+ ! simple type definitions
+ !
+ !-->
+
+<xs:simpleType name='QName'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		'Строгое' QName. Имена элементов и аттрибутов 
+		_всегда_ должны быть квалифицированны
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base="xs:QName">
+		<xs:pattern value="\i\c*:\i\c*"/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name='defAny'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Строки '##default' и '##any'. Много где используется.
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base="xs:token">
+		<xs:enumeration value="##any"/>
+		<xs:enumeration value="##default"/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name='defVal'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Строка '##default'. Много где используется.
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base="cxr:defAny">
+		<xs:enumeration value="##default"/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name='expr'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Выражение для if.
+		1. QName = string - точное соответствие
+		2. QName =~ pattern - регексп
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base="xs:string">
+		<xs:pattern value="\i\c*:\i\c*\s+=\s+\S.*"/>
+		<xs:pattern value="\i\c*:\i\c*\s+=~\s+(/.*/[igsxm]?|[^/\s].*)"/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name='pattern'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Regexp. Если заключен в // - считается регекспом hrc, иначе - xsd.
+	</xs:documentation></xs:annotation>
+	
+	<xs:union memberTypes="hrc:REstring">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[^/].+"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:union>
+</xs:simpleType>
+
+
+
+<xs:simpleType name='range'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Значение диапазона. 
+		Список из одного-двух элементов. 
+		
+		Первый не может быть inf, если опрделен второй.
+		Иначе это зависит от того, которой из них опрделен по 
+		умолчанию. 
+	</xs:documentation></xs:annotation>
+	
+	<xs:list>
+		<xs:simpleType>
+			<xs:union memberTypes="xs:nonNegativeInteger">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="inf"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:list>
+</xs:simpleType>
+
+
+
+<!-- @use ... -->
+
+<xs:simpleType name='use-base'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Значение для use-аттрубтив.
+		
+		Этот элемент является бзоваым для них для всех
+		
+		Значения (для префисов):
+			
+			required: следует использовать его и только его (допустимо несколько префиксов со знаком #required. 
+			тогда можно использовать любой префикс из этого списка).
+			
+			optional: (по умлчанию) можно использовать его или пустой префикс (для аттрибутов - только если 
+			пространство имен элемента и аттрибута совпадает. Иначе префикс небходим).
+			
+			prohibited: этот префикс использовать нельзя (имеет смысл, если рядом определен ##any, либо
+			для аттрибутов)
+			
+			default: (для аттрибутов, по умолчанию) поведение по умолчанию: использовать тогда и только
+			тогда, когда пространство имен элемента и аттрибута не совпадает
+			
+			any: (для аттрибутов) можно использовать или не исползьовать, в том числе для
+			чужих элементов (в нарушение спецификации).
+			
+		Еще определены значения:
+			
+			fixed - для аттрибудтов
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base='xs:token'>
+		<xs:enumeration value='required'/>
+		<xs:enumeration value='optional'/>
+		<xs:enumeration value='prohibited'/>
+		<xs:enumeration value='default'/>
+		<xs:enumeration value='any'/>
+		<xs:enumeration value='fixed'/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+<xs:simpleType name='use-ap'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Префиксы для аттрибутов
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base='cxr:use-base'>
+		<xs:enumeration value='required'/>
+		<xs:enumeration value='optional'/>
+		<xs:enumeration value='prohibited'/>
+		<xs:enumeration value='default'/>
+		<xs:enumeration value='any'/>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name='use-a'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Значения аттрибутов
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base='cxr:use-base'>
+		<xs:enumeration value='required'/>
+		<xs:enumeration value='optional'/>
+		<xs:enumeration value='prohibited'/>
+		<xs:enumeration value='fixed'/>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name='use-ep'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Префиксы для элементопв
+	</xs:documentation></xs:annotation>
+	
+	<xs:restriction base='cxr:use-base'>
+		<xs:enumeration value='required'/>
+		<xs:enumeration value='optional'/>
+		<xs:enumeration value='prohibited'/>
+	</xs:restriction>
+</xs:simpleType>
+
+
+
+
+<!--
+ !
+ ! global attributes
+ !
+ !-->
+
+<xs:simpleType name='actions'>
+	<xs:restriction base="xs:token">
+		<xs:enumeration value='replace'/>
+		<xs:enumeration value='replace-content'/>
+		<xs:enumeration value='remove'/>
+		<xs:enumeration value='remove-content'/>
+		<xs:enumeration value='append'/>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:attribute name='action' type='cxr:actions'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Глобальный аттрибут, определяющий наследование.
+		Подробное описание поведения см. отдельно.
+	</xs:documentation></xs:annotation>
+</xs:attribute>
+
+<xs:attributeGroup name='action'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Его локальная версия. Для своих.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='action' type='cxr:actions'/>
+</xs:attributeGroup>
+
+
+<xs:attribute name='quotes' default='all'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Глобальный аттрибут, определяющий применение hrc-схемы 
+		для типа data.
+		
+			apos - применяется для строки в апострофах (' запрещены)
+			quot - применяется для строки в кавычках   (" запрещены)
+			all (default) - применяется во всех слуаях
+	</xs:documentation></xs:annotation>
+	
+	<xs:simpleType>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value='apos'/>
+			<xs:enumeration value='quot'/>
+			<xs:enumeration value='all'/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:attribute>
+
+
+
+
+<!--
+ !
+ ! typedefs attributes
+ !
+ !-->
+
+<xs:attributeGroup name='name-q'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Имя элемента или аттрибута. 
+		Должно быть полностью квалифицированно.
+		Используется, если не используется @ref
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='name' type='cxr:QName'/>
+	
+	<xs:attribute name='name-pattern' type='cxr:pattern'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Для группы (возможно, бесконечной) элементов/аттрибутов
+			одного типа позволяет задать регулярное выражение
+			для писка полного соответствия с его NCName.
+			
+			При этом name должно быть именем первого элемента 
+			в группе схожих сущностей.
+		</xs:documentation></xs:annotation>
+	</xs:attribute>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='name-n'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Имя объекта typedefs.
+		Префикса иметь не должно. 
+		Относится к пространству имен, опрделенному в type/@name.
+		Используется, если не используется @ref
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='name' type='xs:NCName'/>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='ref'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Ссылка на объект, определенный в другом месте. 
+		При использовании этого аттрибута нельзя использовать @name
+		и ряд других аттрибутов (это нельзя отразить в схеме). 
+		
+		Аттрибут нельзя использовать для объектов верхнего уровня.
+		(Это можно отразить в схеме, но ценой очень 
+		гормоздкого дублирования кода. Так что я это делать не буду.)
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='ref' type='cxr:QName'/>
+</xs:attributeGroup>
+
+
+
+<xs:attributeGroup name='refname-q'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Объединение несовместмых атрибутов.
+		Они используются в одном и том же контексте, 
+		Так что разделить их нельзя. :-(
+		
+		Вариант 1, для QName.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attributeGroup ref='cxr:name-q'/>
+	<xs:attributeGroup ref='cxr:ref'/>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='refname-n'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Вариант 2, для NCName.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attributeGroup ref='cxr:name-n'/>
+	<xs:attributeGroup ref='cxr:ref'/>
+</xs:attributeGroup>
+
+
+
+<xs:attributeGroup name='inherit'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Атрибуты, используемые при наследовании.
+		
+		Есть ряд ограничений на их совместное 
+		использование, см. описание action
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='inherit' type='cxr:QName'/>
+	<xs:attributeGroup ref='cxr:action'/>
+</xs:attributeGroup>
+
+
+
+<xs:attributeGroup name='use-item'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Атрибуты, определяющие способ испоььзования 
+		входящих в последовательность элементов.
+		
+		Если их нет, предполагается, что про элементы 
+		изестно лишь, что они могут встречаться в 
+		данном контексе (порядок и количество включений 
+		не опрделено).
+	</xs:documentation></xs:annotation>
+	
+	
+	<xs:attribute name='use-sequence' default='choice'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Определяет построение последовательности группы, 
+			аналог xs:sequence, choice, all...
+		</xs:documentation></xs:annotation>
+		
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value='sequence'/>
+				<xs:enumeration value='choice'/>
+				<xs:enumeration value='all'/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	
+	<xs:attribute name='use-occurs' type='cxr:range' default='0 inf'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Определяет число элементов в группе.
+			Если определен только первый элемент - 
+			второй предполагается inf.
+			
+			Первый элемент inf быть не может!
+		</xs:documentation></xs:annotation>
+	</xs:attribute>
+	
+	<xs:attribute name='use-prefix' type='cxr:use-ep'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Переопрделяет использование префикса по умолчанию
+		</xs:documentation></xs:annotation>
+	</xs:attribute>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='use-attrib'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Аналог xs:attribute/use или DTD #...
+		
+		Если @use=fixed -- attrib/default должен быть объявлен.
+		Значение prohibited имеет смысл использовать 
+		только вместе с any.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='use' default='optional' type='cxr:use-a'/>
+	<xs:attribute name='use-prefix' type='cxr:use-ap'/>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='if'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Элемент/аттрибут/объект допустим лишь
+		если условие истино.
+		
+		@if - соответствие значение аттрибута выражению
+		@ifdef -  перечисленные аттрибуты оределены
+		@ifndef -  перечисленные аттрибуты _не_ оределены
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='if' type='cxr:expr'/>
+	<xs:attribute name='ifdef'>
+		<xs:simpleType>
+			<xs:list itemType="cxr:QName"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name='ifndef'>
+		<xs:simpleType>
+			<xs:list itemType="cxr:QName"/>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:attributeGroup>
+
+
+<xs:attributeGroup name='namespace'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Налагает ограичение на допустимое пространство имен 
+		По умолачаию - любое (для any-element - любое, 
+		кроме текущего).
+		
+		Вместо ##defult, ##all etc. следует
+		использовать определенные для них псевднонимы!
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='namespace'>
+		<xs:simpleType>
+			<xs:list itemType="xs:anyURI"/>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:attributeGroup>
+
+
+
+<xs:attributeGroup name='object-attribs'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Стандартный набор аттрибутов для объекта содержимого.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attributeGroup ref='cxr:refname-n'/>
+	<xs:attributeGroup ref='cxr:inherit'/>
+	<xs:attributeGroup ref='cxr:if'/>
+</xs:attributeGroup>
+
+
+
+
+
+<!--
+ !
+ ! annotations
+ !
+ !-->
+
+
+<xs:element name='annotation'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Like xs:annotation
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="appinfo" type='cxr:documentation'/>
+			<xs:element name="documentation" type='cxr:documentation'/>
+		</xs:choice>
+	</xs:complexType>
+</xs:element>
+
+<xs:complexType name="documentation" mixed="true">
+	<xs:sequence minOccurs="0" maxOccurs="unbounded">
+		<xs:any processContents="lax"/>
+	</xs:sequence>
+	<xs:attribute name="href" type="xs:anyURI"/>
+	<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+
+<xs:complexType name="annotated">
+	<xs:sequence>
+		<xs:element ref="cxr:annotation" minOccurs="0"/>
+	</xs:sequence>
+</xs:complexType>
+
+
+
+
+<!--
+ !
+ ! data
+ !
+ !-->
+
+<xs:element name='pattern'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		like xs:pattern
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attribute name='match' type='cxr:pattern'/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='list'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		like sequence of xs:enumeration
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name='item' minOccurs="1" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name='value' type='xs:string'/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='simple'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Simple content (like enumeration, patterns, etc)
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Простейшее содержимое, не тербующее переопрделенеия
+			
+		@reply определяет число повторений. Если в нем только один
+		элемент списка - это второй, первый равен 1.
+		@reply='inf' (equ @reply='1 inf') - аналог xs:list.
+		
+		@ref имеет смысл только вместе с @reply, иначе получается 
+		полный аналог inherit.
+	</xs:documentation></xs:annotation>
+	
+	
+	<xs:complexType>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref='cxr:pattern'/>
+			<xs:element ref='cxr:list'/>
+		</xs:choice>
+		
+		<xs:attribute name='reply' type='cxr:range' default='1 1'/>
+		<xs:attributeGroup ref='cxr:ref'/>
+		<xs:attributeGroup ref='cxr:action'/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='inherit'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		CDATA inheritage
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Определяет наследование для data.
+		Может быть несколько предков, тогда 
+		они складываются как xs:union,
+		если типы конфликтуют, приоритет имеет первый из них.
+		
+		data/@inherit рассматриавтеся как аналог первого
+		из data/inherit, за исключением того, что
+		data/@action применяется к data по отношению
+		к data/@inherit, но не по отношению к data/inherit.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attributeGroup ref='cxr:ref'/>
+		<xs:attributeGroup ref='cxr:action'/>
+	</xs:complexType>
+</xs:element>
+
+
+
+<xs:element name='data'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		CDATA (equ xs:simpleType)
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		simpleContent элемента/аттрибута
+		(в отличии от xs:simpleContent, может использоваться
+		совместно с любым другим допустимым содержимим)
+		
+		Аттрибуты @hrc-scheme и @xs-type не должны использоваться ондовременно!
+		Соотв. элементы тоже, но это отражено в choice...
+		
+		Для всех встореных xs-типов определены обертки, такие, что  
+		записи ref='xs:string' и xs-type='xs:string' эквивалентны.
+		В частности, это позволяет ссылаться на xs-тип непосредственно 
+		из атрибута.
+		
+		Пустой элемент без содержимого и предков обозначает PCDATA, 
+		и работает аналогично xs:complexType/@mixed.
+		
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Имеем проблему: hrc:scheme и xs:simpleType должны иметь аттрибуты из 
+		пространства имен cxr.
+		
+	</xs:documentation></xs:annotation>
+	
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref='cxr:inherit' minOccurs='0' maxOccurs='unbounded'/>
+				<xs:element ref='cxr:simple'  minOccurs='0' maxOccurs='1'/>
+			</xs:sequence>
+			
+			<xs:element name='scheme' minOccurs='0' maxOccurs='2'>
+				<xs:annotation><xs:documentation xml:lang='ru'>
+					HRC схема. На самом деле она относится к 
+					пространству имен hrc.
+					
+					Если определены две схемы, @quotes для первой должен
+					иметь значение 'apos', для второй - 'quot'.
+					Если одна - 'all' (по умолчанию).
+				</xs:documentation></xs:annotation>
+				
+				<xs:complexType><xs:complexContent><xs:extension base='hrc:scheme'>
+					<xs:attribute ref='cxr:action'/>
+					<xs:attribute ref='cxr:quotes'/>
+					<xs:attribute name='name' use='prohibited'/>
+				</xs:extension></xs:complexContent></xs:complexType>
+			</xs:element>
+			
+			<xs:element name='simpleType' minOccurs='0' maxOccurs='1'>
+				<xs:annotation><xs:documentation xml:lang='ru'>
+					XSD тип. Может быть определен только один.
+					На самом деле относится к пространству имен xs.
+					
+					Имеет имя, одноименное с родителькисм. Имя 
+					может использоваться в ссылках вида
+					data/xs:simpleType/xs:restriction/@base
+				</xs:documentation></xs:annotation>
+				
+				<xs:complexType><xs:complexContent><xs:extension base='xs:localSimpleType'>
+					<xs:attribute ref='cxr:action'/>
+				</xs:extension></xs:complexContent></xs:complexType>
+			</xs:element>
+		</xs:choice>
+		
+		
+		<xs:attributeGroup ref='cxr:object-attribs'/>
+		
+		<xs:attribute name='hrc-scheme' type='hrc:QName'>
+			<xs:annotation><xs:documentation xml:lang='ru'>
+				Аналог data/hrc:scheme/hrc:inherit/@scheme
+				hrc:scheme и @hrc-scheme не должны использоваться одновременно!
+			</xs:documentation></xs:annotation>
+		</xs:attribute>
+		
+		<xs:attribute name='xs-type' type='cxr:QName'>
+			<xs:annotation><xs:documentation xml:lang='ru'>
+				Аналог data/xs:simpleType/xs:restriction/@base
+				xs:simpleType и @xs-type не должны использоваться одновременно!
+			</xs:documentation></xs:annotation>
+		</xs:attribute>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+
+<!--
+ !
+ ! typedefs
+ !
+ !-->
+ 
+<xs:element name='default'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Default attribute value
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attribute name='value' use='required' type='xs:string'/>
+		<xs:attributeGroup ref='cxr:action'/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='attrib'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Attribute definition
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Аттрибут. 
+		
+		Внутри attrib/data @if запрещен!
+		@name - required!
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:all>
+			<xs:element ref='cxr:data' minOccurs='0'/>
+			<xs:element ref='cxr:default' minOccurs='0'/>
+		</xs:all>
+		
+		<xs:attributeGroup ref='cxr:name-q'/><!-- @ref not allowed -->
+		<xs:attributeGroup ref='cxr:if'/>
+		<xs:attributeGroup ref='cxr:action'/>
+		<xs:attributeGroup ref='cxr:use-attrib'/>
+		
+		<xs:attribute name='data' type='cxr:QName'>
+			<xs:annotation><xs:documentation xml:lang='ru'>
+				Аналог attrib/data/@ref 
+				data и @data не должны использоваться одновременно!
+			</xs:documentation></xs:annotation>
+		</xs:attribute>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+ 
+
+<xs:element name='attlist'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Attribute list. Attributes allowed only here.
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Список аттрибутов. Аттрибуты допускаются 
+		только внурти этого списка.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:element ref='cxr:attlist'/>
+			<xs:element ref='cxr:attrib'/>
+			<xs:element ref='cxr:any'/>
+		</xs:choice>
+		
+		<xs:attributeGroup ref='cxr:object-attribs'/>
+		
+		<xs:attribute name='global' type='xs:boolean' default='false'>
+			<xs:annotation><xs:documentation xml:lang='ru'>
+				Данные атрибуты могут использоваться где угодно 
+				за пределами типа. Атрибут имеет смысл
+				только для определений верхнего уровня.
+			</xs:documentation></xs:annotation>
+		</xs:attribute>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+<xs:element name='any'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Any elements (group/any) or attributes (attlist/any)
+		allowed here.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attributeGroup ref='cxr:namespace'/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='group'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Child elements
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Элементы внутри элемента
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:group ref='cxr:elements'/>
+			<xs:element ref='cxr:group'/>
+			<xs:element ref='cxr:any'/>
+		</xs:choice>
+		
+		<xs:attributeGroup ref='cxr:object-attribs'/>
+		<xs:attributeGroup ref='cxr:use-item'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='content'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Element content: attributes, child elements, cdata.
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Содержимое элемента
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:group ref='cxr:content'/>
+		</xs:choice>
+		
+		<xs:attributeGroup ref='cxr:object-attribs'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+ 
+<xs:complexType name='element'><xs:complexContent><xs:extension base='cxr:annotated'>
+	<xs:all>
+		<xs:element ref='cxr:key' minOccurs='0'/>
+		<xs:element ref='cxr:content' minOccurs='0'/>
+	</xs:all>
+	
+	<xs:attributeGroup ref='cxr:action'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Для элементов имеет смысл только в контексте 'redefine'
+		</xs:documentation></xs:annotation>
+	</xs:attributeGroup>
+	
+	<xs:attribute name='content' type='cxr:QName'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Аналог element/content/@ref 
+			content и @content не должны использоваться одновременно!
+		</xs:documentation></xs:annotation>
+	</xs:attribute>
+</xs:extension></xs:complexContent></xs:complexType>
+
+
+<xs:element name='element'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Base element definition
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Определение элемента
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:element'>
+		<xs:attributeGroup ref='cxr:refname-q'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='any-element'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Unknow element (template)
+	</xs:documentation><xs:documentation xml:lang='ru'><![CDATA[
+		Чужой элемент. Используется как 
+		"шаблон" для элемента. 
+		T.e., к нему могут применяться
+		все тревования, допустимые для элемента. 
+		Но вместо элемента используется нечто 
+		произвольное, относящиеся к "чужему" 
+		пространству имен.
+		
+		Что именно понимать под "чужим" - может опрделяеться
+		с помощью substitution. Если 'any-element' 
+		анонимен, это невозможно. По умолчанию используется:
+			
+			<cxr:substitytion>
+				<cxr:any namespace='{@namespace}'/>
+			</cxr:substitytion>
+		
+		Аттрибут any-element/@namespace влияет также на пространснво имен по умолчанию
+		для substitution/any.
+	]]></xs:documentation><xs:documentation xml:lang='ru'>
+		TODO: допустима ли ссылка element/@ref, ведущая на any-element,
+		или она обязана быть в виде any-element/@ref?
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:element'>
+		<xs:attributeGroup ref='cxr:refname-n'/>
+		<xs:attributeGroup ref='cxr:namespace'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='key'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Key, for match document structure and logic.
+		For relation, not for validation.
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Ключи не имеют отношения к проверке правильности
+		документа, они позволяют обрабатывающему приложению создать 
+		его логичекий каркас (например, построением outlines).
+		
+		Смысл такой же, как у ключей в реляционной базе данных.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:attribute name='name' type='xs:NCName' use='required'/>
+		<xs:attributeGroup ref='cxr:if'/>
+		
+		<xs:attribute name='use' use='required'>
+			<xs:annotation><xs:documentation xml:lang='ru'>
+				Определяет аттрибут, ассоциированный со занчением ключа
+				Если атрибут отсутствует, ключ не используется.
+				
+				##default - вместо аттрибута используется значение элемета
+				##any - любой имеющийся аттрибут (можно использовать первый 
+				в списке).
+			</xs:documentation></xs:annotation>
+			
+			<xs:simpleType>
+				<xs:union memberTypes="xs:QName cxr:defAny"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+<xs:group name='content'>
+	<xs:choice>
+		<xs:element ref='cxr:data'/>
+		<xs:element ref='cxr:attlist'/>
+		<xs:element ref='cxr:group'/>
+	</xs:choice>
+</xs:group>
+
+<xs:group name='elements'>
+	<xs:choice>
+		<xs:element ref='cxr:element'/>
+		<xs:element ref='cxr:any-element'/>
+	</xs:choice>
+</xs:group>
+
+<xs:group name='typedefs'>
+	<xs:choice>
+		<xs:group ref='cxr:content'/>
+		<xs:element ref='cxr:content'/>
+		<xs:group ref='cxr:elements'/>
+		<xs:element ref='cxr:substitution'/>
+		<xs:element ref='cxr:root'/>
+	</xs:choice>
+</xs:group>
+
+
+
+
+
+<!--
+ !
+ ! substitytions
+ !
+ !-->
+
+<xs:group name='subst-elements'>
+		<xs:choice>
+			<xs:element name='any-element' type='cxr:included-typedef'/>
+			<xs:element name='element'     type='cxr:included-typedef'/>
+			<xs:element name='group'       type='cxr:included-typedef'/>
+			<xs:element ref='cxr:any'/>
+		</xs:choice>
+</xs:group>
+
+
+<xs:element name='substitution'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Substitution group for 'any-element'.
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Определяет, что именно подразумевать под 'any-element'.
+		По умолчанию это cxr:any.
+		
+		Все элементы, включаемые в группу подстановки, наследуют свойства 
+		исходного any-element и могут использоваться везде, 
+		где он используется.
+		
+		Имя группы должно совпадать с именем элемента. 
+		
+		@action используется, чтобы определить, что делать с
+		одноименными группами, унаследованными из других типов.
+		
+		group, на которые ссылаются substitution/group не дожны 
+		иметь атрибута @if.
+		
+		Пространсво имен по умолчанию для substitution/any
+		наследуется. При отсуствии предков - от @namespace 
+		исходного any-element.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:group ref='cxr:subst-elements'/>
+		</xs:choice>
+		
+		<xs:attribute name='name' type='cxr:QName' use='required'/>
+		<xs:attributeGroup ref='cxr:action'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='root'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Allowed root elements list.
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Список корневых элементов
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:group ref='cxr:subst-elements'/>
+		</xs:choice>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+
+
+<!--
+ !
+ ! include / embed
+ !
+ !-->
+
+<xs:group name='includes'>
+	<xs:choice>
+		<xs:element ref='cxr:include'/>
+		<xs:element ref='cxr:import'/>
+		<xs:element ref='cxr:embed'/>
+	</xs:choice>
+</xs:group>
+
+
+<xs:group name='included-typedefs'>
+	<xs:choice>
+		<xs:element name='substitution' type='cxr:included-typedef'/>
+		<xs:element name='any-elenemt'  type='cxr:included-typedef'/>
+		<xs:element name='elenemt'      type='cxr:included-typedef'/>
+		<xs:element name='content'      type='cxr:included-typedef'/>
+		<xs:element name='group'        type='cxr:included-typedef'/>
+		<xs:element name='attlist'      type='cxr:included-typedef'/>
+		<xs:element name='data'         type='cxr:included-typedef'/>
+	</xs:choice>
+</xs:group>
+
+
+<xs:complexType name='included-typedef'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Ссылка на элемент из группы typedef.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attributeGroup ref='cxr:ref'/>
+</xs:complexType>
+
+
+<xs:complexType name='redefine'><xs:complexContent><xs:extension base='cxr:annotated'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Переопределение содержимого
+	</xs:documentation></xs:annotation>
+	
+	<xs:sequence minOccurs='1' maxOccurs='unbounded'>
+		<xs:group ref='cxr:typedefs'/>
+	</xs:sequence>
+</xs:extension></xs:complexContent></xs:complexType>
+
+
+<xs:complexType name='include'><xs:complexContent><xs:extension base='cxr:annotated'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Общий тип для подстановок
+		
+		redefine заменяет в случае, если элементы совпадает
+		redefine-all заменяет/добавляет во все элементы такого типа
+			redefine-all/@where - тип элеменотов, в котором производить подстановки
+			redefine-all/@location - 
+				named - именованные
+				local - анонимные
+				all - named + local
+				any - + any-element
+				
+	</xs:documentation></xs:annotation>
+	
+	<xs:sequence>
+		<xs:group ref='cxr:included-typedefs' minOccurs='0' maxOccurs='unbounded'/>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:element name='redefine' type='cxr:redefine'/>
+			
+			<xs:element name='redefine-all'>
+				<xs:complexType><xs:complexContent><xs:extension base='cxr:redefine'>
+					<xs:attribute name='where'>
+						<xs:simpleType><xs:restriction base='xs:NCName'>
+							<xs:enumeration value='element'/>
+							<xs:enumeration value='content'/>
+							<xs:enumeration value='data'/>
+							<xs:enumeration value='attlist'/>
+							<xs:enumeration value='group'/>
+						</xs:restriction></xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name='location' default='named'>
+						<xs:simpleType><xs:list>
+							<xs:simpleType><xs:restriction base='xs:token'>
+								<xs:enumeration value='local'/>
+								<xs:enumeration value='global'/>
+								<xs:enumeration value='all'/>
+								<xs:enumeration value='any'/>
+							</xs:restriction></xs:simpleType>
+						</xs:list></xs:simpleType>
+					</xs:attribute>
+				</xs:extension></xs:complexContent></xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:sequence>
+	
+	<xs:attribute name='content' default='all'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Определяет способ работы с included-typedefs.
+				all - включаем все содержимое, группа не нужна
+				listed - включаем перечисленные
+				excluded - включаем все, кроме перечисленных
+		</xs:documentation></xs:annotation>
+		
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="all"/>
+				<xs:enumeration value="listed"/>
+				<xs:enumeration value="excluded"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	
+	<xs:attribute name='spec-content' default='all'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Определяет способ работы с доп содержимым.
+				all - включаем все содержимое
+				entity - включаем сущности
+				pre - включаем инструкции обработки
+				none - ничего из этого не включаем
+		</xs:documentation></xs:annotation>
+		
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="all"/>
+				<xs:enumeration value="entity"/>
+				<xs:enumeration value="pre"/>
+				<xs:enumeration value="none"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	
+	<xs:attribute name='inherit-ns' type='xs:boolean' default='false'>
+		<xs:annotation><xs:documentation xml:lang='ru'>
+			Включать ли опрделенные у предка пространства имен?
+			Пространтва имен, определенные в потомке, имеют больший 
+			приоритет!
+		</xs:documentation></xs:annotation>
+	</xs:attribute>
+</xs:extension></xs:complexContent></xs:complexType>
+
+
+
+<xs:element name='trans-name'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Translate namespaces
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Переносит все импоритруемые элементы из 
+		пространства имен @from в пространство имен @to
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attribute name='from' type='xs:anyURI' use='required'/>
+		<xs:attribute name='to'   type='xs:anyURI' use='required'/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='import'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Import other types
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Пордгужается другой тип.
+		Все подстановки производятся в процессе
+		работы схемы. Если результат работы -
+		другая схема, то желательно, чтобы 
+		в ней было сохранено наследование.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:include'>
+		<xs:sequence>
+			<xs:element ref='cxr:trans-name' minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+		
+		<xs:attribute name='href' type='xs:anyURI' use='optional'/>
+		<xs:attribute name='type' type='xs:anyURI' use='required'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='include'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Include same type from other files
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		В подгружаемом файле ищется одноименный тип
+		и грузится. Все подстановки выполняются 
+		до начала любой другой работы со схемой. 
+		(Преобразуется исходный XML).
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:include'>
+		<xs:attribute name='href' type='xs:anyURI' use='required'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+<xs:attributeGroup name='embed-types'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Type of foreign schemas (hrc, xsd, etc...)
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Тип встраиваемой/исходящей схемы.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='type' use='required'>
+		<xs:simpleType>
+			<xs:union memberTypes="xs:QName">
+				<xs:simpleType>
+					<xs:restriction base="xs:NCName">
+						<xs:enumeration value='hrc'/>
+						<xs:enumeration value='xsd'/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:attributeGroup>
+
+
+<xs:element name='embed'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Embed foreign schemas (hrc, xsd, etc...)
+	</xs:documentation></xs:annotation>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Встороенные элементы целевых схем.
+		На текущий момент поддерживаются xs:simpleType (@type = 'xsd')
+		и все содержимое hrc/type (@type = 'hrc')
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='hrc:type'>
+		<xs:sequence>
+			<xs:element ref='xs:simpleType' minOccurs='0' maxOccurs='unbounded'/>
+		</xs:sequence>
+		
+		<xs:attributeGroup ref='cxr:embed-types'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+
+<!--
+ !
+ ! entities & preporcessor
+ !
+ !-->
+
+<xs:group name='entities'>
+	<xs:choice>
+		<xs:element ref='cxr:entity'/>
+		<xs:element ref='cxr:notation'/>
+		<xs:element ref='cxr:processing-instruction'/>
+	</xs:choice>
+</xs:group>
+
+
+<xs:complexType name='entity'>
+	<xs:attribute name='name' type='xs:QName' use='required'/>
+	<xs:attribute name='public' type='xs:public'/>
+	<xs:attribute name='system' type='xs:anyURI'/>
+</xs:complexType>
+
+
+<xs:element name='notation' type='cxr:entity'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		XML NOTATION declares
+	</xs:documentation></xs:annotation>
+</xs:element>
+
+
+<xs:element name='entity'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		XML ENTITY declares
+	</xs:documentation><xs:documentation xml:lang='ru'><![CDATA[
+		Определение сущности (XML ENTITY).
+		
+		Сущность используется в документе как '&entity;'
+		Опредленение ее здесь не отменяет необходимсоть
+		определения ее в DTD для использования в исходном 
+		документе, (если только используемый XML-парсер 
+		не научится вдруг понимать CXRCS), но позволяет
+		CXRCS-валидатору проверить допустимость использования
+		сущности без обращения к этому DTD.
+	]]></xs:documentation></xs:annotation>
+	
+	<xs:complexType mixed='true'><xs:complexContent><xs:extension base='cxr:entity'>
+		<xs:sequence>
+			<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		
+		<xs:attribute name='ndata' type='xs:QName'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+<xs:element name='processing-instruction'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		XML processing-instruction declares
+	</xs:documentation><xs:documentation xml:lang='ru'><![CDATA[
+		Инструкции препроцессора XML
+		
+		В них возможно содержимое двух видов:
+		1. Псевдоаттрибуты:
+			<?foo bar='baz'?>
+			
+		2. Неизвестно что:
+			<?foo bar baz... ?>
+			
+		Поэтому для processing-instruction допустимы
+		элементы attlist и data для обработки обоих 
+		вариантов. То, что попадает под определение
+		псевдоаттрибута, будет обрабатыватья первым,
+		все остальное - вторым.
+		
+		Аттрибут @if внутри содежимого недопустим!
+	]]></xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:all>
+			<xs:element ref='cxr:attlist' minOccurs="0"/>
+			<xs:element ref='cxr:data' minOccurs="0"/>
+		</xs:all>
+		
+		<xs:attribute name='name' type='xs:Name' use='required'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+
+
+<!--
+ !
+ ! root
+ !
+ !-->
+<!--
+<xs:attributeGroup name='hrc'>
+	<xs:annotation><xs:documentation xml:lang='ru'>
+		Определяет аттрибуты, ассоциирующее
+		пространство имен с hrc-типом.
+	</xs:documentation></xs:annotation>
+	
+	<xs:attribute name='hrc-type' type='xs:NCName'/>
+</xs:attributeGroup>
+-->
+
+<xs:element name='prefix'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Know used prefixies for this namespace
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Префиксы:
+		##default - пустой префикс.
+		##any - любой возможный префикс
+		
+		required - всегда использовать.
+		optional - можно использовать или не использовать - на выбор.
+		default - требуется использовать, если аттрибут чужой, иначе - нет.
+		prohibited префикс для аттрибутов не исползуется.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attribute name='name' use='required'>
+			<xs:simpleType>
+				<xs:union memberTypes="xs:NCName cxr:defAny"/>
+			</xs:simpleType>
+		</xs:attribute>
+		
+		<xs:attribute name='use' type='cxr:use-ep' default='optional'/>
+		<xs:attribute name='attrib-use' type='cxr:use-ap' default='default'/>
+	</xs:complexType>
+</xs:element>
+
+ 
+<xs:element name='namespace'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Used namespaces and aliases for them
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		##default - пространство имен по умолчанию.
+		##any - все пространства имен, кроме явно перечисленных
+		
+		@alias - используется вместо этого пространства в текущем документе.
+			Может использоваться как название типа.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:sequence>
+			<xs:element ref='cxr:prefix' minOccurs='1' maxOccurs='unbounded'/>
+		</xs:sequence>
+		
+		<xs:attribute name='uri' use='required'>
+			<xs:simpleType>
+				<xs:union memberTypes="xs:anyURI cxr:defAny"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name='alias' type='xs:anyURI'/>
+		<!--
+		<xs:attributeGroup ref='cxr:hrc'/>-->
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+ 
+
+<xs:element name='output'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Metainformation for conversion to other type schemas
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Информация для генераторов схем
+			
+			@type - целевой тип. 
+			Допускается только один элемент output для каждого типа!
+			
+			Остальные данные могут иметь разный смысл для разных вты
+			@target-ns - выходное пространство имен(если не определено - берется ../@name)
+			@name - выходное имя типа (если имеет смысл)
+			@content-type - для описываемого схемой типа...
+			@public, @system, @любые другие данные, если имеют смысл...
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attributeGroup ref='cxr:embed-types'/>
+		
+		<xs:attribute name='name' type='xs:NCName'/>
+		<xs:attribute name='target-ns' type='xs:anyURI'/>
+		<xs:attribute name='public' type='xs:public'/>
+		<xs:attribute name='system' type='xs:anyURI'/>
+		<xs:attribute name='content-type' type='xs:string'/>
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:complexType>
+</xs:element>
+
+
+<xs:element name='apply-template'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Use template for this type
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Заставляет использовать шаблон на типе.
+		Шаблоны применяются после всех include,
+		в порядке их следования.
+		
+		Если @href опрделен, шаблон ишется в том файле,
+		иначе в текущем.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType>
+		<xs:attribute name='name' type='xs:NCName' use='required'/>
+		<xs:attribute name='href' type='xs:anyURI'/>
+	</xs:complexType>
+</xs:element>
+
+
+
+<!-- type -->
+
+<xs:group name='type'>
+	<xs:sequence>
+		<xs:element ref='cxr:namespace' minOccurs='0' maxOccurs='unbounded'/>
+		<xs:choice minOccurs='0' maxOccurs='unbounded'>
+			<xs:group ref='cxr:typedefs'/>
+			<xs:group ref='cxr:includes'/>
+			<xs:group ref='cxr:entities'/>
+		</xs:choice>
+	</xs:sequence>
+</xs:group>
+
+
+<xs:element name='template'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Template for includes
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		Шаблон, аналогичен incldue 
+		любого типа, который на этот 
+		шблон ссылается.
+		
+		Тип включается с помощью include-caller.
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:sequence>
+			<xs:group ref='cxr:type'/>
+			<xs:element name='include-caller' type='cxr:include'/> <!-- reqired -->
+		</xs:sequence>
+		
+		<xs:attribute name='name' type='xs:NCName' use='required'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+<xs:element name='type'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Root for any XML type
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:sequence>
+			<xs:element ref='cxr:output' minOccurs='0' maxOccurs='unbounded'/>
+			<xs:element ref='cxr:apply-template' minOccurs='0' maxOccurs='unbounded'/>
+			<xs:group ref='cxr:type'/>
+		</xs:sequence>
+		
+		<xs:attribute name='name' type='xs:anyURI' use='required'/>
+		<xs:attribute name='public' type='xs:public'/>
+	</xs:extension></xs:complexContent></xs:complexType>
+	
+	<xs:unique name='output'>
+		<xs:selector xpath="cxr:output"/>
+		<xs:field xpath="@type"/>
+	</xs:unique>
+</xs:element>
+
+
+
+<!-- root -->
+
+<xs:element name='schema'>
+	<xs:annotation><xs:documentation xml:lang='en'>
+		Root CXRCS element
+	</xs:documentation><xs:documentation xml:lang='ru'>
+		include-all добавляет содержимое во все подключаемые файлы
+	</xs:documentation></xs:annotation>
+	
+	<xs:complexType><xs:complexContent><xs:extension base='cxr:annotated'>
+		<xs:sequence>
+			<xs:element name='include-all' type='cxr:include' minOccurs='0' maxOccurs='1'/>
+			<xs:choice minOccurs='1' maxOccurs='unbounded'>
+				<xs:element ref='cxr:type'/>
+				<xs:element ref='cxr:template'/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="version" type="xs:token" default='0.1'/> <!-- ??? -->
+	</xs:extension></xs:complexContent></xs:complexType>
+</xs:element>
+
+
+</xs:schema>

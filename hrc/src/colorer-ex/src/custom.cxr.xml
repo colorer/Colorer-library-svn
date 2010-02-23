@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<custom xmlns="uri:colorer:custom">
+
+<custom-type targetNamespace="http://colorer.sf.net/2010/cxrcs">
+	<prefix>cxr</prefix>
+	<prefix>xr</prefix>
+	<prefix>xrc</prefix>
+	
+	<force-prefix>
+		<element name='scheme'/>
+		<prefix>hrc</prefix>
+		<empty-prefix/>
+	</force-prefix>
+	
+	<force-prefix>
+		<element name='simpleType'/>
+		<prefix>xs</prefix>
+		<prefix>xsd</prefix>
+	</force-prefix>
+	
+	<contributors><![CDATA[
+		Eugene Efremov <4mirror@mail.ru>
+	]]></contributors>
+	
+	<top-level>
+		<element>schema</element>
+	</top-level>
+	
+	
+	<type xmlns="http://colorer.sf.net/2003/hrc">
+		<region name='expr.op'      parent='def:Operator'/>
+		<region name='range.number' parent='def:Number'/>
+		<region name='ns.spec'      parent='xmlschema:ns.spec'/>
+		<region name='ns.spec.mark' parent='xmlschema:ns.spec.mark'/>
+		
+		<entity name='QName-ex' 
+			value='\b(?{xml:QName.nsprefix}%xml:NCName;)(?{xml:QName.nscolon}\:)(?{xml:QName.name}%xml:NCName;)\b'
+		/>
+		
+		
+		
+		<scheme name="QName-content">
+			<regexp match="/(~|\s?#1)%QName-ex;/" />
+		</scheme>
+		
+		
+		<scheme name="pattern-content">
+			<!--union:-->
+			<inherit scheme="hrc:REstring-content"/>
+			<inherit scheme="xmlschema:REstring-content"/>
+		</scheme>
+		
+		
+		<scheme name='expr-content'>
+			<block start='/~([&apos;&quot;])?#1\s*%QName-ex;\s+(=\~)\s+/g' end='/\M\y1/'
+				scheme='pattern-content' region02='expr.op'
+			/>
+			
+			<regexp match='/~\s*%QName-ex;\s+(=)\s+\M\S/' region1='expr.op'/>
+			<regexp match='/~.+/' region='xml:badChar' priority='low'/>
+			
+			<inherit scheme="xmlschema:string-content"/>
+		</scheme>
+		
+		
+		<scheme name='range-content'>
+			<regexp match='/~\s*(\d+\s+)?(\d+|inf)/' region='range.number'/>
+		</scheme>
+		
+		
+		
+		<scheme name="defVal-list">
+			<keywords region='ns.spec' worddiv='[\s#&apos;&quot;]'>
+				<word name='default'/>
+			</keywords>
+			<inherit scheme="xml:badChar"/>
+		</scheme>
+		
+		<scheme name="defVal-content">
+			<block start='/(~|\s?#1)(##)\M\w+\b/' end='/~\w+\b\m/'
+				scheme='defVal-list' region02='ns.spec.mark'
+			/>
+		</scheme>
+		
+		
+		<scheme name="defAny-list">
+			<keywords region='ns.spec' worddiv='[\s#&apos;&quot;]'>
+				<word name='any'/>
+			</keywords>
+			<inherit scheme="defVal-list"/>
+		</scheme>
+		
+		<scheme name="defAny-content">
+			<inherit scheme="defVal-content">
+				<virtual scheme='defVal-list' subst-scheme='defAny-list'/>
+			</inherit>
+		</scheme>
+	</type>
+	
+	
+	<outline> 
+		<element name='type' extract='withAttribute' description='new type definition'/>
+		
+		<element name='include' extract='withAttribute' description='inlcude in current type'/>
+		<element name='import'  extract='withAttribute' description='import other type'/>
+		<element name='namespace' extract='withAttribute' description='namespace declaration'/>
+		
+		<element name='element' extract='withAttribute' description='element'/>
+		<element name='items'   extract='withAttribute' description='elements list'/>
+		<element name='attlist' extract='withAttribute' description='attributes list'/>
+		<element name='content' extract='withAttribute' description='element content'/>
+		<element name='data'    extract='withAttribute' description='PCDATA content'/>
+		<element name='processing-instruction' extract='withAttribute' description='processing instruction'/>
+	</outline>
+	
+</custom-type>
+
+
+
+<custom-type targetNamespace="http://colorer.sf.net/2010/dtdxml">
+	<prefix>dtd</prefix>
+	<contributors><![CDATA[
+		Eugene Efremov <4mirror@mail.ru>
+	]]></contributors>
+	
+	<top-level>
+		<element>doctype</element>
+	</top-level>
+	
+	<outline>
+		<element name='document' extract='withAttribute' description='DOCTYPE declaration'/>
+		<element name='conduction' extract='attributeValue' description='Conductional rules'/>
+		<element name='entity'  extract='attributeValue' description='DTD ENTITY declaration'/>
+		<element name='xml-ref' extract='attributeValue' description='XML ENTITY declaration'/>
+		<element name='element' extract='attributeValue' description='ELEMENT declaration'/>
+		<element name='attlist' extract='attributeValue' description='ATTLIST declaration'/>
+		<element name='notation' extract='attributeValue' description='NOTATION declaration'/>
+		<element name='include-ref' extract='attributeValue' description='Include exteranal entity'/>
+	</outline>
+	
+</custom-type>
+
+</custom>
