@@ -514,6 +514,10 @@
     <filename>/\.pr[oif]$/i</filename>
   </prototype>
   
+  <prototype name="mkb" group="scripts" description="Project build file for Airplay SDK">
+    <filename>/\.(mkb|mkf)$/i</filename>
+    <location link="scripts/mkb.hrc"/>
+  </prototype>
   <prototype name="ant" group="scripts" description="Ant's build.xml" targetNamespace="http://jakarta.apache.org/ant/">
     <location link="scripts/gen/ant.hrc"/>
     <filename weight='4'>/\bbuild\.xml$/ix</filename>
