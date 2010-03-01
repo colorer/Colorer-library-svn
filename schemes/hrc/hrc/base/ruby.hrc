@@ -81,7 +81,7 @@
       <regexp match='/\M def \s+ (?{MethodOutline}\S+)/x'/>
       
 
-      <block start='/(?{def:PairStart}(?{Keyword}def)) \s+ (\S+?) (\(.*?\))?/x' end='/\b(?{def:PairEnd}(?{Keyword}end))\b/' scheme='ruby'/>
+      <block start='/(?{def:PairStart}(?{Keyword}def) \s+ ([^\s\(]+)) (\(.*?\))?/x' end='/\b(?{def:PairEnd}(?{Keyword}end))\b/' scheme='ruby'/>
 
 
       <block start='/^\s*(case|class|do|begin|for|while|unless|until|module)\b/' end='/\b(end)\b/' scheme="ruby"
@@ -106,7 +106,7 @@
     </scheme>
     
     <scheme name='Keywords'>
-      <regexp match='/ :(?{Keyword}[\w_]+) /x'/>
+      <regexp match='/ :(?{def:Identifier}[\w_]+) /x'/>
 
       <keywords region="Keyword">
         <word name="BEGIN"/>
@@ -161,9 +161,11 @@
 
       <keywords region="def:Symbol">
         <symb name='+'/><symb name='-'/><symb name='/'/><symb name='*'/><symb name='='/><symb name='!='/>
+        <symb name="."/><symb name=","/>
         <symb name="$'"/>
         <symb name="$/"/>
         <symb name="$`"/>
+        <symb name="::"/>
       </keywords>
 
     </scheme>
@@ -205,3 +207,5 @@
    - the terms of any one of the MPL, the GPL or the LGPL.
    -
    - ***** END LICENSE BLOCK ***** -->
+
+ 	  	 
