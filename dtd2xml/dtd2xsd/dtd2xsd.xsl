@@ -9,7 +9,7 @@
 	xmlns:l='colorer://xslt.ns.xml/lib'
 	xmlns:p='colorer://xslt.ns.xml/dtdxml/prep'
 	xmlns:f='colorer://xslt.ns.xml/dtdxml/func'
->
+ >
 <xsl:import href='func.xsl'/>
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>

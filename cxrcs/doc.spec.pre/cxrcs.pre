@@ -1,0 +1,180 @@
+
+<cxr:scheme xmlns:cxr="colorer://namespace.xml/2009/cxrcs">
+
+<!-- Colorer XML resource custom scheme -->
+
+<cxr:type name='[имя типа]' root='[строгое QName] list' public='[fpi]' hrc='[ассоциированный HRC тип]'>
+
+<!--  если root отсутсвует - считается пакетом -->
+
+<cxr:namespace uri='uri|##default' alias='xmlns, используемое здесь' use='extern|local|default' action='[только в контексте redfine]'>
+	<cxr:hrc type='[ассоциированный HRC тип]'/>
+	<cxr:prefix pre='NCName|##default' alias='используемый здесь префикс' use='optional|required'/>
+</cxr:namespace>
+
+
+<!--
+ ! определения типоав
+ !-->
+
+<!-- ... - то же самое или ref='ссылка на тип'  -->
+
+<cxr:items name="[имя типа]" inherit='[имя предка]' use-...="[способ использования]" action='[action]' if='[match]'>
+	[<virtual/>]
+	<cxr:element... /> 
+	<cxr:items... />
+</cxr:items>
+
+<cxr:attlist name="[имя типа]" inherit='[имя предка]'  action='[action]'>
+	[<virtual/>]
+	<cxr:attribute name='[строгое QName]' data='[ref]' use="optional|reqired|fixed"  action='[action]' if='[match]'>
+		<xs:data.../>
+		<xs:default value='' action='[action]'/>
+	</cxr:attribute>
+	<cxr:attlist.../>
+</cxr:attlist>
+
+
+<cxr:data name="[имя типа]" quotes='normal|diff' xs-type='ref' hrc-scheme='ref' inherit='ref' action='[action]' if='[match]'>
+	<cxr:inherit name="[дата]"/>
+	
+	<hrc:scheme quotes='apos|quot|all' action='[action]'/>
+	<xs:simpleType action='[action]'/>
+</cxr:data>
+
+<cxr:content name='[имя типа]' inherit='[имя предка]' action='[action]'>
+	[<virtual/>]
+	<cxr:items... />
+</cxr:content>
+
+
+<cxr:element name="[строгое QName]" content='ref' action='[action]'>
+	<cxr:content... />
+</cxr:element>
+
+
+<!--
+ ! импорт
+ !-->
+
+<cxr:import type='имя типа' href='[если определен в другом файле]'>
+	<cxr:redefine>
+		[опеделения типов]
+	</cxr:redefine>
+</cxr:import>
+
+
+<cxr:include href='uri, берется только текущий тип'>
+	<cxr:redefine>
+		[опеделения типов] -- переопределяется на этапе препорцессинга
+		---или переопрделение namespace---
+	</cxr:redefine>
+</cxr:include>
+
+<cxr:embed type='[hrc|xsd]'>
+	<xs:simpleType/>
+	или
+	произвольное содержимое <hrc:type/>
+</cxr:embed>
+
+
+</cxr:type>
+
+
+
+<!--
+ ! прочие определения
+ !-->
+
+
+<!-- [<virtual/>]: -->
+<cxr:virtual>
+	<cxr:subst from='что заменить' to='чем заменить'/>
+</cxr:virtual>
+
+
+</cxr:scheme>
+
+Атрибут [action]: 
+- Возможен лиш при наличии атрибута inherit
+- Пока определен у родителей, аттрибут inherit у детей не допускаюется
+
+
+replace - заменяет значение родителя собой. (дети не могут иметь атрибут action, но могут заново определить inherit)
+
+replace-content - заменяет детей (эквивалентно replace у всех детей).
+
+remove - удаляет родителя (дети недустимы)
+
+remove-content - удаляет детей (эквивалентно remove у всех детей).
+
+append - добавляет детей, если совпадают - заменяет в части свпадения. Значение по умолачанию
+
+
+Совпадающими элементами считается:
+
+namespace (*) - совападющий @uri (допускается использование только в контексте include/redefine) / iskuhit!
+
+element, attribute, items, attlist, data, content - совпадающий @name. 
+Если несколько с одним @name - совпадающий if. Если совпадения по @if нет - совпадетс с #default или строкий без if. 
+При отсутствии таковых выдается ошибка.
+
+
+type/hrc:scheme (*) - совпадающий @quotes (допускается лишь одна схема для каждого типа)
+
+type/xs:simleType, attribute/default (*) - эти элементы допускаются в одном экземплярe => единцвенный элемент и есть совпадющий.
+
+(*) Для этих элементов допускается только remove/replace. Значение по умолчанию - replace.
+
+
+
+Группа атрибутов use...
+
+attribute/@use - kak в dtd/xsd.
+
+use-occurs='[0..inf]..[0..inf]'
+количество повторений. По умолчанию - use-occurs='0 inf' 
+если опущен второй аргумент - [первтый аргумент]..inf
+
+use-sequence='sequence|choice|all'
+Способ повторений. 
+sequence - строгая последователлность, 
+choice - любой из приведенных на выбор, 
+all - требуются все элементы порядок не важен
+По умолчаню - choice.
+
+Примечание: В этом -- отличие от xsd. Мы по умолчанию предполагаем только, что элемент _может_ здесь появлятся. 
+Более строгие требования (колорером не поддерживаемые) требуют задания спецатрибутов.
+
+
+
+Атрибут if
+
+Паттерн имеет вид: @foo = 'bar' or|and @baz =~ 'math or|and @other != defined or ##default'
+	
+1	@foo - имя аттрибута
+	'' - строка или шаблон xsd
+	'//' - шаблон hrc
+	defined -- аттрибут существиет
+	#default -- всегда истино
+	
+2	=	точное соответствие нормализованных строк
+	!=	несоотвтетвие 
+	=~	совпадение с шаблоном
+3	and	логические операторы  
+4	or	
+
+
+Компонент схемы применяется, если аттрибут элемента удвлетворяет выражению.
+
+Ограничение, сделанное для минимацазии обработки (она будет на XSLT): Операторы должны быть отделены пробелами. 
+В регекспах запрещается употреблять последовательности, которые можно принять за упомянутые операторы, а также 
+символы кавычек (в т.ч. в виде &apos;&quot;). 
+Пользуктесь метасимволами вместо этого.
+Кртоме того, строки могут быть нормализованы, так что значимые пробельные символы в регекспах не допустимы.
+
+Неправильно: "@foo =~ '/([&apos;&quot;]) or die \1/'" 
+Правильно:   "@foo =~ '/([\x22\x27])\s+or\s+die\s+\1/'" 
+
+Примечание: вместо имени атрибута могло бы быть любое выражение xpath, но колорер его все равно не поймет...
+Даже аттрибуты он поймет, только если они в одной строке с именем элемента...

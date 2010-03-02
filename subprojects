@@ -20,11 +20,11 @@ for colorer 6:
 dtd2xml
 	DTD convertor: DTD -> XML -> XSD // todo:  XML -> CXR
 
+cxrcs
+	"Colorer XML resources custom schema" (multiconverter)
 
 TODO (colorer 6):
 
 xsltlib
-	xsl templates library
-	
-cxrcs
-	"Colorer XML resources custom schema" (multiconverter)
+	xsl templates library (for cxrcs, dtd2xml)
+

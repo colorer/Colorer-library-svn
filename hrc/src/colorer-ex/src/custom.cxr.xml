@@ -57,7 +57,7 @@
 				scheme='pattern-content' region02='expr.op'
 			/>
 			
-			<regexp match='/~\s*%QName-ex;\s+(=)\s+\M\S/' region1='expr.op'/>
+			<regexp match='/~\s*%QName-ex;\s+(!? =)\s+\M\S/x' region1='expr.op'/>
 			<regexp match='/~.+/' region='xml:badChar' priority='low'/>
 			
 			<inherit scheme="xmlschema:string-content"/>

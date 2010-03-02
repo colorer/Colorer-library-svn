@@ -1,0 +1,1743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cxr:schema 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
+	xmlns:hrc="http://colorer.sf.net/2003/hrc"
+ >
+<cxr:type name="http://colorer.sf.net/2010/cxrcs" public='-//Colorer//XML resources custom schema//EN'>
+
+<cxr:apply-template name="xsi" href="xsi.cxr"/>
+<cxr:namespace uri="http://colorer.sf.net/2010/cxrcs">
+	<cxr:prefix name="cxr"/>
+	<cxr:prefix name="xr"/>
+	<cxr:prefix name="xrc"/>
+	<cxr:prefix name="##any"/>
+</cxr:namespace>
+<cxr:namespace uri="http://colorer.sf.net/2003/hrc">
+	<cxr:prefix name="hrc"/>
+	<cxr:prefix name="##any"/>
+</cxr:namespace>
+<cxr:namespace uri="http://www.w3.org/2001/XMLSchema">
+	<cxr:prefix name="xs"/>
+	<cxr:prefix name="xsd"/>
+	<cxr:prefix name="##any"/>
+</cxr:namespace>
+
+
+<cxr:annotation>
+	<cxr:documentation xml:lang='en'>
+		Colorer XML resources custom schema
+		Written © Eugene Efremov, 2009-2010
+		
+			root:  cxr:schema
+			FPI:   -//Colorer//XML resources custom schema//EN
+			xmlns: http://colorer.sf.net/2010/cxrcs
+	</cxr:documentation>
+</cxr:annotation>
+
+
+<cxr:import type="http://colorer.sf.net/2003/hrc"/>
+<cxr:import type="http://www.w3.org/2001/XMLSchema"/>
+ 
+
+
+
+<!--
+ !
+ ! simple data definitions
+ !
+ !-->
+
+<cxr:data name="QName">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		'Строгое' QName. Имена элементов и аттрибутов 
+		_всегда_ должны быть квалифицированны,
+		т.к. может использоваться более одного пространства имен
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:pattern match="\i\c*:\i\c*"/>
+	</cxr:simple>
+</cxr:data>
+
+<cxr:data name='QNameList'>
+	<cxr:simple reply='1 inf' ref='cxr:QName'/>
+</cxr:data>
+
+
+<cxr:data name="defAny">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Строки '##default' и '##any'. Много где используется.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple ref='cxr:defVal'>
+		<cxr:list>
+			<cxr:item value='##any'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name="defVal">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Строка '##default'. Много где используется.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:list>
+			<cxr:item value='##default'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name="expr">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Выражение для if.
+		1. QName = string - точное соответствие
+		2. QName != string - точное НЕсоответствие
+		3. QName =~ pattern - регексп
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:pattern match="\i\c*:\i\c*\s+!?=\s+\S.*"/>
+		<cxr:pattern match="\i\c*:\i\c*\s+=~\s+(/.*/[igsxm]?|[^/\s].*)"/>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name="pattern">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Regexp. Если заключен в // - считается регекспом hrc, иначе - xsd.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:inherit ref='hrc:REstring'/>
+	<cxr:inherit ref='xs:REstring'/><!-- this type wil be defined in xsd.cxr -->
+</cxr:data>
+
+
+<cxr:data name="range">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Значение диапазона. 
+		Список из одного-двух элементов. 
+		
+		Первый не может быть inf, если опрделен второй.
+		Иначе это зависит от того, которой из них опрделен по 
+		умолчанию. 
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple reply='1 2' ref='xs:nonNegativeInteger'>
+		<cxr:list>
+			<cxr:item value='inf'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+
+<!-- @use ... -->
+
+<cxr:data name='use-ep'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Значение для use-аттрубтив.
+		
+		Этот тип является базовым для них для всех,
+			а также — представляет префиксы для элементов.
+		
+		Значения (для префисов):
+			
+			required: следует использовать его и только его (допустимо несколько префиксов со знаком #required. 
+			тогда можно использовать любой префикс из этого списка).
+			
+			optional: (по умлчанию) можно использовать его или пустой префикс (для аттрибутов - только если 
+			пространство имен элемента и аттрибута совпадает. Иначе префикс небходим).
+			
+			prohibited: этот префикс использовать нельзя (имеет смысл, если рядом определен ##any, либо
+			для аттрибутов)
+			
+			default: (для аттрибутов, по умолчанию) поведение по умолчанию: использовать тогда и только
+			тогда, когда пространство имен элемента и аттрибута не совпадает
+			
+			any: (для аттрибутов) можно использовать или не исползьовать, в том числе для
+			чужих элементов (в нарушение спецификации).
+			
+		Еще определены значения:
+			
+			fixed - для аттрибудтов
+			choice - для attlist
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:list>
+			<cxr:item value='required'/>
+			<cxr:item value='optional'/>
+			<cxr:item value='prohibited'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name='use-a' inherit='cxr:use-ep'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Значения аттрибутов
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:list>
+			<cxr:item value='fixed'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name='use-al' inherit='cxr:use-ep'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Значения attlist
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:list>
+			<cxr:item value='choice'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+<cxr:data name='use-ap' inherit='cxr:use-ep'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Префиксы для аттрибутов
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:simple>
+		<cxr:list>
+			<cxr:item value='default'/>
+			<cxr:item value='any'/>
+		</cxr:list>
+	</cxr:simple>
+</cxr:data>
+
+
+
+
+
+
+<!--
+ !
+ ! global attributes
+ !
+ !-->
+ 
+<cxr:attlist global="true" name="action">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Глобальный аттрибут, определяющий наследование.
+		Подробное описание поведения см. отдельно.
+		
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:action">
+		<cxr:data>
+			<cxr:simple>
+				<cxr:list>
+					<cxr:item value='replace'/>
+					<cxr:item value='replace-content'/>
+					<cxr:item value='remove'/>
+					<cxr:item value='remove-content'/>
+					<cxr:item value='append'/>
+				</cxr:list>
+			</cxr:simple>
+		</cxr:data>
+		<cxr:default value="append"/>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+<cxr:attlist global="true" name="quotes">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Глобальный аттрибут, определяющий применение hrc-схемы 
+		для типа data.
+		
+			apos - применяется для строки в апострофах (' запрещены)
+			quot - применяется для строки в кавычках   (" запрещены)
+			all (default) - применяется во всех слуаях
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:quotes">
+		<cxr:data>
+			<cxr:simple>
+				<cxr:list>
+					<cxr:item value='apos'/>
+					<cxr:item value='quot'/>
+					<cxr:item value='all'/>
+				</cxr:list>
+			</cxr:simple>
+		</cxr:data>
+		<cxr:default value="all"/>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+
+
+<!--
+ !
+ ! typedefs attributes
+ !
+ !-->
+
+<cxr:attlist name="name-q" ifndef='cxr:ref'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Имя элемента или аттрибута. 
+		Должно быть полностью квалифицированно.
+		Используется, если не используется @ref
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name='cxr:name' data='cxr:QName' use='required'/>
+	
+	<cxr:attrib name='cxr:name-pattern' data='cxr:pattern'>
+		<cxr:annotation><cxr:documentation xml:lang='ru'>
+			Для группы (возможно, бесконечной) элементов/аттрибутов
+			одного типа позволяет задать регулярное выражение
+			для писка полного соответствия с его NCName.
+			
+			При этом name должно быть именем первого элемента 
+			в группе схожих сущностей.
+		</cxr:documentation></cxr:annotation>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+<cxr:attlist name="name-n" ifndef='cxr:ref'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Имя объекта typedefs.
+		Префикса иметь не должно. 
+		Относится к пространству имен, опрделенному в type/@name.
+		Используется, если не используется @ref
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:name" data="xs:NCName"/>
+</cxr:attlist>
+
+
+<cxr:attlist name="ref" ifndef='cxr:name'>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Ссылка на объект, определенный в другом месте. 
+		При использовании этого аттрибута нельзя использовать @name
+		и ряд других аттрибутов (это нельзя отразить в схеме). 
+		
+		Аттрибут нельзя использовать для объектов верхнего уровня.
+		(Это можно отразить в схеме, но ценой очень 
+		гормоздкого дублирования кода. Так что я это делать не буду.)
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:ref" data="cxr:QName"/>
+</cxr:attlist>
+
+
+<cxr:attlist name="refname-q">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Объединение несовместмых атрибутов.
+		
+		Вариант 1, для QName.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attlist ref="cxr:name-q"/>
+	<cxr:attlist ref="cxr:ref"/>
+</cxr:attlist>
+
+
+<cxr:attlist name="refname-n">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Вариант 2, для NCName.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attlist ref="cxr:name-n"/>
+	<cxr:attlist ref="cxr:ref"/>
+</cxr:attlist>
+
+
+
+
+<cxr:attlist name="inherit">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Атрибуты, используемые при наследовании.
+		
+		Есть ряд ограничений на их совместное 
+		использование, см. описание action
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:inherit" data="cxr:QName"/>
+	<cxr:attlist ref="cxr:action"/>
+</cxr:attlist>
+
+
+<cxr:attlist name="use-item">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Атрибуты, определяющие способ испоььзования 
+		входящих в последовательность элементов.
+		
+		Если их нет, предполагается, что про элементы 
+		изестно лишь, что они могут встречаться в 
+		данном контексе (порядок и количество включений 
+		не опрделено).
+	</cxr:documentation></cxr:annotation>
+	
+	
+	<cxr:attrib name="cxr:use-sequence">
+		<cxr:annotation><cxr:documentation xml:lang='ru'>
+			Определяет построение последовательности группы, 
+			аналог xs:sequence, choice, all...
+			
+			choice: любой из членов группы на вывор; т.к. группа
+				повторяется @use-occurs раз, то по умолчанию 
+				это значит: «любой из элементов в любом порядке»
+			
+			sequence: четкая последовательность элементов, 
+				_вся целиком_ повторяется @use-occurs раз
+			
+			all: _каждый_ из членов может присутствовать 
+				@use-occurs раз. Порядок не важен.
+		</cxr:documentation></cxr:annotation>
+		
+		<cxr:data>
+			<cxr:simple>
+				<cxr:list>
+					<cxr:item value='sequence'/>
+					<cxr:item value='choice'/>
+					<cxr:item value='all'/>
+				</cxr:list>
+			</cxr:simple>
+		</cxr:data>
+		<cxr:default value="choice"/>
+	</cxr:attrib>
+	
+	<cxr:attrib name="cxr:use-occurs" data="cxr:range">
+		<cxr:annotation><cxr:documentation xml:lang='ru'>
+			Определяет число элементов в группе.
+			Если определен только первый элемент - 
+			второй предполагается inf.
+			
+			Первый элемент inf быть не может!
+		</cxr:documentation></cxr:annotation>
+		
+		<cxr:default value="0 inf"/>
+	</cxr:attrib>
+	
+	<cxr:attrib name="cxr:use-prefix" data="cxr:use-ep">
+		<cxr:annotation><cxr:documentation xml:lang='ru'>
+			Переопрделяет использование префикса по умолчанию
+		</cxr:documentation></cxr:annotation>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+<cxr:attlist name="use-attrib">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Аналог xs:attribute/use или DTD #...
+		
+		Если @use=fixed — attrib/default должен быть объявлен.
+		Значение prohibited имеет смысл использовать 
+		только вместе с any.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:use" data="cxr:use-a">
+		<cxr:default value="optional"/>
+	</cxr:attrib>
+	<cxr:attrib name="cxr:use-prefix" data="cxr:use-ap"/>
+</cxr:attlist>
+
+
+<cxr:attlist name="use-attlist">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		attlist/@use
+		Позволяет задать правила использования аттрибутов по умолчанию.
+		
+		Значение prohibited имеет смысл использовать 
+		только при наследовании.
+		
+		Занчение choice — допустим только один атрибут из группы
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:use" data="cxr:use-al">
+		<cxr:default value="optional"/>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+
+<cxr:attlist name="if">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Элемент/аттрибут/объект допустим лишь
+		если условие истино.
+		Имеет приоритет над @use='required', etc.
+		
+		@if - соответствие значение аттрибута выражению
+		@ifdef -  перечисленные аттрибуты оределены
+		@ifndef -  перечисленные аттрибуты _не_ оределены
+		
+		TODO: допустимость при тех или иных родительских элементах...
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:if" data="cxr:expr"/>
+	<cxr:attrib name="cxr:ifdef" data='cxr:QNameList'/>
+	<cxr:attrib name="cxr:ifndef" data='cxr:QNameList'/>
+</cxr:attlist>
+
+
+<cxr:attlist name="namespace">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Налагает ограичение на допустимое пространство имен 
+		По умолачаию - любое (для any-element - любое, 
+		кроме текущего).
+		
+		Вместо ##defult, ##all etc. следует
+		использовать определенные для них псевднонимы!
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:namespace">
+		<cxr:data>
+			<cxr:simple reply='1 inf' ref='xs:anyURI'/>
+		</cxr:data>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+<cxr:attlist name="object-attribs">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Стандартный набор аттрибутов для объекта содержимого.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attlist ref="cxr:refname-n"/>
+	<cxr:attlist ref="cxr:inherit"/>
+	<cxr:attlist ref="cxr:if"/>
+</cxr:attlist>
+
+
+
+
+<!--
+ !
+ ! annotations
+ !
+ !-->
+
+<cxr:element name="cxr:annotation">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Like xs:annotation
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:group>
+			<cxr:element name="cxr:appinfo" content="cxr:documentation"/>
+			<cxr:element name="cxr:documentation" content="cxr:documentation"/>
+		</cxr:group>
+	</cxr:content>
+</cxr:element>
+
+<cxr:content name="documentation">
+	<cxr:group>
+		<cxr:any/>
+	</cxr:group>
+	<cxr:attlist>
+		<cxr:attrib name="cxr:href" data="xs:anyURI"/>
+		<cxr:any/>
+	</cxr:attlist>
+	<cxr:data/>
+</cxr:content>
+
+<cxr:content name="annotated">
+	<cxr:group>
+		<cxr:element ref="cxr:annotation"/>
+	</cxr:group>
+</cxr:content>
+
+
+
+
+<!--
+ !
+ ! data
+ !
+ !-->
+
+<cxr:element name="cxr:pattern">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		like xs:pattern
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:match" data="cxr:pattern"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:list">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		like sequence of xs:enumeration
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:group use-sequence="sequence" use-occurs='1 inf'>
+			<cxr:element name="cxr:item">
+				<cxr:content>
+					<cxr:attlist>
+						<cxr:attrib name="cxr:value" data="xs:string"/>
+					</cxr:attlist>
+				</cxr:content>
+			</cxr:element>
+		</cxr:group>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:simple">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Simple content (like enumeration, patterns, etc)
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Простейшее содержимое, не тербующее переопрделенеия
+			
+		@reply определяет число повторений. Если в нем только один
+		элемент списка - это второй, первый равен 1.
+		@reply='inf' (equ @reply='1 inf') - аналог xs:list.
+		
+		@ref имеет смысл только вместе с @reply, иначе получается 
+		полный аналог inherit.
+	</cxr:documentation></cxr:annotation>
+	
+	
+	<cxr:content>
+		<cxr:group use-sequence="choice">
+			<cxr:element ref="cxr:pattern"/>
+			<cxr:element ref="cxr:list"/>
+		</cxr:group>
+		
+		<cxr:attlist>
+			<cxr:attrib name="cxr:reply" data="cxr:range">
+				<cxr:default value="1 1"/>
+			</cxr:attrib>
+			<cxr:attrib name="cxr:ref" ifdef='cxr:reply'>
+				<cxr:data>
+					<cxr:simple reply='1 inf' ref='cxr:QName'/>
+				</cxr:data>
+			</cxr:attrib>
+			
+			<cxr:attlist ref="cxr:action"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+ 
+
+<cxr:element name="cxr:inherit">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		CDATA inheritage
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Определяет наследование для data.
+		Может быть несколько предков, тогда 
+		они складываются как xs:union,
+		если типы конфликтуют, приоритет имеет первый из них.
+		
+		data/@inherit рассматриавтеся как аналог первого
+		из data/inherit, за исключением того, что
+		data/@action применяется к data по отношению
+		к data/@inherit, но не по отношению к data/inherit.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:ref"/>
+			<cxr:attlist ref="cxr:action"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:data">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		CDATA (equ xs:simpleType)
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		simpleContent элемента/аттрибута
+		(в отличии от xs:simpleContent, может использоваться
+		совместно с любым другим допустимым содержимим)
+		
+		Аттрибуты @hrc-scheme и @xs-type не должны использоваться одновременно!
+		Соотв. элементы тоже, но это отражено в choice...
+		
+		Для всех встореных xs-типов определены обертки, такие, что  
+		записи ref='xs:string' и xs-type='xs:string' эквивалентны.
+		В частности, это позволяет ссылаться на xs-тип непосредственно 
+		из атрибута.
+		
+		Пустой элемент без содержимого и предков обозначает PCDATA, 
+		и работает аналогично xs:complexType/@mixed.
+		
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Имеем проблему: hrc:scheme и xs:simpleType должны иметь аттрибуты из 
+		пространства имен cxr.
+		
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='data' use='name'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence='choice' use-occurs='1'> <!-- or 0..1? -->
+			<cxr:group use-sequence="sequence" use-occurs='1'>
+				<cxr:group use-occurs='0 inf' ifndef='cxr:inherit'>
+					<cxr:element ref="cxr:inherit"/>
+				</cxr:group>
+				<cxr:element ref="cxr:simple"/>
+			</cxr:group>
+			
+			<cxr:group use-occurs='1 2' ifndef='cxr:hrc-scheme'>
+				<cxr:annotation><cxr:documentation xml:lang='ru'>
+					HRC схема. Oтносится к пространству имен hrc.
+					
+					Если определены две схемы, @quotes для первой должен
+					иметь значение 'apos', для второй - 'quot'.
+					Если одна - 'all' (по умолчанию).
+				</cxr:documentation></cxr:annotation>
+					
+				<cxr:element name="hrc:scheme">
+					<cxr:content inherit="hrc:scheme">
+						<cxr:attlist>
+							<cxr:attlist ref="cxr:action"/>
+							<cxr:attlist ref="cxr:quotes"/>
+							<cxr:attrib name="hrc:name" use="prohibited"/>
+						</cxr:attlist>
+					</cxr:content>
+				</cxr:element>
+			</cxr:group>
+			
+			<cxr:group use-occurs='1' ifndef='cxr:xs-type'>
+				<cxr:annotation><cxr:documentation xml:lang='ru'>
+					XSD тип. Может быть определен только один.
+					Относится к пространству имен xs.
+					
+					Имеет имя, одноименное с родителькисм. Имя 
+					может использоваться в ссылках вида
+					data/xs:simpleType/xs:restriction/@base
+				</cxr:documentation></cxr:annotation>
+				
+				<cxr:element name="xs:simpleType">
+					<cxr:content inherit="xs:localSimpleType">
+						<cxr:attlist>
+							<cxr:attlist ref="cxr:action"/>
+						</cxr:attlist>
+					</cxr:content>
+				</cxr:element>
+			</cxr:group>
+		</cxr:group>
+		
+		
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:object-attribs"/>
+			
+			<cxr:attrib name="cxr:hrc-scheme" data="hrc:QName" ifndef='cxr:xs-type'>
+				<cxr:annotation><cxr:documentation xml:lang='ru'>
+					Аналог data/hrc:scheme/hrc:inherit/@scheme
+					hrc:scheme и @hrc-scheme не должны использоваться одновременно!
+				</cxr:documentation></cxr:annotation>
+			</cxr:attrib>
+			
+			<cxr:attrib name="cxr:xs-type" data="cxr:QName" ifndef='cxr:hrc-scheme'>
+				<cxr:annotation><cxr:documentation xml:lang='ru'>
+					Аналог data/xs:simpleType/xs:restriction/@base
+					xs:simpleType и @xs-type не должны использоваться одновременно!
+				</cxr:documentation></cxr:annotation>
+			</cxr:attrib>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+<!--
+ !
+ ! typedefs
+ !
+ !-->
+
+<cxr:element name="cxr:default">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Default attribute value
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:value" use="required" data="xs:string"/>
+			<cxr:attlist ref="cxr:action"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:attrib">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Attribute definition
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Аттрибут. 
+		
+		Внутри attrib/data @if запрещен!
+		@name - required!
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence='all'  use-occurs='0 1'>
+			<cxr:group use-occurs='1' ifndef='cxr:data'>
+				<cxr:element ref="cxr:data"/>
+			</cxr:group>
+			<cxr:element ref="cxr:default"/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:name-q"/> <!--  use='required' -->
+			<cxr:attlist ref="cxr:if"/>
+			<cxr:attlist ref="cxr:action"/>
+			<cxr:attlist ref="cxr:use-attrib"/>
+			<cxr:attrib name="cxr:data" data="cxr:QName"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:attlist">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Attribute list. Attributes allowed only here.
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Список аттрибутов. Аттрибуты допускаются 
+		только внурти этого списка.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='attlist' use='name'/>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group>
+			<cxr:element ref="cxr:attlist"/>
+			<cxr:element ref="cxr:attrib"/>
+			<cxr:element ref="cxr:any"/>
+		</cxr:group>
+	<cxr:attlist>
+		<cxr:attlist ref="cxr:object-attribs"/>
+		<cxr:attlist ref="cxr:use-attlist"/>
+		<cxr:attrib name="cxr:global" data="xs:boolean">
+			<cxr:default value="false"/>
+		</cxr:attrib>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+<cxr:element name="cxr:any">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Any elements (group/any) or attributes (attlist/any)
+		allowed here.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist ref="cxr:namespace"/>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:group">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Child elements
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Элементы внутри элемента
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='group' use='name'/>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group>
+			<cxr:group ref="cxr:elements"/>
+			<cxr:element ref="cxr:group"/>
+			<cxr:element ref="cxr:any"/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:object-attribs"/>
+			<cxr:attlist ref="cxr:use-item"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:content">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Element content: attributes, child elements, cdata.
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Содержимое элемента
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='content' use='name'/>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group ref="cxr:content"/>
+		<cxr:attlist ref="cxr:object-attribs"/>
+	</cxr:content>
+</cxr:element>
+
+
+
+<cxr:content name="element" inherit="cxr:annotated">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Более одного content имеет смысл, если первые из них 
+		включены с условием @if. Тогда следующий применяется 
+		без условия.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:group use-sequence="all" use-occurs='0 1'>
+		<cxr:element ref="cxr:key"/>
+		<cxr:group use-occurs='1 inf' ifndef='cxr:content'>
+			<cxr:element ref="cxr:content"/>
+		</cxr:group>
+	</cxr:group>
+	
+	<cxr:attlist>
+		<cxr:attlist ref="cxr:action">
+			<cxr:annotation><cxr:documentation xml:lang='ru'>
+				Для элементов имеет смысл только в контексте 'redefine'
+			</cxr:documentation></cxr:annotation>
+		</cxr:attlist>
+		<cxr:attrib name="cxr:content" data="cxr:QName">
+			<cxr:annotation><cxr:documentation xml:lang='ru'>
+				Аналог element/content/@ref 
+				content и @content не должны использоваться одновременно!
+			</cxr:documentation></cxr:annotation>
+		</cxr:attrib>
+	</cxr:attlist>
+</cxr:content>
+
+
+<cxr:element name="cxr:element">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Base element definition
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Определение элемента
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='element' use='name'/>
+	
+	<cxr:content inherit="cxr:element">
+		<cxr:attlist ref="cxr:refname-q"/>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:any-element">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Unknow element (template)
+	</cxr:documentation><cxr:documentation xml:lang='ru'><![CDATA[
+		Чужой элемент. Используется как 
+		"шаблон" для элемента. 
+		T.e., к нему могут применяться
+		все тревования, допустимые для элемента. 
+		Но вместо элемента используется нечто 
+		произвольное, относящиеся к "чужему" 
+		пространству имен.
+		
+		Что именно понимать под "чужим" - может опрделяеться
+		с помощью substitution. Если 'any-element' 
+		анонимен, это невозможно. По умолчанию используется:
+			
+			<cxr:substitytion>
+				<cxr:any namespace='{@namespace}'/>
+			</cxr:substitytion>
+		
+		Аттрибут any-element/@namespace влияет также на пространснво имен по умолчанию
+		для substitution/any.
+	]]></cxr:documentation><cxr:documentation xml:lang='ru'>
+		TODO: допустима ли ссылка element/@ref, ведущая на any-element,
+		или она обязана быть в виде any-element/@ref?
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='element-any' use='name'/>
+	
+	
+	<cxr:content inherit="cxr:element">
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:refname-n"/>
+			<cxr:attlist ref="cxr:namespace"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+<cxr:element name="cxr:key">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Key, for match document structure and logic.
+		For relation, not for validation.
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Ключи не имеют отношения к проверке правильности
+		документа, они позволяют обрабатывающему приложению создать 
+		его логичекий каркас (например, построением outlines).
+		
+		Смысл такой же, как у ключей в реляционной базе данных.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="xs:NCName" use="required"/>
+			<cxr:attlist ref="cxr:if"/>
+			
+			<cxr:attrib name="cxr:unique" data='xs:boolean'>
+				<cxr:default value='false'/>
+			</cxr:attrib>
+			
+			<cxr:attrib name="cxr:use" use="required">
+				<cxr:annotation><cxr:documentation xml:lang='ru'>
+					Определяет аттрибут, ассоциированный со занчением ключа
+					Если атрибут отсутствует, ключ не используется.
+					
+					##default - вместо аттрибута используется значение элемета
+					##any - любой имеющийся аттрибут (можно использовать первый 
+					в списке).
+				</cxr:documentation></cxr:annotation>
+				
+				<cxr:data>
+					<cxr:inherit ref='xs:QName'/>
+					<cxr:inherit ref='cxr:defAny'/>
+				</cxr:data>
+			</cxr:attrib>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+<cxr:group name="content">
+	<cxr:element ref="cxr:data"/>
+	<cxr:element ref="cxr:attlist"/>
+	<cxr:element ref="cxr:group"/>
+</cxr:group>
+
+<cxr:group name="elements">
+	<cxr:element ref="cxr:element"/>
+	<cxr:element ref="cxr:any-element"/>
+</cxr:group>
+
+<cxr:group name="typedefs">
+	<cxr:group ref="cxr:content"/>
+	<cxr:element ref="cxr:content"/>
+	<cxr:group ref="cxr:elements"/>
+	<cxr:element ref="cxr:substitution"/>
+	<cxr:element ref="cxr:root"/>
+</cxr:group>
+
+
+
+
+<!--
+ !
+ ! substitytions
+ !
+ !-->
+
+<cxr:group name="subst-elements">
+	<cxr:element name="cxr:any-element" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:element" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:group" content="cxr:included-typedef"/>
+	<cxr:element ref="cxr:any"/>
+</cxr:group>
+
+
+<cxr:element name="cxr:substitution">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Substitution group for 'any-element'.
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Определяет, что именно подразумевать под 'any-element'.
+		По умолчанию это cxr:any.
+		
+		Все элементы, включаемые в группу подстановки, наследуют свойства 
+		исходного any-element и могут использоваться везде, 
+		где он используется.
+		
+		Имя группы должно совпадать с именем элемента. 
+		
+		@action используется, чтобы определить, что делать с
+		одноименными группами, унаследованными из других типов.
+		
+		group, на которые ссылаются substitution/group не дожны 
+		иметь атрибута @if.
+		
+		Пространсво имен по умолчанию для substitution/any
+		наследуется. При отсуствии предков - от @namespace 
+		исходного any-element.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='subst' use='name'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group ref="cxr:subst-elements"/>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="cxr:QName" use="required"/>
+			<cxr:attlist ref="cxr:action"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:root">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Allowed root elements list.
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Список корневых элементов
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group ref="cxr:subst-elements"/>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+
+
+<!--
+ !
+ ! include / embed
+ !
+ !-->
+
+<cxr:group name="includes">
+	<cxr:element ref="cxr:include"/>
+	<cxr:element ref="cxr:import"/>
+	<cxr:element ref="cxr:embed"/>
+</cxr:group>
+
+
+<cxr:group name="included-typedefs">
+	<cxr:element name="cxr:substitution" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:any-elenemt" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:elenemt" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:content" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:group" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:attlist" content="cxr:included-typedef"/>
+	<cxr:element name="cxr:data" content="cxr:included-typedef"/>
+</cxr:group>
+
+
+<cxr:content name="included-typedef">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Ссылка на элемент из группы typedef.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attlist ref="cxr:ref"/>
+</cxr:content>
+
+
+<cxr:content name="redefine" inherit="cxr:annotated">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Переопределение содержимого
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:group ref="cxr:typedefs"/>
+</cxr:content>
+
+
+<cxr:content name="include" inherit="cxr:annotated">
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Общий тип для подстановок
+		
+		Элементы группы included-typedefs опредляют, что именно включать
+			это регулируется значением @content
+			по умолчанию включается все
+		
+		redefine заменяет в случае, если элементы совпадает
+		redefine-all заменяет/добавляет во все элементы такого типа
+			redefine-all/@where - тип элеменотов, в котором производить подстановки
+			redefine-all/@location - 
+				named - именованные
+				local - анонимные
+				all - named + local
+				any - + any-element
+				
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:group use-sequence="sequence" use-occurs='1'>
+		<cxr:group ref="cxr:included-typedefs"/>
+		<cxr:group>
+			<cxr:element name="cxr:redefine" content="cxr:redefine"/>
+			
+			<cxr:element name="cxr:redefine-all">
+				<cxr:content inherit="cxr:redefine">
+					<cxr:attlist>
+						<cxr:attrib name="cxr:where">
+							<cxr:data>
+								<cxr:simple>
+									<cxr:list>
+										<cxr:item value='element'/>
+										<cxr:item value='content'/>
+										<cxr:item value='data'/>
+										<cxr:item value='attlist'/>
+										<cxr:item value='group'/>
+									</cxr:list>
+								</cxr:simple>
+							</cxr:data>
+						</cxr:attrib>
+						
+						<cxr:attrib name="cxr:location">
+							<cxr:data>
+								<cxr:simple>
+									<cxr:list>
+										<cxr:item value='local'/>
+										<cxr:item value='named'/>
+										<cxr:item value='all'/>
+										<cxr:item value='any'/>
+									</cxr:list>
+								</cxr:simple>
+							</cxr:data>
+							<cxr:default value="named"/><!-- ??? -->
+						</cxr:attrib>
+						
+					</cxr:attlist>
+				</cxr:content>
+			</cxr:element>
+		</cxr:group>
+	</cxr:group>
+	
+	
+	<cxr:attlist>
+		<cxr:attrib name="cxr:content">
+			<cxr:annotation><cxr:documentation xml:lang='ru'>
+				Определяет способ работы с included-typedefs.
+					all - включаем все содержимое, группа не нужна
+					listed - включаем перечисленные
+					excluded - включаем все, кроме перечисленных
+			</cxr:documentation></cxr:annotation>
+			
+			<cxr:data>
+				<cxr:simple>
+					<cxr:list>
+						<cxr:item value='all'/>
+						<cxr:item value='listed'/>
+						<cxr:item value='excluded'/>
+					</cxr:list>
+				</cxr:simple>
+			</cxr:data>
+			<cxr:default value="all"/>
+		</cxr:attrib>
+		
+		<cxr:attrib name="cxr:spec-content">
+			<cxr:annotation><cxr:documentation xml:lang='ru'>
+				Определяет способ работы с доп содержимым.
+					all - включаем все содержимое
+					entity - включаем сущности
+					pre - включаем инструкции обработки
+					none - ничего из этого не включаем
+			</cxr:documentation></cxr:annotation>
+			
+			<cxr:data>
+				<cxr:simple>
+					<cxr:list>
+						<cxr:item value='all'/>
+						<cxr:item value='entity'/>
+						<cxr:item value='pre'/>
+						<cxr:item value='none'/>
+					</cxr:list>
+				</cxr:simple>
+			</cxr:data>
+			<cxr:default value="all"/>
+		</cxr:attrib>
+		
+		<cxr:attrib name="cxr:inherit-ns" data="xs:boolean">
+			<cxr:annotation><cxr:documentation xml:lang='ru'>
+				Включать ли опрделенные у предка пространства имен?
+				Пространтва имен, определенные в потомке, имеют больший 
+				приоритет!
+			</cxr:documentation></cxr:annotation>
+			
+			<cxr:default value="false"/>
+		</cxr:attrib>
+	</cxr:attlist>
+</cxr:content>
+
+
+
+<cxr:element name="cxr:trans-name">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Translate namespaces
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Переносит все импоритруемые элементы из 
+		пространства имен @from в пространство имен @to
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:from" data="xs:anyURI" use="required"/>
+			<cxr:attrib name="cxr:to" data="xs:anyURI" use="required"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:import">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Import other types
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Пордгужается другой тип.
+		Все подстановки производятся в процессе
+		работы схемы. Если результат работы -
+		другая схема, то желательно, чтобы 
+		в ней было сохранено наследование.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='import' use='type'/>
+	
+	<cxr:content inherit="cxr:include">
+		<cxr:group>
+			<cxr:element ref="cxr:trans-name"/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:href" data="xs:anyURI" use="optional"/>
+			<cxr:attrib name="cxr:type" data="xs:anyURI" use="required"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:include">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Include same type from other files
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		В подгружаемом файле ищется одноименный тип
+		и грузится. Все подстановки выполняются 
+		до начала любой другой работы со схемой. 
+		(Преобразуется исходный XML).
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='include' use='href'/>
+	
+	<cxr:content inherit="cxr:include">
+		<cxr:attlist>
+			<cxr:attrib name="cxr:href" data="xs:anyURI" use="required"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+<cxr:attlist name="embed-types">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Type of foreign schemas (hrc, xsd, etc...)
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Тип встраиваемой/исходящей схемы.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:attrib name="cxr:type" use="required">
+		<cxr:data>
+			<cxr:inherit ref='xs:QName'/>
+			<cxr:simple>
+				<cxr:list>
+					<cxr:item value='hrc'/>
+					<cxr:item value='xsd'/>
+				</cxr:list>
+			</cxr:simple>
+		</cxr:data>
+	</cxr:attrib>
+</cxr:attlist>
+
+
+<cxr:element name="cxr:embed">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Embed foreign schemas (hrc, xsd, etc...)
+	</cxr:documentation></cxr:annotation>
+	<cxr:annotation><cxr:documentation xml:lang='ru'>
+		Встороенные элементы целевых схем.
+		На текущий момент поддерживаются xs:simpleType (@type = 'xsd')
+		и все содержимое hrc/type (@type = 'hrc')
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='embed' use='type'/>
+	
+	
+	<cxr:content inherit="hrc:type" if='cxr:type = hrc'>
+		<cxr:attlist ref="cxr:embed-types"/>
+	</cxr:content>
+	
+	<cxr:content if='cxr:type = xsd'>
+		<cxr:group>
+			<cxr:element ref="xs:simpleType"/>
+		</cxr:group>
+		<cxr:attlist ref="cxr:embed-types"/>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+
+
+<!--
+ !
+ ! entities & preporcessor
+ !
+ !-->
+
+<cxr:group name="entities">
+	<cxr:element ref="cxr:entity"/>
+	<cxr:element ref="cxr:notation"/>
+	<cxr:element ref="cxr:processing-instruction"/>
+</cxr:group>
+
+
+<cxr:content name="entity">
+	<cxr:attlist>
+		<cxr:attrib name="cxr:name" data="xs:QName" use="required"/>
+		<cxr:attrib name="cxr:public" data="xs:public"/>
+		<cxr:attrib name="cxr:system" data="xs:anyURI"/>
+	</cxr:attlist>
+</cxr:content>
+
+
+<cxr:element name="cxr:notation" content="cxr:entity">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		XML NOTATION declares
+	</cxr:documentation></cxr:annotation>
+</cxr:element>
+
+
+<cxr:element name="cxr:entity">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		XML ENTITY declares
+	</cxr:documentation><cxr:documentation xml:lang='ru'><![CDATA[
+		Определение сущности (XML ENTITY).
+		
+		Сущность используется в документе как '&entity;'
+		Опредленение ее здесь не отменяет необходимсоть
+		определения ее в DTD для использования в исходном 
+		документе, (если только используемый XML-парсер 
+		не научится вдруг понимать CXRCS), но позволяет
+		CXRCS-валидатору проверить допустимость использования
+		сущности без обращения к этому DTD.
+	]]></cxr:documentation></cxr:annotation>
+	
+	<cxr:content inherit="cxr:entity">
+		<cxr:group use-sequence="sequence">
+			<cxr:any/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:ndata" data="xs:QName"/>
+		</cxr:attlist>
+		<cxr:data/>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:processing-instruction">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		XML processing-instruction declares
+	</cxr:documentation><cxr:documentation xml:lang='ru'><![CDATA[
+		Инструкции препроцессора XML
+		
+		В них возможно содержимое двух видов:
+		1. Псевдоаттрибуты:
+			<?foo bar='baz'?>
+			
+		2. Неизвестно что:
+			<?foo bar baz... ?>
+			
+		Поэтому для processing-instruction допустимы
+		элементы attlist и data для обработки обоих 
+		вариантов. То, что попадает под определение
+		псевдоаттрибута, будет обрабатыватья первым,
+		все остальное - вторым.
+		
+		Аттрибут @if внутри содежимого недопустим!
+	]]></cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='preproc' use='name'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence="all" use-occurs='0 1'>
+			<cxr:element ref="cxr:attlist"/>
+			<cxr:element ref="cxr:data"/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="xs:Name" use="required"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+
+<!--
+ !
+ ! root
+ !
+ !-->
+
+<cxr:element name="cxr:prefix">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Know used prefixies for this namespace
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Префиксы:
+		##default - пустой префикс.
+		##any - любой возможный префикс
+		
+		required - всегда использовать.
+		optional - можно использовать или не использовать - на выбор.
+		default - требуется использовать, если аттрибут чужой, иначе - нет.
+		prohibited префикс для аттрибутов не исползуется.
+		
+		@name-pattern используется, чтобы определить множество префиксов сразу
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" use="required">
+				<cxr:data>
+					<cxr:inherit ref='xs:NCName'/>
+					<cxr:inherit ref='cxr:defAny'/>
+				</cxr:data>
+			</cxr:attrib>
+			<cxr:attrib name='cxr:name-pattern' data='cxr:pattern'/>
+			
+			<cxr:attrib name="cxr:use" data="cxr:use-ep">
+				<cxr:default value="optional"/>
+			</cxr:attrib>
+			<cxr:attrib name="cxr:attrib-use" data="cxr:use-ap">
+				<cxr:default value="default"/>
+			</cxr:attrib>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:namespace">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Used namespaces and aliases for them
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		##default - пространство имен по умолчанию.
+		##any - все пространства имен, кроме явно перечисленных
+		
+		@alias - используется вместо этого пространства в текущем документе.
+			Может использоваться как название типа.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='namespace' use='uri'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence="sequence" use-occurs='1 inf'>
+			<cxr:element ref="cxr:prefix"/>
+		</cxr:group>
+		
+		<cxr:attlist>
+			<cxr:attrib name="cxr:uri" use="required">
+				<cxr:data>
+					<cxr:inherit ref='xs:NCName'/>
+					<cxr:inherit ref='cxr:defAny'/>
+				</cxr:data>
+			</cxr:attrib>
+			
+			<cxr:attrib name="cxr:alias" data="xs:anyURI"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:output">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Metainformation for conversion to other type schemas
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Информация для генераторов схем
+			
+			@type - целевой тип. 
+			Допускается только один элемент output для каждого типа!
+			
+			Остальные данные могут иметь разный смысл для разных вты
+			@target-ns - выходное пространство имен(если не определено - берется ../@name)
+			@name - выходное имя типа (если имеет смысл)
+			@content-type - для описываемого схемой типа...
+			@public, @system, @любые другие данные, если имеют смысл...
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='output' use='type'/>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attlist ref="cxr:embed-types"/>
+			<cxr:attrib name="cxr:name" data="xs:NCName"/>
+			<cxr:attrib name="cxr:target-ns" data="xs:anyURI"/>
+			<cxr:attrib name="cxr:public" data="xs:public"/>
+			<cxr:attrib name="cxr:system" data="xs:anyURI"/>
+			<cxr:attrib name="cxr:content-type" data="xs:string"/>
+			<cxr:any/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:apply-template">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Use template for this type
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Заставляет использовать шаблон на типе.
+		Шаблоны применяются после всех include,
+		в порядке их следования.
+		
+		Если @href опрделен, шаблон ишется в том файле,
+		иначе в текущем.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='template-app' use='name'/>
+	
+	<cxr:content>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="xs:NCName" use="required"/>
+			<cxr:attrib name="cxr:href" data="xs:anyURI"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+
+<!-- type -->
+
+<cxr:group name="type" use-sequence="sequence" use-occurs='1'>
+	<cxr:group>
+		<cxr:element ref="cxr:namespace"/>
+	</cxr:group>
+	<cxr:group>
+		<cxr:group ref="cxr:typedefs"/>
+		<cxr:group ref="cxr:includes"/>
+		<cxr:group ref="cxr:entities"/>
+	</cxr:group>
+</cxr:group>
+
+
+<cxr:element name="cxr:template">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Template for includes
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		Шаблон, аналогичен incldue 
+		любого типа, который на этот 
+		шблон ссылается.
+		
+		Тип включается с помощью include-caller.
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='template' use='name' unique='true'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence="sequence" use-occurs='1'>
+			<cxr:group ref="cxr:type"/>
+			<cxr:element name="cxr:include-caller" content="cxr:include"/>
+		</cxr:group>
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="xs:NCName" use="required"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:element name="cxr:type">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Root for any XML type
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:key name='type' use='name' unique='true'/>
+	
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence="sequence" use-occurs='1'>
+			<cxr:group>
+				<cxr:element ref="cxr:output"/>
+			</cxr:group>
+			<cxr:group>
+				<cxr:element ref="cxr:apply-template"/>
+			</cxr:group>
+			<cxr:group ref="cxr:type"/>
+		</cxr:group>
+		
+		<cxr:attlist>
+			<cxr:attrib name="cxr:name" data="xs:anyURI" use="required"/>
+			<cxr:attrib name="cxr:public" data="xs:public"/>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+
+<!-- root -->
+
+<cxr:element name="cxr:schema">
+	<cxr:annotation><cxr:documentation xml:lang='en'>
+		Root CXRCS element
+	</cxr:documentation><cxr:documentation xml:lang='ru'>
+		include-all добавляет содержимое во все подключаемые файлы
+	</cxr:documentation></cxr:annotation>
+	
+	<cxr:content inherit="cxr:annotated">
+		<cxr:group use-sequence="sequence" use-occurs='1'>
+			<cxr:group>
+				<cxr:element name="cxr:include-all" content="cxr:include"/>
+			</cxr:group>
+			<cxr:group>
+				<cxr:element ref="cxr:type"/>
+				<cxr:element ref="cxr:template"/>
+			</cxr:group>
+		</cxr:group>
+		<cxr:attlist> 
+			<cxr:attrib name="cxr:version" data="xs:token"> <!-- it's need? -->
+				<cxr:default value="0.2"/>
+			</cxr:attrib>
+		</cxr:attlist>
+	</cxr:content>
+</cxr:element>
+
+
+<cxr:root>
+	<cxr:element ref='cxr:schema'/>
+</cxr:root>
+
+</cxr:type>
+</cxr:schema>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is CXRCS suite.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 2009-2010
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

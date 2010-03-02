@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cxr:schema 
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
+	xmlns:def="colorer://alias.ns.xml/#default"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ >
+<cxr:type name="http://www.w3.org/XML/1998/namespace">
+	<cxr:output type='hrc' name='xmlns' target-ns="http://www.w3.org/XML/1998/namespace"/> <!-- TODO: aliases -->
+	
+	<cxr:namespace uri="http://www.w3.org/XML/1998/namespace">
+		<cxr:prefix name="xml" use="required" attrib-use="required"/>
+	</cxr:namespace>
+	<cxr:namespace uri="##default" alias="colorer://alias.ns.xml/#default">
+		<cxr:prefix name="##default" use="required" attrib-use='required'/>
+	</cxr:namespace>
+	
+	<!-- attributes -->
+	
+	<cxr:attlist name="lang" global="true">
+		<cxr:attrib name="xml:lang" data="xs:language"/>
+	</cxr:attlist>
+	
+	<cxr:attlist name="space" global="true">
+		<cxr:attrib name="xml:space">
+			<cxr:data>
+				<cxr:simple>
+					<cxr:list>
+						<cxr:item value="default"/>
+						<cxr:item value="preserve"/>
+					</cxr:list>
+				</cxr:simple>
+			</cxr:data>
+		</cxr:attrib>
+	</cxr:attlist>
+	
+	<cxr:attlist name="base" global="true">
+		<cxr:attrib name="xml:base" data="xs:anyURI"/>
+	</cxr:attlist>
+	
+	<cxr:attlist name="id" global="true">
+		<cxr:attrib name="xml:id" data="xs:ID"/>
+	</cxr:attlist>
+	
+	
+	<cxr:attlist name="specialAttrs" global="true">
+		<cxr:attlist ref="xml:base"/>
+		<cxr:attlist ref="xml:lang"/>
+		<cxr:attlist ref="xml:space"/>
+	</cxr:attlist>
+	
+	
+	
+	<!-- entities -->
+	
+	<cxr:entity name="lt">&#38;#60;</cxr:entity>  <!-- less-than sign, U+003C ISOnum -->
+	<cxr:entity name="gt">&#62;</cxr:entity>      <!-- greater-than sign, U+003E ISOnum -->
+	<cxr:entity name="amp">&#38;#38;</cxr:entity> <!-- ampersand, U+0026 ISOnum -->
+	<cxr:entity name="apos">&#39;</cxr:entity>    <!-- The Apostrophe (Apostrophe Quote, APL Quote), U+0027 ISOnum -->
+	<cxr:entity name="quot">&#34;</cxr:entity>    <!-- quotation mark (Quote Double), U+0022 ISOnum -->
+	
+	
+	
+	<!-- xml declarations -->
+	
+	<cxr:processing-instruction name="xml">
+		<cxr:annotation><cxr:documentation><![CDATA[
+			[23]   XMLDecl       ::=   '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+			[24]   VersionInfo   ::=   S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')/* */
+			[25]   Eq            ::=   S? '=' S?
+			[26]   VersionNum    ::=   ([a-zA-Z0-9_.:] | '-')+
+			[80]   EncodingDecl  ::=   S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+			[81]   EncName       ::=   [A-Za-z] ([A-Za-z0-9._] | '-')*
+			[32]   SDDecl        ::=   S 'standalone' Eq (("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+		]]></cxr:documentation></cxr:annotation>
+		
+		<cxr:attlist>
+			<cxr:attrib name="def:version" use="required">
+				<cxr:data hrc-scheme='hVersion'/>
+			</cxr:attrib>
+			<cxr:attrib name="def:encoding">
+				<cxr:data hrc-scheme='hEncoding'/>
+				<cxr:default value="UTF-8"/>
+			</cxr:attrib>
+			<cxr:attrib name="def:standalone" data="xml:hYesNo"/>
+		</cxr:attlist>
+	</cxr:processing-instruction>
+	
+	
+	<cxr:processing-instruction name="xml-stylesheet">
+		<cxr:annotation><cxr:documentation><![CDATA[
+			http://www.w3.org/TR/xml-stylesheet
+				href    CDATA     #REQUIRED
+				type    CDATA     #REQUIRED
+				title     CDATA     #IMPLIED
+				media     CDATA     #IMPLIED
+				charset   CDATA     #IMPLIED
+		]]></cxr:documentation></cxr:annotation>
+		
+		<cxr:attlist>
+			<cxr:attrib name="def:href" data="xs:anyURI" use="required"/>
+			<cxr:attrib name="def:type" data="xs:string" use="required"/>
+			<cxr:attrib name="def:title" data="xs:string"/>
+			<cxr:attrib name="def:media" data="xs:string"/>
+			<cxr:attrib name="def:charset" data="xs:string"/>
+			<cxr:attrib name="def:alternate" data="xml:hYesNo">
+				<cxr:default value="no"/>
+			</cxr:attrib>
+		</cxr:attlist>
+	</cxr:processing-instruction>
+	
+	
+	<cxr:data name='hYesNo' hrc-scheme='hYesNo'/>
+	
+	<cxr:embed type='hrc' xmlns="http://colorer.sf.net/2003/hrc">
+		<scheme name="hVersion">
+			<regexp match="/~[a-zA-Z0-9_.:\-]+/" region="def:Constant"/>
+			<inherit scheme="hBad"/>
+		</scheme>
+		
+		<scheme name="hYesNo">
+			<regexp match="/~(yes|no)\b/" region="def:BooleanConstant"/>
+			<inherit scheme="hBad"/>
+		</scheme>
+		
+		<scheme name="hEncoding">
+			<regexp match="/~[A-Za-z][A-Za-z0-9._\-]*/" region="def:String"/>
+			<inherit scheme="hBad"/>
+		</scheme>
+		
+		<scheme name="hBad">
+			<regexp match="/~[&quot;&apos;]/" region="xml:badChar"/>
+			<regexp match="/./" region="xml:badChar" priority="low"/>
+		</scheme>
+	</cxr:embed>
+</cxr:type>
+
+</cxr:schema>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is CXRCS suite.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 2009-2010
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

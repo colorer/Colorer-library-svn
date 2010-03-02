@@ -1,0 +1,36 @@
+Элемент <template>:
+
+<type name='foo:bar'>
+	<apply-template name='...'/>
+	...
+</type>
+
+
+<template name='[NCName]'>
+	<include-caller>
+		
+	</inleude>
+</template>
+
+Аналогично:
+
+<!-- foo.cxr -->
+<type name='foo:bar'>
+	...
+</type>
+
+<!-- temlpate.cxr -->
+<type name='foo:bar'>
+	<include href='foo.cxr'>
+		....
+	</include>
+</type>
+
+
+Аттрибут (template | apply-template)/@name обязателен.
+Аттрибут apply-template/@href может подгружать внешний шаблон.
+
+apply-template применяется _после_ всех include. (но до import)
+
+template/apply-template недопустим(?).
+
