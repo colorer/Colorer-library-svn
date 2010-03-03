@@ -1,5 +1,11 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- diff.hrc: patch, новые опции
+	- расширение hrl для erlang
+	- для типа text добавлена подсветка псевдографики
+
+#Revision: 1414
+	lomecb 2010-03-02 01:48:18 +0500 (Вт, 02 мар 2010)
 	- AirPlay SDK,
 	- ruby minor updates
 	

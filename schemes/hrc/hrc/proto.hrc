@@ -700,7 +700,7 @@
   </prototype>
 	<prototype name="erlang" group="rare" description="Erlang">
     <location link="rare/erlang.hrc"/>
-    <filename>/\.erl$/i</filename>
+    <filename>/\.[eh]rl$/i</filename>
   </prototype>
   <prototype name="icon" group="rare" description="Icon">
     <location link="rare/icon.hrc"/>
@@ -832,7 +832,10 @@
     <firstline>/^(\d+,\d+\w\d+ | \d+\w\d+)/i</firstline>
     <firstline>/^cvs/i</firstline>
     <parameters>
-      <param name="space-err" value="false" description="Mark trailing spaces as error"/>
+      <param name="trailing-space"      value="false" description="Mark trailing spaces as errors"/>
+      <param name="space-before-tab"    value="false" description="Mark leading spaces before tabs as errors"/>
+      <param name="indent-with-non-tab" value="false" description="Mark 8 or more leading spaces as errors"/>
+      <param name="indent-with-tab"     value="false" description="Mark leading tabs as errors"/>
     </parameters>
   </prototype>
   <prototype name="text" group="other" description="plain text">
