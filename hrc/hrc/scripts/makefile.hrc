@@ -38,7 +38,6 @@
 
 <region name='symbs' parent='def:Symbol'/>
 <region name='symbs-rare' parent='regexp:Operator'/>
-<region name='if.op' parent='symbs'/>
 
 <region name='quoted' parent='def:CommentEdge'/><!-- def:StringContent'/>-->
 
