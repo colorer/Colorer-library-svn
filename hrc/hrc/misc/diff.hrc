@@ -8,6 +8,7 @@
     Colorer description for Diff/Patch files
 With Help of
     Timur Safin <timur@lanit.ru>
+		Yuri Khan <yurivkhan@gmail.com>
 -->
    <type name="diff">
 
@@ -25,13 +26,28 @@ With Help of
       <region name="CommandOutline" parent="def:Outlined"/>
       <region name="FileNameOutline" parent="def:Outlined"/>
 
-      <scheme name='space-bad' if='space-err'><!--  priority='low' -->
+      <scheme name='trailing-space' if='trailing-space'><!--  priority='low' -->
       	<regexp match='/\s+$/' region='def:Error'/>
       </scheme>
       
+      <scheme name='space-before-tab' if='space-before-tab'>
+        <regexp match='/~ +\M\t/' region='def:Error'/>
+      </scheme>
+
+      <scheme name='indent-with-non-tab' if='indent-with-non-tab'>
+        <regexp match='/~ {8,}/' region='def:Error'/>
+      </scheme>
+
+      <scheme name='indent-with-tab' if='indent-with-tab'>
+        <regexp match='/~\t+/' region='def:Error'/>
+      </scheme>
+
       <scheme name='org'/>
       <scheme name='new'>
-         <inherit scheme='space-bad'/>
+         <inherit scheme='trailing-space'/>
+         <inherit scheme='space-before-tab'/>
+         <inherit scheme='indent-with-non-tab'/>
+         <inherit scheme='indent-with-tab'/>
       </scheme>
       
       

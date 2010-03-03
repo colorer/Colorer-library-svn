@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
   "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -13,23 +13,54 @@
 
       <region name="Section" parent="def:Outlined"/>
 
-      <scheme name="text">
+      <scheme name="LabelScheme">
+         <keywords region="Label">
+            <symb name="┬"/>
+            <symb name="┼"/>
+            <symb name="┴"/>
+            <symb name="┌"/>
+            <symb name="└"/>
+            <symb name="┐"/>
+            <symb name="┘"/>
+            <symb name="├"/>
+            <symb name="┤"/>
+            <symb name="│"/>
+            <symb name="─"/>
 
-<!-- inet address -->
-         <inherit scheme="NetAddresses"/>
-         <inherit scheme="Apost"/>
-         <regexp match="/^\s{,8} \M (\d[\d\.\-]* \s[^\d.]+) /x" region1="Section"/>
-<!-- speedup by
-        Andrzej Novosiolov <andrzej.Novosiolov@p4.f201.n463.z2.fidonet.org> :)
-   -->
-         <regexp match="/([A-Za-z\x80-\xFF][A-Za-z\x80-\xFF\s]+)\M [\s;=+-*&amp;\|^\(\)\[\],\.\-!\~\%\{\}?_]|$/x" region1="Syntax"/>
-<!-- Date, Time -->
-         <inherit scheme="Date"/>
-         <inherit scheme="Time"/>
-<!-- Numbers -->
-         <regexp match="/\b(\d{,10}[\,\.]?\d{,10}([eE][\-\+]?\d+)?)\b/" region0="Number"/>
-         <regexp match="/``.*?''/" region0="String"/>
-         <inherit scheme="StandardString"/>
+            <symb name="╦"/>
+            <symb name="╬"/>
+            <symb name="╩"/>
+            <symb name="╔"/>
+            <symb name="╚"/>
+            <symb name="╗"/>
+            <symb name="╝"/>
+            <symb name="╠"/>
+            <symb name="╣"/>
+            <symb name="║"/>
+            <symb name="═"/>
+
+            <symb name="╡"/>
+            <symb name="╢"/>
+            <symb name="╖"/>
+            <symb name="╕"/>
+            <symb name="╜"/>
+            <symb name="╛"/>
+            <symb name="╞"/>
+            <symb name="╟"/>
+            <symb name="╧"/>
+            <symb name="╨"/>
+            <symb name="╤"/>
+            <symb name="╥"/>
+            <symb name="╙"/>
+            <symb name="╘"/>
+            <symb name="╒"/>
+            <symb name="╓"/>
+            <symb name="╫"/>
+            <symb name="╪"/>
+         </keywords>
+      </scheme>
+
+      <scheme name="SymbolScheme">
          <keywords region="Symbol">
             <symb name=";"/>
             <symb name="="/>
@@ -58,6 +89,27 @@
             <symb name="_"/>
             <symb name="\"/>
          </keywords>
+      </scheme>
+
+      <scheme name="text">
+
+<!-- inet address -->
+         <inherit scheme="NetAddresses"/>
+         <inherit scheme="Apost"/>
+         <regexp match="/^\s{,8} \M (\d[\d\.\-]* \s[^\d.]+) /x" region1="Section"/>
+<!-- speedup by
+        Andrzej Novosiolov <andrzej.Novosiolov@p4.f201.n463.z2.fidonet.org> :)
+   -->
+         <regexp match="/([A-Za-z\x80-\xFF][A-Za-z\x80-\xFF\s]+)\M [\s;=+-*&amp;\|^\(\)\[\],\.\-!\~\%\{\}?_]|$/x" region1="Syntax"/>
+<!-- Date, Time -->
+         <inherit scheme="Date"/>
+         <inherit scheme="Time"/>
+<!-- Numbers -->
+         <regexp match="/\b(\d{,10}[\,\.]?\d{,10}([eE][\-\+]?\d+)?)\b/" region0="Number"/>
+         <regexp match="/``.*?''/" region0="String"/>
+         <inherit scheme="StandardString"/>
+         <inherit scheme="LabelScheme"/>
+         <inherit scheme="SymbolScheme"/>
       </scheme>
 
    </type>
