@@ -12,11 +12,96 @@
 <xsl:key name='p:def' match='rng:define' use='@name'/>
 
 
-<xsl:template match='define[@combine]' mode='p:root'>
+<!--
+ !
+ ! phase 1 - include
+ !
+ !-->
+
+<xsl:template match='include|externalRef' mode='p:include'> 
+	<!-- todo: externalRef is different -->
+	<xsl:param name='defines' tunnel='yes' as='node()*'/>
+	
+	<xsl:apply-templates select='document(@href)' mode='p:include-content'>
+		<xsl:with-param name='defines' tunnel='yes'>
+			<xsl:apply-templates select='./*|$defines' mode='#current'/>
+		</xsl:with-param>
+	</xsl:apply-templates>
+	
+	<xsl:apply-templates mode='p:include-content'/>
+</xsl:template>
+
+
+<xsl:template match='div' mode='p:include p:include-content'> 
+	<xsl:apply-templates mode='#current'/>
+</xsl:template>
+
+
+
+<xsl:template match='grammar' mode='p:include-content'>
+	<xsl:apply-templates mode='#current'/>
+</xsl:template>
+
+
+<xsl:template match='define' mode='p:include-content'>
+	<xsl:param name='defines' tunnel='yes' as='node()*'/>
+	<xsl:if test="not($defines) or not(key('p:def', @name, $defines))">
+		<xsl:next-match/>
+	</xsl:if>
+</xsl:template>
+
+
+<xsl:template match='*' mode='p:include-content'>
+	<xsl:apply-templates select='.' mode='p:include'/>
+</xsl:template>
+
+
+
+<!-- include xmlns -->
+
+<xsl:template match='/rng:*' mode='p:include'>
+	<xsl:copy>
+		<xsl:apply-templates select='.' mode='p:include-xmlns'/>
+		<xsl:apply-templates select="@*|node()" mode='#current'/>
+	</xsl:copy>
+</xsl:template>
+
+
+<xsl:template match='/rng:*' mode='p:include-xmlns'>
+	<xsl:variable name='root' select='.'/>
+	
+	<xsl:for-each select='in-scope-prefixes(.)'>
+		<xsl:namespace name='{.}' select='namespace-uri-for-prefix(., $root)'/>
+	</xsl:for-each>
+	
+	<xsl:apply-templates mode='#current'/>
+</xsl:template>
+
+
+<xsl:template match='include|externalRef' mode='p:include-xmlns'> 
+	<xsl:apply-templates select='document(@href)' mode='#current'/>
+</xsl:template>
+
+<xsl:template match='text()' mode='p:include-xmlns'/> 
+
+
+
+
+<!--
+ !
+ ! final phase - define
+ !
+ !-->
+
+<xsl:template match="define[count(key('p:def', @name)) &gt; 1]" mode='p:define'>
 	<xsl:if test=". is key('p:def', @name)[1]">
+		<xsl:variable name='combine' select="(key('p:def', @name)/@combine)[1]"/>
+		
 		<xsl:copy>
 			<xsl:attribute name='name' select='@name'/>
-			<xsl:element name='{@combine}' namespace='http://relaxng.org/ns/structure/1.0'>
+			<!--xsl:message>new element (<xsl:value-of select='@name'/>): (<xsl:value-of select='$combine'/>)</xsl:message-->
+			
+			<xsl:element name='{$combine}' namespace='http://relaxng.org/ns/structure/1.0'>
 				<xsl:apply-templates select="key('p:def', @name)/*" mode='#current'/>
 			</xsl:element>
 		</xsl:copy>
@@ -25,11 +110,28 @@
 
 
 
-<xsl:template match="@*|node()" mode='p:root'>
+
+<!--
+ !
+ ! root
+ !
+ !-->
+
+<xsl:template match="@*|node()" mode='p:include p:define'>
 	<xsl:copy>
 		<xsl:apply-templates select="@*|node()" mode='#current'/>
 	</xsl:copy>
 </xsl:template>
+
+
+<xsl:template match='/' mode='p:root'>
+	<xsl:variable name='p1'>
+		<xsl:apply-templates mode='p:include'/>
+	</xsl:variable>
+	
+	<xsl:apply-templates mode='p:define' select='$p1'/>
+</xsl:template>
+
 
 <xsl:template match='/'>
 	<xsl:apply-templates mode='p:root' select='/'/>

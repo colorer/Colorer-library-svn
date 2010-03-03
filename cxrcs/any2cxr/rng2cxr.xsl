@@ -190,11 +190,12 @@
 	</cxr:content>
 </xsl:template>
 
+
 <xsl:template name='element-content'>
-		<xsl:call-template name='make-all'/>
-		<xsl:if test="not(r:isData(.)) and r:isMixed(.)">
-			<cxr:data/>
-		</xsl:if>
+	<xsl:call-template name='make-all'/>
+	<xsl:if test="not(r:isData(.)) and r:isMixed(.)">
+		<cxr:data/>
+	</xsl:if>
 </xsl:template>
 
 
@@ -220,6 +221,7 @@
 <xsl:template match='choice' mode='element-name'>
 	<xsl:apply-templates mode='#current'/>
 </xsl:template>
+
 
 
 
@@ -514,7 +516,7 @@
 <!-- all -->
 
 <xsl:template match='text()' 
-	mode='#default chkp chkd element element-name attlsit att-use att-data data data-content data-ref data-ref-in mk-attrib mk-element mk-data content'
+	mode='#default chkp chkd element element-name element-content attlist att-use att-data data data-content data-ref data-ref-in mk-attrib mk-element mk-data content'
 />
 
 <xsl:template match='*' 
