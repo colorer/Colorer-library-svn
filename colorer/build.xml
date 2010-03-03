@@ -162,7 +162,7 @@
   <target name="all" depends='init, library, farplugin, eclipseplugin, library-linux' description='Builds all available packages: library, farplugin and eclipseplugin'>
   </target>
 
-  <target name="clean" depends='init, library.clean, farplugin.clean, eclipseplugin.clean, hrc.clean, hrcupdate.clean, doc.clean'
+  <target name="clean" depends='init, library.clean, farplugin.clean, eclipseplugin.clean, hrcupdate.clean, doc.clean'
           description='Cleans all the temporary files'>
 
   </target>
@@ -232,15 +232,7 @@
     </fail>
   </target>
 
-  <target name="hrc" depends='init' description='Generates all required HRC files'>
-    <ant dir='src/hrc' antfile='build.xml' target='all'/>
-  </target>
-
-  <target name="hrc.clean" depends='init' description='Cleans all the generated HRC files'>
-    <ant dir='src/hrc' antfile='build.xml' target='clean'/>
-  </target>
-
-  <target name="hrc.jar" depends='hrc'>
+  <target name="hrc.jar" >
 
     <mkdir dir='${target-dir}/hrc/auto/types'/>
 
@@ -251,10 +243,6 @@
       <fileset dir='hrc/' includes='proto*.hrc, *.ent.hrc'/>
     </copy>
     <replace dir="${target-dir}/hrc" includes='*.hrc' token='link="' value='link="jar:common.jar!'/>
-
-    <zip destfile='${target-dir}/hrc/auto/types/auto.jar'>
-      <fileset dir='hrc/auto' includes='gen/**/*, qrm/**/*, types/**/*, far/**/*'/>
-    </zip>
 
     <copy todir='${target-dir}/hrc/auto' overwrite='true'>
       <fileset dir='hrc/auto' includes='*.hrc'/>
@@ -310,7 +298,7 @@
     </antcall>
   </target>
 
-  <target name="library" depends='init, hrc, doc' description='Builds Colorer-take5 Library source distribution package'>
+  <target name="library" depends='init, doc' description='Builds Colorer-take5 Library source distribution package'>
 
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
@@ -358,7 +346,7 @@
     </antcall>
   </target>
 
-  <target name="library-linux" depends='init, hrc, doc' description='Builds Colorer-take5 Library linux package'>
+  <target name="library-linux" depends='init, doc' description='Builds Colorer-take5 Library linux package'>
 
     <mkdir dir='${library-linux-dir}'/>
 

@@ -28,7 +28,7 @@
 
 <target name='copy' depends='copy.build'>
 	<copy todir='${copy-path}'>
-		<fileset dir='hrc' includes='**/*.hrc'/>
+		<fileset dir='hrc' includes='**/*.hrc changes.txt'/>
 	</copy>
 </target>
 
