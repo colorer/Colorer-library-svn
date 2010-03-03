@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet
 	version="2.0"
-	exclude-result-prefixes="xsl r f a rng"
+	exclude-result-prefixes="xsl r n f a rng"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rng='http://relaxng.org/ns/structure/1.0'
 	xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -9,21 +9,16 @@
 	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
 	xmlns:r='colorer://xslt.ns.xml/cxr/rng'
 	xmlns:f='colorer://xslt.ns.xml/cxr/func'
+	xmlns:n='colorer://xslt.ns.xml/cxr/names'
  >
 
-<xsl:import href='func.xsl'/>
+<xsl:import href='template.xsl'/>
 
-<xsl:output 
-	method="xml" indent="yes" encoding="UTF-8"
-	cdata-section-elements='cxr:documentation'
-/>
-<xsl:strip-space elements="*"/>
+<xsl:param name='use-rng-ns' select="'no'"/>
+<xsl:param name='use-arng-ns' select="'no'"/>
 
-<xsl:param name='use-rng-ns' select="'yes'"/>
-<xsl:param name='use-arng-ns' select="'yes'"/>
 
 <xsl:variable name='start-group-name' select="'cxrcs-rng-start-group'"/>
-
 
 <xsl:variable name='f:root-el' select='$f:root/rng:*'/>
 <xsl:variable name='f:tns-real' select='$f:root-el/@ns'/>
@@ -427,98 +422,38 @@
 
 
 
-
 <!-- 
  !
  ! names
  !
  !-->
+
+
+<xsl:template match='/' mode='n:unused-names-ugly'>
+	<xsl:if test="$use-rng-ns = 'no'">
+		<xsl:value-of select="'http://relaxng.org/ns/structure/1.0'"/>
+	</xsl:if>
+	<xsl:if test="$use-arng-ns = 'no'">
+		<xsl:value-of select="'http://relaxng.org/ns/compatibility/annotations/1.0'"/>
+	</xsl:if>
+	<xsl:apply-imports/> 
+</xsl:template>
+
+
  
-<xsl:template match="/rng:*[not(@ns) and ($f:tns = $f:def-ns-alias)]" mode='make-names' priority='2'>
-	<cxr:namespace uri='##default' alias='{$f:def-ns-alias}'>
-		<cxr:prefix name='##default' use='required'/>
-	</cxr:namespace>
+<xsl:template match="/rng:*[not(@ns) and ($f:tns = $f:def-ns-alias)]" mode='n:make-names' priority='2'>
+	<xsl:call-template name='n:make-def-name'/>
 	<xsl:next-match/>
 </xsl:template>
 
 
-<xsl:template match="/rng:*[@ns]" mode='make-names'  priority='2'>
-		<cxr:namespace uri='{@ns}'>
-			<cxr:prefix name='{f:ns2pre(@ns)}'/>
-			<cxr:prefix name='##any'/>
-		</cxr:namespace>
+<xsl:template match="/rng:*[@ns]" mode='n:make-names'  priority='2'>
+	<xsl:apply-templates select='@ns' mode='n:make-name'/>
 	<xsl:next-match>
 		<xsl:with-param name='tns-defined' select='"yes"'/>
 	</xsl:next-match>
 </xsl:template>
 
-
-<xsl:template match='/rng:*' mode='make-names'>
-	<xsl:param name='tns-defined' select='"no"'/>
-	
-	<xsl:variable name='xnss' as='xs:anyURI*'>
-		<xsl:sequence select='
-			for $i in in-scope-prefixes(.) 
-				return namespace-uri-for-prefix($i,$f:root-el)
-		'/>
-	</xsl:variable>
-	
-	<xsl:for-each-group select='$xnss' group-by='$xnss'>
-		<xsl:variable name='nsuri' select='current-grouping-key()'/>
-		
-		<xsl:if test="not(
-			($nsuri = 'http://relaxng.org/ns/structure/1.0' and $use-rng-ns = 'no')
-			or ($nsuri = 'http://relaxng.org/ns/compatibility/annotations/1.0' and $use-arng-ns = 'no')
-			or ($nsuri = $f:tns and $tns-defined = 'yes')
-		)">
-			<cxr:namespace uri='{$nsuri}'>
-				<cxr:prefix name='{f:ns2pre($nsuri)}'/>
-				<cxr:prefix name='##any'/>
-			</cxr:namespace>
-		</xsl:if>
-	</xsl:for-each-group>
-</xsl:template>
-
-
-
-<!--xsl:template match='/rng:*' mode='make-names'>
-	<xsl:param name='tns-defined' select='"no"'/>
-	
-	<xsl:for-each select='in-scope-prefixes(.)'>
-		<xsl:variable name='nsuri' select='namespace-uri-for-prefix(.,$f:root-el)'/>
-		<xsl:variable name='nspre' select='f:ns2pre($nsuri)'/>
-		
-		<xsl:if test="not(
-			($nsuri = 'http://relaxng.org/ns/structure/1.0' and $use-rng-ns = 'no')
-			or ($nsuri = 'http://relaxng.org/ns/compatibility/annotations/1.0' and $use-arng-ns = 'no')
-			or ($nsuri = $f:tns and $tns-defined = 'yes')
-		)">
-			<cxr:namespace uri='{$nsuri}'>
-				<cxr:prefix name='{$nspre}' use='aaa'/>
-				<cxr:prefix name='##any'/>
-			</cxr:namespace>
-		</xsl:if>
-	</xsl:for-each>
-</xsl:template-->
-
-
-
-
-<xsl:template match='/rng:*' mode='copy-namespace'>
-	<xsl:variable name='ns-lsit'>
-		<xsl:apply-templates select='.' mode='make-names'/>
-	</xsl:variable>
-	
-	<xsl:apply-templates select='$ns-lsit/cxr:namespace' mode='#current'/>
-</xsl:template>
-
-<xsl:template match='cxr:namespace' mode='copy-namespace'>
-	<xsl:namespace name="{cxr:prefix[@name != '##any']/@name}" select='@uri'/>
-</xsl:template>
-
-<xsl:template match="cxr:namespace[@uri = '##default']" mode='copy-namespace'>
-	<xsl:namespace name='{$default-prefix}' select='$f:def-ns-alias'/>
-</xsl:template>
 
 
 
@@ -558,15 +493,9 @@
 
 
 <xsl:template match='/rng:*'>
-	<cxr:schema>
-		<xsl:apply-templates select='.' mode='copy-namespace'/>
-		<cxr:type name='{$f:tns}'>
-			<xsl:apply-templates select='.' mode='make-names'/>
-			<xsl:apply-templates/>
-			<xsl:apply-templates select='//rng:element[rng:name or rng:choice/rng:name]' mode='content'/>
-			<xsl:apply-templates select='rng:start' mode='root'/>
-		</cxr:type>
-	</cxr:schema>
+	<xsl:apply-templates/>
+	<xsl:apply-templates select='//rng:element[rng:name or rng:choice/rng:name]' mode='content'/>
+	<xsl:apply-templates select='rng:start' mode='root'/>
 </xsl:template>
 
 

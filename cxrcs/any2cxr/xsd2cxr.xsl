@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet
 	version="2.0"
-	exclude-result-prefixes="xsl s f"
+	exclude-result-prefixes="xsl s f n"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs='http://www.w3.org/2001/XMLSchema'
 	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
 	xmlns:s='colorer://xslt.ns.xml/cxr/xsd'
 	xmlns:f='colorer://xslt.ns.xml/cxr/func'
+	xmlns:n='colorer://xslt.ns.xml/cxr/names'
  >
-<xsl:import href='func.xsl'/>
 
-<xsl:output 
-	method="xml" indent="yes" encoding="UTF-8"
-	cdata-section-elements='cxr:documentation'
-/>
-<xsl:strip-space elements="*"/>
-
+<xsl:import href='template.xsl'/>
 
 <xsl:param name='element-occurs' select="'no'"/>
 <xsl:param name='copy-annotation' select="'no'"/>
-<xsl:param name='support-xsi' select="'yes'"/>
 
 <xsl:variable name='f:root-el' select='$f:root/xs:schema'/>
 <xsl:variable name='f:tns-real' select='$f:root/xs:schema/@targetNamespace'/>
@@ -428,22 +422,18 @@
  !
  !-->
  
-<xsl:template match="xs:schema[not(@targetNamespace) or not(@elementFormDefault) or @elementFormDefault='unqualified']" mode='make-names'>
-	<cxr:namespace uri='##default' alias='{$f:def-ns-alias}'>
-		<cxr:prefix name='##default' use='required'/>
-	</cxr:namespace>
+<xsl:template match="xs:schema[not(@targetNamespace) or not(@elementFormDefault) or @elementFormDefault='unqualified']" mode='n:make-names'>
+	<xsl:call-template name='n:make-def-name'/>
 	<xsl:next-match/>
 </xsl:template>
 
 
-<xsl:template match='xs:schema' mode='make-names'>
-	<xsl:variable name='current' select='.' as='element()'/>
-	
+<xsl:template match='xs:schema' mode='n:make-names'>
 	<xsl:apply-templates select='xs:import | @targetNamespace' mode='#current'/>
 </xsl:template>
 
 
-<xsl:template match='@targetNamespace' mode='make-names' priority='3'>
+<xsl:template match='@targetNamespace' mode='n:make-names' priority='3'>
 	<cxr:namespace uri='{.}'>
 		<cxr:prefix name='{f:ns2pre(.)}'>
 			<xsl:next-match/>
@@ -454,49 +444,19 @@
 	</cxr:namespace>
 </xsl:template>
 
-<xsl:template match="xs:schema[not(@elementFormDefault) or @elementFormDefault='unqualified']/@targetNamespace" mode='make-names' priority='2'>
+
+<xsl:template match="xs:schema[not(@elementFormDefault) or @elementFormDefault='unqualified']/@targetNamespace" mode='n:make-names' priority='2'>
 	<xsl:attribute name='use'>required</xsl:attribute>
 	<xsl:next-match/>
 </xsl:template>
 
-<xsl:template match="xs:schema[@attributeFormDefault='qualified']/@targetNamespace" mode='make-names'>
+<xsl:template match="xs:schema[@attributeFormDefault='qualified']/@targetNamespace" mode='n:make-names'>
 	<xsl:attribute name='attrib-use'>required</xsl:attribute>
 </xsl:template>
 
-<xsl:template match='@*' mode='make-names'/>
 
-
-<xsl:template match='xs:import' mode='make-names'>
-	<xsl:variable name='pre' select='f:ns2pre(@namespace)'/>
-	
-	<cxr:namespace uri='{@namespace}'>
-		<cxr:prefix name='{$pre}'/>
-		<cxr:prefix name='##any'/>
-	</cxr:namespace>
-</xsl:template>
-
-<xsl:template match="xs:import[@namespace = 'http://www.w3.org/XML/1998/namespace']" mode='make-names'>
-	<cxr:namespace uri='{@namespace}'>
-		<cxr:prefix name='xml' use='required' attrib-use='required'/>
-	</cxr:namespace>
-</xsl:template>
-
-
-
-<xsl:template match='xs:schema' mode='copy-namespace'>
-	<xsl:variable name='ns-lsit'>
-		<xsl:apply-templates select='.' mode='make-names'/>
-	</xsl:variable>
-	
-	<xsl:apply-templates select='$ns-lsit/cxr:namespace' mode='#current'/>
-</xsl:template>
-
-<xsl:template match='cxr:namespace' mode='copy-namespace'>
-	<xsl:namespace name="{f:ns2pre(f:pre2ns(cxr:prefix[@name != '##any']/@name))}" select='@uri'/>
-</xsl:template>
-
-<xsl:template match="cxr:namespace[@uri = '##default']" mode='copy-namespace'>
-	<xsl:namespace name='{$default-prefix}' select='$f:def-ns-alias'/>
+<xsl:template match='xs:import' mode='n:make-names'>
+	<xsl:apply-templates select='@namespace' mode='n:make-name'/>
 </xsl:template>
 
 
@@ -510,37 +470,20 @@
 
 
 <xsl:template match='xs:schema'>
-	<cxr:schema>
-		<xsl:apply-templates select='.' mode='copy-namespace'/>
+	<xsl:apply-templates/>
+	
+	<xsl:for-each-group select='xs:element' group-by='@substitutionGroup'>
+		<xsl:variable name='qn' select='f:qn2qn-strict(resolve-QName(current-grouping-key(), $f:root/xs:schema))'/>
 		
-		<cxr:type name='{$f:tns}'>
-			<xsl:if test="$support-xsi = 'yes'">
-				<xsl:call-template name='support-xsi'/>
+		<cxr:substitution name="{$qn}{if(not(key('abst-elements',$qn))) then $abst-element-suffix else ''}">
+			
+			<xsl:if test="not(key('abst-elements',$qn))">
+				<cxr:element ref='{$qn}'/>
 			</xsl:if>
 			
-			<xsl:apply-templates select='.' mode='make-names'/>
-			<xsl:apply-templates/>
-			
-			<xsl:for-each-group select='xs:element' group-by='@substitutionGroup'>
-				<xsl:variable name='qn' select='f:qn2qn-strict(resolve-QName(current-grouping-key(), $f:root/xs:schema))'/>
-				
-				<cxr:substitution name="{$qn}{if(not(key('abst-elements',$qn))) then $abst-element-suffix else ''}">
-					
-					<xsl:if test="not(key('abst-elements',$qn))">
-						<cxr:element ref='{$qn}'/>
-					</xsl:if>
-					
-					<xsl:apply-templates select='current-group()' mode='subst-group'/>
-				</cxr:substitution>
-			</xsl:for-each-group>
-		</cxr:type>
-		
-	</cxr:schema>
-</xsl:template>
-
-
-<xsl:template name='support-xsi'>
-	<cxr:apply-template name='xsi' href='xsi.cxr'/>
+			<xsl:apply-templates select='current-group()' mode='subst-group'/>
+		</cxr:substitution>
+	</xsl:for-each-group>
 </xsl:template>
 
 
@@ -557,7 +500,7 @@
 
 <!-- all -->
 
-<xsl:template match='text()|*' mode='content attlist'/>
+<xsl:template match='*' mode='content attlist'/>
 
 <xsl:template match='text()' mode='#default content attlist'/>
 
