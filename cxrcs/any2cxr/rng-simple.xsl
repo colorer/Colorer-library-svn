@@ -1,49 +1,39 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet
 	version="2.0"
-	exclude-result-prefixes="xsl f n"
+	exclude-result-prefixes="xsl p"
+	xpath-default-namespace='http://relaxng.org/ns/structure/1.0'
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xs='http://www.w3.org/2001/XMLSchema'
-	xmlns:cxr="http://colorer.sf.net/2010/cxrcs"
-	xmlns:f='colorer://xslt.ns.xml/cxr/func'
-	xmlns:n='colorer://xslt.ns.xml/cxr/names'
->
-
-<xsl:import href='func.xsl'/>
-<xsl:import href='names.xsl'/>
-
-<xsl:output 
-	method="xml" indent="yes" encoding="UTF-8"
-	cdata-section-elements='cxr:documentation'
-/>
-<xsl:strip-space elements="*"/>
-
-<xsl:param name='support-xsi' select="'yes'"/>
+	xmlns:rng='http://relaxng.org/ns/structure/1.0'
+	xmlns:p='colorer://xslt.ns.xml/cxr/rng-simple'
+ >
 
 
-<xsl:template name='support-xsi'>
-	<xsl:if test="$support-xsi = 'yes'">
-		<cxr:apply-template name='xsi' href='xsi.cxr'/>
+<xsl:key name='p:def' match='rng:define' use='@name'/>
+
+
+<xsl:template match='define[@combine]' mode='p:root'>
+	<xsl:if test=". is key('p:def', @name)[1]">
+		<xsl:copy>
+			<xsl:attribute name='name' select='@name'/>
+			<xsl:element name='{@combine}' namespace='http://relaxng.org/ns/structure/1.0'>
+				<xsl:apply-templates select="key('p:def', @name)/*" mode='#current'/>
+			</xsl:element>
+		</xsl:copy>
 	</xsl:if>
 </xsl:template>
 
 
-<xsl:template match='/' mode='root'>
-	<cxr:schema>
-		<xsl:apply-templates mode='n:copy-namespace'/>
-		<cxr:type name='{$f:tns}'>
-			<xsl:call-template name='support-xsi'/>
-			<xsl:apply-templates mode='n:make-names'/>
-			<xsl:apply-templates/>
-		</cxr:type>
-	</cxr:schema>
-</xsl:template>
 
+<xsl:template match="@*|node()" mode='p:root'>
+	<xsl:copy>
+		<xsl:apply-templates select="@*|node()" mode='#current'/>
+	</xsl:copy>
+</xsl:template>
 
 <xsl:template match='/'>
-	<xsl:apply-templates select='/' mode='root'/>
+	<xsl:apply-templates mode='p:root' select='/'/>
 </xsl:template>
-
 
 </xsl:stylesheet>
 <!-- ***** BEGIN LICENSE BLOCK *****
@@ -63,7 +53,7 @@
    -
    - The Initial Developer of the Original Code is
    - Eugene Efremov <4mirror@mail.ru>
-   - Portions created by the Initial Developer are Copyright (C) 2009-2010
+   - Portions created by the Initial Developer are Copyright (C) 2010
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):

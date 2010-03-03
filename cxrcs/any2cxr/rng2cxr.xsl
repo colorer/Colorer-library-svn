@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet
 	version="2.0"
-	exclude-result-prefixes="xsl r n f a rng"
+	exclude-result-prefixes="xsl r p n f a rng"
+	xpath-default-namespace='http://relaxng.org/ns/structure/1.0'
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rng='http://relaxng.org/ns/structure/1.0'
 	xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -10,9 +11,11 @@
 	xmlns:r='colorer://xslt.ns.xml/cxr/rng'
 	xmlns:f='colorer://xslt.ns.xml/cxr/func'
 	xmlns:n='colorer://xslt.ns.xml/cxr/names'
+	xmlns:p='colorer://xslt.ns.xml/cxr/rng-simple'
  >
 
 <xsl:import href='template.xsl'/>
+<xsl:import href='rng-simple.xsl'/>
 
 <xsl:param name='use-rng-ns' select="'no'"/>
 <xsl:param name='use-arng-ns' select="'no'"/>
@@ -23,8 +26,6 @@
 <xsl:variable name='f:root-el' select='$f:root/rng:*'/>
 <xsl:variable name='f:tns-real' select='$f:root-el/@ns'/>
 
-
-<xsl:key name='r:def' match='rng:define' use='@name'/>
 
 
 
@@ -72,24 +73,24 @@
 
 
 
-<xsl:template match='rng:attribute|rng:element' mode='chkp'>
+<xsl:template match='attribute|element' mode='chkp'>
 	<xsl:sequence select='local-name(.)'/>
 </xsl:template>
-<xsl:template match='rng:text|rng:value|rng:data' mode='chkp'><!-- rng:mixed| -->
+<xsl:template match='text|value|data' mode='chkp'><!-- mixed| -->
 	<xsl:sequence select="'data'"/>
 </xsl:template>
-<xsl:template match='rng:mixed' mode='chkp'>
+<xsl:template match='mixed' mode='chkp'>
 	<xsl:sequence select="'mixed'"/>
 	<xsl:apply-templates mode='#current'/>
 </xsl:template>
 
-<xsl:template match='rng:oneOrMore|zeroOrMore|rng:value|rng:param' mode='chkd'>
+<xsl:template match='oneOrMore|zeroOrMore|value|param' mode='chkd'>
 	<xsl:sequence select="'simple'"/>
 </xsl:template>
 
 
 
-<xsl:template match='rng:ref' mode='chkp'>
+<xsl:template match='ref' mode='chkp'>
 	<xsl:param name='ref-name' tunnel='yes' as='xs:string*'/>
 	
 	<xsl:if test="some $i in $ref-name satisfies $i = @name">
@@ -97,7 +98,7 @@
 	</xsl:if>
 	
 	<xsl:if test="every $i in $ref-name satisfies $i != @name">
-		<xsl:apply-templates select='key("r:def", @name)' mode='#current'>
+		<xsl:apply-templates select='key("p:def", @name)' mode='#current'>
 			<xsl:with-param name='ref-name' select='($ref-name, @name)' tunnel='yes' as='xs:string*'/>
 		</xsl:apply-templates>
 	</xsl:if>
@@ -158,32 +159,32 @@
  !-->
 
 <!-- todo: mixed choice/any... -->
-<xsl:template match='rng:element[rng:name or rng:choice/rng:name]' mode='element'>
+<xsl:template match='element[name or choice/name]' mode='element'>
 	<xsl:apply-templates mode='element-name'>
 		<xsl:with-param name='content-ref' tunnel='yes' select='concat("content-",generate-id(.))'/>
 	</xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match='rng:element[@name]' mode='element'>
+<xsl:template match='element[@name]' mode='element'>
 	<cxr:element name='{f:qn2qn(@name)}'>
 		<xsl:next-match/>
 	</cxr:element>
 </xsl:template>
 
-<xsl:template match='rng:element[rng:anyName]' mode='element'>
+<xsl:template match='element[anyName]' mode='element'>
 	<cxr:any-element>
 		<xsl:next-match/>
 	</cxr:any-element>
 </xsl:template>
 
-<xsl:template match='rng:element[rng:nsName or rng:choice/rng:nsName]' mode='element'>
-	<cxr:any-element namespace='{rng:nsName/@ns | rng:choice/rng:nsName/@ns}'>
+<xsl:template match='element[nsName or choice/nsName]' mode='element'>
+	<cxr:any-element namespace='{nsName/@ns | choice/nsName/@ns}'>
 		<xsl:next-match/>
 	</cxr:any-element>
 </xsl:template>
 
 
-<xsl:template match='rng:element' mode='element'>
+<xsl:template match='element' mode='element'>
 	<cxr:content>
 		<xsl:call-template name='element-content'/>
 	</cxr:content>
@@ -205,22 +206,21 @@
 	</cxr:group>
 </xsl:template>
 
-<xsl:template match='rng:ref[r:isElement(.)]' mode='element'>
+<xsl:template match='ref[r:isElement(.)]' mode='element'>
 	<cxr:group ref='{f:nn2qn(@name)}'/>
 </xsl:template>
 
 
 
-<xsl:template match='rng:name'  mode='element-name'>
+<xsl:template match='name'  mode='element-name'>
 	<xsl:param name='content-ref' tunnel='yes' select='"foo"'/>
 	<cxr:element name='{f:qn2qn(.)}' content='{f:nn2qn($content-ref)}'/>
 </xsl:template>
 
-<xsl:template match='rng:choice' mode='element-name'>
+<xsl:template match='choice' mode='element-name'>
 	<xsl:apply-templates mode='#current'/>
 </xsl:template>
 
-<xsl:template match='*' mode='element-name'/>
 
 
 <!--
@@ -229,7 +229,7 @@
  !
  !-->
 
-<xsl:template match='rng:attribute[@name]' mode='attlist'>
+<xsl:template match='attribute[@name]' mode='attlist'>
 	<cxr:attrib name='{f:qn2qn(@name)}'>
 		<xsl:apply-templates select='..' mode='att-use'/>
 		<xsl:apply-templates mode='att-data'/>
@@ -239,18 +239,18 @@
 	</cxr:attrib>
 </xsl:template>
 
-<xsl:template match='rng:attribute[rng:anyName]' mode='attlist'>
+<xsl:template match='attribute[anyName]' mode='attlist'>
 	<cxr:any/>
 </xsl:template>
 
 
-<!--xsl:template match='rng:*[r:isPattern(.)][r:isAttrib(.)]' mode='attlist'>
+<!--xsl:template match='*[r:isPattern(.)][r:isAttrib(.)]' mode='attlist'>
 	<cxr:attlist>
 		<xsl:apply-templates mode='#current'/>
 	</cxr:attlist>
 </xsl:template-->
 
-<xsl:template match='rng:ref[r:isAttrib(.)]' mode='attlist'>
+<xsl:template match='ref[r:isAttrib(.)]' mode='attlist'>
 	<cxr:attlist ref='{f:nn2qn(@name)}'/>
 </xsl:template>
 
@@ -258,7 +258,7 @@
 
 <!-- att-data -->
 
-<xsl:template match='rng:data[not(*) and @type]' mode='att-data'>
+<xsl:template match='data[not(*) and @type]' mode='att-data'>
 	<xsl:attribute name='data' select='r:qn2xsd(@type)'/>
 </xsl:template>
  
@@ -268,7 +268,7 @@
 
 
 <!-- att-use -->
-<xsl:template match='rng:optional' mode='att-use'>
+<xsl:template match='optional' mode='att-use'>
 	<xsl:attribute name='use' select='"optional"'/>
 </xsl:template>
 <xsl:template match='rng:*' mode='att-use'>
@@ -284,16 +284,16 @@
  !
  !-->
 
-<xsl:template match='rng:data[not(*) and @type]' mode='data'>
+<xsl:template match='data[not(*) and @type]' mode='data'>
 	<cxr:inherit ref='{r:qn2xsd(@type)}'/>
 </xsl:template>
 
-<xsl:template match='rng:ref[r:isData(.)]' mode='data'>
+<xsl:template match='ref[r:isData(.)]' mode='data'>
 	<!--xsl:attribute name='ref' select='f:qn2qn(@name)'/-->
 	<cxr:inherit ref='{f:nn2qn(@name)}'/>
 </xsl:template>
 
-<xsl:template match='rng:ref[not(key("r:def", @name))]' mode='data'>
+<xsl:template match='ref[not(key("p:def", @name))]' mode='data'>
 	<!--xsl:attribute name='ref' select='f:qn2qn(@name)'/-->
 	<cxr:inherit ref='{r:qn2xsd(@name)}'/>
 </xsl:template>
@@ -311,38 +311,37 @@
 	<xsl:apply-templates mode='#current'/>
 </xsl:template>
 
-<xsl:template match='rng:*' mode='data'/>
 
 
 
-<xsl:template match="rng:param[@name = 'pattern']" mode='data-content'>
+<xsl:template match="param[@name = 'pattern']" mode='data-content'>
 	<cxr:pattern match='{.}'/>
 </xsl:template>
 
-<xsl:template match='rng:value[1]' mode='data-content'>
+<xsl:template match='value[1]' mode='data-content'>
 	<cxr:list>
-		<xsl:for-each select='../rng:value'>
+		<xsl:for-each select='../value'>
 			<cxr:item value='{.}'/>
 		</xsl:for-each>
 	</cxr:list>
 </xsl:template>
 
 
-<xsl:template match='rng:oneOrMore' mode='data-ref'>
+<xsl:template match='oneOrMore' mode='data-ref'>
 	<xsl:attribute name='reply'>1 inf</xsl:attribute>
 	<xsl:apply-templates mode='data-ref-in'/>
 </xsl:template>
 
-<xsl:template match='rng:zeroOrMore' mode='data-ref'>
+<xsl:template match='zeroOrMore' mode='data-ref'>
 	<xsl:attribute name='reply'>0 inf</xsl:attribute>
 	<xsl:apply-templates mode='data-ref-in'/>
 </xsl:template>
 
-<xsl:template match='rng:data[@type]' mode='data-ref-in'>
+<xsl:template match='data[@type]' mode='data-ref-in'>
 	<xsl:attribute name='ref' select='r:qn2xsd(@type)'/>
 </xsl:template>
 
-<xsl:template match='rng:ref[r:isData(.)]' mode='data-ref-in'>
+<xsl:template match='ref[r:isData(.)]' mode='data-ref-in'>
 	<xsl:attribute name='ref' select='f:nn2qn(@name)'/><!-- todo: multi -->
 </xsl:template>
 
@@ -383,7 +382,7 @@
 
 
 <!-- level 2 -->
-<xsl:template match='rng:define' mode='mk-attrib mk-element mk-data'  priority='2'>
+<xsl:template match='define' mode='mk-attrib mk-element mk-data'  priority='2'>
 	<xsl:param name='nm' select='"no"'/>
 	<xsl:if test='$nm = "yes"'>
 		<xsl:attribute name='name' select='@name'/>
@@ -406,7 +405,6 @@
 </xsl:template>
 
 <!-- stop level -->
-<xsl:template match='rng:*' mode='mk-attrib mk-element mk-data'/>
 
 
 <!-- make all -->
@@ -464,7 +462,7 @@
  !
  -->
 
-<xsl:template match='rng:element[rng:name or rng:choice/rng:name]' mode='content'>
+<xsl:template match='element[name or choice/name]' mode='content'>
 	<xsl:variable name='name' select='concat("content-",generate-id(.))'/>
 	
 	<cxr:content name='{$name}'>
@@ -473,17 +471,17 @@
 </xsl:template>
  
 
-<xsl:template match='rng:define'>
+<xsl:template match='define'>
 	<xsl:call-template name='make-all'/>
 </xsl:template>
 
-<xsl:template match='rng:start'>
+<xsl:template match='start'>
 	<cxr:group name='{$start-group-name}'>
 		<xsl:apply-templates mode='element'/>
 	</cxr:group>
 </xsl:template>
 
-<xsl:template match='rng:start' mode='root'>
+<xsl:template match='start' mode='root'>
 	<cxr:root>
 		<cxr:group ref='{f:nn2qn($start-group-name)}'/>
 	</cxr:root>
@@ -491,16 +489,38 @@
 
 
 
+<!-- main -->
 
 <xsl:template match='/rng:*'>
 	<xsl:apply-templates/>
-	<xsl:apply-templates select='//rng:element[rng:name or rng:choice/rng:name]' mode='content'/>
-	<xsl:apply-templates select='rng:start' mode='root'/>
+	<xsl:apply-templates select='//element[name or choice/name]' mode='content'/>
+	<xsl:apply-templates select='start' mode='root'/>
 </xsl:template>
 
 
 
-<xsl:template match='text()' mode='#all'/>
+<!-- root -->
+
+<xsl:variable name='f:root'>
+	<xsl:apply-templates select='/' mode='p:root'/>
+</xsl:variable>
+
+<xsl:template match='/'>
+	<xsl:apply-templates mode='root' select='$f:root'/>
+</xsl:template>
+
+
+
+<!-- all -->
+
+<xsl:template match='text()' 
+	mode='#default chkp chkd element element-name attlsit att-use att-data data data-content data-ref data-ref-in mk-attrib mk-element mk-data content'
+/>
+
+<xsl:template match='*' 
+	mode='mk-attrib mk-element mk-data data element-name'
+/>
+
 
 </xsl:stylesheet>
 <!-- ***** BEGIN LICENSE BLOCK *****
