@@ -3,11 +3,16 @@
 	version="2.0"
 	exclude-result-prefixes="xsl p"
 	xpath-default-namespace='http://relaxng.org/ns/structure/1.0'
+	xmlns='http://relaxng.org/ns/structure/1.0'
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:rng='http://relaxng.org/ns/structure/1.0'
 	xmlns:p='colorer://xslt.ns.xml/cxr/rng-simple'
  >
 
+
+<xsl:output 
+	method="xml" indent="yes" encoding="UTF-8"
+/>
 
 <xsl:key name='p:def' match='rng:define' use='@name'/>
 
@@ -19,7 +24,6 @@
  !-->
 
 <xsl:template match='include|externalRef' mode='p:include'> 
-	<!-- todo: externalRef is different -->
 	<xsl:param name='defines' tunnel='yes' as='node()*'/>
 	
 	<xsl:apply-templates select='document(@href)' mode='p:include-content'>
@@ -57,15 +61,110 @@
 
 
 
-<!-- include xmlns -->
 
-<xsl:template match='/rng:*' mode='p:include'>
+<!--
+ !
+ ! phase 2 - normalization
+ !
+ !-->
+
+
+<xsl:template match='/grammar | /grammar/start' mode='p:norm' priority='2'>
 	<xsl:copy>
-		<xsl:apply-templates select='.' mode='p:include-xmlns'/>
 		<xsl:apply-templates select="@*|node()" mode='#current'/>
+		<xsl:apply-templates select='.' mode='p:norm-define'/>
 	</xsl:copy>
 </xsl:template>
 
+
+<xsl:template match='/rng:*' mode='p:norm'>
+	<grammar>
+		<xsl:apply-templates select='.' mode='p:include-xmlns'/>
+		<xsl:apply-templates select='@*' mode='#current'/>
+		<start>
+			<xsl:apply-templates mode='#current'/>
+		</start>
+		<xsl:apply-templates select='.' mode='p:norm-define'/>
+	</grammar>
+</xsl:template>
+
+
+<xsl:template match='grammar | start' mode='p:norm'>
+	<xsl:apply-templates mode='#current'/>
+</xsl:template> 
+ 
+
+<xsl:template match='define' mode='p:norm'/>
+
+
+
+<xsl:template match='/rng:*' mode='p:norm-define'>
+	<xsl:apply-templates select='//define' mode='p:norm-define'/>
+</xsl:template>
+
+
+<xsl:template match='define' mode='p:norm-define'>
+	<xsl:copy>
+		<xsl:apply-templates select="@*|node()" mode='p:norm'/>
+	</xsl:copy>
+</xsl:template>
+
+<xsl:template match='*' mode='p:norm-define'/>
+
+
+
+
+<!--
+ !
+ ! final phase - define
+ !
+ !-->
+
+<xsl:template match="define[count(key('p:def', @name)) &gt; 1]" mode='p:define'>
+	<xsl:if test=". is key('p:def', @name)[1]">
+		<xsl:variable name='combine' select="(key('p:def', @name)/@combine)[1]"/>
+		
+		<xsl:copy>
+			<xsl:attribute name='name' select='@name'/>
+			<!--xsl:message>new element (<xsl:value-of select='@name'/>): (<xsl:value-of select='$combine'/>)</xsl:message-->
+			
+			<xsl:choose>
+				<xsl:when test='$combine'>
+					<xsl:element name='{$combine}' namespace='http://relaxng.org/ns/structure/1.0'>
+						<xsl:apply-templates select="key('p:def', @name)/*" mode='#current'/>
+					</xsl:element>
+				</xsl:when>
+				
+				<xsl:otherwise>
+					<xsl:message>Warning: define '<xsl:value-of select='@name'/>' has no combine.</xsl:message>
+					<xsl:apply-templates mode='#current'/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>
+	</xsl:if>
+</xsl:template>
+
+
+
+
+<!--
+ !
+ ! root
+ !
+ !-->
+
+
+<xsl:template match='/rng:*' mode='p:root'>
+	<xsl:copy>
+		<!-- phase 0 -->
+		<xsl:apply-templates select='.' mode='p:include-xmlns'/>
+		<!-- phase 1 -->
+		<xsl:apply-templates select="@*|node()" mode='p:include'/>
+	</xsl:copy>
+</xsl:template>
+
+
+<!-- include xmlns -->
 
 <xsl:template match='/rng:*' mode='p:include-xmlns'>
 	<xsl:variable name='root' select='.'/>
@@ -86,38 +185,9 @@
 
 
 
+<!-- root -->
 
-<!--
- !
- ! final phase - define
- !
- !-->
-
-<xsl:template match="define[count(key('p:def', @name)) &gt; 1]" mode='p:define'>
-	<xsl:if test=". is key('p:def', @name)[1]">
-		<xsl:variable name='combine' select="(key('p:def', @name)/@combine)[1]"/>
-		
-		<xsl:copy>
-			<xsl:attribute name='name' select='@name'/>
-			<!--xsl:message>new element (<xsl:value-of select='@name'/>): (<xsl:value-of select='$combine'/>)</xsl:message-->
-			
-			<xsl:element name='{$combine}' namespace='http://relaxng.org/ns/structure/1.0'>
-				<xsl:apply-templates select="key('p:def', @name)/*" mode='#current'/>
-			</xsl:element>
-		</xsl:copy>
-	</xsl:if>
-</xsl:template>
-
-
-
-
-<!--
- !
- ! root
- !
- !-->
-
-<xsl:template match="@*|node()" mode='p:include p:define'>
+<xsl:template match="@*|node()" mode='p:include p:define p:norm'>
 	<xsl:copy>
 		<xsl:apply-templates select="@*|node()" mode='#current'/>
 	</xsl:copy>
@@ -125,11 +195,18 @@
 
 
 <xsl:template match='/' mode='p:root'>
+	<!-- phase 1 -->
 	<xsl:variable name='p1'>
-		<xsl:apply-templates mode='p:include'/>
+		<xsl:apply-templates mode='#current'/>
 	</xsl:variable>
 	
-	<xsl:apply-templates mode='p:define' select='$p1'/>
+	<!-- phase 2 -->
+	<xsl:variable name='p2'>
+		<xsl:apply-templates mode='p:norm' select='$p1'/>
+	</xsl:variable>
+	
+	<!-- final phase -->
+	<xsl:apply-templates mode='p:define' select='$p2'/>
 </xsl:template>
 
 
