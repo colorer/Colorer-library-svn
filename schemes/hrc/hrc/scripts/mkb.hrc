@@ -39,10 +39,7 @@ With help of:
     <inherit scheme="mkbBase"/>
   </scheme>
   <scheme name="mkbCondition">
-    <!-- Numbers -->
-    <inherit scheme="mFloatNumb"/>
-    <inherit scheme="mcHexNumb"/>
-    <inherit scheme="mDecNumb"/>
+    <inherit scheme="def:Number"/>
 
     <keywords  region="mkbWord">
     <word name="defined"/>
@@ -62,10 +59,7 @@ With help of:
   
     <inherit scheme="mkbBase"/>
 
-    <!-- Numbers -->
-    <inherit scheme="mFloatNumb"/>
-    <inherit scheme="mcHexNumb"/>
-    <inherit scheme="mDecNumb"/>
+    <inherit scheme="def:Number"/>
 
     <block start="/(\()/" end="/(\))/" scheme="mkbDirectory"
               region00="mkbWord"
@@ -116,10 +110,7 @@ With help of:
   <scheme name="mkb">
     <inherit scheme="mkbBase"/>
 
-    <!-- Numbers -->
-    <inherit scheme="mFloatNumb"/>
-    <inherit scheme="mcHexNumb"/>
-    <inherit scheme="mDecNumb"/>
+    <inherit scheme="def:Number"/>
 
     <block start="/(\()/" end="/(\))/" scheme="mkbDirectory"
            region00="mkbSymb"

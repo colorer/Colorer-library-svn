@@ -1,24 +1,5 @@
 ﻿colorer.log:
 
-error: unqualified name 'mFloatNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mFloatNumb' in scheme 'mkb:mkbBlock'
-error: unqualified name 'mcHexNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mcHexNumb' in scheme 'mkb:mkbBlock'
-error: unqualified name 'mDecNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mDecNumb' in scheme 'mkb:mkbBlock'
-error: unqualified name 'mFloatNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mFloatNumb' in scheme 'mkb:mkb'
-error: unqualified name 'mcHexNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mcHexNumb' in scheme 'mkb:mkb'
-error: unqualified name 'mDecNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mDecNumb' in scheme 'mkb:mkb'
-error: unqualified name 'mFloatNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mFloatNumb' in scheme 'mkb:mkbCondition'
-error: unqualified name 'mcHexNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mcHexNumb' in scheme 'mkb:mkbCondition'
-error: unqualified name 'mDecNumb' doesn't belong to any imported type [../../hrc/hrc/scripts/mkb.hrc]
-error: cannot resolve scheme name 'mDecNumb' in scheme 'mkb:mkbCondition'
-
 error: duplicate scheme name 'yml:xmlss-uri-elementContent'
 error: unqualified name 'perfomace_type-element' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/auto\gen/yml.hrc]
 error: cannot resolve scheme name 'perfomace_type-element' in scheme 'yml:_hrc_int_d12e53-content'
