@@ -4,8 +4,8 @@
 #include<colorer/parsers/HRCParserImpl.h>
 
 HRCParserImpl::HRCParserImpl()
- : fileTypeHash(200), fileTypeVector(150), schemeHash(4000),
-   regionNamesHash(1000), regionNamesVector(1000, 200)
+ : fileTypeHash(200), fileTypeVector(150), regionNamesVector(1000, 200),
+   regionNamesHash(1000), schemeHash(4000)
 {
   parseType = null;
   versionName = null;

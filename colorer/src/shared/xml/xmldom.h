@@ -321,8 +321,8 @@ protected:
   Node *parent, *firstChild;
   const String *name;
   Document *ownerDocument;
-  Node(int _type, const String *_name): type(_type), name(_name),
-       next(null), prev(null), parent(null), firstChild(null) {};
+  Node(int _type, const String *_name): type(_type), next(null),
+    prev(null), parent(null), firstChild(null), name(_name) {};
 };
 
 
@@ -434,7 +434,7 @@ protected:
 
   ProcessingInstruction(const String *_target, const String *_data):
         Node(Node::PROCESSING_INSTRUCTION_NODE, new DString("#pi")),
-        target(_target), data(_data) {}
+        data(_data), target(_target) {}
 
   ~ProcessingInstruction()
   {
