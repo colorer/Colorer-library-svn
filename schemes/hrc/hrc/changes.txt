@@ -1,3 +1,10 @@
+Date: 2010-03-04 12:00:00 rXXXX
+  New:
+	- AirPlay SDK
+	- SASS support and sass in haml support
+  Fixed:
+	- ruby minor updates
+
 Date: 2010-02-04 12:00:00 r1299
 (trunk changes merged into dev branch for FarColorer 1.0.2.4)
   Fixes:

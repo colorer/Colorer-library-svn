@@ -44,10 +44,13 @@
       <block start='/^!!!/' end='/$/' region='def:Insertion'
          region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
 
-      <block start='/^((\s\s)*):(ruby)/' end='/^\M(\y1\S)?!/' region='def:Insertion' region01='def:Outlined'
+      <block start='/^((\s\s)*):(ruby)/' end='/^\M (\s*$|\y1\s)?! /ix' region='def:Insertion' region01='def:Outlined'
          region00='def:PairStart' region10='def:PairEnd' scheme='ruby:ruby'/>
       <block start='/^((\s\s)*):(javascript)/' end='/^\M (\s*$|\y1\s)?! /ix' region='def:Insertion' region01='def:Outlined'
          region00='def:PairStart' region10='def:PairEnd' scheme='jScript:jScript'/>
+      <block start='/^((\s\s)*):(sass)/' end='/^\M (\s*$|\y1\s)?! /ix' region='def:Insertion' region01='def:Outlined'
+         region00='def:PairStart' region10='def:PairEnd' content-priority='low' scheme='sass:sass'/>
+
       <block start='/^((\s\s)*):(plain|cdata|escaped|preserve|textile|\w+)/' end='/^\M (\s*$|\y1\s)?! /ix' region01='def:Outlined'
          region='def:Insertion' region00='def:PairStart' region10='def:PairEnd' scheme='def:empty'/>
 
