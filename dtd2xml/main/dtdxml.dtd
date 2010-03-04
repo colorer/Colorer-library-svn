@@ -87,7 +87,7 @@
 ">
 
 <!ENTITY % type.attlist "
-	type	(cdata|idref|idrefs|entity|entyties|nmtoken|nmtokens|notation)	#IMPLIED
+	type	(cdata|idrefs|idref|id|entities|entity|nmtokens|nmtoken|notation)	#IMPLIED
 ">
 
 

@@ -344,48 +344,22 @@
 			</xsl:if>
 		</xsl:for-each>
 		
-		<xsl:call-template name='annotation'/>
+		<xsl:apply-templates mode='f:annotation' select='.'/>
 		<xsl:apply-templates/>
 	</xs:schema>
 </xsl:template>
+
 
 <xsl:template match='/'>
 	<xsl:apply-imports/>
 </xsl:template>
 
-<xsl:template name='annotation'>
+<xsl:template match='/doctype' mode='f:annotation'>
 	<xs:annotation><xs:documentation>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
-		<xsl:text>This XML schema autogenerate by DTD2XML</xsl:text>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
-		<xsl:text>Written © Eugene Efremov, 2009-2010</xsl:text>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
-		<xsl:text>Original DTD properties:</xsl:text>
-		<xsl:if test='@public'>
-			<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
-			<xsl:text>PUBLIC: </xsl:text>
-			<xsl:value-of select='@public'/>
-		</xsl:if>
-		<xsl:if test='@system'>
-			<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
-			<xsl:text>SYSTEM: </xsl:text>
-			<xsl:value-of select='@system'/>
-		</xsl:if>
-		<xsl:if test='@root'>
-			<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
-			<xsl:text>root:   </xsl:text>
-			<xsl:value-of select='@root'/>
-		</xsl:if>
-		<xsl:if test="$f:has-doc-ns">
-			<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
-			<xsl:text>xmlns:  </xsl:text>
-			<xsl:value-of select='$f:doc-ns'/>
-		</xsl:if>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
-		<xsl:text>&#10;&#9;&#9;</xsl:text>
+		<xsl:apply-imports/>
 	</xs:documentation></xs:annotation>
 </xsl:template>
+
 
 <!-- rare/unused -->
 

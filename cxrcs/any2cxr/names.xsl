@@ -47,10 +47,6 @@
 			(some $i in $n:unused-names satisfies $i = $nsuri)
 			or ($nsuri = $f:tns and $tns-defined = 'yes')
 		)">
-			<!--cxr:namespace uri='{$nsuri}'>
-				<cxr:prefix name='{f:ns2pre($nsuri)}'/>
-				<cxr:prefix name='##any'/>
-			</cxr:namespace-->
 			<xsl:call-template name='n:make-name'>
 				<xsl:with-param name='nsuri' select='$nsuri'/>
 			</xsl:call-template>
@@ -64,9 +60,10 @@
 
 <xsl:template name='n:make-name' match='@*|node()' mode='n:make-name'>
 	<xsl:param name='nsuri' select='.'/>
+	<xsl:param name='nspre' select='f:ns2pre($nsuri)'/>
 	
 	<cxr:namespace uri='{$nsuri}'>
-		<cxr:prefix name='{f:ns2pre($nsuri)}'/>
+		<cxr:prefix name='{$nspre}'/>
 		<cxr:prefix name='##any'/>
 	</cxr:namespace>
 </xsl:template>

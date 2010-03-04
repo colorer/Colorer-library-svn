@@ -28,16 +28,22 @@
 </xsl:template>
 
 
+<xsl:template match='/*' mode='root'>
+	<xsl:attribute name='name' select='$f:tns'/>
+</xsl:template>
+
 <xsl:template match='/' mode='root'>
 	<cxr:schema>
 		<xsl:apply-templates mode='n:copy-namespace'/>
-		<cxr:type name='{$f:tns}'>
+		<cxr:type>
+			<xsl:apply-templates mode='#current'/>
 			<xsl:call-template name='support-xsi'/>
 			<xsl:apply-templates mode='n:make-names'/>
 			<xsl:apply-templates/>
 		</cxr:type>
 	</cxr:schema>
 </xsl:template>
+
 
 
 <xsl:template match='/'>

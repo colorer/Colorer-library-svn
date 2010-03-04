@@ -115,6 +115,42 @@
 
 
 
+<!-- annotation -->
+<xsl:template match='/doctype' mode='f:annotation'>
+	<xsl:param name='product' select="'This XML schema autogenerate by DTD2XML'"/>
+	<xsl:param name='author' select="'Written © Eugene Efremov, 2009-2010'"/>
+	
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+	<xsl:value-of select='$product'/>
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+	<xsl:value-of select='$author'/>
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+	<xsl:text>Original DTD properties:</xsl:text>
+	<xsl:if test='@public'>
+		<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
+		<xsl:text>PUBLIC: </xsl:text>
+		<xsl:value-of select='@public'/>
+	</xsl:if>
+	<xsl:if test='@system'>
+		<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
+		<xsl:text>SYSTEM: </xsl:text>
+		<xsl:value-of select='@system'/>
+	</xsl:if>
+	<xsl:if test='@root'>
+		<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
+		<xsl:text>root:   </xsl:text>
+		<xsl:value-of select='@root'/>
+	</xsl:if>
+	<xsl:if test="$f:has-doc-ns">
+		<xsl:text>&#10;&#9;&#9;&#9;</xsl:text>
+		<xsl:text>xmlns:  </xsl:text>
+		<xsl:value-of select='$f:doc-ns'/>
+	</xsl:if>
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+	<xsl:text>&#10;&#9;&#9;</xsl:text>
+</xsl:template>
+
 
 <!-- main -->
 
