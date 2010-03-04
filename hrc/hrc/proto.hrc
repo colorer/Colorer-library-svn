@@ -191,6 +191,12 @@
     <location link="inet/svg-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
   </prototype>
+  <prototype name="sass" group="inet" description="SASS">
+    <location link="inet/sass.hrc"/>
+    <filename>/\.(sass)$/i</filename>
+    <parameters>
+    </parameters>
+  </prototype>
 
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>
