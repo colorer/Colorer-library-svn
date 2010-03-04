@@ -1,5 +1,9 @@
 ﻿$Revision$
   $Author$ $Date$
+	1. исправлены warnings типа - "In constructor 'A::A(int)' 'A::b' will be initialized after 'S A::a' when initialized here"
+
+#Revision: 1418
+  #Author: ctapmex Date: 2010-03-03 16:36:12 +0500 (Ср, 03 мар 2010)
   1. поправлены build.xml, для правильной сборки баз, после реструктуризации
 	2. прогон всех тестов, ошибки скинул в todo
 
