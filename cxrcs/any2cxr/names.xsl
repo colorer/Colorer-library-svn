@@ -103,8 +103,22 @@
 </xsl:template>
 
 <xsl:template match="cxr:namespace[@uri = '##default']" mode='n:copy-namespace-cnt'>
-	<xsl:namespace name='{$default-prefix}' select='$f:def-ns-alias'/>
+	<xsl:variable name='pre'>
+		<xsl:apply-templates mode='#current'/>
+	</xsl:variable>
+	<xsl:namespace name='{$pre}' select='@alias'/>
 </xsl:template>
+
+
+<xsl:template match='cxr:prefix' mode='n:copy-namespace-cnt'>
+	<xsl:value-of select='@name'/>
+</xsl:template>
+
+<xsl:template match="cxr:prefix[@name = '##default']" mode='n:copy-namespace-cnt'>
+	<xsl:value-of select='$default-prefix'/>
+</xsl:template>
+
+<xsl:template match="cxr:prefix[@name = '##any']" mode='n:copy-namespace-cnt'/>
 
 
 </xsl:stylesheet>

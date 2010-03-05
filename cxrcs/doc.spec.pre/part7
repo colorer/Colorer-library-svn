@@ -96,6 +96,19 @@ xsi - http://www.w3.org/2001/XMLSchema-instance
 Используется общий список префиксов. Если записи противорчат друг другу - это считается ошибкой.
 
 
+3.6 Если требуется префикс для неопределенного пространства имен — он определеется отдельно:
+<cxr:namespace uri="##default" alias="colorer://alias.ns.xml/#default">
+   <cxr:prefix name="##default" use="required"/>
+</cxr:namespace>
+<cxr:namespace uri="##default" alias="colorer://alias.ns.xml/foo">
+   <cxr:prefix name="foo" use="required"/>
+</cxr:namespace>
+<cxr:namespace uri="##default" alias="colorer://alias.ns.xml/bar">
+   <cxr:prefix name="bar" use="required"/>
+</cxr:namespace>
+
+
+
 4 Соответствие префиксов с xsd. (для примера испозльуется xmlns:pre='urn:foo')
 
 4.1. В xsd коренвые элементы должны быть квалифициорванны.
