@@ -266,7 +266,7 @@ sub run
 		
 		default
 		{
-			print STDERR "Warning: unknow directive $_\n";
+			print "Warning: unknow directive $_\n";
 			no_return;
 		}
 		

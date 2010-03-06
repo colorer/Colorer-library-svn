@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<project name="cxrcs" default="info" basedir=".">
+
+<property name='root' value='..'/>
+<property name='any2cxr.path' value='${root}/any2cxr'/>
+
+
+
+<target name="any2cxr.prop">
+	<property file='${any2cxr.path}/any2cxr.properties'/>
+	
+	<property name='input' value='define me!'/>
+	<property name='output' value='define me!'/>
+</target>
+
+<target name='any2cxr' depends="any2cxr.prop">
+	<xslt in="${input}" out='${output}' style='${any2cxr.path}/${style}.xsl'>
+		<!-- func.xsl -->
+		<param name="default-prefix" expression="${any2cxr.default-prefix}"/>
+		<param name="tns-prefix" expression="${any2cxr.tns-prefix}"/>
+		<!-- template.xsl -->
+		<param name="support-xsi" expression="${any2cxr.support-xsi}"/>
+		<!-- ***2cxr.xsl -->
+		<param name="element-occurs" expression="${any2cxr.element-occurs}"/>
+		<param name="copy-annotation" expression="${any2cxr.copy-annotation}"/>
+		<!-- rng2cxr.xsl -->
+		<param name="use-rng-ns" expression="${rng2cxr.use-rng-ns}"/>
+		<param name="use-arng-ns" expression="${rng2cxr.use-arng-ns}"/>
+		<!-- dtd2cxr.xsl -->
+		<param name="tns-uri" expression="${dtd2cxr.tns-uri}"/>
+	</xslt>
+</target>
+
+
+<target name='xsd2cxr'>
+	<antcall target='any2cxr'>
+		<param name='style' value='xsd2cxr'/>
+	</antcall>
+</target>
+
+<target name='rng2cxr'>
+	<antcall target='any2cxr'>
+		<param name='style' value='rng2cxr'/>
+	</antcall>
+</target>
+
+<target name='dtd2cxr'>
+	<antcall target='any2cxr'>
+		<param name='style' value='dtd2cxr'/>
+	</antcall>
+</target>
+
+
+<!-- dtd -->
+
+<target name='dtd2xml'>
+	<ant antfile='${root}/../dtd2xml/util.xml' target='dtdxmlpl'>
+		<property name='root' value='${root}/../dtd2xml'/>
+	</ant>
+</target>
+
+
+<!-- final -->
+<target name="info">
+	<echo level="info">
+	This atn file for support DTD2XML
+	Targets:
+		dtd2cxr
+		rng2cxr
+		xsd2cxr
+	</echo>
+</target>
+
+</project>

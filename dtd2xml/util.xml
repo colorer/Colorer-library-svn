@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="dtd2xml" default="info" basedir=".">
+
+<property name='root' value='..'/>
+
+<property name='dtdxmlp.path' value='${root}/main'/>
+<property name='dtd2xsd.path' value='${root}/dtd2xsd'/>
+
+
+<!-- dtdxmlpl -->
+
+<target name="dtdxmlpl.prop">
+	<property name='dxc' value='define me!'/>
+</target>
+
+
+<target name='dtdxmlpl' depends="dtdxmlpl.prop">
+	<echo level="info" message="DTD2XML: ${dxc}"/>
+	<exec executable="perl">
+		<arg line='${dtdxmlp.path}/dtd2xml.pl ${dxc}'/>
+	</exec>
+</target>
+
+
+
+<!-- dtd2xsd -->
+<target name="dtd2xsd.prop">
+	<!--property name='dtd2xsd.default-prefix' value='def'/-->
+	<property file='${dtd2xsd.path}/dtd2xsd.properties'/>
+	
+	<property name='input' value='define me!'/>
+	<property name='output' value='define me!'/>
+</target>
+
+
+<target name='dtd2xsd' depends="dtd2xsd.prop">
+	<xslt in="${input}" out='${output}' style='${dtd2xsd.path}/dtd2xsd.xsl'>
+		<param name="default-prefix" expression="${dtd2xsd.default-prefix}"/>
+	</xslt>
+</target>
+
+
+
+<!-- final -->
+<target name="info">
+	<echo level="info">
+	This atn file for support DTD2XML
+	Targets:
+		dtdxmlpl
+		dtd2xsd
+	</echo>
+</target>
+
+</project>

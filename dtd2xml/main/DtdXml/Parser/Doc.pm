@@ -119,6 +119,7 @@ sub save
 	my $comment = DtdXml::Parser::getComment();
 	
 	print "Save XML $out\n";
+	mdir($out) if $out=~/\//;
 	
 	my $enc = ($info{enc} eq 'UTF-8') ? 'utf8' : "encoding($info{enc})";
 	open(XML, ">:$enc", $out) or print STDERR "WARNING: cannot save $out: $!\n";
@@ -317,6 +318,15 @@ sub txt2lst
 }
 
 
+#private: make dir for save
+use File::Path;
+
+sub mdir
+{
+	my $file = shift;
+	$file =~ s(/[^/]+?$)();
+	mkpath $file if $file;
+}
 
 1;
 

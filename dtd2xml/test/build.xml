@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="test.dtdxml" default="xsd" basedir=".">
+
+<property name="util" value='../util.xml'/>
+<property name='this' value='../test'/>
+
+
+<target name="dtd.check">
+	<dependset>
+		<srcfilelist dir="../schemas" files="dtdxml.dtd"/>
+		<srcfilelist dir="." files="dtdxml.dxc"/>
+		<targetfilelist dir="." files="dtdxml-dtd.xml"/>
+	</dependset>
+</target>
+
+<target name='dtd' depends="dtd.check">
+	<ant antfile="${util}" target="dtdxmlpl">
+		<property name="dxc" value="dtdxml.dxc"/>
+	</ant>
+</target>
+
+
+
+<target name="xsd.check">
+	<dependset>
+		<srcfilelist dir="." files="dtdxml-dtd.xml"/>
+		<targetfilelist dir="." files="dtdxml.xsd"/>
+	</dependset>
+</target>
+
+<target name='xsd' depends="dtd, xsd.check">
+	<ant antfile="${util}" target="dtd2xsd">
+		<property name="input"  value="dtdxml-dtd.xml"/>
+		<property name="output" value="dtdxml.xsd"/>
+	</ant>
+</target>
+
+
+<target name='clean'>
+	<delete failonerror='false'>
+		<fileset dir="." includes='dtdxml-dtd.xml, dtdxml.xsd'/>
+	</delete>
+</target>
+
+
+</project>
