@@ -1,2 +1,2 @@
-BASE "../schemas/"
+BASE "../../shared/2010/"
 IMPORT "dtdxml.dtd"

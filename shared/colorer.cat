@@ -4,9 +4,14 @@ OVERRIDE YES
 PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "extern/XMLSchema.dtd"
 PUBLIC "datatypes" "extern/datatypes.dtd"
 
+PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "extern/catalog.dtd"
+
+
 -- colorer take5 --
 PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "2003/hrc.dtd"
 PUBLIC "-//Cail Lomecb//DTD Colorer HRD take5//EN" "2003/hrd.dtd"
 PUBLIC "-//Cail Lomecb//DTD Colorer CATALOG take5//EN" "2003/catalog.dtd"
 PUBLIC "-//Cail Lomecb//DTD Colorer DOCLINKS take5//EN" "2003/doclinks.dtd"
 
+-- colorer 6 pre --
+PUBLIC "-//Colorer//DTD2XML DTD scheme//EN" "2010/dtdxml.dtd"

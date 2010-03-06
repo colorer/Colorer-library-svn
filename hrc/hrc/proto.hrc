@@ -416,6 +416,7 @@
     <location link="xml/gen/xmlcatalog.hrc"/>
     <filename>/\.xml$/ix</filename>
     <firstline weight='5'>/-\/{2}OASIS\/{2}DTD Entity Resolution XML Catalog V1\.0\/{2}EN/</firstline>
+    <firstline weight='5'>/xmlns\s*=\s*(["'])urn:oasis:names:tc:entity:xmlns:xml:catalog\1/</firstline>
   </prototype>  
   <prototype name="docbook" group="xml" description="DocBook 4.2">
     <location link="xml/gen/docbook.hrc"/>

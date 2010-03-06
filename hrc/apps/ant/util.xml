@@ -43,8 +43,8 @@
 	<property file="${xsd2hrc}/xsd2hrc.properties"/>
 	<xmlcatalog id="xsd2hrcdtd">
 		<catalogpath>
-			<!--fileset dir='${shemes}' includes='colorer-cat.xml'/-->
-			<fileset dir='${shemes}' includes='colorer.cat'/>
+			<fileset dir='${shemes}' includes='colorer-cat.xml'/>
+			<!--fileset dir='${shemes}' includes='colorer.cat'/-->
 		</catalogpath>
 	</xmlcatalog>
 </target>

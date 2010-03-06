@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
-<!DOCTYPE catalog
-	PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-	"http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd"
->
-
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
 	
 	<!-- not part of colorer -->
+	
 	<public 
 		publicId="-//W3C//DTD XMLSCHEMA 200102//EN"
 		uri="extern/XMLSchema.dtd"
@@ -16,7 +12,15 @@
 		uri="extern/datatypes.dtd"
 	/>
 	
+	<public 
+		publicId="-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+		uri="extern/catalog.dtd"
+	/>
+	<!--uri name="http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd" uri="extern/catalog.dtd"/-->
+	
+	
 	<!-- colorer take5 -->
+	
 	<public 
 		publicId="-//Cail Lomecb//DTD Colorer HRC take5//EN"
 		uri="2003/hrc.dtd"
@@ -33,4 +37,21 @@
 		publicId="-//Cail Lomecb//DTD Colorer DOCLINKS take5//EN"
 		uri="2003/doclinks.dtd"
 	/>
+	
+	<uri name="http://colorer.sf.net/2003/hrc.xsd" uri="2003/hrc.xsd"/>
+	<uri name="http://colorer.sf.net/2003/hrd.xsd" uri="2003/hrd.xsd"/>
+	<uri name="http://colorer.sf.net/2003/catalog.xsd" uri="2003/catalog.xsd"/>
+	<uri name="http://colorer.sf.net/2003/doclinks.xsd" uri="2003/doclinks.xsd"/>
+	
+	
+	<!-- colorer 6 pre -->
+	
+	<public 
+		publicId="-//Colorer//DTD2XML DTD scheme//EN" 
+		uri="2010/dtdxml.dtd"
+	/>
+	
+	<uri name="http://colorer.sf.net/2010/dtdxml.xsd" uri="2010/dtdxml.xsd"/>
+	<uri name="http://colorer.sf.net/2010/cxrcs.xsd" uri="2010/cxr.xsd"/>
+	
 </catalog>

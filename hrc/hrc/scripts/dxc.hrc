@@ -55,7 +55,7 @@
 
 
 
-<scheme name='UriKeys.content'>
+<scheme name='UriFpiKeys.content'>
 	<block start="/\M([&quot;&apos;])\s*(\+|\-|ISO)/" end="/(\y1)\m/" 
 		scheme='dtdcatalog:FPI.literal'
 	/>
