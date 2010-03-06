@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. поправил makefile.mingw
+		следующую версию плагина соберу под vc++, т.к. пока не разобрался как собирать x64 на mingw
+
+#Revision: 1425
+	#Author: ctapmex Date: 2010-03-04 17:45:38 +0500 (Чт, 04 мар 2010)
 	1. makefile для MinGW
 
 #Revision: 1397
