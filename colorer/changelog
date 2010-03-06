@@ -1,5 +1,9 @@
 ﻿$Revision$
-  $Author$ $Date$
+	$Author$ $Date$
+	1. еще один  warning r1426
+	
+#Revision: 1426
+  #Author: ctapmex Date: 2010-03-04 21:30:44 +0500 (Чт, 04 мар 2010)
 	1. исправлены warnings типа - "In constructor 'A::A(int)' 'A::b' will be initialized after 'S A::a' when initialized here"
 
 #Revision: 1418
