@@ -294,7 +294,7 @@
              scheme="NotationDecl" region="NotationDecl"
              region00="PairStart" region01="NotationDecl.start" region02="NotationDecl.tag"
              region10="PairEnd" region11="NotationDecl.end"/>
-      <inherit scheme="xml:PI"/>
+      <inherit scheme="PI"/>
       <inherit scheme="xml:Comment"/>
       <regexp match="/\S+/" region0="badChar" priority="low"/>
     </scheme>
@@ -549,15 +549,27 @@
       <regexp match="/\b%xml:Name;\b/" region="NotationDecl.name"/>
       <inherit scheme="badChar"/>
     </scheme>
-
-
-
+    
+    
     <scheme name="dtd">
       <inherit scheme="extSubset"/>
     </scheme>
+
+
     
-    </type>
+    <!-- dtd2xml catalog support -->
     
+    <scheme name="catalog-processing-instruction" if='dtd2xml-cat'>
+      <inherit scheme="dxc:catalog-processing-instruction"/>
+    </scheme>
+    
+    <scheme name="PI">
+       <regexp match="/&lt;\?xml\M(\s|$)/i" region="xml:badChar"/>
+       <inherit scheme="catalog-processing-instruction"/>
+       <inherit scheme="xml:PI"/>
+    </scheme>
+    
+</type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1

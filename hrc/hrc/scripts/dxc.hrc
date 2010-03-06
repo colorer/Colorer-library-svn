@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding='Windows-1251'?>
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
+  "http://colorer.sf.net/2003/hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
+
+<type name="dxc">
+	<annotation><documentation>
+		DXC -- DTD2XML extended catalog
+		
+		Extension of DTD/SGML OASIS Open Entity Catalog
+		(http://www.oasis-open.org/specs/tr9401.html)
+	</documentation><contributors><![CDATA[
+		Eugene Efremov <4mirror@mail.ru>
+	]]></contributors>
+</annotation>
+
+<!-- support dxc in dtdcatalog -->
+<entity name='newkey-addon' value='INCLUDE|IMPORT|OUTBASE|OUTPUT|ROLE|PARSE|SYSBASE'/>
+
+
+<region name='Literal'       parent='dtd:Literal'/>
+<region name='Literal.start' parent='dtd:Literal.start'/>
+<region name='Literal.end'   parent='dtd:Literal.end'/>
+
+<region name='Keyword' parent='dtdcatalog:Keyword'/>
+<region name='content' parent='dtdcatalog:content'/>
+
+
+
+<!-- support -->
+
+<scheme name='first-qname'>
+	<block start="/~([&quot;&apos;])/" end="/(\y1)/"
+		region00='Literal.start' region01='def:PairStart'
+		region10='Literal.end'   region11='def:PairEnd'
+		scheme="xmlschema:QName-content" region="Literal"
+	/>
+</scheme>
+
+
+
+<!-- new -->
+
+<scheme name='UriKeys.content'>
+	<inherit scheme="dtdcatalog:FSI"/>
+</scheme>
+
+<scheme name='UriKeys'>
+	<block start='/\b(INCLUDE|IMPORT|OUTBASE|SYSBASE)\b/' end='/$/'
+		scheme='UriKeys.content' region00='Keyword' region='content'
+	/>
+</scheme>
+
+
+
+<scheme name='UriKeys.content'>
+	<block start="/\M([&quot;&apos;])\s*(\+|\-|ISO)/" end="/(\y1)\m/" 
+		scheme='dtdcatalog:FPI.literal'
+	/>
+	
+	<inherit scheme="UriKeys.content"/>
+</scheme>
+
+<scheme name='UriFpiKeys'>
+	<block start='/\b(OUTPUT|PARSE)\b/' end='/$/'
+		scheme='UriFpiKeys.content' region00='Keyword' region='content'
+	/>
+</scheme>
+
+
+
+<scheme name='RoleKeys.content'>
+	<inherit scheme='first-qname'/>
+	
+	<block start="/([&quot;&apos;])/" end="/(\y1)/"
+		region00='Literal.start' region01='def:PairStart'
+		region10='Literal.end'   region11='def:PairEnd'
+		scheme="dtdxml:role.type-content" region="Literal"
+	/>
+</scheme>
+
+<scheme name='RoleKeys'>
+	<block start='/\bROLE\s+\M[&quot;&apos;]/' end='/$/'
+		scheme='RoleKeys.content' region00='Keyword' region='content'
+	/>
+</scheme>
+
+
+
+<!-- replased -->
+
+<scheme name='DtdKeys.content'>
+	<inherit scheme='first-qname'/>
+	<inherit scheme="dtdcatalog:FPI"/>
+</scheme>
+
+<scheme name='DtdKeys'>
+	<block start='/\bDOCTYPE\s+\M[&quot;&apos;]/' end='/$/'
+		scheme='DtdKeys.content' region00='Keyword' region='content'
+	/>
+</scheme>
+
+
+<scheme name='DocKeys'>
+	<block start='/\bDOCUMENT\b/' end='/$/'
+		scheme='dtdcatalog:PubId.content' region00='Keyword' region='content'
+	/>
+</scheme>
+
+
+
+<!-- main -->
+
+<scheme name='Keywords'>
+	<inherit scheme='DtdKeys'/>
+	<inherit scheme='DocKeys'/>
+	<inherit scheme='UriKeys'/>
+	<inherit scheme='UriFpiKeys'/>
+	<inherit scheme='RoleKeys'/>
+	<inherit scheme='dtdcatalog:Keywords'/>
+</scheme>
+
+<scheme name='dxc'>
+	<inherit scheme='dtdcatalog:dtdcatalog'>
+		<virtual scheme='dtdcatalog:Keywords' subst-scheme='Keywords'/>
+	</inherit>
+</scheme>
+
+
+
+<!-- support CATALOG for DTD in PI -->
+
+<scheme name="catalog-processing-instruction">
+	<block start="/(&lt;\?)(?{xml:PI.name.defined}CATALOG)\M(\s|$)/" end="/(\?&gt;)/"
+		scheme="dxc" region="xml:PI.content" 
+		region00="def:PairStart" region01="xml:PI.start.defined"
+		region10="def:PairEnd" region11="xml:PI.end.defined"
+	/>
+</scheme>
+
+
+</type>
+
+</hrc>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Colorer Library.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 2010
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->

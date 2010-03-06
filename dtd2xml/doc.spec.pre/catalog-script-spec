@@ -117,9 +117,22 @@ ROLE <name> <role>
 	
 	
 ====================================================================
+Эти команды имеют несколько другой смысл, чем описано в OASIS Technical Resolution 9401:1997
+====================================================================
+
+DOCUMENT <FPI> <URI>?
+	* @public (& @system) attrib for _current_ document
+	+ ok
+	
+DOCTYPE <name> <FPI>? 
+	* set @root for <FPI> (or current unless FPI)
+	* IMPORT FPI if FPI
+	+ ok
+	
+====================================================================
 Остальные команды соответствуют OASIS Technical Resolution 9401:1997
 ====================================================================
-	
+
 BASE <URI>
 	* input baseURI
 	+ ok
@@ -135,7 +148,6 @@ OVERRIDE YES|NO
 	* NO  - imporertd ignore if defined
 	+ todo
 	
-	
 PUBLIC <FPI> <FSI>?
 	public decatration
 	* for @public & @system attribs
@@ -146,15 +158,6 @@ SYSTEM <URI> <FSI>
 	system decatration
 	* for @system attrib
 	* find path for <FSI>
-	+ ok
-	
-DOCUMENT <FPI> <URI>?
-	* @public (& @system) attrib for _current_ document
-	+ ok
-	
-DOCTYPE <name> <FPI>? 
-	* set @root for <FPI> (or current unless FPI)
-	* IMPORT FPI if FPI
 	+ ok
 	
 	

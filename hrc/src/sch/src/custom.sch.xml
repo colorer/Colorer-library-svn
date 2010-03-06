@@ -3,6 +3,7 @@
 <custom xmlns="uri:colorer:custom">
 
 	<custom-type targetNamespace="http://www.ascc.net/xml/schematron">
+		<prefix>s</prefix>
 		<prefix>sch</prefix>
 		<empty-prefix/>
 

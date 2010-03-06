@@ -38,3 +38,8 @@
 	<location link="scripts/colorer/dtdxml.hrc"/>
 	<filename weight='4'>/-dtd\.xml$/i</filename>
 </prototype>
+
+<prototype name="dxc" group="scripts.colorer" description="DTD2XML extended catalog">
+	<location link="scripts/dxc.hrc"/>
+	<filename>/\.dxc$/i</filename>
+</prototype>

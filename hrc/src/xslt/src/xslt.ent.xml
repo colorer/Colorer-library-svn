@@ -4,8 +4,8 @@
 
 <prefix>xslt</prefix>
 <prefix>xsl</prefix>
-<prefix>xt</prefix>
-<prefix>x</prefix>
+<!--prefix>xt</prefix>
+<prefix>x</prefix-->
 <prefix>t</prefix>
 
 <outline>

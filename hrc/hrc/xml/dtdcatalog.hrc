@@ -131,7 +131,7 @@
 
 
 <!-- 
-	ugly hack 
+	ugly hack (we need to mark: dxc instruction, xml pi end, any-other-stuff...)
 	
 	I want:
 	<choice>
@@ -140,7 +140,7 @@
 		....
 	</choice>
 -->
-<entity name='newkey' value='\M\b(PUBLIC|SYSTEM|(DTD|SGML)DECL|DELEGATE|ENTITY|(DOC|LINK)TYPE|NOTATION|DOCUMENT|BASE|CATALOG|OVERRIDE)\b'/>
+<entity name='newkey' value='\M(\?&gt;|\b(PUBLIC|SYSTEM|(DTD|SGML)DECL|DELEGATE|ENTITY|(DOC|LINK)TYPE|NOTATION|DOCUMENT|BASE|CATALOG|OVERRIDE|%dxc:newkey-addon;)\b)'/>
 
 
 <!-- pubId -->
@@ -186,6 +186,8 @@
 <scheme name='Named.content'>
 	<annotation><documentation><![CDATA[
 		(name keyword, ps+, entity name spec, ps+, FSI specification) |
+		
+		TODO: broken end
 	]]></documentation></annotation>
 	
 	<block start='/~\s+\M([&quot;&apos;])/' end='/\y1?#1/' scheme='entity.name'/>
@@ -286,7 +288,7 @@
    -
    - The Initial Developer of the Original Code is
    - Eugene Efremov <4mirror@mail.ru>
-   - Portions created by the Initial Developer are Copyright (C) 1999-2005
+   - Portions created by the Initial Developer are Copyright (C) 2009-2010
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):

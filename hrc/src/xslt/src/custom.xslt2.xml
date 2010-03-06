@@ -119,6 +119,7 @@
             <word name='current-grouping-key'/>
             <word name='document'/>
             <word name='element-available'/>
+            <word name='function-available'/>
             <word name='format-date'/>
             <word name='format-dateTime'/>
             <word name='format-number'/>

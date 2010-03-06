@@ -202,7 +202,7 @@
 				<xs:element ref="sch:diagnostics" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID"/>
-			<xs:attribute name="fpi" type="xs:string"/>
+			<xs:attribute name="fpi" type="xs:public"/> <!-- EE: was: xs:string -->
 			<xs:attribute name="schemaVersion" type="xs:string"/>
 			<xs:attribute name="defaultPhase" type="xs:string"/>
 			<xs:attribute name="icon" type="xs:anyURI"/>

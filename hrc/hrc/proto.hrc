@@ -341,6 +341,9 @@
   <prototype name="dtd" group="xml" description="dtd">
     <location link="xml/dtd.hrc"/>
     <filename>/\.(dtd|ent|mod)$/i</filename>
+    <parameters>
+       <param name="dtd2xml-cat" value="true" description='Support dtd2xml catalog PI'/>
+    </parameters>
   </prototype>
   <prototype name="dtdcatalog" group="xml" description="dtd/sgml catalog">
     <location link="xml/dtdcatalog.hrc"/>
