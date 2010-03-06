@@ -5,7 +5,7 @@
 
 HRCParserImpl::HRCParserImpl()
  : fileTypeHash(200), fileTypeVector(150), regionNamesVector(1000, 200),
-   regionNamesHash(1000), schemeHash(4000)
+   schemeHash(4000), regionNamesHash(1000)
 {
   parseType = null;
   versionName = null;
