@@ -212,7 +212,7 @@
 	<block start="/\$\M\w+/" end="/~\w+\b\m/" priority="low"
 		scheme="macro.command.names" region00="command"
 	/>
-	
+
 	<!-- vars -->
 	<block start="/(\%{1,2}[\w\._]+)\s*(=)/" end="/;/" scheme="macro.expr"
 		region01="var" region02="oper" region10="struct"
@@ -224,7 +224,7 @@
 	<regexp match="/^\s*;;.*?$/" region="def:Comment"/>
   <regexp match="/^\$-start/" region="selmacroBlocks"/>  
   <regexp match="/^\$-end/" region="selmacroBlocks"/>  
-
+	<regexp match="/\$Continue/i" region="command"/>
 	<inherit scheme="macro.command"/>
 	<inherit scheme="macro.expr"/>	
 
@@ -320,6 +320,7 @@
 		<word name="panel.fattr"/>
 		<word name="panel.setpath"/>
 		<word name="panel.setposidx"/>
+		<word name="panel.item"/>
 		<word name="PanelItem"/>
 		<word name="iif"/>
 		<word name="env"/>
@@ -349,6 +350,7 @@
 		<word name="BM.Prev"/>
 		<word name="BM.Stat"/>
 		<word name="callplugin"/>
+		<word name="testfolder"/>
 	</keywords>
 </scheme>
 
@@ -475,6 +477,7 @@
 		<word name="Plugin"/>
 		<word name="Visible"/>
 		<word name="Root"/>
+		<word name="Filter"/>
 	</keywords>
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
@@ -1236,6 +1239,17 @@
      <word name="PANEL_OPIFLAGS_SHOWNAMESONLY"/>
      <word name="PANEL_OPIFLAGS_RIGHTALIGNNAMES"/>
      <word name="PANEL_OPIFLAGS_PRESERVECASE"/>
+
+     <word name="TSTFLD_NOTFOUND"/>
+     <word name="TSTFLD_NOTEMPTY"/>
+     <word name="TSTFLD_EMPTY"/>
+     <word name="TSTFLD_NOTACCESS"/>
+     <word name="TSTFLD_ERROR"/>
+
+     <word name="DOUBLE_CLICK"/>
+     <word name="MOUSE_HWHEELED"/>
+     <word name="MOUSE_MOVED"/>
+     <word name="MOUSE_WHEELED"/>
 	</keywords>
 	
 	<keywords ignorecase="yes" region="farConstUser">
