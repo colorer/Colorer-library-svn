@@ -1,10 +1,14 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. FarColorer 1.0.2.5
+
+#Revision: 1432
+	Author: ctapmex Date: 2010-03-06 15:36:28 +0500 (Сб, 06 мар 2010)
 	1. слияние с ctapmex-far2colorer r1397,r1425,r1430 
 		(1. makefile для MinGW 2. форматирование кода под стандарт)
 
 #Revision: 1382
-  #Author: ctapmex Date: 2010-02-12 15:46:52 +0500 (Пт, 12 фев 2010)
+  Author: ctapmex Date: 2010-02-12 15:46:52 +0500 (Пт, 12 фев 2010)
 	1. убраны неиспользуемые переменные
 	2. добавлена проверка на null
 
