@@ -16,123 +16,123 @@
 */
 class FarEditor : public LineSource
 {
-	public:
-		/** Creates FAR editor instance.
-		*/
-		FarEditor(PluginStartupInfo *info, ParserFactory *pf);
-		/** Drops this editor */
-		~FarEditor();
+public:
+  /** Creates FAR editor instance.
+  */
+  FarEditor(PluginStartupInfo *info, ParserFactory *pf);
+  /** Drops this editor */
+  ~FarEditor();
 
-		void endJob(int lno);
-		/**
-		 Returns line number "lno" from FAR interface. Line is only valid until next call of this function,
-		 it also should not be disposed, this function takes care of this.
-		*/
-		String *getLine(int lno);
+  void endJob(int lno);
+  /**
+  Returns line number "lno" from FAR interface. Line is only valid until next call of this function,
+  it also should not be disposed, this function takes care of this.
+  */
+  String *getLine(int lno);
 
-		/** Changes current assigned file type.
-		*/
-		void setFileType(FileType *ftype);
-		/** Returns currently selected file type.
-		*/
-		FileType *getFileType();
+  /** Changes current assigned file type.
+  */
+  void setFileType(FileType *ftype);
+  /** Returns currently selected file type.
+  */
+  FileType *getFileType();
 
-		/** Selects file type with it's extension and first lines
-		*/
-		void chooseFileType(String *fname);
+  /** Selects file type with it's extension and first lines
+  */
+  void chooseFileType(String *fname);
 
 
-		/** Installs specified RegionMapper implementation.
-		    This class serves to request mapping of regions into
-		    real colors.
-		*/
-		void setRegionMapper(RegionMapper *rs);
+  /** Installs specified RegionMapper implementation.
+  This class serves to request mapping of regions into
+  real colors.
+  */
+  void setRegionMapper(RegionMapper *rs);
 
-		/**
-		 * Change editor properties. These overwrites default HRC settings
-		 */
-		void setDrawCross(int drawCross);
-		void setDrawPairs(bool drawPairs);
-		void setDrawSyntax(bool drawSyntax);
-		void setOutlineStyle(bool oldStyle);
+  /**
+  * Change editor properties. These overwrites default HRC settings
+  */
+  void setDrawCross(int drawCross);
+  void setDrawPairs(bool drawPairs);
+  void setDrawSyntax(bool drawSyntax);
+  void setOutlineStyle(bool oldStyle);
 
-		/** Editor action: pair matching.
-		*/
-		void matchPair();
-		/** Editor action: pair selection.
-		*/
-		void selectPair();
-		/** Editor action: pair selection with current block.
-		*/
-		void selectBlock();
-		/** Editor action: Selection of current region under cursor.
-		*/
-		void selectRegion();
-		/** Editor action: Lists fuctional region.
-		*/
-		void listFunctions();
-		/** Editor action: Lists syntax errors in text.
-		*/
-		void listErrors();
-		/**
-		 * Locates a function under cursor and tries to jump to it using outliner information
-		 */
-		void locateFunction();
+  /** Editor action: pair matching.
+  */
+  void matchPair();
+  /** Editor action: pair selection.
+  */
+  void selectPair();
+  /** Editor action: pair selection with current block.
+  */
+  void selectBlock();
+  /** Editor action: Selection of current region under cursor.
+  */
+  void selectRegion();
+  /** Editor action: Lists fuctional region.
+  */
+  void listFunctions();
+  /** Editor action: Lists syntax errors in text.
+  */
+  void listErrors();
+  /**
+  * Locates a function under cursor and tries to jump to it using outliner information
+  */
+  void locateFunction();
 
-		/** Invalidates current syntax highlighting
-		*/
-		void updateHighlighting();
+  /** Invalidates current syntax highlighting
+  */
+  void updateHighlighting();
 
-		/** Handle passed FAR editor event */
-		int editorEvent(int event, void *param);
-		/** Dispatch editor input event */
-		int editorInput(const INPUT_RECORD *ir);
+  /** Handle passed FAR editor event */
+  int editorEvent(int event, void *param);
+  /** Dispatch editor input event */
+  int editorInput(const INPUT_RECORD *ir);
 
-		void cleanEditor();
+  void cleanEditor();
 
-	private:
-		EditorInfo ei;
-		PluginStartupInfo *info;
+private:
+  EditorInfo ei;
+  PluginStartupInfo *info;
 
-		ParserFactory *parserFactory;
-		BaseEditor *baseEditor;
+  ParserFactory *parserFactory;
+  BaseEditor *baseEditor;
 
-		int  maxLineLength;
-		bool fullBackground;
+  int  maxLineLength;
+  bool fullBackground;
 
-		bool showVerticalCross, showHorizontalCross;
-		int crossZOrder, horzCrossColor, vertCrossColor;
+  bool showVerticalCross, showHorizontalCross;
+  int crossZOrder, horzCrossColor, vertCrossColor;
 
-		bool drawPairs, drawSyntax;
-		bool oldOutline;
+  bool drawPairs, drawSyntax;
+  bool oldOutline;
 
-		int WindowSizeX;
-		int WindowSizeY;
-		bool inRedraw, inHandler;
-		int idleCount;
+  int WindowSizeX;
+  int WindowSizeY;
+  bool inRedraw, inHandler;
+  int idleCount;
 
-		int prevLinePosition, blockTopPosition;
+  int prevLinePosition, blockTopPosition;
 
-		String *ret_str;
-		int ret_strNumber;
+  String *ret_str;
+  int ret_strNumber;
 
-		int newfore, newback;
-		const StyledRegion *rdBackground;
-		LineRegion *cursorRegion;
+  int newfore, newback;
+  const StyledRegion *rdBackground;
+  LineRegion *cursorRegion;
 
-		int visibleLevel;
-		Outliner *structOutliner;
-		Outliner *errorOutliner;
+  int visibleLevel;
+  Outliner *structOutliner;
+  Outliner *errorOutliner;
 
-		void reloadTypeSettings();
-		void enterHandler();
-		void leaveHandler();
-		int convert(const StyledRegion *rd);
-		bool foreDefault(int color);
-		bool backDefault(int color);
-		void showOutliner(Outliner *outliner);
-		void addFARColor(int lno, int s, int e, int col);
-		const wchar_t *GetMsg(int msg);
+  void reloadTypeSettings();
+  void enterHandler();
+  void leaveHandler();
+  int convert(const StyledRegion *rd);
+  bool foreDefault(int color);
+  bool backDefault(int color);
+  void showOutliner(Outliner *outliner);
+  void addFARColor(int lno, int s, int e, int col);
+  const wchar_t *GetMsg(int msg);
 };
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

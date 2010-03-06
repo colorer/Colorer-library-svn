@@ -32,8 +32,8 @@ const bool cOldOutLineDefault = true;
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
-  IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD_ALL,
-  IDX_OK, IDX_CANCEL};
+IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD_ALL,
+IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
 
@@ -44,89 +44,89 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
  */
 class FarEditorSet
 {
-	public:
-		/** Creates set and initialises it with PluginStartupInfo structure */
-		FarEditorSet();
-		/** Standard destructor */
-		~FarEditorSet();
+public:
+  /** Creates set and initialises it with PluginStartupInfo structure */
+  FarEditorSet();
+  /** Standard destructor */
+  ~FarEditorSet();
 
-		/** Shows editor actions menu */
-		void openMenu();
-		/** Shows plugin's configuration dialog */
-		void configure(bool fromEditor);
-		/** Views current file with internal viewer */
-		void viewFile(const String &path);
+  /** Shows editor actions menu */
+  void openMenu();
+  /** Shows plugin's configuration dialog */
+  void configure(bool fromEditor);
+  /** Views current file with internal viewer */
+  void viewFile(const String &path);
 
-		/** Dispatch editor event in the opened editor */
-		int  editorEvent(int Event, void *Param);
-		/** Dispatch editor input event in the opened editor */
-		int  editorInput(const INPUT_RECORD *ir);
+  /** Dispatch editor event in the opened editor */
+  int  editorEvent(int Event, void *Param);
+  /** Dispatch editor input event in the opened editor */
+  int  editorInput(const INPUT_RECORD *ir);
 
-    /** Get the description of HRD, or parameter name if description=null */
-		const String *getHRDescription(const String &name);
-    /** Shows dialog with HRD scheme selection */
-		const String *chooseHRDName(const String *current);
-		
-    /** Reads all registry settings into variables */
-		void ReadSettings();
-		/**
-		 * trying to load the database on the specified path
-		 */
-		bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
-    SString *GetCatalogPath() {return sCatalogPath;}
-    bool GetPluginStatus() {return rEnabled;}
+  /** Get the description of HRD, or parameter name if description=null */
+  const String *getHRDescription(const String &name);
+  /** Shows dialog with HRD scheme selection */
+  const String *chooseHRDName(const String *current);
 
-    SString *sTempHrdName;
-	private:
-		/** Returns current global error handler. */
-		ErrorHandler *getErrorHandler();
-    /** add current active editor and return him. */
-    FarEditor *addCurrentEditor();
-		/** Returns currently active editor. */
-		FarEditor *getCurrentEditor();
-		/**
-		 * Reloads HRC database.
-		 * Drops all currently opened editors and their
-		 * internal structures. Prepares to work with newly
-		 * loaded database. Read settings from registry
-		 */
-		void ReloadBase();
+  /** Reads all registry settings into variables */
+  void ReadSettings();
+  /**
+  * trying to load the database on the specified path
+  */
+  bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+  SString *GetCatalogPath() {return sCatalogPath;}
+  bool GetPluginStatus() {return rEnabled;}
 
-		/** Shows dialog of file type selection */
-		void chooseType();
-		/** FAR localized messages */
-		const wchar_t *GetMsg(int msg);
-    /** Applies the current settings for editors*/
-		void ApplySettingsToEditors();
-		/** writes the default settings in the registry*/
-    void SetDefaultSettings();
-    void SaveSettings();
+  SString *sTempHrdName;
+private:
+  /** Returns current global error handler. */
+  ErrorHandler *getErrorHandler();
+  /** add current active editor and return him. */
+  FarEditor *addCurrentEditor();
+  /** Returns currently active editor. */
+  FarEditor *getCurrentEditor();
+  /**
+  * Reloads HRC database.
+  * Drops all currently opened editors and their
+  * internal structures. Prepares to work with newly
+  * loaded database. Read settings from registry
+  */
+  void ReloadBase();
 
-		/** Kills all currently opened editors*/
-		void dropAllEditors(bool clean);
-		/** kill the current editor*/
-    void dropCurrentEditor(bool clean);
-		/** Disables all plugin processing*/
-		void disableColorer();
-    /** Enables plugin processing*/
-    void enableColorer(bool fromEditor);
+  /** Shows dialog of file type selection */
+  void chooseType();
+  /** FAR localized messages */
+  const wchar_t *GetMsg(int msg);
+  /** Applies the current settings for editors*/
+  void ApplySettingsToEditors();
+  /** writes the default settings in the registry*/
+  void SetDefaultSettings();
+  void SaveSettings();
 
-		Hashtable<FarEditor*> farEditorInstances;
-		ParserFactory *parserFactory;
-		RegionMapper *regionMapper;
-		HRCParser *hrcParser;
+  /** Kills all currently opened editors*/
+  void dropAllEditors(bool clean);
+  /** kill the current editor*/
+  void dropCurrentEditor(bool clean);
+  /** Disables all plugin processing*/
+  void disableColorer();
+  /** Enables plugin processing*/
+  void enableColorer(bool fromEditor);
 
-		HKEY hPluginRegistry;
+  Hashtable<FarEditor*> farEditorInstances;
+  ParserFactory *parserFactory;
+  RegionMapper *regionMapper;
+  HRCParser *hrcParser;
 
-		/** registry settings */
-		bool rEnabled; // status plugin
-		int drawCross;
-		bool drawPairs; 
-    bool drawSyntax;
-		bool oldOutline;
-    SString *sHrdName;
-	  SString *sCatalogPath;
-    SString *sCatalogPathExp;
+  HKEY hPluginRegistry;
+
+  /** registry settings */
+  bool rEnabled; // status plugin
+  int drawCross;
+  bool drawPairs; 
+  bool drawSyntax;
+  bool oldOutline;
+  SString *sHrdName;
+  SString *sCatalogPath;
+  SString *sCatalogPathExp;
 };
 
 #endif

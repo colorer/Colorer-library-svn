@@ -7,94 +7,93 @@ PluginStartupInfo Info;
 FarStandardFunctions FSF;
 
 /**
- * Returns message from FAR current language.
- */
+  Returns message from FAR current language.
+*/
 const wchar_t *GetMsg(int msg)
 {
-	return(Info.GetMsg(Info.ModuleNumber, msg));
+  return(Info.GetMsg(Info.ModuleNumber, msg));
 };
 
 /**
- * Plugin initialization and creation of editor set support class.
- */
+  Plugin initialization and creation of editor set support class.
+*/
 void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 {
-	Info = *fei;
-	FSF = *fei->FSF;
-	Info.FSF = &FSF;
-	editorSet = new FarEditorSet();
+  Info = *fei;
+  FSF = *fei->FSF;
+  Info.FSF = &FSF;
+  editorSet = new FarEditorSet();
 };
 
 /**
- * Plugin strings in FAR interface.
- */
+  Plugin strings in FAR interface.
+*/
 void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
 {
-	static wchar_t* PluginMenuStrings;
-	memset(nInfo, 0, sizeof(*nInfo));
-	nInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
-	nInfo->StructSize = sizeof(*nInfo);
-	nInfo->PluginConfigStringsNumber = 1;
-	nInfo->PluginMenuStringsNumber = 1;
-	PluginMenuStrings = (wchar_t*)GetMsg(mName);
-	nInfo->PluginConfigStrings = &PluginMenuStrings;
-	nInfo->PluginMenuStrings = &PluginMenuStrings;
-	nInfo->CommandPrefix = L"clr";
+  static wchar_t* PluginMenuStrings;
+  memset(nInfo, 0, sizeof(*nInfo));
+  nInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
+  nInfo->StructSize = sizeof(*nInfo);
+  nInfo->PluginConfigStringsNumber = 1;
+  nInfo->PluginMenuStringsNumber = 1;
+  PluginMenuStrings = (wchar_t*)GetMsg(mName);
+  nInfo->PluginConfigStrings = &PluginMenuStrings;
+  nInfo->PluginMenuStrings = &PluginMenuStrings;
+  nInfo->CommandPrefix = L"clr";
 };
 
 /**
- * On FAR exit. Destroys all internal structures.
- */
+  On FAR exit. Destroys all internal structures.
+*/
 void WINAPI ExitFARW()
 {
-	delete editorSet;
+  delete editorSet;
 };
 
 /**
- * Open plugin configuration of actions dialog.
- */
+  Open plugin configuration of actions dialog.
+*/
 HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
-	if (OpenFrom == OPEN_EDITOR)
-	{
-		editorSet->openMenu();
-	}
-	else if (OpenFrom == OPEN_COMMANDLINE)
-	{
-		//file name, which we received
-		wchar_t *file = (wchar_t*)Item;
-    
-    wchar_t *nfile= NULL;
-    nfile = PathToFool(file,true);
-    editorSet->viewFile(DString(nfile));
-    
-    delete[] nfile;
-	}
+  if (OpenFrom == OPEN_EDITOR){
+    editorSet->openMenu();
+  }
+  else
+    if (OpenFrom == OPEN_COMMANDLINE){
+      //file name, which we received
+      wchar_t *file = (wchar_t*)Item;
 
-	return INVALID_HANDLE_VALUE;
+      wchar_t *nfile = NULL;
+      nfile = PathToFool(file,true);
+      editorSet->viewFile(DString(nfile));
+
+      delete[] nfile;
+    }
+
+  return INVALID_HANDLE_VALUE;
 };
 
 /**
- * Configures plugin.
- */
+  Configures plugin.
+*/
 int WINAPI ConfigureW(int ItemNumber)
 {
   editorSet->ReadSettings();
-	editorSet->configure(false);
-	return 1;
+  editorSet->configure(false);
+  return 1;
 };
 
 /**
- * Processes FAR editor events and
- * makes text colorizing here.
- */
+  Processes FAR editor events and
+  makes text colorizing here.
+*/
 int WINAPI ProcessEditorEventW(int Event, void *Param)
 {
-	return editorSet->editorEvent(Event, Param);
+  return editorSet->editorEvent(Event, Param);
 };
 int WINAPI ProcessEditorInputW(const INPUT_RECORD*ir)
 {
-	return editorSet->editorInput(ir);
+  return editorSet->editorInput(ir);
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
