@@ -1,18 +1,27 @@
-Date: 2010-03-04 12:00:00 rXXXX
+Date: 2010-03-06 12:00:00 rXXXX
   New:
-	- AirPlay SDK
-	- SASS support and sass in haml support
+    - AirPlay SDK
+    - SASS support and sass in haml support
+    - JCL - Job Control Language
   Fixed:
-	- ruby minor updates
+    - Ruby minor updates
+    - Diff : add new options for support git diff (Yuri Khan)
+    - Text : add support pseudo-graphic
+    - Reg minor updates
+    - Makefile.hrc support nmake
+    - Awk : scripts, +regexp
+    - Far.hrc : +XML, +callplugin, +\ or \\ in registry, new macro functions and constants
+    - C : Formatting lines and links to system variables in them, paired quotes for strings
+    - HTML : add HTML5 tags 
 
 Date: 2010-02-04 12:00:00 r1299
 (trunk changes merged into dev branch for FarColorer 1.0.2.4)
   Fixes:
     - HAML
     - Ruby
-		- ERB
+    - ERB
     - SubStation Alpha (assa)
-		- makefile
+    - makefile
 
 Date: 2010-01-13 23:29:00 r1242
 (trunk changes merged into dev branch for FarColorer 1.0.2.2)
