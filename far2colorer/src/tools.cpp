@@ -28,7 +28,7 @@ wchar_t *trim(wchar_t* str)
 */
 wchar_t *PathToFool(const wchar_t *path, bool unc)
 {
-  int len=wcslen(path);
+  size_t len=wcslen(path);
   if (!len){
     return NULL;
   }
@@ -50,17 +50,17 @@ wchar_t *PathToFool(const wchar_t *path, bool unc)
   }
 
   // replace the environment variables to their values
-  int i=ExpandEnvironmentStrings(new_path,NULL,0);
+  size_t i=ExpandEnvironmentStrings(new_path,NULL,0);
   if (i>len){
     len = i;
   }
   wchar_t *temp = new wchar_t[len];
-  ExpandEnvironmentStrings(new_path,temp,i);
+  ExpandEnvironmentStrings(new_path,temp,static_cast<DWORD>(i));
   delete[] new_path;
   new_path = temp;
 
   // take the full path to the file, converting all kinds of ../ ./ etc
-  int p=FSF.ConvertPath(CPM_FULL, new_path, NULL, 0);
+  size_t p=FSF.ConvertPath(CPM_FULL, new_path, NULL, 0);
   if (p>len){
     len = p;
     wchar_t *temp = new wchar_t[len];
@@ -68,7 +68,7 @@ wchar_t *PathToFool(const wchar_t *path, bool unc)
     delete[] new_path;
     new_path = temp;
   }
-  FSF.ConvertPath(CPM_FULL, new_path, new_path, len);
+  FSF.ConvertPath(CPM_FULL, new_path, new_path, static_cast<int>(len));
 
   if (unc){
     // for normal work with long paths, the path must be converted to UNC

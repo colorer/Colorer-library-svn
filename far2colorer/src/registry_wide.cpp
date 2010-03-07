@@ -38,7 +38,7 @@ wchar_t *rGetValueSz(HKEY hReg, const wchar_t *name, const wchar_t *DefaultValue
     }
   }
   if (DefaultValue){
-    int k = wcslen(DefaultValue);
+    size_t k = wcslen(DefaultValue);
     Data = new wchar_t[k+1];
     wcscpy(Data,DefaultValue);
     return Data;

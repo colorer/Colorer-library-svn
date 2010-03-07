@@ -878,8 +878,8 @@ void FarEditorSet::ReadSettings()
 void FarEditorSet::SetDefaultSettings()
 {
   rSetValue(hPluginRegistry, cRegEnabled, cEnabledDefault); 
-  rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, cHrdNameDefault, sizeof(wchar_t)*(wcslen(cHrdNameDefault)+1));
-  rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, cCatalogDefault, sizeof(wchar_t)*(wcslen(cCatalogDefault)+1));
+  rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, cHrdNameDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cHrdNameDefault)+1)));
+  rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, cCatalogDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cCatalogDefault)+1)));
   rSetValue(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault); 
   rSetValue(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault); 
   rSetValue(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault); 
