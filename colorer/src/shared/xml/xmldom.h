@@ -297,7 +297,7 @@ public:
     return null;
   };
 
-  short getNodeType()
+  int getNodeType()
   {
     return type;
   }

@@ -1130,7 +1130,7 @@ void FarEditor::leaveHandler()
 
 int FarEditor::convert(const StyledRegion *rd)
 {
-  int color;
+  int color = 0;
 
   if (rdBackground == NULL){
     return 0;

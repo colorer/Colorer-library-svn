@@ -131,7 +131,6 @@ int Encodings::toBytes(int encoding, wchar wc, byte *dest){
   };
 #endif
   throw UnsupportedEncodingException(SString(encoding));
-  return 0;
 }
 
 // no checks for encoding index validness!!!!
