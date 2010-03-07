@@ -482,7 +482,7 @@ bool DocumentBuilder::isPI(){
 }
 
 void DocumentBuilder::consumePI(Node *root){
-  StringBuffer *sb = sb = new StringBuffer(40);
+  StringBuffer *sb = new StringBuffer(40);
   consume("<?", 2);
   String * target = consumeNCName();
   consumeSpaces(1);
