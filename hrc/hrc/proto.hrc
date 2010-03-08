@@ -415,20 +415,20 @@
   <prototype name="xmlcatalog" group="xml" description="XML Catalog" targetNamespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
     <location link="xml/gen/xmlcatalog.hrc"/>
     <filename>/\.xml$/ix</filename>
-    <firstline weight='5'>/-\/{2}OASIS\/{2}DTD Entity Resolution XML Catalog V1\.0\/{2}EN/</firstline>
-    <firstline weight='5'>/xmlns\s*=\s*(["'])urn:oasis:names:tc:entity:xmlns:xml:catalog\1/</firstline>
+    <firstline weight='2'>/-\/{2}OASIS\/{2}DTD Entity Resolution XML Catalog V1\.0\/{2}EN/</firstline>
+    <firstline weight='2'>/xmlns\s*=\s*(["'])urn:oasis:names:tc:entity:xmlns:xml:catalog\1/</firstline>
   </prototype>  
   <prototype name="docbook" group="xml" description="DocBook 4.2">
     <location link="xml/gen/docbook.hrc"/>
     <filename>/\.(dbk?|docbook)$/i</filename>
-    <firstline weight='3'>/DOCTYPE article/</firstline>
-    <firstline weight='3'>/DocBook XML/</firstline>
-    <firstline weight='3'>/&lt;(article|book)/s</firstline>
+    <firstline weight='2'>/DOCTYPE article/</firstline>
+    <firstline weight='2'>/DocBook XML/</firstline>
+    <firstline weight='2'>/&lt;(article|book)/s</firstline>
   </prototype>
   <prototype name="mathml" group="xml" description="MathML2">
     <location link="xml/gen/mathml.hrc"/>
     <filename>/\.(math?|mml)$/i</filename>
-    <firstline weight='3'>/MathML/</firstline>
+    <firstline weight='2'>/http:\/{2}www\.w3\.org\/1998\/Math\/MathML/</firstline>
   </prototype>
   
 

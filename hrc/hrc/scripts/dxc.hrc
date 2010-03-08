@@ -17,7 +17,7 @@
 </annotation>
 
 <!-- support dxc in dtdcatalog -->
-<entity name='newkey-addon' value='INCLUDE|IMPORT|OUTBASE|OUTPUT|ROLE|PARSE|SYSBASE'/>
+<entity name='newkey-addon' value='INCLUDE|IMPORT|(OUT)?(REL)?BASE|OUTPUT|ROLE|PARSE|SYSBASE'/>
 
 
 <region name='Literal'       parent='dtd:Literal'/>
@@ -48,7 +48,7 @@
 </scheme>
 
 <scheme name='UriKeys'>
-	<block start='/\b(INCLUDE|IMPORT|OUTBASE|SYSBASE)\b/' end='/$/'
+	<block start='/\b(INCLUDE|IMPORT|(OUT)?(REL)?BASE|SYSBASE)\b/' end='/$/'
 		scheme='UriKeys.content' region00='Keyword' region='content'
 	/>
 </scheme>

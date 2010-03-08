@@ -48,7 +48,7 @@ sub parse_path($)
 }
 
 
-#todo: normalize_path('./../foo') returns '.foo'
+# normalize_path('./../foo') returns '.foo' -- fixed??
 
 sub normalize_path($)
 {
@@ -59,8 +59,8 @@ sub normalize_path($)
 	$base=~s</+></>g;
 	#print "Step 1 $base\n";
 	
-	$base=~s/^((\.{2}\/)+)//gx;
-	my $pre = $1;
+	$base=~s/^(\.\/)*((\.{2}\/)+)//gx;
+	my $pre = $2;
 	#print "Step 2 $base ($pre)\n";
 	
 	my $del = qr<([^/?#.]+/\.{2}|\.)>;

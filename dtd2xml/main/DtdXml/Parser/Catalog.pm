@@ -3,7 +3,7 @@ package DtdXml::Parser::Catalog;
 
 our $VERSION = 0.01;
 our @ISA = qw(Exporter);
-our @EXPORT= qw(addPubFile addSysFile addOutName setBase getBase);
+our @EXPORT= qw(addPubFile addSysFile addOutName setBase setBaseRel getBase);
 
 #use DtdXml::Parser::File;
 #use DtdXml::Parser::Doc;
@@ -19,6 +19,15 @@ sub setBase
 	#print "set base @_\n";
 	$Base{$_[0]} = $_[1];
 }
+
+sub setBaseRel
+{
+	my ($i, $p) = @_;
+	my $u = new Helper::Uri($p, $Base{$i});
+	#print "set relative base $u\n";
+	$Base{$i} = "$u";
+}
+
 
 sub getBase
 {

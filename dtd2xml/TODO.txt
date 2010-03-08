@@ -1,0 +1,53 @@
+﻿1. Плохо сочетаются DXC и ANT: добавить в dtd2xml.pl поддержку .properties:
+	- ключ --p:name=value
+	- обработака файлов /\.prop(erites)?$/
+	- директива PROPERTIES "uri"
+	- синтаксис вида KEYWORD "param%name%", где вместо %name% подставляется "value"
+Это довольно легко...
+
+
+2. Синтаксис DXC не поддерживает аналогов er:uri и er:rewriteURI из xmlcatalog. 
+Надо добавить.
+
+
+3. dtd2xml.pl игнорирует "%entity;" внутри "&entity;". 
+Впрочем, для колорера они не нужны, но на будущее — надо исправить.
+
+
+4. http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd 
+dtd2xml.pl не понимает конструкций вида
+
+<!ENTITY % SVG.dtd.decl
+    'PUBLIC "%SVG.dtd.fpi;"
+            "%SVG.dtd.sysid;"'
+>
+<!ENTITY % SVG.dtd %SVG.dtd.decl; >
+
+Такой синтаксис требует введение новых ролей — fpi, fsi и decl.
+И нужно обрабатывать все варианты включений.
+Плохо.
+
+
+5. Там же. Наткнувшись на (%ref;) в занечении атрибута, dtd2xml.pl постуыпает 
+с ней как со значением для элемента — создает ссылку с ролью "item".
+В результате оно обрабатывается как элемент, что в корне неверно. Здесь нужна
+сущность с ролью "attrib"...
+
+
+
+6. dtd2xml.pl не понимает синтаксис http://www.w3.org/Math/DTD/mathml3/mathml3.dtd
+Колорер (dtd.hrc) тоже его не понимает. 
+
+И я сам тоже его не понимаю. Или я не въехал в стандарт, или с префиксами там полный бред:
+
+<!ENTITY % MATHML.prefix   "m" >
+<!ENTITY % MATHML.pfx  "%MATHML.prefix;:" >
+
+<!ENTITY % ns1:blabla.qname "%MATHML.pfx;ns1:blabla" >
+
+<!ELEMENT ns1:%blabla.qname; (%blabla.content;)>
+<!ATTLIST ns1:%blabla.qname;
+  xmlns:ns1 CDATA #FIXED 'http://www.w3.org/1998/Math/MathML'
+  %CommonAtt;>
+
+У сущностей есть пространства имен? Или dtd глючный?

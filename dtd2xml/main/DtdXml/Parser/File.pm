@@ -208,10 +208,20 @@ sub run
 			setBase(i=>$args[0]);
 			no_return;
 		},
+		case 'RELBASE' => sub # relative base
+		{
+			setBaseRel(i=>$args[0]);
+			no_return;
+		},
 		case 'OUTBASE' => sub
 		{
 		#	print "$_ @args\n";
 			setBase(o=>$args[0]);
+			no_return;
+		},
+		case 'OUTRELBASE' => sub # relative base
+		{
+			setBaseRel(o=>$args[0]);
 			no_return;
 		},
 		case 'ROLE' => sub

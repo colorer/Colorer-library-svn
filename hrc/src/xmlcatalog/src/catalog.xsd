@@ -104,7 +104,8 @@
   <xs:complexType name='rewriteURI'>
     <xs:complexContent>
       <xs:restriction base="xs:anyType">
-        <xs:attribute name="uriIdStartString"
+      	<!-- EE: invalid name "uriIdStartString" - need  "uriStartString" -->
+        <xs:attribute name="uriStartString" 
                        type="xs:string"
                        use="required"/>
         <xs:attribute name="rewritePrefix" type="xs:string" use="required"/>
