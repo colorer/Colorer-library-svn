@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<project name="test.002" default="xsd" basedir=".">
+
+<property file='../cases.properties'/>
+<property file='${this.prop}'/>
+
+<property name='out.file' value='${out}/${this.path}/${this.file}'/>
+
+
+<target name='dtd'>
+	<ant antfile="${util}" target="dtdxmlpl">
+		<property name="dxc" value="${this.file}.dxc"/>
+	</ant>
+</target>
+
+
+<target name='xsd' depends="dtd">
+	<ant antfile="${util}" target="dtd2xsd">
+		<property name="input"  value="${out.file}-dtd.xml"/>
+		<property name="output" value="${out.file}.xsd"/>
+	</ant>
+</target>
+
+</project>

@@ -1,0 +1,31 @@
+<!-- just for test. not real dtd -->
+
+<?CATALOG 
+	DOCUMENT "-//Colorer//Test NDATA//EN"
+	DOCTYPE "mu:menu"
+?>
+
+
+<!ENTITY nbsp "&#160;">
+
+<!ENTITY % uri "CDATA">
+<!ENTITY % spec "CDATA">
+
+<!ELEMENT mu:menu (mu:menuitem*)>
+<!ELEMENT mu:menuitem EMPTY>
+
+
+<!ATTLIST mu:menuitem
+	image ENTITY #REQUIRED
+	title CDATA #REQUIRED
+	href %uri; #REQUIRED
+	type NOTATION (gif|png|jpg) #IMPLIED
+	test %spec; #IMPLIED 
+>
+
+<!NOTATION gif SYSTEM "gif-view.exe">
+<!NOTATION png PUBLIC "-//PNG//Free">
+<!NOTATION jpg PUBLIC "-//JPG//Free" "jpg-view.exe">
+
+<!ENTITY news SYSTEM "news.gif" NDATA gif>
+<!ENTITY prog SYSTEM "prog.png" NDATA png>
