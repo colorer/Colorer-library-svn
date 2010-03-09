@@ -67,10 +67,12 @@
 	/>
 </scheme>
 
+<scheme name='stream'/>
 
 <!-- FPI -->
 
 <scheme name='FPI.content'>
+	<inherit scheme='stream'/>
 	<inherit scheme='uri:FPI'/>
 </scheme>
 
@@ -91,6 +93,7 @@
 <!-- FSI -->
 
 <scheme name='FSI.content'>
+	<inherit scheme='stream'/>
 	<inherit scheme='uri:uri'/>
 </scheme>
 
@@ -113,7 +116,9 @@
 
 <entity name='rsch' value='[^\s\\\/\.]'/> <!-- restricted system character -->
 
-<scheme name='literal.content'/>
+<scheme name='literal.content'>
+	<inherit scheme='stream'/>
+</scheme>
 
 <scheme name='literal'>
 	<block start="/([&quot;&apos;])/" end="/(\y1)/"

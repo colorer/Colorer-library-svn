@@ -1,9 +1,4 @@
-﻿1. Плохо сочетаются DXC и ANT: добавить в dtd2xml.pl поддержку .properties:
-	- ключ --p:name=value
-	- обработака файлов /\.prop(erites)?$/
-	- директива PROPERTIES "uri"
-	- синтаксис вида KEYWORD "param%name%", где вместо %name% подставляется "value"
-Это довольно легко...
+﻿1 -- сделано.
 
 
 2. Синтаксис DXC не поддерживает аналогов er:uri и er:rewriteURI из xmlcatalog. 

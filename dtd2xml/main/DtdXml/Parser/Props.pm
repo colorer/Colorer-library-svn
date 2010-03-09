@@ -1,51 +1,31 @@
-#!/usr/bin/perl
-
 use strict;
-use utf8;
+package DtdXml::Parser::Props;
 
-use FindBin;
-use lib $FindBin::Bin;
+our $VERSION = 0.01;
 
-use DtdXml::Parser;
+use base qw(DtdXml::Parser::File DtdXml::Parser::Catalog);
+use Helper::Class;
 use DtdXml::Props;
 
-
-my $version = "DTD2XML version 0.1.2 α ";
-my $author = "Written © Eugene Efremov, 2009-2010";
-
-
-while($ARGV[0] =~ /^-/)
+sub run
 {
-	my $arg = shift;
-	if($arg eq '--help')
+	my $this = shift;
+	return unless $this->{code};
+	my @code = split /(?<!\\)\n/, $this->{code};
+	
+	local $_;
+	foreach(@code)
 	{
-		# todo `chcp 65001` crash some consoles...
-		`chcp 65001` if defined $ENV{COMSPEC}; # widnows --> utf8
-		binmode(STDOUT,':raw:utf8');
-		print STDOUT "$version \n$author\n\nUse: \n\tdtd2xml [options] [files]\n\n";
-		print STDOUT "Options:\n\t--p:name=value — set DXC property\n\t--help — this help\n\n";
-		exit;
+		s/(?<!\\)#.+$//g;
+		next if /^\s*$/;
+		my ($k, $v) = (m/($PropName)\s*=\s*(.+)/s);
+		$v =~ s(\\)()g;
+		#print "Set '$k' on '$v'\n";
+		setProperty($k, $v) if $k;
 	}
-	if($arg =~ /^--p:/)
-	{
-		my ($k, $v) = ($arg =~ m/--p:($PropName)=(.+)/);
-		unless($k)
-		{
-			print "Invalid property name ($k, $v) in $arg\n";
-			exit;
-		}
-		setProperty($k, $v);
-		next;
-	}
-	print "Unknow param: $arg";
 }
 
- 
-my $comm = "<!--\n\tThis file autogenerate by\n\t$version\n\t$author\n-->\n";
-
-setComment($comm);
-addFileNames(@ARGV);
-parseAll;
+1;
 
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -64,7 +44,7 @@ parseAll;
 #
 # The Initial Developer of the Original Code is
 # Eugene Efremov <4mirror@mail.ru>
-# Portions created by the Initial Developer are Copyright (C) 2009-2010
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):

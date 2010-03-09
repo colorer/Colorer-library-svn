@@ -66,6 +66,7 @@ sub remDocObj
 }
 
 
+
 sub makeFile($)
 {
 	local $_ = shift;
@@ -73,10 +74,13 @@ sub makeFile($)
 	
 	my $file = (/\.(cat|soc|dxc)$/) 
 		? new DtdXml::Parser::File(uri=>$_) 
-		: new DtdXml::Parser::Doc (uri=>$_);
+		: (/\.prop(erties)?$/)
+		? new DtdXml::Parser::Props(uri=>$_)
+		: new DtdXml::Parser::Doc(uri=>$_);
 		
 	return $file;
 }
+
 
 
 #public static

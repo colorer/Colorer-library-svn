@@ -9,6 +9,7 @@ use Exporter;
 use DtdXml::Parser::Catalog;
 use DtdXml::Parser::File;
 use DtdXml::Parser::Doc;
+use DtdXml::Parser::Props;
 
 our @EXPORT= qw(parseAll addFiles addFileNames setComment getComment getXmlInfo);
 

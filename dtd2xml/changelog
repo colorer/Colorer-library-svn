@@ -1,0 +1,9 @@
+﻿$Revision$
+	$Author$ $Date$
+	1. Добавил в dtd2xml.pl поддержку .properties:
+		- ключ --p:name=value
+		- обработака файлов /\.prop(erites)?$/
+		- директива PROPERTIES "uri"
+		- синтаксис вида KEYWORD "param%name%", где вместо %name% подставляется "value"
+		- введенные раньше имеют больший приоритет, максимальный — через --p
+	2. Завел-таки cahgelog для dtd2xml. Теперь надо еще для cxr завести...

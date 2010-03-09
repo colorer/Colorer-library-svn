@@ -17,7 +17,7 @@
 </annotation>
 
 <!-- support dxc in dtdcatalog -->
-<entity name='newkey-addon' value='INCLUDE|IMPORT|(OUT)?(REL)?BASE|OUTPUT|ROLE|PARSE|SYSBASE'/>
+<entity name='newkey-addon' value='INCLUDE|IMPORT|(OUT)?(REL)?BASE|OUTPUT|ROLE|PARSE|PROPERTIES|SYSBASE'/>
 
 
 <region name='Literal'       parent='dtd:Literal'/>
@@ -27,15 +27,25 @@
 <region name='Keyword' parent='dtdcatalog:Keyword'/>
 <region name='content' parent='dtdcatalog:content'/>
 
+<region name='property' parent='def:Var'/>
 
 
 <!-- support -->
+
+<scheme name='property'>
+	<regexp match='/%[A-Za-z_][\w_.\-]*%/' region='property'/>
+</scheme>
+
+<scheme name='qname'>
+	<inherit scheme='property'/>
+	<inherit scheme="xmlschema:QName-content"/>
+</scheme>
 
 <scheme name='first-qname'>
 	<block start="/~([&quot;&apos;])/" end="/(\y1)/"
 		region00='Literal.start' region01='def:PairStart'
 		region10='Literal.end'   region11='def:PairEnd'
-		scheme="xmlschema:QName-content" region="Literal"
+		scheme="qname" region="Literal"
 	/>
 </scheme>
 
@@ -48,7 +58,7 @@
 </scheme>
 
 <scheme name='UriKeys'>
-	<block start='/\b(INCLUDE|IMPORT|(OUT)?(REL)?BASE|SYSBASE)\b/' end='/$/'
+	<block start='/\b(INCLUDE|IMPORT|(OUT)?(REL)?BASE|SYSBASE|PROPERTIES)\b/' end='/$/'
 		scheme='UriKeys.content' region00='Keyword' region='content'
 	/>
 </scheme>
@@ -71,15 +81,21 @@
 
 
 
+<scheme name='RoleKeys.literal'>
+	<inherit scheme='property'/>
+	<inherit scheme="dtdxml:role.type-content"/>
+</scheme>
+
 <scheme name='RoleKeys.content'>
 	<inherit scheme='first-qname'/>
 	
 	<block start="/([&quot;&apos;])/" end="/(\y1)/"
 		region00='Literal.start' region01='def:PairStart'
 		region10='Literal.end'   region11='def:PairEnd'
-		scheme="dtdxml:role.type-content" region="Literal"
+		scheme="RoleKeys.literal" region="Literal"
 	/>
 </scheme>
+
 
 <scheme name='RoleKeys'>
 	<block start='/\bROLE\s+\M[&quot;&apos;]/' end='/$/'
@@ -113,13 +129,19 @@
 
 <!-- main -->
 
-<scheme name='Keywords'>
+<scheme name='Keywords.in'>
 	<inherit scheme='DtdKeys'/>
 	<inherit scheme='DocKeys'/>
 	<inherit scheme='UriKeys'/>
 	<inherit scheme='UriFpiKeys'/>
 	<inherit scheme='RoleKeys'/>
 	<inherit scheme='dtdcatalog:Keywords'/>
+</scheme>
+
+<scheme name='Keywords'>
+	<inherit scheme='Keywords.in'>
+		<virtual scheme='dtdcatalog:stream' subst-scheme='property'/>
+	</inherit>
 </scheme>
 
 <scheme name='dxc'>

@@ -96,7 +96,9 @@ sub load
 	my $this = shift;
 	my $in = $this->getInName();
 	
-	print "Load CATALOG $in\n";
+	my $tp = (ref($this) eq __PACKAGE__) ? 'CATALOG' : 'PROPS';
+	print "Load $tp $in\n";
+	
 	open(CAT, '<', $in) or print STDERR "WARNING: cannot open $in: $!\n";
 	$this->{code} = join('',<CAT>);
 	close CAT;
@@ -107,6 +109,7 @@ use Helper::Switch;
 
 use DtdXml::Parser;
 use DtdXml::Entities;
+use DtdXml::Props;
 use DtdXml::Parser::Catalog;
 
 
@@ -158,7 +161,7 @@ sub run
 		
 		trase
 		{
-			@args = grep{/[^"']/} ($code[$i+1] =~ m/(["'])(.+?)\1/g); 
+			@args = map{propString($_)} grep{/[^"']/} ($code[$i+1] =~ m/(["'])(.+?)\1/g); 
 			#print "$_: @args\n";
 		},
 		
@@ -194,6 +197,7 @@ sub run
 		#	print "OUT for @args is $out\n";
 			return addOutName($out, @args)
 		},
+		test 'PROPERTIES',
 		test 'INCLUDE',
 		case 'CATALOG' => sub
 		{
@@ -204,7 +208,7 @@ sub run
 		},
 		case 'BASE' => sub
 		{
-		#	print "$_ @args\n";
+			#print "$_ @args\n";
 			setBase(i=>$args[0]);
 			no_return;
 		},
