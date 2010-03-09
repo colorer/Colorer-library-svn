@@ -1,0 +1,4 @@
+INCLUDE "../cases.dxc"
+
+BASE "%root%/../shared/2010/"
+IMPORT "%this.file%.dtd"

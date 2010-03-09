@@ -3,7 +3,7 @@ package DtdXml::Parser::Props;
 
 our $VERSION = 0.01;
 
-use base qw(DtdXml::Parser::File DtdXml::Parser::Catalog);
+use base qw(DtdXml::Parser::File);
 use Helper::Class;
 use DtdXml::Props;
 

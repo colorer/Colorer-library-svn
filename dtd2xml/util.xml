@@ -11,13 +11,14 @@
 
 <target name="dtdxmlpl.prop">
 	<property name='dxc' value='define me!'/>
+	<property name='dxc.prop' value=''/>
 </target>
 
 
 <target name='dtdxmlpl' depends="dtdxmlpl.prop">
 	<echo level="info" message="DTD2XML: ${dxc}"/>
 	<exec executable="perl">
-		<arg line='${dtdxmlp.path}/dtd2xml.pl ${dxc}'/>
+		<arg line='${dtdxmlp.path}/dtd2xml.pl ${dxc.prop} ${dxc}'/>
 	</exec>
 </target>
 

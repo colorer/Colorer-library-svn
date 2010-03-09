@@ -1,0 +1,5 @@
+PROPERTIES "../cases.properties"
+PROPERTIES "%this.prop%"
+
+OUTBASE "%out%/"
+OUTRELBASE "%this.path%/"
