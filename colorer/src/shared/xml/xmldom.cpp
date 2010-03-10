@@ -680,7 +680,7 @@ Node *Node::appendChild(Node *newChild)
     firstChild->prev = firstChild->next = newChild;
     return firstChild;
   }
-  newChild->prev = firstChild->prev->next;
+  newChild->prev = firstChild->prev;
   firstChild->prev->next = newChild;
   firstChild->prev = newChild;
   newChild->next = firstChild;
