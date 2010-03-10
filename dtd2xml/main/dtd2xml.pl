@@ -12,35 +12,61 @@ use DtdXml::Props;
 
 my $version = "DTD2XML version 0.1.2 α ";
 my $author = "Written © Eugene Efremov, 2009-2010";
+my $vb = 0;
 
+
+# comand line
 
 while($ARGV[0] =~ /^-/)
 {
 	my $arg = shift;
+	if($arg =~ /^-\w/)
+	{
+		my %keys = (h=>'help',p=>'prop',v=>'verbose');
+		$arg =~ s/^-(\w)/--$keys{$1}/;
+	}
+	
 	if($arg eq '--help')
 	{
 		# todo `chcp 65001` crash some consoles...
 		`chcp 65001` if defined $ENV{COMSPEC}; # widnows --> utf8
 		binmode(STDOUT,':raw:utf8');
 		print STDOUT "$version \n$author\n\nUse: \n\tdtd2xml [options] [files]\n\n";
-		print STDOUT "Options:\n\t--p:name=value — set DXC property\n\t--help — this help\n\n";
+		print STDOUT "Options:\n\t--prop:name=value (-p) — set DXC property\n\t--verbose (-v) — print extra information\n\t--help (-h) — print this help\n\n";
 		exit;
 	}
-	if($arg =~ /^--p:/)
+	if($arg =~ /^--prop:/)
 	{
-		my ($k, $v) = ($arg =~ m/--p:($PropName)=(.+)/);
-		unless($k)
-		{
-			print "Invalid property name ($k, $v) in $arg\n";
-			exit;
-		}
+		my ($k, $v) = ($arg =~ m/--prop:($PropName)=(.+)/);
+		die "Invalid property name in '$arg'." unless($k);
+		
 		setProperty($k, $v);
 		next;
 	}
+	if($arg eq '--verbose')
+	{
+		$vb=1;
+		next;
+	}
+	
 	print "Unknow param: $arg";
 }
 
+
+# output control
+
+if($vb)
+{
+	$|=1;
+}
+else
+{
+	open(STDOUT,">/dev/null") or open(STDOUT,">nul") or die "Can't disable stdout!";
+}
  
+
+# parse
+
 my $comm = "<!--\n\tThis file autogenerate by\n\t$version\n\t$author\n-->\n";
 
 setComment($comm);
