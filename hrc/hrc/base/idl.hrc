@@ -7,6 +7,7 @@
 <!--
   Colorer sheme file for IDL (Inderface Description Language)
   by Dennis Trachuk (dennis.trachuk@nm.ru)
+  fixed by Maximus5
 -->
    <type name="idl">
 
@@ -16,6 +17,9 @@
       <region name="idlUuid" parent="KeywordStrong"/>
       <region name="idlMods" parent="Parameter"/>
       <region name="idlPrefId" parent="Directive"/>
+      <region name="InterfaceOutline" parent="def:Outlined"/>
+      <region name="EnumOutline" parent="def:Outlined"/>
+      <region name="FuncOutline" parent="def:Outlined"/>
 
 
       <scheme name="inIdlPaired">
@@ -87,10 +91,52 @@
          </keywords>
       </scheme>
 
+      <scheme name="Outlines">
+			<regexp><![CDATA[
+				/^ \M \s*
+				((typedef) \s+)?
+				(
+				 (?{EnumOutline} (enum) \s* \w*)
+				)\s*;?!
+				($|\{)/x
+			]]></regexp>
+
+			<regexp><![CDATA[
+				/^ \M \s* (\}) \s*
+				(
+				 (?{EnumOutline} \w+)
+				)\s*;
+				/x
+			]]></regexp>
+
+			<regexp><![CDATA[
+				/^ \M \s*
+				(
+				 (?{InterfaceOutline} (interface|dispinterface|coclass) \s) \s* (?{InterfaceOutline} \w+)
+				 (\s* [:]{1} \s* \w*)?
+				)\s*;?!
+				($|\{)/x
+			]]></regexp>
+
+			<regexp><![CDATA[
+				/^ \M \s* 
+				\w+ \s+
+
+				((_stdcall) \s+)*?
+
+				(?{FuncOutline}
+				 (\w+)
+				)
+
+				($|\()/x
+			]]></regexp>
+      </scheme>
+
       <scheme name="idl">
          <block start="/(\[)/" end="/(\])/" scheme="inIdlPaired" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <inherit scheme="cpp:cpp">
             <virtual scheme="cpp:cpp" subst-scheme="idl"/>
+            <virtual scheme="cpp:Outlines" subst-scheme="Outlines"/>
          </inherit>
 <!-- idl keywords -->
          <keywords region="idlWord">
