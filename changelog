@@ -1,7 +1,7 @@
-﻿$Revision$
-	$Author$ $Date$
+﻿#Revision: 1446
+	#Author: ctapmex Date: 2010-03-10 16:41:05 +0500 (Ср, 10 мар 2010)
 	1. ошибка в Node::appendChild - если в списке два элемента, то у каждого следующего 
-		prev и next будет указывать на firstChild. 
+		prev будет указывать на firstChild. 
 
 #Revision: 1440
 	#Author: ctapmex Date: 2010-03-07 21:01:55 +0500 (Вс, 07 мар 2010) $
