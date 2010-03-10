@@ -4,8 +4,13 @@
 <property file='cases.properties'/>
 <property name='fails.out' value='fails.diff.log'/>
 
+<target name='case.clean'>
+	<delete failonerror='false' includeemptydirs="true">
+		<fileset dir="${out}" includes="**/*"/>
+	</delete>
+</target>
 
-<target name='case'>
+<target name='case' depends='case.clean'>
 	<subant target="">
 		<fileset dir="." includes="case*/build.xml"/>
 	</subant>

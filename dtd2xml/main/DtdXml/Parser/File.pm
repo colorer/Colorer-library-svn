@@ -280,7 +280,9 @@ sub run
 		
 		default
 		{
-			print "Warning: unknow directive $_\n";
+			no_return if /^(YES|NO)/; # OVERRIDE
+			
+			print STDERR "WARNING: unknow directive '$_'\n";
 			no_return;
 		}
 		
