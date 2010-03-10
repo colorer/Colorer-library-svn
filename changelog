@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. ошибка в Node::appendChild - если в списке два элемента, то у каждого следующего 
+		prev и next будет указывать на firstChild. 
+
+#Revision: 1440
+	#Author: ctapmex Date: 2010-03-07 21:01:55 +0500 (Вс, 07 мар 2010) $
 	1. борьба с warning
 
 #Revision: 1431
