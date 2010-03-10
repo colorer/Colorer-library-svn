@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>
+		This XML schema autogenerate by DTD2XML
+		Written © Eugene Efremov, 2009-2010
+		
+		Original DTD properties:
+			PUBLIC: -//Colorer//Test NDATA//EN
+			SYSTEM: ndata.dtd
+			root:   menu
+		
+		</xs:documentation>
+   </xs:annotation>
+   <xs:annotation>
+      <xs:documentation>Declaration of XML entity named 'nbsp' was here. XML Schema not support it.</xs:documentation>
+   </xs:annotation>
+   <xs:simpleType name="uri">
+      <xs:restriction base="xs:string">
+         <xs:whiteSpace value="preserve"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="spec">
+      <xs:restriction base="xs:string">
+         <xs:whiteSpace value="preserve"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:element name="menu">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="menuitem" minOccurs="0" maxOccurs="unbounded"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="menuitem">
+      <xs:complexType>
+         <xs:attribute name="image" use="required" type="xs:ENTITY"/>
+         <xs:attribute name="title" use="required" type="xs:string"/>
+         <xs:attribute name="href" use="required" type="uri"/>
+         <xs:attribute name="type" use="optional" type="xs:NOTATION">
+            <xs:simpleType>
+               <xs:restriction base="xs:NOTATION">
+                  <xs:enumeration value="gif"/>
+                  <xs:enumeration value="png"/>
+                  <xs:enumeration value="jpg"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="test" use="optional" type="spec"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:notation system="gif-view.exe" name="gif"/>
+   <xs:notation public="-//PNG//Free" name="png"/>
+   <xs:notation system="jpg-view.exe" public="-//JPG//Free" name="jpg"/>
+   <xs:annotation>
+      <xs:documentation>Declaration of XML entity named 'news' was here. XML Schema not support it.</xs:documentation>
+   </xs:annotation>
+   <xs:annotation>
+      <xs:documentation>Declaration of XML entity named 'prog' was here. XML Schema not support it.</xs:documentation>
+   </xs:annotation>
+</xs:schema>

@@ -4,6 +4,13 @@
 <xsl:output method="xml" indent="yes" encoding="utf-8"/>
 <xsl:strip-space elements="*"/>
 
+<xsl:template match='target'>
+	<ant dir="{@type}" antfile="build.xml" target="${{target}}">
+		<property name="this" value="${{this}}/{@type}"/>
+		<property name="bin" value="${{root}}/{@place}"/>
+	</ant>
+</xsl:template>
+
 <xsl:template match='target-list'>
 	<project name="src.all.lst" default="all" basedir=".">
 		<property name="root" value="../.." description="colorer root location"/>
@@ -21,12 +28,4 @@
 		
 	</project>
 </xsl:template>
-
-<xsl:template match='target'>
-	<ant dir="{@type}" antfile="build.xml" target="${{target}}">
-		<property name="this" value="${{this}}/{@type}"/>
-		<property name="bin" value="${{root}}/{@place}"/>
-	</ant>
-</xsl:template>
-
 </xsl:stylesheet>

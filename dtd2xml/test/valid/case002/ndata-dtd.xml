@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dtd:doctype
+	public="-//Colorer//Test NDATA//EN"
+	system="ndata.dtd"
+	root="menu"
+	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
+ >
+<!--
+	This file autogenerate by
+	DTD2XML version 0.1.2 α 
+	Written © Eugene Efremov, 2009-2010
+-->
+
+<!-- just for test. not real dtd -->
+<dtd:xml-ref name="nbsp">&#160;</dtd:xml-ref>
+<dtd:entity name="uri" role="attrib">
+	<dtd:type type="cdata"/>
+</dtd:entity>
+<dtd:entity name="spec" role="attrib">
+	<dtd:type type="cdata"/>
+</dtd:entity>
+<dtd:element pre="mu" name="menu">
+	<dtd:content type="strict">
+		<dtd:seq>
+			<dtd:item occurs="nul-inf" pre="mu" name="menuitem"/>
+		</dtd:seq>
+	</dtd:content>
+</dtd:element>
+<dtd:element pre="mu" name="menuitem">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist pre="mu" name="menuitem">
+	<dtd:attrib mode="required" name="image" type="entity"/>
+	<dtd:attrib mode="required" name="title" type="cdata"/>
+	<dtd:attrib mode="required" name="href">
+		<dtd:ref name="uri" role="attrib"/>
+	</dtd:attrib>
+	<dtd:attrib mode="implied" name="type" type="notation">
+		<dtd:choice>
+			<dtd:item name="gif"/>
+			<dtd:item name="png"/>
+			<dtd:item name="jpg"/>
+		</dtd:choice>
+	</dtd:attrib>
+	<dtd:attrib mode="implied" name="test">
+		<dtd:ref name="spec" role="attrib"/>
+	</dtd:attrib>
+</dtd:attlist>
+<dtd:notation system="gif-view.exe" name="gif"/>
+<dtd:notation public="-//PNG//Free" name="png"/>
+<dtd:notation system="jpg-view.exe" public="-//JPG//Free" name="jpg"/>
+<dtd:xml-ref system="news.gif" name="news" ndata="gif"/>
+<dtd:xml-ref system="prog.png" name="prog" ndata="png"/>
+</dtd:doctype>

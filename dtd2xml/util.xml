@@ -11,7 +11,7 @@
 
 <target name="dtdxmlpl.prop">
 	<property name='dxc' value='define me!'/>
-	<property name='dxc.prop' value='-v'/>
+	<property name='dxc.prop' value=''/>
 </target>
 
 

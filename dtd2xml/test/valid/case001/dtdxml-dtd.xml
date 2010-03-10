@@ -1,0 +1,427 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dtd:doctype
+	public="-//Colorer//DTD2XML DTD scheme//EN"
+	system="dtdxml.dtd"
+	root="doctype"
+	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
+ >
+<!--
+	This file autogenerate by
+	DTD2XML version 0.1.2 α 
+	Written © Eugene Efremov, 2009-2010
+-->
+
+<!-- doctype -->
+<!-- namespace -->
+<dtd:entity name="xmlns" role="string">
+	<dtd:fixed>http://colorer.sf.net/2010/dtdxml</dtd:fixed>
+</dtd:entity>
+<dtd:entity name="p" role="prefix">
+	<dtd:name pre="dtd"/>
+</dtd:entity>
+<dtd:entity name="n" role="prefix">
+	<dtd:name pre="dtd"/>
+</dtd:entity>
+<dtd:entity name="ns" role="name">
+	<dtd:name ref="n" pre="xmlns"/>
+</dtd:entity>
+<!-- types -->
+<dtd:entity name="uri.type" role="attrib">
+	<dtd:type type="cdata"/>
+</dtd:entity>
+<dtd:entity name="FPI.type" role="attrib">
+	<dtd:type type="cdata"/>
+</dtd:entity>
+<dtd:entity name="role.type" role="attrib">
+	<dtd:type>
+		<dtd:choice>
+			<dtd:item name="attlist"/>
+			<dtd:item name="attrib"/>
+			<dtd:item name="element"/>
+			<dtd:item name="item"/>
+			<dtd:item name="string"/>
+			<dtd:item name="conduction"/>
+			<dtd:item name="name"/>
+			<dtd:item name="prefix"/>
+			<dtd:item name="include"/>
+			<dtd:item name="unknow"/>
+		</dtd:choice>
+	</dtd:type>
+</dtd:entity>
+<!-- names -->
+<dtd:entity name="doctype.name" role="name">
+	<dtd:name pre-ref="p" name="doctype"/>
+</dtd:entity>
+<dtd:entity name="document.name" role="name">
+	<dtd:name pre-ref="p" name="document"/>
+</dtd:entity>
+<dtd:entity name="attlist.name" role="name">
+	<dtd:name pre-ref="p" name="attlist"/>
+</dtd:entity>
+<dtd:entity name="attrib.name" role="name">
+	<dtd:name pre-ref="p" name="attrib"/>
+</dtd:entity>
+<dtd:entity name="choice.name" role="name">
+	<dtd:name pre-ref="p" name="choice"/>
+</dtd:entity>
+<dtd:entity name="conduction.name" role="name">
+	<dtd:name pre-ref="p" name="conduction"/>
+</dtd:entity>
+<dtd:entity name="content.name" role="name">
+	<dtd:name pre-ref="p" name="content"/>
+</dtd:entity>
+<dtd:entity name="element.name" role="name">
+	<dtd:name pre-ref="p" name="element"/>
+</dtd:entity>
+<dtd:entity name="entity.name" role="name">
+	<dtd:name pre-ref="p" name="entity"/>
+</dtd:entity>
+<dtd:entity name="fixed.name" role="name">
+	<dtd:name pre-ref="p" name="fixed"/>
+</dtd:entity>
+<dtd:entity name="include-ref.name" role="name">
+	<dtd:name pre-ref="p" name="include-ref"/>
+</dtd:entity>
+<dtd:entity name="item.name" role="name">
+	<dtd:name pre-ref="p" name="item"/>
+</dtd:entity>
+<dtd:entity name="name.name" role="name">
+	<dtd:name pre-ref="p" name="name"/>
+</dtd:entity>
+<dtd:entity name="notation.name" role="name">
+	<dtd:name pre-ref="p" name="notation"/>
+</dtd:entity>
+<dtd:entity name="ref.name" role="name">
+	<dtd:name pre-ref="p" name="ref"/>
+</dtd:entity>
+<dtd:entity name="seq.name" role="name">
+	<dtd:name pre-ref="p" name="seq"/>
+</dtd:entity>
+<dtd:entity name="type.name" role="name">
+	<dtd:name pre-ref="p" name="type"/>
+</dtd:entity>
+<dtd:entity name="unknow.name" role="name">
+	<dtd:name pre-ref="p" name="unknow"/>
+</dtd:entity>
+<dtd:entity name="xml-ref.name" role="name">
+	<dtd:name pre-ref="p" name="xml-ref"/>
+</dtd:entity>
+<!-- attribs -->
+<dtd:entity name="FPSI.attlist" role="attlist">
+	<dtd:attrib mode="implied" name="system">
+		<dtd:ref name="uri.type" role="attrib"/>
+	</dtd:attrib>
+	<dtd:attrib mode="implied" name="public">
+		<dtd:ref name="FPI.type" role="attrib"/>
+	</dtd:attrib>
+	<dtd:attrib mode="implied" name="href">
+		<dtd:ref name="uri.type" role="attrib"/>
+	</dtd:attrib>
+</dtd:entity>
+<dtd:entity name="rname.attlist" role="attlist">
+	<dtd:attrib mode="required" name="name" type="nmtoken"/>
+</dtd:entity>
+<dtd:entity name="refname.attlist" role="attlist">
+	<dtd:attrib mode="implied" name="name" type="nmtoken"/>
+	<dtd:attrib mode="implied" name="ref" type="nmtoken"/>
+</dtd:entity>
+<dtd:entity name="pre.attlist" role="attlist">
+	<dtd:attrib mode="implied" name="pre" type="nmtoken"/>
+</dtd:entity>
+<dtd:entity name="prerefname.attlist" role="attlist">
+	<dtd:ref name="refname.attlist" role="attlist"/>
+	<dtd:ref name="pre.attlist" role="attlist"/>
+	<dtd:attrib mode="implied" name="pre-ref" type="nmtoken"/>
+</dtd:entity>
+<dtd:entity name="role.attlist" role="attlist">
+	<dtd:attrib name="role">
+		<dtd:ref name="role.type" role="attrib"/>
+		<dtd:fixed>unknow</dtd:fixed>
+	</dtd:attrib>
+</dtd:entity>
+<dtd:entity name="occurs.attlist" role="attlist">
+	<dtd:attrib mode="implied" name="occurs">
+		<dtd:choice>
+			<dtd:item name="nul-one"/>
+			<dtd:item name="nul-inf"/>
+			<dtd:item name="one-inf"/>
+		</dtd:choice>
+	</dtd:attrib>
+</dtd:entity>
+<dtd:entity name="type.attlist" role="attlist">
+	<dtd:attrib mode="implied" name="type">
+		<dtd:choice>
+			<dtd:item name="cdata"/>
+			<dtd:item name="idrefs"/>
+			<dtd:item name="idref"/>
+			<dtd:item name="id"/>
+			<dtd:item name="entities"/>
+			<dtd:item name="entity"/>
+			<dtd:item name="nmtokens"/>
+			<dtd:item name="nmtoken"/>
+			<dtd:item name="notation"/>
+		</dtd:choice>
+	</dtd:attrib>
+</dtd:entity>
+<!-- elements -->
+<dtd:entity name="markup.group" role="item">
+	<dtd:choice occurs="nul-inf">
+		<dtd:ref name="entity.name" role="item"/>
+		<dtd:ref name="include-ref.name" role="item"/>
+		<dtd:ref name="xml-ref.name" role="item"/>
+		<dtd:ref name="notation.name" role="item"/>
+		<dtd:ref name="element.name" role="item"/>
+		<dtd:ref name="conduction.name" role="item"/>
+		<dtd:ref name="attlist.name" role="item"/>
+	</dtd:choice>
+</dtd:entity>
+<dtd:entity name="element.group" role="item">
+	<dtd:choice>
+		<dtd:ref name="choice.name" role="item"/>
+		<dtd:ref name="seq.name" role="item"/>
+	</dtd:choice>
+</dtd:entity>
+<dtd:entity name="content.group" role="item">
+	<dtd:choice>
+		<dtd:ref name="item.name" role="item"/>
+		<dtd:ref name="ref.name" role="item"/>
+		<dtd:ref name="element.group" role="item"/>
+	</dtd:choice>
+</dtd:entity>
+<dtd:entity name="attrib.group" role="item">
+	<dtd:seq>
+		<dtd:choice occurs="nul-one">
+			<dtd:ref name="ref.name" role="item"/>
+			<dtd:ref name="choice.name" role="item"/>
+		</dtd:choice>
+		<dtd:item occurs="nul-one" ref="fixed.name"/>
+	</dtd:seq>
+</dtd:entity>
+<dtd:entity name="entity.content" role="element">
+	<dtd:content type="strict">
+		<dtd:choice>
+			<dtd:ref name="content.name" role="item"/>
+			<dtd:ref name="element.group" role="item"/>
+			<dtd:item occurs="one-inf" ref="attrib.name"/>
+			<dtd:ref name="attrib.group" role="item"/>
+			<dtd:ref name="name.name" role="item"/>
+			<dtd:ref name="type.name" role="item"/>
+			<dtd:ref name="unknow.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:entity>
+<!-- stucture -->
+<!-- top level -->
+<dtd:element ref="doctype.name">
+	<dtd:content type="strict">
+		<dtd:choice>
+			<dtd:ref name="markup.group" role="item"/>
+			<dtd:ref name="document.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="doctype.name">
+	<dtd:ref name="FPSI.attlist" role="attlist"/>
+	<dtd:attrib mode="fixed" ref="ns">
+		<dtd:ref name="uri.type" role="attrib"/>
+		<dtd:fixed><dtd:ref name="xmlns" role="string"/></dtd:fixed>
+	</dtd:attrib>
+	<dtd:attrib mode="implied" name="root" type="nmtoken"/>
+</dtd:attlist>
+<dtd:element ref="document.name">
+	<dtd:ref name="markup.group" role="element"/>
+</dtd:element>
+<dtd:attlist ref="document.name">
+	<dtd:ref name="rname.attlist" role="attlist"/>
+	<dtd:ref name="pre.attlist" role="attlist"/>
+	<dtd:ref name="FPSI.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="entity.name">
+	<dtd:ref name="entity.content" role="element"/>
+</dtd:element>
+<dtd:attlist ref="entity.name">
+	<dtd:ref name="rname.attlist" role="attlist"/>
+	<dtd:ref name="FPSI.attlist" role="attlist"/>
+	<dtd:ref name="role.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="xml-ref.name">
+	<dtd:content type="any"/>
+</dtd:element>
+<dtd:attlist ref="xml-ref.name">
+	<dtd:ref name="rname.attlist" role="attlist"/>
+	<dtd:ref name="FPSI.attlist" role="attlist"/>
+	<dtd:attrib mode="implied" name="ndata" type="nmtoken"/>
+</dtd:attlist>
+<dtd:element ref="notation.name">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist ref="notation.name">
+	<dtd:ref name="rname.attlist" role="attlist"/>
+	<dtd:ref name="FPSI.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="include-ref.name">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist ref="include-ref.name">
+	<dtd:ref name="rname.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="conduction.name">
+	<dtd:ref name="markup.group" role="element"/>
+</dtd:element>
+<dtd:attlist ref="conduction.name">
+	<dtd:ref name="refname.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="element.name">
+	<dtd:content type="strict">
+		<dtd:choice>
+			<dtd:ref name="content.name" role="item"/>
+			<dtd:ref name="ref.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="element.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="attlist.name">
+	<dtd:content type="strict">
+		<dtd:choice occurs="one-inf">
+			<dtd:ref name="attrib.name" role="item"/>
+			<dtd:ref name="ref.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="attlist.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+</dtd:attlist>
+<!-- element sub -->
+<dtd:element ref="content.name">
+	<dtd:content type="strict">
+		<dtd:choice occurs="nul-one">
+			<dtd:ref name="element.group" role="item"/>
+			<dtd:ref name="ref.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="content.name">
+	<dtd:attrib mode="required" name="type">
+		<dtd:choice>
+			<dtd:item name="strict"/>
+			<dtd:item name="pcdata"/>
+			<dtd:item name="any"/>
+			<dtd:item name="empty"/>
+		</dtd:choice>
+	</dtd:attrib>
+</dtd:attlist>
+<dtd:element ref="choice.name">
+	<dtd:content type="strict">
+		<dtd:seq occurs="one-inf">
+			<dtd:ref name="content.group" role="item"/>
+		</dtd:seq>
+	</dtd:content>
+</dtd:element>
+<dtd:element ref="seq.name">
+	<dtd:content type="strict">
+		<dtd:seq occurs="one-inf">
+			<dtd:ref name="content.group" role="item"/>
+		</dtd:seq>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="choice.name">
+	<dtd:ref name="occurs.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:attlist ref="seq.name">
+	<dtd:ref name="occurs.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="item.name">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist ref="item.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+	<dtd:ref name="occurs.attlist" role="attlist"/>
+</dtd:attlist>
+<!-- attlist sub -->
+<dtd:element ref="attrib.name">
+	<dtd:ref name="attrib.group" role="element"/>
+</dtd:element>
+<dtd:attlist ref="attrib.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+	<dtd:ref name="type.attlist" role="attlist"/>
+	<dtd:attrib mode="implied" name="mode">
+		<dtd:choice>
+			<dtd:item name="required"/>
+			<dtd:item name="implied"/>
+			<dtd:item name="fixed"/>
+		</dtd:choice>
+	</dtd:attrib>
+</dtd:attlist>
+<dtd:element ref="fixed.name">
+	<dtd:content type="pcdata">
+		<dtd:choice occurs="nul-inf">
+			<dtd:ref name="ref.name" role="item"/>
+		</dtd:choice>
+	</dtd:content>
+</dtd:element>
+<!--  entity sub -->
+<dtd:element ref="name.name">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist ref="name.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="type.name">
+	<dtd:content type="strict">
+		<dtd:seq occurs="nul-one">
+			<dtd:ref name="choice.name" role="item"/>
+		</dtd:seq>
+	</dtd:content>
+</dtd:element>
+<dtd:attlist ref="type.name">
+	<dtd:ref name="type.attlist" role="attlist"/>
+</dtd:attlist>
+<dtd:element ref="unknow.name">
+	<dtd:content type="pcdata"/>
+</dtd:element>
+<!-- allways -->
+<dtd:element ref="ref.name">
+	<dtd:content type="empty"/>
+</dtd:element>
+<dtd:attlist ref="ref.name">
+	<dtd:ref name="prerefname.attlist" role="attlist"/>
+	<dtd:ref name="role.attlist" role="attlist"/>
+</dtd:attlist>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is DTD2XML.
+   -
+   - The Initial Developer of the Original Code is
+   - Eugene Efremov <4mirror@mail.ru>
+   - Portions created by the Initial Developer are Copyright (C) 2009-2010
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+</dtd:doctype>

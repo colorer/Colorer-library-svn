@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:dtd="http://colorer.sf.net/2010/dtdxml"
+           targetNamespace="http://colorer.sf.net/2010/dtdxml"
+           elementFormDefault="qualified">
+   <xs:annotation>
+      <xs:documentation>
+		This XML schema autogenerate by DTD2XML
+		Written © Eugene Efremov, 2009-2010
+		
+		Original DTD properties:
+			PUBLIC: -//Colorer//DTD2XML DTD scheme//EN
+			SYSTEM: dtdxml.dtd
+			root:   doctype
+			xmlns:  http://colorer.sf.net/2010/dtdxml
+		
+		</xs:documentation>
+   </xs:annotation>
+   <xs:simpleType name="uri.type">
+      <xs:restriction base="xs:string">
+         <xs:whiteSpace value="preserve"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="FPI.type">
+      <xs:restriction base="xs:string">
+         <xs:whiteSpace value="preserve"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="role.type">
+      <xs:restriction base="xs:NMTOKEN">
+         <xs:enumeration value="attlist"/>
+         <xs:enumeration value="attrib"/>
+         <xs:enumeration value="element"/>
+         <xs:enumeration value="item"/>
+         <xs:enumeration value="string"/>
+         <xs:enumeration value="conduction"/>
+         <xs:enumeration value="name"/>
+         <xs:enumeration value="prefix"/>
+         <xs:enumeration value="include"/>
+         <xs:enumeration value="unknow"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:attributeGroup name="FPSI.attlist">
+      <xs:attribute name="system" use="optional" type="dtd:uri.type"/>
+      <xs:attribute name="public" use="optional" type="dtd:FPI.type"/>
+      <xs:attribute name="href" use="optional" type="dtd:uri.type"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="rname.attlist">
+      <xs:attribute name="name" use="required" type="xs:NMTOKEN"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="refname.attlist">
+      <xs:attribute name="name" use="optional" type="xs:NMTOKEN"/>
+      <xs:attribute name="ref" use="optional" type="xs:NMTOKEN"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="pre.attlist">
+      <xs:attribute name="pre" use="optional" type="xs:NMTOKEN"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="prerefname.attlist">
+      <xs:attributeGroup ref="dtd:refname.attlist"/>
+      <xs:attributeGroup ref="dtd:pre.attlist"/>
+      <xs:attribute name="pre-ref" use="optional" type="xs:NMTOKEN"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="role.attlist">
+      <xs:attribute name="role" type="dtd:role.type" default="unknow"/>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="occurs.attlist">
+      <xs:attribute name="occurs" use="optional">
+         <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+               <xs:enumeration value="nul-one"/>
+               <xs:enumeration value="nul-inf"/>
+               <xs:enumeration value="one-inf"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+   </xs:attributeGroup>
+   <xs:attributeGroup name="type.attlist">
+      <xs:attribute name="type" use="optional">
+         <xs:simpleType>
+            <xs:restriction base="xs:NMTOKEN">
+               <xs:enumeration value="cdata"/>
+               <xs:enumeration value="idrefs"/>
+               <xs:enumeration value="idref"/>
+               <xs:enumeration value="id"/>
+               <xs:enumeration value="entities"/>
+               <xs:enumeration value="entity"/>
+               <xs:enumeration value="nmtokens"/>
+               <xs:enumeration value="nmtoken"/>
+               <xs:enumeration value="notation"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+   </xs:attributeGroup>
+   <xs:group name="markup.group">
+      <xs:sequence>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="dtd:entity"/>
+            <xs:element ref="dtd:include-ref"/>
+            <xs:element ref="dtd:xml-ref"/>
+            <xs:element ref="dtd:notation"/>
+            <xs:element ref="dtd:element"/>
+            <xs:element ref="dtd:conduction"/>
+            <xs:element ref="dtd:attlist"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+   <xs:group name="element.group">
+      <xs:choice>
+         <xs:element ref="dtd:choice"/>
+         <xs:element ref="dtd:seq"/>
+      </xs:choice>
+   </xs:group>
+   <xs:group name="content.group">
+      <xs:choice>
+         <xs:element ref="dtd:item"/>
+         <xs:element ref="dtd:ref"/>
+         <xs:group ref="dtd:element.group"/>
+      </xs:choice>
+   </xs:group>
+   <xs:group name="attrib.group">
+      <xs:sequence>
+         <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element ref="dtd:ref"/>
+            <xs:element ref="dtd:choice"/>
+         </xs:choice>
+         <xs:element ref="dtd:fixed" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+   </xs:group>
+   <xs:complexType name="entity.content">
+      <xs:choice>
+         <xs:element ref="dtd:content"/>
+         <xs:group ref="dtd:element.group"/>
+         <xs:element ref="dtd:attrib" minOccurs="1" maxOccurs="unbounded"/>
+         <xs:group ref="dtd:attrib.group"/>
+         <xs:element ref="dtd:name"/>
+         <xs:element ref="dtd:type"/>
+         <xs:element ref="dtd:unknow"/>
+      </xs:choice>
+   </xs:complexType>
+   <xs:element name="doctype">
+      <xs:complexType>
+         <xs:choice>
+            <xs:group ref="dtd:markup.group"/>
+            <xs:element ref="dtd:document"/>
+         </xs:choice>
+         <xs:attributeGroup ref="dtd:FPSI.attlist"/>
+         <xs:attribute name="root" use="optional" type="xs:NMTOKEN"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="document">
+      <xs:complexType>
+         <xs:group ref="dtd:markup.group"/>
+         <xs:attributeGroup ref="dtd:rname.attlist"/>
+         <xs:attributeGroup ref="dtd:pre.attlist"/>
+         <xs:attributeGroup ref="dtd:FPSI.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="entity">
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="dtd:entity.content">
+               <xs:attributeGroup ref="dtd:rname.attlist"/>
+               <xs:attributeGroup ref="dtd:FPSI.attlist"/>
+               <xs:attributeGroup ref="dtd:role.attlist"/>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="xml-ref">
+      <xs:complexType mixed="true">
+         <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:any processContents="lax"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="dtd:rname.attlist"/>
+         <xs:attributeGroup ref="dtd:FPSI.attlist"/>
+         <xs:attribute name="ndata" use="optional" type="xs:NMTOKEN"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="notation">
+      <xs:complexType>
+         <xs:attributeGroup ref="dtd:rname.attlist"/>
+         <xs:attributeGroup ref="dtd:FPSI.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="include-ref">
+      <xs:complexType>
+         <xs:attributeGroup ref="dtd:rname.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="conduction">
+      <xs:complexType>
+         <xs:group ref="dtd:markup.group"/>
+         <xs:attributeGroup ref="dtd:refname.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="element">
+      <xs:complexType>
+         <xs:choice>
+            <xs:element ref="dtd:content"/>
+            <xs:element ref="dtd:ref"/>
+         </xs:choice>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="attlist">
+      <xs:complexType>
+         <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element ref="dtd:attrib"/>
+            <xs:element ref="dtd:ref"/>
+         </xs:choice>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="content">
+      <xs:complexType>
+         <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:group ref="dtd:element.group"/>
+            <xs:element ref="dtd:ref"/>
+         </xs:choice>
+         <xs:attribute name="type" use="required">
+            <xs:simpleType>
+               <xs:restriction base="xs:NMTOKEN">
+                  <xs:enumeration value="strict"/>
+                  <xs:enumeration value="pcdata"/>
+                  <xs:enumeration value="any"/>
+                  <xs:enumeration value="empty"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="choice">
+      <xs:complexType>
+         <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:group ref="dtd:content.group"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="dtd:occurs.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="seq">
+      <xs:complexType>
+         <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:group ref="dtd:content.group"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="dtd:occurs.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="item">
+      <xs:complexType>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+         <xs:attributeGroup ref="dtd:occurs.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="attrib">
+      <xs:complexType>
+         <xs:group ref="dtd:attrib.group"/>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+         <xs:attributeGroup ref="dtd:type.attlist"/>
+         <xs:attribute name="mode" use="optional">
+            <xs:simpleType>
+               <xs:restriction base="xs:NMTOKEN">
+                  <xs:enumeration value="required"/>
+                  <xs:enumeration value="implied"/>
+                  <xs:enumeration value="fixed"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="fixed">
+      <xs:complexType mixed="true">
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="dtd:ref"/>
+         </xs:choice>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="name">
+      <xs:complexType>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="type">
+      <xs:complexType>
+         <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element ref="dtd:choice"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="dtd:type.attlist"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="unknow" type="xs:string"/>
+   <xs:element name="ref">
+      <xs:complexType>
+         <xs:attributeGroup ref="dtd:prerefname.attlist"/>
+         <xs:attributeGroup ref="dtd:role.attlist"/>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>

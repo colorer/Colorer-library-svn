@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project name="test" default="all" basedir='.'>
+
+<property file='cases.properties'/>
+<property name='fails.out' value='fails.diff.log'/>
+
+
+<target name='case'>
+	<subant target="">
+		<fileset dir="." includes="case*/build.xml"/>
+	</subant>
+</target>
+
+
+<target name='diff.dell'>
+	<delete file='${fails.out}' failonerror='false'/>
+</target>
+
+
+<target name='diff' depends='case, diff.dell'>
+	<exec executable="diff" output="${fails.out}">
+		<arg line='-r -u -a -d -x.* ${out} valid'/>
+	</exec>
+</target>
+
+
+
+<target name='fail.check'>
+	<condition  property='fail.exist'>
+		<length file='${fails.out}' length='0' when='eq'/>
+	</condition>
+</target>
+
+<target name='fail.dell' depends='fail.check' if='fail.exist'>
+	<delete file='${fails.out}'/>
+	<echo message='Tests result: OK'/>
+</target>
+
+<target name='fail.msg' depends='fail.check' unless='fail.exist'>
+	<echo message='Tests result: FAIL'/>
+	<echo message="See '${fails.out}'"/>
+</target>
+
+<target name='test' depends='fail.dell, fail.msg'/>
+
+
+<target name='all'>
+	<antcall target='diff'/>
+	<antcall target='test'/>
+</target>
+
+
+</project>
