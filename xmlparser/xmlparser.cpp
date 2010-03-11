@@ -1,33 +1,87 @@
-#include<common/io/FileInputSource.h>
-#include<xml/xmldom.h>
-#include<windows.h>
-#include<stdio.h>
+#include <wchar.h>
 #include "xmlprint.h"
 
-int main(int argc, char *argv[])
+
+enum JobType { JT_NOTHING, JT_TEST1};
+
+int loops = 1;
+JobType job = JT_NOTHING;
+SString *testFile = NULL;
+
+void printError(){
+  wprintf(
+    L"\nUsage: xmlparser (command) (parameters)\n"
+    L" Commands:\n"
+    L"  -t<n>      Run the test number <n>\n"
+    L" Parameters:\n"
+    L"  -c<n>      Number of test runs\n"
+    L"  -f<path>   Test file\n\n"
+    L" Test:\n"
+    L"   1         ColorPrintInConsole\n"
+    );
+};
+
+int init(int argc, wchar_t *argv[])
 {
-  FileInputSource fis = FileInputSource(&DString(argv[1]), null);
-  printf("FILE:\t%s\t\t\t\t", argv[1]);
-  try{
-
-    int t1 = GetTickCount();
-
-    DocumentBuilder *db = new DocumentBuilder();
-
-    Document *doc = db->parse(&fis);
-
-    int t2 = GetTickCount()-t1;
-
-    printf("TIMING:\t%d\n", t2);
-
-    printLevel(doc, 0);
-
-    db->free(doc);
-    delete db;
-  }catch(Exception &e){
-    printf("\n\nEXC: %s\n\n", e.getMessage()->getChars());
-  }catch(...){
-    printf("UNK\n");
+  for(int i = 1; i < argc; i++){
+    if (argv[i][0] != L'-'){
+      return -1;
+    }
+    if (argv[i][1] == L't'){
+      if (argv[i][2]){
+        job = (JobType)_wtoi(argv[i]+2);
+      }
+      else{
+        return -1;
+      }
+      continue;
+    }
+    if (argv[i][1] == L'c'){
+      if (argv[i][2]){
+        loops =_wtoi(argv[i]+2);
+      }
+      if (!loops){
+        loops=1;
+      }
+      continue;
+    }
+    if (argv[i][1] == L'f' && (i+1 < argc || argv[i][2])){
+      if (argv[i][2]){
+        testFile=new SString(DString(argv[i]+2));
+      }else{
+        testFile=new SString(DString(argv[i+1]));
+        i++;
+      }
+      continue;
+    }
+    if (argv[i][1]) 
+    {
+      wprintf(L"WARNING: unknown option '-%s'\n", argv[i]+1);
+      return -1;
+    }
   }
+  return 1;
+}
+
+int wmain(int argc, wchar_t *argv[])
+{
+  if ((argc<2)||(init(argc,argv)==-1)) 
+  {
+    printError();
+    return 1;
+  }
+  try{
+    switch (job){
+    case JT_NOTHING:
+      printError();
+      break;
+    case JT_TEST1:
+      ColorPrintInConsole(testFile);
+      break;
+    }
+  }catch(...){
+    wprintf(L"Unknown exception\n");
+    return 1;
+  };
   return 0;
 };

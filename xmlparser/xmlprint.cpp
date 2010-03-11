@@ -1,6 +1,7 @@
 #include "xmlprint.h"
-#include<windows.h>
-#include<stdio.h>
+#include <windows.h>
+#include <wchar.h>
+#include<common/io/FileInputSource.h>
 
 #define COLOR(c) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),c)
 #define BR    0x0E
@@ -9,6 +10,24 @@
 #define PAR   0x0C
 #define PLAIN 0x09
 
+void ColorPrintInConsole(SString *testFile)
+{
+  FileInputSource fis = FileInputSource(testFile, null);
+  try{
+    DocumentBuilder *db = new DocumentBuilder();
+    Document *doc = db->parse(&fis);
+
+    printLevel(doc, 0);
+
+    db->free(doc);
+    delete db;
+  }catch(Exception &e){
+    wprintf(L"\nException: %s\n\n", e.getMessage()->getWChars());
+  }catch(...){
+    wprintf(L"Unknown exception\n");
+  }
+
+}
 void printLevel(Node *node, int lev)
 {
   int i;
@@ -27,40 +46,43 @@ void printLevel(Node *node, int lev)
       Element *elem = (Element*)tmp;
 
       for(i = 0; i < lev*3; i++){
-        printf(" ");
+        wprintf(L" ");
       }
       COLOR(BR);
-      printf("<");
+      wprintf(L"<");
       COLOR(TAG);
-      printf("%s", elem->getNodeName()->getChars());
+      wprintf(L"%s", elem->getNodeName()->getWChars());
       COLOR(NORM);
 
       const Vector<const String*> *attrs = elem->getAttributes();
       for (i = 0; i < attrs->size(); i++){
         COLOR(PAR);
-        printf(" %s=", attrs->elementAt(i)->getChars());
+        wprintf(L" %s=", attrs->elementAt(i)->getWChars());
         COLOR(NORM);
-        printf("\"%s\"", elem->getAttribute(attrs->elementAt(i))->getChars());
+        wprintf(L"\"%s\"", elem->getAttribute(attrs->elementAt(i))->getWChars());
       };
       COLOR(BR);
-      printf(">\n");
+      wprintf(L">\n");
 
       if (tmp->hasChildNodes()){
         printLevel(elem->getFirstChild(), lev+1);
       };
 
-      for(i = 0; i < lev*3; i++) printf(" ");
+      for(i = 0; i < lev*3; i++) wprintf(L" ");
 
-      COLOR(BR);  printf("</");
-      COLOR(TAG);  printf("%s", elem->getNodeName()->getChars());
-      COLOR(BR);  printf(">\n");
+      COLOR(BR);
+      wprintf(L"</");
+      COLOR(TAG);
+      wprintf(L"%s", elem->getNodeName()->getWChars());
+      COLOR(BR);
+      wprintf(L">\n");
       COLOR(NORM);
     }
 
     if (tmp->getNodeType() == Node::TEXT_NODE){
       Text *elem = (Text*)tmp;
       COLOR(PLAIN);
-      printf("%s", elem->getData()->getChars());
+      wprintf(L"%s", elem->getData()->getWChars());
       COLOR(NORM);
 
       CharacterData *elem1 = (CharacterData*)elem;
@@ -70,7 +92,7 @@ void printLevel(Node *node, int lev)
     if (tmp->getNodeType() == Node::PROCESSING_INSTRUCTION_NODE){
       ProcessingInstruction *elem = (ProcessingInstruction*)tmp;
       COLOR(PLAIN);
-      printf("<?%s %s?>", elem->getTarget()->getChars(), elem->getData()->getChars());
+      wprintf(L"<?%s %s?>", elem->getTarget()->getWChars(), elem->getData()->getWChars());
       COLOR(NORM);
 
       CharacterData *elem1 = (CharacterData*)elem;
@@ -81,7 +103,7 @@ void printLevel(Node *node, int lev)
     if (tmp->getNodeType() == Node::COMMENT_NODE){
       Comment *elem = (Comment*)tmp;
       COLOR(PLAIN);
-      printf("<!--%s-->", elem->getData()->getChars());
+      wprintf(L"<!--%s-->", elem->getData()->getWChars());
       elem->getLength();
       COLOR(NORM);
     };
