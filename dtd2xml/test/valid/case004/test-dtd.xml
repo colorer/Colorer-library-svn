@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dtd:doctype
+	system="test.dtd"
+	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
+ >
+<!--
+	This file autogenerate by
+	DTD2XML version 0.1.2 α 
+	Written © Eugene Efremov, 2009-2010
+-->
+
+<!-- just for test. not real dtd -->
+<dtd:entity system="http://example.com/test1.mod" href="test1.mod-dtd.xml" public="-//Colorer//Test mod 1//EN" name="tst1" role="include"/>
+<dtd:include-ref name='tst1'/>
+<dtd:entity system="test2.mod" href="test2.mod-dtd.xml" name="tst2" role="include"/>
+<dtd:include-ref name='tst2'/>
+<dtd:element name="test">
+	<dtd:content type="strict">
+		<dtd:seq occurs="nul-inf">
+			<dtd:item name="foo"/>
+			<dtd:item name="bar"/>
+		</dtd:seq>
+	</dtd:content>
+</dtd:element>
+</dtd:doctype>

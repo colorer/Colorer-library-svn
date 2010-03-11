@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dtd:doctype
+	public="-//Colorer//Test mod 1//EN"
+	system="http://example.com/test1.mod"
+	xmlns:dtd='http://colorer.sf.net/2010/dtdxml'
+ >
+<!--
+	This file autogenerate by
+	DTD2XML version 0.1.2 α 
+	Written © Eugene Efremov, 2009-2010
+-->
+
+<!-- just for test. not real dtd -->
+<dtd:element name="foo">
+	<dtd:content type="any"/>
+</dtd:element>
+</dtd:doctype>

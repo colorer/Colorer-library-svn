@@ -5,7 +5,7 @@ our $VERSION = 0.01;
 
 use base qw(Helper::Class);
 use Helper::Class;
-use Helper::Uri;
+use DtdXml::Uri;
 our %XmlInfo = 
 (
 	xmlns=>'http://colorer.sf.net/2010/dtdxml',
@@ -52,7 +52,7 @@ sub needSave
 sub getOutName
 {
 	my $this = shift;
-#	print "Get name from '$this->{uri}' '$this->{fsi}': '$this->{out}\n";
+	#print "Get name from '$this->{uri}' '$this->{fsi}': '$this->{out}\n";
 	
 	unless($this->{out})
 	{
@@ -62,21 +62,21 @@ sub getOutName
 		$this->{out} = $out;
 	}
 	
-	my $outuri = new Helper::Uri($this->{out}, $this->{baseuri}->{o});
+	my $outuri = makeUri($this->{out}, $this->{baseuri}->{o});
 	return "$outuri";
 }
 
 sub setOutName
 {
 	my ($this, $name) = @_;
-#	print "Set name to '$this->{uri}' '$this->{fsi}'\n";
+	#print "Set name to '$this->{uri}' '$this->{fsi}'\n";
 	$this->{out} = $name;
 }
 
 sub getInName
 {
 	my $this = shift;
-	my $inuri = new Helper::Uri($this->{uri}, $this->{baseuri}->{i});
+	my $inuri = makeUri($this->{uri}, $this->{baseuri}->{i});
 	
 #print "Get in '$inuri', base  $this->{baseuri}->{i}\n";
 	return "$inuri";
@@ -118,7 +118,7 @@ sub setBaseUri
 	my $this = shift;
 	my %base = getBase();
 	
-	$this->{baseuri} = { map{ $_, new Helper::Uri($base{$_}) } keys %base };
+	$this->{baseuri} = { map{ $_, makeUri($base{$_}) } keys %base };
 	#print "set base uri for $this: ",%{$this->{baseuri}},"\n";
 }
 
@@ -232,6 +232,11 @@ sub run
 		{
 		#	print "Set ROLE $args[1] to $args[0]\n";
 			makeRole($args[0], $args[1]);
+			no_return;
+		},
+		case 'URIALIAS' => sub
+		{
+			setUriAlias($args[0], $args[1]);
 			no_return;
 		},
 		case 'DOCTYPE' => sub

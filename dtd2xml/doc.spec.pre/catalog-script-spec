@@ -45,11 +45,11 @@
 		RELBASE
 		OUTRELBASE
 		PROPERTIES
+		URIALIAS
 		
 		BASE
 		CATALOG
 		PUBLIC
-		SYSTEM
 		DOCUMENT
 		DOCTYPE
 		
@@ -58,6 +58,7 @@
 		PARSE (?)
 		SYSBASE
 		
+		SYSTEM
 		OVERRIDE
 		ENTIY    
 		DELEGATE (?)
@@ -129,6 +130,9 @@ ROLE <name> <role>
 	Принудительно устанавливает роль для неопрделенной сущности
 	+ ok
 	
+URIALIAS <alias> <uri>
+	Заменяет <alias> на <uri>. (Аналог <rewriteURI> из catalog.xml)
+	+ ok
 	
 ====================================================================
 Эти команды имеют несколько другой смысл, чем описано в OASIS Technical Resolution 9401:1997
@@ -172,7 +176,7 @@ SYSTEM <URI> <FSI>
 	system decatration
 	* for @system attrib
 	* find path for <FSI>
-	+ ok
+	+ todo
 	
 	
 DELEGATE <FPI> <URI>

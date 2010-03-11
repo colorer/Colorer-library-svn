@@ -7,6 +7,7 @@ our @EXPORT= qw(addPubFile addSysFile addOutName setBase setBaseRel getBase);
 
 #use DtdXml::Parser::File;
 #use DtdXml::Parser::Doc;
+use DtdXml::Uri;
 
 our %FPI;
 our %FSI;
@@ -23,9 +24,9 @@ sub setBase
 sub setBaseRel
 {
 	my ($i, $p) = @_;
-	my $u = new Helper::Uri($p, $Base{$i});
+	my $u = makeUri($p, $Base{$i});
 	#print "set relative base $u\n";
-	$Base{$i} = "$u";
+	setBase($i, "$u");
 }
 
 
