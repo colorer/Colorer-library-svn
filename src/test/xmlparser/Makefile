@@ -9,11 +9,11 @@ obj = obj
 CPP = @cl
 #DEBUG1 = -Zi
 #DEBUG2 = /debug /fixed:no
-DEBUG1 = /O2gtiyb2 /GX /wd4101 /W3
+DEBUG1 = /O2tiyb2 /wd4996 /W3
 DEBUG2 =
-DEFINES = -DCOLORER_FEATURE_JARINPUTSOURCE=0 -DCOLORER_FEATURE_HTTPINPUTSOURCE=0
+DEFINES = -DCOLORER_FEATURE_JARINPUTSOURCE=0 -DCOLORER_FEATURE_HTTPINPUTSOURCE=0  -DUSE_DL_PREFIX  
 
-CPPFLAGS = $(DEBUG1) /Fo$*.$(obj) -c -EHsc -I../../shared $(DEFINES)
+CPPFLAGS = $(DEBUG1) /Fo"$(obj_output_slash)" -c -EHsc -I../../shared $(DEFINES)
 
 OBJS = $(obj_output_slash)xmlparser.obj \
        $(obj_output_slash)UnicodeTools.obj \
@@ -32,9 +32,8 @@ OBJS = $(obj_output_slash)xmlparser.obj \
 
 
 include ../../shared/_dependencies.dep
-
 include ../../shared/makefile.objs
-#include ../../shared/_dependencies.dep
+include ../../shared/makefile.lines
 
 xmlparser.exe: $(OBJS)
 	link /OUT:xmlparser.exe $(OBJS) $(DEBUG2)
