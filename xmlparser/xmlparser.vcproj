@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../shared;../../zlib;./xml"
+				AdditionalIncludeDirectories="../../shared;./xml"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_JARINPUTSOURCE=FALSE;COLORER_FEATURE_HTTPINPUTSOURCE=FALSE;USE_DL_PREFIX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

@@ -1,7 +1,6 @@
 
 #include<stdio.h>
-
-#include<xml/xmldom.h>
+#include"xmldom.h"
 #include<unicode/UnicodeTools.h>
 
 Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
@@ -272,7 +271,7 @@ void DocumentBuilder::consumeContent(Node *root){
 void DocumentBuilder::appendToLastTextNode(Node *root, String *stext){
   if (stext == null) return;
   Node *last = root->getLastChild();
-  if (last == null || last->getNodeType() != Node::TEXT_NODE){
+  if (last == null || last->getNodeType() != TEXT_NODE){
     root->appendChild(doc->createTextNode(stext));
   }else{
     StringBuffer *sb = (StringBuffer*)((Text*)last)->getData();
@@ -663,12 +662,6 @@ long r;
   };
   return true;
 };
-
-const short Node::COMMENT_NODE = 0;
-const short Node::DOCUMENT_NODE = 1;
-const short Node::ELEMENT_NODE = 2;
-const short Node::PROCESSING_INSTRUCTION_NODE = 3;
-const short Node::TEXT_NODE = 4;
 
 Node *Node::appendChild(Node *newChild)
 {

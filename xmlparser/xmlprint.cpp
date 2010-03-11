@@ -15,6 +15,8 @@ void ColorPrintInConsole(SString *testFile)
   FileInputSource fis = FileInputSource(testFile, null);
   try{
     DocumentBuilder *db = new DocumentBuilder();
+    db->setIgnoringComments(false);
+    db->setIgnoringElementContentWhitespace(false);
     Document *doc = db->parse(&fis);
 
     printLevel(doc, 0);
@@ -34,79 +36,79 @@ void printLevel(Node *node, int lev)
   Node *tmp = node;
 
   do{
+    switch (tmp->getNodeType()){
+      case DOCUMENT_NODE:
+        {
+          Node *elem = ((Document*)tmp)->getFirstChild();
+          if (elem){
+            printLevel(elem, lev);
+          }
+        }
+        break;
+      case ELEMENT_NODE:
+        {
+          Element *elem = (Element*)tmp;
 
-    if (tmp->getNodeType() == Node::DOCUMENT_NODE){
-      Node *elem = ((Document*)tmp)->getFirstChild();
-      if (elem){
-        printLevel(elem, lev);
-      }
+          for(i = 0; i < lev*3; i++){
+            wprintf(L" ");
+          }
+          COLOR(BR);
+          wprintf(L"<");
+          COLOR(TAG);
+          wprintf(L"%s", elem->getNodeName()->getWChars());
+          COLOR(NORM);
+
+          const Vector<const String*> *attrs = elem->getAttributes();
+          for (i = 0; i < attrs->size(); i++){
+            COLOR(PAR);
+            wprintf(L" %s=", attrs->elementAt(i)->getWChars());
+            COLOR(NORM);
+            wprintf(L"\"%s\"", elem->getAttribute(attrs->elementAt(i))->getWChars());
+          };
+          COLOR(BR);
+          wprintf(L">\n");
+
+          if (tmp->hasChildNodes()){
+            printLevel(elem->getFirstChild(), lev+1);
+          };
+
+          for(i = 0; i < lev*3; i++) wprintf(L" ");
+
+          COLOR(BR);
+          wprintf(L"</");
+          COLOR(TAG);
+          wprintf(L"%s", elem->getNodeName()->getWChars());
+          COLOR(BR);
+          wprintf(L">\n");
+          COLOR(NORM);
+        }
+        break;
+      case TEXT_NODE:
+        {
+          Text *elem = (Text*)tmp;
+          COLOR(PLAIN);
+          wprintf(L"%s", elem->getData()->getWChars());
+          COLOR(NORM);
+        }
+        break;
+      case PROCESSING_INSTRUCTION_NODE:
+        {
+          ProcessingInstruction *elem = (ProcessingInstruction*)tmp;
+          COLOR(PLAIN);
+          wprintf(L"<?%s %s?>", elem->getTarget()->getWChars(), elem->getData()->getWChars());
+          COLOR(NORM);
+        }
+        break;
+      case COMMENT_NODE:
+        {
+          Comment *elem = (Comment*)tmp;
+          COLOR(PLAIN);
+          wprintf(L"<!--%s-->", elem->getData()->getWChars());
+          elem->getLength();
+          COLOR(NORM);
+        }
+        break;
     }
-
-    if (tmp->getNodeType() == Node::ELEMENT_NODE){
-      Element *elem = (Element*)tmp;
-
-      for(i = 0; i < lev*3; i++){
-        wprintf(L" ");
-      }
-      COLOR(BR);
-      wprintf(L"<");
-      COLOR(TAG);
-      wprintf(L"%s", elem->getNodeName()->getWChars());
-      COLOR(NORM);
-
-      const Vector<const String*> *attrs = elem->getAttributes();
-      for (i = 0; i < attrs->size(); i++){
-        COLOR(PAR);
-        wprintf(L" %s=", attrs->elementAt(i)->getWChars());
-        COLOR(NORM);
-        wprintf(L"\"%s\"", elem->getAttribute(attrs->elementAt(i))->getWChars());
-      };
-      COLOR(BR);
-      wprintf(L">\n");
-
-      if (tmp->hasChildNodes()){
-        printLevel(elem->getFirstChild(), lev+1);
-      };
-
-      for(i = 0; i < lev*3; i++) wprintf(L" ");
-
-      COLOR(BR);
-      wprintf(L"</");
-      COLOR(TAG);
-      wprintf(L"%s", elem->getNodeName()->getWChars());
-      COLOR(BR);
-      wprintf(L">\n");
-      COLOR(NORM);
-    }
-
-    if (tmp->getNodeType() == Node::TEXT_NODE){
-      Text *elem = (Text*)tmp;
-      COLOR(PLAIN);
-      wprintf(L"%s", elem->getData()->getWChars());
-      COLOR(NORM);
-
-      CharacterData *elem1 = (CharacterData*)elem;
-      elem1->getData();
-    };
-
-    if (tmp->getNodeType() == Node::PROCESSING_INSTRUCTION_NODE){
-      ProcessingInstruction *elem = (ProcessingInstruction*)tmp;
-      COLOR(PLAIN);
-      wprintf(L"<?%s %s?>", elem->getTarget()->getWChars(), elem->getData()->getWChars());
-      COLOR(NORM);
-
-      CharacterData *elem1 = (CharacterData*)elem;
-      elem1->getData();
-
-    };
-
-    if (tmp->getNodeType() == Node::COMMENT_NODE){
-      Comment *elem = (Comment*)tmp;
-      COLOR(PLAIN);
-      wprintf(L"<!--%s-->", elem->getData()->getWChars());
-      elem->getLength();
-      COLOR(NORM);
-    };
 
     tmp = tmp->getNextSibling();
   }while(tmp);

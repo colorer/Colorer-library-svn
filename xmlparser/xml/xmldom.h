@@ -19,6 +19,12 @@
  * for API review.
  */
 
+const short COMMENT_NODE = 0;
+const short DOCUMENT_NODE = 1;
+const short ELEMENT_NODE = 2;
+const short PROCESSING_INSTRUCTION_NODE = 3;
+const short TEXT_NODE = 4;
+
 class Node;
 class Document;
 class Element;
@@ -26,8 +32,6 @@ class ProcessingInstruction;
 class CharacterData;
 class Comment;
 class Text;
-
-class BinaryXMLWriter;
 
 /**
  * Basic XML Parser exception class
@@ -93,7 +97,7 @@ private:
 class DocumentBuilder
 {
 public:
-  DocumentBuilder() : ignoreComments(true), whitespace(true),
+  DocumentBuilder() : ignoreComments(true), ignoreWhitespace(true),
            er(null), inputSource(null) {}
 
   /**
@@ -113,16 +117,16 @@ public:
    * Ignores empty element's text content (content with only
    * spaces, tabs, CR/LF).
    */
-  void setIgnoringElementContentWhitespace(bool _whitespace)
+  void setIgnoringElementContentWhitespace(bool _ignoreWhitespace)
   {
-    whitespace = _whitespace;
+    ignoreWhitespace = _ignoreWhitespace;
   }
   /**
    * Retrieves whitespace ignore state.
    */
   inline bool isIgnoringElementContentWhitespace()
   {
-    return whitespace;
+    return ignoreWhitespace;
   }
 
   /**
@@ -154,7 +158,7 @@ public:
 
 protected:
   bool ignoreComments;
-  bool whitespace;
+  bool ignoreWhitespace;
   Hashtable<const String*> entitiesHash;
   Hashtable<const String*> extEntitiesHash;
 private:
@@ -245,12 +249,7 @@ private:
 class Node
 {
 public:
-  static const short COMMENT_NODE;
-  static const short DOCUMENT_NODE;
-  static const short ELEMENT_NODE;
-  static const short PROCESSING_INSTRUCTION_NODE;
-  static const short TEXT_NODE;
-
+  
   bool hasChildNodes()
   {
     return firstChild != null;
@@ -339,7 +338,7 @@ public:
   }
 
   Node *appendChild(Node *newChild){
-    if (newChild->getNodeType() == Node::ELEMENT_NODE)
+    if (newChild->getNodeType() == ELEMENT_NODE)
     {
       if (documentElement != null)
       {
@@ -359,7 +358,7 @@ public:
 protected:
   int line, pos;
   Element *documentElement;
-  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
+  Document() : Node(DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
   friend class DocumentBuilder;
 };
 
@@ -393,7 +392,7 @@ protected:
   Vector<const String*> attributes;
   Hashtable<const String*> attributesHash;
 
-  Element(const String *_tagName): Node(Node::ELEMENT_NODE, _tagName){};
+  Element(const String *_tagName): Node(ELEMENT_NODE, _tagName){};
 
   ~Element()
   {
@@ -433,7 +432,7 @@ protected:
   const String *target;
 
   ProcessingInstruction(const String *_target, const String *_data):
-        Node(Node::PROCESSING_INSTRUCTION_NODE, new DString("#pi")),
+        Node(PROCESSING_INSTRUCTION_NODE, new DString("#pi")),
         data(_data), target(_target) {}
 
   ~ProcessingInstruction()
@@ -479,7 +478,7 @@ class Comment : public CharacterData
 {
 public:
 protected:
-  Comment(const String *data): CharacterData(Node::COMMENT_NODE, data){};
+  Comment(const String *data): CharacterData(COMMENT_NODE, data){};
   friend class Document;
 };
 
@@ -491,7 +490,7 @@ class Text : public CharacterData
 {
 public:
 protected:
-  Text(const String *data): CharacterData(Node::TEXT_NODE, data){};
+  Text(const String *data): CharacterData(TEXT_NODE, data){};
   friend class Document;
 };
 

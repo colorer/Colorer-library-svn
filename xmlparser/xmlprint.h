@@ -1,7 +1,7 @@
 #ifndef _XMLPRINT_H_
 #define _XMLPRINT_H_
 
-#include"xmldom.h"
+#include "xml/xmldom.h"
 
 void ColorPrintInConsole(SString *testFile);
 void printLevel(Node *node, int lev);
