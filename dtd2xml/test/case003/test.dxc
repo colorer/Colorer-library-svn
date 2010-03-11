@@ -1,0 +1,4 @@
+INCLUDE "../cases.dxc"
+
+PUBLIC "-//Colorer//Test mod 1//EN" "%this.file%1.mod"
+IMPORT "%this.file%.dtd"

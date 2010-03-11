@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<project name="test.002" default="xsd" basedir=".">
+	<import file='../cases.xml'/>
+</project>

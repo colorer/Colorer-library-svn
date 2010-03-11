@@ -1,0 +1,15 @@
+<!-- just for test. not real dtd -->
+
+<!ENTITY % tst1 
+	PUBLIC "-//Colorer//Test mod 1//EN" 
+	"http://example.com/test1.mod"
+>
+%tst1;
+
+<!ENTITY % tst2 
+	SYSTEM "test2.mod"
+>
+%tst2;
+
+
+<!ELEMENT test (foo, bar)*>
