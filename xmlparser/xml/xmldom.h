@@ -19,12 +19,6 @@
  * for API review.
  */
 
-const short COMMENT_NODE = 0;
-const short DOCUMENT_NODE = 1;
-const short ELEMENT_NODE = 2;
-const short PROCESSING_INSTRUCTION_NODE = 3;
-const short TEXT_NODE = 4;
-
 class Node;
 class Document;
 class Element;
@@ -249,7 +243,14 @@ private:
 class Node
 {
 public:
-  
+  enum NodeType {
+        ELEMENT_NODE                = 1,
+        TEXT_NODE                   = 3,
+        PROCESSING_INSTRUCTION_NODE = 7,
+        COMMENT_NODE                = 8,
+        DOCUMENT_NODE               = 9,
+    };
+
   bool hasChildNodes()
   {
     return firstChild != null;
@@ -296,7 +297,7 @@ public:
     return null;
   };
 
-  int getNodeType()
+  NodeType getNodeType()
   {
     return type;
   }
@@ -315,12 +316,12 @@ public:
     delete name;
   };
 protected:
-  int type;
+  NodeType type;
   Node *next, *prev;
   Node *parent, *firstChild;
   const String *name;
   Document *ownerDocument;
-  Node(int _type, const String *_name): type(_type), next(null),
+  Node(NodeType _type, const String *_name): type(_type), next(null),
     prev(null), parent(null), firstChild(null), name(_name) {};
 };
 
@@ -338,7 +339,7 @@ public:
   }
 
   Node *appendChild(Node *newChild){
-    if (newChild->getNodeType() == ELEMENT_NODE)
+    if (newChild->getNodeType() == Node::ELEMENT_NODE)
     {
       if (documentElement != null)
       {
@@ -358,7 +359,7 @@ public:
 protected:
   int line, pos;
   Element *documentElement;
-  Document() : Node(DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
+  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
   friend class DocumentBuilder;
 };
 
@@ -392,7 +393,7 @@ protected:
   Vector<const String*> attributes;
   Hashtable<const String*> attributesHash;
 
-  Element(const String *_tagName): Node(ELEMENT_NODE, _tagName){};
+  Element(const String *_tagName): Node(Node::ELEMENT_NODE, _tagName){};
 
   ~Element()
   {
@@ -432,7 +433,7 @@ protected:
   const String *target;
 
   ProcessingInstruction(const String *_target, const String *_data):
-        Node(PROCESSING_INSTRUCTION_NODE, new DString("#pi")),
+        Node(Node::PROCESSING_INSTRUCTION_NODE, new DString("#pi")),
         data(_data), target(_target) {}
 
   ~ProcessingInstruction()
@@ -465,7 +466,7 @@ protected:
 
   const String *data;
 
-  CharacterData(int type, const String *_data): Node(type, new DString("#cdata")), data(_data) {};
+  CharacterData(NodeType type, const String *_data): Node(type, new DString("#cdata")), data(_data) {};
   ~CharacterData(){ delete data; };
   friend class Document;
 };
@@ -478,7 +479,7 @@ class Comment : public CharacterData
 {
 public:
 protected:
-  Comment(const String *data): CharacterData(COMMENT_NODE, data){};
+  Comment(const String *data): CharacterData(Node::COMMENT_NODE, data){};
   friend class Document;
 };
 
@@ -490,7 +491,7 @@ class Text : public CharacterData
 {
 public:
 protected:
-  Text(const String *data): CharacterData(TEXT_NODE, data){};
+  Text(const String *data): CharacterData(Node::TEXT_NODE, data){};
   friend class Document;
 };
 

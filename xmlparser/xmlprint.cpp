@@ -37,7 +37,7 @@ void printLevel(Node *node, int lev)
 
   do{
     switch (tmp->getNodeType()){
-      case DOCUMENT_NODE:
+      case Node::DOCUMENT_NODE:
         {
           Node *elem = ((Document*)tmp)->getFirstChild();
           if (elem){
@@ -45,7 +45,7 @@ void printLevel(Node *node, int lev)
           }
         }
         break;
-      case ELEMENT_NODE:
+      case Node::ELEMENT_NODE:
         {
           Element *elem = (Element*)tmp;
 
@@ -83,7 +83,7 @@ void printLevel(Node *node, int lev)
           COLOR(NORM);
         }
         break;
-      case TEXT_NODE:
+      case Node::TEXT_NODE:
         {
           Text *elem = (Text*)tmp;
           COLOR(PLAIN);
@@ -91,7 +91,7 @@ void printLevel(Node *node, int lev)
           COLOR(NORM);
         }
         break;
-      case PROCESSING_INSTRUCTION_NODE:
+      case Node::PROCESSING_INSTRUCTION_NODE:
         {
           ProcessingInstruction *elem = (ProcessingInstruction*)tmp;
           COLOR(PLAIN);
@@ -99,7 +99,7 @@ void printLevel(Node *node, int lev)
           COLOR(NORM);
         }
         break;
-      case COMMENT_NODE:
+      case Node::COMMENT_NODE:
         {
           Comment *elem = (Comment*)tmp;
           COLOR(PLAIN);
