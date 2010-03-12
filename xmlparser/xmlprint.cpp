@@ -1,3 +1,6 @@
+#ifdef _DEBUG
+#include<vld.h>
+#endif
 #include "xmlprint.h"
 #include <windows.h>
 #include <wchar.h>
@@ -16,7 +19,7 @@ void ColorPrintInConsole(SString *testFile)
   try{
     DocumentBuilder *db = new DocumentBuilder();
     db->setIgnoringComments(false);
-    db->setIgnoringElementContentWhitespace(false);
+    db->setIgnoringElementContentWhitespace(true);
     Document *doc = db->parse(&fis);
 
     printLevel(doc, 0);
@@ -39,6 +42,10 @@ void printLevel(Node *node, int lev)
     switch (tmp->getNodeType()){
       case Node::DOCUMENT_NODE:
         {
+          COLOR(PLAIN);
+          wprintf(L"<?xml version=\"%s\" encoding=\"%s\"?>\n", ((Document*)tmp)->getXmlVersion()->getWChars(),((Document*)tmp)->getXmlEncoding()->getWChars());
+          COLOR(NORM);
+
           Node *elem = ((Document*)tmp)->getFirstChild();
           if (elem){
             printLevel(elem, lev);
@@ -71,7 +78,6 @@ void printLevel(Node *node, int lev)
           if (tmp->hasChildNodes()){
             printLevel(elem->getFirstChild(), lev+1);
           };
-
           for(i = 0; i < lev*3; i++) wprintf(L" ");
 
           COLOR(BR);
@@ -95,15 +101,16 @@ void printLevel(Node *node, int lev)
         {
           ProcessingInstruction *elem = (ProcessingInstruction*)tmp;
           COLOR(PLAIN);
-          wprintf(L"<?%s %s?>", elem->getTarget()->getWChars(), elem->getData()->getWChars());
+          wprintf(L"<?%s %s?>\n", elem->getTarget()->getWChars(), elem->getData()->getWChars());
           COLOR(NORM);
         }
         break;
       case Node::COMMENT_NODE:
         {
           Comment *elem = (Comment*)tmp;
+          for(i = 0; i < lev*3; i++) wprintf(L" ");
           COLOR(PLAIN);
-          wprintf(L"<!--%s-->", elem->getData()->getWChars());
+          wprintf(L"<!--%s-->\n", elem->getData()->getWChars());
           elem->getLength();
           COLOR(NORM);
         }

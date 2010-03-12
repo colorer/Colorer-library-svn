@@ -167,7 +167,7 @@ private:
   static bool getXMLNumber(const String &str, int *res);
 
   void consumeDocument();
-  void consumeXmlDecl();
+  void consumeXmlDecl(Node *root);
   void consumeDTD();
   bool isElement();
   void consumeElement(Node *root);
@@ -338,6 +338,16 @@ public:
     return documentElement;
   }
 
+  String *getXmlVersion()
+  {
+    return xmlVersion;
+  }
+
+  String *getXmlEncoding()
+  {
+    return xmlEncoding;
+  }
+
   Node *appendChild(Node *newChild){
     if (newChild->getNodeType() == Node::ELEMENT_NODE)
     {
@@ -359,7 +369,10 @@ public:
 protected:
   int line, pos;
   Element *documentElement;
-  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
+  bool useBOM;
+  String *xmlVersion;
+  String *xmlEncoding;
+  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null), useBOM(false) {};
   friend class DocumentBuilder;
 };
 

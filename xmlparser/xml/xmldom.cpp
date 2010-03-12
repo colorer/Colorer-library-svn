@@ -50,6 +50,7 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
   src_overflow = null;
   if (src[0] == Encodings::ENC_UTF16_BOM){
     ppos++;
+    doc->useBOM = true;
   }
 
   try{
@@ -72,7 +73,7 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
 }
 
 void DocumentBuilder::consumeDocument(){
-  consumeXmlDecl();
+  consumeXmlDecl(doc);
   consumeMisc(doc);
   consumeDTD();
   consumeMisc(doc);
@@ -83,7 +84,7 @@ void DocumentBuilder::consumeDocument(){
   }
 }
 
-void DocumentBuilder::consumeXmlDecl(){
+void DocumentBuilder::consumeXmlDecl(Node *root){
   wchar c1 = peek(0);
   wchar c2 = peek(1);
   if (c1 != '<' || c2 != '?') return;
@@ -95,7 +96,7 @@ void DocumentBuilder::consumeXmlDecl(){
   consumeSpaces();
   consume("=", 1);
   consumeSpaces();
-  delete consumeQoutedValue();
+  doc->xmlVersion = consumeQoutedValue();
 
   consumeSpaces();
 
@@ -104,7 +105,7 @@ void DocumentBuilder::consumeXmlDecl(){
     consumeSpaces();
     consume("=", 1);
     consumeSpaces();
-    delete consumeQoutedValue();
+    doc->xmlEncoding = consumeQoutedValue();
   }
 
   consumeSpaces();
