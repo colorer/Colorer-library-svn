@@ -221,7 +221,7 @@ void DocumentBuilder::consumeElement(Node *root){
   }
 
   if (peek(0) == '/' && peek(1) == '>'){
-    consume("/>", 1);
+    consume("/>", 2);
   }else{
     consume(">", 1);
 
