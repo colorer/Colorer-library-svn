@@ -124,3 +124,23 @@ void printLevelColor(Node *node, int lev)
     tmp = tmp->getNextSibling();
   }while(tmp);
 };
+
+
+void SaveToFile(SString *inFile, SString *outFile)
+{
+  FileInputSource fis = FileInputSource(inFile, null);
+  try{
+    DocumentBuilder *db = new DocumentBuilder();
+    db->setIgnoringComments(false);
+    db->setIgnoringElementContentWhitespace(true);
+    Document *doc = db->parse(&fis);
+    doc->saveToFile(outFile);
+    db->free(doc);
+    delete db;
+  }catch(Exception &e){
+    wprintf(L"\nException: %s\n\n", e.getMessage()->getWChars());
+  }catch(...){
+    wprintf(L"Unknown exception\n");
+  }
+
+}

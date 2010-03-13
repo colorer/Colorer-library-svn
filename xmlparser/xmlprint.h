@@ -5,5 +5,6 @@
 
 void PrintInConsole(SString *inFile,bool color);
 void printLevelColor(Node *node, int lev);
+void SaveToFile(SString *inFile, SString *outFile);
 
 #endif _XMLPRINT_H_

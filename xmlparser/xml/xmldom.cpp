@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include"xmldom.h"
 #include<unicode/UnicodeTools.h>
+#include<common/io/FileWriter.h>
 
 Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
 {
@@ -818,6 +819,20 @@ SString *Comment::toString(short level, short countSpaceInLevel)
 SString *Text::toString(short level, short countSpaceInLevel)
 {
   return new SString(getData());
+}
+
+void Document::saveToFile(String *filename)
+{
+  Writer *commonWriter = null;
+  try{
+    commonWriter = new FileWriter(filename, Encodings::getEncodingIndex(xmlEncoding->getChars()), useBOM);
+  }catch(Exception &e){
+    throw e;
+  }
+
+  commonWriter->write(toString(0,3));
+  delete commonWriter;
+
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

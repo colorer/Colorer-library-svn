@@ -365,6 +365,11 @@ public:
     return xmlEncoding;
   }
 
+  void setXmlEncoding(String *_xmlEncoding)
+  {
+    xmlEncoding = _xmlEncoding;
+  }
+
   Node *appendChild(Node *newChild){
     if (newChild->getNodeType() == Node::ELEMENT_NODE)
     {
@@ -379,6 +384,7 @@ public:
   }
 
   SString *toString(short level, short countSpaceInLevel);
+  void saveToFile(String *filename);
 
   Element *createElement(const String *tagName);
   Text *createTextNode(const String *data);

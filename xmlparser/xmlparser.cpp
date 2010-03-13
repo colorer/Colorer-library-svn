@@ -2,11 +2,12 @@
 #include "xmlprint.h"
 
 
-enum JobType { JT_NOTHING, JT_TEST1, JT_TEST2};
+enum JobType { JT_NOTHING, JT_TEST1, JT_TEST2, JT_TEST3};
 
 int loops = 1;
 JobType job = JT_NOTHING;
 SString *testFile = NULL;
+SString *outFile = NULL;
 
 void printError(){
   wprintf(
@@ -15,10 +16,12 @@ void printError(){
     L"  -t<n>      Run the test number <n>\n"
     L" Parameters:\n"
     L"  -c<n>      Number of test runs\n"
-    L"  -f<path>   Test file\n\n"
+    L"  -f<path>   Test file\n"
+    L"  -o<path>   Out file\n\n"
     L" Test:\n"
     L"   1         ColorPrintInConsole\n"
-    L"   1         PrintInConsole\n"
+    L"   2         PrintInConsole\n"
+    L"   3         SaveToFile\n"
     );
 };
 
@@ -55,6 +58,15 @@ int init(int argc, wchar_t *argv[])
       }
       continue;
     }
+    if (argv[i][1] == L'o' && (i+1 < argc || argv[i][2])){
+      if (argv[i][2]){
+        outFile=new SString(DString(argv[i]+2));
+      }else{
+        outFile=new SString(DString(argv[i+1]));
+        i++;
+      }
+      continue;
+    }
     if (argv[i][1]) 
     {
       wprintf(L"WARNING: unknown option '-%s'\n", argv[i]+1);
@@ -81,6 +93,9 @@ int wmain(int argc, wchar_t *argv[])
       break;
     case JT_TEST2:
       PrintInConsole(testFile,false);
+      break;
+    case JT_TEST3:
+      SaveToFile(testFile,outFile);
       break;
     }
   }catch(...){
