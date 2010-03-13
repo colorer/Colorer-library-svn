@@ -270,6 +270,17 @@ public:
     }
   }
 
+  int getCountChild()
+  {
+    Node *tmp=firstChild;
+    int c=0;
+    while (tmp){
+      c++;
+      tmp = tmp->getNextSibling();
+    }
+    return c;    
+  }
+
   Node *getParent()
   {
     return parent;
@@ -308,6 +319,12 @@ public:
   }
 
   virtual Node *appendChild(Node *newChild);
+
+  /*  Saves the contents of the class in a string
+   *  @level - level of child compared with root
+   *  @countSpaceInLevel - size of the indentation level
+   */
+  virtual SString *toString(short level, short countSpaceInLevel) {return new SString("");};
 
   //virtual Node *cloneNode(bool deep) = 0;
 
@@ -361,6 +378,8 @@ public:
     return newChild;
   }
 
+  SString *toString(short level, short countSpaceInLevel);
+
   Element *createElement(const String *tagName);
   Text *createTextNode(const String *data);
   Comment *createComment(const String *data);
@@ -400,6 +419,7 @@ public:
   };
 
   void setAttribute(const String *name, const String *value);
+  SString *toString(short level, short countSpaceInLevel);
 
 protected:
   // TODO: static tagName index
@@ -440,6 +460,7 @@ public:
     return target;
   }
 
+  SString *toString(short level, short countSpaceInLevel);
 protected:
 
   const String *data;
@@ -491,6 +512,7 @@ protected:
 class Comment : public CharacterData
 {
 public:
+  SString *toString(short level, short countSpaceInLevel);
 protected:
   Comment(const String *data): CharacterData(Node::COMMENT_NODE, data){};
   friend class Document;
@@ -503,6 +525,7 @@ protected:
 class Text : public CharacterData
 {
 public:
+  SString *toString(short level, short countSpaceInLevel);
 protected:
   Text(const String *data): CharacterData(Node::TEXT_NODE, data){};
   friend class Document;

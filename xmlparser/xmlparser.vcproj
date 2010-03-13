@@ -324,11 +324,35 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\shared\common\io\FileWriter.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\shared\common\io\FileWriter.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\shared\common\io\InputSource.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\shared\common\io\InputSource.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\shared\common\io\StreamWriter.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\shared\common\io\StreamWriter.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\shared\common\io\Writer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\shared\common\io\Writer.h"
 						>
 					</File>
 				</Filter>

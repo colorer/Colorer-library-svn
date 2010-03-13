@@ -13,16 +13,19 @@
 #define PAR   0x0C
 #define PLAIN 0x09
 
-void ColorPrintInConsole(SString *testFile)
+void PrintInConsole(SString *inFile, bool color)
 {
-  FileInputSource fis = FileInputSource(testFile, null);
+  FileInputSource fis = FileInputSource(inFile, null);
   try{
     DocumentBuilder *db = new DocumentBuilder();
     db->setIgnoringComments(false);
     db->setIgnoringElementContentWhitespace(true);
     Document *doc = db->parse(&fis);
-
-    printLevel(doc, 0);
+    if (color){
+      printLevelColor(doc, 0);
+    }else{
+      wprintf(doc->toString(0,3)->getWChars());
+    }
 
     db->free(doc);
     delete db;
@@ -33,7 +36,8 @@ void ColorPrintInConsole(SString *testFile)
   }
 
 }
-void printLevel(Node *node, int lev)
+
+void printLevelColor(Node *node, int lev)
 {
   int i;
   Node *tmp = node;
@@ -48,7 +52,7 @@ void printLevel(Node *node, int lev)
 
           Node *elem = ((Document*)tmp)->getFirstChild();
           if (elem){
-            printLevel(elem, lev);
+            printLevelColor(elem, lev);
           }
         }
         break;
@@ -76,7 +80,7 @@ void printLevel(Node *node, int lev)
           wprintf(L">\n");
 
           if (tmp->hasChildNodes()){
-            printLevel(elem->getFirstChild(), lev+1);
+            printLevelColor(elem->getFirstChild(), lev+1);
           };
           for(i = 0; i < lev*3; i++) wprintf(L" ");
 

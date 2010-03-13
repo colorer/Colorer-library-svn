@@ -2,7 +2,7 @@
 #include "xmlprint.h"
 
 
-enum JobType { JT_NOTHING, JT_TEST1};
+enum JobType { JT_NOTHING, JT_TEST1, JT_TEST2};
 
 int loops = 1;
 JobType job = JT_NOTHING;
@@ -18,6 +18,7 @@ void printError(){
     L"  -f<path>   Test file\n\n"
     L" Test:\n"
     L"   1         ColorPrintInConsole\n"
+    L"   1         PrintInConsole\n"
     );
 };
 
@@ -76,7 +77,10 @@ int wmain(int argc, wchar_t *argv[])
       printError();
       break;
     case JT_TEST1:
-      ColorPrintInConsole(testFile);
+      PrintInConsole(testFile,true);
+      break;
+    case JT_TEST2:
+      PrintInConsole(testFile,false);
       break;
     }
   }catch(...){

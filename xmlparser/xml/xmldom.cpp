@@ -725,6 +725,101 @@ Text *Document::createTextNode(const String *data)
   text->ownerDocument = this;
   return text;
 }
+
+SString *Document::toString(short level, short countSpaceInLevel)
+{
+  StringBuffer *st = new StringBuffer();
+  st->append(DString("<?xml version=\""));
+  st->append(getXmlVersion());
+  st->append(DString("\" encoding=\""));
+  st->append(getXmlEncoding());
+  st->append(DString("\"?>\n"));
+  Node *rmnext = getFirstChild();
+  while (rmnext){
+    st->append(rmnext->toString(level, countSpaceInLevel));
+    rmnext = rmnext->getNextSibling();
+  }
+  return st;
+}
+
+SString *Element::toString(short level, short countSpaceInLevel)
+{
+  StringBuffer *st = new StringBuffer();
+
+  DString qoute = DString("\"");
+  DString gtn = DString(">\n");
+  DString space = DString(" ");
+
+  for(int i = 0; i < level*countSpaceInLevel; i++){
+    st->append(space);
+  }
+  st->append(DString("<"));
+  st->append(getNodeName());
+ 
+  // writes attributes of node
+  const Vector<const String*> *attrs = getAttributes();
+  for (int i = 0; i < attrs->size(); i++){
+    st->append(space);
+    st->append(attrs->elementAt(i));
+    st->append(DString("="));
+
+    st->append(qoute);
+    st->append(getAttribute(attrs->elementAt(i)));
+    st->append(qoute);
+  };
+  st->append(DString(">"));
+
+  if ((getCountChild()==1)&&(getFirstChild()->getNodeType()==Node::TEXT_NODE)){
+    st->append(getFirstChild()->toString(0,0));
+  }else{
+    if (hasChildNodes()){
+      st->append(DString("\n"));
+      Node *rmnext = getFirstChild();
+      while (rmnext){
+        st->append(rmnext->toString(level+1, countSpaceInLevel));
+        rmnext = rmnext->getNextSibling();
+      }
+
+      for(int i = 0; i < level*countSpaceInLevel; i++){
+        st->append(space);
+      }
+    }
+  }
+  st->append(DString("</"));
+  st->append(getNodeName());
+  st->append(gtn);
+  return st;
+}
+
+SString *ProcessingInstruction::toString(short level, short countSpaceInLevel)
+{
+  StringBuffer *st = new StringBuffer();
+  st->append(DString("<?"));
+  st->append(getTarget());
+  st->append(DString(" "));
+  st->append(getData());
+  st->append(DString("?>\n"));
+  return st;
+}
+
+SString *Comment::toString(short level, short countSpaceInLevel)
+{
+  StringBuffer *st = new StringBuffer();
+  DString space = DString(" ");
+  for(int i = 0; i < level*countSpaceInLevel; i++){
+    st->append(space);
+  }
+  st->append(DString("<!--"));
+  st->append(getData());
+  st->append(DString("-->\n"));
+  return st;
+}
+
+SString *Text::toString(short level, short countSpaceInLevel)
+{
+  return new SString(getData());
+}
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

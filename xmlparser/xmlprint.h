@@ -3,7 +3,7 @@
 
 #include "xml/xmldom.h"
 
-void ColorPrintInConsole(SString *testFile);
-void printLevel(Node *node, int lev);
+void PrintInConsole(SString *inFile,bool color);
+void printLevelColor(Node *node, int lev);
 
 #endif _XMLPRINT_H_
