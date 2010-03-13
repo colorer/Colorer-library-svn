@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. при сохранении Node в виде строки , преобразуем <>"&' в "правильные" символы 
+	2. getCountChild -> getChildrenCount, countSpaceInLevel -> spacesInLevel
+
+#Revision: 1462
+	#Author: ctapmex Date: 2010-03-13 22:00:30 +0500 (Сб, 13 мар 2010)
 	1. функция Document::saveToFile, сохраняем содержимое в файл.
 	2. доп. опция для вывода в файл тестового документа.
 

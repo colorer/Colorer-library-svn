@@ -270,7 +270,7 @@ public:
     }
   }
 
-  int getCountChild()
+  int getChildrenCount()
   {
     Node *tmp=firstChild;
     int c=0;

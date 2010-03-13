@@ -4,6 +4,17 @@
 #include<unicode/UnicodeTools.h>
 #include<common/io/FileWriter.h>
 
+String *replaceEntity(const String *st)
+{
+  String *nst;
+  nst=st->replace(DString("&"),DString("&amp;"));
+  nst=nst->replace(DString("<"),DString("&lt;"));
+  nst=nst->replace(DString(">"),DString("&gt;"));
+  nst=nst->replace(DString("\""),DString("&quot;"));
+  nst=nst->replace(DString("\'"),DString("&apos;"));
+  return nst;
+}
+
 Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
 {
   const byte *bytes = is->openStream();
@@ -727,7 +738,7 @@ Text *Document::createTextNode(const String *data)
   return text;
 }
 
-SString *Document::toString(short level, short countSpaceInLevel)
+SString *Document::toString(short level, short spacesInLevel)
 {
   StringBuffer *st = new StringBuffer();
   st->append(DString("<?xml version=\""));
@@ -737,13 +748,13 @@ SString *Document::toString(short level, short countSpaceInLevel)
   st->append(DString("\"?>\n"));
   Node *rmnext = getFirstChild();
   while (rmnext){
-    st->append(rmnext->toString(level, countSpaceInLevel));
+    st->append(rmnext->toString(level, spacesInLevel));
     rmnext = rmnext->getNextSibling();
   }
   return st;
 }
 
-SString *Element::toString(short level, short countSpaceInLevel)
+SString *Element::toString(short level, short spacesInLevel)
 {
   StringBuffer *st = new StringBuffer();
 
@@ -751,7 +762,7 @@ SString *Element::toString(short level, short countSpaceInLevel)
   DString gtn = DString(">\n");
   DString space = DString(" ");
 
-  for(int i = 0; i < level*countSpaceInLevel; i++){
+  for(int i = 0; i < level*spacesInLevel; i++){
     st->append(space);
   }
   st->append(DString("<"));
@@ -765,23 +776,23 @@ SString *Element::toString(short level, short countSpaceInLevel)
     st->append(DString("="));
 
     st->append(qoute);
-    st->append(getAttribute(attrs->elementAt(i)));
+    st->append(replaceEntity(getAttribute(attrs->elementAt(i))));
     st->append(qoute);
   };
   st->append(DString(">"));
 
-  if ((getCountChild()==1)&&(getFirstChild()->getNodeType()==Node::TEXT_NODE)){
+  if ((getChildrenCount()==1)&&(getFirstChild()->getNodeType()==Node::TEXT_NODE)){
     st->append(getFirstChild()->toString(0,0));
   }else{
     if (hasChildNodes()){
       st->append(DString("\n"));
       Node *rmnext = getFirstChild();
       while (rmnext){
-        st->append(rmnext->toString(level+1, countSpaceInLevel));
+        st->append(rmnext->toString(level+1, spacesInLevel));
         rmnext = rmnext->getNextSibling();
       }
 
-      for(int i = 0; i < level*countSpaceInLevel; i++){
+      for(int i = 0; i < level*spacesInLevel; i++){
         st->append(space);
       }
     }
@@ -792,7 +803,7 @@ SString *Element::toString(short level, short countSpaceInLevel)
   return st;
 }
 
-SString *ProcessingInstruction::toString(short level, short countSpaceInLevel)
+SString *ProcessingInstruction::toString(short level, short spacesInLevel)
 {
   StringBuffer *st = new StringBuffer();
   st->append(DString("<?"));
@@ -803,11 +814,11 @@ SString *ProcessingInstruction::toString(short level, short countSpaceInLevel)
   return st;
 }
 
-SString *Comment::toString(short level, short countSpaceInLevel)
+SString *Comment::toString(short level, short spacesInLevel)
 {
   StringBuffer *st = new StringBuffer();
   DString space = DString(" ");
-  for(int i = 0; i < level*countSpaceInLevel; i++){
+  for(int i = 0; i < level*spacesInLevel; i++){
     st->append(space);
   }
   st->append(DString("<!--"));
@@ -816,19 +827,15 @@ SString *Comment::toString(short level, short countSpaceInLevel)
   return st;
 }
 
-SString *Text::toString(short level, short countSpaceInLevel)
+SString *Text::toString(short level, short spacesInLevel)
 {
-  return new SString(getData());
+  return new SString(replaceEntity(getData()));
 }
 
 void Document::saveToFile(String *filename)
 {
   Writer *commonWriter = null;
-  try{
-    commonWriter = new FileWriter(filename, Encodings::getEncodingIndex(xmlEncoding->getChars()), useBOM);
-  }catch(Exception &e){
-    throw e;
-  }
+  commonWriter = new FileWriter(filename, Encodings::getEncodingIndex(xmlEncoding->getChars()), useBOM);
 
   commonWriter->write(toString(0,3));
   delete commonWriter;
