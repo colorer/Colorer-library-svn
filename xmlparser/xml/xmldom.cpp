@@ -2,17 +2,20 @@
 #include<stdio.h>
 #include"xmldom.h"
 #include<unicode/UnicodeTools.h>
-#include<common/io/FileWriter.h>
 
 String *replaceEntity(const String *st)
 {
-  String *nst;
-  nst=st->replace(DString("&"),DString("&amp;"));
-  nst=nst->replace(DString("<"),DString("&lt;"));
-  nst=nst->replace(DString(">"),DString("&gt;"));
-  nst=nst->replace(DString("\""),DString("&quot;"));
-  nst=nst->replace(DString("\'"),DString("&apos;"));
-  return nst;
+  String *nst1, *nst2;
+  nst1=st->replace(DString("&"),DString("&amp;"));
+  nst2=nst1->replace(DString("<"),DString("&lt;"));
+  delete nst1;
+  nst1=nst2->replace(DString(">"),DString("&gt;"));
+  delete nst2;
+  nst2=nst1->replace(DString("\""),DString("&quot;"));
+  delete nst1;
+  nst1=nst2->replace(DString("\'"),DString("&apos;"));
+  delete nst2;
+  return nst1;
 }
 
 Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
@@ -738,108 +741,89 @@ Text *Document::createTextNode(const String *data)
   return text;
 }
 
-SString *Document::toString(short level, short spacesInLevel)
+void Document::serialize(Writer *writer, short level, short spacesInLevel)
 {
-  StringBuffer *st = new StringBuffer();
-  st->append(DString("<?xml version=\""));
-  st->append(getXmlVersion());
-  st->append(DString("\" encoding=\""));
-  st->append(getXmlEncoding());
-  st->append(DString("\"?>\n"));
+  writer->write(DString("<?xml version=\""));
+  writer->write(getXmlVersion());
+  writer->write(DString("\" encoding=\""));
+  writer->write(getXmlEncoding());
+  writer->write(DString("\"?>\n"));
   Node *rmnext = getFirstChild();
   while (rmnext){
-    st->append(rmnext->toString(level, spacesInLevel));
+    rmnext->serialize(writer, level, spacesInLevel);
     rmnext = rmnext->getNextSibling();
   }
-  return st;
 }
 
-SString *Element::toString(short level, short spacesInLevel)
+void Element::serialize(Writer *writer, short level, short spacesInLevel)
 {
-  StringBuffer *st = new StringBuffer();
-
   DString qoute = DString("\"");
   DString gtn = DString(">\n");
   DString space = DString(" ");
 
   for(int i = 0; i < level*spacesInLevel; i++){
-    st->append(space);
+    writer->write(space);
   }
-  st->append(DString("<"));
-  st->append(getNodeName());
+  writer->write(DString("<"));
+  writer->write(getNodeName());
  
   // writes attributes of node
   const Vector<const String*> *attrs = getAttributes();
   for (int i = 0; i < attrs->size(); i++){
-    st->append(space);
-    st->append(attrs->elementAt(i));
-    st->append(DString("="));
+    writer->write(space);
+    writer->write(attrs->elementAt(i));
+    writer->write(DString("="));
 
-    st->append(qoute);
-    st->append(replaceEntity(getAttribute(attrs->elementAt(i))));
-    st->append(qoute);
+    writer->write(qoute);
+    writer->write(replaceEntity(getAttribute(attrs->elementAt(i))));
+    writer->write(qoute);
   };
-  st->append(DString(">"));
+  writer->write(DString(">"));
 
   if ((getChildrenCount()==1)&&(getFirstChild()->getNodeType()==Node::TEXT_NODE)){
-    st->append(getFirstChild()->toString(0,0));
+    getFirstChild()->serialize(writer,0,0);
   }else{
     if (hasChildNodes()){
-      st->append(DString("\n"));
+      writer->write(DString("\n"));
       Node *rmnext = getFirstChild();
       while (rmnext){
-        st->append(rmnext->toString(level+1, spacesInLevel));
+        rmnext->serialize(writer, level+1, spacesInLevel);
         rmnext = rmnext->getNextSibling();
       }
 
       for(int i = 0; i < level*spacesInLevel; i++){
-        st->append(space);
+        writer->write(space);
       }
     }
   }
-  st->append(DString("</"));
-  st->append(getNodeName());
-  st->append(gtn);
-  return st;
+  writer->write(DString("</"));
+  writer->write(getNodeName());
+  writer->write(gtn);
 }
 
-SString *ProcessingInstruction::toString(short level, short spacesInLevel)
+void ProcessingInstruction::serialize(Writer *writer, short level, short spacesInLevel)
 {
-  StringBuffer *st = new StringBuffer();
-  st->append(DString("<?"));
-  st->append(getTarget());
-  st->append(DString(" "));
-  st->append(getData());
-  st->append(DString("?>\n"));
-  return st;
+  writer->write(DString("<?"));
+  writer->write(getTarget());
+  writer->write(DString(" "));
+  writer->write(getData());
+  writer->write(DString("?>\n"));
 }
 
-SString *Comment::toString(short level, short spacesInLevel)
+void Comment::serialize(Writer *writer, short level, short spacesInLevel)
 {
-  StringBuffer *st = new StringBuffer();
   DString space = DString(" ");
   for(int i = 0; i < level*spacesInLevel; i++){
-    st->append(space);
+    writer->write(space);
   }
-  st->append(DString("<!--"));
-  st->append(getData());
-  st->append(DString("-->\n"));
-  return st;
+  writer->write(DString("<!--"));
+  writer->write(getData());
+  writer->write(DString("-->\n"));
 }
 
-SString *Text::toString(short level, short spacesInLevel)
+void Text::serialize(Writer *writer, short level, short spacesInLevel)
 {
-  return new SString(replaceEntity(getData()));
-}
-
-void Document::saveToFile(String *filename)
-{
-  Writer *commonWriter = null;
-  commonWriter = new FileWriter(filename, Encodings::getEncodingIndex(xmlEncoding->getChars()), useBOM);
-
-  commonWriter->write(toString(0,3));
-  delete commonWriter;
-
+  writer->write(replaceEntity(getData()));
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

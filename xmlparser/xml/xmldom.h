@@ -4,6 +4,7 @@
 #include<common/Vector.h>
 #include<common/Hashtable.h>
 #include<common/io/InputSource.h>
+#include<common/io/Writer.h>
 
 /**
  * If true, traces line/column of an errors in the document
@@ -322,9 +323,9 @@ public:
 
   /*  Saves the contents of the class in a string
    *  @level - level of child compared with root
-   *  @countSpaceInLevel - size of the indentation level
+   *  @spacesInLevel - size of the indentation level
    */
-  virtual SString *toString(short level, short countSpaceInLevel) {return new SString("");};
+  virtual void serialize(Writer *writer, short level, short spacesInLevel) {};
 
   //virtual Node *cloneNode(bool deep) = 0;
 
@@ -365,6 +366,11 @@ public:
     return xmlEncoding;
   }
 
+  bool getUseBOM()
+  {
+    return useBOM;
+  }
+
   void setXmlEncoding(String *_xmlEncoding)
   {
     xmlEncoding = _xmlEncoding;
@@ -383,8 +389,7 @@ public:
     return newChild;
   }
 
-  SString *toString(short level, short countSpaceInLevel);
-  void saveToFile(String *filename);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 
   Element *createElement(const String *tagName);
   Text *createTextNode(const String *data);
@@ -425,7 +430,7 @@ public:
   };
 
   void setAttribute(const String *name, const String *value);
-  SString *toString(short level, short countSpaceInLevel);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 
 protected:
   // TODO: static tagName index
@@ -466,7 +471,7 @@ public:
     return target;
   }
 
-  SString *toString(short level, short countSpaceInLevel);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
 
   const String *data;
@@ -518,7 +523,7 @@ protected:
 class Comment : public CharacterData
 {
 public:
-  SString *toString(short level, short countSpaceInLevel);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
   Comment(const String *data): CharacterData(Node::COMMENT_NODE, data){};
   friend class Document;
@@ -531,7 +536,7 @@ protected:
 class Text : public CharacterData
 {
 public:
-  SString *toString(short level, short countSpaceInLevel);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
   Text(const String *data): CharacterData(Node::TEXT_NODE, data){};
   friend class Document;

@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. toString переделан в serialize(Writer *writer, short level, short spacesInLevel)
+	2. Document::saveToFile убрана
+
+#Revision: 1463
+	#Author: ctapmex Date: 2010-03-13 23:46:53 +0500 (Сб, 13 мар 2010)
 	1. при сохранении Node в виде строки , преобразуем <>"&' в "правильные" символы 
 	2. getCountChild -> getChildrenCount, countSpaceInLevel -> spacesInLevel
 

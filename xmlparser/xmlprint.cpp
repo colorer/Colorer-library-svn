@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <wchar.h>
 #include<common/io/FileInputSource.h>
+#include<common/io/FileWriter.h>
 
 #define COLOR(c) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),c)
 #define BR    0x0E
@@ -24,7 +25,7 @@ void PrintInConsole(SString *inFile, bool color)
     if (color){
       printLevelColor(doc, 0);
     }else{
-      wprintf(doc->toString(0,3)->getWChars());
+      //wprintf(doc->toString(0,3)->getWChars());
     }
 
     db->free(doc);
@@ -134,7 +135,12 @@ void SaveToFile(SString *inFile, SString *outFile)
     db->setIgnoringComments(false);
     db->setIgnoringElementContentWhitespace(true);
     Document *doc = db->parse(&fis);
-    doc->saveToFile(outFile);
+
+    Writer *commonWriter = null;
+    commonWriter = new FileWriter(outFile, Encodings::getEncodingIndex(doc->getXmlEncoding()->getChars()), doc->getUseBOM());
+    doc->serialize(commonWriter,0,3);
+    delete commonWriter;
+
     db->free(doc);
     delete db;
   }catch(Exception &e){
