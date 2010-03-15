@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Node::insertBefore, Node::removeChild, Element::removeAttribute
+
+#Revision: 1465
+	#Author: ctapmex Date: 2010-03-15 15:07:19 +0500 (Пн, 15 мар 2010)
 	1. Node переделан под классический двусвязный список.
 
 #Revision: 1464

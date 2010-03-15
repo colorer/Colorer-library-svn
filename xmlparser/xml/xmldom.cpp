@@ -694,6 +694,55 @@ Node *Node::appendChild(Node *newChild)
   return newChild;
 }
 
+Node *Node::insertBefore(Node *newChild, Node *refChild)
+{
+  if (!refChild){
+    return appendChild(newChild);
+  }
+  newChild->prev = refChild->prev;
+  newChild->next = refChild;
+  if (refChild->prev == null){
+    firstChild = newChild;
+  }else{
+    refChild->prev->next = newChild;
+  }
+  refChild->prev = newChild;
+
+  return newChild;
+}
+
+Node *Node::removeChild(Node *oldChild)
+{
+  if (oldChild->prev == null){
+    firstChild = oldChild->next;
+  }else{
+    oldChild->prev->next = oldChild->next;
+  }
+
+  if (oldChild->next==null){
+    lastChild = oldChild->prev;
+  }else{
+    oldChild->next->prev = oldChild->prev;
+  }
+
+  return oldChild;
+}
+
+void Element::removeAttribute(const String *name)
+{
+  if (attributesHash.get(name) != null){
+    for(int idx = 0; idx < attributes.size(); idx++){
+      if (attributes.elementAt(idx)->equals(name)){
+        delete attributes.elementAt(idx);
+        delete attributesHash.get(name);
+        attributes.removeElementAt(idx);
+        attributesHash.remove(name);
+        break;
+      }
+    }
+  }
+}
+
 void Element::setAttribute(const String *name, const String *value)
 {
   if (attributesHash.get(name) != null){

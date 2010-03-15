@@ -316,6 +316,8 @@ public:
   }
 
   virtual Node *appendChild(Node *newChild);
+  virtual Node *insertBefore(Node *newChild, Node *refChild);
+  virtual Node *removeChild(Node *oldChild);
 
   /*  write the contents of the class in a 'Writer'
    *  @level - level of child compared with root
@@ -411,11 +413,11 @@ class Element : public Node
 {
 public:
 
-  const String *getAttribute(const String&name)
+  const String *getAttribute(const String &name)
   {
     return attributesHash.get(&name);
   }
-  const String *getAttribute(const String*name)
+  const String *getAttribute(const String *name)
   {
     return attributesHash.get(name);
   }
@@ -426,6 +428,7 @@ public:
   };
 
   void setAttribute(const String *name, const String *value);
+  void removeAttribute(const String *name);
   void serialize(Writer *writer, short level, short spacesInLevel);
 
 protected:
