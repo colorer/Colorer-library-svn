@@ -264,11 +264,7 @@ public:
 
   Node *getLastChild()
   {
-    if (firstChild == null){
-      return null;
-    }else{
-      return firstChild->prev;
-    }
+    return lastChild;
   }
 
   int getChildrenCount()
@@ -290,13 +286,13 @@ public:
   Node *getNextSibling()
   {
     if (parent == null) return null;
-    return next != parent->firstChild ? next : null;
+    return next;
   }
 
   Node *getPrevSibling()
   {
     if (parent == null) return null;
-    return this != parent->firstChild ? prev : null;
+    return prev;
   }
 
   const String *getNodeName()
@@ -321,7 +317,7 @@ public:
 
   virtual Node *appendChild(Node *newChild);
 
-  /*  Saves the contents of the class in a string
+  /*  write the contents of the class in a 'Writer'
    *  @level - level of child compared with root
    *  @spacesInLevel - size of the indentation level
    */
@@ -336,11 +332,11 @@ public:
 protected:
   NodeType type;
   Node *next, *prev;
-  Node *parent, *firstChild;
+  Node *parent, *firstChild, *lastChild;
   const String *name;
   Document *ownerDocument;
   Node(NodeType _type, const String *_name): type(_type), next(null),
-    prev(null), parent(null), firstChild(null), name(_name) {};
+    prev(null), parent(null), firstChild(null), lastChild(null), name(_name) {};
 };
 
 

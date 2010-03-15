@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Node переделан под классический двусвязный список.
+
+#Revision: 1464
+	#Author: ctapmex Date: 2010-03-15 11:42:49 +0500 (Пн, 15 мар 2010)
 	1. toString переделан в serialize(Writer *writer, short level, short spacesInLevel)
 	2. Document::saveToFile убрана
 

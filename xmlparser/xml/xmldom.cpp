@@ -682,18 +682,15 @@ long r;
 Node *Node::appendChild(Node *newChild)
 {
   newChild->parent = this;
-
-  if (firstChild == null)
-  {
-    firstChild = newChild;
-    firstChild->prev = firstChild->next = newChild;
+  if (firstChild == null){
+    firstChild = lastChild = newChild;
+    newChild->prev = newChild->next = null;
     return firstChild;
   }
-  newChild->prev = firstChild->prev;
-  firstChild->prev->next = newChild;
-  firstChild->prev = newChild;
-  newChild->next = firstChild;
-  newChild->parent = this;
+  newChild->prev = lastChild;
+  newChild->next = null;
+  lastChild->next = newChild;
+  lastChild = newChild;
   return newChild;
 }
 
