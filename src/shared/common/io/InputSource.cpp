@@ -27,7 +27,9 @@ InputSource *InputSource::newInstance(const String *path){
 };
 
 InputSource *InputSource::newInstance(const String *path, InputSource *base){
-  if (path == null) throw InputSourceException(DString("InputSource::newInstance: path is null"));
+  if (path == null){
+    throw InputSourceException(DString("InputSource::newInstance: path is null"));
+  }
 #if COLORER_FEATURE_HTTPINPUTSOURCE
   if (path->startsWith(DString("http://"))){
     return new HTTPInputSource(path, null);

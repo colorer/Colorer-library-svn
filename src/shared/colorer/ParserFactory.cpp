@@ -1,11 +1,11 @@
 #include<stdio.h>
-#include<io.h>
 #include<stdlib.h>
 #include<sys/stat.h>
 #ifdef __unix__
 #include<dirent.h>
 #endif
 #ifdef _WIN32
+#include<io.h>
 #include<windows.h>
 #endif
 
@@ -223,12 +223,17 @@ ParserFactory::ParserFactory(){
   catalogPath = searchPath();
   init();
 };
+
 ParserFactory::ParserFactory(const String *catalogPath){
   fileErrorHandler = null;
-  if (catalogPath == null) this->catalogPath = searchPath();
-  else this->catalogPath = new SString(catalogPath);
+  if (catalogPath == null){
+    this->catalogPath = searchPath();
+  }else{
+    this->catalogPath = new SString(catalogPath);
+  }
   init();
 };
+
 ParserFactory::~ParserFactory(){
   for(Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.enumerate();
       hrdClass;
