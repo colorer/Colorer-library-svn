@@ -14,8 +14,11 @@
          location="${project-root}/src/dtd/catalog.dtd"/>
   </xmlcatalog>
 
-  <property file="../build.properties"/>
-
+  <import file="../common.xml" optional="true"/>
+  <fail unless='docroot'>
+    *** CONFIG FILE ../common.xml IS NOT FOUND ***
+  </fail>
+  
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
   <macrodef name="xslt-hrc-ref">

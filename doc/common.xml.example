@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+<project name='common' default="echo-paths">
+
+  <description>
+    Shared buildfile with common settings (properties) for documentation build
+  </description>
+
+  <!-- setting ${docroot} to absolute path of common.xml directory -->
+  <dirname property='docroot' file="${ant.file.common}"/>
+
+
+  <!-- ========== Configuration ========== -->
+
+  <!-- stop build if some tools/files are absent -->
+  <property name="fail-on-bad-paths" value="true"/>
+
+  <!-- path to DocBook XSL stylesheets, FOP processor, etc. -->
+  <!-- this assumes files are unpacked into tools/          -->
+  <property name="docbook-dir" location="${docroot}/tools/docbook-xsl-1.71.0"/>
+  <property name="fop-dir" location="${docroot}/tools/fop-0.20.5"/>
+
+  <!-- path to XSLT processor, because default fails on DocBook -->
+  <!-- saxon 6.5.5 is known to work ok                          -->
+  <property name="xslt-classpath" location="${docroot}/tools/saxon/saxon.jar"/>
+  <!--
+  <property name="xslt-classpath" location="${docroot}/tools/xalan-j_2_7_1/xalan.jar"/>
+  <property name="xslt-classpath" location="${docroot}/tools/saxon9he.jar"/>
+  -->
+
+  <!-- =================================== -->
+
+  <target name="echo-paths" >
+    <echo>
+Current configuration:
+
+docroot:     ${docroot}
+docbook-dir: ${docbook-dir}
+
+fail-on-bad-paths: ${fail-on-bad-paths}
+    </echo>
+    <echo message="basedir:         ${basedir}"/>
+    <echo message="ant.file:        ${ant.file}"/>
+    <echo message="ant.file.common: ${ant.file.common}"/>
+  </target>
+
+</project>
