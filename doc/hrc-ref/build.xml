@@ -19,6 +19,7 @@
     *** CONFIG FILE ../common.xml IS NOT FOUND ***
   </fail>
   
+  <property name='build-dir' value='${docroot}/build'/>
   <property name='docbook-dir-url' value='file:/${docbook-dir}'/>
 
   <macrodef name="xslt-hrc-ref">
@@ -36,17 +37,18 @@
   </macrodef>
 
   <target name="init">
-
-    <uptodate property="pdf.required" targetfile="hrc-ref.pdf">
+    <mkdir dir="${build-dir}" />
+    
+    <uptodate property="pdf.required" targetfile="${build-dir}/hrc-ref.pdf">
       <srcfiles dir="." includes = "hrc-ref*.docbook"/>
     </uptodate>
-    <uptodate property="html.required" targetfile="index.html">
+    <uptodate property="html.required" targetfile="${build-dir}/index.html">
       <srcfiles dir="." includes = "hrc-ref*.docbook"/>
     </uptodate>
 
     <dependset>
-      <srcfileset dir="." includes = "hrc-ref*.docbook"/>
-      <targetfileset dir="." includes="hrc-ref.docbook-merged"/>
+      <srcfileset dir="." includes = "${build-dir}/hrc-ref*.docbook"/>
+      <targetfileset dir="." includes="${build-dir}/hrc-ref.docbook-merged"/>
     </dependset>
 
     <available file='${docbook-dir}/template/titlepage.xsl' property='xslt-exists'/>
@@ -65,16 +67,14 @@
     <echo>
 * ********** WARNING!!! *************
 * Can't find hrc-ref generation dependencies.
-* Check your paths to the docbook XSL Transformations,
-* and to the FOP PDF processor:
+* Check paths to DocBook XSL Templates and FOP PDF processor
+* in 'common.xml' config file:
 *
 * DocBook XSL: ${docbook-dir}
 * Apache  FOP: ${fop-dir}
 *
-* If you have these packages, please fix 'build.properties'
-* file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-bad-paths'
-* property from the 'build.properties' file.
+* You can ignore this build error, setting 'fail-on-bad-paths'
+* property in 'common.xml' to false.
     </echo>
     <fail if='fail-on-badpaths'>
 ******** Build stopped because of bad DocBook XSLT/Apache FOP paths.
