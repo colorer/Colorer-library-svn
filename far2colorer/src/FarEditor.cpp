@@ -754,6 +754,8 @@ void FarEditor::showOutliner(Outliner *outliner)
     (PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
     (PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
     (PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, (PKF_SHIFT<<16)+VK_OEM_MINUS,
+    VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4,
+    VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9,
     '0','1','2','3','4','5','6','7','8','9',
     'A','B','C','D','E','F','G','H','I','J',
     'K','L','M','N','O','P','Q','R','S','T',
@@ -1077,8 +1079,11 @@ void FarEditor::showOutliner(Outliner *outliner)
       if (flen == FILTER_SIZE || code > keys_size){
         break;
       }
-
-      filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code]);
+      if (code<22){
+        filter[flen] = (wchar_t)Character::toLowerCase('0'+code-12);
+      }else{
+        filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code]);
+      }
       filter[++flen] = 0;
       break;
     }
