@@ -1,8 +1,22 @@
 
 #include<stdio.h>
-
-#include<xml/xmldom.h>
+#include"xmldom.h"
 #include<unicode/UnicodeTools.h>
+
+String *replaceEntity(const String *st)
+{
+  String *nst1, *nst2;
+  nst1=st->replace(DString("&"),DString("&amp;"));
+  nst2=nst1->replace(DString("<"),DString("&lt;"));
+  delete nst1;
+  nst1=nst2->replace(DString(">"),DString("&gt;"));
+  delete nst2;
+  nst2=nst1->replace(DString("\""),DString("&quot;"));
+  delete nst1;
+  nst1=nst2->replace(DString("\'"),DString("&apos;"));
+  delete nst2;
+  return nst1;
+}
 
 Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
 {
@@ -51,6 +65,7 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
   src_overflow = null;
   if (src[0] == Encodings::ENC_UTF16_BOM){
     ppos++;
+    doc->useBOM = true;
   }
 
   try{
@@ -73,7 +88,7 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
 }
 
 void DocumentBuilder::consumeDocument(){
-  consumeXmlDecl();
+  consumeXmlDecl(doc);
   consumeMisc(doc);
   consumeDTD();
   consumeMisc(doc);
@@ -84,7 +99,7 @@ void DocumentBuilder::consumeDocument(){
   }
 }
 
-void DocumentBuilder::consumeXmlDecl(){
+void DocumentBuilder::consumeXmlDecl(Node *root){
   wchar c1 = peek(0);
   wchar c2 = peek(1);
   if (c1 != '<' || c2 != '?') return;
@@ -96,7 +111,7 @@ void DocumentBuilder::consumeXmlDecl(){
   consumeSpaces();
   consume("=", 1);
   consumeSpaces();
-  delete consumeQoutedValue();
+  doc->xmlVersion = consumeQoutedValue();
 
   consumeSpaces();
 
@@ -105,7 +120,7 @@ void DocumentBuilder::consumeXmlDecl(){
     consumeSpaces();
     consume("=", 1);
     consumeSpaces();
-    delete consumeQoutedValue();
+    doc->xmlEncoding = consumeQoutedValue();
   }
 
   consumeSpaces();
@@ -222,7 +237,7 @@ void DocumentBuilder::consumeElement(Node *root){
   }
 
   if (peek(0) == '/' && peek(1) == '>'){
-    consume("/>", 1);
+    consume("/>", 2);
   }else{
     consume(">", 1);
 
@@ -664,28 +679,68 @@ long r;
   return true;
 };
 
-const short Node::COMMENT_NODE = 0;
-const short Node::DOCUMENT_NODE = 1;
-const short Node::ELEMENT_NODE = 2;
-const short Node::PROCESSING_INSTRUCTION_NODE = 3;
-const short Node::TEXT_NODE = 4;
-
 Node *Node::appendChild(Node *newChild)
 {
   newChild->parent = this;
-
-  if (firstChild == null)
-  {
-    firstChild = newChild;
-    firstChild->prev = firstChild->next = newChild;
+  if (firstChild == null){
+    firstChild = lastChild = newChild;
+    newChild->prev = newChild->next = null;
     return firstChild;
   }
-  newChild->prev = firstChild->prev;
-  firstChild->prev->next = newChild;
-  firstChild->prev = newChild;
-  newChild->next = firstChild;
-  newChild->parent = this;
+  newChild->prev = lastChild;
+  newChild->next = null;
+  lastChild->next = newChild;
+  lastChild = newChild;
   return newChild;
+}
+
+Node *Node::insertBefore(Node *newChild, Node *refChild)
+{
+  if (!refChild){
+    return appendChild(newChild);
+  }
+  newChild->prev = refChild->prev;
+  newChild->next = refChild;
+  if (refChild->prev == null){
+    firstChild = newChild;
+  }else{
+    refChild->prev->next = newChild;
+  }
+  refChild->prev = newChild;
+
+  return newChild;
+}
+
+Node *Node::removeChild(Node *oldChild)
+{
+  if (oldChild->prev == null){
+    firstChild = oldChild->next;
+  }else{
+    oldChild->prev->next = oldChild->next;
+  }
+
+  if (oldChild->next==null){
+    lastChild = oldChild->prev;
+  }else{
+    oldChild->next->prev = oldChild->prev;
+  }
+
+  return oldChild;
+}
+
+void Element::removeAttribute(const String *name)
+{
+  if (attributesHash.get(name) != null){
+    for(int idx = 0; idx < attributes.size(); idx++){
+      if (attributes.elementAt(idx)->equals(name)){
+        delete attributes.elementAt(idx);
+        delete attributesHash.get(name);
+        attributes.removeElementAt(idx);
+        attributesHash.remove(name);
+        break;
+      }
+    }
+  }
 }
 
 void Element::setAttribute(const String *name, const String *value)
@@ -731,6 +786,92 @@ Text *Document::createTextNode(const String *data)
   text->ownerDocument = this;
   return text;
 }
+
+void Document::serialize(Writer *writer, short level, short spacesInLevel)
+{
+  writer->write(DString("<?xml version=\""));
+  writer->write(getXmlVersion());
+  writer->write(DString("\" encoding=\""));
+  writer->write(getXmlEncoding());
+  writer->write(DString("\"?>\n"));
+  Node *rmnext = getFirstChild();
+  while (rmnext){
+    rmnext->serialize(writer, level, spacesInLevel);
+    rmnext = rmnext->getNextSibling();
+  }
+}
+
+void Element::serialize(Writer *writer, short level, short spacesInLevel)
+{
+  DString qoute = DString("\"");
+  DString gtn = DString(">\n");
+  DString space = DString(" ");
+
+  for(int i = 0; i < level*spacesInLevel; i++){
+    writer->write(space);
+  }
+  writer->write(DString("<"));
+  writer->write(getNodeName());
+ 
+  // writes attributes of node
+  const Vector<const String*> *attrs = getAttributes();
+  for (int i = 0; i < attrs->size(); i++){
+    writer->write(space);
+    writer->write(attrs->elementAt(i));
+    writer->write(DString("="));
+
+    writer->write(qoute);
+    writer->write(replaceEntity(getAttribute(attrs->elementAt(i))));
+    writer->write(qoute);
+  };
+  writer->write(DString(">"));
+
+  if ((getChildrenCount()==1)&&(getFirstChild()->getNodeType()==Node::TEXT_NODE)){
+    getFirstChild()->serialize(writer,0,0);
+  }else{
+    if (hasChildNodes()){
+      writer->write(DString("\n"));
+      Node *rmnext = getFirstChild();
+      while (rmnext){
+        rmnext->serialize(writer, level+1, spacesInLevel);
+        rmnext = rmnext->getNextSibling();
+      }
+
+      for(int i = 0; i < level*spacesInLevel; i++){
+        writer->write(space);
+      }
+    }
+  }
+  writer->write(DString("</"));
+  writer->write(getNodeName());
+  writer->write(gtn);
+}
+
+void ProcessingInstruction::serialize(Writer *writer, short level, short spacesInLevel)
+{
+  writer->write(DString("<?"));
+  writer->write(getTarget());
+  writer->write(DString(" "));
+  writer->write(getData());
+  writer->write(DString("?>\n"));
+}
+
+void Comment::serialize(Writer *writer, short level, short spacesInLevel)
+{
+  DString space = DString(" ");
+  for(int i = 0; i < level*spacesInLevel; i++){
+    writer->write(space);
+  }
+  writer->write(DString("<!--"));
+  writer->write(getData());
+  writer->write(DString("-->\n"));
+}
+
+void Text::serialize(Writer *writer, short level, short spacesInLevel)
+{
+  writer->write(replaceEntity(getData()));
+}
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

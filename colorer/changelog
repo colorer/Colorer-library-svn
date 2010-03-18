@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. перенес xmldom из ctapmex-xmlparser
+
+#Revision: 1467
+	#Author: ctapmex Date: 2010-03-17 15:38:47 +0500 (Ср, 17 мар 2010)
 	1. не коммпилировалось под linux
 	2. немного форматирования кода
 

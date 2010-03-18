@@ -4,6 +4,7 @@
 #include<common/Vector.h>
 #include<common/Hashtable.h>
 #include<common/io/InputSource.h>
+#include<common/io/Writer.h>
 
 /**
  * If true, traces line/column of an errors in the document
@@ -26,8 +27,6 @@ class ProcessingInstruction;
 class CharacterData;
 class Comment;
 class Text;
-
-class BinaryXMLWriter;
 
 /**
  * Basic XML Parser exception class
@@ -93,7 +92,7 @@ private:
 class DocumentBuilder
 {
 public:
-  DocumentBuilder() : ignoreComments(true), whitespace(true),
+  DocumentBuilder() : ignoreComments(true), ignoreWhitespace(true),
            er(null), inputSource(null) {}
 
   /**
@@ -113,16 +112,16 @@ public:
    * Ignores empty element's text content (content with only
    * spaces, tabs, CR/LF).
    */
-  void setIgnoringElementContentWhitespace(bool _whitespace)
+  void setIgnoringElementContentWhitespace(bool _ignoreWhitespace)
   {
-    whitespace = _whitespace;
+    ignoreWhitespace = _ignoreWhitespace;
   }
   /**
    * Retrieves whitespace ignore state.
    */
   inline bool isIgnoringElementContentWhitespace()
   {
-    return whitespace;
+    return ignoreWhitespace;
   }
 
   /**
@@ -154,7 +153,7 @@ public:
 
 protected:
   bool ignoreComments;
-  bool whitespace;
+  bool ignoreWhitespace;
   Hashtable<const String*> entitiesHash;
   Hashtable<const String*> extEntitiesHash;
 private:
@@ -169,7 +168,7 @@ private:
   static bool getXMLNumber(const String &str, int *res);
 
   void consumeDocument();
-  void consumeXmlDecl();
+  void consumeXmlDecl(Node *root);
   void consumeDTD();
   bool isElement();
   void consumeElement(Node *root);
@@ -245,11 +244,13 @@ private:
 class Node
 {
 public:
-  static const short COMMENT_NODE;
-  static const short DOCUMENT_NODE;
-  static const short ELEMENT_NODE;
-  static const short PROCESSING_INSTRUCTION_NODE;
-  static const short TEXT_NODE;
+  enum NodeType {
+        ELEMENT_NODE                = 1,
+        TEXT_NODE                   = 3,
+        PROCESSING_INSTRUCTION_NODE = 7,
+        COMMENT_NODE                = 8,
+        DOCUMENT_NODE               = 9,
+    };
 
   bool hasChildNodes()
   {
@@ -263,11 +264,18 @@ public:
 
   Node *getLastChild()
   {
-    if (firstChild == null){
-      return null;
-    }else{
-      return firstChild->prev;
+    return lastChild;
+  }
+
+  int getChildrenCount()
+  {
+    Node *tmp=firstChild;
+    int c=0;
+    while (tmp){
+      c++;
+      tmp = tmp->getNextSibling();
     }
+    return c;    
   }
 
   Node *getParent()
@@ -278,13 +286,13 @@ public:
   Node *getNextSibling()
   {
     if (parent == null) return null;
-    return next != parent->firstChild ? next : null;
+    return next;
   }
 
   Node *getPrevSibling()
   {
     if (parent == null) return null;
-    return this != parent->firstChild ? prev : null;
+    return prev;
   }
 
   const String *getNodeName()
@@ -297,7 +305,7 @@ public:
     return null;
   };
 
-  int getNodeType()
+  NodeType getNodeType()
   {
     return type;
   }
@@ -308,6 +316,14 @@ public:
   }
 
   virtual Node *appendChild(Node *newChild);
+  virtual Node *insertBefore(Node *newChild, Node *refChild);
+  virtual Node *removeChild(Node *oldChild);
+
+  /*  write the contents of the class in a 'Writer'
+   *  @level - level of child compared with root
+   *  @spacesInLevel - size of the indentation level
+   */
+  virtual void serialize(Writer *writer, short level, short spacesInLevel) {};
 
   //virtual Node *cloneNode(bool deep) = 0;
 
@@ -316,13 +332,13 @@ public:
     delete name;
   };
 protected:
-  int type;
+  NodeType type;
   Node *next, *prev;
-  Node *parent, *firstChild;
+  Node *parent, *firstChild, *lastChild;
   const String *name;
   Document *ownerDocument;
-  Node(int _type, const String *_name): type(_type), next(null),
-    prev(null), parent(null), firstChild(null), name(_name) {};
+  Node(NodeType _type, const String *_name): type(_type), next(null),
+    prev(null), parent(null), firstChild(null), lastChild(null), name(_name) {};
 };
 
 
@@ -338,6 +354,26 @@ public:
     return documentElement;
   }
 
+  String *getXmlVersion()
+  {
+    return xmlVersion;
+  }
+
+  String *getXmlEncoding()
+  {
+    return xmlEncoding;
+  }
+
+  bool getUseBOM()
+  {
+    return useBOM;
+  }
+
+  void setXmlEncoding(String *_xmlEncoding)
+  {
+    xmlEncoding = _xmlEncoding;
+  }
+
   Node *appendChild(Node *newChild){
     if (newChild->getNodeType() == Node::ELEMENT_NODE)
     {
@@ -351,6 +387,8 @@ public:
     return newChild;
   }
 
+  void serialize(Writer *writer, short level, short spacesInLevel);
+
   Element *createElement(const String *tagName);
   Text *createTextNode(const String *data);
   Comment *createComment(const String *data);
@@ -359,7 +397,10 @@ public:
 protected:
   int line, pos;
   Element *documentElement;
-  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null) {};
+  bool useBOM;
+  String *xmlVersion;
+  String *xmlEncoding;
+  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null), useBOM(false) {};
   friend class DocumentBuilder;
 };
 
@@ -372,11 +413,11 @@ class Element : public Node
 {
 public:
 
-  const String *getAttribute(const String&name)
+  const String *getAttribute(const String &name)
   {
     return attributesHash.get(&name);
   }
-  const String *getAttribute(const String*name)
+  const String *getAttribute(const String *name)
   {
     return attributesHash.get(name);
   }
@@ -387,6 +428,8 @@ public:
   };
 
   void setAttribute(const String *name, const String *value);
+  void removeAttribute(const String *name);
+  void serialize(Writer *writer, short level, short spacesInLevel);
 
 protected:
   // TODO: static tagName index
@@ -427,6 +470,7 @@ public:
     return target;
   }
 
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
 
   const String *data;
@@ -466,7 +510,7 @@ protected:
 
   const String *data;
 
-  CharacterData(int type, const String *_data): Node(type, new DString("#cdata")), data(_data) {};
+  CharacterData(NodeType type, const String *_data): Node(type, new DString("#cdata")), data(_data) {};
   ~CharacterData(){ delete data; };
   friend class Document;
 };
@@ -478,6 +522,7 @@ protected:
 class Comment : public CharacterData
 {
 public:
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
   Comment(const String *data): CharacterData(Node::COMMENT_NODE, data){};
   friend class Document;
@@ -490,6 +535,7 @@ protected:
 class Text : public CharacterData
 {
 public:
+  void serialize(Writer *writer, short level, short spacesInLevel);
 protected:
   Text(const String *data): CharacterData(Node::TEXT_NODE, data){};
   friend class Document;
