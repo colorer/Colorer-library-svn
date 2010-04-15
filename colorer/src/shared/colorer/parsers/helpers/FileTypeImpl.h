@@ -54,8 +54,15 @@ public:
   const String *getParamDefaultValue(const String &name) {
     return paramDefaultHash.get(&name);
   }
+
+  void addParam(const String *name){
+    paramVector.addElement(new SString(name));
+  }
   void setParamValue(const String &name, const String *value){
     paramHash.put(&name, new SString(value));
+  }
+  void setParamDefaultValue(const String &name, const String *value){
+    paramDefaultHash.put(&name, new SString(value));
   }
 
   /**
