@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. добавлены процедуры FileTypeImpl.addParam и FileTypeImpl.setParamDefaultValue (нельзя зафрендить
+	класс FileTypeImpl из внешнего,для библиотеки, класса)
+
+#Revision: 1476
+	#Author: ctapmex Date: 2010-04-15 15:54:54 +0600 (Чт, 15 апр 2010)
 	1. zlib 1.2.4
 
 #Revision: 1470
