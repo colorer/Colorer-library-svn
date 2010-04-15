@@ -51,7 +51,7 @@ public:
   /**
   * Change editor properties. These overwrites default HRC settings
   */
-  void setDrawCross(int drawCross);
+  void setDrawCross(int _drawCross);
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);
@@ -100,6 +100,7 @@ private:
   int  maxLineLength;
   bool fullBackground;
 
+  int drawCross;//0 - off,  1 - always, 2 - if included in the scheme
   bool showVerticalCross, showHorizontalCross;
   int crossZOrder, horzCrossColor, vertCrossColor;
 

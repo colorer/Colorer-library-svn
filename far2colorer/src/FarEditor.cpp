@@ -16,6 +16,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   ret_strNumber = -1;
   maxLineLength = 0;
   fullBackground = true;
+  drawCross = 2;
   showHorizontalCross = showVerticalCross = true;
   crossZOrder    = 0;
   horzCrossColor = 0x0E;
@@ -120,26 +121,27 @@ void FarEditor::reloadTypeSettings()
   }
 
   value = def->getParamValue(DString("show-cross"));
+  if (drawCross==2 && value != NULL){
+	  if (value->equals("none")){
+		  showHorizontalCross = false;
+		  showVerticalCross   = false;
+	  };
 
-  if (value != NULL && value->equals("none")){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  };
+	  if (value->equals("vertical")){
+		  showHorizontalCross = false;
+		  showVerticalCross   = true;
+	  };
 
-  if (value != NULL && value->equals("vertical")){
-    showHorizontalCross = false;
-    showVerticalCross   = true;
-  };
+	  if (value->equals("horizontal")){
+		  showHorizontalCross = true;
+		  showVerticalCross   = false;
+	  };
 
-  if (value != NULL && value->equals("horizontal")){
-    showHorizontalCross = true;
-    showVerticalCross   = false;
-  };
-
-  if (value != NULL && value->equals("both")){
-    showHorizontalCross = true;
-    showVerticalCross   = true;
-  };
+	  if (value->equals("both")){
+		  showHorizontalCross = true;
+		  showVerticalCross   = true;
+	  };
+  }
 
   value = def->getParamValue(DString("cross-zorder"));
 
@@ -160,25 +162,27 @@ void FarEditor::reloadTypeSettings()
 
   value = ftype->getParamValue(DString("show-cross"));
 
-  if (value != NULL && value->equals("none")){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  };
+  if (drawCross==2 && value != NULL){
+	  if (value->equals("none")){
+		  showHorizontalCross = false;
+		  showVerticalCross   = false;
+	  };
 
-  if (value != NULL && value->equals("vertical")){
-    showHorizontalCross = false;
-    showVerticalCross   = true;
-  };
+	  if (value->equals("vertical")){
+		  showHorizontalCross = false;
+		  showVerticalCross   = true;
+	  };
 
-  if (value != NULL && value->equals("horizontal")){
-    showHorizontalCross = true;
-    showVerticalCross   = false;
-  };
+	  if (value->equals("horizontal")){
+		  showHorizontalCross = true;
+		  showVerticalCross   = false;
+	  };
 
-  if (value != NULL && value->equals("both")){
-    showHorizontalCross = true;
-    showVerticalCross   = true;
-  };
+	  if (value->equals("both")){
+		  showHorizontalCross = true;
+		  showVerticalCross   = true;
+	  };
+  }
 
   value = ftype->getParamValue(DString("cross-zorder"));
 
@@ -194,8 +198,9 @@ FileType *FarEditor::getFileType()
   return baseEditor->getFileType();
 }
 
-void FarEditor::setDrawCross(int drawCross)
+void FarEditor::setDrawCross(int _drawCross)
 {
+  drawCross=_drawCross;
   switch (drawCross){
   case 0:
     showHorizontalCross = false;
@@ -753,7 +758,8 @@ void FarEditor::showOutliner(Outliner *outliner)
     VK_BACK, VK_RETURN, VK_OEM_1, VK_OEM_MINUS, VK_TAB,
     (PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
     (PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
-    (PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, (PKF_SHIFT<<16)+VK_OEM_MINUS,
+    (PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, 
+	(PKF_SHIFT<<16)+VK_OEM_MINUS,(PKF_SHIFT<<16)+VK_OEM_3,
     VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4,
     VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9,
     '0','1','2','3','4','5','6','7','8','9',
@@ -1072,6 +1078,15 @@ void FarEditor::showOutliner(Outliner *outliner)
       }
 
       filter[flen]= '_';
+      filter[++flen]= 0;
+      break;
+    case 12: // _
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= '~';
       filter[++flen]= 0;
       break;
     default:
