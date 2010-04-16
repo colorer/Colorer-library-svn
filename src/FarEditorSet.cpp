@@ -1,4 +1,6 @@
 #include"FarEditorSet.h"
+#include "HRCSettings.h"
+
 
 FarEditorSet::FarEditorSet()
 {
@@ -695,6 +697,9 @@ void FarEditorSet::ReloadBase()
   try{
     parserFactory = new ParserFactory(sCatalogPathExp);
     hrcParser = parserFactory->getHRCParser();
+    HRCSettings p(parserFactory);
+    p.readProfile();
+	//readProfile();
 
     try{
       regionMapper = parserFactory->createStyledMapper(&DString("console"), sHrdName);
@@ -896,6 +901,7 @@ void FarEditorSet::SaveSettings()
   rSetValue(hPluginRegistry, cRegSyntaxDraw, drawSyntax); 
   rSetValue(hPluginRegistry, cRegOldOutLine, oldOutline); 
 }
+
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1

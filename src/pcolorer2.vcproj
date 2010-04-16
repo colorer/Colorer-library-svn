@@ -432,6 +432,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HRCSettings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HRCSettings.h"
+				>
+			</File>
+			<File
 				RelativePath=".\pcolorer.cpp"
 				>
 			</File>

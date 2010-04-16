@@ -77,6 +77,7 @@ public:
   bool GetPluginStatus() {return rEnabled;}
 
   SString *sTempHrdName;
+
 private:
   /** Returns current global error handler. */
   ErrorHandler *getErrorHandler();
