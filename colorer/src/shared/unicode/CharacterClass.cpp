@@ -21,7 +21,7 @@ CharacterClass::~CharacterClass(){
 */
 CharacterClass *CharacterClass::createCharClass(const String &ccs, int pos, int *retPos)
 {
-	if (ccs[pos] != '[') return null;
+if (ccs[pos] != '[') return null;
 
 CharacterClass *cc = new CharacterClass();
 CharacterClass cc_temp;
@@ -172,26 +172,26 @@ wchar prev_char = BAD_WCHAR;
 }
 
 void CharacterClass::addChar(wchar c){
-  BitArray *tablePos = infoIndex[c>>8];
+  BitArray *tablePos = infoIndex[(c>>8)&0xFF];
   if (!tablePos){
     tablePos = new BitArray();
-    infoIndex[c>>8] = tablePos;
+    infoIndex[(c>>8)&0xFF] = tablePos;
   };
   tablePos->setBit(c&0xFF);
 }
 void CharacterClass::clearChar(wchar c){
-  BitArray *tablePos = infoIndex[c>>8];
+  BitArray *tablePos = infoIndex[(c>>8)&0xFF];
   if (!tablePos) return;
   tablePos->clearBit(c&0xFF);
 }
 void CharacterClass::addRange(wchar s, wchar e){
-  for(int ti = s>>8; ti <= e>>8; ti++){
+  for(int ti = (s>>8)&0xFF; ti <= (e>>8)&0xFF; ti++){
     if (!infoIndex[ti]) infoIndex[ti] = new BitArray();
     infoIndex[ti]->addRange((ti == s>>8)?s&0xFF:0, (ti == e>>8)?e&0xFF:0xFF);
   };
 }
 void CharacterClass::clearRange(wchar s, wchar e){
-  for(int ti = s>>8; ti <= e>>8; ti++){
+  for(int ti = (s>>8)&0xFF; ti <= (e>>8)&0xFF; ti++){
     if (!infoIndex[ti]) infoIndex[ti] = new BitArray();
     infoIndex[ti]->clearRange(ti == s>>8?s&0xFF:0, ti == e>>8?e&0xFF:0xFF);
   };
@@ -279,7 +279,7 @@ void CharacterClass::fill(){
 }
 
 bool CharacterClass::inClass(wchar c) const{
-  BitArray *tablePos = infoIndex[c>>8];
+  BitArray *tablePos = infoIndex[(c>>8)&0xFF];
   if (!tablePos) return false;
   return tablePos->getBit(c&0xFF);
 }

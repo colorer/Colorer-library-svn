@@ -13,4 +13,4 @@ LIBFLAGS = $(objs) $(FLAGS) -o $(TARGET) $(LIBINC)
 include makefile.core
 
 clean:
-	$(RM) $(objs)
+	$(RM) colorer $(objs)
