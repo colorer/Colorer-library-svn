@@ -1,5 +1,6 @@
 #ifndef _COLORER_CHARACTER_H_
 #define _COLORER_CHARACTER_H_
+#include<wchar.h>
 
 //#if   defined _MSC_VER
 
@@ -7,7 +8,13 @@
 //typedef wchar_t wchar;
 
 /// default unicode char definition
+#ifndef WCHAR_MAX
+#error wchar misconfig
+#elif WCHAR_MAX == 0xFFFFFFFE/2
+typedef unsigned short wchar;
+#else
 typedef wchar_t wchar;
+#endif
 
 /// wide unicode char definition
 typedef unsigned long w4char;
