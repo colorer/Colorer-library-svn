@@ -29,9 +29,6 @@
   <property name='farplugin-dir' value='${build-dir}/${farplugin-name}'/>
   <property name='farplugin-zip' value='${build-dir}/${farplugin-name}.zip'/>
 
-  <property name='eclipseplugin-version' value='_1.0.0'/>
-  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
-
   <property name='fixcrlf-ext' value="**/*.cpp, **/*.c, **/*.h, **/*.hpp, **/*makefile*, **/*.java,
                                       **/*.prop*, **/*.sh, **/*.hrc, **/*.hrd, **/*.xml, **/*.xslt, **/*.pl,
                                       **/*.dep,
@@ -131,13 +128,7 @@
       <not><isset property="target-arch"/></not>
     </condition>
 
-    <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}_${target-arch}'/>
-    <property name='eclipseplugin-dir' value='${build-dir}/${eclipseplugin-name}/${eclipsedir-name}'/>
-    <property name='eclipseplugin-zip' value='${build-dir}/${eclipseplugin-name}.zip'/>
-
     <echo message="${target-arch}"/>
-
-    <available file='${eclipse.dir}' type='dir' property='eclipse.plugins-exists'/>
 
   </target>
 
@@ -237,7 +228,7 @@
     <mkdir dir='${target-dir}/hrc/auto/types'/>
 
     <zip destfile='${target-dir}/hrc/common.jar'>
-      <fileset dir='hrc' includes='**/*' excludes='changes.txt, proto*.hrc, *.ent.hrc, auto, auto/**/*'/>
+      <fileset dir='${basedir}/hrc' includes='**/*' excludes='changes.txt, proto*.hrc, *.ent.hrc, auto, auto/**/*'/>
     </zip>
     <copy todir='${target-dir}/hrc/'  overwrite='true'>
       <fileset dir='hrc/' includes='proto*.hrc, *.ent.hrc'/>
@@ -373,94 +364,14 @@
 
   </target>
 
-
   <target name="eclipseplugin.clean" depends='init'>
-    <delete dir='${eclipseplugin-dir}' failonerror='false'/>
-    <delete file='${eclipseplugin-zip}' failonerror='false'/>
-    <ant dir='src/net.sf.colorer' antfile='build.xml' target='clean'>
-      <property name='temp.folder' value='../../${build-dir}/${eclipseplugin-name}'/>
+    <ant dir='../eclipsecolorer' antfile='build.xml' target='clean'>
     </ant>
-    <antcall target='make.clean'>
-      <param name='make.dir' value='src/net.sf.colorer/libnative'/>
-    </antcall>
   </target>
-
-  <target name='eclipse.plugins-check' unless='eclipse.plugins-exists'>
-    <echo>
-* ********** WARNING!!! *************
-* Can't find ECLIPSE IDE folder.
-* Eclipse libraries are used to compile EclipseColorer plugin.
-*
-* If you have these files, please fix 'build.properties'
-* file in colorer root directory and restart building.
-* You can ignore this build error, removing 'fail-on-bad-paths'
-* property from the 'build.properties' file.
-    </echo>
-    <fail if='fail-on-badpaths'>
-******** Build stopped because of bad Eclipse IDE paths.
-    </fail>
-  </target>
-
-
-  <target name="eclipseplugin-native-win32">
-    <condition property="lib">
-      <available filepath="src/net.sf.colorer/libnative" file="net_sf_colorer.dll"/>
-    </condition>
-    <fail unless='lib'>
-    *********** ERROR! Native part of the Colorer Java library was not compiled
-    </fail>
-    <mkdir dir="${eclipseplugin-dir}/os/win32/x86"/>
-    <copy todir="${eclipseplugin-dir}/os/win32/x86">
-      <fileset dir="src/net.sf.colorer/libnative" includes="net_sf_colorer.dll"/>
-    </copy>
-  </target>
-
-  <target name="eclipseplugin-native-linux-x86">
-    <condition property="lib">
-      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
-    </condition>
-    <fail unless='lib'>
-    *********** ERROR! Native part of the Colorer Java library was not compiled
-    </fail>
-    <mkdir dir="${eclipseplugin-dir}/os/linux/x86"/>
-    <copy todir="${eclipseplugin-dir}/os/linux/x86">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
-    </copy>
-  </target>
-
-  <target name="eclipseplugin-native-macos">
-    <condition property="lib">
-      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.jnilib"/>
-    </condition>
-    <fail unless='lib'>
-    *********** ERROR! Native part of the Colorer Java library was not compiled
-    </fail>
-    <mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
-    <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
-    </copy>
-    <mkdir dir="${eclipseplugin-dir}/os/macosx/x86"/>
-    <copy todir="${eclipseplugin-dir}/os/macosx/x86">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
-    </copy>
-
-  </target>
-
-  <target name="eclipseplugin-native-solaris">
-    <condition property="lib">
-      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
-    </condition>
-    <fail unless='lib'>
-    *********** ERROR! Native part of the Colorer Java library was not compiled
-    </fail>
-    <mkdir dir="${eclipseplugin-dir}/os/solaris"/>
-    <copy todir="${eclipseplugin-dir}/os/solaris">
-      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
-    </copy>
-  </target>
-
-
   <target name="eclipseplugin" depends='init' description='Eclipse plugin package'>
+  </target>
+
+  <target name="xxeclipseplugin" depends='init' description='Eclipse plugin package'>
 
     <antcall target='eclipse.plugins-check'/>
 
