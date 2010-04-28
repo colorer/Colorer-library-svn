@@ -4,8 +4,6 @@
       label="Eclipse Colorer"
       version="@eclipseplugin-version@"
       provider-name="Igor Russkih"
-      os="@target.os@"
-      arch="@target.arch@"
       image="logo-colorer.png">
 
    <description url="http://colorer.sf.net/eclipsecolorer/">
@@ -66,8 +64,8 @@ the terms of any one of the MPL, the GPL or the LGPL.
 
    <plugin
          id="net.sf.colorer"
-         download-size="2000"
-         install-size="2000"
+         download-size="2000000"
+         install-size="2000000"
          version="@eclipseplugin-version@">
    </plugin>
 

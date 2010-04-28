@@ -3,13 +3,7 @@
    <description url="http://colorer.sf.net/eclipsecolorer/">
       Eclipse Colorer plugin information
    </description>
-   <feature url="features/net.sf.colorer_@eclipseplugin-version@_win32_x86.jar" id="net.sf.colorer" version="@eclipseplugin-version@" os="win32" ws="" arch="x86">
-      <category name="syntax"/>
-   </feature>
-   <feature url="features/net.sf.colorer_@eclipseplugin-version@_win32_x86_64.jar" id="net.sf.colorer" version="@eclipseplugin-version@" os="win32" ws="" arch="x86_64">
-      <category name="syntax"/>
-   </feature>
-   <feature url="features/net.sf.colorer_@eclipseplugin-version@_linux_x86_64.jar" id="net.sf.colorer" version="@eclipseplugin-version@" os="linux" arch="x86_64">
+   <feature url="features/net.sf.colorer_@eclipseplugin-version@.jar" id="net.sf.colorer" version="@eclipseplugin-version@">
       <category name="syntax"/>
    </feature>
    <category-def name="syntax" label="Syntax Highlighting">
