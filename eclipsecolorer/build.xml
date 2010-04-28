@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.sf.colorer" default="gather" basedir=".">
 
-  <property file='../../build.user.properties'/>
-  <property file='../../build.properties'/>
+  <property file='build.user.properties'/>
+  <property file='build.properties'/>
 
   <property name="bootclasspath" value=""/>
-  <property name="eclipse.ws" value='win32'/>
-  <property name="ws" value="${eclipse.ws}"/>
-  <property name="os" value="win32"/>
-  <property name="arch" value="x86"/>
+  <property name="target.os" value=""/>
+  <property name="target.arch" value=""/>
   <property name="javacFailOnError" value="true"/>
   <property name="javacDebugInfo" value="on"/>
   <property name="javacVerbose" value="false"/>
-  <property name="eclipse.dir" value="${ECLIPSE_HOME}"/>
 
+  <property name="eclipse.dir" value="${ECLIPSE_HOME}"/>
   <property name="plugin" value="net.sf.colorer"/>
 
-  <property name='eclipseplugin-version' value='_eclipseplugin-version'/>
-  <property name='eclipseplugin-name' value='EclipseColorer-take5${eclipseplugin-version}'/>
-  <property name='eclipsedir-name' value='net.sf.colorer${eclipseplugin-version}'/>
+  <property name='eclipseplugin-version' value='eclipseplugin-version'/>
+  <property name='release-name' value='EclipseColorer-take5_${eclipseplugin-version}'/>
+  <property name='build-dir' value='${basedir}/${release-name}'/>
+  <property name='release-zip' value='${release-name}.zip'/>
+  
+  <property name='eclipsedir-name' value='net.sf.colorer_${eclipseplugin-version}'/>
+  <property name='eclipseplugin-dir' value='${build-dir}/${eclipsedir-name}'/>
 
-  <property name="version.suffix" value="${eclipseplugin-version}"/>
-  <property name="full.name" value="${plugin}${version.suffix}"/>
-  <property name="zip.name" value="${eclipseplugin-name}"/>
+  <property name="full.name" value="${plugin}_${eclipseplugin-version}_${target.os}_${target.arch}"/>
+  <property name="zip.name" value="${full.name}"/>
+
   <property name="temp.folder" value="${basedir}/temp.folder"/>
-  <property name="plugin.destination" value="${basedir}/distr"/>
+  
+  <!-- location for colorer.jar and src.zip -->
   <property name="build.result.folder" value="${basedir}"/>
-  <property name='eclipse.dir' value='../..'/>
-  <property name='eclipse.plugins' value='${eclipse.dir}/plugins'/>
 
 
-  <target name="init" depends="properties">
-
+  <target name="init" depends="properties, update-version">
     <path id='classpath'>
       <fileset dir="${eclipse.plugins}">
         <include name="org.eclipse*/**/*.jar"/>
@@ -39,12 +39,46 @@
       </fileset>
       <pathelement path="${java.class.path}"/>
     </path>
-
+    <available file='${eclipse.dir}' type='dir' property='eclipse.plugins-exists'/>
+    <mkdir dir='${build-dir}'/>
   </target>
 
   <target name="properties" if="eclipse.running">
     <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
   </target>
+  
+  <target name="update-version">
+    <filter token="eclipseplugin-version" value="${eclipseplugin-version}"/>
+    <filter token="target.os" value="${target.os}"/>
+    <filter token="target.arch" value="${target.arch}"/>
+    <copy file='feature.in.xml' tofile='feature.xml' filtering='true'/>
+    <copy file='site.in.xml' tofile='site.xml' filtering='true'/>
+  </target>
+
+  <target name="cleanxx" depends='init'>
+    <delete dir='${eclipseplugin-dir}' failonerror='false'/>
+    <delete file='${eclipseplugin-zip}' failonerror='false'/>
+    <ant antfile='${basedir}/../colorer/build.xml' target='make.clean'>
+      <param name='make.dir' value='${basedir}/libnative'/>
+    </ant>
+  </target>
+
+  <target name='eclipse.plugins-check' unless='eclipse.plugins-exists'>
+    <echo>
+* ********** WARNING!!! *************
+* Can't find ECLIPSE IDE folder.
+* Eclipse libraries are used to compile EclipseColorer plugin.
+*
+* If you have these files, please fix 'build.properties'
+* file in colorer root directory and restart building.
+* You can ignore this build error, removing 'fail-on-bad-paths'
+* property from the 'build.properties' file.
+    </echo>
+    <fail if='fail-on-badpaths'>
+******** Build stopped because of bad Eclipse IDE paths.
+    </fail>
+  </target>
+
 
   <target name="build.update.jar" depends="init" description="Build the plug-in: net.sf.colorer for an update site.">
     <delete dir="${temp.folder}"/>
@@ -53,7 +87,6 @@
     <antcall target="gather.bin.parts">
       <param name="destination.temp.folder" value="${temp.folder}/"/>
     </antcall>
-    <zip zipfile="${plugin.destination}/${full.name}.jar" basedir="${temp.folder}/${full.name}" filesonly="false" update="no"/>
     <delete dir="${temp.folder}"/>
   </target>
 
@@ -63,7 +96,7 @@
     <copy todir="${destination.temp.folder}/${full.name}">
       <fileset dir="." includes="META-INF/**/*,plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
       <fileset dir="." includes="icons/**/*.gif"/>
-      <fileset dir="${plugin.destination}" includes='ColorerDemo.bat,LINUX,MACOS,README,TODO,WHATSNEW,ColorerDemo.sh'/>
+      <fileset dir="distr" includes='ColorerDemo.bat,LINUX,MACOS,README,TODO,WHATSNEW,ColorerDemo.sh'/>
     </copy>
   </target>
 
@@ -116,8 +149,8 @@
   <target name="clean" description="Clean the plug-in: net.sf.colorer of all the zips, jars and logs created.">
     <delete file="${build.result.folder}/colorer.jar" failonerror='false'/>
     <delete file="${build.result.folder}/src.zip" failonerror='false'/>
-    <delete file="${plugin.destination}/${full.name}.jar" failonerror='false'/>
-    <delete file="${plugin.destination}/${full.name}.zip" failonerror='false'/>
+    <delete file="${build-dir}/${full.name}.jar" failonerror='false'/>
+    <delete file="${build-dir}/${full.name}.zip" failonerror='false'/>
     <delete dir="${temp.folder}" failonerror='false'/>
   </target>
 
@@ -126,21 +159,136 @@
     <eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
   </target>
 
+  <target name="eclipseplugin-native-win32">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="net_sf_colorer.dll"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/win32/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/win32/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="net_sf_colorer.dll"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-linux-x86">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/linux/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/linux/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-linux-x86_64">
+    <condition property="lib">
+      <available filepath="libnative" file="libnet_sf_colorer.so"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${temp.folder}/${full.name}/os/linux/x86_64"/>
+    <copy todir="${temp.folder}/${full.name}/os/linux/x86_64">
+      <fileset dir="libnative" includes="libnet_sf_colorer.so"/>
+    </copy>
+  </target>
+
+  <target name="eclipseplugin-native-macos">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.jnilib"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/macosx/ppc"/>
+    <copy todir="${eclipseplugin-dir}/os/macosx/ppc">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+    </copy>
+    <mkdir dir="${eclipseplugin-dir}/os/macosx/x86"/>
+    <copy todir="${eclipseplugin-dir}/os/macosx/x86">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.jnilib"/>
+    </copy>
+
+  </target>
+
+  <target name="eclipseplugin-native-solaris">
+    <condition property="lib">
+      <available filepath="src/net.sf.colorer/libnative" file="libnet_sf_colorer.so"/>
+    </condition>
+    <fail unless='lib'>
+    *********** ERROR! Native part of the Colorer Java library was not compiled
+    </fail>
+    <mkdir dir="${eclipseplugin-dir}/os/solaris"/>
+    <copy todir="${eclipseplugin-dir}/os/solaris">
+      <fileset dir="src/net.sf.colorer/libnative" includes="libnet_sf_colorer.so"/>
+    </copy>
+  </target>
+
+
   <target name="gather" depends="init" description="Create a directory, containing all the elements for the plug-in: net.sf.colorer.">
+    <antcall target='eclipse.plugins-check'/>
     <antcall target="build.jars"/>
     <antcall target="build.sources"/>
     <antcall target="gather.bin.parts">
       <param name="destination.temp.folder" value="${temp.folder}/"/>
     </antcall>
+
+    <!--
     <antcall target="gather.sources">
       <param name="destination.temp.folder" value="${temp.folder}/"/>
     </antcall>
+    <exec dir='${basedir}/libnative' executable='${make}' failonerror='${fail-on-bad-build}'>
+      <arg line='${makefile}'/>
+      <env key='Path' path='${native-path}:${java.library.path}'/>
+    </exec>
+    -->
+    <!-- handle native library -
+    <mkdir dir='${eclipseplugin-dir}'/>
+    -->
+    <antcall target="eclipseplugin-native-${target.os}-${target.arch}"/>
+
+    <mkdir dir='${temp.folder}/${full.name}/colorer'/>
+    <ant dir='../colorer/' antfile='build.xml' target='hrc.jar'>
+      <property name='target-dir' value='${temp.folder}/${full.name}/colorer'/>
+    </ant>
+
+    <mkdir dir='${temp.folder}/${full.name}/colorer/hrd/rgb'/>
+    <copy todir='${temp.folder}/${full.name}/colorer/hrd/rgb'>
+      <fileset dir='../colorer/hrd/rgb' includes='**'/>
+    </copy>
+    <copy todir='${temp.folder}/${full.name}/colorer/hrd'>
+      <fileset dir='../colorer/hrd' includes='*.xml'/>
+    </copy>
+
+    <antcall target="zip.folder">
+    </antcall>
+
+    <mkdir dir='${build-dir}/update/features'/>
+    <mkdir dir='${build-dir}/update/plugins'/>
+    <zip destfile='${build-dir}/update/features/${full.name}.jar'>
+      <fileset dir='.' includes='feature.xml'/>
+      <fileset dir='distr' includes='MPL-1.1.html'/>
+      <fileset dir='distr' includes='logo-colorer.png'/>
+    </zip>
+    <zip destfile='${build-dir}/update/plugins/${full.name}.jar'>
+      <fileset dir='${temp.folder}'/>
+    </zip>
+    <copy todir='${build-dir}/update'>
+      <fileset dir='.' includes='site.xml'/>
+    </copy>
+    
     <delete>
       <fileset dir="${temp.folder}" includes="**/*.bin.log"/>
     </delete>
   </target>
+  
   <target name="zip.folder" depends="init">
-    <zip zipfile="${plugin.destination}/${zip.name}.zip" basedir="${temp.folder}" filesonly="true" update="no" excludes="**/*.bin.log"/>
+    <zip zipfile="${build-dir}/${release-zip}" basedir="${temp.folder}" filesonly="true" update="no" excludes="**/*.bin.log"/>
   </target>
 
 </project>

@@ -2,17 +2,17 @@
 <feature
       id="net.sf.colorer"
       label="Eclipse Colorer"
-      version="0.8.0"
+      version="@eclipseplugin-version@"
       provider-name="Igor Russkih"
-      os="linux,macosx,win32"
-      arch="ppc,x86"
+      os="@target.os@"
+      arch="@target.arch@"
       image="logo-colorer.png">
 
    <description url="http://colorer.sf.net/eclipsecolorer/">
       Eclipse Colorer is a syntax Highlighting plugin for the Eclipse IDE.
 Based on a open source library &quot;Colorer-take5&quot;, supports more
-than 150 different syntaxes and languages.
-Shows outlines for the majority of the languages, could be easily configured.
+than 200 different syntaxes and languages.
+Shows outline for the majority of the languages, could be flexibly configured.
    </description>
 
    <copyright>
@@ -68,7 +68,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
          id="net.sf.colorer"
          download-size="2000"
          install-size="2000"
-         version="0.8.0">
+         version="@eclipseplugin-version@">
    </plugin>
 
 </feature>

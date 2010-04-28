@@ -33,7 +33,7 @@ public class FoldingBuilder {
         Stack schemeStack = new Stack();
         private int fLastLine, fFirstLine;
         private int compensateReparse;
-        private boolean compensationrun;
+        private boolean compensationRun;
         
         public void addRegion(int lno, String line, int sx, int ex, Region region) {
         }
@@ -44,7 +44,7 @@ public class FoldingBuilder {
         public void startParsing(int lno) {
             //schemeVector.setSize(0);
             compensateReparse = 0;
-            compensationrun = true;
+            compensationRun = true;
         }
         public void endParsing(int lno) {
         }
@@ -52,10 +52,10 @@ public class FoldingBuilder {
         public void enterScheme(int lno, String line, int sx, int ex,
                 Region region, String scheme)
         {
-            if (compensationrun && compensateReparse < schemeStack.size()){
+            if (compensationRun && compensateReparse < schemeStack.size()){
                 compensateReparse++;
             }else{
-                compensationrun = false;
+                compensationRun = false;
                 schemeStack.push(new FoldingElement(lno, sx, scheme));
             }
         }
@@ -66,8 +66,9 @@ public class FoldingBuilder {
         public void leaveScheme(int lno, String line, int sx, int ex,
                 Region region, String scheme)
         {
-            if (compensationrun) {
-                Logger.error("FoldingBuilder", "leaveScheme: compensateReparse >0 !!!");
+            if (compensationRun) {
+                //Logger.error("FoldingBuilder", "leaveScheme: compensateReparse >0 !!!");
+                compensationRun = false;
             }
 
             FoldingElement last = (FoldingElement)schemeStack.pop();

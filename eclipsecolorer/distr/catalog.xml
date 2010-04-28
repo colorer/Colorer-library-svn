@@ -2,6 +2,9 @@
 <!DOCTYPE catalog PUBLIC "-//Cail Lomecb//DTD Colorer CATALOG take5//EN"
   "http://colorer.sf.net/2003/catalog.dtd"[
 
+<!ENTITY hrc "hrc">
+<!ENTITY hrd "hrd">
+
 <!ENTITY catalog-console SYSTEM "hrd/catalog-console.xml">
 <!ENTITY catalog-rgb SYSTEM "hrd/catalog-rgb.xml">
 <!ENTITY catalog-text SYSTEM "hrd/catalog-text.xml">
@@ -15,15 +18,8 @@
 
   <hrc-sets>
 
-    <location link="hrc/proto.hrc"/>
-    
-    <location link="hrc/auto/ccsql.hrc"/>
-    <location link="hrc/auto/far.hrc"/>
-    <location link="hrc/auto/gen.hrc"/>
-    <location link="hrc/auto/litestep.hrc"/>
-    <location link="hrc/auto/qrm.hrc"/>
-    <location link="hrc/auto/rare-scripts.hrc"/>
-    <location link="hrc/auto/vim.hrc"/>
+    <location link="&hrc;/proto.hrc"/>
+    <location link="&hrc;/auto"/>
 
   </hrc-sets>
 

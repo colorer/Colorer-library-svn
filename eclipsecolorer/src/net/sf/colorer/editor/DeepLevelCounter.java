@@ -16,7 +16,7 @@ public class DeepLevelCounter {
     private Vector lineVector = new Vector();
     private BaseEditor fBaseEditor;
     private int fDeepLevel;
-    private int fMaxDeepLevel = 0;
+    private int fMaxDeepLevel = 1;
     
     /*
      * Installs this DeepLevelCounter over the specified base editor
@@ -26,7 +26,7 @@ public class DeepLevelCounter {
         // TODO: Using quite a rare region to prevent invocation of addRegion() at all
         fBaseEditor.addRegionHandler(fRegionHandler,
                 fBaseEditor.getParserFactory().getHRCParser().getRegion("def:EmbeddedTag"));
-        fMaxDeepLevel = 0;
+        fMaxDeepLevel = 1;
     }
     
     /*

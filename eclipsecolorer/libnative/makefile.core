@@ -9,7 +9,6 @@ JAVA_DEP=net_sf_colorer_ParserFactory.h net_sf_colorer_impl_BaseEditorNative.h n
 $(obj_output_slash)net_sf_colorer.$(obj): *.cpp *.h $(JAVA_DEP)
 
 
-
 net_sf_colorer_impl_BaseEditorNative.h: ../src/net/sf/colorer/impl/BaseEditorNative.java
 	$(RM) net_sf_colorer_impl_BaseEditorNative.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.impl.BaseEditorNative
@@ -33,3 +32,6 @@ net_sf_colorer_FileType.h: ../src/net/sf/colorer/FileType.java
 net_sf_colorer_handlers_RegionMapper.h: ../src/net/sf/colorer/handlers/RegionMapper.java
 #	$(RM) net_sf_colorer_FileType.h
 	javah -classpath $(NSC_PATH) net.sf.colorer.handlers.RegionMapper
+
+$(obj_output):
+	$(MKDIR) $(obj_output)

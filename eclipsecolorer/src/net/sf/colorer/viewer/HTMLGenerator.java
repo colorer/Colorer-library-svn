@@ -26,7 +26,7 @@ public class HTMLGenerator {
   ParserFactory pf;
   
   /**
-   * Ñonstructor, used to pass initial common parameters of generation process
+   * Constructor, used to pass initial common parameters of generation process
    * @param pf ParserFactory object, used to obtain all parsing resources
    * @param input LineSource input object, representing input source text, used for parsing
    * @param hrd Name of a color scheme, used to highlight text and transform it into HTML form
