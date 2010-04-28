@@ -12,6 +12,7 @@
   <property name="javacVerbose" value="false"/>
 
   <property name="eclipse.dir" value="${ECLIPSE_HOME}"/>
+  <property name="eclipse.plugins" value="${ECLIPSE_HOME}/plugins"/>
   <property name="plugin" value="net.sf.colorer"/>
 
   <property name='eclipseplugin-version' value='eclipseplugin-version'/>
@@ -96,7 +97,6 @@
     <copy todir="${destination.temp.folder}/${full.name}">
       <fileset dir="." includes="META-INF/**/*,plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
       <fileset dir="." includes="icons/**/*.gif"/>
-      <fileset dir="distr" includes='ColorerDemo.bat,LINUX,MACOS,README,TODO,WHATSNEW,ColorerDemo.sh'/>
     </copy>
   </target>
 
@@ -264,6 +264,7 @@
     <copy todir='${temp.folder}/${full.name}/colorer/hrd'>
       <fileset dir='../colorer/hrd' includes='*.xml'/>
     </copy>
+    <copy file='distr/catalog.xml' todir='${temp.folder}/${full.name}/colorer'/>
 
     <antcall target="zip.folder">
     </antcall>
