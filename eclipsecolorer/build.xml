@@ -32,7 +32,7 @@
   <property name="build.result.folder" value="${basedir}"/>
 
 
-  <target name="init" depends="properties, update-version">
+  <target name="init" depends="properties">
     <path id='classpath'>
       <fileset dir="${eclipse.plugins}">
         <include name="org.eclipse*/**/*.jar"/>
@@ -49,11 +49,15 @@
   </target>
   
   <target name="update-version">
+    <delete>
+      <fileset dir="." includes="feature.xml, site.xml, META-INF/MANIFEST.MF"/>
+    </delete>
     <filter token="eclipseplugin-version" value="${eclipseplugin-version}"/>
     <filter token="target.os" value="${target.os}"/>
     <filter token="target.arch" value="${target.arch}"/>
     <copy file='feature.in.xml' tofile='feature.xml' filtering='true'/>
     <copy file='site.in.xml' tofile='site.xml' filtering='true'/>
+    <copy file='META-INF/MANIFEST.in.MF' tofile='META-INF/MANIFEST.MF' filtering='true'/>
   </target>
 
   <target name="cleanxx" depends='init'>
@@ -95,7 +99,7 @@
     <mkdir dir="${destination.temp.folder}/${full.name}"/>
     <copy file="${build.result.folder}/colorer.jar" todir="${destination.temp.folder}/${full.name}"/>
     <copy todir="${destination.temp.folder}/${full.name}">
-      <fileset dir="." includes="META-INF/**/*,plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
+      <fileset dir="." includes="META-INF/MANIFEST.MF,plugin.properties,plugin.xml,plugin_ru.prop,plugin_ru.properties,about.ini,welcome.xml"/><!-- toc.xml -->
       <fileset dir="." includes="icons/**/*.gif"/>
     </copy>
   </target>
@@ -230,7 +234,7 @@
   </target>
 
 
-  <target name="gather" depends="init" description="Create a directory, containing all the elements for the plug-in: net.sf.colorer.">
+  <target name="gather" depends="init, update-version" description="Create a directory, containing all the elements for the plug-in: net.sf.colorer.">
     <antcall target='eclipse.plugins-check'/>
     <antcall target="build.jars"/>
     <antcall target="build.sources"/>
