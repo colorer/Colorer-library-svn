@@ -8,7 +8,7 @@
       <editor
             name="%ColorerEditor"
             icon="icons/colorer_editor.gif"
-            extensions="adb,adc,ads,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
+            extensions="adb,adc,ads,as,asm,bas,dsl,f,inc,idl,js,java,sqlj,lisp,lsp,ltx,m,m3,p,pas,patch,pl,pls,pm,prg,ps,py,rb,pyw,rex,sh,sml,spec,sql,tcl,tex,texi,tsh,vbs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor">
@@ -16,7 +16,7 @@
       <editor
             name="%ColorerEditor.cpp"
             icon="icons/cpp.gif"
-            extensions="c,cc,cpp,cs,csh,css,cxx,h,hh,hpp,hs"
+            extensions="c,cc,cpp,cs,csh,cxx,h,hh,hpp,hs"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor.Cpp">
@@ -34,7 +34,7 @@
             name="%ColorerEditor.xml"
             default="true"
             icon="icons/xml.gif"
-            extensions="xml,xsd,xsl,dtd,hrc,hrd,html,htm,xhtml,asp,aspx,jsp,fo,svg,dbk,docbook,jhtml,jspf,php,php3,php4,phtml,sgm,sgml,shtm,shtml"
+            extensions="xml,xsd,xsl,dtd,hrc,hrd,html,htm,xhtml,rhtml,erb,yml,haml,sass,css,asp,aspx,jsp,fo,svg,dbk,docbook,jhtml,jspf,php,php3,php4,phtml,sgm,sgml,shtm,shtml"
             contributorClass="net.sf.colorer.eclipse.editors.ColorerActionContributor"
             class="net.sf.colorer.eclipse.editors.ColorerEditor"
             id="net.sf.colorer.eclipse.editors.ColorerEditor.XML">
