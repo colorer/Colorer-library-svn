@@ -529,6 +529,16 @@
     <filename weight='4'>/\bbuild\.xml$/ix</filename>
     <firstline weight='5'>/&lt;project\b/</firstline>
   </prototype>
+
+  <prototype name="acapella" group="scripts" description="Acapella">
+    <location link="scripts/acapella/acapella.hrc"/>
+    <filename>/\.(script|proc|param|parameter)$/i</filename>
+    <parameters>
+      <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
+      <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
+    </parameters>
+  </prototype>
+
   <prototype name="qrc" group="scripts" description="qrc">
     <location link="scripts/gen/qrc.hrc"/>
     <filename>/\.qrc$/ix</filename>
