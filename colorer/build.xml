@@ -223,46 +223,6 @@
     </fail>
   </target>
 
-  <target name="hrc.jar" >
-
-    <mkdir dir='${target-dir}/hrc/auto/types'/>
-
-    <zip destfile='${target-dir}/hrc/common.jar'>
-      <fileset dir='${basedir}/hrc' includes='**/*' excludes='changes.txt, proto*.hrc, *.ent.hrc, auto, auto/**/*'/>
-    </zip>
-    <copy todir='${target-dir}/hrc/'  overwrite='true'>
-      <fileset dir='hrc/' includes='proto*.hrc, *.ent.hrc'/>
-    </copy>
-    <replace dir="${target-dir}/hrc" includes='*.hrc' token='link="' value='link="jar:common.jar!'/>
-
-    <copy todir='${target-dir}/hrc/auto' overwrite='true'>
-      <fileset dir='hrc/auto' includes='*.hrc'/>
-    </copy>
-    <replace dir="${target-dir}/hrc/auto" includes='*.hrc' token='link="' value='link="jar:types/auto.jar!'/>
-  </target>
-
-  <target name="hrcupdate.clean" depends='init'>
-    <delete><fileset dir='${build-dir}/..' includes='hrc-update*'/></delete>
-    <delete dir='${hrcupdate-dir}'/>
-  </target>
-
-  <target name="hrcupdate" depends='init' description='Builds a package of the current HRC base'>
-    <tstamp><format property="TODAY" pattern="yyyy-MM-dd"/></tstamp>
-    <property name='hrcupdate-zip' value='${build-dir}/hrc-update.${TODAY}.zip'/>
-
-    <mkdir dir='${hrcupdate-dir}/hrc'/>
-    <antcall target='hrc.jar'>
-      <param name='target-dir' value='${hrcupdate-dir}'/>
-    </antcall>
-    <copy file='hrc/changes.txt' todir='${hrcupdate-dir}'/>
-
-    <zip destfile='${hrcupdate-zip}'>
-      <fileset dir='${hrcupdate-dir}'/>
-    </zip>
-
-  </target>
-
-
   <target name="this.colorer" depends='init' description='Builds binary executable and moves it into current working copy'>
     <exec dir='src/colorer' executable='${make}' failonerror='true'>
       <arg line='${makefile}'/>
