@@ -18,9 +18,9 @@ public:
   };
   static JBaseEditor *get(JNIEnv *env, jlong iptr){
     JBaseEditor *be = (JBaseEditor*)(iptr);
-//    be->lineSource->env = env;
-//    for(int idx = 0; idx < be->regionHandlers.size(); idx++)
-//      be->regionHandlers.elementAt(idx)->env = env;
+    be->lineSource->env = env;
+    for(int idx = 0; idx < be->jregionHandlers.size(); idx++)
+      be->jregionHandlers.elementAt(idx)->env = env;
     return be;
   };
 

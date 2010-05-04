@@ -11,8 +11,8 @@
   <property name="javacDebugInfo" value="on"/>
   <property name="javacVerbose" value="false"/>
 
-  <property name="eclipse.dir" value="${ECLIPSE_HOME}"/>
-  <property name="eclipse.plugins" value="${ECLIPSE_HOME}/plugins"/>
+  <property name="eclipse.dir" value=""/>
+  <property name="eclipse.plugins" value="${eclipse.dir}/plugins"/>
   <property name="plugin" value="net.sf.colorer"/>
 
   <property name='eclipseplugin-version' value='eclipseplugin-version'/>
@@ -130,7 +130,7 @@
 
   <target name="build.jars" depends="init" description="Build all the jars for the plug-in: net.sf.colorer.">
     <uptodate property="colorer.jar" targetfile="${build.result.folder}/colorer.jar">
-      <srcfiles dir= "src" includes="**/*.java"/>
+      <srcfiles dir= "src" includes="**/*"/>
     </uptodate>
     <antcall target="colorer.jar"/>
   </target>

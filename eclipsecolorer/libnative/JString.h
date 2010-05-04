@@ -10,15 +10,20 @@
 class JString : public String{
 public:
   JString(JNIEnv *env, jstring jdstring){
-    this->env = env;
-    this->jdstring = (jstring)env->NewGlobalRef(jdstring);
+    jdstring = (jstring)env->NewGlobalRef(jdstring);
     jboolean copied;
-    chars = env->GetStringChars(this->jdstring, &copied);
-    len = env->GetStringLength(this->jdstring);
-  };
-  ~JString(){
+    
+    const jchar *chars = env->GetStringChars(jdstring, &copied);
+    this->len = env->GetStringLength(jdstring);
+    
+    this->chars = new jchar[len];
+    memcpy(this->chars, chars, len*sizeof(jchar));
+    
     env->ReleaseStringChars(jdstring, chars);
     env->DeleteGlobalRef(jdstring);
+  };
+  ~JString(){
+    delete[] this->chars;
   };
 
   int length() const{
@@ -26,12 +31,10 @@ public:
   };
   wchar operator[](int idx) const{
     if (idx < 0 || idx >= len) throw OutOfBoundException(StringBuffer("JString: ")+SString(idx));
-    return chars[idx];
+    return this->chars[idx];
   };
-  JNIEnv *env;
-private:
-  jstring jdstring;
-  const jchar *chars;
+private:  
+  jchar *chars;
   int len;
 };
 
