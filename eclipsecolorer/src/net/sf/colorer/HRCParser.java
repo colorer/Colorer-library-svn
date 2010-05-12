@@ -89,12 +89,14 @@ public class HRCParser {
                 if (idx == -1) {
                     rg.addElement(gr);
                 } else {
-                    Group parent_gr = (Group) allGroups.get(ft_group.substring(0, idx));
+                    String parent_name = ft_group.substring(0, idx);
+                    Group parent_gr = (Group) allGroups.get(parent_name);
                     if (parent_gr == null) {
-                        rg.addElement(gr);
-                    } else {
-                        parent_gr.groups.addElement(gr);
+                        parent_gr = new Group(parent_name);
+                        allGroups.put(parent_name, parent_gr);
+                        rg.addElement(parent_gr);
                     }
+                    parent_gr.groups.addElement(gr);
                 }
             }
             gr.filetypes.addElement(ft);
