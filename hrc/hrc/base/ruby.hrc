@@ -73,6 +73,13 @@
         scheme="regexp:perl.regexp"
         region="String" region01="def:Symbol" region07="regexp:SpecQuote"
         region10="regexp:SpecQuote" region11="def:PairEnd" region12="regexp:SpecArea"/>
+      
+      <block start="/ (%r\{) /x"
+        end="/( \} )/x"
+        scheme="regexp:perl.regexp"
+        region="String" region00="def:Symbol" region01="def:PairStart"
+        region10="def:Symbol" region10="def:PairEnd"/>
+      
 
       <block start='/\%([^\s\w&lt;&gt;])/' end='/\y1/' scheme='def:Comment' region='CommentDoc'/>
 
