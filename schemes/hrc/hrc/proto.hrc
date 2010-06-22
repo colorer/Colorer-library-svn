@@ -155,6 +155,10 @@
     <firstline weight='4'>/-\*- ruby -\*-/i</firstline>
     <firstline>/bin\/ruby/i</firstline>
   </prototype>
+  <prototype name="scala" group="main" description="Scala">
+    <location link="base/scala.hrc"/>
+    <filename>/\.(.scala)$/i</filename>
+  </prototype>
   <prototype name="tcltk" group="main" description="Tcl/Tk">
     <location link="base/tcltk.hrc"/>
     <filename>/\.(tcl|tk)$/i</filename>
