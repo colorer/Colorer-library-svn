@@ -28,16 +28,10 @@ public class BaseEditorNative implements BaseEditor {
     ParserFactory fParserFactory;
     RegionMapper regionMapper;
 
-    static boolean invalidUsage = false;
- 
-
     //native Region getRegion(final long iptr, final String qname);
 
     public BaseEditorNative(ParserFactory pf, LineSource lineSource) {
         
-        if (invalidUsage) {
-            throw new RuntimeException("Colorer:BaseEditorNative: Invalid global state: dispose() should be called explicitly!");
-        }
         iptr = init(pf, lineSource);
         fParserFactory = pf;
         HRCParser hrcParser = pf.getHRCParser();
@@ -72,10 +66,13 @@ public class BaseEditorNative implements BaseEditor {
 
     protected void finalize() throws Throwable {
         if (!disposed){
-            invalidUsage = true;
+            if (Logger.TRACE) {
+                Logger.trace("BaseEditor", "Colorer:BaseEditorNative: Invalid global state: dispose() should be called explicitly!");
+            }
+            // Memory leak instead???
+            // Is this safe???
+            dispose();
         }
-        //Memory leak instead!!!
-        //dispose();
     }
 
     public void setRegionCompact(boolean compact) {
