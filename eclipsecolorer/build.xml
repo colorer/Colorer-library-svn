@@ -296,7 +296,9 @@
   </target>
   
   <target name="zip.folder" depends="init">
-    <zip zipfile="${build-dir}/${release-zip}" basedir="${temp.folder}" filesonly="true" update="no" excludes="**/*.bin.log"/>
+    <zip zipfile="${build-dir}/${release-zip}" filesonly="true" update="no" excludes="**/*.bin.log">
+      <fileset dir='${temp.folder}/${full.name}'/>
+    </zip>
   </target>
   
 </project>
