@@ -349,7 +349,7 @@
           <word name="AnyRef"/>
           <word name="Application"/>
           <word name="AppliedType"/>
-          <word name="Array"/>>
+          <word name="Array"/>
           <word name="ArrayBuffer"/>
           <word name="Attribute"/>
           <word name="BoxedArray"/>
