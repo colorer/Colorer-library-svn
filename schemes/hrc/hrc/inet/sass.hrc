@@ -20,15 +20,22 @@
     <region name="IDSelector" parent="def:Keyword"/>
     <region name="IncludeMixin" parent="def:Label"/>
     
+    <scheme name='PropertyNames'>
+      <regexp match="/(\$)([\w\d\-]+)/" region='def:Var'/>
+      <inherit scheme='css:PropertyNames'/>
+    </scheme>
 
     <scheme name="PropertyWrapper">
-       <block start="/~/" end="/(:|\s|$)/" scheme="css:PropertyNames" region10="def:Symbol"/>
+       <block start="/~/" end="/(:|\s|$)/" scheme="PropertyNames" region10="def:Symbol"/>
+       
+       <regexp match="/(\$)([\w\d\-]+)/" region='def:Var'/>
+
        <inherit scheme="css:Property"/>
     </scheme>
 
     <scheme name="sass">
        <!-- property value after colon -->
-       <block start="/\M([\w\d\-]+)\s*(:)/" end="/\M([\x22\x27]|$)/"
+       <block start="/\M([\$\w\d\-]+)\s*(:)/" end="/\M([\x22\x27]|$)/"
               scheme="PropertyWrapper" region02="def:Symbol"
        />
        <block start="/(:)\s*\M([\w\d\-]+)?/" end="/\M([\x22\x27]|$)/"
@@ -39,6 +46,12 @@
        <regexp match="/ \. (?{ClassSelector}[\w\d\-]+ ) /x" />
        <regexp match="/ \# (?{IDSelector}[\w\d\-]+ ) /x" />
        <regexp match="/ [\=\+] (?{IncludeMixin}[\w\d\-]+ ) /x" />
+
+       <regexp match="/[\(\)&apos;&quot;]/" region='def:Symbol'/>
+       
+       <regexp match="/\/\/.*$/" region='def:Comment'/>
+
+       <regexp match="/\@(import|extend|mixin)/" region='def:Keyword'/>
 
     </scheme>
 
