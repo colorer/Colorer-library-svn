@@ -1,4 +1,7 @@
-﻿colorer.log:
+﻿Some comments here are in Russian. You may want to use http://translate.google.com to read them.
+
+
+colorer.log:
 
 error: duplicate scheme name 'yml:xmlss-uri-elementContent'
 error: unqualified name 'perfomace_type-element' doesn't belong to any imported type [I:\WORK\colorer\main\colorer\hrc/auto\gen/yml.hrc]
