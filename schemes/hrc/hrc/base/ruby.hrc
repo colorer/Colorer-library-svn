@@ -114,6 +114,7 @@
     
     <scheme name='Keywords'>
       <regexp match='/ :(?{def:Identifier}[\@\w_]+) /x'/>
+      <regexp match='/ (?{def:Identifier}[\@\w_]+): /x'/>
 
       <keywords region="Keyword">
         <word name="BEGIN"/>
