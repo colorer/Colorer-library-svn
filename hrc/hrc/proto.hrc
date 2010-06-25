@@ -734,7 +734,7 @@
     <location link="rare/mako.hrc"/>
     <!-- extension conflicts with Makefile, hence weight is less than 2 -->
     <filename weight="1.5">/\.(mako|mak)$/i</filename>
-    <firstline>/\<%/</firstline>
+    <firstline>/\&lt;%/</firstline>
   </prototype>
   <prototype name="matlab" group="rare" description="MatLab">
     <location link="rare/matlab.hrc"/>
