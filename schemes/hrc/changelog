@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- changes.txt в актуальное состояние
+	- исправление ошибки в proto.hrc
+
+#Revision: 1448
+	ctapmex 2010-03-10 17:42:59 +0500 (Ср, 10 мар 2010)
 	- idl.hrc "С тем, что в поставке - outliner можно сказать не работает" (с)Maximus5
 
 #Revision: 1434
