@@ -198,17 +198,7 @@
 		region00="command" region01="def:PairStart"
 		region10="command" region11="def:PairEnd"
 	/>
-	
-	<block start="/\$Text\b\s*\M\S+/i" end="//" 
-		scheme="macro.command.text" region00="command"
-	/>
-	
-	<block start="/\$Date\b\s*\M[\\&quot;]/i" end="//" 
-		scheme="macro.date" region00="command"
-	/>
-	
-	<regexp match="/\$MMode\s*(1)\b/i" region="command" region1="def:Number"/>
-	
+		
 	<block start="/\$\M\w+/" end="/~\w+\b\m/" priority="low"
 		scheme="macro.command.names" region00="command"
 	/>
@@ -315,16 +305,18 @@
 		<word name="fsplit"/>
 		<word name="fexist"/>
 		<word name="fattr"/>
-		<word name="panel.fexist"/>
-		<word name="panel.setpos"/>
 		<word name="panel.fattr"/>
-		<word name="panel.setpath"/>
-		<word name="panel.setposidx"/>
+		<word name="panel.fexist"/>
 		<word name="panel.item"/>
+		<word name="panel.select"/>
+		<word name="panel.setpath"/>
+		<word name="panel.setpos"/>
+		<word name="panel.setposidx"/>
 		<word name="PanelItem"/>
 		<word name="iif"/>
 		<word name="env"/>
 		<word name="msave"/>
+		<word name="mmode"/>
 		<word name="akey"/>
 		<word name="clip"/>
 		<word name="flock"/>
@@ -336,12 +328,15 @@
 		<word name="prompt"/>
 		<word name="gethotkey"/>
 		<word name="checkhotkey"/>
+		<word name="Menu.GetValue"/>
 		<word name="Menu.Select"/>
 		<word name="Menu.Value"/>
 		<word name="Dlg.GetValue"/>
-		<word name="Editor.Set"/>
-		<word name="Editor.Sel"/>
 		<word name="Editor.Pos"/>
+		<word name="Editor.Sel"/>
+		<word name="Editor.Set"/>
+		<word name="Editor.SetTitle"/>
+		<word name="Editor.Undo"/>
 		<word name="BM.Add"/>
 		<word name="BM.Clear"/>
 		<word name="BM.Del"/>
@@ -350,6 +345,8 @@
 		<word name="BM.Prev"/>
 		<word name="BM.Stat"/>
 		<word name="callplugin"/>
+		<word name="date"/>
+		<word name="print"/>
 		<word name="testfolder"/>
 	</keywords>
 </scheme>
@@ -358,9 +355,6 @@
 <scheme name="macro.command.names">
 	<keywords region="command" ignorecase="yes" worddiv="[\$\s]">
 		<word name="AKey"/>
-		<word name="Text"/>
-		<word name="Date"/>
-		<word name="IClip"/>
 		<word name="Exit"/>
 		<word name="XLat"/>
 		<word name="KbdSwitch"/>
@@ -382,6 +376,10 @@
 		scheme="macro.flags.cmd" 
 		region00="flag" region01="flag.dot"
 	/>
+	<block start="/Menu(\.)\M\w+/i" end="/~\w+\b\m/" 
+		scheme="macro.flags.menu" 
+		region00="flag" region01="flag.dot"
+	/>
 	<block start="/Dlg(\.)\M\w+/i" end="/~\w+\b\m/" 
 		scheme="macro.flags.dlg" 
 		region00="flag" region01="flag.dot"
@@ -390,25 +388,30 @@
 		scheme="macro.flags.edit" 
 		region00="flag" region01="flag.dot"
 	/>
-	<regexp match="/Viewer(\.)State/i" region0="flag" region1="flag.dot"/>
-
+	<block start="/Viewer(\.)\M\w+/i" end="/~\w+\b\m/"
+		scheme="macro.flags.view"
+		region00="flag" region01="flag.dot"
+	/>
 	<inherit scheme="macro.flags.common"/>
 	<inherit scheme="macro.flags.registry"/>
 	<keywords region="flag" ignorecase="yes">
-    <word name="MacroArea"/>
-    <word name="ItemCount"/>
-    <word name="CurPos"/>
-    <word name="Title"/>
-    <word name="Far.Width"/>
-    <word name="Far.Height"/>
-    <word name="Far.Title"/>
-    <word name="Help.FileName"/>
-    <word name="MsX"/>
-    <word name="MsY"/>
-    <word name="Help.Topic"/>
-    <word name="Help.SelTopic"/>
-    <word name="MsButton"/>
-    <word name="MsCtrlState"/>
+		<word name="MacroArea"/>
+		<word name="ItemCount"/>
+		<word name="CurPos"/>
+		<word name="Title"/>
+		<word name="Far.Width"/>
+		<word name="Far.Height"/>
+		<word name="Far.Title"/>
+		<word name="Help.FileName"/>
+		<word name="MsX"/>
+		<word name="MsY"/>
+		<word name="Help.Topic"/>
+		<word name="Help.SelTopic"/>
+		<word name="MsButton"/>
+		<word name="MsCtrlState"/>
+		<word name="MsEventState"/>
+		<word name="IsUserAdmin"/>
+		<word name="RCounter"/>
 	</keywords>
 	<inherit scheme="macro.flags.ns"/>
 	<inherit scheme="macro.keys"/>
@@ -457,6 +460,21 @@
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
 
+<scheme name="macro.flags.menu">
+	<keywords region="flag" ignorecase="yes">
+		<word name="Value"/>
+	</keywords> 
+	<regexp match="/\S+/" region="def:Error" priority="low"/>
+</scheme>
+
+<scheme name="macro.flags.view">
+	<keywords region="flag" ignorecase="yes">
+		<word name="State"/>
+		<word name="FileName"/>
+	</keywords>
+	<regexp match="/\S+/" region="def:Error" priority="low"/>
+</scheme>
+
 <scheme name="macro.flags.panel">
 	<inherit scheme="macro.flags.common"/>
 	<keywords region="flag" ignorecase="yes">
@@ -478,6 +496,9 @@
 		<word name="Visible"/>
 		<word name="Root"/>
 		<word name="Filter"/>
+		<word name="HostFile"/>
+		<word name="Prefix"/>
+		<word name="Path0"/>
 	</keywords>
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
@@ -568,6 +589,7 @@
 		<word name="Num7"/>
 		<word name="Num8"/>
 		<word name="Num9"/>
+		<word name="NumEnter"/>
 		<word name="Multiply"/>
 		<word name="Add"/>
 		<word name="Subtract"/>
@@ -963,6 +985,7 @@
 		<word name="CtrlNum7"/>
 		<word name="CtrlNum8"/>
 		<word name="CtrlNum9"/>
+		<word name="CtrlNumEnter"/>
 		<word name="ShiftNum0"/>
 		<word name="ShiftNum1"/>
 		<word name="ShiftNum2"/>
@@ -973,6 +996,7 @@
 		<word name="ShiftNum7"/>
 		<word name="ShiftNum8"/>
 		<word name="ShiftNum9"/>
+		<word name="ShiftNumEnter"/>
 		<word name="CtrlShiftNum0"/>
 		<word name="CtrlShiftNum1"/>
 		<word name="CtrlShiftNum2"/>
@@ -983,6 +1007,7 @@
 		<word name="CtrlShiftNum7"/>
 		<word name="CtrlShiftNum8"/>
 		<word name="CtrlShiftNum9"/>
+		<word name="CtrlShiftNumEnter"/>
 		<word name="CtrlAltNum0"/>
 		<word name="CtrlAltNum1"/>
 		<word name="CtrlAltNum2"/>
@@ -993,6 +1018,7 @@
 		<word name="CtrlAltNum7"/>
 		<word name="CtrlAltNum8"/>
 		<word name="CtrlAltNum9"/>
+		<word name="CtrlAltNumEnter"/>
 		<word name="AltShiftNum0"/>
 		<word name="AltShiftNum1"/>
 		<word name="AltShiftNum2"/>
@@ -1003,6 +1029,7 @@
 		<word name="AltShiftNum7"/>
 		<word name="AltShiftNum8"/>
 		<word name="AltShiftNum9"/>
+		<word name="AltShiftNumEnter"/>
 		<word name="CtrlBackSlash"/>
 		<word name="CtrlClear"/>
 		<word name="CtrlAdd"/>
@@ -1045,6 +1072,8 @@
 		<word name="CtrlShiftMsWheelUp"/>
 		<word name="AltMsWheelUp"/>
 		<word name="CtrlMsWheelUp"/>
+		<word name="MsRClick"/>
+		<word name="MsLClick"/>
 	</keywords>  
 	<inherit scheme='far.macro.string.internal:macro.key.addon'/>
 	<regexp match="/\b(Ctrl|Alt|Shift){1,3}[`@\#\$\%\=\(\)\[\]\{\}?\|*+\-.,;:'~\/]/" region="macro.key"/>

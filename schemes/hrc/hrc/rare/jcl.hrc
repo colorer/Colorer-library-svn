@@ -41,6 +41,8 @@
 
 
       <scheme name="jcl">
+<!-- Comments -->
+        <regexp match="/\/\/\*.*$/" region0="jclComment"/>
 <!-- Strings -->
         <regexp match="/(\&#39;(.*?[^\&#39;])??\&#39;)/" region0="jclString"/>
         <regexp match="/(\&#34;(.*?[^\&#34;])??\&#34;)/" region0="jclString"/>
