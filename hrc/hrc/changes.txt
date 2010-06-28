@@ -4,6 +4,8 @@
   Fixed:
     - SASS keywords and improvements
     - Ruby : ruby custom RE syntax; ruby 1.9 style symbols
+    - JCL : add support comments
+    - Far macro
 
 Date: 2010-03-06 12:00:00 r1435
 (FarColorer 1.0.2.5)
