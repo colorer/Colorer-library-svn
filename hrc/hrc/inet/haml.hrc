@@ -27,6 +27,8 @@
     </scheme>    
     
     <scheme name="SimpleRuby">
+      <!-- HAML 3 ruby continuation via comma -->
+      <block start='/\,\s*$/' end='/^/' scheme='def:empty'/>
       <inherit scheme='ruby:Keywords'/>
       <inherit scheme='ruby:Strings'/>
     </scheme>    
@@ -55,8 +57,8 @@
          region='def:Insertion' region00='def:PairStart' region10='def:PairEnd' scheme='def:empty'/>
 
       <block start='/[\=\-]\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
-      <block start='/\-/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
-      <block start='/\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
+      <block start='/^\s*\-/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
+      <block start='/^\s*\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
 
       <block start='/\(/' end='/\)/' region00='def:PairStart' region10='def:PairEnd' scheme='SimpleAttributes'/>
 
