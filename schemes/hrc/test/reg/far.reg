@@ -180,3 +180,12 @@ regf dfg dg dfg "
 "Sequence"="$if (fexist(1,(11+1)+0x12) == 1) fexist() $end"
 "Sequence"="$if (fexistr() == 1) $end"
 "Sequence"="%html=APanel.Current; $if (fexist(fsplit(%html,0x04)+\".files\") == 1) panel.setpos(0,fsplit(%html,0x04)+\"_files\") Ins $end $if (fexist(fsplit(%html,0x04)+\".files\") == 1) panel.setpos(0,fsplit(%html,0x04)+\".files\") Ins $end panel.setpos(0,%html) Ins"
+
+;hex значенийя
+[HKEY_CURRENT_USER\Software\far2\Colors]
+"Current"=hex:
+"Новый параметр #1"=hex(7):64,00,73,00,66,00,76,00,64,00,66,00,61,00,64,00,66,\
+  00,67,00,68,00,6e,00,62,00,64,00,20,00,72,00,20,00,72,00,74,00,20,00,74,00,\
+  65,00,74,00,67,00,20,00,72,00,74,00,67,00,20,00,77,00,65,00,72,00,67,00,74,\
+  00,67,00,20,00,5c,00,00,00,66,00,64,00,67,00,20,00,64,00,66,00,67,00,64,00,\
+  66,00,5c,00,00,00,00,00
