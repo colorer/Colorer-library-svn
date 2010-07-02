@@ -112,6 +112,10 @@
 <entity name="end" value="\M($|;)"/>
 
 <scheme name="param.content">
+ <regexp match="/hex(\(([\db])\))?(:)\M\s*$/" region="type.hex"
+  region0="type" region3="ini:SymbolStrong"
+  region1="ini:Symbol" region2="ini:Number"
+ />
  <block start="/hex(\(([\db])\))?(:)/" end="/%ini:hex;{1,2}\s*\m%end;/" scheme="type.hex"
   region00="type" region03="ini:SymbolStrong"
   region01="ini:Symbol" region02="ini:Number"
