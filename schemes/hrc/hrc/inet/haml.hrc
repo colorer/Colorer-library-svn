@@ -58,7 +58,7 @@
 
       <block start='/[\=\-]\#/' end='/$/' scheme='def:Comment' region='def:Comment'/>
       <block start='/^\s*\-/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
-      <block start='/^\s*\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
+      <block start='/\=/' end='/$/' scheme='SimpleRuby' region='def:Insertion'/>
 
       <block start='/\(/' end='/\)/' region00='def:PairStart' region10='def:PairEnd' scheme='SimpleAttributes'/>
 
