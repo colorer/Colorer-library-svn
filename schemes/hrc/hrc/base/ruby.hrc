@@ -41,16 +41,43 @@
       <regexp match="/\\\M[^\\]/"/>
     </scheme>
     
+    <scheme name="InterpolatedString1">
+      <block start='/\{/' end='/\}/' scheme="InterpolatedString1" region='String'/>
+      <inherit scheme="InterpolatedString"/>
+    </scheme>
+
+    <scheme name="InterpolatedString2">
+      <block start='/\[/' end='/\]/' scheme="InterpolatedString2" region='String'/>
+      <inherit scheme="InterpolatedString"/>
+    </scheme>
+
+    <scheme name="InterpolatedString3">
+      <block start='/\(/' end='/\)/' scheme="InterpolatedString3" region='String'/>
+      <inherit scheme="InterpolatedString"/>
+    </scheme>
+    <scheme name="InterpolatedString4">
+      <block start='/\&lt;/' end='/\&gt;/' scheme="InterpolatedString4" region='String'/>
+      <inherit scheme="InterpolatedString"/>
+    </scheme>
 
     <scheme name="Strings">
       <block start='/([\x27])/' end='/\y1/' scheme="String" region='String'/>
-      <block start='/([\x22\`])/' end='/\y1/' scheme="InterpolatedString" region='String'/>
+      <block start='/\%[qxw](\{)/' end='/\}/' scheme="String" region='String'/>
+      <block start='/\%[qxw](\[)/' end='/\]/' scheme="String" region='String'/>
+      <block start='/\%[qxw](\()/' end='/\)/' scheme="String" region='String'/>
+      <block start='/\%[qxw](.)/' end='/\y1/' scheme="String" region='String'/>
 
-      <block start='/\%[QqxWw](\{)/' end='/\}/' scheme="String" region='String'/>
-      <block start='/\%[QqxWw](\[)/' end='/\]/' scheme="String" region='String'/>
-      <block start='/\%[QqxWw](\()/' end='/\)/' scheme="String" region='String'/>
-      <block start='/\%[QqxWw](.)/' end='/\y1/' scheme="String" region='String'/>
-      <block start='/&lt;&lt;(\-?)([\w_]+)/' end='/\y2/' scheme="String" region='String'/>
+      <block start='/\%[QW](\{)/' end='/\}/' scheme="InterpolatedString1" region='String'/>
+      <block start='/\%[QW](\[)/' end='/\]/' scheme="InterpolatedString2" region='String'/>
+      <block start='/\%[QW](\()/' end='/\)/' scheme="InterpolatedString3" region='String'/>
+      <block start='/\%[QW]?(\&lt;)/' end='/\&gt;/' scheme="InterpolatedString4" region='String'/>
+      <block start='/\%[QW](.)/' end='/\y1/' scheme="InterpolatedString" region='String'/>
+
+      <block start='/&lt;&lt;(\-?)([&apos;]?)([\w_]+)\2/' end='/\y3/' scheme="InterpolatedString"
+             region='String' region03='def:PairStart' region10='def:PairEnd'/>
+
+      <block start='/([\x22\`])/' end='/\y1/' scheme="InterpolatedString" region='String'/>
+      <block start='/\%(\()/' end='/\)/' scheme="InterpolatedString" region='String'/>
     </scheme>
 
     <scheme name="ruby">
@@ -78,7 +105,7 @@
         end="/( \} )/x"
         scheme="regexp:perl.regexp"
         region="String" region00="def:Symbol" region01="def:PairStart"
-        region10="def:Symbol" region10="def:PairEnd"/>
+        region10="def:Symbol" region11="def:PairEnd"/>
       
 
       <block start='/\%([^\s\w&lt;&gt;])/' end='/\y1/' scheme='def:Comment' region='CommentDoc'/>
