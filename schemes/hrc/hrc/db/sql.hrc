@@ -298,6 +298,7 @@ With help of:
             <word name="FOLD_BEFORE"/>
             <word name="FOLLOWING"/>
             <word name="FOR"/>
+            <word name="FORALL"/>
             <word name="FORM"/>
             <word name="FORMAT"/>
             <word name="FREELIST"/>
