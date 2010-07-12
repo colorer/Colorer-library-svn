@@ -22,7 +22,6 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
   Info = *fei;
   FSF = *fei->FSF;
   Info.FSF = &FSF;
-  editorSet = new FarEditorSet();
 };
 
 /**
@@ -47,7 +46,9 @@ void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
 */
 void WINAPI ExitFARW()
 {
-  delete editorSet;
+  if (editorSet){
+    delete editorSet;
+  }
 };
 
 /**
@@ -65,6 +66,9 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 
       wchar_t *nfile = NULL;
       nfile = PathToFool(file,true);
+      if (!editorSet){
+        editorSet = new FarEditorSet();
+      }
       editorSet->viewFile(DString(nfile));
 
       delete[] nfile;
@@ -78,6 +82,9 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 */
 int WINAPI ConfigureW(int ItemNumber)
 {
+  if (!editorSet){
+    editorSet = new FarEditorSet();
+  }
   editorSet->ReadSettings();
   editorSet->configure(false);
   return 1;
@@ -89,8 +96,12 @@ int WINAPI ConfigureW(int ItemNumber)
 */
 int WINAPI ProcessEditorEventW(int Event, void *Param)
 {
+  if (!editorSet){
+    editorSet = new FarEditorSet();
+  }
   return editorSet->editorEvent(Event, Param);
 };
+
 int WINAPI ProcessEditorInputW(const INPUT_RECORD*ir)
 {
   return editorSet->editorInput(ir);

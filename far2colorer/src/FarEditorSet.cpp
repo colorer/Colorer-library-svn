@@ -13,6 +13,10 @@ FarEditorSet::FarEditorSet()
   rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
   parserFactory = NULL;
   regionMapper = NULL;
+  hrcParser = NULL;
+  sHrdName = NULL;
+  sCatalogPath = NULL;
+  sCatalogPathExp = NULL;
   ReloadBase();
 }
 
