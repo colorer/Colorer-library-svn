@@ -122,25 +122,25 @@ void FarEditor::reloadTypeSettings()
 
   value = def->getParamValue(DString("show-cross"));
   if (drawCross==2 && value != NULL){
-	  if (value->equals("none")){
-		  showHorizontalCross = false;
-		  showVerticalCross   = false;
-	  };
+    if (value->equals("none")){
+      showHorizontalCross = false;
+      showVerticalCross   = false;
+    };
 
-	  if (value->equals("vertical")){
-		  showHorizontalCross = false;
-		  showVerticalCross   = true;
-	  };
+    if (value->equals("vertical")){
+      showHorizontalCross = false;
+      showVerticalCross   = true;
+    };
 
-	  if (value->equals("horizontal")){
-		  showHorizontalCross = true;
-		  showVerticalCross   = false;
-	  };
+    if (value->equals("horizontal")){
+      showHorizontalCross = true;
+      showVerticalCross   = false;
+    };
 
-	  if (value->equals("both")){
-		  showHorizontalCross = true;
-		  showVerticalCross   = true;
-	  };
+    if (value->equals("both")){
+      showHorizontalCross = true;
+      showVerticalCross   = true;
+    };
   }
 
   value = def->getParamValue(DString("cross-zorder"));
@@ -163,25 +163,25 @@ void FarEditor::reloadTypeSettings()
   value = ftype->getParamValue(DString("show-cross"));
 
   if (drawCross==2 && value != NULL){
-	  if (value->equals("none")){
-		  showHorizontalCross = false;
-		  showVerticalCross   = false;
-	  };
+    if (value->equals("none")){
+      showHorizontalCross = false;
+      showVerticalCross   = false;
+    };
 
-	  if (value->equals("vertical")){
-		  showHorizontalCross = false;
-		  showVerticalCross   = true;
-	  };
+    if (value->equals("vertical")){
+      showHorizontalCross = false;
+      showVerticalCross   = true;
+    };
 
-	  if (value->equals("horizontal")){
-		  showHorizontalCross = true;
-		  showVerticalCross   = false;
-	  };
+    if (value->equals("horizontal")){
+      showHorizontalCross = true;
+      showVerticalCross   = false;
+    };
 
-	  if (value->equals("both")){
-		  showHorizontalCross = true;
-		  showVerticalCross   = true;
-	  };
+    if (value->equals("both")){
+      showHorizontalCross = true;
+      showVerticalCross   = true;
+    };
   }
 
   value = ftype->getParamValue(DString("cross-zorder"));
