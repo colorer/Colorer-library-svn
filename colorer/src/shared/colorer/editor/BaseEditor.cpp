@@ -456,9 +456,9 @@ void BaseEditor::validate(int lno, bool rebuildRegions)
 
 void BaseEditor::idleJob(int time)
 {
-  if (time < 0) time = 0;
-  if (time > 100) time = 100;
   if (invalidLine < lineCount) {
+    if (time < 0) time = 0;
+    if (time > 100) time = 100;
     validate(invalidLine+IDLE_PARSE(time), false);
   }
 }
@@ -494,6 +494,10 @@ void BaseEditor::leaveScheme(int lno, String *line, int sx, int ex, const Region
     regionHandlers.elementAt(idx)->leaveScheme(lno, line, sx, ex, region, scheme);
 }
 
+bool BaseEditor::haveInvalidLine()
+{ 
+  return invalidLine < lineCount;
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

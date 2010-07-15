@@ -487,15 +487,18 @@ void FarEditor::updateHighlighting()
 int FarEditor::editorInput(const INPUT_RECORD *ir)
 {
   if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0){
-    idleCount++;
 
-    if (idleCount > 10){
-      idleCount = 10;
+    if (baseEditor->haveInvalidLine()){
+     
+      idleCount++;
+      if (idleCount > 10){
+        idleCount = 10;
+      }
+      enterHandler();
+      baseEditor->idleJob(idleCount*10);
+      leaveHandler();
+      info->EditorControl(ECTL_REDRAW, NULL);
     }
-    enterHandler();
-    baseEditor->idleJob(idleCount*10);
-    leaveHandler();
-    info->EditorControl(ECTL_REDRAW, NULL);
   }
   else
     if (ir->EventType == KEY_EVENT){
