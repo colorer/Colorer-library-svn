@@ -328,6 +328,7 @@
 		<word name="prompt"/>
 		<word name="gethotkey"/>
 		<word name="checkhotkey"/>
+		<word name="Menu.ItemStatus"/>
 		<word name="Menu.GetValue"/>
 		<word name="Menu.Select"/>
 		<word name="Menu.Value"/>

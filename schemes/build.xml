@@ -41,7 +41,7 @@
   <antcall target='hrc.jar'>
     <param name='target-dir' value='${hrcupdate-dir}'/>
   </antcall>
-  <copy file='hrc/changes.txt' todir='${hrcupdate-dir}'/>
+  <copy file='hrc/hrc/changes.txt' todir='${hrcupdate-dir}'/>
 
   <zip destfile='${hrcupdate-zip}'>
     <fileset dir='${hrcupdate-dir}'/>
