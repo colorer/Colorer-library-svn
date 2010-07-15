@@ -240,6 +240,8 @@ public:
   void enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
   void leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme);
 
+  bool haveInvalidLine();
+
 private:
 
   FileType *chooseFileTypeCh(const String *fileName, int chooseStr, int chooseLen);
