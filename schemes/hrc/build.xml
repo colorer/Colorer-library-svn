@@ -34,7 +34,7 @@
 
 <target name="copy.clean">
 	<delete failonerror='false' includeemptydirs="true">
-		<fileset dir="${copy-path}" includes="**/*.hrc"/>
+		<fileset dir="${copy-path}" includes="**/*.hrc  changes.txt"/>
 	</delete>
 </target>
 
