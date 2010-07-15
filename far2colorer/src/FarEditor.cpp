@@ -1097,8 +1097,8 @@ void FarEditor::showOutliner(Outliner *outliner)
       if (flen == FILTER_SIZE || code > keys_size){
         break;
       }
-      if (code<22){
-        filter[flen] = (wchar_t)Character::toLowerCase('0'+code-12);
+      if (code<23){
+        filter[flen] = (wchar_t)Character::toLowerCase('0'+code-13);
       }else{
         filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code]);
       }

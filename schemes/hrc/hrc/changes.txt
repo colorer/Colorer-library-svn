@@ -1,11 +1,16 @@
+Date: 2010-07-15 12:00:00 r1530
+(FarColorer 1.0.2.7)
   New:
     - Mako templates (Mikael Lepisto)
     - Scala
+    - Acapella
   Fixed:
     - SASS keywords and improvements
     - Ruby : ruby custom RE syntax; ruby 1.9 style symbols
+    - Haml
     - JCL : add support comments
     - Far macro
+    - Reg empty hex value
 
 Date: 2010-03-06 12:00:00 r1435
 (FarColorer 1.0.2.5)
