@@ -612,7 +612,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
   }
 
   SString *catalogPathS = NULL;
-  wchar_t *t=PathToFool(catalogPath,false);
+  wchar_t *t=PathToFull(catalogPath,false);
   if (t){
     catalogPathS=new SString(DString(t));
   }
@@ -862,7 +862,7 @@ void FarEditorSet::ReadSettings()
 
   sHrdName = new SString(DString(hrdName));
   sCatalogPath = new SString(DString(catalogPath));
-  wchar_t *t=PathToFool(catalogPath,false);
+  wchar_t *t=PathToFull(catalogPath,false);
   if (t){
     sCatalogPathExp=new SString(DString(t));
   }

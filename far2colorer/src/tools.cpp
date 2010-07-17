@@ -26,7 +26,7 @@ wchar_t *trim(wchar_t* str)
   Function converts a path in the UNC path. 
   Source path can be framed by quotes, be a relative, or contain environment variables 
 */
-wchar_t *PathToFool(const wchar_t *path, bool unc)
+wchar_t *PathToFull(const wchar_t *path, bool unc)
 {
   size_t len=wcslen(path);
   if (!len){

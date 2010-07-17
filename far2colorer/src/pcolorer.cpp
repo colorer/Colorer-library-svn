@@ -65,11 +65,12 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
       wchar_t *file = (wchar_t*)Item;
 
       wchar_t *nfile = NULL;
-      nfile = PathToFool(file,true);
-      if (!editorSet){
-        editorSet = new FarEditorSet();
+      if (nfile = PathToFull(file,true)){
+        if (!editorSet){
+          editorSet = new FarEditorSet();
+        }
+        editorSet->viewFile(DString(nfile));
       }
-      editorSet->viewFile(DString(nfile));
 
       delete[] nfile;
     }
@@ -102,7 +103,7 @@ int WINAPI ProcessEditorEventW(int Event, void *Param)
   return editorSet->editorEvent(Event, Param);
 };
 
-int WINAPI ProcessEditorInputW(const INPUT_RECORD*ir)
+int WINAPI ProcessEditorInputW(const INPUT_RECORD *ir)
 {
   return editorSet->editorInput(ir);
 }
