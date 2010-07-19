@@ -6,6 +6,10 @@
 #include<colorer/HRCParser.h>
 #include<colorer/ParserFactory.h>
 
+const wchar_t FarCatalogXml[]=L"\\base\\catalog.xml";
+
+StringBuffer *GetPluginPath();
+
 class HRCSettingsException : public Exception{
 public:
   HRCSettingsException(){};

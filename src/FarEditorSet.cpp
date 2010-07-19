@@ -15,6 +15,8 @@ FarEditorSet::FarEditorSet()
   rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
   parserFactory = NULL;
   regionMapper = NULL;
+  hrdClass = DString("console");
+
   ReloadBase();
 }
 
@@ -300,7 +302,7 @@ const String *FarEditorSet::getHRDescription(const String &name)
 {
   const String *descr = NULL;
   if (parserFactory != NULL){
-    descr = parserFactory->getHRDescription(DString("console"), name);
+    descr = parserFactory->getHRDescription(hrdClass, name);
   }
 
   if (descr == NULL){
@@ -478,7 +480,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  while (parserFactory->enumerateHRDInstances(DString("console"), count) != NULL){
+  while (parserFactory->enumerateHRDInstances(hrdClass, count) != NULL){
     count++;
   }
 
@@ -486,8 +488,8 @@ const String *FarEditorSet::chooseHRDName(const String *current)
   memset(menuElements, 0, sizeof(FarMenuItem)*count);
 
   for (int i = 0; i < count; i++){
-    const String *name = parserFactory->enumerateHRDInstances(DString("console"), i);
-    const String *descr = parserFactory->getHRDescription(DString("console"), *name);
+    const String *name = parserFactory->enumerateHRDInstances(hrdClass, i);
+    const String *descr = parserFactory->getHRDescription(hrdClass, *name);
 
     if (descr == NULL){
       descr = name;
@@ -509,7 +511,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  return parserFactory->enumerateHRDInstances(DString("console"), result);
+  return parserFactory->enumerateHRDInstances(hrdClass, result);
 }
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
@@ -616,19 +618,31 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
   }
   delete[] t;
 
+  SString *tpath;
+
+  if (!catalogPathS || !catalogPathS->length()){
+    StringBuffer *path=GetPluginPath();
+    path->append(DString(FarCatalogXml));
+    tpath = new SString(path);
+    delete path;
+  }
+  else{
+    tpath=catalogPathS;
+  }
+
   try{
-    parserFactoryLocal = new ParserFactory(catalogPathS);
+    parserFactoryLocal = new ParserFactory(tpath);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
 
     try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), hrdNameS);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, hrdNameS);
     }
     catch (ParserFactoryException &e)
     {
       if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
         parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, NULL);
     };
 
     Info.RestoreScreen(scr);
@@ -694,21 +708,31 @@ void FarEditorSet::ReloadBase()
 
   ReadSettings();
 
+  SString *tpath;
+  if (!sCatalogPathExp || !sCatalogPathExp->length()){
+    StringBuffer *path=GetPluginPath();
+    path->append(DString(FarCatalogXml));
+    tpath = new SString(path);
+    delete path;
+  }
+  else{
+    tpath=sCatalogPathExp;
+  }
+
   try{
-    parserFactory = new ParserFactory(sCatalogPathExp);
+    parserFactory = new ParserFactory(tpath);
     hrcParser = parserFactory->getHRCParser();
     HRCSettings p(parserFactory);
     p.readProfile();
-	//readProfile();
 
     try{
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), sHrdName);
+      regionMapper = parserFactory->createStyledMapper(&hrdClass, sHrdName);
     }
     catch (ParserFactoryException &e){
       if (getErrorHandler() != NULL){
         getErrorHandler()->error(*e.getMessage());
       }
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), NULL);
+      regionMapper = parserFactory->createStyledMapper(&hrdClass, NULL);
     };
   }
   catch (Exception &e){

@@ -1,8 +1,7 @@
 #include"HRCSettings.h"
 #include<windows.h>
 
-
-void HRCSettings::readProfile()
+StringBuffer *GetPluginPath()
 {
   wchar_t cname[256];
   HMODULE hmod;
@@ -12,8 +11,16 @@ void HRCSettings::readProfile()
   DString module(cname, 0, len);
   int pos;
   pos = module.lastIndexOf('\\');
+  pos = module.lastIndexOf('\\',pos);
   StringBuffer *path=new StringBuffer(DString(module, 0, pos));
-  path->append(DString("\\profile.xml"));
+
+  return path;
+}
+
+void HRCSettings::readProfile()
+{
+  StringBuffer *path=GetPluginPath();
+  path->append(DString("\\bin\\profile.xml"));
 
   DocumentBuilder docbuilder;
   InputSource *dfis = InputSource::newInstance(path);
@@ -31,7 +38,7 @@ void HRCSettings::readProfile()
     }
   };
   docbuilder.free(xmlDocument);
-
+  delete path;
 }
 
 void HRCSettings::UpdatePrototype(Element *elem)
