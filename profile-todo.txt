@@ -1,0 +1,54 @@
+Текущее дерево плагина
+=============================
+  -FarColorer
+		-bin
+			colorer.dll
+			colorer.hlf
+			colorer.lng
+			coloree.hlf   
+			coloree.lng
+			shortcuts.reg   
+		-hrc
+		-hrd
+		catalog.xml
+		history.ru.txt
+		LICENCE
+		README
+==============================
+
+К чему идем
+=============================
+  -FarColorer
+		-bin
+			colorer.dll
+			colorer_x64.dll
+			colorerr.hlf            ----+
+			colorerr.lng                | зачем обрезали букву последнюю? из формата 8.3 не выбиваемся при полном названии
+			colorere.hlf                |
+			colorere.lng            ----+
+			shortcuts.reg
+			profile.xml
+			profile-user.xml				---- место по умолчанию
+		-base                     ----+
+			-hrc                        | каталог баз, неизменный для всей библиотеки colorer
+			-hrd                        | в базах убраны в profile.xml параметры фара
+			catalog.xml             ----+
+		history.ru.txt
+		LICENCE
+		README
+==============================
+
+
+ Profile.xml - в файл выносятся все far-специфичные (far-sp) параметры из proto.hrc
+	1. всегда лежит в папке рядом с модулем
+	2. read-only
+  3. обновляется с плагином, содержит рекомендуемые значения для параметров.
+	4. обязательный файл. если нет его - ошибка
+ 
+ Profile-user.xml - хранятся пользовательские значения far-sp параметров
+	1. по умолчанию лежит рядом с модулем
+	2. параметр в реестре для указания пути до файла
+	3. файл не обязательный. при отсутсвии создается.
+
+ catalog.xml
+	1. если не задан параметр в реестре, то ищем только! в папке base
