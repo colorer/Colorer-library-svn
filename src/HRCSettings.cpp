@@ -22,7 +22,7 @@ void HRCSettings::readProfile()
   StringBuffer *path=GetPluginPath();
   path->append(DString("\\bin\\profile.xml"));
 
-  readXML(path);
+  readXML(path, false);
 
   delete path;
 }
@@ -33,15 +33,15 @@ void HRCSettings::readUserProfile(String *userProfile)
     StringBuffer *path=GetPluginPath();
     path->append(DString("\\bin\\profile-user.xml"));
 
-    readXML(path);
+    readXML(path, true);
     delete path;
   }
   else{
-    readXML(userProfile);
+    readXML(userProfile, true);
   }
 }
 
-void HRCSettings::readXML(String *file)
+void HRCSettings::readXML(String *file, bool userValue)
 {
   DocumentBuilder docbuilder;
   InputSource *dfis = InputSource::newInstance(file);
@@ -54,14 +54,14 @@ void HRCSettings::readXML(String *file)
   }
   for (Node *elem = types->getFirstChild(); elem; elem = elem->getNextSibling()){
     if (*elem->getNodeName() == "prototype"){
-      UpdatePrototype((Element*)elem);
+      UpdatePrototype((Element*)elem, userValue);
       continue;
     }
   };
   docbuilder.free(xmlDocument);
 }
 
-void HRCSettings::UpdatePrototype(Element *elem)
+void HRCSettings::UpdatePrototype(Element *elem, bool userValue)
 {
   const String *typeName = elem->getAttribute(DString("name"));
   if (typeName == null){
@@ -80,10 +80,15 @@ void HRCSettings::UpdatePrototype(Element *elem)
         continue;
       };
 
-      if (type->getParamDefaultValue(SString(name))==null){
+      if (type->getParamValue(SString(name))==null){
         type->addParam(name);
       }
-      type->setParamDefaultValue(SString(name), value);
+      if (userValue){
+        type->setParamValue(SString(name), value);
+      }
+      else{
+        type->setParamDefaultValue(SString(name), value);
+      }
     };
   };
 
