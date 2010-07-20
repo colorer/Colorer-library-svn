@@ -6,7 +6,9 @@
   Optional 
 */
 #ifdef _DEBUG
+#ifndef _WIN64
 #include<vld.h>
+#endif
 #endif
 
 #include<plugin.hpp>
@@ -17,9 +19,11 @@
 #include<wchar.h>
 #include<windows.h>
 #include "registry_wide.h"
+#include<unicode/StringBuffer.h>
 
 extern PluginStartupInfo Info;
 extern FarStandardFunctions FSF;
+extern StringBuffer *PluginPath;
 
 
 /** FAR .lng file identifiers. */

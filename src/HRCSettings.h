@@ -7,8 +7,8 @@
 #include<colorer/ParserFactory.h>
 
 const wchar_t FarCatalogXml[]=L"\\base\\catalog.xml";
-
-StringBuffer *GetPluginPath();
+const wchar_t FarProfileXml[]=L"\\bin\\profile.xml";
+const wchar_t FarUserProfileXml[]=L"\\bin\\profile-user.xml";
 
 class HRCSettingsException : public Exception{
 public:
@@ -31,6 +31,6 @@ private:
   void UpdatePrototype(Element *elem, bool userValue);
   ParserFactory *parserFactory;
 
-
 };
+
 #endif

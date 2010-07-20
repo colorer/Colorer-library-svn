@@ -5,6 +5,34 @@
 FarEditorSet *editorSet = NULL;
 PluginStartupInfo Info;
 FarStandardFunctions FSF;
+StringBuffer *PluginPath;
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved )  
+{
+  switch( fdwReason ) 
+  { 
+  case DLL_PROCESS_ATTACH:
+    {
+      // получаем путь до папки плагина, не привязываясь к имени файла
+      wchar_t path[MAX_PATH];
+      if (!GetModuleFileName(hinstDLL, path, MAX_PATH)){
+        return false;
+      }
+      DString module(path, 0);
+      int pos = module.lastIndexOf('\\');
+      pos = module.lastIndexOf('\\',pos);
+      PluginPath=new StringBuffer(DString(module, 0, pos));
+    }
+    break;
+
+  case DLL_PROCESS_DETACH:
+    delete PluginPath;
+    break;
+  }
+
+
+  return true;  
+}
 
 /**
   Returns message from FAR current language.

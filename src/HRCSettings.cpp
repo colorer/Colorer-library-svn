@@ -1,27 +1,11 @@
 #include"HRCSettings.h"
-#include<windows.h>
+#include"pcolorer.h"
 
-StringBuffer *GetPluginPath()
-{
-  wchar_t cname[256];
-  HMODULE hmod;
-  hmod = GetModuleHandle(TEXT("colorer"));
-  if (hmod == null) hmod = GetModuleHandle(null);
-  int len = GetModuleFileName(hmod, cname, 256) - 1;
-  DString module(cname, 0, len);
-  int pos;
-  pos = module.lastIndexOf('\\');
-  pos = module.lastIndexOf('\\',pos);
-  StringBuffer *path=new StringBuffer(DString(module, 0, pos));
-
-  return path;
-}
 
 void HRCSettings::readProfile()
 {
-  StringBuffer *path=GetPluginPath();
-  path->append(DString("\\bin\\profile.xml"));
-
+  StringBuffer *path=new StringBuffer(PluginPath);
+  path->append(DString(FarProfileXml));
   readXML(path, false);
 
   delete path;
@@ -30,9 +14,8 @@ void HRCSettings::readProfile()
 void HRCSettings::readUserProfile(String *userProfile)
 {
   if (!userProfile || !userProfile->length()){
-    StringBuffer *path=GetPluginPath();
-    path->append(DString("\\bin\\profile-user.xml"));
-
+    StringBuffer *path=new StringBuffer(PluginPath);
+    path->append(DString(FarUserProfileXml));
     readXML(path, true);
     delete path;
   }
