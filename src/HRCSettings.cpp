@@ -22,8 +22,29 @@ void HRCSettings::readProfile()
   StringBuffer *path=GetPluginPath();
   path->append(DString("\\bin\\profile.xml"));
 
+  readXML(path);
+
+  delete path;
+}
+
+void HRCSettings::readUserProfile(String *userProfile)
+{
+  if (!userProfile || !userProfile->length()){
+    StringBuffer *path=GetPluginPath();
+    path->append(DString("\\bin\\profile-user.xml"));
+
+    readXML(path);
+    delete path;
+  }
+  else{
+    readXML(userProfile);
+  }
+}
+
+void HRCSettings::readXML(String *file)
+{
   DocumentBuilder docbuilder;
-  InputSource *dfis = InputSource::newInstance(path);
+  InputSource *dfis = InputSource::newInstance(file);
   Document *xmlDocument = docbuilder.parse(dfis);
   Element *types = xmlDocument->getDocumentElement();
 
@@ -38,7 +59,6 @@ void HRCSettings::readProfile()
     }
   };
   docbuilder.free(xmlDocument);
-  delete path;
 }
 
 void HRCSettings::UpdatePrototype(Element *elem)

@@ -23,7 +23,9 @@ class HRCSettings
   friend class FileTypeImpl;
 public:
   HRCSettings(ParserFactory *_parserFactory){parserFactory=_parserFactory;}
+  void readXML(String *file);
   void readProfile();
+  void readUserProfile(String *userProfile);
 
 private:
   void UpdatePrototype(Element *elem);

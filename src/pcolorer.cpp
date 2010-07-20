@@ -64,9 +64,9 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
       wchar_t *file = (wchar_t*)Item;
 
       wchar_t *nfile = NULL;
-      nfile = PathToFool(file,true);
-      editorSet->viewFile(DString(nfile));
-
+      if (nfile = PathToFull(file,true)){
+        editorSet->viewFile(DString(nfile));
+      }
       delete[] nfile;
     }
 

@@ -16,6 +16,7 @@
 const wchar_t cRegEnabled[] = L"Enabled";
 const wchar_t cRegHrdName[] = L"HrdName";
 const wchar_t cRegCatalog[] = L"Catalog";
+const wchar_t cRegUserProfile[] = L"UserProfile";
 const wchar_t cRegCrossDraw[] = L"CrossDraw";
 const wchar_t cRegPairsDraw[] = L"PairsDraw";
 const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
@@ -25,6 +26,7 @@ const wchar_t cRegOldOutLine[] = L"OldOutlineView";
 const bool cEnabledDefault = true;
 const wchar_t cHrdNameDefault[] = L"default";
 const wchar_t cCatalogDefault[] = L"";
+const wchar_t cUserProfileDefault[] = L"";
 const int cCrossDrawDefault = 2;
 const bool cPairsDrawDefault = true;
 const bool cSyntaxDrawDefault = true;
@@ -32,8 +34,8 @@ const bool cOldOutLineDefault = true;
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
-IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD_ALL,
-IDX_OK, IDX_CANCEL};
+IDX_CATALOG, IDX_CATALOG_EDIT, IDX_UPROFILE, IDX_UPROFILE_EDIT, IDX_HRD, 
+IDX_HRD_SELECT, IDX_RELOAD_ALL,IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
 
@@ -72,8 +74,9 @@ public:
   /**
   * trying to load the database on the specified path
   */
-  bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+  bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const wchar_t *userProfilePath, const int full);
   SString *GetCatalogPath() {return sCatalogPath;}
+  SString *GetUserProfilePath() {return sUserProfilePath;}
   bool GetPluginStatus() {return rEnabled;}
 
   SString *sTempHrdName;
@@ -129,6 +132,8 @@ private:
   SString *sHrdName;
   SString *sCatalogPath;
   SString *sCatalogPathExp;
+  SString *sUserProfilePath;
+  SString *sUserProfilePathExp;
 };
 
 #endif
