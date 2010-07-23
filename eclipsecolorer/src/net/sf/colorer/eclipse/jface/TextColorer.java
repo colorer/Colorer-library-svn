@@ -110,10 +110,7 @@ public class TextColorer
             }
             fDocument = document;
 
-            if (fDeepLevelCounter != null) {
-                fDeepLevelCounter.uninstall();
-                fDeepLevelCounter = null;
-            }
+            fDeepLevelCounter = null;
             
             if (fDocument == null) {
                 return;
