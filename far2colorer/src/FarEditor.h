@@ -109,7 +109,7 @@ private:
 
   int WindowSizeX;
   int WindowSizeY;
-  bool inRedraw, inHandler;
+  bool inRedraw;
   int idleCount;
 
   int prevLinePosition, blockTopPosition;
@@ -127,7 +127,6 @@ private:
 
   void reloadTypeSettings();
   void enterHandler();
-  void leaveHandler();
   int convert(const StyledRegion *rd);
   bool foreDefault(int color);
   bool backDefault(int color);

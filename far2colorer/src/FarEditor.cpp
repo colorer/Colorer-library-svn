@@ -10,7 +10,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   prevLinePosition = 0;
   blockTopPosition = -1;
   inRedraw = false;
-  inHandler = false;
   idleCount = 0;
   ret_str = NULL;
   ret_strNumber = -1;
@@ -57,26 +56,12 @@ String *FarEditor::getLine(int lno)
   int len = 0;
   ret_strNumber = lno;
 
-  if (inHandler){
-    EditorSetPosition esp;
-    es.StringNumber = -1;
-    es.StringText = NULL;
-    esp.CurLine = lno;
-    esp.CurPos = esp.CurTabPos = esp.TopScreenLine = esp.LeftPos = esp.Overtype = -1;
-    info->EditorControl(ECTL_SETPOSITION, &esp);
+  es.StringNumber = lno;
+  es.StringText = NULL;
 
-    if (info->EditorControl(ECTL_GETSTRING, &es)){
-      len = es.StringLength;
-    }
+  if (info->EditorControl(ECTL_GETSTRING, &es)){
+    len = es.StringLength;
   }
-  else{
-    es.StringNumber = lno;
-    es.StringText = NULL;
-
-    if (info->EditorControl(ECTL_GETSTRING, &es)){
-      len = es.StringLength;
-    }
-  };
 
   if (len > maxLineLength && maxLineLength > 0){
     len = maxLineLength;
@@ -253,7 +238,6 @@ void FarEditor::matchPair()
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
-  leaveHandler();
   if ((pm == NULL)||(pm->eline == -1)){
     return;
   }
@@ -290,8 +274,6 @@ void FarEditor::selectPair()
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
-  leaveHandler();
-
   if ((pm == NULL)||(pm->eline == -1)){
     return;
   }
@@ -327,8 +309,6 @@ void FarEditor::selectBlock()
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
-  leaveHandler();
-
   if ((pm == NULL)||(pm->eline == -1)){
     return;
   }
@@ -361,6 +341,7 @@ void FarEditor::selectRegion()
 {
   EditorSelect es;
   EditorGetString egs;
+  enterHandler();
   egs.StringNumber = ei.CurLine;
   info->EditorControl(ECTL_GETSTRING, &egs);
   int end = cursorRegion->end;
@@ -381,17 +362,13 @@ void FarEditor::selectRegion()
 
 void FarEditor::listFunctions()
 {
-  enterHandler();
   baseEditor->validate(-1, false);
-  leaveHandler();
   showOutliner(structOutliner);
 }
 
 void FarEditor::listErrors()
 {
-  enterHandler();
   baseEditor->validate(-1, false);
-  leaveHandler();
   showOutliner(errorOutliner);
 }
 
@@ -399,6 +376,7 @@ void FarEditor::listErrors()
 void FarEditor::locateFunction()
 {
   // extract word
+  enterHandler();
   String &curLine = *getLine(ei.CurLine);
   int cpos = ei.CurPos;
   int sword = cpos;
@@ -424,9 +402,7 @@ void FarEditor::locateFunction()
 
       SString funcname(curLine, sword+1, eword-sword-1);
       CLR_INFO("FC", "Letter %s", funcname.getChars());
-      enterHandler();
       baseEditor->validate(-1, false);
-      leaveHandler();
       EditorSetPosition esp;
       OutlineItem *item_found = NULL;
       OutlineItem *item_last = NULL;
@@ -481,7 +457,6 @@ void FarEditor::updateHighlighting()
 {
   enterHandler();
   baseEditor->validate(ei.TopScreenLine, true);
-  leaveHandler();
 }
 
 int FarEditor::editorInput(const INPUT_RECORD *ir)
@@ -494,9 +469,7 @@ int FarEditor::editorInput(const INPUT_RECORD *ir)
       if (idleCount > 10){
         idleCount = 10;
       }
-      enterHandler();
       baseEditor->idleJob(idleCount*10);
-      leaveHandler();
       info->EditorControl(ECTL_REDRAW, NULL);
     }
   }
@@ -516,7 +489,6 @@ int FarEditor::editorEvent(int event, void *param)
   }
 
   enterHandler();
-
   WindowSizeX = ei.WindowSizeX;
   WindowSizeY = ei.WindowSizeY;
 
@@ -737,8 +709,6 @@ int FarEditor::editorEvent(int event, void *param)
     baseEditor->releasePairMatch(pm);
   };
 
-  leaveHandler();
-
   if (param != EEREDRAW_ALL){
     inRedraw = true;
     info->EditorControl(ECTL_REDRAW, NULL);
@@ -860,7 +830,6 @@ void FarEditor::showOutliner(Outliner *outliner)
         menu_size++;
       };
     }
-    leaveHandler();
 
     if (selectedItem > 0){
       menu[selectedItem].Selected = 1;
@@ -1132,23 +1101,8 @@ void FarEditor::showOutliner(Outliner *outliner)
 
 void FarEditor::enterHandler()
 {
-  inHandler = true;
   info->EditorControl(ECTL_GETINFO, &ei);
   ret_strNumber = -1;
-}
-
-void FarEditor::leaveHandler()
-{
-  // restoring position
-  EditorSetPosition esp;
-  esp.CurLine = ei.CurLine;
-  esp.CurPos = ei.CurPos;
-  esp.TopScreenLine = ei.TopScreenLine;
-  esp.LeftPos = ei.LeftPos;
-  esp.CurTabPos = -1;
-  esp.Overtype = -1;
-  info->EditorControl(ECTL_SETPOSITION, &esp);
-  inHandler = false;
 }
 
 int FarEditor::convert(const StyledRegion *rd)
@@ -1221,7 +1175,6 @@ void FarEditor::cleanEditor()
       addFARColor(i,0,egs.StringLength,col);
     }
   }
-  leaveHandler();
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
