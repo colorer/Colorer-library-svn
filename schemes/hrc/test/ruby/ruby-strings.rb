@@ -17,3 +17,7 @@ print <<-'THERE'
     The above used #{a + 1}
     THERE
 sdfsdf
+
+push_script "translate('#{text.gsub(/'/, '\\\'')}')"
+
+1234

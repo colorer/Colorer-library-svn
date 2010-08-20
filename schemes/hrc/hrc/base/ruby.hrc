@@ -33,12 +33,12 @@
     
 
     <scheme name="String">
-      <regexp match="/\\\M[^\\]/"/>
+      <regexp match="/\\./"/>
     </scheme>
 
     <scheme name="InterpolatedString">
       <block start='/\#\{/' end='/\}/' scheme="ruby" region='def:Insertion' region00='def:PairStart' region10='def:PairEnd'/>
-      <regexp match="/\\\M[^\\]/"/>
+      <regexp match="/\\./"/>
     </scheme>
     
     <scheme name="InterpolatedString1">
