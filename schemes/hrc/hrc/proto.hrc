@@ -465,6 +465,9 @@
   <prototype name="sql" group="database" description="SQL, PL/SQL">
     <location link="db/sql.hrc"/>
     <filename>/\.sql$/i</filename>
+      <parameters>
+        <param name="backslash_escapes" value="true" description="Treat \' in character literals as an escaped '"/>
+      </parameters>
   </prototype>
   <prototype name="mysql" group="database" description="MySQL">
    <location link="db/mysql.hrc"/>
@@ -512,6 +515,7 @@
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
     <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
+		<filename weight='3'>/(android|application)\.mk/i</filename>
     <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline-->
     <firstline>/makefile/s</firstline>

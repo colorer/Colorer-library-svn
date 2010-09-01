@@ -945,7 +945,7 @@ With help of:
          </keywords>
       </scheme>
 
-      <scheme name="stringApost">
+      <scheme name="stringApost" if="backslash_escapes">
         <regexp match="/\\'/" region='def:StringContent'/>
       </scheme>
 
