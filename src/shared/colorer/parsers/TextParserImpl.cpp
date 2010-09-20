@@ -122,6 +122,13 @@ int TextParserImpl::parse(int from, int num, TextParseMode mode)
 
 void TextParserImpl::clearCache()
 {
+  ParseCache *tmp, *tmp2;
+  tmp=cache->next;
+  while(tmp){
+    tmp2=tmp->next;
+    delete tmp2;
+    tmp=tmp2;
+  }
   delete cache->children;
   delete cache->backLine;
   cache->backLine = null;
@@ -340,7 +347,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         };
 
         int ogy = gy;
-		bool zeroLength;
+        bool zeroLength;
 
         SchemeImpl *o_scheme = baseScheme;
         int o_schemeStart = schemeStart;

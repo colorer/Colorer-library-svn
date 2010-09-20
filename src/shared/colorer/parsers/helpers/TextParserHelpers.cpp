@@ -16,7 +16,7 @@ ParseCache::~ParseCache()
   CLR_TRACE("TPCache", "~ParseCache():%s,%d-%d", scheme->getName()->getChars(), sline, eline);
   delete backLine;
   delete children;
-  delete next;
+  //delete next;
   delete[] vcache;
 };
 ParseCache *ParseCache::searchLine(int ln, ParseCache **cache)
