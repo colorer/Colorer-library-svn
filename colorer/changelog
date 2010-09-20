@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. исправлен stack overflow при уничтожении ParseCache. Патч работает, утечек памяти нет.
+     Но для полного счастья нужно работу с ParseCache переделать. Но это wishe.
+
+#Revision: 1479
+	#Author: ctapmex Date: 2010-04-15 20:54:12 +0600 (Чт, 15 апр 2010)
 	1. добавлены процедуры FileTypeImpl.addParam и FileTypeImpl.setParamDefaultValue (нельзя зафрендить
 	класс FileTypeImpl из внешнего,для библиотеки, класса)
 
