@@ -73,12 +73,23 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
   if (unc){
     // for normal work with long paths, the path must be converted to UNC
     if (wcsstr(new_path,L"\\\\?\\")==NULL){
-      len+=4;
-      wchar_t *temp = new wchar_t[len];
-      wcscpy(temp,L"\\\\?\\");
-      wcscat(temp,new_path);
-      delete[] new_path;
-      new_path = temp;
+      if (wcsstr(new_path,L"\\\\")==NULL){
+        len+=4;
+        wchar_t *temp = new wchar_t[len];
+        wcscpy(temp,L"\\\\?\\");
+        wcscat(temp,new_path);
+        delete[] new_path;
+        new_path = temp;
+      }
+      else
+      {
+        len+=6;
+        wchar_t *temp = new wchar_t[len];
+        wcscpy(temp,L"\\\\?\\UNC");
+        wcscat(temp,new_path+1);
+        delete[] new_path;
+        new_path = temp;
+      }
     }
   }
 
