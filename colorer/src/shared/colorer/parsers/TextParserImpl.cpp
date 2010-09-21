@@ -126,7 +126,7 @@ void TextParserImpl::clearCache()
   tmp=cache->next;
   while(tmp){
     tmp2=tmp->next;
-    delete tmp2;
+    delete tmp;
     tmp=tmp2;
   }
   delete cache->children;
