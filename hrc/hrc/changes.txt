@@ -1,3 +1,9 @@
+Date: 2010-09-21 12:00:00 r1550
+(FarColorer 1.0.2.9)
+  Fixed:
+    - Ruby : ruby string fixes
+    - pl/sql : backslash escapes param for pl/sql
+
 Date: 2010-07-15 12:00:00 r1530
 (FarColorer 1.0.2.7)
   New:
