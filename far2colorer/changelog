@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. мусор в строке возвращаемой функцией PathToFull.
+
+#Revision: 1550
+	Author: ctapmex Date: 2010-09-20 23:08:36 +0600 (Пн, 20 сен 2010)
 	1. clr работает с сетевыми путями
 
 #Revision: 1541

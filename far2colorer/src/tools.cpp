@@ -42,6 +42,7 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
     len--;
     new_path=new wchar_t[len];
     wcsncpy(new_path, &path[1],len-1);
+    new_path[len-1]='\0';
   }
   else{
     len++;
