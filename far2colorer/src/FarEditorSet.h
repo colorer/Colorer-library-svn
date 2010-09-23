@@ -117,6 +117,7 @@ private:
   HRCParser *hrcParser;
 
   HKEY hPluginRegistry;
+  DString hrdClass;
 
   /** registry settings */
   bool rEnabled; // status plugin

@@ -12,6 +12,7 @@
 #include<plugin.hpp>
 #include<farcolor.hpp>
 #include<farkeys.hpp>
+#include"ConsoleAnnotation.h"
 
 #include<wctype.h>
 #include<wchar.h>
@@ -37,6 +38,8 @@ enum
   mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
   mFatal, mNeedColorer,  mSelectHRD
 };
+
+bool consoleAnnotationAvailable();
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

@@ -1336,6 +1336,7 @@ enum EDITOR_CONTROL_COMMANDS
 	ECTL_GETSTACKBOOKMARKS,
 	ECTL_UNDOREDO,
 	ECTL_GETFILENAME,
+	ECTL_ADDANNOTATION,
 };
 
 enum EDITOR_SETPARAMETER_TYPES
@@ -1514,6 +1515,14 @@ struct EditorColor
 	int StartPos;
 	int EndPos;
 	int Color;
+};
+
+struct EditorAnnotation
+{
+	int StringNumber;
+	int StartPos;
+	int EndPos;
+	int annotation_raw[8];
 };
 
 struct EditorSaveFile

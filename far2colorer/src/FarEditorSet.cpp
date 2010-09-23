@@ -1,5 +1,12 @@
 #include"FarEditorSet.h"
 
+int _snwprintf_s (wchar_t *string, size_t sizeInWords, size_t count, const wchar_t *format, ...)
+{
+  va_list arglist;
+  va_start(arglist, format);
+  return _vsnwprintf(string, count, format, arglist);
+}
+
 FarEditorSet::FarEditorSet()
 {
   wchar_t key[255];
@@ -17,6 +24,12 @@ FarEditorSet::FarEditorSet()
   sHrdName = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
+  hrdClass = DString("console");
+
+  if (consoleAnnotationAvailable()){
+    hrdClass = DString("rgb");
+  }
+
   ReloadBase();
 }
 
@@ -302,7 +315,7 @@ const String *FarEditorSet::getHRDescription(const String &name)
 {
   const String *descr = NULL;
   if (parserFactory != NULL){
-    descr = parserFactory->getHRDescription(DString("console"), name);
+    descr = parserFactory->getHRDescription(hrdClass, name);
   }
 
   if (descr == NULL){
@@ -480,7 +493,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  while (parserFactory->enumerateHRDInstances(DString("console"), count) != NULL){
+  while (parserFactory->enumerateHRDInstances(hrdClass, count) != NULL){
     count++;
   }
 
@@ -488,8 +501,8 @@ const String *FarEditorSet::chooseHRDName(const String *current)
   memset(menuElements, 0, sizeof(FarMenuItem)*count);
 
   for (int i = 0; i < count; i++){
-    const String *name = parserFactory->enumerateHRDInstances(DString("console"), i);
-    const String *descr = parserFactory->getHRDescription(DString("console"), *name);
+    const String *name = parserFactory->enumerateHRDInstances(hrdClass, i);
+    const String *descr = parserFactory->getHRDescription(hrdClass, *name);
 
     if (descr == NULL){
       descr = name;
@@ -511,7 +524,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  return parserFactory->enumerateHRDInstances(DString("console"), result);
+  return parserFactory->enumerateHRDInstances(hrdClass, result);
 }
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
@@ -623,14 +636,14 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
     hrcParserLocal = parserFactoryLocal->getHRCParser();
 
     try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), hrdNameS);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, hrdNameS);
     }
     catch (ParserFactoryException &e)
     {
       if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
         parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, NULL);
     };
 
     Info.RestoreScreen(scr);
@@ -701,13 +714,13 @@ void FarEditorSet::ReloadBase()
     hrcParser = parserFactory->getHRCParser();
 
     try{
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), sHrdName);
+      regionMapper = parserFactory->createStyledMapper(&hrdClass, sHrdName);
     }
     catch (ParserFactoryException &e){
       if (getErrorHandler() != NULL){
         getErrorHandler()->error(*e.getMessage());
       }
-      regionMapper = parserFactory->createStyledMapper(&DString("console"), NULL);
+      regionMapper = parserFactory->createStyledMapper(&hrdClass, NULL);
     };
   }
   catch (Exception &e){

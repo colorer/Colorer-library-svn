@@ -6,6 +6,25 @@ FarEditorSet *editorSet = NULL;
 PluginStartupInfo Info;
 FarStandardFunctions FSF;
 
+int consoleAnnotationCheck = -1;
+
+bool consoleAnnotationAvailable()
+{
+  if (consoleAnnotationCheck == -1)
+  {
+    wchar_t shareName[255];
+    wsprintf(shareName, AnnotationShareName, sizeof(AnnotationInfo), GetConsoleWindow());
+
+    HANDLE hSharedMem = OpenFileMapping(
+      FILE_MAP_ALL_ACCESS, 
+      FALSE, 
+      shareName);
+    consoleAnnotationCheck = (hSharedMem != 0) ? 1 : 0;
+    CloseHandle(hSharedMem);
+  }
+  return consoleAnnotationCheck == 1;
+}
+
 /**
   Returns message from FAR current language.
 */

@@ -8,6 +8,21 @@
 
 #include"pcolorer.h"
 
+struct color{
+  union{
+    struct{
+      unsigned int cfg : 4;
+      unsigned int cbk : 4;
+    };
+    int concolor : 8;
+    struct{
+      unsigned int fg :24;
+      unsigned int bk :24;
+      int style;
+    };
+  };
+  color(): fg(0), bk(0), style(0) {};
+};
 
 /** FAR Editor internal plugin structures.
     Implements text parsing and different
@@ -102,7 +117,8 @@ private:
 
   int drawCross;//0 - off,  1 - always, 2 - if included in the scheme
   bool showVerticalCross, showHorizontalCross;
-  int crossZOrder, horzCrossColor, vertCrossColor;
+  int crossZOrder;
+  color horzCrossColor, vertCrossColor;
 
   bool drawPairs, drawSyntax;
   bool oldOutline;
@@ -127,11 +143,12 @@ private:
 
   void reloadTypeSettings();
   void enterHandler();
-  int convert(const StyledRegion *rd);
-  bool foreDefault(int color);
-  bool backDefault(int color);
+  color convert(const StyledRegion *rd);
+  bool foreDefault(color col);
+  bool backDefault(color col);
   void showOutliner(Outliner *outliner);
-  void addFARColor(int lno, int s, int e, int col);
+  void addFARColor(int lno, int s, int e, color col);
+  void addAnnotation(int lno, int s, int e, AnnotationInfo &ai);
   const wchar_t *GetMsg(int msg);
 };
 #endif

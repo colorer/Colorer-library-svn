@@ -3,6 +3,13 @@
 
 #include <windows.h>
 
+#ifdef __CYGWIN__
+  #define wcsncpy_s(s,l,ds,dl) wcsncpy(s,ds,dl)
+  #define wcscpy_s(s,l,d) wcscpy(s,d)
+  #define wcscat_s(s,l,d) wcscat(s,d)
+  int _snwprintf_s (wchar_t *string, size_t sizeInWords, size_t count, const wchar_t *format, ...);
+#endif
+
 DWORD rOpenKey(HKEY hReg, const wchar_t *Name, HKEY &hKey);
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD val);
 LONG rSetValue(HKEY hReg, const wchar_t *VName, DWORD Type, const void *Data, DWORD Len);

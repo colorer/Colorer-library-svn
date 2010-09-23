@@ -28,5 +28,8 @@ colorer.dll: $(obj_output) $(objs)
 	$(RM) colorer.dll.exp
 	$(RM) temp
 
+$(obj_output):
+	-mkdir $(obj_output)
+
 clean:
 	$(RM) $(objs)

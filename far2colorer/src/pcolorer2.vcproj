@@ -416,6 +416,10 @@
 			Name="pcolorer2"
 			>
 			<File
+				RelativePath=".\ConsoleAnnotation.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FarEditor.cpp"
 				>
 			</File>
