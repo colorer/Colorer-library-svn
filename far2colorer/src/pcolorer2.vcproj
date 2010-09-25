@@ -396,19 +396,19 @@
 			Name="far2sdk"
 			>
 			<File
-				RelativePath=".\far2sdk\farcolor.hpp"
+				RelativePath="..\far2sdk\farcolor.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\far2sdk\farkeys.hpp"
+				RelativePath="..\far2sdk\farkeys.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\far2sdk\farversion.hpp"
+				RelativePath="..\far2sdk\farversion.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\far2sdk\plugin.hpp"
+				RelativePath="..\far2sdk\plugin.hpp"
 				>
 			</File>
 		</Filter>

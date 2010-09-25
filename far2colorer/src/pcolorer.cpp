@@ -21,6 +21,13 @@ bool consoleAnnotationAvailable()
       shareName);
     consoleAnnotationCheck = (hSharedMem != 0) ? 1 : 0;
     CloseHandle(hSharedMem);
+    if (consoleAnnotationCheck){
+      EditorAnnotation ea;
+      ea.StringNumber = 1;
+      ea.StartPos = 1;
+      ea.EndPos = 2;
+      consoleAnnotationCheck=Info.EditorControl(ECTL_ADDANNOTATION, &ea);
+    }
   }
   return consoleAnnotationCheck == 1;
 }
