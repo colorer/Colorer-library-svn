@@ -554,7 +554,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-      vertCrossColor.concolor += 0x10000;
+      vertCrossColor.concolor |= 0x10000;
       addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
     };
 
@@ -617,7 +617,7 @@ int FarEditor::editorEvent(int event, void *param)
             ecp_cl.StringNumber = lno;
             ecp_cl.SrcPos = ecp.DestPos;
             info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-            col.concolor+=0x10000;
+            col.concolor|=0x10000;
             addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col);
             vertCrossDone = true;
           };
@@ -628,7 +628,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
-      vertCrossColor.concolor += 0x10000;
+      vertCrossColor.concolor |= 0x10000;
       addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
     };
   };
@@ -668,7 +668,7 @@ int FarEditor::editorEvent(int event, void *param)
         col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
       }
 
-      col.concolor+=0x10000;
+      col.concolor|=0x10000;
       addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, col);
     };
     //
@@ -703,7 +703,7 @@ int FarEditor::editorEvent(int event, void *param)
           col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
         }
         
-        col.concolor+=0x10000;
+        col.concolor|=0x10000;
         addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, col);
       };
       //
