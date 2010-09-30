@@ -14,14 +14,14 @@ struct color{
       unsigned int cfg : 4;
       unsigned int cbk : 4;
     };
-    int concolor : 8;
+    int concolor : 32;
     struct{
       unsigned int fg :24;
       unsigned int bk :24;
       int style;
     };
   };
-  color(): fg(0), bk(0), style(0) {};
+  color(): concolor(0), fg(0), bk(0), style(0) {};
 };
 
 /** FAR Editor internal plugin structures.
@@ -113,7 +113,6 @@ private:
   BaseEditor *baseEditor;
 
   int  maxLineLength;
-  bool fullBackground;
 
   int drawCross;//0 - off,  1 - always, 2 - if included in the scheme
   bool showVerticalCross, showHorizontalCross;
