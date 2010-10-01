@@ -113,6 +113,7 @@ private:
   BaseEditor *baseEditor;
 
   int  maxLineLength;
+  bool fullBackground;
 
   int drawCross;//0 - off,  1 - always, 2 - if included in the scheme
   bool showVerticalCross, showHorizontalCross;

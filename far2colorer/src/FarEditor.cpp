@@ -14,6 +14,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   ret_str = NULL;
   ret_strNumber = -1;
   maxLineLength = 0;
+  fullBackground = true;
   drawCross = 2;
   showHorizontalCross = showVerticalCross = true;
   crossZOrder    = 0;
@@ -98,6 +99,11 @@ void FarEditor::reloadTypeSettings()
   newfore = def->getParamValueInt(DString("default-fore"), -1);
   newback = def->getParamValueInt(DString("default-back"), -1);
   const String *value;
+  value = def->getParamValue(DString("fullback"));
+
+  if (value != NULL && value->equals("no")){
+    fullBackground = false;
+  }
 
   value = def->getParamValue(DString("show-cross"));
   if (drawCross==2 && value != NULL){
@@ -133,6 +139,11 @@ void FarEditor::reloadTypeSettings()
   maxLineLength = ftype->getParamValueInt(DString("maxlinelength"), maxLineLength);
   newfore = ftype->getParamValueInt(DString("default-fore"), newfore);
   newback = ftype->getParamValueInt(DString("default-back"), newback);
+  value = ftype->getParamValue(DString("fullback"));
+
+  if (value != NULL && value->equals("no")){
+    fullBackground = false;
+  }
 
   value = ftype->getParamValue(DString("show-cross"));
 
@@ -579,16 +590,21 @@ int FarEditor::editorEvent(int event, void *param)
             continue;
           }
           //
+          int lend = l1->end;
 
-          addFARColor(lno, l1->start, l1->end, col);
+          if (lend == -1){
+            lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
+          }
 
-          if (lno == ei.CurLine && (l1->start <= ei.CurPos) && (ei.CurPos <= l1->end)){
+          addFARColor(lno, l1->start, lend, col);
+
+          if (lno == ei.CurLine && (l1->start <= ei.CurPos) && (ei.CurPos <= lend)){
             delete cursorRegion;
             cursorRegion = new LineRegion(*l1);
           };
 
           // column
-          if (showVerticalCross && crossZOrder == 0 && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < l1->end){
+          if (showVerticalCross && crossZOrder == 0 && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
             col = convert(l1->styled());
 
             
