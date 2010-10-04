@@ -24,11 +24,6 @@ FarEditorSet::FarEditorSet()
   sHrdName = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
-  hrdClass = DString("console");
-
-  if (consoleAnnotationAvailable()){
-    hrdClass = DString("rgb");
-  }
 
   ReloadBase();
 }
@@ -379,6 +374,7 @@ void FarEditorSet::configure(bool fromEditor)
     {
       { DI_DOUBLEBOX,3,1,51,16,0,0,0,0,L""},                                 //IDX_BOX,
       { DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
+      { DI_CHECKBOX,31,3,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
       { DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
       { DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
       { DI_CHECKBOX,31,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
@@ -395,6 +391,8 @@ void FarEditorSet::configure(bool fromEditor)
     fdi[IDX_BOX].PtrData = GetMsg(mSetup);
     fdi[IDX_ENABLED].PtrData = GetMsg(mTurnOff);
     fdi[IDX_ENABLED].Selected = rEnabled;
+    fdi[IDX_TRUEMOD].PtrData = GetMsg(mTrueMod);
+    fdi[IDX_TRUEMOD].Selected = TrueModOn;
     fdi[IDX_CROSS].PtrData = GetMsg(mCross);
     fdi[IDX_CROSS].Selected = drawCross;
     fdi[IDX_PAIRS].PtrData = GetMsg(mPairs);
@@ -440,6 +438,7 @@ void FarEditorSet::configure(bool fromEditor)
       drawPairs = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
       drawSyntax = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
       oldOutline = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
+      fdi[IDX_TRUEMOD].Selected = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
       delete sHrdName;
       delete sCatalogPath;
       sHrdName = sTempHrdName;
@@ -448,18 +447,27 @@ void FarEditorSet::configure(bool fromEditor)
       // if the plugin has been enable, and we will disable
       if (rEnabled && !fdi[IDX_ENABLED].Selected){
         rEnabled = false;
+        TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
         SaveSettings();
         disableColorer();
       }
       else{
         if ((!rEnabled && fdi[IDX_ENABLED].Selected) || k){
           rEnabled = true;
+          TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
           enableColorer(fromEditor);
         }
         else{
-          SaveSettings();
-          ApplySettingsToEditors();
+          if ((TrueModOn && !fdi[IDX_TRUEMOD].Selected)||(!TrueModOn && fdi[IDX_TRUEMOD].Selected)){
+            TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
+            SaveSettings();
+            ReloadBase();
+          }
+          else{
+            SaveSettings();
+            ApplySettingsToEditors();
+          }
         }
       }
     }
@@ -708,6 +716,13 @@ void FarEditorSet::ReloadBase()
   regionMapper = NULL;
 
   ReadSettings();
+  consoleAnnotationAvailable=checkConsoleAnnotationAvailable();
+  if (consoleAnnotationAvailable){
+    hrdClass = DString("rgb");
+  }
+  else{
+    hrdClass = DString("console");
+  }
 
   try{
     parserFactory = new ParserFactory(sCatalogPathExp);
@@ -782,6 +797,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
   editor->setDrawPairs(drawPairs);
   editor->setDrawSyntax(drawSyntax);
   editor->setOutlineStyle(oldOutline);
+  editor->setTrueMod(consoleAnnotationAvailable);
 
   return editor;
 }
@@ -823,7 +839,6 @@ void FarEditorSet::disableColorer()
   regionMapper = NULL;
 }
 
-
 void FarEditorSet::ApplySettingsToEditors()
 {
   for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next()){
@@ -831,6 +846,7 @@ void FarEditorSet::ApplySettingsToEditors()
     fe->setDrawPairs(drawPairs);
     fe->setDrawSyntax(drawSyntax);
     fe->setOutlineStyle(oldOutline);
+    fe->setTrueMod(consoleAnnotationAvailable);
   }
 }
 
@@ -890,6 +906,7 @@ void FarEditorSet::ReadSettings()
   drawPairs = !!rGetValueDw(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault);
   drawSyntax = !!rGetValueDw(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault);
   oldOutline = !!rGetValueDw(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault);
+  TrueModOn = !!rGetValueDw(hPluginRegistry, cRegTrueMod, cTrueMod);
 }
 
 void FarEditorSet::SetDefaultSettings()
@@ -901,6 +918,7 @@ void FarEditorSet::SetDefaultSettings()
   rSetValue(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault); 
   rSetValue(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault); 
   rSetValue(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault); 
+  rSetValue(hPluginRegistry, cRegTrueMod, cTrueMod); 
 }
 
 void FarEditorSet::SaveSettings()
@@ -912,6 +930,29 @@ void FarEditorSet::SaveSettings()
   rSetValue(hPluginRegistry, cRegPairsDraw, drawPairs); 
   rSetValue(hPluginRegistry, cRegSyntaxDraw, drawSyntax); 
   rSetValue(hPluginRegistry, cRegOldOutLine, oldOutline); 
+  rSetValue(hPluginRegistry, cRegTrueMod, TrueModOn); 
+}
+
+bool FarEditorSet::checkConsoleAnnotationAvailable()
+{
+  int consoleAnnotationCheck = -1;
+  if (TrueModOn){
+    wchar_t shareName[255];
+    wsprintf(shareName, AnnotationShareName, sizeof(AnnotationInfo), GetConsoleWindow());
+
+    HANDLE hSharedMem = OpenFileMapping( FILE_MAP_ALL_ACCESS, FALSE, shareName);
+    consoleAnnotationCheck = (hSharedMem != 0) ? 1 : 0;
+    CloseHandle(hSharedMem);
+    if (consoleAnnotationCheck){
+      EditorAnnotation ea;
+      ea.StringNumber = 1;
+      ea.StartPos = 1;
+      ea.EndPos = 2;
+      consoleAnnotationCheck=Info.EditorControl(ECTL_ADDANNOTATION, &ea);
+    }
+  }
+
+  return consoleAnnotationCheck == 1;
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

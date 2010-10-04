@@ -20,6 +20,7 @@ const wchar_t cRegCrossDraw[] = L"CrossDraw";
 const wchar_t cRegPairsDraw[] = L"PairsDraw";
 const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
 const wchar_t cRegOldOutLine[] = L"OldOutlineView";
+const wchar_t cRegTrueMod[] = L"TrueMod";
 
 //values of registry keys by default
 const bool cEnabledDefault = true;
@@ -29,9 +30,10 @@ const int cCrossDrawDefault = 2;
 const bool cPairsDrawDefault = true;
 const bool cSyntaxDrawDefault = true;
 const bool cOldOutLineDefault = true;
+const bool cTrueMod = false;
 
 enum
-{ IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
+{ IDX_BOX, IDX_ENABLED,IDX_TRUEMOD, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
 IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD_ALL,
 IDX_OK, IDX_CANCEL};
 
@@ -110,6 +112,9 @@ private:
   void disableColorer();
   /** Enables plugin processing*/
   void enableColorer(bool fromEditor);
+  
+  bool checkConsoleAnnotationAvailable();
+  bool consoleAnnotationAvailable;
 
   Hashtable<FarEditor*> farEditorInstances;
   ParserFactory *parserFactory;
@@ -125,6 +130,7 @@ private:
   bool drawPairs; 
   bool drawSyntax;
   bool oldOutline;
+  bool TrueModOn;
   SString *sHrdName;
   SString *sCatalogPath;
   SString *sCatalogPathExp;

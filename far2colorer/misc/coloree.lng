@@ -5,7 +5,7 @@
 "Colorer's settings"
 
 "Colorer &enabled"
-
+"&TrueMod"
 "Cro&ss"
 "&Pairs"
 "S&yntax"
@@ -42,9 +42,7 @@
 "Problem with Colorer"
 "Can't open file:"
 "Ok"
-"Bad Colorer version:"
 "Try anyway"
 "Fatal error loading the library schemes"
-"Need Colorer"
 
 "Select color style"

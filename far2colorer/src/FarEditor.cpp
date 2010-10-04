@@ -29,6 +29,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
   structOutliner = new Outliner(baseEditor, def_Outlined);
   errorOutliner = new Outliner(baseEditor, def_Error);
+  TrueMod=false;
 }
 
 FarEditor::~FarEditor()
@@ -214,6 +215,11 @@ void FarEditor::setDrawSyntax(bool drawSyntax)
 void FarEditor::setOutlineStyle(bool oldStyle)
 {
   this->oldOutline = oldStyle;
+}
+
+void FarEditor::setTrueMod(bool _TrueMod)
+{
+  this->TrueMod = _TrueMod;
 }
 
 void FarEditor::setRegionMapper(RegionMapper *rs)
@@ -1115,7 +1121,7 @@ color FarEditor::convert(const StyledRegion *rd)
   int fore = (newfore != -1) ? newfore : rdBackground->fore;
   int back = (newback != -1) ? newback : rdBackground->back;
 
-  if (consoleAnnotationAvailable())
+  if (TrueMod)
   {
     if (rd != NULL){
       col.fg = rd->fore;
@@ -1151,7 +1157,7 @@ color FarEditor::convert(const StyledRegion *rd)
 
 bool FarEditor::foreDefault(color col)
 {
-  if (consoleAnnotationAvailable())
+  if (TrueMod)
     return col.fg == rdBackground->fore;
   else
     return col.cfg == rdBackground->fore;
@@ -1159,7 +1165,7 @@ bool FarEditor::foreDefault(color col)
 
 bool FarEditor::backDefault(color col)
 {
-  if (consoleAnnotationAvailable())
+  if (TrueMod)
     return col.bk == rdBackground->back;
   else
     return col.cbk == rdBackground->back;
@@ -1167,7 +1173,7 @@ bool FarEditor::backDefault(color col)
 
 void FarEditor::addFARColor(int lno, int s, int e, color col)
 {
-  if (consoleAnnotationAvailable()){
+  if (TrueMod){
     AnnotationInfo ai;
     ai.fg_color = ((col.fg>>16)&0xFF) + (col.fg&0x00FF00) + ((col.fg&0xFF)<<16);
     ai.bk_color = ((col.bk>>16)&0xFF) + (col.bk&0x00FF00) + ((col.bk&0xFF)<<16);

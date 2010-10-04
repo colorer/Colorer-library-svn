@@ -26,7 +26,7 @@ extern FarStandardFunctions FSF;
 /** FAR .lng file identifiers. */
 enum
 {
-  mName, mSetup, mTurnOff,
+  mName, mSetup, mTurnOff, mTrueMod,
   mCross, mPairs, mSyntax, mOldOutline,
   mOk, mReloadAll, mCancel,
   mCatalogFile, mHRDName,
@@ -35,11 +35,9 @@ enum
   mUpdateHighlight, mReloadBase, mConfigure,
   mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
   mGotcha, mChoose,
-  mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-  mFatal, mNeedColorer,  mSelectHRD
+  mReloading, mCantLoad, mCantOpenFile, mDie, mTry,
+  mFatal, mSelectHRD
 };
-
-bool consoleAnnotationAvailable();
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

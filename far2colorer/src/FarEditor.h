@@ -70,6 +70,7 @@ public:
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);
+  void setTrueMod(bool _TrueMod);
 
   /** Editor action: pair matching.
   */
@@ -122,6 +123,7 @@ private:
 
   bool drawPairs, drawSyntax;
   bool oldOutline;
+  bool TrueMod;
 
   int WindowSizeX;
   int WindowSizeY;
