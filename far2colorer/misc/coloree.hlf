@@ -18,6 +18,10 @@ $^#Colorer's settings.#
   #Colorer enabled#
      Enable/Disable Colorer.
 
+  #TrueMod#
+     Enable/Disable TrueMod in plugin. If Far does not support truemod,
+     or ConEmu disable truemod, the plugin will work as usual.
+
   #Cross#
      [ ] Do not show ever
      [?] Show if included in the scheme

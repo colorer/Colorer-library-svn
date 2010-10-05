@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. маленькая оптимизация
+	2. дополнен help
+
+#Revision: 1560
+	Author: ctapmex Date: 2010-10-05 00:11:24 +0600 (Вт, 05 окт 2010)
 	1. опция для включения/выключения truemod
 
 #Revision: 1559

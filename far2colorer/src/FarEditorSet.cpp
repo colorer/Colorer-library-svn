@@ -459,7 +459,7 @@ void FarEditorSet::configure(bool fromEditor)
           enableColorer(fromEditor);
         }
         else{
-          if ((TrueModOn && !fdi[IDX_TRUEMOD].Selected)||(!TrueModOn && fdi[IDX_TRUEMOD].Selected)){
+          if (TrueModOn !=!!fdi[IDX_TRUEMOD].Selected){
             TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
             SaveSettings();
             ReloadBase();
