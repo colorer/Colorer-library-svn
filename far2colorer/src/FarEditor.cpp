@@ -29,7 +29,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
   structOutliner = new Outliner(baseEditor, def_Outlined);
   errorOutliner = new Outliner(baseEditor, def_Error);
-  TrueMod=false;
+  TrueMod=true;
 }
 
 FarEditor::~FarEditor()

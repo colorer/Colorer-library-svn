@@ -148,6 +148,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_VC80_UPGRADE=0x0700;_WIN64"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -156,7 +157,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wininet.lib"
-				OutputFile="$(OutDir)\colorer.dll"
+				OutputFile="$(OutDir)\colorer_x64.dll"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile="pcolorer.def"
@@ -334,6 +335,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_VC80_UPGRADE=0x0700;_WIN64"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -343,7 +345,7 @@
 				LinkLibraryDependencies="false"
 				AdditionalOptions=""
 				AdditionalDependencies="wininet.lib"
-				OutputFile="$(OutDir)\colorer.dll"
+				OutputFile="$(OutDir)\colorer_x64.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile="pcolorer.def"

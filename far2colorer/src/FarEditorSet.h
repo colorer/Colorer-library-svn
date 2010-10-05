@@ -30,7 +30,7 @@ const int cCrossDrawDefault = 2;
 const bool cPairsDrawDefault = true;
 const bool cSyntaxDrawDefault = true;
 const bool cOldOutLineDefault = true;
-const bool cTrueMod = false;
+const bool cTrueMod = true;
 
 enum
 { IDX_BOX, IDX_ENABLED,IDX_TRUEMOD, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
