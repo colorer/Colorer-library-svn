@@ -26,6 +26,9 @@ FarEditorSet::FarEditorSet()
   sCatalogPathExp = NULL;
 
   ReloadBase();
+  if (ChangeBgEditor){
+    SetBgEditor();
+  }
 }
 
 FarEditorSet::~FarEditorSet()
@@ -372,7 +375,7 @@ void FarEditorSet::configure(bool fromEditor)
   try{
     FarDialogItem fdi[] =
     {
-      { DI_DOUBLEBOX,3,1,51,16,0,0,0,0,L""},                                 //IDX_BOX,
+      { DI_DOUBLEBOX,3,1,51,18,0,0,0,0,L""},                                 //IDX_BOX,
       { DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
       { DI_CHECKBOX,31,3,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
       { DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
@@ -383,9 +386,10 @@ void FarEditorSet::configure(bool fromEditor)
       { DI_EDIT,6,10,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
       { DI_TEXT,5,12,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
       { DI_BUTTON,20,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
-      { DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-      { DI_BUTTON,31,15,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-      { DI_BUTTON,39,15,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+      { DI_CHECKBOX,5,14,0,0,TRUE,0,0,0,L""},                                 //IDX_CHANGE_BG,
+      { DI_BUTTON,5,16,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+      { DI_BUTTON,31,17,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+      { DI_BUTTON,39,17,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
     };// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
     fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -410,13 +414,15 @@ void FarEditorSet::configure(bool fromEditor)
     descr=getHRDescription(*sTempHrdName);
 
     fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
+    fdi[IDX_CHANGE_BG].PtrData = GetMsg(mChangeBackgroundEditor);
+    fdi[IDX_CHANGE_BG].Selected = ChangeBgEditor;
     fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
     fdi[IDX_OK].PtrData = GetMsg(mOk);
     fdi[IDX_CANCEL].PtrData = GetMsg(mCancel);
     /*
     * Dialog activation
     */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 18, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 20, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK){
@@ -438,6 +444,7 @@ void FarEditorSet::configure(bool fromEditor)
       drawPairs = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
       drawSyntax = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
       oldOutline = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
+      ChangeBgEditor = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_CHANGE_BG, 0);
       fdi[IDX_TRUEMOD].Selected = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
       delete sHrdName;
       delete sCatalogPath;
@@ -457,6 +464,9 @@ void FarEditorSet::configure(bool fromEditor)
           TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
           enableColorer(fromEditor);
+          if (ChangeBgEditor){
+            SetBgEditor();
+          }
         }
         else{
           if (TrueModOn !=!!fdi[IDX_TRUEMOD].Selected){
@@ -467,6 +477,9 @@ void FarEditorSet::configure(bool fromEditor)
           else{
             SaveSettings();
             ApplySettingsToEditors();
+            if (ChangeBgEditor){
+              SetBgEditor();
+            }
           }
         }
       }
@@ -907,6 +920,7 @@ void FarEditorSet::ReadSettings()
   drawSyntax = !!rGetValueDw(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault);
   oldOutline = !!rGetValueDw(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault);
   TrueModOn = !!rGetValueDw(hPluginRegistry, cRegTrueMod, cTrueMod);
+  ChangeBgEditor = !!rGetValueDw(hPluginRegistry, cRegChangeBgEditor, cChangeBgEditor);
 }
 
 void FarEditorSet::SetDefaultSettings()
@@ -919,6 +933,7 @@ void FarEditorSet::SetDefaultSettings()
   rSetValue(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault); 
   rSetValue(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault); 
   rSetValue(hPluginRegistry, cRegTrueMod, cTrueMod); 
+  rSetValue(hPluginRegistry, cRegChangeBgEditor, cChangeBgEditor); 
 }
 
 void FarEditorSet::SaveSettings()
@@ -931,6 +946,7 @@ void FarEditorSet::SaveSettings()
   rSetValue(hPluginRegistry, cRegSyntaxDraw, drawSyntax); 
   rSetValue(hPluginRegistry, cRegOldOutLine, oldOutline); 
   rSetValue(hPluginRegistry, cRegTrueMod, TrueModOn); 
+  rSetValue(hPluginRegistry, cRegChangeBgEditor, ChangeBgEditor); 
 }
 
 bool FarEditorSet::checkConsoleAnnotationAvailable()
@@ -955,6 +971,21 @@ bool FarEditorSet::checkConsoleAnnotationAvailable()
   return consoleAnnotationCheck == 1;
 }
 
+bool FarEditorSet::SetBgEditor()
+{
+  FarSetColors fsc;
+  unsigned char c;
+
+  const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
+  c=(def_text->back<<4) + def_text->fore;
+
+  fsc.Flags=FCLR_REDRAW;
+  fsc.ColorCount=1;
+  fsc.StartIndex=COL_EDITORTEXT;
+  fsc.Colors=&c;
+  return !!Info.AdvControl(Info.ModuleNumber,ACTL_SETARRAYCOLOR,&fsc);
+
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

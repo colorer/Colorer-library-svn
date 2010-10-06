@@ -533,7 +533,8 @@ int FarEditor::editorEvent(int event, void *param)
 
   for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
-      break;
+      addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
+      continue;
     }
 
     LineRegion *l1 = NULL;

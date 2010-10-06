@@ -33,7 +33,7 @@ $^#Colorer's settings.#
   #Syntax#
      Turns on display of syntax
 
-  #Classic ou&tline style#
+  #Classic outline style#
      In classic style displays only the name of the function. Otherwise show
      the beginning of the line number, then the first letter in the function 
      and the function name itself.
@@ -50,6 +50,14 @@ $^#Colorer's settings.#
   #Color style:#
      Choose a color style, which will be used for coloring text. 
      The choice does not work if the plugin is disabled.
+
+  #Change background editor#
+     In the set condition, Colorer set in System Preferences color of 
+     "Plain Text" color group "editor" such as and the default color for 
+     the color scheme Colorer.
+     The effect is visible on the files, the number of rows in less than window height
+     editor.
+     In TrueMod desired visual effect is not achieved.
 
   #[ Test schema library ]#
      Tests ability to load all the language of schemes, taking the path to

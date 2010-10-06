@@ -21,6 +21,7 @@ const wchar_t cRegPairsDraw[] = L"PairsDraw";
 const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
 const wchar_t cRegOldOutLine[] = L"OldOutlineView";
 const wchar_t cRegTrueMod[] = L"TrueMod";
+const wchar_t cRegChangeBgEditor[] = L"ChangeBgEditor";
 
 //values of registry keys by default
 const bool cEnabledDefault = true;
@@ -31,10 +32,11 @@ const bool cPairsDrawDefault = true;
 const bool cSyntaxDrawDefault = true;
 const bool cOldOutLineDefault = true;
 const bool cTrueMod = true;
+const bool cChangeBgEditor = false;
 
 enum
 { IDX_BOX, IDX_ENABLED,IDX_TRUEMOD, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
-IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_RELOAD_ALL,
+IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_CHANGE_BG, IDX_RELOAD_ALL,
 IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
@@ -77,6 +79,8 @@ public:
   bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
   SString *GetCatalogPath() {return sCatalogPath;}
   bool GetPluginStatus() {return rEnabled;}
+
+  bool SetBgEditor();
 
   SString *sTempHrdName;
 private:
@@ -131,6 +135,7 @@ private:
   bool drawSyntax;
   bool oldOutline;
   bool TrueModOn;
+  bool ChangeBgEditor;
   SString *sHrdName;
   SString *sCatalogPath;
   SString *sCatalogPathExp;
