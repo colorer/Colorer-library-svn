@@ -652,6 +652,14 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
   }
   delete[] t;
 
+  consoleAnnotationAvailable=checkConsoleAnnotationAvailable();
+  if (consoleAnnotationAvailable){
+    hrdClass = DString("rgb");
+  }
+  else{
+    hrdClass = DString("console");
+  }
+
   try{
     parserFactoryLocal = new ParserFactory(catalogPathS);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
