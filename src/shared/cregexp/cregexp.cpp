@@ -749,12 +749,10 @@ int i, sv, wlen;
 bool leftenter = true;
 const String &pattern = *global_pattern;
 
-#ifdef WIN32
 //check for stack overflow
-if ((unsigned int)(&leftenter)<0x00033333 ){
+if ((unsigned int)(&leftenter)<0x00034444 ){
   return false;
 }
-#endif
 
   if (!re){
     re = prev->parent;
