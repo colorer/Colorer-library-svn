@@ -26,7 +26,7 @@ FarEditorSet::FarEditorSet()
   sCatalogPathExp = NULL;
 
   ReloadBase();
-  if (ChangeBgEditor){
+  if (ChangeBgEditor && !TrueModOn){
     SetBgEditor();
   }
 }
@@ -464,7 +464,7 @@ void FarEditorSet::configure(bool fromEditor)
           TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
           enableColorer(fromEditor);
-          if (ChangeBgEditor){
+          if (ChangeBgEditor && !TrueModOn){
             SetBgEditor();
           }
         }
@@ -477,7 +477,7 @@ void FarEditorSet::configure(bool fromEditor)
           else{
             SaveSettings();
             ApplySettingsToEditors();
-            if (ChangeBgEditor){
+            if (ChangeBgEditor && !TrueModOn){
               SetBgEditor();
             }
           }

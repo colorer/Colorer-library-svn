@@ -533,7 +533,6 @@ int FarEditor::editorEvent(int event, void *param)
 
   for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
-      addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
       continue;
     }
 
@@ -552,13 +551,18 @@ int FarEditor::editorEvent(int event, void *param)
 
     // fills back
     if (lno == ei.CurLine && showHorizontalCross){
-      addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, horzCrossColor);
+      if (!TrueMod){
+        addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, horzCrossColor);
+      }
+      else{
+        addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
+      }
     }
     else{
       addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
     }
 
-    if (showVerticalCross){
+    if (showVerticalCross && !TrueMod){
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
@@ -585,12 +589,14 @@ int FarEditor::editorEvent(int event, void *param)
 
           //TODO
           if (lno == ei.CurLine && showHorizontalCross){
-            if (foreDefault(col)){
-              col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
-            }
+            if (!TrueMod){
+              if (foreDefault(col)){
+                col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
+              }
 
-            if (backDefault(col)){
-              col.concolor = (col.concolor&0xF) + (horzCrossColor.concolor&0xF0);
+              if (backDefault(col)){
+                col.concolor = (col.concolor&0xF) + (horzCrossColor.concolor&0xF0);
+              }
             }
           };
           if (!col.concolor){
@@ -611,14 +617,14 @@ int FarEditor::editorEvent(int event, void *param)
           };
 
           // column
-          if (showVerticalCross && crossZOrder == 0 && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
+          if (!TrueMod && showVerticalCross && crossZOrder == 0 && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
             col = convert(l1->styled());
 
-            
+
             if (foreDefault(col)) col.concolor = (col.concolor&0xF0) + (vertCrossColor.concolor&0xF);
 
             if (backDefault(col)) col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
-           
+
             ecp_cl.StringNumber = lno;
             ecp_cl.SrcPos = ecp.DestPos;
             info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
@@ -629,7 +635,7 @@ int FarEditor::editorEvent(int event, void *param)
         };
       };
     };
-    if (showVerticalCross && !vertCrossDone){
+    if (!TrueMod && showVerticalCross && !vertCrossDone){
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(ECTL_TABTOREAL, &ecp_cl);
@@ -649,7 +655,7 @@ int FarEditor::editorEvent(int event, void *param)
     color col = convert(pm->start->styled());
 
     // TODO
-    if (showHorizontalCross){
+    if (!TrueMod && showHorizontalCross){
       if (foreDefault(col)){ 
         col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
       }
@@ -662,7 +668,7 @@ int FarEditor::editorEvent(int event, void *param)
     addFARColor(ei.CurLine, pm->start->start, pm->start->end, col);
 
     // TODO
-    if (showVerticalCross && !showHorizontalCross && pm->start->start <= ei.CurPos && ei.CurPos < pm->start->end){
+    if (!TrueMod && showVerticalCross && !showHorizontalCross && pm->start->start <= ei.CurPos && ei.CurPos < pm->start->end){
       col = convert(pm->start->styled());
 
       if (foreDefault(col)){
@@ -681,7 +687,7 @@ int FarEditor::editorEvent(int event, void *param)
       col = convert(pm->end->styled());
 
       //
-      if (showHorizontalCross && pm->eline == ei.CurLine){
+      if (!TrueMod && showHorizontalCross && pm->eline == ei.CurLine){
         if (foreDefault(col)){
           col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
         }
@@ -697,7 +703,7 @@ int FarEditor::editorEvent(int event, void *param)
       info->EditorControl(ECTL_TABTOREAL, &ecp);
 
       //
-      if (showVerticalCross && pm->end->start <= ecp.DestPos && ecp.DestPos < pm->end->end){
+      if (!TrueMod && showVerticalCross && pm->end->start <= ecp.DestPos && ecp.DestPos < pm->end->end){
         col = convert(pm->end->styled());
 
         if (foreDefault(col)){
