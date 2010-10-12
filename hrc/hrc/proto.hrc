@@ -487,7 +487,7 @@
   </prototype>
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
-    <filename>/\.(sh)$|^\./i</filename>
+    <filename>/\.(sh|spec)$|^\./i</filename>
     <filename>/^PKGBUILD$/i</filename>
     <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
