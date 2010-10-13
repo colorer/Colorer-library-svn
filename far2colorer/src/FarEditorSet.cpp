@@ -22,11 +22,12 @@ FarEditorSet::FarEditorSet()
   regionMapper = NULL;
   hrcParser = NULL;
   sHrdName = NULL;
+  sHrdNameTm = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
 
   ReloadBase();
-  if (ChangeBgEditor && !TrueModOn){
+  if (ChangeBgEditor && !consoleAnnotationAvailable){
     SetBgEditor();
   }
 }
@@ -36,6 +37,7 @@ FarEditorSet::~FarEditorSet()
   dropAllEditors(false);
   RegCloseKey(hPluginRegistry);
   delete sHrdName;
+  delete sHrdNameTm;
   delete sCatalogPath;
   delete sCatalogPathExp;
   delete regionMapper;
@@ -309,11 +311,11 @@ void FarEditorSet::chooseType()
   }
 }
 
-const String *FarEditorSet::getHRDescription(const String &name)
+const String *FarEditorSet::getHRDescription(const String &name, DString _hrdClass )
 {
   const String *descr = NULL;
   if (parserFactory != NULL){
-    descr = parserFactory->getHRDescription(hrdClass, name);
+    descr = parserFactory->getHRDescription(_hrdClass, name);
   }
 
   if (descr == NULL){
@@ -332,11 +334,21 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
     switch (Param1){
   case IDX_HRD_SELECT:
     {
-      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdName));
+      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdName, DString("console")));
       delete fes->sTempHrdName;
       fes->sTempHrdName=tempSS;
-      const String *descr=fes->getHRDescription(*fes->sTempHrdName);
+      const String *descr=fes->getHRDescription(*fes->sTempHrdName,DString("console"));
       Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
+      return true;
+    }
+    break;
+  case IDX_HRD_SELECT_TM:
+    {
+      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdNameTm, DString("rgb")));
+      delete fes->sTempHrdNameTm;
+      fes->sTempHrdNameTm=tempSS;
+      const String *descr=fes->getHRDescription(*fes->sTempHrdNameTm,DString("rgb"));
+      Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT_TM,(LONG_PTR)descr->getWChars());
       return true;
     }
     break;
@@ -344,7 +356,7 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
     {
       Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , false,0);
       wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
-      fes->TestLoadBase(fes->sTempHrdName->getWChars(),catalog,true);
+      fes->TestLoadBase(catalog,true);
       Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true,0);
       return true;
     }
@@ -354,7 +366,7 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
     int k = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_ENABLED, 0);
 
     if (fes->GetCatalogPath()->compareTo(DString(temp))|| (!fes->GetPluginStatus() && k)){ 
-      if (fes->TestLoadBase(fes->sTempHrdName->getWChars(),temp,false)){
+      if (fes->TestLoadBase(temp,false)){
         return false;
       }
       else{
@@ -375,21 +387,23 @@ void FarEditorSet::configure(bool fromEditor)
   try{
     FarDialogItem fdi[] =
     {
-      { DI_DOUBLEBOX,3,1,51,18,0,0,0,0,L""},                                 //IDX_BOX,
+      { DI_DOUBLEBOX,3,1,51,15,0,0,0,0,L""},                                 //IDX_BOX,
       { DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
       { DI_CHECKBOX,31,3,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
-      { DI_CHECKBOX,5,5,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
-      { DI_CHECKBOX,18,5,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
-      { DI_CHECKBOX,31,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
-      { DI_CHECKBOX,5,7,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
-      { DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
-      { DI_EDIT,6,10,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
-      { DI_TEXT,5,12,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
-      { DI_BUTTON,20,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
-      { DI_CHECKBOX,5,14,0,0,TRUE,0,0,0,L""},                                 //IDX_CHANGE_BG,
-      { DI_BUTTON,5,16,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-      { DI_BUTTON,31,17,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-      { DI_BUTTON,39,17,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+      { DI_CHECKBOX,5,4,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
+      { DI_CHECKBOX,18,4,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
+      { DI_CHECKBOX,31,4,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
+      { DI_CHECKBOX,5,5,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
+      { DI_CHECKBOX,5,6,0,0,TRUE,0,0,0,L""},                                 //IDX_CHANGE_BG,
+      { DI_TEXT,5,7,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
+      { DI_EDIT,6,8,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
+      { DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
+      { DI_BUTTON,6,10,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
+      { DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD_TM,
+      { DI_BUTTON,6,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT_TM,
+      { DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+      { DI_BUTTON,31,14,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+      { DI_BUTTON,39,14,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
     };// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
     fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -411,9 +425,16 @@ void FarEditorSet::configure(bool fromEditor)
 
     const String *descr = NULL;
     sTempHrdName =new SString(sHrdName); 
-    descr=getHRDescription(*sTempHrdName);
+    descr=getHRDescription(*sTempHrdName,DString("console"));
 
     fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
+
+    const String *descr2 = NULL;
+    sTempHrdNameTm =new SString(sHrdNameTm); 
+    descr2=getHRDescription(*sTempHrdNameTm,DString("rgb"));
+
+    fdi[IDX_HRD_TM].PtrData = GetMsg(mHRDNameTrueMod);
+    fdi[IDX_HRD_SELECT_TM].PtrData = descr2->getWChars();
     fdi[IDX_CHANGE_BG].PtrData = GetMsg(mChangeBackgroundEditor);
     fdi[IDX_CHANGE_BG].Selected = ChangeBgEditor;
     fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
@@ -422,7 +443,7 @@ void FarEditorSet::configure(bool fromEditor)
     /*
     * Dialog activation
     */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 20, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 17, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK){
@@ -434,7 +455,7 @@ void FarEditorSet::configure(bool fromEditor)
         k = true;
       }
       if (!k){
-        if (sHrdName->compareTo(*sTempHrdName)){
+        if (sHrdName->compareTo(*sTempHrdName) || sHrdNameTm->compareTo(*sTempHrdNameTm)){
           k = true;
         }
       }
@@ -447,8 +468,10 @@ void FarEditorSet::configure(bool fromEditor)
       ChangeBgEditor = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_CHANGE_BG, 0);
       fdi[IDX_TRUEMOD].Selected = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
       delete sHrdName;
+      delete sHrdNameTm;
       delete sCatalogPath;
       sHrdName = sTempHrdName;
+      sHrdNameTm = sTempHrdNameTm;
       sCatalogPath = new SString(DString(fdi[IDX_CATALOG_EDIT].PtrData));
 
       // if the plugin has been enable, and we will disable
@@ -464,7 +487,7 @@ void FarEditorSet::configure(bool fromEditor)
           TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
           enableColorer(fromEditor);
-          if (ChangeBgEditor && !TrueModOn){
+          if (ChangeBgEditor && !consoleAnnotationAvailable){
             SetBgEditor();
           }
         }
@@ -477,7 +500,7 @@ void FarEditorSet::configure(bool fromEditor)
           else{
             SaveSettings();
             ApplySettingsToEditors();
-            if (ChangeBgEditor && !TrueModOn){
+            if (ChangeBgEditor && !consoleAnnotationAvailable){
               SetBgEditor();
             }
           }
@@ -506,7 +529,7 @@ void FarEditorSet::configure(bool fromEditor)
   };
 }
 
-const String *FarEditorSet::chooseHRDName(const String *current)
+const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdClass )
 {
   int count = 0;
 
@@ -514,7 +537,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  while (parserFactory->enumerateHRDInstances(hrdClass, count) != NULL){
+  while (parserFactory->enumerateHRDInstances(_hrdClass, count) != NULL){
     count++;
   }
 
@@ -522,8 +545,8 @@ const String *FarEditorSet::chooseHRDName(const String *current)
   memset(menuElements, 0, sizeof(FarMenuItem)*count);
 
   for (int i = 0; i < count; i++){
-    const String *name = parserFactory->enumerateHRDInstances(hrdClass, i);
-    const String *descr = parserFactory->getHRDescription(hrdClass, *name);
+    const String *name = parserFactory->enumerateHRDInstances(_hrdClass, i);
+    const String *descr = parserFactory->getHRDescription(_hrdClass, *name);
 
     if (descr == NULL){
       descr = name;
@@ -545,7 +568,7 @@ const String *FarEditorSet::chooseHRDName(const String *current)
     return current;
   }
 
-  return parserFactory->enumerateHRDInstances(hrdClass, result);
+  return parserFactory->enumerateHRDInstances(_hrdClass, result);
 }
 
 int FarEditorSet::editorInput(const INPUT_RECORD *ir)
@@ -629,7 +652,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
   return 0;
 }
 
-bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full)
+bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const int full)
 {
   bool res = true;
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
@@ -640,11 +663,6 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
   RegionMapper *regionMapperLocal = NULL;
   HRCParser *hrcParserLocal = NULL;
 
-  SString *hrdNameS = NULL;
-  if (hrdName){
-    hrdNameS = new SString(DString(hrdName));
-  }
-
   SString *catalogPathS = NULL;
   wchar_t *t=PathToFull(catalogPath,false);
   if (t){
@@ -652,27 +670,32 @@ bool FarEditorSet::TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPa
   }
   delete[] t;
 
-  consoleAnnotationAvailable=checkConsoleAnnotationAvailable();
-  if (consoleAnnotationAvailable){
-    hrdClass = DString("rgb");
-  }
-  else{
-    hrdClass = DString("console");
-  }
-
   try{
     parserFactoryLocal = new ParserFactory(catalogPathS);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
 
     try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, hrdNameS);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), sTempHrdName);
     }
     catch (ParserFactoryException &e)
     {
       if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
         parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&hrdClass, NULL);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
+    };
+
+    delete regionMapperLocal;
+    regionMapperLocal=NULL;
+    try{
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("rgb"), sTempHrdNameTm);
+    }
+    catch (ParserFactoryException &e)
+    {
+      if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
+        parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+      }
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("rgb"), NULL);
     };
 
     Info.RestoreScreen(scr);
@@ -740,9 +763,11 @@ void FarEditorSet::ReloadBase()
   consoleAnnotationAvailable=checkConsoleAnnotationAvailable();
   if (consoleAnnotationAvailable){
     hrdClass = DString("rgb");
+    hrdName = sHrdNameTm;
   }
   else{
     hrdClass = DString("console");
+    hrdName = sHrdName;
   }
 
   try{
@@ -750,7 +775,7 @@ void FarEditorSet::ReloadBase()
     hrcParser = parserFactory->getHRCParser();
 
     try{
-      regionMapper = parserFactory->createStyledMapper(&hrdClass, sHrdName);
+      regionMapper = parserFactory->createStyledMapper(&hrdClass, &hrdName);
     }
     catch (ParserFactoryException &e){
       if (getErrorHandler() != NULL){
@@ -901,9 +926,11 @@ void FarEditorSet::dropAllEditors(bool clean)
 void FarEditorSet::ReadSettings()
 {
   wchar_t *hrdName = rGetValueSz(hPluginRegistry, cRegHrdName, cHrdNameDefault);
+  wchar_t *hrdNameTm = rGetValueSz(hPluginRegistry, cRegHrdNameTm, cHrdNameTmDefault);
   wchar_t *catalogPath = rGetValueSz(hPluginRegistry, cRegCatalog, cCatalogDefault);
 
   delete sHrdName;
+  delete sHrdNameTm;
   delete sCatalogPath;
   delete sCatalogPathExp;
   sHrdName = NULL;
@@ -911,6 +938,7 @@ void FarEditorSet::ReadSettings()
   sCatalogPathExp = NULL;
 
   sHrdName = new SString(DString(hrdName));
+  sHrdNameTm = new SString(DString(hrdNameTm));
   sCatalogPath = new SString(DString(catalogPath));
   wchar_t *t=PathToFull(catalogPath,false);
   if (t){
@@ -919,6 +947,7 @@ void FarEditorSet::ReadSettings()
   delete[] t;
 
   delete[] hrdName;
+  delete[] hrdNameTm;
   delete[] catalogPath;
 
   // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
@@ -935,6 +964,7 @@ void FarEditorSet::SetDefaultSettings()
 {
   rSetValue(hPluginRegistry, cRegEnabled, cEnabledDefault); 
   rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, cHrdNameDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cHrdNameDefault)+1)));
+  rSetValue(hPluginRegistry, cRegHrdNameTm, REG_SZ, cHrdNameTmDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cHrdNameTmDefault)+1)));
   rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, cCatalogDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cCatalogDefault)+1)));
   rSetValue(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault); 
   rSetValue(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault); 
@@ -948,6 +978,7 @@ void FarEditorSet::SaveSettings()
 {
   rSetValue(hPluginRegistry, cRegEnabled, rEnabled); 
   rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, sHrdName->getWChars(), sizeof(wchar_t)*(sHrdName->length()+1));
+  rSetValue(hPluginRegistry, cRegHrdNameTm, REG_SZ, sHrdNameTm->getWChars(), sizeof(wchar_t)*(sHrdNameTm->length()+1));
   rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, sCatalogPath->getWChars(), sizeof(wchar_t)*(sCatalogPath->length()+1));
   rSetValue(hPluginRegistry, cRegCrossDraw, drawCross); 
   rSetValue(hPluginRegistry, cRegPairsDraw, drawPairs); 

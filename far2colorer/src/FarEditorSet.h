@@ -15,6 +15,7 @@
 //registry keys
 const wchar_t cRegEnabled[] = L"Enabled";
 const wchar_t cRegHrdName[] = L"HrdName";
+const wchar_t cRegHrdNameTm[] = L"HrdNameTm";
 const wchar_t cRegCatalog[] = L"Catalog";
 const wchar_t cRegCrossDraw[] = L"CrossDraw";
 const wchar_t cRegPairsDraw[] = L"PairsDraw";
@@ -26,6 +27,7 @@ const wchar_t cRegChangeBgEditor[] = L"ChangeBgEditor";
 //values of registry keys by default
 const bool cEnabledDefault = true;
 const wchar_t cHrdNameDefault[] = L"default";
+const wchar_t cHrdNameTmDefault[] = L"default";
 const wchar_t cCatalogDefault[] = L"";
 const int cCrossDrawDefault = 2;
 const bool cPairsDrawDefault = true;
@@ -35,8 +37,8 @@ const bool cTrueMod = true;
 const bool cChangeBgEditor = false;
 
 enum
-{ IDX_BOX, IDX_ENABLED,IDX_TRUEMOD, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,
-IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_CHANGE_BG, IDX_RELOAD_ALL,
+{ IDX_BOX, IDX_ENABLED,IDX_TRUEMOD, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
+IDX_CATALOG, IDX_CATALOG_EDIT, IDX_HRD, IDX_HRD_SELECT, IDX_HRD_TM, IDX_HRD_SELECT_TM, IDX_RELOAD_ALL,
 IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
@@ -67,22 +69,23 @@ public:
   int  editorInput(const INPUT_RECORD *ir);
 
   /** Get the description of HRD, or parameter name if description=null */
-  const String *getHRDescription(const String &name);
+  const String *getHRDescription(const String &name, DString _hrdClass);
   /** Shows dialog with HRD scheme selection */
-  const String *chooseHRDName(const String *current);
+  const String *chooseHRDName(const String *current, DString _hrdClass );
 
   /** Reads all registry settings into variables */
   void ReadSettings();
   /**
   * trying to load the database on the specified path
   */
-  bool TestLoadBase(const wchar_t *hrdName, const wchar_t *catalogPath, const int full);
+  bool TestLoadBase(const wchar_t *catalogPath, const int full);
   SString *GetCatalogPath() {return sCatalogPath;}
   bool GetPluginStatus() {return rEnabled;}
 
   bool SetBgEditor();
 
   SString *sTempHrdName;
+  SString *sTempHrdNameTm;
 private:
   /** Returns current global error handler. */
   ErrorHandler *getErrorHandler();
@@ -126,7 +129,9 @@ private:
   HRCParser *hrcParser;
 
   HKEY hPluginRegistry;
+  /**current value*/
   DString hrdClass;
+  DString hrdName;
 
   /** registry settings */
   bool rEnabled; // status plugin
@@ -137,7 +142,10 @@ private:
   bool TrueModOn;
   bool ChangeBgEditor;
   SString *sHrdName;
+  SString *sHrdNameTm;
   SString *sCatalogPath;
+  
+  /** UNC path of sCatalogPath*/
   SString *sCatalogPathExp;
 };
 
