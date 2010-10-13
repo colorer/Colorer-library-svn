@@ -128,6 +128,9 @@ String *ParserFactory::searchPath()
   TCHAR cname[256];
   HMODULE hmod;
   hmod = GetModuleHandle(TEXT("colorer"));
+#ifdef _WIN64
+  if (hmod == null) hmod = GetModuleHandle(TEXT("colorer_x64"));
+#endif
   if (hmod == null) hmod = GetModuleHandle(null);
   int len = GetModuleFileName(hmod, cname, 256) - 1;
   DString module(cname, 0, len);
