@@ -36,6 +36,15 @@ SRegInfo::~SRegInfo()
 
 ////////////////////////////////////////////////////////////////////////////
 // CRegExp class
+void CRegExp::setWow64(bool wow64)
+{
+#ifdef _WIN32
+  if (wow64)  adr_so=0x00094444;
+  else adr_so=0x00034444;
+#else
+  adr_so=0;
+#endif
+}
 void CRegExp::init()
 {
   tree_root = 0;
@@ -51,14 +60,6 @@ void CRegExp::init()
   cnMatch = 0;
 #else
   namedMatches = 0;
-#endif
-
-#ifdef _WIN32
-  //check for stack overflow
-  char *b = getenv("PROCESSOR_ARCHITEW6432");
-  if (b == null) adr_so=0x00034444;
-  else adr_so=0x00094444;
-  delete b;
 #endif
 };
 CRegExp::CRegExp()

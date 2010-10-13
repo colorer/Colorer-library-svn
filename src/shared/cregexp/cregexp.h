@@ -4,11 +4,6 @@
 #include<unicode/String.h>
 #include<unicode/CharacterClass.h>
 
-#ifdef _WIN32
-#include<io.h>
-#include<windows.h>
-#endif
-
 /**
     @addtogroup cregexp Regular Expressions
       Colorer Regular Expressions (cregexp) class implementation.
@@ -291,6 +286,7 @@ public:
   bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 
+  void setWow64(bool wow64);
 private:
   bool ignoreCase, extend, positionMoves, singleLine, multiLine;
   SRegInfo *tree_root;
@@ -328,10 +324,8 @@ private:
   bool lowParse(SRegInfo *re, SRegInfo *prev, int toParse);
   bool parseRE(int toParse);
 
-#ifdef _WIN32
   //check for stack overflow
   unsigned int adr_so;
-#endif
 };
 
 #endif
