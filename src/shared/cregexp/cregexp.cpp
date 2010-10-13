@@ -52,6 +52,14 @@ void CRegExp::init()
 #else
   namedMatches = 0;
 #endif
+
+#ifdef _WIN32
+  //check for stack overflow
+  char *b = getenv("PROCESSOR_ARCHITEW6432");
+  if (b == null) adr_so=0x00034444;
+  else adr_so=0x00094444;
+  delete b;
+#endif
 };
 CRegExp::CRegExp()
 {
@@ -749,10 +757,12 @@ int i, sv, wlen;
 bool leftenter = true;
 const String &pattern = *global_pattern;
 
+#ifdef _WIN32
 //check for stack overflow
-if ((unsigned int)(&leftenter)<0x00034444 ){
+if ((unsigned int)(&leftenter)<adr_so ){
   return false;
 }
+#endif
 
   if (!re){
     re = prev->parent;

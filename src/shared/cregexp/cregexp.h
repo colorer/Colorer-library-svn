@@ -4,6 +4,11 @@
 #include<unicode/String.h>
 #include<unicode/CharacterClass.h>
 
+#ifdef _WIN32
+#include<io.h>
+#include<windows.h>
+#endif
+
 /**
     @addtogroup cregexp Regular Expressions
       Colorer Regular Expressions (cregexp) class implementation.
@@ -322,6 +327,11 @@ private:
   bool checkMetaSymbol(EMetaSymbols metaSymbol, int &toParse);
   bool lowParse(SRegInfo *re, SRegInfo *prev, int toParse);
   bool parseRE(int toParse);
+
+#ifdef _WIN32
+  //check for stack overflow
+  unsigned int adr_so;
+#endif
 };
 
 #endif
