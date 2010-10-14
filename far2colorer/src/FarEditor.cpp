@@ -580,7 +580,7 @@ int FarEditor::editorEvent(int event, void *param)
         if (l1->start == l1->end){
           continue;
         }
-        if (l1->start > ei.WindowSizeX){
+        if (l1->start > ei.LeftPos+ei.WindowSizeX){
           continue;
         }
         if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX){
