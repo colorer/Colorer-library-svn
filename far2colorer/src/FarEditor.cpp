@@ -533,7 +533,7 @@ int FarEditor::editorEvent(int event, void *param)
 
   for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
-      continue;
+      break;
     }
 
     LineRegion *l1 = NULL;
@@ -574,13 +574,16 @@ int FarEditor::editorEvent(int event, void *param)
 
     if (drawSyntax){
       for (; l1; l1 = l1->next){
-        if (l1->special || l1->end == -1){
+        if (l1->special){
           continue;
         }
         if (l1->start == l1->end){
           continue;
         }
         if (l1->start > ei.WindowSizeX){
+          continue;
+        }
+        if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX){
           continue;
         }
 
