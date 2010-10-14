@@ -147,6 +147,8 @@ private:
   
   /** UNC path of sCatalogPath*/
   SString *sCatalogPathExp;
+
+  int viewFirst; // 0 - init;  1 - first run view; 2 - first run editor
 };
 
 #endif

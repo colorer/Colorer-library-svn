@@ -30,6 +30,7 @@ FarEditorSet::FarEditorSet()
   if (ChangeBgEditor && !consoleAnnotationAvailable){
     SetBgEditor();
   }
+  viewFirst = 0;
 }
 
 FarEditorSet::~FarEditorSet()
@@ -159,6 +160,7 @@ void FarEditorSet::openMenu()
 
 void FarEditorSet::viewFile(const String &path)
 {
+  if (viewFirst==0) viewFirst=1;
   try{
     if (!rEnabled){
       throw Exception(DString("Colorer is disabled"));
@@ -181,13 +183,14 @@ void FarEditorSet::viewFile(const String &path)
     //HRCParser *hrcParser = parserFactory->getHRCParser();
     // Base editor to make primary parse
     BaseEditor baseEditor(parserFactory, &textLinesStore);
-    baseEditor.setRegionMapper(regionMapper);
+    RegionMapper *regionMap=parserFactory->createStyledMapper(&DString("console"), sHrdName);
+    baseEditor.setRegionMapper(regionMap);
     baseEditor.chooseFileType(newPath);
     // initial event
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
     // computing background color
     int background = 0x1F;
-    const StyledRegion *rd = StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
+    const StyledRegion *rd = StyledRegion::cast(regionMap->getRegionDefine(DString("def:Text")));
 
     if (rd != NULL && rd->bfore && rd->bback){
       background = rd->fore + (rd->back<<4);
@@ -812,6 +815,9 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 
 FarEditor *FarEditorSet::addCurrentEditor()
 {
+  if (viewFirst==0) viewFirst=2;
+  else ReloadBase();
+
   EditorInfo ei;
   Info.EditorControl(ECTL_GETINFO, &ei);
 
