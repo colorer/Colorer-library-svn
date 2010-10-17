@@ -390,23 +390,25 @@ void FarEditorSet::configure(bool fromEditor)
   try{
     FarDialogItem fdi[] =
     {
-      { DI_DOUBLEBOX,3,1,51,15,0,0,0,0,L""},                                 //IDX_BOX,
-      { DI_CHECKBOX,5,3,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
-      { DI_CHECKBOX,31,3,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
-      { DI_CHECKBOX,5,4,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
-      { DI_CHECKBOX,18,4,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
-      { DI_CHECKBOX,31,4,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
-      { DI_CHECKBOX,5,5,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
-      { DI_CHECKBOX,5,6,0,0,TRUE,0,0,0,L""},                                 //IDX_CHANGE_BG,
-      { DI_TEXT,5,7,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
-      { DI_EDIT,6,8,47,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
-      { DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
-      { DI_BUTTON,6,10,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
-      { DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD_TM,
-      { DI_BUTTON,6,12,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT_TM,
-      { DI_BUTTON,5,14,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-      { DI_BUTTON,31,14,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-      { DI_BUTTON,39,14,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+      { DI_DOUBLEBOX,3,1,52,18,0,0,0,0,L""},                                 //IDX_BOX,
+      { DI_CHECKBOX,5,2,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
+      { DI_CHECKBOX,5,3,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
+      { DI_CHECKBOX,5,4,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
+      { DI_CHECKBOX,5,5,0,0,FALSE,0,0,0,L""},                               //IDX_SYNTAX,
+      { DI_CHECKBOX,5,6,0,0,FALSE,0,0,0,L""},                                //IDX_OLDOUTLINE,
+      { DI_CHECKBOX,5,7,0,0,TRUE,0,0,0,L""},                                 //IDX_CHANGE_BG,
+      { DI_TEXT,5,8,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD,
+      { DI_BUTTON,20,8,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
+      { DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
+      { DI_EDIT,6,10,49,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
+      { DI_SINGLEBOX,4,12,51,12,TRUE,0,0,0,L""},                                //IDX_TM_BOX,
+      { DI_CHECKBOX,5,13,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
+      { DI_TEXT,5,14,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD_TM,
+      { DI_BUTTON,20,14,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT_TM,
+      { DI_SINGLEBOX,4,15,51,15,TRUE,0,0,0,L""},                                //IDX_TM_BOX_OFF,
+      { DI_BUTTON,25,17,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+      { DI_BUTTON,5,17,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+      { DI_BUTTON,13,17,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
     };// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
     fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -443,10 +445,16 @@ void FarEditorSet::configure(bool fromEditor)
     fdi[IDX_RELOAD_ALL].PtrData = GetMsg(mReloadAll);
     fdi[IDX_OK].PtrData = GetMsg(mOk);
     fdi[IDX_CANCEL].PtrData = GetMsg(mCancel);
+    fdi[IDX_TM_BOX].PtrData = GetMsg(mTrueModSetting);
+
+    if (!checkConsoleAnnotationAvailable()){
+      fdi[IDX_HRD_SELECT_TM].Flags = DIF_DISABLE;
+      fdi[IDX_TRUEMOD].Flags = DIF_DISABLE;
+    }
     /*
     * Dialog activation
     */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 55, 17, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 56, 20, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK){
@@ -763,7 +771,7 @@ void FarEditorSet::ReloadBase()
   regionMapper = NULL;
 
   ReadSettings();
-  consoleAnnotationAvailable=checkConsoleAnnotationAvailable();
+  consoleAnnotationAvailable=checkConsoleAnnotationAvailable() && TrueModOn;
   if (consoleAnnotationAvailable){
     hrdClass = DString("rgb");
     hrdName = sHrdNameTm;
@@ -815,8 +823,10 @@ ErrorHandler *FarEditorSet::getErrorHandler()
 
 FarEditor *FarEditorSet::addCurrentEditor()
 {
-  if (viewFirst==0) viewFirst=2;
-  else ReloadBase();
+  if (viewFirst==1){
+    viewFirst=2;
+    ReloadBase();
+  }
 
   EditorInfo ei;
   Info.EditorControl(ECTL_GETINFO, &ei);
@@ -997,21 +1007,20 @@ void FarEditorSet::SaveSettings()
 bool FarEditorSet::checkConsoleAnnotationAvailable()
 {
   int consoleAnnotationCheck = -1;
-  if (TrueModOn){
-    wchar_t shareName[255];
-    wsprintf(shareName, AnnotationShareName, sizeof(AnnotationInfo), GetConsoleWindow());
+  wchar_t shareName[255];
+  wsprintf(shareName, AnnotationShareName, sizeof(AnnotationInfo), GetConsoleWindow());
 
-    HANDLE hSharedMem = OpenFileMapping( FILE_MAP_ALL_ACCESS, FALSE, shareName);
-    consoleAnnotationCheck = (hSharedMem != 0) ? 1 : 0;
-    CloseHandle(hSharedMem);
-    if (consoleAnnotationCheck){
-      EditorAnnotation ea;
-      ea.StringNumber = 1;
-      ea.StartPos = 1;
-      ea.EndPos = 2;
-      consoleAnnotationCheck=Info.EditorControl(ECTL_ADDANNOTATION, &ea);
-    }
+  HANDLE hSharedMem = OpenFileMapping( FILE_MAP_ALL_ACCESS, FALSE, shareName);
+  consoleAnnotationCheck = (hSharedMem != 0) ? 1 : 0;
+  CloseHandle(hSharedMem);
+  if (consoleAnnotationCheck){
+    EditorAnnotation ea;
+    ea.StringNumber = 1;
+    ea.StartPos = 1;
+    ea.EndPos = 2;
+    consoleAnnotationCheck=Info.EditorControl(ECTL_ADDANNOTATION, &ea);
   }
+
 
   return consoleAnnotationCheck == 1;
 }

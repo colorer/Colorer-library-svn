@@ -4,8 +4,8 @@
 
 "Colorer's settings"
 
-"Colorer &enabled"
-"&TrueMod"
+"&Enabled"
+"E&nabled"
 "Cro&ss"
 "&Pairs"
 "S&yntax"
@@ -17,8 +17,8 @@
 "&Cancel"
 
 "c&atalog.xml file:"
-"Console colo&r style:"
-"True&Mod color style:"
+"Colo&r style:"
+"Color s&tyle:"
 
 "&1 List types"
 "&2 Match pair"
@@ -46,4 +46,5 @@
 "Try anyway"
 "Fatal error loading the library schemes"
 "Select color style"
-"Change background editor"
+"Change &background editor"
+"TrueMod settings"
