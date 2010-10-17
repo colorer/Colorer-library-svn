@@ -854,12 +854,12 @@ FarEditor *FarEditorSet::addCurrentEditor()
   DString fn = DString(fnpath, slash_idx+1);
   editor->chooseFileType(&fn);
   delete[] FileName;
+  editor->setTrueMod(consoleAnnotationAvailable);
   editor->setRegionMapper(regionMapper);
   editor->setDrawCross(drawCross);
   editor->setDrawPairs(drawPairs);
   editor->setDrawSyntax(drawSyntax);
   editor->setOutlineStyle(oldOutline);
-  editor->setTrueMod(consoleAnnotationAvailable);
 
   return editor;
 }
@@ -904,11 +904,11 @@ void FarEditorSet::disableColorer()
 void FarEditorSet::ApplySettingsToEditors()
 {
   for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next()){
+    fe->setTrueMod(consoleAnnotationAvailable);
     fe->setDrawCross(drawCross);
     fe->setDrawPairs(drawPairs);
     fe->setDrawSyntax(drawSyntax);
     fe->setOutlineStyle(oldOutline);
-    fe->setTrueMod(consoleAnnotationAvailable);
   }
 }
 
