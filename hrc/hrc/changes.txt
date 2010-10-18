@@ -1,3 +1,12 @@
+Date: 2010-xx-xx 12:00:00 rxxxx
+(FarColorer 1.0.x.x)
+  New:
+	- Cue sheet
+  Fixed:
+	- batch : label begins with a digit; compound command echo
+	- lua : removed from the outline cycles
+	- cpp : removed from the outline function calls
+
 Date: 2010-09-21 12:00:00 r1550
 (FarColorer 1.0.2.9)
   Fixed:

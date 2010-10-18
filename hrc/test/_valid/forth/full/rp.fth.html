@@ -67,7 +67,7 @@
  66:        <span class='forth-forComment def-Comment def-Syntax'> \ 3-ii-d concatinate aliastail : aliasargs</span>
  67:     <span class='forth-forResWord def-Label'>then</span> <span class='forth-forComment def-Comment def-Syntax'> ( AdrAlias' LenAlias' )</span><span class='forth-forWord def-Keyword'> ;</span>
  68: 
- 69: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>setroot</span><span class='forth-forComment def-Comment def-Syntax'> \ cr ." I must set root active </span><span class='def-TODO def-Error'>package !!!!</span><span class='forth-forComment def-Comment def-Syntax'>"</span>
+ 69: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>setroot</span><span class='forth-forComment def-Comment def-Syntax'> \ cr ." I must set root active package </span><span class='def-TODO def-Error'>!!!!</span><span class='forth-forComment def-Comment def-Syntax'>"</span>
  70:     roothandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>dup</span> nodehandle <span class='forth-forWord def-Keyword'>!</span> active-package <span class='forth-forWord def-Keyword'>!</span><span class='forth-forComment def-Comment def-Syntax'> (  )</span><span class='forth-forWord def-Keyword'> ;</span>
  71: 
  72: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>copynode</span><span class='forth-forComment def-Comment def-Syntax'> ( -- )</span> nodehandle <span class='forth-forExtWords def-VarStrong def-Var'>@nt</span> creanode <span class='forth-forExtWords def-VarStrong def-Var'>@nt</span> sizenode <span class='forth-forWord def-Keyword'>move</span><span class='forth-forWord def-Keyword'> ;</span>
@@ -219,7 +219,7 @@
 218: <span class='forth-forWord def-Keyword'>:</span> <span class='forth-forWordDefinition def-Keyword'>fullotkat</span><span class='forth-forComment def-Comment def-Syntax'> ( 2PathName )</span> inode<span class='forth-forComment def-Comment def-Syntax'> ( Phandle )</span>
 219:     <span class='forth-forResWord def-Label'>begin</span><span class='forth-forComment def-Comment def-Syntax'> ( Phandle )</span><span class='forth-forComment def-Comment def-Syntax'> \ map .s key drop</span>
 220:         <span class='forth-forWord def-Keyword'>s" </span><span class='forth-forString def-String'>CLOSE</span><span class='forth-forWord def-Keyword'>"</span> <span class='forth-forNumb def-Number'>2</span> <span class='forth-forWord def-Keyword'>pick</span> $call-method
-221:        <span class='forth-forComment def-Comment def-Syntax'> \ dup here - allot \ Release memory assigned for this </span><span class='def-TODO def-Error'>node !!!</span>
+221:        <span class='forth-forComment def-Comment def-Syntax'> \ dup here - allot \ Release memory assigned for this node </span><span class='def-TODO def-Error'>!!!</span>
 222:         parent<span class='forth-forComment def-Comment def-Syntax'> ( Parent )</span> <span class='forth-forWord def-Keyword'>dup</span> roothandle <span class='forth-forWord def-Keyword'>@</span> <span class='forth-forWord def-Keyword'>=</span> <span class='forth-forWord def-Keyword'>not</span>
 223:     <span class='forth-forResWord def-Label'>until</span><span class='forth-forComment def-Comment def-Syntax'> ( False )</span><span class='forth-forWord def-Keyword'> ;</span>
 224: 

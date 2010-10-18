@@ -1,0 +1,24 @@
+ 0: <span class='lua-Keyword def-Keyword'>function</span> foo<span class='def-Symbol'>(</span>
+ 1: itIsVeryLongParameter<span class='lua-Symbol def-Symbol'>,</span>
+ 2: itIsAnotherSampleOfVeryLongParameterWhichDoesNotFitInLine<span class='lua-Symbol def-Symbol'>,</span>
+ 3: <span class='def-Symbol'>)</span>
+ 4: <span class='lua-Keyword def-Keyword'>end</span>
+ 5:   <span class='lua-Keyword def-Keyword'>if</span> <span class='def-Symbol'>(</span> a <span class='lua-Symbol def-Symbol'>==</span> b <span class='def-Symbol'>)</span> <span class='lua-Keyword def-Keyword'>then</span>
+ 6:     <span class='lua-Keyword def-Keyword'>while</span> <span class='def-Symbol'>(</span> <span class='lua-Keyword def-Keyword'>true</span> <span class='def-Symbol'>)</span> <span class='lua-Keyword def-Keyword'>do</span>
+ 7:       smth<span class='def-Symbol'>(</span><span class='def-Symbol'>)</span>
+ 8:     <span class='lua-Keyword def-Keyword'>end</span>
+ 9:   <span class='lua-Keyword def-Keyword'>end</span>
+10: end
+11: 
+12: <span class='lua-Keyword def-Keyword'>function</span> fibonacci<span class='def-Symbol'>(</span>n<span class='def-Symbol'>)</span>
+13:     <span class='lua-Keyword def-Keyword'>if</span> n<span class='lua-Symbol def-Symbol'>&lt;</span><span class='def-NumberDec def-Number'>3</span> <span class='lua-Keyword def-Keyword'>then</span>
+14:         <span class='lua-StringEdge def-StringEdge def-String'>return</span> <span class='def-NumberDec def-Number'>1</span>
+15:     <span class='lua-Keyword def-Keyword'>else</span>
+16:         <span class='lua-StringEdge def-StringEdge def-String'>return</span> fibonacci<span class='def-Symbol'>(</span>n<span class='lua-Symbol def-Symbol'>-</span><span class='def-NumberDec def-Number'>1</span><span class='def-Symbol'>)</span> <span class='lua-Symbol def-Symbol'>+</span> fibonacci<span class='def-Symbol'>(</span>n<span class='lua-Symbol def-Symbol'>-</span><span class='def-NumberDec def-Number'>2</span><span class='def-Symbol'>)</span>
+17:     <span class='lua-Keyword def-Keyword'>end</span>
+18: <span class='lua-Keyword def-Keyword'>end</span>
+19: 
+20: <span class='lua-Keyword def-Keyword'>for</span> n <span class='lua-Symbol def-Symbol'>=</span> <span class='def-NumberDec def-Number'>1</span><span class='lua-Symbol def-Symbol'>,</span> <span class='def-NumberDec def-Number'>16</span> <span class='lua-Keyword def-Keyword'>do</span>
+21:     <span class='lua-Directive def-Directive'>io.write</span><span class='def-Symbol'>(</span>fibonacci<span class='def-Symbol'>(</span>n<span class='def-Symbol'>)</span><span class='lua-Symbol def-Symbol'>,</span> <span class='lua-String def-String'>", "</span><span class='def-Symbol'>)</span>
+22: <span class='lua-Keyword def-Keyword'>end</span>
+23: <span class='lua-Directive def-Directive'>io.write</span><span class='def-Symbol'>(</span><span class='lua-String def-String'>"...</span><span class='lua-StringEscape c-StringEscape def-StringContent def-String'>\n</span><span class='lua-String def-String'>"</span><span class='def-Symbol'>)</span>

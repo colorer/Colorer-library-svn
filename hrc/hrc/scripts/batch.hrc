@@ -30,7 +30,7 @@ With help of:
       <region name="ntStr" parent="String"/>
       <region name="ntVarEnv" parent="Var"/>
 
-      <entity name="label" value=":[A-Za-z]\w*"/>
+      <entity name="label" value=":[\dA-Za-z]\w*"/>
 
 
       <scheme name="BatchInternal">
@@ -57,7 +57,7 @@ With help of:
 <!-- ECHO command -->
 <!--regexp match="/\b(echo)((\s*?on\s*?(>|$))|(\s*?off\s*?(>|$)))/i" region1="Keywords" region2="Keywords" -->
          <regexp match="/\becho(\s*on\s*|\s*?off\s*)/i" region0="ntCmd"/>
-         <block start="/\becho\M\W/i" end="/\M'|`|$/" scheme="Comment" region="ntStr" region00="ntCmd"/>
+         <block start="/\becho\M\W/i" end="/\M'|`|&lt;|&gt;|\||&amp;|$/" scheme="Comment" region="ntStr" region00="ntCmd"/>
 <!-- GOTO command -->
          <regexp match="/(goto\s)+(\w*\b)/i" region1="ntCmd" region2="ntLabel"/>
 <!-- CALL command with label -->

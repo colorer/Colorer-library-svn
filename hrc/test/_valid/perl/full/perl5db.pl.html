@@ -211,7 +211,7 @@
  210: <span class='perl-Comment def-Comment def-Syntax'># Command-line + PERLLIB:</span>
  211: <span class='perl-Var def-Var'>@ini_INC</span> <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Var def-Var'>@INC</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
  212: 
- 213: <span class='perl-Comment def-Comment def-Syntax'># $prevwarn = $prevdie = $prevbus = $prevsegv = ''; # Does not </span><span class='def-TODO def-Error'>help?!</span>
+ 213: <span class='perl-Comment def-Comment def-Syntax'># $prevwarn = $prevdie = $prevbus = $prevsegv = ''; # Does not help</span><span class='def-TODO def-Error'>?!</span>
  214: 
  215: <span class='perl-Var def-Var'>$trace</span> <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Var def-Var'>$signal</span> <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Var def-Var'>$single</span> <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Numb def-Number'>0</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>    <span class='perl-Comment def-Comment def-Syntax'># Uninitialized warning suppression</span>
  216:                                 <span class='perl-Comment def-Comment def-Syntax'># (local $^W cannot help - other packages!).</span>
@@ -1090,7 +1090,7 @@
 1089:             <span class='perl-Comment def-Comment def-Syntax'>#  Probably not needed, since we finish an interactive</span>
 1090:             <span class='perl-Comment def-Comment def-Syntax'>#  sub-session anyway...</span>
 1091:             <span class='perl-Comment def-Comment def-Syntax'># local $filename = $filename;</span>
-1092:             <span class='perl-Comment def-Comment def-Syntax'># local *dbline = *dbline;    # XXX Would this </span><span class='def-TODO def-Error'>work?!</span>
+1092:             <span class='perl-Comment def-Comment def-Syntax'># local *dbline = *dbline;    # XXX Would this work</span><span class='def-TODO def-Error'>?!</span>
 1093:             <span class='perl-Word def-Keyword'>if</span> <span class='def-Symbol'>(</span><span class='perl-Var def-Var'>$i</span> <span class='perl-Symb def-Symbol'>=</span><span class='perl-Symb def-Symbol'>~</span><span class='perl-String def-String'> </span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='regexp-SymbClass def-Var'>\D</span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='def-Symbol'>)</span> <span class='def-SymbolStrong def-Symbol'>{</span> <span class='perl-Comment def-Comment def-Syntax'># subroutine name</span>
 1094:                 <span class='perl-Var def-Var'>$subname</span> <span class='perl-Symb def-Symbol'>=</span> <span class='perl-Var def-Var'>$package</span><span class='perl-Symb def-Symbol'>.</span><span class='perl-String def-String'>"::"</span><span class='perl-Symb def-Symbol'>.</span><span class='perl-Var def-Var'>$subname</span> 
 1095:                     <span class='perl-Word def-Keyword'>unless</span> <span class='perl-Var def-Var'>$subname</span> <span class='perl-Symb def-Symbol'>=</span><span class='perl-Symb def-Symbol'>~</span><span class='perl-String def-String'> </span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='perl-String def-String'>::</span><span class='perl-StringEdge regexp-SpecQuote def-StringEdge def-String'>/</span><span class='perl-MainSymb def-SymbolStrong def-Symbol'>;</span>
