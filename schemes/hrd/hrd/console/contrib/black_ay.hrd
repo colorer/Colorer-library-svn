@@ -29,8 +29,8 @@
   </documentation>
 
   <assign name="def:Text" fore="#7" back="#0"/>
-	<assign name="def:HorzCross"  fore="#0" back="#8"/>
-	<assign name="def:VertCross" fore="#0" back="#8"/>
+  <assign name="def:HorzCross"  fore="#0" back="#8"/>
+  <assign name="def:VertCross" fore="#0" back="#8"/>
 
   <assign name="def:Syntax"/>
 

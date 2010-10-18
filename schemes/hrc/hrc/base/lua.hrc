@@ -69,15 +69,15 @@
 		</scheme>
 
 		<scheme name="OutlinedStructures">
-			<block start="/\b(?{Outline}(?{PairStart}(?{Keyword}function))\b\s*\M\S*\(.*\))/"
+			<block start="/\b(?{Outline}(?{PairStart}(?{Keyword}function))\b\s*\M\S*\()/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
-			<block start="/(?{Outline}(?{PairStart}(?{Keyword}if))\s+\M.*)\s+then/"
+			<block start="/(?{PairStart}(?{Keyword}if))\s+\M.*\s+then/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
-			<block start="/\b(?{Outline}(?{PairStart}(?{Keyword}(while|for)))\s+\M.*)\s+do/"
+			<block start="/\b(?{PairStart}(?{Keyword}(while|for))\s+\M.*)\s+do/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
 			<block start="/\b(?{PairStart}(?{Keyword}repeat))\b/"
-						 end="/\b(?{Outline}(?{PairEnd}(?{Keyword}until))\b\M[^;\n\r]+)/" scheme="lua"/>
-			<block start="/(?{Outline}\s?(?{PairStart}(?{Keyword}do)))\b/"
+						 end="/\b(?{PairEnd}(?{Keyword}until))\b\M[^;\n\r]+/" scheme="lua"/>
+			<block start="/(\s?(?{PairStart}(?{Keyword}do)))\b/"
 						 end="/\b\M(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"
 						 content-priority="low" priority="low"/>
 		</scheme>
