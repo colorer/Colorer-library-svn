@@ -850,7 +850,10 @@
     <filename>/\.(ssa|ass)$/</filename>
     <firstline weight='2'>/^(...)?\[Script Info\]/</firstline>
   </prototype>
-
+  <prototype name="cue" group="other" description="Cue sheet">
+    <location link="misc/cue.hrc"/>
+    <filename>/\.cue$/</filename>
+  </prototype>
   <prototype name="filesbbs" group="other" description="files.bbs">
     <location link="misc/filesbbs.hrc"/>
     <filename>/(files\.bbs|descript\.ion|file_id.diz)/i</filename>
