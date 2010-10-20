@@ -47,7 +47,7 @@
 
 		<scheme name="index">
 			<regexp match="/\d\d\s/" region="def:Number"/>
-			<regexp match="/\d\d\:[0-5]\d\:[0-5]\d/" region="def:Time"/>
+			<regexp match="/\d\d\:[0-5]\d\:\d\d/" region="def:Time"/>
 			<regexp match="/\S+/" region="def:Error" priority="low"/>
 		</scheme>
 
@@ -69,7 +69,7 @@
 		</scheme>
 
 		<scheme name="gap">
-			<regexp match="/\d\d\:[0-5]\d\:[0-5]\d/" region="def:Time"/>
+			<regexp match="/\d\d\:[0-5]\d\:\d\d/" region="def:Time"/>
 			<regexp match="/\S+/" region="def:Error" priority="low"/>
 		</scheme>
 
