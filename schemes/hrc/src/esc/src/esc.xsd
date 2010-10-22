@@ -102,6 +102,7 @@
  <xs:attribute name="mask" type="esc:farmask"/>
  <xs:attribute name="inherit" type="xs:string"/>
  <xs:attribute name="skippath" type="esc:onoff"/>
+ <xs:attribute name="overload" type="esc:onoff"/>
 </xs:complexType>
 
 

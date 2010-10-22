@@ -33,16 +33,21 @@ With help of:
       <entity name="label" value=":[\dA-Za-z]\w*"/>
 
 
+      <scheme name="echo">
+         <regexp match="/\^(\||&amp;|&lt;|&gt;)/i" region0="ntStr"/>
+         <inherit scheme="Comment"/>
+      </scheme>
+
       <scheme name="BatchInternal">
          <block start="/(\{)/" end="/(\})/" scheme="BatchInternal" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\()/" end="/(\))/" scheme="BatchInternal" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="BatchInternal" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
 <!-- Labels -->
-         <regexp match="/^%label;\s*$/" region0="ntLabel"/>
+         <regexp match="/^\s*%label;\s*$/" region0="ntLabel"/>
 <!-- Linear Comments -->
          <regexp match="/^\s*(REM\s+).*$/i" region0="ntComment" region1="ntCmd"/>
-         <regexp match="/^::.*$/" region0="ntComment"/>
-         <regexp match="/^;.*$/" region0="ntComment"/>
+         <regexp match="/^\s*::.*$/" region0="ntComment"/>
+         <regexp match="/^\s*;.*$/" region0="ntComment"/>
 <!-- Numbers -->
          <regexp match="/\b\d[0-9a-fA-F]*\b/" region0="ntNumber"/>
          <regexp match="/\%\@[^\[]+/" region0="ntNumber"/>
@@ -57,7 +62,7 @@ With help of:
 <!-- ECHO command -->
 <!--regexp match="/\b(echo)((\s*?on\s*?(>|$))|(\s*?off\s*?(>|$)))/i" region1="Keywords" region2="Keywords" -->
          <regexp match="/\becho(\s*on\s*|\s*?off\s*)/i" region0="ntCmd"/>
-         <block start="/\becho\M\W/i" end="/\M'|`|&lt;|&gt;|\||&amp;|$/" scheme="Comment" region="ntStr" region00="ntCmd"/>
+         <block start="/\becho\M\W/i" end="/\M'|`|&lt;|&gt;|\||&amp;|$/" scheme="echo" region="ntStr" region00="ntCmd"/>
 <!-- GOTO command -->
          <regexp match="/(goto\s)+(\w*\b)/i" region1="ntCmd" region2="ntLabel"/>
 <!-- CALL command with label -->
