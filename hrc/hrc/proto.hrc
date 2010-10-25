@@ -55,9 +55,6 @@
       <param name="win32-specific" value="true" description="Use Windows specific definitions"/>
       <param name="unix-specific" value="true" description="Use Unix/Linux specific definitions"/>
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
-      <!-- firstline -->
-      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
-      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
     </parameters>
   </prototype>
   <package name="cpp-qt" description="C++ + Qt">
@@ -69,9 +66,6 @@
     <parameters>
       <param name="format-str" value="true" description="Highlight printf-like %format in strnigs"/>
       <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
-      <!-- firstline -->
-      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
-      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
     </parameters>
   </prototype>
   
@@ -140,9 +134,6 @@
     <location link="base/python.hrc"/>
     <filename>/\.(py|pyw|pys)$/i</filename>
     <firstline weight='2'>/^#!\S*(python)/</firstline>
-		<parameters>
-			<param name="show-cross" value="both"/>
-		</parameters>
   </prototype>
   <prototype name="lua" group="main" description="Lua">
     <location link="base/lua.hrc"/>
@@ -198,8 +189,6 @@
   <prototype name="sass" group="inet" description="SASS">
     <location link="inet/sass.hrc"/>
     <filename>/\.(sass)$/i</filename>
-    <parameters>
-    </parameters>
   </prototype>
 
   <prototype name="haml" group="inet" description="HAML">
@@ -324,12 +313,6 @@
     <filename>/\.(wxs|fb2)$/i</filename>
     <firstline>/^&lt;\?xml | &lt;\!DOCTYPE | xmlns /x</firstline>
     <firstline>/^\s*&lt;\w+&gt;\s*/</firstline><!-- (\s+\w+\s*=\*([&quot;&apos;]).+?\2)*\s* -->
-    <parameters>
-      <!-- firstline -->
-      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
-      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
-    </parameters>
-    
   </prototype>
   <package name="xmlns" description="xml namespace" targetNamespace="http://www.w3.org/XML/1998/namespace">
     <location link="xml/gen/xmlns.hrc"/>
@@ -362,11 +345,6 @@
     <filename>/\.(xslt?)$/i</filename>
     <firstline>/ xsl:stylesheet /x</firstline>
     <firstline>/ XSL\/Transform /x</firstline>
-    <parameters>
-      <!-- firstline -->
-      <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
-      <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
-    </parameters>
   </prototype>
   <!-- targetNamespace duplicate. It's not good... -->
   <prototype name="xslt2" group="xml" description="xslt 2.0" targetNamespace="http://www.w3.org/1999/XSL/Transform">
@@ -879,20 +857,6 @@
 
   <prototype name="default" group="other" description="default type">
     <filename weight='1'>//</filename>
-    <parameters>
-      <!-- none,vertical,horizontal,both -->
-      <param name="show-cross" value="none" description="Visibility of the cross (horizontal, vertical, both, none)"/>
-      <!-- top, bottom -->
-      <param name="cross-zorder" value="bottom" description="Position of the cross, which points out cursor position"/>
-      <param name="maxlinelength" value="5000" description="Maximum parsed length of line of the text"/>
-      <param name="backparse" value="6000" description="Number of lines, after which parser stops continous analysis. Infinite, if zero."/>
-      <param name="fullback" value="yes" description="If yes, draws background in inlined languages till end of the screen"/>
-      <param name="default-fore" value="" description="User-defined foreground color for this particular type"/>
-      <param name="default-back" value="" description="User-defined foreground color for this particular type"/>
-      <!-- firstline -->
-      <param name='firstlines'     value='4'   description="lines for 'firstline'"/>
-      <param name='firstlinebytes' value='500' description="bytes for 'firstline'"/>
-    </parameters>
   </prototype>
 
   <type name="default"><scheme name='default'/></type>
