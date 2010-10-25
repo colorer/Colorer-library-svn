@@ -12,10 +12,12 @@ void HRCParserImpl::checkWow64()
 {
   wow64=true;
 #ifdef _WIN32
+#ifndef _WIN64
   //check for stack overflow
+  //check to run the 32 bit libraries on 64 bit operating system
   char *b = getenv("PROCESSOR_ARCHITEW6432");
   if (!b) wow64=false;
-  delete b;
+#endif
 #endif
 
 };
