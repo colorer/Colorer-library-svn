@@ -11,6 +11,7 @@
 #include "pcolorer.h"
 #include "tools.h"
 #include "FarEditor.h"
+#include "FarHrcSettings.h"
 
 //registry keys
 const wchar_t cRegEnabled[] = L"Enabled";

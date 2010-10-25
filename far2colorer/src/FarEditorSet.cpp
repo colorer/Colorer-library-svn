@@ -695,8 +695,17 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const int full)
   }
   delete[] t;
 
+  SString *tpath;
+  if (!catalogPathS || !catalogPathS->length()){
+    StringBuffer *path=new StringBuffer(PluginPath);
+    path->append(DString(FarCatalogXml));
+    tpath = path;
+  }
+  else{
+    tpath=catalogPathS;
+  }
   try{
-    parserFactoryLocal = new ParserFactory(catalogPathS);
+    parserFactoryLocal = new ParserFactory(tpath);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
 
     try{
@@ -795,8 +804,18 @@ void FarEditorSet::ReloadBase()
     hrdName = sHrdName;
   }
 
+  SString *tpath;
+  if (!sCatalogPathExp || !sCatalogPathExp->length()){
+    StringBuffer *path=new StringBuffer(PluginPath);
+    path->append(DString(FarCatalogXml));
+    tpath = path;
+  }
+  else{
+    tpath=sCatalogPathExp;
+  }
+
   try{
-    parserFactory = new ParserFactory(sCatalogPathExp);
+    parserFactory = new ParserFactory(tpath);
     hrcParser = parserFactory->getHRCParser();
 
     try{
