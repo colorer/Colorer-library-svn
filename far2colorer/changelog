@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. отмена 1589 , неожиданное поведение "отмена действия " в VC
+
+$Revision$
+	$Author$ $Date$
 	1. при ошибке нахождения баз ( ReloadBase) плагин падает
 
 #Revision: 1579

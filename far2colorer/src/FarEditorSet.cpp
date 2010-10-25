@@ -27,7 +27,7 @@ FarEditorSet::FarEditorSet()
   sCatalogPathExp = NULL;
 
   ReloadBase();
-  if (ChangeBgEditor && rEnabled && !consoleAnnotationAvailable){
+  if (ChangeBgEditor && !consoleAnnotationAvailable){
     SetBgEditor();
   }
   viewFirst = 0;
@@ -681,18 +681,8 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const int full)
   }
   delete[] t;
 
-  SString *tpath;
-  if (!catalogPathS || !catalogPathS->length()){
-    StringBuffer *path=new StringBuffer(PluginPath);
-    path->append(DString(FarCatalogXml));
-    tpath = path;
-  }
-  else{
-    tpath=catalogPathS;
-  }
-
   try{
-    parserFactoryLocal = new ParserFactory(tpath);
+    parserFactoryLocal = new ParserFactory(catalogPathS);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
 
     try{
@@ -781,8 +771,7 @@ void FarEditorSet::ReloadBase()
   regionMapper = NULL;
 
   ReadSettings();
-
-  consoleAnnotationAvailable = checkConsoleAnnotationAvailable() && TrueModOn;
+  consoleAnnotationAvailable=checkConsoleAnnotationAvailable() && TrueModOn;
   if (consoleAnnotationAvailable){
     hrdClass = DString("rgb");
     hrdName = sHrdNameTm;
@@ -792,18 +781,8 @@ void FarEditorSet::ReloadBase()
     hrdName = sHrdName;
   }
 
-  SString *tpath;
-  if (!sCatalogPathExp || !sCatalogPathExp->length()){
-    StringBuffer *path=new StringBuffer(PluginPath);
-    path->append(DString(FarCatalogXml));
-    tpath = path;
-  }
-  else{
-    tpath=sCatalogPathExp;
-  }
-
   try{
-    parserFactory = new ParserFactory(tpath);
+    parserFactory = new ParserFactory(sCatalogPathExp);
     hrcParser = parserFactory->getHRCParser();
 
     try{
