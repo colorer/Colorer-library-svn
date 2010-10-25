@@ -1,19 +1,18 @@
-Date: 2010-xx-xx 12:00:00 rxxxx
-(FarColorer 1.x.x.x)
+Date: 2010-10-25 12:00:00 r1593
+(FarColorer 1.0.2.14)
   Fixed:
-	- batch : label and a comment (::) can not start from the beginning of the line;
-			 escape symbol ^;
-	- esc : add param "overload"
-
+    - batch : label and a comment (::) can not start from the beginning of the line;
+      escape symbol ^;
+    - esc : add param "overload"
 
 Date: 2010-10-20 12:00:00 r1585
 (FarColorer 1.0.2.13)
   New:
-	- Cue sheet
+    - Cue sheet
   Fixed:
-	- batch : label begins with a digit; compound command echo
-	- lua : removed from the outline cycles
-	- cpp : removed from the outline function calls
+    - batch : label begins with a digit; compound command echo
+    - lua : removed from the outline cycles
+    - cpp : removed from the outline function calls
 
 Date: 2010-09-21 12:00:00 r1550
 (FarColorer 1.0.2.9)
