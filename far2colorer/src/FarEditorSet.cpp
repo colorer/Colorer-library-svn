@@ -707,6 +707,8 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const int full)
   try{
     parserFactoryLocal = new ParserFactory(tpath);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
+    FarHrcSettings p(parserFactoryLocal);
+    p.readProfile();
 
     try{
       regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), sTempHrdName);
@@ -817,6 +819,8 @@ void FarEditorSet::ReloadBase()
   try{
     parserFactory = new ParserFactory(tpath);
     hrcParser = parserFactory->getHRCParser();
+    FarHrcSettings p(parserFactory);
+    p.readProfile();
 
     try{
       regionMapper = parserFactory->createStyledMapper(&hrdClass, &hrdName);
