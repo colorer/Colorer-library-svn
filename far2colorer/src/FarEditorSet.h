@@ -38,8 +38,8 @@ const bool cChangeBgEditor = false;
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
-IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_HRD_TM, IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL,
-IDX_OK, IDX_CANCEL};
+IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_TMMESSAGE,
+IDX_HRD_TM, IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
 
@@ -120,6 +120,8 @@ private:
   /** Enables plugin processing*/
   void enableColorer(bool fromEditor);
   
+  bool checkConEmu();
+  bool checkFarTrueMod();
   bool checkConsoleAnnotationAvailable();
   bool consoleAnnotationAvailable;
 

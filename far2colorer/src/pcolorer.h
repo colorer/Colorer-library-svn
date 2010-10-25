@@ -36,7 +36,8 @@ enum
   mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
   mGotcha, mChoose,
   mReloading, mCantLoad, mCantOpenFile, mDie, mTry,
-  mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting
+  mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
+  mNoFarTM, mNoConEmu, mNoFarTMConEmu
 };
 
 #endif
