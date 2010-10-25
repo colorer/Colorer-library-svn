@@ -27,7 +27,7 @@ FarEditorSet::FarEditorSet()
   sCatalogPathExp = NULL;
 
   ReloadBase();
-  if (ChangeBgEditor && !consoleAnnotationAvailable){
+  if (ChangeBgEditor && rEnabled &&!consoleAnnotationAvailable){
     SetBgEditor();
   }
   viewFirst = 0;
