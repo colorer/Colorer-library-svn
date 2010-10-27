@@ -48,7 +48,7 @@ void ParserFactory::init()
 
       const String *logLocation = ((Element*)elem)->getAttribute(DString("log-location"));
 
-      if (logLocation != null){
+      if ((logLocation != null) && (logLocation->length()!=0)){
         InputSource *dfis = InputSource::newInstance(logLocation, catalogFIS);
         try{
           fileErrorHandler = new FileErrorHandler(dfis->getLocation(), Encodings::ENC_UTF8, false);

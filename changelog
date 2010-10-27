@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. при пустом значении параметра log-location в catalog.xml пораждалось исключение.
+	 Зачем? проверим сразу. и логи в отладчике чисты.
+
+#Revision: 1597
+	#Author: ctapmex Date: 2010-10-26 10:09:08 +0600 (Вт, 26 окт 2010)
 	1. warnings в malloc.c при сборке x64. спасибо 2useven10, патчи были высланы автору malloc.c.
 
 #Revision: 1588
