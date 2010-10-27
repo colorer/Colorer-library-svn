@@ -6,6 +6,11 @@
 #include<colorer/HRCParser.h>
 #include<colorer/ParserFactory.h>
 
+#include"pcolorer.h"
+
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
+
 const wchar_t FarCatalogXml[]=L"\\base\\catalog.xml";
 const wchar_t FarProfileXml[]=L"\\bin\\hrcsettings.xml";
 
@@ -25,9 +30,12 @@ public:
   FarHrcSettings(ParserFactory *_parserFactory){parserFactory=_parserFactory;}
   void readXML(String *file, bool userValue);
   void readProfile();
+  void readUserProfile();
 
 private:
   void UpdatePrototype(Element *elem, bool userValue);
+  void readProfileFromRegistry(HKEY dwKey);
+
   ParserFactory *parserFactory;
 
 };
