@@ -114,6 +114,7 @@ public:
     return fileErrorHandler;
   };
 
+  void parseHRDSetsChild(Node *hrd);
 private:
   void init();
   String *searchPath();
@@ -125,8 +126,6 @@ private:
   Hashtable<Hashtable<Vector<const String*>*>*> hrdLocations;
   Hashtable<const String *>hrdDescriptions;
   HRCParser  *hrcParser;
-  DocumentBuilder docbuilder;
-  Document *catalog;
 
   ParserFactory(const ParserFactory&);
   void operator=(const ParserFactory&);

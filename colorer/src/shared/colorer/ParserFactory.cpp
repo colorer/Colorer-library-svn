@@ -25,6 +25,9 @@
 
 void ParserFactory::init()
 {
+  DocumentBuilder docbuilder;
+  Document *catalog;
+
   hrcParser = null;
   fileErrorHandler = null;
   try{
@@ -67,7 +70,7 @@ void ParserFactory::init()
       while(loc != null){
         if (loc->getNodeType() == Node::ELEMENT_NODE &&
             *loc->getNodeName() == "location"){
-          hrcLocations.addElement(((Element*)loc)->getAttribute(DString("link")));
+          hrcLocations.addElement(new SString(((Element*)loc)->getAttribute(DString("link"))));
         }
         loc = loc->getNextSibling();
       }
@@ -77,44 +80,48 @@ void ParserFactory::init()
       Node *hrd = elem->getFirstChild();
       while(hrd != null){
         if (hrd->getNodeType() == Node::ELEMENT_NODE && *hrd->getNodeName() == "hrd"){
-
-          const String *hrd_class = ((Element*)hrd)->getAttribute(DString("class"));
-          const String *hrd_name = ((Element*)hrd)->getAttribute(DString("name"));
-          if (hrd_class == null || hrd_name == null){
-            hrd = hrd->getNextSibling();
-            continue;
-          };
-
-          const String *hrd_descr = ((Element*)hrd)->getAttribute(DString("description"));
-          if (hrd_descr == null){
-            hrd_descr = hrd_name;
-          }
-          hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
-
-          Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.get(hrd_class);
-          if (hrdClass == null){
-            hrdClass = new Hashtable<Vector<const String*>*>;
-            hrdLocations.put(hrd_class, hrdClass);
-            hrdClass->put(hrd_name, new Vector<const String*>);
-          };
-          Vector<const String*> *hrdLocV = hrdClass->get(hrd_name);
-          if (hrdLocV == null){
-            hrdLocV = new Vector<const String*>;
-            hrdClass->put(hrd_name, hrdLocV);
-          };
-
-          Node *loc = hrd->getFirstChild();
-          while(loc != null){
-            if (loc->getNodeType() == Node::ELEMENT_NODE && *loc->getNodeName() == "location"){
-              hrdLocV->addElement(((Element*)loc)->getAttribute(DString("link")));
-            };
-            loc = loc->getNextSibling();
-          };
+          parseHRDSetsChild(hrd);
         };
         hrd = hrd->getNextSibling();
       };
     };
     elem = elem->getNextSibling();
+  };
+  docbuilder.free(catalog);
+};
+
+void ParserFactory::parseHRDSetsChild(Node *hrd)
+{
+  const String *hrd_class =((Element*)hrd)->getAttribute(DString("class"));
+  const String *hrd_name =((Element*)hrd)->getAttribute(DString("name"));
+  if (hrd_class == null || hrd_name == null){
+    return;
+  };
+
+  const String *hrd_descr = new SString(((Element*)hrd)->getAttribute(DString("description")));
+  if (hrd_descr == null){
+    hrd_descr = hrd_name;
+  }
+  hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
+
+  Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.get(hrd_class);
+  if (hrdClass == null){
+    hrdClass = new Hashtable<Vector<const String*>*>;
+    hrdLocations.put(hrd_class, hrdClass);
+    hrdClass->put(hrd_name, new Vector<const String*>);
+  };
+  Vector<const String*> *hrdLocV = hrdClass->get(hrd_name);
+  if (hrdLocV == null){
+    hrdLocV = new Vector<const String*>;
+    hrdClass->put(hrd_name, hrdLocV);
+  };
+
+  Node *loc = hrd->getFirstChild();
+  while(loc != null){
+    if (loc->getNodeType() == Node::ELEMENT_NODE && *loc->getNodeName() == "location"){
+      hrdLocV->addElement(new SString(((Element*)loc)->getAttribute(DString("link"))));
+    };
+    loc = loc->getNextSibling();
   };
 };
 
@@ -243,11 +250,14 @@ ParserFactory::~ParserFactory(){
       hrdClass = hrdLocations.next())
   {
     for(Vector<const String*> *hrd_name = hrdClass->enumerate();hrd_name ; hrd_name = hrdClass->next()){
+      for (int i=0;i<hrd_name->size();i++) delete hrd_name->elementAt(i);
       delete hrd_name;
     };
+
     delete hrdClass;
   };
-  docbuilder.free(catalog);
+  for (int i=0;i<hrcLocations.size();i++) delete hrcLocations.elementAt(i);
+
   delete hrcParser;
   delete catalogPath;
   delete catalogFIS;
