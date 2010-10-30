@@ -358,7 +358,8 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
       Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , false,0);
       wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
       wchar_t *userhrd = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRD_EDIT,0));
-      fes->TestLoadBase(catalog, userhrd, true);
+      wchar_t *userhrc = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRC_EDIT,0));
+      fes->TestLoadBase(catalog, userhrd, userhrc, true);
       Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true,0);
       return true;
     }
@@ -366,10 +367,11 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
   case IDX_OK:
     const wchar_t *temp = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
     const wchar_t *userhrd = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRD_EDIT,0));
+    const wchar_t *userhrc = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRC_EDIT,0));
     int k = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_ENABLED, 0);
 
     if (fes->GetCatalogPath()->compareTo(DString(temp))|| fes->GetUserHrdPath()->compareTo(DString(userhrd)) || (!fes->GetPluginStatus() && k)){ 
-      if (fes->TestLoadBase(temp, userhrd, false)){
+      if (fes->TestLoadBase(temp, userhrd, userhrc, false)){
         return false;
       }
       else{
@@ -390,7 +392,7 @@ void FarEditorSet::configure(bool fromEditor)
   try{
     FarDialogItem fdi[] =
     {
-      { DI_DOUBLEBOX,3,1,55,20,0,0,0,0,L""},                                 //IDX_BOX,
+      { DI_DOUBLEBOX,3,1,55,21,0,0,0,0,L""},                                 //IDX_BOX,
       { DI_CHECKBOX,5,2,0,0,TRUE,0,0,0,L""},                                 //IDX_DISABLED,
       { DI_CHECKBOX,5,3,0,0,FALSE,0,DIF_3STATE,0,L""},                       //IDX_CROSS,
       { DI_CHECKBOX,5,4,0,0,FALSE,0,0,0,L""},                               //IDX_PAIRS,
@@ -401,17 +403,19 @@ void FarEditorSet::configure(bool fromEditor)
       { DI_BUTTON,20,8,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT,
       { DI_TEXT,5,9,0,0,FALSE,0,0,0,L""},                                    //IDX_CATALOG,
       { DI_EDIT,6,10,52,5,FALSE,(DWORD_PTR)L"catalog",DIF_HISTORY,0,L""},   //IDX_CATALOG_EDIT
-      { DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                    //IDX_USERHRD,
-      { DI_EDIT,6,12,52,5,FALSE,(DWORD_PTR)L"userhrd",DIF_HISTORY,0,L""},   //IDX_USERHRD_EDIT
-      { DI_SINGLEBOX,4,14,54,14,TRUE,0,0,0,L""},                                //IDX_TM_BOX,
-      { DI_CHECKBOX,5,15,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
-      { DI_TEXT,20,15,0,0,TRUE,0,0,0,L""},                                //IDX_TMMESSAGE,
-      { DI_TEXT,5,16,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD_TM,
-      { DI_BUTTON,20,16,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT_TM,
-      { DI_SINGLEBOX,4,17,54,17,TRUE,0,0,0,L""},                                //IDX_TM_BOX_OFF,
-      { DI_BUTTON,29,19,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
-      { DI_BUTTON,5,19,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
-      { DI_BUTTON,13,19,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
+      { DI_TEXT,5,11,0,0,FALSE,0,0,0,L""},                                    //IDX_USERHRC,
+      { DI_EDIT,6,12,52,5,FALSE,(DWORD_PTR)L"userhrc",DIF_HISTORY,0,L""},   //IDX_USERHRC_EDIT
+      { DI_TEXT,5,13,0,0,FALSE,0,0,0,L""},                                    //IDX_USERHRD,
+      { DI_EDIT,6,14,52,5,FALSE,(DWORD_PTR)L"userhrd",DIF_HISTORY,0,L""},   //IDX_USERHRD_EDIT
+      { DI_SINGLEBOX,4,16,54,16,TRUE,0,0,0,L""},                                //IDX_TM_BOX,
+      { DI_CHECKBOX,5,17,0,0,TRUE,0,0,0,L""},                                //IDX_TRUEMOD,
+      { DI_TEXT,20,17,0,0,TRUE,0,0,0,L""},                                //IDX_TMMESSAGE,
+      { DI_TEXT,5,18,0,0,FALSE,0,0,0,L""},                                   //IDX_HRD_TM,
+      { DI_BUTTON,20,18,0,0,FALSE,0,0,0,L""},                                //IDX_HRD_SELECT_TM,
+      { DI_SINGLEBOX,4,19,54,19,TRUE,0,0,0,L""},                                //IDX_TM_BOX_OFF,
+      { DI_BUTTON,29,20,0,0,FALSE,0,0,0,L""},                                //IDX_RELOAD_ALL,
+      { DI_BUTTON,5,20,0,0,FALSE,0,0,TRUE,L""},                             //IDX_OK,
+      { DI_BUTTON,13,20,0,0,FALSE,0,0,0,L""},                                //IDX_CANCEL,
     };// type, x1, y1, x2, y2, focus, sel, fl, def, data
 
     fdi[IDX_BOX].PtrData = GetMsg(mSetup);
@@ -429,6 +433,8 @@ void FarEditorSet::configure(bool fromEditor)
     fdi[IDX_OLDOUTLINE].Selected = oldOutline;
     fdi[IDX_CATALOG].PtrData = GetMsg(mCatalogFile);
     fdi[IDX_CATALOG_EDIT].PtrData = sCatalogPath->getWChars();
+    fdi[IDX_USERHRC].PtrData = GetMsg(mUserHrcFile);
+    fdi[IDX_USERHRC_EDIT].PtrData = sUserHrcPath->getWChars();
     fdi[IDX_USERHRD].PtrData = GetMsg(mUserHrdFile);
     fdi[IDX_USERHRD_EDIT].PtrData = sUserHrdPath->getWChars();
     fdi[IDX_HRD].PtrData = GetMsg(mHRDName);
@@ -472,17 +478,19 @@ void FarEditorSet::configure(bool fromEditor)
     /*
     * Dialog activation
     */
-    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 58, 22, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
+    HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 58, 23, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, (LONG_PTR)this);
     int i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK){
       fdi[IDX_CATALOG_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
       fdi[IDX_USERHRD_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRD_EDIT,0));
+      fdi[IDX_USERHRC_EDIT].PtrData = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRC_EDIT,0));
       //check whether or not to reload the base
       int k = false;
 
       if (sCatalogPath->compareTo(DString(fdi[IDX_CATALOG_EDIT].PtrData)) || 
           sUserHrdPath->compareTo(DString(fdi[IDX_USERHRD_EDIT].PtrData)) || 
+          sUserHrcPath->compareTo(DString(fdi[IDX_USERHRC_EDIT].PtrData)) || 
           sHrdName->compareTo(*sTempHrdName) ||
           sHrdNameTm->compareTo(*sTempHrdNameTm))
       { 
@@ -500,10 +508,12 @@ void FarEditorSet::configure(bool fromEditor)
       delete sHrdNameTm;
       delete sCatalogPath;
       delete sUserHrdPath;
+      delete sUserHrcPath;
       sHrdName = sTempHrdName;
       sHrdNameTm = sTempHrdNameTm;
       sCatalogPath = new SString(DString(fdi[IDX_CATALOG_EDIT].PtrData));
       sUserHrdPath = new SString(DString(fdi[IDX_USERHRD_EDIT].PtrData));
+      sUserHrcPath = new SString(DString(fdi[IDX_USERHRC_EDIT].PtrData));
 
       // if the plugin has been enable, and we will disable
       if (rEnabled && !fdi[IDX_ENABLED].Selected){
@@ -679,7 +689,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
   return 0;
 }
 
-bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const int full)
+bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full)
 {
   bool res = true;
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
@@ -692,6 +702,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
 
   SString *catalogPathS = PathToFullS(catalogPath,false);
   SString *userHrdPathS = PathToFullS(userHrdPath,false);
+  SString *userHrcPathS = PathToFullS(userHrcPath,false);
 
   SString *tpath;
   if (!catalogPathS || !catalogPathS->length()){
@@ -710,6 +721,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     p.readProfile();
     p.readUserProfile();
     LoadUserHrd(userHrdPathS, parserFactoryLocal);
+    LoadUserHrc(userHrcPathS, parserFactoryLocal);
 
     try{
       regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), sTempHrdName);
@@ -824,6 +836,7 @@ void FarEditorSet::ReloadBase()
     p.readProfile();
     p.readUserProfile();
     LoadUserHrd(sUserHrdPathExp, parserFactory);
+    LoadUserHrc(sUserHrcPathExp, parserFactory);
 
     try{
       regionMapper = parserFactory->createStyledMapper(&hrdClass, &hrdName);
@@ -985,6 +998,7 @@ void FarEditorSet::ReadSettings()
   wchar_t *hrdNameTm = rGetValueSz(hPluginRegistry, cRegHrdNameTm, cHrdNameTmDefault);
   wchar_t *catalogPath = rGetValueSz(hPluginRegistry, cRegCatalog, cCatalogDefault);
   wchar_t *userHrdPath = rGetValueSz(hPluginRegistry, cRegUserHrdPath, cUserHrdPathDefault);
+  wchar_t *userHrcPath = rGetValueSz(hPluginRegistry, cRegUserHrcPath, cUserHrcPathDefault);
 
   delete sHrdName;
   delete sHrdNameTm;
@@ -992,11 +1006,15 @@ void FarEditorSet::ReadSettings()
   delete sCatalogPathExp;
   delete sUserHrdPath;
   delete sUserHrdPathExp;
+  delete sUserHrcPath;
+  delete sUserHrcPathExp;
   sHrdName = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
   sUserHrdPath = NULL;
   sUserHrdPathExp = NULL;
+  sUserHrcPath = NULL;
+  sUserHrcPathExp = NULL;
 
   sHrdName = new SString(hrdName);
   sHrdNameTm = new SString(hrdNameTm);
@@ -1004,11 +1022,14 @@ void FarEditorSet::ReadSettings()
   sCatalogPathExp = PathToFullS(catalogPath,false);
   sUserHrdPath = new SString(userHrdPath);
   sUserHrdPathExp = PathToFullS(userHrdPath,false);
+  sUserHrcPath = new SString(userHrcPath);
+  sUserHrcPathExp = PathToFullS(userHrcPath,false);
 
   delete[] hrdName;
   delete[] hrdNameTm;
   delete[] catalogPath;
   delete[] userHrdPath;
+  delete[] userHrcPath;
 
   // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
   rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
@@ -1033,6 +1054,7 @@ void FarEditorSet::SetDefaultSettings()
   rSetValue(hPluginRegistry, cRegTrueMod, cTrueMod); 
   rSetValue(hPluginRegistry, cRegChangeBgEditor, cChangeBgEditor); 
   rSetValue(hPluginRegistry, cRegUserHrdPath, REG_SZ, cUserHrdPathDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cUserHrdPathDefault)+1)));
+  rSetValue(hPluginRegistry, cRegUserHrcPath, REG_SZ, cUserHrcPathDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cUserHrcPathDefault)+1)));
 }
 
 void FarEditorSet::SaveSettings()
@@ -1048,6 +1070,7 @@ void FarEditorSet::SaveSettings()
   rSetValue(hPluginRegistry, cRegTrueMod, TrueModOn); 
   rSetValue(hPluginRegistry, cRegChangeBgEditor, ChangeBgEditor); 
   rSetValue(hPluginRegistry, cRegUserHrdPath, REG_SZ, sUserHrdPath->getWChars(), sizeof(wchar_t)*(sUserHrdPath->length()+1));
+  rSetValue(hPluginRegistry, cRegUserHrcPath, REG_SZ, sUserHrcPath->getWChars(), sizeof(wchar_t)*(sUserHrcPath->length()+1));
 }
 
 bool FarEditorSet::checkConEmu()
@@ -1106,7 +1129,6 @@ void FarEditorSet::LoadUserHrd(const String *filename, ParserFactory *pf)
     if (*types->getNodeName() != "hrd-sets"){
       docbuilder.free(xmlDocument);
       throw Exception(DString("main '<hrd-sets>' block not found"));
-      //throw FarHrcSettingsException(DString("main '<hrc-settings>' block not found"));
     }
     for (Node *elem = types->getFirstChild(); elem; elem = elem->getNextSibling()){
       if (elem->getNodeType() == Node::ELEMENT_NODE && *elem->getNodeName() == "hrd"){
@@ -1118,6 +1140,20 @@ void FarEditorSet::LoadUserHrd(const String *filename, ParserFactory *pf)
 
 }
 
+void FarEditorSet::LoadUserHrc(const String *filename, ParserFactory *pf)
+{
+  if (filename && filename->length()){
+    HRCParser *hr = pf->getHRCParser();
+    InputSource *dfis = InputSource::newInstance(filename, NULL);
+    try{
+      hr->loadSource(dfis);
+      delete dfis;
+    }catch(Exception &e){
+      delete dfis;
+      throw Exception(e);
+    }
+  }
+}
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

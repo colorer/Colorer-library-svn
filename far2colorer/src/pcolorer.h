@@ -40,7 +40,7 @@ enum
   mGotcha, mChoose,
   mReloading, mCantLoad, mCantOpenFile, mDie, mTry,
   mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
-  mNoFarTM, mNoConEmu, mNoFarTMConEmu, mUserHrdFile
+  mNoFarTM, mNoConEmu, mNoFarTMConEmu, mUserHrdFile, mUserHrcFile
 };
 
 #endif
