@@ -106,6 +106,17 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
   return new_path;
 }
 
+SString *PathToFullS(const wchar_t *path, bool unc)
+{
+  SString *spath=NULL;
+  wchar_t *t=PathToFull(path,unc);
+  if (t){
+    spath=new SString(t);
+  }
+  delete[] t;
+  return spath;
+}
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

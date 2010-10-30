@@ -24,6 +24,7 @@ const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
 const wchar_t cRegOldOutLine[] = L"OldOutlineView";
 const wchar_t cRegTrueMod[] = L"TrueMod";
 const wchar_t cRegChangeBgEditor[] = L"ChangeBgEditor";
+const wchar_t cRegUserHrdPath[] = L"UserHrdPath";
 
 //values of registry keys by default
 const bool cEnabledDefault = true;
@@ -36,10 +37,11 @@ const bool cSyntaxDrawDefault = true;
 const bool cOldOutLineDefault = true;
 const bool cTrueMod = true;
 const bool cChangeBgEditor = false;
+const wchar_t cUserHrdPathDefault[] = L"";
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
-IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_TMMESSAGE,
+IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_TMMESSAGE,
 IDX_HRD_TM, IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_OK, IDX_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
@@ -79,11 +81,13 @@ public:
   /**
   * trying to load the database on the specified path
   */
-  bool TestLoadBase(const wchar_t *catalogPath, const int full);
+  bool TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const int full);
   SString *GetCatalogPath() {return sCatalogPath;}
+  SString *GetUserHrdPath() {return sUserHrdPath;}
   bool GetPluginStatus() {return rEnabled;}
 
   bool SetBgEditor();
+  void LoadUserHrd(const String *filename, ParserFactory *pf);
 
   SString *sTempHrdName;
   SString *sTempHrdNameTm;
@@ -147,9 +151,11 @@ private:
   SString *sHrdName;
   SString *sHrdNameTm;
   SString *sCatalogPath;
+  SString *sUserHrdPath;
   
-  /** UNC path of sCatalogPath*/
+  /** UNC path */
   SString *sCatalogPathExp;
+  SString *sUserHrdPathExp;
 
   int viewFirst; // 0 - init;  1 - first run view; 2 - first run editor
 };
