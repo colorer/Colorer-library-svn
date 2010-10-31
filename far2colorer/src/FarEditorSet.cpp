@@ -25,6 +25,8 @@ FarEditorSet::FarEditorSet()
   sHrdNameTm = NULL;
   sCatalogPath = NULL;
   sCatalogPathExp = NULL;
+  sTempHrdName = NULL;
+  sTempHrdNameTm = NULL;
 
   ReloadBase();
   SetBgEditor();

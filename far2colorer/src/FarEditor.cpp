@@ -241,6 +241,7 @@ void FarEditor::matchPair()
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
   if ((pm == NULL)||(pm->eline == -1)){
+    baseEditor->releasePairMatch(pm);
     return;
   }
 
@@ -277,6 +278,7 @@ void FarEditor::selectPair()
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
   if ((pm == NULL)||(pm->eline == -1)){
+    baseEditor->releasePairMatch(pm);
     return;
   }
 
@@ -312,6 +314,7 @@ void FarEditor::selectBlock()
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
   if ((pm == NULL)||(pm->eline == -1)){
+    baseEditor->releasePairMatch(pm);
     return;
   }
 
@@ -346,20 +349,22 @@ void FarEditor::selectRegion()
   enterHandler();
   egs.StringNumber = ei.CurLine;
   info->EditorControl(ECTL_GETSTRING, &egs);
-  int end = cursorRegion->end;
+  if (cursorRegion != NULL){
+    int end = cursorRegion->end;
 
-  if (end == -1){
-    end = egs.StringLength;
+    if (end == -1){
+      end = egs.StringLength;
+    }
+
+    if (end - cursorRegion->start > 0){
+      es.BlockType = BTYPE_STREAM;
+      es.BlockStartLine = ei.CurLine;
+      es.BlockStartPos = cursorRegion->start;
+      es.BlockHeight = 1;
+      es.BlockWidth = end - cursorRegion->start;
+      info->EditorControl(ECTL_SELECT, &es);
+    };
   }
-
-  if (cursorRegion != NULL && end - cursorRegion->start > 0){
-    es.BlockType = BTYPE_STREAM;
-    es.BlockStartLine = ei.CurLine;
-    es.BlockStartPos = cursorRegion->start;
-    es.BlockHeight = 1;
-    es.BlockWidth = end - cursorRegion->start;
-    info->EditorControl(ECTL_SELECT, &es);
-  };
 }
 
 void FarEditor::listFunctions()
@@ -764,7 +769,7 @@ void FarEditor::showOutliner(Outliner *outliner)
   wchar_t prefix[FILTER_SIZE+1];
   wchar_t autofilter[FILTER_SIZE+1];
   wchar_t filter[FILTER_SIZE+1];
-  int  flen = 0, autoIncremented = 0;
+  int  flen = 0;
   *filter = 0;
   int maxLevel = -1;
   bool stopMenu = false;
@@ -888,7 +893,6 @@ void FarEditor::showOutliner(Outliner *outliner)
       }
     }
 
-    autoIncremented = (int)(wcslen(autofilter) - wcslen(filter));
     wchar_t top[128];
     const wchar_t *topline = GetMsg(mOutliner);
     wchar_t captionfilter[FILTER_SIZE+1];
