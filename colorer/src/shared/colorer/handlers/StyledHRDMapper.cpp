@@ -85,7 +85,6 @@ void StyledHRDMapper::saveRegionMappings(Writer *writer) const
 void StyledHRDMapper::setRegionDefine(const String &name, const RegionDefine *rd)
 {
   RegionDefine *rd_old = regionDefines.get(&name);
-  delete rd_old;
 
   const StyledRegion *new_region = StyledRegion::cast(rd);
   RegionDefine *rd_new = new StyledRegion(*new_region);
@@ -98,6 +97,7 @@ void StyledHRDMapper::setRegionDefine(const String &name, const RegionDefine *rd
       break;
     };
   };
+  delete rd_old;
 };
 
 /* ***** BEGIN LICENSE BLOCK *****

@@ -28,7 +28,6 @@ CharacterClass cc_temp;
 bool inverse = false;
 wchar prev_char = BAD_WCHAR;
 
-  if (ccs[pos] != '[') return null;
   pos++;
   if (ccs[pos] == '^'){
     inverse = true;
@@ -48,7 +47,10 @@ wchar prev_char = BAD_WCHAR;
     };
     if(ccs[pos] == '{'){
       String *categ = UnicodeTools::getCurlyContent(ccs, pos);
-      if (categ == null) return 0;
+      if (categ == null){
+        delete cc;
+        return 0;
+      }
       if (*categ == "ALL") cc->fill();
       else if (*categ == "ASSIGNED") cc->addCategory("");
       else if (*categ == "UNASSIGNED"){
@@ -116,7 +118,10 @@ wchar prev_char = BAD_WCHAR;
     if (pos+1 < ccs.length() && ccs[pos] == '-' && ccs[pos+1] == '['){
       int retEnd;
       CharacterClass *scc = createCharClass(ccs, pos+1, &retEnd);
-      if (retEnd == ccs.length()) return null;
+      if (retEnd == ccs.length()){
+        delete cc;
+        return null;
+      };
       if (scc == null){
         delete cc;
         return null;
@@ -131,7 +136,10 @@ wchar prev_char = BAD_WCHAR;
     if (pos+2 < ccs.length() && ccs[pos] == '&' && ccs[pos+1] == '&' && ccs[pos+2] == '['){
       int retEnd;
       CharacterClass *scc = createCharClass(ccs, pos+2, &retEnd);
-      if (retEnd == ccs.length()) return null;
+      if (retEnd == ccs.length()){
+        delete cc;
+        return null;
+      };
       if (scc == null){
         delete cc;
         return null;

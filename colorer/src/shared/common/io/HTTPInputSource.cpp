@@ -57,7 +57,11 @@ const byte *HTTPInputSource::openStream()
 
     ok = InternetReadFile(iurl, block, blockSize, &bread);
 
-    if (ok == FALSE || bread == 0) break;
+    if (ok == FALSE || bread == 0)
+    {
+      delete[] block;
+      break;
+    }
     streamVector.addElement(block);
     streamSizeVector.addElement(bread);
     len += bread;
