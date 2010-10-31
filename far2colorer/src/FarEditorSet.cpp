@@ -27,6 +27,10 @@ FarEditorSet::FarEditorSet()
   sCatalogPathExp = NULL;
   sTempHrdName = NULL;
   sTempHrdNameTm = NULL;
+  sUserHrdPath = NULL;
+  sUserHrdPathExp = NULL;
+  sUserHrcPath = NULL;
+  sUserHrcPathExp = NULL;
 
   ReloadBase();
   SetBgEditor();
