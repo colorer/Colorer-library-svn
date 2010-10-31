@@ -340,6 +340,8 @@ void HRCParserImpl::addType(Element *elem)
         if (errorHandler != null){
           errorHandler->warning(StringBuffer("Duplicate region '") + qname1 + "' definition in type '"+parseType->getName()+"'");
         }
+        delete qname1;
+        delete qname2;
         continue;
       };
 
@@ -549,6 +551,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'start' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
+        delete startParam;
         delete next;
         continue;
       }
@@ -556,6 +559,8 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         if (errorHandler != null){
           errorHandler->error(StringBuffer("'end' block attribute not found in scheme '")+scheme->schemeName+"'");
         }
+        delete startParam;
+        delete endParam;
         delete next;
         continue;
       }

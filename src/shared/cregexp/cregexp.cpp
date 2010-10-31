@@ -270,7 +270,10 @@ SRegInfo *next, *temp;
             next->op = (expr[i+1] =='y'?ReBkTraceName:ReBkTraceNName);
             br_name = UnicodeTools::getCurlyContent(expr, i+2);
             if (br_name == null) return ESYNTAX;
-            if (!backRE) return EERROR;
+            if (!backRE){
+              delete br_name;
+              return EERROR;
+            }
             next->param0 = backRE->getBracketNo(br_name);
             blen = br_name->length();
             delete br_name;
