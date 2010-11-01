@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. функция ParserFactory::countHRD для получения количества загруженных схем 
+
+#Revision: 1603 $
+	#Author: ctapmex Date: 2010-10-31 22:13:57 +0500 (Вс, 31 окт 2010)
 	1. утечки памяти
 
 #Revision: 1600
