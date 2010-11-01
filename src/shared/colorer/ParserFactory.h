@@ -113,8 +113,11 @@ public:
   ErrorHandler *getErrorHandler(){
     return fileErrorHandler;
   };
-
+  /**
+   * load one hrd node from hrd-sets
+   */
   void parseHRDSetsChild(Node *hrd);
+  int countHRD(const String &classID);
 private:
   void init();
   String *searchPath();

@@ -268,7 +268,12 @@ const char *ParserFactory::getVersion(){
   return "Colorer-take5 Library be5 "__TIMESTAMP__;
 };
 
-
+int ParserFactory::countHRD(const String &classID)
+{
+  Hashtable<Vector<const String*>*> *hash = hrdLocations.get(&classID);
+  if (hash == null) return 0;
+  return hash->size();
+}
 
 const String* ParserFactory::enumerateHRDClasses(int idx){
   return hrdLocations.key(idx);
