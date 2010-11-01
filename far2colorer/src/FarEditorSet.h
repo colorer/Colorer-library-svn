@@ -41,6 +41,9 @@ const bool cChangeBgEditor = false;
 const wchar_t cUserHrdPathDefault[] = L"";
 const wchar_t cUserHrcPathDefault[] = L"";
 
+const DString DConsole=DString("console");
+const DString DRgb=DString("rgb");
+
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
 IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_USERHRC, IDX_USERHRC_EDIT,

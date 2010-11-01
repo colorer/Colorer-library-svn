@@ -44,7 +44,10 @@ FarEditorSet::~FarEditorSet()
   delete sHrdName;
   delete sHrdNameTm;
   delete sCatalogPath;
-  delete sCatalogPathExp;
+  delete sUserHrdPath;
+  delete sUserHrdPathExp;
+  delete sUserHrcPath;
+  delete sUserHrcPathExp;
   delete regionMapper;
   delete parserFactory;
 }
@@ -170,26 +173,14 @@ void FarEditorSet::viewFile(const String &path)
       throw Exception(DString("Colorer is disabled"));
     }
 
-    String *newPath = NULL;
-
-    if (path[0] == '\"'){
-      newPath = new DString(path, 1, path.length()-2);
-    }
-    else{
-      newPath = new DString(path);
-    }
-
     // Creates store of text lines
     TextLinesStore textLinesStore;
-    textLinesStore.loadFile(newPath, NULL, true);
-    // HRC loading
-    //we need this?
-    //HRCParser *hrcParser = parserFactory->getHRCParser();
+    textLinesStore.loadFile(&path, NULL, true);
     // Base editor to make primary parse
     BaseEditor baseEditor(parserFactory, &textLinesStore);
-    RegionMapper *regionMap=parserFactory->createStyledMapper(&DString("console"), sHrdName);
+    RegionMapper *regionMap=parserFactory->createStyledMapper(&DConsole, sHrdName);
     baseEditor.setRegionMapper(regionMap);
-    baseEditor.chooseFileType(newPath);
+    baseEditor.chooseFileType(&path);
     // initial event
     baseEditor.lineCountEvent(textLinesStore.getLineCount());
     // computing background color
@@ -203,7 +194,6 @@ void FarEditorSet::viewFile(const String &path)
     // File viewing in console window
     TextConsoleViewer viewer(&baseEditor, &textLinesStore, background, -1);
     viewer.view();
-    delete newPath;
   }
   catch (Exception &e){
     const wchar_t* exceptionMessage[4];
@@ -341,20 +331,20 @@ LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Par
     switch (Param1){
   case IDX_HRD_SELECT:
     {
-      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdName, DString("console")));
+      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdName, DConsole));
       delete fes->sTempHrdName;
       fes->sTempHrdName=tempSS;
-      const String *descr=fes->getHRDescription(*fes->sTempHrdName,DString("console"));
+      const String *descr=fes->getHRDescription(*fes->sTempHrdName,DConsole);
       Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT,(LONG_PTR)descr->getWChars());
       return true;
     }
     break;
   case IDX_HRD_SELECT_TM:
     {
-      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdNameTm, DString("rgb")));
+      SString *tempSS = new SString(fes->chooseHRDName(fes->sTempHrdNameTm, DRgb));
       delete fes->sTempHrdNameTm;
       fes->sTempHrdNameTm=tempSS;
-      const String *descr=fes->getHRDescription(*fes->sTempHrdNameTm,DString("rgb"));
+      const String *descr=fes->getHRDescription(*fes->sTempHrdNameTm,DRgb);
       Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,IDX_HRD_SELECT_TM,(LONG_PTR)descr->getWChars());
       return true;
     }
@@ -574,16 +564,11 @@ void FarEditorSet::configure(bool fromEditor)
 
 const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdClass )
 {
-  int count = 0;
-
   if (parserFactory == NULL){
     return current;
   }
 
-  while (parserFactory->enumerateHRDInstances(_hrdClass, count) != NULL){
-    count++;
-  }
-
+  int count = parserFactory->countHRD(_hrdClass);
   FarMenuItem *menuElements = new FarMenuItem[count];
   memset(menuElements, 0, sizeof(FarMenuItem)*count);
 
@@ -603,8 +588,7 @@ const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdCla
   };
 
   int result = Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
-    GetMsg(mSelectHRD), 0, L"hrd",
-    NULL, NULL, menuElements, count);
+    GetMsg(mSelectHRD), 0, L"hrd", NULL, NULL, menuElements, count);
   delete[] menuElements;
 
   if (result == -1){
@@ -730,27 +714,27 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     LoadUserHrc(userHrcPathS, parserFactoryLocal);
 
     try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), sTempHrdName);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
     }
     catch (ParserFactoryException &e)
     {
       if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
         parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("console"), NULL);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, NULL);
     };
 
     delete regionMapperLocal;
     regionMapperLocal=NULL;
     try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("rgb"), sTempHrdNameTm);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, sTempHrdNameTm);
     }
     catch (ParserFactoryException &e)
     {
       if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
         parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DString("rgb"), NULL);
+      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, NULL);
     };
 
     Info.RestoreScreen(scr);
@@ -817,11 +801,11 @@ void FarEditorSet::ReloadBase()
   ReadSettings();
   consoleAnnotationAvailable=checkConsoleAnnotationAvailable() && TrueModOn;
   if (consoleAnnotationAvailable){
-    hrdClass = DString("rgb");
+    hrdClass = DRgb;
     hrdName = sHrdNameTm;
   }
   else{
-    hrdClass = DString("console");
+    hrdClass = DConsole;
     hrdName = sHrdName;
   }
 
