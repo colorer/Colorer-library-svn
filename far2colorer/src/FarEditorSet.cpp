@@ -437,13 +437,13 @@ void FarEditorSet::configure(bool fromEditor)
 
     const String *descr = NULL;
     sTempHrdName =new SString(sHrdName); 
-    descr=getHRDescription(*sTempHrdName,DString("console"));
+    descr=getHRDescription(*sTempHrdName,DConsole);
 
     fdi[IDX_HRD_SELECT].PtrData = descr->getWChars();
 
     const String *descr2 = NULL;
     sTempHrdNameTm =new SString(sHrdNameTm); 
-    descr2=getHRDescription(*sTempHrdNameTm,DString("rgb"));
+    descr2=getHRDescription(*sTempHrdNameTm,DRgb);
 
     fdi[IDX_HRD_TM].PtrData = GetMsg(mHRDNameTrueMod);
     fdi[IDX_HRD_SELECT_TM].PtrData = descr2->getWChars();
