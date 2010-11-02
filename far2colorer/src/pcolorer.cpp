@@ -7,7 +7,7 @@ PluginStartupInfo Info;
 FarStandardFunctions FSF;
 StringBuffer *PluginPath;
 
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved )  
+extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved )  
 {
   switch( fdwReason ) 
   { 

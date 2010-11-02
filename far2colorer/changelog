@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. падение плагина после сборки с помощью gcc
+
+#Revision: 1609
+	Author: ctapmex Date: 2010-11-02 13:41:44 +0500 (Вт, 02 ноя 2010)
 	1. gcc warnings
 
 #Revision: 1608
