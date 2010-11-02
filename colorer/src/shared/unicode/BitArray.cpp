@@ -31,13 +31,13 @@ void BitArray::addRange(int s, int e){
   int cs = s>>5;
   if (s&0x1f){
     int fillbytes = 0xFFFFFFFF << (s&0x1f);
-    if ((e>>5) == (s>>5)) fillbytes &= 0xFFFFFFFF >> (0x1F - e&0x1F);
+    if ((e>>5) == (s>>5)) fillbytes &= 0xFFFFFFFF >> (0x1F - (e&0x1F));
     array[cs] |= fillbytes;
     cs++;
   };
   int ce = e>>5;
   if (s>>5 != ce && (e&0x1f) != 0x1f){
-    array[ce] |= 0xFFFFFFFF >> (0x1F - e&0x1F);
+    array[ce] |= 0xFFFFFFFF >> (0x1F - (e&0x1F));
     ce--;
   };
   for(int idx = cs; idx <= ce; idx++)
@@ -53,7 +53,7 @@ void BitArray::clearRange(int s, int e){
   int cs = s>>5;
   if (s&0x1f){
     int fillbytes = 0xFFFFFFFF << (s&0x1f);
-    if ((e&0x1F) == (s&0x1F)) fillbytes &= 0xFFFFFFFF >> (0x1F - e&0x1F);
+    if ((e&0x1F) == (s&0x1F)) fillbytes &= 0xFFFFFFFF >> (0x1F - (e&0x1F));
     array[cs] &= ~fillbytes;
     cs++;
   };

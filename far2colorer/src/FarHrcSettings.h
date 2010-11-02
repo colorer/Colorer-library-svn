@@ -41,4 +41,4 @@ private:
 };
 
 
-#endif _FARHRCSETTINGS_H_
+#endif

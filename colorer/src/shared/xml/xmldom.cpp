@@ -220,11 +220,11 @@ void DocumentBuilder::consumeElement(Node *root){
   Element *el = doc->createElement(name);
   root->appendChild(el);
 
-  if (peek(0) == '/' && peek(1) == '>' || peek(0) == '>'){
+  if ((peek(0) == '/' && peek(1) == '>') || peek(0) == '>'){
     // no attributes
   }else{
     consumeSpaces(1);
-    while(!(peek(0) == '/' && peek(1) == '>' || peek(0) == '>')){
+    while(!((peek(0) == '/' && peek(1) == '>') || peek(0) == '>')){
       consumeSpaces();
       String *aname = consumeName();
       consumeSpaces();

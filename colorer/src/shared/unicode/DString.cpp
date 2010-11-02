@@ -61,17 +61,17 @@ DString::DString(const byte *stream, int size, int def_encoding){
       }else type = ST_UTF8;
     };
 
-    if (stream[0] == 0xFF && stream[1] == 0xFE && stream[2] == 0x00 && stream[3] == 0x00 ||
-    stream[0] == 0x3C && stream[1] == 0x00 && stream[2] == 0x00 && stream[3] == 0x00 ){
+    if ((stream[0] == 0xFF && stream[1] == 0xFE && stream[2] == 0x00 && stream[3] == 0x00) ||
+    (stream[0] == 0x3C && stream[1] == 0x00 && stream[2] == 0x00 && stream[3] == 0x00) ){
       type = ST_UTF32;
-    }else if (stream[0] == 0x00 && stream[1] == 0x00 && stream[2] == 0xFE && stream[3] == 0xFF ||
-    stream[0] == 0x00 && stream[1] == 0x00 && stream[2] == 0x00 && stream[3] == 0x3C ){
+    }else if ((stream[0] == 0x00 && stream[1] == 0x00 && stream[2] == 0xFE && stream[3] == 0xFF) ||
+    (stream[0] == 0x00 && stream[1] == 0x00 && stream[2] == 0x00 && stream[3] == 0x3C) ){
       type = ST_UTF32_BE;
-    }else if (stream[0] == 0xFF && stream[1] == 0xFE ||
-    stream[0] == 0x3C && stream[1] == 0x00 && stream[2] == 0x3F && stream[3] == 0x00){
+    }else if ((stream[0] == 0xFF && stream[1] == 0xFE) ||
+    (stream[0] == 0x3C && stream[1] == 0x00 && stream[2] == 0x3F && stream[3] == 0x00)){
       type = ST_UTF16;
-    }else if (stream[0] == 0xFE && stream[1] == 0xFF ||
-    stream[0] == 0x00 && stream[1] == 0x3C && stream[2] == 0x00 && stream[3] == 0x3F){
+    }else if ((stream[0] == 0xFE && stream[1] == 0xFF) ||
+    (stream[0] == 0x00 && stream[1] == 0x3C && stream[2] == 0x00 && stream[3] == 0x3F)){
       type = ST_UTF16_BE;
     }else if (stream[0] == 0xEF && stream[1] == 0xBB && stream[2] == 0xBF){
       type = ST_UTF8;

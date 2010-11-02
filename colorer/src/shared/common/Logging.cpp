@@ -88,7 +88,7 @@ void colorer_logger(int level, const char *cname, const char *msg, va_list v){
 
   bool found = false;
 
-  for (int idx = 0; idx < sizeof(toTrace)/sizeof(toTrace[0]); idx++){
+  for (size_t idx = 0; idx < sizeof(toTrace)/sizeof(toTrace[0]); idx++){
     if (stricmp(toTrace[idx], cname) == 0){
       found = true;
     }

@@ -27,8 +27,8 @@ SRegInfo::~SRegInfo()
       if(namedata) delete namedata;
 #endif
     default:
-      if (op > ReBlockOps && op < ReSymbolOps
-          || op == ReBrackets || op == ReNamedBrackets)
+      if (op > ReBlockOps && (op < ReSymbolOps
+          || op == ReBrackets || op == ReNamedBrackets))
         delete un.param;
       break;
   };

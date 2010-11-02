@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. gcc warnings
+
+#Revision: 1608
+	Author: ctapmex Date: 2010-11-02 10:12:57 +0500 (Вт, 02 ноя 2010)
 	1. забытые две константы из 1607
 
 #Revision: 1607

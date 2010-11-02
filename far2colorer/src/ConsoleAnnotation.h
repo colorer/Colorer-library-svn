@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CONSOLEANNOTATION_H_
+#define _CONSOLEANNOTATION_H_
 /*
  * v0.1 color&border styles
  * v0.2 interface formal description, unified with ConEmu
@@ -68,7 +69,7 @@ struct AnnotationInfo
 {
     AnnotationInfo()
     {
-      for (int i = 0; i < sizeof(raw)/sizeof(raw[0]); i++)
+      for (size_t i = 0; i < sizeof(raw)/sizeof(raw[0]); i++)
         raw[i] = 0;
     }
     union{
@@ -121,6 +122,7 @@ struct AnnotationInfo
       int raw[8];
     };
 };
+#endif
 /*
 Copyright (c) 2010 Igor Russkih
 All rights reserved.

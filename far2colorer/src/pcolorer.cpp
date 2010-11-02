@@ -91,8 +91,8 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
       //file name, which we received
       wchar_t *file = (wchar_t*)Item;
 
-      wchar_t *nfile = NULL;
-      if (nfile = PathToFull(file,true)){
+      wchar_t *nfile = PathToFull(file,true);
+      if (nfile){
         if (!editorSet){
           editorSet = new FarEditorSet();
         }
