@@ -251,7 +251,7 @@ void ConsoleTools::profile(int loopCount){
   }
   msecs = clock() - msecs;
 
-  printf("%d\n", (msecs*1000)/CLOCKS_PER_SEC );
+  printf("%ld\n", (msecs*1000)/CLOCKS_PER_SEC );
 }
 
 void ConsoleTools::viewFile(){

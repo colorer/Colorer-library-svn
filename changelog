@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. gcc warnings
+
+#Revision: 1606
+	#Author: ctapmex Date: 2010-11-01 17:11:28 +0500 (Пн, 01 ноя 2010)
 	1. функция ParserFactory::countHRD для получения количества загруженных схем 
 
 #Revision: 1603 $
