@@ -15,20 +15,4 @@
 	<prototype name="hrc">
 		<param name="show-cross" value="both"/>
 	</prototype>
-	<prototype name="cpp">
-		<param name='firstlines'     value='10'/>
-		<param name='firstlinebytes' value='2000'/>
-	</prototype>
-	<prototype name="d">
-		<param name='firstlines'     value='10'/>
-		<param name='firstlinebytes' value='2000'/>
-	</prototype>
-	<prototype name="xml">
-		<param name='firstlines'     value='10'/>
-		<param name='firstlinebytes' value='2000'/>
-	</prototype>
-	<prototype name="xslt">
-		<param name='firstlines'     value='10'/>
-		<param name='firstlinebytes' value='2000'/>
-	</prototype>
 </hrc-settings>
