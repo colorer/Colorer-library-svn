@@ -77,7 +77,7 @@ public:
   size_t getParamCount(){
     return paramVector.size();
   }
-  size_t getParamValueCount(){
+  size_t getParamNotDefaultValueCount(){
     return paramHash.size();
   }
   /**

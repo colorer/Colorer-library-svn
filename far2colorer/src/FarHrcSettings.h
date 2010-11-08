@@ -31,10 +31,12 @@ public:
   void readXML(String *file, bool userValue);
   void readProfile();
   void readUserProfile();
+  void writeUserProfile();
 
 private:
   void UpdatePrototype(Element *elem, bool userValue);
   void readProfileFromRegistry(HKEY dwKey);
+  void writeProfileToRegistry();
 
   ParserFactory *parserFactory;
 
