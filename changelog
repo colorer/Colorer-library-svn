@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. переименован функция getParamValueCount в getParamNotDefaultValueCount для 
+	отражения точного её значения
+
+#Revision: 1613
+	#Author: ctapmex Date: 2010-11-08 10:08:36 +0500 (Пн, 08 ноя 2010)
 	1. добавлены функции и процедуры в FileTypeImpl
 
 #Revision: 1609
