@@ -24,6 +24,22 @@ struct color{
   color(): concolor(0), fg(0), bk(0), style(0) {};
 };
 
+const DString DShowCross=DString("show-cross");
+const DString DNone=DString("none");
+const DString DVertical=DString("vertical");
+const DString DHorizontal=DString("horizontal");
+const DString DBoth=DString("both");
+const DString DCrossZorder=DString("cross-zorder");
+const DString DBottom=DString("bottom");
+const DString DTop=DString("top");
+const DString DYes=DString("yes");
+const DString DNo=DString("no");
+const DString DBackparse=DString("backparse");
+const DString DMaxLen=DString("maxlinelength");
+const DString DDefFore=DString("default-fore");
+const DString DDefBack=DString("default-back");
+const DString DFullback=DString("fullback");
+
 /** FAR Editor internal plugin structures.
     Implements text parsing and different
     editor extended functions.

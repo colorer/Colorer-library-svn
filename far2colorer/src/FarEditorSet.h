@@ -43,14 +43,20 @@ const wchar_t cUserHrcPathDefault[] = L"";
 
 const DString DConsole=DString("console");
 const DString DRgb=DString("rgb");
+const DString Ddefault=DString("<default>");
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
 IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_USERHRC, IDX_USERHRC_EDIT,
 IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_TMMESSAGE,IDX_HRD_TM, 
-IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_OK, IDX_CANCEL};
+IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_HRC_SETTING, IDX_OK, IDX_CANCEL};
+
+enum
+{ IDX_CH_BOX, IDX_CH_CAPTIONLIST, IDX_CH_SCHEMAS, 
+IDX_CH_PARAM_LIST,IDX_CH_PARAM_VALUE_CAPTION,IDX_CH_PARAM_VALUE_LIST, IDX_CH_DESCRIPTION, IDX_CH_OK, IDX_CH_CANCEL};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
+LONG_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
 
 /**
  * FAR Editors container.
@@ -98,6 +104,14 @@ public:
 
   SString *sTempHrdName;
   SString *sTempHrdNameTm;
+
+  /** Shows hrc configuration dialog */
+  void configureHrc();
+  void OnChangeHrc(HANDLE hDlg);
+  void OnChangeParam(HANDLE hDlg, int idx);
+  void OnSaveHrcParams(HANDLE hDlg);
+  bool dialogFirstFocus;
+  int menuid;
 private:
   /** Returns current global error handler. */
   ErrorHandler *getErrorHandler();
@@ -136,6 +150,28 @@ private:
   bool checkFarTrueMod();
   bool checkConsoleAnnotationAvailable();
   bool consoleAnnotationAvailable;
+
+  size_t getCountFileTypeAndGroup();
+  FileTypeImpl* getFileTypeByIndex(int idx);
+
+  // FarList for dialog objects
+  FarList *buildHrcList();
+  FarList *buildParamsList(FileTypeImpl *type);
+  // filetype "default"
+  FileTypeImpl *defaultType;
+  //change combobox type
+  void ChangeParamValueListType(HANDLE hDlg, bool dropdownlist);
+  //set list of values to combobox
+  void setCrossValueListToCombobox(FileTypeImpl *type,HANDLE hDlg);
+  void setCrossPosValueListToCombobox(FileTypeImpl *type,HANDLE hDlg);
+  void setYNListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param);
+  void setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param);
+
+  FileTypeImpl *getCurrentTypeInDialog(HANDLE hDlg);
+
+  const String *getParamDefValue(FileTypeImpl *type, SString param);
+
+  void SaveChangedValueParam(HANDLE hDlg);
 
   Hashtable<FarEditor*> farEditorInstances;
   ParserFactory *parserFactory;

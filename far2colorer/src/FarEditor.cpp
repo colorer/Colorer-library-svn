@@ -95,84 +95,84 @@ void FarEditor::reloadTypeSettings()
     throw Exception(DString("No 'default' file type found"));
   }
 
-  int backparse = def->getParamValueInt(DString("backparse"), 2000);
-  maxLineLength = def->getParamValueInt(DString("maxlinelength"), 0);
-  newfore = def->getParamValueInt(DString("default-fore"), -1);
-  newback = def->getParamValueInt(DString("default-back"), -1);
+  int backparse = def->getParamValueInt(DBackparse, 2000);
+  maxLineLength = def->getParamValueInt(DMaxLen, 0);
+  newfore = def->getParamValueInt(DDefFore, -1);
+  newback = def->getParamValueInt(DDefBack, -1);
   const String *value;
-  value = def->getParamValue(DString("fullback"));
+  value = def->getParamValue(DFullback);
 
-  if (value != NULL && value->equals("no")){
+  if (value != NULL && value->equals(&DNo)){
     fullBackground = false;
   }
 
-  value = def->getParamValue(DString("show-cross"));
+  value = def->getParamValue(DShowCross);
   if (drawCross==2 && value != NULL){
-    if (value->equals("none")){
+    if (value->equals(&DNone)){
       showHorizontalCross = false;
       showVerticalCross   = false;
     };
 
-    if (value->equals("vertical")){
+    if (value->equals(&DVertical)){
       showHorizontalCross = false;
       showVerticalCross   = true;
     };
 
-    if (value->equals("horizontal")){
+    if (value->equals(&DHorizontal)){
       showHorizontalCross = true;
       showVerticalCross   = false;
     };
 
-    if (value->equals("both")){
+    if (value->equals(&DBoth)){
       showHorizontalCross = true;
       showVerticalCross   = true;
     };
   }
 
-  value = def->getParamValue(DString("cross-zorder"));
+  value = def->getParamValue(DCrossZorder);
 
-  if (value != NULL && value->equals("top")){
+  if (value != NULL && value->equals(&DTop)){
     crossZOrder = 1;
   }
 
   // installs custom file properties
-  backparse = ftype->getParamValueInt(DString("backparse"), backparse);
-  maxLineLength = ftype->getParamValueInt(DString("maxlinelength"), maxLineLength);
-  newfore = ftype->getParamValueInt(DString("default-fore"), newfore);
-  newback = ftype->getParamValueInt(DString("default-back"), newback);
-  value = ftype->getParamValue(DString("fullback"));
+  backparse = ftype->getParamValueInt(DBackparse, backparse);
+  maxLineLength = ftype->getParamValueInt(DMaxLen, maxLineLength);
+  newfore = ftype->getParamValueInt(DDefFore, newfore);
+  newback = ftype->getParamValueInt(DDefBack, newback);
+  value = ftype->getParamValue(DFullback);
 
-  if (value != NULL && value->equals("no")){
+  if (value != NULL && value->equals(&DNo)){
     fullBackground = false;
   }
 
-  value = ftype->getParamValue(DString("show-cross"));
+  value = ftype->getParamValue(DShowCross);
 
   if (drawCross==2 && value != NULL){
-    if (value->equals("none")){
+    if (value->equals(&DNone)){
       showHorizontalCross = false;
       showVerticalCross   = false;
     };
 
-    if (value->equals("vertical")){
+    if (value->equals(&DVertical)){
       showHorizontalCross = false;
       showVerticalCross   = true;
     };
 
-    if (value->equals("horizontal")){
+    if (value->equals(&DHorizontal)){
       showHorizontalCross = true;
       showVerticalCross   = false;
     };
 
-    if (value->equals("both")){
+    if (value->equals(&DBoth)){
       showHorizontalCross = true;
       showVerticalCross   = true;
     };
   }
 
-  value = ftype->getParamValue(DString("cross-zorder"));
+  value = ftype->getParamValue(DCrossZorder);
 
-  if (value != NULL && value->equals("top")){
+  if (value != NULL && value->equals(&DTop)){
     crossZOrder = 1;
   }
 

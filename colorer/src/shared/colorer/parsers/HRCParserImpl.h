@@ -29,6 +29,7 @@ public:
   FileType *getFileType(const String *name);
   FileType *enumerateFileTypes(int index);
   FileType *chooseFileType(const String *fileName, const String *firstLine, int typeNo = 0);
+  int getFileTypesCount();
 
   int getRegionCount();
   const Region *getRegion(int id);
