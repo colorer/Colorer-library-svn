@@ -46,13 +46,16 @@ public:
   }
   int getParamValueInt(const String &name, int def)
   {
-  	int val = def;
-  	UnicodeTools::getNumber(getParamValue(name), &val);
-  	return val;
+    int val = def;
+    UnicodeTools::getNumber(getParamValue(name), &val);
+    return val;
   }
 
   const String *getParamDefaultValue(const String &name) {
     return paramDefaultHash.get(&name);
+  }
+  const String *getParamNotDefaultValue(const String &name) {
+    return paramHash.get(&name);
   }
 
   void addParam(const String *name){
@@ -64,7 +67,19 @@ public:
   void setParamDefaultValue(const String &name, const String *value){
     paramDefaultHash.put(&name, new SString(value));
   }
+  void setParamDescription(const String &name, const String *value){
+    paramDescriptionHash.put(&name, new SString(value));
+  }
 
+  void removeParamValue(const String *name){
+    paramHash.remove(name);
+  }
+  size_t getParamCount(){
+    return paramVector.size();
+  }
+  size_t getParamValueCount(){
+    return paramHash.size();
+  }
   /**
    * Returns total priority, accordingly to all it's
    * choosers (filename and firstline choosers).
