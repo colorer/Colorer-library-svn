@@ -6,6 +6,8 @@ $^#Colorer
 
     ~Plugin setup.~@config@
 
+    ~Schemes settings.~@confighrc@
+
     ~Command line support.~@cmdline@
 
     ~Plugin's menus.~@menu@
@@ -15,12 +17,8 @@ $^#Colorer
 @config
 $^#Colorer's settings.#
 
-  #Colorer enabled#
+  #Enabled#
      Enable/Disable Colorer.
-
-  #TrueMod#
-     Enable/Disable TrueMod in plugin. If Far does not support truemod,
-     or ConEmu disable truemod, the plugin will work as usual.
 
   #Cross#
      [ ] Do not show ever
@@ -38,19 +36,6 @@ $^#Colorer's settings.#
      the beginning of the line number, then the first letter in the function 
      and the function name itself.
 
-  #catalog.xml file:#
-     Full file path sets default catalog file for Colorer.
-     If this field is empty Colorer tries to find the file automatically
-     in the following order:
-        - Directory with plugin's dll, parent, parent of parent directory.
-        - Path in %COLORER5CATALOG%
-        - Path in file %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
-        - Path in file %SYSTEMROOT%/.colorer5catalog (or %WINDIR% in w9x)
-
-  #Color style:#
-     Choose a color style, which will be used for coloring text. 
-     The choice does not work if the plugin is disabled.
-
   #Change background editor#
      In the set condition, Colorer set in System Preferences color of 
      "Plain Text" color group "editor" such as and the default color for 
@@ -59,12 +44,49 @@ $^#Colorer's settings.#
      editor.
      In TrueMod desired visual effect is not achieved.
 
+  #Color style:#
+     Choose a color style, which will be used for coloring text. 
+     The choice does not work if the plugin is disabled.
+
+  #catalog.xml file:#
+     Full file path sets default catalog file for Colorer.
+     If this field is empty Colorer trying to find the file automatically
+     in a subfolder of "base" parent directory plugin.
+
+  #Users file of schemes#
+     Full file path sets the users file of schemes
+
+  #Users file of color styles#
+     Full file path sets the users file of color styles
+
+  #--------------------------Настройки TrueMod------------------------------#
+  #Enabled#
+     Enable/Disable TrueMod in plugin. If Far does not support truemod,
+     or ConEmu disable truemod, the plugin will work as usual.
+
+  #Color style:#
+     Choose a color style, which will be used for coloring text in TrueMod. 
+     The choice does not work if the plugin is disabled.
+  #-------------------------------------------------------------------------#
+
   #[ Test schema library ]#
      Tests ability to load all the language of schemes, taking the path to
      catalog.xml from the settings window.
 
+  #[ Schemes settings ]#
+    Open dialog for shemes settings
+
   #[ Ok ]#
      Closes dialog and save settings.
+
+@confighrc
+$^#Schemes settings#
+    For each of the selected schemes, a list of parameters that affect the mapping
+coloring.
+    Parameter value - the value set for this parameter.
+Values of the form <default-znach.> shows that the parameter is "znach." It is set
+in the system (non-user) settings of the scheme or scheme is taken from default.
+    Save all the changes occurs after clicking "OK" button.
 
 @cmdline
 $# Command line support
