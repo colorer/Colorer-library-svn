@@ -142,6 +142,10 @@ FileType *HRCParserImpl::enumerateFileTypes(int index) {
   return null;
 }
 
+int HRCParserImpl::getFileTypesCount() {
+  return fileTypeVector.size();
+}
+
 int HRCParserImpl::getRegionCount() {
   return regionNamesVector.size();
 }
