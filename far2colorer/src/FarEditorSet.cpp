@@ -725,11 +725,11 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
   try{
     parserFactoryLocal = new ParserFactory(tpath);
     hrcParserLocal = parserFactoryLocal->getHRCParser();
+    LoadUserHrd(userHrdPathS, parserFactoryLocal);
+    LoadUserHrc(userHrcPathS, parserFactoryLocal);
     FarHrcSettings p(parserFactoryLocal);
     p.readProfile();
     p.readUserProfile();
-    LoadUserHrd(userHrdPathS, parserFactoryLocal);
-    LoadUserHrc(userHrcPathS, parserFactoryLocal);
 
     try{
       regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
@@ -840,11 +840,11 @@ void FarEditorSet::ReloadBase()
   try{
     parserFactory = new ParserFactory(tpath);
     hrcParser = parserFactory->getHRCParser();
+    LoadUserHrd(sUserHrdPathExp, parserFactory);
+    LoadUserHrc(sUserHrcPathExp, parserFactory);
     FarHrcSettings p(parserFactory);
     p.readProfile();
     p.readUserProfile();
-    LoadUserHrd(sUserHrdPathExp, parserFactory);
-    LoadUserHrc(sUserHrcPathExp, parserFactory);
     defaultType= (FileTypeImpl*)hrcParser->getFileType(&DString("default"));
 
     try{
@@ -1546,6 +1546,8 @@ LONG_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR 
 
 void FarEditorSet::configureHrc()
 {
+  if (!rEnabled) return;
+
   FarDialogItem fdi[] =
   {
     { DI_DOUBLEBOX,2,1,56,21,0,0,0,0,L""},                                //IDX_CH_BOX,

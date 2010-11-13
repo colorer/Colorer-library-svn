@@ -165,6 +165,10 @@ void FarHrcSettings::writeProfileToRegistry()
       break;
     }
 
+    wchar_t key[MAX_KEY_LENGTH];
+    _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,type->getName()->getWChars());
+
+    RegDeleteKey(HKEY_CURRENT_USER,key);
     const String *p, *v;
     if (type->getParamCount() && type->getParamNotDefaultValueCount()){// params>0 and user values >0
       // enum all params
@@ -175,10 +179,7 @@ void FarHrcSettings::writeProfileToRegistry()
         }
         v=type->getParamNotDefaultValue(*p);
         if (v!=NULL){
-          wchar_t key[MAX_KEY_LENGTH];
           HKEY hkKey;
-
-          _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,type->getName()->getWChars());
 
           if (RegCreateKeyEx(HKEY_CURRENT_USER, key, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkKey, NULL)==ERROR_SUCCESS ){
               RegSetValueExW(hkKey, p->getWChars(), 0, REG_SZ, (const BYTE*)v->getWChars(), sizeof(wchar_t)*(v->length()+1));
