@@ -33,7 +33,6 @@ FarEditorSet::FarEditorSet()
   sUserHrcPathExp = NULL;
 
   ReloadBase();
-  SetBgEditor();
   viewFirst = 0;
 }
 
@@ -543,7 +542,6 @@ void FarEditorSet::configure(bool fromEditor)
           TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
           enableColorer(fromEditor);
-          SetBgEditor();
         }
         else{
           if (TrueModOn !=!!fdi[IDX_TRUEMOD].Selected){
@@ -657,7 +655,8 @@ int FarEditorSet::editorEvent(int Event, void *Param)
     case EE_GOTFOCUS:
       {
         if (!getCurrentEditor()){
-          addCurrentEditor();
+          editor = addCurrentEditor();
+          return editor->editorEvent(EE_REDRAW, EEREDRAW_CHANGE);
         }
         return 0;
       }
@@ -811,7 +810,7 @@ void FarEditorSet::ReloadBase()
   HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
   Info.Message(Info.ModuleNumber, 0, NULL, &marr[0], 2, 0);
 
-  dropAllEditors(false);
+  dropAllEditors(true);
   delete regionMapper;
   delete parserFactory;
   parserFactory = NULL;
@@ -857,6 +856,8 @@ void FarEditorSet::ReloadBase()
       }
       regionMapper = parserFactory->createStyledMapper(&hrdClass, NULL);
     };
+    //устанавливаем фон редактора при каждой перезагрузке схем.
+    SetBgEditor();
   }
   catch (Exception &e){
     const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
@@ -992,10 +993,11 @@ void FarEditorSet::dropCurrentEditor(bool clean)
 
 void FarEditorSet::dropAllEditors(bool clean)
 {
+  if (clean){
+    //мы не имеем доступа к другим редакторам, кроме текущего
+    dropCurrentEditor(clean);
+  }
   for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next()){
-    if (clean){
-      fe->cleanEditor();
-    }
     delete fe;
   };
 
