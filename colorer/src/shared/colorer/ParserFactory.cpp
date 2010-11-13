@@ -98,23 +98,29 @@ void ParserFactory::parseHRDSetsChild(Node *hrd)
     return;
   };
 
-  const String *hrd_descr = new SString(((Element*)hrd)->getAttribute(DString("description")));
-  if (hrd_descr == null){
-    hrd_descr = hrd_name;
-  }
-  hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
-
   Hashtable<Vector<const String*>*> *hrdClass = hrdLocations.get(hrd_class);
   if (hrdClass == null){
     hrdClass = new Hashtable<Vector<const String*>*>;
     hrdLocations.put(hrd_class, hrdClass);
-    hrdClass->put(hrd_name, new Vector<const String*>);
   };
+  if (hrdClass->get(hrd_name) != null){
+    if (fileErrorHandler != null){
+      fileErrorHandler->error(StringBuffer("Duplicate hrd class '")+hrd_name+"'");
+    }
+    return;
+  };
+  hrdClass->put(hrd_name, new Vector<const String*>);
   Vector<const String*> *hrdLocV = hrdClass->get(hrd_name);
   if (hrdLocV == null){
     hrdLocV = new Vector<const String*>;
     hrdClass->put(hrd_name, hrdLocV);
   };
+
+  const String *hrd_descr = new SString(((Element*)hrd)->getAttribute(DString("description")));
+  if (hrd_descr == null){
+    hrd_descr = hrd_name;
+  }
+  hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
 
   Node *loc = hrd->getFirstChild();
   while(loc != null){
