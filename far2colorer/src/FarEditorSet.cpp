@@ -1223,9 +1223,6 @@ FarList *FarEditorSet::buildHrcList()
   return ListItems;
 }
 
-
-
-
 FarList *FarEditorSet::buildParamsList(FileTypeImpl *type)
 {
   //max count params
@@ -1312,6 +1309,9 @@ void FarEditorSet::setCrossValueListToCombobox(FileTypeImpl *type, HANDLE hDlg)
   fcross[ret].Flags=LIF_SELECTED;
   ChangeParamValueListType(hDlg,true);
   Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_VALUE_LIST,(LONG_PTR)lcross);
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
 }
 
 void FarEditorSet::setCrossPosValueListToCombobox(FileTypeImpl *type, HANDLE hDlg)
@@ -1343,6 +1343,9 @@ void FarEditorSet::setCrossPosValueListToCombobox(FileTypeImpl *type, HANDLE hDl
   fcross[ret].Flags=LIF_SELECTED;
   ChangeParamValueListType(hDlg,true);
   Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_VALUE_LIST,(LONG_PTR)lcross);
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
 }
 
 void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DString param)
@@ -1374,6 +1377,9 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   fcross[ret].Flags=LIF_SELECTED;
   ChangeParamValueListType(hDlg,true);
   Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_VALUE_LIST,(LONG_PTR)lcross);
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
 }
 
 void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param)
@@ -1396,6 +1402,9 @@ void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, 
   if (value!=NULL){
     Info.SendDlgMessage(hDlg,DM_SETTEXTPTR ,IDX_CH_PARAM_VALUE_LIST,(LONG_PTR)value->getWChars());
   }
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
 }
 
 FileTypeImpl *FarEditorSet::getCurrentTypeInDialog(HANDLE hDlg)
@@ -1413,6 +1422,8 @@ void  FarEditorSet::OnChangeHrc(HANDLE hDlg)
   FarList *List=buildParamsList(type);
 
   Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_LIST,(LONG_PTR)List);
+  delete[] List->Items;
+  delete List;
   OnChangeParam(hDlg,0);
 }
 
@@ -1563,7 +1574,8 @@ void FarEditorSet::configureHrc()
 
   fdi[IDX_CH_BOX].PtrData = GetMsg(mUserHrcSettingDialog);
   fdi[IDX_CH_CAPTIONLIST].PtrData = GetMsg(mListSyntax); 
-  fdi[IDX_CH_SCHEMAS].ListItems=buildHrcList();
+  FarList* l=buildHrcList();
+  fdi[IDX_CH_SCHEMAS].ListItems = l;
   fdi[IDX_CH_SCHEMAS].Flags= DIF_LISTWRAPMODE | DIF_DROPDOWNLIST;
   fdi[IDX_CH_OK].PtrData = GetMsg(mOk);
   fdi[IDX_CH_CANCEL].PtrData = GetMsg(mCancel);  
@@ -1577,6 +1589,15 @@ void FarEditorSet::configureHrc()
   dialogFirstFocus = true;
   HANDLE hDlg = Info.DialogInit(Info.ModuleNumber, -1, -1, 59, 23, L"confighrc", fdi, ARRAY_SIZE(fdi), 0, 0, SettingHrcDialogProc, (LONG_PTR)this);
   int i = Info.DialogRun(hDlg);
+  
+  for (int idx = 0; idx < l->ItemsNumber; idx++){
+    if (l->Items[idx].Text){
+      delete[] l->Items[idx].Text;
+    }
+  }
+  delete[] l->Items;
+  delete l;
+  
   Info.DialogFree(hDlg);
 }
 
