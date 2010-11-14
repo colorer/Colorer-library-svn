@@ -25,6 +25,9 @@
   <copy todir='${target-dir}/hrc/'  overwrite='true'>
     <fileset dir='hrc/hrc/' includes='proto*.hrc, *.ent.hrc'/>
   </copy>
+  <copy todir='${target-dir}/hrc/'  overwrite='true'>
+    <fileset dir='hrc/hrc/' includes='auto/**/*'/>
+  </copy>
   <replace dir="${target-dir}/hrc" includes='*.hrc' token='link="' value='link="jar:common.jar!'/>
 </target>
 
@@ -55,7 +58,7 @@
   <antcall target='hrc.jar'>
     <param name='target-dir' value='${hrcupdate-dir}'/>
   </antcall>
-  <copy file='hrc/hrc/changes.txt' todir='${hrcupdate-dir}'/>
+  <copy file='hrc/hrc/changes.txt' todir='${hrcupdate-dir}/hrc'/>
 
   <zip destfile='${hrcupdate-zip}'>
     <fileset dir='${hrcupdate-dir}'/>
