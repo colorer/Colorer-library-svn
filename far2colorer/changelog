@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. warnings x64
+	2. версия 1.0.3
+
+#Revision: 1621
+	Author: ctapmex Date: 2010-11-14 12:49:33 +0500 (Вс, 14 ноя 2010)
 	1. очищаем выделенную память
 
 #Revision: 1620

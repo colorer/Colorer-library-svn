@@ -151,7 +151,7 @@ private:
   bool checkConsoleAnnotationAvailable();
   bool consoleAnnotationAvailable;
 
-  size_t getCountFileTypeAndGroup();
+  int getCountFileTypeAndGroup();
   FileTypeImpl* getFileTypeByIndex(int idx);
 
   // FarList for dialog objects

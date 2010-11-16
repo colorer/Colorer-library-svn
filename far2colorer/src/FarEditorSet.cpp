@@ -204,7 +204,7 @@ void FarEditorSet::viewFile(const String &path)
   };
 }
 
-size_t FarEditorSet::getCountFileTypeAndGroup()
+int FarEditorSet::getCountFileTypeAndGroup()
 {
   int num = 0;
   const String *group = NULL;
@@ -1230,7 +1230,7 @@ FarList *FarEditorSet::buildParamsList(FileTypeImpl *type)
   FarListItem *fparam= new FarListItem[size];
   memset(fparam, 0, sizeof(FarListItem)*(size));
 
-  size_t count=0;
+  int count=0;
   const String *paramname;
   for(int idx=0;;idx++){
     paramname=defaultType->enumerateParameters(idx);
@@ -1277,7 +1277,7 @@ void FarEditorSet::setCrossValueListToCombobox(FileTypeImpl *type, HANDLE hDlg)
   const String *value=((FileTypeImpl*)type)->getParamNotDefaultValue(DShowCross);
   const String *def_value=getParamDefValue(type,DShowCross);
 
-  size_t count = 5;
+  int count = 5;
   FarListItem *fcross = new FarListItem[count];
   memset(fcross, 0, sizeof(FarListItem)*(count));
   fcross[0].Text = DNone.getWChars();
@@ -1319,7 +1319,7 @@ void FarEditorSet::setCrossPosValueListToCombobox(FileTypeImpl *type, HANDLE hDl
   const String *value=type->getParamNotDefaultValue(DCrossZorder);
   const String *def_value=getParamDefValue(type,DCrossZorder);
 
-  size_t count = 3;
+  int count = 3;
   FarListItem *fcross = new FarListItem[count];
   memset(fcross, 0, sizeof(FarListItem)*(count));
   fcross[0].Text = DBottom.getWChars();
@@ -1353,7 +1353,7 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   const String *value=type->getParamNotDefaultValue(param);
   const String *def_value=getParamDefValue(type,param);
 
-  size_t count = 3;
+  int count = 3;
   FarListItem *fcross = new FarListItem[count];
   memset(fcross, 0, sizeof(FarListItem)*(count));
   fcross[0].Text = DNo.getWChars();
@@ -1387,7 +1387,7 @@ void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, 
   const String *value=type->getParamNotDefaultValue(param);
   const String *def_value=getParamDefValue(type,param);
 
-  size_t count = 1;
+  int count = 1;
   FarListItem *fcross = new FarListItem[count];
   memset(fcross, 0, sizeof(FarListItem)*(count));
   fcross[0].Text = def_value->getWChars();
@@ -1409,7 +1409,7 @@ void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, 
 
 FileTypeImpl *FarEditorSet::getCurrentTypeInDialog(HANDLE hDlg)
 {
-  int k=Info.SendDlgMessage(hDlg,DM_LISTGETCURPOS,IDX_CH_SCHEMAS,0);
+  int k=(int)Info.SendDlgMessage(hDlg,DM_LISTGETCURPOS,IDX_CH_SCHEMAS,0);
   return getFileTypeByIndex(k);
 }
 
@@ -1545,7 +1545,7 @@ LONG_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR 
     case DN_LISTCHANGE:
     switch (Param1){
       case IDX_CH_PARAM_LIST:
-        fes->OnChangeParam(hDlg,Param2);
+        fes->OnChangeParam(hDlg,(int)Param2);
         return true;
         break;
     }
