@@ -177,7 +177,16 @@ void FarEditorSet::viewFile(const String &path)
     textLinesStore.loadFile(&path, NULL, true);
     // Base editor to make primary parse
     BaseEditor baseEditor(parserFactory, &textLinesStore);
-    RegionMapper *regionMap=parserFactory->createStyledMapper(&DConsole, sHrdName);
+    RegionMapper *regionMap;
+    try{
+      regionMap=parserFactory->createStyledMapper(&DConsole, sHrdName);
+    }
+    catch (ParserFactoryException &e){
+      if (getErrorHandler() != NULL){
+        getErrorHandler()->error(*e.getMessage());
+      }
+      regionMap = parserFactory->createStyledMapper(&DConsole, NULL);
+    };
     baseEditor.setRegionMapper(regionMap);
     baseEditor.chooseFileType(&path);
     // initial event

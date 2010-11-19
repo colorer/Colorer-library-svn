@@ -13,7 +13,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpRes
   { 
   case DLL_PROCESS_ATTACH:
     {
-      // получаем путь до папки плагина, не привязываясь к имени файла
+      // obtain the path to the folder plugin, without being attached to the file name
       wchar_t path[MAX_PATH];
       if (!GetModuleFileName(hinstDLL, path, MAX_PATH)){
         return false;
@@ -29,7 +29,6 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpRes
     delete PluginPath;
     break;
   }
-
 
   return true;  
 }
@@ -113,7 +112,6 @@ int WINAPI ConfigureW(int ItemNumber)
   if (!editorSet){
     editorSet = new FarEditorSet();
   }
-  editorSet->ReadSettings();
   editorSet->configure(false);
   return 1;
 };
