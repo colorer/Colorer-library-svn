@@ -851,6 +851,7 @@ void FarEditorSet::ReloadBase()
   try{
     parserFactory = new ParserFactory(tpath);
     delete tpath;
+    tpath = NULL;
     hrcParser = parserFactory->getHRCParser();
     LoadUserHrd(sUserHrdPathExp, parserFactory);
     LoadUserHrc(sUserHrcPathExp, parserFactory);
