@@ -118,7 +118,7 @@ void ParserFactory::parseHRDSetsChild(Node *hrd)
 
   const String *hrd_descr = new SString(((Element*)hrd)->getAttribute(DString("description")));
   if (hrd_descr == null){
-    hrd_descr = hrd_name;
+    hrd_descr = new SString(hrd_name);
   }
   hrdDescriptions.put(&(StringBuffer(hrd_class)+"-"+hrd_name), hrd_descr);
 
@@ -263,6 +263,10 @@ ParserFactory::~ParserFactory(){
     delete hrdClass;
   };
   for (int i=0;i<hrcLocations.size();i++) delete hrcLocations.elementAt(i);
+  for (const String* hrdD=hrdDescriptions.enumerate(); hrdD; hrdD=hrdDescriptions.next())
+  {    
+    delete hrdD;
+  }
 
   delete hrcParser;
   delete catalogPath;
@@ -361,8 +365,9 @@ HRCParser* ParserFactory::getHRCParser(){
         }
 #endif
       }else{
+        InputSource *dfis;
         try{
-          InputSource *dfis = InputSource::newInstance(hrcLocations.elementAt(idx), catalogFIS);
+          dfis = InputSource::newInstance(hrcLocations.elementAt(idx), catalogFIS);
           hrcParser->loadSource(dfis);
           delete dfis;
         }catch(Exception &e){
@@ -370,6 +375,7 @@ HRCParser* ParserFactory::getHRCParser(){
             fileErrorHandler->fatalError(DString("Can't load hrc: "));
             fileErrorHandler->fatalError(*e.getMessage());
           };
+          delete dfis;
         };
       };
       delete path;

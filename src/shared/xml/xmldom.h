@@ -198,6 +198,7 @@ private:
   void incDocumentLine();
   void setDocumentPos(int pos);
   void incDocumentPos();
+  void clearEntitiesHash();
 
   inline int peek(int offset = 0){
     if (src_overflow){
@@ -400,7 +401,7 @@ protected:
   bool useBOM;
   String *xmlVersion;
   String *xmlEncoding;
-  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null), useBOM(false) {};
+  Document() : Node(Node::DOCUMENT_NODE, new DString("#document")), documentElement(null), useBOM(false) ,xmlEncoding(NULL),xmlVersion(NULL) {};
   friend class DocumentBuilder;
 };
 

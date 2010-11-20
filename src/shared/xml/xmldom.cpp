@@ -40,6 +40,17 @@ Document *DocumentBuilder::parse(InputSource *is, const char *codepage)
   return _doc;
 }
 
+void DocumentBuilder::clearEntitiesHash()
+{
+  const String* st;
+  for (st = entitiesHash.enumerate(); st != null; st = entitiesHash.next()){
+    delete st;
+  }
+  for (st = extEntitiesHash.enumerate(); st != null; st = extEntitiesHash.next()){
+    delete st;
+  }
+}
+
 Document *DocumentBuilder::parse(const byte *bytes, int length, const char *codepage)
 {
   entitiesHash.clear();
@@ -70,17 +81,11 @@ Document *DocumentBuilder::parse(const byte *bytes, int length, const char *code
 
   try{
     consumeDocument();
+    clearEntitiesHash();
   }catch(ParseException &e){
     free(doc);
+    clearEntitiesHash();
     throw ParseException(*e.getMessage(), doc->line, doc->pos);
-  }
-
-  const String* st;
-  for (st = entitiesHash.enumerate(); st != null; st = entitiesHash.next()){
-    delete st;
-  }
-  for (st = extEntitiesHash.enumerate(); st != null; st = extEntitiesHash.next()){
-    delete st;
   }
 
   return doc;
@@ -449,6 +454,7 @@ String *DocumentBuilder::consumeQoutedValue(){
     if (qc2 == qc) return sb;
     sb->append(qc2);
   }
+  return sb;
 }
 
 String *DocumentBuilder::consumeName(){
@@ -595,6 +601,8 @@ Document *DocumentBuilder::newDocument()
 void DocumentBuilder::free(Document *doc)
 {
   bool skip_childred = false;
+  delete doc->xmlVersion;
+  delete doc->xmlEncoding;
 
   Node *rmnext = doc->getFirstChild();
   while(rmnext != doc && rmnext != null)

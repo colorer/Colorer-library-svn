@@ -68,6 +68,7 @@ const byte *FileInputSource::openStream()
   len = st.st_size;
 
   stream = new byte[len];
+  memset(stream,0, sizeof(byte)*len);
   read(source, stream, len);
   close(source);
   return stream;

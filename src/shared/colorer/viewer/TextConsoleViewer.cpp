@@ -160,6 +160,7 @@ INPUT_RECORD ir;
   delete[] buffer;
   SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE));
   CloseHandle(hCon);
+  CloseHandle(hConI);
 
 #else
 

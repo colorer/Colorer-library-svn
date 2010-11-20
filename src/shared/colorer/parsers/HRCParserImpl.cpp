@@ -641,6 +641,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       }
 
       next->kwList->kwList = new KeywordInfo[next->kwList->num];
+      memset(next->kwList->kwList ,0,sizeof(KeywordInfo)*next->kwList->num);
       next->kwList->num = 0;
       KeywordInfo *pIDs = next->kwList->kwList;
       next->kwList->matchCase = isCase;

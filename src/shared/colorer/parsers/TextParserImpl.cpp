@@ -10,6 +10,7 @@ TextParserImpl::TextParserImpl()
   regionHandler = null;
   picked = null;
   baseScheme = null;
+  memset(&matchend,0,sizeof(SMatches));
 }
 TextParserImpl::~TextParserImpl()
 {
