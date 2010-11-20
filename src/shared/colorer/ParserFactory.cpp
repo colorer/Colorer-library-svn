@@ -417,14 +417,17 @@ StyledHRDMapper *ParserFactory::createStyledMapper(const String *classID, const 
   StyledHRDMapper *mapper = new StyledHRDMapper();
   for(int idx = 0; idx < hrdLocV->size(); idx++)
     if (hrdLocV->elementAt(idx) != null){
+      InputSource *dfis;
       try{
-        InputSource *dfis = InputSource::newInstance(hrdLocV->elementAt(idx), catalogFIS);
+        dfis = InputSource::newInstance(hrdLocV->elementAt(idx), catalogFIS);
         mapper->loadRegionMappings(dfis);
         delete dfis;
       }catch(Exception &e){
         if (fileErrorHandler != null){
           fileErrorHandler->error(DString("Can't load hrd: "));
           fileErrorHandler->error(*e.getMessage());
+          delete dfis;
+          throw ParserFactoryException(DString("Error load hrd"));
         };
       };
     };
