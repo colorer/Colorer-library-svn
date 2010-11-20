@@ -12,6 +12,7 @@ SharedInputSource::SharedInputSource(InputSource *source){
 
 SharedInputSource::~SharedInputSource(){
   isHash->remove(is->getLocation());
+  if (isHash->size()==0) delete isHash;
   delete is;
 }
 

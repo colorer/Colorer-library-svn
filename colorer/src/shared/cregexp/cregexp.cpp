@@ -55,6 +55,8 @@ void CRegExp::init()
   global_pattern = 0;
 #ifdef COLORERMODE
   backRE = 0;
+  backStr = null;
+  backTrace = null;
 #endif
 #ifndef NAMED_MATCHES_IN_HASH
   cnMatch = 0;

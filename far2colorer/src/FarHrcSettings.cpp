@@ -27,6 +27,7 @@ void FarHrcSettings::readXML(String *file, bool userValue)
     }
   };
   docbuilder.free(xmlDocument);
+  delete dfis;
 }
 
 void FarHrcSettings::UpdatePrototype(Element *elem, bool userValue)

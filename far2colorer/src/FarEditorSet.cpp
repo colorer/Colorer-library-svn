@@ -202,6 +202,7 @@ void FarEditorSet::viewFile(const String &path)
     // File viewing in console window
     TextConsoleViewer viewer(&baseEditor, &textLinesStore, background, -1);
     viewer.view();
+    delete regionMap;
   }
   catch (Exception &e){
     const wchar_t* exceptionMessage[4];
@@ -733,6 +734,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
 
   try{
     parserFactoryLocal = new ParserFactory(tpath);
+    delete tpath;
     hrcParserLocal = parserFactoryLocal->getHRCParser();
     LoadUserHrd(userHrdPathS, parserFactoryLocal);
     LoadUserHrc(userHrcPathS, parserFactoryLocal);
@@ -848,6 +850,7 @@ void FarEditorSet::ReloadBase()
 
   try{
     parserFactory = new ParserFactory(tpath);
+    delete tpath;
     hrcParser = parserFactory->getHRCParser();
     LoadUserHrd(sUserHrdPathExp, parserFactory);
     LoadUserHrc(sUserHrcPathExp, parserFactory);
@@ -879,6 +882,7 @@ void FarEditorSet::ReloadBase()
 
     Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 
+    delete tpath;
     disableColorer();
   };
 
