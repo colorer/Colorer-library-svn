@@ -97,7 +97,6 @@ bool Exp = false, ExpSign = true, sign = false;
           return false;
         j &=15;
         k = i-pt;
-        r = 0;
         r = j;
         while(k){
           k--;
