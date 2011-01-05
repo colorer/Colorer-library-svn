@@ -326,6 +326,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
           ResP = parent;
           if (forward){
             forward->next = new ParseCache;
+            forward->next->prev = forward;
             OldCacheF = forward->next;
             OldCacheP = parent?parent:forward->parent;
             parent = forward->next;
