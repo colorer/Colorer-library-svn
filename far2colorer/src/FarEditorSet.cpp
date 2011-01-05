@@ -961,9 +961,6 @@ void FarEditorSet::enableColorer(bool fromEditor)
   rEnabled = true;
   rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
   ReloadBase();
-  if (fromEditor){
-    addCurrentEditor();
-  }
 }
 
 void FarEditorSet::disableColorer()
@@ -1473,7 +1470,7 @@ void FarEditorSet::SaveChangedValueParam(HANDLE hDlg)
     }
 
   }
-
+  delete def_value;
 }
 
 void  FarEditorSet::OnChangeParam(HANDLE hDlg, int idx)
