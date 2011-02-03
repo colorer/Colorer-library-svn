@@ -247,6 +247,9 @@
      <!-- Module attributes -->
      <word name="__dict__"/>
      <word name="__file__"/>
+     <!-- Class attributes -->
+     <word name="__module__"/>
+     <word name="__bases__"/>
      <!-- Special method names : http://docs.python.org/ref/specialnames.html -->
      <word name="__new__"/>
      <word name="__init__"/>
