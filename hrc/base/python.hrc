@@ -351,7 +351,7 @@
   <scheme name="python">
    <!-- python outliner: class, def and __main__ -->
    <regexp match="/\M(?{pyOutline}^\s*(class|def)\s+\w+)/" />
-   <regexp match="/\M(?{pyOutline}^if\s+__name__\s+==\s+\&#34;__main__\&#34;)/x"/>
+   <regexp match="/\M(?{pyOutline}^if\s+__name__\s+==\s+(&apos;|&quot;)__main__\1)/x"/>
 
    <inherit scheme="Keywords"/>
    <inherit scheme="SpecialNames"/>
