@@ -250,6 +250,8 @@
      <!-- Class attributes -->
      <word name="__module__"/>
      <word name="__bases__"/>
+     <!-- Class instance attributes -->
+     <word name="__class__"/>
      <!-- Special method names : http://docs.python.org/ref/specialnames.html -->
      <word name="__new__"/>
      <word name="__init__"/>
