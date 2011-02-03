@@ -371,6 +371,10 @@
    <inherit scheme="SpecialNames"/>
    <inherit scheme="Functions"/>
 
+   <inherit scheme="def:PairedBrackets">
+      <virtual scheme="def:PairedBrackets" subst-scheme="python"/>
+   </inherit>
+
    <!-- encoding declaration : http://docs.python.org/ref/encodings.html
         todo - make it match only at file start -->
    <regexp match="/^# (-\+- |vim:fileen)coding[=:]\s*(\w+).*/" region="pyComment" region2="pySpecialName"/>
