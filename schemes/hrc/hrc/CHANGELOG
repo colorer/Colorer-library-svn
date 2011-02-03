@@ -1,12 +1,10 @@
-Date: 2010-10-25 12:00:00 r1593
-(FarColorer 1.0.2.14)
+2010-10-25 r1593 (FarColorer 1.0.2.14)
   Fixed:
     - batch : label and a comment (::) can not start from the beginning of the line;
       escape symbol ^;
     - esc : add param "overload"
 
-Date: 2010-10-20 12:00:00 r1585
-(FarColorer 1.0.2.13)
+2010-10-20 r1585 (FarColorer 1.0.2.13)
   New:
     - Cue sheet
   Fixed:
@@ -14,14 +12,12 @@ Date: 2010-10-20 12:00:00 r1585
     - lua : removed from the outline cycles
     - cpp : removed from the outline function calls
 
-Date: 2010-09-21 12:00:00 r1550
-(FarColorer 1.0.2.9)
+2010-09-21 r1550 (FarColorer 1.0.2.9)
   Fixed:
     - Ruby : ruby string fixes
     - pl/sql : backslash escapes param for pl/sql
 
-Date: 2010-07-15 12:00:00 r1530
-(FarColorer 1.0.2.7)
+2010-07-15 r1530 (FarColorer 1.0.2.7)
   New:
     - Mako templates (Mikael Lepisto)
     - Scala
@@ -34,8 +30,7 @@ Date: 2010-07-15 12:00:00 r1530
     - Far macro
     - Reg empty hex value
 
-Date: 2010-03-06 12:00:00 r1435
-(FarColorer 1.0.2.5)
+2010-03-06 r1435 (FarColorer 1.0.2.5)
   New:
     - AirPlay SDK
     - SASS support and sass in haml support
@@ -51,7 +46,7 @@ Date: 2010-03-06 12:00:00 r1435
     - C : Formatting lines and links to system variables in them, paired quotes for strings
     - HTML : add HTML5 tags 
 
-Date: 2010-02-04 12:00:00 r1299
+2010-02-04 r1299
 (trunk changes merged into dev branch for FarColorer 1.0.2.4)
   Fixes:
     - HAML
@@ -60,7 +55,7 @@ Date: 2010-02-04 12:00:00 r1299
     - SubStation Alpha (assa)
     - makefile
 
-Date: 2010-01-13 23:29:00 r1242
+2010-01-13 r1242
 (trunk changes merged into dev branch for FarColorer 1.0.2.2)
   Fixes:
     - HAML
@@ -72,7 +67,7 @@ Date: 2010-01-13 23:29:00 r1242
     - Lua
     - SCons scripts support (anatoly techtonik)
 
-Date: 2009-12-23 18:47:53 r1178
+2009-12-23 r1178
 (trunk changes merged into dev branch for FarColorer 1.0.2.1)
   Reorg:
     - Python, Ruby, Tcl/Tk are not "rare" anymore
@@ -114,7 +109,7 @@ Date: 2009-12-23 18:47:53 r1178
     - Web-app
     - Erlang
 
-Date: 2006-11-27 12:39:58 r843 (FarColorer take5.be5)
+2006-11-27 r843 (FarColorer take5.be5)
   Reorg:
     - RTF syntax migrated from rare.scripts to scripts
   Fixes:
@@ -128,7 +123,7 @@ Date: 2006-11-27 12:39:58 r843 (FarColorer take5.be5)
     - recognize CakePHP template
 
 
-Date: 2006-06-20 18:03:09 r772
+2006-06-20 r772
   Fixes:
     - Perl improvements
     - FAR packages fixes
@@ -140,7 +135,7 @@ Date: 2006-06-20 18:03:09 r772
     - Pnuts syntax (by Nate)
 
 
-Date: 2005/04/06 13:41:01
+2005-04-06
   New:
     - HRC regexp fixes
     - External xml entities now has a .xml extension.
@@ -149,7 +144,7 @@ Date: 2005/04/06 13:41:01
     - AVR and 8051 Assemblers (by Igor Yudincev).
 
 
-Date : 2004/09/27 05:55:36
+2004-09-27
 
   New:
     - SVG 1.0, PostScript, htc, parser, rdf, rss, xbl (Eugene Efremov)
@@ -165,7 +160,7 @@ Date : 2004/09/27 05:55:36
     - xhtml improvements (Eugene Efremov)
 
 
-Date: 2003/09/12 11:39:20
+2003-09-12
 
   New:
     - JSP TagLib, OCaml, Sicstus Prolog
@@ -176,7 +171,7 @@ Date: 2003/09/12 11:39:20
     - Tex
 
 
-Date: 2003/06/02 11:26:40
+2003-06-02
 
   Reorg:
     - Rare scripts were moved into the 'auto' directory
