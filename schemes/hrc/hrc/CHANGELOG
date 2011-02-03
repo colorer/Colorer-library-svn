@@ -1,3 +1,7 @@
+
+  Fixed:
+    - remove .cgi from Perl extensions, use first line for detection
+
 2010-10-25 r1593 (FarColorer 1.0.2.14)
   Fixed:
     - batch : label and a comment (::) can not start from the beginning of the line;

@@ -82,7 +82,7 @@
   </prototype>
   <prototype name="perl" group="main" description="Perl">
     <location link="base/perl.hrc"/>
-    <filename>/\.(pl[sx]?|pm|pod|cgi|t)$/i</filename>
+    <filename>/\.(pl[sx]?|pm|pod|t)$/i</filename>
     <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
     <firstline>/perl/i</firstline>
     <parameters>
