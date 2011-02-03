@@ -390,9 +390,15 @@
    <block start="/#/" end="/$/" region="pyComment" scheme="def:Comment"/>
 
    <!-- python strings : http://docs.python.org/ref/strings.html -->
-   <block start="/((u|U)?(r|R)?)(&quot;{3}|&apos;{3})/" end="/\y4/" scheme="StringCommon" region="pyString"/>
-   <block start="/((u|U)?(r|R)?)(&apos;)/"              end="/\y4/" scheme="StringSingle" region="pyString"/>
-   <block start="/((u|U)?(r|R)?)(&quot;)/"              end="/\y4/" scheme="StringDouble" region="pyString"/>
+   <block start="/(u|U)?(r|R)?(&quot;{3}|&apos;{3})/" end="/\y3/"
+      region00="def:PairStart" region10="def:PairEnd"
+      scheme="def:Comment" region="pyComment" />
+      <!-- TODO: better scheme for multiline comments/docstrings -->
+      <!-- scheme="StringCommon" region="pyString" /> -->
+   <block start="/(u|U)?(r|R)?(&apos;)/"              end="/\y3/"
+      region00="def:PairStart" region10="def:PairEnd" scheme="StringSingle" region="pyString" />
+   <block start="/(u|U)?(r|R)?(&quot;)/"              end="/\y3/"
+      region00="def:PairStart" region10="def:PairEnd" scheme="StringDouble" region="pyString" />
 
    <!-- python floats and imaginary numbers : http://docs.python.org/ref/floating.html -->
    <!-- placed before integers to avoid confusion with octals, where exponent will get an error -->
