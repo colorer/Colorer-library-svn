@@ -90,6 +90,8 @@
 
 
   <scheme name="Functions">
+    <!-- TODO: consider changing region to something more colorful like
+               pySpecialName for good visual text anchoring    -->
     <keywords ignorecase="no" region="pyFunction">
       <!-- built-in functions -->
       <word name="__import__"/>
