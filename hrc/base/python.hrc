@@ -227,7 +227,7 @@
 
    <!-- python magic -->
    <keywords ignorecase="no" region="pySpecialName">
-     <!-- User-defined functions special attributes -->
+     <!-- User-defined functions special attributes : http://docs.python.org/reference/datamodel.html -->
      <word name="func_doc"/>
      <word name="__doc__"/>
      <word name="func_name"/>
@@ -238,6 +238,15 @@
      <word name="func_globals"/>
      <word name="func_dict"/>
      <word name="func_closure"/>
+     <!-- User-defined methods special attributes -->
+     <word name="im_self"/>
+     <word name="im_func"/>
+     <word name="im_class"/>
+     <word name="__self__"/>
+     <word name="__func__"/>
+     <!-- Module attributes -->
+     <word name="__dict__"/>
+     <word name="__file__"/>
      <!-- Special method names : http://docs.python.org/ref/specialnames.html -->
      <word name="__new__"/>
      <word name="__init__"/>
