@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- комментарии в TCL
+
+#Revision: 1596
+	ctapmex 2010-10-25 23:24:30 +0600 (Пн, 25 окт 2010)
 	- из proto.hrc убраны параметры фара. перенесены в hrcsettings.xml проекта far2colorer
 	- для сборки схем для старых версий фара используем цель hrcupdate.old
 
