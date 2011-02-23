@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far2sdk"
+				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far3sdk"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -133,7 +133,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far2sdk"
+				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far3sdk"
 				PreprocessorDefinitions="_WIN64;_DEBUG;_CONSOLE;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CRT_SECURE_NO_DEPRECATE;USE_DL_PREFIX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -225,7 +225,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far2sdk"
+				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far3sdk"
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -322,7 +322,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far2sdk"
+				AdditionalIncludeDirectories="..\..\colorer\src\shared;..\..\colorer\src\zlib;..\far3sdk"
 				PreprocessorDefinitions="_WIN64;NDEBUG;_USRDLL;COLORER_FEATURE_USE_DL_MALLOC=TRUE;COLORER_FEATURE_USE_CHUNK_ALLOC=FALSE;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;COLORER_FEATURE_LOGLEVEL=COLORER_FEATURE_LOGLEVEL_QUIET;USE_DL_PREFIX"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -403,22 +403,18 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="far2sdk"
+			Name="far3sdk"
 			>
 			<File
-				RelativePath="..\far2sdk\farcolor.hpp"
+				RelativePath="..\far3sdk\farcolor.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\far2sdk\farkeys.hpp"
+				RelativePath="..\far3sdk\farkeys.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\far2sdk\farversion.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\far2sdk\plugin.hpp"
+				RelativePath="..\far3sdk\plugin.hpp"
 				>
 			</File>
 		</Filter>
