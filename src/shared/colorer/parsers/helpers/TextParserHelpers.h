@@ -70,7 +70,7 @@ public:
   /**
    * Tree structure references in parse cache
    */
-  ParseCache *children, *next, *prev, *parent;
+  ParseCache *children, *next, *parent;
   ParseCache();
   ~ParseCache();
   /**
