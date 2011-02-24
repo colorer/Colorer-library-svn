@@ -37,8 +37,22 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpRes
 */
 const wchar_t *GetMsg(int msg)
 {
-  return(Info.GetMsg(Info.ModuleNumber, msg));
+  return(Info.GetMsg(&MainGuid, msg));
 };
+
+/**
+  Global information about the plugin
+*/
+void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
+{
+  Info->StructSize=sizeof(GlobalInfo);
+  Info->MinFarVersion=FARMANAGERVERSION;
+  Info->Version=MAKEFARVERSION(1,0,3);// need fix
+  Info->Guid=MainGuid;
+  Info->Title=L"FarColorer";
+  Info->Description=L"Syntax highlighting in Far editor";
+  Info->Author=L"Igor Ruskih, Dobrunov Aleksey, Eugene Efremov";
+}
 
 /**
   Plugin initialization and creation of editor set support class.
@@ -59,11 +73,13 @@ void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
   memset(nInfo, 0, sizeof(*nInfo));
   nInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
   nInfo->StructSize = sizeof(*nInfo);
-  nInfo->PluginConfigStringsNumber = 1;
-  nInfo->PluginMenuStringsNumber = 1;
+  nInfo->PluginConfig.Count = 1;
+  nInfo->PluginMenu.Count = 1;
   PluginMenuStrings = (wchar_t*)GetMsg(mName);
-  nInfo->PluginConfigStrings = &PluginMenuStrings;
-  nInfo->PluginMenuStrings = &PluginMenuStrings;
+  nInfo->PluginConfig.Strings = &PluginMenuStrings;
+  nInfo->PluginMenu.Strings = &PluginMenuStrings;
+  nInfo->PluginConfig.Guids=&PluginConfig;
+  nInfo->PluginMenu.Guids=&PluginMenu;
   nInfo->CommandPrefix = L"clr";
 };
 

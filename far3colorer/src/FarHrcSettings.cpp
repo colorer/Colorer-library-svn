@@ -69,7 +69,7 @@ void FarHrcSettings::UpdatePrototype(Element *elem, bool userValue)
 void FarHrcSettings::readUserProfile()
 {
   wchar_t key[MAX_KEY_LENGTH];
-  _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings", Info.RootKey);
+//v3//   _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings", Info.RootKey);
   HKEY dwKey;
 
   if (RegOpenKeyEx( HKEY_CURRENT_USER, key, 0, KEY_READ, &dwKey) == ERROR_SUCCESS ){
@@ -101,7 +101,7 @@ void FarHrcSettings::readProfileFromRegistry(HKEY dwKey)
     wchar_t key[MAX_KEY_LENGTH];
     HKEY hkKey;
 
-    _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,szNameOfKey);
+//v3//     _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,szNameOfKey);
 
     if (RegOpenKeyEx( HKEY_CURRENT_USER, key, 0, KEY_READ, &hkKey) == ERROR_SUCCESS ){
 
@@ -141,7 +141,7 @@ void FarHrcSettings::readProfileFromRegistry(HKEY dwKey)
 void FarHrcSettings::writeUserProfile()
 {
   wchar_t key[MAX_KEY_LENGTH];
-  _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings", Info.RootKey);
+//v3//   _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings", Info.RootKey);
   HKEY dwKey;
 
   //create or open key
@@ -167,7 +167,7 @@ void FarHrcSettings::writeProfileToRegistry()
     }
 
     wchar_t key[MAX_KEY_LENGTH];
-    _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,type->getName()->getWChars());
+//v3//     _snwprintf(key,MAX_KEY_LENGTH, L"%s\\colorer\\HrcSettings\\%s", Info.RootKey,type->getName()->getWChars());
 
     RegDeleteKey(HKEY_CURRENT_USER,key);
     const String *p, *v;

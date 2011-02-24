@@ -1,5 +1,6 @@
 LIBRARY
 EXPORTS
+   GetGlobalInfoW
    OpenPluginW
    SetStartupInfoW
    GetPluginInfoW
