@@ -742,382 +742,383 @@ int FarEditor::editorEvent(int event, void *param)
 
 
 void FarEditor::showOutliner(Outliner *outliner)
-{//v3// 
-  //FarMenuItem *menu;
-  //EditorSetPosition esp;
-  //bool moved = false;
-  //int code = 0;
-  //const int FILTER_SIZE = 40;
-  //int breakKeys[] =
-  //{
-  //  VK_BACK, VK_RETURN, VK_OEM_1, VK_OEM_MINUS, VK_TAB,
-  //  (PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
-  //  (PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
-  //  (PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, 
-  //  (PKF_SHIFT<<16)+VK_OEM_MINUS,(PKF_SHIFT<<16)+VK_OEM_3,
-  //  VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4,
-  //  VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9,
-  //  '0','1','2','3','4','5','6','7','8','9',
-  //  'A','B','C','D','E','F','G','H','I','J',
-  //  'K','L','M','N','O','P','Q','R','S','T',
-  //  'U','V','W','X','Y','Z',' ', 0
-  //};
-  //int keys_size = sizeof(breakKeys)/sizeof(int)-1;
-
-  ////we need this?
-  ////int outputEnc = Encodings::getEncodingIndex("cp866");
-  //wchar_t prefix[FILTER_SIZE+1];
-  //wchar_t autofilter[FILTER_SIZE+1];
-  //wchar_t filter[FILTER_SIZE+1];
-  //int  flen = 0;
-  //*filter = 0;
-  //int maxLevel = -1;
-  //bool stopMenu = false;
-  //int items_num = outliner->itemCount();
-
-  //if (items_num == 0){
-  //  stopMenu = true;
-  //}
-
-  //menu = new FarMenuItem[items_num];
-
-  //while (!stopMenu){
-  //  int i;
-  //  memset(menu, 0, sizeof(FarMenuItem)*items_num);
-  //  // items in FAR's menu;
-  //  int menu_size = 0;
-  //  int selectedItem = 0;
-  //  Vector<int> treeStack;
-
-  //  enterHandler();
-  //  for (i = 0; i < items_num; i++){
-  //    OutlineItem *item = outliner->getItem(i);
-
-  //    if (item->token->indexOfIgnoreCase(DString(filter)) != -1){
-  //      int treeLevel = Outliner::manageTree(treeStack, item->level);
-
-  //      if (maxLevel < treeLevel){
-  //        maxLevel = treeLevel;
-  //      }
-
-  //      if (treeLevel > visibleLevel){
-  //        continue;
-  //      }
-
-  //      wchar_t * menuItem = new wchar_t[255];
-
-  //      if (!oldOutline){
-  //        int si = _snwprintf(menuItem, 255, L"%4d ", item->lno+1);
-
-  //        for (int lIdx = 0; lIdx < treeLevel; lIdx++){
-  //          menuItem[si++] = ' ';
-  //          menuItem[si++] = ' ';
-  //        };
-
-  //        const String *region = item->region->getName();
-
-  //        wchar_t cls = Character::toLowerCase((*region)[region->indexOf(':')+1]);
-
-  //        si += _snwprintf(menuItem+si, 255-si, L"%c ", cls);
-
-  //        int labelLength = item->token->length();
-
-  //        if (labelLength+si > 110){
-  //          labelLength = 110;
-  //        }
-
-  //        wcsncpy(menuItem+si, item->token->getWChars(), labelLength);
-  //        menuItem[si+labelLength] = 0;
-  //      }
-  //      else{
-  //        String *line = getLine(item->lno);
-  //        int labelLength = line->length();
-
-  //        if (labelLength > 110){
-  //          labelLength = 110;
-  //        }
-
-  //        wcsncpy(menuItem, line->getWChars(), labelLength);
-  //        menuItem[labelLength] = 0;
-  //      }
-
-  //      *(OutlineItem**)(&menuItem[124]) = item;
-  //      // set position on nearest top function
-  //      menu[menu_size].Text = menuItem;
-
-  //      if (ei.CurLine >= item->lno){
-  //        selectedItem = menu_size;
-  //      }
-
-  //      menu_size++;
-  //    };
-  //  }
-
-  //  if (selectedItem > 0){
-  //    menu[selectedItem].Selected = 1;
-  //  }
-
-  //  if (menu_size == 0 && flen > 0){
-  //    flen--;
-  //    filter[flen] = 0;
-  //    continue;
-  //  }
-
-  //  int aflen = flen;
-  //  // Find same function prefix
-  //  bool same = true;
-  //  int plen = 0;
-  //  wcscpy(autofilter, filter);
-
-  //  while (code != 0 && menu_size > 1 && same && plen < FILTER_SIZE){
-  //    plen = aflen + 1;
-  //    int auto_ptr  = DString(menu[0].Text).indexOfIgnoreCase(DString(autofilter));
-
-  //    if (int(wcslen(menu[0].Text)-auto_ptr) < plen){
-  //      break;
-  //    }
-
-  //    wcsncpy(prefix, menu[0].Text+auto_ptr, plen);
-  //    prefix[plen] = 0;
-
-  //    for (int j = 1 ; j < menu_size ; j++){
-  //      if (DString(menu[j].Text).indexOfIgnoreCase(DString(prefix)) == -1){
-  //        same = false;
-  //        break;
-  //      }
-  //    }
-
-  //    if (same){
-  //      aflen++;
-  //      wcscpy(autofilter, prefix);
-  //    }
-  //  }
-
-  //  wchar_t top[128];
-  //  const wchar_t *topline = GetMsg(mOutliner);
-  //  wchar_t captionfilter[FILTER_SIZE+1];
-  //  wcsncpy(captionfilter, filter, flen);
-  //  captionfilter[flen] = 0;
-
-  //  if (aflen > flen){
-  //    wcscat(captionfilter, L"?");
-  //    wcsncat(captionfilter, autofilter+flen, aflen-flen);
-  //    captionfilter[aflen+1] = 0;
-  //  }
-
-  //  _snwprintf(top, 128, topline, captionfilter);
-  //  int sel = 0;
-  //  sel = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
-  //    top, GetMsg(mChoose), L"add", breakKeys, &code, menu, menu_size);
-
-  //  // handle mouse selection
-  //  if (sel != -1 && code == -1){
-  //    code = 1;
-  //  }
-
-  //  switch (code){
-  //  case -1:
-  //    stopMenu = true;
-  //    break;
-  //  case 0: // VK_BACK
-
-  //    if (flen > 0){
-  //      flen--;
-  //    }
-
-  //    filter[flen] = 0;
-  //    break;
-  //  case 1:  // VK_RETURN
-  //    {
-  //      if (menu_size == 0){
-  //        break;
-  //      }
-
-  //      esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-  //      OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
-  //      esp.CurLine = item->lno;
-  //      esp.CurPos = item->pos;
-  //      esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
-
-  //      if (esp.TopScreenLine < 0){
-  //        esp.TopScreenLine = 0;
-  //      }
-
-  //      info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
-  //      stopMenu = true;
-  //      moved = true;
-  //      break;
-  //    }
-  //  case 2: // ;
-
-  //    if (flen == FILTER_SIZE){
-  //      break;
-  //    }
-
-  //    filter[flen]= ';';
-  //    filter[++flen]= 0;
-  //    break;
-  //  case 3: // -
-
-  //    if (flen == FILTER_SIZE){
-  //      break;
-  //    }
-
-  //    filter[flen]= '-';
-  //    filter[++flen]= 0;
-  //    break;
-  //  case 4: // VK_TAB
-  //    wcscpy(filter, autofilter);
-  //    flen = aflen;
-  //    break;
-  //  case 5:  // ctrl-up
-  //    {
-  //      if (menu_size == 0){
-  //        break;
-  //      }
-
-  //      if (sel == 0){
-  //        sel = menu_size-1;
-  //      }
-  //      else{
-  //        sel--;
-  //      }
-
-  //      esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-  //      OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
-  //      esp.CurLine = item->lno;
-  //      esp.CurPos = item->pos;
-  //      esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
-
-  //      if (esp.TopScreenLine < 0){
-  //        esp.TopScreenLine = 0;
-  //      }
-
-  //      info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
-  //      info->EditorControl(-1, ECTL_REDRAW, NULL, NULL);
-  //      info->EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
-  //      break;
-  //    }
-  //  case 6:  // ctrl-down
-  //    {
-  //      if (menu_size == 0){
-  //        break;
-  //      }
-
-  //      if (sel == menu_size-1){
-  //        sel = 0;
-  //      }
-  //      else{
-  //        sel++;
-  //      }
-
-  //      esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-  //      OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
-  //      esp.CurLine = item->lno;
-  //      esp.CurPos = item->pos;
-  //      esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
-
-  //      if (esp.TopScreenLine < 0){
-  //        esp.TopScreenLine = 0;
-  //      }
-
-  //      info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
-  //      info->EditorControl(-1, ECTL_REDRAW, NULL, NULL);
-  //      info->EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
-  //      break;
-  //    }
-  //  case 7:  // ctrl-left
-  //    {
-  //      if (visibleLevel > maxLevel){
-  //        visibleLevel = maxLevel-1;
-  //      }
-  //      else{
-  //        if (visibleLevel > 0){
-  //          visibleLevel--;
-  //        }
-  //      }
-
-  //      if (visibleLevel < 0){
-  //        visibleLevel = 0;
-  //      }
-
-  //      break;
-  //    }
-  //  case 8:  // ctrl-right
-  //    {
-  //      visibleLevel++;
-  //      break;
-  //    }
-  //  case 9:  // ctrl-return
-  //    {
-  //      OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
-  //      info->EditorControl(-1, ECTL_INSERTTEXT, NULL, (INT_PTR)item->token->getWChars());
-  //      stopMenu = true;
-  //      break;
-  //    }
-  //  case 10: // :
-
-  //    if (flen == FILTER_SIZE){
-  //      break;
-  //    }
-
-  //    filter[flen]= ':';
-  //    filter[++flen]= 0;
-  //    break;
-  //  case 11: // _
-
-  //    if (flen == FILTER_SIZE){
-  //      break;
-  //    }
-
-  //    filter[flen]= '_';
-  //    filter[++flen]= 0;
-  //    break;
-  //  case 12: // _
-
-  //    if (flen == FILTER_SIZE){
-  //      break;
-  //    }
-
-  //    filter[flen]= '~';
-  //    filter[++flen]= 0;
-  //    break;
-  //  default:
-
-  //    if (flen == FILTER_SIZE || code > keys_size){
-  //      break;
-  //    }
-  //    if (code<23){
-  //      filter[flen] = (wchar_t)Character::toLowerCase('0'+code-13);
-  //    }else{
-  //      filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code]);
-  //    }
-  //    filter[++flen] = 0;
-  //    break;
-  //  }
-  //}
-
-  //for (int i = 0; i < items_num; i++){
-  //  delete[] menu[i].Text;
-  //}
-
-  //delete[] menu;
-
-  //if (!moved){
-  //  // restoring position
-  //  esp.CurLine = ei.CurLine;
-  //  esp.CurPos = ei.CurPos;
-  //  esp.CurTabPos = ei.CurTabPos;
-  //  esp.TopScreenLine = ei.TopScreenLine;
-  //  esp.LeftPos = ei.LeftPos;
-  //  esp.Overtype = ei.Overtype;
-  //  info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
-  //}
-
-  //if (items_num == 0){
-  //  const wchar_t *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
-  //  info->Message(info->ModuleNumber, 0, 0, msg, 2, 1);
-  //}
+{
+  FarMenuItem *menu;
+  EditorSetPosition esp;
+  bool moved = false;
+  int code = 0;
+  const int FILTER_SIZE = 40;
+  FarKey breakKeys[] =
+  {
+    {VK_BACK,0}, 
+    {VK_RETURN,0} ,{VK_OEM_1,0}, {VK_OEM_MINUS,0}, {VK_TAB,0},
+    {VK_UP,LEFT_CTRL_PRESSED},{VK_DOWN,LEFT_CTRL_PRESSED },
+    {VK_LEFT,LEFT_CTRL_PRESSED }, {VK_RIGHT,LEFT_CTRL_PRESSED },
+    {VK_RETURN,LEFT_CTRL_PRESSED },{VK_OEM_1,LEFT_CTRL_PRESSED }, 
+    {VK_OEM_MINUS,LEFT_CTRL_PRESSED },{VK_OEM_3,LEFT_CTRL_PRESSED },
+    {VK_NUMPAD0,0},{VK_NUMPAD1,0},{VK_NUMPAD2,0},{VK_NUMPAD3,0},{VK_NUMPAD4,0},
+    {VK_NUMPAD5,0},{VK_NUMPAD6,0},{VK_NUMPAD7,0},{VK_NUMPAD8,0},{VK_NUMPAD9,0},
+    {'0',0},{'1',0},{'2',0},{'3',0},{'4',0},{'5',0},{'6',0},{'7',0},{'8',0},{'9',0},
+    {'A',0},{'B',0},{'C',0},{'D',0},{'E',0},{'F',0},{'G',0},{'H',0},{'I',0},{'J',0},
+    {'K',0},{'L',0},{'M',0},{'N',0},{'O',0},{'P',0},{'Q',0},{'R',0},{'S',0},{'T',0},
+    {'U',0},{'V',0},{'W',0},{'X',0},{'Y',0},{'Z',0},{VK_SPACE,0}
+  };
+  int keys_size = sizeof(breakKeys)/sizeof(FarKey);
+
+  //we need this?
+  //int outputEnc = Encodings::getEncodingIndex("cp866");
+  wchar_t prefix[FILTER_SIZE+1];
+  wchar_t autofilter[FILTER_SIZE+1];
+  wchar_t filter[FILTER_SIZE+1];
+  int  flen = 0;
+  *filter = 0;
+  int maxLevel = -1;
+  bool stopMenu = false;
+  int items_num = outliner->itemCount();
+
+  if (items_num == 0){
+    stopMenu = true;
+  }
+
+  menu = new FarMenuItem[items_num];
+
+  while (!stopMenu){
+    int i;
+    memset(menu, 0, sizeof(FarMenuItem)*items_num);
+    // items in FAR's menu;
+    int menu_size = 0;
+    int selectedItem = 0;
+    Vector<int> treeStack;
+
+    enterHandler();
+    for (i = 0; i < items_num; i++){
+      OutlineItem *item = outliner->getItem(i);
+
+      if (item->token->indexOfIgnoreCase(DString(filter)) != -1){
+        int treeLevel = Outliner::manageTree(treeStack, item->level);
+
+        if (maxLevel < treeLevel){
+          maxLevel = treeLevel;
+        }
+
+        if (treeLevel > visibleLevel){
+          continue;
+        }
+
+        wchar_t * menuItem = new wchar_t[255];
+
+        if (!oldOutline){
+          int si = _snwprintf(menuItem, 255, L"%4d ", item->lno+1);
+
+          for (int lIdx = 0; lIdx < treeLevel; lIdx++){
+            menuItem[si++] = ' ';
+            menuItem[si++] = ' ';
+          };
+
+          const String *region = item->region->getName();
+
+          wchar_t cls = Character::toLowerCase((*region)[region->indexOf(':')+1]);
+
+          si += _snwprintf(menuItem+si, 255-si, L"%c ", cls);
+
+          int labelLength = item->token->length();
+
+          if (labelLength+si > 110){
+            labelLength = 110;
+          }
+
+          wcsncpy(menuItem+si, item->token->getWChars(), labelLength);
+          menuItem[si+labelLength] = 0;
+        }
+        else{
+          String *line = getLine(item->lno);
+          int labelLength = line->length();
+
+          if (labelLength > 110){
+            labelLength = 110;
+          }
+
+          wcsncpy(menuItem, line->getWChars(), labelLength);
+          menuItem[labelLength] = 0;
+        }
+
+        *(OutlineItem**)(&menuItem[124]) = item;
+        // set position on nearest top function
+        menu[menu_size].Text = menuItem;
+
+        if (ei.CurLine >= item->lno){
+          selectedItem = menu_size;
+        }
+
+        menu_size++;
+      };
+    }
+
+    if (selectedItem > 0){
+      menu[selectedItem].Flags = MIF_SELECTED;
+    }
+
+    if (menu_size == 0 && flen > 0){
+      flen--;
+      filter[flen] = 0;
+      continue;
+    }
+
+    int aflen = flen;
+    // Find same function prefix
+    bool same = true;
+    int plen = 0;
+    wcscpy(autofilter, filter);
+
+    while (code != 0 && menu_size > 1 && same && plen < FILTER_SIZE){
+      plen = aflen + 1;
+      int auto_ptr  = DString(menu[0].Text).indexOfIgnoreCase(DString(autofilter));
+
+      if (int(wcslen(menu[0].Text)-auto_ptr) < plen){
+        break;
+      }
+
+      wcsncpy(prefix, menu[0].Text+auto_ptr, plen);
+      prefix[plen] = 0;
+
+      for (int j = 1 ; j < menu_size ; j++){
+        if (DString(menu[j].Text).indexOfIgnoreCase(DString(prefix)) == -1){
+          same = false;
+          break;
+        }
+      }
+
+      if (same){
+        aflen++;
+        wcscpy(autofilter, prefix);
+      }
+    }
+
+    wchar_t top[128];
+    const wchar_t *topline = GetMsg(mOutliner);
+    wchar_t captionfilter[FILTER_SIZE+1];
+    wcsncpy(captionfilter, filter, flen);
+    captionfilter[flen] = 0;
+
+    if (aflen > flen){
+      wcscat(captionfilter, L"?");
+      wcsncat(captionfilter, autofilter+flen, aflen-flen);
+      captionfilter[aflen+1] = 0;
+    }
+
+    _snwprintf(top, 128, topline, captionfilter);
+    int sel = 0;
+    sel = info->Menu(&MainGuid, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
+      top, GetMsg(mChoose), L"add", breakKeys, &code, menu, menu_size);
+
+    // handle mouse selection
+    if (sel != -1 && code == -1){
+      code = 1;
+    }
+
+    switch (code){
+    case -1:
+      stopMenu = true;
+      break;
+    case 0: // VK_BACK
+
+      if (flen > 0){
+        flen--;
+      }
+
+      filter[flen] = 0;
+      break;
+    case 1:  // VK_RETURN
+      {
+        if (menu_size == 0){
+          break;
+        }
+
+        esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
+        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        esp.CurLine = item->lno;
+        esp.CurPos = item->pos;
+        esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
+
+        if (esp.TopScreenLine < 0){
+          esp.TopScreenLine = 0;
+        }
+
+        info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
+        stopMenu = true;
+        moved = true;
+        break;
+      }
+    case 2: // ;
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= ';';
+      filter[++flen]= 0;
+      break;
+    case 3: // -
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= '-';
+      filter[++flen]= 0;
+      break;
+    case 4: // VK_TAB
+      wcscpy(filter, autofilter);
+      flen = aflen;
+      break;
+    case 5:  // ctrl-up
+      {
+        if (menu_size == 0){
+          break;
+        }
+
+        if (sel == 0){
+          sel = menu_size-1;
+        }
+        else{
+          sel--;
+        }
+
+        esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
+        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        esp.CurLine = item->lno;
+        esp.CurPos = item->pos;
+        esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
+
+        if (esp.TopScreenLine < 0){
+          esp.TopScreenLine = 0;
+        }
+
+        info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
+        info->EditorControl(-1, ECTL_REDRAW, NULL, NULL);
+        info->EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+        break;
+      }
+    case 6:  // ctrl-down
+      {
+        if (menu_size == 0){
+          break;
+        }
+
+        if (sel == menu_size-1){
+          sel = 0;
+        }
+        else{
+          sel++;
+        }
+
+        esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
+        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        esp.CurLine = item->lno;
+        esp.CurPos = item->pos;
+        esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
+
+        if (esp.TopScreenLine < 0){
+          esp.TopScreenLine = 0;
+        }
+
+        info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
+        info->EditorControl(-1, ECTL_REDRAW, NULL, NULL);
+        info->EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+        break;
+      }
+    case 7:  // ctrl-left
+      {
+        if (visibleLevel > maxLevel){
+          visibleLevel = maxLevel-1;
+        }
+        else{
+          if (visibleLevel > 0){
+            visibleLevel--;
+          }
+        }
+
+        if (visibleLevel < 0){
+          visibleLevel = 0;
+        }
+
+        break;
+      }
+    case 8:  // ctrl-right
+      {
+        visibleLevel++;
+        break;
+      }
+    case 9:  // ctrl-return
+      {
+        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        info->EditorControl(-1, ECTL_INSERTTEXT, NULL, (INT_PTR)item->token->getWChars());
+        stopMenu = true;
+        break;
+      }
+    case 10: // :
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= ':';
+      filter[++flen]= 0;
+      break;
+    case 11: // _
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= '_';
+      filter[++flen]= 0;
+      break;
+    case 12: // _
+
+      if (flen == FILTER_SIZE){
+        break;
+      }
+
+      filter[flen]= '~';
+      filter[++flen]= 0;
+      break;
+    default:
+
+      if (flen == FILTER_SIZE || code > keys_size){
+        break;
+      }
+      if (code<23){
+        filter[flen] = (wchar_t)Character::toLowerCase('0'+code-13);
+      }else{
+        filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code].VirtualKeyCode);
+      }
+      filter[++flen] = 0;
+      break;
+    }
+  }
+
+  for (int i = 0; i < items_num; i++){
+    delete[] menu[i].Text;
+  }
+
+  delete[] menu;
+
+  if (!moved){
+    // restoring position
+    esp.CurLine = ei.CurLine;
+    esp.CurPos = ei.CurPos;
+    esp.CurTabPos = ei.CurTabPos;
+    esp.TopScreenLine = ei.TopScreenLine;
+    esp.LeftPos = ei.LeftPos;
+    esp.Overtype = ei.Overtype;
+    info->EditorControl(-1, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
+  }
+
+  if (items_num == 0){
+    const wchar_t *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
+    info->Message(&MainGuid, 0, 0, msg, 2, 1);
+  }
 }
 
 void FarEditor::enterHandler()
