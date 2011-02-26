@@ -96,7 +96,7 @@ void WINAPI ExitFARW()
 /**
   Open plugin configuration of actions dialog.
 */
-HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
+HANDLE WINAPI OpenPanelW(OPENPANEL_OPENFROM OpenFrom, const GUID* Guid, INT_PTR Data)
 {
   if (OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();
@@ -104,7 +104,7 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
   else
     if (OpenFrom == OPEN_COMMANDLINE){
       //file name, which we received
-      wchar_t *file = (wchar_t*)Item;
+      wchar_t *file = (wchar_t*)Data;
 
       wchar_t *nfile = PathToFull(file,true);
       if (nfile){

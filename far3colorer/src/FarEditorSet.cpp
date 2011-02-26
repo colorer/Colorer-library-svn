@@ -1,12 +1,5 @@
 #include"FarEditorSet.h"
 
-int _snwprintf_s (wchar_t *string, size_t sizeInWords, size_t count, const wchar_t *format, ...)
-{
-  va_list arglist;
-  va_start(arglist, format);
-  return _vsnwprintf(string, count, format, arglist);
-}
-
 DWORD FarEditorSet::rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue)
 {
   FarSettingsItem fsi;
@@ -112,114 +105,113 @@ FarEditorSet::~FarEditorSet()
 
 void FarEditorSet::openMenu()
 {
-	//v3// 
-  //int iMenuItems[] =
-  //{
-  //  mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-  //  mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
-  //  mUpdateHighlight, mReloadBase, mConfigure
-  //};
-  //FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
-  //memset(menuElements, 0, sizeof(menuElements));
+  int iMenuItems[] =
+  {
+    mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+    mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
+    mUpdateHighlight, mReloadBase, mConfigure
+  };
+  FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
+  memset(menuElements, 0, sizeof(menuElements));
 
-  //try{
-  //  if (!rEnabled){
-  //    menuElements[0].Text = GetMsg(mConfigure);
-  //    menuElements[0].Selected = 1;
+  try{
+    if (!rEnabled){
+      menuElements[0].Text = GetMsg(mConfigure);
+      menuElements[0].Flags = MIF_SELECTED;
 
-  //    if (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0){
-  //      ReadSettings();
-  //      configure(true);
-  //    }
+      if (Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0){
+        ReadSettings();
+        configure(true);
+      }
 
-  //    return;
-  //  };
+      return;
+    };
 
-  //  for (int i = sizeof(iMenuItems) / sizeof(iMenuItems[0]) - 1; i >= 0; i--){
-  //    if (iMenuItems[i] == -1){
-  //      menuElements[i].Separator = 1;
-  //    }
-  //    else{
-  //      menuElements[i].Text = GetMsg(iMenuItems[i]);
-  //    }
-  //  };
+    for (int i = sizeof(iMenuItems) / sizeof(iMenuItems[0]) - 1; i >= 0; i--){
+      if (iMenuItems[i] == -1){
+        menuElements[i].Flags = MIF_SEPARATOR;;
+      }
+      else{
+        menuElements[i].Text = GetMsg(iMenuItems[i]);
+      }
+    };
 
-  //  menuElements[0].Selected = 1;
+    menuElements[0].Flags = MIF_SELECTED;
 
-  //  // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
-  //  // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
-  //  FarEditor *editor = getCurrentEditor();
-  //  switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
-  //    menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
-  //  {
-  //  case 0:
-  //    if (editor){
-  //      chooseType();
-  //    }
-  //    break;
-  //  case 1:
-  //    if (editor){
-  //      editor->matchPair();
-  //    }
-  //    break;
-  //  case 2:
-  //    if (editor){
-  //      editor->selectBlock();
-  //    }
-  //    break;
-  //  case 3:
-  //    if (editor){
-  //      editor->selectPair();
-  //    }
-  //    break;
-  //  case 4:
-  //    if (editor){
-  //      editor->listFunctions();
-  //    }
-  //    break;
-  //  case 5:
-  //    if (editor){
-  //      editor->listErrors();
-  //    }
-  //    break;
-  //  case 6:
-  //    if (editor){
-  //      editor->selectRegion();
-  //    }
-  //    break;
-  //  case 7:
-  //    if (editor){
-  //      editor->locateFunction();
-  //    }
-  //    break;
-  //  case 9:
-  //    if (editor){
-  //      editor->updateHighlighting();
-  //    }
-  //    break;
-  //  case 10:
-  //    ReloadBase();
-  //    break;
-  //  case 11:
-  //    configure(true);
-  //    break;
-  //  };
-  //}
-  //catch (Exception &e){
-  //  const wchar_t* exceptionMessage[5];
-  //  exceptionMessage[0] = GetMsg(mName);
-  //  exceptionMessage[1] = GetMsg(mCantLoad);
-  //  exceptionMessage[3] = GetMsg(mDie);
-  //  StringBuffer msg("openMenu: ");
-  //  exceptionMessage[2] = (msg+e.getMessage()).getWChars();
+    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
+    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
+    FarEditor *editor = getCurrentEditor();
+    switch (Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+      menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
+    {
+    case 0:
+      if (editor){
+        chooseType();
+      }
+      break;
+    case 1:
+      if (editor){
+        editor->matchPair();
+      }
+      break;
+    case 2:
+      if (editor){
+        editor->selectBlock();
+      }
+      break;
+    case 3:
+      if (editor){
+        editor->selectPair();
+      }
+      break;
+    case 4:
+      if (editor){
+        editor->listFunctions();
+      }
+      break;
+    case 5:
+      if (editor){
+        editor->listErrors();
+      }
+      break;
+    case 6:
+      if (editor){
+        editor->selectRegion();
+      }
+      break;
+    case 7:
+      if (editor){
+        editor->locateFunction();
+      }
+      break;
+    case 9:
+      if (editor){
+        editor->updateHighlighting();
+      }
+      break;
+    case 10:
+      ReloadBase();
+      break;
+    case 11:
+      configure(true);
+      break;
+    };
+  }
+  catch (Exception &e){
+    const wchar_t* exceptionMessage[5];
+    exceptionMessage[0] = GetMsg(mName);
+    exceptionMessage[1] = GetMsg(mCantLoad);
+    exceptionMessage[3] = GetMsg(mDie);
+    StringBuffer msg("openMenu: ");
+    exceptionMessage[2] = (msg+e.getMessage()).getWChars();
 
-  //  if (getErrorHandler()){
-  //    getErrorHandler()->error(*e.getMessage());
-  //  }
+    if (getErrorHandler()){
+      getErrorHandler()->error(*e.getMessage());
+    }
 
-  //  Info.Message(Info.ModuleNumber, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
-  //  disableColorer();
-  //};
+    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+    disableColorer();
+  };
 }
 
 
@@ -317,8 +309,8 @@ FileTypeImpl* FarEditorSet::getFileTypeByIndex(int idx)
 }
 
 void FarEditorSet::chooseType()
-{//v3// 
- /* FarEditor *fe = getCurrentEditor();
+{
+  FarEditor *fe = getCurrentEditor();
   if (!fe){
     return;
   }
@@ -340,7 +332,7 @@ void FarEditorSet::chooseType()
     }
 
     if (group != NULL && !group->equals(type->getGroup())){
-      menuels[i].Separator = 1;
+      menuels[i].Flags = MIF_SEPARATOR;
       i++;
     };
 
@@ -359,14 +351,14 @@ void FarEditorSet::chooseType()
     _snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
 
     if (type == fe->getFileType()){
-      menuels[i].Selected = 1;
+      menuels[i].Flags = MIF_SELECTED;
     }
   };
 
   wchar_t bottom[20];
   int i;
   _snwprintf(bottom, 20, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
-  i = Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+  i = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
     GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
 
   for (int idx = 0; idx < num; idx++){
@@ -384,7 +376,7 @@ void FarEditorSet::chooseType()
  type = getFileTypeByIndex(i);
  if (type != NULL){
     fe->setFileType(type);
-  }*/
+  }
 }
 
 const String *FarEditorSet::getHRDescription(const String &name, DString _hrdClass )
@@ -799,8 +791,8 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     LoadUserHrd(userHrdPathS, parserFactoryLocal);
     LoadUserHrc(userHrcPathS, parserFactoryLocal);
     FarHrcSettings p(parserFactoryLocal);
-    p.readProfile();
-    p.readUserProfile();
+   // p.readProfile();
+    //p.readUserProfile();
 
     try{
       regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
@@ -916,8 +908,8 @@ void FarEditorSet::ReloadBase()
     LoadUserHrd(sUserHrdPathExp, parserFactory);
     LoadUserHrc(sUserHrcPathExp, parserFactory);
     FarHrcSettings p(parserFactory);
-    p.readProfile();
-    p.readUserProfile();
+    //p.readProfile();
+   // p.readUserProfile();
     defaultType= (FileTypeImpl*)hrcParser->getFileType(&DString("default"));
 
     try{
