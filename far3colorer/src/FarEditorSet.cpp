@@ -7,17 +7,75 @@ int _snwprintf_s (wchar_t *string, size_t sizeInWords, size_t count, const wchar
   return _vsnwprintf(string, count, format, arglist);
 }
 
-FarEditorSet::FarEditorSet()
+DWORD FarEditorSet::rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue)
 {
-  wchar_t key[255];
-  //v3// _snwprintf(key,255, L"%s\\colorer", Info.RootKey);
+  FarSettingsItem fsi;
+  fsi.Root = Root;
+  fsi.Type = FST_QWORD;
+  fsi.Name = name;
 
-  DWORD res =rOpenKey(HKEY_CURRENT_USER, key, hPluginRegistry);
-  if (res == REG_CREATED_NEW_KEY){
-    SetDefaultSettings();
+  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
+    return fsi.Number;
+  }
+  else{
+    return DefaultValue;
+  }
+}
+
+const wchar_t *FarEditorSet::rGetValueSz(size_t Root, const wchar_t *name, const wchar_t *DefaultValue)
+{
+  FarSettingsItem fsi;
+  fsi.Root = Root;
+  fsi.Type = FST_STRING;
+  fsi.Name = name;
+
+  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
+    return fsi.String;
+  }
+  else{
+    return DefaultValue;
   }
 
-  rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
+}
+
+bool FarEditorSet::rSetValueDw(size_t Root, const wchar_t *name, DWORD val)
+{
+  FarSettingsItem fsi;
+  fsi.Root = Root;
+  fsi.Type = FST_QWORD;
+  fsi.Name = name;
+  fsi.Number = val;
+
+  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
+
+}
+
+bool FarEditorSet::rSetValueSz(size_t Root, const wchar_t *name, const wchar_t *val)
+{
+  FarSettingsItem fsi;
+  fsi.Root = Root;
+  fsi.Type = FST_STRING;
+  fsi.Name = name;
+  fsi.String = val;
+
+  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
+
+}
+
+FarEditorSet::FarEditorSet()
+{
+  
+  FarSettingsCreate fsc;
+  fsc.Guid = MainGuid;
+  fsc.StructSize = sizeof(FarSettingsCreate);
+  if (Info.SettingsControl(INVALID_HANDLE_VALUE, SCTL_CREATE, NULL, (INT_PTR)&fsc)){
+    farSettingHandle = fsc.Handle;
+  }
+  else{
+    //error
+  }
+
+  rEnabled = !!rGetValueDw(0, cRegEnabled, cEnabledDefault);
   parserFactory = NULL;
   regionMapper = NULL;
   hrcParser = NULL;
@@ -39,7 +97,7 @@ FarEditorSet::FarEditorSet()
 FarEditorSet::~FarEditorSet()
 {
   dropAllEditors(false);
-  RegCloseKey(hPluginRegistry);
+  Info.SettingsControl(farSettingHandle, SCTL_FREE, NULL, NULL);
   delete sHrdName;
   delete sHrdNameTm;
   delete sCatalogPath;
@@ -909,18 +967,18 @@ FarEditor *FarEditorSet::addCurrentEditor()
   }
 
   EditorInfo ei;
-  Info.EditorControl(0, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
 
   FarEditor *editor = new FarEditor(&Info, parserFactory);
   farEditorInstances.put(&SString(ei.EditorID), editor);
   LPWSTR FileName=NULL;
-  size_t FileNameSize=Info.EditorControl(0, ECTL_GETFILENAME, NULL, NULL);
+  size_t FileNameSize=Info.EditorControl(-1, ECTL_GETFILENAME, NULL, NULL);
 
   if (FileNameSize){
     FileName=new wchar_t[FileNameSize];
 
     if (FileName){
-      Info.EditorControl(0, ECTL_GETFILENAME, NULL, (INT_PTR)FileName);
+      Info.EditorControl(-1, ECTL_GETFILENAME, NULL, (INT_PTR)FileName);
     }
   }
 
@@ -947,7 +1005,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
 FarEditor *FarEditorSet::getCurrentEditor()
 {
   EditorInfo ei;
-  Info.EditorControl(0, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
   return editor;
@@ -961,14 +1019,14 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 void FarEditorSet::enableColorer(bool fromEditor)
 {
   rEnabled = true;
-  rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
+  rSetValueDw(0, cRegEnabled, rEnabled);
   ReloadBase();
 }
 
 void FarEditorSet::disableColorer()
 {
   rEnabled = false;
-  rSetValue(hPluginRegistry, cRegEnabled, rEnabled);
+  rSetValueDw(0, cRegEnabled, rEnabled);
 
   dropCurrentEditor(true);
 
@@ -992,7 +1050,7 @@ void FarEditorSet::ApplySettingsToEditors()
 void FarEditorSet::dropCurrentEditor(bool clean)
 {
   EditorInfo ei;
-  Info.EditorControl(0, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
   if (editor){
     if (clean){
@@ -1001,7 +1059,7 @@ void FarEditorSet::dropCurrentEditor(bool clean)
     farEditorInstances.remove(&SString(ei.EditorID));
     delete editor;
   }
-  Info.EditorControl(0, ECTL_REDRAW, NULL, NULL);
+  Info.EditorControl(-1, ECTL_REDRAW, NULL, NULL);
 }
 
 void FarEditorSet::dropAllEditors(bool clean)
@@ -1019,11 +1077,11 @@ void FarEditorSet::dropAllEditors(bool clean)
 
 void FarEditorSet::ReadSettings()
 {
-  wchar_t *hrdName = rGetValueSz(hPluginRegistry, cRegHrdName, cHrdNameDefault);
-  wchar_t *hrdNameTm = rGetValueSz(hPluginRegistry, cRegHrdNameTm, cHrdNameTmDefault);
-  wchar_t *catalogPath = rGetValueSz(hPluginRegistry, cRegCatalog, cCatalogDefault);
-  wchar_t *userHrdPath = rGetValueSz(hPluginRegistry, cRegUserHrdPath, cUserHrdPathDefault);
-  wchar_t *userHrcPath = rGetValueSz(hPluginRegistry, cRegUserHrcPath, cUserHrcPathDefault);
+  const wchar_t *hrdName = rGetValueSz(0, cRegHrdName, cHrdNameDefault);
+  const wchar_t *hrdNameTm = rGetValueSz(0, cRegHrdNameTm, cHrdNameTmDefault);
+  const wchar_t *catalogPath = rGetValueSz(0, cRegCatalog, cCatalogDefault);
+  const wchar_t *userHrdPath = rGetValueSz(0, cRegUserHrdPath, cUserHrdPathDefault);
+  const wchar_t *userHrcPath = rGetValueSz(0, cRegUserHrcPath, cUserHrcPathDefault);
 
   delete sHrdName;
   delete sHrdNameTm;
@@ -1041,13 +1099,13 @@ void FarEditorSet::ReadSettings()
   sUserHrcPath = NULL;
   sUserHrcPathExp = NULL;
 
-  sHrdName = new SString(hrdName);
-  sHrdNameTm = new SString(hrdNameTm);
-  sCatalogPath = new SString(catalogPath);
+  sHrdName = new SString(DString(hrdName));
+  sHrdNameTm = new SString(DString(hrdNameTm));
+  sCatalogPath = new SString(DString(catalogPath));
   sCatalogPathExp = PathToFullS(catalogPath,false);
-  sUserHrdPath = new SString(userHrdPath);
+  sUserHrdPath = new SString(DString(userHrdPath));
   sUserHrdPathExp = PathToFullS(userHrdPath,false);
-  sUserHrcPath = new SString(userHrcPath);
+  sUserHrcPath = new SString(DString(userHrcPath));
   sUserHrcPathExp = PathToFullS(userHrcPath,false);
 
   delete[] hrdName;
@@ -1057,45 +1115,30 @@ void FarEditorSet::ReadSettings()
   delete[] userHrcPath;
 
   // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
-  rEnabled = !!rGetValueDw(hPluginRegistry, cRegEnabled, cEnabledDefault);
-  drawCross = rGetValueDw(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault);
-  drawPairs = !!rGetValueDw(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault);
-  drawSyntax = !!rGetValueDw(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault);
-  oldOutline = !!rGetValueDw(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault);
-  TrueModOn = !!rGetValueDw(hPluginRegistry, cRegTrueMod, cTrueMod);
-  ChangeBgEditor = !!rGetValueDw(hPluginRegistry, cRegChangeBgEditor, cChangeBgEditor);
+  rEnabled = !!rGetValueDw(0, cRegEnabled, cEnabledDefault);
+  drawCross = rGetValueDw(0, cRegCrossDraw, cCrossDrawDefault);
+  drawPairs = !!rGetValueDw(0, cRegPairsDraw, cPairsDrawDefault);
+  drawSyntax = !!rGetValueDw(0, cRegSyntaxDraw, cSyntaxDrawDefault);
+  oldOutline = !!rGetValueDw(0, cRegOldOutLine, cOldOutLineDefault);
+  TrueModOn = !!rGetValueDw(0, cRegTrueMod, cTrueMod);
+  ChangeBgEditor = !!rGetValueDw(0, cRegChangeBgEditor, cChangeBgEditor);
 }
 
-void FarEditorSet::SetDefaultSettings()
-{
-  rSetValue(hPluginRegistry, cRegEnabled, cEnabledDefault); 
-  rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, cHrdNameDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cHrdNameDefault)+1)));
-  rSetValue(hPluginRegistry, cRegHrdNameTm, REG_SZ, cHrdNameTmDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cHrdNameTmDefault)+1)));
-  rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, cCatalogDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cCatalogDefault)+1)));
-  rSetValue(hPluginRegistry, cRegCrossDraw, cCrossDrawDefault); 
-  rSetValue(hPluginRegistry, cRegPairsDraw, cPairsDrawDefault); 
-  rSetValue(hPluginRegistry, cRegSyntaxDraw, cSyntaxDrawDefault); 
-  rSetValue(hPluginRegistry, cRegOldOutLine, cOldOutLineDefault); 
-  rSetValue(hPluginRegistry, cRegTrueMod, cTrueMod); 
-  rSetValue(hPluginRegistry, cRegChangeBgEditor, cChangeBgEditor); 
-  rSetValue(hPluginRegistry, cRegUserHrdPath, REG_SZ, cUserHrdPathDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cUserHrdPathDefault)+1)));
-  rSetValue(hPluginRegistry, cRegUserHrcPath, REG_SZ, cUserHrcPathDefault, static_cast<DWORD>(sizeof(wchar_t)*(wcslen(cUserHrcPathDefault)+1)));
-}
 
 void FarEditorSet::SaveSettings()
 {
-  rSetValue(hPluginRegistry, cRegEnabled, rEnabled); 
-  rSetValue(hPluginRegistry, cRegHrdName, REG_SZ, sHrdName->getWChars(), sizeof(wchar_t)*(sHrdName->length()+1));
-  rSetValue(hPluginRegistry, cRegHrdNameTm, REG_SZ, sHrdNameTm->getWChars(), sizeof(wchar_t)*(sHrdNameTm->length()+1));
-  rSetValue(hPluginRegistry, cRegCatalog, REG_SZ, sCatalogPath->getWChars(), sizeof(wchar_t)*(sCatalogPath->length()+1));
-  rSetValue(hPluginRegistry, cRegCrossDraw, drawCross); 
-  rSetValue(hPluginRegistry, cRegPairsDraw, drawPairs); 
-  rSetValue(hPluginRegistry, cRegSyntaxDraw, drawSyntax); 
-  rSetValue(hPluginRegistry, cRegOldOutLine, oldOutline); 
-  rSetValue(hPluginRegistry, cRegTrueMod, TrueModOn); 
-  rSetValue(hPluginRegistry, cRegChangeBgEditor, ChangeBgEditor); 
-  rSetValue(hPluginRegistry, cRegUserHrdPath, REG_SZ, sUserHrdPath->getWChars(), sizeof(wchar_t)*(sUserHrdPath->length()+1));
-  rSetValue(hPluginRegistry, cRegUserHrcPath, REG_SZ, sUserHrcPath->getWChars(), sizeof(wchar_t)*(sUserHrcPath->length()+1));
+  rSetValueDw(0, cRegEnabled, rEnabled); 
+  rSetValueSz(0, cRegHrdName, sHrdName->getWChars());
+  rSetValueSz(0, cRegHrdNameTm, sHrdNameTm->getWChars());
+  rSetValueSz(0, cRegCatalog,  sCatalogPath->getWChars());
+  rSetValueDw(0, cRegCrossDraw, drawCross); 
+  rSetValueDw(0, cRegPairsDraw, drawPairs); 
+  rSetValueDw(0, cRegSyntaxDraw, drawSyntax); 
+  rSetValueDw(0, cRegOldOutLine, oldOutline); 
+  rSetValueDw(0, cRegTrueMod, TrueModOn); 
+  rSetValueDw(0, cRegChangeBgEditor, ChangeBgEditor); 
+  rSetValueSz(0, cRegUserHrdPath, sUserHrdPath->getWChars());
+  rSetValueSz(0, cRegUserHrcPath, sUserHrcPath->getWChars());
 }
 
 bool FarEditorSet::checkConEmu()
@@ -1116,7 +1159,7 @@ bool FarEditorSet::checkFarTrueMod()
   ea.StringNumber = 1;
   ea.StartPos = 1;
   ea.EndPos = 2;
-  return !!Info.EditorControl(0, ECTL_ADDANNOTATION, NULL, (INT_PTR)&ea);
+  return !!Info.EditorControl(-1, ECTL_ADDANNOTATION, NULL, (INT_PTR)&ea);
 }
 
 bool FarEditorSet::checkConsoleAnnotationAvailable()

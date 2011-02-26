@@ -123,7 +123,7 @@ HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 /**
   Configures plugin.
 */
-int WINAPI ConfigureW(int ItemNumber)
+int WINAPI ConfigureW(const GUID* Guid)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
@@ -146,9 +146,9 @@ int WINAPI ProcessEditorEventW(int Event, void *Param)
   return editorSet->editorEvent(Event, Param);
 };
 
-int WINAPI ProcessEditorInputW(const INPUT_RECORD *ir)
+int WINAPI ProcessEditorInputW(const INPUT_RECORD *Rec)
 {
-  return editorSet->editorInput(ir);
+  return editorSet->editorInput(Rec);
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

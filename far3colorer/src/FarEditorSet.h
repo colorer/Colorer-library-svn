@@ -133,8 +133,7 @@ private:
   const wchar_t *GetMsg(int msg);
   /** Applies the current settings for editors*/
   void ApplySettingsToEditors();
-  /** writes the default settings in the registry*/
-  void SetDefaultSettings();
+  /** writes settings in the registry*/
   void SaveSettings();
 
   /** Kills all currently opened editors*/
@@ -179,6 +178,11 @@ private:
   HRCParser *hrcParser;
 
   HKEY hPluginRegistry;
+  HANDLE farSettingHandle;
+  DWORD rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue);
+  const wchar_t *rGetValueSz(size_t Root, const wchar_t *name, const wchar_t *DefaultValue);
+  bool rSetValueDw(size_t Root, const wchar_t *name, DWORD val);
+  bool rSetValueSz(size_t Root, const wchar_t *name, const wchar_t *val);
   /**current value*/
   DString hrdClass;
   DString hrdName;

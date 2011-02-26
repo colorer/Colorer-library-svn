@@ -19,7 +19,6 @@
 #include<wctype.h>
 #include<wchar.h>
 #include<windows.h>
-#include "registry_wide.h"
 #include<unicode/StringBuffer.h>
 
 #include <initguid.h>
