@@ -7,12 +7,14 @@
 #include<colorer/ParserFactory.h>
 
 #include"pcolorer.h"
+#include "SettingsControl.h"
 
 #define MAX_KEY_LENGTH 255
 #define MAX_VALUE_NAME 50 // in msdn 16383 , but we have enough 50
 
 const wchar_t FarCatalogXml[]=L"\\base\\catalog.xml";
 const wchar_t FarProfileXml[]=L"\\bin\\hrcsettings.xml";
+const wchar_t HrcSettings[]=L"HrcSettings";
 
 
 class FarHrcSettingsException : public Exception{
@@ -35,7 +37,7 @@ public:
 
 private:
   void UpdatePrototype(Element *elem, bool userValue);
-  void readProfileFromRegistry(HKEY dwKey);
+  void readProfileFromRegistry();
   void writeProfileToRegistry();
 
   ParserFactory *parserFactory;

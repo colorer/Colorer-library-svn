@@ -462,15 +462,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\registry_wide.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\registry_wide.h"
-				>
-			</File>
-			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SettingsControl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SettingsControl.h"
 				>
 			</File>
 			<File

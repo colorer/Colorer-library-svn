@@ -24,6 +24,7 @@ struct color{
   color(): concolor(0), fg(0), bk(0), style(0) {};
 };
 
+const int CurrentEditor = -1;
 const DString DShowCross=DString("show-cross");
 const DString DNone=DString("none");
 const DString DVertical=DString("vertical");

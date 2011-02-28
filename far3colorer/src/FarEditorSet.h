@@ -12,6 +12,7 @@
 #include "tools.h"
 #include "FarEditor.h"
 #include "FarHrcSettings.h"
+#include "SettingsControl.h"
 
 //registry keys
 const wchar_t cRegEnabled[] = L"Enabled";
@@ -142,8 +143,6 @@ private:
   void dropCurrentEditor(bool clean);
   /** Disables all plugin processing*/
   void disableColorer();
-  /** Enables plugin processing*/
-  void enableColorer(bool fromEditor);
   
   bool checkConEmu();
   bool checkFarTrueMod();
@@ -177,12 +176,6 @@ private:
   RegionMapper *regionMapper;
   HRCParser *hrcParser;
 
-  HKEY hPluginRegistry;
-  HANDLE farSettingHandle;
-  DWORD rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue);
-  const wchar_t *rGetValueSz(size_t Root, const wchar_t *name, const wchar_t *DefaultValue);
-  bool rSetValueDw(size_t Root, const wchar_t *name, DWORD val);
-  bool rSetValueSz(size_t Root, const wchar_t *name, const wchar_t *val);
   /**current value*/
   DString hrdClass;
   DString hrdName;

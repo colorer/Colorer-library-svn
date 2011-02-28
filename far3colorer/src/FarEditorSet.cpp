@@ -1,74 +1,7 @@
 #include"FarEditorSet.h"
 
-DWORD FarEditorSet::rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue)
-{
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_QWORD;
-  fsi.Name = name;
-
-  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
-    return fsi.Number;
-  }
-  else{
-    return DefaultValue;
-  }
-}
-
-const wchar_t *FarEditorSet::rGetValueSz(size_t Root, const wchar_t *name, const wchar_t *DefaultValue)
-{
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_STRING;
-  fsi.Name = name;
-
-  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
-    return fsi.String;
-  }
-  else{
-    return DefaultValue;
-  }
-
-}
-
-bool FarEditorSet::rSetValueDw(size_t Root, const wchar_t *name, DWORD val)
-{
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_QWORD;
-  fsi.Name = name;
-  fsi.Number = val;
-
-  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
-
-}
-
-bool FarEditorSet::rSetValueSz(size_t Root, const wchar_t *name, const wchar_t *val)
-{
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_STRING;
-  fsi.Name = name;
-  fsi.String = val;
-
-  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
-
-}
-
 FarEditorSet::FarEditorSet()
 {
-  
-  FarSettingsCreate fsc;
-  fsc.Guid = MainGuid;
-  fsc.StructSize = sizeof(FarSettingsCreate);
-  if (Info.SettingsControl(INVALID_HANDLE_VALUE, SCTL_CREATE, NULL, (INT_PTR)&fsc)){
-    farSettingHandle = fsc.Handle;
-  }
-  else{
-    //error
-  }
-
-  rEnabled = !!rGetValueDw(0, cRegEnabled, cEnabledDefault);
   parserFactory = NULL;
   regionMapper = NULL;
   hrcParser = NULL;
@@ -90,7 +23,6 @@ FarEditorSet::FarEditorSet()
 FarEditorSet::~FarEditorSet()
 {
   dropAllEditors(false);
-  Info.SettingsControl(farSettingHandle, SCTL_FREE, NULL, NULL);
   delete sHrdName;
   delete sHrdNameTm;
   delete sCatalogPath;
@@ -602,7 +534,7 @@ void FarEditorSet::configure(bool fromEditor)
           rEnabled = true;
           TrueModOn = !!(fdi[IDX_TRUEMOD].Selected);
           SaveSettings();
-          enableColorer(fromEditor);
+          ReloadBase();
         }
         else{
           if (TrueModOn !=!!fdi[IDX_TRUEMOD].Selected){
@@ -790,8 +722,8 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     LoadUserHrd(userHrdPathS, parserFactoryLocal);
     LoadUserHrc(userHrcPathS, parserFactoryLocal);
     FarHrcSettings p(parserFactoryLocal);
-   // p.readProfile();
-    //p.readUserProfile();
+    p.readProfile();
+    p.readUserProfile();
 
     try{
       regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
@@ -864,6 +796,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
 
 void FarEditorSet::ReloadBase()
 {
+  ReadSettings();
   if (!rEnabled){
     return;
   }
@@ -878,7 +811,6 @@ void FarEditorSet::ReloadBase()
   parserFactory = NULL;
   regionMapper = NULL;
 
-  ReadSettings();
   consoleAnnotationAvailable=checkConsoleAnnotationAvailable() && TrueModOn;
   if (consoleAnnotationAvailable){
     hrdClass = DRgb;
@@ -907,8 +839,8 @@ void FarEditorSet::ReloadBase()
     LoadUserHrd(sUserHrdPathExp, parserFactory);
     LoadUserHrc(sUserHrcPathExp, parserFactory);
     FarHrcSettings p(parserFactory);
-    //p.readProfile();
-   // p.readUserProfile();
+    p.readProfile();
+    p.readUserProfile();
     defaultType= (FileTypeImpl*)hrcParser->getFileType(&DString("default"));
 
     try{
@@ -958,18 +890,18 @@ FarEditor *FarEditorSet::addCurrentEditor()
   }
 
   EditorInfo ei;
-  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, (INT_PTR)&ei);
 
   FarEditor *editor = new FarEditor(&Info, parserFactory);
   farEditorInstances.put(&SString(ei.EditorID), editor);
   LPWSTR FileName=NULL;
-  size_t FileNameSize=Info.EditorControl(-1, ECTL_GETFILENAME, NULL, NULL);
+  size_t FileNameSize=Info.EditorControl(CurrentEditor, ECTL_GETFILENAME, NULL, NULL);
 
   if (FileNameSize){
     FileName=new wchar_t[FileNameSize];
 
     if (FileName){
-      Info.EditorControl(-1, ECTL_GETFILENAME, NULL, (INT_PTR)FileName);
+      Info.EditorControl(CurrentEditor, ECTL_GETFILENAME, NULL, (INT_PTR)FileName);
     }
   }
 
@@ -996,7 +928,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
 FarEditor *FarEditorSet::getCurrentEditor()
 {
   EditorInfo ei;
-  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, (INT_PTR)&ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
   return editor;
@@ -1007,17 +939,11 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 	return(Info.GetMsg(&MainGuid, msg));
 }
 
-void FarEditorSet::enableColorer(bool fromEditor)
-{
-  rEnabled = true;
-  rSetValueDw(0, cRegEnabled, rEnabled);
-  ReloadBase();
-}
-
 void FarEditorSet::disableColorer()
 {
   rEnabled = false;
-  rSetValueDw(0, cRegEnabled, rEnabled);
+  SettingsControl ColorerSettings;
+  ColorerSettings.rSetValueDw(0, cRegEnabled, rEnabled);
 
   dropCurrentEditor(true);
 
@@ -1041,7 +967,7 @@ void FarEditorSet::ApplySettingsToEditors()
 void FarEditorSet::dropCurrentEditor(bool clean)
 {
   EditorInfo ei;
-  Info.EditorControl(-1, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+  Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, (INT_PTR)&ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
   if (editor){
     if (clean){
@@ -1050,7 +976,7 @@ void FarEditorSet::dropCurrentEditor(bool clean)
     farEditorInstances.remove(&SString(ei.EditorID));
     delete editor;
   }
-  Info.EditorControl(-1, ECTL_REDRAW, NULL, NULL);
+  Info.EditorControl(CurrentEditor, ECTL_REDRAW, NULL, NULL);
 }
 
 void FarEditorSet::dropAllEditors(bool clean)
@@ -1068,11 +994,12 @@ void FarEditorSet::dropAllEditors(bool clean)
 
 void FarEditorSet::ReadSettings()
 {
-  const wchar_t *hrdName = rGetValueSz(0, cRegHrdName, cHrdNameDefault);
-  const wchar_t *hrdNameTm = rGetValueSz(0, cRegHrdNameTm, cHrdNameTmDefault);
-  const wchar_t *catalogPath = rGetValueSz(0, cRegCatalog, cCatalogDefault);
-  const wchar_t *userHrdPath = rGetValueSz(0, cRegUserHrdPath, cUserHrdPathDefault);
-  const wchar_t *userHrcPath = rGetValueSz(0, cRegUserHrcPath, cUserHrcPathDefault);
+  SettingsControl ColorerSettings;
+  const wchar_t *hrdName = ColorerSettings.rGetValueSz(0, cRegHrdName, cHrdNameDefault);
+  const wchar_t *hrdNameTm = ColorerSettings.rGetValueSz(0, cRegHrdNameTm, cHrdNameTmDefault);
+  const wchar_t *catalogPath = ColorerSettings.rGetValueSz(0, cRegCatalog, cCatalogDefault);
+  const wchar_t *userHrdPath = ColorerSettings.rGetValueSz(0, cRegUserHrdPath, cUserHrdPathDefault);
+  const wchar_t *userHrcPath = ColorerSettings.rGetValueSz(0, cRegUserHrcPath, cUserHrcPathDefault);
 
   delete sHrdName;
   delete sHrdNameTm;
@@ -1100,30 +1027,31 @@ void FarEditorSet::ReadSettings()
   sUserHrcPathExp = PathToFullS(userHrcPath,false);
 
   // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
-  rEnabled = !!rGetValueDw(0, cRegEnabled, cEnabledDefault);
-  drawCross = rGetValueDw(0, cRegCrossDraw, cCrossDrawDefault);
-  drawPairs = !!rGetValueDw(0, cRegPairsDraw, cPairsDrawDefault);
-  drawSyntax = !!rGetValueDw(0, cRegSyntaxDraw, cSyntaxDrawDefault);
-  oldOutline = !!rGetValueDw(0, cRegOldOutLine, cOldOutLineDefault);
-  TrueModOn = !!rGetValueDw(0, cRegTrueMod, cTrueMod);
-  ChangeBgEditor = !!rGetValueDw(0, cRegChangeBgEditor, cChangeBgEditor);
+  rEnabled = !!ColorerSettings.rGetValueDw(0, cRegEnabled, cEnabledDefault);
+  drawCross = ColorerSettings.rGetValueDw(0, cRegCrossDraw, cCrossDrawDefault);
+  drawPairs = !!ColorerSettings.rGetValueDw(0, cRegPairsDraw, cPairsDrawDefault);
+  drawSyntax = !!ColorerSettings.rGetValueDw(0, cRegSyntaxDraw, cSyntaxDrawDefault);
+  oldOutline = !!ColorerSettings.rGetValueDw(0, cRegOldOutLine, cOldOutLineDefault);
+  TrueModOn = !!ColorerSettings.rGetValueDw(0, cRegTrueMod, cTrueMod);
+  ChangeBgEditor = !!ColorerSettings.rGetValueDw(0, cRegChangeBgEditor, cChangeBgEditor);
 }
 
 
 void FarEditorSet::SaveSettings()
 {
-  rSetValueDw(0, cRegEnabled, rEnabled); 
-  rSetValueSz(0, cRegHrdName, sHrdName->getWChars());
-  rSetValueSz(0, cRegHrdNameTm, sHrdNameTm->getWChars());
-  rSetValueSz(0, cRegCatalog,  sCatalogPath->getWChars());
-  rSetValueDw(0, cRegCrossDraw, drawCross); 
-  rSetValueDw(0, cRegPairsDraw, drawPairs); 
-  rSetValueDw(0, cRegSyntaxDraw, drawSyntax); 
-  rSetValueDw(0, cRegOldOutLine, oldOutline); 
-  rSetValueDw(0, cRegTrueMod, TrueModOn); 
-  rSetValueDw(0, cRegChangeBgEditor, ChangeBgEditor); 
-  rSetValueSz(0, cRegUserHrdPath, sUserHrdPath->getWChars());
-  rSetValueSz(0, cRegUserHrcPath, sUserHrcPath->getWChars());
+  SettingsControl ColorerSettings;
+  ColorerSettings.rSetValueDw(0, cRegEnabled, rEnabled); 
+  ColorerSettings.rSetValueSz(0, cRegHrdName, sHrdName->getWChars());
+  ColorerSettings.rSetValueSz(0, cRegHrdNameTm, sHrdNameTm->getWChars());
+  ColorerSettings.rSetValueSz(0, cRegCatalog,  sCatalogPath->getWChars());
+  ColorerSettings.rSetValueDw(0, cRegCrossDraw, drawCross); 
+  ColorerSettings.rSetValueDw(0, cRegPairsDraw, drawPairs); 
+  ColorerSettings.rSetValueDw(0, cRegSyntaxDraw, drawSyntax); 
+  ColorerSettings.rSetValueDw(0, cRegOldOutLine, oldOutline); 
+  ColorerSettings.rSetValueDw(0, cRegTrueMod, TrueModOn); 
+  ColorerSettings.rSetValueDw(0, cRegChangeBgEditor, ChangeBgEditor); 
+  ColorerSettings.rSetValueSz(0, cRegUserHrdPath, sUserHrdPath->getWChars());
+  ColorerSettings.rSetValueSz(0, cRegUserHrcPath, sUserHrcPath->getWChars());
 }
 
 bool FarEditorSet::checkConEmu()
@@ -1144,7 +1072,7 @@ bool FarEditorSet::checkFarTrueMod()
   ea.StringNumber = 1;
   ea.StartPos = 1;
   ea.EndPos = 2;
-  return !!Info.EditorControl(-1, ECTL_ADDANNOTATION, NULL, (INT_PTR)&ea);
+  return !!Info.EditorControl(CurrentEditor, ECTL_ADDANNOTATION, NULL, (INT_PTR)&ea);
 }
 
 bool FarEditorSet::checkConsoleAnnotationAvailable()
