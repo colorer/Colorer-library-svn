@@ -7,7 +7,7 @@
 // parser's cache structures
 ParseCache::ParseCache()
 {
-  children = next = parent = null;
+  children = next = prev = parent = null;
   backLine = null;
   vcache = 0;
 };
@@ -16,7 +16,23 @@ ParseCache::~ParseCache()
   CLR_TRACE("TPCache", "~ParseCache():%s,%d-%d", scheme->getName()->getChars(), sline, eline);
   delete backLine;
   delete children;
-  delete next;
+  prev = null;
+
+  while (next){
+    ParseCache *tmp;
+    tmp=next;
+    while (tmp->next){
+      tmp=tmp->next;
+    }
+    while (tmp->prev){
+      tmp=tmp->prev;
+      delete tmp->next;
+      tmp->next = null;
+    }
+    delete next;
+    next = null;
+  }
+
   delete[] vcache;
 };
 ParseCache *ParseCache::searchLine(int ln, ParseCache **cache)
