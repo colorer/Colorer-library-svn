@@ -1,8 +1,10 @@
     - Python scheme completely rewritten (anatoly techtonik)
+    - add support Expect
   Fixed:
     - remove .cgi from Perl extensions, use first line for detection
     - fix firstline of Python prototype to allow spaces in shebang
-	- fix comments in Tcl ( Nikita Retunsky)
+    - fix comments in Tcl ( Nikita Retunsky)
+    - c# add #region/#endregion , get, set, yield
 
 2010-10-25 r1593 (FarColorer 1.0.2.14)
   Fixed:

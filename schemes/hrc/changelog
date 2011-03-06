@@ -1,5 +1,11 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- доработка схемы c# по тикету "еще добавки в hrc для C# - ID: 2983454" и
+	 "C# yield return and yield break keywords - ID: 2687858"
+	- поддержка Expect по тикету "добавить ключевые слова expect в hrc/base/tcltk.hrc - ID: 2983449"
+
+#Revision: 1652
+	ctapmex 2011-02-21 20:27:55 +0500 (Пн, 21 фев 2011)
 	- комментарии в TCL
 
 #Revision: 1596

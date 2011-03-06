@@ -99,6 +99,9 @@
          <word name="tk_messageBox"/>                      <word name="tk_optionMenu"/>
          <word name="tk_popup"/>   <word name="tkerror"/>  <word name="tkwait"/>
          <word name="toplevel"/>   <word name="winfo"/>    <word name="wm"/>
+         <!-- expect commands -->
+         <word name="expect"/> <word name="exp_internal"/> <word name="send"/>
+         <word name="spawn"/>  <word name="send_user"/>    <word name="send_error"/>
       </keywords>
     </scheme>
 
