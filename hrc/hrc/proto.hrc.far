@@ -159,9 +159,9 @@
     <location link="base/scala.hrc"/>
     <filename>/\.(scala)$/i</filename>
   </prototype>
-  <prototype name="tcltk" group="main" description="Tcl/Tk">
+  <prototype name="tcltk" group="main" description="Tcl/Tk/Expect">
     <location link="base/tcltk.hrc"/>
-    <filename>/\.(tcl|tk)$/i</filename>
+    <filename>/\.(tcl|tk|exp)$/i</filename>
     <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
 

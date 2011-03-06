@@ -34,6 +34,7 @@ With help of:
          <block start="/\/\*/" end="/\*\//" scheme="Comment" region="csComment" region00="csOpenStruct" region10="csCloseStruct"/>
          <regexp match="/\/\/.*$/" region0="csComment"/>
          <regexp match="/'(.|\\['])'/" region0="csString"/>
+         <block start="/^\s*(#region) (.*)$/" end="/^\s*(#endregion)(.*)$/" scheme="csharp" region01="csOpenStruct" region11="csCloseStruct" region00="Directive" region10="Directive" region02="Comment" region12="Comment"/>
          <block start="/(\()/" end="/(\))/" scheme="csharp" region00="csSymbol" region10="csSymbol" region01="csOpenStruct" region11="csCloseStruct"/>
          <block start="/(\{)/" end="/(\})/" scheme="csharp" region00="csSymbolStrong" region10="csSymbolStrong" region01="csOpenStruct" region11="csCloseStruct"/>
          <block start="/(\[)/" end="/(\])/" scheme="csharp" region00="csSymbol" region10="csSymbol" region01="csOpenStruct" region11="csCloseStruct"/>
@@ -66,6 +67,7 @@ With help of:
             <word name="as"/>
             <word name="base"/>
             <word name="bool"/>
+            <word name="yield break"/>
             <word name="break"/>
             <word name="byte"/>
             <word name="case"/>
@@ -91,6 +93,7 @@ With help of:
             <word name="float"/>
             <word name="for"/>
             <word name="foreach"/>
+            <word name="get"/>
             <word name="goto"/>
             <word name="if"/>
             <word name="implicit"/>
@@ -115,8 +118,10 @@ With help of:
             <word name="readonly"/>
             <word name="ref"/>
             <word name="return"/>
+            <word name="yield return"/>
             <word name="sbyte"/>
             <word name="sealed"/>
+            <word name="set"/>
             <word name="short"/>
             <word name="sizeof"/>
             <word name="stackalloc"/>
