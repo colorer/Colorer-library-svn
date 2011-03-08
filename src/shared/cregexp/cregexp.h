@@ -162,6 +162,19 @@ public:
   SRegInfo *prev;
 };
 
+struct StackElem{
+  //local variable
+  SRegInfo *re;
+  SRegInfo *prev;
+  int toParse;
+  bool leftenter;
+  // step if function return true
+  int ifTrueReturn;
+  // step if function return false
+  int ifFalseReturn;
+  //previous elemenm in stack
+  StackElem *prev_elem;
+};
 /** Regular Expression compiler and matcher.
     Colorer regular expressions library cregexp.
 
@@ -326,7 +339,14 @@ private:
 
   //check for stack overflow
   unsigned int adr_so;
+
+  StackElem *stack;
+  void check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,bool *leftenter, int *action);
+  void insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2);
+
 };
+
+
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
