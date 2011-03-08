@@ -173,7 +173,7 @@ struct StackElem{
   // step if function return false
   int ifFalseReturn;
   //previous elemenm in stack
-  StackElem *prev_elem;
+  //StackElem *prev_elem;
 };
 /** Regular Expression compiler and matcher.
     Colorer regular expressions library cregexp.
@@ -341,6 +341,8 @@ private:
   unsigned int adr_so;
 
   StackElem *stack;
+  int stack_size;
+  int count_elem;
   void check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,bool *leftenter, int *action);
   void insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2);
 

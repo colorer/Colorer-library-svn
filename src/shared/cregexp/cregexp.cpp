@@ -63,6 +63,9 @@ void CRegExp::init()
 #else
   namedMatches = 0;
 #endif
+  stack_size = 0;
+  count_elem = 0;
+  stack=null;
 };
 CRegExp::CRegExp()
 {
@@ -80,6 +83,7 @@ CRegExp::~CRegExp()
   for(int bp = 0; bp < cnMatch; bp++)
     if(brnames[bp]) delete brnames[bp];
 #endif
+  delete[] stack;
 };
 
 EError CRegExp::setRELow(const String &expr)
@@ -759,37 +763,44 @@ const String &pattern = *global_pattern;
 
 void CRegExp::check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int *action)
 {
-  if (stack==null){
+  if (count_elem==0){
     *action=res;
     return;
   }
+  
+  StackElem &ne=stack[--count_elem];
   if (res/* && stack->ifTrueReturn<2*/){
-    *action=stack->ifTrueReturn;
+    *action=ne.ifTrueReturn;
   }else{
-    *action=stack->ifFalseReturn;
+    *action=ne.ifFalseReturn;
   }
-  *re=stack->re;
-  *prev=stack->prev;
-  *toParse=stack->toParse;
-  *leftenter=stack->leftenter;
-  StackElem *t;
-  t=stack;
-  stack=t->prev_elem;
-  delete t;
+  *re=ne.re;
+  *prev=ne.prev;
+  *toParse=ne.toParse;
+  *leftenter=ne.leftenter;
 }
 
 void CRegExp::insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2)
 {
-  StackElem *ne=new StackElem;
-  ne->re=*re;
-  ne->prev=*prev;
-  ne->toParse=*toParse;
-  ne->ifTrueReturn=ifTrueReturn;
-  ne->ifFalseReturn=ifFalseReturn;
-  ne->leftenter=*leftenter;
-  ne->prev_elem=stack;
-  stack=ne;
-
+  if (stack_size==0){
+    stack = new StackElem [1000];
+    stack_size=1000;
+  }
+  if(stack_size==count_elem){
+    stack_size+=100;
+    StackElem* s=  new StackElem [stack_size];
+    memcpy(s,stack,count_elem*sizeof(StackElem));
+    delete[] stack;
+    stack=s;
+  }
+  StackElem &ne=stack[count_elem++];
+  ne.re=*re;
+  ne.prev=*prev;
+  ne.toParse=*toParse;
+  ne.ifTrueReturn=ifTrueReturn;
+  ne.ifFalseReturn=ifFalseReturn;
+  ne.leftenter=*leftenter;
+  
   *leftenter = true;
   if (prev2==null) *prev=null;
   else  *prev=*prev2;
@@ -1229,14 +1240,14 @@ int action=-1;
    
     switch (action){
       case 0: 
-        if (stack){
+        if (count_elem){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
         }else
           return 0; 
         break;
       case 1: 
-        if (stack){
+        if (count_elem){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action);
           continue;
         }else
@@ -1352,7 +1363,7 @@ inline bool CRegExp::parseRE(int pos)
   matches->cnMatch = cnMatch;
 #endif
   do{
-    stack=null;
+    //stack=null;
     if (lowParse(tree_root, 0, toParse)) return true;
     if (!positionMoves) return false;
     toParse = ++pos;
