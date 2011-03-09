@@ -172,8 +172,6 @@ struct StackElem{
   int ifTrueReturn;
   // step if function return false
   int ifFalseReturn;
-  //previous elemenm in stack
-  //StackElem *prev_elem;
 };
 /** Regular Expression compiler and matcher.
     Colorer regular expressions library cregexp.
@@ -299,7 +297,6 @@ public:
   bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 
-  void setWow64(bool wow64);
 private:
   bool ignoreCase, extend, positionMoves, singleLine, multiLine;
   SRegInfo *tree_root;
@@ -336,9 +333,6 @@ private:
   bool checkMetaSymbol(EMetaSymbols metaSymbol, int &toParse);
   bool lowParse(SRegInfo *re, SRegInfo *prev, int toParse);
   bool parseRE(int toParse);
-
-  //check for stack overflow
-  unsigned int adr_so;
 
   StackElem *stack;
   int stack_size;

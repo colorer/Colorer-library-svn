@@ -84,9 +84,6 @@ friend class FileTypeImpl;
   String *useEntities(const String *name);
   const Region *getNCRegion(Element *el, const String &tag);
   const Region *getNCRegion(const String *name, bool logErrors);
-  
-  void checkWow64();
-  bool wow64;
 };
 
 #include<colorer/parsers/helpers/FileTypeImpl.h>

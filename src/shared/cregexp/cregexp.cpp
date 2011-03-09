@@ -36,15 +36,6 @@ SRegInfo::~SRegInfo()
 
 ////////////////////////////////////////////////////////////////////////////
 // CRegExp class
-void CRegExp::setWow64(bool wow64)
-{
-#ifdef _WIN32
-  if (wow64)  adr_so=0x00094444;
-  else adr_so=0x00034444;
-#else
-  adr_so=0;
-#endif
-}
 void CRegExp::init()
 {
   tree_root = 0;
