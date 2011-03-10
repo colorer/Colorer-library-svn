@@ -774,11 +774,11 @@ void CRegExp::check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,
 void CRegExp::insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2)
 {
   if (stack_size==0){
-    stack = new StackElem [1000];
-    stack_size=1000;
+    stack = new StackElem [INIT_MEM_SIZE];
+    stack_size = INIT_MEM_SIZE;
   }
   if(stack_size==count_elem){
-    stack_size+=100;
+    stack_size+= MEM_INC;
     StackElem* s=  new StackElem [stack_size];
     memcpy(s,stack,count_elem*sizeof(StackElem));
     delete[] stack;
@@ -854,36 +854,36 @@ int action=-1;
         if (toParse >= end){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         if (ignoreCase){
           if (Character::toLowerCase(pattern[toParse]) != Character::toLowerCase(re->un.symbol) &&
             Character::toUpperCase(pattern[toParse]) != Character::toUpperCase(re->un.symbol)){
               check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
               continue;
-          }//  return false;
+          }
         }else if (pattern[toParse] != re->un.symbol){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         toParse++;
         break;
       case ReMetaSymb:
         if (!checkMetaSymbol(re->un.metaSymbol, toParse)){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         break;
       case ReWord:
         wlen = re->un.word->length();
         if (toParse+wlen > end) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }//return false;
+        }
         if (ignoreCase){
           if (!DString(&pattern, toParse, wlen).equalsIgnoreCase(re->un.word)){
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             continue;
-          }// return false;
+          }
           toParse += wlen;
         }else{
           br = false;
@@ -892,7 +892,7 @@ int action=-1;
               check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
               br = true;
               break;
-            }// return false;
+            }
           };
           if (br) continue;
           toParse += wlen;
@@ -902,22 +902,22 @@ int action=-1;
         if (toParse >= end){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         if (!re->un.charclass->inClass(pattern[toParse])) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         toParse++;
         break;
       case ReNEnum:
         if (toParse >= end){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         if (re->un.charclass->inClass(pattern[toParse])){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return false;
+        }
         toParse++;
         break;
 #ifdef COLORERMODE
@@ -926,14 +926,14 @@ int action=-1;
         if (!backStr || !backTrace || sv == -1){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return false;
+        }
         br = false;
         for (i = backTrace->s[sv]; i < backTrace->e[sv]; i++){
           if (toParse >= end || pattern[toParse] != (*backStr)[i]){
             check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
             br = true;
             break;
-          }// return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -943,14 +943,14 @@ int action=-1;
         if (!backStr || !backTrace || sv == -1){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return false;
+        }
         br = false;
         for (i = backTrace->s[sv]; i < backTrace->e[sv]; i++){
           if (toParse >= end || Character::toLowerCase(pattern[toParse]) != Character::toLowerCase((*backStr)[i])) {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
             br = true;
             break;
-          }//return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -961,14 +961,14 @@ int action=-1;
         if (!backStr || !backTrace || sv == -1) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         br = false;
         for (i = backTrace->ns[sv]; i < backTrace->ne[sv]; i++){
           if (toParse >= end || pattern[toParse] != (*backStr)[i]) {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             br = true;
             break;
-          } //return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -978,7 +978,7 @@ int action=-1;
         {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }  //return false;
+        } 
 #endif // NAMED_MATCHES_IN_HASH
       case ReBkTraceNName:
 #ifndef NAMED_MATCHES_IN_HASH
@@ -986,14 +986,14 @@ int action=-1;
         if (!backStr || !backTrace || sv == -1) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         br = false;
         for (i = backTrace->s[sv]; i < backTrace->e[sv]; i++){
           if (Character::toLowerCase(pattern[toParse]) != Character::toLowerCase((*backStr)[i]) || toParse >= end)  {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             br = true;
             break;
-          } //return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -1004,7 +1004,6 @@ int action=-1;
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
         }
-        //return false;
 #endif // NAMED_MATCHES_IN_HASH
 #endif // COLORERMODE
 
@@ -1014,18 +1013,18 @@ int action=-1;
         if (sv == -1 || cnMatch <= sv) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         if (matches->ns[sv] == -1 || matches->ne[sv] == -1) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }//return false;
+        }
         br = false;
         for (i = matches->ns[sv]; i < matches->ne[sv]; i++){
           if (toParse >= end || pattern[toParse] != pattern[i]) {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             br = true;
             break;
-          } //return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -1036,18 +1035,18 @@ int action=-1;
           if (!mt) {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             continue;
-          }//return false;
+          }
           if (mt->s == -1 || mt->e == -1) {
             check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
             continue;
-          }// return false;
+          }
           br = false;
           for (i = mt->s; i < mt->e; i++){
             if (toParse >= end || pattern[toParse] != pattern[i]){
               check_stack(false,&re,&prev,&toParse,&leftenter,&action);
               br = true;
               break;
-            } // return false;
+            }
             toParse++;
           };
           if (br) continue;
@@ -1060,18 +1059,18 @@ int action=-1;
         if (sv == -1 || cMatch <= sv){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         if (matches->s[sv] == -1 || matches->e[sv] == -1){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return false;
+        }
         br = false;
         for (i = matches->s[sv]; i < matches->e[sv]; i++){
           if (toParse >= end || pattern[toParse] != pattern[i]){
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             br = true;
             break;
-          } // return false;
+          }
           toParse++;
         };
         if (br) continue;
@@ -1080,47 +1079,45 @@ int action=-1;
         if (!leftenter){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action);
           continue;
-        }// return true;
+        }
         {
-          insert_stack(&re,&prev,&toParse,&leftenter,10000,false,&re->un.param,0,toParse);
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_Break,rea_False,&re->un.param,0,toParse);
           continue;
-        }//if (!lowParse(re->un.param, 0, toParse)) return false;
+        }
         break;
       case ReNAhead:
         if (!leftenter){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return true;
+        }
         {
-          insert_stack(&re,&prev,&toParse,&leftenter,false,10000,&re->un.param,0,toParse);
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_False,rea_Break,&re->un.param,0,toParse);
           continue;
-        }//if (lowParse(re->un.param, 0, toParse)) return false;
+        }
         break;
       case ReBehind:
         if (!leftenter){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return true;
+        }
         if (toParse - re->param0 < 0) {
           check_stack(false,&re,&prev,&toParse,&leftenter,&action); 
           continue;
         }
         else{
-          insert_stack(&re,&prev,&toParse,&leftenter,10000,false,&re->un.param,0,toParse - re->param0);
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_Break,rea_False,&re->un.param,0,toParse - re->param0);
           continue;
         }
-        //if (toParse - re->param0 < 0 || !lowParse(re->un.param, 0, toParse - re->param0)) return false;
         break;
       case ReNBehind:
         if (!leftenter){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action); 
           continue;
-        }// return true;
+        }
         if (toParse - re->param0 >= 0){ 
-          insert_stack(&re,&prev,&toParse,&leftenter,false,10000,&re->un.param,0,toParse - re->param0);
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_False,rea_Break,&re->un.param,0,toParse - re->param0);
           continue;
         }
-        //if (toParse - re->param0 >= 0 && lowParse(re->un.param, 0, toParse - re->param0)) return false;
         break;
 
       case ReOr:
@@ -1130,9 +1127,9 @@ int action=-1;
           break;
         };
         {
-          insert_stack(&re,&prev,&toParse,&leftenter,true,10000,&re->un.param,0,toParse );
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_Break,&re->un.param,0,toParse );
           continue;
-        }// if (lowParse(re->un.param, 0, toParse)) return true;
+        }
         break;
       case ReRangeN:
         // first enter into op
@@ -1144,11 +1141,8 @@ int action=-1;
         re->oldParse = toParse;
         // making branch
         if (!re->param0){
-          insert_stack(&re,&prev,&toParse,&leftenter,true,10001,&re->un.param,0,toParse );
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_RangeN_step2,&re->un.param,0,toParse );
           continue;
-          //if (lowParse(re->un.param, 0, toParse))
-          //  return true;
-          //return lowParse(re->next, re, toParse);
         };
         // go into
         if (re->param0) re->param0--;
@@ -1161,21 +1155,16 @@ int action=-1;
           re->param1 = re->e - re->s;
           re->oldParse = -1;
         };
-        //
         if (!re->param0){
           if (re->param1) re->param1--;
           else{
-            insert_stack(&re,&prev,&toParse,&leftenter,true,false,&re->next,&re,toParse );
-            continue;
-          }//return lowParse(re->next, re, toParse);
-          {
-            insert_stack(&re,&prev,&toParse,&leftenter,true,10002,&re->un.param,0,toParse );
+            insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_False,&re->next,&re,toParse );
             continue;
           }
-        /*  if (lowParse(re->un.param, 0, toParse)) return true;
-          if (lowParse(re->next, re, toParse)) return true;
-          re->param1++;
-          return false;*/
+          {
+            insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_RangeNM_step2,&re->un.param,0,toParse );
+            continue;
+          }
         };
         if (re->param0) re->param0--;
         re = re->un.param;
@@ -1188,12 +1177,10 @@ int action=-1;
         };
         if (!re->param0 && re->oldParse == toParse) break;
         re->oldParse = toParse;
-        //
         if (!re->param0){
-          insert_stack(&re,&prev,&toParse,&leftenter,true,10004,&re->next,&re,toParse );
+          insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_NGRangeN_step2,&re->next,&re,toParse );
           continue;
         }
-        //if (!re->param0 && lowParse(re->next, re, toParse)) return true;
         if (re->param0) re->param0--;
         re = re->un.param;
         leftenter = true;
@@ -1204,24 +1191,16 @@ int action=-1;
           re->param1 = re->e - re->s;
           re->oldParse = -1;
         };
-        //
         if (!re->param0){
           if (re->param1) re->param1--;
           else {
-            insert_stack(&re,&prev,&toParse,&leftenter,true,false,&re->next,&re,toParse );
+            insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_False,&re->next,&re,toParse );
             continue;
-            //return lowParse(re->next, re, toParse);
           }
           {
-            insert_stack(&re,&prev,&toParse,&leftenter,true,10005,&re->next,&re,toParse );
+            insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_NGRangeNM_step2,&re->next,&re,toParse );
             continue;
-          }//if (lowParse(re->next, re, toParse)) return true;
-        /*  if (lowParse(re->un.param, 0, toParse))
-            return true;
-          else{
-            re->param1++;
-            return false;
-          };*/
+          }
         };
         if (re->param0) re->param0--;
         re = re->un.param;
@@ -1230,71 +1209,56 @@ int action=-1;
     };
    
     switch (action){
-      case 0: 
+      case rea_False: 
         if (count_elem){
           check_stack(false,&re,&prev,&toParse,&leftenter,&action);
           continue;
         }else
-          return 0; 
+          return false; 
         break;
-      case 1: 
+      case rea_True: 
         if (count_elem){
           check_stack(true,&re,&prev,&toParse,&leftenter,&action);
           continue;
         }else
-          return 1; 
+          return true; 
         break;
-      case 10000: 
+      case rea_Break: 
         action = -1; 
         break;
-      case 10001: 
+      case rea_RangeN_step2: 
         action = -1;
-        insert_stack(&re,&prev,&toParse,&leftenter,true,false,&re->next,&re,toParse);
-        //return lowParse(re->next, re, toParse);
+        insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_False,&re->next,&re,toParse);
         continue;
         break;
-      case 10002:
+      case rea_RangeNM_step2:
         action = -1;
-        insert_stack(&re,&prev,&toParse,&leftenter,true,10003,&re->next,&re,toParse);
+        insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_RangeNM_step3,&re->next,&re,toParse);
         continue;
-        //if (lowParse(re->next, re, toParse)) return true;
-        //re->param1++;
-        //return false;
         break;
-      case 10003:
+      case rea_RangeNM_step3:
         action = -1;
         re->param1++;
         check_stack(false,&re,&prev,&toParse,&leftenter,&action);
         continue;
-         //re->param1++;
-        //return false;
         break;
-      case 10004:
+      case rea_NGRangeN_step2:
         action = -1;
         if (re->param0) re->param0--;
         re = re->un.param;
         leftenter = true;
         continue;
         break;
-      case 10005:
+      case rea_NGRangeNM_step2:
         action = -1;
-        insert_stack(&re,&prev,&toParse,&leftenter,true,10006,&re->un.param,0,toParse);
+        insert_stack(&re,&prev,&toParse,&leftenter,rea_True,rea_NGRangeNM_step3,&re->un.param,0,toParse);
         continue;
-
-        //if (lowParse(re->un.param, 0, toParse))
-        //  return true;
-        //else{
-        //  re->param1++;
-        //  return false;
-        //};
         break;
-      case 10006:
+      case rea_NGRangeNM_step3:
         action = -1;
         re->param1++;
         check_stack(false,&re,&prev,&toParse,&leftenter,&action);
         continue;
-        //re->param1++;
-        //return false;
         break;
     }
     if (!re->next){

@@ -173,6 +173,21 @@ struct StackElem{
   // step if function return false
   int ifFalseReturn;
 };
+
+#define INIT_MEM_SIZE 1000
+#define MEM_INC 100
+
+enum ReAction {
+  rea_False=0,
+  rea_True=1,
+  rea_Break,
+  rea_RangeNM_step2,
+  rea_RangeNM_step3,
+  rea_RangeN_step2,
+  rea_NGRangeN_step2,
+  rea_NGRangeNM_step2,
+  rea_NGRangeNM_step3
+};
 /** Regular Expression compiler and matcher.
     Colorer regular expressions library cregexp.
 
