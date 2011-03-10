@@ -758,9 +758,9 @@ void CRegExp::check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,
     *action=res;
     return;
   }
-  
+
   StackElem &ne=stack[--count_elem];
-  if (res/* && stack->ifTrueReturn<2*/){
+  if (res){
     *action=ne.ifTrueReturn;
   }else{
     *action=ne.ifFalseReturn;
@@ -779,7 +779,7 @@ void CRegExp::insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *l
   }
   if(stack_size==count_elem){
     stack_size+= MEM_INC;
-    StackElem* s=  new StackElem [stack_size];
+    StackElem* s = new StackElem [stack_size];
     memcpy(s,stack,count_elem*sizeof(StackElem));
     delete[] stack;
     stack=s;
@@ -791,17 +791,17 @@ void CRegExp::insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *l
   ne.ifTrueReturn=ifTrueReturn;
   ne.ifFalseReturn=ifFalseReturn;
   ne.leftenter=*leftenter;
-  
-  *leftenter = true;
+
   if (prev2==null) *prev=null;
   else  *prev=*prev2;
   *re=*re2; 
   *toParse=toParse2;
+  // this is init operation from lowParse
+  *leftenter = true;
   if (!*re){
     *re = (*prev)->parent;
     *leftenter = false;
   };
-
 }
 
 bool CRegExp::lowParse(SRegInfo *re, SRegInfo *prev, int toParse)

@@ -174,8 +174,8 @@ struct StackElem{
   int ifFalseReturn;
 };
 
-#define INIT_MEM_SIZE 1000
-#define MEM_INC 100
+#define INIT_MEM_SIZE 1024
+#define MEM_INC 128
 
 enum ReAction {
   rea_False=0,
