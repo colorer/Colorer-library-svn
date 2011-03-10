@@ -17,7 +17,7 @@ obj_output_slash = $(obj_output)/
 
 DLLNAME = colorer.dll
 DLLDIR = ../bin
-DEF = pcolorer.gcc.def
+DEF = pcolorer3.gcc.def
 RC_NAME = pcolorer3.rc
 RES = $(obj_output)/pcolorer3.res.o
 MAP_NAME = colorer.map

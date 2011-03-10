@@ -73,7 +73,7 @@
 				OutputFile="$(OutDir)\colorer.dll"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
-				ModuleDefinitionFile="pcolorer.def"
+				ModuleDefinitionFile="pcolorer3.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
 				GenerateMapFile="true"
@@ -162,7 +162,7 @@
 				OutputFile="$(OutDir)\colorer_x64.dll"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
-				ModuleDefinitionFile="pcolorer.def"
+				ModuleDefinitionFile="pcolorer3.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
 				GenerateMapFile="true"
@@ -256,7 +256,7 @@
 				OutputFile="$(OutDir)\colorer.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ModuleDefinitionFile="pcolorer.def"
+				ModuleDefinitionFile="pcolorer3.def"
 				GenerateDebugInformation="false"
 				GenerateMapFile="true"
 				MapFileName="$(OutDir)\colorer.map"
@@ -354,7 +354,7 @@
 				OutputFile="$(OutDir)\colorer_x64.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ModuleDefinitionFile="pcolorer.def"
+				ModuleDefinitionFile="pcolorer3.def"
 				GenerateDebugInformation="false"
 				GenerateMapFile="true"
 				MapFileName="$(OutDir)\colorer_x64.map"
@@ -454,11 +454,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pcolorer.def"
+				RelativePath=".\pcolorer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\pcolorer.h"
+				RelativePath=".\pcolorer3.def"
 				>
 			</File>
 			<File

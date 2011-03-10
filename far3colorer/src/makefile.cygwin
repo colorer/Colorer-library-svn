@@ -14,7 +14,7 @@ include $(shared_path)makefile.colorer.cygwin
 include _dependencies.dep
 include makefile.core
 
-DEF=pcolorer.gcc.def
+DEF=pcolorer3.gcc.def
 DLLMAIN=_DllMain@12
 
 LIBINC = -lwininet -lstdc++
