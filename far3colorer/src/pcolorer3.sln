@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pcolorer2", "pcolorer2.vcproj", "{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pcolorer3", "pcolorer3.vcproj", "{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}"
 EndProject
 Global
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution

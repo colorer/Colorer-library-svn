@@ -42,13 +42,13 @@ include makefile.core
 
 LIBFLAGS = $(objs) $(LIBFLAGS) /map:$(obj_output)\\colorer.map /out:$(obj_output)\\colorer.dll /DLL /MANIFEST /MANIFESTFILE:"$(obj_output)\\colorer.dll.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /def:pcolorer.def  /SUBSYSTEM:CONSOLE /DYNAMICBASE:NO wininet.lib kernel32.lib user32.lib advapi32.lib /nologo
 
-$(obj_output)\\colorer.dll: $(obj_output) $(objs) $(obj_output)\\pcolorer2.res
-	$(LINK) $(LIBFLAGS) $(obj_output)\\pcolorer2.res
+$(obj_output)\\colorer.dll: $(obj_output) $(objs) $(obj_output)\\pcolorer3.res
+	$(LINK) $(LIBFLAGS) $(obj_output)\\pcolorer3.res
 	
 
 $(obj_output)\\pcolorer2.res:
-	rc.exe /d /fo"$(obj_output)\\pcolorer2.res" .\pcolorer2.rc
-	move pcolorer2.res $(obj_output)\\pcolorer2.res
+	rc.exe /d /fo"$(obj_output)\\pcolorer2.res" .\pcolorer3.rc
+	move pcolorer2.res $(obj_output)\\pcolorer3.res
 	del /q vc90.idb
 
 clean:

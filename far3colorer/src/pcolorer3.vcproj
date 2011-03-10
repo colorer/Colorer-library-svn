@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="pcolorer2"
+	Name="pcolorer3"
 	ProjectGUID="{1D34D8DB-0A9A-46B8-83BD-07D38B989EF2}"
-	RootNamespace="pcolorer2"
+	RootNamespace="pcolorer3"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -398,7 +398,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\pcolorer2.rc"
+				RelativePath=".\pcolorer3.rc"
 				>
 			</File>
 		</Filter>
@@ -419,7 +419,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="pcolorer2"
+			Name="pcolorer3"
 			>
 			<File
 				RelativePath=".\ConsoleAnnotation.h"

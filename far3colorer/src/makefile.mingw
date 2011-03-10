@@ -18,8 +18,8 @@ obj_output_slash = $(obj_output)/
 DLLNAME = colorer.dll
 DLLDIR = ../bin
 DEF = pcolorer.gcc.def
-RC_NAME = pcolorer2.rc
-RES = $(obj_output)/pcolorer2.res.o
+RC_NAME = pcolorer3.rc
+RES = $(obj_output)/pcolorer3.res.o
 MAP_NAME = colorer.map
 
 CPPFLAGS_CUSTOM= -DUNICODE -D_UNICODE -DWINVER=0x0500 -DCOLORER_FEATURE_USE_DL_MALLOC=TRUE -DCOLORER_FEATURE_USE_CHUNK_ALLOC=TRUE

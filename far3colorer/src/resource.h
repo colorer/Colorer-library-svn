@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by pcolorer2.rc
+// Used by pcolorer3.rc
 
 // Next default values for new objects
 // 
