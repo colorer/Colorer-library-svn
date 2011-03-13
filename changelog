@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. оптимизация String::indexOf
+
+#Revision: 1666
+	#Author: ctapmex Date: 2011-03-06 21:56:30 +0500 (Вс, 06 мар 2011)
 	1. с 3 попытки 1549 закрываем -)
 
 #Revision: 1656
