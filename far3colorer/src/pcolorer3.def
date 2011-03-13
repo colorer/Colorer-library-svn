@@ -1,7 +1,7 @@
 LIBRARY
 EXPORTS
    GetGlobalInfoW
-   OpenPanelW
+   OpenW
    SetStartupInfoW
    GetPluginInfoW
    ConfigureW

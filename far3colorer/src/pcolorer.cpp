@@ -47,7 +47,7 @@ void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 {
   Info->StructSize=sizeof(GlobalInfo);
   Info->MinFarVersion=FARMANAGERVERSION;
-  Info->Version=MAKEFARVERSION(1,3,1);// need fix
+  Info->Version=MAKEFARVERSION(1,0,3,1);// need fix
   Info->Guid=MainGuid;
   Info->Title=L"FarColorer";
   Info->Description=L"Syntax highlighting in Far editor";
@@ -96,15 +96,15 @@ void WINAPI ExitFARW()
 /**
   Open plugin configuration of actions dialog.
 */
-HANDLE WINAPI OpenPanelW(OPENPANEL_OPENFROM OpenFrom, const GUID* Guid, INT_PTR Data)
+HANDLE WINAPI OpenW(const struct OpenInfo *Info)
 {
-  if (OpenFrom == OPEN_EDITOR){
+  if (Info->OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();
   }
   else
-    if (OpenFrom == OPEN_COMMANDLINE){
+    if (Info->OpenFrom == OPEN_COMMANDLINE){
       //file name, which we received
-      wchar_t *file = (wchar_t*)Data;
+      wchar_t *file = (wchar_t*)Info->Data;
 
       wchar_t *nfile = PathToFull(file,true);
       if (nfile){

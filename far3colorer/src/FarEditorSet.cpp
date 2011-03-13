@@ -1089,7 +1089,7 @@ bool FarEditorSet::SetBgEditor()
     const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
     c=(def_text->back<<4) + def_text->fore;
 
-    fsc.Flags=FCLR_REDRAW;
+    fsc.Flags=FSETCLR_REDRAW;
     fsc.ColorCount=1;
     fsc.StartIndex=COL_EDITORTEXT;
     fsc.Colors=&c;

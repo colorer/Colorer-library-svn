@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 1893
+  Plugin API for Far Manager 3.0 build 1907
 */
 
 /*
@@ -42,13 +42,10 @@ other possible license with no implications from the above license on them.
 
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
-#define FARMANAGERVERSION_BUILD 1893
+#define FARMANAGERVERSION_REVISION 0
+#define FARMANAGERVERSION_BUILD 1907
 
 #ifndef RC_INVOKED
-
-#define MAKEFARVERSION(major,minor,build) ( ((major)<<24) | ((minor)<<16) | (build) )
-
-#define FARMANAGERVERSION MAKEFARVERSION(FARMANAGERVERSION_MAJOR,FARMANAGERVERSION_MINOR,FARMANAGERVERSION_BUILD)
 
 #include <windows.h>
 
@@ -59,6 +56,19 @@ other possible license with no implications from the above license on them.
 #define CP_UNICODE 1200
 #define CP_REVERSEBOM 1201
 #define CP_AUTODETECT ((UINT)-1)
+
+typedef unsigned __int64 FARCOLORFLAGS;
+static const FARCOLORFLAGS
+	FMSG_FG_4BIT  = 0x0000000000000001ULL,
+	FMSG_BG_4BIT  = 0x0000000000000002ULL;
+
+struct FarColor
+{
+	unsigned __int64 Flags;
+	unsigned int ForegroundColor;
+	unsigned int BackgroundColor;
+	void* Reserved;
+};
 
 typedef unsigned __int64 FARMESSAGEFLAGS;
 static const FARMESSAGEFLAGS
@@ -106,7 +116,7 @@ enum FARDIALOGITEMTYPES
    Check diagol element type has inputstring?
    (DI_EDIT, DI_FIXEDIT, DI_PSWEDIT, etc)
 */
-static __inline BOOL IsEdit(FARDIALOGITEMTYPES Type)
+static __inline BOOL IsEdit(enum FARDIALOGITEMTYPES Type)
 {
 	switch (Type)
 	{
@@ -409,7 +419,7 @@ struct FarListColors
 
 struct FarDialogItem
 {
-	FARDIALOGITEMTYPES Type;
+	enum FARDIALOGITEMTYPES Type;
 	int X1,Y1,X2,Y2;
 	union
 	{
@@ -673,14 +683,14 @@ struct PanelInfo
 	size_t StructSize;
 	GUID OwnerGuid;
 	HANDLE PluginHandle;
-	PANELINFOTYPE PanelType;
+	enum PANELINFOTYPE PanelType;
 	RECT PanelRect;
 	int ItemsNumber;
 	int SelectedItemsNumber;
 	int CurrentItem;
 	int TopPanelItem;
 	int ViewMode;
-	OPENPANELINFO_SORTMODES SortMode;
+	enum OPENPANELINFO_SORTMODES SortMode;
 	PANELINFOFLAGS Flags;
 	DWORD Reserved;
 };
@@ -845,7 +855,7 @@ typedef BOOL (WINAPI *FARAPISHOWHELP)(
 
 enum ADVANCED_CONTROL_COMMANDS
 {
-	ACTL_GETFARVERSION,
+	ACTL_GETFARMANAGERVERSION,
 	ACTL_GETSYSWORDDIV,
 	ACTL_WAITKEY,
 	ACTL_GETCOLOR,
@@ -1071,15 +1081,15 @@ struct MacroCheckMacroText
 };
 
 
-typedef unsigned __int64 FARCOLORFLAGS;
-static const FARCOLORFLAGS
-	
-	FCLR_NONE                   = 0,
-	FCLR_REDRAW                 = 0x0000000000000001ULL;
+typedef unsigned __int64 FARSETCOLORFLAGS;
+static const FARSETCOLORFLAGS
+
+	FSETCLR_NONE                   = 0,
+	FSETCLR_REDRAW                 = 0x0000000000000001ULL;
 
 struct FarSetColors
 {
-	FARCOLORFLAGS Flags;
+	FARSETCOLORFLAGS Flags;
 	int StartIndex;
 	int ColorCount;
 	LPBYTE Colors;
@@ -1105,7 +1115,7 @@ struct WindowInfo
 	size_t StructSize;
 	INT_PTR Id;
 	int  Pos;
-	WINDOWINFO_TYPE Type;
+	enum WINDOWINFO_TYPE Type;
 	WINDOWINFO_FLAGS Flags;
 	wchar_t *TypeName;
 	int TypeNameSize;
@@ -1164,7 +1174,7 @@ static const VIEWER_SETMODEFLAGS_TYPES
 
 struct ViewerSetMode
 {
-	VIEWER_SETMODE_TYPES Type;
+	enum VIEWER_SETMODE_TYPES Type;
 	union
 	{
 		int iParam;
@@ -1318,7 +1328,7 @@ enum EDITOR_SETPARAMETER_TYPES
 
 struct EditorSetParameter
 {
-	EDITOR_SETPARAMETER_TYPES Type;
+	enum EDITOR_SETPARAMETER_TYPES Type;
 	union
 	{
 		int iParam;
@@ -1345,7 +1355,7 @@ enum EDITOR_UNDOREDO_COMMANDS
 
 struct EditorUndoRedo
 {
-	EDITOR_UNDOREDO_COMMANDS Command;
+	enum EDITOR_UNDOREDO_COMMANDS Command;
 	DWORD_PTR Reserved[3];
 };
 
@@ -1466,20 +1476,20 @@ struct EditorConvertPos
 };
 
 
-enum EDITORCOLORFLAGS
-{
-	ECF_TAB1 = 0x10000,
-};
+typedef unsigned __int64 EDITORCOLORFLAGS;
+static const EDITORCOLORFLAGS
+	ECF_TAB1 = 0x0000000000000001ULL;
 
 struct EditorColor
 {
+	size_t StructSize;
 	int StringNumber;
 	int ColorItem;
 	int StartPos;
 	int EndPos;
-	int Color;
+	EDITORCOLORFLAGS Flags;
+	struct FarColor Color;
 };
-
 struct EditorAnnotation
 {
 	int StringNumber;
@@ -1604,7 +1614,7 @@ struct FarSettingsItem
 {
 	size_t Root;
 	const wchar_t* Name;
-	FARSETTINGSTYPES Type;
+	enum FARSETTINGSTYPES Type;
 	union
 	{
 		unsigned __int64 Number;
@@ -1624,14 +1634,14 @@ struct FarSettingsItem
 struct FarSettingsName
 {
 	const wchar_t* Name;
-	FARSETTINGSTYPES Type;
+	enum FARSETTINGSTYPES Type;
 };
 
 struct FarSettingsEnum
 {
 	size_t Root;
 	size_t Count;
-	const FarSettingsName* Items;
+	const struct FarSettingsName* Items;
 };
 
 struct FarSettingsValue
@@ -1642,62 +1652,62 @@ struct FarSettingsValue
 
 typedef int (WINAPI *FARAPICONTROL)(
     HANDLE hPanel,
-    FILE_CONTROL_COMMANDS Command,
+    enum FILE_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef INT_PTR(WINAPI *FARAPIADVCONTROL)(
     const GUID* PluginId,
-    ADVANCED_CONTROL_COMMANDS Command,
+    enum ADVANCED_CONTROL_COMMANDS Command,
     void *Param
 );
 
 typedef int (WINAPI *FARAPIVIEWERCONTROL)(
     int ViewerID,
-    VIEWER_CONTROL_COMMANDS Command,
+    enum VIEWER_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPIEDITORCONTROL)(
     int EditorID,
-    EDITOR_CONTROL_COMMANDS Command,
+    enum EDITOR_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPIMACROCONTROL)(
     HANDLE hHandle,
-    FAR_MACRO_CONTROL_COMMANDS Command,
+    enum FAR_MACRO_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPIPLUGINSCONTROL)(
     HANDLE hHandle,
-    FAR_PLUGINS_CONTROL_COMMANDS Command,
+    enum FAR_PLUGINS_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPIFILEFILTERCONTROL)(
     HANDLE hHandle,
-    FAR_FILE_FILTER_CONTROL_COMMANDS Command,
+    enum FAR_FILE_FILTER_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPIREGEXPCONTROL)(
     HANDLE hHandle,
-    FAR_REGEXP_CONTROL_COMMANDS Command,
+    enum FAR_REGEXP_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
 
 typedef int (WINAPI *FARAPISETTINGSCONTROL)(
     HANDLE hHandle,
-    FAR_SETTINGS_CONTROL_COMMANDS Command,
+    enum FAR_SETTINGS_CONTROL_COMMANDS Command,
     int Param1,
     INT_PTR Param2
 );
@@ -1799,7 +1809,7 @@ static const MKLINK_FLAGS
 	MLF_SHOWERRMSG       = 0x0000000000010000ULL,
 	MLF_DONOTUPDATEPANEL = 0x0000000000020000ULL;
 
-typedef int (WINAPI *FARSTDMKLINK)(const wchar_t *Src,const wchar_t *Dest,LINK_TYPE Type, MKLINK_FLAGS Flags);
+typedef int (WINAPI *FARSTDMKLINK)(const wchar_t *Src,const wchar_t *Dest,enum LINK_TYPE Type, MKLINK_FLAGS Flags);
 typedef int (WINAPI *FARGETREPARSEPOINTINFO)(const wchar_t *Src, wchar_t *Dest,int DestSize);
 
 enum CONVERTPATHMODES
@@ -1809,7 +1819,7 @@ enum CONVERTPATHMODES
 	CPM_NATIVE,
 };
 
-typedef int (WINAPI *FARCONVERTPATH)(CONVERTPATHMODES Mode, const wchar_t *Src, wchar_t *Dest, int DestSize);
+typedef int (WINAPI *FARCONVERTPATH)(enum CONVERTPATHMODES Mode, const wchar_t *Src, wchar_t *Dest, int DestSize);
 
 typedef DWORD (WINAPI *FARGETCURRENTDIRECTORY)(DWORD Size,wchar_t* Buffer);
 
@@ -1933,11 +1943,41 @@ struct PluginMenuItem
 	int Count;
 };
 
+enum VERSION_STAGE
+{
+	VS_RELEASE,
+	VS_ALPHA,
+	VS_BETA,
+	VS_RC,
+};
+
+struct VersionInfo
+{
+	int Major;
+	int Minor;
+	int Revision;
+	int Build;
+	enum VERSION_STAGE Stage;
+};
+
+static __inline BOOL CheckVersion(const struct VersionInfo* Current, const struct VersionInfo* Required)
+{
+	return (Current->Major > Required->Major) || (Current->Major == Required->Major && Current->Minor > Required->Minor) || (Current->Major == Required->Major && Current->Minor == Required->Minor && Current->Revision > Required->Revision) || (Current->Major == Required->Major && Current->Minor == Required->Minor && Current->Revision == Required->Revision && Current->Build >= Required->Build);
+}
+
+static __inline struct VersionInfo MAKEFARVERSION(int Major, int Minor, int Revision, int Build)
+{
+	struct VersionInfo Info = {Major,Minor,Revision,Build};
+	return Info;
+}
+
+#define FARMANAGERVERSION MAKEFARVERSION(FARMANAGERVERSION_MAJOR,FARMANAGERVERSION_MINOR, FARMANAGERVERSION_REVISION, FARMANAGERVERSION_BUILD)
+
 struct GlobalInfo
 {
 	size_t StructSize;
-	DWORD MinFarVersion;
-	DWORD Version;
+	struct VersionInfo MinFarVersion;
+	struct VersionInfo Version;
 	GUID Guid;
 	const wchar_t *Title;
 	const wchar_t *Description;
@@ -2030,6 +2070,7 @@ static const OPERATION_MODES
 struct OpenPanelInfo
 {
 	size_t                       StructSize;
+	HANDLE                       hPanel;
 	OPENPANELINFO_FLAGS          Flags;
 	const wchar_t               *HostFile;
 	const wchar_t               *CurDir;
@@ -2042,14 +2083,14 @@ struct OpenPanelInfo
 	const struct PanelMode      *PanelModesArray;
 	int                          PanelModesNumber;
 	int                          StartPanelMode;
-	OPENPANELINFO_SORTMODES     StartSortMode;
+	enum OPENPANELINFO_SORTMODES StartSortMode;
 	int                          StartSortOrder;
 	const struct KeyBarTitles   *KeyBar;
 	const wchar_t               *ShortcutData;
 	unsigned __int64             FreeSize;
 };
 
-struct AnalyseData
+struct AnalyseInfo
 {
 	size_t          StructSize;
 	const wchar_t  *FileName;
@@ -2058,7 +2099,7 @@ struct AnalyseData
 	OPERATION_MODES OpMode;
 };
 
-enum OPENPANEL_OPENFROM
+enum OPENFROM
 {
 	OPEN_FROM_MASK          = 0x000000FF,
 
@@ -2094,39 +2135,148 @@ enum FAR_EVENTS
 	FE_KILLFOCUS      =7,
 };
 
+struct OpenInfo
+{
+	size_t StructSize;
+	enum OPENFROM OpenFrom;
+	const GUID* Guid;
+	INT_PTR Data;
+};
+
+struct SetDirectoryInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	const wchar_t *Dir;
+	OPERATION_MODES OpMode;
+	INT_PTR UserData;
+};
+
+struct SetFindListInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	const struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+};
+
+struct PutFilesInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	int Move;
+	const wchar_t *SrcPath;
+	OPERATION_MODES OpMode;
+};
+
+struct ProcessHostFileInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	OPERATION_MODES OpMode;
+};
+
+struct MakeDirectoryInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	const wchar_t *Name;
+	OPERATION_MODES OpMode;
+};
+
+struct CompareInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	const struct PluginPanelItem *Item1;
+	const struct PluginPanelItem *Item2;
+	enum OPENPANELINFO_SORTMODES Mode;
+};
+
+struct GetFindDataInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	OPERATION_MODES OpMode;
+};
+
+struct GetVirtualFindDataInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	const wchar_t *Path;
+};
+
+struct FreeFindDataInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+};
+
+struct GetFilesInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	int Move;
+	const wchar_t *DestPath;
+	OPERATION_MODES OpMode;
+};
+
+struct DeleteFilesInfo
+{
+	size_t StructSize;
+	HANDLE hPanel;
+	struct PluginPanelItem *PanelItem;
+	int ItemsNumber;
+	OPERATION_MODES OpMode;
+};
+
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 // Exported Functions
 
-	int    WINAPI AnalyseW(const struct AnalyseData *Data);
+	int    WINAPI AnalyseW(const struct AnalyseInfo *Info);
 	void   WINAPI ClosePanelW(HANDLE hPanel);
-	int    WINAPI CompareW(HANDLE hPanel,const struct PluginPanelItem *Item1,const struct PluginPanelItem *Item2,OPENPANELINFO_SORTMODES Mode);
+	int    WINAPI CompareW(const struct CompareInfo *Info);
 	int    WINAPI ConfigureW(const GUID* Guid);
-	int    WINAPI DeleteFilesW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber,OPERATION_MODES OpMode);
+	int    WINAPI DeleteFilesW(const struct DeleteFilesInfo *Info);
 	void   WINAPI ExitFARW(void);
-	void   WINAPI FreeFindDataW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber);
-	void   WINAPI FreeVirtualFindDataW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber);
-	int    WINAPI GetFilesW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t **DestPath,OPERATION_MODES OpMode);
-	int    WINAPI GetFindDataW(HANDLE hPanel,struct PluginPanelItem **pPanelItem,int *pItemsNumber,OPERATION_MODES OpMode);
+	void   WINAPI FreeFindDataW(const struct FreeFindDataInfo *Info);
+	void   WINAPI FreeVirtualFindDataW(const struct FreeFindDataInfo *Info);
+	int    WINAPI GetFilesW(struct GetFilesInfo *Info);
+	int    WINAPI GetFindDataW(struct GetFindDataInfo *Info);
 	void   WINAPI GetGlobalInfoW(struct GlobalInfo *Info);
-	void   WINAPI GetOpenPanelInfoW(HANDLE hPanel,struct OpenPanelInfo *Info);
+	void   WINAPI GetOpenPanelInfoW(struct OpenPanelInfo *Info);
 	void   WINAPI GetPluginInfoW(struct PluginInfo *Info);
-	int    WINAPI GetVirtualFindDataW(HANDLE hPanel,struct PluginPanelItem **pPanelItem,int *pItemsNumber,const wchar_t *Path);
-	int    WINAPI MakeDirectoryW(HANDLE hPanel,const wchar_t **Name,OPERATION_MODES OpMode);
-	HANDLE WINAPI OpenPanelW(OPENPANEL_OPENFROM OpenFrom,const GUID* Guid,INT_PTR Data);
+	int    WINAPI GetVirtualFindDataW(struct GetVirtualFindDataInfo *Info);
+	int    WINAPI MakeDirectoryW(struct MakeDirectoryInfo *Info);
+	HANDLE WINAPI OpenW(const struct OpenInfo *Info);
 	int    WINAPI ProcessDialogEventW(int Event,void *Param);
 	int    WINAPI ProcessEditorEventW(int Event,void *Param);
 	int    WINAPI ProcessEditorInputW(const INPUT_RECORD *Rec);
 	int    WINAPI ProcessEventW(HANDLE hPanel,int Event,void *Param);
-	int    WINAPI ProcessHostFileW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber,OPERATION_MODES OpMode);
+	int    WINAPI ProcessHostFileW(const struct ProcessHostFileInfo *Info);
 	int    WINAPI ProcessKeyW(HANDLE hPanel,const INPUT_RECORD *Rec);
 	int    WINAPI ProcessSynchroEventW(int Event,void *Param);
 	int    WINAPI ProcessViewerEventW(int Event,void *Param);
-	int    WINAPI PutFilesW(HANDLE hPanel,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t *SrcPath,OPERATION_MODES OpMode);
-	int    WINAPI SetDirectoryW(HANDLE hPanel,const wchar_t *Dir,OPERATION_MODES OpMode);
-	int    WINAPI SetFindListW(HANDLE hPanel,const struct PluginPanelItem *PanelItem,int ItemsNumber);
+	int    WINAPI PutFilesW(const struct PutFilesInfo *Info);
+	int    WINAPI SetDirectoryW(const struct SetDirectoryInfo *Info);
+	int    WINAPI SetFindListW(const struct SetFindListInfo *Info);
 	void   WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info);
 
 #ifdef __cplusplus

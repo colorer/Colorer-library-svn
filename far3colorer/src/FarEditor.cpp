@@ -1197,10 +1197,15 @@ void FarEditor::addFARColor(int lno, int s, int e, color col)
     addAnnotation(lno, s, e, ai);
   }else{
     EditorColor ec;
+	ec.StructSize = sizeof(EditorColor);
+	ec.Flags = 0;
     ec.StringNumber = lno;
     ec.StartPos = s;
     ec.EndPos = e-1;
-    ec.Color = col.concolor;
+    //ec.Color = col.concolor;
+	ec.Color.Flags = FMSG_FG_4BIT|FMSG_BG_4BIT;
+	ec.Color.BackgroundColor = col.cbk;
+	ec.Color.ForegroundColor = col.cfg;
     CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
     info->EditorControl(CurrentEditor, ECTL_ADDCOLOR, NULL, (INT_PTR)&ec);
     CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
