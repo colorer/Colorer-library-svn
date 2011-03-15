@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="C:\Far\Plugins\colorer\bin"
+			OutputDirectory="..\..\..\test_bin\Plugins\colorer\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
@@ -76,6 +76,9 @@
 				ModuleDefinitionFile="pcolorer.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/colorer.pdb"
+				GenerateMapFile="true"
+				MapFileName="$(OutDir)/colorer.map"
+				MapExports="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
