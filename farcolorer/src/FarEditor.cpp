@@ -431,7 +431,9 @@ void FarEditor::locateFunction(){
 }
 
 void FarEditor::updateHighlighting(){
+  enterHandler();
   baseEditor->validate(ei.TopScreenLine, true);
+  leaveHandler();
 }
 
 void FarEditor::selectEncoding(){
@@ -459,12 +461,16 @@ void FarEditor::selectEncoding(){
 int FarEditor::editorInput(const INPUT_RECORD *ir)
 {
   if (ir->EventType == KEY_EVENT && ir->Event.KeyEvent.wVirtualKeyCode == 0){
-    idleCount++;
-    if (idleCount > 10){
-      idleCount = 10;
-    }
-    baseEditor->idleJob(idleCount*10);
-    info->EditorControl(ECTL_REDRAW, EEREDRAW_ALL);
+    if (baseEditor->haveInvalidLine()){ 
+      idleCount++; 
+      if (idleCount > 10){ 
+        idleCount = 10; 
+      } 
+      enterHandler(); 
+      baseEditor->idleJob(idleCount*10); 
+      leaveHandler(); 
+      info->EditorControl(ECTL_REDRAW, NULL); 
+    } 
   }else if(ir->EventType == KEY_EVENT){
     idleCount = 0;
   };
@@ -704,6 +710,7 @@ const int FILTER_SIZE = 40;
     int selectedItem = 0;
 
     Vector<int> treeStack;
+    enterHandler();
     for(i = 0; i < items_num; i++){
       OutlineItem *item = outliner->getItem(i);
       if (item->token->indexOfIgnoreCase(DString(filter)) != -1){
@@ -741,6 +748,7 @@ const int FILTER_SIZE = 40;
         menu_size++;
       };
     }
+    leaveHandler();
     if (selectedItem > 0) menu[selectedItem].Selected = 1;
 
     if (menu_size == 0 && flen > 0){
@@ -965,6 +973,7 @@ const char *FarEditor::GetMsg(int msg){
 void FarEditor::cleanEditor()
 {
   int col=(int)info->AdvControl(info->ModuleNumber,ACTL_GETCOLOR,(void *)COL_EDITORTEXT );
+  enterHandler();
   for (int i=0;i<ei.TotalLines;i++){
     EditorGetString egs;
     egs.StringNumber=i;
@@ -974,6 +983,7 @@ void FarEditor::cleanEditor()
     else
       addFARColor(i,0,egs.StringLength,col);
   }
+  leaveHandler();
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
