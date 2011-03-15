@@ -35,7 +35,6 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
   drawPairs = drawSyntax = true;
   oldOutline = false;
-  maxTime = 3000;
 
   newback = newfore = -1;
   rdBackground = null;
@@ -206,11 +205,6 @@ void FarEditor::setDrawSyntax(bool drawSyntax)
 void FarEditor::setOutlineStyle(bool oldStyle)
 {
   this->oldOutline = oldStyle;
-}
-
-void FarEditor::setMaxTime(int maxTime)
-{
-  this->maxTime = maxTime;
 }
 
 void FarEditor::setRegionMapper(RegionMapper *rs)
@@ -674,18 +668,20 @@ const int FILTER_SIZE = 40;
 
   int breakKeys[] =
   {
-    VK_BACK, VK_RETURN, 0xBA, 0xBD, VK_TAB,
+    VK_BACK, VK_RETURN, VK_OEM_1, VK_OEM_MINUS, VK_TAB,
     (PKF_CONTROL<<16)+VK_UP, (PKF_CONTROL<<16)+VK_DOWN,
     (PKF_CONTROL<<16)+VK_LEFT, (PKF_CONTROL<<16)+VK_RIGHT,
-    (PKF_CONTROL<<16)+VK_RETURN,
+    (PKF_CONTROL<<16)+VK_RETURN,(PKF_SHIFT<<16)+VK_OEM_1, 
+    (PKF_SHIFT<<16)+VK_OEM_MINUS,(PKF_SHIFT<<16)+VK_OEM_3,
+    VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4, 
+ 	  VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9, 
     '0','1','2','3','4','5','6','7','8','9',
     'A','B','C','D','E','F','G','H','I','J',
     'K','L','M','N','O','P','Q','R','S','T',
     'U','V','W','X','Y','Z',' ', 0,
   };
 
-  int keys_size = 0;
-  while (breakKeys[keys_size] !=0) keys_size++;
+  int keys_size = sizeof(breakKeys)/sizeof(int)-1; 
 
   int outputEnc = Encodings::getEncodingIndex("cp866");
 
@@ -825,15 +821,15 @@ const int FILTER_SIZE = 40;
         moved = true;
         break;
       }
-      case 2: // :
+      case 2: // ;
         if (flen == FILTER_SIZE) break;
-        filter[flen]= ':';
+        filter[flen]= ';';
         filter[++flen]= 0;
         break;
 
-      case 3: // _
+      case 3: // -
         if (flen == FILTER_SIZE) break;
-        filter[flen]= '_';
+        filter[flen]= '-';
         filter[++flen]= 0;
         break;
 
@@ -888,9 +884,36 @@ const int FILTER_SIZE = 40;
         stopMenu = true;
         break;
       }
+      case 10: // : 
+
+        if (flen == FILTER_SIZE) break; 
+
+        filter[flen]= ':'; 
+        filter[++flen]= 0; 
+        break; 
+      case 11: // _ 
+
+        if (flen == FILTER_SIZE) break; 
+
+        filter[flen]= '_'; 
+        filter[++flen]= 0; 
+        break; 
+      case 12: // _ 
+
+        if (flen == FILTER_SIZE){ 
+          break; 
+        } 
+
+        filter[flen]= '~'; 
+        filter[++flen]= 0; 
+        break; 
       default:
         if (flen == FILTER_SIZE || code > keys_size) break;
-        filter[flen] = (char)Character::toLowerCase(breakKeys[code]);
+        if (code<23){ 
+          filter[flen] = (char)Character::toLowerCase('0'+code-13); 
+        }else{ 
+          filter[flen] = (char)Character::toLowerCase(breakKeys[code]); 
+        } 
         filter[++flen] = 0;
         break;
     }

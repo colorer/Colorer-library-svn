@@ -49,7 +49,6 @@ public:
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);
-  void setMaxTime(int maxTime);
 
   /** Editor action: pair matching.
   */
@@ -105,7 +104,6 @@ private:
 
   bool drawPairs, drawSyntax;
   bool oldOutline;
-  int maxTime;
 
   int WindowSizeX;
   int WindowSizeY;

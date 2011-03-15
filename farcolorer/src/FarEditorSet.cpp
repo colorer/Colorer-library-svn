@@ -8,7 +8,6 @@
 #define REG_DISABLED        "disabled"
 #define REG_HRD_NAME        "hrdName"
 #define REG_CATALOG         "catalog"
-#define REG_MAXTIME         "maxTime"
 #define REG_CROSSDRAW				"CrossDraw"
 #define REG_PAIRSDONTDRAW  "pairsDontDraw"
 #define REG_SYNTAXDONTDRAW "syntaxDontDraw"
@@ -125,7 +124,7 @@ void FarEditorSet::openMenu(){
 		exceptionMessage[2] = (msg+e.getMessage()).getChars();
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
-		info->Message(info->ModuleNumber, 0, "exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, "exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 }
@@ -165,7 +164,7 @@ void FarEditorSet::viewFile(const String &path){
 		exceptionMessage[1] = GetMsg(mCantOpenFile);
 		exceptionMessage[3] = GetMsg(mDie);
 		exceptionMessage[2] = e.getMessage()->getChars();
-		info->Message(info->ModuleNumber, 0, "exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, "exception", &exceptionMessage[0], 4, 1);
 	};
 }
 
@@ -245,8 +244,6 @@ void FarEditorSet::configure()
 			IDX_CATALOG_EDIT,
 			IDX_HRD,
 			IDX_HRD_SELECT,
-			IDX_TIME,
-			IDX_TIME_EDIT,
 			IDX_RELOAD,//8
 			IDX_RELOAD_ALL,
 			IDX_OK,
@@ -268,8 +265,6 @@ void FarEditorSet::configure()
 			{ DI_EDIT,10,10,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
 			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,""},    // hrd
 			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,""}, // hrd button
-			{ DI_TEXT,6,13,0,0,FALSE,0,0,0,""},
-			{ DI_EDIT,10,14,25,5,FALSE,(DWORD)"clr_time",DIF_HISTORY,0,""},
 			{ DI_BUTTON,6,16,0,0,FALSE,0,0,0,""},    // reload
 			{ DI_BUTTON,26,16,0,0,FALSE,0,0,0,""},   // all
 			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,""}, // ok
@@ -316,12 +311,6 @@ void FarEditorSet::configure()
 		}
 		strcpy(fdi[IDX_HRD_SELECT].Data, descr->getChars());
 
-		strcpy(fdi[IDX_TIME].Data, GetMsg(mMaxTime));
-
-		char tempMaxTime[512] = {0};
-		rGetValue(hPluginRegistry, REG_MAXTIME, tempMaxTime, 512);
-		strcpy(fdi[IDX_TIME_EDIT].Data, trim(tempMaxTime));
-
 		strcpy(fdi[IDX_RELOAD].Data, GetMsg(mReload));
 		strcpy(fdi[IDX_RELOAD_ALL].Data, GetMsg(mReloadAll));
 		strcpy(fdi[IDX_OK].Data, GetMsg(mOk));
@@ -343,10 +332,6 @@ void FarEditorSet::configure()
 			rGetValue(hPluginRegistry, REG_CATALOG, oName, 512);
 			if (stricmp(oName, fdi[IDX_CATALOG_EDIT].Data)) i = IDX_RELOAD;
 
-			oName[0] = 0;
-			rGetValue(hPluginRegistry, REG_MAXTIME, oName, 512);
-			if (stricmp(oName, fdi[IDX_TIME_EDIT].Data)) i = IDX_RELOAD;
-
 			if (rDisabled != !fdi[IDX_DISABLED].Selected){
 				disableColorer();
 				i = IDX_RELOAD;
@@ -361,11 +346,8 @@ void FarEditorSet::configure()
 		rSetValue(hPluginRegistry, REG_DISABLED, !fdi[IDX_DISABLED].Selected);
 
 		strcpy(fdi[IDX_CATALOG_EDIT].Data,trim(fdi[IDX_CATALOG_EDIT].Data));
-		strcpy(fdi[IDX_TIME_EDIT].Data,trim(fdi[IDX_TIME_EDIT].Data));
 		len = strlen(fdi[IDX_CATALOG_EDIT].Data)+1;
 		rSetValue(hPluginRegistry, REG_CATALOG, REG_SZ, fdi[IDX_CATALOG_EDIT].Data, len);
-		len = strlen(fdi[IDX_TIME_EDIT].Data)+1;
-		rSetValue(hPluginRegistry, REG_MAXTIME, REG_SZ, fdi[IDX_TIME_EDIT].Data, len);
 
 		readRegistry();
 
@@ -410,7 +392,7 @@ void FarEditorSet::configure()
 		exceptionMessage[2] = (msg+e.getMessage()).getChars();
 		if (getErrorHandler() != null)
 			getErrorHandler()->error(*e.getMessage());
-		info->Message(info->ModuleNumber, 0, "exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, "exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 
@@ -476,7 +458,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 		exceptionMessage[2] = (msg+e.getMessage()).getChars();
 		if (getErrorHandler())
 			getErrorHandler()->error(*e.getMessage());
-		info->Message(info->ModuleNumber, 0, "exception", &exceptionMessage[0], 4, 1);
+		info->Message(info->ModuleNumber, FMSG_WARNING, "exception", &exceptionMessage[0], 4, 1);
 		disableColorer();
 	};
 	return 0;
@@ -568,7 +550,6 @@ FarEditor *FarEditorSet::getCurrentEditor(){
 		editor->setDrawPairs(drawPairs);
 		editor->setDrawSyntax(drawSyntax);
 		editor->setOutlineStyle(oldOutline);
-		editor->setMaxTime(rMaxTime);
 	};
 	return editor;
 }
@@ -591,8 +572,6 @@ void FarEditorSet::disableColorer(){
 
 void FarEditorSet::readRegistry()
 {
-	char mt[64];
-
 	rDisabled = rGetValue(hPluginRegistry, REG_DISABLED) != 0;
 
 	drawCross = rGetValue(hPluginRegistry, REG_CROSSDRAW);
@@ -600,19 +579,10 @@ void FarEditorSet::readRegistry()
 	drawSyntax = !rGetValue(hPluginRegistry, REG_SYNTAXDONTDRAW);
 	oldOutline = rGetValue(hPluginRegistry, REG_OLDOUTLINE) == TRUE;
 
-	rMaxTime = 3000;
-	int len = rGetValue(hPluginRegistry, REG_MAXTIME, mt, 64);
-	if (len>0){
-		char* temp=trim(mt);
-		if (strlen(temp)>0)
-			rMaxTime = atoi(mt);
-	}
-
 	for(FarEditor *fe = farEditorInstances.enumerate(); fe != null; fe = farEditorInstances.next()){
 		fe->setDrawCross(drawCross);
 		fe->setDrawPairs(drawPairs);
 		fe->setDrawSyntax(drawSyntax);
-		fe->setMaxTime(rMaxTime);
 		fe->setOutlineStyle(oldOutline);
 	}
 }

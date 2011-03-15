@@ -73,7 +73,6 @@ private:
  int drawCross;
   bool drawPairs, drawSyntax;
   bool oldOutline;
-  int  rMaxTime;
 };
 
 #endif

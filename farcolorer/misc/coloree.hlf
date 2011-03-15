@@ -46,10 +46,6 @@ $^#Colorer's settings.#
   #Color scheme:#
      Selected color scheme to use for text highlighting.
 
-  #Time before showing cancel dialog (msec)#
-     After this time interval colorer shows cancelling dialog.
-     anyway, you can stop parsing with ESC at any time.
-
   #[ Reload ]#
      Reloads HRC database.
 
@@ -86,7 +82,7 @@ Choose any item to go to corresponding line in text.
     #Enter#
       Close the outliner and jump to the selected item
 
-    #Any symbol keys#
+    #Symbol keys [0-9a-z;:-_]#
       Filter out the outliner items against entered filter
 
 @menu
