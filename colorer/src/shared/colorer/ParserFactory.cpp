@@ -190,6 +190,7 @@ String *ParserFactory::searchPath()
           paths.addElement(new SString(tls.getLine(0)));
         }
       }
+      delete d;
     }catch(InputSourceException &){};
   };
   // %SYSTEMROOT%/.colorer5catalog
