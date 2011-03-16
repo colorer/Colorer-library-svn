@@ -108,7 +108,7 @@ private:
   int WindowSizeX;
   int WindowSizeY;
   int farEncodingIndex, unicodeEncodingIndex;
-  bool inRedraw, inHandler, ignoreChange;
+  bool inRedraw, inHandler;
   int idleCount;
 
   int prevLinePosition, blockTopPosition;

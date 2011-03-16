@@ -4,8 +4,11 @@
 #include<colorer/handlers/FileErrorHandler.h>
 #include<colorer/handlers/LineRegionsSupport.h>
 #include<colorer/handlers/StyledHRDMapper.h>
+#include<colorer/viewer/TextConsoleViewer.h>
+#include<colorer/parsers/helpers/FileTypeImpl.h>
+#include<common/Logging.h>
+#include<unicode/Encodings.h>
 #include "registry.h"
-
 #include"pcolorer.h"
 
 #include"FarEditor.h"
@@ -59,6 +62,8 @@ private:
   void dropAllEditors();
   /** Disables all plugin processing */
   void disableColorer();
+  int getCountFileTypeAndGroup();
+  FileTypeImpl* getFileTypeByIndex(int idx);
 
   Hashtable<FarEditor*> farEditorInstances;
   ParserFactory *parserFactory;
@@ -70,7 +75,7 @@ private:
 
   /** registry settings */
   bool rDisabled;
- int drawCross;
+  int drawCross;
   bool drawPairs, drawSyntax;
   bool oldOutline;
 };

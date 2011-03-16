@@ -1,8 +1,3 @@
-#include<stdlib.h>
-#include<unicode/Encodings.h>
-#include<common/Logging.h>
-#include<colorer/viewer/TextConsoleViewer.h>
-
 #include"FarEditorSet.h"
 
 #define REG_DISABLED        "disabled"
@@ -168,65 +163,108 @@ void FarEditorSet::viewFile(const String &path){
 	};
 }
 
+int FarEditorSet::getCountFileTypeAndGroup()
+{
+  int num = 0;
+  const String *group = NULL;
+  FileType *type = NULL;
+
+  for (int idx = 0;; idx++, num++){
+    type = hrcParser->enumerateFileTypes(idx);
+
+    if (type == NULL){
+      break;
+    }
+
+    if (group != NULL && !group->equals(type->getGroup())){
+      num++;
+    }
+
+    group = type->getGroup();
+  };
+  return num;
+}
+FileTypeImpl* FarEditorSet::getFileTypeByIndex(int idx)
+{
+  FileType *type = NULL;
+  const String *group = NULL;
+
+  for (int i = 0; idx>=0; idx--, i++){
+    type = hrcParser->enumerateFileTypes(i);
+
+    if (!type){
+      break;
+    }
+
+    if (group != NULL && !group->equals(type->getGroup())){
+      idx--;
+    }
+    group = type->getGroup();
+  };
+
+  return (FileTypeImpl*)type;
+}
 
 void FarEditorSet::chooseType()
 {
-	FarEditor *fe = getCurrentEditor();
+  FarEditor *fe = getCurrentEditor();
+  if (!fe){
+    return;
+  }
 
-	int num = 0;
-	int i = 0;
-	int idx = 0;
-	const String *group = null;
-	FileType *type = null;
+  int num = getCountFileTypeAndGroup();
+  const String *group = NULL;
+  FileType *type = NULL;
 
-	for(idx = 0;; idx++, num++){
-		type = hrcParser->enumerateFileTypes(idx);
-		if (type == null) break;
-		if (group != null && !group->equals(type->getGroup())) num++;
-		group = type->getGroup();
-	};
+  char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+  FarMenuItem *menuels = new FarMenuItem[num];
+  memset(menuels, 0, sizeof(FarMenuItem)*(num));
+  group = null;
+  for (int idx = 0, i = 0;; idx++, i++){
+    type = hrcParser->enumerateFileTypes(idx);
 
-	char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNMxx";
-	FarMenuItem *menuels = new FarMenuItem[num+2];
-	memset(menuels, 0, sizeof(FarMenuItem)*(num+2));
+    if (type == NULL){
+      break;
+    }
 
-	group = null;
-	for(idx = 0, i = 0;; idx++, i++){
-		type = hrcParser->enumerateFileTypes(idx);
-		if (type == null) break;
+    if (group != null && !group->equals(type->getGroup())){
+      menuels[i].Separator = 1;
+      i++;
+    };
 
+    group = type->getGroup();
 
-		if (group != null && !group->equals(type->getGroup())){
-			menuels[i].Separator = 1;
-			i++;
-		};
-		group = type->getGroup();
+    const char *groupChars = NULL;
 
-		const char *groupChars = null;
-		if (group != null) groupChars = group->getChars();
-		else groupChars = "<no group>";
-		sprintf(menuels[i].Text, "%c. %s: %s", idx < 37?MapThis[idx]:'x', groupChars, type->getDescription()->getChars());
-		if(type == fe->getFileType()) menuels[i].Selected = 1;
-	};
+    if (group != NULL){
+      groupChars = group->getChars();
+    }
+    else{
+      groupChars = "<no group>";
+    }
 
-	char bottom[20];
-	sprintf(bottom, GetMsg(mTotalTypes), idx);
+    sprintf(menuels[i].Text, "%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getChars());
 
-	i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-		GetMsg(mSelectSyntax), bottom, "contents", null, null, menuels, i);
-	delete[] menuels;
+    if (type == fe->getFileType()){
+      menuels[i].Selected = 1;
+    }
+  };
+  char bottom[20];
+  int i;
+  sprintf(bottom, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
 
-	if (i == -1) return;
-	i++;
-	type = null;
-	group = null;
-	for(int ti = 0; i; i--, ti++){
-		type = hrcParser->enumerateFileTypes(ti);
-		if (!type) break;
-		if (group != null && !group->equals(type->getGroup())) i--;
-		group = type->getGroup();
-	};
-	if (type != null) fe->setFileType(type);
+  i = info->Menu(info->ModuleNumber, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+    GetMsg(mSelectSyntax), bottom, "contents", null, null, menuels, num);
+  delete[] menuels;
+
+  if (i == -1){
+    return;
+  }
+  type = getFileTypeByIndex(i);
+  if (type != NULL){
+    fe->setFileType(type);
+  }
+
 }
 
 
