@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. небольшая утечка
+
+#Revision: 1676
+	#Author: ctapmex Date: 2011-03-13 22:24:53 +0500 (Вс, 13 мар 2011)
 	1. оптимизация String::indexOf
 
 #Revision: 1666
