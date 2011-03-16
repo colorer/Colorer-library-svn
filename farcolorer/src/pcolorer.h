@@ -10,15 +10,13 @@ enum {
   mName, mSetup, mTurnOff,
   mCross, mPairs, mSyntax, mOldOutline,
   mOk, mReload, mReloadAll, mCancel,
-  mCatalogFile, mHRDName, mMaxTime,
-  mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+  mCatalogFile, mHRDName,mListTypes, mMatchPair, mSelectBlock, mSelectPair,
   mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
   mUpdateHighlight, mChooseEncoding, mConfigure,
   mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
   mGotcha, mChoose,
   mReloading, mCantLoad, mCantOpenFile, mDie, mBadColorer, mTry,
-  mFatal, mNeedColorer, mWait,
-  mSelectEncoding, mSelectHRD
+  mFatal, mNeedColorer, mSelectEncoding, mSelectHRD
 };
 
 #endif

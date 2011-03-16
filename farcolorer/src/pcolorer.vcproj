@@ -151,6 +151,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_VC80_UPGRADE=0x0700;_WIN64"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -194,7 +195,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\..\..\test_bin\Plugins\colorer\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
@@ -337,6 +338,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_VC80_UPGRADE=0x0700;_WIN64"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"

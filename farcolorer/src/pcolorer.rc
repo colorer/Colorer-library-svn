@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,2,1
- PRODUCTVERSION 1,0,2,1
+ FILEVERSION 1,0,2,2
+ PRODUCTVERSION 1,0,2,2
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,13 +69,17 @@ BEGIN
     BEGIN
         BLOCK "041904b0"
         BEGIN
+#ifdef _WIN64
+            VALUE "FileDescription", "Colorer - Syntax Highlighting for FAR (x64)"
+#else
             VALUE "FileDescription", "Colorer - Syntax Highlighting for FAR"
-            VALUE "FileVersion", "1, 0, 2, 1"
+#endif
+            VALUE "FileVersion", "1, 0, 2, 2"
             VALUE "InternalName", "colorer"
-            VALUE "LegalCopyright", "Copyright (C) 2009"
+            VALUE "LegalCopyright", "Copyright (C) 2009-2011"
             VALUE "OriginalFilename", "colorer.dll"
             VALUE "ProductName", "Colorer library"
-            VALUE "ProductVersion", "1, 0, 2, 1"
+            VALUE "ProductVersion", "1, 0, 2, 2"
         END
     END
     BLOCK "VarFileInfo"
