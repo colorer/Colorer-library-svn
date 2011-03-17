@@ -54,9 +54,7 @@ void CRegExp::init()
 #else
   namedMatches = 0;
 #endif
-  stack_size = 0;
   count_elem = 0;
-  stack=null;
 };
 CRegExp::CRegExp()
 {
@@ -74,7 +72,6 @@ CRegExp::~CRegExp()
   for(int bp = 0; bp < cnMatch; bp++)
     if(brnames[bp]) delete brnames[bp];
 #endif
-  delete[] stack;
 };
 
 EError CRegExp::setRELow(const String &expr)
@@ -759,7 +756,7 @@ void CRegExp::check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,
     return;
   }
 
-  StackElem &ne=stack[--count_elem];
+  StackElem &ne=RegExpStack[--count_elem];
   if (res){
     *action=ne.ifTrueReturn;
   }else{
@@ -773,18 +770,18 @@ void CRegExp::check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,
 
 void CRegExp::insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2)
 {
-  if (stack_size==0){
-    stack = new StackElem [INIT_MEM_SIZE];
-    stack_size = INIT_MEM_SIZE;
+  if (RegExpStack_Size==0){
+    RegExpStack = new StackElem [INIT_MEM_SIZE];
+    RegExpStack_Size = INIT_MEM_SIZE;
   }
-  if(stack_size==count_elem){
-    stack_size+= MEM_INC;
-    StackElem* s = new StackElem [stack_size];
-    memcpy(s,stack,count_elem*sizeof(StackElem));
-    delete[] stack;
-    stack=s;
+  if(RegExpStack_Size==count_elem){
+    RegExpStack_Size+= MEM_INC;
+    StackElem* s = new StackElem [RegExpStack_Size];
+    memcpy(s,RegExpStack,count_elem*sizeof(StackElem));
+    delete[] RegExpStack;
+    RegExpStack=s;
   }
-  StackElem &ne=stack[count_elem++];
+  StackElem &ne=RegExpStack[count_elem++];
   ne.re=*re;
   ne.prev=*prev;
   ne.toParse=*toParse;

@@ -236,12 +236,16 @@ String *ParserFactory::searchPath()
 };
 
 ParserFactory::ParserFactory(){
+  RegExpStack = NULL;
+  RegExpStack_Size = 0;
   fileErrorHandler = null;
   catalogPath = searchPath();
   init();
 };
 
 ParserFactory::ParserFactory(const String *catalogPath){
+  RegExpStack = NULL;
+  RegExpStack_Size = 0;
   fileErrorHandler = null;
   if (catalogPath == null){
     this->catalogPath = searchPath();
@@ -273,6 +277,7 @@ ParserFactory::~ParserFactory(){
   delete catalogPath;
   delete catalogFIS;
   delete fileErrorHandler;
+  delete[] RegExpStack;
 };
 
 const char *ParserFactory::getVersion(){
