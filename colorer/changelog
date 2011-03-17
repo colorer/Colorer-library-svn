@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Сливаем с бранчем ctapmex_no_recursion
+	избавляемся от рекурсии в CRegExp::lowParse
+
+#Revision: 1683
+	#Author: ctapmex Date: 2011-03-16 15:07:35 +0500 (Ср, 16 мар 2011)
 	1. небольшая утечка
 
 #Revision: 1676

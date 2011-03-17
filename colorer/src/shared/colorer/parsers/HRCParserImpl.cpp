@@ -3,25 +3,6 @@
 #include<colorer/parsers/helpers/HRCParserHelpers.h>
 #include<colorer/parsers/HRCParserImpl.h>
 
-#ifdef _WIN32
-#include<io.h>
-#include<windows.h>
-#endif
-
-void HRCParserImpl::checkWow64()
-{
-  wow64=true;
-#ifdef _WIN32
-#ifndef _WIN64
-  //check for stack overflow
-  //check to run the 32 bit libraries on 64 bit operating system
-  char *b = getenv("PROCESSOR_ARCHITEW6432");
-  if (!b) wow64=false;
-#endif
-#endif
-
-};
-
 HRCParserImpl::HRCParserImpl()
  : fileTypeHash(200), fileTypeVector(150), schemeHash(4000),
  regionNamesVector(1000, 200), regionNamesHash(1000)
@@ -31,7 +12,6 @@ HRCParserImpl::HRCParserImpl()
   errorHandler = null;
   curInputSource = null;
   updateStarted = false;
-  checkWow64();
 }
 
 HRCParserImpl::~HRCParserImpl()
@@ -256,7 +236,6 @@ void HRCParserImpl::addPrototype(Element *elem)
       };
       const String *match = ((Text*)content->getFirstChild())->getData();
       CRegExp *matchRE = new CRegExp(match);
-      matchRE->setWow64(wow64);
       matchRE->setPositionMoves(true);
       if (!matchRE->isOk()){
         if (errorHandler != null){
@@ -502,7 +481,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->lowPriority = DString("low").equals(((Element*)tmpel)->getAttribute(DString("priority")));
       next->type = SNT_RE;
       next->start = new CRegExp(entMatchParam);
-      next->start->setWow64(wow64);
       next->start->setPositionMoves(false);
       if (!next->start || !next->start->isOk())
         if (errorHandler != null) errorHandler->error(StringBuffer("fault compiling regexp '")+entMatchParam+"' in scheme '"+scheme->schemeName+"'");
@@ -583,7 +561,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
       next->innerRegion = DString("yes").equals(((Element*)tmpel)->getAttribute(DString("inner-region")));
       next->type = SNT_SCHEME;
       next->start = new CRegExp(startParam);
-      next->start->setWow64(wow64);
       next->start->setPositionMoves(false);
       if (!next->start->isOk()){
         if (errorHandler != null){
@@ -591,7 +568,6 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
         }
       }
       next->end = new CRegExp();
-      next->end->setWow64(wow64);
       next->end->setPositionMoves(true);
       next->end->setBackRE(next->start);
       next->end->setRE(endParam);
