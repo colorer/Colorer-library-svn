@@ -174,7 +174,10 @@ struct StackElem{
   int ifFalseReturn;
 };
 
-#define INIT_MEM_SIZE 1024
+static StackElem *RegExpStack = NULL;
+static int RegExpStack_Size = 0;
+
+#define INIT_MEM_SIZE 512
 #define MEM_INC 128
 
 enum ReAction {
@@ -349,8 +352,6 @@ private:
   bool lowParse(SRegInfo *re, SRegInfo *prev, int toParse);
   bool parseRE(int toParse);
 
-  StackElem *stack;
-  int stack_size;
   int count_elem;
   void check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,bool *leftenter, int *action);
   void insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2);
