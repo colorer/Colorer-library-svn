@@ -162,6 +162,32 @@ public:
   SRegInfo *prev;
 };
 
+struct StackElem{
+  //local variable
+  SRegInfo *re;
+  SRegInfo *prev;
+  int toParse;
+  bool leftenter;
+  // step if function return true
+  int ifTrueReturn;
+  // step if function return false
+  int ifFalseReturn;
+};
+
+#define INIT_MEM_SIZE 1024
+#define MEM_INC 128
+
+enum ReAction {
+  rea_False=0,
+  rea_True=1,
+  rea_Break,
+  rea_RangeNM_step2,
+  rea_RangeNM_step3,
+  rea_RangeN_step2,
+  rea_NGRangeN_step2,
+  rea_NGRangeNM_step2,
+  rea_NGRangeNM_step3
+};
 /** Regular Expression compiler and matcher.
     Colorer regular expressions library cregexp.
 
@@ -286,7 +312,6 @@ public:
   bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 
-  void setWow64(bool wow64);
 private:
   bool ignoreCase, extend, positionMoves, singleLine, multiLine;
   SRegInfo *tree_root;
@@ -324,9 +349,15 @@ private:
   bool lowParse(SRegInfo *re, SRegInfo *prev, int toParse);
   bool parseRE(int toParse);
 
-  //check for stack overflow
-  unsigned int adr_so;
+  StackElem *stack;
+  int stack_size;
+  int count_elem;
+  void check_stack(bool res,SRegInfo **re, SRegInfo **prev, int *toParse,bool *leftenter, int *action);
+  void insert_stack(SRegInfo **re, SRegInfo **prev, int *toParse, bool *leftenter, int ifTrueReturn, int ifFalseReturn, SRegInfo **re2, SRegInfo **prev2, int toParse2);
+
 };
+
+
 
 #endif
 /* ***** BEGIN LICENSE BLOCK *****
