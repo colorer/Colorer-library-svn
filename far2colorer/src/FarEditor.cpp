@@ -16,7 +16,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   maxLineLength = 0;
   fullBackground = true;
   drawCross = 2;
-  showHorizontalCross = showVerticalCross = true;
+  showHorizontalCross = showVerticalCross = false;
   crossZOrder    = 0;
   horzCrossColor = color(); //0x0E;
   vertCrossColor = color(); //0x0E;
