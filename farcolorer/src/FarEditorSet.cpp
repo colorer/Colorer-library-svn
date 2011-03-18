@@ -289,7 +289,7 @@ void FarEditorSet::configure()
 		};
 
 		FarDialogItem fdi[] = {
-			{ DI_DOUBLEBOX,3,1,49,19,0,0,0,0,""},
+			{ DI_DOUBLEBOX,3,1,49,17,0,0,0,0,""},
 
 			{ DI_CHECKBOX,6,3,0,0,TRUE,0,0,0,""},
 
@@ -303,10 +303,10 @@ void FarEditorSet::configure()
 			{ DI_EDIT,10,10,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
 			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,""},    // hrd
 			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,""}, // hrd button
-			{ DI_BUTTON,6,16,0,0,FALSE,0,0,0,""},    // reload
-			{ DI_BUTTON,26,16,0,0,FALSE,0,0,0,""},   // all
-			{ DI_BUTTON,30,18,0,0,FALSE,0,0,TRUE,""}, // ok
-			{ DI_BUTTON,38,18,0,0,FALSE,0,0,0,""},   // cancel
+			{ DI_BUTTON,6,14,0,0,FALSE,0,0,0,""},    // reload
+			{ DI_BUTTON,26,14,0,0,FALSE,0,0,0,""},   // all
+			{ DI_BUTTON,30,16,0,0,FALSE,0,0,TRUE,""}, // ok
+			{ DI_BUTTON,38,16,0,0,FALSE,0,0,0,""},   // cancel
 		}; // type, x1, y1, x2, y2, focus, sel, fl, def, data
 
 		strcpy(fdi[IDX_BOX].Data, GetMsg(mSetup));
@@ -357,7 +357,7 @@ void FarEditorSet::configure()
 		/*
 		* Dialog activation
 		*/
-		int i = info->Dialog(info->ModuleNumber, -1, -1, 53, 21, "config", fdi, ARRAY_SIZE(fdi));
+		int i = info->Dialog(info->ModuleNumber, -1, -1, 53, 19, "config", fdi, ARRAY_SIZE(fdi));
 
 		if (i == IDX_CANCEL || i == -1){
 			return;
