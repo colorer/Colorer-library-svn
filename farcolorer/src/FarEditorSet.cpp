@@ -300,7 +300,7 @@ void FarEditorSet::configure()
 			{ DI_CHECKBOX,6,7,0,0,FALSE,0,0,0,""},
 
 			{ DI_TEXT,6,9,0,0,FALSE,0,0,0,""},
-			{ DI_EDIT,10,10,40,5,FALSE,(DWORD)"catalog",DIF_HISTORY,0,""},
+			{ DI_EDIT,10,10,40,5,FALSE,(DWORD_PTR)"catalog",DIF_HISTORY,0,""},
 			{ DI_TEXT,6,11,0,0,FALSE,0,0,0,""},    // hrd
 			{ DI_BUTTON,12,12,0,0,FALSE,0,0,0,""}, // hrd button
 			{ DI_BUTTON,6,14,0,0,FALSE,0,0,0,""},    // reload

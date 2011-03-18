@@ -108,7 +108,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="..\..\..\test_bin64\Plugins\colorer\bin"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
@@ -160,7 +160,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wininet.lib"
-				OutputFile="$(OutDir)\colorer.dll"
+				OutputFile="$(OutDir)\colorer_x64.dll"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile="pcolorer.def"
@@ -357,7 +357,7 @@
 				ModuleDefinitionFile="pcolorer.def"
 				GenerateDebugInformation="false"
 				GenerateMapFile="true"
-				MapFileName="$(OutDir)/colorer.map"
+				MapFileName="$(OutDir)/colorer_x64.map"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

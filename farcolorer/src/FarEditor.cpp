@@ -25,8 +25,9 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
   maxLineLength = 0;
   fullBackground = true;
+  drawCross = 2; 
 
-  showHorizontalCross = showVerticalCross = true;
+  showHorizontalCross = showVerticalCross = false;
   crossZOrder    = 0;
   horzCrossColor = 0x0E;
   vertCrossColor = 0x0E;
@@ -128,22 +129,28 @@ void FarEditor::reloadTypeSettings()
   value = def->getParamValue(DString("fullback"));
   if (value != null && value->equals("no")) fullBackground = false;
   value = def->getParamValue(DString("show-cross"));
-  if (value != null && value->equals("none")){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  };
-  if (value != null && value->equals("vertical")){
-    showHorizontalCross = false;
-    showVerticalCross   = true;
-  };
-  if (value != null && value->equals("horizontal")){
-    showHorizontalCross = true;
-    showVerticalCross   = false;
-  };
-  if (value != null && value->equals("both")){
-    showHorizontalCross = true;
-    showVerticalCross   = true;
-  };
+  if (drawCross==2 && value != NULL){
+    if (value->equals("none")){
+      showHorizontalCross = false;
+      showVerticalCross   = false;
+    };
+
+    if (value->equals("vertical")){
+      showHorizontalCross = false;
+      showVerticalCross   = true;
+    };
+
+    if (value->equals("horizontal")){
+      showHorizontalCross = true;
+      showVerticalCross   = false;
+    };
+
+    if (value->equals("both")){
+      showHorizontalCross = true;
+      showVerticalCross   = true;
+    };
+  }
+
   value = def->getParamValue(DString("cross-zorder"));
   if (value != null && value->equals("top")) crossZOrder = 1;
 
@@ -156,22 +163,28 @@ void FarEditor::reloadTypeSettings()
   value = ftype->getParamValue(DString("fullback"));
   if (value != null && value->equals("no")) fullBackground = false;
   value = ftype->getParamValue(DString("show-cross"));
-  if (value != null && value->equals("none")){
-    showHorizontalCross = false;
-    showVerticalCross   = false;
-  };
-  if (value != null && value->equals("vertical")){
-    showHorizontalCross = false;
-    showVerticalCross   = true;
-  };
-  if (value != null && value->equals("horizontal")){
-    showHorizontalCross = true;
-    showVerticalCross   = false;
-  };
-  if (value != null && value->equals("both")){
-    showHorizontalCross = true;
-    showVerticalCross   = true;
-  };
+  if (drawCross==2 && value != NULL){
+    if (value->equals("none")){
+      showHorizontalCross = false;
+      showVerticalCross   = false;
+    };
+
+    if (value->equals("vertical")){
+      showHorizontalCross = false;
+      showVerticalCross   = true;
+    };
+
+    if (value->equals("horizontal")){
+      showHorizontalCross = true;
+      showVerticalCross   = false;
+    };
+
+    if (value->equals("both")){
+      showHorizontalCross = true;
+      showVerticalCross   = true;
+    };
+  }
+
   value = ftype->getParamValue(DString("cross-zorder"));
   if (value != null && value->equals("top")) crossZOrder = 1;
 
@@ -184,22 +197,23 @@ FileType *FarEditor::getFileType()
   return baseEditor->getFileType();
 }
 
-void FarEditor::setDrawCross(int drawCross)
+void FarEditor::setDrawCross(int _drawCross)
 {
-		switch (drawCross)
-		{
-		case 0: 
-				showHorizontalCross = false;
-				showVerticalCross   = false;
-				break;
-		case 1:
-				showHorizontalCross = true;
-				showVerticalCross   = true;
-				break;
-		case 2: 
-				reloadTypeSettings();
-				break;
-		}
+  drawCross=_drawCross; 
+  switch (drawCross)
+  {
+  case 0: 
+    showHorizontalCross = false;
+    showVerticalCross   = false;
+    break;
+  case 1:
+    showHorizontalCross = true;
+    showVerticalCross   = true;
+    break;
+  case 2: 
+    reloadTypeSettings();
+    break;
+  }
 
 }
 
