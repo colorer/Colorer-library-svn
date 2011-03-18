@@ -200,7 +200,7 @@ int String::indexOf(wchar wc, int pos) const{
 int String::indexOf(const String &str, int pos) const{
   int thislen = this->length();
   int strlen = str.length();
-  for(int idx = pos; idx < thislen - strlen; idx++){
+  for(int idx = pos; idx < thislen - strlen + 1; idx++){
     int idx2;
     for(idx2 = 0; idx2 < strlen; idx2++){
       if (str[idx2] != (*this)[idx+idx2]) break;
@@ -213,7 +213,7 @@ int String::indexOf(const String &str, int pos) const{
 int String::indexOfIgnoreCase(const String &str, int pos) const{
   int thislen = this->length();
   int strlen = str.length();
-  for(int idx = pos; idx < thislen - strlen; idx++){
+  for(int idx = pos; idx < thislen - strlen + 1; idx++){
     int idx2;
     for(idx2 = 0; idx2 < strlen; idx2++){
       if (Character::toLowerCase(str[idx2]) != Character::toLowerCase((*this)[idx+idx2])) break;
