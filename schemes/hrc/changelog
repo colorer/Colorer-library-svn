@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- правки C и C++ по патчам от HaRT
+
+#Revision: 1665
+	ctapmex 2011-03-06 18:07:06 +0500 (Вс, 06 мар 2011)
 	- доработка схемы c# по тикету "еще добавки в hrc для C# - ID: 2983454" и
 	 "C# yield return and yield break keywords - ID: 2687858"
 	- поддержка Expect по тикету "добавить ключевые слова expect в hrc/base/tcltk.hrc - ID: 2983449"
