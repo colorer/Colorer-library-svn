@@ -254,6 +254,15 @@
    <word name="cerr"/>
    <word name="clog"/>
    <word name="cin"/>
+   
+   <word name="endl"/>
+   <word name="ends"/>
+   <word name="resetiosflags"/>
+   <word name="setbase"/>
+   <word name="setfill"/>
+   <word name="setiosflags"/>
+   <word name="setprecision"/>
+   <word name="setw"/>
 
    <word name="iterator"/>
    <word name="const_iterator"/>
