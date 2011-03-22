@@ -216,9 +216,6 @@
     <ClInclude Include="..\zlib\contrib\minizip\zip.h">
       <Filter>zlib\minizip</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\colorer\_template.h">
-      <Filter>shared\colorer</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\colorer\ErrorHandler.h">
       <Filter>shared\colorer</Filter>
     </ClInclude>

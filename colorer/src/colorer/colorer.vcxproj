@@ -168,7 +168,6 @@
     <ClInclude Include="..\zlib\contrib\minizip\ioapi.h" />
     <ClInclude Include="..\zlib\contrib\minizip\unzip.h" />
     <ClInclude Include="..\zlib\contrib\minizip\zip.h" />
-    <ClInclude Include="..\shared\colorer\_template.h" />
     <ClInclude Include="..\shared\colorer\ErrorHandler.h" />
     <ClInclude Include="..\shared\colorer\FileType.h" />
     <ClInclude Include="..\shared\colorer\HRCParser.h" />
