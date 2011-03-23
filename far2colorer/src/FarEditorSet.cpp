@@ -87,56 +87,40 @@ void FarEditorSet::openMenu()
 
     menuElements[0].Selected = 1;
 
-    // т.к. теоритически функция getCurrentEditor может вернуть NULL, то будем 
-    // проверять на это. Но ситуация возврата NULL не нормальна, ошибка где то в другом месте
     FarEditor *editor = getCurrentEditor();
-    switch (Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
-      menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0])))
+    if (!editor){
+      throw Exception(DString("Can't find current editor in array."));
+    }
+    int res = Info.Menu(Info.ModuleNumber, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+      menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0]));
+    switch (res)
     {
     case 0:
-      if (editor){
-        chooseType();
-      }
+      chooseType();
       break;
     case 1:
-      if (editor){
-        editor->matchPair();
-      }
+      editor->matchPair();
       break;
     case 2:
-      if (editor){
-        editor->selectBlock();
-      }
+      editor->selectBlock();
       break;
     case 3:
-      if (editor){
-        editor->selectPair();
-      }
+      editor->selectPair();
       break;
     case 4:
-      if (editor){
-        editor->listFunctions();
-      }
+      editor->listFunctions();
       break;
     case 5:
-      if (editor){
-        editor->listErrors();
-      }
+      editor->listErrors();
       break;
     case 6:
-      if (editor){
-        editor->selectRegion();
-      }
+      editor->selectRegion();
       break;
     case 7:
-      if (editor){
-        editor->locateFunction();
-      }
+      editor->locateFunction();
       break;
     case 9:
-      if (editor){
-        editor->updateHighlighting();
-      }
+      editor->updateHighlighting();
       break;
     case 10:
       ReloadBase();

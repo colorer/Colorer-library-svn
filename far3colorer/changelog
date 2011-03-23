@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. обработка возможной ошибки в FarEditorSet::openMenu 
+	2. при вставке текста из Outliner устанавливаем курсор на конец вставленного текста
+
+#Revision: 1701
+	Author: ctapmex Date: 2011-03-23 15:39:43 +0500 (Ср, 23 мар 2011)
 	1. Far3 build 1929 API
 	2. функции в SettingsControl переделаны/скопированы по аналогии с Far`овскими
 

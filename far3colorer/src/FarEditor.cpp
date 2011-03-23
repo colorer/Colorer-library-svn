@@ -1051,9 +1051,20 @@ void FarEditor::showOutliner(Outliner *outliner)
       }
     case 9:  // ctrl-return
       {
+        //read current position
+        info->EditorControl(CurrentEditor, ECTL_GETINFO, NULL, (INT_PTR)&ei);
+        //insert text
         OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
         info->EditorControl(CurrentEditor, ECTL_INSERTTEXT, NULL, (INT_PTR)item->token->getWChars());
+
+        //move the cursor to the end of the inserted string
+        esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
+        esp.CurLine =-1;
+        esp.CurPos = ei.CurPos+item->token->length();
+        info->EditorControl(CurrentEditor, ECTL_SETPOSITION, NULL, (INT_PTR)&esp);
+
         stopMenu = true;
+        moved = true;
         break;
       }
     case 10: // :
