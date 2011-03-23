@@ -943,7 +943,7 @@ void FarEditorSet::disableColorer()
 {
   rEnabled = false;
   SettingsControl ColorerSettings;
-  ColorerSettings.rSetValueDw(0, cRegEnabled, rEnabled);
+  ColorerSettings.Set(0, cRegEnabled, rEnabled);
 
   dropCurrentEditor(true);
 
@@ -995,11 +995,11 @@ void FarEditorSet::dropAllEditors(bool clean)
 void FarEditorSet::ReadSettings()
 {
   SettingsControl ColorerSettings;
-  const wchar_t *hrdName = ColorerSettings.rGetValueSz(0, cRegHrdName, cHrdNameDefault);
-  const wchar_t *hrdNameTm = ColorerSettings.rGetValueSz(0, cRegHrdNameTm, cHrdNameTmDefault);
-  const wchar_t *catalogPath = ColorerSettings.rGetValueSz(0, cRegCatalog, cCatalogDefault);
-  const wchar_t *userHrdPath = ColorerSettings.rGetValueSz(0, cRegUserHrdPath, cUserHrdPathDefault);
-  const wchar_t *userHrcPath = ColorerSettings.rGetValueSz(0, cRegUserHrcPath, cUserHrcPathDefault);
+  const wchar_t *hrdName = ColorerSettings.Get(0, cRegHrdName, cHrdNameDefault);
+  const wchar_t *hrdNameTm = ColorerSettings.Get(0, cRegHrdNameTm, cHrdNameTmDefault);
+  const wchar_t *catalogPath = ColorerSettings.Get(0, cRegCatalog, cCatalogDefault);
+  const wchar_t *userHrdPath = ColorerSettings.Get(0, cRegUserHrdPath, cUserHrdPathDefault);
+  const wchar_t *userHrcPath = ColorerSettings.Get(0, cRegUserHrcPath, cUserHrcPathDefault);
 
   delete sHrdName;
   delete sHrdNameTm;
@@ -1026,32 +1026,31 @@ void FarEditorSet::ReadSettings()
   sUserHrcPath = new SString(DString(userHrcPath));
   sUserHrcPathExp = PathToFullS(userHrcPath,false);
 
-  // two '!' disable "Compiler Warning (level 3) C4800" and slightly faster code
-  rEnabled = !!ColorerSettings.rGetValueDw(0, cRegEnabled, cEnabledDefault);
-  drawCross = ColorerSettings.rGetValueDw(0, cRegCrossDraw, cCrossDrawDefault);
-  drawPairs = !!ColorerSettings.rGetValueDw(0, cRegPairsDraw, cPairsDrawDefault);
-  drawSyntax = !!ColorerSettings.rGetValueDw(0, cRegSyntaxDraw, cSyntaxDrawDefault);
-  oldOutline = !!ColorerSettings.rGetValueDw(0, cRegOldOutLine, cOldOutLineDefault);
-  TrueModOn = !!ColorerSettings.rGetValueDw(0, cRegTrueMod, cTrueMod);
-  ChangeBgEditor = !!ColorerSettings.rGetValueDw(0, cRegChangeBgEditor, cChangeBgEditor);
+  rEnabled = ColorerSettings.Get(0, cRegEnabled, cEnabledDefault);
+  drawCross = ColorerSettings.Get(0, cRegCrossDraw, cCrossDrawDefault);
+  drawPairs = ColorerSettings.Get(0, cRegPairsDraw, cPairsDrawDefault);
+  drawSyntax = ColorerSettings.Get(0, cRegSyntaxDraw, cSyntaxDrawDefault);
+  oldOutline = ColorerSettings.Get(0, cRegOldOutLine, cOldOutLineDefault);
+  TrueModOn = ColorerSettings.Get(0, cRegTrueMod, cTrueMod);
+  ChangeBgEditor = ColorerSettings.Get(0, cRegChangeBgEditor, cChangeBgEditor);
 }
 
 
 void FarEditorSet::SaveSettings()
 {
   SettingsControl ColorerSettings;
-  ColorerSettings.rSetValueDw(0, cRegEnabled, rEnabled); 
-  ColorerSettings.rSetValueSz(0, cRegHrdName, sHrdName->getWChars());
-  ColorerSettings.rSetValueSz(0, cRegHrdNameTm, sHrdNameTm->getWChars());
-  ColorerSettings.rSetValueSz(0, cRegCatalog,  sCatalogPath->getWChars());
-  ColorerSettings.rSetValueDw(0, cRegCrossDraw, drawCross); 
-  ColorerSettings.rSetValueDw(0, cRegPairsDraw, drawPairs); 
-  ColorerSettings.rSetValueDw(0, cRegSyntaxDraw, drawSyntax); 
-  ColorerSettings.rSetValueDw(0, cRegOldOutLine, oldOutline); 
-  ColorerSettings.rSetValueDw(0, cRegTrueMod, TrueModOn); 
-  ColorerSettings.rSetValueDw(0, cRegChangeBgEditor, ChangeBgEditor); 
-  ColorerSettings.rSetValueSz(0, cRegUserHrdPath, sUserHrdPath->getWChars());
-  ColorerSettings.rSetValueSz(0, cRegUserHrcPath, sUserHrcPath->getWChars());
+  ColorerSettings.Set(0, cRegEnabled, rEnabled); 
+  ColorerSettings.Set(0, cRegHrdName, sHrdName->getWChars());
+  ColorerSettings.Set(0, cRegHrdNameTm, sHrdNameTm->getWChars());
+  ColorerSettings.Set(0, cRegCatalog,  sCatalogPath->getWChars());
+  ColorerSettings.Set(0, cRegCrossDraw, drawCross); 
+  ColorerSettings.Set(0, cRegPairsDraw, drawPairs); 
+  ColorerSettings.Set(0, cRegSyntaxDraw, drawSyntax); 
+  ColorerSettings.Set(0, cRegOldOutLine, oldOutline); 
+  ColorerSettings.Set(0, cRegTrueMod, TrueModOn); 
+  ColorerSettings.Set(0, cRegChangeBgEditor, ChangeBgEditor); 
+  ColorerSettings.Set(0, cRegUserHrdPath, sUserHrdPath->getWChars());
+  ColorerSettings.Set(0, cRegUserHrcPath, sUserHrcPath->getWChars());
 }
 
 bool FarEditorSet::checkConEmu()

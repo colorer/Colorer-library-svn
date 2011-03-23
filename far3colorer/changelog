@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Far3 build 1929 API
+	2. функции в SettingsControl переделаны/скопированы по аналогии с Far`овскими
+
+#Revision: 1692
+	Author: ctapmex Date: 2011-03-18 17:51:47 +0500 (Пт, 18 мар 2011)
 	1. меняем умолчания для отображения креста
 
 #Revision: 1677

@@ -96,7 +96,7 @@ void FarHrcSettings::readProfileFromRegistry()
                 if (type->getParamValue(SString(DString(type_fse.Items[j].Name)))==null){
                   type->addParam(&SString(DString(type_fse.Items[j].Name)));
                 }
-                type->setParamValue(SString(DString(type_fse.Items[j].Name)), &SString(DString(ColorerSettings.rGetValueSz(type_subkey,type_fse.Items[j].Name,NULL))));
+                type->setParamValue(SString(DString(type_fse.Items[j].Name)), &SString(DString(ColorerSettings.Get(type_subkey,type_fse.Items[j].Name,(wchar_t*)NULL))));
               }
             }
           }
@@ -140,7 +140,7 @@ void FarHrcSettings::writeProfileToRegistry()
         }
         v=type->getParamNotDefaultValue(*p);
         if (v!=NULL){
-          ColorerSettings.rSetValueSz(type_subkey,p->getWChars(),v->getWChars());
+          ColorerSettings.Set(type_subkey,p->getWChars(),v->getWChars());
         }
       }
     }

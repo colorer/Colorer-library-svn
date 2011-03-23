@@ -11,7 +11,6 @@ SettingsControl::SettingsControl()
   else{
     //error
   }
-
 }
 
 SettingsControl::~SettingsControl()
@@ -19,70 +18,44 @@ SettingsControl::~SettingsControl()
   Info.SettingsControl(farSettingHandle, SCTL_FREE, NULL, NULL);
 }
 
-DWORD SettingsControl::rGetValueDw(size_t Root, const wchar_t *name, DWORD DefaultValue)
+const wchar_t *SettingsControl::Get(size_t Root, const wchar_t *Name, const wchar_t *Default)
 {
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_QWORD;
-  fsi.Name = name;
-
-  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
-    return fsi.Number;
+  FarSettingsItem item={Root,Name,FST_STRING};
+  if (Info.SettingsControl(farSettingHandle,SCTL_GET,0,(INT_PTR)&item))
+  {
+    return item.String;
   }
-  else{
-    return DefaultValue;
-  }
+  return Default;
 }
 
-const wchar_t *SettingsControl::rGetValueSz(size_t Root, const wchar_t *name, const wchar_t *DefaultValue)
+unsigned __int64 SettingsControl::Get(size_t Root, const wchar_t *Name, unsigned __int64 Default)
 {
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_STRING;
-  fsi.Name = name;
-
-  if (Info.SettingsControl(farSettingHandle, SCTL_GET, NULL, (INT_PTR)&fsi)){
-    return fsi.String;
+  FarSettingsItem item={Root,Name,FST_QWORD};
+  if (Info.SettingsControl(farSettingHandle,SCTL_GET,0,(INT_PTR)&item))
+  {
+    return item.Number;
   }
-  else{
-    return DefaultValue;
-  }
-
+  return Default;
 }
 
-bool SettingsControl::rSetValueDw(size_t Root, const wchar_t *name, DWORD val)
+bool SettingsControl::Set(int Root, const wchar_t *Name, const wchar_t *Value)
 {
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_QWORD;
-  fsi.Name = name;
-  fsi.Number = val;
-
-  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
-
+  FarSettingsItem item={Root,Name,FST_STRING};
+  item.String=Value;
+  return Info.SettingsControl(farSettingHandle,SCTL_SET,0,(INT_PTR)&item)!=FALSE;
 }
 
-bool SettingsControl::rSetValueSz(size_t Root, const wchar_t *name, const wchar_t *val)
+bool SettingsControl::Set(int Root, const wchar_t *Name, unsigned __int64 Value)
 {
-  FarSettingsItem fsi;
-  fsi.Root = Root;
-  fsi.Type = FST_STRING;
-  fsi.Name = name;
-  fsi.String = val;
-
-  return !!Info.SettingsControl(farSettingHandle, SCTL_SET, NULL, (INT_PTR)&fsi);
-
+  FarSettingsItem item={Root,Name,FST_QWORD};
+  item.Number=Value;
+  return Info.SettingsControl(farSettingHandle,SCTL_SET,0,(INT_PTR)&item)!=FALSE;
 }
 
-int SettingsControl::rGetSubKey(size_t Root, const wchar_t *name)
+int SettingsControl::rGetSubKey(size_t Root, const wchar_t *Name)
 {
-
-  FarSettingsValue fsv;
-  fsv.Root = Root;
-  fsv.Value = name;
-  
+  FarSettingsValue fsv={Root,Name};
   return Info.SettingsControl(farSettingHandle, SCTL_SUBKEY, NULL, (INT_PTR)&fsv);
-
 }
 
 bool SettingsControl::rEnum(size_t Root, FarSettingsEnum *fse)
@@ -91,11 +64,8 @@ bool SettingsControl::rEnum(size_t Root, FarSettingsEnum *fse)
   return !!Info.SettingsControl(farSettingHandle, SCTL_ENUM, NULL, (INT_PTR)fse);
 }
 
-bool SettingsControl::rDeleteSubKey(size_t Root,const wchar_t *name)
+bool SettingsControl::rDeleteSubKey(size_t Root,const wchar_t *Name)
 {
-  FarSettingsValue fsv;
-  fsv.Root = Root;
-  fsv.Value = name;
-  
+  FarSettingsValue fsv={Root,Name};  
   return !!Info.SettingsControl(farSettingHandle, SCTL_DELETE, NULL, (INT_PTR)&fsv);
 }
