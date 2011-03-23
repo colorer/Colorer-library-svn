@@ -16,25 +16,6 @@
  * and creates HRCParser, StyledHRDMapper, TextHRDMapper and TextParser instances
  * with information, loaded from specified sources.
  *
- * If no path were passed to it's constructor,
- * it uses the next search order to find 'catalog.xml' file:
- *
- * - win32 systems:
- *   - image_start_dir, image_start_dir/../, image_start_dir/../../
- *   - \%COLORER5CATALOG%
- *   - \%HOMEDRIVE%%HOMEPATH%/.colorer5catalog
- *   - \%SYSTEMROOT%/.colorer5catalog (or \%WINDIR% in w9x)
- *
- * - unix/macos systems:
- *   - \$COLORER5CATALOG
- *   - \$HOME/.colorer5catalog
- *   - \$HOMEPATH/.colorer5catalog
- *   - /usr/share/colorer/catalog.xml
- *   - /usr/local/share/colorer/catalog.xml
- *
- * @note
- *   - \%NAME%, \$NAME - Environment variable of the current process.
- *   - image_start_dir - Directory, where current image was started.
  *
  * @ingroup colorer
  */
@@ -42,16 +23,8 @@ class ParserFactory{
 public:
 
   /**
-   * ParserFactory Constructor.
-   * Searches for catalog.xml in the set of predefined locations
-   * @throw ParserFactoryException If can't find catalog at any of standard locations.
-   */
-  ParserFactory();
-
-  /**
    * ParserFactory Constructor with explicit catalog path.
-   * @param catalogPath Path to catalog.xml file. If null,
-   *        standard search method is used.
+   * @param catalogPath Path to catalog.xml file.
    * @throw ParserFactoryException If can't load specified catalog.
    */
   ParserFactory(const String *catalogPath);
@@ -120,7 +93,6 @@ public:
   int countHRD(const String &classID);
 private:
   void init();
-  String *searchPath();
 
   String *catalogPath;
   InputSource *catalogFIS;

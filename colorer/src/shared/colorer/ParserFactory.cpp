@@ -131,124 +131,12 @@ void ParserFactory::parseHRDSetsChild(Node *hrd)
   };
 };
 
-String *ParserFactory::searchPath()
-{
-  Vector<String*> paths;
-  TextLinesStore tls;
-
-#ifdef _WIN32
-  // image_path/  image_path/..  image_path/../..
-  TCHAR cname[256];
-  HMODULE hmod;
-  hmod = GetModuleHandle(TEXT("colorer"));
-#ifdef _WIN64
-  if (hmod == null) hmod = GetModuleHandle(TEXT("colorer_x64"));
-#endif
-  if (hmod == null) hmod = GetModuleHandle(null);
-  int len = GetModuleFileName(hmod, cname, 256) - 1;
-  DString module(cname, 0, len);
-  int pos[3];
-  pos[0] = module.lastIndexOf('\\');
-  pos[1] = module.lastIndexOf('\\', pos[0]);
-  pos[2] = module.lastIndexOf('\\', pos[1]);
-  for(int idx = 0; idx < 3; idx++)
-    if (pos[idx] >= 0)
-      paths.addElement(&(new StringBuffer(DString(module, 0, pos[idx])))->append(DString("\\catalog.xml")));
-#endif
-
-  // %COLORER5CATALOG%
-  char *c = getenv("COLORER5CATALOG");
-  if (c != null) paths.addElement(new SString(c));
-
-#ifdef __unix__
-  // %HOME%/.colorer5catalog or %HOMEPATH%
-  c = getenv("HOME");
-  if (c == null) c = getenv("HOMEPATH");
-  if (c != null){
-    try{
-      tls.loadFile(&StringBuffer(c).append(DString("/.colorer5catalog")), null, false);
-      if (tls.getLineCount() > 0) paths.addElement(new SString(tls.getLine(0)));
-    }catch(InputSourceException &e){};
-  };
-
-   // /usr/share/colorer/catalog.xml
-  paths.addElement(new SString("/usr/share/colorer/catalog.xml"));
-  paths.addElement(new SString("/usr/local/share/colorer/catalog.xml"));
-#endif
-
-#ifdef _WIN32
-    // %HOMEDRIVE%%HOMEPATH%\.colorer5catalog
-  char *b = getenv("HOMEDRIVE");
-  c = getenv("HOMEPATH");
-  if ((c != null)&&(b != null)){
-    try{
-      StringBuffer *d=new StringBuffer(b);
-      d->append(&StringBuffer(c).append(DString("/.colorer5catalog")));
-      if (_access(d->getChars(),0) != -1){
-        tls.loadFile(d, null, false);
-        if (tls.getLineCount() > 0){
-          paths.addElement(new SString(tls.getLine(0)));
-        }
-      }
-      delete d;
-    }catch(InputSourceException &){};
-  };
-  // %SYSTEMROOT%/.colorer5catalog
-  c = getenv("SYSTEMROOT");
-  if (c == null) c = getenv("WINDIR");
-  if (c != null){ 
-    try{
-      StringBuffer *d=new StringBuffer(c);
-      d->append(DString("/.colorer5catalog"));
-      if (_access(d->getChars(),0) != -1){
-        tls.loadFile(d, null, false);
-        if (tls.getLineCount() > 0){
-          paths.addElement(new SString(tls.getLine(0)));
-        }
-      }
-    }catch(InputSourceException &){};
-  };
-
-#endif
-
-  String *right_path = null;
-  for(int i = 0; i < paths.size(); i++){
-    String *path = paths.elementAt(i);
-    if (right_path == null){
-      InputSource *is = null;
-      try{
-        is = InputSource::newInstance(path);
-        is->openStream();
-        right_path = new SString(path);
-        delete is;
-      }catch(InputSourceException &){
-        delete is;
-      };
-    };
-    delete path;
-  };
-  if (right_path == null){
-    if (fileErrorHandler != null)
-      fileErrorHandler->fatalError(DString("Can't find suitable catalog.xml file. Check your program settings."));
-    throw ParserFactoryException(DString("Can't find suitable catalog.xml file. Check your program settings."));
-  };
-  return right_path;
-};
-
-ParserFactory::ParserFactory(){
-  RegExpStack = NULL;
-  RegExpStack_Size = 0;
-  fileErrorHandler = null;
-  catalogPath = searchPath();
-  init();
-};
-
 ParserFactory::ParserFactory(const String *catalogPath){
   RegExpStack = NULL;
   RegExpStack_Size = 0;
   fileErrorHandler = null;
   if (catalogPath == null){
-    this->catalogPath = searchPath();
+    throw ParserFactoryException(DString("Can't find suitable catalog.xml file. Check your program settings."));
   }else{
     this->catalogPath = new SString(catalogPath);
   }

@@ -117,9 +117,6 @@
     <ClCompile Include="..\shared\colorer\parsers\HRCParserImpl.cpp">
       <Filter>shared\colorer\parser</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\colorer\parsers\helpers\TextParserHelpers.cpp">
-      <Filter>shared\colorer\parser</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\colorer\parsers\TextParserImpl.cpp">
       <Filter>shared\colorer\parser</Filter>
     </ClCompile>
@@ -196,6 +193,9 @@
       <Filter>shared\cregexp</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleToolsRunner.cpp" />
+    <ClCompile Include="..\shared\colorer\parsers\helpers\TextParserHelpers.cpp">
+      <Filter>shared\colorer\parser\helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\zlib\inffast.h">
@@ -425,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="..\shared\cregexp\cregexp.h">
       <Filter>shared\cregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\colorer\parsers\TextParserImpl.h">
+      <Filter>shared\colorer\parser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

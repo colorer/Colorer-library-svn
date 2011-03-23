@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. библиотека сама не ищет catalog.xml
+
+#Revision: 1687
+	#Author: ctapmex Date: 2011-03-18 14:23:15 +0500 (Пт, 18 мар 2011)
 	1. ошибка в 1676
 
 #Revision: 1685
