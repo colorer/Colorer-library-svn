@@ -114,7 +114,8 @@ void FarEditorSet::openMenu()
     };
   }
   catch (Exception &e){
-    const wchar_t* exceptionMessage[5];
+    const size_t count_lines = 4;
+    const wchar_t* exceptionMessage[count_lines];
     exceptionMessage[0] = GetMsg(mName);
     exceptionMessage[1] = GetMsg(mCantLoad);
     exceptionMessage[3] = GetMsg(mDie);
@@ -125,7 +126,7 @@ void FarEditorSet::openMenu()
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 }
@@ -172,12 +173,13 @@ void FarEditorSet::viewFile(const String &path)
     delete regionMap;
   }
   catch (Exception &e){
-    const wchar_t* exceptionMessage[4];
+    const size_t count_lines = 4;
+    const wchar_t* exceptionMessage[count_lines];
     exceptionMessage[0] = GetMsg(mName);
     exceptionMessage[1] = GetMsg(mCantOpenFile);
     exceptionMessage[3] = GetMsg(mDie);
     exceptionMessage[2] = e.getMessage()->getWChars();
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
   };
 }
 
@@ -539,7 +541,8 @@ void FarEditorSet::configure(bool fromEditor)
 
   }
   catch (Exception &e){
-    const wchar_t* exceptionMessage[5];
+    const size_t count_lines = 4;
+    const wchar_t* exceptionMessage[count_lines];
     exceptionMessage[0] = GetMsg(mName);
     exceptionMessage[1] = GetMsg(mCantLoad);
     exceptionMessage[2] = 0;
@@ -551,7 +554,7 @@ void FarEditorSet::configure(bool fromEditor)
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 }
@@ -655,7 +658,8 @@ int FarEditorSet::editorEvent(int Event, void *Param)
     }
   }
   catch (Exception &e){
-    const wchar_t* exceptionMessage[5];
+    const size_t count_lines = 4;
+    const wchar_t* exceptionMessage[count_lines];
     exceptionMessage[0] = GetMsg(mName);
     exceptionMessage[1] = GetMsg(mCantLoad);
     exceptionMessage[2] = 0;
@@ -667,7 +671,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], 4, 1);
+    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 
