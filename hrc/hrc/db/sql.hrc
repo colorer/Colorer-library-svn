@@ -1504,6 +1504,7 @@ With help of:
             <word name="CHARINDEX"/>
             <word name="DIFFERENCE"/>
             <word name="IDENT_CURRENT"/>
+            <word name="ISNULL"/>
             <word name="LEFT"/>
             <word name="LEN"/>
             <word name="LOWER"/>

@@ -37,20 +37,21 @@ With help of:
          <inherit scheme="vbasic:Outlines"/>
 
          <keywords ignorecase="yes" region="Keyword">
+            <word name="As"/>
             <word name="Call"/>
             <word name="Case"/>
             <word name="ByVal"/>
             <word name="ByRef"/>
             <word name="Dim"/>
             <word name="Error"/>
-            <word name="else"/>
-            <word name="elseIf"/>
+            <word name="Else"/>
+            <word name="ElseIf"/>
             <word name="End"/>
             <word name="Erase"/>
             <word name="Exit"/>
             <word name="In"/>
             <word name="Nothing"/>
-            <word name="on"/>
+            <word name="On"/>
             <word name="Preserve"/>
             <word name="Private"/>
             <word name="Public"/>
@@ -60,7 +61,7 @@ With help of:
             <word name="Set"/>
             <word name="Step"/>
             <word name="Sub"/>
-            <word name="then"/>
+            <word name="Then"/>
             <word name="To"/>
             <word name="Until"/>
             <word name="With"/>

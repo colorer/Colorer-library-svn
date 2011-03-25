@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- правки jscript,qmake,sql,vbscript,email по патчам от HaRT
+
+#Revision: 1695
+	ctapmex 2011-03-22 10:54:09 +0500 (Вт, 22 мар 2011)
 	- правки C и C++ по патчам от HaRT
 
 #Revision: 1665

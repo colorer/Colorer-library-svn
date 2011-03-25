@@ -77,7 +77,8 @@
 
          <!-- artem: applying mNetAddresses sheme causes too slow work when
                      many addresses are in Received: field -->
-         <block start="/^(Received\:)/i" end="/%mesTE;/" scheme="def:empty" region01="head.word2" region="head.content2"/>
+         <block start="/^(Received(-SPF)?\:)/i" end="/%mesTE;/" scheme="def:Comment" region01="head.word2" region="head.content2"/>
+         <block start="/^(Authentication-Results\:)/i" end="/%mesTE;/" scheme="def:Comment" region01="head.word2" region="head.content2"/>
          <regexp match="/^(Message\-Id\:)(.*)$/i" region0="head.word2" region2="head.content2"/>
          <regexp match="/^(Status\:)(.*)$/i" region0="head.word2" region2="head.content2"/>
          <!-- cail: really it is better to use scheme "empty" -
@@ -85,11 +86,11 @@
          <block start="/^(Content\-Type\:)/i" end="/%mesTE;/" scheme="def:empty" region01="head.word2" region="head.content2"/>
 
          <!-- (C) by Artem Zankovich starts-->
-         <block start="/^(Content\-[dD]isposition\:)/" end="/%mesTE;/" scheme="def:empty" region01="head.word2" region="head.content2"/>
+         <block start="/^(Content\-[dD]isposition\:)/" end="/%mesTE;/" scheme="def:Comment" region01="head.word2" region="head.content2"/>
          <regexp match="/^(Content\-(transfer\-encoding|Description|Language|ID|Class)\:)(.*)$/i" region0="head.word2" region3="head.content2"/>
          <regexp match="/^(Mailing\-[lL]ist\:)\s(.*)$/" region0="head.word2" region2="head.content2"/>
          <regexp match="/^(Subscribed\-as\:)\s(.*)$/" region0="head.word2" region2="head.content2"/>
-         <regexp match="/^(List\-(Id|Help|Owner|Subscribe|Unsubscribe|Archive|Post)\:)\s(.*)$/" region0="head.word2" region3="head.content2"/>
+         <regexp match="/^(List\-(I[dD]|Help|Owner|Subscribe|Unsubscribe|Archive|Post)\:)\s(.*)$/" region0="head.word2" region3="head.content2"/>
          <regexp match="/^(Errors\-[tT]o\:)\s(.*)$/" region0="head.word2" region2="head.content2"/>
          <regexp match="/^(Delivered\-[tT]o\:)\s(.*)$/" region0="head.word2" region2="head.content2"/>
          <regexp match="/^(Delivery\-[dD]ate\:)\s(.*)$/" region0="head.word2" region2="head.content2"/>
