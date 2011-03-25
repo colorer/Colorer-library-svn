@@ -344,6 +344,7 @@
             <word name="join"/>
             <word name="lastIndexOf"/>
             <word name="lbound"/>
+            <word name="length"/>
             <word name="link"/>
             <word name="log"/>
             <word name="match"/>

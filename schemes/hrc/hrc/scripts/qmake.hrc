@@ -205,6 +205,7 @@
 		<word name='LEXIMPLS'/>
 		<word name='LEXOBJECTS'/>
 		<word name='LEXSOURCES'/>
+		<word name='LIBPATH'/>
 		<word name='LIBS'/>
 		<word name='LITERAL_HASH'/>
 		<word name='MAKEFILE'/>
@@ -550,6 +551,7 @@
 		<word name='count'/>
 		<word name='dirname'/>
 		<word name='error'/>
+		<word name='equals'/>
 		<word name='eval'/>
 		<word name='exists'/>
 		<word name='find'/>
