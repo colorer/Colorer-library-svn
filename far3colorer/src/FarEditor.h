@@ -119,7 +119,7 @@ public:
   /** Handle passed FAR editor event */
   int editorEvent(int event, void *param);
   /** Dispatch editor input event */
-  int editorInput(const INPUT_RECORD *ir);
+  int editorInput(const ProcessEditorInputInfo *ir);
 
   void cleanEditor();
 
@@ -167,6 +167,7 @@ private:
   bool backDefault(color col);
   void showOutliner(Outliner *outliner);
   void addFARColor(int lno, int s, int e, color col);
+  void deleteFarColor(int lno, int s);
   void addAnnotation(int lno, int s, int e, AnnotationInfo &ai);
   const wchar_t *GetMsg(int msg);
 };

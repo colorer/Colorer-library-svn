@@ -47,7 +47,7 @@ void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 {
   Info->StructSize=sizeof(GlobalInfo);
   Info->MinFarVersion=FARMANAGERVERSION;
-  Info->Version=MAKEFARVERSION(1,0,3,1);// need fix
+  Info->Version=MAKEFARVERSION(1,0,3,1,VS_BETA);// need fix
   Info->Guid=MainGuid;
   Info->Title=L"FarColorer";
   Info->Description=L"Syntax highlighting in Far editor";
@@ -86,7 +86,7 @@ void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
 /**
   On FAR exit. Destroys all internal structures.
 */
-void WINAPI ExitFARW()
+void WINAPI ExitFARW(const struct ExitInfo *Info)
 {
   if (editorSet){
     delete editorSet;
@@ -146,7 +146,7 @@ int WINAPI ProcessEditorEventW(int Event, void *Param)
   return editorSet->editorEvent(Event, Param);
 };
 
-int WINAPI ProcessEditorInputW(const INPUT_RECORD *Rec)
+int WINAPI ProcessEditorInputW(const ProcessEditorInputInfo *Rec)
 {
   return editorSet->editorInput(Rec);
 }
