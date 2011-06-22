@@ -1070,17 +1070,20 @@ bool FarEditorSet::checkConsoleAnnotationAvailable()
 bool FarEditorSet::SetBgEditor()
 {
   if (rEnabled && ChangeBgEditor && !consoleAnnotationAvailable){
-    FarSetColors fsc;
-    unsigned char c;
 
-    const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
-    c=(def_text->back<<4) + def_text->fore;
+		const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
 
-    fsc.Flags=FSETCLR_REDRAW;
-    fsc.ColorCount=1;
-    fsc.StartIndex=COL_EDITORTEXT;
-    fsc.Colors=&c;
-    return !!Info.AdvControl(&MainGuid,ACTL_SETARRAYCOLOR,0,&fsc);
+		FarSetColors fsc;
+		FarColor fc;
+		fsc.Flags = FSETCLR_REDRAW;
+		fsc.ColorsCount = 1;
+		fsc.StartIndex = COL_EDITORTEXT;
+		fc.BackgroundColor = def_text->back<<4;
+		fc.ForegroundColor = def_text->fore;
+		fc.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
+		fc.Reserved = null;
+		fsc.Colors = &fc;
+		return !!Info.AdvControl(&MainGuid,ACTL_SETARRAYCOLOR,0,&fsc);
   }
   return false;
 }
@@ -1546,7 +1549,7 @@ void FarEditorSet::configureHrc()
   HANDLE hDlg = Info.DialogInit(&MainGuid,&HrcPluginConfig, -1, -1, 59, 23, L"confighrc", fdi, ARRAY_SIZE(fdi), 0, 0, SettingHrcDialogProc, this);
   int i = Info.DialogRun(hDlg);
   
-  for (int idx = 0; idx < l->ItemsNumber; idx++){
+  for (size_t idx = 0; idx < l->ItemsNumber; idx++){
     if (l->Items[idx].Text){
       delete[] l->Items[idx].Text;
     }

@@ -1226,8 +1226,8 @@ void FarEditor::addFARColor(int lno, int s, int e, color col)
     ec.EndPos = e-1;
     //ec.Color = col.concolor;
     ec.Owner = MainGuid;
-    ec.Priority = EDITOR_COLOR_NORMAL_PRIORITY+1;
-    ec.Color.Flags = FMSG_FG_4BIT|FMSG_BG_4BIT;
+    ec.Priority =0;
+    ec.Color.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
     ec.Color.BackgroundColor = col.cbk;
     ec.Color.ForegroundColor = col.cfg;
     CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
