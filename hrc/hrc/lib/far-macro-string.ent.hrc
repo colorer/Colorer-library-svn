@@ -5,8 +5,8 @@
 <region name="string.quote" parent="def:StringEdge"/> <!-- def:String? -->
 <region name="macro.key" parent="def:Label"/>
 
-
 <scheme name="string">
+	<inherit scheme="verbatim-string"/>
 	<block start="/(%quote;)/" end="/(%quote;)/"
 		scheme="string.content" region="string"
 		region00='string.quote' region01="def:PairStart"
@@ -17,6 +17,10 @@
 		region00='string.quote' region01="def:PairStart"
 		region10='string.quote' region11="def:PairEnd"
 	/>
+</scheme>
+
+<scheme name="vbstring.content">
+
 </scheme>
 
 <scheme name="string.content">

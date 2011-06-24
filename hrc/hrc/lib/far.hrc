@@ -21,16 +21,36 @@
 	<entity name="quote" value="&quot;"/>
 	<entity name="slash" value="\\"/>
 	<entity name="apos" value="&apos;"/>
+	<region name="vbString" parent="def:String"/>
+
 	
 	&far-macro-string;
+
+	<scheme name="verbatim-string">
+		<block start="/@(%quote;)/" end="/.*?(%quote;)?~1\m(%quote;)\M(%quote;)?!/"
+			region="vbString" scheme="vbstring.content"
+			region00='string.quote' region01="def:PairStart"
+			region10='string.quote' region12="def:PairEnd"		
+		/>
+	</scheme>
 </type>
 
 <type name="far.macro.string-quot.internal">
 	<entity name="quote" value="\\&quot;"/>
 	<entity name="slash" value="\\\\"/>
 	<entity name="apos" value="\\&apos;"/>
+	<region name="vbString" parent="def:String"/>
+
 	
 	&far-macro-string;
+
+	<scheme name="verbatim-string">
+		<block start="/@(%quote;)/" end="/.*?(%quote;)?~2\m(%quote;)\M(%quote;)?!/"
+			region="vbString" scheme="vbstring.content"
+			region00='string.quote' region01="def:PairStart"
+			region10='string.quote' region12="def:PairEnd"		
+		/>
+	</scheme>
 </type>
 
 
@@ -42,6 +62,9 @@
 	<entity name="apos" value="(?{}&amp;apos;|')"/>
 	
 	&far-macro-string;
+	<scheme name="verbatim-string">
+	</scheme>
+
 </type>
 
 <type name="far.macro.string-xml-noapos.internal">
@@ -50,6 +73,8 @@
 	<entity name="apos" value="&amp;apos;"/>
 	
 	&far-macro-string;
+	<scheme name="verbatim-string">
+	</scheme>
 </type>
 
 
@@ -143,7 +168,7 @@
 <scheme name='far.oper'>
 	<inherit scheme="far.oper.logical"/>	
 	<inherit scheme="far.oper.arithmetic"/>	
-  <regexp match="/,/" region="oper"/>
+	<regexp match="/,/" region="oper"/>
 
 </scheme>
 
@@ -157,7 +182,7 @@
 
 	<inherit scheme="macro.func"/>	
 	<inherit scheme="far.oper"/>
-	<regexp match="/\%{1,2}[\w\._]+\b/" region="var"/>
+	<regexp match="/\#*\%{1,2}[\w\._]+\b/" region="var"/>
 	<regexp match="/\b0x[\dA-Fa-f]+\b/" region="def:NumberHex"/>
 	<regexp match="/\b0[0-7]+\b/" region="def:NumberOct"/>
 	<regexp match="/\b\d+\b/" region="def:NumberDec"/>
@@ -212,8 +237,8 @@
 
 <scheme name="macro.sequense">
 	<regexp match="/^\s*;;.*?$/" region="def:Comment"/>
-  <regexp match="/^\$-start/" region="selmacroBlocks"/>  
-  <regexp match="/^\$-end/" region="selmacroBlocks"/>  
+	<regexp match="/^\$-start/" region="selmacroBlocks"/>  
+	<regexp match="/^\$-end/" region="selmacroBlocks"/>  
 	<regexp match="/\$Continue/i" region="command"/>
 	<inherit scheme="macro.command"/>
 	<inherit scheme="macro.expr"/>	
@@ -329,8 +354,11 @@
 		<word name="gethotkey"/>
 		<word name="checkhotkey"/>
 		<word name="Menu.ItemStatus"/>
+		<word name="Menu.Filter"/>
+		<word name="Menu.FilterStr"/>
 		<word name="Menu.GetValue"/>
 		<word name="Menu.Select"/>
+		<word name="Menu.Show"/>
 		<word name="Menu.Value"/>
 		<word name="Dlg.GetValue"/>
 		<word name="Editor.Pos"/>
@@ -349,6 +377,11 @@
 		<word name="date"/>
 		<word name="print"/>
 		<word name="testfolder"/>
+		<word name="Plugin.Load"/>
+		<word name="Plugin.Unload"/>
+		<word name="history.enable"/>
+		<word name="FMatch"/>
+		<word name="Keybar.Show"/>
 	</keywords>
 </scheme>
 
