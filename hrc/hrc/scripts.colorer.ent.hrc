@@ -5,7 +5,7 @@
 </prototype>
 <prototype name="hrc" group="scripts.colorer" description="Colorer HRC" targetNamespace="http://colorer.sf.net/2003/hrc">
   <location link="scripts/colorer/hrc.hrc"/>
-  <filename>/\.hrc$/i</filename>
+  <filename>/\.hrc(\.far)?$/i</filename>
   <parameters>
     <param name="show-cross" value="both"/>
   </parameters>

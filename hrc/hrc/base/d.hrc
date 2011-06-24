@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="Windows-1251"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-	"http://colorer.sf.net/2003/hrc.dtd">
+	"http://colorer.sf.net/2003/hrc.dtd"[
+<!ENTITY d1-phobos SYSTEM "d1-phobos.ent.hrc">
+<!ENTITY d1-tango SYSTEM "d1-tango.ent.hrc">
+<!ENTITY d2-phobos SYSTEM "d2-phobos.ent.hrc">
+]>
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
@@ -15,15 +19,20 @@
 	]]></contributors>
 	<appinfo><todo>
 		- Fix delegate outlines (how?)
-		- Check phobos keywords for correctly
-		- DDOC comments support
-		- D 2.0 syntax support
-		- Optional win32 keywords from c.hrc (it's need?)
+		- Figure out highlighting of properties
 	</todo></appinfo>
 </annotation>
 
 <region name='comment' parent='def:Comment'/>
 <region name='comment.quote' parent='comment'/>
+<region name='ddoc' parent='def:CommentDoc'/>
+<region name='ddoc.quote' parent='ddoc'/>
+<region name='ddoc.sectiontitle' parent='def:String'/>
+<region name='ddoc.macro' parent='ddoc'/>
+<region name='ddoc.macro.symbol' parent='def:Comment'/>
+<region name='ddoc.macro.quote' parent='def:Comment'/>
+<region name='ddoc.example' parent='def:Text'/>
+<region name='ddoc.example.quote' parent='ddoc'/>
 
 <region name='char.esc' parent='c:StringEscape'/>
 <region name='char' parent='c:Character'/>
@@ -31,6 +40,9 @@
 <region name='string.quote' parent='def:StringEdge'/>
 <region name='string.pref' parent='regexp:SpecArea'/>
 <region name='string.format' parent='def:VarStrong'/>
+<region name='string.token' parent='def:Text'/>
+<region name='string.delimited' parent='perl:HereDoc'/>
+<region name='string.delimited.name' parent='perl:HereDocName'/>
 
 <region name='prefix' parent='def:NumberPrefix'/>
 <region name='postfix' parent='def:NumberSuffix'/>
@@ -49,10 +61,19 @@
 <region name='key.var' parent='def:Var'/>
 <region name='key.prop' parent='def:KeywordStrong'/>
 
-<region name='key.lib.const' parent='def:Constant'/>
-<region name='key.lib.type' parent='def:ClassKeyword'/>
-<region name='key.lib.fun' parent='def:FunctionKeyword'/>
-<region name='key.fun.main' parent='key.lib.fun'/>
+<region name='key.lib.alias' parent='def:Keyword'/>
+<region name='key.lib.typedef' parent='def:Keyword'/>
+<region name='key.lib.template' parent='def:Keyword'/>
+<region name='key.lib.struct' parent='def:StructKeyword'/>
+<region name='key.lib.union' parent='def:StructKeyword'/>
+<region name='key.lib.class' parent='def:ClassKeyword'/>
+<region name='key.lib.interface' parent='def:InterfaceKeyword'/>
+<region name='key.lib.enum' parent='def:TypeKeyword'/>
+<region name='key.lib.enum-member' parent='def:Constant'/>
+<region name='key.lib.variable' parent='def:Constant'/>
+<region name='key.lib.function' parent='def:FunctionKeyword'/>
+
+<region name='key.fun.main' parent='key.lib.function'/>
 
 <region name='decl.module' parent='def:Directive'/>
 <region name='decl' parent='def:Directive'/>
@@ -67,7 +88,7 @@
 <region name='class.out' parent='cpp:ClassOutline'/>
 <region name='struct.out' parent="c:StructOutline"/>
 <region name='tpl.out' parent="struct.out"/>
-<region name='ifase.out' parent='class.out'/>
+<region name='iface.out' parent='class.out'/>
 <region name='enum.out' parent="c:EnumOutline"/>
 <region name='version.out' parent='out'/>
 <region name='fun.out' parent='c:FuncOutline'/>
@@ -87,13 +108,35 @@
 </scheme>
 
 
-<!-- comments -->
+<!-- comments/DDoc -->
 
 <scheme name='comment.content'>
 	<inherit scheme='def:Comment'/>
 </scheme>
 
+<scheme name='ddoc.content'>
+	<inherit scheme='comment.content'/>
+	<regexp match='/^\s*\S+:/' region='ddoc.sectiontitle'/>
+	<block scheme='ddoc.content' region='ddoc'>
+		<start match='/(\()/' region1='def:PairStart'/>
+		<end   match='/(\))/' region1='def:PairEnd'/>
+	</block>
+	<block scheme='ddoc.content' region='ddoc.macro'>
+		<start match='/(\$\()(\w+)/' region0='ddoc.macro.quote' region1='def:PairStart' region2='ddoc.macro.symbol'/>
+		<end   match='/(\))/' region0='ddoc.macro.quote' region1='def:PairEnd'/>
+	</block>
+	<block scheme='d.lang' region='ddoc.example'>
+		<start match='/(^-{3,}$)/' region0='ddoc.example.quote' region1='def:PairStart'/>
+		<end   match='/(^-{3,}$)/' region0='ddoc.example.quote' region1='def:PairEnd'/>
+	</block>
+</scheme>
+
+
 <scheme name='comment.rec.block'>
+	<block scheme='ddoc.rec' region='ddoc'>
+		<start match='/(\/\+\+)/' region0='ddoc.quote' region1='def:PairStart'/>
+		<end   match='/(\+\/)/' region0='ddoc.quote' region1='def:PairEnd'/>
+	</block>
 	<block scheme='comment.rec' region='comment'>
 		<start match='/(\/\+)/' region0='comment.quote' region1='def:PairStart'/>
 		<end   match='/(\+\/)/' region0='comment.quote' region1='def:PairEnd'/>
@@ -105,7 +148,21 @@
 	<inherit scheme='comment.rec.block'/>
 </scheme>
 
+<scheme name='ddoc.rec'>
+	<inherit scheme='ddoc.content'/>
+	<inherit scheme='comment.rec.block'/>
+</scheme>
+
 <scheme name='comment'>
+	<block start='/(\/\/\/)/' end='/$/'
+		scheme='ddoc.content' region='ddoc' region00='ddoc.quote' 
+	/>
+	<block scheme='ddoc.content' region='ddoc'>
+		<start match='/(\/\*\*)/' region0='ddoc.quote' region1='def:PairStart'/>
+		<end   match='/(\*\/)/' region0='ddoc.quote' region1='def:PairEnd'/>
+	</block>
+	<inherit scheme='comment.rec.block'/>
+
 	<block start='/(\/\/)/' end='/$/'
 		scheme='comment.content' region='comment' region00='comment.quote' 
 	/>
@@ -135,7 +192,8 @@
 	<regexp match='/\\x%hex;{2}/' region='char.esc'/>
 	<regexp match='/\\u%hex;{4}/' region='char.esc'/>
 	<regexp match='/\\U%hex;{8}/' region='char.esc'/>
-	<regexp match='/\\o[0-7]{1,3}/' region='char.esc'/>
+	<regexp match='/\\[0-7]{1,3}/' region='char.esc'/>
+	<regexp match='/\\./' region='def:Error'/>
 </scheme>
 
 <scheme name='char.content'>
@@ -187,6 +245,8 @@
 		/>
 		<end match='/(")%str.post;/' region0='string.quote' region1='def:PairEnd'/>
 	</block>
+
+	<inherit scheme='string.all.d2'/>
 	
 	<block scheme='string.content' region='string'>
 		<start match='/(")/' region0='string.quote' region1='def:PairStart'/>
@@ -194,6 +254,57 @@
 	</block>
 </scheme>
 
+<scheme name='string.all.d2' if='d2'>
+	<block scheme='d.lang' region='string.token'>
+		<start match='/((q)\{)/' 
+			region0='string.quote'  region1='def:PairStart' region2='string.pref'
+		/>
+		<end match='/(\})/' region0='string.quote' region1='def:PairEnd'/>
+	</block>
+
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(%id;))$/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/^((\y3)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+	
+	<!-- TODO: implement nesting -->
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(\())/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/((\))")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+	
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(\[))/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/((\])")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+	
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(\{))/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/((\})")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+	
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(\<))/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/((\>)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+
+	<block scheme='def:empty' region='string.delimited'>
+		<start match='/(q)("(\S))/' 
+			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+		/>
+		<end match='/((\y3)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+	</block>
+</scheme>
 
 <scheme name='string'>
 	<inherit scheme='char'/>
@@ -373,6 +484,11 @@
 		<word name='dchar'/>
 		
 		<word name='size_t'/>
+		<word name='hash_t'/>
+		
+		<word name='string'/>
+		<word name='wstring'/>
+		<word name='dstring'/>
 		
 		<word name='auto'/>
 		<word name='alias'/>
@@ -388,6 +504,14 @@
 			region0='symb' region1='def:PairStart'
 		/>
 		<end match='/(\])/' 
+			region0='symb' region1='def:PairEnd'
+		/>
+	</block>
+	<block scheme='type'>
+		<start match='/(\()/' 
+			region0='symb' region1='def:PairStart'
+		/>
+		<end match='/(\))/' 
 			region0='symb' region1='def:PairEnd'
 		/>
 	</block>
@@ -410,6 +534,15 @@
 		<word name='function'/>
 		<word name='delegate'/>
 		<word name='return'/>
+		<word name='this'/>
+	</keywords>
+
+	<inherit scheme='type.d2'/>
+</scheme>
+
+<scheme name='type.d2' if='d2'>
+	<keywords region='key.type'>
+		<word name='immutable'/>
 	</keywords>
 </scheme>
 
@@ -508,7 +641,7 @@
 </scheme>
 
 <scheme name='decl.attr.pragma'>
-	<regexp match='/~\s*(msg|lib)/' region='decl'/>
+	<regexp match='/~\s*(msg|lib)\b/' region='decl'/>
 	<inherit scheme='d.expr'/> <!-- !!!!!!!!!!!! -->
 </scheme>
 
@@ -552,7 +685,7 @@
 	
 	<!-- pragma -->
 	<block scheme='decl.attr.pragma'>
-		<start match='/\bpargma\s*((\())/' 
+		<start match='/\bpragma\s*((\())/' 
 			region0='key' region1='symb' region2='def:PairStart'
 		/>
 		<end match='/((\)))\s*:?/' 
@@ -572,7 +705,7 @@
 	
 	
 	<regexp region1='key' region2='label.mark'>
-		/\b( extern
+		/\b ( extern
 			| align 
 			| deprecated
 			| private
@@ -588,6 +721,25 @@
 			| auto
 			| debug
 		)\b\s*(:)?/x</regexp>
+	
+	<inherit scheme='decl.attr.d2'/>
+</scheme>
+
+<scheme name='decl.attr.d2' if='d2'>
+	<regexp region1='key' region2='label.mark'>
+		/\b ( pure
+			| nothrow
+			| shared
+			| immutable
+			| __gshared
+		)\b\s*(:)?/x</regexp>
+	<regexp region1='key' region3='label.mark'>
+		/(@ ( property
+			| safe
+			| trusted
+			| system
+			| disable
+		))\b\s*(:)?/x</regexp>
 </scheme>
 
 
@@ -638,15 +790,15 @@
 		/>
 		<end match='/\{?=/'/>
 	</block>
-	<block scheme='def:empty'> <!-- no tempaltes -->
-		<start match='/\b(enum)\b\M(\s+%id;)?/' 
+	<block scheme='def:empty'> <!-- no templates -->
+		<start match='/\b(enum)\b\s*\M(%id;)?/'  
 			region1='key' region2='enum.out'
 		/>
-		<end match='/(:)|\{?=/' region1='symb.struct'/>
+		<end match='/([:=])|\{?=/' region1='symb'/>
 	</block>
-	<block scheme='def:empty'> <!-- no tempaltes ?? -->
+	<block scheme='def:empty'> <!-- no templates ?? -->
 		<start match='/\b(interface)\b\s+\M(%id;)/' 
-			region1='key' region2='ifase.out'
+			region1='key' region2='iface.out'
 		/>
 		<end match='/(:)|\{?=/' region1='symb.struct'/>
 	</block>
@@ -699,7 +851,7 @@
 </scheme> 
 
 <scheme name='decl.fun'>
-	<!-- bug: with delegates it's work incorrect -->
+	<!-- bug: this doesn't work correctly with delegates -->
 	<regexp match='/\M(?{fun.out}(\bout\b)?!%id;(\s*\([^\);]*?\)){1,2})[^;]*($|\{)/'/>
 	
 	<block scheme='tpl.fun.proxy'>
@@ -708,12 +860,9 @@
 	</block>   
 	
 	<keywords region='key.over'>
-		<word name='opNeg'/>
 		<word name='opPos'/>
+		<word name='opNeg'/>
 		<word name='opCom'/>
-		<word name='opPostInc'/>
-		<word name='opPostDec'/>
-		<word name='opCast'/>
 		<word name='opAdd'/>
 		<word name='opAdd_r'/>
 		<word name='opSub'/>
@@ -724,6 +873,8 @@
 		<word name='opDiv_r'/>
 		<word name='opMod'/>
 		<word name='opMod_r'/>
+		<word name='opEquals'/>
+		<word name='opCmp'/>
 		<word name='opAnd'/>
 		<word name='opAnd_r'/>
 		<word name='opOr'/>
@@ -738,8 +889,6 @@
 		<word name='opUShr_r'/>
 		<word name='opCat'/>
 		<word name='opCat_r'/>
-		<word name='opEquals'/>
-		<word name='opCmp'/>
 		<word name='opAssign'/>
 		<word name='opAddAssign'/>
 		<word name='opSubAssign'/>
@@ -753,16 +902,22 @@
 		<word name='opShrAssign'/>
 		<word name='opUShrAssign'/>
 		<word name='opCatAssign'/>
-		<word name='opIn'/>
-		<word name='opIn_r'/>
+		<word name='opPostInc'/>
+		<word name='opPostDec'/>
 		<word name='opIndex'/>
 		<word name='opIndexAssign'/>
-		<word name='opApply'/>
-		<word name='opApplyReverse'/>
-		<word name='opCall'/>
 		<word name='opSlice'/>
 		<word name='opSliceAssign'/>
+		<word name='opCall'/>
+		<word name='opCast'/>
+		<word name='opMatch'/>
+		<word name='opNext'/>
+		<word name='opIn'/>
+		<word name='opIn_r'/>
+		<word name='opApply'/>
+		<word name='opApplyReverse'/>
 	</keywords>
+	<inherit scheme='decl.fun.d2'/>
 	
 	<!-- from Vladimir Panteleev's d.hrc -->
 	<keywords region='key.fun.main'>
@@ -771,6 +926,25 @@
 		<word name="DllMain"/>
 	</keywords>
 </scheme> 
+
+<scheme name='decl.fun.d2' if='d2'>
+	<keywords region='key.over'>
+		<word name='opStar'/>
+		<word name='opDot'/>
+		<word name='opDispatch'/>
+		<word name='opUnary'/>
+		<word name='opIndexUnary'/>
+		<word name='opSliceUnary'/>
+		<word name='opBinary'/>
+		<word name='opBinaryRight'/>
+		<word name='opOpAssign'/>
+		<word name='opIndexOpAssign'/>
+		<word name='opSliceOpAssign'/>
+		<word name='opPow'/>
+		<word name='opPow_r'/>
+		<word name='opPowAssign'/>
+	</keywords>
+</scheme>
 
 
 
@@ -820,6 +994,7 @@
 	<keywords region='key'>
 		<word name='body'/>
 		<word name='break'/>
+		<word name='catch'/>
 		<word name='case'/>
 		<word name='continue'/>
 		<word name='default'/>
@@ -880,6 +1055,9 @@
 	<inherit scheme='literal'/>
 	<regexp match='/;/' region='symb.struct'/>
 	<regexp match='/,/' region='symb'/>
+	<regexp match='/:/' region='symb' priority='low'/>
+	<regexp match='/\$/' region='symb'/>
+	<inherit scheme='keys'/>
 	<inherit scheme='op'/>
 	<inherit scheme='tpl'/>
 	<inherit scheme='type'/>
@@ -893,14 +1071,12 @@
 		<word name='lazy'/>
 		<word name='mixin'/>
 		<word name='scope'/>
+		<word name='ref'/>
 		
 		<!--word name='sizeof'/-->
 		<word name='typeid'/>
 		<word name='typeof'/>
 	</keywords>
-	<inherit scheme='keys.custom'/>
-	
-	
 	<inherit scheme='tokens.spec'/>
 	<inherit scheme='tokens.bad'/>
 </scheme>
@@ -941,17 +1117,6 @@
 	</keywords>
 </scheme>
 
-<!-- d 
-
-
-<scheme name='d.all'>
-	<inherit scheme='d.declare'/>
-	
-	<inherit scheme="def:PairedBrackets">
-		<virtual scheme="def:PairedBrackets" subst-scheme="d.all"/>
-	</inherit>
-	<inherit scheme='keys'/>
-</scheme>-->
 
 <scheme name="d.lang">
 	<inherit scheme='comment'/>
@@ -968,8 +1133,12 @@
 
 
 <scheme name='d.property'>
-	<!--regexp region='key.prop' region1='symb'>
-		/(.)\s*(alignof
+	<!-- disabled due to Colorer bug(?):
+
+		{foo!(bar).init}      // } is not highlighted
+	
+	<regexp region='key.prop' region1='symb'>
+		/(\.)\s*(alignof
 			| dig
 			| dup
 			| epsilon
@@ -993,584 +1162,47 @@
 			| sizeof
 			| sort
 			| stringof
-		)\b/x
-	</regexp-->
++		)/x
++	</regexp>
++	-->
 	<keywords region='key.var'>
 		<word name='_argptr'/>
 		<word name='_arguments'/>
 	</keywords>
 	
-	<keywords region='key.prop'>
-		<word name='alignof'/>
-		<word name='dig'/>
-		<word name='dup'/>
-		<word name='epsilon'/>
-		<word name='idup'/>
-		<word name='im'/>
-		<word name='infinity'/>
-		<word name='init'/>
-		<word name='length'/>
-		<word name='mangleof'/>
-		<word name='mant_dig'/>
-		<word name='max'/>
-		<word name='max_10_exp'/>
-		<word name='max_exp'/>
-		<word name='min'/>
-		<word name='min_10_exp'/>
-		<word name='min_exp'/>
-		<word name='nan'/>
-		<word name='ptr'/>
-		<word name='re'/>
-		<word name='reverse'/>
-		<word name='sizeof'/>
-		<word name='sort'/>
-		<word name='stringof'/>
-	</keywords>
 </scheme>
 
 
 <scheme name='keys.custom'>
 	<inherit scheme='d.property'/>
-	<keywords region='key.lib.fun'>
+	<keywords region='key.lib.function'>
 		<word name='print'/>
 		<word name='toString'/>
 		<word name='toHash'/>
 		<word name='factory'/>
 	</keywords>
 	
-	<keywords region='key.lib.type'>
-		<word name='Object'/>
-		<word name='Interface'/>
-		<word name='ClassInfo'/>
-		<word name='TypeInfo'/>
-		<word name='OffsetTypeInfo'/>
-		<word name='Exception'/>
-		<word name='Error'/>
-		<word name='size_t'/>
-		<word name='ptrdiff_t'/>
-		<word name='bit'/>
-	</keywords>
 	<inherit scheme='key.phobos'/>
 </scheme>
 
 
 <scheme name='key.phobos' if='use_phobos'>
-	<keywords region='key.lib.const'>
-		<word name='BAD_FILE_READ'/>
-		<word name='BUFSIZ'/>
-		<word name='BigEndian'/>
-		<word name='CANNOT_OPEN_JAR_FILE'/>
-		<word name='D_major'/>
-		<word name='D_minor'/>
-		<word name='DigitalMars'/>
-		<word name='E'/>
-		<word name='ELIDE_BLANK_RECORDS'/>
-		<word name='EOF'/>
-		<word name='EXIT_SUCCESS'/>
-		<word name='FILENAME_MAX'/>
-		<word name='FOPEN_MAX'/>
-		<word name='FP_FAST_FMA'/>
-		<word name='FP_FAST_FMAF'/>
-		<word name='FP_FAST_FMAL'/>
-		<word name='FP_ILOGB0'/>
-		<word name='FP_ILOGBNAN'/>
-		<word name='FP_INFINITE'/>
-		<word name='FP_NAN'/>
-		<word name='FP_NORMAL'/>
-		<word name='FP_SUBNORMAL'/>
-		<word name='FP_ZERO'/>
-		<word name='HUGE_VAL'/>
-		<word name='INFINITY'/>
-		<word name='INVALID_CONTENT'/>
-		<word name='INVALID_INDEX'/>
-		<word name='LC_ALL'/>
-		<word name='LC_COLLATE'/>
-		<word name='LC_CTYPE'/>
-		<word name='LC_MONETARY'/>
-		<word name='LC_NUMERIC'/>
-		<word name='LC_TIME'/>
-		<word name='LN10'/>
-		<word name='LN2'/>
-		<word name='LOG10E'/>
-		<word name='LOG2'/>
-		<word name='LOG2E'/>
-		<word name='LOG2T'/>
-		<word name='LittleEndian'/>
-		<word name='MATH_ERREXCEPT'/>
-		<word name='MATH_ERRNO'/>
-		<word name='M_1_PI'/>
-		<word name='M_2_PI'/>
-		<word name='M_2_SQRTPI'/>
-		<word name='NAN'/>
-		<word name='NO_RECORDS'/>
-		<word name='ORDER_FIELDS'/>
-		<word name='OUT_OF_MEMORY'/>
-		<word name='PARSE_ERROR'/>
-		<word name='PI'/>
-		<word name='PI_2'/>
-		<word name='PI_4'/>
-		<word name='RECORD_SEPARATOR_IN_CONTINUATION'/>
-		<word name='SQRT1_2'/>
-		<word name='SQRT2'/>
-		<word name='SUCCESS'/>
-		<word name='SYS_OPEN'/>
-		<word name='TMP_MAX'/>
-		<word name='UNEXPECTED'/>
-		<word name='UNFINISHED_FIELD'/>
-		<word name='UNFINISHED_LINE'/>
-		<word name='UNFINISHED_RECORD'/>
-		<word name='WEOF'/>
-		<word name='_NFILE'/>
-		<word name='_SYS_OPEN'/>
-		<!--symb name='altsep'/>
-		<word name='curdir'/>
-		<word name='d_time_nan'/>
-		<word name='email'/>
-		<word name='endian'/>
-		<word name='linesep'/>
-		<word name='math_errhandling'/>
-		<word name='name'/>
-		<word name='pardir'/>
-		<word name='pathsep'/>
-		<word name='url'/>
-		<word name='sep'/-->
-		<word name='stdaux'/>
-		<word name='stderr'/>
-		<word name='stdin'/>
-		<word name='stdout'/>
-		<word name='stdprn'/>
-		<word name='vendor'/>
-		<word name='version_major'/>
-		<word name='version_minor'/>
-	</keywords>
-	<keywords region='key.lib.type'>
-		<word name='Address'/>
-		<word name='AddressException'/>
-		<word name='ArchiveMember'/>
-		<word name='Base64CharException'/>
-		<word name='Base64Exception'/>
-		<word name='BitArray'/>
-		<word name='Box'/>
-		<word name='BufferedFile'/>
-		<word name='BufferedStream'/>
-		<word name='CFile'/>
-		<word name='Compress'/>
-		<word name='ConvError'/>
-		<word name='ConvOverflowError'/>
-		<word name='Database'/>
-		<word name='DatabaseException'/>
-		<word name='Date'/>
-		<word name='DirEntry'/>
-		<word name='DynArg'/>
-		<word name='Endian'/>
-		<word name='EndianStream'/>
-		<word name='FILE'/>
-		<word name='Field'/>
-		<word name='File'/>
-		<word name='FileException'/>
-		<word name='FilterStream'/>
-		<word name='FormatError'/>
-		<word name='HostException'/>
-		<word name='InternetAddress'/>
-		<word name='InternetHost'/>
-		<word name='InvalidKeyException'/>
-		<word name='InvalidTypeException'/>
-		<word name='MD5_CTX'/>
-		<word name='MmFile'/>
-		<word name='ORJRC'/>
-		<word name='ORJ_FLAG'/>
-		<word name='ORJ_PARSE_ERROR'/>
-		<word name='OpenException'/>
-		<word name='OpenRJException'/>
-		<word name='OutBuffer'/>
-		<word name='OutOfMemoryException'/>
-		<word name='Protocol'/>
-		<word name='ReadException'/>
-		<word name='Record'/>
-		<word name='RegExp'/>
-		<word name='RegExpException'/>
-		<word name='SeekException'/>
-		<word name='Service'/>
-		<word name='SliceStream'/>
-		<word name='Socket'/>
-		<word name='SocketAcceptException'/>
-		<word name='SocketException'/>
-		<word name='SocketSet'/>
-		<word name='SocketStream'/>
-		<word name='StdioException'/>
-		<word name='Stream'/>
-		<word name='StreamException'/>
-		<word name='StreamFileException'/>
-		<word name='StringException'/>
-		<word name='TcpSocket'/>
-		<word name='Thread'/>
-		<word name='ThreadError'/>
-		<word name='Tuple'/>
-		<word name='TypeClass'/>
-		<word name='UdpSocket'/>
-		<word name='UnCompress'/>
-		<word name='UnboxException'/>
-		<word name='UnknownAddress'/>
-		<word name='UtfException'/>
-		<word name='Vendor'/>
-		<word name='WriteException'/>
-		<word name='ZipArchive'/>
-		<word name='ZipException'/>
-		<word name='ZlibException'/>
-		<word name='d_time'/>
-		<word name='div_t'/>
-		<word name='double_t'/>
-		<word name='fcmp'/>
-		<word name='fenv_t'/>
-		<word name='float_t'/>
-		<word name='fpos_t'/>
-		<word name='lconv'/>
-		<word name='ldiv_t'/>
-		<word name='linger'/>
-		<word name='lldiv_t'/>
-		<word name='slot_t'/>
-		<word name='thread_hdl'/>
-		<word name='timeval'/>
-		<word name='va_list'/>
-	</keywords>
-	<keywords region='key.lib.fun'>
-		<word name='BaseTypeTuple'/>
-		<word name='BoundFunc'/>
-		<word name='DerivedToFront'/>
-		<word name='Erase'/>
-		<word name='EraseAll'/>
-		<word name='FieldTypeTuple'/>
-		<word name='Format'/>
-		<word name='IndexOf'/>
-		<word name='MemoryStream'/>
-		<word name='MmFileStream'/>
-		<word name='MostDerived'/>
-		<word name='NoDuplicates'/>
-		<word name='ParameterTypeTuple'/>
-		<word name='ParseInteger'/>
-		<word name='ParseUinteger'/>
-		<word name='Replace'/>
-		<word name='ReplaceAll'/>
-		<word name='ReturnType'/>
-		<word name='Reverse'/>
-		<word name='Signal'/>
-		<word name='TArrayStream'/>
-		<word name='ToString'/>
-		<word name='Tuple'/>
-		<word name='TypeTuple'/>
-		<word name='_fgetchar'/>
-		<word name='_fputchar'/>
-		<word name='_fsopen'/>
-		<word name='_wtmpnam'/>
-		<word name='abs'/>
-		<word name='acos'/>
-		<word name='acosh'/>
-		<word name='addExt'/>
-		<word name='addRange'/>
-		<word name='addRoot'/>
-		<word name='alignSize'/>
-		<word name='alloca'/>
-		<word name='amd'/>
-		<word name='amd3dnow'/>
-		<word name='amd3dnowExt'/>
-		<word name='amd64'/>
-		<word name='amdMmx'/>
-		<word name='asin'/>
-		<word name='asinh'/>
-		<word name='atan'/>
-		<word name='atan2'/>
-		<word name='atanh'/>
-		<word name='atexit'/>
-		<word name='atof'/>
-		<word name='bsearch'/>
-		<word name='bsf'/>
-		<word name='bsr'/>
-		<word name='bswap'/>
-		<word name='bt'/>
-		<word name='btc'/>
-		<word name='btr'/>
-		<word name='bts'/>
-		<word name='calloc'/>
-		<word name='capacity'/>
-		<word name='cbrt'/>
-		<word name='ceil'/>
-		<word name='clearerr'/>
-		<word name='conj'/>
-		<word name='connect'/>
-		<word name='copysign'/>
-		<word name='coresPerCPU'/>
-		<word name='cos'/>
-		<word name='cosh'/>
-		<word name='decode'/>
-		<word name='decodeComponent'/>
-		<word name='defaultExt'/>
-		<word name='demangle'/>
-		<word name='digestToString'/>
-		<word name='disable'/>
-		<word name='disconnect'/>
-		<word name='div'/>
-		<word name='emit'/>
-		<word name='encode'/>
-		<word name='encodeComponent'/>
-		<word name='erf'/>
-		<word name='erfc'/>
-		<word name='execv'/>
-		<word name='exp'/>
-		<word name='exp2'/>
-		<word name='expandTilde'/>
-		<word name='expi'/>
-		<word name='expm1'/>
-		<word name='extend'/>
-		<word name='fabs'/>
-		<word name='family'/>
-		<word name='fclose'/>
-		<word name='fcloseall'/>
-		<word name='fdim'/>
-		<word name='fdopen'/>
-		<word name='feof'/>
-		<word name='feqrel'/>
-		<word name='ferror'/>
-		<word name='fflush'/>
-		<word name='fgetc'/>
-		<word name='fgetchar'/>
-		<word name='fgetpos'/>
-		<word name='fgets'/>
-		<word name='fgetwc'/>
-		<word name='fgetws'/>
-		<word name='fileno'/>
-		<word name='filesize'/>
-		<word name='fill0'/>
-		<word name='floor'/>
-		<word name='flushall'/>
-		<word name='fma'/>
-		<word name='fmax'/>
-		<word name='fmin'/>
-		<word name='fmod'/>
-		<word name='fncharmatch'/>
-		<word name='fnmatch'/>
-		<word name='fopen'/>
-		<word name='fprintf'/>
-		<word name='fputc'/>
-		<word name='fputchar'/>
-		<word name='fputs'/>
-		<word name='fputwc'/>
-		<word name='fputws'/>
-		<word name='fread'/>
-		<word name='freopen'/>
-		<word name='frexp'/>
-		<word name='fromMBSz'/>
-		<word name='fscanf'/>
-		<word name='fseek'/>
-		<word name='fsetpos'/>
-		<word name='ftell'/>
-		<word name='fullCollect'/>
-		<word name='fwide'/>
-		<word name='fwprintf'/>
-		<word name='fwrite'/>
-		<word name='fwritef'/>
-		<word name='fwritefln'/>
-		<word name='fwscanf'/>
-		<word name='fxsr'/>
-		<word name='genCollect'/>
-		<word name='getBaseName'/>
-		<word name='getDirName'/>
-		<word name='getDrive'/>
-		<word name='getExt'/>
-		<word name='getGCHandle'/>
-		<word name='getName'/>
-		<word name='getc'/>
-		<word name='getch'/>
-		<word name='getchar'/>
-		<word name='getche'/>
-		<word name='getenv'/>
-		<word name='gets'/>
-		<word name='getw'/>
-		<word name='getwc'/>
-		<word name='getwchar_t'/>
-		<word name='hasNoPointers'/>
-		<word name='hasPointers'/>
-		<word name='hyperThreading'/>
-		<word name='hypot'/>
-		<word name='ia64'/>
-		<word name='ilogb'/>
-		<word name='inp'/>
-		<word name='intel'/>
-		<word name='isExpressionTuple'/>
-		<word name='isIdentical'/>
-		<word name='isStaticArray'/>
-		<word name='isUniAlpha'/>
-		<word name='isUniLower'/>
-		<word name='isUniUpper'/>
-		<word name='isabs'/>
-		<word name='isalnum'/>
-		<word name='isalpha'/>
-		<word name='isascii'/>
-		<word name='iscntrl'/>
-		<word name='isdigit'/>
-		<word name='isfinite'/>
-		<word name='isgraph'/>
-		<word name='isgreater'/>
-		<word name='isgreaterequal'/>
-		<word name='isinf'/>
-		<word name='isless'/>
-		<word name='islessequal'/>
-		<word name='islessgreater'/>
-		<word name='islower'/>
-		<word name='isnan'/>
-		<word name='isnormal'/>
-		<word name='isprint'/>
-		<word name='ispunct'/>
-		<word name='isspace'/>
-		<word name='issubnormal'/>
-		<word name='isunordered'/>
-		<word name='isupper'/>
-		<word name='isxdigit'/>
-		<word name='itoa'/>
-		<word name='join'/>
-		<word name='kbhit'/>
-		<word name='ldexp'/>
-		<word name='lgamma'/>
-		<word name='llrint'/>
-		<word name='llround'/>
-		<word name='localeconv'/>
-		<word name='log'/>
-		<word name='log10'/>
-		<word name='log1p'/>
-		<word name='log2'/>
-		<word name='logb'/>
-		<word name='lrint'/>
-		<word name='lround'/>
-		<word name='malloc'/>
-		<word name='mblen'/>
-		<word name='memchr'/>
-		<word name='memcmp'/>
-		<word name='memcpy'/>
-		<word name='memicmp'/>
-		<word name='memmove'/>
-		<word name='memset'/>
-		<word name='minimize'/>
-		<word name='mmx'/>
-		<word name='model'/>
-		<word name='modf'/>
-		<word name='nan'/>
-		<word name='nearbyint'/>
-		<word name='nextDown'/>
-		<word name='nextUp'/>
-		<word name='nextafter'/>
-		<word name='nexttoward'/>
-		<word name='outp'/>
-		<word name='perror'/>
-		<word name='poly'/>
-		<word name='pow'/>
-		<word name='printDigest'/>
-		<word name='printf'/>
-		<word name='processor'/>
-		<word name='putc'/>
-		<word name='putchar'/>
-		<word name='puts'/>
-		<word name='putw'/>
-		<word name='putwc'/>
-		<word name='putwchar_t'/>
-		<word name='rand'/>
-		<word name='rand_seed'/>
-		<word name='read'/>
-		<word name='readln'/>
-		<word name='realloc'/>
-		<word name='remainder'/>
-		<word name='remove'/>
-		<word name='removeRange'/>
-		<word name='removeRoot'/>
-		<word name='remquo'/>
-		<word name='rename'/>
-		<word name='reserve'/>
-		<word name='rewind'/>
-		<word name='rint'/>
-		<word name='rndtol'/>
-		<word name='rndtonl'/>
-		<word name='round'/>
-		<word name='scalbln'/>
-		<word name='scalbn'/>
-		<word name='scanf'/>
-		<word name='setDestDir'/>
-		<word name='setGCHandle'/>
-		<word name='setMerge'/>
-		<word name='setSourceDir'/>
-		<word name='setTypeInfo'/>
-		<word name='setV1_0'/>
-		<word name='setbuf'/>
-		<word name='setenv'/>
-		<word name='setlocale'/>
-		<word name='setvbuf'/>
-		<word name='signbit'/>
-		<word name='sin'/>
-		<word name='sinh'/>
-		<word name='spread'/>
-		<word name='sprintf'/>
-		<word name='sqrt'/>
-		<word name='sscanf'/>
-		<word name='sse'/>
-		<word name='sse2'/>
-		<word name='sse3'/>
-		<word name='ssse3'/>
-		<word name='stepping'/>
-		<word name='strcat'/>
-		<word name='strchr'/>
-		<word name='strcmp'/>
-		<word name='strcoll'/>
-		<word name='strcpy'/>
-		<word name='strcspn'/>
-		<word name='strerror'/>
-		<word name='strlen'/>
-		<word name='strncat'/>
-		<word name='strncmp'/>
-		<word name='strncpy'/>
-		<word name='strpbrk'/>
-		<word name='strrchr'/>
-		<word name='strspn'/>
-		<word name='strstr'/>
-		<word name='strtok'/>
-		<word name='strxfrm'/>
-		<word name='sum'/>
-		<word name='swprintf'/>
-		<word name='swscanf'/>
-		<word name='system'/>
-		<word name='tan'/>
-		<word name='tanh'/>
-		<word name='tempnam'/>
-		<word name='tgamma'/>
-		<word name='threadsPerCPU'/>
-		<word name='tmpfile'/>
-		<word name='tmpnam'/>
-		<word name='toBytes'/>
-		<word name='toMBSz'/>
-		<word name='toString'/>
-		<word name='toUniLower'/>
-		<word name='toUniUpper'/>
-		<word name='tolower'/>
-		<word name='toupper'/>
-		<word name='trunc'/>
-		<word name='tuple'/>
-		<word name='ungetc'/>
-		<word name='ungetwc'/>
-		<word name='unlink'/>
-		<word name='unsetenv'/>
-		<word name='va_start'/>
-		<word name='va_arg'/>
-		<word name='va_end'/>
-		<word name='va_copy'/>
-		<word name='vendor'/>
-		<word name='vfprintf'/>
-		<word name='vfwprintf'/>
-		<word name='vprintf'/>
-		<word name='vsprintf'/>
-		<word name='vswprintf'/>
-		<word name='vwprintf'/>
-		<word name='wprintf'/>
-		<word name='write'/>
-		<word name='writef'/>
-		<word name='writefln'/>
-		<word name='wscanf'/>
-	</keywords>
+	<inherit scheme='key.phobos.d1'/>
+	<inherit scheme='key.phobos.d2'/>
+</scheme>
+
+<!-- https://github.com/CyberShadow/json2colorer -->
+
+<scheme name='key.phobos.d1' unless='d2'>
+	&d1-phobos;
+</scheme>
+
+<scheme name='key.phobos.d2' if='d2'>
+	&d2-phobos;
+</scheme>
+
+<scheme name='key.tango' if='use_tango'>
+	&d1-tango;
 </scheme>
 
 <scheme name='keys'>

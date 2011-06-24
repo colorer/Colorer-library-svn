@@ -65,10 +65,12 @@
   </package>
   <prototype name="d" group="main" description="D">
     <location link="base/d.hrc"/>
-    <filename>/\.d$/i</filename>
+    <filename>/\.(d|di)$/i</filename>
     <parameters>
-      <param name="format-str" value="true" description="Highlight printf-like %format in strnigs"/>
+      <param name="format-str" value="true" description="Highlight printf-like %format in strings"/>
       <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
+      <param name="use_tango" value="false" description="Use Tango library keywords"/>
+      <param name="d2" value="true" description="Use D 2.0 language features"/>
       <!-- firstline -->
       <param name='firstlines'     value='10'   description="lines for 'firstline'"/>
       <param name='firstlinebytes' value='2000' description="bytes for 'firstline'"/>
@@ -77,7 +79,7 @@
   
   <prototype name="asm" group="main" description="ASM">
     <location link="base/asm.hrc"/>
-    <filename>/\.(mac|asm|inc|i32)$/i</filename>
+    <filename>/\.(mac|asm|inc|i32|cod)$/i</filename>
     <firstline>/^\s*;/</firstline>
   </prototype>
   <prototype name="perl" group="main" description="Perl">
@@ -107,8 +109,8 @@
   </prototype>
   <prototype name="pascal" group="main" description="Pascal">
     <location link="base/pascal.hrc"/>
-    <filename>/\.(\~?pas|dpr|dpk|inc|int)$/i</filename>
-    <firstline>/^(\{|\/\/|resourcestring)/i</firstline>
+    <filename>/\.(\~?pas|dpr|dpk|inc|int|pp)$/i</filename>
+    <firstline>/^(\{|\/\/|resourcestring|program|library|unit|package)/i</firstline>
   </prototype>
   <prototype name="csharp" group="main" description="C#">
     <location link="base/csharp.hrc"/>
@@ -116,7 +118,7 @@
   </prototype>
   <prototype name="jsnet" group="main" description="JS.NET">
     <location link="base/js.net.hrc"/>
-    <filename>/\.js$/i</filename>
+    <filename weight="0.5">/\.js$/i</filename>
   </prototype>
   <prototype name="vbnet" group="main" description="VB.NET">
     <location link="base/vb.net.hrc"/>
@@ -293,7 +295,8 @@
 
   <prototype name="rss" group="inet" description="rss" targetNamespace="http://purl.org/rss/1.0/">
     <location link="inet/gen/rss.hrc"/>
-    <filename>/^rss|\.(rss)$/i</filename>
+    <filename>/\.(rss)$/i</filename>
+    <filename weight='1.5'>/^rss/i</filename>
     <firstline>/xmlns="http:\/\/purl\.org\/rss\/1\.0\/"/</firstline>
     <firstline>/&lt;rss version="0\.91"&gt;/</firstline>
   </prototype>
