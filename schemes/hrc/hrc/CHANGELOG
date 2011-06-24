@@ -1,5 +1,9 @@
   Fixed:
-    - add missing words for c, cpp, jscript, qmake, sql, vbscript, email  from HaRT 
+    - add missing words for c, cpp, jscript, qmake, sql, vbscript, email (from HaRT) 
+    - add  C function outlining for C# (from Vladimir Panteleev)
+    - major improvements to D syntax file (from Vladimir Panteleev)
+    - minor fix proto.hrc (from Vladimir Panteleev)
+    - Pascal - write characters with codes 0-31 in the format ^ @, ^ A, ^ B (Igor Yudincev)
 
 2011-03-18 r1688 (FarColorer 1.0.3.1)
   New:

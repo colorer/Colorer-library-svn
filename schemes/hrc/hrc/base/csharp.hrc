@@ -22,6 +22,9 @@ With help of:
       <region name="csCloseStruct" parent="PairEnd"/>
       <region name="csError" parent="Error"/>
 
+      <region name="FuncOutline" parent="def:Outlined"/>
+      <region name="ClassOutline" parent="def:Outlined"/>
+      
 
       <scheme name="csharp">
          <inherit scheme="CString"/>
@@ -38,6 +41,29 @@ With help of:
          <block start="/(\()/" end="/(\))/" scheme="csharp" region00="csSymbol" region10="csSymbol" region01="csOpenStruct" region11="csCloseStruct"/>
          <block start="/(\{)/" end="/(\})/" scheme="csharp" region00="csSymbolStrong" region10="csSymbolStrong" region01="csOpenStruct" region11="csCloseStruct"/>
          <block start="/(\[)/" end="/(\])/" scheme="csharp" region00="csSymbol" region10="csSymbol" region01="csOpenStruct" region11="csCloseStruct"/>
+         
+         <regexp><![CDATA[
+           /^ \M \s*
+           (\w [\w*\[\]\s]+? [*\[\]\s]) (delegate \s* \([\w_*~,\[\]\s]*\)\s*)?
+
+           (?{csharp:FuncOutline}
+            ([\w]+?)
+           )
+
+           (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sdo)?~3 (\sswitch)?~7 (\scatch)?~6 (\sforeach)?~8
+
+           \s* \( (.* \( [^\(\)]* \))* ( [^\)]*?\) | [^\);]*? )
+           \s* ($|\{|\/) /x
+         ]]></regexp>
+         <regexp><![CDATA[
+           /\M
+           class \s+
+           (?{ClassOutline}
+            [\:\w]+ [\:\w\s]*? ([^;]|$)
+           )/x
+         ]]></regexp>
+         
+
          <keywords region="csSymbol">
             <symb name=";" region="csSymbolStrong"/>
             <symb name=":"/>

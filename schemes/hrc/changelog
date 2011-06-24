@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- доработка схемы C# и D, а также исправления в proto.hrc от Vladimir Panteleev
+	- pascal - запись символов с кодами 0-31 в формате ^@, ^A, ^B и т. п. (Игорь Юдинцев)
+
+#Revision: 1704
+	Author: ctapmex Date: 2011-03-25 13:49:45 +0500 (Пт, 25 мар 2011)
 	- правки jscript,qmake,sql,vbscript,email по патчам от HaRT
 
 #Revision: 1695
