@@ -466,7 +466,8 @@
 		<word name="CurPos"/>
 		<word name="ItemCount"/>
 		<word name="ItemType"/>
-		<word name="GetValue"/>
+		<word name="Info.Id"/>
+		<word name="Info.Owner"/>
 	</keywords> 
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
