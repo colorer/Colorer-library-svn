@@ -578,14 +578,17 @@ int FarEditor::editorEvent(int event, void *param)
 
     bool vertCrossDone = false;
 
-    if (drawSyntax){
-      for (; l1; l1 = l1->next){
-        if (l1->special){
-          continue;
-        }
-        if (l1->start == l1->end){
-          continue;
-        }
+		if (drawSyntax){
+			for (; l1; l1 = l1->next){
+				if (!l1->region){
+					continue;
+				}
+				if (l1->special){
+					continue;
+				}
+				if (l1->start == l1->end){
+					continue;
+				}
         if (l1->start > ei.LeftPos+ei.WindowSizeX){
           continue;
         }
