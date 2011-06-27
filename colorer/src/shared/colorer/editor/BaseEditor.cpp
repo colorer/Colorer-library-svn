@@ -40,13 +40,13 @@ BaseEditor::BaseEditor(ParserFactory *parserFactory, LineSource *lineSource)
   breakParse = false;
   validationProcess = false;
 
-  setRegionCompact(regionCompact);
-
   def_Text = hrcParser->getRegion(&DString("def:Text"));
   def_Syntax = hrcParser->getRegion(&DString("def:Syntax"));
-  def_Special = hrcParser->getRegion(&DString("def:Special"));
-  def_PairStart = hrcParser->getRegion(&DString("def:PairStart"));
-  def_PairEnd = hrcParser->getRegion(&DString("def:PairEnd"));
+	def_Special = hrcParser->getRegion(&DString("def:Special"));
+	def_PairStart = hrcParser->getRegion(&DString("def:PairStart"));
+	def_PairEnd = hrcParser->getRegion(&DString("def:PairEnd"));
+
+	setRegionCompact(regionCompact);
 
   rd_def_Text = rd_def_HorzCross = rd_def_VertCross = null;
   eh = parserFactory->getErrorHandler();
