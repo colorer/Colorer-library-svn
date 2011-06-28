@@ -6,6 +6,7 @@
     - Pascal - write characters with codes 0-31 in the format ^@, ^A, ^B (Igor Yudincev)
     - far.hrc - add support verbatim string; new functions
     - c.hrc - shows #include and #define in the outline list is closed by key
+    - csharp.hrc - add support verbatim string; 
 
 2011-03-18 r1688 (FarColorer 1.0.3.1)
   New:

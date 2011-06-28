@@ -24,9 +24,22 @@ With help of:
 
       <region name="FuncOutline" parent="def:Outlined"/>
       <region name="ClassOutline" parent="def:Outlined"/>
-      
+      <region name="vbString" parent="def:String"/>
+
+      <scheme name="verbatim-string">
+         <block start="/@(&quot;)/" end="/.*?(&quot;)?~1\m(&quot;)\M(&quot;)?!/"
+            region="vbString" scheme="vbstring.content"
+            region00='string.quote' region01="def:PairStart"
+            region10='string.quote' region12="def:PairEnd"		
+        />
+      </scheme>
+
+     <scheme name="vbstring.content">
+
+     </scheme>
 
       <scheme name="csharp">
+         <inherit scheme="verbatim-string"/>
          <inherit scheme="CString"/>
          <inherit scheme="CHexNumber"/>
          <inherit scheme="FloatNumber"/>
