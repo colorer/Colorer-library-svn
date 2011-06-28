@@ -59,7 +59,7 @@
          <regexp match="/'(.*?[^\'])??'/" region0="pString"/>
          <regexp match="/\#\d+?\b/" region0="pNumb"/>
          <regexp match="/\#\$[\dA-Fa-f]+?\b/" region0="pNumb"/>
-         <regexp match="/\^./" region0="pNumb"/>
+         <regexp match="/\W\m\^.\W/" region0="pNumb"/>
 <!-- Numbers  -->
          <regexp match="/\B(\$[\da-fA-F]+)\b/" region0="pNumb"/>
          <inherit scheme="FloatNumber"/>
