@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлена поддержка verbatim string в csharp.hrc 
+
+#Revision: 1717
+	#Author: ctapmex Date: 2011-06-28 18:00:50 +0600 (Вт, 28 июн 2011)
 	- исправление 1708.2
 
 #Revision: 1716
