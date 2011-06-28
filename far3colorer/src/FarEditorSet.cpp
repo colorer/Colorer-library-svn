@@ -1078,7 +1078,7 @@ bool FarEditorSet::SetBgEditor()
 		fsc.Flags = FSETCLR_REDRAW;
 		fsc.ColorsCount = 1;
 		fsc.StartIndex = COL_EDITORTEXT;
-		fc.BackgroundColor = def_text->back<<4;
+		fc.BackgroundColor = def_text->back;
 		fc.ForegroundColor = def_text->fore;
 		fc.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
 		fc.Reserved = null;
