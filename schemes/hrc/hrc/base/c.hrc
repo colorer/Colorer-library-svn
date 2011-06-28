@@ -161,6 +161,14 @@
    />
   </scheme>
 
+  <scheme name='include.outline' if='include-in-outline'>
+    <regexp match="/~ \s* \M include \s* ([\w_&lt;&gt;\x22\x27\\\/\.]+) /x" region1="IncludeOutline"/>
+  </scheme>
+
+  <scheme name='define.outline' if='define-in-outline'>
+    <regexp match="/~ \s* \M define \s+ ([\w_]+) /x" region1="DefineOutline"/>
+  </scheme>
+
   <scheme name="Preproc">
    <block start="/\/\//" end="/$/" scheme="def:Comment" region="LineComment"/>
    <block start="/\/\*/" end="/\*\//" scheme="def:Comment"
@@ -175,8 +183,9 @@
    <block start="/~ \s* (pragma | error | warning) \b/x" end="/$/" scheme="PragmaText" region="PreprocSpec" region00="PreprocWord"/>
    <inherit scheme="PreprocLine"/>
    
-   <regexp match="/~ \s* \M define \s+ ([\w_]+) /x" region1="DefineOutline"/>
-   <regexp match="/~ \s* \M include \s* ([\w_&lt;&gt;\x22\x27\\\/\.]+) /x" region1="IncludeOutline"/>
+   <inherit scheme="define.outline"/>
+   <inherit scheme="include.outline"/>
+
    <!-- can make bugs
    <inherit scheme="PairedBrackets">
       <virtual scheme="PairedBrackets" subst-scheme="cPrePro"/>

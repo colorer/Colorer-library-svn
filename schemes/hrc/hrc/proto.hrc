@@ -40,6 +40,8 @@
       <param name="doxygen-comments" value="true" description="Use Doxygen syntax in comments"/>
       <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
       <param name="spaces-as-errors" value="false" description="Shows trailing spaces as error"/>
+      <param name="include-in-outline" value="false" description="Shows #include in the outline list"/>
+      <param name="define-in-outline" value="false" description="Shows #define in the outline list"/>
     </parameters>
   </prototype>
   <prototype name="cpp" group="main" description="C++">
