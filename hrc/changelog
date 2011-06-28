@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- исправление 1708.2
+
+#Revision: 1716
+	#Author: ctapmex Date: 2011-06-28 17:27:09 +0600 (Вт, 28 июн 2011)
 	- в схеме c.hrc показ "#include" и "#define" в outlined списке скрыт ключом
 
 #Revision: 1713
