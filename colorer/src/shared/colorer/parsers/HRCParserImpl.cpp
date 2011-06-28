@@ -52,6 +52,25 @@ void HRCParserImpl::loadSource(InputSource *is){
   curInputSource = istemp;
 }
 
+void HRCParserImpl::unloadFileType(FileTypeImpl *filetype)
+{
+	bool loop=true;
+	while (loop){
+		loop=false;
+		for(SchemeImpl *scheme = schemeHash.enumerate(); scheme != null; scheme = schemeHash.next()){
+			if (scheme->fileType==filetype) {
+				schemeHash.remove(scheme->getName());
+				delete scheme;
+				loop= true;
+				break;
+			}
+		};
+	}
+	fileTypeVector.removeElement(filetype);
+	fileTypeHash.remove(filetype->getName());
+	delete filetype;
+}
+
 void HRCParserImpl::loadFileType(FileType *filetype)
 {
   if (filetype == null) return;
@@ -202,11 +221,13 @@ void HRCParserImpl::addPrototype(Element *elem)
   if (typeDescription == null){
     typeDescription = typeName;
   }
-  if (fileTypeHash.get(typeName) != null){
+	FileTypeImpl* f=fileTypeHash.get(typeName);
+  if (f != null){
+		unloadFileType(f);
     if (errorHandler != null){
-      errorHandler->error(StringBuffer("Duplicate prototype '")+typeName+"'");
+      errorHandler->warning(StringBuffer("Duplicate prototype '")+typeName+"'");
     }
-    return;
+  //  return;
   };
   FileTypeImpl *type = new FileTypeImpl(this);
   type->name = new SString(typeName);

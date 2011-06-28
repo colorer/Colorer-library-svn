@@ -65,6 +65,7 @@ friend class FileTypeImpl;
   ErrorHandler *errorHandler;
 
   void loadFileType(FileType *filetype);
+  void unloadFileType(FileTypeImpl *filetype);
 
   void parseHRC(InputSource *is);
   void addPrototype(Element *elem);
