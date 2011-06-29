@@ -82,7 +82,7 @@ public:
   /** Dispatch editor event in the opened editor */
   int  editorEvent(int Event, void *Param);
   /** Dispatch editor input event in the opened editor */
-  int  editorInput(const ProcessEditorInputInfo *ir);
+  int  editorInput(const INPUT_RECORD Rec);
 
   /** Get the description of HRD, or parameter name if description=null */
   const String *getHRDescription(const String &name, DString _hrdClass);

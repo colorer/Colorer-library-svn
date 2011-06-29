@@ -466,9 +466,9 @@ void FarEditor::updateHighlighting()
   baseEditor->validate(ei.TopScreenLine, true);
 }
 
-int FarEditor::editorInput(const ProcessEditorInputInfo *ir)
+int FarEditor::editorInput(const INPUT_RECORD Rec)
 {
-  if (ir->Rec.EventType == KEY_EVENT && ir->Rec.Event.KeyEvent.wVirtualKeyCode == 0){
+  if (Rec.EventType == KEY_EVENT && Rec.Event.KeyEvent.wVirtualKeyCode == 0){
 
     if (baseEditor->haveInvalidLine()){
      
@@ -481,7 +481,7 @@ int FarEditor::editorInput(const ProcessEditorInputInfo *ir)
     }
   }
   else
-    if (ir->Rec.EventType == KEY_EVENT){
+    if (Rec.EventType == KEY_EVENT){
       idleCount = 0;
     };
 

@@ -595,12 +595,12 @@ const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdCla
   return parserFactory->enumerateHRDInstances(_hrdClass, result);
 }
 
-int FarEditorSet::editorInput(const ProcessEditorInputInfo *ir)
+int FarEditorSet::editorInput(const INPUT_RECORD Rec)
 {
   if (rEnabled){
     FarEditor *editor = getCurrentEditor();
     if (editor){
-      return editor->editorInput(ir);
+      return editor->editorInput(Rec);
     }
   }
   return 0;

@@ -123,7 +123,7 @@ HANDLE WINAPI OpenW(const struct OpenInfo *Info)
 /**
   Configures plugin.
 */
-int WINAPI ConfigureW(const GUID* Guid)
+int WINAPI ConfigureW(const struct CompareInfo *Info)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
@@ -138,17 +138,17 @@ int WINAPI ConfigureW(const GUID* Guid)
   Processes FAR editor events and
   makes text colorizing here.
 */
-int WINAPI ProcessEditorEventW(int Event, void *Param)
+int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *Info)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
   }
-  return editorSet->editorEvent(Event, Param);
+  return editorSet->editorEvent(Info->Event, Info->Param);
 };
 
-int WINAPI ProcessEditorInputW(const ProcessEditorInputInfo *Rec)
+int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *Info)
 {
-  return editorSet->editorInput(Rec);
+  return editorSet->editorInput(Info->Rec);
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

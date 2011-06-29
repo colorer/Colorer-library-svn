@@ -119,7 +119,7 @@ public:
   /** Handle passed FAR editor event */
   int editorEvent(int event, void *param);
   /** Dispatch editor input event */
-  int editorInput(const ProcessEditorInputInfo *ir);
+  int editorInput(const INPUT_RECORD Rec);
 
   void cleanEditor();
 
