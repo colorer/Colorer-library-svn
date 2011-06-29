@@ -1,3 +1,4 @@
+2011-06-29 r1721 (FarColorer 1.0.3.2)
   Fixed:
     - add missing words for c, cpp, jscript, qmake, sql, vbscript, email (from HaRT) 
     - add  C function outlining for C# (from Vladimir Panteleev)
