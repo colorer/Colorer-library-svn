@@ -127,9 +127,10 @@ int WINAPI ConfigureW(const struct CompareInfo *Info)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
-  }
+  }else{
   // ReadSettings need for plugin off mode
-  editorSet->ReadSettings();
+    editorSet->ReadSettings();
+  }
   editorSet->configure(false);
   return 1;
 };

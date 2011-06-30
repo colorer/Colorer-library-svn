@@ -43,6 +43,7 @@ FarEditorSet::~FarEditorSet()
   delete sHrdName;
   delete sHrdNameTm;
   delete sCatalogPath;
+  delete sCatalogPathExp;
   delete sUserHrdPath;
   delete sUserHrdPathExp;
   delete sUserHrcPath;
@@ -826,20 +827,8 @@ void FarEditorSet::ReloadBase()
     hrdName = sHrdName;
   }
 
-  SString *tpath;
-  if (!sCatalogPathExp || !sCatalogPathExp->length()){
-    StringBuffer *path=new StringBuffer(PluginPath);
-    path->append(DString(FarCatalogXml));
-    tpath = path;
-  }
-  else{
-    tpath=sCatalogPathExp;
-  }
-
   try{
-    parserFactory = new ParserFactory(tpath);
-    delete tpath;
-    tpath = NULL;
+    parserFactory = new ParserFactory(sCatalogPathExp);
     hrcParser = parserFactory->getHRCParser();
     LoadUserHrd(sUserHrdPathExp, parserFactory);
     LoadUserHrc(sUserHrcPathExp, parserFactory);
@@ -871,7 +860,6 @@ void FarEditorSet::ReloadBase()
 
     Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, &errload[0], 5, 1);
 
-    delete tpath;
     disableColorer();
   };
 
@@ -1031,6 +1019,13 @@ void FarEditorSet::ReadSettings()
   sHrdNameTm = new SString(hrdNameTm);
   sCatalogPath = new SString(catalogPath);
   sCatalogPathExp = PathToFullS(catalogPath,false);
+  if (!sCatalogPathExp || !sCatalogPathExp->length()){
+    delete sCatalogPathExp;
+    StringBuffer *path=new StringBuffer(PluginPath);
+    path->append(DString(FarCatalogXml));
+    sCatalogPathExp = path;
+  }
+
   sUserHrdPath = new SString(userHrdPath);
   sUserHrdPathExp = PathToFullS(userHrdPath,false);
   sUserHrcPath = new SString(userHrcPath);

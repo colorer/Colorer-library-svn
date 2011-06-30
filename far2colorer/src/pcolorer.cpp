@@ -111,9 +111,10 @@ int WINAPI ConfigureW(int ItemNumber)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
-  }
+  }else{
   // ReadSettings need for plugin off mode
-  editorSet->ReadSettings();
+		editorSet->ReadSettings();
+	}
   editorSet->configure(false);
   return 1;
 };
