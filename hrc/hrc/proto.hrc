@@ -97,6 +97,7 @@
   <prototype name="java" group="main" description="Java">
     <location link="base/java.hrc"/>
     <filename>/\.(java|jav|jad)$/i</filename>
+    <firstline weight='2'>/^\/\/ Decompiled by Jad/</firstline>
     <parameters>
       <param name="j2se-classes" value="true" description="Use some common used J2SE class names"/>
       <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
