@@ -6,9 +6,9 @@
 <prototype name="ie.d" group="rare.ie" description="Infinity Engine: dialogs">
 	<location link="rare/ie-weidu/dialog.hrc"/>
 	<filename>/\.d$/i</filename>
-	<firstline weight='4'>/^\/\/.+[\w_#]{1,8}\.DLG/im</firstline>
+	<firstline weight='4'>/^\/\/.+[\w_#]{1,8}\.DLG/i</firstline>
 	<!-- <firstline weight='5'>/^%ie.d:action;/m</firstline>  - NOT WORK, DUPLICATE :-(  -->
-	<firstline weight='5'>/^\s*(BEGIN|APPEND|CHAIN|INTERJECT|EXTEND|ADD|REPLACE|ALTER|SET_WEIGHT|[RA]_[ST]_T|R_A_T|I_C)(\b|_[A-Z]+)/m</firstline>
+	<firstline weight='2'>/^\s*(BEGIN|APPEND|CHAIN|INTERJECT|EXTEND|ADD|REPLACE|ALTER|SET_WEIGHT|[RA]_[ST]_T|R_A_T|I_C)(\b|_[A-Z]+)/</firstline>
 </prototype>
 
 <prototype name="ie.tra" group="rare.ie" description="WeiDU translations">

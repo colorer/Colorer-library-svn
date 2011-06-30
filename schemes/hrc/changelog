@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- исправление 1717
+	- изменение опретеделения типов файлов (баштрекер)
+
+#Revision: 1718
+	#Author: ctapmex Date: 2011-06-28 23:42:19 +0600 (Вт, 28 июн 2011)
 	- добавлена поддержка verbatim string в csharp.hrc 
 
 #Revision: 1717
