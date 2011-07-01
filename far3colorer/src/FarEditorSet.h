@@ -13,6 +13,7 @@
 #include "FarEditor.h"
 #include "FarHrcSettings.h"
 #include "SettingsControl.h"
+#include "ChooseTypeMenu.h"
 
 //registry keys
 const wchar_t cRegEnabled[] = L"Enabled";
@@ -45,6 +46,7 @@ const wchar_t cUserHrcPathDefault[] = L"";
 const DString DConsole=DString("console");
 const DString DRgb=DString("rgb");
 const DString Ddefault=DString("<default>");
+const DString DAutodetect=DString("autodetect");
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
@@ -151,6 +153,8 @@ private:
 
   int getCountFileTypeAndGroup();
   FileTypeImpl* getFileTypeByIndex(int idx);
+  void FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType);
+  String *getCurrentFileName();
 
   // FarList for dialog objects
   FarList *buildHrcList();
@@ -200,6 +204,7 @@ private:
   SString *sUserHrcPathExp;
 
   int viewFirst; // 0 - init;  1 - first run view; 2 - first run editor
+  int CurrentMenuItem;
 };
 
 #endif

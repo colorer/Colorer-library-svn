@@ -327,6 +327,9 @@
     <ClInclude Include="..\..\colorer\src\shared\cregexp\cregexp.h">
       <Filter>shared\cregexp</Filter>
     </ClInclude>
+    <ClInclude Include="ChooseTypeMenu.h">
+      <Filter>pcolorer3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FarEditor.cpp">
@@ -493,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="..\..\colorer\src\shared\cregexp\cregexp.cpp">
       <Filter>shared\cregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="ChooseTypeMenu.cpp">
+      <Filter>pcolorer3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

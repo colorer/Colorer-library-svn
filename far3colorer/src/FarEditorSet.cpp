@@ -227,23 +227,14 @@ FileTypeImpl* FarEditorSet::getFileTypeByIndex(int idx)
   return (FileTypeImpl*)type;
 }
 
-void FarEditorSet::chooseType()
+void FarEditorSet::FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType)
 {
-  FarEditor *fe = getCurrentEditor();
-  if (!fe){
-    return;
-  }
-
-  int num = getCountFileTypeAndGroup();
   const String *group = NULL;
   FileType *type = NULL;
 
-  char MapThis[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
-  FarMenuItem *menuels = new FarMenuItem[num];
-  memset(menuels, 0, sizeof(FarMenuItem)*(num));
-  group = NULL;
+  group = &DAutodetect;
 
-  for (int idx = 0, i = 0;; idx++, i++){
+  for (int idx = 0;; idx++){
     type = hrcParser->enumerateFileTypes(idx);
 
     if (type == NULL){
@@ -251,51 +242,62 @@ void FarEditorSet::chooseType()
     }
 
     if (group != NULL && !group->equals(type->getGroup())){
-      menuels[i].Flags = MIF_SEPARATOR;
-      i++;
+      Menu->AddGroup(type->getGroup()->getWChars());
+      group = type->getGroup();
     };
 
-    group = type->getGroup();
-
-    const wchar_t *groupChars = NULL;
-
-    if (group != NULL){
-      groupChars = group->getWChars();
-    }
-    else{
-      groupChars = L"<no group>";
-    }
-
-    menuels[i].Text = new wchar_t[255];
-    _snwprintf((wchar_t*)menuels[i].Text, 255, L"%c. %s: %s", idx < 36?MapThis[idx]:'x', groupChars, type->getDescription()->getWChars());
-
-    if (type == fe->getFileType()){
-      menuels[i].Flags = MIF_SELECTED;
+    int i;
+    const String *v;
+    v=((FileTypeImpl*)type)->getParamValue(DFavorite);
+    if (v && v->equals("yes")) i= Menu->AddFavorites(type);
+    else i=Menu->AddItem(type);
+    if (type == CurFileType){
+      Menu->SetSelected(i);
     }
   };
 
-  wchar_t bottom[20];
-  int i;
-  _snwprintf(bottom, 20, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
-  i = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-    GetMsg(mSelectSyntax), bottom, L"contents", NULL, NULL, menuels, num);
+}
 
-  for (int idx = 0; idx < num; idx++){
-    if (menuels[idx].Text){
-      delete[] menuels[idx].Text;
-    }
-  }
-
-  delete[] menuels;
-
-  if (i == -1){
+void FarEditorSet::chooseType()
+{
+  FarEditor *fe = getCurrentEditor();
+  if (!fe){
     return;
   }
 
- type = getFileTypeByIndex(i);
- if (type != NULL){
-    fe->setFileType(type);
+  ChooseTypeMenu menu(GetMsg(mAutoDetect),GetMsg(mFavorites));
+  FillTypeMenu(&menu,fe->getFileType());
+ 
+  wchar_t bottom[20];
+  _snwprintf(bottom, 20, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
+  struct FarKey BreakKeys[2]={VK_INSERT,0,VK_DELETE,0};
+  int BreakCode,i;
+  while (1) {
+    i = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+      GetMsg(mSelectSyntax), bottom, L"contents", BreakKeys,&BreakCode, menu.getItems(), menu.getItemsCount());
+
+    if (i>=0){
+      if (BreakCode==0){
+        menu.MoveToFavorites(i);
+      }
+      else
+      if (BreakCode==1){
+        if (menu.IsFavorite(i)) menu.DelFromFavorites(i);
+      }
+      else
+      {
+        if (i==0){
+          String *s=getCurrentFileName();
+          fe->chooseFileType(s);
+          delete s;
+          break;
+        } 
+        fe->setFileType(menu.GetFileType(i));
+        break;
+      } 
+    }else break;
   }
+
 }
 
 const String *FarEditorSet::getHRDescription(const String &name, DString _hrdClass )
@@ -870,6 +872,21 @@ FarEditor *FarEditorSet::addCurrentEditor()
 
   FarEditor *editor = new FarEditor(&Info, parserFactory);
   farEditorInstances.put(&SString(ei.EditorID), editor);
+  String *s=getCurrentFileName();
+  editor->chooseFileType(s);
+  delete s;
+  editor->setTrueMod(consoleAnnotationAvailable);
+  editor->setRegionMapper(regionMapper);
+  editor->setDrawCross(drawCross);
+  editor->setDrawPairs(drawPairs);
+  editor->setDrawSyntax(drawSyntax);
+  editor->setOutlineStyle(oldOutline);
+
+  return editor;
+}
+
+String* FarEditorSet::getCurrentFileName()
+{
   LPWSTR FileName=NULL;
   size_t FileNameSize=Info.EditorControl(CurrentEditor, ECTL_GETFILENAME, NULL, NULL);
 
@@ -887,18 +904,9 @@ FarEditor *FarEditorSet::addCurrentEditor()
   if (slash_idx == -1){
     slash_idx = fnpath.lastIndexOf('/');
   }
-
-  DString fn = DString(fnpath, slash_idx+1);
-  editor->chooseFileType(&fn);
-  delete[] FileName;
-  editor->setTrueMod(consoleAnnotationAvailable);
-  editor->setRegionMapper(regionMapper);
-  editor->setDrawCross(drawCross);
-  editor->setDrawPairs(drawPairs);
-  editor->setDrawSyntax(drawSyntax);
-  editor->setOutlineStyle(oldOutline);
-
-  return editor;
+  SString* s=new SString(fnpath, slash_idx+1);
+  delete FileName;
+  return s;
 }
 
 FarEditor *FarEditorSet::getCurrentEditor()
