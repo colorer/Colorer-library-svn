@@ -25,6 +25,9 @@ void ChooseTypeMenu::DeleteItem(size_t index)
   if (Item[index].Text){
     free((void*) Item[index].Text);
   }
+  memmove(Item+index,Item+index+1,sizeof(FarMenuItem)*(ItemCount-(index+1)));
+  ItemCount--;
+  if (ItemSelected>=index) ItemSelected--;
 }
 
 FarMenuItem *ChooseTypeMenu::getItems()
@@ -57,7 +60,7 @@ int ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, cons
   Item[PosAdd].Reserved = 0;
   Item[PosAdd].AccelKey = 0;
 
-  return ItemCount-1;
+  return PosAdd;
 }
 
 int ChooseTypeMenu::AddGroup(const wchar_t *Text)
@@ -111,15 +114,16 @@ void ChooseTypeMenu::MoveToFavorites(size_t index)
 {
   FileType* f=(FileType*)Item[index].UserData;
   DeleteItem(index);
-  memmove(Item+index,Item+index+1,sizeof(FarMenuItem)*(ItemCount-(index+1)));
-  ItemCount--;
-  if (ItemSelected>=index) ItemSelected--;
-  AddFavorites(f);
+  AddFavorite(f);
   SetSelected(GetNext(index));
   HideEmptyGroup();
+  if (f->getParamValue(DFavorite)==null){
+    ((FileTypeImpl*)f)->addParam(&DFavorite);
+  }
+  f->setParamValue(DFavorite,&DTrue);
 }
 
-int ChooseTypeMenu::AddFavorites(const FileType* fType)
+int ChooseTypeMenu::AddFavorite(const FileType* fType)
 {
   size_t i;
   for (i=favorite_idx;i<ItemCount && !(Item[i].Flags&MIF_SEPARATOR);i++);
@@ -139,11 +143,9 @@ void ChooseTypeMenu::DelFromFavorites(size_t index)
 {
   FileType* f=(FileType*)Item[index].UserData;
   DeleteItem(index);
-  memmove(Item+index,Item+index+1,sizeof(FarMenuItem)*(ItemCount-(index+1)));
-  ItemCount--;
-  if (ItemSelected>=index) ItemSelected--;
   AddItemInGroup(f);
-  SetSelected(GetNext(index));
+  SetSelected(index);
+  f->setParamValue(DFavorite,&DFalse);
 }
 
 int ChooseTypeMenu::AddItemInGroup(FileType* fType)

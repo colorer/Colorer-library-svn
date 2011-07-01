@@ -249,7 +249,7 @@ void FarEditorSet::FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType)
     int i;
     const String *v;
     v=((FileTypeImpl*)type)->getParamValue(DFavorite);
-    if (v && v->equals("yes")) i= Menu->AddFavorites(type);
+    if (v && v->equals(&DTrue)) i= Menu->AddFavorite(type);
     else i=Menu->AddItem(type);
     if (type == CurFileType){
       Menu->SetSelected(i);
@@ -278,7 +278,7 @@ void FarEditorSet::chooseType()
 
     if (i>=0){
       if (BreakCode==0){
-        menu.MoveToFavorites(i);
+        if (!menu.IsFavorite(i)) menu.MoveToFavorites(i);
       }
       else
       if (BreakCode==1){
@@ -298,6 +298,8 @@ void FarEditorSet::chooseType()
     }else break;
   }
 
+  FarHrcSettings p(parserFactory);
+  p.writeUserProfile();
 }
 
 const String *FarEditorSet::getHRDescription(const String &name, DString _hrdClass )
@@ -1343,6 +1345,39 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   delete lcross;
 }
 
+void FarEditorSet::setTFListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DString param)
+{
+  const String *value=type->getParamNotDefaultValue(param);
+  const String *def_value=getParamDefValue(type,param);
+
+  int count = 3;
+  FarListItem *fcross = new FarListItem[count];
+  memset(fcross, 0, sizeof(FarListItem)*(count));
+  fcross[0].Text = DFalse.getWChars();
+  fcross[1].Text = DTrue.getWChars();
+  fcross[2].Text = def_value->getWChars();
+  FarList *lcross = new FarList;
+  lcross->Items=fcross;
+  lcross->ItemsNumber=count;
+
+  int ret=2;
+  if (value==NULL || !value->length()){
+    ret=2;
+  }else{
+    if (value->equals(&DFalse)){
+      ret=0;
+    }else 
+      if (value->equals(&DTrue)){
+        ret=1;
+      }
+  }
+  fcross[ret].Flags=LIF_SELECTED;
+  ChangeParamValueListType(hDlg,true);
+  Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_VALUE_LIST,lcross);
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
+}
 void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param)
 {
   const String *value=type->getParamNotDefaultValue(param);
@@ -1457,9 +1492,12 @@ void  FarEditorSet::OnChangeParam(HANDLE hDlg, int idx)
       if (p.equals(&DMaxLen)||p.equals(&DBackparse)||p.equals(&DDefFore)||p.equals(&DDefBack)
         ||p.equals("firstlines")||p.equals("firstlinebytes")){
           setCustomListValueToCombobox(type,hDlg,DString(List.Item.Text));        
-      }else{        
+      }else
+      if (p.equals(&DFullback)){   
         setYNListValueToCombobox(type, hDlg,DString(List.Item.Text));
       }
+      else
+        setTFListValueToCombobox(type, hDlg,DString(List.Item.Text));
   }
 
 }

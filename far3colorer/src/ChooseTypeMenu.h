@@ -20,7 +20,7 @@ public:
   int GetNext(size_t index);
   FileType* GetFileType(size_t index);
   void MoveToFavorites(size_t index);
-  int AddFavorites(const FileType* fType);
+  int AddFavorite(const FileType* fType);
   void DeleteItem(size_t index);
 
   void HideEmptyGroup();

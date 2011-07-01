@@ -167,6 +167,7 @@ private:
   void setCrossValueListToCombobox(FileTypeImpl *type,HANDLE hDlg);
   void setCrossPosValueListToCombobox(FileTypeImpl *type,HANDLE hDlg);
   void setYNListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param);
+  void setTFListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param);
   void setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param);
 
   FileTypeImpl *getCurrentTypeInDialog(HANDLE hDlg);
