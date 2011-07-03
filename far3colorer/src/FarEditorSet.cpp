@@ -258,6 +258,51 @@ void FarEditorSet::FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType)
 
 }
 
+inline wchar_t __cdecl Upper(wchar_t Ch) { CharUpperBuff(&Ch, 1); return Ch; }
+
+INT_PTR WINAPI KeyDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2) 
+{
+  const INPUT_RECORD* record=nullptr;
+  static int LastKey=0;
+  int key=0;
+  wchar wkey[2];
+
+  if (Msg == DN_CONTROLINPUT)
+  {
+    record=(const INPUT_RECORD *)Param2;
+    if (record->EventType==KEY_EVENT)
+    {
+      key = FSF.FarInputRecordToKey((const INPUT_RECORD *)Param2);
+    }
+  }
+
+  if (Msg == DN_CONTROLINPUT && record->EventType==KEY_EVENT && key>31)
+  {
+    if (key == KEY_ESC || key == KEY_ENTER||key == KEY_NUMENTER)
+    {
+      return FALSE;
+    }
+
+    if (key>128){
+      FSF.FarKeyToName((int)key,wkey,2);
+      wchar_t* c= FSF.XLat(wkey,0,1,0);
+      key=FSF.FarNameToKey(c);
+    }
+
+    if (key<0xFFFF)
+      key=Upper((wchar_t)(key&0x0000FFFF))|(key&(~0x0000FFFF));
+
+    if((key>=48 && key<=57)||(key>=65 && key<=90)){
+      FSF.FarKeyToName((int)key,wkey,2);
+      Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,2,wkey);
+      LastKey=(int)key;
+    }
+    return TRUE;
+  }
+
+  return Info.DefDlgProc(hDlg, Msg, Param1, Param2);
+}
+
 void FarEditorSet::chooseType()
 {
   FarEditor *fe = getCurrentEditor();
@@ -270,24 +315,53 @@ void FarEditorSet::chooseType()
  
   wchar_t bottom[20];
   _snwprintf(bottom, 20, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
-  struct FarKey BreakKeys[2]={VK_INSERT,0,VK_DELETE,0};
+  struct FarKey BreakKeys[3]={VK_INSERT,0,VK_DELETE,0,VK_F4,0};
   int BreakCode,i;
   while (1) {
     i = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
-      GetMsg(mSelectSyntax), bottom, L"contents", BreakKeys,&BreakCode, menu.getItems(), menu.getItemsCount());
+      GetMsg(mSelectSyntax), bottom, L"filetypechoose", BreakKeys,&BreakCode, menu.getItems(), menu.getItemsCount());
 
     if (i>=0){
       if (BreakCode==0){
-        if (!menu.IsFavorite(i)) menu.MoveToFavorites(i);
+        if (i!=0 && !menu.IsFavorite(i)) menu.MoveToFavorites(i);
+        else menu.SetSelected(i);
       }
       else
       if (BreakCode==1){
-        if (menu.IsFavorite(i)) menu.DelFromFavorites(i);
+        if (i!=0 && menu.IsFavorite(i)) menu.DelFromFavorites(i);
+        else menu.SetSelected(i);
       }
       else
-      {
-        if (i==0){
-          String *s=getCurrentFileName();
+        if (BreakCode==2){
+          FarDialogItem KeyAssignDlgData[]=
+          {
+            {DI_DOUBLEBOX,3,1,30,4,0,nullptr,nullptr,0,GetMsg(mKeyAssignDialogTitle)},
+            {DI_TEXT,-1,2,0,2,0,nullptr,nullptr,0,GetMsg(mKeyAssignTextTitle)},
+            {DI_EDIT,5,3,28,3,0,nullptr,nullptr,DIF_FOCUS|DIF_DEFAULTBUTTON,L""},
+          };
+
+          const String *v;
+          v=((FileTypeImpl*)menu.GetFileType(i))->getParamValue(DHotkey);
+          if (v && v->length())
+            KeyAssignDlgData[2].Data=v->getWChars();
+
+          HANDLE hDlg = Info.DialogInit(&MainGuid, &AssignKeyDlg, -1, -1, 34, 6, L"keyassign", KeyAssignDlgData, ARRAY_SIZE(KeyAssignDlgData), 0, 0, KeyDialogProc, null);
+          int res = Info.DialogRun(hDlg);
+
+          if (res!=-1) 
+          {
+            KeyAssignDlgData[2].Data = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,2,0));
+            if (menu.GetFileType(i)->getParamValue(DHotkey)==null){
+              ((FileTypeImpl*)menu.GetFileType(i))->addParam(&DHotkey);
+            }
+            menu.GetFileType(i)->setParamValue(DHotkey,&DString(KeyAssignDlgData[2].Data));
+            menu.RefreshItemCaption(i);
+          }
+        }
+        else
+        {
+          if (i==0){
+            String *s=getCurrentFileName();
           fe->chooseFileType(s);
           delete s;
           break;

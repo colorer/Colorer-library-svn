@@ -26,6 +26,7 @@ public:
   void HideEmptyGroup();
   void DelFromFavorites(size_t index);
   bool IsFavorite(size_t index);
+  void RefreshItemCaption(size_t index);
 
 private:
   size_t ItemCount;

@@ -15,7 +15,9 @@ ChooseTypeMenu::ChooseTypeMenu(const wchar_t *AutoDetect,const wchar_t *Favorite
 ChooseTypeMenu::~ChooseTypeMenu()
 {
   for (size_t idx = 0; idx < ItemCount; idx++){
-    DeleteItem(idx);
+    if (Item[idx].Text){
+      free((void*) Item[idx].Text);
+    }
   }
   free(Item);
 }
@@ -114,8 +116,8 @@ void ChooseTypeMenu::MoveToFavorites(size_t index)
 {
   FileType* f=(FileType*)Item[index].UserData;
   DeleteItem(index);
-  AddFavorite(f);
-  SetSelected(GetNext(index));
+  size_t k=AddFavorite(f);
+  SetSelected(k);
   HideEmptyGroup();
   if (f->getParamValue(DFavorite)==null){
     ((FileTypeImpl*)f)->addParam(&DFavorite);
@@ -128,7 +130,7 @@ int ChooseTypeMenu::AddFavorite(const FileType* fType)
   size_t i;
   for (i=favorite_idx;i<ItemCount && !(Item[i].Flags&MIF_SEPARATOR);i++);
   size_t p=AddItem(fType,i=ItemCount?i:i+1);
-  ItemSelected++;
+  if (ItemSelected>=p) ItemSelected++;
   return p;
 }
 
@@ -144,7 +146,8 @@ void ChooseTypeMenu::DelFromFavorites(size_t index)
   FileType* f=(FileType*)Item[index].UserData;
   DeleteItem(index);
   AddItemInGroup(f);
-  SetSelected(index);
+  if (Item[index].Flags&MIF_SEPARATOR)  SetSelected(GetNext(index));
+  else  SetSelected(index);
   f->setParamValue(DFavorite,&DFalse);
 }
 
@@ -154,7 +157,9 @@ int ChooseTypeMenu::AddItemInGroup(FileType* fType)
   const String* group =fType->getGroup();
   for (i=favorite_idx;i<ItemCount && !((Item[i].Flags&MIF_SEPARATOR) && (group->compareTo(DString(Item[i].Text))==0) );i++);
   if (Item[i].Flags&MIF_HIDDEN) Item[i].Flags &= ~MIF_HIDDEN;
-  return AddItem(fType,i+1);
+  size_t k=AddItem(fType,i+1);
+  if (ItemSelected>=k) ItemSelected++;
+  return k;
 }
 
 bool ChooseTypeMenu::IsFavorite(size_t index)
@@ -164,4 +169,22 @@ bool ChooseTypeMenu::IsFavorite(size_t index)
   i=ItemCount?i:i+1;
   if (i>index) return true;
   return false;
+}
+
+void ChooseTypeMenu::RefreshItemCaption(size_t index)
+{
+  if (Item[index].Text){
+    free((void*) Item[index].Text);
+  }
+  const String *v;
+  v=((FileTypeImpl*)GetFileType(index))->getParamValue(DHotkey);
+  StringBuffer s;
+  if (v!=NULL && v->length()){
+    s.append(DString("&")).append(v);
+  }else{
+    s.append(DString(" "));
+  }
+  s.append(DString(" ")).append(((FileType*)GetFileType(index))->getDescription());
+
+  Item[index].Text= _wcsdup(s.getWChars());
 }
