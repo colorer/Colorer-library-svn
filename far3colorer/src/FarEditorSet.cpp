@@ -1454,6 +1454,7 @@ void FarEditorSet::setTFListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   delete[] fcross;
   delete lcross;
 }
+
 void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param)
 {
   const String *value=type->getParamNotDefaultValue(param);
@@ -1566,7 +1567,7 @@ void  FarEditorSet::OnChangeParam(HANDLE hDlg, int idx)
       setCrossPosValueListToCombobox(type, hDlg);
     }else
       if (p.equals(&DMaxLen)||p.equals(&DBackparse)||p.equals(&DDefFore)||p.equals(&DDefBack)
-        ||p.equals("firstlines")||p.equals("firstlinebytes")){
+        ||p.equals("firstlines")||p.equals("firstlinebytes")||p.equals(&DHotkey)){
           setCustomListValueToCombobox(type,hDlg,DString(List.Item.Text));        
       }else
       if (p.equals(&DFullback)){   
