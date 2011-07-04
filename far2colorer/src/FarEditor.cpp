@@ -579,9 +579,6 @@ int FarEditor::editorEvent(int event, void *param)
 
     if (drawSyntax){
 			for (; l1; l1 = l1->next){
-				if (!l1->region){
-					continue;
-				}
 				if (l1->special){
 					continue;
 				}
