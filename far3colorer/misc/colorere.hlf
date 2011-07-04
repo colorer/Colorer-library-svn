@@ -179,6 +179,25 @@ Colorer from it's settings menu after locating and removing
 exception cause. All extended information in Colorer logging
 file (colorer.log by default)
 
+@filetypechoose
+$# List types
+    The list contains all of the supported file types. By choosing any, you force 
+the type of coloring the current file.
+   
+    #Automatic detection# - select the type of file produced plugin built rules.
+    #Favorites# - The list of chosen types. Add to "Favorites" is produced by 
+pressing the Ins, delete - Delete.
+    #Hot keys# - to assign a hot key to the file type you need to press F4, and 
+in the dialog box to specify the key.
+
+    Hot keys and being in the group "Favorites" can also be customized through the
+~Schemes settings.~@confighrc@ These are the parameters 'hotkey' and 'favorite' for 
+any of the schemes.
+ 
+@keyassign
+$# Define key
+    Keys 0-9, A-Z
+
 @author
 $^#Colorer is a syntax highlighting plugin for FAR Manager.
     #Plugin home site#

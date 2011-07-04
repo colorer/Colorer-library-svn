@@ -276,7 +276,7 @@ INT_PTR WINAPI KeyDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2)
     }
   }
 
-  if (Msg == DN_CONTROLINPUT && record->EventType==KEY_EVENT && key>31)
+  if (Msg == DN_CONTROLINPUT && record->EventType==KEY_EVENT && key>31  && key!=KEY_F1)
   {
     if (key == KEY_ESC || key == KEY_ENTER||key == KEY_NUMENTER)
     {
