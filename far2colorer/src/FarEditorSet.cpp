@@ -1458,6 +1458,40 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   delete lcross;
 }
 
+void FarEditorSet::setTFListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DString param)
+{
+  const String *value=type->getParamNotDefaultValue(param);
+  const String *def_value=getParamDefValue(type,param);
+
+  int count = 3;
+  FarListItem *fcross = new FarListItem[count];
+  memset(fcross, 0, sizeof(FarListItem)*(count));
+  fcross[0].Text = DFalse.getWChars();
+  fcross[1].Text = DTrue.getWChars();
+  fcross[2].Text = def_value->getWChars();
+  FarList *lcross = new FarList;
+  lcross->Items=fcross;
+  lcross->ItemsNumber=count;
+
+  int ret=2;
+  if (value==NULL || !value->length()){
+    ret=2;
+  }else{
+    if (value->equals(&DFalse)){
+      ret=0;
+    }else 
+      if (value->equals(&DTrue)){
+        ret=1;
+      }
+  }
+  fcross[ret].Flags=LIF_SELECTED;
+  ChangeParamValueListType(hDlg,true);
+  Info.SendDlgMessage(hDlg,DM_LISTSET,IDX_CH_PARAM_VALUE_LIST,(LONG_PTR)lcross);
+  delete def_value;
+  delete[] fcross;
+  delete lcross;
+}
+
 void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, DString param)
 {
   const String *value=type->getParamNotDefaultValue(param);
@@ -1570,11 +1604,14 @@ void  FarEditorSet::OnChangeParam(HANDLE hDlg, int idx)
       setCrossPosValueListToCombobox(type, hDlg);
     }else
       if (p.equals(&DMaxLen)||p.equals(&DBackparse)||p.equals(&DDefFore)||p.equals(&DDefBack)
-        ||p.equals("firstlines")||p.equals("firstlinebytes")){
+        ||p.equals("firstlines")||p.equals("firstlinebytes")||p.equals(&DHotkey)){
           setCustomListValueToCombobox(type,hDlg,DString(List.Item.Text));        
-      }else{        
-        setYNListValueToCombobox(type, hDlg,DString(List.Item.Text));
-      }
+      }else
+        if (p.equals(&DFullback)){   
+          setYNListValueToCombobox(type, hDlg,DString(List.Item.Text));
+        }
+        else
+          setTFListValueToCombobox(type, hDlg,DString(List.Item.Text));
   }
 
 }
