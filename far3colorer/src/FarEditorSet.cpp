@@ -358,6 +358,7 @@ void FarEditorSet::chooseType()
             menu.RefreshItemCaption(i);
           }
           menu.SetSelected(i);
+          Info.DialogFree(hDlg);
         }
         else
         {
