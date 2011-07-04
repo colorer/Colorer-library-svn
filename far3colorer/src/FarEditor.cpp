@@ -466,7 +466,7 @@ void FarEditor::updateHighlighting()
   baseEditor->validate(ei.TopScreenLine, true);
 }
 
-int FarEditor::editorInput(const INPUT_RECORD Rec)
+int FarEditor::editorInput(const INPUT_RECORD &Rec)
 {
   if (Rec.EventType == KEY_EVENT && Rec.Event.KeyEvent.wVirtualKeyCode == 0){
 

@@ -357,6 +357,7 @@ void FarEditorSet::chooseType()
             menu.GetFileType(i)->setParamValue(DHotkey,&DString(KeyAssignDlgData[2].Data));
             menu.RefreshItemCaption(i);
           }
+          menu.SetSelected(i);
         }
         else
         {
@@ -674,7 +675,7 @@ const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdCla
   return parserFactory->enumerateHRDInstances(_hrdClass, result);
 }
 
-int FarEditorSet::editorInput(const INPUT_RECORD Rec)
+int FarEditorSet::editorInput(const INPUT_RECORD &Rec)
 {
   if (rEnabled){
     FarEditor *editor = getCurrentEditor();

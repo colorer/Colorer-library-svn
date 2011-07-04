@@ -72,16 +72,10 @@ int ChooseTypeMenu::AddGroup(const wchar_t *Text)
 
 int ChooseTypeMenu::AddItem(const FileType* fType, size_t PosAdd)
 {
-  const String *v;
-  v=((FileTypeImpl*)fType)->getParamValue(DHotkey);
-  StringBuffer s;
-  if (v!=NULL && v->length()){
-    s.append(DString("&")).append(v);
-  }else{
-    s.append(DString(" "));
-  }
-  s.append(DString(" ")).append(((FileType*)fType)->getDescription());
-  return AddItem(s.getWChars(), 0, fType, PosAdd);
+  StringBuffer *s=GenerateName(fType);
+  size_t k=AddItem(s->getWChars(), 0, fType, PosAdd);
+  delete s;
+  return k;
 }
 
 void ChooseTypeMenu::SetSelected(size_t index)
@@ -176,15 +170,23 @@ void ChooseTypeMenu::RefreshItemCaption(size_t index)
   if (Item[index].Text){
     free((void*) Item[index].Text);
   }
-  const String *v;
-  v=((FileTypeImpl*)GetFileType(index))->getParamValue(DHotkey);
-  StringBuffer s;
-  if (v!=NULL && v->length()){
-    s.append(DString("&")).append(v);
-  }else{
-    s.append(DString(" "));
-  }
-  s.append(DString(" ")).append(((FileType*)GetFileType(index))->getDescription());
 
-  Item[index].Text= _wcsdup(s.getWChars());
+  StringBuffer *s=GenerateName(GetFileType(index));
+  Item[index].Text= _wcsdup(s->getWChars());
+  delete s;
+}
+
+StringBuffer* ChooseTypeMenu::GenerateName(const FileType* fType)
+{
+  const String *v;
+  v=((FileTypeImpl*)fType)->getParamValue(DHotkey);
+  StringBuffer *s=new StringBuffer;
+  if (v!=NULL && v->length()){
+    s->append(DString("&")).append(v);
+  }else{
+    s->append(DString(" "));
+  }
+  s->append(DString(" ")).append(((FileType*)fType)->getDescription());
+
+  return s;
 }
