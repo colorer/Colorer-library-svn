@@ -41,7 +41,8 @@ enum
   mReloading, mCantLoad, mCantOpenFile, mDie, mTry,
   mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
   mNoFarTM, mNoConEmu, mNoFarTMConEmu, mUserHrdFile, mUserHrcFile, mUserHrcSetting,
-  mUserHrcSettingDialog, mListSyntax, mParamList,mParamValue
+  mUserHrcSettingDialog, mListSyntax, mParamList,mParamValue, mAutoDetect, mFavorites,
+  mKeyAssignDialogTitle, mKeyAssignTextTitle
 };
 
 #endif

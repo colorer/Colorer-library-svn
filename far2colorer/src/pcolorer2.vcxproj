@@ -267,6 +267,7 @@
     <ClInclude Include="..\far2sdk\farkeys.hpp" />
     <ClInclude Include="..\far2sdk\farversion.hpp" />
     <ClInclude Include="..\far2sdk\plugin.hpp" />
+    <ClInclude Include="ChooseTypeMenu.h" />
     <ClInclude Include="ConsoleAnnotation.h" />
     <ClInclude Include="FarEditor.h" />
     <ClInclude Include="FarEditorSet.h" />
@@ -354,6 +355,7 @@
     <ClInclude Include="..\..\colorer\src\shared\cregexp\cregexp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChooseTypeMenu.cpp" />
     <ClCompile Include="FarEditor.cpp" />
     <ClCompile Include="FarEditorSet.cpp" />
     <ClCompile Include="FarHrcSettings.cpp" />

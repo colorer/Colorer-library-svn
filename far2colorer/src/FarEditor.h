@@ -34,11 +34,15 @@ const DString DBottom=DString("bottom");
 const DString DTop=DString("top");
 const DString DYes=DString("yes");
 const DString DNo=DString("no");
+const DString DTrue=DString("true");
+const DString DFalse=DString("false");
 const DString DBackparse=DString("backparse");
 const DString DMaxLen=DString("maxlinelength");
 const DString DDefFore=DString("default-fore");
 const DString DDefBack=DString("default-back");
 const DString DFullback=DString("fullback");
+const DString DHotkey=DString("hotkey");
+const DString DFavorite=DString("favorite");
 
 /** FAR Editor internal plugin structures.
     Implements text parsing and different
