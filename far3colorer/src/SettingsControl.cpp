@@ -55,7 +55,7 @@ bool SettingsControl::Set(int Root, const wchar_t *Name, unsigned __int64 Value)
 int SettingsControl::rGetSubKey(size_t Root, const wchar_t *Name)
 {
   FarSettingsValue fsv={Root,Name};
-  return Info.SettingsControl(farSettingHandle, SCTL_CREATESUBKEY, NULL, &fsv);
+  return (int)Info.SettingsControl(farSettingHandle, SCTL_CREATESUBKEY, NULL, &fsv);
 }
 
 bool SettingsControl::rEnum(size_t Root, FarSettingsEnum *fse)

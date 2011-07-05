@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2085
+  Plugin API for Far Manager 3.0 build 2098
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2085
+#define FARMANAGERVERSION_BUILD 2098
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -389,7 +389,7 @@ static const FARLISTINFOFLAGS
 struct FarListInfo
 {
 	FARLISTINFOFLAGS Flags;
-	int ItemsNumber;
+	size_t ItemsNumber;
 	int SelectPos;
 	int TopPos;
 	int MaxHeight;
@@ -558,7 +558,7 @@ typedef HANDLE(WINAPI *FARAPIDIALOGINIT)(
     int                   Y2,
     const wchar_t        *HelpTopic,
     const struct FarDialogItem *Item,
-    unsigned int          ItemsNumber,
+    size_t                ItemsNumber,
     DWORD                 Reserved,
     FARDIALOGFLAGS        Flags,
     FARWINDOWPROC         DlgProc,
@@ -712,8 +712,8 @@ struct PanelInfo
 	HANDLE PluginHandle;
 	enum PANELINFOTYPE PanelType;
 	RECT PanelRect;
-	int ItemsNumber;
-	int SelectedItemsNumber;
+	size_t ItemsNumber;
+	size_t SelectedItemsNumber;
 	int CurrentItem;
 	int TopPanelItem;
 	int ViewMode;
@@ -792,7 +792,7 @@ typedef void (WINAPI *FARAPIRESTORESCREEN)(HANDLE hScreen);
 typedef int (WINAPI *FARAPIGETDIRLIST)(
     const wchar_t *Dir,
     struct PluginPanelItem **pPanelItem,
-    int *pItemsNumber
+    size_t *pItemsNumber
 );
 
 typedef int (WINAPI *FARAPIGETPLUGINDIRLIST)(
@@ -800,11 +800,11 @@ typedef int (WINAPI *FARAPIGETPLUGINDIRLIST)(
     HANDLE hPanel,
     const wchar_t *Dir,
     struct PluginPanelItem **pPanelItem,
-    int *pItemsNumber
+    size_t *pItemsNumber
 );
 
-typedef void (WINAPI *FARAPIFREEDIRLIST)(struct PluginPanelItem *PanelItem, int nItemsNumber);
-typedef void (WINAPI *FARAPIFREEPLUGINDIRLIST)(struct PluginPanelItem *PanelItem, int nItemsNumber);
+typedef void (WINAPI *FARAPIFREEDIRLIST)(struct PluginPanelItem *PanelItem, size_t nItemsNumber);
+typedef void (WINAPI *FARAPIFREEPLUGINDIRLIST)(struct PluginPanelItem *PanelItem, size_t nItemsNumber);
 
 typedef unsigned __int64 VIEWER_FLAGS;
 static const VIEWER_FLAGS
@@ -2213,7 +2213,7 @@ struct PutFilesInfo
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
-	int Move;
+	BOOL Move;
 	const wchar_t *SrcPath;
 	OPERATION_MODES OpMode;
 };
@@ -2249,7 +2249,7 @@ struct GetFindDataInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
-	int ItemsNumber;
+	size_t ItemsNumber;
 	OPERATION_MODES OpMode;
 };
 
@@ -2258,7 +2258,7 @@ struct GetVirtualFindDataInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
-	int ItemsNumber;
+	size_t ItemsNumber;
 	const wchar_t *Path;
 };
 
@@ -2267,7 +2267,7 @@ struct FreeFindDataInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
-	int ItemsNumber;
+	size_t ItemsNumber;
 };
 
 struct GetFilesInfo
@@ -2275,8 +2275,8 @@ struct GetFilesInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
-	int ItemsNumber;
-	int Move;
+	size_t ItemsNumber;
+	BOOL Move;
 	const wchar_t *DestPath;
 	OPERATION_MODES OpMode;
 };
@@ -2286,7 +2286,7 @@ struct DeleteFilesInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
-	int ItemsNumber;
+	size_t ItemsNumber;
 	OPERATION_MODES OpMode;
 };
 

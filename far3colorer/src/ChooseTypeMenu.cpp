@@ -37,7 +37,7 @@ FarMenuItem *ChooseTypeMenu::getItems()
   return Item;
 }
 
-int ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, const FileType* UserData, size_t PosAdd)
+size_t ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, const FileType* UserData, size_t PosAdd)
 {
   if (PosAdd > ItemCount)
     PosAdd = ItemCount;
@@ -65,12 +65,12 @@ int ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, cons
   return PosAdd;
 }
 
-int ChooseTypeMenu::AddGroup(const wchar_t *Text)
+size_t ChooseTypeMenu::AddGroup(const wchar_t *Text)
 {
   return AddItem(Text, MIF_SEPARATOR, NULL);
 }
 
-int ChooseTypeMenu::AddItem(const FileType* fType, size_t PosAdd)
+size_t ChooseTypeMenu::AddItem(const FileType* fType, size_t PosAdd)
 {
   StringBuffer *s=GenerateName(fType);
   size_t k=AddItem(s->getWChars(), 0, fType, PosAdd);
@@ -87,7 +87,7 @@ void ChooseTypeMenu::SetSelected(size_t index)
   }
 }
 
-int ChooseTypeMenu::GetNext(size_t index)
+size_t ChooseTypeMenu::GetNext(size_t index)
 {
   size_t p;
   for (p=index+1;p<ItemCount;p++){
@@ -119,7 +119,7 @@ void ChooseTypeMenu::MoveToFavorites(size_t index)
   f->setParamValue(DFavorite,&DTrue);
 }
 
-int ChooseTypeMenu::AddFavorite(const FileType* fType)
+size_t ChooseTypeMenu::AddFavorite(const FileType* fType)
 {
   size_t i;
   for (i=favorite_idx;i<ItemCount && !(Item[i].Flags&MIF_SEPARATOR);i++);
@@ -145,7 +145,7 @@ void ChooseTypeMenu::DelFromFavorites(size_t index)
   f->setParamValue(DFavorite,&DFalse);
 }
 
-int ChooseTypeMenu::AddItemInGroup(FileType* fType)
+size_t ChooseTypeMenu::AddItemInGroup(FileType* fType)
 {
   size_t i;
   const String* group =fType->getGroup();

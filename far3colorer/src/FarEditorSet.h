@@ -151,7 +151,7 @@ private:
   bool checkConsoleAnnotationAvailable();
   bool consoleAnnotationAvailable;
 
-  int getCountFileTypeAndGroup();
+  size_t getCountFileTypeAndGroup();
   FileTypeImpl* getFileTypeByIndex(int idx);
   void FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType);
   String *getCurrentFileName();

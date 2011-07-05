@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Far3 build 2098 API
+	2. size_t
+
+#Revision: 1733
+	#Author: ctapmex Date: 2011-07-04 15:05:03 +0600 (Пн, 04 июл 2011)
 	1. для hotkey в диалоге настроек схем отображался неверный combobox 
 
 #Revision: 1731

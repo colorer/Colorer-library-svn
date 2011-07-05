@@ -69,7 +69,7 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
     delete[] new_path;
     new_path = temp;
   }
-  FSF.ConvertPath(CPM_FULL, new_path, new_path, static_cast<int>(len));
+  FSF.ConvertPath(CPM_FULL, new_path, new_path, len);
 
   if (unc){
     // for normal work with long paths, the path must be converted to UNC

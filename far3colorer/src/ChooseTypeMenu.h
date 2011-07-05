@@ -13,14 +13,14 @@ public:
   FarMenuItem *getItems();
   size_t getItemsCount(){return ItemCount;};
 
-  int AddItem(const FileType* fType, size_t PosAdd=0x7FFFFFFF);
-  int AddItemInGroup(FileType* fType);
-  int AddGroup(const wchar_t *Text);
+  size_t AddItem(const FileType* fType, size_t PosAdd=0x7FFFFFFF);
+  size_t AddItemInGroup(FileType* fType);
+  size_t AddGroup(const wchar_t *Text);
   void SetSelected(size_t index);
-  int GetNext(size_t index);
+  size_t GetNext(size_t index);
   FileType* GetFileType(size_t index);
   void MoveToFavorites(size_t index);
-  int AddFavorite(const FileType* fType);
+  size_t AddFavorite(const FileType* fType);
   void DeleteItem(size_t index);
 
   void HideEmptyGroup();
@@ -35,7 +35,7 @@ private:
 
   size_t ItemSelected; // Index of selected item 
 
-  int AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, const FileType* UserData = NULL, size_t PosAdd=0x7FFFFFFF);
+  size_t AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, const FileType* UserData = NULL, size_t PosAdd=0x7FFFFFFF);
 
   static const size_t favorite_idx=2;
 };
