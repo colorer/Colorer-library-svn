@@ -95,6 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\shared\unicode\InternalString.cpp" />
     <ClCompile Include="test_speed.cpp" />
     <ClCompile Include="tests.cpp" />
     <ClCompile Include="..\..\zlib\adler32.c" />
@@ -148,6 +149,7 @@
     <ClCompile Include="..\..\shared\cregexp\cregexp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\shared\unicode\InternalString.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="..\..\zlib\inffast.h" />
     <ClInclude Include="..\..\zlib\inftrees.h" />

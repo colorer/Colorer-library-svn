@@ -154,7 +154,8 @@ void ConsoleTools::RETest(){
     if (!re->setRE(&DString(text))) continue;
     printf("exprn:");
     gets(text);
-    res = re->parse(&DString(text), &match);
+    //!! need correct
+    //res = re->parse(&DString(text), &match);
     printf("%s\nmatch:  ",res?"ok":"error");
     for(int i = 0; i < match.cMatch; i++){
       printf("%d:(%d,%d), ",i,match.s[i],match.e[i]);

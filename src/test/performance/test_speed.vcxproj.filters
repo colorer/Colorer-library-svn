@@ -205,6 +205,9 @@
     <ClCompile Include="..\..\shared\cregexp\cregexp.cpp">
       <Filter>shared\cregexp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\shared\unicode\InternalString.cpp">
+      <Filter>shared\unicode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests.h">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="..\..\shared\cregexp\cregexp.h">
       <Filter>shared\cregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\unicode\InternalString.h">
+      <Filter>shared\unicode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

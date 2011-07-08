@@ -302,17 +302,17 @@ public:
 #ifdef NAMED_MATCHES_IN_HASH
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, SMatches *mtch, SMatchHash *nmtch = null);
+  bool parse(const InternalString *str, SMatches *mtch, SMatchHash *nmtch = null);
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, int pos, int eol, SMatches *mtch, SMatchHash *nmtch = null, int soscheme = 0, int moves = -1);
+  bool parse(const InternalString *str, int pos, int eol, SMatches *mtch, SMatchHash *nmtch = null, int soscheme = 0, int moves = -1);
 #else
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, SMatches *mtch);
+  bool parse(const InternalString *str, SMatches *mtch);
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
+  bool parse(const InternalString *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 
 private:
@@ -328,7 +328,7 @@ private:
   int schemeStart;
 #endif
   bool startChange, endChange;
-  const String *global_pattern;
+  const InternalString *global_pattern;
   int end;
 
   SMatches *matches;

@@ -4,6 +4,7 @@
 TextParserImpl::TextParserImpl()
 {
   CLR_TRACE("TextParserImpl", "constructor");
+  str = null;
   cache = new ParseCache();
   clearCache();
   lineSource = null;
@@ -16,6 +17,7 @@ TextParserImpl::~TextParserImpl()
 {
   clearCache();
   delete cache;
+  delete str;
 }
 
 void TextParserImpl::setFileType(FileType *type){
@@ -145,13 +147,13 @@ void TextParserImpl::breakParse()
 
 void TextParserImpl::addRegion(int lno, int sx, int ex, const Region* region){
   if (sx == -1 || region == null) return;
-  regionHandler->addRegion(lno, str, sx, ex, region);
+  regionHandler->addRegion(lno, str->getString(), sx, ex, region);
 };
 void TextParserImpl::enterScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->enterScheme(lno, str, sx, ex, region, baseScheme);
+  regionHandler->enterScheme(lno, str->getString(), sx, ex, region, baseScheme);
 };
 void TextParserImpl::leaveScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->leaveScheme(lno, str, sx, ex, region, baseScheme);
+  regionHandler->leaveScheme(lno, str->getString(), sx, ex, region, baseScheme);
   if (region != null) picked = region;
 };
 
@@ -219,9 +221,9 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
 
     int cr;
     if (node->kwList->matchCase)
-      cr = node->kwList->kwList[pos].keyword->compareTo(DString(*str, gx, kwlen));
+      cr = str->compareTo(gx, kwlen,node->kwList->kwList[pos].keyword);
     else
-      cr = node->kwList->kwList[pos].keyword->compareToIgnoreCase(DString(*str, gx, kwlen));
+      cr = str->compareToIgnoreCase(gx, kwlen,node->kwList->kwList[pos].keyword);
 
     if (cr == 0 && right-left == 1){
       bool badbound = false;
@@ -252,8 +254,8 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
       };
       break;
     };
-    if (cr == 1) right = pos;
-    if (cr == 0 || cr == -1) left = pos;
+    if (cr == -1) right = pos;
+    if (cr == 0 || cr == 1) left = pos;
   };
   return MATCH_NOTHING;
 };
@@ -320,7 +322,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         ssubst = vtlist->pushvirt(schemeNode->scheme);
         if (!ssubst) ssubst = schemeNode->scheme;
 
-        SString *backLine = new SString(str);
+        SString *backLine = new SString(str->getString());
         if (updateCache){
           ResF = forward;
           ResP = parent;
@@ -423,14 +425,15 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
     // prevents multiple requests on each line
     if (clearLine != gy){
       clearLine = gy;
-      str = lineSource->getLine(gy);
-      if (str == null){
+      delete str;
+      str = new InternalString(lineSource->getLine(gy));
+      if (str->getString() == null){
         throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
         //!!unreachable code
         //gy = gy2;
         break;
       };
-      regionHandler->clearLine(gy, str);
+      regionHandler->clearLine(gy, str->getString());
     };
     // hack to include invisible regions in start of block
     // when parsing with cache information

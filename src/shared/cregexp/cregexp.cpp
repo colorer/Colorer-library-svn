@@ -656,7 +656,7 @@ bool CRegExp::isNWordBoundary(int &toParse)
 
 bool CRegExp::checkMetaSymbol(EMetaSymbols symb, int &toParse)
 {
-const String &pattern = *global_pattern;
+const InternalString &pattern = *global_pattern;
 
   switch(symb){
     case ReAnyChr:
@@ -806,7 +806,7 @@ bool CRegExp::lowParse(SRegInfo *re, SRegInfo *prev, int toParse)
 int i, sv, wlen;
 bool leftenter = true;
 bool br = false;
-const String &pattern = *global_pattern;
+const InternalString &pattern = *global_pattern;
 int action=-1;
 
   if (!re){
@@ -877,7 +877,7 @@ int action=-1;
           continue;
         }
         if (ignoreCase){
-          if (!DString(&pattern, toParse, wlen).equalsIgnoreCase(re->un.word)){
+          if (!pattern.equalsIgnoreCase( toParse, wlen,re->un.word)){
             check_stack(false,&re,&prev,&toParse,&leftenter,&action);
             continue;
           }
@@ -1323,7 +1323,7 @@ inline bool CRegExp::parseRE(int pos)
   return false;
 };
 
-bool CRegExp::parse(const String *str, int pos, int eol, SMatches *mtch
+bool CRegExp::parse(const InternalString *str, int pos, int eol, SMatches *mtch
 #ifdef NAMED_MATCHES_IN_HASH
 , PMatchHash nmtch
 #endif
@@ -1345,7 +1345,7 @@ bool CRegExp::parse(const String *str, int pos, int eol, SMatches *mtch
   return result;
 };
 
-bool CRegExp::parse(const String *str, SMatches *mtch
+bool CRegExp::parse(const InternalString *str, SMatches *mtch
 #ifdef NAMED_MATCHES_IN_HASH
 ,PMatchHash nmtch
 #endif
