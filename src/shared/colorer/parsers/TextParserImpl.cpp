@@ -322,7 +322,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         ssubst = vtlist->pushvirt(schemeNode->scheme);
         if (!ssubst) ssubst = schemeNode->scheme;
 
-        SString *backLine = new SString(str->getString());
+        InternalString *backLine = new InternalString(str);
         if (updateCache){
           ResF = forward;
           ResP = parent;
@@ -357,8 +357,8 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         int o_schemeStart = schemeStart;
         SMatches o_matchend = matchend;
         SMatches *o_match;
-        DString *o_str;
-        schemeNode->end->getBackTrace((const String**)&o_str, &o_match);
+        InternalString *o_str;
+        schemeNode->end->getBackTrace((const InternalString**)&o_str, &o_match);
 
         baseScheme = ssubst;
         schemeStart = gx;

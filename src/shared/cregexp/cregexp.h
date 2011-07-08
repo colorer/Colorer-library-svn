@@ -146,7 +146,7 @@ public:
   union{
     EMetaSymbols metaSymbol;
     wchar symbol;
-    String *word;
+    InternalString *word;
     CharacterClass *charclass;
     SRegInfo *param;
   }un;
@@ -288,11 +288,11 @@ public:
   /**
     Changes RE object, used for backreferences with named \y{} \Y{} operators.
   */
-  bool setBackTrace(const String *str, SMatches *trace);
+  bool setBackTrace(const InternalString *str, SMatches *trace);
   /**
     Returns current RE object, used for backreferences with \y \Y operators.
   */
-  bool getBackTrace(const String **str, SMatches **trace);
+  bool getBackTrace(const InternalString **str, SMatches **trace);
 #endif
   /**
     Compiles specified regular expression and drops all
@@ -323,7 +323,7 @@ private:
   EMetaSymbols firstMetaChar;
 #ifdef COLORERMODE
   CRegExp *backRE;
-  const String *backStr;
+  const InternalString *backStr;
   SMatches *backTrace;
   int schemeStart;
 #endif

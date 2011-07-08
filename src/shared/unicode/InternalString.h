@@ -7,6 +7,8 @@ class InternalString{
 public:
 
   InternalString(const String *str);
+  InternalString(const InternalString *str);
+  InternalString(const wchar *str, size_t Pos, size_t Len );
   ~InternalString();
 
   void init();
@@ -25,6 +27,7 @@ public:
   int compareToIgnoreCase(const InternalString* Str) const {return compareToIgnoreCase(0,len,Str->wstr,Str->len);}
   int compareToIgnoreCase(size_t Pos, size_t Len, const SString *Str) const { return compareToIgnoreCase(Pos, Len,Str->getWChars(), Str->length()); }
   bool equalsIgnoreCase(size_t Pos, size_t Len, const wchar_t* Data, size_t DataLen)  const;
+  bool equalsIgnoreCase(size_t Pos, size_t Len, const InternalString *Str) const { return equalsIgnoreCase(Pos, Len,Str->wstr, Str->len); }
   bool equalsIgnoreCase(size_t Pos, size_t Len, const SString *Str) const { return equalsIgnoreCase(Pos, Len,Str->getWChars(), Str->length()); }
   bool equalsIgnoreCase(size_t Pos, size_t Len, const String *Str) const { return equalsIgnoreCase(Pos, Len,Str->getWChars(), Str->length()); }
 

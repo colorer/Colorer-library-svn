@@ -550,7 +550,7 @@ SRegInfo *next, *temp;
         if (idx > 0) delete retmp;
       };
       reword->op = ReWord;
-      reword->un.word = new SString(DString(wcword, 0, wsize));
+      reword->un.word = new InternalString(wcword, 0, wsize);
       delete[] wcword;
       reword->next = reafterword;
       if (reafterword) reafterword->prev = reword;
@@ -1415,13 +1415,13 @@ bool CRegExp::setBackRE(CRegExp *bkre)
   this->backRE = bkre;
   return true;
 };
-bool CRegExp::setBackTrace(const String *str, SMatches *trace)
+bool CRegExp::setBackTrace(const InternalString *str, SMatches *trace)
 {
   backTrace = trace;
   backStr = str;
   return true;
 };
-bool CRegExp::getBackTrace(const String **str, SMatches **trace)
+bool CRegExp::getBackTrace(const InternalString **str, SMatches **trace)
 {
   *str = backStr;
   *trace = backTrace;

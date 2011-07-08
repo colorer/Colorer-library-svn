@@ -24,6 +24,22 @@ InternalString::InternalString(const String *str)
   else init();
 }
 
+InternalString::InternalString(const InternalString *str)
+{
+  len = str->len;
+  wstr = new wchar[len];
+  wmemcpy(wstr,str->wstr,len);
+  cstring = null;
+}
+
+InternalString::InternalString(const wchar *str, size_t Pos, size_t Len )
+{
+  len = Len;
+  wstr = new wchar[len];
+  wmemcpy(wstr,str+Pos,len);
+  cstring = null;
+}
+
 int InternalString::compareTo(size_t Pos, size_t Len, const wchar_t* Data, size_t DataLen) const
 {
   size_t i;
