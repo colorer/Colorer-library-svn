@@ -147,13 +147,13 @@ void TextParserImpl::breakParse()
 
 void TextParserImpl::addRegion(int lno, int sx, int ex, const Region* region){
   if (sx == -1 || region == null) return;
-  regionHandler->addRegion(lno, str->getString(), sx, ex, region);
+  regionHandler->addRegion(lno, str, sx, ex, region);
 };
 void TextParserImpl::enterScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->enterScheme(lno, str->getString(), sx, ex, region, baseScheme);
+  regionHandler->enterScheme(lno, str, sx, ex, region, baseScheme);
 };
 void TextParserImpl::leaveScheme(int lno, int sx, int ex, const Region* region){
-  regionHandler->leaveScheme(lno, str->getString(), sx, ex, region, baseScheme);
+  regionHandler->leaveScheme(lno, str, sx, ex, region, baseScheme);
   if (region != null) picked = region;
 };
 
@@ -427,13 +427,13 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
       clearLine = gy;
       delete str;
       str = new InternalString(lineSource->getLine(gy));
-      if (str->getString() == null){
+      if (str->getWChars() == null){
         throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
         //!!unreachable code
         //gy = gy2;
         break;
       };
-      regionHandler->clearLine(gy, str->getString());
+      regionHandler->clearLine(gy, str);
     };
     // hack to include invisible regions in start of block
     // when parsing with cache information

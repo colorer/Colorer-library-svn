@@ -473,22 +473,22 @@ void BaseEditor::endParsing(int lno){
   for(int idx = 0; idx < regionHandlers.size(); idx++)
     regionHandlers.elementAt(idx)->endParsing(lno);
 }
-void BaseEditor::clearLine(int lno, String *line){
+void BaseEditor::clearLine(int lno, InternalString *line){
   lrSupport->clearLine(lno, line);
   for(int idx = 0; idx < regionHandlers.size(); idx++)
     regionHandlers.elementAt(idx)->clearLine(lno, line);
 }
-void BaseEditor::addRegion(int lno, String *line, int sx, int ex, const Region *region){
+void BaseEditor::addRegion(int lno, InternalString *line, int sx, int ex, const Region *region){
   lrSupport->addRegion(lno, line, sx, ex, region);
   for(int idx = 0; idx < regionHandlers.size(); idx++)
     regionHandlers.elementAt(idx)->addRegion(lno, line, sx, ex, region);
 }
-void BaseEditor::enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
+void BaseEditor::enterScheme(int lno, InternalString *line, int sx, int ex, const Region *region, const Scheme *scheme){
   lrSupport->enterScheme(lno, line, sx, ex, region, scheme);
   for(int idx = 0; idx < regionHandlers.size(); idx++)
     regionHandlers.elementAt(idx)->enterScheme(lno, line, sx, ex, region, scheme);
 }
-void BaseEditor::leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
+void BaseEditor::leaveScheme(int lno, InternalString *line, int sx, int ex, const Region *region, const Scheme *scheme){
   lrSupport->leaveScheme(lno, line, sx, ex, region, scheme);
   for(int idx = 0; idx < regionHandlers.size(); idx++)
     regionHandlers.elementAt(idx)->leaveScheme(lno, line, sx, ex, region, scheme);
