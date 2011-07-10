@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. Outliner переделан под InternalString как наследник RegionHandler
+	2. скрипты makefile
+
+#Revision: 1745
+	#Author: ctapmex Date: 2011-07-10 13:57:46 +0600 (Вс, 10 июл 2011)
 	1. слито с бранчем ctapmex_internal_string  - переделка работы со строками в ядре парсера.
 	прирост скорости от14 до 32 процентов.
 

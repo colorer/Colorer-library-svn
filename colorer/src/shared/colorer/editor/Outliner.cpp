@@ -71,11 +71,11 @@ void Outliner::clearLine(int lno, String *line){
   lineIsEmpty = true;
 }
 
-void Outliner::addRegion(int lno, String *line, int sx, int ex, const Region *region){
+void Outliner::addRegion(int lno, InternalString *line, int sx, int ex, const Region *region){
   if (lno < modifiedLine) return;
   if (!isOutlined(region)) return;
 
-  String *itemLabel = new DString(line, sx, ex-sx);
+  String *itemLabel = new DString(line->getString(), sx, ex-sx);
 
   if (lineIsEmpty){
     outline.addElement(new OutlineItem(lno, sx, curLevel, itemLabel, region));
@@ -88,11 +88,11 @@ void Outliner::addRegion(int lno, String *line, int sx, int ex, const Region *re
   lineIsEmpty = false;
 }
 
-void Outliner::enterScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
+void Outliner::enterScheme(int lno, InternalString *line, int sx, int ex, const Region *region, const Scheme *scheme){
   curLevel++;
 }
 
-void Outliner::leaveScheme(int lno, String *line, int sx, int ex, const Region *region, const Scheme *scheme){
+void Outliner::leaveScheme(int lno, InternalString *line, int sx, int ex, const Region *region, const Scheme *scheme){
   curLevel--;
 }
 

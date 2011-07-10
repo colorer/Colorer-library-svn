@@ -112,6 +112,9 @@ $(obj_output_slash)SString.$(obj):
 $(obj_output_slash)String.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./unicode/String.cpp
 
+$(obj_output_slash)InternalString.$(obj):
+	$(CPP) $(CPPFLAGS) $(shared_path)/./unicode/InternalString.cpp
+
 $(obj_output_slash)StringBuffer.$(obj):
 	$(CPP) $(CPPFLAGS) $(shared_path)/./unicode/StringBuffer.cpp
 
