@@ -59,10 +59,10 @@ KeywordList::~KeywordList(){
 };
 
 int kwCompare(const void*e1, const void*e2){
-  return ((KeywordInfo*)e1)->keyword->compareTo(*((KeywordInfo*)e2)->keyword);
+  return ((KeywordInfo*)e1)->keyword->compareTo(((KeywordInfo*)e2)->keyword);
 };
 int kwCompareI(const void*e1, const void*e2){
-  return ((KeywordInfo*)e1)->keyword->compareToIgnoreCase(*((KeywordInfo*)e2)->keyword);
+  return ((KeywordInfo*)e1)->keyword->compareToIgnoreCase(((KeywordInfo*)e2)->keyword);
 };
 void KeywordList::sortList(){
   if (num < 2) return;
@@ -84,9 +84,9 @@ void KeywordList::substrIndex(){
     for(int ii = i-1; ii != 0; ii--){
       if ((*kwList[ii].keyword)[0] != (*kwList[i].keyword)[0]) break;
       if (kwList[ii].keyword->length() < kwList[i].keyword->length() &&
-          DString(kwList[i].keyword, 0, kwList[ii].keyword->length()) == *kwList[ii].keyword){
-        kwList[i].ssShorter = ii;
-        break;
+        kwList[i].keyword->compareTo(0,kwList[ii].keyword->length(),kwList[ii].keyword)==0){
+          kwList[i].ssShorter = ii;
+          break;
       };
     };
 };

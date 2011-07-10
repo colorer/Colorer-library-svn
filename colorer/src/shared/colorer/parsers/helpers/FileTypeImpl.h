@@ -97,9 +97,9 @@ public:
     double cur_prior = 0;
     for(int idx = 0; idx < chooserVector.size(); idx++){
       FileTypeChooser *ftc = chooserVector.elementAt(idx);
-      if (fileName != null && ftc->isFileName() && ftc->getRE()->parse(fileName, &match))
+      if (fileName != null && ftc->isFileName() && ftc->getRE()->parse(&InternalString(fileName), &match))
         cur_prior += ftc->getPrior();
-      if (fileContent != null && ftc->isFileContent() && ftc->getRE()->parse(fileContent, &match))
+      if (fileContent != null && ftc->isFileContent() && ftc->getRE()->parse(&InternalString(fileContent), &match))
         cur_prior += ftc->getPrior();
     }
     return cur_prior;

@@ -662,7 +662,7 @@ void HRCParserImpl::addSchemeNodes(SchemeImpl *scheme, Node *elem)
           rgn = getNCRegion((Element*)keywrd, DString("region"));
 
         int pos = next->kwList->num;
-        pIDs[pos].keyword = new SString(param);
+        pIDs[pos].keyword = new InternalString(param);
         pIDs[pos].region = rgn;
         pIDs[pos].isSymbol = (type == 2);
         pIDs[pos].ssShorter = -1;

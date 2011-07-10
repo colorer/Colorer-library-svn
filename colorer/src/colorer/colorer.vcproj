@@ -215,6 +215,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\shared\unicode\InternalString.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\shared\unicode\SString.cpp"
 					>
 				</File>
@@ -575,6 +579,10 @@
 			</File>
 			<File
 				RelativePath="..\shared\common\io\InputSource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\shared\unicode\InternalString.h"
 				>
 			</File>
 			<File

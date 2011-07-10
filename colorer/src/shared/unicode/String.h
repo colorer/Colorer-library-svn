@@ -122,6 +122,7 @@ private:
 #include<unicode/DString.h>
 #include<unicode/SString.h>
 #include<unicode/StringBuffer.h>
+#include<unicode/InternalString.h>
 
 #endif
 

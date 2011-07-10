@@ -146,7 +146,7 @@ public:
   union{
     EMetaSymbols metaSymbol;
     wchar symbol;
-    String *word;
+    InternalString *word;
     CharacterClass *charclass;
     SRegInfo *param;
   }un;
@@ -288,11 +288,11 @@ public:
   /**
     Changes RE object, used for backreferences with named \y{} \Y{} operators.
   */
-  bool setBackTrace(const String *str, SMatches *trace);
+  bool setBackTrace(const InternalString *str, SMatches *trace);
   /**
     Returns current RE object, used for backreferences with \y \Y operators.
   */
-  bool getBackTrace(const String **str, SMatches **trace);
+  bool getBackTrace(const InternalString **str, SMatches **trace);
 #endif
   /**
     Compiles specified regular expression and drops all
@@ -302,17 +302,17 @@ public:
 #ifdef NAMED_MATCHES_IN_HASH
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, SMatches *mtch, SMatchHash *nmtch = null);
+  bool parse(const InternalString *str, SMatches *mtch, SMatchHash *nmtch = null);
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, int pos, int eol, SMatches *mtch, SMatchHash *nmtch = null, int soscheme = 0, int moves = -1);
+  bool parse(const InternalString *str, int pos, int eol, SMatches *mtch, SMatchHash *nmtch = null, int soscheme = 0, int moves = -1);
 #else
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, SMatches *mtch);
+  bool parse(const InternalString *str, SMatches *mtch);
   /** Runs RE parser against input string @c str
   */
-  bool parse(const String *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
+  bool parse(const InternalString *str, int pos, int eol, SMatches *mtch, int soscheme = 0, int moves = -1);
 #endif
 
 private:
@@ -323,12 +323,12 @@ private:
   EMetaSymbols firstMetaChar;
 #ifdef COLORERMODE
   CRegExp *backRE;
-  const String *backStr;
+  const InternalString *backStr;
   SMatches *backTrace;
   int schemeStart;
 #endif
   bool startChange, endChange;
-  const String *global_pattern;
+  const InternalString *global_pattern;
   int end;
 
   SMatches *matches;
