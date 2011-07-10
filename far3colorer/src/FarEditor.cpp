@@ -457,7 +457,7 @@ void FarEditor::locateFunction()
   };
 
   const wchar_t *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
-  info->Message(&MainGuid, 0, 0, msg, 2, 1);
+  info->Message(&MainGuid, &NothingFoundMesage, 0, 0, msg, 2, 1);
 }
 
 void FarEditor::updateHighlighting()
@@ -909,7 +909,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 
     _snwprintf(top, 128, topline, captionfilter);
     int sel = 0;
-    sel = info->Menu(&MainGuid, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
+    sel = info->Menu(&MainGuid, &OutlinerMenu, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
       top, GetMsg(mChoose), L"add", breakKeys, &code, menu, menu_size);
 
     // handle mouse selection
@@ -1129,7 +1129,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 
   if (items_num == 0){
     const wchar_t *msg[2] = { GetMsg(mNothingFound), GetMsg(mGotcha) };
-    info->Message(&MainGuid, 0, 0, msg, 2, 1);
+    info->Message(&MainGuid, &NothingFoundMesage, 0, 0, msg, 2, 1);
   }
 }
 

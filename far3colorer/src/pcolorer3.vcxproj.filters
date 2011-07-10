@@ -66,9 +66,6 @@
     <ClInclude Include="..\far3sdk\farcolor.hpp">
       <Filter>far3sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\far3sdk\farkeys.hpp">
-      <Filter>far3sdk</Filter>
-    </ClInclude>
     <ClInclude Include="..\far3sdk\plugin.hpp">
       <Filter>far3sdk</Filter>
     </ClInclude>

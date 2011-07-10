@@ -410,10 +410,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\far3sdk\farkeys.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\far3sdk\plugin.hpp"
 				>
 			</File>
@@ -830,6 +826,14 @@
 				</File>
 				<File
 					RelativePath="..\..\colorer\src\shared\unicode\Encodings.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\colorer\src\shared\unicode\InternalString.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\colorer\src\shared\unicode\InternalString.h"
 					>
 				</File>
 				<File

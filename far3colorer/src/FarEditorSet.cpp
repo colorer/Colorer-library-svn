@@ -52,7 +52,7 @@ void FarEditorSet::openMenu()
       menuElements[0].Text = GetMsg(mConfigure);
       menuElements[0].Flags = MIF_SELECTED;
 
-      if (Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0){
+      if (Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0){
         ReadSettings();
         configure(true);
       }
@@ -75,7 +75,7 @@ void FarEditorSet::openMenu()
     if (!editor){
       throw Exception(DString("Can't find current editor in array."));
     }
-    int res = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+    int res = Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
       menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0]) );
     switch (res)
     {
@@ -127,7 +127,7 @@ void FarEditorSet::openMenu()
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 }
@@ -180,7 +180,7 @@ void FarEditorSet::viewFile(const String &path)
     exceptionMessage[1] = GetMsg(mCantOpenFile);
     exceptionMessage[3] = GetMsg(mDie);
     exceptionMessage[2] = e.getMessage()->getWChars();
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
   };
 }
 
@@ -258,46 +258,36 @@ void FarEditorSet::FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType)
 
 }
 
-inline wchar_t __cdecl Upper(wchar_t Ch) { CharUpperBuff(&Ch, 1); return Ch; }
+inline wchar_t* __cdecl Upper(wchar_t* Ch) { CharUpperBuff(Ch, 1); return Ch; }
 
 INT_PTR WINAPI KeyDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2) 
 {
-  const INPUT_RECORD* record=nullptr;
+  INPUT_RECORD* record=nullptr;
   static int LastKey=0;
   int key=0;
   wchar wkey[2];
 
-  if (Msg == DN_CONTROLINPUT)
-  {
-    record=(const INPUT_RECORD *)Param2;
-    if (record->EventType==KEY_EVENT)
-    {
-      key = FSF.FarInputRecordToKey((const INPUT_RECORD *)Param2);
-    }
-  }
-
-  if (Msg == DN_CONTROLINPUT && record->EventType==KEY_EVENT && key>31  && key!=KEY_F1)
-  {
-    if (key == KEY_ESC || key == KEY_ENTER||key == KEY_NUMENTER)
+  record=(INPUT_RECORD *)Param2;
+  if (Msg == DN_CONTROLINPUT && record->EventType==KEY_EVENT){
+    key = record->Event.KeyEvent.wVirtualKeyCode;
+    if (key == VK_ESCAPE  || key == VK_RETURN )
     {
       return FALSE;
     }
-
-    if (key>128){
-      FSF.FarKeyToName((int)key,wkey,2);
-      wchar_t* c= FSF.XLat(wkey,0,1,0);
-      key=FSF.FarNameToKey(c);
+    if ( key>31  && key!=VK_F1)
+    {
+      FSF.FarInputRecordToName((const INPUT_RECORD *)Param2,wkey,2);
+      if (key>255) {
+        wchar_t* c= FSF.XLat(wkey,0,1,0);
+        wkey[0]=*c;
+        FSF.FarNameToInputRecord(wkey,record);
+      }
+      key=record->Event.KeyEvent.wVirtualKeyCode;
+      if((key>=48 && key<=57)||(key>=65 && key<=90)){
+        Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,2,Upper(wkey));
+      }
+      return TRUE;
     }
-
-    if (key<0xFFFF)
-      key=Upper((wchar_t)(key&0x0000FFFF))|(key&(~0x0000FFFF));
-
-    if((key>=48 && key<=57)||(key>=65 && key<=90)){
-      FSF.FarKeyToName((int)key,wkey,2);
-      Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,2,wkey);
-      LastKey=(int)key;
-    }
-    return TRUE;
   }
 
   return Info.DefDlgProc(hDlg, Msg, Param1, Param2);
@@ -318,7 +308,7 @@ void FarEditorSet::chooseType()
   struct FarKey BreakKeys[3]={VK_INSERT,0,VK_DELETE,0,VK_F4,0};
   int BreakCode,i;
   while (1) {
-    i = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
+    i = Info.Menu(&MainGuid, &FileChooseMenu, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
       GetMsg(mSelectSyntax), bottom, L"filetypechoose", BreakKeys,&BreakCode, menu.getItems(), menu.getItemsCount());
 
     if (i>=0){
@@ -635,7 +625,7 @@ void FarEditorSet::configure(bool fromEditor)
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 }
@@ -665,7 +655,7 @@ const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdCla
     }
   };
 
-  int result = Info.Menu(&MainGuid, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
+  int result = Info.Menu(&MainGuid, &HrdMenu, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
     GetMsg(mSelectHRD), 0, L"hrd", NULL, NULL, menuElements, count);
   delete[] menuElements;
 
@@ -752,7 +742,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
     disableColorer();
   };
 
@@ -764,7 +754,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
   bool res = true;
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
   HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
-  Info.Message(&MainGuid, 0, NULL, &marr[0], 2, 0);
+  Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
 
   ParserFactory *parserFactoryLocal = NULL;
   RegionMapper *regionMapperLocal = NULL;
@@ -837,7 +827,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
         tname.append(type->getDescription());
         marr[1] = tname.getWChars();
         scr = Info.SaveScreen(0, 0, -1, -1);
-        Info.Message(&MainGuid, 0, NULL, &marr[0], 2, 0);
+        Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
         type->getBaseScheme();
         Info.RestoreScreen(scr);
       }
@@ -852,7 +842,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
       parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
     }
 
-	Info.Message(&MainGuid, FMSG_WARNING, NULL, &errload[0], 5, 1);
+	Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
 	Info.RestoreScreen(scr);
 	res = false;
   };
@@ -872,7 +862,7 @@ void FarEditorSet::ReloadBase()
 
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
   HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
-  Info.Message(&MainGuid, 0, NULL, &marr[0], 2, 0);
+  Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
 
   dropAllEditors(true);
   delete regionMapper;
@@ -921,7 +911,7 @@ void FarEditorSet::ReloadBase()
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, FMSG_WARNING, NULL, &errload[0], 5, 1);
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
 
     disableColorer();
   };
