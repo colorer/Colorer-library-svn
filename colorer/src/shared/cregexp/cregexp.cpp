@@ -1,6 +1,7 @@
 #include<cregexp/cregexp.h>
 #include<unicode/UnicodeTools.h>
 
+StackElem *RegExpStack;
 /////////////////////////////////////////////////////////////////////////////
 //
 SRegInfo::SRegInfo()

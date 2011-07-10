@@ -174,7 +174,7 @@ struct StackElem{
   int ifFalseReturn;
 };
 
-static StackElem *RegExpStack = NULL;
+extern StackElem *RegExpStack;
 static int RegExpStack_Size = 0;
 
 #define INIT_MEM_SIZE 512

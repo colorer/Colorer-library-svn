@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. неверное использование глобальной переменной
+
+#Revision: 1746
+	#Author: ctapmex Date: 2011-07-10 15:05:16 +0600 (Вс, 10 июл 2011)
 	1. Outliner переделан под InternalString как наследник RegionHandler
 	2. скрипты makefile
 
