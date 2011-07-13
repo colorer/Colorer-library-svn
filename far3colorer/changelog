@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. утечки памяти
+
+#Revision: 1748
+	#Author: ctapmex Date: 2011-07-10 17:37:21 +0600 (Вс, 10 июл 2011)
 	1. Far3 build 2105 API
 
 #Revision: 1735

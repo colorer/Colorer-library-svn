@@ -366,6 +366,7 @@ void FarEditorSet::chooseType()
             if (menu.GetFileType(i)->getParamValue(DHotkey)==null){
               ((FileTypeImpl*)menu.GetFileType(i))->addParam(&DHotkey);
             }
+            delete menu.GetFileType(i)->getParamValue(DHotkey);
             menu.GetFileType(i)->setParamValue(DHotkey,&DString(KeyAssignDlgData[2].PtrData));
             menu.RefreshItemCaption(i);
           }
@@ -1564,6 +1565,7 @@ void FarEditorSet::SaveChangedValueParam(HANDLE hDlg)
          //delete value
         ((FileTypeImpl*)type)->removeParamValue(&p);
       }else{
+        delete type->getParamValue(p);
         type->setParamValue(p,&v);
       }
     }

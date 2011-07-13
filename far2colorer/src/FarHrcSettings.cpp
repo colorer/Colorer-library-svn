@@ -57,9 +57,11 @@ void FarHrcSettings::UpdatePrototype(Element *elem, bool userValue)
         type->setParamDescription(SString(name), descr);
       }
       if (userValue){
+        delete type->getParamValue(DString(name));
         type->setParamValue(SString(name), value);
       }
       else{
+        delete type->getParamDefaultValue(DString(name));
         type->setParamDefaultValue(SString(name), value);
       }
     };
@@ -120,6 +122,7 @@ void FarHrcSettings::readProfileFromRegistry(HKEY dwKey)
             if (type->getParamValue(SString(szNameOfValue))==null){
               type->addParam(&SString(szNameOfValue));
             }
+            delete type->getParamValue(SString(szNameOfValue));
             type->setParamValue(SString(szNameOfValue), &SString(szValue));
           }
           delete [] szValue;

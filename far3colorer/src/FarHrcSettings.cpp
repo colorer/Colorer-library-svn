@@ -57,9 +57,11 @@ void FarHrcSettings::UpdatePrototype(Element *elem, bool userValue)
         type->setParamDescription(SString(name), descr);
       }
       if (userValue){
+        delete type->getParamValue(DString(name));
         type->setParamValue(SString(name), value);
       }
       else{
+        delete type->getParamDefaultValue(DString(name));
         type->setParamDefaultValue(SString(name), value);
       }
     };
@@ -93,10 +95,11 @@ void FarHrcSettings::readProfileFromRegistry()
           if (ColorerSettings.rEnum(type_subkey,&type_fse)){
             for (size_t j=0; j<type_fse.Count; j++){
               if (type_fse.Items[j].Type == FST_STRING){
-                if (type->getParamValue(SString(DString(type_fse.Items[j].Name)))==null){
-                  type->addParam(&SString(DString(type_fse.Items[j].Name)));
+                if (type->getParamValue(DString(type_fse.Items[j].Name))==null){
+                  type->addParam(&DString(type_fse.Items[j].Name));
                 }
-                type->setParamValue(SString(DString(type_fse.Items[j].Name)), &SString(DString(ColorerSettings.Get(type_subkey,type_fse.Items[j].Name,(wchar_t*)NULL))));
+                delete type->getParamValue(DString(type_fse.Items[j].Name));
+                type->setParamValue(DString(type_fse.Items[j].Name), &DString(ColorerSettings.Get(type_subkey,type_fse.Items[j].Name,(wchar_t*)NULL)));
               }
             }
           }
