@@ -175,7 +175,7 @@ struct StackElem{
 };
 
 extern StackElem *RegExpStack;
-static int RegExpStack_Size = 0;
+extern int RegExpStack_Size;
 
 #define INIT_MEM_SIZE 512
 #define MEM_INC 128

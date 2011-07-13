@@ -2,6 +2,7 @@
 #include<unicode/UnicodeTools.h>
 
 StackElem *RegExpStack;
+int RegExpStack_Size;
 /////////////////////////////////////////////////////////////////////////////
 //
 SRegInfo::SRegInfo()
