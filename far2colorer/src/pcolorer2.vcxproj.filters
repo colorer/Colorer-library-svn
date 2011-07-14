@@ -333,9 +333,6 @@
     <ClInclude Include="ChooseTypeMenu.h">
       <Filter>pcolorer2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\colorer\src\shared\unicode\InternalString.h">
-      <Filter>shared\unicode</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FarEditor.cpp">
@@ -505,9 +502,6 @@
     </ClCompile>
     <ClCompile Include="ChooseTypeMenu.cpp">
       <Filter>pcolorer2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\colorer\src\shared\unicode\InternalString.cpp">
-      <Filter>shared\unicode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

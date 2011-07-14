@@ -108,15 +108,15 @@ FileType* ChooseTypeMenu::GetFileType( size_t index)
 
 void ChooseTypeMenu::MoveToFavorites(size_t index)
 {
-  FileType* f=(FileType*)Item[index].UserData;
+  FileTypeImpl* f=(FileTypeImpl*)Item[index].UserData;
   DeleteItem(index);
   size_t k=AddFavorite(f);
   SetSelected(k);
   HideEmptyGroup();
   if (f->getParamValue(DFavorite)==null){
-    ((FileTypeImpl*)f)->addParam(&DFavorite);
+    f->addParam(&DFavorite);
   }
-  delete f->getParamValue(DFavorite);
+  delete f->getParamNotDefaultValue(DFavorite);
   f->setParamValue(DFavorite,&DTrue);
 }
 
@@ -138,12 +138,12 @@ void ChooseTypeMenu::HideEmptyGroup()
 
 void ChooseTypeMenu::DelFromFavorites(size_t index)
 {
-  FileType* f=(FileType*)Item[index].UserData;
+  FileTypeImpl* f=(FileTypeImpl*)Item[index].UserData;
   DeleteItem(index);
   AddItemInGroup(f);
   if (Item[index].Flags&MIF_SEPARATOR)  SetSelected(GetNext(index));
   else  SetSelected(index);
-  delete f->getParamValue(DFavorite);
+  delete f->getParamNotDefaultValue(DFavorite);
   f->setParamValue(DFavorite,&DFalse);
 }
 

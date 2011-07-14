@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. 1751.1
+
+#Revision: 1752
+	#Author: ctapmex Date: 2011-07-14 14:58:32 +0600 (Чт, 14 июл 2011)
 	1. rollback InternalString
 
 #Revision: 1751

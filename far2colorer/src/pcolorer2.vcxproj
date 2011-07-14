@@ -263,7 +263,6 @@
     <ResourceCompile Include="pcolorer2.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\colorer\src\shared\unicode\InternalString.h" />
     <ClInclude Include="..\far2sdk\farcolor.hpp" />
     <ClInclude Include="..\far2sdk\farkeys.hpp" />
     <ClInclude Include="..\far2sdk\farversion.hpp" />
@@ -356,7 +355,6 @@
     <ClInclude Include="..\..\colorer\src\shared\cregexp\cregexp.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\colorer\src\shared\unicode\InternalString.cpp" />
     <ClCompile Include="ChooseTypeMenu.cpp" />
     <ClCompile Include="FarEditor.cpp" />
     <ClCompile Include="FarEditorSet.cpp" />
