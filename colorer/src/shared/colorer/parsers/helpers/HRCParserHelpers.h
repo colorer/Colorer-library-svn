@@ -24,7 +24,7 @@ class FileTypeImpl;
     @ingroup colorer_parsers
 */
 struct KeywordInfo{
-  const InternalString *keyword;
+  const SString *keyword;
   bool isSymbol;
   const Region* region;
   int  ssShorter;

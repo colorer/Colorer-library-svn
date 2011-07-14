@@ -65,7 +65,7 @@ public:
   /**
    * Copy of the line with parent's start RE.
    */
-  InternalString *backLine;
+  SString *backLine;
 
   /**
    * Tree structure references in parse cache

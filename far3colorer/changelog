@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. rollback InternalString
+
+#Revision: 1751
+	#Author: ctapmex Date: 2011-07-13 16:43:02 +0600 (Ср, 13 июл 2011)
 	1. утечки памяти
 
 #Revision: 1748

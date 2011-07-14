@@ -4,7 +4,6 @@
 TextParserImpl::TextParserImpl()
 {
   CLR_TRACE("TextParserImpl", "constructor");
-  str = null;
   cache = new ParseCache();
   clearCache();
   lineSource = null;
@@ -17,7 +16,6 @@ TextParserImpl::~TextParserImpl()
 {
   clearCache();
   delete cache;
-  delete str;
 }
 
 void TextParserImpl::setFileType(FileType *type){
@@ -221,9 +219,9 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
 
     int cr;
     if (node->kwList->matchCase)
-      cr = str->compareTo(gx, kwlen,node->kwList->kwList[pos].keyword);
+      cr = node->kwList->kwList[pos].keyword->compareTo(DString(*str, gx, kwlen));
     else
-      cr = str->compareToIgnoreCase(gx, kwlen,node->kwList->kwList[pos].keyword);
+      cr = node->kwList->kwList[pos].keyword->compareToIgnoreCase(DString(*str, gx, kwlen));
 
     if (cr == 0 && right-left == 1){
       bool badbound = false;
@@ -254,8 +252,8 @@ int TextParserImpl::searchKW(const SchemeNode *node, int no, int lowlen, int hil
       };
       break;
     };
-    if (cr == -1) right = pos;
-    if (cr == 0 || cr == 1) left = pos;
+    if (cr == 1) right = pos;
+    if (cr == 0 || cr == -1) left = pos;
   };
   return MATCH_NOTHING;
 };
@@ -322,7 +320,7 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         ssubst = vtlist->pushvirt(schemeNode->scheme);
         if (!ssubst) ssubst = schemeNode->scheme;
 
-        InternalString *backLine = new InternalString(str);
+        SString *backLine = new SString(str);
         if (updateCache){
           ResF = forward;
           ResP = parent;
@@ -357,8 +355,8 @@ int TextParserImpl::searchRE(SchemeImpl *cscheme, int no, int lowLen, int hiLen)
         int o_schemeStart = schemeStart;
         SMatches o_matchend = matchend;
         SMatches *o_match;
-        InternalString *o_str;
-        schemeNode->end->getBackTrace((const InternalString**)&o_str, &o_match);
+        DString *o_str;
+        schemeNode->end->getBackTrace((const String**)&o_str, &o_match);
 
         baseScheme = ssubst;
         schemeStart = gx;
@@ -425,9 +423,8 @@ bool TextParserImpl::colorize(CRegExp *root_end_re, bool lowContentPriority)
     // prevents multiple requests on each line
     if (clearLine != gy){
       clearLine = gy;
-      delete str;
-      str = new InternalString(lineSource->getLine(gy));
-      if (str->getWChars() == null){
+      str = lineSource->getLine(gy);
+      if (str == null){
         throw Exception(StringBuffer("null String passed into the parser: ")+SString(gy));
         //!!unreachable code
         //gy = gy2;

@@ -8,7 +8,6 @@ coreobjects = $(unzipobjects) \
               $(obj_output_slash)Character.$(obj)     \
               $(obj_output_slash)CharacterClass.$(obj)\
               $(obj_output_slash)String.$(obj)        \
-              $(obj_output_slash)InternalString.$(obj)        \
               $(obj_output_slash)DString.$(obj)       \
               $(obj_output_slash)SString.$(obj)       \
               $(obj_output_slash)StringBuffer.$(obj)  \
