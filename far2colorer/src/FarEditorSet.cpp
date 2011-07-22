@@ -345,6 +345,11 @@ void FarEditorSet::chooseType()
       }
       else
         if (BreakCode==2){
+          if (i==0)  {
+            menu.SetSelected(i);
+            continue;
+          }
+
           FarDialogItem KeyAssignDlgData[]=
           { 
             {DI_DOUBLEBOX,3,1,30,4,0,0,0,0,GetMsg(mKeyAssignDialogTitle)},
