@@ -1,8 +1,8 @@
 .Language=English,English
-.PluginContents=Colorer
+.PluginContents=FarColorer
 
 @contents
-$^#Colorer
+$^#FarColorer
 
     ~Plugin setup.~@config@
 
@@ -15,10 +15,10 @@ $^#Colorer
     ~About authors.~@author@
 
 @config
-$^#Colorer's settings.#
+$^#FarColorer's settings.#
 
   #Enabled#
-     Enable/Disable Colorer.
+     Enable/Disable FarColorer.
 
   #Cross#
      [ ] Do not show ever
@@ -37,9 +37,9 @@ $^#Colorer's settings.#
      and the function name itself.
 
   #Change background editor#
-     In the set condition, Colorer set in System Preferences color of 
+     In the set condition, FarColorer set in System Preferences color of 
      "Plain Text" color group "editor" such as and the default color for 
-     the color scheme Colorer.
+     the color scheme FarColorer.
      The effect is visible on the files, the number of rows in less than window height
      editor.
      In TrueMod desired visual effect is not achieved.
@@ -49,8 +49,8 @@ $^#Colorer's settings.#
      The choice does not work if the plugin is disabled.
 
   #catalog.xml file:#
-     Full file path sets default catalog file for Colorer.
-     If this field is empty Colorer trying to find the file automatically
+     Full file path sets default catalog file for FarColorer.
+     If this field is empty FarColorer trying to find the file automatically
      in a subfolder of "base" parent directory plugin.
 
   #Users file of schemes#
@@ -91,7 +91,7 @@ in the system (non-user) settings of the scheme or scheme is taken from default.
 @cmdline
 $# Command line support
     You can use the plugin from FAR's command line with prefix 'clr:'
-to view files with syntax highlighting in Colorer's internal viewer.
+to view files with syntax highlighting in FarColorer's internal viewer.
 To view file you have to specify file name after the 'clr:' prefix
 in FAR's command line. This function is equal to #colorer.exe# program
 features, but doesn't load HRC database each time, so it works faster.
@@ -122,7 +122,7 @@ Choose any item to go to corresponding line in text.
       Filter out the outliner items against entered filter
 
 @menu
-$#Colorer operation
+$#FarColorer operation
 
   #1 List types#          ~Alt-L~
     Lists all supported file types. You can choose any of them to use
@@ -134,7 +134,7 @@ current region under cursor and jumps there.
 
   #3 Select block#        ~Alt-]~
     Moves cursor to start of block and selects it all. You can call this
-function as on block limits as inside it. In second case Colorer will find
+function as on block limits as inside it. In second case FarColorer will find
 start and end of nearest block automatically.
 
   #4 Select pair#         ~Alt-P~
@@ -165,7 +165,7 @@ some problems occurs in current syntax.
     Reload the configuration plugin and library schemes.
 
   #C Configuration#
-    Calls Colorer ~configuration menu~@config@.
+    Calls FarColorer ~configuration menu~@config@.
 
 @hrd
 $# Color style selection
@@ -173,10 +173,10 @@ $# Color style selection
 
 @exception
 $# Exception occured
-    Exception happened while Colorer work.
+    Exception happened while FarColorer work.
 All further processing would be disabled. You can re-enable
-Colorer from it's settings menu after locating and removing
-exception cause. All extended information in Colorer logging
+FarColorer from it's settings menu after locating and removing
+exception cause. All extended information in FarColorer logging
 file (colorer.log by default)
 
 @filetypechoose
@@ -199,7 +199,7 @@ $# Define key
     Keys 0-9, A-Z
 
 @author
-$^#Colorer is a syntax highlighting plugin for FAR Manager.
+$^#FarColorer is a syntax highlighting plugin for FAR Manager.
     #Plugin home site#
            http://colorer.sf.net
 

@@ -138,7 +138,7 @@ void FarEditorSet::viewFile(const String &path)
   if (viewFirst==0) viewFirst=1;
   try{
     if (!rEnabled){
-      throw Exception(DString("Colorer is disabled"));
+      throw Exception(DString("FarColorer is disabled"));
     }
 
     // Creates store of text lines
