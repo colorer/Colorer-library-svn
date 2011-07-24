@@ -25,6 +25,7 @@ struct color{
 };
 
 const int CurrentEditor = -1;
+const DString DDefaultScheme=DString("default");
 const DString DShowCross=DString("show-cross");
 const DString DNone=DString("none");
 const DString DVertical=DString("vertical");

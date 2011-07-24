@@ -15,7 +15,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   ret_strNumber = -1;
   maxLineLength = 0;
   fullBackground = true;
-  drawCross = 2;
+  drawCross = 0;
   showHorizontalCross = showVerticalCross = false;
   crossZOrder    = 0;
   horzCrossColor = color(); //0x0E;
@@ -89,94 +89,41 @@ void FarEditor::reloadTypeSettings()
 {
   FileType *ftype = baseEditor->getFileType();
   HRCParser *hrcParser = parserFactory->getHRCParser();
-  FileType *def = hrcParser->getFileType(&DString("default"));
+  FileType *def = hrcParser->getFileType(&DDefaultScheme);
 
   if (def == NULL){
     throw Exception(DString("No 'default' file type found"));
   }
 
   int backparse = def->getParamValueInt(DBackparse, 2000);
-  maxLineLength = def->getParamValueInt(DMaxLen, 0);
-  newfore = def->getParamValueInt(DDefFore, -1);
-  newback = def->getParamValueInt(DDefBack, -1);
-  const String *value;
-  value = def->getParamValue(DFullback);
-
-  if (value != NULL && value->equals(&DNo)){
-    fullBackground = false;
-  }
-
-  value = def->getParamValue(DShowCross);
-  if (drawCross==2 && value != NULL){
-    if (value->equals(&DNone)){
-      showHorizontalCross = false;
-      showVerticalCross   = false;
-    };
-
-    if (value->equals(&DVertical)){
-      showHorizontalCross = false;
-      showVerticalCross   = true;
-    };
-
-    if (value->equals(&DHorizontal)){
-      showHorizontalCross = true;
-      showVerticalCross   = false;
-    };
-
-    if (value->equals(&DBoth)){
-      showHorizontalCross = true;
-      showVerticalCross   = true;
-    };
-  }
-
-  value = def->getParamValue(DCrossZorder);
-
-  if (value != NULL && value->equals(&DTop)){
-    crossZOrder = 1;
-  }
-
-  // installs custom file properties
   backparse = ftype->getParamValueInt(DBackparse, backparse);
-  maxLineLength = ftype->getParamValueInt(DMaxLen, maxLineLength);
-  newfore = ftype->getParamValueInt(DDefFore, newfore);
-  newback = ftype->getParamValueInt(DDefBack, newback);
-  value = ftype->getParamValue(DFullback);
+  baseEditor->setBackParse(backparse);
 
+  maxLineLength = def->getParamValueInt(DMaxLen, 0);
+  maxLineLength = ftype->getParamValueInt(DMaxLen, maxLineLength);
+
+  newfore = def->getParamValueInt(DDefFore, -1);
+  newfore = ftype->getParamValueInt(DDefFore, newfore);
+
+  newback = def->getParamValueInt(DDefBack, -1);
+  newback = ftype->getParamValueInt(DDefBack, newback);
+
+  const String *value;
+  value = ftype->getParamValue(DFullback);
+  if (!value){
+    value = def->getParamValue(DFullback);
+  }
   if (value != NULL && value->equals(&DNo)){
     fullBackground = false;
-  }
-
-  value = ftype->getParamValue(DShowCross);
-
-  if (drawCross==2 && value != NULL){
-    if (value->equals(&DNone)){
-      showHorizontalCross = false;
-      showVerticalCross   = false;
-    };
-
-    if (value->equals(&DVertical)){
-      showHorizontalCross = false;
-      showVerticalCross   = true;
-    };
-
-    if (value->equals(&DHorizontal)){
-      showHorizontalCross = true;
-      showVerticalCross   = false;
-    };
-
-    if (value->equals(&DBoth)){
-      showHorizontalCross = true;
-      showVerticalCross   = true;
-    };
   }
 
   value = ftype->getParamValue(DCrossZorder);
-
+  if (!value){
+    value = def->getParamValue(DCrossZorder);
+  }
   if (value != NULL && value->equals(&DTop)){
     crossZOrder = 1;
   }
-
-  baseEditor->setBackParse(backparse);
 }
 
 FileType *FarEditor::getFileType()
@@ -197,7 +144,36 @@ void FarEditor::setDrawCross(int _drawCross)
     showVerticalCross   = true;
     break;
   case 2:
-    reloadTypeSettings();
+    FileType *ftype = baseEditor->getFileType();
+    HRCParser *hrcParser = parserFactory->getHRCParser();
+    FileType *def = hrcParser->getFileType(&DDefaultScheme);
+    const String *value;
+    value = ftype->getParamValue(DShowCross);
+    if (!value){
+      value = def->getParamValue(DShowCross);
+    }
+
+    if (value){
+      if (value->equals(&DNone)){
+        showHorizontalCross = false;
+        showVerticalCross   = false;
+      };
+
+      if (value->equals(&DVertical)){
+        showHorizontalCross = false;
+        showVerticalCross   = true;
+      };
+
+      if (value->equals(&DHorizontal)){
+        showHorizontalCross = true;
+        showVerticalCross   = false;
+      };
+
+      if (value->equals(&DBoth)){
+        showHorizontalCross = true;
+        showVerticalCross   = true;
+      };
+    }
     break;
   }
 }
@@ -1256,22 +1232,9 @@ const wchar_t *FarEditor::GetMsg(int msg)
 
 void FarEditor::cleanEditor()
 {
- /* color col;
-  col.concolor = (int)info->AdvControl(&MainGuid,ACTL_GETCOLOR,0,(void *)COL_EDITORTEXT);*/
   enterHandler();
   for (int i=0; i<ei.TotalLines; i++){
-
     deleteFarColor(i,-1);
- /*   EditorGetString egs;
-    egs.StringNumber=i;
-    info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);*/
-
-   /* if (ei.LeftPos + ei.WindowSizeX>egs.StringLength){
-      addFARColor(i,0,ei.LeftPos + ei.WindowSizeX,col);
-    }
-    else{
-      addFARColor(i,0,egs.StringLength,col);
-    }*/
   }
 }
 

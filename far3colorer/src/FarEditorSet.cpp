@@ -894,7 +894,7 @@ void FarEditorSet::ReloadBase()
     FarHrcSettings p(parserFactory);
     p.readProfile();
     p.readUserProfile();
-    defaultType= (FileTypeImpl*)hrcParser->getFileType(&DString("default"));
+    defaultType= (FileTypeImpl*)hrcParser->getFileType(&DDefaultScheme);
 
     try{
       regionMapper = parserFactory->createStyledMapper(&hrdClass, &hrdName);
