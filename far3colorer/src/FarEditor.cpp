@@ -1187,12 +1187,12 @@ void FarEditor::deleteFarColor(int lno, int s)
 void FarEditor::addFARColor(int lno, int s, int e, color col)
 {
   if (TrueMod){
-    AnnotationInfo ai;
-    ai.fg_color = ((col.fg>>16)&0xFF) + (col.fg&0x00FF00) + ((col.fg&0xFF)<<16);
-    ai.bk_color = ((col.bk>>16)&0xFF) + (col.bk&0x00FF00) + ((col.bk&0xFF)<<16);
-    ai.bk_valid = ai.fg_valid = 1;
-    ai.style = col.style;
-    addAnnotation(lno, s, e, ai);
+    
+    //ai.fg_color = ((col.fg>>16)&0xFF) + (col.fg&0x00FF00) + ((col.fg&0xFF)<<16);
+    //ai.bk_color = ((col.bk>>16)&0xFF) + (col.bk&0x00FF00) + ((col.bk&0xFF)<<16);
+    //ai.bk_valid = ai.fg_valid = 1;
+    //ai.style = col.style;
+   // addAnnotation(lno, s, e, ai);
   }else{
     EditorColor ec;
     ec.StructSize = sizeof(EditorColor);
@@ -1200,9 +1200,8 @@ void FarEditor::addFARColor(int lno, int s, int e, color col)
     ec.StringNumber = lno;
     ec.StartPos = s;
     ec.EndPos = e-1;
-    //ec.Color = col.concolor;
     ec.Owner = MainGuid;
-    ec.Priority =0;
+    ec.Priority = 0;
     ec.Color.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
     ec.Color.BackgroundColor = col.cbk;
     ec.Color.ForegroundColor = col.cfg;
@@ -1212,17 +1211,6 @@ void FarEditor::addFARColor(int lno, int s, int e, color col)
   }
 
 }
-
-void FarEditor::addAnnotation(int lno, int s, int e, AnnotationInfo &ai)
-{
-  EditorAnnotation ea;
-
-  ea.StringNumber = lno;
-  ea.StartPos = s;
-  ea.EndPos = e-1;
-  memcpy(ea.annotation_raw, ai.raw, sizeof(ai.raw));
-  info->EditorControl(CurrentEditor, ECTL_ADDANNOTATION, NULL, &ea);
-} 	
 
 const wchar_t *FarEditor::GetMsg(int msg)
 {

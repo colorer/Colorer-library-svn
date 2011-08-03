@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2124
+  Plugin API for Far Manager 3.0 build 2125
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2124
+#define FARMANAGERVERSION_BUILD 2125
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -1337,7 +1337,6 @@ enum EDITOR_CONTROL_COMMANDS
 	ECTL_UNDOREDO,
 	ECTL_GETFILENAME,
 	ECTL_DELCOLOR,
-	ECTL_ADDANNOTATION=100,
 };
 
 enum EDITOR_SETPARAMETER_TYPES
@@ -1525,13 +1524,6 @@ struct EditorColor
 	unsigned Priority;
 };
 
-struct EditorAnnotation
-{
-	int StringNumber;
-	int StartPos;
-	int EndPos;
-	int annotation_raw[8];
-};
 struct EditorDeleteColor
 {
 	size_t StructSize;

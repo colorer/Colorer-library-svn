@@ -173,7 +173,6 @@ private:
   void showOutliner(Outliner *outliner);
   void addFARColor(int lno, int s, int e, color col);
   void deleteFarColor(int lno, int s);
-  void addAnnotation(int lno, int s, int e, AnnotationInfo &ai);
   const wchar_t *GetMsg(int msg);
 };
 #endif

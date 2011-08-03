@@ -69,9 +69,6 @@
     <ClInclude Include="..\far3sdk\plugin.hpp">
       <Filter>far3sdk</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleAnnotation.h">
-      <Filter>pcolorer3</Filter>
-    </ClInclude>
     <ClInclude Include="FarEditor.h">
       <Filter>pcolorer3</Filter>
     </ClInclude>

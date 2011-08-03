@@ -51,7 +51,7 @@ const DString DAutodetect=DString("autodetect");
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
 IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_USERHRC, IDX_USERHRC_EDIT,
-IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_TMMESSAGE,IDX_HRD_TM, 
+IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_HRD_TM, 
 IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_HRC_SETTING, IDX_OK, IDX_CANCEL};
 
 enum
@@ -145,11 +145,6 @@ private:
   void dropCurrentEditor(bool clean);
   /** Disables all plugin processing*/
   void disableColorer();
-  
-  bool checkConEmu();
-  bool checkFarTrueMod();
-  bool checkConsoleAnnotationAvailable();
-  bool consoleAnnotationAvailable;
 
   size_t getCountFileTypeAndGroup();
   FileTypeImpl* getFileTypeByIndex(int idx);

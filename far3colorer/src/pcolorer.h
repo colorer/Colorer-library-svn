@@ -3,7 +3,6 @@
 
 #include<plugin.hpp>
 #include<farcolor.hpp>
-#include"ConsoleAnnotation.h"
 
 #include<wctype.h>
 #include<wchar.h>
@@ -60,7 +59,7 @@ enum
   mGotcha, mChoose,
   mReloading, mCantLoad, mCantOpenFile, mDie, mTry,
   mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
-  mNoFarTM, mNoConEmu, mNoFarTMConEmu, mUserHrdFile, mUserHrcFile, mUserHrcSetting,
+  mUserHrdFile, mUserHrcFile, mUserHrcSetting,
   mUserHrcSettingDialog, mListSyntax, mParamList,mParamValue, mAutoDetect, mFavorites,
   mKeyAssignDialogTitle, mKeyAssignTextTitle
 };

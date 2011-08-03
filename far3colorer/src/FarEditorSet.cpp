@@ -477,7 +477,6 @@ void FarEditorSet::configure(bool fromEditor)
       { DI_EDIT,6,14,52,5,0,L"userhrd",0,DIF_HISTORY,0,0,0},  //IDX_USERHRD_EDIT
       { DI_SINGLEBOX,4,16,54,16,0,0,0,0,0,0,0},               //IDX_TM_BOX,
       { DI_CHECKBOX,5,17,0,0,0,0,0,0,0,0,0},                  //IDX_TRUEMOD,
-      { DI_TEXT,20,17,0,17,0,0,0,0,0,0,0},                    //IDX_TMMESSAGE,
       { DI_TEXT,5,18,0,18,0,0,0,0,0,0,0},                     //IDX_HRD_TM,
       { DI_BUTTON,20,18,0,0,0,0,0,0,0,0,0},                   //IDX_HRD_SELECT_TM,
       { DI_SINGLEBOX,4,19,54,19,0,0,0,0,0,0,0},               //IDX_TM_BOX_OFF,
@@ -528,23 +527,6 @@ void FarEditorSet::configure(bool fromEditor)
     fdi[IDX_CANCEL].Data = GetMsg(mCancel);
     fdi[IDX_TM_BOX].Data = GetMsg(mTrueModSetting);
 
-    if (!checkConsoleAnnotationAvailable() && fromEditor){
-      fdi[IDX_HRD_SELECT_TM].Flags = DIF_DISABLE;
-      fdi[IDX_TRUEMOD].Flags = DIF_DISABLE;
-      if (!checkFarTrueMod()){
-        if (!checkConEmu()){
-          fdi[IDX_TMMESSAGE].Data = GetMsg(mNoFarTMConEmu);
-        }
-        else{
-          fdi[IDX_TMMESSAGE].Data = GetMsg(mNoFarTM);
-        }
-      }
-      else{
-        if (!checkConEmu()){
-          fdi[IDX_TMMESSAGE].Data = GetMsg(mNoConEmu);
-        }
-      }
-    }
     /*
     * Dialog activation
     */
@@ -876,8 +858,7 @@ void FarEditorSet::ReloadBase()
   parserFactory = NULL;
   regionMapper = NULL;
 
-  consoleAnnotationAvailable=checkConsoleAnnotationAvailable() && TrueModOn;
-  if (consoleAnnotationAvailable){
+  if (TrueModOn){
     hrdClass = DRgb;
     hrdName = sHrdNameTm;
   }
@@ -949,7 +930,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
   String *s=getCurrentFileName();
   editor->chooseFileType(s);
   delete s;
-  editor->setTrueMod(consoleAnnotationAvailable);
+  editor->setTrueMod(TrueModOn);
   editor->setRegionMapper(regionMapper);
   editor->setDrawCross(drawCross);
   editor->setDrawPairs(drawPairs);
@@ -1014,7 +995,7 @@ void FarEditorSet::disableColorer()
 void FarEditorSet::ApplySettingsToEditors()
 {
   for (FarEditor *fe = farEditorInstances.enumerate(); fe != NULL; fe = farEditorInstances.next()){
-    fe->setTrueMod(consoleAnnotationAvailable);
+    fe->setTrueMod(TrueModOn);
     fe->setDrawCross(drawCross);
     fe->setDrawPairs(drawPairs);
     fe->setDrawSyntax(drawSyntax);
@@ -1117,35 +1098,9 @@ void FarEditorSet::SaveSettings()
   ColorerSettings.Set(0, cRegUserHrcPath, sUserHrcPath->getWChars());
 }
 
-bool FarEditorSet::checkConEmu()
-{
-  bool conemu;
-  wchar_t shareName[255];
-  wsprintf(shareName, AnnotationShareName, sizeof(AnnotationInfo), GetConsoleWindow());
-
-  HANDLE hSharedMem = OpenFileMapping( FILE_MAP_ALL_ACCESS, FALSE, shareName);
-  conemu = (hSharedMem != 0) ? 1 : 0;
-  CloseHandle(hSharedMem);
-  return conemu;
-}
-
-bool FarEditorSet::checkFarTrueMod()
-{
-  EditorAnnotation ea;
-  ea.StringNumber = 1;
-  ea.StartPos = 1;
-  ea.EndPos = 2;
-  return !!Info.EditorControl(CurrentEditor, ECTL_ADDANNOTATION, NULL, &ea);
-}
-
-bool FarEditorSet::checkConsoleAnnotationAvailable()
-{
-  return checkConEmu()&&checkFarTrueMod();
-}
-
 bool FarEditorSet::SetBgEditor()
 {
-  if (rEnabled && ChangeBgEditor && !consoleAnnotationAvailable){
+  if (rEnabled && ChangeBgEditor && !TrueModOn){
 
 		const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
 
