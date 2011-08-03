@@ -18,8 +18,8 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   drawCross = 0;
   showHorizontalCross = showVerticalCross = false;
   crossZOrder    = 0;
-  horzCrossColor = color(); //0x0E;
-  vertCrossColor = color(); //0x0E;
+  horzCrossColor = FarColor(); 
+  vertCrossColor = FarColor();
   drawPairs = drawSyntax = true;
   oldOutline = false;
   newback = newfore = -1;
@@ -206,8 +206,8 @@ void FarEditor::setRegionMapper(RegionMapper *rs)
   vertCrossColor = convert(StyledRegion::cast(baseEditor->rd_def_VertCross));
 
   //TODO
-  if (horzCrossColor.concolor == 0) horzCrossColor.concolor = 0x0E;
-  if (vertCrossColor.concolor == 0) vertCrossColor.concolor = 0x0E;
+  //if (horzCrossColor.concolor == 0) horzCrossColor.concolor = 0x0E;
+  //if (vertCrossColor.concolor == 0) vertCrossColor.concolor = 0x0E;
 }
 
 void FarEditor::matchPair()
@@ -548,7 +548,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
-      vertCrossColor.concolor |= 0x10000;
+      vertCrossColor.BackgroundColor|=0x10;
       addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
     };
 
@@ -570,21 +570,23 @@ int FarEditor::editorEvent(int event, void *param)
         }
 
         if ((lno != ei.CurLine || !showHorizontalCross || crossZOrder == 0)){
-          color col = convert(l1->styled());
+          FarColor col = convert(l1->styled());
 
           //TODO
           if (lno == ei.CurLine && showHorizontalCross){
             if (!TrueMod){
               if (foreDefault(col)){
-                col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
+                col.BackgroundColor&=0xF0;
+                col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
               }
 
               if (backDefault(col)){
-                col.concolor = (col.concolor&0xF) + (horzCrossColor.concolor&0xF0);
+                col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
+                col.ForegroundColor&=0xF;
               }
             }
           };
-          if (!col.concolor){
+          if (!col.BackgroundColor && !col.ForegroundColor){
             continue;
           }
           //
@@ -606,14 +608,20 @@ int FarEditor::editorEvent(int event, void *param)
             col = convert(l1->styled());
 
 
-            if (foreDefault(col)) col.concolor = (col.concolor&0xF0) + (vertCrossColor.concolor&0xF);
+            if (foreDefault(col)){
+              col.BackgroundColor&=0xF0;
+              col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
+            }
 
-            if (backDefault(col)) col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
+            if (backDefault(col)){
+              col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
+              col.ForegroundColor&=0xF;
+            }
 
             ecp_cl.StringNumber = lno;
             ecp_cl.SrcPos = ecp.DestPos;
             info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
-            col.concolor|=0x10000;
+            col.BackgroundColor|=0x10;
             addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col);
             vertCrossDone = true;
           };
@@ -624,7 +632,7 @@ int FarEditor::editorEvent(int event, void *param)
       ecp_cl.StringNumber = lno;
       ecp_cl.SrcPos = ecp.DestPos;
       info->EditorControl(CurrentEditor, ECTL_TABTOREAL ,NULL, &ecp_cl);
-      vertCrossColor.concolor |= 0x10000;
+      vertCrossColor.BackgroundColor|=0x10;
       addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
     };
   };
@@ -637,16 +645,18 @@ int FarEditor::editorEvent(int event, void *param)
   }
 
   if (pm != NULL){
-    color col = convert(pm->start->styled());
+    FarColor col = convert(pm->start->styled());
 
     // TODO
     if (!TrueMod && showHorizontalCross){
       if (foreDefault(col)){ 
-        col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
+        col.BackgroundColor&=0xF0;
+        col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
       }
 
       if (backDefault(col)){
-        col.concolor = (col.concolor&0xF) + (horzCrossColor.concolor&0xF0);
+        col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
+        col.ForegroundColor&=0xF;
       }
     };
     //
@@ -657,14 +667,16 @@ int FarEditor::editorEvent(int event, void *param)
       col = convert(pm->start->styled());
 
       if (foreDefault(col)){
-        col.concolor = (col.concolor&0xF0) + (vertCrossColor.concolor&0xF);
+        col.BackgroundColor&=0xF0;
+        col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
       }
 
       if (backDefault(col)){
-        col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
+        col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
+        col.ForegroundColor&=0xF;
       }
 
-      col.concolor|=0x10000;
+      col.BackgroundColor|=0x10;
       addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, col);
     };
     //
@@ -674,11 +686,13 @@ int FarEditor::editorEvent(int event, void *param)
       //
       if (!TrueMod && showHorizontalCross && pm->eline == ei.CurLine){
         if (foreDefault(col)){
-          col.concolor = (col.concolor&0xF0) + (horzCrossColor.concolor&0xF);
+          col.BackgroundColor&=0xF0;
+          col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
         }
 
         if (backDefault(col)){
-          col.concolor = (col.concolor&0xF) + (horzCrossColor.concolor&0xF0);
+          col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
+          col.ForegroundColor&=0xF;
         }
       };
       //
@@ -692,14 +706,16 @@ int FarEditor::editorEvent(int event, void *param)
         col = convert(pm->end->styled());
 
         if (foreDefault(col)){
-          col.concolor = (col.concolor&0xF0) + (vertCrossColor.concolor&0xF);
+          col.BackgroundColor&=0xF0;
+          col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
         }
 
         if (backDefault(col)){
-          col.concolor = (col.concolor&0xF) + (vertCrossColor.concolor&0xF0);
+          col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
+          col.ForegroundColor&=0xF;
         }
         
-        col.concolor|=0x10000;
+        col.BackgroundColor|=0x10;
         addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, col);
       };
       //
@@ -1115,63 +1131,45 @@ void FarEditor::enterHandler()
   ret_strNumber = -1;
 }
 
-color FarEditor::convert(const StyledRegion *rd)
+FarColor FarEditor::convert(const StyledRegion *rd)
 {
-  color col;
+  FarColor col=FarColor();
 
+  if (!TrueMod) col.Flags|=FCF_4BITMASK;
   if (rdBackground == NULL) return col;
 
   int fore = (newfore != -1) ? newfore : rdBackground->fore;
   int back = (newback != -1) ? newback : rdBackground->back;
-
-  if (TrueMod)
-  {
-    if (rd != NULL){
-      col.fg = rd->fore;
-      col.bk = rd->back;
-    }
-
-    if (rd == NULL || !rd->bfore)
-      col.fg = fore;
-
-    if (rd == NULL || !rd->bback)
-      col.bk = back;
-
-    if (rd != NULL)
-      col.style = rd->style;
-
-    return col;
-
-  }else{
-    if (rd != NULL){
-      col.cfg = rd->fore;
-      col.cbk = rd->back;
-    }
-
-    if (rd == NULL || !rd->bfore)
-      col.cfg = fore;
-
-    if (rd == NULL || !rd->bback)
-      col.cbk = back;
-
-    return col;
+  
+  if (rd != NULL){
+    col.ForegroundColor = rd->fore;
+    col.BackgroundColor = rd->back;
   }
+
+  if (rd == NULL || !rd->bfore)
+    col.ForegroundColor = fore;
+
+  if (rd == NULL || !rd->bback)
+    col.BackgroundColor = back;
+
+  if (rd != NULL){
+    if (rd->style&StyledRegion::RD_BOLD) col.Flags|=FCF_FG_BOLD;
+    if (rd->style&StyledRegion::RD_ITALIC) col.Flags|=FCF_FG_ITALIC;
+    if (rd->style&StyledRegion::RD_UNDERLINE) col.Flags|=FCF_FG_UNDERLINE;
+  }
+
+
+  return col;
 }
 
-bool FarEditor::foreDefault(color col)
+bool FarEditor::foreDefault(FarColor col)
 {
-  if (TrueMod)
-    return col.fg == rdBackground->fore;
-  else
-    return col.cfg == rdBackground->fore;
+  return col.ForegroundColor == rdBackground->fore;
 }
 
-bool FarEditor::backDefault(color col)
+bool FarEditor::backDefault(FarColor col)
 {
-  if (TrueMod)
-    return col.bk == rdBackground->back;
-  else
-    return col.cbk == rdBackground->back;
+  return col.BackgroundColor == rdBackground->back;
 }
 
 void FarEditor::deleteFarColor(int lno, int s)
@@ -1184,16 +1182,8 @@ void FarEditor::deleteFarColor(int lno, int s)
     info->EditorControl(CurrentEditor, ECTL_DELCOLOR, NULL, &edc);
 }
 
-void FarEditor::addFARColor(int lno, int s, int e, color col)
+void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
 {
-  if (TrueMod){
-    
-    //ai.fg_color = ((col.fg>>16)&0xFF) + (col.fg&0x00FF00) + ((col.fg&0xFF)<<16);
-    //ai.bk_color = ((col.bk>>16)&0xFF) + (col.bk&0x00FF00) + ((col.bk&0xFF)<<16);
-    //ai.bk_valid = ai.fg_valid = 1;
-    //ai.style = col.style;
-   // addAnnotation(lno, s, e, ai);
-  }else{
     EditorColor ec;
     ec.StructSize = sizeof(EditorColor);
     ec.Flags = 0;
@@ -1202,14 +1192,10 @@ void FarEditor::addFARColor(int lno, int s, int e, color col)
     ec.EndPos = e-1;
     ec.Owner = MainGuid;
     ec.Priority = 0;
-    ec.Color.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
-    ec.Color.BackgroundColor = col.cbk;
-    ec.Color.ForegroundColor = col.cfg;
+    ec.Color = col;
     CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
     info->EditorControl(CurrentEditor, ECTL_ADDCOLOR, NULL, &ec);
     CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
-  }
-
 }
 
 const wchar_t *FarEditor::GetMsg(int msg)

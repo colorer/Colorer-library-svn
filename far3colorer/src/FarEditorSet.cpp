@@ -1100,7 +1100,7 @@ void FarEditorSet::SaveSettings()
 
 bool FarEditorSet::SetBgEditor()
 {
-  if (rEnabled && ChangeBgEditor && !TrueModOn){
+  if (rEnabled && ChangeBgEditor){
 
 		const StyledRegion* def_text=StyledRegion::cast(regionMapper->getRegionDefine(DString("def:Text")));
 
@@ -1111,8 +1111,12 @@ bool FarEditorSet::SetBgEditor()
 		fsc.StartIndex = COL_EDITORTEXT;
 		fc.BackgroundColor = def_text->back;
 		fc.ForegroundColor = def_text->fore;
-		fc.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
-		fc.Reserved = null;
+    if (TrueModOn){
+      fc.Flags = 0;
+    }else{
+      fc.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
+    }
+    fc.Reserved = null;
 		fsc.Colors = &fc;
 		return !!Info.AdvControl(&MainGuid,ACTL_SETARRAYCOLOR,0,&fsc);
   }
