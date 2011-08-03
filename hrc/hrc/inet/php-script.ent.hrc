@@ -6,6 +6,9 @@
 <region name="HereDoc" parent="perl:HereDoc"/>
 <region name="HereDocName" parent="perl:HereDocName"/>
 <region name="HereDocLt" parent="perl:HereDocLt"/>
+<region name="NowDoc" parent="perl:HereDoc"/>
+<region name="NowDocName" parent="perl:HereDocName"/>
+<region name="NowDocLt" parent="perl:HereDocLt"/>
 <region name="SystemExec" parent="perl:SystemExec"/>
 <region name="VarString" parent="def:Var"/>
 
@@ -208,14 +211,21 @@
     <block start="/\/\*/" end="/\*\//" scheme="Comment"
         region="Comment" region00="PairStart" region10="PairEnd"
     />
-    
-    <!-- heredoc -->
-    <block start="/(&lt;&lt;&lt;)\s*?([a-zA-Z_][\w_]*)(\s.*)?$/" end="/^(\y2);?$/" 
+
+    <!-- heredoc -->    
+    <block start="/(&lt;&lt;&lt;)\s*?&quot;?([a-zA-Z_][\w_]*)&quot;?(\s.*)?$/" end="/^(\y2);?$/" 
         scheme="StringCore" region="HereDoc" 
         region00="PairStart" region10="PairEnd" region03="def:Error"
         region01="HereDocLt" region02="HereDocName" region11="HereDocName"
     />
     
+    <!-- nowdoc -->
+    <block start="/(&lt;&lt;&lt;)\s*?'([a-zA-Z_][\w_]*)'(\s.*)?$/" end="/^(\y2);?$/" 
+        scheme="StringBaseCore" region="String" 
+        region00="PairStart" region10="PairEnd" region03="def:Error"
+        region01="NowDocLt" region02="NowDocName" region11="NowDocName"
+    />
+
     <!--  System command -->
     <block start="/`/" end="/`/" scheme="StringCore" 
         region="SystemExec" region00="String" region10="String"
