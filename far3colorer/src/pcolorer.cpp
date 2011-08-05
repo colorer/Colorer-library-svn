@@ -152,6 +152,15 @@ int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *Info)
   return editorSet->editorInput(Info->Rec);
 }
 
+// in order to not fall when it starts in far2 
+int WINAPI GetMinFarVersionW(void)
+{
+  #define MAKEFARVERSION_OLD(major,minor,build) ( ((major)<<8) | (minor) | ((build)<<16))
+  
+  return MAKEFARVERSION_OLD(3,0,2130);
+}
+
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *

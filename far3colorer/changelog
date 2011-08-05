@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. защита от использования на far2
+
+#Revision: 1770
+	#Author: ctapmex Date: 2011-08-05 11:15:28 +0600 (Пт, 05 авг 2011)
 	1. продолжаем переделку truemod
 
 #Revision: 1769
