@@ -30,6 +30,8 @@ const DString DFullback=DString("fullback");
 const DString DHotkey=DString("hotkey");
 const DString DFavorite=DString("favorite");
 
+#define revertRGB(x) (BYTE)(x>>16 & 0xff)|((BYTE)(x>>8 & 0xff)<<8)|((BYTE)(x & 0xff)<<16)
+
 /** FAR Editor internal plugin structures.
     Implements text parsing and different
     editor extended functions.

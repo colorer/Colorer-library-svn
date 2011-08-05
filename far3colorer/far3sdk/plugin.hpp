@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2125
+  Plugin API for Far Manager 3.0 build 2130
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2125
+#define FARMANAGERVERSION_BUILD 2130
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -61,20 +61,24 @@ other possible license with no implications from the above license on them.
 
 typedef unsigned __int64 FARCOLORFLAGS;
 static const FARCOLORFLAGS
+	FCF_NONE          = 0,
 	FCF_FG_4BIT       = 0x0000000000000001ULL,
 	FCF_BG_4BIT       = 0x0000000000000002ULL,
-	FCF_4BITMASK      = 0x0000000000000003ULL, //FCF_FG_4BIT|FCF_BG_4BIT
 
-	FCF_FG_BOLD       = 0x0000000000000004ULL,
-	FCF_FG_ITALIC     = 0x0000000000000008ULL,
-	FCF_FG_UNDERLINE  = 0x0000000000000010ULL,
-	FCF_STYLEMASK     = 0x000000000000001cULL; //FCF_FG_BOLD|FCF_FG_ITALIC|FCF_FG_UNDERLINE
+	FCF_4BITMASK      = 0x0000000000000003ULL, // FCF_FG_4BIT|FCF_BG_4BIT
+
+	FCF_EXTENDEDFLAGS = 0xFFFFFFFFFFFFFFFCULL, // ~FCF_4BITMASK
+
+	FCF_FG_BOLD       = 0x1000000000000000ULL,
+	FCF_FG_ITALIC     = 0x2000000000000000ULL,
+	FCF_FG_UNDERLINE  = 0x4000000000000000ULL,
+	FCF_STYLEMASK     = 0x7000000000000000ULL; // FCF_FG_BOLD|FCF_FG_ITALIC|FCF_FG_UNDERLINE
 
 struct FarColor
 {
-	unsigned __int64 Flags;
-	unsigned int ForegroundColor;
-	unsigned int BackgroundColor;
+	FARCOLORFLAGS Flags;
+	COLORREF ForegroundColor;
+	COLORREF BackgroundColor;
 	void* Reserved;
 };
 

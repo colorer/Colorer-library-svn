@@ -1135,7 +1135,6 @@ FarColor FarEditor::convert(const StyledRegion *rd)
 {
   FarColor col=FarColor();
 
-  if (!TrueMod) col.Flags|=FCF_4BITMASK;
   if (rdBackground == NULL) return col;
 
   int fore = (newfore != -1) ? newfore : rdBackground->fore;
@@ -1152,12 +1151,17 @@ FarColor FarEditor::convert(const StyledRegion *rd)
   if (rd == NULL || !rd->bback)
     col.BackgroundColor = back;
 
+  if (!TrueMod) col.Flags|=FCF_4BITMASK;
+  else {
+    col.ForegroundColor=revertRGB(col.ForegroundColor);
+    col.BackgroundColor=revertRGB(col.BackgroundColor);
+  }
+
   if (rd != NULL){
     if (rd->style&StyledRegion::RD_BOLD) col.Flags|=FCF_FG_BOLD;
     if (rd->style&StyledRegion::RD_ITALIC) col.Flags|=FCF_FG_ITALIC;
     if (rd->style&StyledRegion::RD_UNDERLINE) col.Flags|=FCF_FG_UNDERLINE;
   }
-
 
   return col;
 }
