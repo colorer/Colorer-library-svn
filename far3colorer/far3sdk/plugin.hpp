@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2130
+  Plugin API for Far Manager 3.0 build 2139
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2130
+#define FARMANAGERVERSION_BUILD 2139
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -81,6 +81,19 @@ struct FarColor
 	COLORREF BackgroundColor;
 	void* Reserved;
 };
+
+#define INDEXMASK 0x0000000f
+#define COLORMASK 0x00ffffff
+#define ALPHAMASK 0xff000000
+
+#define INDEXVALUE(x) ((x)&INDEXMASK)
+#define COLORVALUE(x) ((x)&COLORMASK)
+#define ALPHAVALUE(x) ((x)&ALPHAMASK)
+
+#define IS_OPAQUE(x) (ALPHAVALUE(x)==ALPHAMASK)
+#define IS_TRANSPARENT(x) (!ALPHAVALUE(x))
+#define MAKE_OPAQUE(x) (x|=ALPHAMASK)
+#define MAKE_TRANSPARENT(x) (x&=COLORMASK)
 
 typedef unsigned __int64 COLORDIALOGFLAGS;
 static const COLORDIALOGFLAGS

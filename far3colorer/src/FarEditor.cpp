@@ -206,8 +206,8 @@ void FarEditor::setRegionMapper(RegionMapper *rs)
   vertCrossColor = convert(StyledRegion::cast(baseEditor->rd_def_VertCross));
 
   //TODO
-  //if (horzCrossColor.concolor == 0) horzCrossColor.concolor = 0x0E;
-  //if (vertCrossColor.concolor == 0) vertCrossColor.concolor = 0x0E;
+  if (!horzCrossColor.BackgroundColor && !horzCrossColor.ForegroundColor) horzCrossColor.ForegroundColor = 0xE;
+  if (!vertCrossColor.BackgroundColor && !vertCrossColor.ForegroundColor) vertCrossColor.ForegroundColor = 0xE;
 }
 
 void FarEditor::matchPair()
@@ -1139,10 +1139,13 @@ FarColor FarEditor::convert(const StyledRegion *rd)
 
   int fore = (newfore != -1) ? newfore : rdBackground->fore;
   int back = (newback != -1) ? newback : rdBackground->back;
-  
+
   if (rd != NULL){
     col.ForegroundColor = rd->fore;
     col.BackgroundColor = rd->back;
+    if (rd->style&StyledRegion::RD_BOLD) col.Flags|=FCF_FG_BOLD;
+    if (rd->style&StyledRegion::RD_ITALIC) col.Flags|=FCF_FG_ITALIC;
+    if (rd->style&StyledRegion::RD_UNDERLINE) col.Flags|=FCF_FG_UNDERLINE;
   }
 
   if (rd == NULL || !rd->bfore)
@@ -1155,12 +1158,6 @@ FarColor FarEditor::convert(const StyledRegion *rd)
   else {
     col.ForegroundColor=revertRGB(col.ForegroundColor);
     col.BackgroundColor=revertRGB(col.BackgroundColor);
-  }
-
-  if (rd != NULL){
-    if (rd->style&StyledRegion::RD_BOLD) col.Flags|=FCF_FG_BOLD;
-    if (rd->style&StyledRegion::RD_ITALIC) col.Flags|=FCF_FG_ITALIC;
-    if (rd->style&StyledRegion::RD_UNDERLINE) col.Flags|=FCF_FG_UNDERLINE;
   }
 
   return col;
