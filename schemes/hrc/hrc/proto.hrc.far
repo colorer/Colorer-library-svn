@@ -169,6 +169,13 @@
     <filename>/\.(tcl|tk|exp)$/i</filename>
     <firstline>/^\#(!\s*.+(tcl|wi)?sh\b)/</firstline>
   </prototype>
+  <prototype name="go" group="main" description="Go">
+    <location link="base/go.hrc"/>
+    <filename>/\.go$/i</filename>
+    <parameters>
+      <param name="tabs-as-errors" value="false" description="Shows tabulation symbol as error"/>
+    </parameters>
+  </prototype>	
 
   <!--  inet languages  -->
   <package name="html-entity" description="(x)html entities">

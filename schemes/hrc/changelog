@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлена поддержка языка Go
+	- новая версия для PL/I
+
+#Revision: 1767
+	#Author: ctapmex #Date: 2011-08-03 11:31:59 +0600 (Ср, 03 авг 2011)
 	- NowDoc в php
 
 #Revision: 1724
