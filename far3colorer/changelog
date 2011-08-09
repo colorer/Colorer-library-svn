@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. немного упростим функцию PathToFull
+
+#Revision: 1772
+	#Author: ctapmex Date: 2011-08-08 20:43:20 +0600 (Пн, 08 авг 2011)
 	1. доделан truemod. (остался крест для него)
 
 #Revision: 1771

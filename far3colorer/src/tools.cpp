@@ -60,8 +60,12 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
   delete[] new_path;
   new_path = temp;
 
+  CONVERTPATHMODES mode;
+  if (unc) mode = CPM_NATIVE;
+  else  mode = CPM_FULL ;
+
   // take the full path to the file, converting all kinds of ../ ./ etc
-  size_t p=FSF.ConvertPath(CPM_FULL, new_path, NULL, 0);
+  size_t p=FSF.ConvertPath(mode, new_path, NULL, 0);
   if (p>len){
     len = p;
     wchar_t *temp = new wchar_t[len];
@@ -69,39 +73,7 @@ wchar_t *PathToFull(const wchar_t *path, bool unc)
     delete[] new_path;
     new_path = temp;
   }
-  FSF.ConvertPath(CPM_FULL, new_path, new_path, len);
-
-  if (unc){
-    // for normal work with long paths, the path must be converted to UNC
-    if (wcsstr(new_path,L"\\\\?\\")==NULL){
-      if (wcsstr(new_path,L"\\\\")==NULL){
-        len+=4;
-        wchar_t *temp = new wchar_t[len];
-        wcscpy(temp,L"\\\\?\\");
-        wcscat(temp,new_path);
-        delete[] new_path;
-        new_path = temp;
-      }
-      else
-      {
-        len+=6;
-        wchar_t *temp = new wchar_t[len];
-        wcscpy(temp,L"\\\\?\\UNC");
-        wcscat(temp,new_path+1);
-        delete[] new_path;
-        new_path = temp;
-      }
-    }
-  }
-
-  // reduce the length of the buffer
-  i = wcslen(new_path)+1;
-  if (i!=len){
-    wchar_t *temp = new wchar_t[i];
-    wcscpy(temp,new_path);
-    delete[] new_path;
-    return temp;
-  }
+  FSF.ConvertPath(mode, new_path, new_path, len);
 
   return new_path;
 }
