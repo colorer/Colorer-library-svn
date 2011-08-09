@@ -1,3 +1,9 @@
+  New:
+    - Go (Mikhail Kupchik)
+  Fixed:
+    - PL/I (Pavel Pleva)
+    - NowDoc in PHP
+
 2011-06-30 r1724 (FarColorer 1.0.3.3)
   Fixed:
     - Pascal - write characters with codes 0-31 in the format ^@, ^A, ^B (Igor Yudincev)
