@@ -7,6 +7,7 @@
 
 #if defined _WIN32
 #include<io.h>
+#include<windows.h>
 #endif
 #if defined __unix__ || defined __GNUC__
 #include<unistd.h>
@@ -32,6 +33,15 @@ FileInputSource::FileInputSource(const String *basePath, FileInputSource *base){
       baseLocation = new SString(basePath);
     prefix = false;
   };
+#if defined _WIN32
+   // replace the environment variables to their values
+  size_t i=ExpandEnvironmentStrings(baseLocation->getWChars(),NULL,0);
+  wchar_t *temp = new wchar_t[i];
+  ExpandEnvironmentStrings(baseLocation->getWChars(),temp,static_cast<DWORD>(i));
+  delete baseLocation;
+  baseLocation = new SString(temp);
+  delete[] temp;
+#endif
   if(prefix && (baseLocation->indexOf(':') == -1 || baseLocation->indexOf(':') > 10) && !baseLocation->startsWith(DString("/"))){
     StringBuffer *n_baseLocation = new StringBuffer();
     n_baseLocation->append(DString("/")).append(baseLocation);
