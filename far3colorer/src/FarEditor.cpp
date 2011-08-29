@@ -1194,9 +1194,9 @@ void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
     ec.Owner = MainGuid;
     ec.Priority = 0;
     ec.Color = col;
-    CLR_TRACE("FarEditor", "line:%d, %d-%d, color:%x", lno, s, e, col);
+	CLR_TRACE("FarEditor", "line:%d, %d-%d, color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
     info->EditorControl(CurrentEditor, ECTL_ADDCOLOR, NULL, &ec);
-    CLR_TRACE("FarEditor", "line %d: %d-%d: color=%x", lno, s, e, col);
+    CLR_TRACE("FarEditor", "line %d: %d-%d: color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
 }
 
 const wchar_t *FarEditor::GetMsg(int msg)
