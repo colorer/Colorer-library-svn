@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. makefile
+
+#Revision: 1780
+	#Author: ctapmex Date: 2011-08-29 22:34:37 +0600 (Пн, 29 авг 2011)
 	1. коррекция отладочной информации
 	2. Far3 2181 API
 
