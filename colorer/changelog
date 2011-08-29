@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. файл проекта для VS2010 colorer.exe
+	2. исправление 1175, для работы с не unicode сборкой.
+
+#Revision: 1777
+	#Author: ctapmex Date: 2011-08-29 17:19:32 +0600 (Пн, 29 авг 2011)
 	1. malloc.c 2.8.5 
 
 #Revision: 1775
