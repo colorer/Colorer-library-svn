@@ -142,7 +142,6 @@ public:
 
 #include<common/MemoryOperator.h>
 
-  EOps op;
   union{
     EMetaSymbols metaSymbol;
     wchar symbol;
@@ -153,13 +152,14 @@ public:
 #if defined NAMED_MATCHES_IN_HASH
   String *namedata;
 #endif
+  SRegInfo *parent;
+  SRegInfo *next;
+  SRegInfo *prev;
   int oldParse;
   int param0, param1;
   int s, e;
 
-  SRegInfo *parent;
-  SRegInfo *next;
-  SRegInfo *prev;
+  EOps op;
 };
 
 struct StackElem{

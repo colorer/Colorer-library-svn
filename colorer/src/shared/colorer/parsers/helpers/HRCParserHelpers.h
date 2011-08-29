@@ -25,8 +25,8 @@ class FileTypeImpl;
 */
 struct KeywordInfo{
   const SString *keyword;
-  bool isSymbol;
   const Region* region;
+  bool isSymbol;
   int  ssShorter;
 
 //#include<common/MemoryOperator.h>
