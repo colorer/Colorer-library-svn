@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. ошибка освобождения памяти
+
+#Revision: 1781
+	#Author: ctapmex Date: 2011-08-29 22:53:38 +0600 (Пн, 29 авг 2011)
 	1. makefile
 
 #Revision: 1780
