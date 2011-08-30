@@ -1283,7 +1283,7 @@ void FarEditorSet::setCrossValueListToCombobox(FileTypeImpl *type, HANDLE hDlg)
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
 
-  size_t ret;
+  size_t ret=2;
   if (value==NULL || !value->length()){
     ret=4;
   }else{
@@ -1323,7 +1323,7 @@ void FarEditorSet::setCrossPosValueListToCombobox(FileTypeImpl *type, HANDLE hDl
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
 
-  size_t ret;
+  size_t ret=2;
   if (value==NULL || !value->length()){
     ret=2;
   }else{
@@ -1357,7 +1357,7 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
 
-  size_t ret;
+  size_t ret=2;
   if (value==NULL || !value->length()){
     ret=2;
   }else{
@@ -1391,7 +1391,7 @@ void FarEditorSet::setTFListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
 
-  size_t ret;
+  size_t ret=2;
   if (value==NULL || !value->length()){
     ret=2;
   }else{

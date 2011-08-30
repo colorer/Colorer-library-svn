@@ -1202,7 +1202,6 @@ void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
 const wchar_t *FarEditor::GetMsg(int msg)
 {
 	return(info->GetMsg(&MainGuid, msg));
-	return null;
 }
 
 void FarEditor::cleanEditor()
