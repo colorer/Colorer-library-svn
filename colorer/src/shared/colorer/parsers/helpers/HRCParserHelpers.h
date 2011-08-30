@@ -168,9 +168,9 @@ public:
   /** Returns associated regular expression */
   CRegExp *getRE() const { return re; };
 private:
+  CRegExp *re;
   int type;
   double prior;
-  CRegExp *re;
 };
 
 #endif
