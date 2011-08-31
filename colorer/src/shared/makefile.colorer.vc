@@ -10,12 +10,12 @@ MKDIR= mkdir
 obj_output_slash = $(obj_output)\\
 
 !ifndef DEBUG
-CPPFLAGS =/O2 /Oi /Ot /GL  /GF /FD /EHsc /MT /GS- /Gy /GR-
+CPPFLAGS =/O2 /Oi /Ot /Oy- /GL /GF /EHsc /MT /GS- /Gy /GR-
 !else
 CPPFLAGS =/Od /Gm /EHsc /RTC1 /MTd /ZI
 !endif  
 
-CPPFLAGS = $(CPPFLAGS) /I $(shared_path) /I $(unzipdir) /D "USE_DL_PREFIX"  /wd4996 /W3 /nologo /c  $(CPPFLAGS_CUSTOM)
+CPPFLAGS = $(CPPFLAGS) /I $(shared_path) /I $(unzipdir) /D "USE_DL_PREFIX"  /wd4996 /W3 /nologo /c $(CPPFLAGS_CUSTOM)
 
 # ms nmake faults to substitute $(shared_path) here :(
 
