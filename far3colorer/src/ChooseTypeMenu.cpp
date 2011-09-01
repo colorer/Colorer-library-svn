@@ -46,7 +46,7 @@ size_t ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, c
   {
     FarMenuItem *NewPtr;
     if (!(NewPtr=(FarMenuItem *)realloc(Item, sizeof(FarMenuItem)*(ItemCount+256+1))))
-      return -1;
+      throw Exception(DString("ChooseTypeMenu: not enough available memory."));
 
     Item=NewPtr;
   }

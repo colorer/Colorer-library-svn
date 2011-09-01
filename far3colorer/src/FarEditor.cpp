@@ -758,8 +758,6 @@ void FarEditor::showOutliner(Outliner *outliner)
   };
   int keys_size = sizeof(breakKeys)/sizeof(FarKey);
 
-  //we need this?
-  //int outputEnc = Encodings::getEncodingIndex("cp866");
   wchar_t prefix[FILTER_SIZE+1];
   wchar_t autofilter[FILTER_SIZE+1];
   wchar_t filter[FILTER_SIZE+1];
@@ -835,9 +833,9 @@ void FarEditor::showOutliner(Outliner *outliner)
           menuItem[labelLength] = 0;
         }
 
-        *(OutlineItem**)(&menuItem[124]) = item;
         // set position on nearest top function
         menu[menu_size].Text = menuItem;
+        menu[menu_size].UserData = (DWORD_PTR)item;
 
         if (ei.CurLine >= item->lno){
           selectedItem = menu_size;
@@ -928,7 +926,7 @@ void FarEditor::showOutliner(Outliner *outliner)
         }
 
         esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        OutlineItem *item = (OutlineItem *) menu[sel].UserData;
         esp.CurLine = item->lno;
         esp.CurPos = item->pos;
         esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
@@ -978,7 +976,7 @@ void FarEditor::showOutliner(Outliner *outliner)
         }
 
         esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        OutlineItem *item = (OutlineItem *) menu[sel].UserData;
         esp.CurLine = item->lno;
         esp.CurPos = item->pos;
         esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
@@ -1006,7 +1004,7 @@ void FarEditor::showOutliner(Outliner *outliner)
         }
 
         esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
-        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        OutlineItem *item = (OutlineItem *) menu[sel].UserData;
         esp.CurLine = item->lno;
         esp.CurPos = item->pos;
         esp.TopScreenLine = esp.CurLine - ei.WindowSizeY/2;
@@ -1047,7 +1045,7 @@ void FarEditor::showOutliner(Outliner *outliner)
         //read current position
         info->EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
         //insert text
-        OutlineItem *item = *(OutlineItem**)(&menu[sel].Text[124]);
+        OutlineItem *item = (OutlineItem *) menu[sel].UserData;
         info->EditorControl(CurrentEditor, ECTL_INSERTTEXT, NULL, (void*)item->token->getWChars());
 
         //move the cursor to the end of the inserted string
