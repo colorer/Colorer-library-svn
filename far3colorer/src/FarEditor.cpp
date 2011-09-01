@@ -1175,28 +1175,28 @@ bool FarEditor::backDefault(FarColor col)
 
 void FarEditor::deleteFarColor(int lno, int s)
 {
-    EditorDeleteColor edc;
-    edc.Owner = MainGuid;
-    edc.StartPos = s;
-    edc.StringNumber = lno;
-    edc.StructSize= sizeof (EditorDeleteColor);
-    info->EditorControl(CurrentEditor, ECTL_DELCOLOR, NULL, &edc);
+  EditorDeleteColor edc;
+  edc.Owner = MainGuid;
+  edc.StartPos = s;
+  edc.StringNumber = lno;
+  edc.StructSize= sizeof (EditorDeleteColor);
+  info->EditorControl(CurrentEditor, ECTL_DELCOLOR, NULL, &edc);
 }
 
 void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
 {
-    EditorColor ec;
-    ec.StructSize = sizeof(EditorColor);
-    ec.Flags = 0;
-    ec.StringNumber = lno;
-    ec.StartPos = s;
-    ec.EndPos = e-1;
-    ec.Owner = MainGuid;
-    ec.Priority = 0;
-    ec.Color = col;
-	CLR_TRACE("FarEditor", "line:%d, %d-%d, color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
-    info->EditorControl(CurrentEditor, ECTL_ADDCOLOR, NULL, &ec);
-    CLR_TRACE("FarEditor", "line %d: %d-%d: color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
+  EditorColor ec;
+  ec.StructSize = sizeof(EditorColor);
+  ec.Flags = 0;
+  ec.StringNumber = lno;
+  ec.StartPos = s;
+  ec.EndPos = e-1;
+  ec.Owner = MainGuid;
+  ec.Priority = 0;
+  ec.Color = col;
+  CLR_TRACE("FarEditor", "line:%d, %d-%d, color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
+  info->EditorControl(CurrentEditor, ECTL_ADDCOLOR, NULL, &ec);
+  CLR_TRACE("FarEditor", "line %d: %d-%d: color bg:%d fg:%d flag:%d", lno, s, e, col.BackgroundColor, col.ForegroundColor, col.Flags);
 }
 
 const wchar_t *FarEditor::GetMsg(int msg)

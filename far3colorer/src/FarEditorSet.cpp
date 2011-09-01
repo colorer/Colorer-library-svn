@@ -116,19 +116,13 @@ void FarEditorSet::openMenu()
     };
   }
   catch (Exception &e){
-    const size_t count_lines = 4;
-    const wchar_t* exceptionMessage[count_lines];
-    exceptionMessage[0] = GetMsg(mName);
-    exceptionMessage[1] = GetMsg(mCantLoad);
-    exceptionMessage[3] = GetMsg(mDie);
-    StringBuffer msg("openMenu: ");
-    exceptionMessage[2] = (msg+e.getMessage()).getWChars();
-
     if (getErrorHandler()){
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    StringBuffer msg("openMenu: ");
+    msg.append(e.getMessage());
+    showExceptionMessage( msg.getWChars());
     disableColorer();
   };
 }
@@ -175,13 +169,7 @@ void FarEditorSet::viewFile(const String &path)
     delete regionMap;
   }
   catch (Exception &e){
-    const size_t count_lines = 4;
-    const wchar_t* exceptionMessage[count_lines];
-    exceptionMessage[0] = GetMsg(mName);
-    exceptionMessage[1] = GetMsg(mCantOpenFile);
-    exceptionMessage[3] = GetMsg(mDie);
-    exceptionMessage[2] = e.getMessage()->getWChars();
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    showExceptionMessage(e.getMessage()->getWChars());
   };
 }
 
@@ -601,20 +589,13 @@ void FarEditorSet::configure(bool fromEditor)
 
   }
   catch (Exception &e){
-    const size_t count_lines = 4;
-    const wchar_t* exceptionMessage[count_lines];
-    exceptionMessage[0] = GetMsg(mName);
-    exceptionMessage[1] = GetMsg(mCantLoad);
-    exceptionMessage[2] = 0;
-    exceptionMessage[3] = GetMsg(mDie);
-    StringBuffer msg("configure: ");
-    exceptionMessage[2] = (msg+e.getMessage()).getWChars();
-
     if (getErrorHandler() != NULL){
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    StringBuffer msg("configure: ");
+    msg.append(e.getMessage());
+    showExceptionMessage(msg.getWChars());
     disableColorer();
   };
 }
@@ -718,20 +699,13 @@ int FarEditorSet::editorEvent(int Event, void *Param)
     }
   }
   catch (Exception &e){
-    const size_t count_lines = 4;
-    const wchar_t* exceptionMessage[count_lines];
-    exceptionMessage[0] = GetMsg(mName);
-    exceptionMessage[1] = GetMsg(mCantLoad);
-    exceptionMessage[2] = 0;
-    exceptionMessage[3] = GetMsg(mDie);
-    StringBuffer msg("editorEvent: ");
-    exceptionMessage[2] = (msg+e.getMessage()).getWChars();
-
     if (getErrorHandler()){
       getErrorHandler()->error(*e.getMessage());
     }
 
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], count_lines, 1);
+    StringBuffer msg("editorEvent: ");
+    msg.append(e.getMessage());
+    showExceptionMessage(msg.getWChars());
     disableColorer();
   };
 
@@ -823,17 +797,14 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     }
   }
   catch (Exception &e){
-    const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
-
-    errload[2] = e.getMessage()->getWChars();
 
     if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
       parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
     }
 
-	Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
-	Info.RestoreScreen(scr);
-	res = false;
+    showExceptionMessage(e.getMessage()->getWChars());
+    Info.RestoreScreen(scr);
+    res = false;
   };
 
   delete regionMapperLocal;
@@ -892,32 +863,23 @@ void FarEditorSet::ReloadBase()
     SetBgEditor();
   }
   catch (SettingsControlException &e){
-    const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
-
-    errload[2] = e.getMessage()->getWChars();
 
     if (getErrorHandler() != NULL){
       getErrorHandler()->error(*e.getMessage());
     }
-
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
+    showExceptionMessage( e.getMessage()->getWChars());
     err_status = ERR_FARSETTINGS_ERROR;
     disableColorer();
   }
   catch (Exception &e){
-    const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
-
-    errload[2] = e.getMessage()->getWChars();
 
     if (getErrorHandler() != NULL){
       getErrorHandler()->error(*e.getMessage());
     }
-
-    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
+    showExceptionMessage( e.getMessage()->getWChars());
     err_status = ERR_BASE_LOAD;
     disableColorer();
   };
-
 
   Info.RestoreScreen(scr);
 }
@@ -1650,6 +1612,12 @@ void FarEditorSet::configureHrc()
   delete l;
   
   Info.DialogFree(hDlg);
+}
+
+void FarEditorSet::showExceptionMessage(const wchar_t* message)
+{
+  const wchar_t* exceptionMessage[4]={GetMsg(mName), GetMsg(mCantLoad), message, GetMsg(mDie)};
+  Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, L"exception", &exceptionMessage[0], sizeof(exceptionMessage)/sizeof(exceptionMessage[0]), 1);
 }
 
 /* ***** BEGIN LICENSE BLOCK *****

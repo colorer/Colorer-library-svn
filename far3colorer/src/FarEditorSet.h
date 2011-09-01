@@ -122,6 +122,8 @@ public:
   void OnSaveHrcParams(HANDLE hDlg);
   bool dialogFirstFocus;
   int menuid;
+
+  void showExceptionMessage(const wchar_t* message);
 private:
   /** Returns current global error handler. */
   ErrorHandler *getErrorHandler();
