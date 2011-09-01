@@ -36,7 +36,6 @@ FarEditorSet::~FarEditorSet()
   delete parserFactory;
 }
 
-
 void FarEditorSet::openMenu()
 {
   int iMenuItems[] =
@@ -822,6 +821,7 @@ void FarEditorSet::ReloadBase()
   try{
     ReadSettings();
     if (!rEnabled){
+      Info.RestoreScreen(scr);
       return;
     }
 

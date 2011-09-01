@@ -21,7 +21,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpRes
       DString module(path, 0);
       int pos = module.lastIndexOf('\\');
       pos = module.lastIndexOf('\\',pos);
-      PluginPath=new StringBuffer(DString(module, 0, pos));
+      PluginPath = new StringBuffer(DString(module, 0, pos));
     }
     break;
 
@@ -43,15 +43,15 @@ const wchar_t *GetMsg(int msg)
 /**
   Global information about the plugin
 */
-void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
+void WINAPI GetGlobalInfoW(struct GlobalInfo *gInfo)
 {
-  Info->StructSize=sizeof(GlobalInfo);
-  Info->MinFarVersion=FARMANAGERVERSION;
-  Info->Version=MAKEFARVERSION(1,0,3,5,VS_BETA);// need fix
-  Info->Guid=MainGuid;
-  Info->Title=L"FarColorer";
-  Info->Description=L"Syntax highlighting in Far editor";
-  Info->Author=L"Igor Ruskih, Dobrunov Aleksey, Eugene Efremov";
+  gInfo->StructSize = sizeof(GlobalInfo);
+  gInfo->MinFarVersion = FARMANAGERVERSION;
+  gInfo->Version = MAKEFARVERSION(1,0,3,5,VS_BETA);
+  gInfo->Guid = MainGuid;
+  gInfo->Title = L"FarColorer";
+  gInfo->Description =L"Syntax highlighting in Far editor";
+  gInfo->Author = L"Igor Ruskih, Dobrunov Aleksey, Eugene Efremov";
 }
 
 /**
@@ -67,26 +67,26 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *fei)
 /**
   Plugin strings in FAR interface.
 */
-void WINAPI GetPluginInfoW(struct PluginInfo *nInfo)
+void WINAPI GetPluginInfoW(struct PluginInfo *pInfo)
 {
   static wchar_t* PluginMenuStrings;
-  memset(nInfo, 0, sizeof(*nInfo));
-  nInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
-  nInfo->StructSize = sizeof(*nInfo);
-  nInfo->PluginConfig.Count = 1;
-  nInfo->PluginMenu.Count = 1;
+  memset(pInfo, 0, sizeof(*pInfo));
+  pInfo->Flags = PF_EDITOR | PF_DISABLEPANELS;
+  pInfo->StructSize = sizeof(*pInfo);
+  pInfo->PluginConfig.Count = 1;
+  pInfo->PluginMenu.Count = 1;
   PluginMenuStrings = (wchar_t*)GetMsg(mName);
-  nInfo->PluginConfig.Strings = &PluginMenuStrings;
-  nInfo->PluginMenu.Strings = &PluginMenuStrings;
-  nInfo->PluginConfig.Guids=&PluginConfig;
-  nInfo->PluginMenu.Guids=&PluginMenu;
-  nInfo->CommandPrefix = L"clr";
+  pInfo->PluginConfig.Strings = &PluginMenuStrings;
+  pInfo->PluginMenu.Strings = &PluginMenuStrings;
+  pInfo->PluginConfig.Guids = &PluginConfig;
+  pInfo->PluginMenu.Guids = &PluginMenu;
+  pInfo->CommandPrefix = L"clr";
 };
 
 /**
   On FAR exit. Destroys all internal structures.
 */
-void WINAPI ExitFARW(const struct ExitInfo *Info)
+void WINAPI ExitFARW(const struct ExitInfo *eInfo)
 {
   if (editorSet){
     delete editorSet;
@@ -96,15 +96,15 @@ void WINAPI ExitFARW(const struct ExitInfo *Info)
 /**
   Open plugin configuration of actions dialog.
 */
-HANDLE WINAPI OpenW(const struct OpenInfo *Info)
+HANDLE WINAPI OpenW(const struct OpenInfo *oInfo)
 {
-  if (Info->OpenFrom == OPEN_EDITOR){
+  if (oInfo->OpenFrom == OPEN_EDITOR){
     editorSet->openMenu();
   }
   else
-    if (Info->OpenFrom == OPEN_COMMANDLINE){
+    if (oInfo->OpenFrom == OPEN_COMMANDLINE){
       //file name, which we received
-      wchar_t *file = (wchar_t*)Info->Data;
+      wchar_t *file = (wchar_t*)oInfo->Data;
 
       wchar_t *nfile = PathToFull(file,true);
       if (nfile){
@@ -123,13 +123,10 @@ HANDLE WINAPI OpenW(const struct OpenInfo *Info)
 /**
   Configures plugin.
 */
-int WINAPI ConfigureW(const struct CompareInfo *Info)
+int WINAPI ConfigureW(const struct ConfigureInfo *cInfo)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
-  }else{
-  // ReadSettings need for plugin off mode
-    editorSet->ReadSettings();
   }
   editorSet->configure(false);
   return 1;
@@ -139,17 +136,17 @@ int WINAPI ConfigureW(const struct CompareInfo *Info)
   Processes FAR editor events and
   makes text colorizing here.
 */
-int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *Info)
+int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *pInfo)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
   }
-  return editorSet->editorEvent(Info->Event, Info->Param);
+  return editorSet->editorEvent(pInfo->Event, pInfo->Param);
 };
 
-int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *Info)
+int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *pInfo)
 {
-  return editorSet->editorInput(Info->Rec);
+  return editorSet->editorInput(pInfo->Rec);
 }
 
 // in order to not fall when it starts in far2 
