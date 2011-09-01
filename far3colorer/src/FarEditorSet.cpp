@@ -2,6 +2,7 @@
 
 FarEditorSet::FarEditorSet()
 {
+  err_status = ERR_NO_ERROR;
   parserFactory = NULL;
   regionMapper = NULL;
   hrcParser = NULL;
@@ -843,31 +844,32 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
 
 void FarEditorSet::ReloadBase()
 {
-  ReadSettings();
-  if (!rEnabled){
-    return;
-  }
-
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
   HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
   Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
 
-  dropAllEditors(true);
-  delete regionMapper;
-  delete parserFactory;
-  parserFactory = NULL;
-  regionMapper = NULL;
-
-  if (TrueModOn){
-    hrdClass = DRgb;
-    hrdName = sHrdNameTm;
-  }
-  else{
-    hrdClass = DConsole;
-    hrdName = sHrdName;
-  }
-
   try{
+    ReadSettings();
+    if (!rEnabled){
+      return;
+    }
+
+    dropAllEditors(true);
+    delete regionMapper;
+    delete parserFactory;
+    parserFactory = NULL;
+    regionMapper = NULL;
+
+    if (TrueModOn){
+      hrdClass = DRgb;
+      hrdName = sHrdNameTm;
+    }
+    else{
+      hrdClass = DConsole;
+      hrdName = sHrdName;
+    }
+
+
     parserFactory = new ParserFactory(sCatalogPathExp);
     hrcParser = parserFactory->getHRCParser();
     LoadUserHrd(sUserHrdPathExp, parserFactory);
@@ -889,6 +891,19 @@ void FarEditorSet::ReloadBase()
     //устанавливаем фон редактора при каждой перезагрузке схем.
     SetBgEditor();
   }
+  catch (SettingsControlException &e){
+    const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
+
+    errload[2] = e.getMessage()->getWChars();
+
+    if (getErrorHandler() != NULL){
+      getErrorHandler()->error(*e.getMessage());
+    }
+
+    Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
+    err_status = ERR_FARSETTINGS_ERROR;
+    disableColorer();
+  }
   catch (Exception &e){
     const wchar_t *errload[5] = { GetMsg(mName), GetMsg(mCantLoad), 0, GetMsg(mFatal), GetMsg(mDie) };
 
@@ -899,9 +914,10 @@ void FarEditorSet::ReloadBase()
     }
 
     Info.Message(&MainGuid, &ErrorMessage, FMSG_WARNING, NULL, &errload[0], 5, 1);
-
+    err_status = ERR_BASE_LOAD;
     disableColorer();
   };
+
 
   Info.RestoreScreen(scr);
 }
@@ -981,8 +997,10 @@ const wchar_t *FarEditorSet::GetMsg(int msg)
 void FarEditorSet::disableColorer()
 {
   rEnabled = false;
-  SettingsControl ColorerSettings;
-  ColorerSettings.Set(0, cRegEnabled, rEnabled);
+  if (!(err_status & ERR_FARSETTINGS_ERROR)){
+    SettingsControl ColorerSettings;
+    ColorerSettings.Set(0, cRegEnabled, rEnabled);
+  }
 
   dropCurrentEditor(true);
 

@@ -1,5 +1,12 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. наведение порядка с типами в SettingsControl
+	2. исключение в SettingsControl
+	3. немного форматирования кода
+	4. Far3 2184 API (неизбежность, надо проверять , не сломалось ли что)
+
+#Revision: 1785
+	#Author: ctapmex Date: 2011-08-31 11:44:55 +0600 (Ср, 31 авг 2011)
 	1. makefile
 
 #Revision: 1783

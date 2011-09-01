@@ -9,7 +9,8 @@ SettingsControl::SettingsControl()
     farSettingHandle = fsc.Handle;
   }
   else{
-    //error
+    farSettingHandle = INVALID_HANDLE_VALUE;
+    throw SettingsControlException(DString("Access error to the FarSettings."));
   }
 }
 
@@ -38,24 +39,24 @@ unsigned __int64 SettingsControl::Get(size_t Root, const wchar_t *Name, unsigned
   return Default;
 }
 
-bool SettingsControl::Set(int Root, const wchar_t *Name, const wchar_t *Value)
+bool SettingsControl::Set(size_t Root, const wchar_t *Name, const wchar_t *Value)
 {
   FarSettingsItem item={Root,Name,FST_STRING};
   item.String=Value;
   return Info.SettingsControl(farSettingHandle,SCTL_SET,0,&item)!=FALSE;
 }
 
-bool SettingsControl::Set(int Root, const wchar_t *Name, unsigned __int64 Value)
+bool SettingsControl::Set(size_t Root, const wchar_t *Name, unsigned __int64 Value)
 {
   FarSettingsItem item={Root,Name,FST_QWORD};
   item.Number=Value;
   return Info.SettingsControl(farSettingHandle,SCTL_SET,0,&item)!=FALSE;
 }
 
-int SettingsControl::rGetSubKey(size_t Root, const wchar_t *Name)
+size_t SettingsControl::rGetSubKey(size_t Root, const wchar_t *Name)
 {
   FarSettingsValue fsv={Root,Name};
-  return (int)Info.SettingsControl(farSettingHandle, SCTL_CREATESUBKEY, NULL, &fsv);
+  return (size_t)Info.SettingsControl(farSettingHandle, SCTL_CREATESUBKEY, NULL, &fsv);
 }
 
 bool SettingsControl::rEnum(size_t Root, FarSettingsEnum *fse)

@@ -78,7 +78,7 @@ void FarHrcSettings::readProfileFromRegistry()
   HRCParser *hrcParser = parserFactory->getHRCParser();
   
   SettingsControl ColorerSettings;
-  int hrc_subkey;
+  size_t hrc_subkey;
   hrc_subkey = ColorerSettings.rGetSubKey(0,HrcSettings);
   FarSettingsEnum fse;
   // enum all the sections in HrcSettings
@@ -89,7 +89,7 @@ void FarHrcSettings::readProfileFromRegistry()
         FileTypeImpl *type = (FileTypeImpl *)hrcParser->getFileType(&DString(fse.Items[i].Name));
         if (type){
           // enum all params in the section
-          int type_subkey;
+          size_t type_subkey;
           type_subkey = ColorerSettings.rGetSubKey(hrc_subkey,fse.Items[i].Name);
           FarSettingsEnum type_fse;
           if (ColorerSettings.rEnum(type_subkey,&type_fse)){
@@ -121,7 +121,7 @@ void FarHrcSettings::writeProfileToRegistry()
 
   SettingsControl ColorerSettings;
   ColorerSettings.rDeleteSubKey(0,HrcSettings);
-  int hrc_subkey;
+  size_t hrc_subkey;
   hrc_subkey = ColorerSettings.rGetSubKey(0,HrcSettings);
 
   // enum all FileTypes
@@ -134,7 +134,7 @@ void FarHrcSettings::writeProfileToRegistry()
 
     const String *p, *v;
     if (type->getParamCount() && type->getParamNotDefaultValueCount()){// params>0 and user values >0
-      int type_subkey = ColorerSettings.rGetSubKey(hrc_subkey,type->getName()->getWChars());
+      size_t type_subkey = ColorerSettings.rGetSubKey(hrc_subkey,type->getName()->getWChars());
       // enum all params
       for (int i=0;;i++){
         p=type->enumerateParameters(i);

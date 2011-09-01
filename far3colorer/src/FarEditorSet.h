@@ -16,37 +16,37 @@
 #include "ChooseTypeMenu.h"
 
 //registry keys
-const wchar_t cRegEnabled[] = L"Enabled";
-const wchar_t cRegHrdName[] = L"HrdName";
-const wchar_t cRegHrdNameTm[] = L"HrdNameTm";
-const wchar_t cRegCatalog[] = L"Catalog";
-const wchar_t cRegCrossDraw[] = L"CrossDraw";
-const wchar_t cRegPairsDraw[] = L"PairsDraw";
-const wchar_t cRegSyntaxDraw[] = L"SyntaxDraw";
-const wchar_t cRegOldOutLine[] = L"OldOutlineView";
-const wchar_t cRegTrueMod[] = L"TrueMod";
+const wchar_t cRegEnabled[]        = L"Enabled";
+const wchar_t cRegHrdName[]        = L"HrdName";
+const wchar_t cRegHrdNameTm[]      = L"HrdNameTm";
+const wchar_t cRegCatalog[]        = L"Catalog";
+const wchar_t cRegCrossDraw[]      = L"CrossDraw";
+const wchar_t cRegPairsDraw[]      = L"PairsDraw";
+const wchar_t cRegSyntaxDraw[]     = L"SyntaxDraw";
+const wchar_t cRegOldOutLine[]     = L"OldOutlineView";
+const wchar_t cRegTrueMod[]        = L"TrueMod";
 const wchar_t cRegChangeBgEditor[] = L"ChangeBgEditor";
-const wchar_t cRegUserHrdPath[] = L"UserHrdPath";
-const wchar_t cRegUserHrcPath[] = L"UserHrcPath";
+const wchar_t cRegUserHrdPath[]    = L"UserHrdPath";
+const wchar_t cRegUserHrcPath[]    = L"UserHrcPath";
 
 //values of registry keys by default
-const bool cEnabledDefault = true;
-const wchar_t cHrdNameDefault[] = L"default";
-const wchar_t cHrdNameTmDefault[] = L"default";
-const wchar_t cCatalogDefault[] = L"";
-const int cCrossDrawDefault = 2;
-const bool cPairsDrawDefault = true;
-const bool cSyntaxDrawDefault = true;
-const bool cOldOutLineDefault = true;
-const bool cTrueMod = true;
-const bool cChangeBgEditor = false;
+const bool cEnabledDefault          = true;
+const wchar_t cHrdNameDefault[]     = L"default";
+const wchar_t cHrdNameTmDefault[]   = L"default";
+const wchar_t cCatalogDefault[]     = L"";
+const int cCrossDrawDefault         = 2;
+const bool cPairsDrawDefault        = true;
+const bool cSyntaxDrawDefault       = true;
+const bool cOldOutLineDefault       = true;
+const bool cTrueMod                 = false;
+const bool cChangeBgEditor          = false;
 const wchar_t cUserHrdPathDefault[] = L"";
 const wchar_t cUserHrcPathDefault[] = L"";
 
-const DString DConsole=DString("console");
-const DString DRgb=DString("rgb");
-const DString Ddefault=DString("<default>");
-const DString DAutodetect=DString("autodetect");
+const DString DConsole   = DString("console");
+const DString DRgb       = DString("rgb");
+const DString Ddefault   = DString("<default>");
+const DString DAutodetect= DString("autodetect");
 
 enum
 { IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
@@ -57,6 +57,13 @@ IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_HRC_SETTING, IDX_OK, IDX_
 enum
 { IDX_CH_BOX, IDX_CH_CAPTIONLIST, IDX_CH_SCHEMAS, 
 IDX_CH_PARAM_LIST,IDX_CH_PARAM_VALUE_CAPTION,IDX_CH_PARAM_VALUE_LIST, IDX_CH_DESCRIPTION, IDX_CH_OK, IDX_CH_CANCEL};
+
+enum ERROR_TYPE
+{ 
+  ERR_NO_ERROR = 0,
+  ERR_BASE_LOAD = 1,
+  ERR_FARSETTINGS_ERROR = 2
+};
 
 LONG_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
 LONG_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, int Msg, int Param1, LONG_PTR Param2);
@@ -201,6 +208,8 @@ private:
 
   int viewFirst; // 0 - init;  1 - first run view; 2 - first run editor
   int CurrentMenuItem;
+
+  unsigned int err_status;
 };
 
 #endif

@@ -17,23 +17,28 @@ public:
   DWORD            Get(size_t Root, const wchar_t *Name, DWORD Default) { return (DWORD)Get(Root,Name,(unsigned __int64)Default); }
   bool             Get(size_t Root, const wchar_t *Name, bool Default) { return Get(Root,Name,Default?1ull:0ull)?true:false; }
 
-  bool Set(int Root, const wchar_t *Name, unsigned __int64 Value);
-  bool Set(int Root, const wchar_t *Name, const wchar_t *Value);
-  bool Set(int Root, const wchar_t *Name, __int64 Value) { return Set(Root,Name,(unsigned __int64)Value); }
-  bool Set(int Root, const wchar_t *Name, int Value) { return Set(Root,Name,(unsigned __int64)Value); }
-  bool Set(int Root, const wchar_t *Name, unsigned int Value) { return Set(Root,Name,(unsigned __int64)Value); }
-  bool Set(int Root, const wchar_t *Name, DWORD Value) { return Set(Root,Name,(unsigned __int64)Value); }
-  bool Set(int Root, const wchar_t *Name, bool Value) { return Set(Root,Name,Value?1ull:0ull); }
+  bool Set(size_t Root, const wchar_t *Name, unsigned __int64 Value);
+  bool Set(size_t Root, const wchar_t *Name, const wchar_t *Value);
+  bool Set(size_t Root, const wchar_t *Name, __int64 Value) { return Set(Root,Name,(unsigned __int64)Value); }
+  bool Set(size_t Root, const wchar_t *Name, int Value) { return Set(Root,Name,(unsigned __int64)Value); }
+  bool Set(size_t Root, const wchar_t *Name, unsigned int Value) { return Set(Root,Name,(unsigned __int64)Value); }
+  bool Set(size_t Root, const wchar_t *Name, DWORD Value) { return Set(Root,Name,(unsigned __int64)Value); }
+  bool Set(size_t Root, const wchar_t *Name, bool Value) { return Set(Root,Name,Value?1ull:0ull); }
 
-  int rGetSubKey(size_t Root, const wchar_t *Name);
+  size_t rGetSubKey(size_t Root, const wchar_t *Name);
   bool rEnum(size_t Root, FarSettingsEnum *fse);
   bool rDeleteSubKey(size_t Root,const wchar_t *Name);
 
 private:
   HANDLE farSettingHandle;
+};
 
-
-
+class SettingsControlException : public Exception{
+public:
+  SettingsControlException(){};
+  SettingsControlException(const String& msg){
+    message->append(DString("SettingsControl: ")).append(msg);
+  };
 };
 
 #endif 
