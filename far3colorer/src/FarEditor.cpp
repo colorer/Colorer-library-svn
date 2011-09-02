@@ -471,6 +471,10 @@ int FarEditor::editorEvent(int event, void *param)
     return 0;
   }
 
+  if (rdBackground == NULL){
+    throw Exception(DString("HRD Background region 'def:Text' not found"));
+  }
+
   enterHandler();
   WindowSizeX = ei.WindowSizeX;
   WindowSizeY = ei.WindowSizeY;
@@ -500,228 +504,129 @@ int FarEditor::editorEvent(int event, void *param)
     blockTopPosition = ei.BlockStartLine;
   }
 
-  // hack against tabs in FAR's editor
+  delete cursorRegion;
+  cursorRegion = NULL;
+
+  // Position the cursor on the screen
   EditorConvertPos ecp, ecp_cl;
   ecp.StringNumber = -1;
   ecp.SrcPos = ei.CurPos;
   info->EditorControl(CurrentEditor, ECTL_REALTOTAB, NULL, &ecp);
-  delete cursorRegion;
-  cursorRegion = NULL;
-
-  if (rdBackground == NULL){
-    throw Exception(DString("HRD Background region 'def:Text' not found"));
-  }
 
   for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
       break;
     }
 
-    LineRegion *l1 = NULL;
-
-    if (drawSyntax || drawPairs){
-      l1 = baseEditor->getLineRegions(lno);
-    }
-    
     //clean line in far editor
     deleteFarColor(lno,-1);
 
+    // length current string
     EditorGetString egs;
     egs.StringNumber = lno;
     info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
     int llen = egs.StringLength;
+    //position previously found a column in the current row
+    ecp_cl.StringNumber = lno;
+    ecp_cl.SrcPos = ecp.DestPos;
+    info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
 
-    // fills back
-    if (lno == ei.CurLine && showHorizontalCross){
-      if (!TrueMod){
-        addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, horzCrossColor);
-      }
-      else{
-        addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
-      }
-    }
-    else{
-      addFARColor(lno, 0, ei.LeftPos + ei.WindowSizeX, convert(NULL));
-    }
+    if (drawSyntax){
+      LineRegion *l1 = NULL;
+      l1 = baseEditor->getLineRegions(lno);
 
-    if (showVerticalCross && !TrueMod){
-      ecp_cl.StringNumber = lno;
-      ecp_cl.SrcPos = ecp.DestPos;
-      info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
-      vertCrossColor.BackgroundColor|=0x10;
-      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
-    };
+      for (; l1; l1 = l1->next){
+        if (l1->special) continue;
+        if (l1->start == l1->end) continue;
+        if (l1->start > ei.LeftPos+ei.WindowSizeX) continue;
+        if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX) continue;
 
-    bool vertCrossDone = false;
+        FarColor col = convert(l1->styled());
 
-		if (drawSyntax){
-			for (; l1; l1 = l1->next){
-				if (l1->special){
-					continue;
-				}
-				if (l1->start == l1->end){
-					continue;
-				}
-        if (l1->start > ei.LeftPos+ei.WindowSizeX){
-          continue;
-        }
-        if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX){
-          continue;
+        //horizontal cross
+        if (lno == ei.CurLine && showHorizontalCross){
+          col.BackgroundColor=horzCrossColor.BackgroundColor;
+          if (crossZOrder!=0){
+            col.ForegroundColor=horzCrossColor.ForegroundColor;
+          }
         }
 
-        if ((lno != ei.CurLine || !showHorizontalCross || crossZOrder == 0)){
-          FarColor col = convert(l1->styled());
+        int lend = l1->end;
+        if (lend == -1){
+          lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
+        }
 
-          //TODO
-          if (lno == ei.CurLine && showHorizontalCross){
-            if (!TrueMod){
-              if (foreDefault(col)){
-                col.BackgroundColor&=0xF0;
-                col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
-              }
+        addFARColor(lno, l1->start, lend, col);
 
-              if (backDefault(col)){
-                col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
-                col.ForegroundColor&=0xF;
-              }
-            }
-          };
-          if (!col.BackgroundColor && !col.ForegroundColor){
-            continue;
+        // vertical cross
+        if (showVerticalCross && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
+          col.BackgroundColor=vertCrossColor.BackgroundColor;
+          if (crossZOrder!=0){
+            col.ForegroundColor=vertCrossColor.ForegroundColor;
           }
-          //
-          int lend = l1->end;
-
-          if (lend == -1){
-            lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
-          }
-
-          addFARColor(lno, l1->start, lend, col);
-
-          if (lno == ei.CurLine && (l1->start <= ei.CurPos) && (ei.CurPos <= lend)){
-            delete cursorRegion;
-            cursorRegion = new LineRegion(*l1);
-          };
-
-          // column
-          if (!TrueMod && showVerticalCross && crossZOrder == 0 && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
-            col = convert(l1->styled());
-
-
-            if (foreDefault(col)){
-              col.BackgroundColor&=0xF0;
-              col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
-            }
-
-            if (backDefault(col)){
-              col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
-              col.ForegroundColor&=0xF;
-            }
-
-            ecp_cl.StringNumber = lno;
-            ecp_cl.SrcPos = ecp.DestPos;
-            info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
-            col.BackgroundColor|=0x10;
-            addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col);
-            vertCrossDone = true;
-          };
+          addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col);
         };
+
+        if (lno == ei.CurLine && (l1->start <= ei.CurPos) && (ei.CurPos <= lend)){
+          delete cursorRegion;
+          cursorRegion = new LineRegion(*l1);
+        };
+
       };
-    };
-    if (!TrueMod && showVerticalCross && !vertCrossDone){
-      ecp_cl.StringNumber = lno;
-      ecp_cl.SrcPos = ecp.DestPos;
-      info->EditorControl(CurrentEditor, ECTL_TABTOREAL ,NULL, &ecp_cl);
-      vertCrossColor.BackgroundColor|=0x10;
-      addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
-    };
+    }else{
+      // cross at the show is off the drawSyntax
+      if (lno == ei.CurLine && showHorizontalCross){
+        addFARColor(lno, 0, ei.LeftPos+ei.WindowSizeX , horzCrossColor);
+      }
+      if (showVerticalCross){
+        addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, vertCrossColor);
+      };
+    }
   };
 
-  /// pair brackets
-  PairMatch *pm = NULL;
-
+  // pair brackets
   if (drawPairs){
+    PairMatch *pm = NULL;
     pm = baseEditor->searchLocalPair(ei.CurLine, ei.CurPos);
-  }
+    if (pm != NULL){
+      // start bracket
+      FarColor col = convert(pm->start->styled());
 
-  if (pm != NULL){
-    FarColor col = convert(pm->start->styled());
-
-    // TODO
-    if (!TrueMod && showHorizontalCross){
-      if (foreDefault(col)){ 
-        col.BackgroundColor&=0xF0;
-        col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
+      //horizontal cross
+      if (showHorizontalCross){
+        col.BackgroundColor=horzCrossColor.BackgroundColor;
       }
+      addFARColor(ei.CurLine, pm->start->start, pm->start->end, col);
 
-      if (backDefault(col)){
-        col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
-        col.ForegroundColor&=0xF;
-      }
-    };
-    //
-    addFARColor(ei.CurLine, pm->start->start, pm->start->end, col);
-
-    // TODO
-    if (!TrueMod && showVerticalCross && !showHorizontalCross && pm->start->start <= ei.CurPos && ei.CurPos < pm->start->end){
-      col = convert(pm->start->styled());
-
-      if (foreDefault(col)){
-        col.BackgroundColor&=0xF0;
-        col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
-      }
-
-      if (backDefault(col)){
-        col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
-        col.ForegroundColor&=0xF;
-      }
-
-      col.BackgroundColor|=0x10;
-      addFARColor(pm->sline, ei.CurPos, ei.CurPos+1, col);
-    };
-    //
-    if (pm->eline != -1){
-      col = convert(pm->end->styled());
-
-      //
-      if (!TrueMod && showHorizontalCross && pm->eline == ei.CurLine){
-        if (foreDefault(col)){
-          col.BackgroundColor&=0xF0;
-          col.ForegroundColor=horzCrossColor.ForegroundColor&0xF;
-        }
-
-        if (backDefault(col)){
-          col.BackgroundColor=horzCrossColor.BackgroundColor&0xF0;
-          col.ForegroundColor&=0xF;
-        }
+      // vertical cross
+      if (showVerticalCross && !showHorizontalCross && pm->start->start <= ei.CurPos && ei.CurPos < pm->start->end){
+        col.BackgroundColor=vertCrossColor.BackgroundColor;
+        addFARColor(ei.CurLine, ei.CurPos, ei.CurPos+1, col);
       };
-      //
-      addFARColor(pm->eline, pm->end->start, pm->end->end, col);
-      ecp.StringNumber = pm->eline;
-      ecp.SrcPos = ecp.DestPos;
-      info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp);
 
-      //
-      if (!TrueMod && showVerticalCross && pm->end->start <= ecp.DestPos && ecp.DestPos < pm->end->end){
+      //end bracket 
+      if (pm->eline != -1){
         col = convert(pm->end->styled());
 
-        if (foreDefault(col)){
-          col.BackgroundColor&=0xF0;
-          col.ForegroundColor=vertCrossColor.ForegroundColor&0xF;
+        //horizontal cross
+        if (showHorizontalCross && pm->eline == ei.CurLine){
+          col.BackgroundColor=horzCrossColor.BackgroundColor;
         }
+        addFARColor(pm->eline, pm->end->start, pm->end->end, col);
 
-        if (backDefault(col)){
-          col.BackgroundColor=vertCrossColor.BackgroundColor&0xF0;
-          col.ForegroundColor&=0xF;
-        }
-        
-        col.BackgroundColor|=0x10;
-        addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, col);
+        ecp.StringNumber = pm->eline;
+        ecp.SrcPos = ecp.DestPos;
+        info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp);
+
+        // vertical cross
+        if (showVerticalCross && pm->end->start <= ecp.DestPos && ecp.DestPos < pm->end->end){
+          col.BackgroundColor=vertCrossColor.BackgroundColor;
+          addFARColor(pm->eline, ecp.DestPos, ecp.DestPos+1, col);
+        };
       };
-      //
-    };
 
-    baseEditor->releasePairMatch(pm);
+      baseEditor->releasePairMatch(pm);
+    };
   };
 
   if (param != EEREDRAW_ALL){
