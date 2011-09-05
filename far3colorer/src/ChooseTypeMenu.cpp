@@ -60,7 +60,8 @@ size_t ChooseTypeMenu::AddItem(const wchar_t *Text, const MENUITEMFLAGS Flags, c
   Item[PosAdd].Text = _wcsdup(Text);
   Item[PosAdd].UserData = (DWORD_PTR) UserData;
   Item[PosAdd].Reserved = 0;
-  Item[PosAdd].AccelKey = 0;
+  Item[PosAdd].AccelKey.ControlKeyState = 0;
+  Item[PosAdd].AccelKey.VirtualKeyCode = 0;
 
   return PosAdd;
 }

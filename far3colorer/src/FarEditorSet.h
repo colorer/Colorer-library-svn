@@ -28,6 +28,7 @@ const wchar_t cRegTrueMod[]        = L"TrueMod";
 const wchar_t cRegChangeBgEditor[] = L"ChangeBgEditor";
 const wchar_t cRegUserHrdPath[]    = L"UserHrdPath";
 const wchar_t cRegUserHrcPath[]    = L"UserHrcPath";
+const wchar_t cRegTabMarkStyle[]   = L"TabMarkStyle";
 
 //values of registry keys by default
 const bool cEnabledDefault          = true;
@@ -42,6 +43,7 @@ const bool cTrueMod                 = false;
 const bool cChangeBgEditor          = false;
 const wchar_t cUserHrdPathDefault[] = L"";
 const wchar_t cUserHrcPathDefault[] = L"";
+const int cTabMarkStyleDefault      = 0;
 
 const DString DConsole   = DString("console");
 const DString DRgb       = DString("rgb");
@@ -49,9 +51,9 @@ const DString Ddefault   = DString("<default>");
 const DString DAutodetect= DString("autodetect");
 
 enum
-{ IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE,IDX_CHANGE_BG,
+{ IDX_BOX, IDX_ENABLED, IDX_CROSS, IDX_PAIRS, IDX_SYNTAX, IDX_OLDOUTLINE, IDX_CHANGE_BG, IDX_CHANGE_TABMARKSTYLE,
 IDX_HRD, IDX_HRD_SELECT, IDX_CATALOG, IDX_CATALOG_EDIT, IDX_USERHRC, IDX_USERHRC_EDIT,
-IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD,IDX_HRD_TM, 
+IDX_USERHRD, IDX_USERHRD_EDIT, IDX_TM_BOX, IDX_TRUEMOD, IDX_HRD_TM, 
 IDX_HRD_SELECT_TM, IDX_TM_BOX_OFF, IDX_RELOAD_ALL, IDX_HRC_SETTING, IDX_OK, IDX_CANCEL};
 
 enum
@@ -194,6 +196,7 @@ private:
   int drawCross;
   bool drawPairs; 
   bool drawSyntax;
+  int TabMarkStyle;
   bool oldOutline;
   bool TrueModOn;
   bool ChangeBgEditor;

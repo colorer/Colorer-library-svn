@@ -29,7 +29,8 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
   structOutliner = new Outliner(baseEditor, def_Outlined);
   errorOutliner = new Outliner(baseEditor, def_Error);
-  TrueMod=true;
+  TrueMod = false;
+  TabMarkStyle= 0;
 }
 
 FarEditor::~FarEditor()
@@ -176,6 +177,11 @@ void FarEditor::setDrawCross(int _drawCross)
     }
     break;
   }
+}
+
+void FarEditor::setTabMarkStyle(int _tabMarkStyle)
+{
+  this->TabMarkStyle = _tabMarkStyle;
 }
 
 void FarEditor::setDrawPairs(bool drawPairs)
@@ -1090,7 +1096,9 @@ void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
 {
   EditorColor ec;
   ec.StructSize = sizeof(EditorColor);
-  ec.Flags = 0;
+  if (TabMarkStyle==0) ec.Flags =ECF_TABMARKFIRST;
+  else if (TabMarkStyle==1) ec.Flags = ECF_TABMARKCURRENT;
+  else ec.Flags=0;
   ec.StringNumber = lno;
   ec.StartPos = s;
   ec.EndPos = e-1;

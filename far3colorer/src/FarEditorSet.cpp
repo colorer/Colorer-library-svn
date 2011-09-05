@@ -455,14 +455,15 @@ void FarEditorSet::configure(bool fromEditor)
       { DI_CHECKBOX,5,5,0,0,0,0,0,0,0,0,0},                   //IDX_SYNTAX,
       { DI_CHECKBOX,5,6,0,0,0,0,0,0,0,0,0},                   //IDX_OLDOUTLINE,
       { DI_CHECKBOX,5,7,0,0,0,0,0,0,0,0,0},                   //IDX_CHANGE_BG,
-      { DI_TEXT,5,8,0,8,0,0,0,0,0,0,0},                       //IDX_HRD,
-      { DI_BUTTON,20,8,0,0,0,0,0,0,0,0,0},                    //IDX_HRD_SELECT,
-      { DI_TEXT,5,9,0,9,0,0,0,0,0,0,0},                       //IDX_CATALOG,
-      { DI_EDIT,6,10,52,5,0,L"catalog",0,DIF_HISTORY,0,0,0},  //IDX_CATALOG_EDIT
-      { DI_TEXT,5,11,0,11,0,0,0,0,0,0,0},                     //IDX_USERHRC,
-      { DI_EDIT,6,12,52,5,0,L"userhrc",0,DIF_HISTORY,0,0,0},  //IDX_USERHRC_EDIT
-      { DI_TEXT,5,13,0,13,0,0,0,0,0,0,0},                     //IDX_USERHRD,
-      { DI_EDIT,6,14,52,5,0,L"userhrd",0,DIF_HISTORY,0,0,0},  //IDX_USERHRD_EDIT
+      { DI_CHECKBOX,5,8,0,0,0,0,0,DIF_3STATE,0,0,0},          //IDX_CHANGE_TABMARKSTYLE,
+      { DI_TEXT,5,9,0,8,0,0,0,0,0,0,0},                       //IDX_HRD,
+      { DI_BUTTON,20,9,0,0,0,0,0,0,0,0,0},                    //IDX_HRD_SELECT,
+      { DI_TEXT,5,10,0,9,0,0,0,0,0,0,0},                      //IDX_CATALOG,
+      { DI_EDIT,6,11,52,5,0,L"catalog",0,DIF_HISTORY,0,0,0},  //IDX_CATALOG_EDIT
+      { DI_TEXT,5,12,0,11,0,0,0,0,0,0,0},                     //IDX_USERHRC,
+      { DI_EDIT,6,13,52,5,0,L"userhrc",0,DIF_HISTORY,0,0,0},  //IDX_USERHRC_EDIT
+      { DI_TEXT,5,14,0,13,0,0,0,0,0,0,0},                     //IDX_USERHRD,
+      { DI_EDIT,6,15,52,5,0,L"userhrd",0,DIF_HISTORY,0,0,0},  //IDX_USERHRD_EDIT
       { DI_SINGLEBOX,4,16,54,16,0,0,0,0,0,0,0},               //IDX_TM_BOX,
       { DI_CHECKBOX,5,17,0,0,0,0,0,0,0,0,0},                  //IDX_TRUEMOD,
       { DI_TEXT,5,18,0,18,0,0,0,0,0,0,0},                     //IDX_HRD_TM,
@@ -485,6 +486,8 @@ void FarEditorSet::configure(bool fromEditor)
     fdi[IDX_PAIRS].Selected = drawPairs;
     fdi[IDX_SYNTAX].Data = GetMsg(mSyntax);
     fdi[IDX_SYNTAX].Selected = drawSyntax;
+    fdi[IDX_CHANGE_TABMARKSTYLE].Data = GetMsg(mTabMarkStyle);
+    fdi[IDX_CHANGE_TABMARKSTYLE].Selected = TabMarkStyle;
     fdi[IDX_OLDOUTLINE].Data = GetMsg(mOldOutline);
     fdi[IDX_OLDOUTLINE].Selected = oldOutline;
     fdi[IDX_CATALOG].Data = GetMsg(mCatalogFile);
@@ -542,6 +545,7 @@ void FarEditorSet::configure(bool fromEditor)
       drawPairs = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_PAIRS, 0);
       drawSyntax = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_SYNTAX, 0);
       oldOutline = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_OLDOUTLINE, 0);
+      TabMarkStyle = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_CHANGE_TABMARKSTYLE, 0);
       ChangeBgEditor = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_CHANGE_BG, 0);
       fdi[IDX_TRUEMOD].Selected = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
       delete sHrdName;
@@ -914,7 +918,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
   editor->setDrawPairs(drawPairs);
   editor->setDrawSyntax(drawSyntax);
   editor->setOutlineStyle(oldOutline);
-
+  editor->setTabMarkStyle(TabMarkStyle);
   return editor;
 }
 
@@ -980,6 +984,7 @@ void FarEditorSet::ApplySettingsToEditors()
     fe->setDrawPairs(drawPairs);
     fe->setDrawSyntax(drawSyntax);
     fe->setOutlineStyle(oldOutline);
+    fe->setTabMarkStyle(TabMarkStyle);
   }
 }
 
@@ -1058,6 +1063,7 @@ void FarEditorSet::ReadSettings()
   oldOutline = ColorerSettings.Get(0, cRegOldOutLine, cOldOutLineDefault);
   TrueModOn = ColorerSettings.Get(0, cRegTrueMod, cTrueMod);
   ChangeBgEditor = ColorerSettings.Get(0, cRegChangeBgEditor, cChangeBgEditor);
+  TabMarkStyle = ColorerSettings.Get(0, cRegTabMarkStyle, cTabMarkStyleDefault);
 }
 
 
@@ -1076,6 +1082,7 @@ void FarEditorSet::SaveSettings()
   ColorerSettings.Set(0, cRegChangeBgEditor, ChangeBgEditor); 
   ColorerSettings.Set(0, cRegUserHrdPath, sUserHrdPath->getWChars());
   ColorerSettings.Set(0, cRegUserHrcPath, sUserHrcPath->getWChars());
+  ColorerSettings.Set(0, cRegTabMarkStyle, TabMarkStyle);
 }
 
 bool FarEditorSet::SetBgEditor()

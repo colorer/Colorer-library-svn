@@ -46,7 +46,7 @@
 "Try anyway"
 "Fatal error loading the library schemes"
 "Select color style"
-"Change &background editor"
+"Change Editor &backgound"
 "TrueMod settings"
 "&Users file of color styles"
 "Users &file of schemes"
@@ -59,3 +59,4 @@
 "Favorites"
 "Define key"
 "Press the desired key"
+"Tab &Mark Style"
