@@ -526,6 +526,7 @@ int FarEditor::editorEvent(int event, void *param)
     egs.StringNumber = lno;
     info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
     int llen = egs.StringLength;
+    DString s = DString(egs.StringText);
     //position previously found a column in the current row
     ecp_cl.StringNumber = lno;
     ecp_cl.SrcPos = ecp.DestPos;
@@ -541,37 +542,54 @@ int FarEditor::editorEvent(int event, void *param)
         if (l1->start > ei.LeftPos+ei.WindowSizeX) continue;
         if (l1->end != -1 && l1->end < ei.LeftPos-ei.WindowSizeX) continue;
 
-        FarColor col = convert(l1->styled());
-
         int lend = l1->end;
         if (lend == -1){
           lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
         }
-
-        //horizontal cross
-        if (lno == ei.CurLine && showHorizontalCross){
-          col.BackgroundColor=horzCrossColor.BackgroundColor;
-          if (crossZOrder!=0){
-            col.ForegroundColor=horzCrossColor.ForegroundColor;
-          }
-          addFARColor(lno, l1->start, lend, col, 0);
-        }else
-        addFARColor(lno, l1->start, lend, col);
-
-        // vertical cross
-        if (showVerticalCross && l1->start <= ecp_cl.DestPos && ecp_cl.DestPos < lend){
-          col.BackgroundColor=vertCrossColor.BackgroundColor;
-          if (crossZOrder!=0){
-            col.ForegroundColor=vertCrossColor.ForegroundColor;
-          }
-          addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col);
-        };
-
         if (lno == ei.CurLine && (l1->start <= ei.CurPos) && (ei.CurPos <= lend)){
           delete cursorRegion;
           cursorRegion = new LineRegion(*l1);
         };
 
+        FarColor col = convert(l1->styled());
+        // remove the front in color whitespaces to display correctly in the far hidden characters (tab, space)
+        int j=l1->start;
+        int start,end;
+        bool whitespace=false;
+        while (j<lend){
+          FarColor col1=col;
+          start = j;
+          if (egs.StringText[j]==L' ' || egs.StringText[j]==L'\t'){
+            while ((j<=llen)&&(j<lend)&&(egs.StringText[j]==L' ' || egs.StringText[j]==L'\t')) j++;
+            end = j>=llen ? lend : j;
+            whitespace=true;
+          }else{
+            while ((j<=llen)&&(j<lend)&&(egs.StringText[j]!=L' ' && egs.StringText[j]!=L'\t')) j++;
+            end = j>=llen ? lend : j;
+            whitespace=false;
+          }
+
+          if (whitespace) col1.ForegroundColor=rdBackground->fore;
+          //horizontal cross
+          if (lno == ei.CurLine && showHorizontalCross){
+            col1.BackgroundColor=horzCrossColor.BackgroundColor;
+            if (crossZOrder!=0 && !whitespace){
+              col1.ForegroundColor=horzCrossColor.ForegroundColor;
+            }
+            addFARColor(lno, start, end, col1);
+          }else
+            addFARColor(lno, start, end, col1);
+
+          // vertical cross
+          if (showVerticalCross && start <= ecp_cl.DestPos && ecp_cl.DestPos < end){
+            col1.BackgroundColor=vertCrossColor.BackgroundColor;
+            if (crossZOrder!=0 && !whitespace){
+              col1.ForegroundColor=vertCrossColor.ForegroundColor;
+            }
+            addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col1,ECF_TABMARKCURRENT);
+          };
+          j = end;
+        }
       };
     }else{
       // cross at the show is off the drawSyntax

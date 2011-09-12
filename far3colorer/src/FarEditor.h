@@ -157,7 +157,7 @@ private:
   bool foreDefault(FarColor col);
   bool backDefault(FarColor col);
   void showOutliner(Outliner *outliner);
-  void addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=ECF_TABMARKCURRENT);
+  void addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=0);
   void deleteFarColor(int lno, int s);
   const wchar_t *GetMsg(int msg);
 };
