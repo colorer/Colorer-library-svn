@@ -29,8 +29,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   const Region *def_Error = pf->getHRCParser()->getRegion(&DString("def:Error"));
   structOutliner = new Outliner(baseEditor, def_Outlined);
   errorOutliner = new Outliner(baseEditor, def_Error);
-  TrueMod = false;
-  TabMarkStyle= 0;
+  TrueMod=true;
 }
 
 FarEditor::~FarEditor()
@@ -177,11 +176,6 @@ void FarEditor::setDrawCross(int _drawCross)
     }
     break;
   }
-}
-
-void FarEditor::setTabMarkStyle(int _tabMarkStyle)
-{
-  this->TabMarkStyle = _tabMarkStyle;
 }
 
 void FarEditor::setDrawPairs(bool drawPairs)
@@ -549,19 +543,19 @@ int FarEditor::editorEvent(int event, void *param)
 
         FarColor col = convert(l1->styled());
 
+        int lend = l1->end;
+        if (lend == -1){
+          lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
+        }
+
         //horizontal cross
         if (lno == ei.CurLine && showHorizontalCross){
           col.BackgroundColor=horzCrossColor.BackgroundColor;
           if (crossZOrder!=0){
             col.ForegroundColor=horzCrossColor.ForegroundColor;
           }
-        }
-
-        int lend = l1->end;
-        if (lend == -1){
-          lend = fullBackground ? ei.LeftPos+ei.WindowSizeX : llen;
-        }
-
+          addFARColor(lno, l1->start, lend, col, 0);
+        }else
         addFARColor(lno, l1->start, lend, col);
 
         // vertical cross
@@ -1092,13 +1086,11 @@ void FarEditor::deleteFarColor(int lno, int s)
   info->EditorControl(CurrentEditor, ECTL_DELCOLOR, NULL, &edc);
 }
 
-void FarEditor::addFARColor(int lno, int s, int e, FarColor col)
+void FarEditor::addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle)
 {
   EditorColor ec;
   ec.StructSize = sizeof(EditorColor);
-  if (TabMarkStyle==0) ec.Flags =ECF_TABMARKFIRST;
-  else if (TabMarkStyle==1) ec.Flags = ECF_TABMARKCURRENT;
-  else ec.Flags=0;
+  ec.Flags=TabMarkStyle;
   ec.StringNumber = lno;
   ec.StartPos = s;
   ec.EndPos = e-1;

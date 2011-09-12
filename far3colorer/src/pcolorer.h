@@ -61,7 +61,7 @@ enum
   mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
   mUserHrdFile, mUserHrcFile, mUserHrcSetting,
   mUserHrcSettingDialog, mListSyntax, mParamList,mParamValue, mAutoDetect, mFavorites,
-  mKeyAssignDialogTitle, mKeyAssignTextTitle, mTabMarkStyle
+  mKeyAssignDialogTitle, mKeyAssignTextTitle
 };
 
 #endif

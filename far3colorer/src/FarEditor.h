@@ -78,7 +78,6 @@ public:
   void setDrawPairs(bool drawPairs);
   void setDrawSyntax(bool drawSyntax);
   void setOutlineStyle(bool oldStyle);
-  void setTabMarkStyle(int _tabMarkStyle);
   void setTrueMod(bool _TrueMod);
 
   /** Editor action: pair matching.
@@ -128,7 +127,6 @@ private:
   int drawCross;//0 - off,  1 - always, 2 - if included in the scheme
   bool showVerticalCross, showHorizontalCross;
   int crossZOrder;
-  int TabMarkStyle; // 0 - ECF_TABMARKFIRST , 1 - ECF_TABMARKCURRENT , 2 - 0
   FarColor horzCrossColor, vertCrossColor;
 
   bool drawPairs, drawSyntax;
@@ -159,7 +157,7 @@ private:
   bool foreDefault(FarColor col);
   bool backDefault(FarColor col);
   void showOutliner(Outliner *outliner);
-  void addFARColor(int lno, int s, int e, FarColor col);
+  void addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=ECF_TABMARKCURRENT);
   void deleteFarColor(int lno, int s);
   const wchar_t *GetMsg(int msg);
 };
