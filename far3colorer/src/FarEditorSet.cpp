@@ -1089,12 +1089,14 @@ bool FarEditorSet::SetBgEditor()
 		fsc.Flags = FSETCLR_REDRAW;
 		fsc.ColorsCount = 1;
 		fsc.StartIndex = COL_EDITORTEXT;
-		fc.BackgroundColor = revertRGB(def_text->back);
-		fc.ForegroundColor = revertRGB(def_text->fore);
     if (TrueModOn){
       fc.Flags = 0;
+      fc.BackgroundColor = revertRGB(def_text->back);
+      fc.ForegroundColor = revertRGB(def_text->fore);
     }else{
-      fc.Flags = FCF_FG_4BIT|FCF_BG_4BIT;
+      fc.Flags = FCF_4BITMASK;
+      fc.BackgroundColor = def_text->back;
+		  fc.ForegroundColor = def_text->fore;
     }
     fc.Reserved = null;
 		fsc.Colors = &fc;

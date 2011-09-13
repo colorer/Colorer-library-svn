@@ -154,7 +154,7 @@ int WINAPI GetMinFarVersionW(void)
 {
   #define MAKEFARVERSION_OLD(major,minor,build) ( ((major)<<8) | (minor) | ((build)<<16))
   
-  return MAKEFARVERSION_OLD(3,0,2130);
+  return MAKEFARVERSION_OLD(FARMANAGERVERSION_MAJOR,FARMANAGERVERSION_MINOR,FARMANAGERVERSION_BUILD);
 }
 
 
