@@ -160,7 +160,14 @@
  <regexp match="/./" region0="def:Error" priority="low"/>
 </scheme>
 
-<scheme name="pcre.modif"> <!-- Заглушка, на ее место - спецсимволы -->
+<scheme name="pcre.modif">
+ <keywords region="SpecArea">
+  <symb name="-" region="MetaSymb"/>
+  <symb name="i"/>
+  <symb name="m"/>
+  <symb name="s"/>
+  <symb name="x"/>
+ </keywords>
  <regexp match="/./" region0="def:Error" priority="low"/>
 </scheme>
 
@@ -270,13 +277,6 @@
 <scheme name="unicode.charter"/> <!-- Not realised -->
 
 <scheme name="perl.modif">
- <keywords region="SpecArea">
-  <symb name="-" region="MetaSymb"/>
-  <symb name="i"/>
-  <symb name="m"/>
-  <symb name="s"/>
-  <symb name="x"/>
- </keywords>
  <inherit scheme="pcre.modif"/>
 </scheme>
 
