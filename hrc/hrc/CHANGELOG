@@ -3,6 +3,8 @@
   Fixed:
     - PL/I (Pavel Pleva)
     - NowDoc in PHP
+	- regexp
+	- C++ function outline 
 
 2011-06-30 r1724 (FarColorer 1.0.3.3)
   Fixed:
