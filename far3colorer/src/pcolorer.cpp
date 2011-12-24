@@ -47,7 +47,7 @@ void WINAPI GetGlobalInfoW(struct GlobalInfo *gInfo)
 {
   gInfo->StructSize = sizeof(GlobalInfo);
   gInfo->MinFarVersion = FARMANAGERVERSION;
-  gInfo->Version = MAKEFARVERSION(1,0,3,5,VS_BETA);
+  gInfo->Version = MAKEFARVERSION(1,0,3,5,VS_RELEASE);
   gInfo->Guid = MainGuid;
   gInfo->Title = L"FarColorer";
   gInfo->Description =L"Syntax highlighting in Far editor";
