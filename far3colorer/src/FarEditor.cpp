@@ -82,6 +82,10 @@ void FarEditor::chooseFileType(String *fname)
 void FarEditor::setFileType(FileType *ftype)
 {
   baseEditor->setFileType(ftype);
+  // clear Outliner
+  structOutliner->modifyEvent(0);
+  errorOutliner->modifyEvent(0);
+
   reloadTypeSettings();
 }
 

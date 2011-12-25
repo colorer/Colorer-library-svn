@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. при смене типа файла не очищались списки функций и ошибок
+
+#Revision: 1798
+	#Author: ctapmex Date: 2011-12-24 22:29:01 +0600 (Сб, 24 дек 2011)
 	1. Far3 2317 API. Far3 Ready.
 
 #Revision: 1796
