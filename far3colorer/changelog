@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. shortcuts.reg заменен на shortcuts.xml
+
+$Revision$
+	$Author$ $Date$
 	1. при смене типа файла не очищались списки функций и ошибок
 
 #Revision: 1798

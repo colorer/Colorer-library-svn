@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<farconfig>
+  <macro>
+    <constants />
+    <variables />
+    <keymacros>
+      <macro area="Editor" key="Alt'" flags="DisableOutput"
+        description="find errors [colorer]"
+      >F11 c 6</macro>
+      <macro area="Editor" key="Alt;" flags="DisableOutput"
+        description="list functions [colorer]"
+      >F11 c 5</macro>
+      <macro area="Editor" key="AltK" flags="DisableOutput"
+        description="select region [colorer]"
+      >F11 c 7</macro>
+      <macro area="Editor" key="AltL" flags="DisableOutput"
+        description="list types [colorer]"
+      >F11 c 1</macro>
+      <macro area="Editor" key="AltO" flags="DisableOutput"
+        description="find function [colorer]"
+      >F11 c 8</macro>
+      <macro area="Editor" key="AltP" flags="DisableOutput"
+        description="select pair [colorer]"
+      >F11 c 4</macro>
+      <macro area="Editor" key="AltR" flags="DisableOutput"
+        description="reload colorer [colorer]"
+      >F11 c r</macro>
+      <macro area="Editor" key="Alt[" flags="DisableOutput"
+        description="match pair [colorer]"
+      >F11 c 2</macro>
+      <macro area="Editor" key="Alt]" flags="DisableOutput"
+        description="select block [colorer]"
+      >F11 c 3</macro>
+    </keymacros>
+  </macro>
+</farconfig>

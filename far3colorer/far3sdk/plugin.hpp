@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2317
+  Plugin API for Far Manager 3.0 build 2328
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2317
+#define FARMANAGERVERSION_BUILD 2328
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -660,7 +660,7 @@ struct PluginPanelItem
 	FILETIME LastWriteTime;
 	FILETIME ChangeTime;
 	unsigned __int64 FileSize;
-	unsigned __int64 PackSize;
+	unsigned __int64 AllocationSize;
 	const wchar_t *FileName;
 	const wchar_t *AlternateFileName;
 	const wchar_t *Description;
@@ -1732,6 +1732,7 @@ enum FARSETTINGS_SUBFOLDERS
 	FSSF_FOLDERSHORTCUT_7           = 13,
 	FSSF_FOLDERSHORTCUT_8           = 14,
 	FSSF_FOLDERSHORTCUT_9           = 15,
+	FSSF_CONFIRMATIONS              = 16,
 };
 
 struct FarSettingsCreate
