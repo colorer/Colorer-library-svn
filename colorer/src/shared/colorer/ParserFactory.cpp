@@ -412,7 +412,7 @@ StyledHRDMapper *ParserFactory::createStyledMapper(const String *classID, const 
     hrdLocV = (hrd) ? hrdClass->get(&DString(hrd)) : hrdClass->get(&DString("default"));
     if(hrdLocV == null)
     {
-      hrdLocV = hrdClass->get(&DString("default"));
+      hrdLocV = hrdClass->enumerate();
     }
   }
   else
