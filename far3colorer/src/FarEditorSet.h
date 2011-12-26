@@ -103,7 +103,8 @@ public:
   /**
   * trying to load the database on the specified path
   */
-  bool TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full);
+  enum HRC_MODE {HRCM_CONSOLE, HRCM_RGB, HRCM_BOTH};
+  bool TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full, const HRC_MODE hrc_mode);
   SString *GetCatalogPath() {return sCatalogPath;}
   SString *GetUserHrdPath() {return sUserHrdPath;}
   bool GetPluginStatus() {return rEnabled;}

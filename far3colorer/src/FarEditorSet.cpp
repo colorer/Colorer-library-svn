@@ -409,8 +409,9 @@ INT_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2)
       wchar_t *catalog = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
       wchar_t *userhrd = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRD_EDIT,0));
       wchar_t *userhrc = trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRC_EDIT,0));
-      fes->TestLoadBase(catalog, userhrd, userhrc, true);
-      Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true,0);
+      bool trumod = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
+      fes->TestLoadBase(catalog, userhrd, userhrc, true, trumod? FarEditorSet::HRCM_BOTH : FarEditorSet::HRCM_CONSOLE);
+      Info.SendDlgMessage(hDlg,DM_SHOWDIALOG , true, 0);
       return true;
     }
     break;
@@ -424,10 +425,12 @@ INT_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2)
     const wchar_t *temp = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
     const wchar_t *userhrd = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRD_EDIT,0));
     const wchar_t *userhrc = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_USERHRC_EDIT,0));
+    bool trumod = !!Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_TRUEMOD, 0);
     int k = (int)Info.SendDlgMessage(hDlg, DM_GETCHECK, IDX_ENABLED, 0);
 
-    if (fes->GetCatalogPath()->compareTo(DString(temp))|| fes->GetUserHrdPath()->compareTo(DString(userhrd)) || (!fes->GetPluginStatus() && k)){ 
-      if (fes->TestLoadBase(temp, userhrd, userhrc, false)){
+    if (fes->GetCatalogPath()->compareTo(DString(temp))|| fes->GetUserHrdPath()->compareTo(DString(userhrd)) 
+      || (!fes->GetPluginStatus() && k) || (trumod == true)){ 
+      if (fes->TestLoadBase(temp, userhrd, userhrc, false, trumod? FarEditorSet::HRCM_BOTH : FarEditorSet::HRCM_CONSOLE)){
         return false;
       }
       else{
@@ -711,7 +714,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
   return 0;
 }
 
-bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full)
+bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full, const HRC_MODE hrc_mode)
 {
   bool res = true;
   const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
@@ -746,29 +749,33 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
     p.readProfile();
     p.readUserProfile();
 
-    try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
-    }
-    catch (ParserFactoryException &e)
-    {
-      if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
-        parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+    if (hrc_mode == HRCM_CONSOLE || hrc_mode == HRCM_BOTH) {
+      try{
+        regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, sTempHrdName);
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, NULL);
-    };
+      catch (ParserFactoryException &e)
+      {
+        if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
+          parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+        }
+        regionMapperLocal = parserFactoryLocal->createStyledMapper(&DConsole, NULL);
+      };
+      delete regionMapperLocal;
+      regionMapperLocal=NULL;
+    }
 
-    delete regionMapperLocal;
-    regionMapperLocal=NULL;
-    try{
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, sTempHrdNameTm);
-    }
-    catch (ParserFactoryException &e)
-    {
-      if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
-        parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+    if (hrc_mode == HRCM_RGB || hrc_mode == HRCM_BOTH) {
+      try{
+        regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, sTempHrdNameTm);
       }
-      regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, NULL);
-    };
+      catch (ParserFactoryException &e)
+      {
+        if ((parserFactoryLocal != NULL)&&(parserFactoryLocal->getErrorHandler()!=NULL)){
+          parserFactoryLocal->getErrorHandler()->error(*e.getMessage());
+        }
+        regionMapperLocal = parserFactoryLocal->createStyledMapper(&DRgb, NULL);
+      };
+    }
 
     Info.RestoreScreen(scr);
     if (full){

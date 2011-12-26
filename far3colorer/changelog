@@ -1,9 +1,13 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. проверять наличие rgb стилей нужно только при включенном режиме truemode
+
+#Revision: 1801
+	#Author: ctapmex Date: 2011-12-25 20:27:24 +0600 (Вс, 25 дек 2011)
 	1. shortcuts.reg заменен на shortcuts.xml
 
-$Revision$
-	$Author$ $Date$
+#Revision: 1801
+	#Author: ctapmex Date: 2011-12-25 20:27:24 +0600 (Вс, 25 дек 2011)
 	1. при смене типа файла не очищались списки функций и ошибок
 
 #Revision: 1798
