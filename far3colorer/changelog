@@ -1,5 +1,5 @@
-﻿$Revision$
-	$Author$ $Date$
+﻿#Revision: 1803
+	#Author: ctapmex Date: 2011-12-27 11:39:50 +0600 (Вт, 27 дек 2011)
 	1. сломался ввод символов _ и ~ в outline
 
 #Revision: 1802
@@ -10,7 +10,7 @@
 	#Author: ctapmex Date: 2011-12-25 20:27:24 +0600 (Вс, 25 дек 2011)
 	1. shortcuts.reg заменен на shortcuts.xml
 
-#Revision: 1801
+#Revision: 1800
 	#Author: ctapmex Date: 2011-12-25 20:27:24 +0600 (Вс, 25 дек 2011)
 	1. при смене типа файла не очищались списки функций и ошибок
 
