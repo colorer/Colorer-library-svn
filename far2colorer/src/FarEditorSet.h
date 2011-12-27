@@ -95,7 +95,8 @@ public:
   /**
   * trying to load the database on the specified path
   */
-  bool TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full);
+  enum HRC_MODE {HRCM_CONSOLE, HRCM_RGB, HRCM_BOTH};
+  bool TestLoadBase(const wchar_t *catalogPath, const wchar_t *userHrdPath, const wchar_t *userHrcPath, const int full, const HRC_MODE hrc_mode);
   SString *GetCatalogPath() {return sCatalogPath;}
   SString *GetUserHrdPath() {return sUserHrdPath;}
   bool GetPluginStatus() {return rEnabled;}
@@ -114,6 +115,8 @@ public:
   void OnSaveHrcParams(HANDLE hDlg);
   bool dialogFirstFocus;
   int menuid;
+
+  bool checkConsoleAnnotationAvailable();
 private:
   /** Returns current global error handler. */
   ErrorHandler *getErrorHandler();
@@ -150,7 +153,6 @@ private:
   
   bool checkConEmu();
   bool checkFarTrueMod();
-  bool checkConsoleAnnotationAvailable();
   bool consoleAnnotationAvailable;
 
   int getCountFileTypeAndGroup();
