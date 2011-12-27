@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	1. сломался ввод символов _ и ~ в outline
+
+#Revision: 1802
+	#Author: ctapmex Date: 2011-12-26 16:47:29 +0600 (Пн, 26 дек 2011)
 	1. проверять наличие rgb стилей нужно только при включенном режиме truemode
 
 #Revision: 1801

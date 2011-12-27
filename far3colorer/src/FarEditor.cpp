@@ -675,7 +675,7 @@ void FarEditor::showOutliner(Outliner *outliner)
     {VK_UP,LEFT_CTRL_PRESSED},{VK_DOWN,LEFT_CTRL_PRESSED },
     {VK_LEFT,LEFT_CTRL_PRESSED }, {VK_RIGHT,LEFT_CTRL_PRESSED },
     {VK_RETURN,LEFT_CTRL_PRESSED },{VK_OEM_1,LEFT_CTRL_PRESSED }, 
-    {VK_OEM_MINUS,LEFT_CTRL_PRESSED },{VK_OEM_3,LEFT_CTRL_PRESSED },
+    {VK_OEM_MINUS,SHIFT_PRESSED },{VK_OEM_3,SHIFT_PRESSED },
     {VK_NUMPAD0,0},{VK_NUMPAD1,0},{VK_NUMPAD2,0},{VK_NUMPAD3,0},{VK_NUMPAD4,0},
     {VK_NUMPAD5,0},{VK_NUMPAD6,0},{VK_NUMPAD7,0},{VK_NUMPAD8,0},{VK_NUMPAD9,0},
     {'0',0},{'1',0},{'2',0},{'3',0},{'4',0},{'5',0},{'6',0},{'7',0},{'8',0},{'9',0},
@@ -1003,7 +1003,7 @@ void FarEditor::showOutliner(Outliner *outliner)
       filter[flen]= '_';
       filter[++flen]= 0;
       break;
-    case 12: // _
+    case 12: // ~
 
       if (flen == FILTER_SIZE){
         break;
