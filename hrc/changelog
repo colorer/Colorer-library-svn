@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- Far MacroLib
+	- добавления в far.hrc
+
+#Revision: 1797 
+	#Author: ctapmex Date: 2011-09-14 11:53:27 +0600 (Ср, 14 сен 2011)
 	- поправлен regexp
 	- исправлен outline для функций в C++
 

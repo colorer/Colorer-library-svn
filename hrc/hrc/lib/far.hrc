@@ -360,6 +360,7 @@
 		<word name="Menu.Select"/>
 		<word name="Menu.Show"/>
 		<word name="Menu.Value"/>
+		<word name="Dlg.SetFocus"/>
 		<word name="Dlg.GetValue"/>
 		<word name="Editor.Pos"/>
 		<word name="Editor.Sel"/>
@@ -382,6 +383,8 @@
 		<word name="history.enable"/>
 		<word name="FMatch"/>
 		<word name="Keybar.Show"/>
+		<word name="Beep"/>
+		<word name="kbdLayoutBeep"/>
 	</keywords>
 </scheme>
 
@@ -402,27 +405,27 @@
 <!-- flags -->
 
 <scheme name="macro.flags">
-	<block start="/[APap]Panel(\.)\M\w+/i" end="/~\w+\b\m/" 
+	<block start="/[APap]Panel(\.)\M\w+/i" end="/~[\w\.]+\m/" 
 		scheme="macro.flags.panel" 
 		region00="flag" region01="flag.dot"
 	/>
-	<block start="/CmdLine(\.)\M\w+/i" end="/~\w+\b\m/" 
+	<block start="/CmdLine(\.)\M\w+/i" end="/~[\w\.]+\m/" 
 		scheme="macro.flags.cmd" 
 		region00="flag" region01="flag.dot"
 	/>
-	<block start="/Menu(\.)\M\w+/i" end="/~\w+\b\m/" 
+	<block start="/Menu(\.)\M\w+/i" end="/~[\w\.]+\m/" 
 		scheme="macro.flags.menu" 
 		region00="flag" region01="flag.dot"
 	/>
-	<block start="/Dlg(\.)\M\w+/i" end="/~\w+\b\m/" 
+	<block start="/Dlg(\.)\M\w+/i" end="/~[\w\.]+\m/" 
 		scheme="macro.flags.dlg" 
 		region00="flag" region01="flag.dot"
 	/>
-	<block start="/Editor(\.)\M\w+/i" end="/~\w+\b\m/" 
+	<block start="/Editor(\.)\M\w+/i" end="/~[\w\.]+\m/" 
 		scheme="macro.flags.edit" 
 		region00="flag" region01="flag.dot"
 	/>
-	<block start="/Viewer(\.)\M\w+/i" end="/~\w+\b\m/"
+	<block start="/Viewer(\.)\M\w+/i" end="/~[\w\.]+\m/"
 		scheme="macro.flags.view"
 		region00="flag" region01="flag.dot"
 	/>
@@ -446,6 +449,8 @@
 		<word name="MsEventState"/>
 		<word name="IsUserAdmin"/>
 		<word name="RCounter"/>
+		<word name="Far.Pid"/>
+		<word name="Far.UpTime"/>
 	</keywords>
 	<inherit scheme="macro.flags.ns"/>
 	<inherit scheme="macro.keys"/>
@@ -468,6 +473,7 @@
 		<word name="ItemType"/>
 		<word name="Info.Id"/>
 		<word name="Info.Owner"/>
+		<word name="PrevPos"/>
 	</keywords> 
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
@@ -498,6 +504,7 @@
 <scheme name="macro.flags.menu">
 	<keywords region="flag" ignorecase="yes">
 		<word name="Value"/>
+		<word name="Info.Id"/>
 	</keywords> 
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
@@ -534,6 +541,7 @@
 		<word name="HostFile"/>
 		<word name="Prefix"/>
 		<word name="Path0"/>
+		<word name="Format"/>
 	</keywords>
 	<regexp match="/\S+/" region="def:Error" priority="low"/>
 </scheme>
@@ -564,6 +572,7 @@
 </scheme>
 
 <scheme name="macro.flags.ns">
+        <regexp match="/(Dialog|Shell)\.AutoCompletion/" region="flag"/>
 	<keywords region="flag" ignorecase="yes">
 		<word name="Shell"/>
 		<word name="Viewer"/>
@@ -589,9 +598,9 @@
 
 <scheme name="macro.keys">
 	<keywords region="macro.key" ignorecase="yes" worddiv="[\s&quot;&apos;\(\)=]">
-    <word name="Alt"/>
-    <word name="Ctrl"/>
-    <word name="RCtrl"/>
+		<word name="Alt"/>
+		<word name="Ctrl"/>
+		<word name="RCtrl"/>
 		<word name="RAlt"/>
 		<word name="Shift"/>
 		<word name="BackSlash"/>

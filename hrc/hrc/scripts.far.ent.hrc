@@ -28,7 +28,11 @@
     <filename>/^Sequence$/</filename>
     <filename>/^\%\%\w+$/</filename>
   </prototype>
-  
+
+  <prototype name="far.macrolib" group="scripts.far" description="Far Macro Library">
+    <location link="scripts/far/macrolib.hrc"/> 
+    <filename>/\.fml$/i</filename>
+  </prototype>
 
   <prototype name="calcset" group="scripts.far" description="calc's defines">
     <location link="scripts/far/gen/calcset.hrc"/>
