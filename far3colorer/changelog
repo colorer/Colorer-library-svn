@@ -1,4 +1,8 @@
-﻿#Revision: 1803
+﻿$Revision$
+	$Author$ $Date$
+	1. совместимость с win2000 sp4 для VC2010
+
+#Revision: 1803
 	#Author: ctapmex Date: 2011-12-27 11:39:50 +0600 (Вт, 27 дек 2011)
 	1. сломался ввод символов _ и ~ в outline
 

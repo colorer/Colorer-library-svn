@@ -500,4 +500,9 @@
       <Filter>pcolorer3</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="vc10.asm">
+      <Filter>pcolorer3</Filter>
+    </MASM>
+  </ItemGroup>
 </Project>
