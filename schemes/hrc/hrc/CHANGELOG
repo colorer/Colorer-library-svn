@@ -1,12 +1,17 @@
   New:
     - Go (Mikhail Kupchik)
-    - Far MacroLib
+    - Far MacroLib (Max Rusov)
   Fixed:
-    - PL/I (Pavel Pleva)
     - NowDoc in PHP
     - regexp
     - C++ function outline 
     - far.hrc - new in Far3
+    - vbasic and vbscript - fix outline
+    - lua (Aidar, darkmist )
+    - cobol.hrc: updated keywords list, removed import, color all keywords the same, 
+       allow string in single or double quotes (Pavel Pleva)
+    - cobolfr.hrc: updated keywords list, removed import, color all keywords the same (Pavel Pleva)
+    - pl1.hrc: added preprocessor comments, removed import, and other (Pavel Pleva)
 
 2011-06-30 r1724 (FarColorer 1.0.3.3)
   Fixed:

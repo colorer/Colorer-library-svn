@@ -102,11 +102,10 @@ With help of:
          <block start="/(\()/" end="/(\))/" scheme="vbasic" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="vbasic" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
 
-         <inherit scheme="PairedConstructions">
-           <virtual scheme="PairedConstructions" subst-scheme="vbasic"/>
-         </inherit>
-
          <inherit scheme="Outlines"/>
+    <!--     <inherit scheme="PairedConstructions">
+           <virtual scheme="PairedConstructions" subst-scheme="vbasic"/>
+         </inherit>    -->
 
 <!-- Labels -->
          <regexp match="/^\w+(:)$/" region0="vbLabel" region1="vbSymb"/>

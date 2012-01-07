@@ -12,46 +12,49 @@
          </documentation>
       </annotation>
 
-      <import type="def"/>
-      <import type="sql"/>
-
-      <region name="pComment" parent="Comment"/>
-      <region name="pString" parent="String"/>
-      <region name="pSymb" parent="Symbol"/>
-      <region name="pSymbSemicolon" parent="SymbolStrong"/>
-      <region name="pBuiltWord" parent="Keyword"/>
-      <region name="pKeyWord" parent="Keyword"/>
-      <region name="pPrepro" parent="Label"/>
-      <region name="pNumb" parent="Number"/>
-      <region name="pConst" parent="Number"/>
-      <region name="pOther" parent="Directive"/>
-      <region name="pError" parent="Error"/>
+      <region name="pComment"   parent="def:Comment"/>
+      <region name="pString"    parent="def:String"/>
+      <region name="pSymb"      parent="def:Symbol"/>
+      <region name="pSemicolon" parent="def:SymbolStrong"/>
+      <region name="pBuiltWord" parent="def:Keyword"/>
+      <region name="pKeyWord"   parent="def:Keyword"/>
+      <region name="pPrepro"    parent="def:Label"/>
+      <region name="pNumb"      parent="def:Number"/>
+      <region name="pConst"     parent="def:Number"/>
+      <region name="pOther"     parent="def:Directive"/>
+      <region name="pError"     parent="def:Error"/>
 
       <scheme name="pl1">
-<!-- Preprocessor directives -->
-         <regexp match="/^[\*\%]PROCESS.*$/i" region="pPrepro"/> <!-- compiler options -->
-         <regexp match="/\M[;\s](%)/" region1="pPrepro"/>
-<!-- no character allowed in 1st column -->
+         <!-- Compiler options -->
+         <regexp match="/^[\*\%]PROCESS.*$/i" region="pPrepro"/>
+         <!-- No character allowed in 1st column -->
          <regexp match="/^([^\s])\M/" region="pError"/>
-<!-- Comments -->
-         <block start="/\/\*/" end="/\*\//" scheme="Comment" region="pComment" region00="PairStart" region10="PairEnd"/>
-<!-- Embedded EXEC is usually "EXEC SQL" -->
-         <block start="/\bEXEC\b/i" end="/;/" scheme="sql" region="pOther" region00="PairStart" region10="PairEnd"/>
-<!-- paired -->
-         <block start="/(\()/" end="/(\))/" scheme="pl1" region00="pSymb" region01="PairStart" region10="pSymb" region11="PairEnd"/>
-         <block start="/(\[)/" end="/(\])/" scheme="pl1" region00="pSymb" region01="PairStart" region10="pSymb" region11="PairEnd"/>
-         <block start="/(%DO|%PROC|%PROCEDURE|%SELECT)\b/i" end="/(%END)\b/i" scheme="pl1" region00="PairStart" region01="pPrepro" region10="PairEnd" region11="pPrepro"/>
-         <block start="/\b(BEGIN|DO|PACKAGE|PROC|PROCEDURE|SELECT)\b/i" end="/\b(END)\b/i" scheme="pl1" region00="PairStart" region01="pKeyWord" region10="PairEnd" region11="pKeyWord"/>
-<!-- Numbers in pl1 may contain underscores -->
+         <!-- Preprocessor assignment statements -->
+         <regexp match="/\M[;\s](%)/" region1="pPrepro"/>
+         <!-- Preprocessor comments -->
+         <block start="/^\s+(%\s*IF\s+0\s+%?\s*THEN\s+%?\s*DO)(;)?\b/i" end="/^\s+(%\s*END)\b/i"
+                scheme="def:empty" region="pComment" region00="def:PairStart" region01="pPrepro" region02="pSemicolon" region10="def:PairEnd" region11="pPrepro"/>
+         <!-- Comments -->
+         <block start="/\/\*/" end="/\*\//" scheme="def:empty" region="pComment" region00="def:PairStart" region10="def:PairEnd"/>
+         <!-- Embedded EXEC is usually "EXEC SQL" -->
+         <block start="/\bEXEC\b/i" end="/;/" scheme="sql:sql" region="pOther" region00="def:PairStart" region10="def:PairEnd"/>
+         <!-- Paired -->
+         <block start="/(\()/" end="/(\))/" scheme="pl1" region00="def:PairStart" region01="pSymb" region10="def:PairEnd" region11="pSymb"/>
+         <block start="/(\[)/" end="/(\])/" scheme="pl1" region00="def:PairStart" region01="pSymb" region10="def:PairEnd" region11="pSymb"/>
+         <block start="/(%DO|%PROC|%PROCEDURE|%SELECT)\b/i" end="/(%END)\b/i"
+                scheme="pl1" region00="def:PairStart" region01="pPrepro" region10="def:PairEnd" region11="pPrepro"/>
+         <block start="/\b(BEGIN|DO|PACKAGE|PROC|PROCEDURE|SELECT)\b/i" end="/\b(END)\b/i"
+                scheme="pl1" region00="def:PairStart" region01="pKeyWord" region10="def:PairEnd" region11="pKeyWord"/>
+         <!-- Numbers in PL/I may contain underscores -->
          <regexp match="/\B\.\d(\d|\_)*\b/" region0="pNumb"/> 
          <regexp match="/\b\d(\d|\_)*(\.(\d|\_)*)?/" region0="pNumb"/> 
-<!-- Constants may also contain underscores -->
+         <!-- Constants may also contain underscores -->
          <regexp match="/\'[\dA-F\_]*\'((B[X43]?)|(XN?))\b/i" region0="pConst"/>
          <regexp match="/\&#34;[\dA-F\_]*\&#34;((B[X43]?)|(XN?))\b/i" region0="pConst"/>
-<!-- Strings cannot be divided into more lines -->
-         <block start="/\'/" end="/\'/" scheme="Comment" region="pString" region00="PairStart" region10="PairEnd"/>
-         <block start="/\&#34;/" end="/\&#34;/" scheme="Comment" region="pString" region00="PairStart" region10="PairEnd"/>
-<!-- Symbols -->
+         <!-- Strings cannot be divided into more lines -->
+         <block start="/\'/" end="/\'/" scheme="def:empty" region="pString" region00="def:PairStart" region10="def:PairEnd"/>
+         <block start="/\&#34;/" end="/\&#34;/" scheme="def:empty" region="pString" region00="def:PairStart" region10="def:PairEnd"/>
+         <!-- Symbols -->
          <keywords region="pSymb">
             <symb name="="/> 
             <symb name="+"/>
@@ -69,10 +72,10 @@
             <symb name="&gt;"/>
             <symb name="&lt;"/>
          </keywords>
-         <keywords region="pSymbSemicolon">
+         <keywords region="pSemicolon">
             <symb name=";"/>
          </keywords>
-<!-- Keywords: Built-in functions and sub-routines -->
+         <!-- Keywords: Built-in functions and sub-routines -->
          <keywords ignorecase="yes" region="pBuiltWord">
             <word name="ABS"/>
             <word name="ACOS"/>
@@ -365,7 +368,7 @@
             <word name="Y4JULIAN"/>
             <word name="Y4YEAR"/>
          </keywords>
-<!-- Keywords: Statements, attributes and options -->
+         <!-- Keywords: Statements, attributes and options -->
          <keywords ignorecase="yes" region="pKeyWord">
             <word name="ABNORMAL"/>
             <word name="ALIAS"/>
@@ -557,7 +560,7 @@
             <word name="WINMAIN"/>
             <word name="WRITE"/>
          </keywords>
-<!-- Keywords: Preprocessor statements -->
+         <!-- Keywords: Preprocessor statements -->
          <keywords ignorecase="yes" region="pPrepro">
             <word name="%ACTIVATE"/><word name="%ACT"/>
             <word name="%DEACTIVATE"/><word name="%DEACT"/>

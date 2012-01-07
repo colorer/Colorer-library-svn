@@ -30,11 +30,10 @@ With help of:
          <block start="/(\()/" end="/(\))/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="vbScript" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
 
+         <inherit scheme="vbasic:Outlines"/>
          <inherit scheme="vbasic:PairedConstructions">
            <virtual scheme="vbasic:PairedConstructions" subst-scheme="vbScript"/>
          </inherit>
-
-         <inherit scheme="vbasic:Outlines"/>
 
          <keywords ignorecase="yes" region="Keyword">
             <word name="As"/>

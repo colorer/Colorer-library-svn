@@ -1,5 +1,12 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- vbscript и vbasic  исправлены outline
+	- lua
+  - cobol и pl/i от Pavel Pleva
+	- мелкие исправления
+
+#Revision: 1806
+	#Author: ctapmex Date: 2011-12-29 17:24:02 +0600 (Чт, 29 дек 2011)
 	- Far MacroLib
 	- добавления в far.hrc
 

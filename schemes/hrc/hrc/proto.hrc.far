@@ -720,6 +720,7 @@
   <prototype name="cobolfr" group="rare" description="Cobol Free format">
     <location link="rare/cobolfr.hrc"/>
     <firstline>/SOURCEFORMAT\"FREE\"/i</firstline>
+    <firstline>/^IDENTIFICATION/i</firstline>
     <filename>/\.(cob|cbl)$/i</filename>
   </prototype>
   <prototype name="cache" group="rare" description="Cache/Open-M">
