@@ -165,6 +165,7 @@
   <symb name="-" region="MetaSymb"/>
   <symb name="i"/>
   <symb name="m"/>
+  <symb name="n"/>
   <symb name="s"/>
   <symb name="x"/>
  </keywords>

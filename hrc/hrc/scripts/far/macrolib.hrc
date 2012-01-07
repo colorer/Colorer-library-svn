@@ -9,6 +9,12 @@
 
 
 <type name="far.macrolib">
+<annotation>
+ <contributors>
+   Max Rusov
+ </contributors>
+</annotation>
+
 
 <import type="def"/>
 

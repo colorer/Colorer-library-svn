@@ -69,9 +69,9 @@
 		</scheme>
 
 		<scheme name="OutlinedStructures">
-			<block start="/\b(?{Outline}(?{PairStart}(?{Keyword}function))\b\s*\M\S*\()/"
+			<block start="/\b(?{Outline}(?{PairStart}(?{Keyword}function))\b\s*\M\S*\s*\()/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
-			<block start="/(?{PairStart}(?{Keyword}if))\s+\M.*\s+then/"
+			<block start="/(?{PairStart}(?{Keyword}if))\b/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
 			<block start="/\b(?{PairStart}(?{Keyword}(while|for))\s+\M.*)\s+do/"
 						 end="/\b(?{PairEnd}(?{Keyword}end))\b/" scheme="lua"/>
