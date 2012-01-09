@@ -1,8 +1,12 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- обновлен MacroLib
+
+#Revision: 1808
+	#Author: ctapmex Date: 2012-01-08 02:38:06 +0600 (Вс, 08 янв 2012)
 	- vbscript и vbasic  исправлены outline
 	- lua
-  - cobol и pl/i от Pavel Pleva
+	- cobol и pl/i от Pavel Pleva
 	- мелкие исправления
 
 #Revision: 1806
