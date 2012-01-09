@@ -11,7 +11,7 @@
 <type name="far.macrolib">
 <annotation>
  <contributors>
-   Max Rusov
+   Maxim Rusov
  </contributors>
 </annotation>
 
@@ -27,11 +27,12 @@
   <regexp match="/\/\/.*?$/" region="Comment"/>
   <block start="/\/\*/" end="/\*\//" scheme="Comment" region="Comment" region00="PairStart" region10="PairEnd"/>
 
-  <regexp match="/\b\d+\b/" region="def:NumberDec"/>
-
   <keywords region="mKeyWord" ignorecase="yes">
      <word name="macro"/>
+     <word name="farmacro"/>
      <word name="$macro"/>
+     <word name="const"/>
+     <word name="include"/>
   </keywords>    
 
   <keywords region="mParam" ignorecase="yes">
@@ -45,16 +46,24 @@
      <word name="keys"/>
      <word name="hotkey"/>
      <word name="hotkeys"/>
+     <word name="event"/>
+     <word name="events"/>
      <word name="cond"/>
      <word name="condition"/>
+     <word name="priority"/>
      <word name="EatOnRun"/>
      <word name="RunOnRelease"/>
+     <word name="DisableOutput"/>
+     <word name="SendToPlugin"/>
   </keywords>
 
   <block start="/(\{\{)/" end="/(\}\})/" scheme="body" 
     region00="Symbol" region01="PairStart" 
     region10="Symbol" region11="PairEnd"
    />
+
+  <regexp match="/\b0x[\dA-Fa-f]+\b/" region="NumberHex"/>
+  <regexp match="/\b\d+\b/" region="NumberDec"/>
 
   <inherit scheme="far:macro.string"/>
 
