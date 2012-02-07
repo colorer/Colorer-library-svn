@@ -649,10 +649,10 @@ int FarEditorSet::editorInput(const INPUT_RECORD &Rec)
   return 0;
 }
 
-int FarEditorSet::editorEvent(int Event, void *Param)
+int FarEditorSet::editorEvent(const struct ProcessEditorEventInfo *pInfo)
 {
   // check whether all the editors cleaned
-  if (!rEnabled && farEditorInstances.size() && Event==EE_GOTFOCUS){
+  if (!rEnabled && farEditorInstances.size() && pInfo->Event==EE_GOTFOCUS){
     dropCurrentEditor(true);
     return 0;
   }
@@ -663,12 +663,24 @@ int FarEditorSet::editorEvent(int Event, void *Param)
 
   try{
     FarEditor *editor = NULL;
-    switch (Event){
+    switch (pInfo->Event){
     case EE_REDRAW:
       {
         editor = getCurrentEditor();
         if (editor){
-          return editor->editorEvent(Event, Param);
+          return editor->editorEvent(pInfo->Event, pInfo->Param);
+        }
+        else{
+          return 0;
+        }
+      }
+      break;
+    case EE_CHANGE:
+      {
+        //запрещено вызывать EditorControl (getCurrentEditor)
+        editor = farEditorInstances.get(&SString(pInfo->EditorID));
+        if (editor){
+          return editor->editorEvent(pInfo->Event, pInfo->Param);
         }
         else{
           return 0;
@@ -679,7 +691,7 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       {
         if (!getCurrentEditor()){
           editor = addCurrentEditor();
-          return editor->editorEvent(EE_REDRAW, EEREDRAW_CHANGE);
+         return editor->editorEvent(EE_REDRAW, EEREDRAW_ALL);
         }
         return 0;
       }
@@ -692,8 +704,8 @@ int FarEditorSet::editorEvent(int Event, void *Param)
       break;
     case EE_CLOSE:
       {
-        editor = farEditorInstances.get(&SString(*((int*)Param)));
-        farEditorInstances.remove(&SString(*((int*)Param)));
+        editor = farEditorInstances.get(&SString(pInfo->EditorID));
+        farEditorInstances.remove(&SString(pInfo->EditorID));
         delete editor;
         return 0;
       }

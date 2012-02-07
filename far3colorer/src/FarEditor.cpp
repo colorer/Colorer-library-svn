@@ -470,6 +470,21 @@ int FarEditor::editorInput(const INPUT_RECORD &Rec)
 
 int FarEditor::editorEvent(int event, void *param)
 {
+  if (event == EE_CHANGE) {
+    EditorChange* editor_change = (EditorChange*)param;
+    
+    int ml = (prevLinePosition < editor_change->StringNumber ? prevLinePosition : editor_change->StringNumber)-1;
+
+    if (ml < 0){
+      ml = 0;
+    }
+    if (blockTopPosition != -1 && ml > blockTopPosition){
+      ml = blockTopPosition;
+    }
+
+    baseEditor->modifyEvent(ml);
+    return 0;
+  }
   // ignore event
   if (event != EE_REDRAW || (event == EE_REDRAW && param == EEREDRAW_ALL && inRedraw)){
     return 0;
@@ -486,20 +501,6 @@ int FarEditor::editorEvent(int event, void *param)
   baseEditor->visibleTextEvent(ei.TopScreenLine, WindowSizeY);
 
   baseEditor->lineCountEvent(ei.TotalLines);
-
-  if (param == EEREDRAW_CHANGE){
-    int ml = (prevLinePosition < ei.CurLine ? prevLinePosition : ei.CurLine)-1;
-
-    if (ml < 0){
-      ml = 0;
-    }
-
-    if (blockTopPosition != -1 && ml > blockTopPosition){
-      ml = blockTopPosition;
-    }
-
-    baseEditor->modifyEvent(ml);
-  };
 
   prevLinePosition = ei.CurLine;
   blockTopPosition = -1;

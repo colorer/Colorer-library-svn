@@ -89,7 +89,7 @@ public:
   void viewFile(const String &path);
 
   /** Dispatch editor event in the opened editor */
-  int  editorEvent(int Event, void *Param);
+  int  editorEvent(const struct ProcessEditorEventInfo *pInfo);
   /** Dispatch editor input event in the opened editor */
   int  editorInput(const INPUT_RECORD &Rec);
 

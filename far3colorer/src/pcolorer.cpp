@@ -141,7 +141,7 @@ int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *pInfo)
   if (!editorSet){
     editorSet = new FarEditorSet();
   }
-  return editorSet->editorEvent(pInfo->Event, pInfo->Param);
+  return editorSet->editorEvent(pInfo);
 };
 
 int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *pInfo)
