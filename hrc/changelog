@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлена схема Less
+	- Обновления в html и css (в том числе удалены теги, связанные с layer)
+
+#Revision: 1811
+	#Author: ctapmex Date: 2012-01-09 19:58:48 +0200 (Пн, 09 Січ 2012)
 	- обновлен MacroLib
 
 #Revision: 1808

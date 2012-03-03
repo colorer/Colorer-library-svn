@@ -268,12 +268,15 @@
       <keywords ignorecase="yes" region="htmlOpenTag">
         <word name="a"/>
         <word name="abbr"/>
-        <word name="above"/>
+        <!--word name="above"/-->
         <word name="acronym"/>
         <word name="address"/>
         <word name="applet"/>
         <word name="array"/>
         <word name="area"/>
+        <word name="article"/>
+        <word name="aside"/>
+        <word name="audio"/>
         <word name="b"/>
         <word name="base"/>
         <word name="basefont"/>
@@ -287,15 +290,19 @@
         <word name="br"/>
         <word name="blink"/>
         <word name="button"/>
+        <word name="canvas"/>
         <word name="caption"/>
         <word name="center"/>
         <word name="cite"/>
         <word name="code"/>
         <word name="col"/>
         <word name="colgroup"/>
+        <word name="command"/>
         <word name="comment"/>
+        <word name="datalist"/>
         <word name="dd"/>
         <word name="del"/>
+        <word name="details"/>
         <word name="dfn"/>
         <word name="dir"/>
         <word name="div"/>
@@ -305,8 +312,11 @@
         <word name="embed"/>
         <word name="fieldset"/>
         <word name="fig"/>
+        <word name="figcaption"/>
+        <word name="figure"/>
         <word name="font"/>
         <word name="form"/>
+        <word name="footer"/>
         <word name="frame"/>
         <word name="frameset"/>
         <word name="h1"/>
@@ -316,52 +326,65 @@
         <word name="h5"/>
         <word name="h6"/>
         <word name="head"/>
+        <word name="header"/>
+        <word name="hgroup"/>
         <word name="hr"/>
         <word name="html"/>
         <word name="i"/>
-        <word name="id"/>
+        <!--word name="id"/-->
         <word name="iframe"/>
-        <word name="ilayer"/>
+        <!--word name="ilayer"/ removed. Not used and not supported for over than 10 years -->
         <word name="img"/>
         <word name="input"/>
         <word name="ins"/>
         <word name="isindex"/>
         <word name="kbd"/>
+        <word name="keygen"/>
         <word name="label"/>
-        <word name="layer"/>
+        <!--word name="layer"/ removed. Not used and not supported for over than 10 years -->
         <word name="legend"/>
         <word name="li"/>
         <word name="link"/>
-        <word name="listing"/>
+        <!--word name="listing"/-->
         <word name="map"/>
+        <word name="mark"/>
         <word name="marquee"/>
         <word name="menu"/>
         <word name="meta"/>
-        <word name="multicol"/>
-        <word name="nextid"/>
+        <word name="meter"/>
+        <!--word name="multicol"/-->
+        <word name="nav"/>
+        <!--word name="nextid"/-->
         <word name="nobr"/>
+        <word name="noembed"/>
         <word name="noframes"/>
-        <word name="nolayer"/>
+        <!--word name="nolayer"/ removed. Not used and not supported for over than 10 years -->
         <word name="note"/>
         <word name="noscript"/>
         <word name="object"/>
         <word name="ol"/>
-        <word name="option"/>
-        <word name="keygen"/>
         <word name="optgroup"/>
+        <word name="option"/>
+        <word name="output"/>
         <word name="p"/>
         <word name="param"/>
         <word name="pre"/>
+        <word name="progress"/>
         <word name="q"/>
         <word name="quote"/>
         <word name="range"/>
         <word name="root"/>
+        <word name="rp"/>
+        <word name="rt"/>
+        <word name="ruby"/>
         <word name="s"/>
         <word name="samp"/>
         <word name="script"/>
+        <word name="section"/>
         <word name="select"/>
         <word name="small"/>
         <word name="sound"/>
+        <word name="source"/>
         <word name="spacer"/>
         <word name="span"/>
         <word name="sqrt"/>
@@ -369,6 +392,7 @@
         <word name="strong"/>
         <word name="style"/>
         <word name="sub"/>
+        <word name="summary"/>
         <word name="sup"/>
         <word name="table"/>
         <word name="tbody"/>
@@ -378,26 +402,16 @@
         <word name="tfoot"/>
         <word name="th"/>
         <word name="thead"/>
+        <word name="time"/>
         <word name="title"/>
         <word name="tr"/>
         <word name="tt"/>
         <word name="u"/>
         <word name="ul"/>
         <word name="var"/>
+        <word name="video"/>
         <word name="wbr"/>
         <word name="xmp"/>
-        
-        <!-- HTML5 -->
-        <word name="footer"/>
-        <word name="section"/>
-        <word name="video"/>
-        <word name="audio"/>
-        <word name="progress"/>
-        <word name="nav"/>
-        <word name="meter"/>
-        <word name="time"/>
-        <word name="aside"/>
-        <word name="canvas"/>
       </keywords>
     </scheme>
 
@@ -428,17 +442,17 @@
 
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
+                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix" 
+                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix" 
              end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
+                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
-      <block start="/ (&lt;(script .*?) [\%\/]?~1 \&gt; ) /ix"
+      <block start="/ (&lt;(script .*?) [\%\/\?]?~1 \&gt; ) /ix"
              end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
              region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
          
