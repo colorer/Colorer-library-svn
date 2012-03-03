@@ -33,10 +33,30 @@
 			<inherit scheme="css:Comment" />
 		</scheme>
 
+		<scheme name="StringContent">
+			<regexp match="/\\&quot;/" region="SymbolStrong" />
+			<regexp match="/\@((\{))[a-zA-Z0-9_]+((\}))/" region="Variable"
+				region1="PairStart" region2="SymbolStrong"
+				region3="PairEnd" region4="SymbolStrong"
+			/>
+		</scheme>
+		<scheme name="StringContentJS">
+			<inherit scheme="StringContent"/>
+			<inherit scheme="jScript:String"/>
+		</scheme>
+
+		<scheme name="StringValue">
+			<block start="/([&quot;&apos;])/" end="/(\y1)/"
+				region00="PairStart" region01="StringEdge"
+				region10="PairEnd" region11="StringEdge"
+				region="String"
+				scheme="StringContent"
+			/>
+		</scheme>
 		<scheme name="VariableDef">
-			<block start="/(\@+(media|import|charset|namespace|(-webkit-|-moz-)?keyframes)?![-\w]+)\s*(:)\s*/" end="/;/"
+			<block start="/(\@+(media|import|charset|namespace|(-webkit-|-moz-)?keyframes|-moz-document)?![-\w]+)\s*(:)\s*/" end="/;/"
 				scheme="Property"
-				region01="Variable"
+				region01="Variable" region04="def:Symbol"
 				region10="def:SymbolStrong"
 			/>
 		</scheme>
@@ -66,11 +86,20 @@
 			</keywords>
 		</scheme>
 
+		<scheme name="jScript">
+			<inherit scheme="jScript:jScript">
+				<virtual scheme="jScript:String" subst-scheme="StringContentJS" />
+			</inherit>
+		</scheme>
 		<scheme name="Property">
+			<keywords region="SymbolStrong">
+				<symb name="~"/>
+			</keywords>
+			<inherit scheme="StringValue" />
 			<block start="/(`)/" end="/(`)/"
 				region00="PairStart" region01="SymbolStrong"
 				region10="PairEnd" region11="SymbolStrong"
-				scheme="jScript:jScript"
+				scheme="jScript"
 			/>
 			<inherit scheme="css:urlFunc"/>
 			<block start="/\M[\w\-]+(\s*\()?=/" end="/\M\(/" 
