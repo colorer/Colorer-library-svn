@@ -754,7 +754,6 @@
 				<word name="radial"/>
 				<word name="even"/>
 				<word name="odd"/>
-				<word name="progress-bar-stripes"/>
 				<word name="infinite"/>
 				<word name="ease-in-out"/>
 				<word name="ease"/>
@@ -877,6 +876,13 @@
 			<regexp match="/(\@)(page|font-face)/" region0="Directive" region1="SymbolStrong"/>
 		</scheme>
     
+        <scheme name="NthArgument">
+        	<keywords region="Symbol">
+        		<symb name="-"/>
+        		<symb name="+"/>
+        	</keywords>
+        	<regexp match="/(\d*)(n?)/" region1="Number" region2="NumberSuffix" />
+        </scheme>
 		<scheme name="RulesList">
 			<inherit scheme="Comment"/>
     
@@ -894,6 +900,11 @@
 				scheme="RulesList" region01="SymbolStrong" region02="PseudoClass" region03="PairStart" region04="SymbolStrong"
 				region10="SymbolStrong" region11="PairEnd"
 			/>
+			<block start="/(:)(nth-child|nth-last-child|nth-last-of-type|nth-of-type)((\())/" end="/(\))/"
+				scheme="NthArgument" region01="SymbolStrong" region02="PseudoClass" region03="PairStart" region04="SymbolStrong"
+				region10="SymbolStrong" region11="PairEnd"
+			/>
+
 			<block start="/(::)\M[\.\w\-]+/" end="/~[\.\w\-]+\m/"
 				scheme="PseudoElement" region="PseudoElementUnknown" region01="SymbolStrong"
 			/>
@@ -943,6 +954,9 @@
 		</scheme>
     
 		<scheme name="MozDocument">
+		    <inherit scheme="Comment" />
+		    <regexp match="/~\s*,|,\s*,/" region="def:Error" />
+		    <regexp match="/,/" region="Symbol" />
 			<block start="/(regexp)\s*((\())((&quot;))/" end="/((&quot;))((\)))/"
 				region="def:String"
 				region01="PropertyFunc" region02="Symbol" region03="PairStart" region04="def:StringEdge" region05="PairStart"
@@ -968,7 +982,7 @@
 		</scheme>
     
 		<scheme name="css-r">
-			<block start="/(\@)(-moz-document)\s*\M[\w\-]+\s*\(.*\)\s*/" end="/(\})?#1/"
+			<block start="/(\@)(-moz-document)\s*\M.*/" end="/(\})?#1/"
 				region01="SymbolStrong" region02="Directive"
 				scheme="MozDocument"
 			/>
@@ -983,8 +997,8 @@
 				(?{PairStart}(?{SymbolStrong}\{))/ixs"
 				end="/(?{PairEnd}(?{SymbolStrong}\}))/" scheme="RulesList"
 			/>
-			<block start="/(\@)(import|charset|namespace)/i" end="/(\;)/" scheme="Property"
-				region01="SymbolStrong" region02="Directive" region11="SymbolStrong"
+			<block start="/(\@)(import|charset|namespace(\s*[\w]+)?)/i" end="/(\;)/" scheme="Property"
+				region01="SymbolStrong" region02="Directive" region03="NameSpacePrefix" region11="SymbolStrong"
 			/>
 			<inherit scheme="RulesList"/>
 		</scheme>

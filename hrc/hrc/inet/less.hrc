@@ -75,6 +75,8 @@
 				<word name="floor" />
 				<word name="hsl" />
 				<word name="hue" />
+				<word name="iscolor" />
+				<word name="isnumber" />
 				<word name="lighten" />
 				<word name="lightness" />
 				<word name="mix" />
@@ -113,7 +115,7 @@
 			<inherit scheme="css:Property">
 				<virtual scheme="css:PropertyValue" subst-scheme="html-css:PropertyValue"/>
 			</inherit>
-			<regexp match="/\@+\w+/" region="Variable" />
+			<regexp match="/\@+[\w-]+/" region="Variable" />
 			<keywords region="Symbol">
 				<symb name="+"/>
 				<symb name="-"/>
@@ -132,6 +134,7 @@
 				region00="PairStart" region01="def:Symbol"
 				region10="PairEnd" region11="Symbol"
 			/>
+			<regexp match="/\)?#1 \s* (when) \s* \(?=/x" region1="Keyword" />
 			<keywords region="SymbolStrong">
 				<symb name=";"/>
 			</keywords>
@@ -152,7 +155,10 @@
 
 		<scheme name="RuleContent">
 			<inherit scheme="Combinator" />
-			<block start="/\M([\w\d\-]+)?\s*(:)(.*;)?=/s" end="/\M[\;\}\x22\x27]/"
+			<!--block start="/\M([\w\d\-]+)?\s*(:)(.*;)?=/s" end="/\M[\;\}\x22\x27]/"
+				scheme="PropertyWrapper" region02="Symbol"
+			/-->
+			<block start="/\M ([\w\d\-]+) \s* (:)/x" end="/(;|\})?=/"
 				scheme="PropertyWrapper" region02="Symbol"
 			/>
 
