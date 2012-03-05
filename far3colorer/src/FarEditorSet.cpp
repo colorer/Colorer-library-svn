@@ -667,12 +667,10 @@ int FarEditorSet::editorEvent(const struct ProcessEditorEventInfo *pInfo)
     case EE_REDRAW:
       {
         editor = getCurrentEditor();
-        if (editor){
-          return editor->editorEvent(pInfo->Event, pInfo->Param);
+        if (!editor){
+          editor = addCurrentEditor();
         }
-        else{
-          return 0;
-        }
+        return editor->editorEvent(pInfo->Event, pInfo->Param);
       }
       break;
     case EE_CHANGE:

@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2442
+  Plugin API for Far Manager 3.0 build 2521
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2442
+#define FARMANAGERVERSION_BUILD 2521
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -1230,13 +1230,13 @@ struct WindowType
 	enum WINDOWINFO_TYPE Type;
 };
 
-enum PROGRESSTATE
+enum TASKBARPROGRESSTATE
 {
-	PS_NOPROGRESS   =0x0,
-	PS_INDETERMINATE=0x1,
-	PS_NORMAL       =0x2,
-	PS_ERROR        =0x4,
-	PS_PAUSED       =0x8,
+	TBPS_NOPROGRESS   =0x0,
+	TBPS_INDETERMINATE=0x1,
+	TBPS_NORMAL       =0x2,
+	TBPS_ERROR        =0x4,
+	TBPS_PAUSED       =0x8,
 };
 
 struct ProgressValue
@@ -1397,12 +1397,12 @@ enum EDITOR_CONTROL_COMMANDS
 	ECTL_GETBOOKMARKS               = 23,
 	ECTL_TURNOFFMARKINGBLOCK        = 24,
 	ECTL_DELETEBLOCK                = 25,
-	ECTL_ADDSTACKBOOKMARK           = 26,
-	ECTL_PREVSTACKBOOKMARK          = 27,
-	ECTL_NEXTSTACKBOOKMARK          = 28,
-	ECTL_CLEARSTACKBOOKMARKS        = 29,
-	ECTL_DELETESTACKBOOKMARK        = 30,
-	ECTL_GETSTACKBOOKMARKS          = 31,
+	ECTL_ADDSESSIONBOOKMARK         = 26,
+	ECTL_PREVSESSIONBOOKMARK        = 27,
+	ECTL_NEXTSESSIONBOOKMARK        = 28,
+	ECTL_CLEARSESSIONBOOKMARKS      = 29,
+	ECTL_DELETESESSIONBOOKMARK      = 30,
+	ECTL_GETSESSIONBOOKMARKS        = 31,
 	ECTL_UNDOREDO                   = 32,
 	ECTL_GETFILENAME                = 33,
 	ECTL_DELCOLOR                   = 34,
@@ -1761,6 +1761,9 @@ enum FARSETTINGS_SUBFOLDERS
 	FSSF_FOLDERSHORTCUT_8           = 14,
 	FSSF_FOLDERSHORTCUT_9           = 15,
 	FSSF_CONFIRMATIONS              = 16,
+	FSSF_SYSTEM                     = 17,
+	FSSF_PANEL                      = 18,
+	FSSF_EDITOR                     = 19,
 };
 
 enum FAR_PLUGIN_SETTINGS_LOCATION
@@ -1936,10 +1939,16 @@ typedef int (WINAPI *FARSTDLOCALSTRNICMP)(const wchar_t *s1,const wchar_t *s2,in
 
 typedef unsigned __int64 PROCESSNAME_FLAGS;
 static const PROCESSNAME_FLAGS
-	PN_CMPNAME      = 0x0000000000000000ULL,
-	PN_CMPNAMELIST  = 0x0000000000010000ULL,
-	PN_GENERATENAME = 0x0000000000020000ULL,
-	PN_SKIPPATH     = 0x0000000001000000ULL;
+	//             0xFFFF - length
+	//           0xFF0000 - mode
+	// 0xFFFFFFFFFF000000 - flags
+	PN_CMPNAME          = 0x0000000000000000ULL,
+	PN_CMPNAMELIST      = 0x0000000000010000ULL,
+	PN_GENERATENAME     = 0x0000000000020000ULL,
+	PN_CHECKMASK        = 0x0000000000030000ULL,
+
+	PN_SKIPPATH         = 0x0000000001000000ULL,
+	PN_SHOWERRORMESSAGE = 0x0000000002000000ULL;
 
 typedef size_t (WINAPI *FARSTDPROCESSNAME)(const wchar_t *param1, wchar_t *param2, size_t size, PROCESSNAME_FLAGS flags);
 
@@ -2267,6 +2276,7 @@ static const OPERATION_MODES
 	OPM_DESCR      =0x0000000000000020ULL,
 	OPM_QUICKVIEW  =0x0000000000000040ULL,
 	OPM_PGDN       =0x0000000000000080ULL,
+	OPM_COMMANDS   =0x0000000000000100ULL,
 	OPM_NONE       =0;
 
 struct OpenPanelInfo
@@ -2301,6 +2311,20 @@ struct AnalyseInfo
 	OPERATION_MODES OpMode;
 };
 
+struct OpenAnalyseInfo
+{
+	size_t StructSize;
+	struct AnalyseInfo* Info;
+	HANDLE Handle;
+};
+
+struct OpenMacroInfo
+{
+	size_t StructSize;
+	size_t Count;
+	struct FarMacroValue *Values;
+};
+
 enum OPENFROM
 {
 	OPEN_FROM_MASK          = 0x000000FF,
@@ -2316,11 +2340,7 @@ enum OPENFROM
 	OPEN_DIALOG             = 8,
 	OPEN_ANALYSE            = 9,
 	OPEN_RIGHTDISKMENU      = 10,
-
-	OPEN_FROMMACRO_MASK     = 0x000F0000,
-
-	OPEN_FROMMACRO          = 0x00010000,
-	OPEN_FROMMACROSTRING    = 0x00020000,
+	OPEN_FROMMACRO          = 11,
 };
 
 
@@ -2508,6 +2528,12 @@ struct ClosePanelInfo
 	HANDLE hPanel;
 };
 
+struct CloseAnalyseInfo
+{
+	size_t StructSize;
+	HANDLE Handle;
+};
+
 struct ConfigureInfo
 {
 	size_t StructSize;
@@ -2520,7 +2546,8 @@ extern "C"
 #endif
 // Exported Functions
 
-	int    WINAPI AnalyseW(const struct AnalyseInfo *Info);
+	HANDLE WINAPI AnalyseW(const struct AnalyseInfo *Info);
+	void   WINAPI CloseAnalyseW(const struct CloseAnalyseInfo *Info);
 	void   WINAPI ClosePanelW(const struct ClosePanelInfo *Info);
 	int    WINAPI CompareW(const struct CompareInfo *Info);
 	int    WINAPI ConfigureW(const struct ConfigureInfo *Info);
