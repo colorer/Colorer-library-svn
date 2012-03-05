@@ -333,7 +333,7 @@
         <word name="i"/>
         <!--word name="id"/-->
         <word name="iframe"/>
-        <!--word name="ilayer"/ removed. Not used and not supported for over than 10 years -->
+        <!--word name="ilayer"/-->
         <word name="img"/>
         <word name="input"/>
         <word name="ins"/>
@@ -341,7 +341,7 @@
         <word name="kbd"/>
         <word name="keygen"/>
         <word name="label"/>
-        <!--word name="layer"/ removed. Not used and not supported for over than 10 years -->
+        <!--word name="layer"/-->
         <word name="legend"/>
         <word name="li"/>
         <word name="link"/>
@@ -358,7 +358,7 @@
         <word name="nobr"/>
         <word name="noembed"/>
         <word name="noframes"/>
-        <!--word name="nolayer"/ removed. Not used and not supported for over than 10 years -->
+        <!--word name="nolayer"/-->
         <word name="note"/>
         <word name="noscript"/>
         <word name="object"/>

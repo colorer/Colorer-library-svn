@@ -180,6 +180,7 @@
 		<word name="-moz-stack"/>
 		<word name="-moz-inline-stack"/>
 		<word name="-moz-deck"/>
+		<word name="-moz-pre-wrap"/>
 		<word name="-moz-popup"/>
 		<word name="-moz-groupbox"/>
 		<word name="-moz-scrollbars-horizontal"/>
@@ -408,9 +409,9 @@
         but it's NOT valid CSS level 1 or 2!
        </documentation>
       </annotation>
-      <keywords region="def:DeprecatedKeyword" ignorecase="yes" worddiv='%css:worddiv-class;'>
-        <word name="aliceBlue"/>
-        <word name="antuqueWhite"/>
+      <keywords region="css:baseColors" ignorecase="yes" worddiv='%css:worddiv-class;'>
+        <word name="aliceblue"/>
+        <word name="antuquewhite"/>
         <word name="aquamarine"/>
         <word name="azure"/>
         <word name="beige"/>
@@ -431,6 +432,7 @@
         <word name="darkcyan"/>
         <word name="darkgoldenrod"/>
         <word name="darkgray"/>
+        <word name="darkgrey"/>
         <word name="darkgreen"/>
         <word name="darkkhaki"/>
         <word name="darkmagenta"/>
@@ -442,20 +444,23 @@
         <word name="darkseagreen"/>
         <word name="darkslateblue"/>
         <word name="darkslategray"/>
+        <word name="darkslategrey"/>
         <word name="darkturquoise"/>
         <word name="darkviolet"/>
         <word name="deeppink"/>
         <word name="deepskyblue"/>
         <word name="dimgray"/>
+        <word name="dimgrey"/>
         <word name="dodgerblue"/>
         <word name="firebrick"/>
         <word name="floralwhite"/>
         <word name="forestgreen"/>
-        <word name="fainsboro"/>
+        <word name="gainsboro"/>
         <word name="ghostwhite"/>
         <word name="gold"/>
         <word name="goldenrod"/>
         <word name="greenyellow"/>
+        <word name="grey"/>
         <word name="honeydew"/>
         <word name="hotpink"/>
         <word name="indianred"/>
@@ -469,16 +474,20 @@
         <word name="lightblue"/>
         <word name="lightcoral"/>
         <word name="lightcyan"/>
-        <word name="lightgrey"/> <!-- !!! Not lightgrAy -->
+        <word name="LightGoldenRodYellow"/>
+        <word name="lightgray"/>
+        <word name="lightgrey"/>
         <word name="lightgreen"/>
         <word name="lightpink"/>
         <word name="lightsalmon"/>
         <word name="lightseagreen"/>
         <word name="lightskyblue"/>
         <word name="lightslategray"/>
+        <word name="lightslategrey"/>
         <word name="lightsteelblue"/>
         <word name="lightyellow"/>
         <word name="limegreen"/>
+        <word name="lime"/>
         <word name="linen"/>
         <word name="magenta"/>
         <word name="mediumaquamarine"/>
@@ -497,8 +506,9 @@
         <word name="navajowhite"/>
         <word name="oldlace"/>
         <word name="olivedrab"/>
-        <word name="orange"/>
+        <word name="olive"/>
         <word name="orangered"/>
+        <word name="orange"/>
         <word name="orchid"/>
         <word name="palegoldenrod"/>
         <word name="palegreen"/>
@@ -521,17 +531,18 @@
         <word name="skyblue"/>
         <word name="slateblue"/>
         <word name="slategray"/>
+        <word name="slategrey"/>
         <word name="snow"/>
         <word name="springgreen"/>
         <word name="steelblue"/>
         <word name="tan"/>
+        <word name="teal"/>
         <word name="thistle"/>
         <word name="tomato"/>
         <word name="turquoise"/>
         <word name="violet"/>
-        <word name="white"/>
+        <word name="wheat"/>
         <word name="whitesmoke"/>
-        <word name="yellowgreen"/>
         <word name="yellowgreen"/>
       </keywords>
     </scheme>

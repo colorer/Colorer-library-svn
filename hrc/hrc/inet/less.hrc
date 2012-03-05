@@ -25,6 +25,7 @@
 		<import type="def"/>
 
 	    <region name="Variable" parent="def:VarStrong"/>
+	    <region name="KnownVariable" parent="def:VarStrong"/>
 	    <region name="Mixing" parent="def:StringEdge"/>
 
 
@@ -76,7 +77,13 @@
 				<word name="hsl" />
 				<word name="hue" />
 				<word name="iscolor" />
+				<word name="isem" />
+				<word name="iskeyword" />
 				<word name="isnumber" />
+				<word name="ispercentage" />
+				<word name="ispixl" />
+				<word name="isstring" />
+				<word name="isurl" />
 				<word name="lighten" />
 				<word name="lightness" />
 				<word name="mix" />
@@ -114,13 +121,20 @@
 			/>
 			<inherit scheme="css:Property">
 				<virtual scheme="css:PropertyValue" subst-scheme="html-css:PropertyValue"/>
+				<virtual scheme="css:CustomColors" subst-scheme="html-css:CustomColors"/>
 			</inherit>
+			<regexp match="/(\@)arguments/" region="KnownVariable" region1="Variable" />
 			<regexp match="/\@+[\w-]+/" region="Variable" />
 			<keywords region="Symbol">
 				<symb name="+"/>
 				<symb name="-"/>
 				<symb name="*"/>
 				<symb name="/"/>
+				<symb name="="/>
+				<symb name="&lt;="/>
+				<symb name="&gt;="/>
+				<symb name="&lt;"/>
+				<symb name="&gt;"/>
 			</keywords>
 			<keywords region="SymbolStrong">
 				<symb name=":"/>
