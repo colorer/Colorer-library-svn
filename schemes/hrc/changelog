@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавления в far.hrc
+
+#Revision: 1811
+	#Author: ctapmex Date: 2012-01-09 23:58:48 +0600 (Пн, 09 янв 2012)
 	- обновлен MacroLib
 
 #Revision: 1808
