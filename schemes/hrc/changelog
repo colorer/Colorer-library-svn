@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлен SHPAML (Eric Gustavson https://github.com/occulens/shpaml-colorer)
+
+#Revision: 1820
+	#Author: ctapmex Date: 2012-03-06 10:19:37 +0600 (Вт, 06 мар 2012)
 	- добавления в far.hrc
 
 #Revision: 1811

@@ -213,6 +213,10 @@
     <location link="inet/haml.hrc"/>
     <filename>/\.(haml)$/i</filename>
   </prototype>
+  <prototype name="shpaml" group="inet" description="SHPAML">
+    <location link="inet/shpaml.hrc"/>
+    <filename>/\.(shpaml)$/i</filename>
+  </prototype>
   <prototype name="erb" group="inet" description="ERB">
     <location link="inet/erb.hrc"/>
     <filename weight='4'>/\.(erb|rhtml|html\.erb)$/i</filename>
