@@ -347,6 +347,31 @@ void FarEditor::selectRegion()
   }
 }
 
+void FarEditor::getNameCurrentScheme()
+{
+  EditorGetString egs;
+  enterHandler();
+  egs.StringNumber = ei.CurLine;
+  info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
+  if (cursorRegion != NULL){
+    StringBuffer region, scheme;
+    region.append(DString(L"Region: "));
+    scheme.append(DString(L"Scheme: "));
+    if (cursorRegion->region != NULL) {
+      const Region* r = cursorRegion->region;
+      while (r->getParent() != NULL) r = r->getParent();
+      region.append(r->getName());
+    } 
+    if (cursorRegion->scheme != NULL) {
+      scheme.append(cursorRegion->scheme->getName());
+    }
+    const wchar_t* exceptionMessage[3]={GetMsg(mRegionName),region.getWChars(),scheme.getWChars()};
+    info->Message(&MainGuid, &RegionName, FMSG_MB_OK|FMSG_LEFTALIGN, L"exception", &exceptionMessage[0], sizeof(exceptionMessage)/sizeof(exceptionMessage[0]), 1);
+
+  }
+
+}
+
 void FarEditor::listFunctions()
 {
   baseEditor->validate(-1, false);

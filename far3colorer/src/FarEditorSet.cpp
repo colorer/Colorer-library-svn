@@ -41,7 +41,7 @@ void FarEditorSet::openMenu()
   int iMenuItems[] =
   {
     mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-    mListFunctions, mFindErrors, mSelectRegion, mLocateFunction, -1,
+    mListFunctions, mFindErrors, mSelectRegion, mCurrentRegionName, mLocateFunction, -1,
     mUpdateHighlight, mReloadBase, mConfigure
   };
   FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
@@ -101,15 +101,18 @@ void FarEditorSet::openMenu()
       editor->selectRegion();
       break;
     case 7:
+      editor->getNameCurrentScheme();
+      break;
+    case 8:
       editor->locateFunction();
       break;
-    case 9:
+    case 10:
       editor->updateHighlighting();
       break;
-    case 10:
+    case 11:
       ReloadBase();
       break;
-    case 11:
+    case 12:
       configure(true);
       break;
     };

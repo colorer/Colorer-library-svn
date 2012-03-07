@@ -149,6 +149,9 @@ alphabetic symbols to create filters.
   #7 Select region#       ~Alt-K~
     Selects region under cursor.
 
+  #A Name of the current region#
+    Displays the name of the region and the scheme under the cursor.
+
   #*# All these features are depend on the content of language scheme.
 All information is taken from syntax regions analysis.
 

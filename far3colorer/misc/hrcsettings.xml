@@ -14,7 +14,4 @@
 	<prototype name="python">
 		<param name="show-cross" value="both"/>
 	</prototype>
-	<prototype name="hrc">
-		<param name="show-cross" value="both"/>
-	</prototype>
 </hrc-settings>

@@ -114,6 +114,7 @@ public:
 
   void cleanEditor();
 
+  void getNameCurrentScheme();
 private:
   EditorInfo ei;
   PluginStartupInfo *info;

@@ -39,6 +39,8 @@ DEFINE_GUID(ErrorMessage, 0xc954ac8, 0x2b69, 0x4c74, 0x94, 0xc8, 0x7a, 0xb1, 0x3
 DEFINE_GUID(ReloadBaseMessage, 0xdee3b49d, 0x4a55, 0x48a8, 0x9d, 0xc8, 0xd1, 0x1d, 0xa0, 0x4c, 0xbf, 0x37);
 // {AB214DCE-450B-4389-9E3B-533C7A6D786C}
 DEFINE_GUID(NothingFoundMesage, 0xab214dce, 0x450b, 0x4389, 0x9e, 0x3b, 0x53, 0x3c, 0x7a, 0x6d, 0x78, 0x6c);
+// {70656884-B7BD-4440-A8FF-6CE781C7DC6A}
+DEFINE_GUID(RegionName,0x70656884, 0xb7bd, 0x4440, 0xa8, 0xff, 0x6c, 0xe7, 0x81, 0xc7, 0xdc, 0x6a);
 
 
 extern PluginStartupInfo Info;
@@ -53,7 +55,7 @@ enum
   mOk, mReloadAll, mCancel,
   mCatalogFile, mHRDName,mHRDNameTrueMod,
   mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-  mListFunctions, mFindErrors, mSelectRegion, mLocateFunction,
+  mListFunctions, mFindErrors, mSelectRegion, mCurrentRegionName, mLocateFunction,
   mUpdateHighlight, mReloadBase, mConfigure,
   mTotalTypes, mSelectSyntax, mOutliner, mNothingFound,
   mGotcha, mChoose,
@@ -61,7 +63,7 @@ enum
   mFatal, mSelectHRD, mChangeBackgroundEditor, mTrueModSetting,
   mUserHrdFile, mUserHrcFile, mUserHrcSetting,
   mUserHrcSettingDialog, mListSyntax, mParamList,mParamValue, mAutoDetect, mFavorites,
-  mKeyAssignDialogTitle, mKeyAssignTextTitle
+  mKeyAssignDialogTitle, mKeyAssignTextTitle, mRegionName
 };
 
 #endif
