@@ -55,13 +55,16 @@
     <region name="htmlUnknowTag" parent="Tag"/> 
     <region name="htmlTagEqu" parent="Symbol"/> 
 
-
     <entity name="htmlscrStart" value="script [^&gt;]+ language\s*=\s*(?{q}[\x22\x27]?)"/>
     <entity name="htmlscrEnd" value="(?{htmlTagBr}&lt; \/ (?{htmlCloseTag}script) \&gt; )"/>
 
     <region name='Header1Outline' parent='def:Outlined' description='Header1 Element'/>
     <region name='Header2Outline' parent='def:Outlined' description='Header2 Element'/>
     <region name='Header3Outline' parent='def:Outlined' description='Header3 Element'/>
+
+    <region name="CCOperator" parent="def:Keyword" />
+    <region name="CCBool" parent="def:Keyword" />
+    <region name="CCVar" parent="def:VarStrong" />
 
     <scheme name="xssi">
       <block start="/(=)\s*&#34;/" end="/&#34;/" scheme="perl:InterpolateString" region="String" region01="Symbol" region00="PairStart" region10="PairEnd"/>
@@ -511,6 +514,49 @@
 
 
       
+    <scheme name="IECommentsTag">
+    	<keywords region="CCVar">
+    		<word name="IE"/>
+    		<word name="WindowsEdition"/>
+    	</keywords>
+    	<keywords region="CCOperator">
+    		<symb name="!"/>
+    		<symb name="&amp;"/>
+    		<symb name="|"/>
+    		<word name="lte"/>
+    		<word name="lt"/>
+    		<word name="gte"/>
+    		<word name="gt"/>
+    	</keywords>
+    	<keywords region="CCBool">
+    		<word name="true"/>
+    		<word name="false"/>
+    	</keywords>
+    	<regexp match="/\d+/" region="Number"/>
+    	<block start="/(\()/" end="/(\))/" scheme="ConditionalCommentsTag"
+    		region00="CCOperator" region10="CCOperator"
+    		region01="PairStart" region11="PairEnd"
+    	/>
+    </scheme>
+	<scheme name="IECommentsInner">
+    	<block start="/~(\[)(if)/" end="/(\])&gt;/"
+			scheme="IECommentsTag" region="Text" inner-region="yes"
+			region01="PairStart" region11="PairEnd" region02="htmlOpenTag"
+    	/>
+    	<inherit scheme="html" />
+    </scheme>
+
+    <scheme name="IEComments" if="conditional-comments">
+		<block start="/~\M\[if[^\]]+\]&gt;/" end="/&lt;!\[(endif)\]/"
+			scheme="IECommentsInner" region11="htmlCloseTag"
+		/>
+    </scheme>
+
+    <scheme name="htmlComment">
+      <inherit scheme="IEComments"/>
+      <inherit scheme="Comment"/>
+    </scheme>
+
     <scheme name="html">
 
       <inherit scheme="htmlScripts"/>
@@ -537,7 +583,7 @@
          
       <!-- comments -->
       <block start="/&lt;!--\s*\M#/" end="/--&gt;/" scheme="xssi" region="htmlComment" region00="PairStart" region10="PairEnd"/>
-      <block start="/&lt;!--/" end="/--&gt;/" scheme="Comment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
+      <block start="/&lt;!--/" end="/--&gt;/" scheme="htmlComment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
       <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment" 
              region00="PairStart" region10="PairEnd" region="htmlDirective"/>
 

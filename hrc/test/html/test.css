@@ -77,7 +77,7 @@ DIV.subtoc {padding: 1em; border: solid thin;   /*border םו גûהוכÿועסÿ*/
 	  -webkit-animation: progress-bar-stripes 2s linear infinite;
 	}
 
-	div.clear::after, p:nth-child(4n+1) {
+	div.clear::after, p:nth-child(4n+1), span:nth-child(even) {
 		-moz-opacity: 0.1;
 	}
 

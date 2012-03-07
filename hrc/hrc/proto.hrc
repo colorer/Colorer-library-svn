@@ -182,6 +182,9 @@
     <location link="inet/html.hrc"/>
     <filename>/\.[^ptr]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
+	<parameters>
+		<param name="conditional-comments" value="true" description="IE conditional comments"/>
+	</parameters>
   </prototype>
 
   <prototype name="css" group="inet" description="css">
@@ -211,10 +214,14 @@
     <location link="inet/sass.hrc"/>
     <filename>/\.(sass)$/i</filename>
   </prototype>
-     <prototype name="less" group="inet" description="Less css">
-     	<location link="inet/less.hrc"/>
-     	<filename>/\.(less)$/</filename>
-     </prototype>
+	<prototype name="less" group="inet" description="Less css">
+		<location link="inet/less.hrc"/>
+		<filename>/\.(less)$/</filename>
+	</prototype>
+	<prototype name="ss" group="inet" description="SilverStripe">
+		<location link="inet/ss.hrc"/>
+		<filename weight="10">/\.(ss)$/</filename>
+	</prototype>
 
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>

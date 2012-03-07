@@ -185,6 +185,9 @@
     <location link="inet/html.hrc"/>
     <filename>/\.[^ptr]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
+	<parameters>
+		<param name="conditional-comments" value="true" description="IE conditional comments"/>
+	</parameters>
   </prototype>
 
   <prototype name="css" group="inet" description="css">
@@ -199,8 +202,11 @@
     <location link="inet/html-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
     <parameters>
-     <param name="ie-css" value="true" description="Use non-standard MSIE css extensions"/>
-     <param name="moz-css" value="true" description="Use non-standard Gecho-based css extensions"/>
+		<param name="ie-css" value="true" description="Use non-standard MSIE css extensions"/>
+		<param name="moz-css" value="true" description="Use non-standard Gecho-based css extensions"/>
+		<param name="opera-css" value="true" description="Use non-standard opera-based css extensions"/>
+		<param name="webkit-css" value="true" description="Use non-standard webkit-based css extensions"/>
+		<param name="khtml-css" value="true" description="Use non-standard khtml-based css extensions"/>
     </parameters>
   </prototype>
   <prototype name="svg-css" group="inet" description="css for svg">
@@ -210,9 +216,15 @@
   <prototype name="sass" group="inet" description="SASS">
     <location link="inet/sass.hrc"/>
     <filename>/\.(sass)$/i</filename>
-    <parameters>
-    </parameters>
   </prototype>
+	<prototype name="less" group="inet" description="Less css">
+		<location link="inet/less.hrc"/>
+		<filename>/\.(less)$/</filename>
+	</prototype>
+	<prototype name="ss" group="inet" description="SilverStripe">
+		<location link="inet/ss.hrc"/>
+		<filename weight="10">/\.(ss)$/</filename>
+	</prototype>
 
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>

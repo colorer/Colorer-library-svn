@@ -879,7 +879,12 @@
         		<symb name="-"/>
         		<symb name="+"/>
         	</keywords>
+        	<keywords region="PropertyValue">
+        		<word name="even"/>
+        		<word name="odd"/>
+        	</keywords>
         	<regexp match="/(\d*)(n?)/" region1="Number" region2="NumberSuffix" />
+        	<regexp match="/\w+/" region="def:Error" />
         </scheme>
 		<scheme name="RulesList">
 			<inherit scheme="Comment"/>
