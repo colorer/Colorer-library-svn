@@ -533,7 +533,7 @@
     		<word name="false"/>
     	</keywords>
     	<regexp match="/\d+/" region="Number"/>
-    	<block start="/(\()/" end="/(\))/" scheme="ConditionalCommentsTag"
+    	<block start="/(\()/" end="/(\))/" scheme="IECommentsTag"
     		region00="CCOperator" region10="CCOperator"
     		region01="PairStart" region11="PairEnd"
     	/>
