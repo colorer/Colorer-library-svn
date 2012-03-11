@@ -36,97 +36,96 @@ FarEditorSet::~FarEditorSet()
   delete parserFactory;
 }
 
-void FarEditorSet::openMenu()
+void FarEditorSet::openMenu(int MenuId)
 {
-  int iMenuItems[] =
-  {
-    mListTypes, mMatchPair, mSelectBlock, mSelectPair,
-    mListFunctions, mFindErrors, mSelectRegion, mCurrentRegionName, mLocateFunction, -1,
-    mUpdateHighlight, mReloadBase, mConfigure
-  };
-  FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
-  memset(menuElements, 0, sizeof(menuElements));
-
-  try{
-    if (!rEnabled){
-      menuElements[0].Text = GetMsg(mConfigure);
-      menuElements[0].Flags = MIF_SELECTED;
-
-      if (Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL, menuElements, 1) == 0){
-        ReadSettings();
-        configure(true);
-      }
-
-      return;
+  if (MenuId <= 0) {
+    int iMenuItems[] =
+    {
+      mConfigure, mListTypes, mMatchPair, mSelectBlock, mSelectPair,
+      mListFunctions, mFindErrors, mSelectRegion, mCurrentRegionName, mLocateFunction, -1,
+      mUpdateHighlight, mReloadBase, mConfigure
     };
-
+    FarMenuItem menuElements[sizeof(iMenuItems) / sizeof(iMenuItems[0])];
+    memset(menuElements, 0, sizeof(menuElements));
+    if (rEnabled) {
+      menuElements[0].Flags = MIF_HIDDEN;
+      menuElements[1].Flags = MIF_SELECTED;
+    }else {
+      menuElements[0].Flags = MIF_SELECTED;
+    }
     for (int i = sizeof(iMenuItems) / sizeof(iMenuItems[0]) - 1; i >= 0; i--){
       if (iMenuItems[i] == -1){
-        menuElements[i].Flags = MIF_SEPARATOR;;
+        menuElements[i].Flags |= MIF_SEPARATOR;;
       }
       else{
         menuElements[i].Text = GetMsg(iMenuItems[i]);
       }
     };
 
-    menuElements[0].Flags = MIF_SELECTED;
-
-    FarEditor *editor = getCurrentEditor();
-    if (!editor){
-      throw Exception(DString("Can't find current editor in array."));
+    MenuId = Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+      menuElements, rEnabled? (sizeof(iMenuItems) / sizeof(iMenuItems[0])) : 1 );
+    if (MenuId == 0 ) {
+      MenuId = 13;
     }
-    int res = Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
-      menuElements, sizeof(iMenuItems) / sizeof(iMenuItems[0]) );
-    switch (res)
-    {
-    case 0:
-      chooseType();
-      break;
-    case 1:
-      editor->matchPair();
-      break;
-    case 2:
-      editor->selectBlock();
-      break;
-    case 3:
-      editor->selectPair();
-      break;
-    case 4:
-      editor->listFunctions();
-      break;
-    case 5:
-      editor->listErrors();
-      break;
-    case 6:
-      editor->selectRegion();
-      break;
-    case 7:
-      editor->getNameCurrentScheme();
-      break;
-    case 8:
-      editor->locateFunction();
-      break;
-    case 10:
-      editor->updateHighlighting();
-      break;
-    case 11:
-      ReloadBase();
-      break;
-    case 12:
-      configure(true);
-      break;
+  }
+  if (MenuId>=0) {
+    try{
+      FarEditor *editor = getCurrentEditor();
+      if (!editor && (rEnabled || MenuId!=13)){
+        throw Exception(DString("Can't find current editor in array."));
+      }
+
+      switch (MenuId)
+      {
+      case 1:
+        chooseType();
+        break;
+      case 2:
+        editor->matchPair();
+        break;
+      case 3:
+        editor->selectBlock();
+        break;
+      case 4:
+        editor->selectPair();
+        break;
+      case 5:
+        editor->listFunctions();
+        break;
+      case 6:
+        editor->listErrors();
+        break;
+      case 7:
+        editor->selectRegion();
+        break;
+      case 8:
+        editor->getNameCurrentScheme();
+        break;
+      case 9:
+        editor->locateFunction();
+        break;
+      case 11:
+        editor->updateHighlighting();
+        break;
+      case 12:
+        ReloadBase();
+        break;
+      case 13:
+        configure(true);
+        break;
+      };
+    }
+    catch (Exception &e){
+      if (getErrorHandler()){
+        getErrorHandler()->error(*e.getMessage());
+      }
+
+      StringBuffer msg("openMenu: ");
+      msg.append(e.getMessage());
+      showExceptionMessage( msg.getWChars());
+      disableColorer();
     };
   }
-  catch (Exception &e){
-    if (getErrorHandler()){
-      getErrorHandler()->error(*e.getMessage());
-    }
-
-    StringBuffer msg("openMenu: ");
-    msg.append(e.getMessage());
-    showExceptionMessage( msg.getWChars());
-    disableColorer();
-  };
 }
 
 
@@ -1014,8 +1013,8 @@ void FarEditorSet::dropCurrentEditor(bool clean)
     }
     farEditorInstances.remove(&SString(ei.EditorID));
     delete editor;
+    Info.EditorControl(CurrentEditor, ECTL_REDRAW, NULL, NULL);
   }
-  Info.EditorControl(CurrentEditor, ECTL_REDRAW, NULL, NULL);
 }
 
 void FarEditorSet::dropAllEditors(bool clean)

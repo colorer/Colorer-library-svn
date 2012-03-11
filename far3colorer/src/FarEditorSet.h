@@ -82,7 +82,7 @@ public:
   ~FarEditorSet();
 
   /** Shows editor actions menu */
-  void openMenu();
+  void openMenu(int MenuId = -1);
   /** Shows plugin's configuration dialog */
   void configure(bool fromEditor);
   /** Views current file with internal viewer */

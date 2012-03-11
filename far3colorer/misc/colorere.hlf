@@ -12,6 +12,8 @@ $^#FarColorer
 
     ~Plugin's menus.~@menu@
 
+    ~Using a plugin in macros.~@MacroCallPlugin@
+
     ~About authors.~@author@
 
 @config
@@ -167,6 +169,41 @@ some problems occurs in current syntax.
 
   #C Configuration#
     Calls FarColorer ~configuration menu~@config@.
+
+@MacroCallPlugin
+$# Using a plugin in macros
+    The plugin can be called from a macro using the macro function callplugin.
+    Call format:
+
+       #callplugin("D2F36B62-A470-418d-83A3-ED7A3710E5B5",<Param>)#
+
+    Here:
+       #D2F36B62-A470-418d-83A3-ED7A3710E5B5#
+          ID of the plugin
+
+       #<Param>#
+          A numeric value corresponding to the menu item number:
+
+          1 - List types
+          2 - Match pair
+          3 - Select block
+          4 - Select pair
+          5 - Outliner List
+          6 - Errors List
+          7 - Select region
+          8 - Name of the current region
+          9 - Find function
+          11 - Update highlight
+          12 - Reload schema library
+          13 - Configuration
+
+          If the <Param> not a number - plugin exits.
+          If the <Param> outside the above range - the plugin exits.
+          If the <Param> is not specified, will see action menu.
+
+    For example, list the types available:
+
+       callplugin("0E92FC81-4888-4297-A85D-31C79E0E0CEE",0)
 
 @hrd
 $# Color style selection

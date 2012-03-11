@@ -98,25 +98,47 @@ void WINAPI ExitFARW(const struct ExitInfo *eInfo)
 */
 HANDLE WINAPI OpenW(const struct OpenInfo *oInfo)
 {
-  if (oInfo->OpenFrom == OPEN_EDITOR){
-    editorSet->openMenu();
-  }
-  else
-    if (oInfo->OpenFrom == OPEN_COMMANDLINE){
-      //file name, which we received
-      wchar_t *file = (wchar_t*)oInfo->Data;
+  switch (oInfo->OpenFrom) {
+    case OPEN_EDITOR:
+      editorSet->openMenu();
+      break;
+    case OPEN_COMMANDLINE:
+      {
+        //file name, which we received
+        wchar_t *file = (wchar_t*)oInfo->Data;
 
-      wchar_t *nfile = PathToFull(file,true);
-      if (nfile){
-        if (!editorSet){
-          editorSet = new FarEditorSet();
+        wchar_t *nfile = PathToFull(file,true);
+        if (nfile){
+          if (!editorSet){
+            editorSet = new FarEditorSet();
+          }
+          editorSet->viewFile(DString(nfile));
         }
-        editorSet->viewFile(DString(nfile));
+
+        delete[] nfile;
       }
+      break;
+    case OPEN_FROMMACRO:
+      {
+        int i= Info.MacroControl(&MainGuid, MCTL_GETAREA, 0, NULL);
+        OpenMacroInfo* mi=(OpenMacroInfo*)oInfo->Data;
+        int MenuCode=0;
+        if (mi->Count)
+        {
+          if (FMVT_INTEGER == mi->Values[0].Type || FMVT_UNKNOWN == mi->Values[0].Type)
+          {
+            MenuCode=(int)mi->Values[0].Integer;
 
-      delete[] nfile;
-    }
-
+            if (MenuCode < 0)
+              return INVALID_HANDLE_VALUE;
+          }
+          else 
+            return INVALID_HANDLE_VALUE;
+        }
+        editorSet->openMenu(MenuCode);
+      }
+      break;
+  }
   return INVALID_HANDLE_VALUE;
 };
 
