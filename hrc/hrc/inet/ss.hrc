@@ -205,10 +205,6 @@
 				<symb name="."/>
 				<symb name="=="/>
 				<symb name="="/>
-				<symb name="&lt;="/>
-				<symb name="&gt;="/>
-				<symb name="&lt;"/>
-				<symb name="&gt;"/>
 			</keywords>
 			<inherit scheme="KnownVars"/>
 			<regexp match="/\d+/" region="Number" />
