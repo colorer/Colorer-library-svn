@@ -54,7 +54,6 @@ var
 while
 
 null
-NULL
 interface
 public
 private
@@ -69,16 +68,23 @@ throw
 static
 instanceof
 clone
+namespace
+goto
 
+__autoload
 __construct
 __destruct
-__autoload
-__toString
 __get
 __set
 __call
+__callStatic
 __clone
+__isset
+__invoke
+__set_state 
 __sleep
+__toString
+__unset
 __wakeup
 
 
@@ -92,31 +98,60 @@ __wakeup
 ~string
 ~array
 ~object
+~resource
 
 __FILE__
 __LINE__
+__DIR__
 __FUNCTION__
 __CLASS__
 __METHOD__  
+__NAMESPACE__
 
 
      <!-- PHP Core Predefined Constants -->
 
 PHP_VERSION (string)
+PHP_MAJOR_VERSION ( integer ) 
+PHP_MINOR_VERSION ( integer ) 
+PHP_RELEASE_VERSION ( integer ) 
+PHP_VERSION_ID ( integer ) 
+PHP_EXTRA_VERSION ( string ) 
+PHP_ZTS ( integer ) 
+PHP_DEBUG ( integer ) 
+PHP_MAXPATHLEN ( integer )
 PHP_OS (string)
+PHP_SAPI ( string ) 
+PHP_EOL ( string ) 
+PHP_INT_MAX ( integer ) 
+PHP_INT_SIZE ( integer ) 
 DEFAULT_INCLUDE_PATH (string)
 PEAR_INSTALL_DIR (string)
 PEAR_EXTENSION_DIR (string)
 PHP_EXTENSION_DIR (string)
+PHP_PREFIX ( string )
 PHP_BINDIR (string)
 PHP_LIBDIR (string)
 PHP_DATADIR (string)
 PHP_SYSCONFDIR (string)
 PHP_LOCALSTATEDIR (string)
 PHP_CONFIG_FILE_PATH (string)
+PHP_CONFIG_FILE_SCAN_DIR ( string ) 
+PHP_SHLIB_SUFFIX ( string ) 
 PHP_OUTPUT_HANDLER_START (integer)
 PHP_OUTPUT_HANDLER_CONT (integer)
 PHP_OUTPUT_HANDLER_END (integer)
+PHP_WINDOWS_VERSION_MINOR ( integer ) 
+PHP_WINDOWS_VERSION_BUILD ( integer ) 
+PHP_WINDOWS_VERSION_PLATFORM ( integer ) 
+PHP_WINDOWS_VERSION_SP_MAJOR ( integer ) 
+PHP_WINDOWS_VERSION_SP_MINOR ( integer ) 
+PHP_WINDOWS_VERSION_SUITEMASK ( integer ) 
+PHP_WINDOWS_VERSION_PRODUCTTYPE ( integer ) 
+PHP_WINDOWS_NT_DOMAIN_CONTROLLER ( integer ) 
+PHP_WINDOWS_NT_SERVER ( integer ) 
+PHP_WINDOWS_NT_WORKSTATION ( integer ) 
+__COMPILER_HALT_OFFSET__ ( integer ) 
 
      <!-- PHP Standard Predefined Constants -->
 SORT_ASC (integer)
@@ -541,6 +576,7 @@ crack_getlastmessage -- Returns the message from the last obscure check
 crack_opendict -- Opens a new CrackLib dictionary
      <!-- XII. CURL, Client URL Library Functions -->
 curl_close -- Close a CURL session
+curl_copy_handle -- Copy a cURL handle along with all of its preferences
 curl_errno -- Return the last error number
 curl_error --  Return a string containing the last error for the current session 
 curl_exec -- Perform a CURL session
@@ -554,150 +590,253 @@ curl_multi_info_read --  Get information about the current transfers
 curl_multi_init --  Returns a new cURL multi handle 
 curl_multi_remove_handle --  Remove a multi handle from a set of cURL handles 
 curl_multi_select --  Get all the sockets associated with the cURL extension, which can then be "selected" 
+curl_setopt_array -- Set multiple options for a cURL transfer
 curl_setopt -- Set an option for a CURL transfer
 curl_version -- Return the current CURL version
 
-CURLOPT_PORT (integer)
-CURLOPT_FILE (integer)
-CURLOPT_INFILE (integer)
-CURLOPT_INFILESIZE (integer)
-CURLOPT_URL (integer)
-CURLOPT_PROXY (integer)
-CURLOPT_VERBOSE (integer)
-CURLOPT_HEADER (integer)
-CURLOPT_HTTPHEADER (integer)
-CURLOPT_NOPROGRESS (integer)
-CURLOPT_NOBODY (integer)
-CURLOPT_FAILONERROR (integer)
-CURLOPT_UPLOAD (integer)
-CURLOPT_POST (integer)
-CURLOPT_FTPLISTONLY (integer)
-CURLOPT_FTPAPPEND (integer)
-CURLOPT_NETRC (integer)
-CURLOPT_FOLLOWLOCATION (integer)
-CURLOPT_FTPASCII (integer)
-CURLOPT_PUT (integer)
-CURLOPT_MUTE (integer)
-CURLOPT_USERPWD (integer)
-CURLOPT_PROXYUSERPWD (integer)
-CURLOPT_RANGE (integer)
-CURLOPT_TIMEOUT (integer)
-CURLOPT_POSTFIELDS (integer)
-CURLOPT_REFERER (integer)
-CURLOPT_USERAGENT (integer)
-CURLOPT_FTPPORT (integer)
-CURLOPT_LOW_SPEED_LIMIT (integer)
-CURLOPT_LOW_SPEED_TIME (integer)
-CURLOPT_RESUME_FROM (integer)
-CURLOPT_COOKIE (integer)
-CURLOPT_SSLCERT (integer)
-CURLOPT_SSLCERTPASSWD (integer)
-CURLOPT_WRITEHEADER (integer)
-CURLOPT_SSL_VERIFYHOST (integer)
-CURLOPT_COOKIEFILE (integer)
-CURLOPT_SSLVERSION (integer)
-CURLOPT_TIMECONDITION (integer)
-CURLOPT_TIMEVALUE (integer)
-CURLOPT_CUSTOMREQUEST (integer)
-CURLOPT_STDERR (integer)
-CURLOPT_TRANSFERTEXT (integer)
-CURLOPT_RETURNTRANSFER (integer)
-CURLOPT_QUOTE (integer)
-CURLOPT_POSTQUOTE (integer)
-CURLOPT_INTERFACE (integer)
-CURLOPT_KRB4LEVEL (integer)
-CURLOPT_HTTPPROXYTUNNEL (integer)
-CURLOPT_FILETIME (integer)
-CURLOPT_WRITEFUNCTION (integer)
-CURLOPT_READFUNCTION (integer)
-CURLOPT_PASSWDFUNCTION (integer)
-CURLOPT_HEADERFUNCTION (integer)
-CURLOPT_MAXREDIRS (integer)
-CURLOPT_MAXCONNECTS (integer)
-CURLOPT_CLOSEPOLICY (integer)
-CURLOPT_FRESH_CONNECT (integer)
-CURLOPT_FORBID_REUSE (integer)
-CURLOPT_RANDOM_FILE (integer)
-CURLOPT_EGDSOCKET (integer)
-CURLOPT_CONNECTTIMEOUT (integer)
-CURLOPT_SSL_VERIFYPEER (integer)
-CURLOPT_CAINFO (integer)
-CURLOPT_COOKIEJAR (integer)
-CURLOPT_SSL_CIPHER_LIST (integer)
-CURLOPT_BINARYTRANSFER (integer)
-CURLCLOSEPOLICY_LEAST_RECENTLY_USED (integer)
-CURLCLOSEPOLICY_LEAST_TRAFFIC (integer)
-CURLCLOSEPOLICY_SLOWEST (integer)
-CURLCLOSEPOLICY_CALLBACK (integer)
-CURLCLOSEPOLICY_OLDEST (integer)
-CURLINFO_EFFECTIVE_URL (integer)
-CURLINFO_HTTP_CODE (integer)
-CURLINFO_HEADER_SIZE (integer)
-CURLINFO_REQUEST_SIZE (integer)
-CURLINFO_TOTAL_TIME (integer)
-CURLINFO_NAMELOOKUP_TIME (integer)
-CURLINFO_CONNECT_TIME (integer)
-CURLINFO_PRETRANSFER_TIME (integer)
-CURLINFO_SIZE_UPLOAD (integer)
-CURLINFO_SIZE_DOWNLOAD (integer)
-CURLINFO_SPEED_DOWNLOAD (integer)
-CURLINFO_SPEED_UPLOAD (integer)
-CURLINFO_FILETIME (integer)
-CURLINFO_SSL_VERIFYRESULT (integer)
-CURLINFO_CONTENT_LENGTH_DOWNLOAD (integer)
-CURLINFO_CONTENT_LENGTH_UPLOAD (integer)
-CURLE_OK (integer)
-CURLE_UNSUPPORTED_PROTOCOL (integer)
-CURLE_FAILED_INIT (integer)
-CURLE_URL_MALFORMAT (integer)
-CURLE_URL_MALFORMAT_USER (integer)
-CURLE_COULDNT_RESOLVE_PROXY (integer)
-CURLE_COULDNT_RESOLVE_HOST (integer)
-CURLE_COULDNT_CONNECT (integer)
-CURLE_FTP_WEIRD_SERVER_REPLY (integer)
-CURLE_FTP_ACCESS_DENIED (integer)
-CURLE_FTP_USER_PASSWORD_INCORRECT (integer)
-CURLE_FTP_WEIRD_PASS_REPLY (integer)
-CURLE_FTP_WEIRD_USER_REPLY (integer)
-CURLE_FTP_WEIRD_PASV_REPLY (integer)
-CURLE_FTP_WEIRD_227_FORMAT (integer)
-CURLE_FTP_CANT_GET_HOST (integer)
-CURLE_FTP_CANT_RECONNECT (integer)
-CURLE_FTP_COULDNT_SET_BINARY (integer)
-CURLE_PARTIAL_FILE (integer)
-CURLE_FTP_COULDNT_RETR_FILE (integer)
-CURLE_FTP_WRITE_ERROR (integer)
-CURLE_FTP_QUOTE_ERROR (integer)
-CURLE_HTTP_NOT_FOUND (integer)
-CURLE_WRITE_ERROR (integer)
-CURLE_MALFORMAT_USER (integer)
-CURLE_FTP_COULDNT_STOR_FILE (integer)
-CURLE_READ_ERROR (integer)
-CURLE_OUT_OF_MEMORY (integer)
-CURLE_OPERATION_TIMEOUTED (integer)
-CURLE_FTP_COULDNT_SET_ASCII (integer)
-CURLE_FTP_PORT_FAILED (integer)
-CURLE_FTP_COULDNT_USE_REST (integer)
-CURLE_FTP_COULDNT_GET_SIZE (integer)
-CURLE_HTTP_RANGE_ERROR (integer)
-CURLE_HTTP_POST_ERROR (integer)
-CURLE_SSL_CONNECT_ERROR (integer)
-CURLE_FTP_BAD_DOWNLOAD_RESUME (integer)
-CURLE_FILE_COULDNT_READ_FILE (integer)
-CURLE_LDAP_CANNOT_BIND (integer)
-CURLE_LDAP_SEARCH_FAILED (integer)
-CURLE_LIBRARY_NOT_FOUND (integer)
-CURLE_FUNCTION_NOT_FOUND (integer)
-CURLE_ABORTED_BY_CALLBACK (integer)
-CURLE_BAD_FUNCTION_ARGUMENT (integer)
-CURLE_BAD_CALLING_ORDER (integer)
-CURLE_HTTP_PORT_FAILED (integer)
-CURLE_BAD_PASSWORD_ENTERED (integer)
-CURLE_TOO_MANY_REDIRECTS (integer)
-CURLE_UNKNOWN_TELNET_OPTION (integer)
-CURLE_TELNET_OPTION_SYNTAX (integer)
-CURLE_OBSOLETE (integer)
-CURLE_SSL_PEER_CERTIFICATE (integer)
+CURLOPT_AUTOREFERER (integer) 
+CURLOPT_COOKIESESSION (integer) 
+CURLOPT_DNS_USE_GLOBAL_CACHE (integer) 
+CURLOPT_DNS_CACHE_TIMEOUT (integer) 
+CURLOPT_FTP_SSL (integer) 
+CURLFTPSSL_TRY (integer) 
+CURLFTPSSL_ALL (integer) 
+CURLFTPSSL_CONTROL (integer) 
+CURLFTPSSL_NONE (integer) 
+CURLOPT_PRIVATE (integer) 
+CURLOPT_FTPSSLAUTH (integer) 
+CURLOPT_PORT (integer) 
+CURLOPT_FILE (integer) 
+CURLOPT_INFILE (integer) 
+CURLOPT_INFILESIZE (integer) 
+CURLOPT_URL (integer) 
+CURLOPT_PROXY (integer) 
+CURLOPT_VERBOSE (integer) 
+CURLOPT_HEADER (integer) 
+CURLOPT_HTTPHEADER (integer) 
+CURLOPT_NOPROGRESS (integer) 
+CURLOPT_NOBODY (integer) 
+CURLOPT_FAILONERROR (integer) 
+CURLOPT_UPLOAD (integer) 
+CURLOPT_POST (integer) 
+CURLOPT_FTPLISTONLY (integer) 
+CURLOPT_FTPAPPEND (integer) 
+CURLOPT_FTP_CREATE_MISSING_DIRS (integer) 
+CURLOPT_NETRC (integer) 
+CURLOPT_FOLLOWLOCATION (integer) 
+CURLOPT_FTPASCII (integer) 
+CURLOPT_PUT (integer) 
+CURLOPT_MUTE (integer) 
+CURLOPT_USERPWD (integer) 
+CURLOPT_PROXYUSERPWD (integer) 
+CURLOPT_RANGE (integer) 
+CURLOPT_TIMEOUT (integer) 
+CURLOPT_TIMEOUT_MS (integer) 
+CURLOPT_TCP_NODELAY (integer) 
+CURLOPT_POSTFIELDS (integer) 
+CURLOPT_PROGRESSFUNCTION (integer) 
+CURLOPT_REFERER (integer) 
+CURLOPT_USERAGENT (integer) 
+CURLOPT_FTPPORT (integer) 
+CURLOPT_FTP_USE_EPSV (integer) 
+CURLOPT_LOW_SPEED_LIMIT (integer) 
+CURLOPT_LOW_SPEED_TIME (integer) 
+CURLOPT_RESUME_FROM (integer) 
+CURLOPT_COOKIE (integer) 
+CURLOPT_SSLCERT (integer) 
+CURLOPT_SSLCERTPASSWD (integer) 
+CURLOPT_WRITEHEADER (integer) 
+CURLOPT_SSL_VERIFYHOST (integer) 
+CURLOPT_COOKIEFILE (integer) 
+CURLOPT_SSLVERSION (integer) 
+CURLOPT_TIMECONDITION (integer) 
+CURLOPT_TIMEVALUE (integer) 
+CURLOPT_CUSTOMREQUEST (integer) 
+CURLOPT_STDERR (integer) 
+CURLOPT_TRANSFERTEXT (integer) 
+CURLOPT_RETURNTRANSFER (integer) 
+CURLOPT_QUOTE (integer) 
+CURLOPT_POSTQUOTE (integer) 
+CURLOPT_INTERFACE (integer) 
+CURLOPT_KRB4LEVEL (integer) 
+CURLOPT_HTTPPROXYTUNNEL (integer) 
+CURLOPT_FILETIME (integer) 
+CURLOPT_WRITEFUNCTION (integer) 
+CURLOPT_READFUNCTION (integer) 
+CURLOPT_PASSWDFUNCTION (integer) 
+CURLOPT_HEADERFUNCTION (integer) 
+CURLOPT_MAXREDIRS (integer) 
+CURLOPT_MAXCONNECTS (integer) 
+CURLOPT_CLOSEPOLICY (integer) 
+CURLOPT_FRESH_CONNECT (integer) 
+CURLOPT_FORBID_REUSE (integer) 
+CURLOPT_RANDOM_FILE (integer) 
+CURLOPT_EGDSOCKET (integer) 
+CURLOPT_CONNECTTIMEOUT (integer) 
+CURLOPT_CONNECTTIMEOUT_MS (integer) 
+CURLOPT_SSL_VERIFYPEER (integer) 
+CURLOPT_CAINFO (integer) 
+CURLOPT_CAPATH (integer) 
+CURLOPT_COOKIEJAR (integer) 
+CURLOPT_SSL_CIPHER_LIST (integer) 
+CURLOPT_BINARYTRANSFER (integer) 
+CURLOPT_NOSIGNAL (integer) 
+CURLOPT_PROXYTYPE (integer) 
+CURLOPT_BUFFERSIZE (integer) 
+CURLOPT_HTTPGET (integer) 
+CURLOPT_HTTP_VERSION (integer) 
+CURLOPT_SSLKEY (integer) 
+CURLOPT_SSLKEYTYPE (integer) 
+CURLOPT_SSLKEYPASSWD (integer) 
+CURLOPT_SSLENGINE (integer) 
+CURLOPT_SSLENGINE_DEFAULT (integer) 
+CURLOPT_SSLCERTTYPE (integer) 
+CURLOPT_CRLF (integer) 
+CURLOPT_ENCODING (integer) 
+CURLOPT_PROXYPORT (integer) 
+CURLOPT_UNRESTRICTED_AUTH (integer) 
+CURLOPT_FTP_USE_EPRT (integer) 
+CURLOPT_HTTP200ALIASES (integer) 
+CURLOPT_HTTPAUTH (integer) 
+CURLAUTH_BASIC (integer) 
+CURLAUTH_DIGEST (integer) 
+CURLAUTH_GSSNEGOTIATE (integer) 
+CURLAUTH_NTLM (integer) 
+CURLAUTH_ANY (integer) 
+CURLAUTH_ANYSAFE (integer) 
+CURLOPT_PROXYAUTH (integer) 
+CURLOPT_MAX_RECV_SPEED_LARGE (integer) 
+CURLOPT_MAX_SEND_SPEED_LARGE (integer) 
+CURLCLOSEPOLICY_LEAST_RECENTLY_USED (integer) 
+CURLCLOSEPOLICY_LEAST_TRAFFIC (integer) 
+CURLCLOSEPOLICY_SLOWEST (integer) 
+CURLCLOSEPOLICY_CALLBACK (integer) 
+CURLCLOSEPOLICY_OLDEST (integer) 
+CURLINFO_PRIVATE (integer) 
+CURLINFO_EFFECTIVE_URL (integer) 
+CURLINFO_HTTP_CODE (integer) 
+CURLINFO_HEADER_OUT (integer) 
+CURLINFO_HEADER_SIZE (integer) 
+CURLINFO_REQUEST_SIZE (integer) 
+CURLINFO_TOTAL_TIME (integer) 
+CURLINFO_NAMELOOKUP_TIME (integer) 
+CURLINFO_CONNECT_TIME (integer) 
+CURLINFO_PRETRANSFER_TIME (integer) 
+CURLINFO_SIZE_UPLOAD (integer) 
+CURLINFO_SIZE_DOWNLOAD (integer) 
+CURLINFO_SPEED_DOWNLOAD (integer) 
+CURLINFO_SPEED_UPLOAD (integer) 
+CURLINFO_FILETIME (integer) 
+CURLINFO_SSL_VERIFYRESULT (integer) 
+CURLINFO_CONTENT_LENGTH_DOWNLOAD (integer) 
+CURLINFO_CONTENT_LENGTH_UPLOAD (integer) 
+CURLINFO_STARTTRANSFER_TIME (integer) 
+CURLINFO_CONTENT_TYPE (integer) 
+CURLINFO_REDIRECT_TIME (integer) 
+CURLINFO_REDIRECT_COUNT (integer) 
+CURL_TIMECOND_IFMODSINCE (integer) 
+CURL_TIMECOND_IFUNMODSINCE (integer) 
+CURL_TIMECOND_LASTMOD (integer) 
+CURL_VERSION_IPV6 (integer) 
+CURL_VERSION_KERBEROS4 (integer) 
+CURL_VERSION_SSL (integer) 
+CURL_VERSION_LIBZ (integer) 
+CURLVERSION_NOW (integer) 
+CURLE_OK (integer) 
+CURLE_UNSUPPORTED_PROTOCOL (integer) 
+CURLE_FAILED_INIT (integer) 
+CURLE_URL_MALFORMAT (integer) 
+CURLE_URL_MALFORMAT_USER (integer) 
+CURLE_COULDNT_RESOLVE_PROXY (integer) 
+CURLE_COULDNT_RESOLVE_HOST (integer) 
+CURLE_COULDNT_CONNECT (integer) 
+CURLE_FTP_WEIRD_SERVER_REPLY (integer) 
+CURLE_FTP_ACCESS_DENIED (integer) 
+CURLE_FTP_USER_PASSWORD_INCORRECT (integer) 
+CURLE_FTP_WEIRD_PASS_REPLY (integer) 
+CURLE_FTP_WEIRD_USER_REPLY (integer) 
+CURLE_FTP_WEIRD_PASV_REPLY (integer) 
+CURLE_FTP_WEIRD_227_FORMAT (integer) 
+CURLE_FTP_CANT_GET_HOST (integer) 
+CURLE_FTP_CANT_RECONNECT (integer) 
+CURLE_FTP_COULDNT_SET_BINARY (integer) 
+CURLE_PARTIAL_FILE (integer) 
+CURLE_FTP_COULDNT_RETR_FILE (integer) 
+CURLE_FTP_WRITE_ERROR (integer) 
+CURLE_FTP_QUOTE_ERROR (integer) 
+CURLE_HTTP_NOT_FOUND (integer) 
+CURLE_WRITE_ERROR (integer) 
+CURLE_MALFORMAT_USER (integer) 
+CURLE_FTP_COULDNT_STOR_FILE (integer) 
+CURLE_READ_ERROR (integer) 
+CURLE_OUT_OF_MEMORY (integer) 
+CURLE_OPERATION_TIMEOUTED (integer) 
+CURLE_FTP_COULDNT_SET_ASCII (integer) 
+CURLE_FTP_PORT_FAILED (integer) 
+CURLE_FTP_COULDNT_USE_REST (integer) 
+CURLE_FTP_COULDNT_GET_SIZE (integer) 
+CURLE_HTTP_RANGE_ERROR (integer) 
+CURLE_HTTP_POST_ERROR (integer) 
+CURLE_SSL_CONNECT_ERROR (integer) 
+CURLE_FTP_BAD_DOWNLOAD_RESUME (integer) 
+CURLE_FILE_COULDNT_READ_FILE (integer) 
+CURLE_LDAP_CANNOT_BIND (integer) 
+CURLE_LDAP_SEARCH_FAILED (integer) 
+CURLE_LIBRARY_NOT_FOUND (integer) 
+CURLE_FUNCTION_NOT_FOUND (integer) 
+CURLE_ABORTED_BY_CALLBACK (integer) 
+CURLE_BAD_FUNCTION_ARGUMENT (integer) 
+CURLE_BAD_CALLING_ORDER (integer) 
+CURLE_HTTP_PORT_FAILED (integer) 
+CURLE_BAD_PASSWORD_ENTERED (integer) 
+CURLE_TOO_MANY_REDIRECTS (integer) 
+CURLE_UNKNOWN_TELNET_OPTION (integer) 
+CURLE_TELNET_OPTION_SYNTAX (integer) 
+CURLE_OBSOLETE (integer) 
+CURLE_SSL_PEER_CERTIFICATE (integer) 
+CURLE_GOT_NOTHING (integer) 
+CURLE_SSL_ENGINE_NOTFOUND (integer) 
+CURLE_SSL_ENGINE_SETFAILED (integer) 
+CURLE_SEND_ERROR (integer) 
+CURLE_RECV_ERROR (integer) 
+CURLE_SHARE_IN_USE (integer) 
+CURLE_SSL_CERTPROBLEM (integer) 
+CURLE_SSL_CIPHER (integer) 
+CURLE_SSL_CACERT (integer) 
+CURLE_BAD_CONTENT_ENCODING (integer) 
+CURLE_LDAP_INVALID_URL (integer) 
+CURLE_FILESIZE_EXCEEDED (integer) 
+CURLE_FTP_SSL_FAILED (integer) 
+CURLFTPAUTH_DEFAULT (integer) 
+CURLFTPAUTH_SSL (integer) 
+CURLFTPAUTH_TLS (integer) 
+CURLPROXY_HTTP (integer) 
+CURLPROXY_SOCKS5 (integer) 
+CURL_NETRC_OPTIONAL (integer) 
+CURL_NETRC_IGNORED (integer) 
+CURL_NETRC_REQUIRED (integer) 
+CURL_HTTP_VERSION_NONE (integer) 
+CURL_HTTP_VERSION_1_0 (integer) 
+CURL_HTTP_VERSION_1_1 (integer) 
+CURLM_CALL_MULTI_PERFORM (integer) 
+CURLM_OK (integer) 
+CURLM_BAD_HANDLE (integer) 
+CURLM_BAD_EASY_HANDLE (integer) 
+CURLM_OUT_OF_MEMORY (integer) 
+CURLM_INTERNAL_ERROR (integer) 
+CURLMSG_DONE (integer) 
+CURLOPT_KEYPASSWD (integer) 
+CURLOPT_SSH_AUTH_TYPES (integer) 
+CURLOPT_SSH_HOST_PUBLIC_KEY_MD5 (integer) 
+CURLOPT_SSH_PRIVATE_KEYFILE (integer) 
+CURLOPT_SSH_PUBLIC_KEYFILE (integer) 
+CURLSSH_AUTH_ANY (integer) 
+CURLSSH_AUTH_DEFAULT (integer) 
+CURLSSH_AUTH_HOST (integer) 
+CURLSSH_AUTH_KEYBOARD (integer) 
+CURLSSH_AUTH_NONE (integer) 
+CURLSSH_AUTH_PASSWORD (integer) 
+CURLSSH_AUTH_PUBLICKEY (integer) 
      <!-- XIII. Cybercash Payment Functions -->
 cybercash_base64_decode -- base64 decode data for Cybercash
 cybercash_base64_encode -- base64 encode data for Cybercash
@@ -1086,6 +1225,8 @@ E_COMPILE_WARNING (integer)
 E_USER_ERROR (integer) 
 E_USER_WARNING (integer) 
 E_USER_NOTICE (integer) 
+E_DEPRECATED ( integer ) 
+E_USER_DEPRECATED ( integer ) 
 E_ALL (integer) 
 E_STRICT (integer) 
      <!-- XXVII. File Alteration Monitor Functions -->
@@ -2032,6 +2173,28 @@ ircg_whois --  Query server for user information
      <!-- XLVII. PHP / Java Integration -->
 java_last_exception_clear -- Clear last Java exception
 java_last_exception_get -- Get last Java exception
+     <!-- XXXXX. JSON Functions -->
+json_decode -- Decodes a JSON string
+json_encode -- Returns the JSON representation of a value
+json_last_error -- Returns the last error occurred
+
+JSON_ERROR_NONE (integer) 
+JSON_ERROR_DEPTH (integer) 
+JSON_ERROR_STATE_MISMATCH (integer) 
+JSON_ERROR_CTRL_CHAR (integer) 
+JSON_ERROR_SYNTAX (integer) 
+JSON_ERROR_UTF8 (integer) 
+JSON_HEX_TAG (integer) 
+JSON_HEX_AMP (integer) 
+JSON_HEX_APOS (integer) 
+JSON_HEX_QUOT (integer) 
+JSON_FORCE_OBJECT (integer) 
+JSON_NUMERIC_CHECK (integer) 
+JSON_BIGINT_AS_STRING (integer) 
+JSON_PRETTY_PRINT (integer) 
+JSON_UNESCAPED_SLASHES (integer) 
+JSON_UNESCAPED_UNICODE (integer)
+
      <!-- XLVIII. LDAP Functions -->
 ldap_8859_to_t61 --  Translate 8859 characters to t61 characters 
 ldap_add -- Add entries to LDAP directory
@@ -3213,6 +3376,79 @@ mysqli_thread_id -- Returns the thread ID for the current connection
 mysqli_thread_safe -- Returns whether thread safety is given or not
 mysqli_use_result -- Initiate a result set retrieval
 mysqli_warning_count -- Returns the number of warnings from the last query for the given link
+mysqli::autocommit -- Turns on or off auto-commiting database modifications
+mysqli::change_user -- Changes the user of the specified database connection
+mysqli::character_set_name -- Returns the default character set for the database connection
+mysqli::close -- Closes a previously opened database connection
+mysqli::commit -- Commits the current transaction
+mysqli::debug -- Performs debugging operations
+mysqli::disable_reads_from_master -- Disable reads from master
+mysqli::dump_debug_info -- Dump debugging information into the log
+mysqli::get_charset -- Returns a character set object
+mysqli::get_client_info -- Returns the MySQL client version as a string
+mysqli_get_client_stats -- Returns client per-process statistics
+mysqli::get_connection_stats -- Returns statistics about the client connection
+mysqli::get_warnings -- Get result of SHOW WARNINGS
+mysqli::init -- Initializes MySQLi and returns a resource for use with mysqli_real_connect()
+mysqli::kill -- Asks the server to kill a MySQL thread
+mysqli::more_results -- Check if there are any more query results from a multi query
+mysqli::multi_query -- Performs a query on the database
+mysqli::next_result -- Prepare next result from multi_query
+mysqli::options -- Set options
+mysqli::ping -- Pings a server connection, or tries to reconnect if the connection has gone down
+mysqli::poll -- Poll connections
+mysqli::prepare -- Prepare an SQL statement for execution
+mysqli::query -- Performs a query on the database
+mysqli::real_connect -- Opens a connection to a mysql server
+mysqli::real_escape_string -- Escapes special characters in a string for use in an SQL statement, taking into account the current charset of the connection
+mysqli::real_query -- Execute an SQL query
+mysqli::reap_async_query -- Get result from async query
+mysqli::refresh -- Refreshes
+mysqli::rollback -- Rolls back current transaction
+mysqli::rpl_query_type -- Returns RPL query type
+mysqli::select_db -- Selects the default database for database queries
+mysqli::send_query -- Send the query and return
+mysqli::set_charset -- Sets the default client character set
+mysqli::set_local_infile_default -- Unsets user defined handler for load local infile command
+mysqli::set_local_infile_handler -- Set callback function for LOAD DATA LOCAL INFILE command
+mysqli::ssl_set -- Used for establishing secure connections using SSL
+mysqli::stat -- Gets the current system status
+mysqli::stmt_init -- Initializes a statement and returns an object for use with mysqli_stmt_prepare
+mysqli::store_result -- Transfers a result set from the last query
+mysqli::thread_safe -- Returns whether thread safety is given or not
+mysqli::use_result -- Initiate a result set retrieval
+mysqli_stmt::attr_get -- Used to get the current value of a statement attribute
+mysqli_stmt::attr_set -- Used to modify the behavior of a prepared statement
+mysqli_stmt::bind_param -- Binds variables to a prepared statement as parameters
+mysqli_stmt::bind_result -- Binds variables to a prepared statement for result storage
+mysqli_stmt::close -- Closes a prepared statement
+mysqli_stmt::data_seek -- Seeks to an arbitrary row in statement result set
+mysqli_stmt::execute -- Executes a prepared Query
+mysqli_stmt::fetch -- Fetch results from a prepared statement into the bound variables
+mysqli_stmt::free_result -- Frees stored result memory for the given statement handle
+mysqli_stmt::get_result -- Gets a result set from a prepared statement
+mysqli_stmt::get_warnings -- Get result of SHOW WARNINGS
+mysqli_stmt::more_results -- Check if there are more query results from a multiple query
+mysqli_stmt::next_result -- Reads the next result from a multiple query
+mysqli_stmt::prepare -- Prepare an SQL statement for execution
+mysqli_stmt::reset -- Resets a prepared statement
+mysqli_stmt::result_metadata -- Returns result set metadata from a prepared statement
+mysqli_stmt::send_long_data -- Send data in blocks
+mysqli_stmt::store_result -- Transfers a result set from a prepared statement
+mysqli_result::data_seek -- Adjusts the result pointer to an arbitary row in the result
+mysqli_result::fetch_all -- Fetches all result rows as an associative array, a numeric array, or both
+mysqli_result::fetch_array -- Fetch a result row as an associative, a numeric array, or both
+mysqli_result::fetch_assoc -- Fetch a result row as an associative array
+mysqli_result::fetch_field_direct -- Fetch meta-data for a single field
+mysqli_result::fetch_field -- Returns the next field in the result set
+mysqli_result::fetch_fields -- Returns an array of objects representing the fields in a result set
+mysqli_result::fetch_object -- Returns the current row of a result set as an object
+mysqli_result::fetch_row -- Get a result row as an enumerated array
+mysqli_result::field_seek -- Set result pointer to a specified field offset
+mysqli_result::free -- Frees the memory associated with a result
+mysqli_driver::embedded_server_end -- Stop embedded server
+mysqli_driver::embedded_server_start -- Initialize and start embedded server
+mysqli_warning::next -- The next purpose
 
 MYSQLI_READ_DEFAULT_GROUP (integer) 
 MYSQLI_READ_DEFAULT_FILE (integer) 
@@ -3269,7 +3505,6 @@ MYSQLI_TYPE_CHAR (integer)
 MYSQLI_TYPE_GEOMETRY (integer) 
 MYSQLI_NEED_DATA (integer) 
 MYSQLI_NO_DATA (integer) 
-
      <!-- LXVI. Mohawk Software Session Handler Functions -->
 msession_connect -- Connect to msession server 
 msession_count -- Get session count 
@@ -3737,6 +3972,77 @@ notes_version -- Get the version Lotus Notes
 nsapi_request_headers -- Fetch all HTTP request headers
 nsapi_response_headers --  Fetch all HTTP response headers 
 nsapi_virtual -- Perform an NSAPI sub-request
+     <!-- XXXXX. OAuth Functions -->
+OAuth::disableDebug -- Turn off verbose debugging
+OAuth::disableRedirects -- Turn off redirects
+OAuth::disableSSLChecks -- Turn off SSL checks
+OAuth::enableDebug -- Turn on verbose debugging
+OAuth::enableRedirects -- Turn on redirects
+OAuth::enableSSLChecks -- Turn on SSL checks
+OAuth::fetch -- Fetch an OAuth protected resource
+OAuth::generateSignature -- Generate a signature
+OAuth::getAccessToken -- Fetch an access token
+OAuth::getCAPath -- Gets CA information
+OAuth::getLastResponse -- Get the last response
+OAuth::getLastResponseHeaders -- Get headers for last response
+OAuth::getLastResponseInfo -- Get HTTP information about the last response
+OAuth::getRequestHeader -- Generate OAuth header string signature
+OAuth::getRequestToken -- Fetch a request token
+OAuth::setAuthType -- Set authorization type
+OAuth::setCAPath -- Set CA path and info
+OAuth::setNonce -- Set the nonce for subsequent requests
+OAuth::setRequestEngine -- The setRequestEngine purpose
+OAuth::setRSACertificate -- Set the RSA certificate
+OAuth::setSSLChecks -- Tweak specific SSL checks for requests.
+OAuth::setTimestamp -- Set the timestamp
+OAuth::setToken -- Sets the token and secret
+OAuth::setVersion -- Set the OAuth version
+OAuthProvider::addRequiredParameter -- Add required parameters
+OAuthProvider::callconsumerHandler -- Calls the consumerNonceHandler callback
+OAuthProvider::callTimestampNonceHandler -- Calls the timestampNonceHandler callback
+OAuthProvider::calltokenHandler -- Calls the tokenNonceHandler callback
+OAuthProvider::checkOAuthRequest -- Check an oauth request
+OAuthProvider::consumerHandler -- Set the consumerHandler handler callback
+OAuthProvider::generateToken -- Generate a random token
+OAuthProvider::is2LeggedEndpoint -- is2LeggedEndpoint
+OAuthProvider::isRequestTokenEndpoint -- Sets isRequestTokenEndpoint
+OAuthProvider::removeRequiredParameter -- Remove a required parameter
+OAuthProvider::reportProblem -- Report a problem
+OAuthProvider::setParam -- Set a parameter
+OAuthProvider::setRequestTokenPath -- Set request token path
+OAuthProvider::timestampNonceHandler -- Set the timestampNonceHandler handler callback
+OAuthProvider::tokenHandler -- Set the tokenHandler handler callback
+OAuthException::__contruct -- dumb constructor
+oauth_get_sbs -- Generate a Signature Base String
+oauth_urlencode -- Encode a URI to RFC 3986
+
+OAUTH_SIG_METHOD_RSASHA1 (string) 
+OAUTH_SIG_METHOD_HMACSHA1 (string) 
+OAUTH_SIG_METHOD_HMACSHA256 (string) 
+OAUTH_AUTH_TYPE_AUTHORIZATION (string) 
+OAUTH_AUTH_TYPE_NONE (string) 
+OAUTH_AUTH_TYPE_URI (string) 
+OAUTH_AUTH_TYPE_FORM (string) 
+OAUTH_HTTP_METHOD_GET (string) 
+OAUTH_HTTP_METHOD_POST (string) 
+OAUTH_HTTP_METHOD_PUT (string) 
+OAUTH_HTTP_METHOD_HEAD (string) 
+OAUTH_HTTP_METHOD_DELETE (string) 
+OAUTH_REQENGINE_STREAMS (integer) 
+OAUTH_REQENGINE_CURL (integer) 
+OAUTH_OK (integer) 
+OAUTH_BAD_NONCE (integer) 
+OAUTH_BAD_TIMESTAMP (integer) 
+OAUTH_CONSUMER_KEY_UNKNOWN (integer) 
+OAUTH_CONSUMER_KEY_REFUSED (integer) 
+OAUTH_INVALID_SIGNATURE (integer) 
+OAUTH_TOKEN_USED (integer) 
+OAUTH_TOKEN_EXPIRED (integer) 
+OAUTH_TOKEN_REVOKED (integer) 
+OAUTH_TOKEN_REJECTED (integer) 
+OAUTH_VERIFIER_INVALID (integer) 
+OAUTH_PARAMETER_ABSENT (integer) 
+OAUTH_SIGNATURE_METHOD_REJECTED (integer)
      <!-- LXXII. Unified ODBC Functions -->
 odbc_autocommit -- Toggle autocommit behaviour
 odbc_binmode -- Handling of binary column data

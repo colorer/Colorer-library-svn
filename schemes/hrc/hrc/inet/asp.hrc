@@ -95,6 +95,7 @@
 
     <scheme name="htmlScripts">
       <inherit scheme="html:htmlScripts">
+         <virtual scheme="html:htmlCore" subst-scheme="htmlCore"/>
          <virtual scheme="vbScript:vbScript" subst-scheme="asp.vb:vbScript-client"/>
          <virtual scheme="jScript:jScript" subst-scheme="asp.js:jScript-client"/>
          <virtual scheme="perl:perl" subst-scheme="asp.ps:PerlScript-client"/>
@@ -103,7 +104,7 @@
 
     <scheme name="Comment">
       <inherit scheme="Insertion">
-         <!-- doesn't works!! -->
+         <!-- doesn't work !! -->
          <virtual scheme="html" subst-scheme="Comment"/>
       </inherit>
       <inherit scheme="def:Comment"/>

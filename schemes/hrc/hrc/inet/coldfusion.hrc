@@ -157,6 +157,7 @@
     <scheme name="coldfusion">
       <inherit scheme="html:html">
         <virtual scheme='html:html' subst-scheme='cf-html'/>
+        <virtual scheme='html:htmlCoreTags' subst-scheme='Tags'/>
       </inherit>
     </scheme>
 

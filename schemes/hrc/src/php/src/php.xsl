@@ -29,13 +29,13 @@
 
 
 <xsl:template match="lang">
-	<keywords region="php.keyword">
+	<keywords region="php.keyword" ignorecase="yes">
 		<xsl:apply-templates select="key"/>
 	</keywords>
-	<keywords region="php.function">
+	<keywords region="php.function" ignorecase="yes">
 		<xsl:apply-templates select="func"/>
 	</keywords>
-	<keywords region="php.type">
+	<keywords region="php.type" ignorecase="yes">
 		<xsl:apply-templates select="type"/>
 	</keywords>
 	<keywords region="php.const">
@@ -65,10 +65,10 @@
 
 <xsl:template match="package">
 	<scheme name="{@name}" if="Include-{@name}">
-		<keywords region='php.class'>
+		<keywords region='php.class' ignorecase="yes">
 			<xsl:apply-templates select="method" mode="class"/>
 		</keywords>
-		<keywords region="php.function">
+		<keywords region="php.function" ignorecase="yes">
 			<xsl:apply-templates select="method|function"/>
 		</keywords>
 		<keywords region="php.const">

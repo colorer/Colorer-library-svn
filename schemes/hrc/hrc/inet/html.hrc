@@ -55,13 +55,16 @@
     <region name="htmlUnknowTag" parent="Tag"/> 
     <region name="htmlTagEqu" parent="Symbol"/> 
 
-
     <entity name="htmlscrStart" value="script [^&gt;]+ language\s*=\s*(?{q}[\x22\x27]?)"/>
     <entity name="htmlscrEnd" value="(?{htmlTagBr}&lt; \/ (?{htmlCloseTag}script) \&gt; )"/>
 
     <region name='Header1Outline' parent='def:Outlined' description='Header1 Element'/>
     <region name='Header2Outline' parent='def:Outlined' description='Header2 Element'/>
     <region name='Header3Outline' parent='def:Outlined' description='Header3 Element'/>
+
+    <region name="CCOperator" parent="def:Keyword" />
+    <region name="CCBool" parent="def:Keyword" />
+    <region name="CCVar" parent="def:VarStrong" />
 
     <scheme name="xssi">
       <block start="/(=)\s*&#34;/" end="/&#34;/" scheme="perl:InterpolateString" region="String" region01="Symbol" region00="PairStart" region10="PairEnd"/>
@@ -268,12 +271,15 @@
       <keywords ignorecase="yes" region="htmlOpenTag">
         <word name="a"/>
         <word name="abbr"/>
-        <word name="above"/>
+        <!--word name="above"/-->
         <word name="acronym"/>
         <word name="address"/>
         <word name="applet"/>
         <word name="array"/>
         <word name="area"/>
+        <word name="article"/>
+        <word name="aside"/>
+        <word name="audio"/>
         <word name="b"/>
         <word name="base"/>
         <word name="basefont"/>
@@ -287,15 +293,19 @@
         <word name="br"/>
         <word name="blink"/>
         <word name="button"/>
+        <word name="canvas"/>
         <word name="caption"/>
         <word name="center"/>
         <word name="cite"/>
         <word name="code"/>
         <word name="col"/>
         <word name="colgroup"/>
+        <word name="command"/>
         <word name="comment"/>
+        <word name="datalist"/>
         <word name="dd"/>
         <word name="del"/>
+        <word name="details"/>
         <word name="dfn"/>
         <word name="dir"/>
         <word name="div"/>
@@ -305,8 +315,11 @@
         <word name="embed"/>
         <word name="fieldset"/>
         <word name="fig"/>
+        <word name="figcaption"/>
+        <word name="figure"/>
         <word name="font"/>
         <word name="form"/>
+        <word name="footer"/>
         <word name="frame"/>
         <word name="frameset"/>
         <word name="h1"/>
@@ -316,52 +329,65 @@
         <word name="h5"/>
         <word name="h6"/>
         <word name="head"/>
+        <word name="header"/>
+        <word name="hgroup"/>
         <word name="hr"/>
         <word name="html"/>
         <word name="i"/>
-        <word name="id"/>
+        <!--word name="id"/-->
         <word name="iframe"/>
-        <word name="ilayer"/>
+        <!--word name="ilayer"/-->
         <word name="img"/>
         <word name="input"/>
         <word name="ins"/>
         <word name="isindex"/>
         <word name="kbd"/>
+        <word name="keygen"/>
         <word name="label"/>
-        <word name="layer"/>
+        <!--word name="layer"/-->
         <word name="legend"/>
         <word name="li"/>
         <word name="link"/>
-        <word name="listing"/>
+        <!--word name="listing"/-->
         <word name="map"/>
+        <word name="mark"/>
         <word name="marquee"/>
         <word name="menu"/>
         <word name="meta"/>
-        <word name="multicol"/>
-        <word name="nextid"/>
+        <word name="meter"/>
+        <!--word name="multicol"/-->
+        <word name="nav"/>
+        <!--word name="nextid"/-->
         <word name="nobr"/>
+        <word name="noembed"/>
         <word name="noframes"/>
-        <word name="nolayer"/>
+        <!--word name="nolayer"/-->
         <word name="note"/>
         <word name="noscript"/>
         <word name="object"/>
         <word name="ol"/>
-        <word name="option"/>
-        <word name="keygen"/>
         <word name="optgroup"/>
+        <word name="option"/>
+        <word name="output"/>
         <word name="p"/>
         <word name="param"/>
         <word name="pre"/>
+        <word name="progress"/>
         <word name="q"/>
         <word name="quote"/>
         <word name="range"/>
         <word name="root"/>
+        <word name="rp"/>
+        <word name="rt"/>
+        <word name="ruby"/>
         <word name="s"/>
         <word name="samp"/>
         <word name="script"/>
+        <word name="section"/>
         <word name="select"/>
         <word name="small"/>
         <word name="sound"/>
+        <word name="source"/>
         <word name="spacer"/>
         <word name="span"/>
         <word name="sqrt"/>
@@ -369,6 +395,7 @@
         <word name="strong"/>
         <word name="style"/>
         <word name="sub"/>
+        <word name="summary"/>
         <word name="sup"/>
         <word name="table"/>
         <word name="tbody"/>
@@ -378,36 +405,21 @@
         <word name="tfoot"/>
         <word name="th"/>
         <word name="thead"/>
+        <word name="time"/>
         <word name="title"/>
         <word name="tr"/>
         <word name="tt"/>
         <word name="u"/>
         <word name="ul"/>
         <word name="var"/>
+        <word name="video"/>
         <word name="wbr"/>
         <word name="xmp"/>
-        
-        <!-- HTML5 -->
-        <word name="footer"/>
-        <word name="section"/>
-        <word name="video"/>
-        <word name="audio"/>
-        <word name="progress"/>
-        <word name="nav"/>
-        <word name="meter"/>
-        <word name="time"/>
-        <word name="aside"/>
-        <word name="canvas"/>
       </keywords>
     </scheme>
 
     <scheme name="htmlCore">
-      <!--
-      <block start='/(STYLE)\s*=\s*([\x22\x27])/i' end="/(\y2)/" scheme="cssInsideBraces"
-               region="HtString"/>
-         -->
-         
-      <block start="/~/" end="/~[\w\:\-]+\m/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
+      <block start="/~/" end="/[^\w\:\-]?=/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
          
       <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="html-css:AposRuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
@@ -426,21 +438,25 @@
       <regexp match="/\=/" region="htmlTagEqu"/>
     </scheme>
 
+	<scheme name="htmljScript">
+		<block start="/~/" end="/[?%]?~1(&gt;)/" 
+			scheme="htmlCore" region="htmlUnknowParam" region11="htmlTagBr"
+		/>
+		<inherit scheme="jScript" />
+	</scheme>
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
+                      (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix" 
-             end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
-         
-      <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/]?~1 &gt;) /ix"
+                      (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
-      <block start="/ (&lt;(script .*?) [\%\/]?~1 \&gt; ) /ix"
-             end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
-             region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
+
+		<block start="/ ((&lt;) \s* (script)\M\b \s* &gt;?)/ix" end="/(&lt;\/(script)\&gt;)/ix"
+			scheme="htmljScript"
+			region01="PairStrongStart" region10="PairStrongEnd"
+			region02="htmlTagBr" region03="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
          
       <block start="/(@\[[\.\?\=]?)/" end="/(\]@)/" scheme="GenoPro"
                 region="Insertion" region01="Symbol" region11="Symbol" region00="PairStart" region10="PairEnd"/>
@@ -457,26 +473,45 @@
       <regexp match="/\$[\w\d]+/" region="Keyword"/>
     </scheme>
 
-    <scheme name="htmlPairs">
-      <block start="/(&lt;
-               (html | head | title |
-                body | pre |
-                blockquote | h[1-6] | table |
-                [uo]l | [ibu] | em | small | code)
-               &gt;)/ix"
-             end="/(&lt;\/ (\Y2) &gt;)/ix"
-             scheme="html"
-             region00="PairStart" region10="PairEnd"
-             region01="htmlTagBr" region02="htmlOpenTag"
-             region11="htmlTagBr" region12="htmlOpenTag"/>
-<!-- !!!
-      <block start="/(&lt;(td|tr)&gt;)/ix"
-                end="/(&lt;\/ (\Y2) &gt;)/ix"
-                scheme="html"
-                region00="PairStart" region10="PairEnd"
-                region01="htmlTagBr" region02="htmlOpenTag"
-                region11="Error" region12="htmlOpenTag"/>-->
+    <entity name="pairedtags" value="
+    	a|abbr|acronym|address|applet|article|aside|audio|
+    	b|bdo|big|blink|blockquote|body|button|
+    	canvas|caption|center|cite|code|comment|
+    	datalist|del|details|dfn|dir|div|dd|dl|dt|
+    	em|
+    	fieldset|figcaption|figure|font|footer|form|frameset|
+    	h[1-6]|head|header|hgroup|html|
+    	i|iframe|ins|
+    	kbd|
+    	label|legend|li|listing|
+    	map|mark|marquee|menu|meter|multicol|
+    	nav|nobr|noembed|noframes|noscript|
+    	object|ol|optgroup|output|
+    	p|pre|progress|q|rp|rt|ruby|
+    	s|samp|script|section|select|small|span|strike|strong|style|sub|summary|sup|
+    	table|tbody|td|tr|th|tt|textarea|tfoot|thead|time|title|
+    	u|ul|
+    	video|
+    	xmp
+    "/>
+	<scheme name="htmlPairInside">
+		<block start="/~/" end="/\M(\/?&gt;|[\%\?]?~1&gt;)/" 
+			scheme="htmlCore" region="htmlUnknowParam"
+		/>
+		<regexp match="/&gt;/" region="htmlTagBr" />
+		<inherit scheme="html" />
+	</scheme>
+	<scheme name="htmlPairs" if="html-pairs">
+		<block start="/((&lt;) \s* \b(%pairedtags;)\M\b (\s* &gt;)?)/ixs" end="/((\/&gt;)|(&lt;\/)(\Y3)(&gt;)|(&lt;\/(%pairedtags;)\b)?=)/ixs"
+			scheme="htmlPairInside"
+			region01="PairStart" region11="PairEnd"
+			region02="htmlTagBr" region03="htmlOpenTag"
+
+			region12="htmlTagBr"
+			region13="htmlTagBr" region14="htmlCloseTag" region15="htmlTagBr"
+		/>
     </scheme>
+
 
     <scheme name="htmlTagCall">
       <annotation><documentation>
@@ -497,8 +532,50 @@
 
 
       
-    <scheme name="html">
+    <scheme name="IECommentsTag">
+    	<keywords region="CCVar">
+    		<word name="IE"/>
+    		<word name="WindowsEdition"/>
+    	</keywords>
+    	<keywords region="CCOperator">
+    		<symb name="!"/>
+    		<symb name="&amp;"/>
+    		<symb name="|"/>
+    		<word name="lte"/>
+    		<word name="lt"/>
+    		<word name="gte"/>
+    		<word name="gt"/>
+    	</keywords>
+    	<keywords region="CCBool">
+    		<word name="true"/>
+    		<word name="false"/>
+    	</keywords>
+    	<regexp match="/\d+/" region="Number"/>
+    	<block start="/(\()/" end="/(\))/" scheme="IECommentsTag"
+    		region00="CCOperator" region10="CCOperator"
+    		region01="PairStart" region11="PairEnd"
+    	/>
+    </scheme>
+	<scheme name="IECommentsInner">
+    	<block start="/~(\[)(if)/" end="/(\])&gt;/"
+			scheme="IECommentsTag" region="Text" inner-region="yes"
+			region01="PairStart" region11="PairEnd" region02="htmlOpenTag"
+    	/>
+    	<inherit scheme="html" />
+    </scheme>
 
+    <scheme name="IEComments" if="conditional-comments">
+		<block start="/~\M\[if[^\]]+\]&gt;/" end="/&lt;!\[(endif)\]/"
+			scheme="IECommentsInner" region11="htmlCloseTag"
+		/>
+    </scheme>
+
+    <scheme name="htmlComment">
+      <inherit scheme="IEComments"/>
+      <inherit scheme="Comment"/>
+    </scheme>
+
+    <scheme name="html">
       <inherit scheme="htmlScripts"/>
       <!-- EE: special css -->
       <block start="/ (&lt;(style)\b.*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i"
@@ -523,7 +600,7 @@
          
       <!-- comments -->
       <block start="/&lt;!--\s*\M#/" end="/--&gt;/" scheme="xssi" region="htmlComment" region00="PairStart" region10="PairEnd"/>
-      <block start="/&lt;!--/" end="/--&gt;/" scheme="Comment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
+      <block start="/&lt;!--/" end="/--&gt;/" scheme="htmlComment" region="htmlComment" region00="PairStart" region10="PairEnd"/>
       <block start="/&lt;\!\M\w/" end="/&gt;/" scheme="Comment" 
              region00="PairStart" region10="PairEnd" region="htmlDirective"/>
 

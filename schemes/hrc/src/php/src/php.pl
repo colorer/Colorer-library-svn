@@ -101,7 +101,7 @@ while(<>)
 	
 	
 	#default: library functions
-	my ($foo, $bar) = ($1, $2) if/^(\S+)\s+--\s+(.+?)$/;
+	my ($foo, $bar) = ($1, $2) if/^(\S+)\s+--\s+(.*?)$/;
 	$bar =~ s/([<>\&\"\'])/$rep{$1}/gs;
 	($class, $dl, $method, $depr) = ();
 	$depr = ($bar=~s/\s*\[deprecated\]\s*//i);
