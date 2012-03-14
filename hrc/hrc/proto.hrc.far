@@ -187,6 +187,7 @@
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
 	<parameters>
 		<param name="conditional-comments" value="true" description="IE conditional comments"/>
+		<param name="html-pairs" value="true" description="Highlighting some known HTML Pair tags. Please, use &lt; /&gt; syntax for singles like p, td, tr etc.."/>
 	</parameters>
   </prototype>
 

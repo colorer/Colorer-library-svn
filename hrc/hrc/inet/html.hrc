@@ -419,12 +419,7 @@
     </scheme>
 
     <scheme name="htmlCore">
-      <!--
-      <block start='/(STYLE)\s*=\s*([\x22\x27])/i' end="/(\y2)/" scheme="cssInsideBraces"
-               region="HtString"/>
-         -->
-         
-      <block start="/~/" end="/~[\w\:\-]+\m/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
+      <block start="/~/" end="/[^\w\:\-]?=/" scheme="htmlCoreTags" region="htmlUnknowTag"/>
          
       <block start='/\b(style)(\s)*(\=)(\s)*((\"))/i' end='/(\")/' scheme="html-css:AposRuleContent" 
              region01="htmlParam" region03="htmlTagEqu" region05="def:PairStart" 
@@ -443,21 +438,25 @@
       <regexp match="/\=/" region="htmlTagEqu"/>
     </scheme>
 
+	<scheme name="htmljScript">
+		<block start="/~/" end="/[?%]?~1(&gt;)/" 
+			scheme="htmlCore" region="htmlUnknowParam" region11="htmlTagBr"
+		/>
+		<inherit scheme="jScript" />
+	</scheme>
     <scheme name="htmlScripts">
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} perlscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="perl:perl" region00="PairStrongStart" region10="PairStrongEnd"/>
          
       <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
-                      (?{htmlString} j(ava)?script [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix" 
-             end="/%htmlscrEnd;/ix" scheme="jScript"  region00="PairStrongStart" region10="PairStrongEnd"/>
-         
-      <block start="/ (?{htmlTagBr} &lt; (?{htmlOpenTag} %htmlscrStart;
                       (?{htmlString} vbscript [\d\.]*) \p{q} [^&gt;]*) [\%\/\?]?~1 &gt;) /ix"
              end="/%htmlscrEnd;/ix" scheme="vbScript" region00="PairStrongStart" region10="PairStrongEnd"/>
-      <block start="/ (&lt;(script .*?) [\%\/\?]?~1 \&gt; ) /ix"
-             end="/(&lt;\/(script)\&gt;)/ix" scheme="jScript" region00="PairStrongStart" region10="PairStrongEnd"
-             region01="htmlTagBr" region02="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
+
+		<block start="/ ((&lt;) \s* (script)\M\b \s* &gt;?)/ix" end="/(&lt;\/(script)\&gt;)/ix"
+			scheme="htmljScript"
+			region01="PairStrongStart" region10="PairStrongEnd"
+			region02="htmlTagBr" region03="htmlOpenTag" region11="htmlTagBr" region12="htmlCloseTag"/>
          
       <block start="/(@\[[\.\?\=]?)/" end="/(\]@)/" scheme="GenoPro"
                 region="Insertion" region01="Symbol" region11="Symbol" region00="PairStart" region10="PairEnd"/>
@@ -474,26 +473,45 @@
       <regexp match="/\$[\w\d]+/" region="Keyword"/>
     </scheme>
 
-    <scheme name="htmlPairs">
-      <block start="/(&lt;
-               (html | head | title |
-                body | pre |
-                blockquote | h[1-6] | table |
-                [uo]l | [ibu] | em | small | code)
-               &gt;)/ix"
-             end="/(&lt;\/ (\Y2) &gt;)/ix"
-             scheme="html"
-             region00="PairStart" region10="PairEnd"
-             region01="htmlTagBr" region02="htmlOpenTag"
-             region11="htmlTagBr" region12="htmlOpenTag"/>
-<!-- !!!
-      <block start="/(&lt;(td|tr)&gt;)/ix"
-                end="/(&lt;\/ (\Y2) &gt;)/ix"
-                scheme="html"
-                region00="PairStart" region10="PairEnd"
-                region01="htmlTagBr" region02="htmlOpenTag"
-                region11="Error" region12="htmlOpenTag"/>-->
+    <entity name="pairedtags" value="
+    	a|abbr|acronym|address|applet|article|aside|audio|
+    	b|bdo|big|blink|blockquote|body|button|
+    	canvas|caption|center|cite|code|comment|
+    	datalist|del|details|dfn|dir|div|dd|dl|dt|
+    	em|
+    	fieldset|figcaption|figure|font|footer|form|frameset|
+    	h[1-6]|head|header|hgroup|html|
+    	i|iframe|ins|
+    	kbd|
+    	label|legend|li|listing|
+    	map|mark|marquee|menu|meter|multicol|
+    	nav|nobr|noembed|noframes|noscript|
+    	object|ol|optgroup|output|
+    	p|pre|progress|q|rp|rt|ruby|
+    	s|samp|script|section|select|small|span|strike|strong|style|sub|summary|sup|
+    	table|tbody|td|tr|th|tt|textarea|tfoot|thead|time|title|
+    	u|ul|
+    	video|
+    	xmp
+    "/>
+	<scheme name="htmlPairInside">
+		<block start="/~/" end="/\M(\/?&gt;|[\%\?]?~1&gt;)/" 
+			scheme="htmlCore" region="htmlUnknowParam"
+		/>
+		<regexp match="/&gt;/" region="htmlTagBr" />
+		<inherit scheme="html" />
+	</scheme>
+	<scheme name="htmlPairs" if="html-pairs">
+		<block start="/((&lt;) \s* \b(%pairedtags;)\M\b (\s* &gt;)?)/ixs" end="/((\/&gt;)|(&lt;\/)(\Y3)(&gt;)|(&lt;\/(%pairedtags;)\b)?=)/ixs"
+			scheme="htmlPairInside"
+			region01="PairStart" region11="PairEnd"
+			region02="htmlTagBr" region03="htmlOpenTag"
+
+			region12="htmlTagBr"
+			region13="htmlTagBr" region14="htmlOpenTag" region15="htmlTagBr"
+		/>
     </scheme>
+
 
     <scheme name="htmlTagCall">
       <annotation><documentation>
@@ -558,7 +576,6 @@
     </scheme>
 
     <scheme name="html">
-
       <inherit scheme="htmlScripts"/>
       <!-- EE: special css -->
       <block start="/ (&lt;(style)\b.*?&gt;)/ix" end="/(&lt;\/(style)\&gt;)/i"
