@@ -385,6 +385,11 @@
 		<word name="testfolder"/>
 		<word name="Plugin.Load"/>
 		<word name="Plugin.Unload"/>
+		<word name="Plugin.Call"/>
+		<word name="Plugin.Config"/>
+		<word name="Plugin.Prefix"/>
+		<word name="Plugin.Menu"/>
+		<word name="Plugin.Exist"/>
 		<word name="history.enable"/>
 		<word name="FMatch"/>
 		<word name="Keybar.Show"/>
