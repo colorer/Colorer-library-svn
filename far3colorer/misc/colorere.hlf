@@ -14,6 +14,8 @@ $^#FarColorer
 
     ~Using a plugin in macros.~@MacroCallPlugin@
 
+    ~Plugin Guids.~@PluginGuids
+
     ~About authors.~@author@
 
 @config
@@ -170,6 +172,27 @@ some problems occurs in current syntax.
   #C Configuration#
     Calls FarColorer ~configuration menu~@config@.
 
+@PluginGuids
+$# Plugin Guids
+   Plugin Guid - {D2F36B62-A470-418d-83A3-ED7A3710E5B5}
+
+   #Dialog#
+    Settings - {87C92249-430D-4334-AC33-05E7423286E9}
+    Scheme settings - {0497F43A-A8B9-4af1-A3A4-FA568F455707}
+    Define hot key - {C6BE56D8-A80A-4f7d-A331-A711435F2665}
+
+   #Menu#
+    Main menu in editor - {45453CAC-499D-4b37-82B8-0A77F7BD087C}
+    Syntax choose - {0ABEE4C9-BDC6-4c35-BAB7-963D91E3858A}
+    Colore styles - {18A6F7DF-375D-4d3d-8137-DC50AC52B71E}
+    Outliner/error list - {A8A298BA-AD5A-4094-8E24-F65BF38E6C1F}
+
+   #Message#
+    Error - {0C954AC8-2B69-4c74-94C8-7AB10324A005}
+    Reload base - {DEE3B49D-4A55-48a8-9DC8-D11DA04CBF37}
+    Nothing found - {AB214DCE-450B-4389-9E3B-533C7A6D786C}
+    Region name - {70656884-B7BD-4440-A8FF-6CE781C7DC6A}
+
 @MacroCallPlugin
 $# Using a plugin in macros
     The plugin can be called from a macro using the macro function callplugin.
@@ -179,7 +202,7 @@ $# Using a plugin in macros
 
     Here:
        #D2F36B62-A470-418d-83A3-ED7A3710E5B5#
-          ID of the plugin
+          ~Guid of the plugin~@PluginGuids@
 
        #<Param>#
           A numeric value corresponding to the menu item number:

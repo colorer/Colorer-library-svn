@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,3,8
- PRODUCTVERSION 1,0,3,8
+ FILEVERSION 1,0,3,9
+ PRODUCTVERSION 1,0,3,9
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -74,7 +74,7 @@ BEGIN
 #else
             VALUE "FileDescription", "FarColorer - Syntax Highlighting for FAR3"
 #endif
-            VALUE "FileVersion", "1, 0, 3, 8"
+            VALUE "FileVersion", "1, 0, 3, 9"
             VALUE "InternalName", "FarColorer"
             VALUE "LegalCopyright", "Copyright (C) 2009-2012"
             VALUE "OriginalFilename", "colorer.dll"

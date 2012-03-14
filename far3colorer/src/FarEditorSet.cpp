@@ -62,7 +62,7 @@ void FarEditorSet::openMenu(int MenuId)
       }
     };
 
-    MenuId = Info.Menu(&MainGuid, &MainMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+    MenuId = Info.Menu(&MainGuid, &PluginMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
       menuElements, rEnabled? (sizeof(iMenuItems) / sizeof(iMenuItems[0])) : 1 );
     if (MenuId == 0 ) {
       MenuId = 13;
