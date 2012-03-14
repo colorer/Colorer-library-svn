@@ -508,7 +508,7 @@
 			region02="htmlTagBr" region03="htmlOpenTag"
 
 			region12="htmlTagBr"
-			region13="htmlTagBr" region14="htmlOpenTag" region15="htmlTagBr"
+			region13="htmlTagBr" region14="htmlCloseTag" region15="htmlTagBr"
 		/>
     </scheme>
 
