@@ -1,3 +1,6 @@
+  Fixed:
+    - matlab - try/catch support
+
 2012-03-15 r1835 (FarColorer 1.0.3.9)
   New:
     - SHPAML (Eric Gustavson https://github.com/occulens/shpaml-colorer)
