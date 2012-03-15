@@ -2,6 +2,7 @@
     - UniVision Basic (Pete Howell)
   Fixed:
     - matlab - try/catch support
+    - postscript - add keyword
 
 2012-03-15 r1835 (FarColorer 1.0.3.9)
   New:

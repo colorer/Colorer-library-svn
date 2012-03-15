@@ -327,6 +327,7 @@
  <keywords region='words.10'>
   <word name='bind'/>
   <word name='null'/>
+  <word name='realtime'/>
   <word name='usertime'/>
   <word name='version'/>
 
