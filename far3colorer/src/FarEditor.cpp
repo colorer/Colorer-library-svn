@@ -359,7 +359,6 @@ void FarEditor::getNameCurrentScheme()
     scheme.append(DString(L"Scheme: "));
     if (cursorRegion->region != NULL) {
       const Region* r = cursorRegion->region;
-      while (r->getParent() != NULL) r = r->getParent();
       region.append(r->getName());
     } 
     if (cursorRegion->scheme != NULL) {
