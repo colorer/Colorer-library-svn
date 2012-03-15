@@ -838,6 +838,11 @@
    <location link="rare/ahdl.hrc"/>
    <filename>/\.(tdf|tdo|ahdl)$/i</filename>
  </prototype>
+  <prototype name="ubasic" group="rare" description="UniVision Basic">
+    <location link="jar:rare/ubasic.hrc"/>
+    <filename>/\.(uvbasic)$/i</filename>
+    <firstline>/^(PROGRAM\s+\w+$|(SUBROUTINE|EXTERNALFUNCTION)\s+\w+(\s+)?(\(.*\))?$)/</firstline>
+  </prototype>
   <prototype name="z80" group="rare" description="z80asm">
     <location link="rare/z80.hrc"/>
     <filename>/\.za$/i</filename>
