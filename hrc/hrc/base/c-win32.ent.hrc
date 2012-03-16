@@ -290,6 +290,8 @@
      <word name='IMN_SETOPENSTATUS'/>
      <word name='IMN_SETSENTENCEMODE'/>
      <word name='IMN_SETSTATUSWINDOWPOS'/>
+     <word name='INT_MAX'/>
+     <word name='INT_MIN'/>
      <word name='LB_ADDFILE'/>
      <word name='LB_ADDSTRING'/>
      <word name='LB_DELETESTRING'/>
@@ -337,6 +339,8 @@
      <word name='LBN_SELCHANGE'/>
      <word name='LBN_SETFOCUS'/>
      <word name='LBSELCHSTRING'/>
+     <word name='LONG_MAX'/>
+     <word name='LONG_MIN'/>
      <word name='LVM_ARRANGE'/>
      <word name='LVM_CREATEDRAGIMAGE'/>
      <word name='LVM_DELETEALLITEMS'/>
@@ -412,6 +416,8 @@
      <word name='NM_RDBLCLK'/>
      <word name='NM_RETURN'/>
      <word name='NM_SETFOCUS'/>
+     <word name='OAFALSE'/>
+     <word name='OATRUE'/>
      <word name='PBM_DELTAPOS'/>
      <word name='PBM_SETPOS'/>
      <word name='PBM_SETRANGE'/>
@@ -843,6 +849,89 @@
      <word name='WM_WINDOWPOSCHANGED'/>
      <word name='WM_WINDOWPOSCHANGING'/>
      <word name='WM_WININICHANGE'/>
+   </keywords>
+
+   <!-- errno constants -->
+   <keywords region='KeywordConstant'>
+     <word name='E2BIG'/>
+     <word name='EACCES'/>
+     <word name='EADDRINUSE'/>
+     <word name='EADDRNOTAVAIL'/>
+     <word name='EAFNOSUPPORT'/>
+     <word name='EAGAIN'/>
+     <word name='EALREADY'/>
+     <word name='EBADF'/>
+     <word name='EBADMSG'/>
+     <word name='EBUSY'/>
+     <word name='ECANCELED'/>
+     <word name='ECHILD'/>
+     <word name='ECONNABORTED'/>
+     <word name='ECONNREFUSED'/>
+     <word name='ECONNRESET'/>
+     <word name='EDEADLK'/>
+     <word name='EDESTADDRREQ'/>
+     <word name='EDOM'/>
+     <word name='EEXIST'/>
+     <word name='EFAULT'/>
+     <word name='EFBIG'/>
+     <word name='EHOSTUNREACH'/>
+     <word name='EIDRM'/>
+     <word name='EILSEQ'/>
+     <word name='EINPROGRESS'/>
+     <word name='EINTR'/>
+     <word name='EINVAL'/>
+     <word name='EIO'/>
+     <word name='EISCONN'/>
+     <word name='EISDIR'/>
+     <word name='ELOOP'/>
+     <word name='EMFILE'/>
+     <word name='EMLINK'/>
+     <word name='EMSGSIZE'/>
+     <word name='ENAMETOOLONG'/>
+     <word name='ENETDOWN'/>
+     <word name='ENETRESET'/>
+     <word name='ENETUNREACH'/>
+     <word name='ENFILE'/>
+     <word name='ENOBUFS'/>
+     <word name='ENODATA'/>
+     <word name='ENODEV'/>
+     <word name='ENOENT'/>
+     <word name='ENOEXEC'/>
+     <word name='ENOLCK'/>
+     <word name='ENOLINK'/>
+     <word name='ENOMEM'/>
+     <word name='ENOMSG'/>
+     <word name='ENOPROTOOPT'/>
+     <word name='ENOSPC'/>
+     <word name='ENOSR'/>
+     <word name='ENOSTR'/>
+     <word name='ENOSYS'/>
+     <word name='ENOTCONN'/>
+     <word name='ENOTDIR'/>
+     <word name='ENOTEMPTY'/>
+     <word name='ENOTRECOVERABLE'/>
+     <word name='ENOTSOCK'/>
+     <word name='ENOTSUP'/>
+     <word name='ENOTTY'/>
+     <word name='ENXIO'/>
+     <word name='EOPNOTSUPP'/>
+     <word name='EOTHER'/>
+     <word name='EOVERFLOW'/>
+     <word name='EOWNERDEAD'/>
+     <word name='EPERM'/>
+     <word name='EPIPE'/>
+     <word name='EPROTO'/>
+     <word name='EPROTONOSUPPORT'/>
+     <word name='EPROTOTYPE'/>
+     <word name='ERANGE'/>
+     <word name='EROFS'/>
+     <word name='ESPIPE'/>
+     <word name='ESRCH'/>
+     <word name='ETIME'/>
+     <word name='ETIMEDOUT'/>
+     <word name='ETXTBSY'/>
+     <word name='EWOULDBLOCK'/>
+     <word name='EXDEV'/>
    </keywords>
 
    <keywords region='KeywordWin32'>
@@ -6043,6 +6132,25 @@
      <word name='wmemmove_s'/>
      <word name='wprintf_s'/>
      <word name='wscanf_s'/>
+   </keywords>
+
+   <keywords region='KeywordWin32'>
+     <word name='_atodbl'/>
+     <word name='_atodbl_l'/>
+     <word name='_atoldbl'/>
+     <word name='_atoldbl_l'/>
+     <word name='_atof_l'/>
+     <word name='_atoflt'/>
+     <word name='_atoflt_l'/>
+     <word name='_atoi_l'/>
+     <word name='_tstof'/>
+     <word name='_tstoi'/>
+     <word name='_ttof'/>
+     <word name='_ttoi'/>
+     <word name='_wtof'/>
+     <word name='_wtof_l'/>
+     <word name='_wtoi'/>
+     <word name='_wtoi_l'/>
    </keywords>
 
    <!-- StrSafe functions -->
