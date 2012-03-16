@@ -5849,4 +5849,47 @@
      <word name='PreCreateWindow'/>
    </keywords>
 
+   <keywords region='KeywordWin32'>
+     <word name='StringCbCat'/>
+     <word name='StringCbCatEx'/>
+     <word name='StringCbCatN'/>
+     <word name='StringCbCatNEx'/>
+     <word name='StringCbCopy'/>
+     <word name='StringCbCopyEx'/>
+     <word name='StringCbCopyN'/>
+     <word name='StringCbCopyNEx'/>
+     <word name='StringCbGets'/>
+     <word name='StringCbGetsEx'/>
+     <word name='StringCbLength'/>
+     <word name='StringCbPrintf_l'/>
+     <word name='StringCbPrintf_lEx'/>
+     <word name='StringCbPrintf'/>
+     <word name='StringCbPrintfEx'/>
+     <word name='StringCbVPrintf_l'/>
+     <word name='StringCbVPrintf_lEx'/>
+     <word name='StringCbVPrintf'/>
+     <word name='StringCbVPrintfEx'/>
+     <word name='StringCchCat'/>
+     <word name='StringCchCatEx'/>
+     <word name='StringCchCatN'/>
+     <word name='StringCchCatNEx'/>
+     <word name='StringCchCopy'/>
+     <word name='StringCchCopyEx'/>
+     <word name='StringCchCopyN'/>
+     <word name='StringCchCopyNEx'/>
+     <word name='StringCchGets'/>
+     <word name='StringCchGetsEx'/>
+     <word name='StringCchLength'/>
+     <word name='StringCchPrintf_l'/>
+     <word name='StringCchPrintf_lEx'/>
+     <word name='StringCchPrintf'/>
+     <word name='StringCchPrintfEx'/>
+     <word name='StringCchVPrintf_l'/>
+     <word name='StringCchVPrintf_lEx'/>
+     <word name='StringCchVPrintf'/>
+     <word name='StringCchVPrintfEx'/>
+     <word name='UnalignedStringCbLength'/>
+     <word name='UnalignedStringCchLength'/>
+   </keywords>
+
 </scheme>
