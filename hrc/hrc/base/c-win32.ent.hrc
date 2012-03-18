@@ -5,6 +5,9 @@
 <scheme name="Keywords-win32" if="win32-specific">
 
    <keywords region='KeywordConstant'>
+     <word name='_CRT_ASSERT'/>
+     <word name='_CRT_ERROR'/>
+     <word name='_CRT_WARN'/>
      <word name='ABM_ACTIVATE'/>
      <word name='ABM_GETAUTOHIDEBAR'/>
      <word name='ABM_GETSTATE'/>
@@ -412,6 +415,10 @@
      <word name='HDN_ITEMDBLCLICK'/>
      <word name='HDN_TRACK'/>
      <word name='HELPMSGSTRING'/>
+     <word name='HKEY_CLASSES_ROOT'/>
+     <word name='HKEY_CURRENT_CONFIG'/>
+     <word name='HKEY_CURRENT_USER'/>
+     <word name='HKEY_LOCAL_MACHINE'/>
      <word name='HKM_GETHOTKEY'/>
      <word name='HKM_SETHOTKEY'/>
      <word name='HKM_SETRULES'/>
@@ -588,6 +595,18 @@
      <word name='INT_MAX'/>
      <word name='INT_MIN'/>
      <word name='INVALID_HANDLE_VALUE'/>
+     <word name='KEY_ALL_ACCESS'/>
+     <word name='KEY_CREATE_LINK'/>
+     <word name='KEY_CREATE_SUB_KEY'/>
+     <word name='KEY_ENUMERATE_SUB_KEYS'/>
+     <word name='KEY_EXECUTE'/>
+     <word name='KEY_NOTIFY'/>
+     <word name='KEY_QUERY_VALUE'/>
+     <word name='KEY_READ'/>
+     <word name='KEY_SET_VALUE'/>
+     <word name='KEY_WOW64_32KEY'/>
+     <word name='KEY_WOW64_64KEY'/>
+     <word name='KEY_WRITE'/>
      <word name='LB_ADDFILE'/>
      <word name='LB_ADDSTRING'/>
      <word name='LB_DELETESTRING'/>
@@ -754,6 +773,18 @@
      <word name='PSN_WIZBACK'/>
      <word name='PSN_WIZFINISH'/>
      <word name='PSN_WIZNEXT'/>
+     <word name='REG_BINARY'/>
+     <word name='REG_DWORD'/>
+     <word name='REG_DWORD_LITTLE_ENDIAN'/>
+     <word name='REG_DWORD_BIG_ENDIAN'/>
+     <word name='REG_EXPAND_SZ'/>
+     <word name='REG_LINK'/>
+     <word name='REG_MULTI_SZ'/>
+     <word name='REG_NONE'/>
+     <word name='REG_QWORD'/>
+     <word name='REG_QWORD_LITTLE_ENDIAN'/>
+     <word name='REG_SZ'/>
+     <word name='S_OK'/>
      <word name='SB_GETBORDERS'/>
      <word name='SB_GETPARTS'/>
      <word name='SB_GETRECT'/>
@@ -784,6 +815,8 @@
      <word name='STN_DBLCLK'/>
      <word name='STN_DISABLE'/>
      <word name='STN_ENABLE'/>
+     <word name='STRSAFE_E_INVALID_PARAMETER'/>
+     <word name='STRSAFE_E_INSUFFICIENT_BUFFER'/>
      <word name='STRSAFE_MAX_CCH'/>
      <word name='State_Paused'/>
      <word name='State_Running'/>
@@ -3408,7 +3441,6 @@
      <word name='WNetDisconnectDialog1'/>
      <word name='WNetGetNetworkInformation'/>
      <word name='WNetGetProviderName'/>
-     <word name='wvsprintf'/> 
    </keywords>
 
    <keywords region='KeywordStructure'>
@@ -5709,6 +5741,28 @@
 
    <keywords region='KeywordMacro'>
      <word name='_countof'/>
+     <word name='_ASSERT'/>
+     <word name='_ASSERTE'/>
+     <word name='_RPT0'/>
+     <word name='_RPT1'/>
+     <word name='_RPT2'/>
+     <word name='_RPT3'/>
+     <word name='_RPT4'/>
+     <word name='_RPTF0'/>
+     <word name='_RPTF1'/>
+     <word name='_RPTF2'/>
+     <word name='_RPTF3'/>
+     <word name='_RPTF4'/>
+     <word name='_RPTW0'/>
+     <word name='_RPTW1'/>
+     <word name='_RPTW2'/>
+     <word name='_RPTW3'/>
+     <word name='_RPTW4'/>
+     <word name='_RPTFW0'/>
+     <word name='_RPTFW1'/>
+     <word name='_RPTFW2'/>
+     <word name='_RPTFW3'/>
+     <word name='_RPTFW4'/>
      <word name='Animate_Close'/>
      <word name='Animate_Create'/>
      <word name='Animate_Open'/>
@@ -6666,7 +6720,10 @@
 
    <!-- vs2005 security-enhanced functions -->
    <keywords region='KeywordWin32'>
+     <word name='__vswprintf_l'/>
      <word name='__wcserror_s'/>
+     <word name='_abs64'/>
+     <word name='_access'/>
      <word name='_access_s'/>
      <word name='_cgets_s'/>
      <word name='_cgetws_s'/>
@@ -6761,19 +6818,57 @@
      <word name='_ultoa_s'/>
      <word name='_ultow_s'/>
      <word name='_umask_s'/>
+     <word name='_vcprintf'/>
+     <word name='_vcprintf_l'/>
+     <word name='_vcprintf_p'/>
+     <word name='_vcprintf_p_l'/>
      <word name='_vcprintf_s'/>
      <word name='_vcprintf_s_l'/>
+     <word name='_vcwprintf'/>
+     <word name='_vcwprintf_l'/>
+     <word name='_vcwprintf_p'/>
+     <word name='_vcwprintf_p_l'/>
      <word name='_vcwprintf_s'/>
      <word name='_vcwprintf_s_l'/>
+     <word name='_vfprintf_l'/>
+     <word name='_vfprintf_p'/>
+     <word name='_vfprintf_p_l'/>
      <word name='_vfprintf_s_l'/>
+     <word name='_vfwprintf_l'/>
+     <word name='_vfwprintf_p'/>
+     <word name='_vfwprintf_p_l'/>
      <word name='_vfwprintf_s_l'/>
+     <word name='_vprintf_l'/>
+     <word name='_vprintf_p'/>
+     <word name='_vprintf_p_l'/>
      <word name='_vprintf_s_l'/>
+     <word name='_vscprintf'/>
+     <word name='_vscprintf_l'/>
+     <word name='_vscprintf_p'/>
+     <word name='_vscprintf_p_l'/>
+     <word name='_vscwprintf'/>
+     <word name='_vscwprintf_l'/>
+     <word name='_vscwprintf_p'/>
+     <word name='_vscwprintf_p_l'/>
+     <word name='_vsnprintf'/>
+     <word name='_vsnprintf_l'/>
      <word name='_vsnprintf_s'/>
      <word name='_vsnprintf_s_l'/>
+     <word name='_vsnwprintf'/>
+     <word name='_vsnwprintf_l'/>
      <word name='_vsnwprintf_s'/>
      <word name='_vsnwprintf_s_l'/>
+     <word name='_vsprintf_l'/>
+     <word name='_vsprintf_p'/>
+     <word name='_vsprintf_p_l'/>
      <word name='_vsprintf_s_l'/>
+     <word name='_vswprintf_l'/>
+     <word name='_vswprintf_p'/>
+     <word name='_vswprintf_p_l'/>
      <word name='_vswprintf_s_l'/>
+     <word name='_vwprintf_l'/>
+     <word name='_vwprintf_p'/>
+     <word name='_vwprintf_p_l'/>
      <word name='_vwprintf_s_l'/>
      <word name='_waccess_s'/>
      <word name='_wasctime_s'/>
@@ -6804,6 +6899,7 @@
      <word name='_wstrdate_s'/>
      <word name='_wstrtime_s'/>
      <word name='_wtmpnam_s'/>
+
      <word name='asctime_s'/>
      <word name='bsearch_s'/>
      <word name='clearerr_s'/>
