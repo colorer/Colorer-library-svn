@@ -836,7 +836,7 @@
    <filename>/\.(tdf|tdo|ahdl)$/i</filename>
  </prototype>
   <prototype name="ubasic" group="rare" description="UniVision Basic">
-    <location link="jar:rare/ubasic.hrc"/>
+    <location link="rare/ubasic.hrc"/>
     <filename>/\.(uvbasic)$/i</filename>
     <firstline>/^(PROGRAM\s+\w+$|(SUBROUTINE|EXTERNALFUNCTION)\s+\w+(\s+)?(\(.*\))?$)/</firstline>
   </prototype>
