@@ -1254,9 +1254,13 @@ FarList *FarEditorSet::buildParamsList(FileTypeImpl *type)
 
 void FarEditorSet::ChangeParamValueListType(HANDLE hDlg, bool dropdownlist)
 {
-  struct FarDialogItem *DialogItem = (FarDialogItem *) calloc(1,Info.SendDlgMessage(hDlg,DM_GETDLGITEM,IDX_CH_PARAM_VALUE_LIST,NULL));
-
-  Info.SendDlgMessage(hDlg,DM_GETDLGITEM,IDX_CH_PARAM_VALUE_LIST,DialogItem);
+  size_t s = Info.SendDlgMessage(hDlg,DM_GETDLGITEM,IDX_CH_PARAM_VALUE_LIST,NULL);
+  struct FarDialogItem *DialogItem = (FarDialogItem *) calloc(1,s);
+  FarGetDialogItem fgdi;
+  fgdi.Item = DialogItem;
+  fgdi.StructSize = sizeof(FarGetDialogItem);
+  fgdi.Size = s;
+  Info.SendDlgMessage(hDlg,DM_GETDLGITEM,IDX_CH_PARAM_VALUE_LIST,&fgdi);
   DialogItem->Flags=DIF_LISTWRAPMODE;
   if (dropdownlist) {
     DialogItem->Flags|=DIF_DROPDOWNLIST;
@@ -1458,7 +1462,8 @@ void  FarEditorSet::OnChangeHrc(HANDLE hDlg)
 
 void FarEditorSet::SaveChangedValueParam(HANDLE hDlg)
 {
-  FarListGetItem List;
+  FarListGetItem List = {0};
+  List.StructSize= sizeof(FarListGetItem);
   List.ItemIndex=menuid;
   Info.SendDlgMessage(hDlg,DM_LISTGETITEM,IDX_CH_PARAM_LIST,&List);
 
@@ -1499,7 +1504,8 @@ void  FarEditorSet::OnChangeParam(HANDLE hDlg, int idx)
     SaveChangedValueParam(hDlg);
   }
   FileTypeImpl *type = getCurrentTypeInDialog(hDlg);
-  FarListGetItem List;
+  FarListGetItem List = {0};
+  List.StructSize= sizeof(FarListGetItem);
   List.ItemIndex=idx;
   Info.SendDlgMessage(hDlg,DM_LISTGETITEM,IDX_CH_PARAM_LIST,&List);
 
