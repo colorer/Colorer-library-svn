@@ -5,6 +5,7 @@
   Fixed:
     - matlab - try/catch support
     - postscript - add keyword
+    - fix error in csharp, markdown, pl1, ubasic
 
 2012-03-15 r1835 (FarColorer 1.0.3.9)
   New:
@@ -16,7 +17,7 @@
     - Far.hrc - new in Far3
     - Html - pair tags, conditional comments (IE) , new tags and etc.  (lazyeugene)
     - CSS - new keywords (lazyeugene)
-    - ASP - insertions  in the scipt tags  (lazyeugene)
+    - ASP - insertions  in the script tags  (lazyeugene)
     - php - new keywords, json, OAuth; function name and constants case insensitive  (lazyeugene)
 
 2012-01-08 r1809 (FarColorer 1.0.3.7)

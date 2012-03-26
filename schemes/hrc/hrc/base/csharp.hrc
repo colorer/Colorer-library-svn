@@ -25,6 +25,7 @@ With help of:
       <region name="FuncOutline" parent="def:Outlined"/>
       <region name="ClassOutline" parent="def:Outlined"/>
       <region name="vbString" parent="def:String"/>
+      <region name="string.quote" parent="def:StringEdge"/>
 
       <scheme name="verbatim-string">
          <block start="/@(&quot;)/" end="/.*?(&quot;)?~1\m(&quot;)\M(&quot;)?!/"

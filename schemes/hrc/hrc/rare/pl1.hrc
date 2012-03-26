@@ -32,7 +32,7 @@
          <!-- Preprocessor assignment statements -->
          <regexp match="/\M[;\s](%)/" region1="pPrepro"/>
          <!-- Preprocessor comments -->
-         <block start="/^\s+(%\s*IF\s+0\s+%?\s*THEN\s+%?\s*DO)(;)?\b/i" end="/^\s+(%\s*END)\b/i"
+         <block start="/^\s+(\%\s*IF\s+0\s+\%?\s*THEN\s+\%?\s*DO)(;)?\b/i" end="/^\s+(%\s*END)\b/i"
                 scheme="def:empty" region="pComment" region00="def:PairStart" region01="pPrepro" region02="pSemicolon" region10="def:PairEnd" region11="pPrepro"/>
          <!-- Comments -->
          <block start="/\/\*/" end="/\*\//" scheme="def:empty" region="pComment" region00="def:PairStart" region10="def:PairEnd"/>
