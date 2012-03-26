@@ -1,5 +1,10 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- markdown.hrc (Roman Kuzmin)
+	- squirrel.hrc
+
+#Revision: 1839
+	#Author: ctapmex Date: 2012-03-15 16:25:47 +0600 (Чт, 15 мар 2012)
 	- добавление в postscript 
 
 #Revision: 1838
@@ -7,7 +12,7 @@
 	- UniVision Basic (Pete Howell)
 
 #Revision: 1837
-	#Author: ctapmex Date: 2012-03-15 13:24:51 +0600 (Чт, 15 мар 2012) $
+	#Author: ctapmex Date: 2012-03-15 13:24:51 +0600 (Чт, 15 мар 2012)
 	- try/catch в matlab
 
 #Revision: 1830

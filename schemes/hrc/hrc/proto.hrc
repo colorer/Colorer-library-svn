@@ -668,6 +668,10 @@
     <location link="scripts/gen/wsf.hrc"/>
     <filename>/\.wsf$/i</filename>
   </prototype>
+  <prototype name="squirrel" group="scripts" description="squirrel">
+    <location link="scripts/squirrel.hrc"/>
+    <filename>/\.nut$/i</filename>
+  </prototype>
   
 
   <prototype name="rarscript" group="scripts.install" description="RAR Install Script">
@@ -690,6 +694,10 @@
   <!--  rare languages  -->
   
 	&rare-j2ee-protos;
+  <prototype name="markdown" group="rare.inet" description="markdown">
+    <filename>/\.(text|md|markdown)$/i</filename>
+    <location link="rare/markdown.hrc"/>
+  </prototype>
 	&rare-gen-protos;
 	&rare-scripts-protos;
 	&rare-qrm-protos;

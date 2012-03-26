@@ -1,5 +1,7 @@
   New:
     - UniVision Basic (Pete Howell)
+    - markdown (Roman Kuzmin)
+    - squirrel 
   Fixed:
     - matlab - try/catch support
     - postscript - add keyword
