@@ -6,6 +6,8 @@
     - matlab - try/catch support
     - postscript - add keyword
     - fix error in csharp, markdown, pl1, ubasic
+    - c-win32.ent - add keyword, constants
+    - c.hrc  - printf format string
 
 2012-03-15 r1835 (FarColorer 1.0.3.9)
   New:
