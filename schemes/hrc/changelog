@@ -1,5 +1,13 @@
-﻿$Revision$
-	$Author$ $Date$
+﻿#Revision: 1849
+	#Author: ctapmex Date: 2012-03-26 14:25:49 +0600 (Пн, 26 мар 2012)
+	- слито с branches/lazyeugene
+
+#Revision: 1848
+	#Author: ctapmex Date: 2012-03-26 14:00:49 +0600 (Пн, 26 мар 2012)
+	- ошибки в csharp, markdown, pl1, ubasic
+
+#Revision: 1847
+	#Author: ctapmex Date: 2012-03-26 12:13:49 +0600 (Пн, 26 мар 2012)
 	- markdown.hrc (Roman Kuzmin)
 	- squirrel.hrc
 
