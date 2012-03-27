@@ -884,19 +884,80 @@ dba_replace -- Replace or insert entry
 dba_sync -- Synchronize database
 
      <!-- XVII. Date and Time Functions -->
+DateTime::add -- Adds an amount of days, months, years, hours, minutes and seconds to a DateTime object
+DateTime::createFromFormat -- Returns new DateTime object formatted according to the specified format
+DateTime::diff -- Returns the difference between two DateTime objects
+DateTime::format -- Returns date formatted according to given format
+DateTime::getLastErrors -- Returns the warnings and errors
+DateTime::getOffset -- Returns the timezone offset
+DateTime::getTimestamp -- Gets the Unix timestamp
+DateTime::getTimezone -- Return time zone relative to given DateTime
+DateTime::modify -- Alters the timestamp
+DateTime::setDate -- Sets the date
+DateTime::setISODate -- Sets the ISO date
+DateTime::setTime -- Sets the time
+DateTime::setTimestamp -- Sets the date and time based on an Unix timestamp
+DateTime::setTimezone -- Sets the time zone for the DateTime object
+DateTime::sub -- Subtracts an amount of days, months, years, hours, minutes and seconds from a DateTime object
+DateTimeZone::getLocation -- Returns location information for a timezone
+DateTimeZone::getName -- Returns the name of the timezone
+DateTimeZone::getOffset -- Returns the timezone offset from GMT
+DateTimeZone::getTransitions -- Returns all transitions for the timezone
+DateTimeZone::listAbbreviations -- Returns associative array containing dst, offset and the timezone name
+DateTimeZone::listIdentifiers -- Returns numerically index array with all timezone identifiers
 checkdate -- Validate a Gregorian date
+date_add -- Alias of DateTime::add
+date_create_from_format -- Alias of DateTime::createFromFormat
+date_create -- Alias of DateTime::__construct
+date_date_set -- Alias of DateTime::setDate
+date_default_timezone_get -- Gets the default timezone used by all date/time functions in a script
+date_default_timezone_set -- Sets the default timezone used by all date/time functions in a script
+date_diff -- Alias of DateTime::diff
+date_format -- Alias of DateTime::format
+date_get_last_errors -- Alias of DateTime::getLastErrors
+date_interval_create_from_date_string -- Alias of DateInterval::createFromDateString
+date_interval_format -- Alias of DateInterval::format
+date_isodate_set -- Alias of DateTime::setISODate
+date_modify -- Alias of DateTime::modify
+date_offset_get -- Alias of DateTime::getOffset
+date_parse_from_format -- Get info about given date
+date_parse -- Returns associative array with detailed info about given date
+date_sub -- Alias of DateTime::sub
+date_sun_info -- Returns an array with information about sunset/sunrise and twilight begin/end
+date_sunrise -- Returns time of sunrise for a given day and location
+date_sunset -- Returns time of sunset for a given day and location
+date_time_set -- Alias of DateTime::setTime
+date_timestamp_get -- Alias of DateTime::getTimestamp
+date_timestamp_set -- Alias of DateTime::setTimestamp
+date_timezone_get -- Alias of DateTime::getTimezone
+date_timezone_set -- Alias of DateTime::setTimezone
 date -- Format a local time/date
 getdate -- Get date/time information
 gettimeofday -- Get current time
 gmdate -- Format a GMT/UTC date/time
 gmmktime -- Get Unix timestamp for a GMT date
-gmstrftime --  Format a GMT/UTC time/date according to locale settings 
+gmstrftime -- Format a GMT/UTC time/date according to locale settings
+idate -- Format a local time/date as integer
 localtime -- Get the local time
-microtime --  Return current Unix timestamp with microseconds 
+microtime -- Return current Unix timestamp with microseconds
 mktime -- Get Unix timestamp for a date
-strftime --  Format a local time/date according to locale settings 
-strtotime --  Parse about any English textual datetime description into a Unix timestamp 
+strftime -- Format a local time/date according to locale settings
+strptime -- Parse a time/date generated with strftime
+strtotime -- Parse about any English textual datetime description into a Unix timestamp
 time -- Return current Unix timestamp
+timezone_abbreviations_list -- Alias of DateTimeZone::listAbbreviations
+timezone_identifiers_list -- Alias of DateTimeZone::listIdentifiers
+timezone_location_get -- Alias of DateTimeZone::getLocation
+timezone_name_from_abbr -- Returns the timezone name from abbreviation
+timezone_name_get -- Alias of DateTimeZone::getName
+timezone_offset_get -- Alias of DateTimeZone::getOffset
+timezone_open -- Alias of DateTimeZone::__construct
+timezone_transitions_get -- Alias of DateTimeZone::getTransitions
+timezone_version_get -- Gets the version of the timezonedb
+
+SUNFUNCS_RET_TIMESTAMP ( integer ) 
+SUNFUNCS_RET_STRING ( integer ) 
+SUNFUNCS_RET_DOUBLE ( integer ) 
      <!-- XVIII. dBase Functions -->
 dbase_add_record -- Add a record to a dBase database
 dbase_close -- Close a dBase database
@@ -4970,10 +5031,17 @@ shmop_read -- Read data from shared memory block
 shmop_size -- Get size of shared memory block
 shmop_write -- Write data into shared memory block
      <!-- XCVIII. SimpleXML Functions -->
-simplexml_element->asXML --  Return a well-formed XML string based on SimpleXML element. 
-simplexml_element->attributes --  Identifies an element's attributes. 
-simplexml_element->children --  Finds children of given node. 
-simplexml_element->xpath --  Runs Xpath query on XML data. 
+SimpleXMLElement::addAttribute -- Adds an attribute to the SimpleXML element
+SimpleXMLElement::addChild -- Adds a child element to the XML node
+SimpleXMLElement::asXML -- Return a well-formed XML string based on SimpleXML element
+SimpleXMLElement::attributes -- Identifies an element's attributes
+SimpleXMLElement::children -- Finds children of given node
+SimpleXMLElement::count -- Counts the children of an element
+SimpleXMLElement::getDocNamespaces -- Returns namespaces declared in document
+SimpleXMLElement::getName -- Gets the name of the XML element
+SimpleXMLElement::getNamespaces -- Returns namespaces used in document
+SimpleXMLElement::registerXPathNamespace -- Creates a prefix/ns context for the next XPath query
+SimpleXMLElement::xpath -- Runs XPath query on XML data
 simplexml_import_dom --  Get a simplexml_element object from a DOM node. 
 simplexml_load_file --  Interprets an XML file into an object. 
 simplexml_load_string --  Interprets a string of XML into an object. 
