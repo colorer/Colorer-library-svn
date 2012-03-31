@@ -234,6 +234,7 @@
         <word name="readonly"/>
         <word name="top"/>
         <word name="rel"/>
+        <word name="required"/>
         <word name="rev"/>
         <word name="rows"/>
         <word name="rowspan"/>

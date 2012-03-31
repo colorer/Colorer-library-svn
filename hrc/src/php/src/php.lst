@@ -3084,13 +3084,18 @@ constant -- Returns the value of a constant
 define -- Defines a named constant.
 defined --  Checks whether a given named constant exists 
 get_browser --  Tells what the user's browser is capable of 
+__halt_compiler -- Halts the compiler execution
 highlight_file -- Syntax highlighting of a file
 highlight_string -- Syntax highlighting of a string
 ignore_user_abort --  Set whether a client disconnect should abort script execution 
 pack -- Pack data into binary string.
+php_check_syntax -- Check the PHP syntax of (and execute) the specified file
+php_strip_whitespace -- Return source with stripped comments and whitespace
 show_source -- Alias of highlight_file()
 sleep -- Delay execution
-uniqid -- Generate a unique ID
+sys_getloadavg -- Gets system load average
+time_nanosleep -- Delay for a number of seconds and nanoseconds
+time_sleep_until -- Make the script sleep until the specified timeuniqid -- Generate a unique ID
 unpack -- Unpack data from binary string
 usleep -- Delay execution in microseconds
 
@@ -4607,6 +4612,10 @@ assert_options -- Set/get the various assert flags
 assert -- Checks if assertion is FALSE
 dl -- Loads a PHP extension at runtime
 extension_loaded -- Find out whether an extension is loaded
+gc_collect_cycles -- Forces collection of any existing garbage cycles
+gc_disable -- Deactivates the circular reference collector
+gc_enable -- Activates the circular reference collector
+gc_enabled -- Returns status of the circular reference collector
 get_cfg_var --  Gets the value of a PHP configuration option 
 get_current_user --  Gets the name of the owner of the current PHP script 
 get_defined_constants --  Returns an associative array with the names of all the constants and their values 
@@ -4630,8 +4639,11 @@ ini_get_all -- Gets all configuration options
 ini_get -- Gets the value of a configuration option
 ini_restore -- Restores the value of a configuration option
 ini_set -- Sets the value of a configuration option
+magic_quotes_runtime -- Alias of set_magic_quotes_runtime
 main -- Dummy for main()
+memory_get_peak_usage — Returns the peak of memory allocated by PHP
 memory_get_usage -- Returns the amount of memory allocated to PHP
+php_ini_loaded_file -- Retrieve a path to the loaded php.ini file
 php_ini_scanned_files -- Return a list of .ini files parsed from the additional ini dir
 php_logo_guid -- Gets the logo guid
 php_sapi_name --  Returns the type of interface between web server and PHP 
@@ -4644,8 +4656,10 @@ restore_include_path --  Restores the value of the include_path configuration op
 set_include_path --  Sets the include_path configuration option 
 set_magic_quotes_runtime --  Sets the current active configuration setting of magic_quotes_runtime 
 set_time_limit -- Limits the maximum execution time
+sys_get_temp_dir -- Returns directory path used for temporary files
 version_compare --  Compares two "PHP-standardized" version number strings 
 zend_logo_guid -- Gets the Zend guid
+zend_thread_id -- Returns a unique identifier for the current thread
 zend_version -- Gets the version of the current Zend engine
 
 CREDITS_GROUP
