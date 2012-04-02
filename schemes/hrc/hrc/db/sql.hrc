@@ -29,6 +29,7 @@ With help of:
     Sat 10 Feb 19:20:28 2001
     * ported into 4ever
     Vadim Lopushansky <soft@notabene.itgo.com>
+    Roman Kuzmin
 -->
    <type name="sql">
 
@@ -967,16 +968,16 @@ With help of:
 <!-- + -->
 <!-- parencies PLSQL -->
          <block start="/\b(if)\b/i" end="/\b(end([\s])*if)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
-         <block start="/\b(case)\b/i" end="/\b(end([\s])*case)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
+         <block start="/\b(case)\b/i" end="/\b(end(?:\s*case)?)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(loop)\b/i" end="/\b(end([\s])*loop)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(begin)\b/i" end="/\b(end)\b/ix" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd"/>
          <block start="/\b(create(\s)*or(\s)*replace(\s)*(package(\s+body)?|type\s+body)\s+(\b\S+\b)(\s)+(is|as))\b/i" end="/\b(end)\b/i" scheme="sql" region00="tsqlWord" region10="tsqlWord" region01="PairStart" region11="PairEnd" region07="Text"/>
-         
+
          <inherit scheme='noxml-content'/>
          <inherit scheme='sql-content'/>
       </scheme>
-      
-      
+
+
       <!-- suppot sql in xml -->
       <scheme name='noxml-content'>
          <keywords region="sqlSymb">
@@ -985,7 +986,7 @@ With help of:
             <symb name="&gt;"/>
          </keywords>
       </scheme>
-      
+
       <scheme name="sql-content">
 <!-- Numbers -->
          <inherit scheme="CHexNumber"/>
@@ -995,7 +996,7 @@ With help of:
          <regexp match="/\@\@\w*/" region0="Var"/>
          <regexp match="/\@\w*/" region0="Var"/>
          <regexp match="/\:\w*/" region0="Var"/>
-         
+
 <!-- standard SQL symbols -->
          <keywords region="sqlSymb">
             <symb name=";"/>

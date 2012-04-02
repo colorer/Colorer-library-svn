@@ -1,4 +1,8 @@
-﻿#Revision: 1849
+﻿$Revision$
+	$Author$ $Date$
+	- исправления в sql.hrc и csharp.hrc
+
+#Revision: 1849
 	#Author: ctapmex Date: 2012-03-26 14:25:49 +0600 (Пн, 26 мар 2012)
 	- слито с branches/lazyeugene
 
