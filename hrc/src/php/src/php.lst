@@ -6032,6 +6032,7 @@ T_DOUBLE_COLON (integer)
      <!-- CXI. URL Functions -->
 base64_decode -- Decodes data encoded with MIME base64
 base64_encode -- Encodes data with MIME base64
+get_headers -- Fetches all the headers sent by the server in response to a HTTP request
 get_meta_tags --  Extracts all meta tag content attributes from a file and returns an array 
 http_build_query -- Generate URL-encoded query string
 parse_url -- Parse a URL and return its components
@@ -6039,6 +6040,15 @@ rawurldecode -- Decode URL-encoded strings
 rawurlencode -- URL-encode according to RFC 1738
 urldecode -- Decodes URL-encoded string
 urlencode -- URL-encodes string
+
+PHP_URL_SCHEME ( integer ) 
+PHP_URL_HOST ( integer ) 
+PHP_URL_PORT ( integer ) 
+PHP_URL_USER ( integer ) 
+PHP_URL_PASS ( integer ) 
+PHP_URL_PATH ( integer ) 
+PHP_URL_QUERY ( integer ) 
+PHP_URL_FRAGMENT ( integer ) 
      <!-- CXII. Variable Functions -->
 doubleval -- Alias of floatval()
 floatval -- Get float value of a variable
