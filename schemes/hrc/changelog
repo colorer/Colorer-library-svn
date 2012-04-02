@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлена схема для Lemon Parser Generator
+
+#Revision: 1854
+	#Author: ctapmex Date: 2012-04-02 10:58:03 +0600 (Пн, 02 апр 2012)
 	- добавлены powershell и R
 
 #Revision: 1853

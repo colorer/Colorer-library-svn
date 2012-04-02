@@ -1,6 +1,7 @@
   New:
     - powershell (Roman Kuzmin)
     - R (Roman Kuzmin)
+    - Lemon Parser Generator (Aleksey Dobrunov)
   Fixed:
     - sql - 'end' for case block
     - csharp - add struct in outlined; keyword 'var'; simple parse verbatim string

@@ -628,6 +628,11 @@
     <location link="scripts/yacc.hrc"/>
     <filename>/\.y+$/i</filename>
   </prototype>
+  <prototype name="lemon" group="scripts" description="Lemon">
+    <location link="scripts/lemon.hrc"/>
+    <!-- warning!! extensions conflict with YACC -->
+    <filename weight='1'>/\.y$/i</filename>
+  </prototype>
   
 
   <prototype name="delphiform" group="scripts" description="Delphi form">
