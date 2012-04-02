@@ -535,6 +535,14 @@
     <filename weight='5'>/\.awk$/i</filename>
     <firstline>/^# gawk/i</firstline>
   </prototype>
+  <prototype name="powershell" group="scripts" description="PowerShell">
+    <filename>/\.(ps[dDmM]?1|psfconsole)$/i</filename>
+    <location link="scripts/farnet/powershell.hrc"/>
+  </prototype>
+  <prototype name="r" group="scripts" description="R">
+    <filename>/\.(R|Rhistory|Rprofile)$/i</filename>
+    <location link="scripts/farnet/r.hrc"/>
+  </prototype>
 
 
   &scripts-colorer-protos;

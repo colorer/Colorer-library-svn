@@ -1,3 +1,6 @@
+  New:
+    - powershell (Roman Kuzmin)
+    - R (Roman Kuzmin)
   Fixed:
     - sql - 'end' for case block
     - csharp - add struct in outlined; keyword 'var'; simple parse verbatim string

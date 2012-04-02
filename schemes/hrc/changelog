@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- добавлены powershell и R
+
+#Revision: 1853
+	#Author: ctapmex Date: 2012-04-02 10:37:37 +0600 (Пн, 02 апр 2012)
 	- исправления в sql.hrc и csharp.hrc
 
 #Revision: 1849
