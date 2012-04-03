@@ -884,19 +884,80 @@ dba_replace -- Replace or insert entry
 dba_sync -- Synchronize database
 
      <!-- XVII. Date and Time Functions -->
+DateTime::add -- Adds an amount of days, months, years, hours, minutes and seconds to a DateTime object
+DateTime::createFromFormat -- Returns new DateTime object formatted according to the specified format
+DateTime::diff -- Returns the difference between two DateTime objects
+DateTime::format -- Returns date formatted according to given format
+DateTime::getLastErrors -- Returns the warnings and errors
+DateTime::getOffset -- Returns the timezone offset
+DateTime::getTimestamp -- Gets the Unix timestamp
+DateTime::getTimezone -- Return time zone relative to given DateTime
+DateTime::modify -- Alters the timestamp
+DateTime::setDate -- Sets the date
+DateTime::setISODate -- Sets the ISO date
+DateTime::setTime -- Sets the time
+DateTime::setTimestamp -- Sets the date and time based on an Unix timestamp
+DateTime::setTimezone -- Sets the time zone for the DateTime object
+DateTime::sub -- Subtracts an amount of days, months, years, hours, minutes and seconds from a DateTime object
+DateTimeZone::getLocation -- Returns location information for a timezone
+DateTimeZone::getName -- Returns the name of the timezone
+DateTimeZone::getOffset -- Returns the timezone offset from GMT
+DateTimeZone::getTransitions -- Returns all transitions for the timezone
+DateTimeZone::listAbbreviations -- Returns associative array containing dst, offset and the timezone name
+DateTimeZone::listIdentifiers -- Returns numerically index array with all timezone identifiers
 checkdate -- Validate a Gregorian date
+date_add -- Alias of DateTime::add
+date_create_from_format -- Alias of DateTime::createFromFormat
+date_create -- Alias of DateTime::__construct
+date_date_set -- Alias of DateTime::setDate
+date_default_timezone_get -- Gets the default timezone used by all date/time functions in a script
+date_default_timezone_set -- Sets the default timezone used by all date/time functions in a script
+date_diff -- Alias of DateTime::diff
+date_format -- Alias of DateTime::format
+date_get_last_errors -- Alias of DateTime::getLastErrors
+date_interval_create_from_date_string -- Alias of DateInterval::createFromDateString
+date_interval_format -- Alias of DateInterval::format
+date_isodate_set -- Alias of DateTime::setISODate
+date_modify -- Alias of DateTime::modify
+date_offset_get -- Alias of DateTime::getOffset
+date_parse_from_format -- Get info about given date
+date_parse -- Returns associative array with detailed info about given date
+date_sub -- Alias of DateTime::sub
+date_sun_info -- Returns an array with information about sunset/sunrise and twilight begin/end
+date_sunrise -- Returns time of sunrise for a given day and location
+date_sunset -- Returns time of sunset for a given day and location
+date_time_set -- Alias of DateTime::setTime
+date_timestamp_get -- Alias of DateTime::getTimestamp
+date_timestamp_set -- Alias of DateTime::setTimestamp
+date_timezone_get -- Alias of DateTime::getTimezone
+date_timezone_set -- Alias of DateTime::setTimezone
 date -- Format a local time/date
 getdate -- Get date/time information
 gettimeofday -- Get current time
 gmdate -- Format a GMT/UTC date/time
 gmmktime -- Get Unix timestamp for a GMT date
-gmstrftime --  Format a GMT/UTC time/date according to locale settings 
+gmstrftime -- Format a GMT/UTC time/date according to locale settings
+idate -- Format a local time/date as integer
 localtime -- Get the local time
-microtime --  Return current Unix timestamp with microseconds 
+microtime -- Return current Unix timestamp with microseconds
 mktime -- Get Unix timestamp for a date
-strftime --  Format a local time/date according to locale settings 
-strtotime --  Parse about any English textual datetime description into a Unix timestamp 
+strftime -- Format a local time/date according to locale settings
+strptime -- Parse a time/date generated with strftime
+strtotime -- Parse about any English textual datetime description into a Unix timestamp
 time -- Return current Unix timestamp
+timezone_abbreviations_list -- Alias of DateTimeZone::listAbbreviations
+timezone_identifiers_list -- Alias of DateTimeZone::listIdentifiers
+timezone_location_get -- Alias of DateTimeZone::getLocation
+timezone_name_from_abbr -- Returns the timezone name from abbreviation
+timezone_name_get -- Alias of DateTimeZone::getName
+timezone_offset_get -- Alias of DateTimeZone::getOffset
+timezone_open -- Alias of DateTimeZone::__construct
+timezone_transitions_get -- Alias of DateTimeZone::getTransitions
+timezone_version_get -- Gets the version of the timezonedb
+
+SUNFUNCS_RET_TIMESTAMP ( integer ) 
+SUNFUNCS_RET_STRING ( integer ) 
+SUNFUNCS_RET_DOUBLE ( integer ) 
      <!-- XVIII. dBase Functions -->
 dbase_add_record -- Add a record to a dBase database
 dbase_close -- Close a dBase database
@@ -3023,13 +3084,18 @@ constant -- Returns the value of a constant
 define -- Defines a named constant.
 defined --  Checks whether a given named constant exists 
 get_browser --  Tells what the user's browser is capable of 
+__halt_compiler -- Halts the compiler execution
 highlight_file -- Syntax highlighting of a file
 highlight_string -- Syntax highlighting of a string
 ignore_user_abort --  Set whether a client disconnect should abort script execution 
 pack -- Pack data into binary string.
+php_check_syntax -- Check the PHP syntax of (and execute) the specified file
+php_strip_whitespace -- Return source with stripped comments and whitespace
 show_source -- Alias of highlight_file()
 sleep -- Delay execution
-uniqid -- Generate a unique ID
+sys_getloadavg -- Gets system load average
+time_nanosleep -- Delay for a number of seconds and nanoseconds
+time_sleep_until -- Make the script sleep until the specified timeuniqid -- Generate a unique ID
 unpack -- Unpack data from binary string
 usleep -- Delay execution in microseconds
 
@@ -4546,6 +4612,10 @@ assert_options -- Set/get the various assert flags
 assert -- Checks if assertion is FALSE
 dl -- Loads a PHP extension at runtime
 extension_loaded -- Find out whether an extension is loaded
+gc_collect_cycles -- Forces collection of any existing garbage cycles
+gc_disable -- Deactivates the circular reference collector
+gc_enable -- Activates the circular reference collector
+gc_enabled -- Returns status of the circular reference collector
 get_cfg_var --  Gets the value of a PHP configuration option 
 get_current_user --  Gets the name of the owner of the current PHP script 
 get_defined_constants --  Returns an associative array with the names of all the constants and their values 
@@ -4569,8 +4639,11 @@ ini_get_all -- Gets all configuration options
 ini_get -- Gets the value of a configuration option
 ini_restore -- Restores the value of a configuration option
 ini_set -- Sets the value of a configuration option
+magic_quotes_runtime -- Alias of set_magic_quotes_runtime
 main -- Dummy for main()
+memory_get_peak_usage — Returns the peak of memory allocated by PHP
 memory_get_usage -- Returns the amount of memory allocated to PHP
+php_ini_loaded_file -- Retrieve a path to the loaded php.ini file
 php_ini_scanned_files -- Return a list of .ini files parsed from the additional ini dir
 php_logo_guid -- Gets the logo guid
 php_sapi_name --  Returns the type of interface between web server and PHP 
@@ -4583,8 +4656,10 @@ restore_include_path --  Restores the value of the include_path configuration op
 set_include_path --  Sets the include_path configuration option 
 set_magic_quotes_runtime --  Sets the current active configuration setting of magic_quotes_runtime 
 set_time_limit -- Limits the maximum execution time
+sys_get_temp_dir -- Returns directory path used for temporary files
 version_compare --  Compares two "PHP-standardized" version number strings 
 zend_logo_guid -- Gets the Zend guid
+zend_thread_id -- Returns a unique identifier for the current thread
 zend_version -- Gets the version of the current Zend engine
 
 CREDITS_GROUP
@@ -4970,10 +5045,17 @@ shmop_read -- Read data from shared memory block
 shmop_size -- Get size of shared memory block
 shmop_write -- Write data into shared memory block
      <!-- XCVIII. SimpleXML Functions -->
-simplexml_element->asXML --  Return a well-formed XML string based on SimpleXML element. 
-simplexml_element->attributes --  Identifies an element's attributes. 
-simplexml_element->children --  Finds children of given node. 
-simplexml_element->xpath --  Runs Xpath query on XML data. 
+SimpleXMLElement::addAttribute -- Adds an attribute to the SimpleXML element
+SimpleXMLElement::addChild -- Adds a child element to the XML node
+SimpleXMLElement::asXML -- Return a well-formed XML string based on SimpleXML element
+SimpleXMLElement::attributes -- Identifies an element's attributes
+SimpleXMLElement::children -- Finds children of given node
+SimpleXMLElement::count -- Counts the children of an element
+SimpleXMLElement::getDocNamespaces -- Returns namespaces declared in document
+SimpleXMLElement::getName -- Gets the name of the XML element
+SimpleXMLElement::getNamespaces -- Returns namespaces used in document
+SimpleXMLElement::registerXPathNamespace -- Creates a prefix/ns context for the next XPath query
+SimpleXMLElement::xpath -- Runs XPath query on XML data
 simplexml_import_dom --  Get a simplexml_element object from a DOM node. 
 simplexml_load_file --  Interprets an XML file into an object. 
 simplexml_load_string --  Interprets a string of XML into an object. 
@@ -5950,6 +6032,7 @@ T_DOUBLE_COLON (integer)
      <!-- CXI. URL Functions -->
 base64_decode -- Decodes data encoded with MIME base64
 base64_encode -- Encodes data with MIME base64
+get_headers -- Fetches all the headers sent by the server in response to a HTTP request
 get_meta_tags --  Extracts all meta tag content attributes from a file and returns an array 
 http_build_query -- Generate URL-encoded query string
 parse_url -- Parse a URL and return its components
@@ -5957,6 +6040,15 @@ rawurldecode -- Decode URL-encoded strings
 rawurlencode -- URL-encode according to RFC 1738
 urldecode -- Decodes URL-encoded string
 urlencode -- URL-encodes string
+
+PHP_URL_SCHEME ( integer ) 
+PHP_URL_HOST ( integer ) 
+PHP_URL_PORT ( integer ) 
+PHP_URL_USER ( integer ) 
+PHP_URL_PASS ( integer ) 
+PHP_URL_PATH ( integer ) 
+PHP_URL_QUERY ( integer ) 
+PHP_URL_FRAGMENT ( integer ) 
      <!-- CXII. Variable Functions -->
 doubleval -- Alias of floatval()
 floatval -- Get float value of a variable
