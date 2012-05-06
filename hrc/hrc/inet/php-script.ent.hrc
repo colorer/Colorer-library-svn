@@ -194,6 +194,7 @@
     <inherit scheme="CHexNumber"/>
     <inherit scheme="FloatNumber"/>
     <inherit scheme="DecNumber"/>
+    <inherit scheme="BinNumber"/>
     
     <!-- support regexp -->
     <block start="/&#34;/" end="/&#34;/" 
