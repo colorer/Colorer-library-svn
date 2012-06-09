@@ -172,7 +172,7 @@
 			<!--block start="/\M([\w\d\-]+)?\s*(:)(.*;)?=/s" end="/\M[\;\}\x22\x27]/"
 				scheme="PropertyWrapper" region02="Symbol"
 			/-->
-			<block start="/\M ([\w\d\-]+) \s* (:)/x" end="/(;|\})?=/"
+			<block start="/\M ([\w\d\-]+) \s* (:)(.*\{)?!/x" end="/(;|\})?=/"
 				scheme="PropertyWrapper" region02="Symbol"
 			/>
 

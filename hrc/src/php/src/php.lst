@@ -1672,12 +1672,6 @@ gmp_xor -- Logical XOR
 GMP_ROUND_ZERO (integer)
 GMP_ROUND_PLUSINF (integer)
 GMP_ROUND_MINUSINF (integer)
-     <!-- XXXVII. HTTP Functions -->
-header -- Send a raw HTTP header
-headers_list -- Returns a list of response headers sent (or ready to send)
-headers_sent -- Checks if or where headers have been sent
-setcookie -- Send a cookie
-setrawcookie -- Send a cookie without urlencoding the cookie value
      <!-- XXXVIII. Hyperwave Functions -->
 hw_Array2Objrec -- convert attributes from object array to object record
 hw_changeobject --  Changes attributes of an object (obsolete) 
@@ -3605,9 +3599,6 @@ muscat_setup -- Creates a new muscat session and returns the handle.
      <!-- LXVIII. Network Functions -->
 checkdnsrr --  Check DNS records corresponding to a given Internet host name or IP address 
 closelog -- Close connection to system logger
-debugger_off -- Disable internal PHP debugger (PHP 3)
-debugger_on -- Enable internal PHP debugger (PHP 3)
-define_syslog_variables -- Initializes all syslog related constants [deprecated]
 dns_check_record -- Synonym for checkdnsrr()
 dns_get_mx -- Synonym for getmxrr()
 dns_get_record --  Fetch DNS Resource Records associated with a hostname 
@@ -3615,21 +3606,33 @@ fsockopen --  Open Internet or Unix domain socket connection
 gethostbyaddr --  Get the Internet host name corresponding to a given IP address 
 gethostbyname --  Get the IP address corresponding to a given Internet host name 
 gethostbynamel --  Get a list of IP addresses corresponding to a given Internet host name 
+gethostname -- Gets the host name
 getmxrr --  Get MX records corresponding to a given Internet host name 
 getprotobyname --  Get protocol number associated with protocol name 
 getprotobynumber --  Get protocol name associated with protocol number 
 getservbyname --  Get port number associated with an Internet service and protocol 
 getservbyport --  Get Internet service which corresponds to port and protocol 
+header -- Send a raw HTTP header
+header_register_callback -- Call a header function
+header_remove -- Remove previously set headers
+headers_list -- Returns a list of response headers sent (or ready to send)
+headers_sent -- Checks if or where headers have been sent
+http_response_code -- Get or Set the HTTP response code
+inet_ntop -- Converts a packed internet address to a human readable representation
+inet_pton -- Converts a human readable IP address to its packed in_addr representation
 ip2long --  Converts a string containing an (IPv4) Internet Protocol dotted address into a proper address. 
 long2ip --  Converts an (IPv4) Internet network address into a string in Internet standard dotted format 
 openlog -- Open connection to system logger
 pfsockopen --  Open persistent Internet or Unix domain socket connection 
-socket_get_status --  Alias of stream_get_meta_data() 
 socket_set_blocking -- Alias of stream_set_blocking() [deprecated]
-set_socket_blocking -- [deprecated]
+setcookie -- Send a cookie
+setrawcookie -- Send a cookie without urlencoding the cookie value
 socket_set_timeout -- Alias of stream_set_timeout()
 set_socket_timeout -- [deprecated]
 syslog -- Generate a system log message
+debugger_off -- Disable internal PHP debugger (PHP 3) [deprecated]
+debugger_on -- Enable internal PHP debugger (PHP 3) [deprecated]
+define_syslog_variables -- Initializes all syslog related constants [deprecated]
 
 LOG_CONS
 LOG_NDELAY
@@ -4644,7 +4647,7 @@ ini_restore -- Restores the value of a configuration option
 ini_set -- Sets the value of a configuration option
 magic_quotes_runtime -- Alias of set_magic_quotes_runtime
 main -- Dummy for main()
-memory_get_peak_usage — Returns the peak of memory allocated by PHP
+memory_get_peak_usage -- Returns the peak of memory allocated by PHP
 memory_get_usage -- Returns the amount of memory allocated to PHP
 php_ini_loaded_file -- Retrieve a path to the loaded php.ini file
 php_ini_scanned_files -- Return a list of .ini files parsed from the additional ini dir
@@ -5351,15 +5354,78 @@ SOL_TCP (integer)
 SOL_UDP (integer)
 
      <!-- CIV. Standard PHP Library (SPL) Functions -->
-ArrayIterator::current --  Return current array entry 
-ArrayIterator::hasMore --  Check whether array contains more entries 
-ArrayIterator::key --  Return current array key 
-ArrayIterator::next --  Move to next entry 
-ArrayIterator::rewind --  Rewind array back to the start 
-ArrayObject::__construct --  
-ArrayObject::getIterator --  Create a new iterator from a ArrayObject instance 
-DirectoryIterator::__construct --  Constructs a new dir iterator from a path. 
-DirectoryIterator::current --  Return this (needed for Iterator interface) 
+SplDoublyLinkedList::bottom -- Peeks at the node from the beginning of the doubly linked list
+SplDoublyLinkedList::getIteratorMode -- Returns the mode of iteration
+SplDoublyLinkedList::isEmpty -- Checks whether the doubly linked list is empty.
+SplDoublyLinkedList::offsetExists -- Returns whether the requested $index exists
+SplDoublyLinkedList::offsetGet -- Returns the value at the specified $index
+SplDoublyLinkedList::offsetSet -- Sets the value at the specified $index to $newval
+SplDoublyLinkedList::offsetUnset -- Unsets the value at the specified $index
+SplDoublyLinkedList::pop -- Pops a node from the end of the doubly linked list
+SplDoublyLinkedList::push -- Pushes an element at the end of the doubly linked list
+SplDoublyLinkedList::setIteratorMode -- Sets the mode of iteration
+SplDoublyLinkedList::top -- Peeks at the node from the end of the doubly linked list
+SplStack::setIteratorMode -- Sets the mode of iteration
+SplQueue::dequeue -- Dequeues a node from the queue
+SplQueue::enqueue -- Adds an element to the queue.
+SplQueue::setIteratorMode -- Sets the mode of iteration
+SplHeap::compare -- Compare elements in order to place them correctly in the heap while sifting up.
+SplHeap::insert -- Inserts an element in the heap by sifting it up.
+SplHeap::isEmpty -- Checks whether the heap is empty.
+SplHeap::recoverFromCorruption -- Recover from the corrupted state and allow further actions on the heap.
+SplHeap::top -- Peeks at the node from the top of the heap
+SplMaxHeap::compare -- Compare elements in order to place them correctly in the heap while sifting up.
+SplMinHeap::compare -- Compare elements in order to place them correctly in the heap while sifting up.
+SplPriorityQueue::compare -- Compare priorities in order to place elements correctly in the heap while sifting up.
+SplPriorityQueue::insert -- Inserts an element in the queue by sifting it up.
+SplPriorityQueue::isEmpty -- Checks whether the queue is empty.
+SplPriorityQueue::recoverFromCorruption -- Recover from the corrupted state and allow further actions on the queue.
+SplPriorityQueue::setExtractFlags -- Sets the mode of extraction
+SplPriorityQueue::top -- Peeks at the node from the top of the queue
+SplFixedArray::fromArray -- Import a PHP array in a SplFixedArray instance
+SplFixedArray::getSize -- Gets the size of the array
+SplFixedArray::offsetExists -- Returns whether the requested index exists
+SplFixedArray::offsetGet -- Returns the value at the specified index
+SplFixedArray::offsetSet -- Sets a new value at a specified index
+SplFixedArray::offsetUnset -- Unsets the value at the specified $index
+SplFixedArray::setSize -- Change the size of an array
+SplFixedArray::toArray -- Returns a PHP array from the fixed array
+SplObjectStorage::addAll -- Adds all objects from another storage
+SplObjectStorage::attach -- Adds an object in the storage
+SplObjectStorage::contains -- Checks if the storage contains a specific object
+SplObjectStorage::detach -- Removes an object from the storage
+SplObjectStorage::getHash -- Calculate a unique identifier for the contained objects
+SplObjectStorage::getInfo -- Returns the data associated with the current iterator entry
+SplObjectStorage::offsetExists -- Checks whether an object exists in the storage
+SplObjectStorage::offsetGet -- Returns the data associated with an object
+SplObjectStorage::offsetSet -- Associates data to an object in the storage
+SplObjectStorage::offsetUnset -- Removes an object from the storage
+SplObjectStorage::removeAll -- Removes objects contained in another storage from the current storage
+SplObjectStorage::removeAllExcept -- Removes all objects except for those contained in another storage from the current storage
+SplObjectStorage::setInfo -- Sets the data associated with the current iterator entry
+AppendIterator::append -- Appends an iterator
+AppendIterator::getArrayIterator -- Gets the ArrayIterator
+AppendIterator::getInnerIterator -- Gets the inner iterator
+AppendIterator::getIteratorIndex -- Gets an index of iterators
+ArrayIterator::append -- Append an element
+ArrayIterator::getArrayCopy -- Get array copy
+ArrayIterator::getFlags -- Get flags
+ArrayIterator::offsetExists -- Check if offset exists
+ArrayIterator::offsetGet -- Get value for an offset
+ArrayIterator::offsetSet -- Set value for an offset
+ArrayIterator::offsetUnset -- Unset value for an offset
+ArrayIterator::setFlags -- Set behaviour flags
+CachingIterator::getCache -- The getCache purpose
+CachingIterator::getFlags -- Get flags used
+CachingIterator::getInnerIterator -- Returns the inner iterator
+CachingIterator::hasNext -- Check whether the inner iterator has a valid next element
+CachingIterator::offsetExists -- The offsetExists purpose
+CachingIterator::offsetGet -- The offsetGet purpose
+CachingIterator::offsetSet -- The offsetSet purpose
+CachingIterator::offsetUnset -- The offsetUnset purpose
+CachingIterator::setFlags -- The setFlags purpose
+CachingIterator::__toString -- Return the string representation of the current element
+CallbackFilterIterator::accept -- Calls the callback with the current value, the current key and the inner iterator as arguments
 DirectoryIterator::fileATime --  Get last access time of file 
 DirectoryIterator::fileCTime --  Get inode modification time of file 
 DirectoryIterator::fileGroup --  Get file group 
@@ -5381,13 +5447,159 @@ DirectoryIterator::isFile --  Returns true if file is a regular file
 DirectoryIterator::isLink --  Returns true if file is symbolic link 
 DirectoryIterator::isReadable --  Returns true if file can be read 
 DirectoryIterator::isWritable --  Returns true if file can be written 
-DirectoryIterator::key --  Return current dir entry 
-DirectoryIterator::next --  Move to next entry 
-DirectoryIterator::rewind --  Rewind dir back to the start 
-RecursiveDirectoryIterator::hasChildren --  Returns whether current entry is a directory and not '.' or '..' 
-RecursiveDirectoryIterator::key --  Return path and filename of current dir entry 
-RecursiveDirectoryIterator::next --  Move to next entry 
-RecursiveDirectoryIterator::rewind --  Rewind dir back to the start 
+EmptyIterator::rewind -- The rewind() method
+EmptyIterator::valid -- The valid() method
+FilesystemIterator::getFlags -- Get the handling flags
+FilesystemIterator::rewind -- Rewinds back to the beginning
+FilesystemIterator::setFlags -- Sets handling flags
+FilterIterator::accept -- Check whether the current element of the iterator is acceptable
+FilterIterator::getInnerIterator -- Get the inner iterator
+GlobIterator::__construct -- Get the number of directories and files
+InfiniteIterator::__construct -- Constructs an InfiniteIterator
+IteratorIterator::getInnerIterator -- Get the inner iterator
+LimitIterator::getInnerIterator -- Get inner iterator
+LimitIterator::getPosition -- Return the current position
+LimitIterator::seek -- Seek to the given position
+MultipleIterator::attachIterator -- Attaches iterator information
+MultipleIterator::containsIterator -- Checks if an iterator is attached
+MultipleIterator::countIterators -- Gets the number of attached iterator instances
+MultipleIterator::detachIterator -- Detaches an iterator
+MultipleIterator::getFlags -- Gets the flag information
+MultipleIterator::setFlags -- Sets flags
+NoRewindIterator::getInnerIterator -- Get the inner iterator
+ParentIterator::accept -- Determines acceptability
+ParentIterator::getChildren -- Return the inner iterator's children contained in a ParentIterator
+ParentIterator::hasChildren -- Check whether the inner iterator's current element has children
+RecursiveArrayIterator::getChildren -- Returns an iterator for the current entry if it is an array or an object.
+RecursiveArrayIterator::hasChildren -- Returns whether current entry is an array or an object.
+RecursiveCachingIterator::getChildren -- Return the inner iterator's children as a RecursiveCachingIterator
+RecursiveCachingIterator::hasChildren -- Check whether the current element of the inner iterator has children
+RecursiveCallbackFilterIterator::getChildren -- Return the inner iterator's children contained in a RecursiveCallbackFilterIterator
+RecursiveCallbackFilterIterator::hasChildren -- Check whether the inner iterator's current element has children
+RecursiveDirectoryIterator::getChildren -- Returns an iterator for the current entry if it is a directory
+RecursiveDirectoryIterator::getSubPath -- Get sub path
+RecursiveDirectoryIterator::getSubPathname -- Get sub path and name
+RecursiveDirectoryIterator::hasChildren -- Returns whether current entry is a directory and not '.' or '..'
+RecursiveFilterIterator::getChildren -- Return the inner iterator's children contained in a RecursiveFilterIterator
+RecursiveFilterIterator::hasChildren -- Check whether the inner iterator's current element has children
+RecursiveIteratorIterator::beginChildren -- Begin children
+RecursiveIteratorIterator::beginIteration -- Begin Iteration
+RecursiveIteratorIterator::callGetChildren -- Get children
+RecursiveIteratorIterator::callHasChildren -- Has children
+RecursiveIteratorIterator::endChildren -- End children
+RecursiveIteratorIterator::endIteration -- End Iteration
+RecursiveIteratorIterator::getDepth -- Get the current depth of the recursive iteration
+RecursiveIteratorIterator::getInnerIterator -- Get inner iterator
+RecursiveIteratorIterator::getMaxDepth -- Get max depth
+RecursiveIteratorIterator::getSubIterator -- The current active sub iterator
+RecursiveIteratorIterator::nextElement -- Next element
+RecursiveIteratorIterator::setMaxDepth -- Set max depth
+RecursiveRegexIterator::getChildren -- Returns an iterator for the current entry.
+RecursiveRegexIterator::hasChildren -- Returns whether an iterator can be obtained for the current entry.
+RecursiveTreeIterator::beginChildren -- Begin children
+RecursiveTreeIterator::beginIteration -- Begin iteration
+RecursiveTreeIterator::callGetChildren -- Get children
+RecursiveTreeIterator::callHasChildren -- Has children
+RecursiveTreeIterator::endChildren -- End children
+RecursiveTreeIterator::endIteration -- End iteration
+RecursiveTreeIterator::getEntry -- Get current entry
+RecursiveTreeIterator::getPostfix -- Get the postfix
+RecursiveTreeIterator::getPrefix -- Get the prefix
+RecursiveTreeIterator::nextElement -- Next element
+RecursiveTreeIterator::setPrefixPart -- Set a part of the prefix
+RegexIterator::accept -- Get accept status
+RegexIterator::getFlags -- Get flags
+RegexIterator::getMode -- Returns operation mode.
+RegexIterator::getPregFlags -- Returns the regular expression flags.
+RegexIterator::getRegex -- Returns current regular expression
+RegexIterator::setFlags -- Sets the flags.
+RegexIterator::setMode -- Sets the operation mode.
+RegexIterator::setPregFlags -- Sets the regular expression flags.
+Countable::count -- Count elements of an object
+OuterIterator::getInnerIterator -- Returns the inner iterator for the current entry.
+RecursiveIterator::getChildren -- Returns an iterator for the current entry.
+RecursiveIterator::hasChildren -- Returns if an iterator can be created fot the current entry.
+SeekableIterator::seek -- Seeks to a position
+BadFunctionCallException::__construct --
+BadMethodCallException::__construct --
+DomainException::__construct --
+InvalidArgumentException::__construct --
+LengthException::__construct --
+LogicException::__construct --
+OutOfBoundsException::__construct --
+OutOfRangeException::__construct --
+OverflowException::__construct --
+RangeException::__construct --
+RuntimeException::__construct --
+UnderflowException::__construct --
+UnexpectedValueException::__construct --
+SplFileInfo::getATime -- Gets last access time of the file
+SplFileInfo::getBasename -- Gets the base name of the file
+SplFileInfo::getCTime -- Gets the inode change time
+SplFileInfo::getExtension -- Gets the file extension
+SplFileInfo::getFileInfo -- Gets an SplFileInfo object for the file
+SplFileInfo::getFilename -- Gets the filename
+SplFileInfo::getGroup -- Gets the file group
+SplFileInfo::getInode -- Gets the inode for the file
+SplFileInfo::getLinkTarget -- Gets the target of a link
+SplFileInfo::getMTime -- Gets the last modified time
+SplFileInfo::getOwner -- Gets the owner of the file
+SplFileInfo::getPath -- Gets the path without filename
+SplFileInfo::getPathInfo -- Gets an SplFileInfo object for the path
+SplFileInfo::getPathname -- Gets the path to the file
+SplFileInfo::getPerms -- Gets file permissions
+SplFileInfo::getRealPath -- Gets absolute path to file
+SplFileInfo::getSize -- Gets file size
+SplFileInfo::getType -- Gets file type
+SplFileInfo::isDir -- Tells if the file is a directory
+SplFileInfo::isExecutable -- Tells if the file is executable
+SplFileInfo::isFile -- Tells if the object references a regular file
+SplFileInfo::isLink -- Tells if the file is a link
+SplFileInfo::isReadable -- Tells if file is readable
+SplFileInfo::isWritable -- Tells if the entry is writable
+SplFileInfo::openFile -- Gets an SplFileObject object for the file
+SplFileInfo::setFileClass -- Sets the class name used with SplFileInfo::openFile
+SplFileInfo::setInfoClass -- Sets the class used with getFileInfo and getPathInfo
+SplFileInfo::__toString -- Returns the path to the file as a string
+SplFileObject::eof -- Reached end of file
+SplFileObject::getChildren -- No purpose
+SplFileObject::getCsvControl -- Get the delimiter and enclosure character for CSV
+SplFileObject::getCurrentLine -- Alias of SplFileObject::fgets
+SplFileObject::getFlags -- Gets flags for the SplFileObject
+SplFileObject::getMaxLineLen -- Get maximum line length
+SplFileObject::hasChildren -- SplFileObject does not have children
+SplFileObject::setCsvControl -- Set the delimiter and enclosure character for CSV
+SplFileObject::setFlags -- Sets flags for the SplFileObject
+SplFileObject::setMaxLineLen -- Set maximum line length
+SplFileObject::__toString -- Alias of SplFileObject::current
+SplTempFileObject::__construct -- Construct a new temporary file object
+ArrayObject::append -- Appends the value
+ArrayObject::exchangeArray -- Exchange the array for another one.
+ArrayObject::getArrayCopy -- Creates a copy of the ArrayObject.
+ArrayObject::getFlags -- Gets the behavior flags.
+ArrayObject::getIterator -- Create a new iterator from an ArrayObject instance
+ArrayObject::getIteratorClass -- Gets the iterator classname for the ArrayObject.
+ArrayObject::offsetExists -- Returns whether the requested index exists
+ArrayObject::offsetGet -- Returns the value at the specified index
+ArrayObject::offsetSet -- Sets the value at the specified index to newval
+ArrayObject::offsetUnset -- Unsets the value at the specified index
+ArrayObject::setFlags -- Sets the behavior flags.
+ArrayObject::setIteratorClass -- Sets the iterator classname for the ArrayObject.
+SplObserver::update -- Receive update from subject
+SplSubject::attach -- Attach an SplObserver
+SplSubject::detach -- Detach an observer
+SplSubject::notify -- Notify an observer
+Traversable::__construct --
+Iterator::current -- Return the current element
+IteratorAggregate::getIterator -- Retrieve an external iterator
+ArrayAccess::offsetExists -- Whether a offset exists
+ArrayAccess::offsetGet -- Offset to retrieve
+ArrayAccess::offsetSet -- Offset to set
+ArrayAccess::offsetUnset -- Offset to unset
+Serializable::serialize -- String representation of object
+Closure::bind -- Duplicates a closure with a specific bound object and class scope
+Closure::bindTo -- Duplicates the closure with a new bound object and class scope
+
 
 RIT_LEAVES_ONLY (integer)
 RIT_SELF_FIRST (integer)
@@ -5396,32 +5608,54 @@ CIT_CALL_TOSTRING (integer)
 CIT_CATCH_GET_CHILD (integer)
 
      <!-- CV. Stream Functions -->
+stream_bucket_append -- Append bucket to brigade
+stream_bucket_make_writeable -- Return a bucket object from the brigade for operating on
+stream_bucket_new -- Create a new bucket for use on the current stream
+stream_bucket_prepend -- Prepend bucket to brigade
 stream_context_create -- Create a streams context
+stream_context_get_default -- Retrieve the default stream context
 stream_context_get_options -- Retrieve options for a stream/wrapper/context
+stream_context_get_params -- Retrieves parameters from a context
+stream_context_set_default -- Set the default stream context
 stream_context_set_option -- Sets an option for a stream/wrapper/context
 stream_context_set_params -- Set parameters for a stream/wrapper/context
 stream_copy_to_stream -- Copies data from one stream to another
+stream_encoding -- Set character set for stream encoding
 stream_filter_append -- Attach a filter to a stream.
 stream_filter_prepend -- Attach a filter to a stream.
 stream_filter_register --  Register a stream filter implemented as a PHP class derived from php_user_filter 
+stream_filter_remove -- Remove a filter from a stream
 stream_get_contents -- Reads remainder of a stream into a string
 stream_get_filters -- Retrieve list of registered filters
 stream_get_line -- Gets line from stream resource up to a given delimiter
 stream_get_meta_data -- Retrieves header/meta data from streams/file pointers
+socket_get_status --  Alias of stream_get_meta_data() 
 stream_get_transports -- Retrieve list of registered socket transports
 stream_get_wrappers -- Retrieve list of registered streams
+stream_is_local -- Checks if a stream is a local stream
+stream_notification_callback -- A callback function for the notification context paramater
 stream_register_wrapper -- Alias of stream_wrapper_register()
+stream_resolve_include_path -- Resolve filename against the include path
 stream_select -- Runs the equivalent of the select() system call on the given arrays of streams with a timeout specified by tv_sec and tv_usec 
 stream_set_blocking -- Set blocking/non-blocking mode on a stream
+stream_set_chunk_size -- Set the stream chunk size
+stream_set_read_buffer -- Set read file buffering on the given stream
 stream_set_timeout -- Set timeout period on a stream
 stream_set_write_buffer -- Sets file buffering on the given stream
 stream_socket_accept --  Accept a connection on a socket created by stream_socket_server() 
 stream_socket_client --  Open Internet or Unix domain socket connection 
+stream_socket_enable_crypto -- Turns encryption on/off on an already connected socket
 stream_socket_get_name -- Retrieve the name of the local or remote sockets
+stream_socket_pair -- Creates a pair of connected, indistinguishable socket streams
 stream_socket_recvfrom -- Receives data from a socket, connected or not 
 stream_socket_sendto -- Sends a message to a socket, whether it is connected or not 
 stream_socket_server --  Create an Internet or Unix domain server socket 
+stream_socket_shutdown -- Shutdown a full-duplex connection
+stream_supports_lock -- Tells whether the stream supports locking.
 stream_wrapper_register -- Register a URL wrapper implemented as a PHP class
+stream_wrapper_restore -- Restores a previously unregistered built-in wrapper
+stream_wrapper_unregister -- Unregister a URL wrapper
+set_socket_blocking -- [deprecated]
 
 STREAM_FILTER_READ
 STREAM_FILTER_WRITE
@@ -6317,3 +6551,18 @@ zlib_get_coding_type -- Returns the coding type used for output compression
 
 FORCE_GZIP (integer)
 FORCE_DEFLATE (integer)
+     <!-- XXX. SPL Functions -->
+class_implements -- Return the interfaces which are implemented by the given class
+class_parents -- Return the parent classes of the given class
+class_uses -- Return the traits used by the given class
+iterator_apply -- Call a function for every element in an iterator
+iterator_count -- Count the elements in an iterator
+iterator_to_array -- Copy the iterator into an array
+spl_autoload_call -- Try all registered __autoload() function to load the requested class
+spl_autoload_extensions -- Register and return default file extensions for spl_autoload
+spl_autoload_functions -- Return all registered __autoload() functions
+spl_autoload_register -- Register given function as __autoload() implementation
+spl_autoload_unregister -- Unregister given function as __autoload() implementation
+spl_autoload -- Default implementation for __autoload()
+spl_classes -- Return available SPL classes
+spl_object_hash -- Return hash id for given object

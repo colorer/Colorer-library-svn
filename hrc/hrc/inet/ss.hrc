@@ -163,7 +163,7 @@
 			</keywords>
 		</scheme>
 		<scheme name="Script">
-			<block start="/(&lt;%)?#2\s+((control))/" end="/(end_control)/"
+			<block start="/(&lt;%)?#2\s+((control|with|loop))/" end="/(end_\Y3)/"
 				region02="PairStart" region10="PairEnd"
 				region03="ssTagName" region11="ssTagName"
 				scheme="Script" priority="low"
