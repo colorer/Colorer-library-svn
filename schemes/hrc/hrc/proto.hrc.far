@@ -897,6 +897,15 @@
     <filename>/\.(src|inc|inf)$/i</filename>
     <firstline>/\*{10}/</firstline>
   </prototype>
+ <prototype name="llvm" group="rare" description="LLVM IR">
+  <location link="rare/llvm.hrc"/>
+  <filename weight='3'>/\.ll$/i</filename>
+ </prototype>
+ <prototype name="json" group="rare" description="JSON">
+  <location link="rare/json.hrc"/>
+  <filename weight='3'>/\.json$/i</filename>
+ </prototype>
+
 
    
   <!--  other types  -->
