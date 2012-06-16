@@ -194,6 +194,9 @@
 				<word name="color"/>
 				<word name="column-count"/>
 				<word name="column-gap"/>
+				<word name="column-rule"/>
+				<word name="column-width"/>
+				<word name="columns"/>
 				<word name="content"/>
 				<word name="counter-increment"/>
 				<word name="counter-reset"/>

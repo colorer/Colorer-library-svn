@@ -117,6 +117,10 @@
       <regexp match="/ (?{StringEdge}&#34;) (?{String} ( \\. | [^\\&#34;] )*?) (?{StringEdge}&#34;) /x"/>
     </scheme>
 
+    <scheme name="BinNumber">
+      <regexp match="/\b 0(?{NumberSuffix}[bB])[01]+ /ix" region0="NumberBin"/>
+    </scheme>
+
     <scheme name="CHexNumber">
       <regexp match="/\b 0x[\da-fA-F]+ (?{NumberSuffix}ul{0,2}|l{1,2}u?|(i64)|(i128))? \b/ix" region="NumberHex"/>
     </scheme>

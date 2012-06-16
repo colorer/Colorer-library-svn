@@ -1,228 +1,1 @@
-﻿$Revision$
-	$Author$ $Date$
-	- добавлена схема для Lemon Parser Generator
-
-#Revision: 1854
-	#Author: ctapmex Date: 2012-04-02 10:58:03 +0600 (Пн, 02 апр 2012)
-	- добавлены powershell и R
-
-#Revision: 1853
-	#Author: ctapmex Date: 2012-04-02 10:37:37 +0600 (Пн, 02 апр 2012)
-	- исправления в sql.hrc и csharp.hrc
-
-#Revision: 1849
-	#Author: ctapmex Date: 2012-03-26 14:25:49 +0600 (Пн, 26 мар 2012)
-	- слито с branches/lazyeugene
-
-#Revision: 1848
-	#Author: ctapmex Date: 2012-03-26 14:00:49 +0600 (Пн, 26 мар 2012)
-	- ошибки в csharp, markdown, pl1, ubasic
-
-#Revision: 1847
-	#Author: ctapmex Date: 2012-03-26 12:13:49 +0600 (Пн, 26 мар 2012)
-	- markdown.hrc (Roman Kuzmin)
-	- squirrel.hrc
-
-#Revision: 1839
-	#Author: ctapmex Date: 2012-03-15 16:25:47 +0600 (Чт, 15 мар 2012)
-	- добавление в postscript 
-
-#Revision: 1838
-	#Author: ctapmex Date: 2012-03-15 13:38:08 +0600 (Чт, 15 мар 2012)
-	- UniVision Basic (Pete Howell)
-
-#Revision: 1837
-	#Author: ctapmex Date: 2012-03-15 13:24:51 +0600 (Чт, 15 мар 2012)
-	- try/catch в matlab
-
-#Revision: 1830
-	#Author: ctapmex Date: 2012-03-14 15:20:24 +0600 (Ср, 14 мар 2012)
-	- добавления в far.hrc
-
-#Revision: 1822
-	#Author: ctapmex Date: 2012-03-06 15:02:05 +0600 (Вт, 06 мар 2012)
-	- добавлен SHPAML (Eric Gustavson https://github.com/occulens/shpaml-colorer)
-
-#Revision: 1820
-	#Author: ctapmex Date: 2012-03-06 10:19:37 +0600 (Вт, 06 мар 2012)
-	- добавления в far.hrc
-
-#Revision: 1811
-	#Author: ctapmex Date: 2012-01-09 23:58:48 +0600 (Пн, 09 янв 2012)
-	- обновлен MacroLib
-
-#Revision: 1808
-	#Author: ctapmex Date: 2012-01-08 02:38:06 +0600 (Вс, 08 янв 2012)
-	- vbscript и vbasic  исправлены outline
-	- lua
-	- cobol и pl/i от Pavel Pleva
-	- мелкие исправления
-
-#Revision: 1806
-	#Author: ctapmex Date: 2011-12-29 17:24:02 +0600 (Чт, 29 дек 2011)
-	- Far MacroLib
-	- добавления в far.hrc
-
-#Revision: 1797 
-	#Author: ctapmex Date: 2011-09-14 11:53:27 +0600 (Ср, 14 сен 2011)
-	- поправлен regexp
-	- исправлен outline для функций в C++
-
-#Revision: 1774
-	#Author: ctapmex Date: 2011-08-09 20:12:57 +0600 (Вт, 09 авг 2011)
-	- добавлена поддержка языка Go
-	- новая версия для PL/I
-
-#Revision: 1767
-	#Author: ctapmex Date: 2011-08-03 11:31:59 +0600 (Ср, 03 авг 2011)
-	- NowDoc в php
-
-#Revision: 1724
-	#Author: ctapmex Date: 2011-06-30 16:31:05 +0600 (Чт, 30 июн 2011)
-	- исправление 1717
-	- изменение опретеделения типов файлов (багтрекер)
-
-#Revision: 1718
-	#Author: ctapmex Date: 2011-06-28 23:42:19 +0600 (Вт, 28 июн 2011)
-	- добавлена поддержка verbatim string в csharp.hrc 
-
-#Revision: 1717
-	#Author: ctapmex Date: 2011-06-28 18:00:50 +0600 (Вт, 28 июн 2011)
-	- исправление 1708.2
-
-#Revision: 1716
-	#Author: ctapmex Date: 2011-06-28 17:27:09 +0600 (Вт, 28 июн 2011)
-	- в схеме c.hrc показ "#include" и "#define" в outlined списке скрыт ключом
-
-#Revision: 1713
-	#Author: ctapmex Date: 2011-06-27 22:23:44 +0600 (Пн, 27 июн 2011)
-	- добавления в far.hrc
-
-#Revision: 1710
-	#Author: ctapmex Date: 2011-06-25 01:05:17 +0600 (Сб, 25 июн 2011)
-	- добавлена поддержка verbatim string в far.hrc
-	- добавлены новые функции в far.hrc
-
-#Revision: 1708
-	#Author: ctapmex Date: 2011-06-24 10:36:17 +0600 (Пт, 24 июн 2011)
-	- доработка схемы C# и D, а также исправления в proto.hrc от Vladimir Panteleev
-	- pascal - запись символов с кодами 0-31 в формате ^@, ^A, ^B и т. п. (Игорь Юдинцев)
-
-#Revision: 1704
-	Author: ctapmex Date: 2011-03-25 13:49:45 +0500 (Пт, 25 мар 2011)
-	- правки jscript,qmake,sql,vbscript,email по патчам от HaRT
-
-#Revision: 1695
-	ctapmex 2011-03-22 10:54:09 +0500 (Вт, 22 мар 2011)
-	- правки C и C++ по патчам от HaRT
-
-#Revision: 1665
-	ctapmex 2011-03-06 18:07:06 +0500 (Вс, 06 мар 2011)
-	- доработка схемы c# по тикету "еще добавки в hrc для C# - ID: 2983454" и
-	 "C# yield return and yield break keywords - ID: 2687858"
-	- поддержка Expect по тикету "добавить ключевые слова expect в hrc/base/tcltk.hrc - ID: 2983449"
-
-#Revision: 1652
-	ctapmex 2011-02-21 20:27:55 +0500 (Пн, 21 фев 2011)
-	- комментарии в TCL
-
-#Revision: 1596
-	ctapmex 2010-10-25 23:24:30 +0600 (Пн, 25 окт 2010)
-	- из proto.hrc убраны параметры фара. перенесены в hrcsettings.xml проекта far2colorer
-	- для сборки схем для старых версий фара используем цель hrcupdate.old
-
-#Revision: 1587
-	ctapmex 2010-10-22 15:04:22 +0600 (Пт, 22 окт 2010)
-	- в бат файлах комментарии и метки могут начинаться не с начал строки
-	- в бат файлах символ ^ в командке echo является esc символом
-	- в схему esc добавлен один пропущенный параметр
-
-#Revision: 1525
-	ctapmex 2010-07-12 23:21:04 +0600 (Пн, 12 июл 2010)
-	- в sql.hrc добавлено ключевое слово
-
-#Revision: 1522
-	ctapmex 2010-07-02 11:45:10 +0600 (Пн, 02 июл 2010)
-	- исправлена схема reg.hrc , обработка пустых hex строк
-
-#Revision: 1519
-	ctapmex 2010-06-28 16:02:23 +0600 (Пн, 28 июн 2010)
-	- обновлены тесты схем
-
-#Revision: 1518
-	ctapmex 2010-06-28 14:42:45 +0600 (Пн, 28 июн 2010)
-	- обновлён far.hrc
-	- в jcl.hrc добавлена поддержка комментариев 
-
-#Revision: 1517
-	ctapmex 2010-06-25 16:53:52 +0600 (Пт, 25 июн 2010)
-	- changes.txt в актуальное состояние
-	- исправление ошибки в proto.hrc
-
-#Revision: 1448
-	ctapmex 2010-03-10 17:42:59 +0500 (Ср, 10 мар 2010)
-	- idl.hrc "С тем, что в поставке - outliner можно сказать не работает" (с)Maximus5
-
-#Revision: 1434
-	ctapmex 2010-03-06 16:49:54 +0500 (Сб, 06 мар 2010)
-	- far.hrc, новые функции и константы
-	- обновил тесты для ruby
-
-#Revision: 1422
-	ctapmex 2010-03-03 23:38:42 +0500 (Ср, 03 мар 2010)
-	- makefile: продублировано описание региона
-
-#Revision: 1416
-	ctapmex 2010-03-03 12:14:37 +0500 (Ср, 03 мар 2010) 
-	- diff.hrc: patch, новые опции
-	- расширение hrl для erlang
-	- для типа text добавлена подсветка псевдографики
-
-#Revision: 1414
-	lomecb 2010-03-02 01:48:18 +0500 (Вт, 02 мар 2010)
-	- AirPlay SDK,
-	- ruby minor updates
-	
-#Revision: 1398
-	formirror 2010-02-18 21:20:46 +0300 (Чт, 18 фев 2010)
-	- makefile.hrc: поддержка nmake, убрал makefile.old.hrc
-	- reg.hrc: bugfix
-	- diff.hrc: patch
-	- проставил 'firstlines' для cpp, d и xslt
-	- добавил commons-net в javalib: без нее ант собирается неправильно.
-	
-#Revision: 1349 
-	formirror 2010-02-10 03:10:19 +0300 (Ср, 10 фев 2010) 
-	Реструктуризация
-	- Теперь ant обращается к схемам через XMLcatalog.
-	- Убирается все из hrc/auto. Теперь там будет только то, что положит туда юзер.
-	
-#Revision: 1319 
-	formirror Date: 2010-02-06 15:34:40 +0300 (Сб, 06 фев 2010) 
-	1. Фиксим hrc
-	1.1 awk.hrc -> scripts, +regexp
-	1.2 reg.hrc
-	1.3 far.hrc - +XML, +callplugin, +\ или \\ в реестре
-	1.4 macro.hrc - А он вообще используестя, или как?
-	1.5 c.hrc - форматорование строк и ссылки на системные переменные в них...
-	2. Восстановил esc.hrc 
-	2.1 Этот плагин проклят. Его поддержка исчезает из колорера уже в 3 или 4 раз.
-	2.2 А сейчас убили не только его, но и из far.hrc удалили всякую поддержку XML. Пришлось ставить на место.
-	3. Обновил тесты.
-	3.1 Тексты в кодировке UTF-16 svn считает бинарными файлами. Править ему mime-type на text не рискнул, во избежание глюков...
-	
-#Revision: 1306 
-	formirror 2010-02-05 04:55:39 +0300 (Пт, 05 фев 2010)
-	1. Слил с моей старой веткой.
-	1.1 svn merge упорно не хотело идти раньше r1215, так что r1214 пришлось копировать ручками
-	1.2 а затем сообщил об артефактных удалениях файлов
-	2. Слил с транком (1192, 1242+)
-	2.1 svn merge глючит по черному...
-	
-#Revision: 1304 
-	formirror 2010-02-05 02:08:17 +0300 (Пт, 05 фев 2010) 
-	0. Теперь это моя ветка.
-	1. Убрал -nostartfiles. Под gcc все равно не комплияется,в отличии от транка...
-	2. Восстановил валидный test/hrc/valid/xml/build.xml.html
-	3. Автоматизировал подстановку значений для этого файла (и +BOM). Посмотрим, что получится...
-	4. Правлю hrc...
+﻿$Revision$        $Author$ $Date$        - слито с branches/lazyeugene#Revision: 1855        #Author: ctapmex Date: 2012-04-02 15:14:45 +0600 (Пн, 02 апр 2012)        - добавлена схема для Lemon Parser Generator#Revision: 1854        #Author: ctapmex Date: 2012-04-02 10:58:03 +0600 (Пн, 02 апр 2012)        - добавлены powershell и R#Revision: 1853        #Author: ctapmex Date: 2012-04-02 10:37:37 +0600 (Пн, 02 апр 2012)        - исправления в sql.hrc и csharp.hrc#Revision: 1849        #Author: ctapmex Date: 2012-03-26 14:25:49 +0600 (Пн, 26 мар 2012)        - слито с branches/lazyeugene#Revision: 1848        #Author: ctapmex Date: 2012-03-26 14:00:49 +0600 (Пн, 26 мар 2012)        - ошибки в csharp, markdown, pl1, ubasic#Revision: 1847        #Author: ctapmex Date: 2012-03-26 12:13:49 +0600 (Пн, 26 мар 2012)        - markdown.hrc (Roman Kuzmin)        - squirrel.hrc#Revision: 1839        #Author: ctapmex Date: 2012-03-15 16:25:47 +0600 (Чт, 15 мар 2012)        - добавление в postscript#Revision: 1838        #Author: ctapmex Date: 2012-03-15 13:38:08 +0600 (Чт, 15 мар 2012)        - UniVision Basic (Pete Howell)#Revision: 1837        #Author: ctapmex Date: 2012-03-15 13:24:51 +0600 (Чт, 15 мар 2012)        - try/catch в matlab#Revision: 1830        #Author: ctapmex Date: 2012-03-14 15:20:24 +0600 (Ср, 14 мар 2012)        - добавления в far.hrc#Revision: 1822        #Author: ctapmex Date: 2012-03-06 15:02:05 +0600 (Вт, 06 мар 2012)        - добавлен SHPAML (Eric Gustavson https://github.com/occulens/shpaml-colorer)#Revision: 1820        #Author: ctapmex Date: 2012-03-06 10:19:37 +0600 (Вт, 06 мар 2012)        - добавления в far.hrc#Revision: 1811        #Author: ctapmex Date: 2012-01-09 23:58:48 +0600 (Пн, 09 янв 2012)        - обновлен MacroLib#Revision: 1808        #Author: ctapmex Date: 2012-01-08 02:38:06 +0600 (Вс, 08 янв 2012)        - vbscript и vbasic  исправлены outline        - lua        - cobol и pl/i от Pavel Pleva        - мелкие исправления#Revision: 1806        #Author: ctapmex Date: 2011-12-29 17:24:02 +0600 (Чт, 29 дек 2011)        - Far MacroLib        - добавления в far.hrc#Revision: 1797        #Author: ctapmex Date: 2011-09-14 11:53:27 +0600 (Ср, 14 сен 2011)        - поправлен regexp        - исправлен outline для функций в C++#Revision: 1774        #Author: ctapmex Date: 2011-08-09 20:12:57 +0600 (Вт, 09 авг 2011)        - добавлена поддержка языка Go        - новая версия для PL/I#Revision: 1767        #Author: ctapmex Date: 2011-08-03 11:31:59 +0600 (Ср, 03 авг 2011)        - NowDoc в php#Revision: 1724        #Author: ctapmex Date: 2011-06-30 16:31:05 +0600 (Чт, 30 июн 2011)        - исправление 1717        - изменение опретеделения типов файлов (багтрекер)#Revision: 1718        #Author: ctapmex Date: 2011-06-28 23:42:19 +0600 (Вт, 28 июн 2011)        - добавлена поддержка verbatim string в csharp.hrc#Revision: 1717        #Author: ctapmex Date: 2011-06-28 18:00:50 +0600 (Вт, 28 июн 2011)        - исправление 1708.2#Revision: 1716        #Author: ctapmex Date: 2011-06-28 17:27:09 +0600 (Вт, 28 июн 2011)        - в схеме c.hrc показ "#include" и "#define" в outlined списке скрыт ключом#Revision: 1713        #Author: ctapmex Date: 2011-06-27 22:23:44 +0600 (Пн, 27 июн 2011)        - добавления в far.hrc#Revision: 1710        #Author: ctapmex Date: 2011-06-25 01:05:17 +0600 (Сб, 25 июн 2011)        - добавлена поддержка verbatim string в far.hrc        - добавлены новые функции в far.hrc#Revision: 1708        #Author: ctapmex Date: 2011-06-24 10:36:17 +0600 (Пт, 24 июн 2011)        - доработка схемы C# и D, а также исправления в proto.hrc от Vladimir Panteleev        - pascal - запись символов с кодами 0-31 в формате ^@, ^A, ^B и т. п. (Игорь Юдинцев)#Revision: 1704        Author: ctapmex Date: 2011-03-25 13:49:45 +0500 (Пт, 25 мар 2011)        - правки jscript,qmake,sql,vbscript,email по патчам от HaRT#Revision: 1695        ctapmex 2011-03-22 10:54:09 +0500 (Вт, 22 мар 2011)        - правки C и C++ по патчам от HaRT#Revision: 1665        ctapmex 2011-03-06 18:07:06 +0500 (Вс, 06 мар 2011)        - доработка схемы c# по тикету "еще добавки в hrc для C# - ID: 2983454" и         "C# yield return and yield break keywords - ID: 2687858"        - поддержка Expect по тикету "добавить ключевые слова expect в hrc/base/tcltk.hrc - ID: 2983449"#Revision: 1652        ctapmex 2011-02-21 20:27:55 +0500 (Пн, 21 фев 2011)        - комментарии в TCL#Revision: 1596        ctapmex 2010-10-25 23:24:30 +0600 (Пн, 25 окт 2010)        - из proto.hrc убраны параметры фара. перенесены в hrcsettings.xml проекта far2colorer        - для сборки схем для старых версий фара используем цель hrcupdate.old#Revision: 1587        ctapmex 2010-10-22 15:04:22 +0600 (Пт, 22 окт 2010)        - в бат файлах комментарии и метки могут начинаться не с начал строки        - в бат файлах символ ^ в командке echo является esc символом        - в схему esc добавлен один пропущенный параметр#Revision: 1525        ctapmex 2010-07-12 23:21:04 +0600 (Пн, 12 июл 2010)        - в sql.hrc добавлено ключевое слово#Revision: 1522        ctapmex 2010-07-02 11:45:10 +0600 (Пн, 02 июл 2010)        - исправлена схема reg.hrc , обработка пустых hex строк#Revision: 1519        ctapmex 2010-06-28 16:02:23 +0600 (Пн, 28 июн 2010)        - обновлены тесты схем#Revision: 1518        ctapmex 2010-06-28 14:42:45 +0600 (Пн, 28 июн 2010)        - обновлён far.hrc        - в jcl.hrc добавлена поддержка комментариев#Revision: 1517        ctapmex 2010-06-25 16:53:52 +0600 (Пт, 25 июн 2010)        - changes.txt в актуальное состояние        - исправление ошибки в proto.hrc#Revision: 1448        ctapmex 2010-03-10 17:42:59 +0500 (Ср, 10 мар 2010)        - idl.hrc "С тем, что в поставке - outliner можно сказать не работает" (с)Maximus5#Revision: 1434        ctapmex 2010-03-06 16:49:54 +0500 (Сб, 06 мар 2010)        - far.hrc, новые функции и константы        - обновил тесты для ruby#Revision: 1422        ctapmex 2010-03-03 23:38:42 +0500 (Ср, 03 мар 2010)        - makefile: продублировано описание региона#Revision: 1416        ctapmex 2010-03-03 12:14:37 +0500 (Ср, 03 мар 2010)        - diff.hrc: patch, новые опции        - расширение hrl для erlang        - для типа text добавлена подсветка псевдографики#Revision: 1414        lomecb 2010-03-02 01:48:18 +0500 (Вт, 02 мар 2010)        - AirPlay SDK,        - ruby minor updates#Revision: 1398        formirror 2010-02-18 21:20:46 +0300 (Чт, 18 фев 2010)        - makefile.hrc: поддержка nmake, убрал makefile.old.hrc        - reg.hrc: bugfix        - diff.hrc: patch        - проставил 'firstlines' для cpp, d и xslt        - добавил commons-net в javalib: без нее ант собирается неправильно.#Revision: 1349        formirror 2010-02-10 03:10:19 +0300 (Ср, 10 фев 2010)        Реструктуризация        - Теперь ant обращается к схемам через XMLcatalog.        - Убирается все из hrc/auto. Теперь там будет только то, что положит туда юзер.#Revision: 1319        formirror Date: 2010-02-06 15:34:40 +0300 (Сб, 06 фев 2010)        1. Фиксим hrc        1.1 awk.hrc -> scripts, +regexp        1.2 reg.hrc        1.3 far.hrc - +XML, +callplugin, +\ или \\ в реестре        1.4 macro.hrc - А он вообще используестя, или как?        1.5 c.hrc - форматорование строк и ссылки на системные переменные в них...        2. Восстановил esc.hrc        2.1 Этот плагин проклят. Его поддержка исчезает из колорера уже в 3 или 4 раз.        2.2 А сейчас убили не только его, но и из far.hrc удалили всякую поддержку XML. Пришлось ставить на место.        3. Обновил тесты.        3.1 Тексты в кодировке UTF-16 svn считает бинарными файлами. Править ему mime-type на text не рискнул, во избежание глюков...#Revision: 1306        formirror 2010-02-05 04:55:39 +0300 (Пт, 05 фев 2010)        1. Слил с моей старой веткой.        1.1 svn merge упорно не хотело идти раньше r1215, так что r1214 пришлось копировать ручками        1.2 а затем сообщил об артефактных удалениях файлов        2. Слил с транком (1192, 1242+)        2.1 svn merge глючит по черному...#Revision: 1304        formirror 2010-02-05 02:08:17 +0300 (Пт, 05 фев 2010)        0. Теперь это моя ветка.        1. Убрал -nostartfiles. Под gcc все равно не комплияется,в отличии от транка...        2. Восстановил валидный test/hrc/valid/xml/build.xml.html        3. Автоматизировал подстановку значений для этого файла (и +BOM). Посмотрим, что получится...        4. Правлю hrc...
