@@ -3,12 +3,19 @@
     - R (Roman Kuzmin)
     - Lemon Parser Generator (Aleksey Dobrunov)
   Fixed:
-    - sql - 'end' for case block
+    - sql - 'end' for case block; fixed qualified host variables
     - csharp - add struct in outlined; keyword 'var'; simple parse verbatim string
     - php - php 5.4 support: traits, binary numbers, some functions deprecation (lazyeugene)
     - less - some fixes (lazyeugene)
     - SilverStripe - some fixes (lazyeugene)
     - css - new keywords (lazyeugene)
+    - cobol - many fixes (Pavel Pleva)
+    - cobolfr - many fixes (Pavel Pleva)
+    - jcl - many fixes (Pavel Pleva)
+    - makefile- fixed comment after var definition (Pavel Pleva)
+    - pl1 - many fixes (Pavel Pleva)
+    - sh - fixed --eq  (Pavel Pleva)
+
 
 2012-03-26 r1850 (FarColorer 1.0.3.10)
   New:

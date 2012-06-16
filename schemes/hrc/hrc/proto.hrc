@@ -549,8 +549,8 @@
 
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
-		<filename weight='3'>/(android|application)\.mk/i</filename>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g))$/ix</filename>
+    <filename weight='3'>/\.mk$/i</filename>
     <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline-->
     <firstline>/makefile/s</firstline>
