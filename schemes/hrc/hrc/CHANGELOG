@@ -5,12 +5,16 @@
   Fixed:
     - sql - 'end' for case block
     - csharp - add struct in outlined; keyword 'var'; simple parse verbatim string
+    - php - php 5.4 support: traits, binary numbers, some functions deprecation (lazyeugene)
+    - less - some fixes (lazyeugene)
+    - SilverStripe - some fixes (lazyeugene)
+    - css - new keywords (lazyeugene)
 
 2012-03-26 r1850 (FarColorer 1.0.3.10)
   New:
     - UniVision Basic (Pete Howell)
     - markdown (Roman Kuzmin)
-    - squirrel 
+    - squirrel
   Fixed:
     - matlab - try/catch support
     - postscript - add keyword
@@ -38,11 +42,11 @@
   Fixed:
     - NowDoc in PHP
     - regexp
-    - C++ function outline 
+    - C++ function outline
     - far.hrc - new in Far3
     - vbasic and vbscript - fix outline
     - lua (Aidar, darkmist )
-    - cobol.hrc: updated keywords list, removed import, color all keywords the same, 
+    - cobol.hrc: updated keywords list, removed import, color all keywords the same,
        allow string in single or double quotes (Pavel Pleva)
     - cobolfr.hrc: updated keywords list, removed import, color all keywords the same (Pavel Pleva)
     - pl1.hrc: added preprocessor comments, removed import, and other (Pavel Pleva)
@@ -54,14 +58,14 @@
 
 2011-06-29 r1721 (FarColorer 1.0.3.2)
   Fixed:
-    - add missing words for c, cpp, jscript, qmake, sql, vbscript, email (from HaRT) 
+    - add missing words for c, cpp, jscript, qmake, sql, vbscript, email (from HaRT)
     - add  C function outlining for C# (from Vladimir Panteleev)
     - major improvements to D syntax file (from Vladimir Panteleev)
     - minor fix proto.hrc (from Vladimir Panteleev)
     - Pascal - write characters with codes 0-31 in the format ^@, ^A, ^B (Igor Yudincev)
     - far.hrc - add support verbatim string; new functions
     - c.hrc - shows #include and #define in the outline list is closed by key
-    - csharp.hrc - add support verbatim string; 
+    - csharp.hrc - add support verbatim string;
 
 2011-03-18 r1688 (FarColorer 1.0.3.1)
   New:
@@ -119,7 +123,7 @@
     - Awk : scripts, +regexp
     - Far.hrc : +XML, +callplugin, +\ or \\ in registry, new macro functions and constants
     - C : Formatting lines and links to system variables in them, paired quotes for strings
-    - HTML : add HTML5 tags 
+    - HTML : add HTML5 tags
 
 2010-02-04 r1299
 (trunk changes merged into dev branch for FarColorer 1.0.2.4)
