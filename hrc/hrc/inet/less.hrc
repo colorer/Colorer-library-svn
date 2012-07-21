@@ -141,21 +141,29 @@
 			</keywords>
 		</scheme>
 
+		<scheme name="MixingProperty">
+		    <regexp match="/\.{3}[ \)]?=/" region="def:SymbolStrong" />
+			<inherit scheme="Property"/>
+		</scheme>
+
 		<scheme name="Mixing">
 			<regexp match="/((#[\w-]+\s*\>\s*)*\.[\w-]+)(\s*[\(;])?=/" region1="Mixing" region3="SymbolStrong" />
 			<block start="/(\()/" end="/(\))/"
-				scheme="Property"
+				scheme="MixingProperty"
 				region00="PairStart" region01="def:Symbol"
 				region10="PairEnd" region11="Symbol"
 			/>
 			<regexp match="/\)?#1 \s* (when) \s* \(?=/x" region1="Keyword" />
+			<keywords ignorecase="yes" region="css:ImportantValue">
+				 <word name="!important"/>
+			</keywords>
 			<keywords region="SymbolStrong">
 				<symb name=";"/>
 			</keywords>
 		</scheme>
 
 		<scheme name="Combinator">
-			<regexp match="/&amp;([.:])?=/" region="def:Keyword" />
+			<regexp match="/&amp;/" region="def:Keyword" />
 		</scheme>
 
 		<scheme name="PropertyWrapper">
