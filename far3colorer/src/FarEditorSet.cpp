@@ -250,7 +250,7 @@ void FarEditorSet::FillTypeMenu(ChooseTypeMenu *Menu, FileType *CurFileType)
 
 inline wchar_t* __cdecl Upper(wchar_t* Ch) { CharUpperBuff(Ch, 1); return Ch; }
 
-INT_PTR WINAPI KeyDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2) 
+INT_PTR WINAPI KeyDialogProc(HANDLE hDlg, intptr_t Msg, intptr_t Param1, void* Param2) 
 {
   INPUT_RECORD* record=nullptr;
   static int LastKey=0;
@@ -296,7 +296,7 @@ void FarEditorSet::chooseType()
   wchar_t bottom[20];
   _snwprintf(bottom, 20, GetMsg(mTotalTypes), hrcParser->getFileTypesCount());
   struct FarKey BreakKeys[3]={VK_INSERT,0,VK_DELETE,0,VK_F4,0};
-  int BreakCode,i;
+  intptr_t BreakCode,i;
   while (1) {
     i = Info.Menu(&MainGuid, &FileChooseMenu, -1, -1, 0, FMENU_WRAPMODE | FMENU_AUTOHIGHLIGHT,
       GetMsg(mSelectSyntax), bottom, L"filetypechoose", BreakKeys,&BreakCode, menu.getItems(), menu.getItemsCount());
@@ -378,7 +378,7 @@ const String *FarEditorSet::getHRDescription(const String &name, DString _hrdCla
   return descr;
 }
 
-INT_PTR WINAPI SettingDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2) 
+INT_PTR WINAPI SettingDialogProc(HANDLE hDlg, intptr_t Msg, intptr_t Param1, void* Param2) 
 {
   FarEditorSet *fes = (FarEditorSet *)Info.SendDlgMessage(hDlg,DM_GETDLGDATA,0,0);; 
 
@@ -920,6 +920,7 @@ FarEditor *FarEditorSet::addCurrentEditor()
   }
 
   EditorInfo ei;
+  ei.StructSize = sizeof (EditorInfo);
   Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
 
   FarEditor *editor = new FarEditor(&Info, parserFactory);
@@ -946,7 +947,7 @@ String* FarEditorSet::getCurrentFileName()
     FileName=new wchar_t[FileNameSize];
 
     if (FileName){
-      Info.EditorControl(CurrentEditor, ECTL_GETFILENAME, NULL, FileName);
+      Info.EditorControl(CurrentEditor, ECTL_GETFILENAME, FileNameSize, FileName);
     }
   }
 
@@ -964,6 +965,7 @@ String* FarEditorSet::getCurrentFileName()
 FarEditor *FarEditorSet::getCurrentEditor()
 {
   EditorInfo ei;
+    ei.StructSize = sizeof (EditorInfo);
   Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
 
@@ -1005,6 +1007,7 @@ void FarEditorSet::ApplySettingsToEditors()
 void FarEditorSet::dropCurrentEditor(bool clean)
 {
   EditorInfo ei;
+  ei.StructSize = sizeof (EditorInfo);
   Info.EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
   FarEditor *editor = farEditorInstances.get(&SString(ei.EditorID));
   if (editor){
@@ -1105,6 +1108,7 @@ bool FarEditorSet::SetBgEditor()
 
 		FarSetColors fsc;
 		FarColor fc;
+		fsc.StructSize = sizeof(FarSetColors);
 		fsc.Flags = FSETCLR_REDRAW;
 		fsc.ColorsCount = 1;
 		fsc.StartIndex = COL_EDITORTEXT;
@@ -1214,7 +1218,7 @@ FarList *FarEditorSet::buildHrcList()
   FarList *ListItems = new FarList;
   ListItems->Items=hrcList;
   ListItems->ItemsNumber=num;
-
+  ListItems->StructSize=sizeof(FarList);
   return ListItems;
 }
 
@@ -1248,6 +1252,7 @@ FarList *FarEditorSet::buildParamsList(FileTypeImpl *type)
   FarList *lparam = new FarList;
   lparam->Items=fparam;
   lparam->ItemsNumber=count;
+  lparam->StructSize=sizeof(FarList);
   return lparam;
 
 }
@@ -1287,6 +1292,7 @@ void FarEditorSet::setCrossValueListToCombobox(FileTypeImpl *type, HANDLE hDlg)
   FarList *lcross = new FarList;
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
+  lcross->StructSize=sizeof(FarList);
 
   size_t ret=2;
   if (value==NULL || !value->length()){
@@ -1327,6 +1333,7 @@ void FarEditorSet::setCrossPosValueListToCombobox(FileTypeImpl *type, HANDLE hDl
   FarList *lcross = new FarList;
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
+  lcross->StructSize=sizeof(FarList);
 
   size_t ret=2;
   if (value==NULL || !value->length()){
@@ -1361,6 +1368,7 @@ void FarEditorSet::setYNListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   FarList *lcross = new FarList;
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
+  lcross->StructSize=sizeof(FarList);
 
   size_t ret=2;
   if (value==NULL || !value->length()){
@@ -1395,6 +1403,7 @@ void FarEditorSet::setTFListValueToCombobox(FileTypeImpl *type, HANDLE hDlg, DSt
   FarList *lcross = new FarList;
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
+  lcross->StructSize=sizeof(FarList);
 
   size_t ret=2;
   if (value==NULL || !value->length()){
@@ -1427,6 +1436,7 @@ void FarEditorSet::setCustomListValueToCombobox(FileTypeImpl *type,HANDLE hDlg, 
   FarList *lcross = new FarList;
   lcross->Items=fcross;
   lcross->ItemsNumber=count;
+  lcross->StructSize=sizeof(FarList);
 
   fcross[0].Flags=LIF_SELECTED;
   ChangeParamValueListType(hDlg,false);
@@ -1550,7 +1560,7 @@ void FarEditorSet::OnSaveHrcParams(HANDLE hDlg)
    p.writeUserProfile();
 }
 
-INT_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, int Msg, int Param1, void* Param2) 
+INT_PTR WINAPI SettingHrcDialogProc(HANDLE hDlg, intptr_t Msg, intptr_t Param1, void* Param2) 
 {
   FarEditorSet *fes = (FarEditorSet *)Info.SendDlgMessage(hDlg,DM_GETDLGDATA,0,0);; 
 

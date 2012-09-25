@@ -104,8 +104,9 @@ HANDLE WINAPI OpenW(const struct OpenInfo *oInfo)
       break;
     case OPEN_COMMANDLINE:
       {
+		OpenCommandLineInfo *ocli =(OpenCommandLineInfo*)oInfo->Data;
         //file name, which we received
-        wchar_t *file = (wchar_t*)oInfo->Data;
+        const wchar_t *file = ocli->CommandLine;
 
         wchar_t *nfile = PathToFull(file,true);
         if (nfile){
@@ -145,7 +146,7 @@ HANDLE WINAPI OpenW(const struct OpenInfo *oInfo)
 /**
   Configures plugin.
 */
-int WINAPI ConfigureW(const struct ConfigureInfo *cInfo)
+intptr_t WINAPI ConfigureW(const struct ConfigureInfo *cInfo)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
@@ -158,7 +159,7 @@ int WINAPI ConfigureW(const struct ConfigureInfo *cInfo)
   Processes FAR editor events and
   makes text colorizing here.
 */
-int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *pInfo)
+intptr_t WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *pInfo)
 {
   if (!editorSet){
     editorSet = new FarEditorSet();
@@ -166,7 +167,7 @@ int WINAPI ProcessEditorEventW(const struct ProcessEditorEventInfo *pInfo)
   return editorSet->editorEvent(pInfo);
 };
 
-int WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *pInfo)
+intptr_t WINAPI ProcessEditorInputW(const struct ProcessEditorInputInfo *pInfo)
 {
   return editorSet->editorInput(pInfo->Rec);
 }

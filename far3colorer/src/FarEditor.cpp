@@ -5,6 +5,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   parserFactory = pf;
   baseEditor = new BaseEditor(parserFactory, this);
   this->info = info;
+  ei.StructSize = sizeof(EditorInfo);
   info->EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
   cursorRegion = NULL;
   prevLinePosition = 0;
@@ -56,7 +57,7 @@ String *FarEditor::getLine(int lno)
   EditorGetString es;
   int len = 0;
   ret_strNumber = lno;
-
+  es.StructSize = sizeof(EditorGetString);
   es.StringNumber = lno;
   es.StringText = NULL;
 
@@ -217,6 +218,7 @@ void FarEditor::setRegionMapper(RegionMapper *rs)
 void FarEditor::matchPair()
 {
   EditorSetPosition esp;
+  esp.StructSize = sizeof(EditorSetPosition);
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
 
@@ -253,6 +255,7 @@ void FarEditor::matchPair()
 void FarEditor::selectPair()
 {
   EditorSelect es;
+  es.StructSize = sizeof(EditorSelect);
   int X1, X2, Y1, Y2;
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
@@ -289,6 +292,7 @@ void FarEditor::selectPair()
 void FarEditor::selectBlock()
 {
   EditorSelect es;
+  es.StructSize = sizeof(EditorSelect);
   int X1, X2, Y1, Y2;
   enterHandler();
   PairMatch *pm = baseEditor->searchGlobalPair(ei.CurLine, ei.CurPos);
@@ -325,7 +329,9 @@ void FarEditor::selectBlock()
 void FarEditor::selectRegion()
 {
   EditorSelect es;
+  es.StructSize = sizeof(EditorSelect);
   EditorGetString egs;
+  egs.StructSize = sizeof(EditorGetString);
   enterHandler();
   egs.StringNumber = ei.CurLine;
   info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
@@ -350,6 +356,7 @@ void FarEditor::selectRegion()
 void FarEditor::getNameCurrentScheme()
 {
   EditorGetString egs;
+  egs.StructSize = sizeof(EditorGetString);
   enterHandler();
   egs.StringNumber = ei.CurLine;
   info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
@@ -415,6 +422,7 @@ void FarEditor::locateFunction()
       CLR_INFO("FC", "Letter %s", funcname.getChars());
       baseEditor->validate(-1, false);
       EditorSetPosition esp;
+	  esp.StructSize = sizeof(EditorSetPosition);
       OutlineItem *item_found = NULL;
       OutlineItem *item_last = NULL;
       int items_num = structOutliner->itemCount();
@@ -538,6 +546,7 @@ int FarEditor::editorEvent(int event, void *param)
 
   // Position the cursor on the screen
   EditorConvertPos ecp, ecp_cl;
+  ecp.StructSize = sizeof(EditorConvertPos);
   ecp.StringNumber = -1;
   ecp.SrcPos = ei.CurPos;
   info->EditorControl(CurrentEditor, ECTL_REALTOTAB, NULL, &ecp);
@@ -552,11 +561,13 @@ int FarEditor::editorEvent(int event, void *param)
 
     // length current string
     EditorGetString egs;
+	egs.StructSize = sizeof(EditorGetString);
     egs.StringNumber = lno;
     info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
     int llen = egs.StringLength;
     DString s = DString(egs.StringText);
     //position previously found a column in the current row
+	ecp_cl.StructSize = sizeof(EditorConvertPos);
     ecp_cl.StringNumber = lno;
     ecp_cl.SrcPos = ecp.DestPos;
     info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
@@ -690,8 +701,9 @@ void FarEditor::showOutliner(Outliner *outliner)
 {
   FarMenuItem *menu;
   EditorSetPosition esp;
+  esp.StructSize = sizeof(EditorSetPosition);
   bool moved = false;
-  int code = 0;
+  intptr_t code = 0;
   const int FILTER_SIZE = 40;
   FarKey breakKeys[] =
   {
