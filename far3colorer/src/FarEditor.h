@@ -108,7 +108,7 @@ public:
   void updateHighlighting();
 
   /** Handle passed FAR editor event */
-  int editorEvent(int event, void *param);
+  int editorEvent(intptr_t event, void *param);
   /** Dispatch editor input event */
   int editorInput(const INPUT_RECORD &Rec);
 

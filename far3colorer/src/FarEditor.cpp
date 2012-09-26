@@ -500,7 +500,7 @@ int FarEditor::editorInput(const INPUT_RECORD &Rec)
   return 0;
 }
 
-int FarEditor::editorEvent(int event, void *param)
+int FarEditor::editorEvent(intptr_t event, void *param)
 {
   if (event == EE_CHANGE) {
     EditorChange* editor_change = (EditorChange*)param;
@@ -799,7 +799,7 @@ void FarEditor::showOutliner(Outliner *outliner)
 
         // set position on nearest top function
         menu[menu_size].Text = menuItem;
-        menu[menu_size].UserData = (DWORD_PTR)item;
+        menu[menu_size].UserData = (intptr_t)item;
 
         if (ei.CurLine >= item->lno){
           selectedItem = menu_size;
@@ -1010,12 +1010,14 @@ void FarEditor::showOutliner(Outliner *outliner)
         info->EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
         //insert text
         OutlineItem *item = (OutlineItem *) menu[sel].UserData;
-        info->EditorControl(CurrentEditor, ECTL_INSERTTEXT, NULL, (void*)item->token->getWChars());
+		SString str = SString(item->token);
+		//!! warning , after call next line  object 'item' changes
+        info->EditorControl(CurrentEditor, ECTL_INSERTTEXT, NULL, (void*)str.getWChars());
 
         //move the cursor to the end of the inserted string
         esp.CurTabPos = esp.LeftPos = esp.Overtype = esp.TopScreenLine = -1;
         esp.CurLine =-1;
-        esp.CurPos = ei.CurPos+item->token->length();
+        esp.CurPos = ei.CurPos+str.length();
         info->EditorControl(CurrentEditor, ECTL_SETPOSITION, NULL, &esp);
 
         stopMenu = true;
