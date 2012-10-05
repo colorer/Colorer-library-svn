@@ -81,6 +81,7 @@ void FarHrcSettings::readProfileFromRegistry()
   size_t hrc_subkey;
   hrc_subkey = ColorerSettings.rGetSubKey(0,HrcSettings);
   FarSettingsEnum fse;
+  fse.StructSize = sizeof(FarSettingsEnum);
   // enum all the sections in HrcSettings
   if (ColorerSettings.rEnum(hrc_subkey,&fse)){
     for (size_t i=0; i<fse.Count; i++){
@@ -92,6 +93,7 @@ void FarHrcSettings::readProfileFromRegistry()
           size_t type_subkey;
           type_subkey = ColorerSettings.rGetSubKey(hrc_subkey,fse.Items[i].Name);
           FarSettingsEnum type_fse;
+          type_fse.StructSize = sizeof(FarSettingsEnum);
           if (ColorerSettings.rEnum(type_subkey,&type_fse)){
             for (size_t j=0; j<type_fse.Count; j++){
               if (type_fse.Items[j].Type == FST_STRING){
