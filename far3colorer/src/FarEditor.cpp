@@ -55,7 +55,7 @@ String *FarEditor::getLine(int lno)
   }
 
   EditorGetString es;
-  int len = 0;
+  intptr_t len = 0;
   ret_strNumber = lno;
   es.StructSize = sizeof(EditorGetString);
   es.StringNumber = lno;
@@ -336,7 +336,7 @@ void FarEditor::selectRegion()
   egs.StringNumber = ei.CurLine;
   info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
   if (cursorRegion != NULL){
-    int end = cursorRegion->end;
+    intptr_t end = cursorRegion->end;
 
     if (end == -1){
       end = egs.StringLength;
@@ -551,7 +551,7 @@ int FarEditor::editorEvent(intptr_t event, void *param)
   ecp.SrcPos = ei.CurPos;
   info->EditorControl(CurrentEditor, ECTL_REALTOTAB, NULL, &ecp);
 
-  for (int lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
+  for (intptr_t lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
       break;
     }
@@ -561,13 +561,13 @@ int FarEditor::editorEvent(intptr_t event, void *param)
 
     // length current string
     EditorGetString egs;
-	egs.StructSize = sizeof(EditorGetString);
+    egs.StructSize = sizeof(EditorGetString);
     egs.StringNumber = lno;
     info->EditorControl(CurrentEditor, ECTL_GETSTRING, NULL, &egs);
     int llen = egs.StringLength;
     DString s = DString(egs.StringText);
     //position previously found a column in the current row
-	ecp_cl.StructSize = sizeof(EditorConvertPos);
+    ecp_cl.StructSize = sizeof(EditorConvertPos);
     ecp_cl.StringNumber = lno;
     ecp_cl.SrcPos = ecp.DestPos;
     info->EditorControl(CurrentEditor, ECTL_TABTOREAL, NULL, &ecp_cl);
@@ -862,7 +862,7 @@ void FarEditor::showOutliner(Outliner *outliner)
     }
 
     _snwprintf(top, 128, topline, captionfilter);
-    int sel = 0;
+    intptr_t sel = 0;
     sel = info->Menu(&MainGuid, &OutlinerMenu, -1, -1, 0, FMENU_SHOWAMPERSAND|FMENU_WRAPMODE,
       top, GetMsg(mChoose), L"add", breakKeys, &code, menu, menu_size);
 
@@ -1137,7 +1137,7 @@ bool FarEditor::backDefault(FarColor col)
   return col.BackgroundColor == rdBackground->back;
 }
 
-void FarEditor::deleteFarColor(int lno, int s)
+void FarEditor::deleteFarColor(intptr_t lno, intptr_t s)
 {
   EditorDeleteColor edc;
   edc.Owner = MainGuid;
@@ -1147,7 +1147,7 @@ void FarEditor::deleteFarColor(int lno, int s)
   info->EditorControl(CurrentEditor, ECTL_DELCOLOR, NULL, &edc);
 }
 
-void FarEditor::addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle)
+void FarEditor::addFARColor(intptr_t lno, intptr_t s, intptr_t e, FarColor col, EDITORCOLORFLAGS TabMarkStyle)
 {
   EditorColor ec;
   ec.StructSize = sizeof(EditorColor);

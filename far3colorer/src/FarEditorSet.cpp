@@ -62,11 +62,14 @@ void FarEditorSet::openMenu(int MenuId)
       }
     };
 
-    MenuId = Info.Menu(&MainGuid, &PluginMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
+    intptr_t menu_id = Info.Menu(&MainGuid, &PluginMenu, -1, -1, 0, FMENU_WRAPMODE, GetMsg(mName), 0, L"menu", NULL, NULL,
       menuElements, rEnabled? (sizeof(iMenuItems) / sizeof(iMenuItems[0])) : 1 );
-    if (MenuId == 0 ) {
+    if (menu_id == 0 ) {
       MenuId = 13;
-    }
+    } else {
+      MenuId = menu_id;
+    };
+
   }
   if (MenuId>=0) {
     try{
@@ -331,7 +334,7 @@ void FarEditorSet::chooseType()
             KeyAssignDlgData[2].Data=v->getWChars();
 
           HANDLE hDlg = Info.DialogInit(&MainGuid, &AssignKeyDlg, -1, -1, 34, 6, L"keyassign", KeyAssignDlgData, ARRAY_SIZE(KeyAssignDlgData), 0, 0, KeyDialogProc, null);
-          int res = Info.DialogRun(hDlg);
+          intptr_t res = Info.DialogRun(hDlg);
 
           if (res!=-1) 
           {
@@ -524,7 +527,7 @@ void FarEditorSet::configure(bool fromEditor)
     * Dialog activation
     */
     HANDLE hDlg = Info.DialogInit(&MainGuid, &PluginConfig, -1, -1, 58, 24, L"config", fdi, ARRAY_SIZE(fdi), 0, 0, SettingDialogProc, this);
-    int i = Info.DialogRun(hDlg);
+    intptr_t i = Info.DialogRun(hDlg);
 
     if (i == IDX_OK){
       fdi[IDX_CATALOG_EDIT].Data = (const wchar_t*)trim((wchar_t*)Info.SendDlgMessage(hDlg,DM_GETCONSTTEXTPTR,IDX_CATALOG_EDIT,0));
@@ -629,7 +632,7 @@ const String *FarEditorSet::chooseHRDName(const String *current, DString _hrdCla
     }
   };
 
-  int result = Info.Menu(&MainGuid, &HrdMenu, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
+  intptr_t result = Info.Menu(&MainGuid, &HrdMenu, -1, -1, 0, FMENU_WRAPMODE|FMENU_AUTOHIGHLIGHT,
     GetMsg(mSelectHRD), 0, L"hrd", NULL, NULL, menuElements, count);
   delete[] menuElements;
 
@@ -1638,7 +1641,7 @@ void FarEditorSet::configureHrc()
 
   dialogFirstFocus = true;
   HANDLE hDlg = Info.DialogInit(&MainGuid,&HrcPluginConfig, -1, -1, 59, 23, L"confighrc", fdi, ARRAY_SIZE(fdi), 0, 0, SettingHrcDialogProc, this);
-  int i = Info.DialogRun(hDlg);
+  intptr_t i = Info.DialogRun(hDlg);
   
   for (size_t idx = 0; idx < l->ItemsNumber; idx++){
     if (l->Items[idx].Text){

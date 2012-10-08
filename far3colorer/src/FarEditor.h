@@ -8,7 +8,7 @@
 
 #include"pcolorer.h"
 
-const int CurrentEditor = -1;
+const intptr_t CurrentEditor = -1;
 const DString DDefaultScheme=DString("default");
 const DString DShowCross    =DString("show-cross");
 const DString DNone         =DString("none");
@@ -158,8 +158,8 @@ private:
   bool foreDefault(FarColor col);
   bool backDefault(FarColor col);
   void showOutliner(Outliner *outliner);
-  void addFARColor(int lno, int s, int e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=0);
-  void deleteFarColor(int lno, int s);
+  void addFARColor(intptr_t lno, intptr_t s, intptr_t e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=0);
+  void deleteFarColor(intptr_t lno, intptr_t s);
   const wchar_t *GetMsg(int msg);
 };
 #endif

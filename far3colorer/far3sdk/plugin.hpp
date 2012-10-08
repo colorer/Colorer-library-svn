@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2838
+  Plugin API for Far Manager 3.0 build 2876
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2838
+#define FARMANAGERVERSION_BUILD 2876
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -1089,6 +1089,7 @@ enum FARMACROVARTYPE
 	FMVT_INTEGER                = 1,
 	FMVT_STRING                 = 2,
 	FMVT_DOUBLE                 = 3,
+	FMVT_BOOLEAN                = 4,
 };
 
 struct FarMacroValue
@@ -1104,6 +1105,33 @@ struct FarMacroValue
 	Value
 #endif
 	;
+};
+
+enum MACROPLUGINRETURNTYPE
+{
+	MPRT_NORMALFINISH  = 0,
+	MPRT_ERRORFINISH   = 1,
+	MPRT_KEYS          = 2,
+	MPRT_PRINT         = 3,
+	MPRT_PLUGINCALL    = 4,
+	MPRT_PLUGINMENU    = 5,
+	MPRT_PLUGINCONFIG  = 6,
+	MPRT_PLUGINCOMMAND = 7,
+};
+
+struct MacroPluginReturn
+{
+	struct FarMacroValue *Args;
+	int ArgNum;
+	enum MACROPLUGINRETURNTYPE ReturnType;
+};
+
+struct FarMacroCall
+{
+	struct FarMacroValue *Args;
+	int ArgNum;
+	void (_cdecl *Callback)(void *CallbackData, struct FarMacroValue *Value);
+	void *CallbackData;
 };
 
 
@@ -1872,18 +1900,18 @@ enum FARCLIPBOARD_TYPE
 };
 
 // <C&C++>
-typedef intptr_t (WINAPIV *FARSTDSPRINTF)(wchar_t *Buffer,const wchar_t *Format,...);
-typedef intptr_t (WINAPIV *FARSTDSNPRINTF)(wchar_t *Buffer,size_t Sizebuf,const wchar_t *Format,...);
-typedef intptr_t (WINAPIV *FARSTDSSCANF)(const wchar_t *Buffer, const wchar_t *Format,...);
+typedef int (WINAPIV *FARSTDSPRINTF)(wchar_t *Buffer,const wchar_t *Format,...);
+typedef int (WINAPIV *FARSTDSNPRINTF)(wchar_t *Buffer,size_t Sizebuf,const wchar_t *Format,...);
+typedef int (WINAPIV *FARSTDSSCANF)(const wchar_t *Buffer, const wchar_t *Format,...);
 // </C&C++>
-typedef void (WINAPI *FARSTDQSORT)(void *base, size_t nelem, size_t width, intptr_t (WINAPI *fcmp)(const void *, const void *,void *userparam),void *userparam);
-typedef void   *(WINAPI *FARSTDBSEARCH)(const void *key, const void *base, size_t nelem, size_t width, intptr_t (WINAPI *fcmp)(const void *, const void *,void *userparam),void *userparam);
+typedef void (WINAPI *FARSTDQSORT)(void *base, size_t nelem, size_t width, int (WINAPI *fcmp)(const void *, const void *,void *userparam),void *userparam);
+typedef void   *(WINAPI *FARSTDBSEARCH)(const void *key, const void *base, size_t nelem, size_t width, int (WINAPI *fcmp)(const void *, const void *,void *userparam),void *userparam);
 typedef size_t (WINAPI *FARSTDGETFILEOWNER)(const wchar_t *Computer,const wchar_t *Name,wchar_t *Owner,size_t Size);
 typedef size_t (WINAPI *FARSTDGETNUMBEROFLINKS)(const wchar_t *Name);
-typedef intptr_t (WINAPI *FARSTDATOI)(const wchar_t *s);
-typedef __int64(WINAPI *FARSTDATOI64)(const wchar_t *s);
-typedef wchar_t   *(WINAPI *FARSTDITOA64)(__int64 value, wchar_t *string, intptr_t radix);
-typedef wchar_t   *(WINAPI *FARSTDITOA)(intptr_t value, wchar_t *string, intptr_t radix);
+typedef int (WINAPI *FARSTDATOI)(const wchar_t *s);
+typedef __int64 (WINAPI *FARSTDATOI64)(const wchar_t *s);
+typedef wchar_t   *(WINAPI *FARSTDITOA64)(__int64 value, wchar_t *string, int radix);
+typedef wchar_t   *(WINAPI *FARSTDITOA)(int value, wchar_t *string, int radix);
 typedef wchar_t   *(WINAPI *FARSTDLTRIM)(wchar_t *Str);
 typedef wchar_t   *(WINAPI *FARSTDRTRIM)(wchar_t *Str);
 typedef wchar_t   *(WINAPI *FARSTDTRIM)(wchar_t *Str);
@@ -1894,18 +1922,18 @@ typedef const wchar_t*(WINAPI *FARSTDPOINTTONAME)(const wchar_t *Path);
 typedef BOOL (WINAPI *FARSTDADDENDSLASH)(wchar_t *Path);
 typedef BOOL (WINAPI *FARSTDCOPYTOCLIPBOARD)(enum FARCLIPBOARD_TYPE Type, const wchar_t *Data);
 typedef size_t (WINAPI *FARSTDPASTEFROMCLIPBOARD)(enum FARCLIPBOARD_TYPE Type, wchar_t *Data, size_t Size);
-typedef intptr_t (WINAPI *FARSTDLOCALISLOWER)(wchar_t Ch);
-typedef intptr_t (WINAPI *FARSTDLOCALISUPPER)(wchar_t Ch);
-typedef intptr_t (WINAPI *FARSTDLOCALISALPHA)(wchar_t Ch);
-typedef intptr_t (WINAPI *FARSTDLOCALISALPHANUM)(wchar_t Ch);
+typedef int (WINAPI *FARSTDLOCALISLOWER)(wchar_t Ch);
+typedef int (WINAPI *FARSTDLOCALISUPPER)(wchar_t Ch);
+typedef int (WINAPI *FARSTDLOCALISALPHA)(wchar_t Ch);
+typedef int (WINAPI *FARSTDLOCALISALPHANUM)(wchar_t Ch);
 typedef wchar_t (WINAPI *FARSTDLOCALUPPER)(wchar_t LowerChar);
 typedef wchar_t (WINAPI *FARSTDLOCALLOWER)(wchar_t UpperChar);
 typedef void (WINAPI *FARSTDLOCALUPPERBUF)(wchar_t *Buf,intptr_t Length);
 typedef void (WINAPI *FARSTDLOCALLOWERBUF)(wchar_t *Buf,intptr_t Length);
 typedef void (WINAPI *FARSTDLOCALSTRUPR)(wchar_t *s1);
 typedef void (WINAPI *FARSTDLOCALSTRLWR)(wchar_t *s1);
-typedef intptr_t (WINAPI *FARSTDLOCALSTRICMP)(const wchar_t *s1,const wchar_t *s2);
-typedef intptr_t (WINAPI *FARSTDLOCALSTRNICMP)(const wchar_t *s1,const wchar_t *s2,intptr_t n);
+typedef int (WINAPI *FARSTDLOCALSTRICMP)(const wchar_t *s1,const wchar_t *s2);
+typedef int (WINAPI *FARSTDLOCALSTRNICMP)(const wchar_t *s1,const wchar_t *s2,intptr_t n);
 
 typedef unsigned __int64 PROCESSNAME_FLAGS;
 static const PROCESSNAME_FLAGS
@@ -1938,7 +1966,7 @@ typedef wchar_t*(WINAPI *FARSTDXLAT)(wchar_t *Line,intptr_t StartPos,intptr_t En
 
 typedef BOOL (WINAPI *FARSTDKEYNAMETOINPUTRECORD)(const wchar_t *Name,INPUT_RECORD* Key);
 
-typedef intptr_t (WINAPI *FRSUSERFUNC)(
+typedef int (WINAPI *FRSUSERFUNC)(
     const struct PluginPanelItem *FData,
     const wchar_t *FullName,
     void *Param
@@ -2112,6 +2140,14 @@ struct ArclitePrivateInfo
 	FARAPIDELETEFILE DeleteFile;
 	FARAPIREMOVEDIRECTORY RemoveDirectory;
 	FARAPICREATEDIRECTORY CreateDirectory;
+};
+
+typedef intptr_t (WINAPI *FARAPICALLFAR)(intptr_t CheckCode, struct FarMacroCall* Data);
+
+struct MacroPrivateInfo
+{
+	size_t StructSize;
+	FARAPICALLFAR CallFar;
 };
 
 typedef unsigned __int64 PLUGIN_FLAGS;
@@ -2348,6 +2384,15 @@ enum OPENFROM
 	OPEN_ANALYSE            = 9,
 	OPEN_RIGHTDISKMENU      = 10,
 	OPEN_FROMMACRO          = 11,
+	OPEN_LUAMACRO           = 100,
+};
+
+enum MACROCALLTYPE
+{
+	MCT_MACROINIT          = 0,
+	MCT_MACROSTEP          = 1,
+	MCT_MACROFINAL         = 2,
+	MCT_MACROPARSE         = 3,
 };
 
 
@@ -2487,7 +2532,6 @@ struct ProcessConsoleInputInfo
 	size_t StructSize;
 	PROCESSCONSOLEINPUT_FLAGS Flags;
 	INPUT_RECORD Rec;
-	HANDLE hPanel;
 };
 
 struct ExitInfo
