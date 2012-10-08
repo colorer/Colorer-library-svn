@@ -55,5 +55,8 @@
     <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">
       <location link="&hrd;/console/emu/mirror.hrd"/>
     </hrd>
+    <hrd class="console" name="visual" description="Visual by Roman Kuzmin">
+      <location link="&hrd;/console/visual.hrd"/>
+    </hrd>
 
   </hrd-sets>
