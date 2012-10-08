@@ -3093,12 +3093,14 @@ sleep -- Delay execution
 sys_getloadavg -- Gets system load average
 time_nanosleep -- Delay for a number of seconds and nanoseconds
 time_sleep_until -- Make the script sleep until the specified timeuniqid -- Generate a unique ID
+uniqid -- Generate a unique ID
 unpack -- Unpack data from binary string
 usleep -- Delay execution in microseconds
 
 CONNECTION_ABORTED (integer)
 CONNECTION_NORMAL (integer)
 CONNECTION_TIMEOUT (integer)
+__COMPILER_HALT_OFFSET__ (integer)
 
      <!-- LXII. mnoGoSearch Functions -->
 udm_add_search_limit -- Add various search limits
@@ -5781,6 +5783,13 @@ HTML_ENTITIES (integer)
 ENT_COMPAT (integer)
 ENT_QUOTES (integer)
 ENT_NOQUOTES (integer)
+ENT_IGNORE (integer)
+ENT_SUBSTITUTE (integer)
+ENT_DISALLOWED (integer)
+ENT_HTML401 (integer)
+ENT_XML1 (integer)
+ENT_XHTML (integer)
+ENT_HTML5 (integer) 
 CHAR_MAX (integer)
 LC_CTYPE (integer)
 LC_NUMERIC (integer)

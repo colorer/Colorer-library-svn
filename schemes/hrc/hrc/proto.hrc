@@ -199,13 +199,13 @@
   <prototype name="html-css" group="inet" description="css for html">
     <location link="inet/html-css.hrc"/>
     <filename weight="0">/\.(css)$/i</filename>
-    <parameters>
+    <!--parameters>
       <param name="ie-css" value="true" description="Use non-standard MSIE css extensions"/>
       <param name="moz-css" value="true" description="Use non-standard Gecho-based css extensions"/>
       <param name="opera-css" value="true" description="Use non-standard opera-based css extensions"/>
       <param name="webkit-css" value="true" description="Use non-standard webkit-based css extensions"/>
       <param name="khtml-css" value="true" description="Use non-standard khtml-based css extensions"/>
-    </parameters>
+    </parameters-->
   </prototype>
   <prototype name="svg-css" group="inet" description="css for svg">
     <location link="inet/svg-css.hrc"/>

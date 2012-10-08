@@ -52,11 +52,15 @@
 		<region name="PseudoElement" parent="def:Keyword" />
 		<region name="PseudoElementUnknown" parent="default" />
 		<region name="PseudoClassUnknown" parent="default" />
+		<region name="DeprecatedPseudoClass" parent="def:DeprecatedKeyword"/>
+		<region name="DeprecatedPseudoElement" parent="def:DeprecatedKeyword"/>
 
 		<region name="PropertyName" parent="def:KeywordStrong" />
 		<region name="PropertyFunc" parent="def:FunctionKeyword" />
 		<region name="PropertyValue" parent="def:Parameter" />
 		<region name="ImportantValue" parent="def:Keyword" />
+		<region name="DeprecatedPropertyFunc" parent="def:DeprecatedKeyword"/>
+		<region name="DeprecatedPropertyName" parent="def:DeprecatedKeyword"/>
 
 		<region name="RuleOutline" parent="def:Outlined"/>
 		<region name="DirectiveOutline" parent="def:Outlined"/>
@@ -135,8 +139,242 @@
 			</keywords>
 		</scheme>
     
-    
-		<scheme name="PropertyNames">
+    	<scheme name="PropertyNames">
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="-khtml-border-bottom-left-radius"/>
+				<word name="-khtml-border-bottom-right-radius"/>
+				<word name="-khtml-border-radius"/>
+				<word name="-khtml-border-top-left-radius"/>
+				<word name="-khtml-border-top-right-radius"/>
+				<word name="-khtml-opacity"/>
+			</keywords>
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="-moz-animation-delay" />
+				<word name="-moz-animation-direction" />
+				<word name="-moz-animation-duration" />
+				<word name="-moz-animation-fill-mode" />
+				<word name="-moz-animation-iteration-count" />
+				<word name="-moz-animation-name" />
+				<word name="-moz-animation-play-state" />
+				<word name="-moz-animation-timing-function" />
+				<word name="-moz-animation"/>
+				<word name="-moz-appearance" />
+				<word name="-moz-backface-visibility" />
+				<word name="-moz-background-clip"/>
+				<word name="-moz-background-inline-policy"/>
+				<word name="-moz-background-origin"/>
+				<word name="-moz-background-size"/>
+				<word name="-moz-binding"/>
+				<word name="-moz-border-bottom-colors"/>
+				<word name="-moz-border-colors"/>
+				<word name="-moz-border-end-color"/>
+				<word name="-moz-border-end-style"/>
+				<word name="-moz-border-end-width"/>
+				<word name="-moz-border-end"/>
+				<word name="-moz-border-image-outset" />
+				<word name="-moz-border-image-repeat" />
+				<word name="-moz-border-image-slice" />
+				<word name="-moz-border-image-source" />
+				<word name="-moz-border-image-width" />
+				<word name="-moz-border-image" />
+				<word name="-moz-border-left-colors"/>
+				<word name="-moz-border-radius-bottomleft"/>
+				<word name="-moz-border-radius-bottomright"/>
+				<word name="-moz-border-radius-topleft"/>
+				<word name="-moz-border-radius-topright"/>
+				<word name="-moz-border-radius"/>
+				<word name="-moz-border-right-colors"/>
+				<word name="-moz-border-start-color"/>
+				<word name="-moz-border-start-style"/>
+				<word name="-moz-border-start-width"/>
+				<word name="-moz-border-start"/>
+				<word name="-moz-border-top-colors"/>
+				<word name="-moz-box-align"/>
+				<word name="-moz-box-direction"/>
+				<word name="-moz-box-flex"/>
+				<word name="-moz-box-flexgroup"/>
+				<word name="-moz-box-ordinal-group"/>
+				<word name="-moz-box-orient"/>
+				<word name="-moz-box-pack"/>
+				<word name="-moz-box-shadow"/>
+				<word name="-moz-box-sizing"/>
+				<word name="-moz-column-count"/>
+				<word name="-moz-column-fill"/>
+				<word name="-moz-column-gap"/>
+				<word name="-moz-column-rule-color" />
+				<word name="-moz-column-rule-style" />
+				<word name="-moz-column-rule-width" />
+				<word name="-moz-column-rule" />
+				<word name="-moz-column-width" />
+				<word name="-moz-columns" />
+				<word name="-moz-filter" />
+				<word name="-moz-float-edge" />
+				<word name="-moz-font-feature-settings" />
+				<word name="-moz-font-language-override" />
+				<word name="-moz-force-broken-image-icon" />
+				<word name="-moz-hyphens" />
+				<word name="-moz-image-region"/>
+				<word name="-moz-key-equivalent"/>
+				<word name="-moz-margin-end"/>
+				<word name="-moz-margin-start"/>
+				<word name="-moz-mask" />
+				<word name="-moz-opacity"/>
+				<word name="-moz-orient"/>
+				<word name="-moz-outline-color"/>
+				<word name="-moz-outline-offset" />
+				<word name="-moz-outline-radius-bottomleft"/>
+				<word name="-moz-outline-radius-bottomright"/>
+				<word name="-moz-outline-radius-topleft"/>
+				<word name="-moz-outline-radius-topright"/>
+				<word name="-moz-outline-radius"/>
+				<word name="-moz-outline-style"/>
+				<word name="-moz-outline-width"/>
+				<word name="-moz-outline"/>
+				<word name="-moz-padding-end" />
+				<word name="-moz-padding-start" />
+				<word name="-moz-perspective-origin" />
+				<word name="-moz-perspective" />
+				<word name="-moz-script-level" />
+				<word name="-moz-script-min-size" />
+				<word name="-moz-script-size-multiplier" />
+				<word name="-moz-stack-sizing" />
+				<word name="-moz-tab-size" />
+				<word name="-moz-text-align-last" />
+				<word name="-moz-text-blink" />
+				<word name="-moz-text-decoration-color" />
+				<word name="-moz-text-decoration-line" />
+				<word name="-moz-text-decoration-style" />
+				<word name="-moz-text-size-adjust" />
+				<word name="-moz-transform-origin" />
+				<word name="-moz-transform-style" />
+				<word name="-moz-transform" />
+				<word name="-moz-transition-delay" />
+				<word name="-moz-transition-duration" />
+				<word name="-moz-transition-property" />
+				<word name="-moz-transition-timing-function" />
+				<word name="-moz-transition" />
+				<word name="-moz-user-focus"/>
+				<word name="-moz-user-input"/>
+				<word name="-moz-user-modify" />
+				<word name="-moz-user-select"/>
+				<word name="-moz-window-shadow"/>
+			</keywords>
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="behavior"/>
+				<word name="filter"/>
+				<word name="layout-flow"/>
+				<word name="layout-grid-char"/>
+				<word name="layout-grid-line"/>
+				<word name="layout-grid-type"/>
+				<word name="layout-grid-mode"/>
+				<word name="text-autospace"/>
+				<word name="text-justify"/>
+				<word name="text-kashida-space"/>
+				<word name="text-underline-position"/>
+				<word name="word-break"/>
+				<word name="word-wrap"/>
+				<word name="writing-mode"/>
+				<word name="zoom"/>
+				<word name="line-break"/>
+				<word name="ruby-overhang"/>
+				<word name="ruby-position"/>
+				<word name="scrollbar-3dlight-color"/>
+				<word name="scrollbar-arrow-color"/>
+				<word name="scrollbar-base-color"/>
+				<word name="scrollbar-darkshadow-color"/>
+				<word name="scrollbar-face-color"/>
+				<word name="scrollbar-highlight-color"/>
+				<word name="scrollbar-shadow-color"/>
+				<word name="-ms-accelerator" />
+				<word name="-ms-background-position-x" />
+				<word name="-ms-background-position-y" />
+				<word name="-ms-behavior" />
+				<word name="-ms-block-progression" />
+				<word name="-ms-box-sizing"/>
+				<word name="-ms-filter" />
+				<word name="-ms-ime-mode" />
+				<word name="-ms-interpolation-mode" />
+				<word name="-ms-layout-grid-char" />
+				<word name="-ms-layout-grid-line" />
+				<word name="-ms-layout-grid-mode" />
+				<word name="-ms-layout-grid-type" />
+				<word name="-ms-layout-grid" />
+				<word name="-ms-line-break" />
+				<word name="-ms-line-grid-mode" />
+				<word name="-ms-overflow-x" />
+				<word name="-ms-overflow-y" />
+				<word name="-ms-scrollbar-3dlight-color" />
+				<word name="-ms-scrollbar-arrow-color" />
+				<word name="-ms-scrollbar-base-color" />
+				<word name="-ms-scrollbar-darkshadow-color" />
+				<word name="-ms-scrollbar-face-color" />
+				<word name="-ms-scrollbar-highlight-color" />
+				<word name="-ms-scrollbar-shadow-color" />
+				<word name="-ms-scrollbar-track-color" />
+				<word name="-ms-text-align-last" />
+				<word name="-ms-text-autospace" />
+				<word name="-ms-text-justify" />
+				<word name="-ms-text-kashida-space" />
+				<word name="-ms-text-overflow" />
+				<word name="-ms-text-size-adjust"/>
+				<word name="-ms-text-underline-position" />
+				<word name="-ms-transform"/>
+				<word name="-ms-transition"/>
+				<word name="-ms-word-break" />
+				<word name="-ms-word-wrap" />
+				<word name="-ms-writing-mode" />
+				<word name="-ms-zoom" />
+			</keywords>
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="-o-background-size"/>
+				<word name="-o-border-image"/>
+				<word name="-o-device-pixel-ratio"/>
+				<word name="-o-focus-opacity"/>
+				<word name="-o-link"/>
+				<word name="-o-link-source"/>
+				<word name="-o-mini-fold"/>
+				<word name="-o-object-fit"/>
+				<word name="-o-object-position"/>
+				<word name="-o-tab-size"/>
+				<word name="-o-table-baseline"/>
+				<word name="-o-text-overflow"/>
+				<word name="-o-transform-origin"/>
+				<word name="-o-transform"/>
+				<word name="-o-transition-delay"/>
+				<word name="-o-transition-duration"/>
+				<word name="-o-transition-property"/>
+				<word name="-o-transition-timing-function"/>
+				<word name="-o-transition"/>
+				<word name="-o-user-select"/>
+			</keywords>
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="-pie-background"/>
+			</keywords>
+			<keywords region="DeprecatedPropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
+				<word name="-webkit-animation"/>
+				<word name="-webkit-appearance"/>
+				<word name="-webkit-background-clip"/>
+				<word name="-webkit-background-origin"/>
+				<word name="-webkit-background-size"/>
+				<word name="-webkit-border-bottom-left-radius"/>
+				<word name="-webkit-border-bottom-right-radius"/>
+				<word name="-webkit-border-top-left-radius"/>
+				<word name="-webkit-border-top-right-radius"/>
+				<word name="-webkit-border-radius"/>
+				<word name="-webkit-box-shadow"/>
+				<word name="-webkit-box-sizing"/>
+				<word name="-webkit-column-count"/>
+				<word name="-webkit-column-gap"/>
+				<word name="-webkit-column-rule"/>
+				<word name="-webkit-column-width"/>
+				<word name="-webkit-columns"/>
+				<word name="-webkit-margin-top-collapse"/>
+				<word name="-webkit-text-size-adjust"/>
+				<word name="-webkit-transform"/>
+				<word name="-webkit-transition"/>
+				<word name="-webkit-user-select"/>
+			</keywords>
+
 			<keywords region="PropertyName" ignorecase="yes" worddiv='%worddiv-class;'>
 				<word name="ACCELERATOR"/>
 				<word name="animation"/>
@@ -363,7 +601,7 @@
 		</scheme>
     
 		<scheme name="NumericArc">
-			<regexp match="/([+\-])?[\d\.]+ (deg|g?rad)?\M\b/x"
+			<regexp match="/([+\-])?[\d\.]+ (deg|g?rad|turn)?\M\b/x"
 				region0="Number" region1="def:Symbol" region2="UnitSuffix"/>
 		</scheme>
 		<scheme name="NumericArcLst">
@@ -455,20 +693,23 @@
     
     
 		<scheme name="CssFunctions">
-			<keywords region="PropertyFunc" ignorecase="yes">
-				<word name="-ms-linear-gradient"/>
+		    <keywords region="DeprecatedPropertyFunc" ignorecase="yes">
 				<word name="-moz-linear-gradient"/>
+				<word name="-moz-radial-gradient"/>
+				<word name="-ms-linear-gradient"/>
+				<word name="-ms-radial-gradient"/>
 				<word name="-o-linear-gradient"/>
+				<word name="-o-radial-gradient"/>
 				<word name="-webkit-gradient"/>
 				<word name="-webkit-linear-gradient"/>
-				<word name="-ms-radial-gradient"/>
-				<word name="-moz-radial-gradient"/>
 				<word name="-webkit-radial-gradient"/>
-            
+		    </keywords>
+			<keywords region="PropertyFunc" ignorecase="yes">
 				<word name="attr"/>
 				<word name="hsl"/>
 				<word name="hsla"/>
 				<word name="linear-gradient"/>
+				<word name="radial-gradient"/>
 				<word name="rect"/>
 				<word name="rgb"/>
 				<word name="rgba"/>
@@ -809,6 +1050,10 @@
 		</scheme>
     
 		<scheme name="PseudoClass">
+			<keywords region="DeprecatedPseudoClass">
+				<word name="-moz-placeholder" />
+				<word name="-webkit-autofill" />
+			</keywords>
 			<keywords region="PseudoClass">
 				<word name="active"/>
 				<word name="after"/>
@@ -848,23 +1093,22 @@
 				<word name="target"/>
 				<word name="valid"/>
 				<word name="visited"/>
-    
-				<word name="-moz-placeholder" />
 			</keywords>
 		</scheme>
     
 		<scheme name="PseudoElement">
+			<keywords region="DeprecatedPseudoElement">
+				<word name="-moz-focus-inner"/>
+				<word name="-webkit-input-placeholder"/>
+				<word name="-webkit-search-cancel-button"/>
+				<word name="-webkit-search-decoration"/>
+			</keywords>
 			<keywords region="PseudoElement">
 				<word name="after"/>
 				<word name="before"/>
 				<word name="first-letter"/>
 				<word name="first-line"/>
 				<word name="selection"/>
-    
-				<word name="-moz-focus-inner"/>
-				<word name="-webkit-input-placeholder"/>
-				<word name="-webkit-search-cancel-button"/>
-				<word name="-webkit-search-decoration"/>
 			</keywords>
 		</scheme>
     
@@ -992,7 +1236,7 @@
 				region01="SymbolStrong" region02="Directive"
 				scheme="MozDocument"
 			/>
-			<block start="/(\@)((-webkit-|-moz-)?keyframes)\s*([\w\-]+)\s*((\{))/" end="/(\})/"
+			<block start="/(\@)((-webkit-|-moz-|-o-)?keyframes)\s*([\w\-]+)\s*((\{))/" end="/(\})/"
 				region01="SymbolStrong" region02="Directive" region04="String" region05="SymbolStrong" region06="PairStart"
 				region10="SymbolStrong" region11="PairEnd"
 				scheme="Animation"
