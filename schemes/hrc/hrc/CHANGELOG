@@ -1,3 +1,4 @@
+2012-10-08 r1876 (FarColorer 1.0.3.12)
   New:
     - powershell (Roman Kuzmin)
     - R (Roman Kuzmin)
@@ -11,7 +12,6 @@
     - less - some fixes (lazyeugene)
     - SilverStripe - some fixes (lazyeugene)
     - css - new keywords (lazyeugene)
-    - html - some bugfixes, some simplifies (lazyeugene)		
     - cobol - many fixes (Pavel Pleva)
     - cobolfr - many fixes (Pavel Pleva)
     - jcl - many fixes (Pavel Pleva)
