@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 2876
+  Plugin API for Far Manager 3.0 build 2948
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 2876
+#define FARMANAGERVERSION_BUILD 2948
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -1030,22 +1030,8 @@ enum FARMACROSTATE
 
 enum FARMACROPARSEERRORCODE
 {
-	MPEC_SUCCESS                = 0,
-	MPEC_UNRECOGNIZED_KEYWORD   = 1,
-	MPEC_UNRECOGNIZED_FUNCTION  = 2,
-	MPEC_FUNC_PARAM             = 3,
-	MPEC_NOT_EXPECTED_ELSE      = 4,
-	MPEC_NOT_EXPECTED_END       = 5,
-	MPEC_UNEXPECTED_EOS         = 6,
-	MPEC_EXPECTED_TOKEN         = 7,
-	MPEC_BAD_HEX_CONTROL_CHAR   = 8,
-	MPEC_BAD_CONTROL_CHAR       = 9,
-	MPEC_VAR_EXPECTED           =10,
-	MPEC_EXPR_EXPECTED          =11,
-	MPEC_ZEROLENGTHMACRO        =12,
-	MPEC_INTPARSERERROR         =13,
-	MPEC_CONTINUE_OTL           =14,
-	MPEC_BREAK_OTL              =15,
+	MPEC_SUCCESS = 0,
+	MPEC_ERROR   = 1,
 };
 
 struct MacroParseResult
@@ -1090,6 +1076,7 @@ enum FARMACROVARTYPE
 	FMVT_STRING                 = 2,
 	FMVT_DOUBLE                 = 3,
 	FMVT_BOOLEAN                = 4,
+	FMVT_BINARY                 = 5,
 };
 
 struct FarMacroValue
@@ -1097,9 +1084,15 @@ struct FarMacroValue
 	enum FARMACROVARTYPE Type;
 	union
 	{
-		__int64  Integer;
-		double   Double;
+		__int64        Integer;
+		__int64        Boolean;
+		double         Double;
 		const wchar_t *String;
+		struct
+		{
+			void *Data;
+			size_t Size;
+		} Binary;
 	}
 #ifndef __cplusplus
 	Value
@@ -1111,26 +1104,28 @@ enum MACROPLUGINRETURNTYPE
 {
 	MPRT_NORMALFINISH  = 0,
 	MPRT_ERRORFINISH   = 1,
-	MPRT_KEYS          = 2,
-	MPRT_PRINT         = 3,
-	MPRT_PLUGINCALL    = 4,
-	MPRT_PLUGINMENU    = 5,
-	MPRT_PLUGINCONFIG  = 6,
-	MPRT_PLUGINCOMMAND = 7,
+	MPRT_ERRORPARSE    = 2,
+	MPRT_KEYS          = 3,
+	MPRT_PRINT         = 4,
+	MPRT_PLUGINCALL    = 5,
+	MPRT_PLUGINMENU    = 6,
+	MPRT_PLUGINCONFIG  = 7,
+	MPRT_PLUGINCOMMAND = 8,
 };
 
 struct MacroPluginReturn
 {
-	struct FarMacroValue *Args;
-	int ArgNum;
+	size_t Count;
+	struct FarMacroValue *Values;
 	enum MACROPLUGINRETURNTYPE ReturnType;
 };
 
 struct FarMacroCall
 {
-	struct FarMacroValue *Args;
-	int ArgNum;
-	void (_cdecl *Callback)(void *CallbackData, struct FarMacroValue *Value);
+	size_t StructSize;
+	size_t Count;
+	struct FarMacroValue *Values;
+	void (WINAPI *Callback)(void *CallbackData, struct FarMacroValue *Values, size_t Count);
 	void *CallbackData;
 };
 
@@ -1227,7 +1222,7 @@ static const VIEWER_OPTIONS
 
 enum VIEWER_SETMODE_TYPES
 {
-	VSMT_HEX                        = 0,
+	VSMT_VIEWMODE                   = 0,
 	VSMT_WRAP                       = 1,
 	VSMT_WORDWRAP                   = 2,
 };
@@ -1290,7 +1285,7 @@ struct ViewerMode
 {
 	uintptr_t CodePage;
 	VIEWER_MODE_FLAGS Flags;
-	enum VIEWER_MODE_TYPE Type;
+	enum VIEWER_MODE_TYPE ViewMode;
 };
 
 struct ViewerInfo
@@ -1511,8 +1506,8 @@ struct EditorInfo
 	intptr_t BlockStartLine;
 	uintptr_t Options;
 	intptr_t TabSize;
-	intptr_t BookmarkCount;
-	intptr_t SessionBookmarkCount;
+	size_t BookmarkCount;
+	size_t SessionBookmarkCount;
 	uintptr_t CurState;
 	uintptr_t CodePage;
 };
@@ -2355,11 +2350,17 @@ struct OpenMacroInfo
 	struct FarMacroValue *Values;
 };
 
+typedef unsigned __int64 FAROPENSHORTCUTFLAGS;
+static const FAROPENSHORTCUTFLAGS
+	FOSF_ACTIVE = 0x0000000000000001ULL,
+	FOSF_NONE   = 0;
+
 struct OpenShortcutInfo
 {
 	size_t StructSize;
 	const wchar_t *HostFile;
 	const wchar_t *ShortcutData;
+	FAROPENSHORTCUTFLAGS Flags;
 };
 
 struct OpenCommandLineInfo
@@ -2370,8 +2371,6 @@ struct OpenCommandLineInfo
 
 enum OPENFROM
 {
-	OPEN_FROM_MASK          = 0x000000FF,
-
 	OPEN_LEFTDISKMENU       = 0,
 	OPEN_PLUGINSMENU        = 1,
 	OPEN_FINDLIST           = 2,
@@ -2393,6 +2392,14 @@ enum MACROCALLTYPE
 	MCT_MACROSTEP          = 1,
 	MCT_MACROFINAL         = 2,
 	MCT_MACROPARSE         = 3,
+};
+
+struct OpenMacroPluginInfo
+{
+	size_t StructSize;
+	enum MACROCALLTYPE CallType;
+	HANDLE Handle;
+	struct FarMacroCall *Data;
 };
 
 
