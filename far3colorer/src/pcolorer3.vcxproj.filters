@@ -81,9 +81,6 @@
     <ClInclude Include="pcolorer.h">
       <Filter>pcolorer3</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>pcolorer3</Filter>
-    </ClInclude>
     <ClInclude Include="SettingsControl.h">
       <Filter>pcolorer3</Filter>
     </ClInclude>

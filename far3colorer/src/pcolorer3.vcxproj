@@ -274,7 +274,6 @@
     <ClInclude Include="FarEditorSet.h" />
     <ClInclude Include="FarHrcSettings.h" />
     <ClInclude Include="pcolorer.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SettingsControl.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="..\..\colorer\src\zlib\inffast.h" />
