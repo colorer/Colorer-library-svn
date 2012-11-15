@@ -123,19 +123,18 @@ HANDLE WINAPI OpenW(const struct OpenInfo *oInfo)
       {
         intptr_t i= Info.MacroControl(&MainGuid, MCTL_GETAREA, 0, NULL);
         OpenMacroInfo* mi=(OpenMacroInfo*)oInfo->Data;
-        int MenuCode=0;
+        int MenuCode=-1;
         if (mi->Count)
         {
-          if (FMVT_INTEGER == mi->Values[0].Type || FMVT_UNKNOWN == mi->Values[0].Type)
-          {
-            MenuCode=(int)mi->Values[0].Integer;
-
-            if (MenuCode < 0)
-              return INVALID_HANDLE_VALUE;
+          switch (mi->Values[0].Type) {
+          case FMVT_INTEGER: MenuCode=(int)mi->Values[0].Integer; break;
+          case FMVT_DOUBLE: MenuCode=(int)mi->Values[0].Double; break;
+          default: MenuCode = -1;
           }
-          else 
-            return INVALID_HANDLE_VALUE;
         }
+
+        if (MenuCode < 0)
+          return INVALID_HANDLE_VALUE;
         editorSet->openMenu(MenuCode);
       }
       break;
