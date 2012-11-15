@@ -38,7 +38,7 @@
       <location link="&hrd;/rgb/contrib/bred3.hrd"/>
     </hrd>
     <hrd class="rgb" name="visual" description="Visual by Roman Kuzmin">
-      <location link="&hrd;/rgb/visual-rgb.hrd"/>
+      <location link="&hrd;/rgb/contrib/visual-rgb.hrd"/>
     </hrd>
 	
   </hrd-sets>

@@ -51,12 +51,15 @@
     <hrd class="console" name="Cyberpunk" description="Cyberpunk black from 4ekucT">
       <location link="&hrd;/console/contrib/cyberpunk.hrd"/>
     </hrd>
+    <hrd class="console" name="visual" description="Visual by Roman Kuzmin">
+      <location link="&hrd;/console/contrib/visual.hrd"/>
+    </hrd>
+    <hrd class="console" name="take4" description="Classic take4 like by Sim">
+      <location link="&hrd;/console/contrib/visual.hrd"/>
+    </hrd>
     
     <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">
       <location link="&hrd;/console/emu/mirror.hrd"/>
-    </hrd>
-    <hrd class="console" name="visual" description="Visual by Roman Kuzmin">
-      <location link="&hrd;/console/contrib/visual.hrd"/>
     </hrd>
 
   </hrd-sets>
