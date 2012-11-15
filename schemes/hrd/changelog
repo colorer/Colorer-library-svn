@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	Перемещен visual.hrd в папку contrib.
+	
+#Revision: 1874
+	Author: ctapmex Date: 2012-10-08 11:43:02 +0600 (Пн, 08 окт 2012)
 	Добавлены стили от Roman Kuzmin
 	
 #Revision: 1400

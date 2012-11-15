@@ -56,7 +56,7 @@
       <location link="&hrd;/console/emu/mirror.hrd"/>
     </hrd>
     <hrd class="console" name="visual" description="Visual by Roman Kuzmin">
-      <location link="&hrd;/console/visual.hrd"/>
+      <location link="&hrd;/console/contrib/visual.hrd"/>
     </hrd>
 
   </hrd-sets>
