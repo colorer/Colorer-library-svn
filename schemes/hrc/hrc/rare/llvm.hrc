@@ -23,7 +23,8 @@
     <region name="llvmNumBin"    parent="NumberBin"/>
     <region name="llvmNumHex"    parent="NumberHex"/>
     <region name="llvmNumDec"    parent="NumberDec"/>
-    <region name="llvmNumOct"    parent="NumberOct"/>
+    <region name="llvmNumOct"    parent="NumberOct"/> 
+    <region name="LabelOutline"  parent="Outlined"/>
 
     <scheme name="llvm">
       <!-- labels -->

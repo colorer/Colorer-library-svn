@@ -55,7 +55,7 @@
       <location link="&hrd;/console/contrib/visual.hrd"/>
     </hrd>
     <hrd class="console" name="take4" description="Classic take4 like by Sim">
-      <location link="&hrd;/console/contrib/visual.hrd"/>
+      <location link="&hrd;/console/contrib/take4.hrd"/>
     </hrd>
     
     <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">

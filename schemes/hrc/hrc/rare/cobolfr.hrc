@@ -30,6 +30,7 @@
       <region name="Exec"      parent="def:StringEdge"/>
       <region name="Number"    parent="def:Number"/>
       <region name="String"    parent="def:String"/>
+      <region name="Ident"     parent="def:Text"/>
 
       <region name="start" parent="def:PairStart"/>
       <region name="end"   parent="def:PairEnd"/>

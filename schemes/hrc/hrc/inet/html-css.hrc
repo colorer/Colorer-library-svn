@@ -39,6 +39,7 @@
 
 <type name="html-css">
 
+<region name="msie" parent="def:DeprecatedKeyword"/>
 <region name="PropertyValue" parent="def:Parameter"/>
 
 <scheme name="PropertyNames"> 

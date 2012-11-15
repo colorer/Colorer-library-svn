@@ -1,3 +1,8 @@
+2012-15-11
+  Fixed:
+    - pl1 - fix not escaped %
+    - llvm, html-css, cobolfr - Added missing regions
+
 2012-10-08 r1876 (FarColorer 1.0.3.12)
   New:
     - powershell (Roman Kuzmin)

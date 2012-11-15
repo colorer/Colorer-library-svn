@@ -71,7 +71,7 @@
          <!-- Strings -->
          <block start="/(?{start}(\x22|\'))/" end="/(?{end}\Y1)/" scheme="def:empty" region="String"/>
          <!-- %-directives -->
-         <regexp match="/%\s*(INCLUDE|LINE|NOPRINT|NOTE|PAGE|POP|PRINT|PUSH|SKIP)%b2;/i" region0="Prepro"/>
+         <regexp match="/\%\s*(INCLUDE|LINE|NOPRINT|NOTE|PAGE|POP|PRINT|PUSH|SKIP)%b2;/i" region0="Prepro"/>
          <!-- Symbols -->
          <keywords region="Symbol">
             <symb name="="/>
@@ -100,25 +100,25 @@
       <scheme name="prepro">
          <inherit scheme="common"/>
          <!-- Special preprocessor comments -->
-         <block start="/^.\s*(?{start}(%\s*IF\s+0(?:\s*=\s*1)?\s+%?\s*THEN\s+%?\s*DO)(;)?)%b2;/i"
-                end="/^.\s*(?{end}%\s*END)%b2;/i"
+         <block start="/^.\s*(?{start}(\%\s*IF\s+0(?:\s*=\s*1)?\s+\%?\s*THEN\s+\%?\s*DO)(;)?)%b2;/i"
+                end="/^.\s*(?{end}\%\s*END)%b2;/i"
                 scheme="def:empty" region="Comment" region01="Prepro" region02="Semicolon" region10="Prepro"/>
          <!-- %comment -->
-         <regexp match="/%b1;(%)(\s*\/\*)?=/" region1="Prepro"/>
+         <regexp match="/%b1;(\%)(\s*\/\*)?=/" region1="Prepro"/>
          <!-- %assignment statement -->
-         <regexp match="/%b1;(%)(\s*%ident;\s*=)?=/" region1="Prepro"/>
+         <regexp match="/%b1;(\%)(\s*%ident;\s*=)?=/" region1="Prepro"/>
          <!-- Statements with labels -->
-         <regexp match="/(%)\s*(?:%label1;)?(DEACT(?:IVATE)?|IF|NOTE|REPLACE)%b2;/i" region1="Prepro" region2="Prepro"/>
-         <regexp match="/(%)\s*(?:%label1;)?(GO\ *TO|ITERATE|LEAVE)(?:%label2;)?%b2;/i" region1="Prepro" region2="Prepro"/>
+         <regexp match="/(\%)\s*(?:%label1;)?(DEACT(?:IVATE)?|IF|NOTE|REPLACE)%b2;/i" region1="Prepro" region2="Prepro"/>
+         <regexp match="/(\%)\s*(?:%label1;)?(GO\ *TO|ITERATE|LEAVE)(?:%label2;)?%b2;/i" region1="Prepro" region2="Prepro"/>
          <!-- Statements with labels and paired -->
-         <block start="/(?{start}(%)\s*(?:%label1;)?(DO|SELECT))%b2;/i"
-                end="/(?{end}(%)\s*(?:%label1;)?(END)(?:%label2;)?)%b2;/i"
+         <block start="/(?{start}(\%)\s*(?:%label1;)?(DO|SELECT))%b2;/i"
+                end="/(?{end}(\%)\s*(?:%label1;)?(END)(?:%label2;)?)%b2;/i"
                 scheme="pl1" region01="Prepro" region02="Prepro" region11="Prepro" region12="Prepro"/>
-         <block start="/(?{start}(%)\s*(?:%label1;)?(PROC(?:EDURE)?))%b2;/i"
-                end="/(?{end}(%)\s*(?:%label1;)?(END)(?:%label2;)?)%b2;/i"
+         <block start="/(?{start}(\%)\s*(?:%label1;)?(PROC(?:EDURE)?))%b2;/i"
+                end="/(?{end}(\%)\s*(?:%label1;)?(END)(?:%label2;)?)%b2;/i"
                 scheme="preproc" region01="Prepro" region02="Prepro" region03="def:LabelStrong" region11="Prepro" region12="Prepro"/>
          <!-- %-statements (except those defined previously!) -->
-         <regexp match="/%\s*(ACT(IVATE)?|DECLARE|DCL|THEN|ELSE|INCLUDE|INSCAN|WHEN|OTHERWISE|XINCLUDE|XINSCAN)%b2;/i" region0="Prepro"/>
+         <regexp match="/\%\s*(ACT(IVATE)?|DECLARE|DCL|THEN|ELSE|INCLUDE|INSCAN|WHEN|OTHERWISE|XINCLUDE|XINSCAN)%b2;/i" region0="Prepro"/>
          <inherit scheme="prekey"/>
          <inherit scheme="prefun"/>
       </scheme>
