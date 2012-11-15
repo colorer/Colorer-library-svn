@@ -19,6 +19,7 @@
     <region name="RptTypeWord"  parent="def:TypeKeyword"/>
     <region name="RptBool"      parent="def:BooleanConstant"/>
     <region name="RptLabel"     parent="def:Label"/>
+    <region name="CallOutlined" parent="def:Outlined"/>
 
     <scheme name="RptAny">
       <inherit scheme="atl:qrmBase"/>
@@ -26,6 +27,7 @@
         <word name="STRING"/>
         <word name="POINTER"/>
         <word name="LONGINT"/>
+        <word name="INT64"/>
         <word name="DOUBLE"/>
         <word name="WORD"/>
         <word name="INTEGER"/>
@@ -41,7 +43,7 @@
 
     <scheme name="RptPrePro">
   <!-- Rpt preprocessor -->
-      <block start="/^\s*#\b((include))\b/i" end="/$/" scheme="RptPrePro" region="RptPreProc" region00="RptPrePrWord"/>
+      <block start="/^\s*#\b((ifdef|ifndef|define|undefine|endif|else|include))\b/i" end="/$/" scheme="RptPrePro" region="RptPreProc" region00="RptPrePrWord"/>
       <keywords ignorecase="yes" region="RptPrePrWord">
       </keywords>
     </scheme>
@@ -78,6 +80,7 @@
       <regexp match="/(call)\s+([\w\S]*\b)/i" region1="RptWord" region2="def:ErrorText"/>
       <keywords ignorecase="yes" region="RptWord">
         <word name="IF"/>
+        <word name="IN"/>
         <word name="NOT"/>
         <word name="AND"/>
         <word name="XOR"/>
@@ -161,12 +164,7 @@
         <word name="FUNCTION"/>
         <word name="FORMULA"/>
       </keywords>
-  <!--regexp match="/^.*\s*(\b\w+\b)\s*\M\{/" region0="dFunction" region1="RptLabel"/-->
-      <block start="/\s*\m(\b[A-Za-z_]\w*\b)\M\s*\{/" end="/~\s*\m\{/" scheme="rpt" region00="atl:FunctionOutline" region01="RptLabel"/>
-      <block start="/\s*\m(\b[A-Za-z_]\w*\b)\M(\s*\/\*.*\*\/\s*)*\{/" end="/~(\s*\/\*.*\*\/\s*)*\m\{/" scheme="rpt" region00="atl:FunctionOutline" region01="RptLabel"/>
-      <block start="/([A-Za-z_]\w*\b)\M(\s*$)/" end="/~(\s*$)(^\s*\{)?=/" scheme="rpt" region00="atl:FunctionOutline" region01="RptLabel"/>
-      <block start="/([A-Za-z_]\w*\b)\M(\s*\/\/.*$)/" end="/~(\s*\/\/.*$)(^\s*\{)?=/" scheme="rpt" region00="atl:FunctionOutline" region01="RptLabel"/>
-      <block start="/([A-Za-z_]\w*\b)\M((\s*\/\*.*)(\*\/\s*)*(\s*\/\/.*)*$)/" end="/~((\s*\/\*.*)(\*\/\s*)*(\s*\/\/.*)*$)(^\s*\{)?=/" scheme="rpt" region00="atl:FunctionOutline" region01="RptLabel"/>
+      <regexp match="/\b([A-Za-z_]\w*)\b\M\s*(\/\*|\/\/|\{|begin|$)/i" region0="rpt:CallOutlined" region1="RptLabel"/>
 
     </scheme>
 

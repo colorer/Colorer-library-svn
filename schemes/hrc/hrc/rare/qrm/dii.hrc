@@ -79,6 +79,7 @@
       <keywords ignorecase="yes" region="tdiiWord">
         <word name="date"/>
         <word name="longint"/>
+        <word name="int64"/>
         <word name="string"/>
         <word name="double"/>
         <word name="word"/>
