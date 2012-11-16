@@ -836,9 +836,7 @@ bool FarEditorSet::TestLoadBase(const wchar_t *catalogPath, const wchar_t *userH
 
 void FarEditorSet::ReloadBase()
 {
-  const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
   HANDLE scr = Info.SaveScreen(0, 0, -1, -1);
-  Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
 
   try{
     ReadSettings();
@@ -847,6 +845,8 @@ void FarEditorSet::ReloadBase()
       return;
     }
 
+    const wchar_t *marr[2] = { GetMsg(mName), GetMsg(mReloading) };
+    Info.Message(&MainGuid, &ReloadBaseMessage, 0, NULL, &marr[0], 2, 0);
     dropAllEditors(true);
     delete regionMapper;
     delete parserFactory;
