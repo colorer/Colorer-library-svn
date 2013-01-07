@@ -540,6 +540,10 @@
     <filename>/\.(R|Rhistory|Rprofile)$/i</filename>
     <location link="scripts/farnet/r.hrc"/>
   </prototype>
+  <prototype name="markdown" group="scripts" description="markdown">
+    <filename>/\.(text|md|markdown)$/i</filename>
+    <location link="scripts/farnet/markdown.hrc"/>
+  </prototype>
 
 
   &scripts-colorer-protos;
@@ -707,10 +711,6 @@
   <!--  rare languages  -->
 
   &rare-j2ee-protos;
-  <prototype name="markdown" group="rare.inet" description="markdown">
-    <filename>/\.(text|md|markdown)$/i</filename>
-    <location link="rare/markdown.hrc"/>
-  </prototype>
   &rare-gen-protos;
   &rare-scripts-protos;
   &rare-qrm-protos;
