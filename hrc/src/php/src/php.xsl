@@ -9,7 +9,6 @@
 <xsl:template match="php">
 	<region name="php.keyword" parent="def:Keyword"/>
 	<region name="php.function" parent="def:FunctionKeyword"/>
-	<region name="php.type" parent="def:TypeKeyword"/>
 	<region name="php.const" parent="def:Constant"/>
 	<region name="php.class" parent="def:ClassKeyword"/>
 	<region name="php.deprecated" parent="def:DeprecatedKeyword"/>
@@ -34,9 +33,6 @@
 	</keywords>
 	<keywords region="php.function" ignorecase="yes">
 		<xsl:apply-templates select="func"/>
-	</keywords>
-	<keywords region="php.type" ignorecase="yes">
-		<xsl:apply-templates select="type"/>
 	</keywords>
 	<keywords region="php.const">
 		<xsl:apply-templates select="const"/>
