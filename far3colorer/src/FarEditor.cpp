@@ -612,7 +612,9 @@ int FarEditor::editorEvent(intptr_t event, void *param)
           if (whitespace) col1.ForegroundColor=rdBackground->fore;
           //horizontal cross
           if (lno == ei.CurLine && showHorizontalCross){
-            col1.BackgroundColor=horzCrossColor.BackgroundColor;
+            if (horzCrossColor.BackgroundColor!=col1.ForegroundColor) {
+              col1.BackgroundColor=horzCrossColor.BackgroundColor;
+            }
             if (crossZOrder!=0 && !whitespace){
               col1.ForegroundColor=horzCrossColor.ForegroundColor;
             }
@@ -622,7 +624,9 @@ int FarEditor::editorEvent(intptr_t event, void *param)
 
           // vertical cross
           if (showVerticalCross && start <= ecp_cl.DestPos && ecp_cl.DestPos < end){
-            col1.BackgroundColor=vertCrossColor.BackgroundColor;
+            if (vertCrossColor.BackgroundColor!=col1.ForegroundColor) {
+              col1.BackgroundColor=vertCrossColor.BackgroundColor;
+            }
             if (crossZOrder!=0 && !whitespace){
               col1.ForegroundColor=vertCrossColor.ForegroundColor;
             }
