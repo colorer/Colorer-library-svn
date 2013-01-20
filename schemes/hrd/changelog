@@ -1,5 +1,9 @@
 ﻿$Revision$
 	$Author$ $Date$
+	- обновлен стиль Classic take4 like by Sim
+
+#Revision: 1885
+	Author: ctapmex Date: 2012-11-15 15:11:20 +0600 (Чт, 15 ноя 2012)
 	- Добавлен стиль Classic take4 like by Sim. (#1)
 	- Перемещен visual-rgb.hrd в папку contrib
 

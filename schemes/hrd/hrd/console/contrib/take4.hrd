@@ -53,15 +53,15 @@
   <assign name="def:CloseTag" fore="#B"/>
 
   <assign name="def:Label" fore="#D"/>
-  <assign name="def:LabelStrong" fore="#1" back="#F"/>
+  <assign name="def:LabelStrong" fore="#F" back="#1"/>
 
   <assign name="def:Insertion" fore="#7" back="#1"/>
 
   <assign name="def:Error" fore="#C" back="#1"/>
   <assign name="def:ErrorText" fore="#D"/>
 
-  <assign name="def:TODO" fore="#0" back="#6"/>
-  <assign name="def:Debug" fore="#0" back="#6"/>
+  <assign name="def:TODO" fore="#6"/>
+  <assign name="def:Debug" fore="#6"/>
 
   <assign name="def:URI" fore="#C"/>
   <assign name="def:Path" fore="#C"/>
