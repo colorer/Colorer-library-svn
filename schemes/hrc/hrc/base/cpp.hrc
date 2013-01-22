@@ -181,6 +181,8 @@
    <word name="__single_inheritance"/>
    <word name="__uuidof"/>
    <word name="__virtual_inheritance"/>
+
+   <word name="nullptr"/>
   </keywords>
 
 
@@ -214,6 +216,13 @@
   <keywords region="KeywordSTL">
    <word name="std" region="KeywordNamespace"/>
 
+   <!-- c++11 -->
+   <word name="move"/>
+   <word name="unordered_map"/>
+   <word name="unique_ptr"/>
+   <word name="shared_ptr"/>
+   <word name="weak_ptr"/>
+   <!--       -->
    <word name="vector"/>
    <word name="list"/>
    <word name="set"/>
