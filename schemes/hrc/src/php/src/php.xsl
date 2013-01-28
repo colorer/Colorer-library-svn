@@ -7,7 +7,6 @@
 <xsl:output indent="yes" method="xml" encoding="Windows-1251"/>
 
 <xsl:template match="php">
-	<region name="php.keyword" parent="def:Keyword"/>
 	<region name="php.function" parent="def:FunctionKeyword"/>
 	<region name="php.const" parent="def:Constant"/>
 	<region name="php.class" parent="def:ClassKeyword"/>
