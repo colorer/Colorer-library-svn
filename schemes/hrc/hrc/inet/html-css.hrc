@@ -48,63 +48,8 @@
 
 <scheme name="PropertyValue">
  <inherit scheme="css:PropertyValue"/>
- <inherit scheme="mzPropertyValue"/>
- <inherit scheme="iePropertyValue"/>
- <inherit scheme="webkitPropertyValue"/>
 </scheme>
 
-
-<scheme name="mzPropertyValue">
-	<keywords region="PropertyValue" ignorecase="yes" worddiv='%css:worddiv-class;'>
-		<word name="border"/>
-		<word name="padding"/>
-		<word name="content"/>
-		<word name="border-box"/>
-		<word name="padding-box"/>
-		<word name="content-box"/>
-		<word name="bounding-box"/>
-		<word name="each-box"/>
-		<word name="start"/>
-		<word name="stretch"/>
-		<word name="reverse"/>
-		<word name="horizontal"/>
-		<word name="vertical"/>
-		<word name="end"/>
-		<word name="disabled"/>
-		<word name="enabled"/>
-		<word name="-moz-box"/>
-		<word name="-moz-initial" />
-		<word name="-moz-inline-box"/>
-		<word name="-moz-inline-grid"/>
-		<word name="-moz-grid-group"/>
-		<word name="-moz-grid-line"/>
-		<word name="-moz-grid"/>
-		<word name="-moz-stack"/>
-		<word name="-moz-inline-stack"/>
-		<word name="-moz-deck"/>
-		<word name="-moz-pre-wrap"/>
-		<word name="-moz-popup"/>
-		<word name="-moz-groupbox"/>
-		<word name="-moz-scrollbars-horizontal"/>
-		<word name="-moz-scrollbars-vertical"/>
-		<word name="-moz-scrollbars-none"/>
-	</keywords>
-</scheme>
-
-
-<scheme name="iePropertyValue">
-	<keywords region="PropertyValue" ignorecase="yes" worddiv='%css:worddiv-class;'>
-		<word name="bicubic"/>
-	</keywords>
-</scheme>
-
-<scheme name="webkitPropertyValue">
-	<keywords region="PropertyValue" ignorecase="yes" worddiv='%css:worddiv-class;'>
-		<word name="button"/>
-		<word name="textfield"/>
-		<word name="-webkit-focus-ring-color"/>
-	</keywords>
-</scheme>
 
 
 <scheme name="cssTag">
@@ -117,12 +62,11 @@
 <scheme name="PropertyFunc">
  <inherit scheme="css:PropertyFunc"/>
  <inherit scheme="iePropertyFunc"/>
- 
 </scheme>
 
 <scheme name="iePropertyFunc">
  <block start="/\b(expression)(\s)*((\())/" end="/(\))/" scheme="jScript:jScript"
-  region01="msie" region03="def:PairStart" region04="css:Symbol"
+  region01="css:DeprecatedPropertyFunc" region03="def:PairStart" region04="css:Symbol"
   region10="def:PairEnd"  region11="css:Symbol"
  />
   

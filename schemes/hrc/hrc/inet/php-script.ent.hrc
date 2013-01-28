@@ -11,6 +11,9 @@
 <region name="NowDocLt" parent="perl:HereDocLt"/>
 <region name="SystemExec" parent="perl:SystemExec"/>
 <region name="VarString" parent="def:Var"/>
+<region name="php.type" parent="def:TypeKeyword"/>
+<region name="php.label" parent="def:Label"/>
+<region name="php.keyword" parent="def:Keyword"/>
 
 <!-- symbolic link -->
 <scheme name="VarLink">
@@ -23,21 +26,31 @@
 
 
 <!-- pure strings -->      
+<scheme name="StringBaseCorePrintf">
+    <regexp match="/\% (\d+\$)? (\\\'.)? ([+-]?(\d+)?(\.\d+)?)? [bcdeEuufFgGosxX]/x" region0="def:VarStrong" />
+    <regexp match='/\\$/' region0="StringContent"/>
+</scheme>
+<scheme name="StringCorePrintf">
+    <regexp match="/\% (\d+\\\$)? (\'.)? ([+-]?(\d+)?(\.\d+)?)? [bcdeEuufFgGosxX]/x" region0="def:VarStrong" />
+    <regexp match='/\\[^xX0-7]/' region0="StringContent"/>
+    <regexp match='/\\$/' region0="StringContent"/>
+    <regexp match='/\\(x|X)[\da-fA-F]{1,8}/' region0="StringContent"/>
+    <regexp match='/\\[0-7]{1,12}/' region0="StringContent"/>
+</scheme>
 <scheme name="StringBaseCore">
     <regexp 
         match="/(\\\\)+\\\M[^&apos;&quot;\\]/" region0="StringContent"
     /> <!-- hack for \\\' (ÇÓÁÎ×ÈÑÒÊÈ :-E~ ) -->
     
+    <inherit scheme="StringBaseCorePrintf"/>
     <regexp match="/\\['\\]/" region0="StringContent"/>
 </scheme>
 
 <scheme name="StringCore">
-    <inherit scheme="StringBaseCore"/>
+    <inherit scheme="StringBaseCore">
+    	<virtual scheme="StringBaseCorePrintf" subst-scheme="StringCorePrintf" />
+    </inherit>
     <!-- regexp match='/\\\\$/' region0="dError"/ -->
-    <regexp match='/\\[^xX0-7]/' region0="StringContent"/>
-    <regexp match='/\\$/' region0="StringContent"/>
-    <regexp match='/\\(x|X)[\da-fA-F]{1,8}/' region0="StringContent"/>
-    <regexp match='/\\[0-7]{1,12}/' region0="StringContent"/>
     
     <!-- Vars -->
     <inherit scheme="VarLink"/>
@@ -248,10 +261,23 @@
     <regexp match="/\M (^|\s)(class|interface) \s+ (?{ClassOutline}[\w_]+ [\w_:\$]*? )/ix"/>
     <regexp match="/\M (^|\s)(function) [\s&amp;]+ (?{FunctionOutline}[\:\w_*&amp;~]+)/ix"/>    
     
+    <regexp match="/((\())\s*(integer|int|boolean|bool|float|double|string|array|object|resource)\s*((\)))/"
+    	region="php.type"
+    	region1="def:PairStart" region2="Symbol" region4="Symbol" region5="def:PairEnd"
+    />
+
     <inherit scheme="PairedBrackets">
         <virtual scheme="PairedBrackets" subst-scheme="Script"/>
     </inherit>
     
+    <block start="/((\)?#1)\:)/" end="/(else|endforeach|endfor|endif|endwhile)/" scheme="Script"
+        region00="SymbolStrong" region01="PairStart"
+        region10="php.keyword" region11="PairEnd"
+    />
+    <block start="/(else)?#4\s*((\:))/" end="/(endif)/" scheme="Script"
+        region02="SymbolStrong" region03="PairStart"
+        region10="php.keyword" region11="PairEnd"
+    />
     
     <keywords region="Symbol" ignorecase="yes">
         <symb name=";" region="SymbolStrong"/>
@@ -286,4 +312,6 @@
         
     <inherit scheme="base-keywords"/>      
     
+    <regexp match="/([a-zA-Z][\w\d]+)(\:)\:?!/ix" region1="php.label" region2="SymbolStrong" priority="low"/>
+    <regexp match="/(goto)\s+([a-zA-Z][\w\d]+)\s*/ix" region1="php.keyword" region2="php.label"/>
 </scheme>
