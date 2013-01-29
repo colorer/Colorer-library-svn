@@ -1308,6 +1308,36 @@ PATH_SEPARATOR (string)
 DomAttribute->name --  Returns name of attribute 
 DomAttribute->specified --  Checks if attribute is specified 
 DomAttribute->value --  Returns value of attribute 
+DOMDocument::createAttribute -- Create new attribute
+DOMDocument::createAttributeNS -- Create new attribute node with an associated namespace
+DOMDocument::createCDATASection -- Create new cdata node
+DOMDocument::createComment -- Create new comment node
+DOMDocument::createDocumentFragment -- Create new document fragment
+DOMDocument::createElement -- Create new element node
+DOMDocument::createElementNS -- Create new element node with an associated namespace
+DOMDocument::createEntityReference -- Create new entity reference node
+DOMDocument::createProcessingInstruction -- Creates new PI node
+DOMDocument::createTextNode -- Create new text node
+DOMDocument::getElementById -- Searches for an element with a certain id
+DOMDocument::getElementsByTagName -- Searches for all elements with given local tag name
+DOMDocument::getElementsByTagNameNS -- Searches for all elements with given tag name in specified namespace
+DOMDocument::importNode -- Import node into current document
+DOMDocument::load -- Load XML from a file
+DOMDocument::loadHTML -- Load HTML from a string
+DOMDocument::loadHTMLFile -- Load HTML from a file
+DOMDocument::loadXML -- Load XML from a string
+DOMDocument::normalizeDocument -- Normalizes the document
+DOMDocument::registerNodeClass -- Register extended class used to create base node type
+DOMDocument::relaxNGValidate -- Performs relaxNG validation on the document
+DOMDocument::relaxNGValidateSource -- Performs relaxNG validation on the document
+DOMDocument::save -- Dumps the internal XML tree back into a file
+DOMDocument::saveHTML -- Dumps the internal document into a string using HTML formatting
+DOMDocument::saveHTMLFile -- Dumps the internal document into a file using HTML formatting
+DOMDocument::saveXML -- Dumps the internal XML tree back into a string
+DOMDocument::schemaValidate -- Validates a document based on a schema
+DOMDocument::schemaValidateSource -- Validates a document based on a schema
+DOMDocument::validate -- Validates the document based on its DTD
+DOMDocument::xinclude -- Substitutes XIncludes in a DOMDocument Object
 DomDocument->add_root --  Adds a root node [deprecated] 
 DomDocument->create_attribute -- Create new attribute
 DomDocument->create_cdata_section -- Create new cdata node
@@ -1338,6 +1368,23 @@ DomElement->has_attribute --  Checks to see if attribute exists
 DomElement->remove_attribute --  Removes attribute 
 DomElement->set_attribute --  Adds new attribute 
 DomElement->tagname --  Returns name of element 
+DOMNode::appendChild -- Adds new child at the end of the children
+DOMNode::C14N -- Canonicalize nodes to a string
+DOMNode::C14NFile -- Canonicalize nodes to a file
+DOMNode::cloneNode -- Clones a node
+DOMNode::getLineNo -- Get line number for a node
+DOMNode::getNodePath -- Get an XPath for a node
+DOMNode::hasAttributes -- Checks if node has attributes
+DOMNode::hasChildNodes -- Checks if node has children
+DOMNode::insertBefore -- Adds a new child before a reference node
+DOMNode::isDefaultNamespace -- Checks if the specified namespaceURI is the default namespace or not
+DOMNode::isSameNode -- Indicates if two nodes are the same node
+DOMNode::isSupported -- Checks if feature is supported for specified version
+DOMNode::lookupNamespaceURI -- Gets the namespace URI of the node based on the prefix
+DOMNode::lookupPrefix -- Gets the namespace prefix of the node based on the namespace URI
+DOMNode::normalize -- Normalizes the node
+DOMNode::removeChild -- Removes child from list of children
+DOMNode::replaceChild -- Replaces a child
 DomNode->add_namespace --  Adds a namespace declaration to a node. 
 DomNode->append_child --  Adds new child at the end of the children 
 DomNode->append_sibling --  Adds new sibling to a node 
@@ -1443,7 +1490,28 @@ XPATH_RANGE (integer)
 XPATH_LOCATIONSET (integer) 
 XPATH_USERS (integer) 
 XPATH_NUMBER (integer) 
-     <!-- XXV. .NET Functions -->
+LIBXML_COMPACT (integer)
+LIBXML_DTDATTR (integer)
+LIBXML_DTDLOAD (integer)
+LIBXML_DTDVALID (integer)
+LIBXML_NOBLANKS (integer)
+LIBXML_NOCDATA (integer)
+LIBXML_NOEMPTYTAG (integer)
+LIBXML_NOENT (integer)
+LIBXML_NOERROR (integer)
+LIBXML_NONET (integer)
+LIBXML_NOWARNING (integer)
+LIBXML_NOXMLDECL (integer)
+LIBXML_NSCLEAN (integer)
+LIBXML_PARSEHUGE (integer)
+LIBXML_XINCLUDE (integer)
+LIBXML_ERR_ERROR (integer)
+LIBXML_ERR_FATAL (integer)
+LIBXML_ERR_NONE (integer)
+LIBXML_ERR_WARNING (integer)
+LIBXML_VERSION (integer)
+LIBXML_DOTTED_VERSION (string)
+<!-- XXV. .NET Functions -->
 dotnet_load -- Loads a DOTNET module
      <!-- XXVI. Error Handling and Logging Functions -->
 debug_backtrace --  Generates a backtrace 
