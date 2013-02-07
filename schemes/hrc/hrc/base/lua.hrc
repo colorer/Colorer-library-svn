@@ -53,21 +53,6 @@
 
 <!-- СХЕМЫ из rh_base.hrc -->
 
-<scheme name="CharEspec">
-<!-- Especial characters -->
- <!--priority="low"-->
- <regexp match="/[\x09\xAD]/" region0="SpecialChar" priority="low"/>
- <regexp match="/[\x{00A0}\x{2011}\x{202F}]/" region0="NoBreakChar" priority="low"/>
- <regexp match="/[\x{2009}\x{2010}]/"         region0="RegularChar" priority="low"/>
- <regexp match="/[\x{200A}\x{2013}]/"         region0="CompactChar" priority="low"/>
- <regexp match="/[\x{2007}\x{2012}\x{2044}]/" region0="SpecMathFig" priority="low"/> <!-- Figure space/dash / fraction -->
- <regexp match="/[\x{205F}]/"                 region0="SpecMathGap" priority="low"/> <!-- Medium math space -->
- <regexp match="/[\x{2002}-\x{2006}\x{2008}\x{200B}]/" region0="SpecialSpace" priority="low"/>
- <regexp match="/[\x{0300}-\x{036F}\x{0483}-\x{0489}\x{0653}-\x{065F}]/" region0="CombineChar"/>
- <regexp match="/[\x{07EB}-\x{07F5}\x{135F}\x{1A7F}\x{1B6B}-\x{1B73}]/" region0="CombineChar"/>
- <regexp match="/[\x{1DC0}-\x{1DFF}\x{20D0}-\x{20FF}\x{2CEF}-\x{2CF1}\x{2DE0}-\x{2DFF}\x{3099}-\x{309A}\x{A66F}-\x{A672}\x{A67C}-\x{A67D}\x{A6F0}-\x{A6F1}\x{A8E0}-\x{A8F1}\x{FE00}-\x{FE0F}\x{FE20}-\x{FE2F}]/" region0="CombineChar"/>
-</scheme>
-
 <scheme name="CharDQuoted">
 <!-- Double quoted string some special characters -->
  <regexp match='/\\[\\&apos;&quot;]/' region0="def:default"/>
@@ -265,13 +250,11 @@
 </scheme>
 
 <scheme name="CommentExt">
- <inherit scheme="CharEspec"/>
  <inherit scheme="Comment"/>
 </scheme>
 
 <scheme name="LuaSpecComment">
 <!-- = Multi-line comment -->
- <!--<inherit scheme="CharEspec"/>-->
  <!-- - - [=[Long-bracketed string]=] -->
  <block start="/(\-\-(\[(\=*)\[))/" end="/((\]\y3\]))/"
         scheme="LuaSpecComment" region="Comment"
@@ -326,7 +309,6 @@
 <scheme name="LuaMain">
 <!-- Main Lua -->
 
- <inherit scheme="CharEspec"/>
  <!-- = Numbers -->
  <inherit scheme="FloatNumber"/>
  <inherit scheme="DecNumber"/>
