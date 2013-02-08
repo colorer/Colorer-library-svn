@@ -100,8 +100,11 @@ void FarHrcSettings::readProfileFromRegistry()
                 if (type->getParamValue(DString(type_fse.Items[j].Name))==null){
                   type->addParam(&DString(type_fse.Items[j].Name));
                 }
-                delete type->getParamNotDefaultValue(DString(type_fse.Items[j].Name));
-                type->setParamValue(DString(type_fse.Items[j].Name), &DString(ColorerSettings.Get(type_subkey,type_fse.Items[j].Name,(wchar_t*)NULL)));
+				const wchar_t *p = ColorerSettings.Get(type_subkey,type_fse.Items[j].Name,(wchar_t*)NULL);
+				if (p) {
+					delete type->getParamNotDefaultValue(DString(type_fse.Items[j].Name));
+					type->setParamValue(DString(type_fse.Items[j].Name), &DString(p));
+				}
               }
             }
           }
