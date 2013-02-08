@@ -1368,6 +1368,7 @@ DomElement->has_attribute --  Checks to see if attribute exists
 DomElement->remove_attribute --  Removes attribute 
 DomElement->set_attribute --  Adds new attribute 
 DomElement->tagname --  Returns name of element 
+DOMException::getMessage --
 DOMNode::appendChild -- Adds new child at the end of the children
 DOMNode::C14N -- Canonicalize nodes to a string
 DOMNode::C14NFile -- Canonicalize nodes to a file
@@ -7035,4 +7036,12 @@ Collator::ON (integer)
 Collator::SHIFTED (integer)
 Collator::NON_IGNORABLE (integer)
 Collator::LOWER_FIRST (integer)
-Collator::UPPER_FIRST (integer) 
+Collator::UPPER_FIRST (integer)
+     <!-- XXX. libxml -->
+libxml_clear_errors -- Clear libxml error buffer
+libxml_disable_entity_loader -- Disable the ability to load external entities
+libxml_get_errors -- Retrieve array of errors
+libxml_get_last_error -- Retrieve last error from libxml
+libxml_set_external_entity_loader -- Changes the default external entity loader
+libxml_set_streams_context -- Set the streams context for the next libxml document load or write
+libxml_use_internal_errors -- Disable libxml errors and allow user to fetch error information as needed

@@ -270,14 +270,14 @@
         <virtual scheme="PairedBrackets" subst-scheme="Script"/>
     </inherit>
     
-    <block start="/((\)?#1)\:)/" end="/(else|endforeach|endfor|endif|endwhile)/" scheme="Script"
+    <!--block start="/((\)?#1)\:)/" end="/(else|endforeach|endfor|endif|endwhile)/" scheme="Script"
         region00="SymbolStrong" region01="PairStart"
         region10="php.keyword" region11="PairEnd"
     />
     <block start="/(else)?#4\s*((\:))/" end="/(endif)/" scheme="Script"
         region02="SymbolStrong" region03="PairStart"
         region10="php.keyword" region11="PairEnd"
-    />
+    /-->
     
     <keywords region="Symbol" ignorecase="yes">
         <symb name=";" region="SymbolStrong"/>

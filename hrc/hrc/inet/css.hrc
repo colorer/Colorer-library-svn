@@ -952,6 +952,7 @@
 				<word name="crosshair"/>
 				<word name="cross"/>
 				<word name="cursive"/>
+				<word name="currentColor"/>
 				<word name="dashed"/>
 				<word name="decimal-leading-zero"/>
 				<word name="decimal"/>
