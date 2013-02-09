@@ -50,6 +50,30 @@
   <delete dir='${hrcupdate-dir}'/>
 </target>
 
+<target name="farbase" description='Builds a base dir for FarColorer'>
+  <mkdir dir='${base-dir}'/>
+  <mkdir dir='${base-dir}/hrc'/>
+  <mkdir dir='${base-dir}/hrd'/>
+  <copy file='hrc/hrc/CHANGELOG' todir='${base-dir}/hrc'/>
+  <copy file='catalog.xml.far' tofile='${base-dir}/catalog.xml'/>
+  <antcall target='hrc.jar'>
+    <param name='target-dir' value='${base-dir}'/>
+  </antcall>
+  <antcall target='hrd'>
+  </antcall>
+  <antcall target='hrd'>
+		<param name='target' value='copy'/>
+    <param name='path.colorer' value='${base-dir}'/>
+  </antcall>
+</target>
+
+<target name="farbase.clean" description='Builds a base dir for FarColorer'>
+	<antcall target='all'>
+		<param name='target' value='clean'/>
+	</antcall>
+  <delete dir='${base-dir}'/>
+</target>
+
 <target name="hrcupdate" description='Builds a package of the current HRC base'>
   <tstamp><format property="TODAY" pattern="yyyy-MM-dd"/></tstamp>
   <property name='hrcupdate-zip' value='${build-dir}/hrc-update.${TODAY}.zip'/>

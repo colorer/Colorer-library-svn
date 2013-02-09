@@ -36,6 +36,7 @@
          <block start="/(\bif\b)/" end="/(\bend\b)/" scheme="matlab" region00="mlKeyWord" region01="PairStart" region10="mlKeyWord" region11="PairEnd"/>
          <block start="/(\bwhile\b)/" end="/(\bend\b)/" scheme="matlab" region00="mlKeyWord" region01="PairStart" region10="mlKeyWord" region11="PairEnd"/>
          <block start="/(\bswitch\b)/" end="/(\bend\b)/" scheme="matlab" region00="mlKeyWord" region01="PairStart" region10="mlKeyWord" region11="PairEnd"/>
+         <block start="/(\btry\b)/" end="/(\bend\b)/" scheme="matlab" region00="mlKeyWord" region01="PairStart" region10="mlKeyWord" region11="PairEnd"/>
 <!-- Symbols -->
          <keywords region="mlSymb">
             <symb name="+"/>

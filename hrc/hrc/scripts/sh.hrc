@@ -236,7 +236,7 @@
   <word name="="/>
   <word name="=="/>
   <word name="!="/>
-  <word name="--eq"/>
+  <word name="-eq"/>
   <word name="-ne"/>
   <word name="-lt"/>
   <word name="-le"/>

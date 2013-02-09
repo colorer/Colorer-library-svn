@@ -19,70 +19,67 @@
          </contributors>
       </annotation>
 
-      <region name="cobDbg"       parent="def:Debug"/>
-      <region name="cobSpecial"   parent="def:Label"/>
-      <region name="cobIdent"     parent="def:Text"/>
-      <region name="cobComment"   parent="def:Comment"/>
-      <region name="cobIndicator" parent="def:Symbol"/>
-      <region name="cobSymb"      parent="def:Symbol"/>
-      <region name="cobSymbDot"   parent="def:SymbolStrong"/>
-      <region name="cobWord"      parent="def:Keyword"/>
-      <region name="cobDirect"    parent="def:Directive"/>
-      <region name="cobExec"      parent="def:Label"/>
-      <region name="cobNumb"      parent="def:Number"/>
-      <region name="cobString"    parent="def:String"/>
+      <region name="Debug"     parent="def:Debug"/>
+      <region name="Special"   parent="def:Label"/>
+      <region name="Comment"   parent="def:Comment"/>
+      <region name="Indicator" parent="def:Symbol"/>
+      <region name="Symbol"    parent="def:Symbol"/>
+      <region name="Period"    parent="def:SymbolStrong"/>
+      <region name="Keyword"   parent="def:Keyword"/>
+      <region name="Directive" parent="def:Directive"/>
+      <region name="Exec"      parent="def:StringEdge"/>
+      <region name="Number"    parent="def:Number"/>
+      <region name="String"    parent="def:String"/>
+      <region name="Ident"     parent="def:Text"/>
+
+      <region name="start" parent="def:PairStart"/>
+      <region name="end"   parent="def:PairEnd"/>
+
+      <entity name="worddiv" value="[\W-[\-]]"/> <!-- minus can be part of identifier -->
 
       <scheme name="cobolfr">
          <!-- Debug lines -->
-         <regexp match="/^D\ .*$/i" region0="cobDbg"/>
+         <regexp match="/^D\ .*$/i" region0="Debug"/>
          <!-- Special lines -->
-         <regexp match="/^\$.*$/" region0="cobSpecial"/>
+         <regexp match="/^\$.*$/" region0="Special"/>
          <!-- Comment lines -->
-         <regexp match="/^([\*\/])(.*)$/" region1="cobIndicator" region2="cobComment"/>
+         <regexp match="/^([\*\/])(.*)$/" region1="Indicator" region2="Comment"/>
          <!-- Special comments -->
-         <regexp match="/^\s*(REMARKS|AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)?(.+)$/i" region1="cobWord" region2="cobSymbDot" region3="cobComment"/>
+         <regexp match="/^\s*(REMARKS|AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)?(.*)$/i" region1="Keyword" region2="Period" region3="Comment"/>
          <!-- Sections and Divisions -->
-         <regexp match="/^\s*([\w\-]+\s+(SECTION|DIVISION))\b/i" region1="cobDirect"/>
-         <!-- Variable declarations -->
-         <regexp match="/^\s*(\d\d)\s+([\w\:\-]+)/" region1="cobNumb" region2="cobIdent"/>
-         <!-- Strings -->
-         <block start="/\'/" end="/\'/" scheme="def:empty" region="cobString" region00="def:PairStart" region10="def:PairEnd"/>
-         <block start="/\&#34;/" end="/\&#34;/" scheme="def:empty" region="cobString" region00="def:PairStart" region10="def:PairEnd"/>
-         <!-- EXEC statement typically contains embedded SQL... -->
-         <block start="/(EXEC|EXECUTE)/i" end="/(END-EXEC)/i" scheme="sql:sql" region00="def:PairStart" region01="cobExec" region10="def:PairEnd" region11="cobExec"/>
+         <regexp match="/^\s*([\w\-]+\s+(SECTION|DIVISION))[\ \.]?=/i" region1="Directive"/>
+         <!-- Paired brackets -->
+         <block start="/(?{start}\()/" end="/(?{end}\))/" scheme="cobolfr" region00="Symbol" region10="Symbol" inner-region="yes"/>
+         <!-- Numeric literals with fixed point -->
+         <regexp match="/(^|[\s:\(]?#1)([+\-])?(\d*\.?\d+)([\s:\)\.]?=|$)/i" region2="Symbol" region3="Number"/>
+         <!-- ... character string in PIC clause is not a number even if it looks so -->
+         <regexp match="/\s(PIC|PICTURE)(\s+IS)?\s+([09]+)([\s\.]?=|$)/i" region1="Keyword" region2="Keyword" region3="Ident"/>
+         <!-- Numeric literals with floating point -->
+         <regexp match="/(^|[\s:\(]?#1)([+\-])?(\d+\.\d+E[+\-]?\d\d?)([\s:\)\.]?=|$)/i" region2="Symbol" region3="Number"/>
+         <!-- Alphanumeric literals -->
+         <block start="/(?{start}(\x22|\'))/" end="/((?{end}\Y1)|(?{def:Error}$))/" scheme="def:empty" region="String"/>
+         <!-- EXEC statement usually contains embedded SQL -->
+         <block start="/(^|\s?#1)(?{start}EXEC|EXECUTE)(\s?=|$)/i" end="/(^|\s?#1)(?{end}END-EXEC)([\s\.]?=|$)/i" scheme="sql:sql" region00="Exec" region10="Exec"/>
 
-         <!-- Standard COBOL Symbols -->
-         <keywords region="cobSymb" worddiv="[\W\d]"> <!-- minus can be part of identifier -->
-            <word name="-"/>
-         </keywords>
-         <keywords region="cobSymb">
-            <symb name=";"/>
-            <symb name="="/>
+         <!-- Symbols -->
+         <keywords region="Symbol" worddiv="%worddiv;">
             <symb name="+"/>
-            <symb name="/"/>
+            <word name="-"/> <!-- apply worddiv -->
             <symb name="*"/>
-            <symb name="&amp;"/>
-            <symb name="|"/>
-            <symb name="^"/>
+            <symb name="/"/>
+            <symb name="="/>
+            <symb name=","/>
+            <symb name=";"/>
+            <symb name="." region="Period"/>
+            <symb name=":"/>
             <symb name="("/>
             <symb name=")"/>
-            <symb name="["/>
-            <symb name="]"/>
-            <symb name="." region="cobSymbDot"/>
-            <symb name=","/>
-            <symb name=":"/>
-            <symb name="!"/>
-            <symb name="~"/>
             <symb name="&lt;"/>
             <symb name="&gt;"/>
-            <symb name="%"/>
-            <symb name="{"/>
-            <symb name="}"/>
-            <symb name="?"/>
          </keywords>
 
-         <!-- COBOL Keywords and Reserved words -->
-         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
+         <!-- Keywords and Reserved words -->
+         <keywords ignorecase="yes" region="Keyword" worddiv="%worddiv;">
             <word name="ACCEPT"/>
             <word name="ACCESS"/>
             <word name="ACOS"/>
@@ -608,6 +605,7 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
+   -  Pavel Pleva
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either the GNU General Public License Version 2 or later (the "GPL"), or

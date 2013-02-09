@@ -374,17 +374,30 @@
 		<word name="BM.Next"/>
 		<word name="BM.Prev"/>
 		<word name="BM.Stat"/>
+		<word name="BM.Push"/>
+		<word name="BM.Pop"/>
+		<word name="BM.First"/>
+		<word name="BM.Last"/>
+		<word name="BM.Goto"/>
 		<word name="callplugin"/>
 		<word name="date"/>
 		<word name="print"/>
 		<word name="testfolder"/>
 		<word name="Plugin.Load"/>
 		<word name="Plugin.Unload"/>
+		<word name="Plugin.Call"/>
+		<word name="Plugin.Config"/>
+		<word name="Plugin.Prefix"/>
+		<word name="Plugin.Menu"/>
+		<word name="Plugin.Exist"/>
 		<word name="history.enable"/>
 		<word name="FMatch"/>
 		<word name="Keybar.Show"/>
 		<word name="Beep"/>
 		<word name="kbdLayoutBeep"/>
+		<word name="Size2Str"/>
+		<word name="StrWrap"/>
+		<word name="Far.Cfg.Get"/>
 	</keywords>
 </scheme>
 
@@ -451,6 +464,7 @@
 		<word name="RCounter"/>
 		<word name="Far.Pid"/>
 		<word name="Far.UpTime"/>
+		<word name="Far.Cfg.Err"/>
 	</keywords>
 	<inherit scheme="macro.flags.ns"/>
 	<inherit scheme="macro.keys"/>

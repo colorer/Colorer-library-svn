@@ -259,6 +259,7 @@
 		<end match='/%var-equ;/' region0='var-equ'/>
 	</block>
 	<inherit scheme='vars'/>
+	<inherit scheme='comments'/>
 </scheme>
 
 

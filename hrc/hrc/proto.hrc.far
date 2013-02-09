@@ -151,7 +151,7 @@
   </prototype>
   <prototype name="lua" group="main" description="Lua">
     <location link="base/lua.hrc"/>
-    <filename>/\.(lua)$/i</filename>
+    <filename>/\.(w?lua)$/i</filename>
   </prototype>  
   <prototype name="ruby" group="main" description="Ruby">
     <location link="base/ruby.hrc"/>
@@ -230,6 +230,10 @@
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>
     <filename>/\.(haml)$/i</filename>
+  </prototype>
+  <prototype name="shpaml" group="inet" description="SHPAML">
+    <location link="inet/shpaml.hrc"/>
+    <filename>/\.(shpaml)$/i</filename>
   </prototype>
   <prototype name="erb" group="inet" description="ERB">
     <location link="inet/erb.hrc"/>
@@ -513,7 +517,7 @@
   </prototype>
   <prototype name="shell" group="scripts" description="sh/ksh/bash script">
     <location link="scripts/sh.hrc"/>
-    <filename>/\.(sh|spec)$|^\./i</filename>
+    <filename>/\.(sh|spec)$/i</filename>
     <filename>/^PKGBUILD$/i</filename>
     <firstline weight='2'>/^\#(!\s*.+sh\b)/</firstline>
   </prototype>
@@ -531,6 +535,18 @@
     <filename weight='5'>/\.awk$/i</filename>
     <firstline>/^# gawk/i</firstline>
   </prototype>
+  <prototype name="powershell" group="scripts" description="PowerShell">
+    <filename>/\.(ps[dDmM]?1|psfconsole)$/i</filename>
+    <location link="scripts/farnet/powershell.hrc"/>
+  </prototype>
+  <prototype name="r" group="scripts" description="R">
+    <filename>/\.(R|Rhistory|Rprofile)$/i</filename>
+    <location link="scripts/farnet/r.hrc"/>
+  </prototype>
+  <prototype name="markdown" group="scripts" description="markdown">
+    <filename>/\.(text|md|markdown)$/i</filename>
+    <location link="scripts/farnet/markdown.hrc"/>
+  </prototype>
 
 
   &scripts-colorer-protos;
@@ -540,8 +556,8 @@
 
   <prototype name="makefile" group="scripts" description="makefile">
     <location link="scripts/makefile.hrc"/>
-    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g)$)/ix</filename>
-		<filename weight='3'>/(android|application)\.mk/i</filename>
+    <filename>/(makefile | tools\.ini) | \.(mak|gmk|ds(p|w)|bp(k|r|g))$/ix</filename>
+    <filename weight='3'>/\.mk$/i</filename>
     <!--firstline>/Microsoft Developer Studio Project File/i</firstline>
     <firstline>/^\!if/i</firstline-->
     <firstline>/makefile/s</firstline>
@@ -616,6 +632,11 @@
     <location link="scripts/yacc.hrc"/>
     <filename>/\.y+$/i</filename>
   </prototype>
+  <prototype name="lemon" group="scripts" description="Lemon">
+    <location link="scripts/lemon.hrc"/>
+    <!-- warning!! extensions conflict with YACC -->
+    <filename weight='1'>/\.y$/i</filename>
+  </prototype>
   
 
   <prototype name="delphiform" group="scripts" description="Delphi form">
@@ -666,6 +687,10 @@
   <prototype name="wsf" group="scripts" description="wsf">
     <location link="scripts/gen/wsf.hrc"/>
     <filename>/\.wsf$/i</filename>
+  </prototype>
+  <prototype name="squirrel" group="scripts" description="squirrel">
+    <location link="scripts/squirrel.hrc"/>
+    <filename>/\.nut$/i</filename>
   </prototype>
   
 
@@ -834,6 +859,11 @@
    <location link="rare/ahdl.hrc"/>
    <filename>/\.(tdf|tdo|ahdl)$/i</filename>
  </prototype>
+  <prototype name="ubasic" group="rare" description="UniVision Basic">
+    <location link="rare/ubasic.hrc"/>
+    <filename>/\.(uvbasic)$/i</filename>
+    <firstline>/^(PROGRAM\s+\w+$|(SUBROUTINE|EXTERNALFUNCTION)\s+\w+(\s+)?(\(.*\))?$)/</firstline>
+  </prototype>
   <prototype name="z80" group="rare" description="z80asm">
     <location link="rare/z80.hrc"/>
     <filename>/\.za$/i</filename>
@@ -867,7 +897,16 @@
     <filename>/\.(src|inc|inf)$/i</filename>
     <firstline>/\*{10}/</firstline>
   </prototype>
+ <prototype name="llvm" group="rare" description="LLVM IR">
+  <location link="rare/llvm.hrc"/>
+  <filename weight='3'>/\.ll$/i</filename>
+ </prototype>
+ <prototype name="json" group="rare" description="JSON">
+  <location link="rare/json.hrc"/>
+  <filename weight='3'>/\.json$/i</filename>
+ </prototype>
 
+   
    
   <!--  other types  -->
   &scripts-msg-protos;

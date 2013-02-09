@@ -6,121 +6,115 @@
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
    <type name="cobol">
       <annotation>
-         <documentation><![CDATA[
+         <documentation>
            COBOL Syntax description
 
-           Cobol FIXED FORMAT reference source line has 72 chars:
-           columns   1-6: sequence number area [.]
-                       7: indicator area [dD\*\-\/ ]
-                    8-11: area A [.]
-                   12-72: area B [.]
-           in case of EXTENDED length, line has 80 chars and:
-                   73-80: comment area [.]
+           Cobol FIXED FORMAT reference source line has 80 columns:
+            1- 6: Sequence number area [.]
+               7: Indicator area [dD\*\-\/ ]
+            8-11: Area A [.]
+           12-72: Area B [.]
+           73-80: Identificaton area [.] (ignored by compiler)
 
-           Known problems:
-           1. Comment area within EXEC statement should be commented out
-              even if it contains SQL keywords.
-           2. Multiline or unended string should color only columns 8-72.
-           3. Special comment should end when something is in area A
-              instead of the end of the first line.
-         ]]></documentation>
+           Known bugs:
+           1. Embedded EXEC area should color only columns 8-72.
+           2. Unended string or parentheses content should not
+              interfere behind column 72.
+           3. END-EXEC is not recognized if it ends at column 72
+              and column 73 is not period nor empty.
+         </documentation>
          <contributors><![CDATA[
            Alexey Matiushkin <matiushkin@hotmail.com>
            Pavel Pleva
          ]]></contributors>
       </annotation>
 
-      <region name="cobDbg"       parent="def:Debug"/>
-      <region name="cobIdent"     parent="def:Text"/>
-      <region name="cobComment"   parent="def:Comment"/>
-      <region name="cobSeqNum"    parent="def:Comment"/>
-      <region name="cobIndicator" parent="def:Symbol"/>
-      <region name="cobSymb"      parent="def:Symbol"/>
-      <region name="cobSymbDot"   parent="def:SymbolStrong"/>
-      <region name="cobWord"      parent="def:Keyword"/>
-      <region name="cobDirect"    parent="def:Directive"/>
-      <region name="cobExec"      parent="def:Label"/>
-      <region name="cobNumb"      parent="def:Number"/>
-      <region name="cobString"    parent="def:String"/>
+      <region name="Debug"     parent="def:Debug"/>
+      <region name="Comment"   parent="def:Comment"/>
+      <region name="SeqNum"    parent="def:Comment"/>
+      <region name="Indicator" parent="def:Symbol"/>
+      <region name="Symbol"    parent="def:Symbol"/>
+      <region name="Period"    parent="def:SymbolStrong"/>
+      <region name="Keyword"   parent="def:Keyword"/>
+      <region name="Ident"     parent="def:Identifier"/>
+      <region name="Directive" parent="def:Directive"/>
+      <region name="Exec"      parent="def:StringEdge"/>
+      <region name="Number"    parent="def:Number"/>
+      <region name="String"    parent="def:String"/>
+      <region name="Error"     parent="def:Error"/>
 
-      <scheme name="cobolmargins">
-         <!-- Sequence number area and Comment area -->
-         <regexp match="/^\M(.{0,6}).{0,66}(.*)$/" region1="cobSeqNum" region2="cobComment"/>
+      <region name="start" parent="def:PairStart"/>
+      <region name="end"   parent="def:PairEnd"/>
+
+      <entity name="worddiv" value="[\W-[\-]]"/> <!-- minus can be part of identifier -->
+
+      <scheme name="cobol">
+         <!-- Comment out Identification area -->
+         <block start="/^/" end="/.{7,72}\m(.*)$/" scheme="cobolcore" region11="Comment"/>
       </scheme>
 
-      <scheme name="cobolexec">
-         <!-- Sequence number area and Comment area -->
-         <regexp match="/^(.{0,6})\M.{0,66}(.*)$/" region1="cobSeqNum" region2="cobComment"/>
-         <!-- EXEC statement typically contains embedded SQL... -->
+      <scheme name="exec">
+         <!-- Sequence number area and Identification area -->
+         <regexp match="/^(.{0,6})\M.{0,66}(.*)$/" region1="SeqNum" region2="Comment"/>
+         <!-- EXEC statement usually contains embedded SQL -->
          <inherit scheme="sql:sql"/>
       </scheme>
 
-      <scheme name="cobol">
-         <inherit scheme="cobolmargins"/>
-         <!-- Debug lines -->
-         <regexp match="/^.{6}(D.{0,65}).*$/i" region1="cobDbg"/>
-         <!-- Comment lines -->
-         <regexp match="/^.{6}([\*\/])(.{0,65}).*$/" region1="cobIndicator" region2="cobComment"/>
-         <!-- Special comments -->
-         <regexp match="/^.{6}\s+(REMARKS|AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)?(.+)$/i" region1="cobWord" region2="cobSymbDot" region3="cobComment"/>
-         <!-- Process area A+B -->
-         <block start="/^.{6}/" end="/.{1,66}\m(.*)$/" scheme="cobolcore" region11="cobComment"/>
-      </scheme>
-
       <scheme name="cobolcore">
+         <!-- Librarian and Panvalet includes -->
+         <regexp match="/^(?:(.{6})?\ *(-INC)|(.{6})\ (\+\+INCLUDE))\ +([\w\$\#\@\xA7]{1,8})\ *(\.)?(.*)$/" region1="SeqNum" region2="Keyword" region3="SeqNum" region4="Keyword" region5="Ident" region6="Period" region7="Comment"/>
+         <!-- Debug lines -->
+         <regexp match="/^(.{6})(D.{0,65})(.*)$/i" region1="SeqNum" region2="Debug" region3="Comment"/>
+         <!-- Comment lines -->
+         <regexp match="/^(.{6})([\*\/])(.*)$/" region1="SeqNum" region2="Indicator" region3="Comment"/>
+         <!-- Something wrong in Indicator area -->
+         <regexp match="/^(.{6})([^\ \-].{0,65})(.*)$/" region1="SeqNum" region2="Error" region3="Comment"/>
+         <!-- Continuation lines error - http://publib.boulder.ibm.com/infocenter/pdthelp/v1r1/index.jsp?topic=%2Fcom.ibm.entcobol.doc_3.4%2Frlfmtcon.htm -->
+         <regexp match="/^(.{6})(\-(?:\ {0,3}[\x22\'])?=.{1,65})(.*)$/" region1="SeqNum" region2="Error" region3="Comment"/>
+         <!-- Special comments -->
+         <block start="/^(.{6})\ +(REMARKS|AUTHOR|DATE\-COMPILED|DATE\-WRITTEN|INSTALLATION|SECURITY)(\.)?/i" end="/^\M(.{6}\ \ {4})?!/"
+                scheme="def:empty" region="Comment" region01="SeqNum" region02="Keyword" region03="Period" inner-region="yes"/>
          <!-- Sections and Divisions -->
-         <regexp match="/\s+([\w\-]+\s+(SECTION|DIVISION))\b/i" region1="cobDirect"/>
-         <!-- Variable declarations -->
-         <regexp match="/\s+(\d\d)\s+([\w\:\-]+)/" region1="cobNumb" region2="cobIdent"/>
-         <!-- Multiline strings
-           http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/igy3lr31/1.6.4.2.1?SHELF=&DT=20060329140556&CASE=
-           multiline string "aaa<spaces>bbb<spaces>ccc":
-           000000 "aaa         //string can start everywhere in area A+B
-           000001-    "bbb     //so far ignoring rule that area A must be blank in this line
-           000002-    "ccc"    //so far ignoring rule that area A must be blank in this line
-          -->
-         <block start="/\&#34;/" end="/( (\&#34;)\M | ^.{6}\M(\-) )/x" scheme="cobolmargins" region="cobString" region00="def:PairStart" region12="def:PairEnd" region13="def:PairEnd"/>
-         <block start="/\'/" end="/( (\')\M | ^.{6}\M(\-) )/x" scheme="cobolmargins" region="cobString" region00="def:PairStart" region12="def:PairEnd" region13="def:PairEnd"/>
+         <regexp match="/^(.{6})\ +([\w\-]+)\ +(SECTION|DIVISION)[\ \.]?=/i" region1="SeqNum" region2="Directive" region3="Directive"/>
+         <!-- Continuation lines indicator -->
+         <regexp match="/^\M.{6}(\-)/" region1="Indicator"/>
+         <!-- Paired brackets -->
+         <block start="/(?{start}\()/" end="/(?{end}\))/" scheme="cobolcore" region00="Symbol" region10="Symbol" inner-region="yes"/>
+         <!-- Numeric literals with fixed point (the \M fixes Identification area) -->
+         <regexp match="/\M[\ :\(]?#1([+\-])?(\d*\.?\d+)([\ :\)\.]?=|$)/i" region1="Symbol" region2="Number"/>
+         <!-- ... character string in PIC clause is not a number even though it might look so -->
+         <regexp match="/\ (PIC|PICTURE)(\ +IS)?\ +([09]+)([\ \.]?=|$)/i" region1="Keyword" region2="Keyword" region3="Ident"/>
+         <!-- Numeric literals with floating point -->
+         <regexp match="/[\ :\(]?#1([+\-])?(\d+\.\d+E[+\-]?\d\d?)([\ :\)\.]?=|$)/i" region1="Symbol" region2="Number"/>
+         <!-- Alphanumeric literals -->
+         <block start="/(?{start}(\x22|\'))/" end="/(?{end}\Y1|$)/" scheme="def:empty" region="String"/>
+         <!-- EXEC statements -->
+         <block start="/\ ?#1(?{start}EXEC|EXECUTE)(\ ?=|$)/i" end="/\ ?#1(?{end}END-EXEC)([\ \.]?=|$)/i"
+                scheme="exec" region00="Exec" region10="Exec"/>
+         <!-- Sequence number area -->
+         <regexp match="/^.{0,6}/" region0="SeqNum"/>
 
-         <!-- Oneline strings -->
-         <block start="/\&#34;/" end="/\&#34;/" scheme="def:empty" region="cobString" region00="def:PairStart" region10="def:PairEnd"/>
-         <block start="/\'/" end="/\'/" scheme="def:empty" region="cobString" region00="def:PairStart" region10="def:PairEnd"/>
-
-         <!-- Embedded EXEC statements -->
-         <block start="/(EXEC|EXECUTE)/i" end="/(END-EXEC)/i" scheme="cobolexec" region00="def:PairStart" region01="cobExec" region10="def:PairEnd" region11="cobExec"/>
-
-         <!-- Standard COBOL Symbols -->
-         <keywords region="cobSymb" worddiv="[\W\d]"> <!-- minus can be part of identifier -->
+         <!-- Symbols -->
+         <keywords region="Symbol" worddiv="%worddiv;">
             <word name="-"/>
          </keywords>
-         <keywords region="cobSymb">
-            <symb name=";"/>
-            <symb name="="/>
+         <keywords region="Symbol">
             <symb name="+"/>
-            <symb name="/"/>
             <symb name="*"/>
-            <symb name="&amp;"/>
-            <symb name="|"/>
-            <symb name="^"/>
+            <symb name="/"/>
+            <symb name="="/>
+            <symb name=","/>
+            <symb name=";"/>
+            <symb name="." region="Period"/>
+            <symb name=":"/>
             <symb name="("/>
             <symb name=")"/>
-            <symb name="["/>
-            <symb name="]"/>
-            <symb name="." region="cobSymbDot"/>
-            <symb name=","/>
-            <symb name=":"/>
-            <symb name="!"/>
-            <symb name="~"/>
             <symb name="&lt;"/>
             <symb name="&gt;"/>
-            <symb name="%"/>
-            <symb name="{"/>
-            <symb name="}"/>
-            <symb name="?"/>
          </keywords>
 
-         <!-- COBOL Keywords and Reserved words -->
-         <keywords ignorecase="yes" region="cobWord" worddiv="[\W-[\-]]">
+         <!-- Keywords and Reserved words -->
+         <keywords ignorecase="yes" region="Keyword" worddiv="%worddiv;">
             <word name="ACCEPT"/>
             <word name="ACCESS"/>
             <word name="ACOS"/>
@@ -622,7 +616,6 @@
             <word name="ZEROS"/>
          </keywords>
       </scheme>
-
    </type>
 </hrc>
 <!-- ***** BEGIN LICENSE BLOCK *****

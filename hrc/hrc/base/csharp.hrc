@@ -8,6 +8,7 @@
     C# Syntax description
 With help of:
     Alexey Drugobitskiy <msfun@rambler.ru>
+    Roman Kuzmin
 -->
    <type name="csharp">
 
@@ -25,17 +26,15 @@ With help of:
       <region name="FuncOutline" parent="def:Outlined"/>
       <region name="ClassOutline" parent="def:Outlined"/>
       <region name="vbString" parent="def:String"/>
+      <region name="string.quote" parent="def:StringEdge"/>
+      <region name="string.escape" parent="def:StringContent"/>
 
       <scheme name="verbatim-string">
-         <block start="/@(&quot;)/" end="/.*?(&quot;)?~1\m(&quot;)\M(&quot;)?!/"
-            region="vbString" scheme="vbstring.content"
-            region00='string.quote' region01="def:PairStart"
-            region10='string.quote' region12="def:PairEnd"		
-        />
+         <block start="/(?{def:PairStart}(?{string.quote}@&quot;))/" end="/(?{def:PairEnd}(?{string.quote}&quot;))/" region="vbString" scheme="vbstring.content"/>
       </scheme>
 
      <scheme name="vbstring.content">
-
+     	<regexp match="/(?{string.escape}&quot;&quot;)/"/>
      </scheme>
 
       <scheme name="csharp">
@@ -48,7 +47,7 @@ With help of:
             <virtual scheme="PairedBrackets" subst-scheme="csharp"/>
          </inherit>
          <block start="/\/\*/" end="/\*\//" scheme="Comment" region="csComment" region00="csOpenStruct" region10="csCloseStruct"/>
-         <regexp match="/\/\/.*$/" region0="csComment"/>
+         <block start="/\/\//" end="/$/" scheme="Comment" region="csComment"/>
          <regexp match="/'(.|\\['])'/" region0="csString"/>
          <block start="/^\s*(#region) (.*)$/" end="/^\s*(#endregion)(.*)$/" scheme="csharp" region01="csOpenStruct" region11="csCloseStruct" region00="Directive" region10="Directive" region02="Comment" region12="Comment"/>
          <block start="/(\()/" end="/(\))/" scheme="csharp" region00="csSymbol" region10="csSymbol" region01="csOpenStruct" region11="csCloseStruct"/>
@@ -70,13 +69,12 @@ With help of:
          ]]></regexp>
          <regexp><![CDATA[
            /\M
-           class \s+
+           (?:class|struct) \s+
            (?{ClassOutline}
             [\:\w]+ [\:\w\s]*? ([^;]|$)
            )/x
          ]]></regexp>
          
-
          <keywords region="csSymbol">
             <symb name=";" region="csSymbolStrong"/>
             <symb name=":"/>
@@ -179,6 +177,7 @@ With help of:
             <word name="unsafe"/>
             <word name="ushort"/>
             <word name="using"/>
+            <word name="var"/>
             <word name="virtual"/>
             <word name="void"/>
             <word name="while"/>

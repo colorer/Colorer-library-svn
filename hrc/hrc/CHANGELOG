@@ -1,5 +1,82 @@
+2013-09-02
+  Fixed:
+    - SilverStripe - some fixes (lazyeugene)
+    - css (lazyeugene)
+    - php - проблемные места с endif/endfor/endwhile (lazyeugene)
+    - js 
+
+2013-07-02
+  Fixed:
+    - farmenu - environment variables
+    - lua  - remove tab highlight
+
+2013-29-01
+  Fixed:
+    - php - new words
+
+2013-28-01
+  Fixed:
+    - warning in log for acapella
+    - html, css, php, jscript - many changes (Небольшая реорганизация css и html схем. Добавлено множество тегов/аттрибутов/правил. Часть устаревших теперь deprecated. Добавлено множество слов в схему php, расширена раскраска строк (все парсятся как строки для printf-функций), добавлена урезанная поддержка меток в пхп и парных скобок : и endfor/endif/endforeach/endwhile/else (чтобы работало, необходимо, чтобы : шло непосредственно за зыкрывающей условие скобкой либо сразу за else. Немного добавлено в jscript-схему.)
+	- Lua (Rakhmatullin A.I.)
+
+2013-22-01
+  Fixed:
+    - a little c++11
+
+2012-15-11
+  Fixed:
+    - pl1 - fix not escaped %
+    - llvm, html-css, cobolfr - Added missing regions
+    - update "quorum languages" (Vladimir Fonarev)
+
+2012-10-08 r1876 (FarColorer 1.0.3.12)
+  New:
+    - powershell (Roman Kuzmin)
+    - R (Roman Kuzmin)
+    - Lemon Parser Generator (Aleksey Dobrunov)
+    - json (Aliaksei Chapyzhenka)
+    - LLVM IR (Aliaksei Chapyzhenka)
+  Fixed:
+    - sql - 'end' for case block; fixed qualified host variables
+    - csharp - add struct in outlined; keyword 'var'; simple parse verbatim string
+    - php - php 5.4 support: traits, binary numbers, some functions deprecation (lazyeugene)
+    - less - some fixes (lazyeugene)
+    - SilverStripe - some fixes (lazyeugene)
+    - css - new keywords (lazyeugene)
+    - cobol - many fixes (Pavel Pleva)
+    - cobolfr - many fixes (Pavel Pleva)
+    - jcl - many fixes (Pavel Pleva)
+    - makefile- fixed comment after var definition (Pavel Pleva)
+    - pl1 - many fixes (Pavel Pleva)
+    - sh - fixed --eq  (Pavel Pleva)
+    - graphviz - updated for Graphviz 2.28 (Roman Kuzmin)
+
+
+2012-03-26 r1850 (FarColorer 1.0.3.10)
+  New:
+    - UniVision Basic (Pete Howell)
+    - markdown (Roman Kuzmin)
+    - squirrel
+  Fixed:
+    - matlab - try/catch support
+    - postscript - add keyword
+    - fix error in csharp, markdown, pl1, ubasic
+    - c-win32.ent - add keyword, constants
+    - c.hrc  - printf format string
+
+2012-03-15 r1835 (FarColorer 1.0.3.9)
+  New:
+    - SHPAML (Eric Gustavson https://github.com/occulens/shpaml-colorer)
+    - Less Css (lazyeugene)
+    - SilverStripe (lazyeugene)
   Fixed:
     - Far MacroLib
+    - Far.hrc - new in Far3
+    - Html - pair tags, conditional comments (IE) , new tags and etc.  (lazyeugene)
+    - CSS - new keywords (lazyeugene)
+    - ASP - insertions  in the script tags  (lazyeugene)
+    - php - new keywords, json, OAuth; function name and constants case insensitive  (lazyeugene)
 
 2012-01-08 r1809 (FarColorer 1.0.3.7)
   New:
