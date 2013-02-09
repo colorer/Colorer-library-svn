@@ -31,6 +31,7 @@
 		<region name="Var" parent="def:Var" />
 		<region name="KnownVar" parent="def:VarStrong" />
 		<region name="ssTagName" parent="def:Keyword" />
+		<region name="ssCondition" parent="def:Keyword" />
 		<region name="IncludeFile" parent="SymbolStrong" />
 
 		<entity name="var" value="[a-zA-Z0-9_]+" />
@@ -49,6 +50,7 @@
 		    <keywords region="KnownVar">
 		    	<word name="AbsoluteLink" />
 		    	<word name="AllNewsletters" />
+		    	<word name="Aggregate" />
 		    	<word name="ATT_val" />
 		    	<word name="BaseHref" />
 		    	<word name="Breadcrumbs" />
@@ -145,6 +147,12 @@
 		    	<word name="XML_val" />
 		    </keywords>
 		</scheme>
+		<scheme name="Conditions">
+		    <keywords region="ssCondition">
+		    	<word name="if" />
+		    	<word name="unless" />
+		    </keywords>
+		</scheme>
 
 		<scheme name="ss_t">
 			<regexp match="/(([&quot;&apos;])) (.*?) ((\1))/x"
@@ -164,7 +172,7 @@
 			</keywords>
 		</scheme>
 		<scheme name="Script">
-			<block start="/(&lt;%)?#2\s+((control|with|loop))/" end="/(end_\Y3)/"
+			<block start="/(&lt;%)?#2\s+((cached|control|with|loop|uncached))/" end="/(end_\Y3)/"
 				region02="PairStart" region10="PairEnd"
 				region03="ssTagName" region11="ssTagName"
 				scheme="Script" priority="low"
@@ -199,15 +207,18 @@
 			/>
 			<regexp match="/(&lt;%)?#2\s+ (include|require) \s+ ([\w]+)/x" region2="ssTagName" region3="IncludeFile" />
 			<regexp match="/(&lt;%)?#2\s+ (base_tag|current_page) /x" region2="ssTagName" />
-			<regexp match="/(&lt;%)?#2\s+ (end_if|end_control) /x" region2="def:Error" priority="low" />
+			<regexp match="/(&lt;%)?#2\s+ (end_(cached|control|loop|if|uncached|width)) /x" region2="def:Error" priority="low" />
 			<keywords region="Symbol">
 				<symb name="||"/>
 				<symb name="&amp;&amp;"/>
 				<symb name="."/>
+				<symb name=","/>
+				<symb name="!="/>
 				<symb name="=="/>
 				<symb name="="/>
 			</keywords>
 			<inherit scheme="KnownVars"/>
+			<inherit scheme="Conditions"/>
 			<regexp match="/\d+/" region="Number" />
 			<keywords region="def:Error">
 				<symb name="," />

@@ -1,7 +1,14 @@
+2013-09-02
+  Fixed:
+    - SilverStripe - some fixes (lazyeugene)
+    - css (lazyeugene)
+    - php - проблемные места с endif/endfor/endwhile (lazyeugene)
+
 2013-07-02
   Fixed:
     - farmenu - environment variables
     - lua  - remove tab highlight
+
 2013-29-01
   Fixed:
     - php - new words
