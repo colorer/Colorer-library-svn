@@ -3,6 +3,7 @@
     - SilverStripe - some fixes (lazyeugene)
     - css (lazyeugene)
     - php - проблемные места с endif/endfor/endwhile (lazyeugene)
+    - js 
 
 2013-07-02
   Fixed:

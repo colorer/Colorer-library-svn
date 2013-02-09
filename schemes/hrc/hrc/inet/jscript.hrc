@@ -103,6 +103,7 @@
          <block start="/\/\//" end="/\M(&lt;\/scr|$)/i" scheme="jComment" region="Comment"/>
          <block start="/\/\*/" end="/\*\//" scheme="jComment" region="Comment" region00="PairStart" region10="PairEnd"/>
          <regexp match="/^\M\s* function \s+ ([\w_]+) /x" region1="Function"/>
+         <regexp match="/\b ([\w_]+) \s* [=:] \M\s* function\b /x" region1="Function"/>
          <inherit scheme="PairedBrackets">
             <virtual scheme="PairedBrackets" subst-scheme="jScript"/>
          </inherit>
