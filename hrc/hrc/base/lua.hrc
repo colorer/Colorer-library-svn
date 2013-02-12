@@ -73,13 +73,15 @@
 <scheme name="CommonQuoted">
 <!-- Quoted commons -->
  <!-- 'string' -->
- <block start="/(&apos;)/" end="/(&apos;)/"
+ <block start="/((&apos;))/" end="/((&apos;))/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="StringEdge" region12="StringEdge"/>
  <!-- "string" -->
- <block start="/(&quot;)/" end="/(&quot;)/"
+ <block start="/((&quot;))/" end="/((&quot;))/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="StringEdge" region12="StringEdge"/>
 </scheme>
 
 <scheme name="CommonPaired">
