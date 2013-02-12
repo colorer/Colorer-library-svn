@@ -31,7 +31,11 @@
 
   <prototype name="far.macrolib" group="scripts.far" description="Far Macro Library">
     <location link="scripts/far/macrolib.hrc"/> 
-    <filename>/\.fml$/i</filename>
+    <filename>/\.fm[li]$/i</filename>
+  </prototype>
+  <prototype name="far.macroliblua" group="scripts.far" description="Far Macro Library (Lua)">
+    <location link="scripts/far/macroliblua.hrc"/> 
+    <filename>/\.fmlua$/i</filename>
   </prototype>
 
   <prototype name="calcset" group="scripts.far" description="calc's defines">
