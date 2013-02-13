@@ -73,32 +73,37 @@
 <scheme name="CommonQuoted">
 <!-- Quoted commons -->
  <!-- 'string' -->
- <block start="/(&apos;)/" end="/(&apos;)/"
+ <block start="/((&apos;))/" end="/((&apos;))/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="StringEdge" region12="StringEdge"/>
  <!-- "string" -->
- <block start="/(&quot;)/" end="/(&quot;)/"
+ <block start="/((&quot;))/" end="/((&quot;))/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="StringEdge" region12="StringEdge"/>
 </scheme>
 
 <scheme name="CommonPaired">
 <!-- Paired commons -->
  <!-- (common) -->
- <block start="/(\()/" end="/(\))/"
+ <block start="/((\())/" end="/((\)))/"
         scheme="CommonPaired"
         region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="def:Symbol" region12="def:Symbol"/>
  <!-- {common} -->
- <block start="/(\{)/" end="/(\})/"
+ <block start="/((\{))/" end="/((\}))/"
         scheme="CommonPaired"
         region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="def:SymbolStrong" region12="def:SymbolStrong"/>
  <!-- [common] -->
- <block start="/(\[)/" end="/(\])/"
+ <block start="/((\[))/" end="/((\]))/"
         scheme="CommonPaired"
         region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"/>
+        region01="PairStart" region11="PairEnd"
+        region02="def:Symbol" region12="def:Symbol"/>
 </scheme>
 
 <!-- СХЕМЫ из rhlang.hrc -->

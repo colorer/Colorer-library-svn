@@ -1,3 +1,7 @@
+2013-13-02
+  New:
+    - scheme for new macrolib+lua (lazyeugene)
+
 2013-09-02
   Fixed:
     - SilverStripe - some fixes (lazyeugene)
