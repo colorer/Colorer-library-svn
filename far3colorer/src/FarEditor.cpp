@@ -145,16 +145,15 @@ void FarEditor::setDrawCross(int _drawCross)
     showVerticalCross   = false;
     break;
   case 1:
-    showHorizontalCross = true;
-    showVerticalCross   = true;
-    break;
   case 2:
     FileType *ftype = baseEditor->getFileType();
     HRCParser *hrcParser = parserFactory->getHRCParser();
     FileType *def = hrcParser->getFileType(&DDefaultScheme);
-    const String *value;
-    value = ftype->getParamValue(DShowCross);
-    if (!value){
+    const String *value = null;
+    if (drawCross==2){
+      value = ftype->getParamValue(DShowCross);
+    }
+    if (!value && drawCross!=2){
       value = def->getParamValue(DShowCross);
     }
 
