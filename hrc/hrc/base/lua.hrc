@@ -8,13 +8,13 @@
 <type name="lua">
 
 <annotation>
- <documentation>
-  Lua Scheme.
-  Lua script syntax.
- </documentation>
- <contributors><![CDATA[
-  Rakhmatullin A.I. <raidar@yandex.ru>
- ]]></contributors>
+    <documentation>
+        Lua Scheme.
+        Lua script syntax.
+    </documentation>
+    <contributors><![CDATA[
+        Rakhmatullin A.I. <raidar@yandex.ru>
+    ]]></contributors>
 </annotation>
 
 <!-- ИМПОРТ -->
@@ -39,9 +39,6 @@
 <region name="SpecMathFig"  parent="SpecialMath"   description="Special math figure"/>
 <region name="SpecMathGap"  parent="SpecialMath"   description="Special math spaces"/>
 
-<!-- РЕГИОНЫ из rh_main.hrc -->
-<region name="PairedSym" parent="def:Syntax" description="Paired Symbol"/>
-
 <!-- РЕГИОНЫ -->
 
 <!-- СУЩНОСТИ из rh_base.hrc -->
@@ -55,55 +52,51 @@
 
 <scheme name="CharDQuoted">
 <!-- Double quoted string some special characters -->
- <regexp match='/\\[\\&apos;&quot;]/' region0="def:default"/>
+    <regexp match='/\\[\\&apos;&quot;]/' region0="def:default"/>
 </scheme>
 <scheme name="CharDQuotin">
 <!-- Double quoted string inner string characters -->
- <regexp match='/\\\\[\\&apos;&quot;]/' region0="def:default"/>
+    <regexp match='/\\\\[\\&apos;&quot;]/' region0="def:default"/>
 </scheme>
 
 <scheme name="HexNumber">
-<!-- Hex simple numbers -->
- <regexp match="/\b(0x)(%hex;+)\b/"
-         region0="def:NumberHex" region1="def:NumberPrefix"/>
+    <!-- Hex simple numbers -->
+    <regexp match="/\b(0x)(%hex;+)\b/" region0="def:NumberHex" region1="def:NumberPrefix"/>
 </scheme>
 
 <!-- СХЕМЫ из rh_main.hrc -->
 
 <scheme name="CommonQuoted">
-<!-- Quoted commons -->
- <!-- 'string' -->
- <block start="/((&apos;))/" end="/((&apos;))/"
+    <!-- Quoted commons -->
+    <!-- 'string' -->
+    <block start="/(&apos;)/" end="/(&apos;)/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"
-        region02="StringEdge" region12="StringEdge"/>
- <!-- "string" -->
- <block start="/((&quot;))/" end="/((&quot;))/"
+        region00="PairStart" region10="PairEnd"
+        region01="StringEdge" region11="StringEdge"/>
+    <!-- "string" -->
+    <block start="/(&quot;)/" end="/(&quot;)/"
         scheme="CommonQuoted" region="String"
-        region01="PairStart" region11="PairEnd"
-        region02="StringEdge" region12="StringEdge"/>
+        region00="PairStart" region10="PairEnd"
+        region01="StringEdge" region11="StringEdge"/>
 </scheme>
 
 <scheme name="CommonPaired">
-<!-- Paired commons -->
- <!-- (common) -->
- <block start="/((\())/" end="/((\)))/"
+    <!-- Paired commons -->
+    <!-- (common) -->
+    <block start="/(\()/" end="/(\))/"
+	        scheme="CommonPaired"
+    	    region00="def:Symbol" region10="def:Symbol"
+        	region01="PairStart" region11="PairEnd" />
+    <!-- {common} -->
+    <block start="/(\{)/" end="/(\})/"
         scheme="CommonPaired"
-        region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"
-        region02="def:Symbol" region12="def:Symbol"/>
- <!-- {common} -->
- <block start="/((\{))/" end="/((\}))/"
+        region00="def:SymbolStrong" region10="def:SymbolStrong"
+        region01="PairStart" region11="PairEnd" />
+    <!-- [common] -->
+    <block start="/(\[)/" end="/(\])/"
         scheme="CommonPaired"
-        region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"
-        region02="def:SymbolStrong" region12="def:SymbolStrong"/>
- <!-- [common] -->
- <block start="/((\[))/" end="/((\]))/"
-        scheme="CommonPaired"
-        region00="PairedSym" region10="PairedSym"
-        region01="PairStart" region11="PairEnd"
-        region02="def:Symbol" region12="def:Symbol"/>
+        region00="def:Symbol" region10="def:Symbol"
+        region01="PairStart" region11="PairEnd" />
 </scheme>
 
 <!-- СХЕМЫ из rhlang.hrc -->
@@ -111,323 +104,345 @@
 <!-- СХЕМЫ -->
 
 <scheme name="LuaCoreKeys">
-<!-- Core keywords -->
- <!-- = Data words -->
- <keywords region="Keyword">
-  <word name="boolean"/>
-  <word name="function"/>
-  <!--word name="nil"/-->
-  <!--<word name="number"/>-->
-  <!--<word name="string"/>-->
-  <!--<word name="table"/>-->
-  <word name="thread"/>
-  <word name="userdata"/>
- </keywords>
- <!-- = Code words -->
- <keywords region="Keyword">
-  <word name="local"/>
-  <word name="in"/>
-  <word name="not"/>
-  <word name="and"/>
-  <word name="or"/>
-  <word name="self"/>
+    <!-- Core keywords -->
+    <!-- = Data words -->
+    <keywords region="Keyword">
+        <word name="boolean"/>
+        <word name="function"/>
+        <!--word name="nil"/-->
+        <!--<word name="number"/>-->
+        <!--<word name="string"/>-->
+        <!--<word name="table"/>-->
+        <word name="thread"/>
+        <word name="userdata"/>
+    </keywords>
+    <!-- = Code words -->
+    <keywords region="Keyword">
+        <word name="local"/>
+        <word name="in"/>
+        <word name="not"/>
+        <word name="and"/>
+        <word name="or"/>
+        <word name="self"/>
 
-  <word name="do"/>
-  <word name="end"/>
-  <word name="for"/>
-  <word name="while"/>
-  <word name="repeat"/>
-  <word name="until"/>
-  <word name="if"/>
-  <word name="then"/>
-  <word name="else"/>
-  <word name="elseif"/>
-  <word name="break"/>
-  <word name="return"/>
-  <word name="continue"/>
- </keywords>
- <!-- = Special words -->
- <keywords region="Keyword">
-  <word name="module"/>
-  <word name="require"/>
-  <word name="import"/>
- </keywords>
- <keywords region="KeywordStrong">
-  <word name="assert"/>
-  <word name="error"/>
-  <word name="print"/>
-  <word name="collectgarbage"/>
+        <word name="do"/>
+        <!--word name="end"/-->
+        <word name="for"/>
+        <word name="while"/>
+        <word name="repeat"/>
+        <word name="until"/>
+        <word name="if"/>
+        <word name="then"/>
+        <word name="else"/>
+        <word name="elseif"/>
+        <word name="break"/>
+        <word name="return"/>
+        <word name="continue"/>
+    </keywords>
+    <!-- = Special words -->
+    <keywords region="Keyword">
+        <word name="module"/>
+        <word name="require"/>
+        <word name="import"/>
+    </keywords>
+    <keywords region="KeywordStrong">
+        <word name="assert"/>
+        <word name="error"/>
+        <word name="print"/>
+        <word name="collectgarbage"/>
 
-  <word name="type"/>
-  <word name="tostring"/>
-  <word name="tonumber"/>
+        <word name="type"/>
+        <word name="tostring"/>
+        <word name="tonumber"/>
 
-  <word name="getfenv"/>
-  <word name="setfenv"/>
+        <word name="getfenv"/>
+        <word name="setfenv"/>
 
-  <word name="pairs"/>
-  <word name="ipairs"/>
-  <word name="next"/>
+        <word name="pairs"/>
+        <word name="ipairs"/>
+        <word name="next"/>
 
-  <word name="select"/>
-  <word name="unpack"/>
-  <word name="rawget"/>
-  <word name="rawset"/>
-  <word name="rawequal"/>
-  <word name="getmetatable"/>
-  <word name="setmetatable"/>
+        <word name="select"/>
+        <word name="unpack"/>
+        <word name="rawget"/>
+        <word name="rawset"/>
+        <word name="rawequal"/>
+        <word name="getmetatable"/>
+        <word name="setmetatable"/>
 
-  <word name="dofile"/>
-  <word name="load"/>
-  <word name="loadfile"/>
-  <word name="loadstring"/>
-  <word name="pcall"/>
-  <word name="xpcall"/>
+        <word name="dofile"/>
+        <word name="load"/>
+        <word name="loadfile"/>
+        <word name="loadstring"/>
+        <word name="pcall"/>
+        <word name="xpcall"/>
 
-  <word name="action"/>
-  <word name="chunk"/>
-  <word name="class"/>
-  <word name="command"/>
-  <word name="default"/>
-  <!--<word name="foreach"/>-->
-  <word name="id"/>
-  <word name="isok"/>
-  <word name="object"/>
-  <word name="result"/>
-  <word name="script"/>
-  <word name="state"/>
-  <word name="tpairs"/>
-  <word name="value"/>
- </keywords>
- <!-- = Other words -->
- <keywords region="KeywordStrong">
-  <word name="bnot"/>
-  <word name="band"/>
-  <word name="bxor"/>
-  <word name="bor"/>
-  <word name="bshl"/>
-  <word name="bshr"/>
+        <word name="action"/>
+        <word name="chunk"/>
+        <word name="class"/>
+        <word name="command"/>
+        <word name="default"/>
+        <!--<word name="foreach"/>-->
+        <word name="id"/>
+        <word name="isok"/>
+        <word name="object"/>
+        <word name="result"/>
+        <word name="script"/>
+        <word name="state"/>
+        <word name="tpairs"/>
+        <word name="value"/>
+    </keywords>
+    <!-- = Other words -->
+    <keywords region="KeywordStrong">
+        <word name="bnot"/>
+        <word name="band"/>
+        <word name="bxor"/>
+        <word name="bor"/>
+        <word name="bshl"/>
+        <word name="bshr"/>
 
-  <word name="_G"/>
-  <word name="F"/>
-  <!--<word name="M"/>-->
-  <word name="L"/>
-  <word name="isOk"/>
-  <word name="Result"/>
-  <word name="State"/>
-  <word name="Value"/>
- </keywords>
- <!-- = Module names -->
- <keywords region="KeywordStrong">
-  <word name="coroutine"/>
-  <word name="debug"/>
-  <word name="io"/>
-  <word name="math"/>
-  <word name="os"/>
-  <word name="package"/>
-  <word name="string"/>
-  <word name="table"/>
+        <word name="_G"/>
+        <word name="F"/>
+        <!--<word name="M"/>-->
+        <word name="L"/>
+        <word name="isOk"/>
+        <word name="Result"/>
+        <word name="State"/>
+        <word name="Value"/>
+    </keywords>
+    <!-- = Module names -->
+    <keywords region="KeywordStrong">
+        <word name="coroutine"/>
+        <word name="debug"/>
+        <word name="io"/>
+        <word name="math"/>
+        <word name="os"/>
+        <word name="package"/>
+        <word name="string"/>
+        <word name="table"/>
 
-  <word name="bit"/>
-  <word name="db"/>
-  <word name="far"/>
-  <word name="game"/>
-  <word name="lf4ed"/>
-  <word name="ini"/>
-  <word name="lfs"/>
-  <word name="unicode"/>
-  <word name="utf8"/>
-  <word name="w32"/>
- </keywords>
- <!-- = Constant values -->
- <keywords region="Constant">
-  <word name="nil"/>
-  <!--<word name="null"/>-->
- </keywords>
- <keywords region="BooleanConstant">
-  <word name="false"/>
-  <word name="true"/>
- </keywords>
- <!-- = Used char vars -->
- <keywords region="Number">
-  <word name="_"/>
- </keywords>
+        <word name="bit"/>
+        <word name="db"/>
+        <word name="far"/>
+        <word name="game"/>
+        <word name="lf4ed"/>
+        <word name="ini"/>
+        <word name="lfs"/>
+        <word name="unicode"/>
+        <word name="utf8"/>
+        <word name="w32"/>
+    </keywords>
+    <!-- = Constant values -->
+    <keywords region="Constant">
+        <word name="nil"/>
+        <!--<word name="null"/>-->
+    </keywords>
+    <keywords region="BooleanConstant">
+        <word name="false"/>
+        <word name="true"/>
+    </keywords>
+    <!-- = Used char vars -->
+    <keywords region="Number">
+        <word name="_"/>
+    </keywords>
 </scheme>
 
 <scheme name="CommentExt">
- <inherit scheme="Comment"/>
+    <inherit scheme="Comment"/>
 </scheme>
 
 <scheme name="LuaSpecComment">
-<!-- = Multi-line comment -->
- <!-- - - [=[Long-bracketed string]=] -->
- <block start="/(\-\-(\[(\=*)\[))/" end="/((\]\y3\]))/"
+    <!-- = Multi-line comment -->
+    <!-- - - [=[Long-bracketed string]=] -->
+    <block start="/(\-\-(\[(\=*)\[))/" end="/((\]\y3\]))/"
         scheme="LuaSpecComment" region="Comment"
         region02="StringEdge" region00="PairStart"
         region11="StringEdge" region10="PairEnd"/>
- <inherit scheme="CommentExt"/>
+    <inherit scheme="CommentExt"/>
 </scheme>
 
 <scheme name="LuaComment">
-<!-- Comments -->
- <!-- = Multi-line comment -->
- <inherit scheme="LuaSpecComment" />
- <inherit scheme="CommentExt"/>
- <!-- = Separator comment -->
- <block start="/(\-{32,32}) (?{Annoted}\-{8,8} \M [^\-].*?) $/x" end="/($)/"
+    <!-- Comments -->
+    <!-- = Multi-line comment -->
+    <inherit scheme="LuaSpecComment" />
+    <inherit scheme="CommentExt"/>
+    <!-- = Separator comment -->
+    <block start="/(\-{32,32}) (?{Annoted}\-{8,8} \M [^\-].*?) $/x" end="/($)/"
         scheme="CommentExt" region="Comment"
         region01="PairStart" region10="PairEnd"/>
- <!-- = Single-line comment -->
- <block start="/(\-\-) \M .*? $/x" end="/($)/"
+    <!-- = Single-line comment -->
+    <block start="/(\-\-) \M .*? $/x" end="/($)/"
         scheme="CommentExt" region="Comment"
         region01="PairStart" region10="PairEnd"/>
 </scheme>
 
 <scheme name="LuaSpecString">
-<!-- Lua special string -->
- <!-- [=[Long-bracketed string]=] -->
- <block start="/((\[(\=*)\[))/" end="/((\]\y3\]))/"
+    <!-- Lua special string -->
+    <!-- [=[Long-bracketed string]=] -->
+    <block start="/((\[(\=*)\[))/" end="/((\]\y3\]))/"
         scheme="LuaSpecString" region="String"
         region02="StringEdge" region00="PairStart"
         region11="StringEdge" region10="PairEnd"/>
 </scheme>
 
 <scheme name="LuaNoted">
-<!-- Noted Lua -->
- <inherit scheme="LuaSpecString">
-  <virtual scheme="LuaSpecString" subst-scheme="LuaMain"/>
- </inherit>
- <inherit scheme="CommonQuoted">
-  <virtual scheme="CommonQuoted" subst-scheme="LuaQuot"/>
- </inherit>
- <inherit scheme="CommonPaired">
-  <virtual scheme="CommonPaired" subst-scheme="LuaCore"/>
- </inherit>
+    <!-- Noted Lua -->
+    <inherit scheme="LuaSpecString">
+        <virtual scheme="LuaSpecString" subst-scheme="LuaMain"/>
+    </inherit>
+    <inherit scheme="CommonQuoted">
+        <virtual scheme="CommonQuoted" subst-scheme="LuaQuot"/>
+    </inherit>
+    <inherit scheme="CommonPaired">
+        <virtual scheme="CommonPaired" subst-scheme="LuaCore"/>
+    </inherit>
 </scheme>
 
 <scheme name="LuaQuot">
-<!-- Quoted Main Lua -->
- <inherit scheme="CharDQuoted"/>
- <inherit scheme="LuaMain"/>
+    <!-- Quoted Main Lua -->
+    <inherit scheme="CharDQuoted"/>
+    <inherit scheme="LuaMain"/>
 </scheme>
 
 <scheme name="LuaMain">
-<!-- Main Lua -->
+    <!-- Main Lua -->
 
- <!-- = Numbers -->
- <inherit scheme="FloatNumber"/>
- <inherit scheme="DecNumber"/>
- <inherit scheme="HexNumber"/>
+    <!-- = Numbers -->
+    <inherit scheme="FloatNumber"/>
+    <inherit scheme="DecNumber"/>
+    <inherit scheme="HexNumber"/>
 </scheme>
 
 <scheme name="LuaCore">
-<!-- Lua Core Scheme -->
- <inherit scheme="LuaMain"/>
- <inherit scheme="LuaComment"/>
- <inherit scheme="LuaNoted"/>
+    <!-- Lua Core Scheme -->
+    <inherit scheme="LuaMain"/>
+    <inherit scheme="LuaComment"/>
+    <inherit scheme="LuaNoted"/>
 
- <!-- = Plural symbols -->
- <keywords region="Symbol">
-  <symb name="=="/><symb name="&lt;="/>
-  <symb name="~="/><symb name="=&gt;"/>
-  <symb name=".."/>
- </keywords>
- <!-- = Single symbols -->
- <keywords region="Symbol">
-  <symb name="="/><symb name="~"/><symb name="#"/><symb name="?"/>
-  <symb name="^"/><symb name="%"/><symb name="&amp;"/>
-  <symb name="+"/><symb name="-"/><symb name="*"/><symb name="/"/>
-  <symb name="("/><symb name="["/><symb name="{"/><symb name="&lt;"/>
-  <symb name=")"/><symb name="]"/><symb name="}"/><symb name="&gt;"/>
-  <symb name=":"/><symb name="."/><symb name=","/><symb name=";"/>
- </keywords>
- <inherit scheme="LuaCoreKeys"/> <!-- Core Keys -->
- <!-- = Character vars -->
- <regexp match="/\W?#1[a-z](\W?=|$)/" region0="Number"/>
- <!-- = Mixed Text -->
- <!--<inherit scheme="rhlang:LexemeMixed"/>-->
+    <!-- = Plural symbols -->
+    <keywords region="Symbol">
+        <symb name="=="/>
+        <symb name="&lt;="/>
+        <symb name="~="/>
+        <symb name="=&gt;"/>
+        <symb name=".."/>
+    </keywords>
+
+    <!-- = Single symbols -->
+    <keywords region="Symbol">
+        <symb name="="/>
+        <symb name="~"/>
+        <symb name="#"/>
+        <symb name="?"/>
+        <symb name="^"/>
+        <symb name="%"/>
+        <symb name="&amp;"/>
+        <symb name="+"/>
+        <symb name="-"/>
+        <symb name="*"/>
+        <symb name="/"/>
+        <symb name="&lt;"/>
+        <symb name="&gt;"/>
+        <symb name=":"/>
+        <symb name="."/>
+        <symb name=","/>
+        <symb name=";"/>
+    </keywords>
+    <inherit scheme="LuaCoreKeys"/> <!-- Core Keys -->
+    <!-- = Character vars -->
+    <regexp match="/\W?#1[a-z](\W?=|$)/" region0="Number"/>
+    <!-- = Mixed Text -->
+    <!--<inherit scheme="rhlang:LexemeMixed"/>-->
+    <keywords region="def:Error" priority="low">
+        <symb name="}"/>
+        <symb name=")"/>
+        <symb name="]"/>
+    </keywords>
 </scheme>
 
 <scheme name="LuaDoif">
-<!-- Doifs -->
- <block start="/(elseif)/"
+    <!-- Doifs -->
+    <block start="/(elseif)/"
         end="/(then)\b/" scheme="LuaBody"
         region00="Operator"  region10="Operator"
         region01="PairStart" region11="PairEnd"/>
- <block start="/(\bif)?#2(\s+)/"
+    <block start="/(\bif)?#2(\s+)/"
         end="/(then)\b/" scheme="LuaBody"
         region00="Operator"  region10="Operator"
         region02="PairStart" region11="PairEnd"/>
- <inherit scheme="LuaBody"/> <!-- LuaBody -->
+    <inherit scheme="LuaBody"/>
 </scheme>
 
 <scheme name="LuaLoop">
-<!-- Loops -->
- <block start="/((\bfor)?#3|(\bwhile)?#5)(\s+)/"
+    <!-- Loops -->
+    <block start="/((\bfor)?#3|(\bwhile)?#5)(\s+)/"
         end="/(do)\b/" scheme="LuaCore"
         region00="Operator"  region10="Operator"
         region04="PairStart" region11="PairEnd"/>
- <inherit scheme="LuaBody"/> <!-- LuaBody -->
+    <inherit scheme="LuaBody"/>
 </scheme>
 
 <scheme name="LuaBody">
-<!-- Lua Body Scheme -->
+    <!-- Lua Body Scheme -->
 
- <!-- * Blocks -->
+    <!-- * Blocks -->
 
- <!-- function-end -->
- <block start="/\b(function) \s+ (?{def:Function}(%entname;)) \s* \M (\(|$)/x"
-        end="/\b(end)\b/" scheme="LuaBody" region02="Parameter"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
- <block start="/\b(function) \s* \M (\(|$)/x"
-        end="/\b(end)\b/" scheme="LuaBody" region02="Parameter"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
- <!-- if-(then)-end -->
- <block start="/\b(if)\b/"
-        end="/\b(end)\b/" scheme="LuaDoif"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
- <!-- for-(do)-end / while-(do)-end -->
- <block start="/\b(for|while)\b/"
-        end="/\b(end)\b/" scheme="LuaLoop"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
- <!-- = repeat-until -->
- <block start="/\b(repeat)\b/"
-        end="/\b(until)\b/" scheme="LuaBody"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
+    <!-- function-end -->
+    <block start="/\b(function) \s+ (?{def:Function}(%entname;)) \s* \M (\(|$)/x"
+            end="/\b(end)\b/" scheme="LuaBody" region02="Parameter"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
+    <block start="/\b(function) \s* \M (\(|$)/x"
+            end="/\b(end)\b/" scheme="LuaBody" region02="Parameter"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
 
- <!-- = do-end -->
- <block start="/^((?{Block}do))\b/"
-        end="/\b(end)\b/" scheme="LuaBody"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
- <!-- = do-end -->
- <block start="/\b(do)\b/"
-        end="/\b(end)\b/" scheme="LuaBody"
-        region00="Operator"  region10="Operator"
-        region01="PairStart" region11="PairEnd"/>
+     <!-- if-(then)-end -->
+    <block start="/\b(if)\b/"
+            end="/\b(end)\b/" scheme="LuaDoif"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
+    <!-- for-(do)-end / while-(do)-end -->
+    <block start="/\b(for|while)\b/"
+            end="/\b(end)\b/" scheme="LuaLoop"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
+    <!-- = repeat-until -->
+    <block start="/\b(repeat)\b/"
+            end="/\b(until)\b/" scheme="LuaBody"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
 
- <!-- * Others -->
- <block start="/^\M((local)) (?{Section}\s+ [_\w]+) \s* \= \s* \{/x"
-        end="/^~local \s+ [_\w]+ \s* ((\=)) \s* \M \{/x" scheme="LuaCore"
-        region01="Operator"  region11="Operator"
-        region02="PairStart" region12="PairEnd"/>
+    <!-- = do-end -->
+    <block start="/^((?{Block}do))\b/"
+            end="/\b(end)\b/" scheme="LuaBody"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
+    <!-- = do-end -->
+    <block start="/\b(do)\b/"
+            end="/\b(end)\b/" scheme="LuaBody"
+            region00="Operator"  region10="Operator"
+            region01="PairStart" region11="PairEnd"/>
 
- <!-- Core -->
- <inherit scheme="LuaCore">
-  <virtual scheme="LuaCore" subst-scheme="LuaBody"/>
- </inherit>
+    <!-- * Others -->
+    <block start="/^\M((local)) (?{Section}\s+ [_\w]+) \s* \= \s* \{/x"
+            end="/^~local \s+ [_\w]+ \s* ((\=)) \s* \M \{/x" scheme="LuaCore"
+            region01="Operator"  region11="Operator"
+            region02="PairStart" region12="PairEnd"/>
+
+    <!-- Core -->
+    <inherit scheme="LuaCore">
+        <virtual scheme="LuaCore" subst-scheme="LuaBody"/>
+    </inherit>
+    <keywords region="def:Error" priority="low">
+    	<word name="end"/>
+    </keywords>
 </scheme>
 
 <!-- ОСНОВА -->
 
 <scheme name="lua">
-<!-- Lua Scheme -->
- <inherit scheme="LuaBody"/>
+    <inherit scheme="LuaBody"/>
 </scheme>
 
 </type>
