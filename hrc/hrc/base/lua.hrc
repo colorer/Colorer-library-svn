@@ -132,9 +132,9 @@
         <word name="repeat"/>
         <word name="until"/>
         <word name="if"/>
-        <word name="then"/>
+        <!--word name="then"/-->
         <word name="else"/>
-        <word name="elseif"/>
+        <!--word name="elseif"/-->
         <word name="break"/>
         <word name="return"/>
         <word name="continue"/>
@@ -362,12 +362,12 @@
 
 <scheme name="LuaDoif">
     <!-- Doifs -->
-    <block start="/(elseif)/"
-        end="/(then)\b/" scheme="LuaBody"
+    <block start="/\b(elseif)\b/"
+        end="/\b(then)\b/" scheme="LuaBody"
         region00="Operator"  region10="Operator"
         region01="PairStart" region11="PairEnd"/>
     <block start="/(\bif)?#2(\s+)/"
-        end="/(then)\b/" scheme="LuaBody"
+        end="/\b(then)\b/" scheme="LuaBody"
         region00="Operator"  region10="Operator"
         region02="PairStart" region11="PairEnd"/>
     <inherit scheme="LuaBody"/>
@@ -376,7 +376,7 @@
 <scheme name="LuaLoop">
     <!-- Loops -->
     <block start="/((\bfor)?#3|(\bwhile)?#5)(\s+)/"
-        end="/(do)\b/" scheme="LuaCore"
+        end="/\b(do)\b/" scheme="LuaCore"
         region00="Operator"  region10="Operator"
         region04="PairStart" region11="PairEnd"/>
     <inherit scheme="LuaBody"/>
@@ -435,7 +435,9 @@
         <virtual scheme="LuaCore" subst-scheme="LuaBody"/>
     </inherit>
     <keywords region="def:Error" priority="low">
+    	<word name="elseif"/>
     	<word name="end"/>
+    	<word name="then"/>
     </keywords>
 </scheme>
 
