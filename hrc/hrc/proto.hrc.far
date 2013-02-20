@@ -259,22 +259,22 @@
 
   <prototype name="xhtml-trans" group="inet" description="xhtml transitional" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/gen/xhtml-trans.hrc"/>
-    <filename>/\.html?/ix</filename>
-    <filename>/\.xhtml?/ix</filename>
+    <filename>/\.html?$/ix</filename>
+    <filename>/\.xhtml?$/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Transitional/i</firstline>
   </prototype>
   <prototype name="xhtml-strict" group="inet" description="xhtml strict" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/gen/xhtml-strict.hrc"/>
-    <filename>/\.html?/ix</filename>
-    <filename>/\.xhtml?/ix</filename>
+    <filename>/\.html?$/ix</filename>
+    <filename>/\.xhtml?$/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Strict/i</firstline>
   </prototype>
   <prototype name="xhtml-frameset" group="inet" description="xhtml frameset" targetNamespace="http://www.w3.org/1999/xhtml">
     <location link="inet/gen/xhtml-frameset.hrc"/>
-    <filename>/\.html?/ix</filename>
-    <filename>/\.xhtml?/ix</filename>
+    <filename>/\.html?$/ix</filename>
+    <filename>/\.xhtml?$/ix</filename>
     <firstline weight='0.5'>/^&lt;\?xml/</firstline>
     <firstline weight='2'>/DTD XHTML.*?Frameset/i</firstline>
   </prototype>
