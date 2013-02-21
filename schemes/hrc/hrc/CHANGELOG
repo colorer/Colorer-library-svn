@@ -1,3 +1,10 @@
+2013-21-02
+  Fixed:
+    - lua - errors processing (single closed brackets and "end" keyword);
+            Sting edges, paired brackets changes;
+            some more error handling;
+    - wrong xml detection if files like *.html.*
+
 2013-13-02
   New:
     - scheme for new macrolib+lua (lazyeugene)
