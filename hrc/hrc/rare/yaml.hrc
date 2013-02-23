@@ -21,7 +21,7 @@
                 Script language for MUD Neronis (http://neronis.ru)
             </documentation>
         </annotation>
-
+        <import type="def"/>
 		<entity name="byte" value="\d{1,2}|[01]\d\d|2[0-4]\d|25[0-5]" />
 
 		<region name="KeyName" parent="def:Keyword"/>
@@ -48,7 +48,7 @@
 			<regexp match="/%[\w\._]+%/" region="def:Constant" />
 			<inherit scheme="def:Date" />
 			<inherit scheme="def:Time" />
-		    <regexp match="/%msg:email;/" region="def:EMail" />
+		    <inherit scheme="def:NetAddresses" />
 		    <inherit scheme="numbers" />
 		</scheme>
 
@@ -81,7 +81,7 @@
         	/>
         </scheme>
         <scheme name="scalars">
-        	<keywords region="def:Keyword">
+        	<keywords region="def:Keyword" ignorecase="yes">
         		<word name="~"/>
         		<word name="false"/>
         		<word name="N"/>

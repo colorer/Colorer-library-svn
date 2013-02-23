@@ -156,7 +156,7 @@
 
     <scheme name="NetURL">
       <regexp priority="low" region="URL"><![CDATA[
-       /\b ((https?|ftp|news|nntp|wais|wysiwyg|gopher|javascript|castanet|about)
+       /\b ((about|castanet|ftp|git|gopher|https?|javascript|news|nntp|sop|wais|wysiwyg)
            \:\/\/  | (www|ftp|fido[0-9]*)\.)
            [\[\]\@\%\:\+\w\.\/\~\?\-\*=_#&;]+\b\/?/ix]]>
       </regexp>
