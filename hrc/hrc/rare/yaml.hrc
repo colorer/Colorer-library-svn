@@ -31,7 +31,7 @@
 		<region name="TagEdge" parent="def:Tag"/>
 
 
-		<scheme name="escapes">
+		<scheme name="Escapes">
 			<regexp match="/\\[0\\abtnvfre&quot;N_Lp]/" region="def:SymbolStrong" />
 			<regexp match="/\\x[\da-fA-F]{2}/" region="def:SymbolStrong" />
 			<regexp match="/\\u[\da-fA-F]{4}/" region="def:SymbolStrong" />
@@ -39,28 +39,31 @@
 
 			<!--regexp match="/\\./" region="def:Error" /-->
 		</scheme>
-		<scheme name="numbers">
+		<scheme name="Numbers">
 			<regexp match="/(^|\s)?#1\b-?\d+(\.\d+)?\b/" region="def:Number"/>
 		</scheme>
-		<scheme name="strings">
-		    <inherit scheme="escapes"/>
+		<scheme name="Date">
+			<inherit scheme="def:Date"/>
+		</scheme>
+		<scheme name="Strings">
+		    <inherit scheme="Escapes"/>
 			<regexp match="/(%byte;)\.(%byte;)\.(%byte;)\.(%byte;)/" region="def:EMail" />
 			<regexp match="/%[\w\._]+%/" region="def:Constant" />
-			<inherit scheme="def:Date" />
+			<inherit scheme="Date" />
 			<inherit scheme="def:Time" />
 		    <inherit scheme="def:NetAddresses" />
-		    <inherit scheme="numbers" />
+		    <inherit scheme="Numbers" />
 		</scheme>
 
-        <scheme name="comments">
+        <scheme name="Comments">
         	<regexp match="/#.*$/" region="def:Comment"/>
         </scheme>
 
-        <scheme name="keys">
-			<regexp match="/([\w\.]+)\M:(\s|$)?=/" region1="KeyName" />
+        <scheme name="Keys">
+			<regexp match="/([\w\.\:\-]+)\M:(\s|$)?=/" region1="KeyName" />
         </scheme>
 
-        <scheme name="brackets">
+        <scheme name="Brackets">
         	<block start="/(\[)/" end="/(\])/" scheme="YamlBody"
         		region00="def:PairStart"  region10="def:PairEnd"
         		region01="def:SymbolStrong" region11="def:SymbolStrong"
@@ -74,13 +77,13 @@
         		<symb name="}"/>
         	</keywords>
         </scheme>
-        <scheme name="tags">
+        <scheme name="Tags">
             <regexp match="/!h?\!\w+/" region="def:Directive" />
         	<regexp match="/!&lt;[^&gt;]+&gt;/"
         		region="def:Directive"
         	/>
         </scheme>
-        <scheme name="scalars">
+        <scheme name="Scalars">
         	<keywords region="def:Keyword" ignorecase="yes">
         		<word name="~"/>
         		<word name="false"/>
@@ -97,20 +100,20 @@
         </scheme>
         
         <scheme name="YamlBody">
-        	<inherit scheme="comments"/>
-			<inherit scheme="tags" />
+        	<inherit scheme="Comments"/>
+			<inherit scheme="Tags" />
 			<inherit scheme="def:Time" />
-        	<inherit scheme="keys"/>
-        	<inherit scheme="scalars"/>
+        	<inherit scheme="Keys"/>
+        	<inherit scheme="Scalars"/>
         	<regexp match="/[&amp;*]\w+/" region="def:Var" />
         	<regexp match="/[|?&gt;!%&amp;`@]($|\s)?=/" region="def:Symbol" />
-        	<inherit scheme="brackets"/>
-        	<block start="/([&apos;&quot;])/" end="/(\Y1)/" scheme="strings"
+        	<inherit scheme="Brackets"/>
+        	<block start="/([&apos;&quot;])/" end="/(\Y1)/" scheme="Strings"
         		region="def:String"
         		region00="def:PairStart"  region10="def:PairEnd"
         		region01="def:StringEdge" region11="def:StringEdge"
         	/>
-        	<block start="/[^\s,:?;-]?=/" end="/[,\[\]\{\}#&apos;&quot;]?=|(^\.{3})?=|$/" scheme="strings"
+        	<block start="/[^\s,:?;-]?=/" end="/[,\[\]\{\}#&apos;&quot;]?=|(^\.{3})?=|$/" scheme="Strings"
         		region="def:String"
         	/>
         	<regexp match="/[\?:,\[\]\{\}#&amp;\*!|&gt;&apos;&quot;%@`\-]/" region="def:Symbol" priority="low"/>
