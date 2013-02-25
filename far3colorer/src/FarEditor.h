@@ -161,6 +161,7 @@ private:
   void addFARColor(intptr_t lno, intptr_t s, intptr_t e, FarColor col, EDITORCOLORFLAGS TabMarkStyle=0);
   void deleteFarColor(intptr_t lno, intptr_t s);
   const wchar_t *GetMsg(int msg);
+  COLORREF getSuitableColor(const COLORREF base_color, const COLORREF blend_color);
 };
 #endif
 /* ***** BEGIN LICENSE BLOCK *****

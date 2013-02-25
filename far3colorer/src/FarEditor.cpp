@@ -421,7 +421,7 @@ void FarEditor::locateFunction()
       CLR_INFO("FC", "Letter %s", funcname.getChars());
       baseEditor->validate(-1, false);
       EditorSetPosition esp;
-	  esp.StructSize = sizeof(EditorSetPosition);
+      esp.StructSize = sizeof(EditorSetPosition);
       OutlineItem *item_found = NULL;
       OutlineItem *item_last = NULL;
       int items_num = structOutliner->itemCount();
@@ -499,6 +499,49 @@ int FarEditor::editorInput(const INPUT_RECORD &Rec)
   return 0;
 }
 
+COLORREF FarEditor::getSuitableColor(const COLORREF base_color, const COLORREF blend_color)
+{
+  /*0 - black
+    1 - blue
+    2 - green
+    3 - cyan
+    4 - bordo
+    5 - purple
+    6 - brown
+    7 - light gray
+    8 - gray
+    9 - light blue
+    A - light green
+    B - light cyan
+    C - red
+    D - light purple
+    E - yellow
+    F - white*/
+  if (base_color==blend_color) {
+    switch (blend_color) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7: return blend_color+8;
+    case 8: return 7;
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15: return blend_color-8;
+    default: return blend_color;
+    };
+  }else{
+    return blend_color;
+  }
+}
+
 int FarEditor::editorEvent(intptr_t event, void *param)
 {
   if (event == EE_CHANGE) {
@@ -550,6 +593,9 @@ int FarEditor::editorEvent(intptr_t event, void *param)
   ecp.SrcPos = ei.CurPos;
   info->EditorControl(CurrentEditor, ECTL_REALTOTAB, NULL, &ecp);
 
+  bool show_whitespase = !!(ei.Options & EOPT_SHOWWHITESPACE);
+  bool show_eol = !!(ei.Options & EOPT_SHOWLINEBREAK);
+
   for (intptr_t lno = ei.TopScreenLine; lno < ei.TopScreenLine + WindowSizeY; lno++){
     if (lno >= ei.TotalLines){
       break;
@@ -598,37 +644,49 @@ int FarEditor::editorEvent(intptr_t event, void *param)
         while (j<lend){
           FarColor col1=col;
           start = j;
-          if (egs.StringText[j]==L' ' || egs.StringText[j]==L'\t'){
-            while ((j<=llen)&&(j<lend)&&(egs.StringText[j]==L' ' || egs.StringText[j]==L'\t')) j++;
-            end = j>=llen ? lend : j;
-            whitespace=true;
-          }else{
-            while ((j<=llen)&&(j<lend)&&(egs.StringText[j]!=L' ' && egs.StringText[j]!=L'\t')) j++;
-            end = j>=llen ? lend : j;
-            whitespace=false;
+          end = lend;
+          if (show_whitespase) {
+            if (egs.StringText[j]==L' ' || egs.StringText[j]==L'\t'){
+              while ((j<=llen)&&(j<lend)&&(egs.StringText[j]==L' ' || egs.StringText[j]==L'\t')) j++;
+              end = j>=llen ? lend : j;
+              whitespace=true;
+            }else{
+              while ((j<=llen)&&(j<lend)&&(egs.StringText[j]!=L' ' && egs.StringText[j]!=L'\t')) j++;
+              end = j>=llen ? lend : j;
+              whitespace=false;
+            }
           }
 
           if (whitespace) col1.ForegroundColor=rdBackground->fore;
           //horizontal cross
           if (lno == ei.CurLine && showHorizontalCross){
-            if (horzCrossColor.BackgroundColor!=col1.ForegroundColor) {
-              col1.BackgroundColor=horzCrossColor.BackgroundColor;
-            }
             if (crossZOrder!=0 && !whitespace){
               col1.ForegroundColor=horzCrossColor.ForegroundColor;
             }
+            col1.BackgroundColor=getSuitableColor(col1.ForegroundColor,horzCrossColor.BackgroundColor);
             addFARColor(lno, start, end, col1);
           }else
             addFARColor(lno, start, end, col1);
-
+          
+          // не меняем цвет для EOL
+          if (end>llen && show_eol){
+            FarColor col2=col1;
+            col2.ForegroundColor=rdBackground->fore;
+            if (lno == ei.CurLine && showHorizontalCross){
+              col2.BackgroundColor=horzCrossColor.BackgroundColor;
+            }
+            addFARColor(lno, llen, llen+2, col2);
+          }
           // vertical cross
           if (showVerticalCross && start <= ecp_cl.DestPos && ecp_cl.DestPos < end){
-            if (vertCrossColor.BackgroundColor!=col1.ForegroundColor) {
-              col1.BackgroundColor=vertCrossColor.BackgroundColor;
+            if ( (ecp_cl.DestPos==llen || ecp_cl.DestPos==llen+1)&&show_eol){
+              col1.ForegroundColor=rdBackground->fore;
+            }else{
+              if (crossZOrder!=0 && !whitespace){
+                col1.ForegroundColor=vertCrossColor.ForegroundColor;
+              }
             }
-            if (crossZOrder!=0 && !whitespace){
-              col1.ForegroundColor=vertCrossColor.ForegroundColor;
-            }
+            col1.BackgroundColor=getSuitableColor(col1.ForegroundColor, vertCrossColor.BackgroundColor);
             addFARColor(lno, ecp_cl.DestPos, ecp_cl.DestPos+1, col1,ECF_TABMARKCURRENT);
           };
           j = end;
