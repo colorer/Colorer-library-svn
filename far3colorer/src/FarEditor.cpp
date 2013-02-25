@@ -17,6 +17,7 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   maxLineLength = 0;
   fullBackground = true;
   drawCross = 0;
+  CrossStyle = 0;
   showHorizontalCross = showVerticalCross = false;
   crossZOrder    = 0;
   horzCrossColor = FarColor(); 
@@ -136,24 +137,38 @@ FileType *FarEditor::getFileType()
   return baseEditor->getFileType();
 }
 
-void FarEditor::setDrawCross(int _drawCross)
+void FarEditor::setDrawCross(int _drawCross, int _CrossStyle)
 {
   drawCross=_drawCross;
+  CrossStyle=_CrossStyle;
   switch (drawCross){
   case 0:
     showHorizontalCross = false;
     showVerticalCross   = false;
     break;
   case 1:
+    switch (CrossStyle){
+    case 0:
+      showHorizontalCross = true;
+      showVerticalCross   = true;
+      break;
+    case 1:
+      showHorizontalCross = false;
+      showVerticalCross   = true;
+      break;
+    case 2:
+      showHorizontalCross = true;
+      showVerticalCross   = false;
+      break;
+    }
+    break;
   case 2:
     FileType *ftype = baseEditor->getFileType();
     HRCParser *hrcParser = parserFactory->getHRCParser();
     FileType *def = hrcParser->getFileType(&DDefaultScheme);
-    const String *value = null;
-    if (drawCross==2){
-      value = ftype->getParamValue(DShowCross);
-    }
-    if (!value && drawCross!=2){
+    const String *value;    
+    value = ftype->getParamValue(DShowCross);
+    if (!value){
       value = def->getParamValue(DShowCross);
     }
 

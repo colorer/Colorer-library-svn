@@ -26,8 +26,11 @@ $^#FarColorer's settings.#
 
   #Cross#
      [ ] Do not show ever
-     [?] Show if included in the scheme. The settings for the cross is taken from the file type.
-     [x] Always Show. The settings for the cross is taken from the default type.
+     [?] Show if included in the scheme. 
+     [x] Always Show.
+
+  #Cross style#
+     Cross style shown when "[x] Cross"
 
   #Pairs#
      Allocate or not paired language elements (brackets, quotes)
