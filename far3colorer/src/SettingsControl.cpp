@@ -5,7 +5,7 @@ SettingsControl::SettingsControl()
   FarSettingsCreate fsc;
   fsc.Guid = MainGuid;
   fsc.StructSize=sizeof(FarSettingsCreate);
-  if (Info.SettingsControl(INVALID_HANDLE_VALUE, SCTL_CREATE, NULL, &fsc)){
+  if (Info.SettingsControl(INVALID_HANDLE_VALUE, SCTL_CREATE, PSL_ROAMING, &fsc)){
     farSettingHandle = fsc.Handle;
   }
   else{
