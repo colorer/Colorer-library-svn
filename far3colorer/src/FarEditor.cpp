@@ -716,8 +716,6 @@ void FarEditor::showOutliner(Outliner *outliner)
     {VK_LEFT,LEFT_CTRL_PRESSED }, {VK_RIGHT,LEFT_CTRL_PRESSED },
     {VK_RETURN,LEFT_CTRL_PRESSED },{VK_OEM_1,LEFT_CTRL_PRESSED }, 
     {VK_OEM_MINUS,SHIFT_PRESSED },{VK_OEM_3,SHIFT_PRESSED },
-    {VK_NUMPAD0,0},{VK_NUMPAD1,0},{VK_NUMPAD2,0},{VK_NUMPAD3,0},{VK_NUMPAD4,0},
-    {VK_NUMPAD5,0},{VK_NUMPAD6,0},{VK_NUMPAD7,0},{VK_NUMPAD8,0},{VK_NUMPAD9,0},
     {'0',0},{'1',0},{'2',0},{'3',0},{'4',0},{'5',0},{'6',0},{'7',0},{'8',0},{'9',0},
     {'A',0},{'B',0},{'C',0},{'D',0},{'E',0},{'F',0},{'G',0},{'H',0},{'I',0},{'J',0},
     {'K',0},{'L',0},{'M',0},{'N',0},{'O',0},{'P',0},{'Q',0},{'R',0},{'S',0},{'T',0},
@@ -1059,11 +1057,7 @@ void FarEditor::showOutliner(Outliner *outliner)
       if (flen == FILTER_SIZE || code > keys_size){
         break;
       }
-      if (code<23){
-        filter[flen] = (wchar_t)Character::toLowerCase('0'+code-13);
-      }else{
-        filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code].VirtualKeyCode);
-      }
+      filter[flen] = (wchar_t)Character::toLowerCase(breakKeys[code].VirtualKeyCode);
       filter[++flen] = 0;
       break;
     }
