@@ -321,6 +321,9 @@
     <ClInclude Include="ChooseTypeMenu.h">
       <Filter>pcolorer3</Filter>
     </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>pcolorer3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FarEditor.cpp">

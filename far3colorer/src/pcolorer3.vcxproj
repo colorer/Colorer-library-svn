@@ -353,6 +353,7 @@
     <ClInclude Include="..\..\colorer\src\shared\common\io\Writer.h" />
     <ClInclude Include="..\..\colorer\src\shared\xml\xmldom.h" />
     <ClInclude Include="..\..\colorer\src\shared\cregexp\cregexp.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChooseTypeMenu.cpp" />

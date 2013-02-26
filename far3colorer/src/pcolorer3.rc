@@ -1,9 +1,10 @@
 #include <windows.h>
+#include "version.h"
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,3,12
- PRODUCTVERSION 1,0,3,12
+ FILEVERSION VER_FILEVERSION
+ PRODUCTVERSION VER_PRODUCTVERSION
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -23,12 +24,12 @@ BEGIN
 #else
             VALUE "FileDescription", "FarColorer - Syntax Highlighting for Far Manager 3.0"
 #endif
-            VALUE "FileVersion", "1, 0, 3, 12"
+            VALUE "FileVersion", VER_FILEVERSION_STR
             VALUE "InternalName", "FarColorer"
-            VALUE "LegalCopyright", "Copyright (C) 2009-2012"
+            VALUE "LegalCopyright", "Copyright (C) 2009-2013"
             VALUE "OriginalFilename", "colorer.dll"
             VALUE "ProductName", "FarColorer library"
-            VALUE "ProductVersion", "1, 0, 3, 12"
+            VALUE "ProductVersion", VER_PRODUCTVERSION_STR
         END
     END
     BLOCK "VarFileInfo"
