@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
-  "http://colorer.sf.net/2003/hrc.dtd">
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
@@ -37,121 +36,123 @@
 		<entity name="var" value="[a-zA-Z0-9_]+" />
 
 		<scheme name="ssComment">
-			<regexp match="/(&lt;%--) .*? (--%&gt;)/x"
-				region1="PairStart"
-				region2="PairEnd"
+			<regexp match="/&lt;%-- (.(--%&gt;)?!)* $/x"
+				region="def:Error"
+			/>
+			<block start="/(&lt;%--\s)/" end="/\s?#1(--%&gt;)/" scheme="Comment"
+				region01="PairStart"
+				region11="PairEnd"
 				region="def:Comment"
 			/>
-			<!--inherit scheme="html:Comment"/-->
 		</scheme>
 
 		
 		<scheme name="KnownVars">
-		    <keywords region="KnownVar">
-		    	<word name="AbsoluteLink" />
-		    	<word name="AllNewsletters" />
-		    	<word name="Aggregate" />
-		    	<word name="ATT_val" />
-		    	<word name="BaseHref" />
-		    	<word name="Breadcrumbs" />
-		    	<word name="ChildrenOf" />
-		    	<word name="ClassName" />
-		    	<word name="CMSTreeClasses" />
-		    	<word name="Comments" />
-		    	<word name="ContentSource" />
-		    	<word name="Content" />
-		    	<word name="CopyContentFromID" />
-		    	<word name="Created" />
-		    	<word name="CurrentMember" />
-		    	<word name="CurrentPage" />
-		    	<word name="Debug" />
-		    	<word name="ElementName" />
-		    	<word name="EmailOnSubmit" />
-		    	<word name="EmailTo" />
-		    	<word name="ErrorCode" />
-		    	<word name="Even" />
-		    	<word name="EvenOdd" />
-		    	<word name="ExternalURL" />
-		    	<word name="FirstLast" />
-		    	<word name="First" />
-		    	<word name="Form" />
-		    	<word name="HasBrokenFile" />
-		    	<word name="HasBrokenLink" />
-		    	<word name="HomePageForDomain" />
-		    	<word name="ID" />
-		    	<word name="Iteration" />
-		    	<word name="InSection" />
-		    	<word name="JS_val" />
-		    	<word name="LastEdited" />
-		    	<word name="Last" />
-		    	<word name="Layout" />
-		    	<word name="LegacyURL" />
-		    	<word name="Level" />
-		    	<word name="LinkedPageID" />
-		    	<word name="LinkingMode" />
-		    	<word name="LinkOrCurrent" />
-		    	<word name="LinkOrSection" />
-		    	<word name="LinkToID" />
-		    	<word name="LinkTo" />
-		    	<word name="Link" />
-		    	<word name="LoginForm" />
-		    	<word name="MetaDescription" />
-		    	<word name="MetaKeywords" />
-		    	<word name="MetaTags" />
-		    	<word name="MetaTitle" />
-		    	<word name="MenuTitle" />
-		    	<word name="Menu" />
-		    	<word name="Me" />
-		    	<word name="MiddleString" />
-		    	<word name="Middle" />
-		    	<word name="MultipleParents" />
-		    	<word name="NestedTitle" />
-		    	<word name="NextPageLink" />
-		    	<word name="Now" />
-		    	<word name="Odd" />
-		    	<word name="OnCompleteMessage" />
-		    	<word name="PageComments" />
-		    	<word name="Page" />
-		    	<word name="PastMember" />
-		    	<word name="PastVisitor" />
-		    	<word name="ParentID" />
-		    	<word name="Pos" />
-		    	<word name="ProvideComments" />
-		    	<word name="RAW_val" />
-		    	<word name="RecordClassName" />
-		    	<word name="RedirectionType" />
-		    	<word name="RelativeLink" />
-		    	<word name="RepostClass" />
-		    	<word name="Root" />
-		    	<word name="SearchForm" />
-		    	<word name="SearchResults" />
-		    	<word name="Section2" />
-		    	<word name="ShowInMenus" />
-		    	<word name="ShowInSearch" />
-		    	<word name="SiteConfig" />
-		    	<word name="SilverStripeNavigator" />
-		    	<word name="Sort" />
-		    	<word name="SQL_val" />
-		    	<word name="Status" />
-		    	<word name="Subject" />
-		    	<word name="SubmitButtonText" />
-		    	<word name="Subscribe" />
-		    	<word name="Title" />
-		    	<word name="ThemeDir" />
-		    	<word name="Top" />
-		    	<word name="TotalItems" />
-		    	<word name="TreeTitle" />
-		    	<word name="URLSegment" />
-		    	<word name="VersionID" />
-		    	<word name="Version" />
-		    	<word name="XML_val" />
-		    </keywords>
+			<keywords region="KnownVar">
+				<word name="AbsoluteLink" />
+				<word name="AllNewsletters" />
+				<word name="Aggregate" />
+				<word name="ATT_val" />
+				<word name="BaseHref" />
+				<word name="Breadcrumbs" />
+				<word name="ChildrenOf" />
+				<word name="ClassName" />
+				<word name="CMSTreeClasses" />
+				<word name="Comments" />
+				<word name="ContentSource" />
+				<word name="Content" />
+				<word name="CopyContentFromID" />
+				<word name="Created" />
+				<word name="CurrentMember" />
+				<word name="CurrentPage" />
+				<word name="Debug" />
+				<word name="ElementName" />
+				<word name="EmailOnSubmit" />
+				<word name="EmailTo" />
+				<word name="ErrorCode" />
+				<word name="Even" />
+				<word name="EvenOdd" />
+				<word name="ExternalURL" />
+				<word name="FirstLast" />
+				<word name="First" />
+				<word name="Form" />
+				<word name="HasBrokenFile" />
+				<word name="HasBrokenLink" />
+				<word name="HomePageForDomain" />
+				<word name="ID" />
+				<word name="Iteration" />
+				<word name="InSection" />
+				<word name="JS_val" />
+				<word name="LastEdited" />
+				<word name="Last" />
+				<word name="Layout" />
+				<word name="LegacyURL" />
+				<word name="Level" />
+				<word name="LinkedPageID" />
+				<word name="LinkingMode" />
+				<word name="LinkOrCurrent" />
+				<word name="LinkOrSection" />
+				<word name="LinkToID" />
+				<word name="LinkTo" />
+				<word name="Link" />
+				<word name="LoginForm" />
+				<word name="MetaDescription" />
+				<word name="MetaKeywords" />
+				<word name="MetaTags" />
+				<word name="MetaTitle" />
+				<word name="MenuTitle" />
+				<word name="Menu" />
+				<word name="Me" />
+				<word name="MiddleString" />
+				<word name="Middle" />
+				<word name="MultipleParents" />
+				<word name="NestedTitle" />
+				<word name="NextPageLink" />
+				<word name="Now" />
+				<word name="Odd" />
+				<word name="OnCompleteMessage" />
+				<word name="PageComments" />
+				<word name="Page" />
+				<word name="PastMember" />
+				<word name="PastVisitor" />
+				<word name="ParentID" />
+				<word name="Pos" />
+				<word name="ProvideComments" />
+				<word name="RAW_val" />
+				<word name="RecordClassName" />
+				<word name="RedirectionType" />
+				<word name="RelativeLink" />
+				<word name="RepostClass" />
+				<word name="Root" />
+				<word name="SearchForm" />
+				<word name="SearchResults" />
+				<word name="Section2" />
+				<word name="ShowInMenus" />
+				<word name="ShowInSearch" />
+				<word name="SiteConfig" />
+				<word name="SilverStripeNavigator" />
+				<word name="Sort" />
+				<word name="SQL_val" />
+				<word name="Status" />
+				<word name="Subject" />
+				<word name="SubmitButtonText" />
+				<word name="Subscribe" />
+				<word name="Title" />
+				<word name="ThemeDir" />
+				<word name="Top" />
+				<word name="TotalItems" />
+				<word name="TreeTitle" />
+				<word name="URLSegment" />
+				<word name="VersionID" />
+				<word name="Version" />
+				<word name="XML_val" />
+			</keywords>
 		</scheme>
 		<scheme name="Conditions">
-		    <keywords region="ssCondition">
-		    	<word name="if" />
-		    	<word name="unless" />
-		    </keywords>
+			<keywords region="ssCondition">
+				<word name="if" />
+				<word name="unless" />
+			</keywords>
 		</scheme>
 
 		<scheme name="ss_t">
@@ -249,7 +250,7 @@
 			<regexp match="/\.\./" region="def:Error" />
 			<regexp match="/\./" region="Symbol" />
 			<inherit scheme="KnownVars" />
-		    <block start="/\w/" end="/(\W)?=/"
+			<block start="/\w/" end="/(\W)?=/"
 				region="Var" scheme="KnownVars"
 			/>
 			<!--regexp match="/\.[\w_]+/" region="Var" /-->
@@ -274,8 +275,8 @@
 
 
 		<scheme name="Insertion">
-		    <inherit scheme="ssComment" />
-		    <inherit scheme="Variables" />
+			<inherit scheme="ssComment" />
+			<inherit scheme="Variables" />
 			<block start="/(&lt;%)(\s+)?=/" end="/(\s)?#1(%&gt;)/" 
 				priority="low" content-priority="low"
 				scheme="ssScript" region="Insertion" 
@@ -283,7 +284,7 @@
 			/>
 		</scheme>
 
-      
+
 		<scheme name="InverseInsertion">
 			<block start="/(\s)?#1((%&gt;))/" end="/((&lt;%(\s+)?=))/" scheme="html"
 				priority="low" region="Text" inner-region="yes"
