@@ -223,6 +223,10 @@
     <location link="inet/ss.hrc"/>
     <filename weight="10">/\.(ss)$/</filename>
   </prototype>
+	<prototype name="twig" group="inet" description="Twig PHP Templates">
+		<location link="inet/twig.hrc"/>
+		<filename weight="10">/\.(twig)$/</filename>
+	</prototype>
 
   <prototype name="haml" group="inet" description="HAML">
     <location link="inet/haml.hrc"/>
@@ -894,14 +898,18 @@
     <filename>/\.(src|inc|inf)$/i</filename>
     <firstline>/\*{10}/</firstline>
   </prototype>
- <prototype name="llvm" group="rare" description="LLVM IR">
-  <location link="rare/llvm.hrc"/>
-  <filename weight='3'>/\.ll$/i</filename>
- </prototype>
- <prototype name="json" group="rare" description="JSON">
-  <location link="rare/json.hrc"/>
-  <filename weight='3'>/\.json$/i</filename>
- </prototype>
+   <prototype name="llvm" group="rare" description="LLVM IR">
+    <location link="rare/llvm.hrc"/>
+    <filename weight='3'>/\.ll$/i</filename>
+   </prototype>
+   <prototype name="json" group="rare" description="JSON">
+    <location link="rare/json.hrc"/>
+    <filename weight='3'>/\.json$/i</filename>
+   </prototype>
+   <prototype name="yaml" group="rare" description="YAML">
+     <location link="rare/yaml.hrc"/>
+     <filename weight="10">/\.(yml)$/</filename>
+   </prototype>
 
   <!--  other types  -->
   &scripts-msg-protos;

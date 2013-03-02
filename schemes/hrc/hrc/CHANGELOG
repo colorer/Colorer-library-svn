@@ -1,3 +1,10 @@
+2013-03-02
+  New:
+    - Twig scheme
+    - YAML scheme
+  Fixed:
+    -  SilverStripe comment scheme improvement
+
 2013-21-02
   Fixed:
     - lua - errors processing (single closed brackets and "end" keyword);
