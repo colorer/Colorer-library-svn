@@ -282,6 +282,10 @@
      <word name='DL_CANCELDRAG'/>
      <word name='DL_DRAGGING'/>
      <word name='DL_DROPPED'/>
+     <word name='DLL_PROCESS_ATTACH'/>
+     <word name='DLL_THREAD_ATTACH'/>
+     <word name='DLL_THREAD_DETACH'/>
+     <word name='DLL_PROCESS_DETACH'/>
      <word name='DM_GETDEFID'/>
      <word name='DM_REPOSITION'/>
      <word name='DM_SETDEFID'/>
