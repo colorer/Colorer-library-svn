@@ -1,3 +1,9 @@
+2013-03-12
+  Fixed:
+    -  c++ - added constants for dll loading; 
+           - added some constants and functions; 
+           - added __declspec() directives
+
 2013-03-02
   New:
     - Twig scheme

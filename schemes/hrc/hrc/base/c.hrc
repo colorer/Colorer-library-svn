@@ -434,6 +434,31 @@
   </scheme>
 
 
+  <scheme name="DeclSpecs">
+    <keywords region="def:Directive">
+       <word name="align"/>
+       <word name="allocate"/>
+       <word name="appdomain"/>
+       <word name="deprecated"/>
+       <word name="dllimport"/>
+       <word name="dllexport"/>
+       <word name="jitintrinsic"/>
+       <word name="naked"/>
+       <word name="noalias"/>
+       <word name="noinline"/>
+       <word name="noreturn"/>
+       <word name="nothrow"/>
+       <word name="novtable"/>
+       <word name="process"/>
+       <word name="property"/>
+       <word name="restrict"/>
+       <word name="selectany"/>
+       <word name="thread"/>
+       <word name="uuid"/>
+    </keywords>
+    <block start="/(\()/" end="/(\))/" scheme="Expression"
+          region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
+  </scheme>
   <scheme name="Expression">
 
    <block start="/(\()/" end="/(\))/" scheme="Expression"
@@ -512,6 +537,10 @@
       <word name="__wchar_t"/>
    </keywords>
 
+   <block start="/(__declspec)\s*((\())/" end="/(\))/" scheme="DeclSpecs"
+       region01="KeywordANSI" region02="Symbol" region03="PairStart"
+       region10="Symbol" region11="PairEnd"
+   />
    <!-- C Keywords -->
    <keywords region="KeywordANSI">
       <word name="asm"/>
