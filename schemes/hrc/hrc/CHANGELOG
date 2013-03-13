@@ -1,3 +1,7 @@
+2013-03-13
+  Fixed:
+    - modula (Alexander Naumov)
+
 2013-03-12
   Fixed:
     -  c++ - added constants for dll loading; 
