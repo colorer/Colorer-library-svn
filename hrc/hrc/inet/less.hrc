@@ -34,12 +34,16 @@
 			<inherit scheme="css:Comment" />
 		</scheme>
 
-		<scheme name="StringContent">
-			<regexp match="/\\&quot;/" region="SymbolStrong" />
+		<scheme name="EscapedVar">
 			<regexp match="/\@((\{))[a-zA-Z0-9_]+((\}))/" region="Variable"
 				region1="PairStart" region2="SymbolStrong"
 				region3="PairEnd" region4="SymbolStrong"
 			/>
+		</scheme>
+
+		<scheme name="StringContent">
+			<regexp match="/\\&quot;/" region="SymbolStrong" />
+			<inherit scheme="EscapedVar" />
 		</scheme>
 		<scheme name="StringContentJS">
 			<inherit scheme="StringContent"/>
@@ -65,16 +69,24 @@
 		<scheme name="LessFunctions">
 			<inherit scheme="css:CssFunctions" />
 			<keywords region="def:Keyword">
+				<word name="acos" />
 				<word name="alpha" />
+				<word name="asin" />
+				<word name="atan" />
 				<word name="ceil" />
 				<word name="color" />
+				<word name="cos" />
 				<word name="darken" />
 				<word name="desaturate" />
+				<word name="extract" />
 				<word name="fade" />
 				<word name="fadein" />
 				<word name="fadeout" />
 				<word name="floor" />
 				<word name="hsl" />
+				<word name="hsvhue" />
+				<word name="hsvsaturation" />
+				<word name="hsvvalue" />
 				<word name="hue" />
 				<word name="iscolor" />
 				<word name="isem" />
@@ -86,12 +98,19 @@
 				<word name="isurl" />
 				<word name="lighten" />
 				<word name="lightness" />
+				<word name="luma" />
 				<word name="mix" />
+				<word name="mod" />
 				<word name="percentage" />
+				<word name="pi" />
+				<word name="pow" />
 				<word name="round" />
 				<word name="saturate" />
 				<word name="saturation" />
+				<word name="sin" />
 				<word name="spin" />
+				<word name="sqrt" />
+				<word name="tan" />
 			</keywords>
 		</scheme>
 
@@ -143,6 +162,9 @@
 
 		<scheme name="MixingProperty">
 		    <regexp match="/\.{3}[ \)]?=/" region="def:SymbolStrong" />
+			<keywords region="SymbolStrong">
+				<symb name=";"/>
+			</keywords>
 			<inherit scheme="Property"/>
 		</scheme>
 
@@ -197,6 +219,7 @@
 			<inherit scheme="VariableDef" />
 			<inherit scheme="Combinator" />
 			<inherit scheme="Mixing"/>
+			<inherit scheme="EscapedVar" />
 			<inherit scheme="css:RulesList">
 				<virtual scheme="css:TagNames" subst-scheme="html-css:cssTag"/>
 				<virtual scheme="css:AttrNames" subst-scheme="html-css:cssAttr"/>
