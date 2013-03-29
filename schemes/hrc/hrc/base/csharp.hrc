@@ -59,7 +59,7 @@ With help of:
            (\w [\w*\[\]\s]+? [*\[\]\s]) (delegate \s* \([\w_*~,\[\]\s]*\)\s*)?
 
            (?{csharp:FuncOutline}
-            ([\w]+?)
+            ([\w.]+?)
            )
 
            (\sfor)?~4 (\sif)?~3 (\swhile)?~6 (\sdo)?~3 (\sswitch)?~7 (\scatch)?~6 (\sforeach)?~8
