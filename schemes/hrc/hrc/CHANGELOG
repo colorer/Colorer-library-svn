@@ -1,6 +1,9 @@
 2013-03-29
   Fixed:
     - c# - point in a method name (Roman Kuzmin)
+    - less - new functions, some improvements
+    - php  - constants
+    - c - win32 constants
 
 2013-03-13
   Fixed:
