@@ -36,8 +36,8 @@
       <scheme name="modula2">
 <!-- Comments -->
          <block start="/\(\*/" end="/\*\)/" scheme="NestedComment" region="Comment" region00="PairStart" region10="PairEnd"/>
-         <block start="/&lt;\*/" end="/\*&gt;/" scheme="Comment" region="def:Directive" region00="PairStart" region10="PairEnd"/>
-         <block start="/--/" end="/$/" scheme="Comment" region="def:LineComment"/>
+         <block start="/&lt;\*/" end="/\*&gt;/" scheme="def:Comment" region="def:Directive" region00="PairStart" region10="PairEnd"/>
+         <block start="/--/" end="/$/" scheme="def:Comment" region="def:LineComment"/>
 <!-- paired -->
          <block start="/(\()/" end="/(\))/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>
          <block start="/(\[)/" end="/(\])/" scheme="modula2" region00="Symbol" region01="PairStart" region10="Symbol" region11="PairEnd"/>

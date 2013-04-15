@@ -462,11 +462,11 @@
 	/>
 	
 	<block start='/\b(CHAIN)\s+(IF\s+)?!(IF_FILE_EXISTS\s+)?(%label;\s+(?{chain.out}%label;))/' end='/^\M%action;/' scheme='chain.text'
-		region01='key' region03='key.check' region04='label' end='/^\M%action;/'
+		region01='key' region03='key.check' region04='label'
 	/>
 	
 	<block start='/\bCHAIN\b/' end='/^\M%action;/' scheme='chain'
-		region00='key' end='/^\M%action;/'
+		region00='key'
 	/>
 	
 	<block start='/\b(INTERJECT(_COPY_TRANS[234]?)?|I_C_T[234]?)\s+\M(?{inter.out}[\S]+)/' 

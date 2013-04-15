@@ -33,13 +33,13 @@
         <block start="/##/" end="/$/" scheme="def:Comment" region="def:LineComment"/>
 
         <!-- python colorization to mako tags -->
-        <block start="/(?{def:PairStart}\<%def.*\>)/" end="/(?{def:PairEnd}\</%def\>)/" scheme="mako" region="MakoTag"/>
-        <block start="/(?{def:PairStart}\<%(doc|textpage|include|namespace|inherit|call))/" 
-               end="/(?{def:PairEnd}(\>|$))/" 
+        <block start="/(?{def:PairStart}&lt;%def.*&gt;)/" end="/(?{def:PairEnd}&lt;/%def&gt;)/" scheme="mako" region="MakoTag"/>
+        <block start="/(?{def:PairStart}&lt;%(doc|textpage|include|namespace|inherit|call))/" 
+               end="/(?{def:PairEnd}(&gt;|$))/" 
                scheme="python:python" region="MakoTag"/>
 
         <!-- Python blocks --> 
-        <block start="/(?{def:PairStart}\<%)/" end="/(?{def:PairEnd}%\>)/" scheme="python:python" region="PythonBlock"/>
+        <block start="/(?{def:PairStart}&lt;%)/" end="/(?{def:PairEnd}%&gt;)/" scheme="python:python" region="PythonBlock"/>
         <block start="/(?{def:PairStart}\$\{)/" end="/(?{def:PairEnd}\})/" scheme="python:python" region="PythonBlock"/>
         <block start="/^\s*%/" end="/$/" scheme="python:python" region="PythonBlock"/>
         

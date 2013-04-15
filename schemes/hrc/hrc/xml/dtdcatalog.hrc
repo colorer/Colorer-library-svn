@@ -63,7 +63,7 @@
 	<block start='/(--)/' end='/(--)/' 
 		scheme='def:Comment' region='Comment'
 		region00='Comment.start' region10='Comment.end'
-		region01='def:PairStart' region10='def:PairEnd'
+		region01='def:PairStart' region11='def:PairEnd'
 	/>
 </scheme>
 
