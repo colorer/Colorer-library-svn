@@ -1,3 +1,43 @@
+2013-04-15
+  Fixed:
+    - d.hrc, ie-weidu/dialog.hrc, mako.hrc, ubasic.hrc, graphiz.hrc, reg.hrc, dtdcatalog.hrc - fix error in xml format
+    - modula - fix error
+
+2013-03-29
+  Fixed:
+    - c# - point in a method name (Roman Kuzmin)
+    - less - new functions, some improvements
+    - php  - constants
+    - c - win32 constants
+
+2013-03-13
+  Fixed:
+    - modula (Alexander Naumov)
+
+2013-03-12
+  Fixed:
+    -  c++ - added constants for dll loading; 
+           - added some constants and functions; 
+           - added __declspec() directives
+
+2013-03-02
+  New:
+    - Twig scheme
+    - YAML scheme
+  Fixed:
+    -  SilverStripe comment scheme improvement
+
+2013-21-02
+  Fixed:
+    - lua - errors processing (single closed brackets and "end" keyword);
+            Sting edges, paired brackets changes;
+            some more error handling;
+    - wrong xml detection if files like *.html.*
+
+2013-13-02
+  New:
+    - scheme for new macrolib+lua (lazyeugene)
+
 2013-09-02
   Fixed:
     - SilverStripe - some fixes (lazyeugene)

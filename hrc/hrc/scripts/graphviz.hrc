@@ -51,7 +51,7 @@
         <regexp match="/\\./" region="LabelContent"/>
         <regexp match="/\\n/" region="LabelContent"/>
         <regexp match="/\}/" region="LabelContent"/>
-        <regexp match="/\|?[\{\|]\s*\<[\w]+\>/" region="LabelContent"/>
+        <regexp match="/\|?[\{\|]\s*&lt;[\w]+&gt;/" region="LabelContent"/>
     </scheme>
 
     <scheme name="id_content_html">

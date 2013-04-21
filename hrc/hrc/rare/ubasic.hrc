@@ -99,7 +99,7 @@
          		 region1="ubWord" region3="ubId" region4="ubSymb" 
          		 region6="ubNumb" region7="ubSymb" region8="ubSymb" region9="ubSymb"/>
          
-         <regexp match="/\b(\w[\w\d\._]+)\b\M(\<.*\>)? \s*(:|\+|\-|)?(\=|\#)\s*\w/x"
+         <regexp match="/\b(\w[\w\d\._]+)\b\M(&lt;.*&gt;)? \s*(:|\+|\-|)?(\=|\#)\s*\w/x"
          		 region1="ubId" />
          
          <regexp match="/^\s*(\$(?:\*|CHAIN|INCLUDE|INSERT))\b\s+(\w[\w\d._]+)(?:\s+(\w[\w\d._]+))?/"

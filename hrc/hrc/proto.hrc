@@ -86,7 +86,7 @@
   </prototype>
   <prototype name="perl" group="main" description="Perl">
     <location link="base/perl.hrc"/>
-    <filename>/\.(pl[sx]?|pm|pod|t)$/i</filename>
+    <filename>/\.(pl[sx]?|pm|pod|t|ph)$/i</filename>
     <firstline weight='2'>/^\#!\s*.+perl\b/</firstline>
     <firstline>/perl/i</firstline>
     <parameters>
@@ -222,6 +222,10 @@
 	<prototype name="ss" group="inet" description="SilverStripe">
 		<location link="inet/ss.hrc"/>
 		<filename weight="10">/\.(ss)$/</filename>
+	</prototype>
+	<prototype name="twig" group="inet" description="Twig PHP Templates">
+		<location link="inet/twig.hrc"/>
+		<filename weight="10">/\.(twig)$/</filename>
 	</prototype>
 	<prototype name="twig" group="inet" description="Twig PHP Templates">
 		<location link="inet/twig.hrc"/>
