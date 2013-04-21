@@ -111,15 +111,13 @@ while(<>)
 	{
 		my $call = ($dl eq '::') ? 'static' : 'dynamic';
 		print "<method class='$class' call='$call' name='$method' decs='$bar'";
-		print " depr='on'" if $depr;
-		print "/>\n";
 	}
 	else
 	{
 		print "<function name='$foo' decs='$bar'";
-		print " depr='on'" if $depr;
-		print "/>\n";
 	}
+	print " depr='on'" if $depr;
+	print "/>\n";
 }
 
 print <<XMLE;

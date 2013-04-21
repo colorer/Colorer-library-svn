@@ -5959,6 +5959,8 @@ chop -- Alias of rtrim()
 chr -- Return a specific character
 chunk_split -- Split a string into smaller chunks
 convert_cyr_string --  Convert from one Cyrillic character set to another 
+convert_uudecode -- Decode a uuencoded string
+convert_uuencode -- Uuencode a string
 count_chars --  Return information about characters used in a string 
 crc32 -- Calculates the crc32 polynomial of a string
 crypt -- One-way string encryption (hashing)
@@ -5967,11 +5969,14 @@ fprintf -- Write a formatted string to a stream
 get_html_translation_table --  Returns the translation table used by htmlspecialchars() and htmlentities() 
 hebrev --  Convert logical Hebrew text to visual text 
 hebrevc --  Convert logical Hebrew text to visual text with newline conversion 
+hex2bin -- Decodes a hexadecimally encoded binary string
 html_entity_decode --  Convert all HTML entities to their applicable characters 
 htmlentities --  Convert all applicable characters to HTML entities 
 htmlspecialchars --  Convert special characters to HTML entities 
+htmlspecialchars_decode -- Convert special HTML entities back to characters
 implode -- Join array elements with a string
 join -- Alias of implode()
+lcfirst -- Make a string s first character lowercase
 levenshtein --  Calculate Levenshtein distance between two strings 
 localeconv -- Get numeric formatting information
 ltrim --  Strip whitespace from the beginning of a string 
@@ -5986,6 +5991,7 @@ ord -- Return ASCII value of character
 parse_str -- Parses the string into variables
 printf -- Output a formatted string
 quoted_printable_decode --  Convert a quoted-printable string to an 8 bit string 
+quoted_printable_encode -- Convert a 8 bit string to a quoted-printable string
 quotemeta -- Quote meta characters
 rtrim --  Strip whitespace from the end of a string 
 setlocale -- Set locale information
@@ -5995,6 +6001,7 @@ similar_text --  Calculate the similarity between two strings
 soundex -- Calculate the soundex key of a string
 sprintf -- Return a formatted string
 sscanf --  Parses input from a string according to a format 
+str_getcsv -- Parse a CSV string into an array
 str_ireplace --  Case-insensitive version of str_replace(). 
 str_pad --  Pad a string to a certain length with another string 
 str_repeat -- Repeat a string
@@ -6018,6 +6025,7 @@ strnatcasecmp --  Case insensitive string comparisons using a "natural order" al
 strnatcmp --  String comparisons using a "natural order" algorithm 
 strncasecmp --  Binary safe case-insensitive string comparison of the first n characters 
 strncmp --  Binary safe string comparison of the first n characters 
+strpbrk -- Search a string for any of a set of characters
 strpos --  Find position of first occurrence of a string 
 strrchr --  Find the last occurrence of a character in a string 
 strrev -- Reverse a string
@@ -6036,6 +6044,7 @@ substr -- Return part of a string
 trim --  Strip whitespace from the beginning and end of a string 
 ucfirst -- Make a string's first character uppercase
 ucwords --  Uppercase the first character of each word in a string 
+vfprintf -- Write a formatted string to a stream
 vprintf -- Output a formatted string
 vsprintf -- Return a formatted string
 wordwrap --  Wraps a string to a given number of characters using a string break character. 
@@ -6717,26 +6726,59 @@ xdiff_string_patch --  Patch a string with an unified diff.
 
 XDIFF_PATCH_NORMAL (integer)
 XDIFF_PATCH_REVERSE (integer)
+     <!-- CXIX. XSL Functions -->
+XSLTProcessor::getParameter -- Get value of a parameter
+XsltProcessor::getSecurityPrefs -- Get security preferences
+XSLTProcessor::hasExsltSupport -- Determine if PHP has EXSLT support
+XSLTProcessor::importStylesheet -- Import stylesheet
+XSLTProcessor::registerPHPFunctions -- Enables the ability to use PHP functions as XSLT functions
+XSLTProcessor::removeParameter -- Remove parameter
+XSLTProcessor::setParameter -- Set value for a parameter
+XSLTProcessor::setProfiling -- Sets profiling output file
+XsltProcessor::setSecurityPrefs -- Set security preferences
+XSLTProcessor::transformToDoc -- Transform to a DOMDocument
+XSLTProcessor::transformToUri -- Transform to URI
+XSLTProcessor::transformToXML -- Transform to XML
+
+XSL_CLONE_AUTO (integer)
+XSL_CLONE_NEVER (integer)
+XSL_CLONE_ALWAYS (integer)
+LIBXSLT_VERSION (integer)
+LIBXSLT_DOTTED_VERSION (string)
+LIBEXSLT_VERSION (integer)
+LIBEXSLT_DOTTED_VERSION (string)
+XSL_SECPREF_READ_FILE (integer)
+XSL_SECPREF_WRITE_FILE (integer)
+XSL_SECPREF_CREATE_DIRECTORY (integer)
+XSL_SECPREF_READ_NETWORK (integer)
+XSL_SECPREF_WRITE_NETWORK (integer) 
      <!-- CXIX. XSLT Functions -->
-xslt_create -- Create a new XSLT processor
-xslt_errno -- Returns an error number
-xslt_error -- Returns an error string
-xslt_free -- Free XSLT processor
-xslt_process -- Perform an XSLT transformation
-xslt_set_base -- Set the base URI for all XSLT transformations
-xslt_set_encoding -- Set the encoding for the parsing of XML documents
-xslt_set_error_handler -- Set an error handler for a XSLT processor
-xslt_set_log -- Set the log file to write log messages to
-xslt_set_sax_handler -- Set SAX handlers for a XSLT processor
-xslt_set_sax_handlers --  Set the SAX handlers to be called when the XML document gets processed 
-xslt_set_scheme_handler -- Set Scheme handlers for a XSLT processor
-xslt_set_scheme_handlers --  Set the scheme handlers for the XSLT processor 
+xslt_backend_info -- Returns the information on the compilation settings of the backend [deprecated]
+xslt_backend_name -- Returns the name of the backend [deprecated]
+xslt_backend_version -- Returns the version number of Sablotron [deprecated]
+xslt_create -- Create a new XSLT processor [deprecated]
+xslt_errno -- Returns an error number [deprecated]
+xslt_error -- Returns an error string [deprecated]
+xslt_free -- Free XSLT processor [deprecated]
+xslt_getopt -- Get options on a given xsl processor [deprecated]
+xslt_process -- Perform an XSLT transformation [deprecated]
+xslt_set_base -- Set the base URI for all XSLT transformations [deprecated]
+xslt_set_encoding -- Set the encoding for the parsing of XML documents [deprecated]
+xslt_set_error_handler -- Set an error handler for a XSLT processor [deprecated]
+xslt_set_log -- Set the log file to write log messages to [deprecated]
+xslt_set_object -- Sets the object in which to resolve callback functions [deprecated]
+xslt_set_sax_handler -- Set SAX handlers for a XSLT processor [deprecated]
+xslt_set_sax_handlers -- Set the SAX handlers to be called when the XML document gets processed [deprecated]
+xslt_set_scheme_handler -- Set Scheme handlers for a XSLT processor [deprecated]
+xslt_set_scheme_handlers -- Set the scheme handlers for the XSLT processor [deprecated]
+xslt_setopt -- Set options on a given XSLT processor [deprecated]
 
 XSLT_OPT_SILENT (integer)
 XSLT_SABOPT_PARSE_PUBLIC_ENTITIES (integer)
 XSLT_SABOPT_DISABLE_ADDING_META (integer)
 XSLT_SABOPT_DISABLE_STRIPPING (integer)
 XSLT_SABOPT_IGNORE_DOC_NOT_FOUND (integer)
+XSLT_SABOPT_FILES_TO_HANDLER (integer)
 XSLT_ERR_UNSUPPORTED_SCHEME (integer)
 
      <!-- CXX. YAZ Functions -->
