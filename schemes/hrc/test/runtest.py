@@ -17,6 +17,7 @@ import difflib
 import optparse
 import subprocess
 import unittest
+import fnmatch
 from datetime import datetime
 from os.path import abspath, dirname, join, normpath
 
@@ -50,7 +51,7 @@ os.mkdir(current_dir)
 
 # -- args parsing --
 
-usage = "%prog [--quick]"
+usage = "%prog [--quick] [GLOB...]"
 
 opt = optparse.OptionParser(usage=usage, add_help_option=False)
 opt.add_option("--quick", action="store_true", help="exclude /full/ dirs from testing")
@@ -105,7 +106,14 @@ for root, dirs, files in os.walk(tests_path):
   if root == tests_path:
     continue
   for name in files:
-    test_list.append(normpath(join(root, name)))
+    path = normpath(join(root, name))
+    if len(args):
+      for glob in args:
+        if fnmatch.fnmatch(path, glob):
+          break
+      else:
+        continue # next file
+    test_list.append(path)
 
 failed = 0
 for no, test in enumerate(test_list):
@@ -139,7 +147,7 @@ for no, test in enumerate(test_list):
   if os.name == 'nt':
     with open(outname) as fr:
       lines = fr.readlines()
-    with open(outname, "w") as fw:
+    with open(outname, "wb") as fw:
       fw.writelines(lines)
 
   diff = filediff("%s.html" % origname, outname)
