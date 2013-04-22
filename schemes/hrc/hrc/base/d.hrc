@@ -10,7 +10,7 @@
 	xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd"
  >
 	
-<type name="d">
+<type name='d'>
 	<annotation><documentation>
 		D syntax description
 	</documentation><contributors><![CDATA[
@@ -18,26 +18,20 @@
 		Vladimir Panteleev <thecybershadow@gmail.com>
 	]]></contributors>
 	<appinfo><todo>
-		- Fix delegate outlines (how?)
-		- Figure out highlighting of properties
+		No known issues.
 	</todo></appinfo>
 </annotation>
 
 <region name='comment' parent='def:Comment'/>
-<region name='comment.quote' parent='comment'/>
+<region name='comment.delim' parent='comment'/>
 <region name='ddoc' parent='def:CommentDoc'/>
-<region name='ddoc.quote' parent='ddoc'/>
-<region name='ddoc.sectiontitle' parent='def:String'/>
-<region name='ddoc.macro' parent='ddoc'/>
-<region name='ddoc.macro.symbol' parent='def:Comment'/>
-<region name='ddoc.macro.quote' parent='def:Comment'/>
-<region name='ddoc.example' parent='def:Text'/>
-<region name='ddoc.example.quote' parent='ddoc'/>
+<region name='ddoc.delim' parent='ddoc'/>
+<region name='ddoc.keyword' parent='def:Comment'/>
 
 <region name='char.esc' parent='c:StringEscape'/>
 <region name='char' parent='c:Character'/>
 <region name='string' parent='def:String'/>
-<region name='string.quote' parent='def:StringEdge'/>
+<region name='string.delim' parent='def:StringEdge'/>
 <region name='string.pref' parent='regexp:SpecArea'/>
 <region name='string.format' parent='def:VarStrong'/>
 <region name='string.token' parent='def:Text'/>
@@ -86,10 +80,10 @@
 <region name='module.out' parent='java:PackageOutline'/>
 <region name='import.out' parent='java:ImportOutline'/>
 <region name='class.out' parent='cpp:ClassOutline'/>
-<region name='struct.out' parent="c:StructOutline"/>
-<region name='tpl.out' parent="struct.out"/>
+<region name='struct.out' parent='c:StructOutline'/>
+<region name='tpl.out' parent='struct.out'/>
 <region name='iface.out' parent='class.out'/>
-<region name='enum.out' parent="c:EnumOutline"/>
+<region name='enum.out' parent='c:EnumOutline'/>
 <region name='version.out' parent='out'/>
 <region name='fun.out' parent='c:FuncOutline'/>
 
@@ -114,32 +108,37 @@
 	<inherit scheme='def:Comment'/>
 </scheme>
 
-<scheme name='ddoc.content'>
-	<inherit scheme='comment.content'/>
-	<regexp match='/^\s*\S+:/' region='ddoc.sectiontitle'/>
-	<block scheme='ddoc.content' region='ddoc'>
-		<start match='/(\()/' region1='def:PairStart'/>
-		<end   match='/(\))/' region1='def:PairEnd'/>
-	</block>
-	<block scheme='ddoc.content' region='ddoc.macro'>
-		<start match='/(\$\()(\w+)/' region0='ddoc.macro.quote' region1='def:PairStart' region2='ddoc.macro.symbol'/>
-		<end   match='/(\))/' region0='ddoc.macro.quote' region1='def:PairEnd'/>
-	</block>
-	<block scheme='d.lang' region='ddoc.example'>
-		<start match='/(^-{3,}$)/' region0='ddoc.example.quote' region1='def:PairStart'/>
-		<end   match='/(^-{3,}$)/' region0='ddoc.example.quote' region1='def:PairEnd'/>
-	</block>
+<entity name='ddoc.lead' value='(^|~)\s*(?{ddoc.delim}[*+]\s*)?'/>
+
+<scheme name='ddoc.lead'>
+	<regexp match='/^\s*([*+]|\/{3,})/' region1='ddoc.delim'/>
 </scheme>
 
+<scheme name='ddoc.content'>
+	<inherit scheme='ddoc:content'>
+		<virtual scheme='ddoc:lead' subst-scheme='ddoc.lead'/>
+	</inherit>
+</scheme>
+
+<scheme name='ddoc.rec'>
+	<inherit scheme='ddoc'/>
+	<inherit scheme='comment.rec.block'/>
+</scheme>
+
+<scheme name='ddoc'>
+	<regexp match='/~\s*ditto\b/' region='ddoc.keyword'/>
+	<regexp match='/%ddoc.lead;\m\w+:/' region='ddoc:sectiontitle'/>
+	<inherit scheme='ddoc.content'/>
+</scheme>
 
 <scheme name='comment.rec.block'>
 	<block scheme='ddoc.rec' region='ddoc'>
-		<start match='/(\/\+\+)/' region0='ddoc.quote' region1='def:PairStart'/>
-		<end   match='/(\+\/)/' region0='ddoc.quote' region1='def:PairEnd'/>
+		<start match='/(\/\+{2,})/' region0='ddoc.delim' region1='def:PairStart'/>
+		<end   match='/(\++\/)/' region0='ddoc.delim' region1='def:PairEnd'/>
 	</block>
 	<block scheme='comment.rec' region='comment'>
-		<start match='/(\/\+)/' region0='comment.quote' region1='def:PairStart'/>
-		<end   match='/(\+\/)/' region0='comment.quote' region1='def:PairEnd'/>
+		<start match='/(\/\+)/' region0='comment.delim' region1='def:PairStart'/>
+		<end   match='/(\+\/)/' region0='comment.delim' region1='def:PairEnd'/>
 	</block>
 </scheme>
 
@@ -148,27 +147,22 @@
 	<inherit scheme='comment.rec.block'/>
 </scheme>
 
-<scheme name='ddoc.rec'>
-	<inherit scheme='ddoc.content'/>
-	<inherit scheme='comment.rec.block'/>
-</scheme>
-
 <scheme name='comment'>
 	<block start='/(\/\/\/)/' end='/$/'
-		scheme='ddoc.content' region='ddoc' region00='ddoc.quote' 
+		scheme='ddoc' region='ddoc' region00='ddoc.delim' 
 	/>
-	<block scheme='ddoc.content' region='ddoc'>
-		<start match='/(\/\*\*)/' region0='ddoc.quote' region1='def:PairStart'/>
-		<end   match='/(\*\/)/' region0='ddoc.quote' region1='def:PairEnd'/>
+	<block scheme='ddoc' region='ddoc'>
+		<start match='/(\/\*{2,})/' region0='ddoc.delim' region1='def:PairStart'/>
+		<end   match='/(\*+\/)/' region0='ddoc.delim' region1='def:PairEnd'/>
 	</block>
 	<inherit scheme='comment.rec.block'/>
 
 	<block start='/(\/\/)/' end='/$/'
-		scheme='comment.content' region='comment' region00='comment.quote' 
+		scheme='comment.content' region='comment' region00='comment.delim' 
 	/>
 	<block scheme='comment.content' region='comment'>
-		<start match='/(\/\*)/' region0='comment.quote' region1='def:PairStart'/>
-		<end   match='/(\*\/)/' region0='comment.quote' region1='def:PairEnd'/>
+		<start match='/(\/\*)/' region0='comment.delim' region1='def:PairStart'/>
+		<end   match='/(\*\/)/' region0='comment.delim' region1='def:PairEnd'/>
 	</block>
 	<inherit scheme='comment.rec.block'/>
 </scheme>
@@ -183,7 +177,7 @@
 	<inherit scheme='error.strong'/>
 </scheme>
 
-<scheme name='char.quote'>
+<scheme name='char.delim'>
 	<block start='/(\\)&amp;\M\w+;/' end='/~\w+\m;/' 
 		scheme='char.entity' region='xml:CharRef' 
 		region01='char.esc'
@@ -197,28 +191,32 @@
 </scheme>
 
 <scheme name='char.content'>
-	<inherit scheme='char.quote'/>
+	<inherit scheme='char.delim'/>
 	<inherit scheme='error.strong'/>
 </scheme>
 
 <scheme name='char'>
-	<regexp match="/(')([^'\\])(')/" region='string.quote'
+	<regexp match="/(')([^'\\])(')/" region='string.delim'
 		region1='def:PairStart' region2='string' region3='def:PairEnd'
 	/>
 	<block scheme='char.content' region='string'>
-		<start match="/(')\M\\/" region0='string.quote' region1='def:PairStart'/>
-		<end   match="/(')/"     region0='string.quote' region1='def:PairEnd'/>
+		<start match="/(')\M\\/" region0='string.delim' region1='def:PairStart'/>
+		<end   match="/(')/"     region0='string.delim' region1='def:PairEnd'/>
 	</block>
-	<inherit scheme='char.quote'/>
+	<inherit scheme='char.delim'/>
 </scheme>
 
 <scheme name='string.format' if='format-str'>
 	<regexp match='/\%{2}/' region='char.esc'/>
-	<regexp match='/\%[\-+#0 ]?(\d+|\*)?(\.(\d+|\*)?)?[sbdoxXeEfFgGaA]/' region='string.format'/>
+	<regexp match='/\%[\-+#0 ]?(\d+|\*)?(\.(\d+|\*)?)?[sbdoxXeEfFgGaA|]/' region='string.format'/>
+	<block start='/(\%\()/' end='/(\%\))/' scheme='string.format'
+		region00='string.format' region01='def:PairStart'
+		region10='string.format' region11='def:PairEnd'
+	/>
 </scheme>
 
 <scheme name='string.content'>
-	<inherit scheme='char.quote'/>
+	<inherit scheme='char.delim'/>
 	<inherit scheme='string.format'/>
 </scheme>
 
@@ -230,79 +228,93 @@
 <scheme name='string.all'>
 	<block scheme='def:empty' region='string'>
 		<start match='/(r)(")/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart'
+			region0='string.delim' region1='string.pref' region2='def:PairStart'
 		/>
-		<end match='/(")%str.post;/' region0='string.quote' region1='def:PairEnd'/>
+		<end match='/(")%str.post;/' region0='string.delim' region1='def:PairEnd'/>
 	</block>
 	<block scheme='def:empty' region='string'>
-		<start match='/(`)/' region0='string.quote' region1='def:PairStart'/>
-		<end   match='/(`)%str.post;/' region0='string.quote' region1='def:PairEnd'/>
+		<start match='/(`)/' region0='string.delim' region1='def:PairStart'/>
+		<end   match='/(`)%str.post;/' region0='string.delim' region1='def:PairEnd'/>
 	</block>
 	
 	<block scheme='string.hex' region='string'>
 		<start match='/(x)(")/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart'
+			region0='string.delim' region1='string.pref' region2='def:PairStart'
 		/>
-		<end match='/(")%str.post;/' region0='string.quote' region1='def:PairEnd'/>
+		<end match='/(")%str.post;/' region0='string.delim' region1='def:PairEnd'/>
 	</block>
 
 	<inherit scheme='string.all.d2'/>
 	
 	<block scheme='string.content' region='string'>
-		<start match='/(")/' region0='string.quote' region1='def:PairStart'/>
-		<end match='/(")%str.post;/' region0='string.quote' region1='def:PairEnd'/>
+		<start match='/(")/' region0='string.delim' region1='def:PairStart'/>
+		<end match='/(")%str.post;/' region0='string.delim' region1='def:PairEnd'/>
 	</block>
 </scheme>
 
-<scheme name='string.all.d2' if='d2'>
+<scheme name='string.all.d2.nest'>
 	<block scheme='d.lang' region='string.token'>
 		<start match='/((q)\{)/' 
-			region0='string.quote'  region1='def:PairStart' region2='string.pref'
+			region0='string.delim'  region1='def:PairStart' region2='string.pref'
 		/>
-		<end match='/(\})/' region0='string.quote' region1='def:PairEnd'/>
+		<end match='/(\})/' region0='string.delim' region1='def:PairEnd'/>
 	</block>
+</scheme>
+
+<scheme name='string.all.d2.flat'>
+	<regexp match='/((q)\{)/' 
+			region0='string.delim' region2='string.pref'/>
+	<regexp match='/(\})/' region0='string.delim'/>
+</scheme>
+
+<scheme name='nest.paren'  ><block scheme='nest.paren'   start='/\(/'   end='/\)/'   region00='def:PairStart' region10='def:PairEnd'/></scheme>
+<scheme name='nest.bracket'><block scheme='nest.bracket' start='/\[/'   end='/\]/'   region00='def:PairStart' region10='def:PairEnd'/></scheme>
+<scheme name='nest.brace'  ><block scheme='nest.brace'   start='/\{/'   end='/\}/'   region00='def:PairStart' region10='def:PairEnd'/></scheme>
+<scheme name='nest.angular'><block scheme='nest.angular' start='/&lt;/' end='/&gt;/' region00='def:PairStart' region10='def:PairEnd'/></scheme>
+
+<scheme name='string.all.d2' if='d2'>
+	<inherit scheme='string.all.d2.nest' />
 
 	<block scheme='def:empty' region='string.delimited'>
 		<start match='/(q)("(%id;))$/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/^((\y3)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/^((\y3)")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 	
-	<!-- TODO: implement nesting -->
-	<block scheme='def:empty' region='string.delimited'>
+	<block scheme='nest.paren' region='string.delimited'>
 		<start match='/(q)("(\())/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((\))")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((\))")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 	
-	<block scheme='def:empty' region='string.delimited'>
+	<block scheme='nest.bracket' region='string.delimited'>
 		<start match='/(q)("(\[))/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((\])")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((\])")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 	
-	<block scheme='def:empty' region='string.delimited'>
+	<block scheme='nest.brace' region='string.delimited'>
 		<start match='/(q)("(\{))/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((\})")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((\})")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 	
-	<block scheme='def:empty' region='string.delimited'>
-		<start match='/(q)("(&lt;))/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+	<block scheme='nest.angular' region='string.delimited'>
+		<start match='/(q)("(\<))/' 
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((&gt;)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((\>)")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 
 	<block scheme='def:empty' region='string.delimited'>
 		<start match='/(q)("(\S))/' 
-			region0='string.quote' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
+			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((\y3)")/' region0='string.quote' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((\y3)")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 </scheme>
 
@@ -314,72 +326,89 @@
 
 <!-- literal -->
 
-<entity name='int.post' value='(?{postfix}[LUlu]{0,2})'/>
-<entity name='float.post' value='(?{postfix}[fFL]i|[fFL]|i)'/>
+<!-- Numeric literal grammar, according to http://www.d-programming-language.org/lex.html and http://www.digitalmars.com/d/1.0/lex.html -->
 
-<entity name='hexd' value='[\dA-Fa-f_]'/>
+<!--entity name='DecimalDigit' value='(0|%NonZeroDigit;|_)'/-->
+<entity name='DecimalDigit' value='[0-9_]'/>
+<entity name='DecimalDigits' value='%DecimalDigit;+'/>
+<entity name='BinaryDigit' value='[01_]'/>
+<entity name='BinaryDigits' value='%BinaryDigit;+'/>
+<entity name='OctalDigit' value='[0-7_]'/>
+<entity name='OctalDigits' value='%OctalDigit;+'/>
+<!--entity name='HexDigit' value='(%DecimalDigit;|a|b|c|d|e|f|A|B|C|D|E|F)'/-->
+<entity name='HexDigit' value='[0-9a-fA-F_]'/>
+<entity name='HexDigits' value='%HexDigit;+'/>
+<entity name='NonZeroDigit' value='[1-9]'/>
+<!--entity name='DecimalInteger' value='(0|%NonZeroDigit;|%NonZeroDigit;%DecimalDigits;)'/-->
+<entity name='DecimalInteger' value='(0|%NonZeroDigit;%DecimalDigit;*)'/>
+<entity name='BinaryInteger' value='(0(?{prefix}[bB])%BinaryDigits;)'/>
+<entity name='OctalInteger' value='(0%OctalDigits;)'/>
+<entity name='HexadecimalInteger' value='(0(?{prefix}[xX])%HexDigits;)'/>
+<!--entity name='IntegerSuffix' value='(?{postfix}(L|u|U|Lu|LU|uL|UL))'/-->
+<entity name='IntegerSuffix' value='(?{postfix}L[uU]?|[uU]L?)'/>
+<entity name='Integer' value='(%DecimalInteger;|%BinaryInteger;|%OctalInteger;|%HexadecimalInteger;)'/>
+<!--entity name='IntegerLiteral' value='(%Integer;%IntegerSuffix;?)'/-->
 
-<scheme name='literal.int'>
-	<regexp match='/\b0%int.post;\b/' region='def:NumberDec'/>
-	<regexp match='/\b[1-9][\d_]*%int.post;\b/' region='def:NumberDec'/>
-	<regexp match='/\b(0)[1-70_]+%int.post;\b/' region='def:NumberOct' region1='prefix'/>
-	<regexp match='/\b0(b)[10_]+%int.post;\b/i' region='def:NumberBin' region1='prefix'/>
-	<regexp match='/\b0(x)%hexd;+%int.post;\b/i' region='def:NumberHex' region1='prefix'/>
+<entity name='LeadingDecimal' value='(%DecimalInteger;|0%DecimalDigits;)'/>
+<entity name='FloatSuffix' value='[fF]'/>
+<!--entity name='RealSuffix' value='L'/-->
+<entity name='PrecisionSuffix' value='[fFL]'/>
+<entity name='ImaginarySuffix' value='i'/>
+<!--entity name='Suffix' value='(%FloatSuffix;|%RealSuffix;|%ImaginarySuffix;|%FloatSuffix;%ImaginarySuffix;|%RealSuffix;%ImaginarySuffix;)'/-->
+<entity name='SuffixOpt' value='(%PrecisionSuffix;?%ImaginarySuffix;?)'/>
+<entity name='HexExponent' value='((?{suffix}[pP][\+\-]?)%DecimalDigits;)'/>
+<entity name='HexPrefix' value='(0(?{prefix}[xX]))'/>
+<!--entity name='HexFloat' value='(%HexPrefix;%HexDigits;\.%HexDigits;%HexExponent;|%HexPrefix;\.%HexDigits;%HexExponent;|%HexPrefix;%HexDigits;%HexExponent;)'/-->
+<entity name='HexFloat' value='(%HexPrefix;((%HexDigits;?\.)?%HexDigits;)%HexExponent;)'/>
+<entity name='DecimalExponent' value='((?{suffix}[eE][\+\-]?)%DecimalDigits;)'/>
+<!--entity name='DecimalFloat' value='(%LeadingDecimal;\.|%LeadingDecimal;\.%DecimalDigits;|%DecimalDigits;\.%DecimalDigits;%DecimalExponent;|\.%DecimalInteger;|\.%DecimalInteger;%DecimalExponent;|%LeadingDecimal;%DecimalExponent;)'/-->
+<entity name='DecimalFloat' value='(%LeadingDecimal;\.%DecimalDigits;?|%DecimalDigits;\.%DecimalDigits;%DecimalExponent;|\.%DecimalInteger;%DecimalExponent;?|%LeadingDecimal;%DecimalExponent;)'/>
+<entity name='Float' value='(%DecimalFloat;|%HexFloat;)'/>
+<!--entity name='FloatLiteral' value='(%Float;|%Float;%Suffix;|%Integer;%ImaginarySuffix;|%Integer;%FloatSuffix;%ImaginarySuffix;|%Integer;%RealSuffix;%ImaginarySuffix;)'/-->
+<!-- spec bug: http://d.puremagic.com/issues/show_bug.cgi?id=9958 -->
+<entity name='FloatLiteral' value='(%Float;(?{postfix}%SuffixOpt;)|%Integer;(?{postfix}%PrecisionSuffix;?%ImaginarySuffix;)|%DecimalInteger;(?{postfix}%FloatSuffix;))'/>
+
+<scheme name='literal.int.octal.d1' unless='d2'>
+	<regexp match='/\b%OctalInteger;%IntegerSuffix;?\b/' region='def:NumberOct'/>
 </scheme>
 
-<entity name='float.exp' value='(?{}(?{suffix}[eE][\-+]?)\d[\d_]*)'/>
-<entity name='float.exh' value='(?{}(?{suffix}[pP][\-+]?)\d[\d_]*)'/>
+<scheme name='literal.int.octal.d2' if='d2'>
+	<!-- octal literals are deprecated - only allow cases when decimal and octal values are the same -->
+	<regexp match='/\b0+[1-7]%IntegerSuffix;?\b/' region='def:NumberDec'/>
+</scheme>
+
+<scheme name='literal.int'>
+	<regexp match='/\b%DecimalInteger;%IntegerSuffix;?\b/' region='def:NumberDec'/>
+	<regexp match='/\b%BinaryInteger;%IntegerSuffix;?\b/' region='def:NumberBin'/>
+	<inherit scheme='literal.int.octal.d1'/>
+	<inherit scheme='literal.int.octal.d2'/>
+	<regexp match='/\b%HexadecimalInteger;%IntegerSuffix;?\b/' region='def:NumberHex'/>
+</scheme>
 
 <scheme name='literal.float'>
-	<regexp 
-		match='/(\b\d[\d_]*\.[\d_]*|\.\d+)%float.exp;?%float.post;?\b/'
-		region0='def:NumberFloat'
-	/>
-	<regexp 
-		match='/\b0(x)(%hexd;+*\.%hexd;*|\.%hexd;+)%float.exh;?%float.post;?\b/i'
-		region0='def:NumberFloat' region1='prefix'
-	/>
-	
-	<regexp match='/\b([1-9][\d_]*|0_*)(%float.exp;|%float.post;|%float.exp;%float.post;)\b/i'
-		region0='def:NumberFloat'
-	/>
-	<regexp match='/\b0(x)(%hexd;+)(%float.exh;|%float.post;|%float.exh;%float.post;)\b/i'
-		region0='def:NumberFloat' region1='prefix'
-	/>
-	
-	<!--
-	<regexp 
-		match='/\w?~1(\d[\d_]*(\.[\d_]*)?|\.\d[\d_]*)([eE][\+\-]?)\d[\d_]*%float.post;\b/'
-		region0='def:NumberFloat' region3='suffix'
-	/>
-	<regexp 
-		match='/\w?~1(\d[\d_]*\.[\d_]*|\.\d[\d_]*)%float.post;\w?!/'
-		region0='def:NumberFloat' 
-	/>
-	
-	<regexp 
-		match='/\b0([xX])[\dA-Fa-f_]*(\.[\dA-Fa-f_]*)?([pP][\+\-]?)\d[\d_]*%float.post;\b/'
-		region0='def:NumberFloat' region1='prefix' region3='suffix'
-	/>-->
+	<regexp match='/\b%FloatLiteral;\b/' region='def:NumberFloat'/>
 </scheme>
 
 <scheme name='literal.bool'>
 	<keywords region='key.bool'>
 		<word name='true'/>
 		<word name='false'/>
-		<word name='null'/>
 	</keywords>
+</scheme>
+
+<scheme name='literal.error'>
+	<regexp match='/\b\d+/' region='def:Error'/>
 </scheme>
 
 <scheme name='literal'>
 	<inherit scheme='literal.float'/>
 	<inherit scheme='literal.int'/>
 	<inherit scheme='literal.bool'/>
-	<regexp match='/\b\d+/' region='def:Error'/>
+	<inherit scheme='literal.error'/>
 </scheme>
 
 
-<scheme name='op'>
+<scheme name='op.nest'>
 	<block scheme='d.expr'>
 		<start match='/(\?)/' 
 			region0='symb.struct' region1='def:PairStart'
@@ -388,8 +417,21 @@
 			region0='symb.struct' region1='def:PairEnd'
 		/>
 	</block>
-	
-	
+
+	<!-- __traits -->
+	<block scheme='decl.attr.traits'>
+		<start match='/\b__traits\s*((\())/' 
+			region0='key' region1='symb' region2='def:PairStart'
+		/>
+		<end match='/((\)))\s*:?/' 
+			region0='label.mark' region1='symb' region2='def:PairEnd'
+		/>
+	</block>
+</scheme>
+
+<scheme name='op'>
+	<inherit scheme='op.nest' />
+
 	<keywords region='symb.op'>
 		<symb name='/'/>
 		<symb name='/='/>
@@ -455,6 +497,33 @@
 	<inherit scheme='type'/>
 </scheme>
 
+<scheme name='type.nest'>
+	<block scheme='type.arr'>
+		<start match='/(\[)/' 
+			region0='symb' region1='def:PairStart'
+		/>
+		<end match='/(\])/' 
+			region0='symb' region1='def:PairEnd'
+		/>
+	</block>
+	<block scheme='type'>
+		<start match='/(\()/' 
+			region0='symb' region1='def:PairStart'
+		/>
+		<end match='/(\))/' 
+			region0='symb' region1='def:PairEnd'
+		/>
+	</block>
+	<block scheme='d.expr'>
+		<start match='/\b(function|delegate|typeof)\s*((\())/' 
+			region1='key' region2='symb' region3='def:PairStart'
+		/>
+		<end match='/((\)))/' 
+			region1='symb' region2='def:PairEnd'
+		/>
+	</block>
+</scheme>
+
 <scheme name='type'>
 	<keywords region='key.type'>
 		<word name='void'/>
@@ -498,31 +567,11 @@
 	
 	<keywords region='symb'>
 		<symb name='*'/>
+		<symb name='!'/>
+		<symb name='.'/>
 	</keywords>
-	<block scheme='type.arr'>
-		<start match='/(\[)/' 
-			region0='symb' region1='def:PairStart'
-		/>
-		<end match='/(\])/' 
-			region0='symb' region1='def:PairEnd'
-		/>
-	</block>
-	<block scheme='type'>
-		<start match='/(\()/' 
-			region0='symb' region1='def:PairStart'
-		/>
-		<end match='/(\))/' 
-			region0='symb' region1='def:PairEnd'
-		/>
-	</block>
-	<block scheme='d.expr'>
-		<start match='/\b(function|delegate|typeof)\s*((\())/' 
-			region1='key' region2='symb' region3='def:PairStart'
-		/>
-		<end match='/((\)))/' 
-			region1='symb' region2='def:PairEnd'
-		/>
-	</block>
+
+	<inherit scheme='type.nest'/>
 	
 	<keywords region='key.type'>
 		<word name='typedef'/>
@@ -542,6 +591,7 @@
 
 <scheme name='type.d2' if='d2'>
 	<keywords region='key.type'>
+		<word name='const'/>
 		<word name='immutable'/>
 	</keywords>
 </scheme>
@@ -584,7 +634,7 @@
 <scheme name='tpl.fun.proxy'>
 	<block scheme='decl.class.tpl'>
 		<start match='/(\()/' region0='symb.tpl' region1='def:PairStart' />
-		<end match='/(\))/'    region0='symb.tpl' region1='def:PairEnd'   />
+		<end   match='/(\))/' region0='symb.tpl' region1='def:PairEnd'   />
 	</block>
 	<inherit scheme='keys'/>
 </scheme>
@@ -592,7 +642,7 @@
 <scheme name='tpl.tpl.proxy'>
 	<block scheme='d.expr'>
 		<start match='/(!\()/' region0='symb.tpl' region1='def:PairStart' />
-		<end match='/(\))/'    region0='symb.tpl' region1='def:PairEnd'   />
+		<end   match='/(\))/'  region0='symb.tpl' region1='def:PairEnd'   />
 	</block>
 	<inherit scheme='keys'/>
 </scheme>
@@ -631,6 +681,7 @@
 		<word name='D'/>
 		<word name='Windows'/>
 		<word name='Pascal'/>
+		<word name='System'/>
 	</keywords>
 	<inherit scheme='error'/>
 </scheme>
@@ -641,13 +692,53 @@
 </scheme>
 
 <scheme name='decl.attr.pragma'>
-	<regexp match='/~\s*(msg|lib)\b/' region='decl'/>
-	<inherit scheme='d.expr'/> <!-- !!!!!!!!!!!! -->
+	<regexp match='/~\s*(msg|lib|startaddress)\b/' region='decl'/>
+	<inherit scheme='d.expr'/>
 </scheme>
 
 <scheme name='decl.attr.vd'>
 	<regexp match='/%id;/' region='decl'/>
 	<inherit scheme='decl.attr.align'/>
+</scheme>
+
+<scheme name='decl.attr.traits'>
+	<regexp region='decl'>
+		/ ~ \s* ( isAbstractClass
+				| isArithmetic
+				| isAssociativeArray
+				| isFinalClass
+				| isPOD
+				| isNested
+				| isFloating
+				| isIntegral
+				| isScalar
+				| isStaticArray
+				| isUnsigned
+				| isVirtualFunction
+				| isVirtualMethod
+				| isAbstractFunction
+				| isFinalFunction
+				| isStaticFunction
+				| isRef
+				| isOut
+				| isLazy
+				| hasMember
+				| identifier
+				| getAttributes
+				| getMember
+				| getOverloads
+				| getProtection
+				| getVirtualFunctions
+				| getVirtualMethods
+				| parent
+				| classInstanceSize
+				| allMembers
+				| derivedMembers
+				| isSame
+				| compiles
+		)\b/x
+	</regexp>
+	<inherit scheme='d.expr'/>
 </scheme>
 
 
@@ -732,6 +823,7 @@
 			| shared
 			| immutable
 			| __gshared
+			| __traits
 		)\b\s*(:)?/x</regexp>
 	<regexp region1='key' region3='label.mark'>
 		/(@ ( property
@@ -757,17 +849,8 @@
 
 
 <scheme name='decl.class.tpl'>
-	<inherit scheme='type'/>
-	<inherit scheme='literal'/>
-	<keywords region='symb'>
-		<symb name=','/>
-		<symb name=':' region='symb.struct'/>
-		<symb name='='/>
-		<symb name='...'/>
-	</keywords>
+	<inherit scheme='d.expr'/>
 	<inherit scheme='tpl.tpl'/>
-	<inherit scheme='comment'/>
-	<inherit scheme='keys'/>
 </scheme>
 
 <scheme name='decl.class'>
@@ -776,13 +859,13 @@
 		<start match='/\b(class)\s+\M(%id;(\s*\(.+?(\)|$))?)/' 
 			region1='key' region2='class.out'
 		/>
-		<end match='/(:)|\{?=/' region1='symb.struct'/>
+		<end match='/[:\{;]?=/'/>
 	</block>
 	<block scheme='decl.class.decl'>
 		<start match='/\b(struct|union)\s+\M(%id;(\s*\(.+?(\)|$))?)/' 
 			region1='key' region2='struct.out'
 		/>
-		<end match='/\{?=/'/>
+		<end match='/[\{;]?=/'/>
 	</block>
 	<block scheme='decl.class.decl'>
 		<start match='/\b(template)\s+\M(%id;\s*\(.+?(\)|$))/' 
@@ -791,16 +874,16 @@
 		<end match='/\{?=/'/>
 	</block>
 	<block scheme='def:empty'> <!-- no templates -->
-		<start match='/\b(enum)\b\s*\M(%id;)?/'  
-			region1='key' region2='enum.out'
+		<start match='/\b(enum)\b\s*(%id;|)\s*(%id;)/' 
+			region1='key' region2='key.type' region3='enum.out'
 		/>
-		<end match='/([:=])|\{?=/' region1='symb'/>
+		<end match='/[:=\{]?=/'/>
 	</block>
-	<block scheme='def:empty'> <!-- no templates ?? -->
+	<block scheme='decl.class.decl'>
 		<start match='/\b(interface)\b\s+\M(%id;)/' 
 			region1='key' region2='iface.out'
 		/>
-		<end match='/(:)|\{?=/' region1='symb.struct'/>
+		<end match='/[:\{]?=/' region1='symb.struct'/>
 	</block>
 	
 	
@@ -810,7 +893,7 @@
 		<word name='struct'/>
 		<word name='union'/>
 		<word name='template'/>
-		<word name='emun'/>
+		<word name='enum'/>
 		<word name='interface'/>
 	</keywords>
 	
@@ -828,11 +911,11 @@
 
 
 
-<!-- decl.constr -->
+<!-- Constructors -->
 
 <scheme name='decl.constr'>
 	<block scheme='d.expr'>
-		<start match='/(\w?~1(\~?this|new|delete)\s*((\())\M.+?(\)|$))[^;]*$/' 
+		<start match='/(\w?~1(\~?this|new|delete))\s*((\())\M.+?(\)|$)[^;]*$/' 
 			region1='fun.out'
 			region2='key' region3='symb' region4='def:PairStart'
 		/>
@@ -850,9 +933,51 @@
 	
 </scheme> 
 
+<entity name='noparens' value='[^()]*' />
+<entity name='nestedparens3' value='(?:%noparens;(?:\(%noparens;     \)%noparens;)*)' />
+<entity name='nestedparens2' value='(?:%noparens;(?:\(%nestedparens3;\)%noparens;)*)' />
+<entity name='nestedparens'  value='(?:%noparens;(?:\(%nestedparens2;\)%noparens;)*)' />
+
+<entity name='argument'      value='%nestedparens;\s+\w+(\s*=\s*%nestedparens;)?' />
+
 <scheme name='decl.fun'>
 	<!-- bug: this doesn't work correctly with delegates -->
-	<regexp match='/\M(?{fun.out}(\bout\b)?!%id;(\s*\([^\);]*?\)){1,2})[^;]*($|\{)/'/>
+	<regexp>
+		/
+			\M
+			^
+			\s*
+			(
+				\S+
+				\s+
+			)+
+			(?{fun.out}
+				(\bout\b)?!
+				%id;
+			)
+			(
+				\s*
+				\(
+				%nestedparens;
+				\)
+			)?
+			(
+				\s* \( \s*
+				(
+					%argument;
+					\s* , \s*
+				)*
+				(
+					%argument;
+					\s*
+				)?
+				(\.\.\.)?
+				(\)|$)
+			)
+			[^;?:\{,()]*
+			($|\{)
+		/x
+	</regexp>
 	
 	<block scheme='tpl.fun.proxy'>
 		<start match='/\M%id;\s*\([^\(\);]*?\)\s*\([^\);]*?\)[^;]*($|\{)/'/>
@@ -921,9 +1046,9 @@
 	
 	<!-- from Vladimir Panteleev's d.hrc -->
 	<keywords region='key.fun.main'>
-		<word name="main"/>
-		<word name="WinMain"/>
-		<word name="DllMain"/>
+		<word name='main'/>
+		<word name='WinMain'/>
+		<word name='DllMain'/>
 	</keywords>
 </scheme> 
 
@@ -949,12 +1074,20 @@
 
 
 
-<!-- statemen -->
+<!-- statement -->
 
 <scheme name='asmcode'>
 	<regexp match='/[\{;]/' region='symb.struct'/>
 	<inherit scheme='comment'/>
-	<inherit scheme="asm:baseasm"/>
+	<inherit scheme='asm:baseasm'/>
+</scheme>
+
+<scheme name='asmstart'>
+	<inherit scheme='comment'/>
+	<block start='/(\{)/' end='/\M((\}))/' scheme='asmcode'
+		region01='symb.struct'   region11='symb.struct' 
+		region00='def:PairStart' region12='def:PairEnd'	/>
+	<inherit scheme='error'/>
 </scheme>
 
 
@@ -967,29 +1100,28 @@
 			region0='symb' region1='def:PairEnd'
 		/>
 	</block>
-	<regexp match="/\b(scope)(\()\s*(exit|success|failure)\s*(\))/"
+	<regexp match='/\b(scope)\s*(\()\s*(exit|success|failure)\s*(\))/'
 		region0='symb' region1='key' region3='decl'
 		region2='def:PairStart' region4='def:PairEnd'
 	/>
 	
-	<block start="/\b(asm)\s*?(\{|$)/" end="/(\})/" scheme="asmcode"
-		region01="key" region02="symb.struct" region10="symb.struct" 
-		region00="def:PairStart" region11="def:PairEnd"
+	<block start='/\basm\b/' end='/\}/' scheme='asmstart'
+		region00='key'
 	/>
 	
 <!--
 	<block start='/\basm\b/' end='/\}?#1/' scheme='asm.content' region00='key' />
 -->	
+	<regexp match='/\b(goto(\s+(case|default))?!|continue|break)\s+(%id;)/' 
+		region1='key' region4='label'
+	/>
+	
 	<block scheme='d.expr' region='label.const'>
-		<start match='/\b(case|default)\b/' 
+		<start match='/(\bgoto\s+)?~10\b(case|default)\b/' 
 			region1='key' region2='symb' region3='def:PairStart'
 		/>
 		<end match='/:/' region0='label.mark'/>
 	</block>
-	
-	<regexp match='/\b(goto(\s+(case|default))?!|continue|break)\s+(%id;)/' 
-		region1='key' region4='label'
-	/>
 	
 	<keywords region='key'>
 		<word name='body'/>
@@ -1038,17 +1170,22 @@
 		<start match='/(\{)/' region0='def:PairStart' region1='symb.struct'/>
 		<start match='/(\})/' region0='def:PairEnd' region1='symb.struct'/>
 	</block-->
-	<inherit scheme="def:PairedBrackets">
-		<virtual scheme="def:PairedBrackets" subst-scheme="d.decldef"/>
+
+	<inherit scheme='def:PairedBrackets'>
+		<virtual scheme='def:PairedBrackets' subst-scheme='d.decldef'/>
 	</inherit>
 	
 	<inherit scheme='d.expr'/>
 </scheme>
-<scheme name='d.expr'>
 
-	<inherit scheme="def:PairedBrackets">
-		<virtual scheme="def:PairedBrackets" subst-scheme="d.expr"/>
+<scheme name='d.expr.nest'>
+	<inherit scheme='def:PairedBrackets'>
+		<virtual scheme='def:PairedBrackets' subst-scheme='d.expr'/>
 	</inherit>
+</scheme>
+
+<scheme name='d.expr'>
+	<inherit scheme='d.expr.nest'/>
 
 	<inherit scheme='comment'/>
 	<inherit scheme='string'/>
@@ -1057,26 +1194,10 @@
 	<regexp match='/,/' region='symb'/>
 	<regexp match='/:/' region='symb' priority='low'/>
 	<regexp match='/\$/' region='symb'/>
-	<inherit scheme='keys'/>
 	<inherit scheme='op'/>
 	<inherit scheme='tpl'/>
 	<inherit scheme='type'/>
-	<keywords region='key'>
-		<word name='static'/>
-		<word name='auto'/>
-		<word name='volatile'/>
-		<word name='in'/>
-		<word name='out'/>
-		<word name='inout'/>
-		<word name='lazy'/>
-		<word name='mixin'/>
-		<word name='scope'/>
-		<word name='ref'/>
-		
-		<!--word name='sizeof'/-->
-		<word name='typeid'/>
-		<word name='typeof'/>
-	</keywords>
+	<inherit scheme='keys'/>
 	<inherit scheme='tokens.spec'/>
 	<inherit scheme='tokens.bad'/>
 </scheme>
@@ -1091,15 +1212,22 @@
 
 <scheme name='tokens.spec'>
 	<keywords region='key.spec'>
+		<!-- http://dlang.org/traits.html#specialkeywords -->
 		<word name='__FILE__'/>
+		<word name='__MODULE__'/>
 		<word name='__LINE__'/>
+		<word name='__FUNCTION__'/>
+		<word name='__PRETTY_FUNCTION__'/>
+
+		<!-- http://dlang.org/traits.html#specialkeywords -->
 		<word name='__DATE__'/>
+		<word name='__EOF__'/>
 		<word name='__TIME__'/>
 		<word name='__TIMESTAMP__'/>
 		<word name='__VENDOR__'/>
 		<word name='__VERSION__'/>
 	</keywords>
-	<block start="/#/" end='/$/'  scheme='tokens.spec.pre' region='c:Preproc'/>
+	<block start='/#/' end='/$/'  scheme='tokens.spec.pre' region='c:Preproc'/>
 </scheme>
 
 
@@ -1118,7 +1246,7 @@
 </scheme>
 
 
-<scheme name="d.lang">
+<scheme name='d.lang'>
 	<inherit scheme='comment'/>
 	<inherit scheme='module'/>
 	<inherit scheme='d.decldef'/>
@@ -1126,50 +1254,68 @@
 
 <scheme name='d'>
 	<inherit scheme='def:unixCommentFirstline'>
-		<virtual scheme="def:def" subst-scheme="d.lang"/>
+		<virtual scheme='def:def' subst-scheme='d.lang'/>
 	</inherit>
 </scheme>
 
+<scheme name='symb.flat'>
+	<keywords region='symb'>
+		<symb name='('/>
+		<symb name=')'/>
+		<symb name='['/>
+		<symb name=']'/>
+		<symb name='?'/>
+		<symb name=':'/>
+		<symb name='\'/>
+	</keywords>
+	<keywords region='symb.struct'>
+		<symb name='{'/>
+		<symb name='}'/>
+	</keywords>
+</scheme>
 
+<scheme name='d.flat'>
+	<annotation><documentation>
+		Simpler, error-tolerable variant which does not nest, for DDoc code / examples.
+	</documentation></annotation>
+
+	<!-- Round parens should be the only allowed block -->
+	<block start='/(\()/' end='/(\))/' scheme='d.flat'
+		region00='def:PairStart' region01='symb'
+		region10='def:PairEnd'   region11='symb'
+	/>
+	
+	<inherit scheme='d.lang'>
+		<virtual scheme='def:PairedBrackets' subst-scheme='symb.flat' />
+		<virtual scheme='d.expr.nest'        subst-scheme='def:empty' />
+		<virtual scheme='op.nest'            subst-scheme='def:empty' />
+		<virtual scheme='type.nest'          subst-scheme='symb.flat' />
+		<virtual scheme='string.all.d2.nest' subst-scheme='string.all.d2.flat' />
+		<virtual scheme='tpl.tpl'            subst-scheme='symb.flat' />
+		<virtual scheme='d.statement'        subst-scheme='def:empty' />
+		<virtual scheme='literal.error'      subst-scheme='def:DecNumber' />
+	</inherit>
+
+</scheme>
+
+<!-- http://dlang.org/property.html -->
+<entity name='d.property.common'   value='init|sizeof|alignof|mangleof|stringof'/>
+<entity name='d.property.integer'  value='max|min'/>
+<entity name='d.property.floating' value='infinity|nan|dig|epsilon|mant_dig|max_10_exp|max_exp|min_10_exp|min_exp|min_normal|re|im'/>
+<entity name='d.property.class'    value='classinfo'/>
+<!-- http://dlang.org/arrays.html#array-properties -->
+<entity name='d.property.array'    value='length|ptr|dup|idup|reverse|sort'/>
+<!-- http://dlang.org/hash-map.html -->
+<entity name='d.property.assoc'    value='keys|values|rehash'/>
 
 <scheme name='d.property'>
-	<!-- disabled due to Colorer bug(?):
+	<!-- Use only common properties, to avoid false positives with custom types -->
+	<regexp match='/(\.)?#1(%d.property.common;)\b/' region='key.prop' />
 
-		{foo!(bar).init}      // } is not highlighted
-	
-	<regexp region='key.prop' region1='symb'>
-		/(\.)\s*(alignof
-			| dig
-			| dup
-			| epsilon
-			| idup
-			| im
-			| infinity
-			| init
-			| length
-			| mangleof
-			| mant_dig
-			| max
-			| max_10_exp
-			| max_exp
-			| min
-			| min_10_exp
-			| min_exp
-			| nan
-			| ptr
-			| re
-			| reverse
-			| sizeof
-			| sort
-			| stringof
-+		)/x
-+	</regexp>
-+	-->
 	<keywords region='key.var'>
 		<word name='_argptr'/>
 		<word name='_arguments'/>
 	</keywords>
-	
 </scheme>
 
 
@@ -1205,9 +1351,25 @@
 	&d1-tango;
 </scheme>
 
+<scheme name='keys.d2' if='d2'>
+	<keywords region='key'>
+		<word name='__gshared'/>
+		<word name='__overloadset'/>
+		<word name='__traits'/>
+		<word name='__vector'/>
+		<word name='immutable'/>
+		<word name='nothrow'/>
+		<word name='pure'/>
+		<word name='shared'/>
+	</keywords>
+</scheme>
+
 <scheme name='keys'>
 	<inherit scheme='keys.custom'/>
+	<inherit scheme='keys.d2'/>
 	<keywords region='key'>
+		<word name='__argTypes'/>
+		<word name='__parameters'/>
 		<word name='abstract'/>
 		<word name='alias'/>
 		<word name='align'/>
@@ -1263,6 +1425,7 @@
 		<word name='is'/>
 		<word name='lazy'/>
 		<word name='long'/>
+		<word name='macro'/>
 		<word name='mixin'/>
 		<word name='module'/>
 		<word name='new'/>
@@ -1275,6 +1438,7 @@
 		<word name='protected'/>
 		<word name='public'/>
 		<word name='real'/>
+		<word name='ref'/>
 		<word name='return'/>
 		<word name='scope'/>
 		<word name='short'/>

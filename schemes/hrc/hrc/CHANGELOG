@@ -2,6 +2,7 @@
   New:
     - ASASM (ActionScript 3 assembler, RABCDAsm variant) from Vladimir Panteleev
     - MediaWiki syntax from Vladimir Panteleev
+    - Major update to D scheme (Vladimir Panteleev)
   Fixed:
     - jscript:  added keywords (Vladimir Panteleev)
     - ActionScript: Fix/improve outlining, regexp/comments  (Vladimir Panteleev) 

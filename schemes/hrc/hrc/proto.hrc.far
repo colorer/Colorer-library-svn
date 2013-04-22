@@ -68,6 +68,7 @@
   <prototype name="d" group="main" description="D">
     <location link="base/d.hrc"/>
     <filename>/\.(d|di)$/i</filename>
+    <firstline>/^\s*(module|import)\b/xi</firstline>
     <parameters>
       <param name="format-str" value="true" description="Highlight printf-like %format in strings"/>
       <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
@@ -929,6 +930,16 @@
   <prototype name="cue" group="other" description="Cue sheet">
     <location link="misc/cue.hrc"/>
     <filename>/\.cue$/</filename>
+  </prototype>
+  <prototype name="ddoc" group="other" description="Ddoc">
+    <location link="misc/ddoc.hrc"/>
+    <filename>/\.(dd|ddoc)$/i</filename>
+    <firstline weight="3">/^Ddoc/x</firstline>
+    <parameters>
+      <!-- firstline -->
+      <param name='firstlines'     value='1' description="lines for 'firstline'"/>
+      <param name='firstlinebytes' value='5' description="bytes for 'firstline'"/>
+    </parameters>
   </prototype>
   <prototype name="filesbbs" group="other" description="files.bbs">
     <location link="misc/filesbbs.hrc"/>
