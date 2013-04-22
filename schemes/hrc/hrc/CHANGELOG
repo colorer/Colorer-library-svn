@@ -3,7 +3,8 @@
     - ASASM (ActionScript 3 assembler, RABCDAsm variant) from Vladimir Panteleev
     - MediaWiki syntax from Vladimir Panteleev
   Fixed:
-    - jscript:  added keywords (Vladimir Panteleev) 
+    - jscript:  added keywords (Vladimir Panteleev)
+    - ActionScript: Fix/improve outlining, regexp/comments  (Vladimir Panteleev) 
  
 2013-04-15
   Fixed:

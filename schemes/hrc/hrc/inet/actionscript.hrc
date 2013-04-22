@@ -14,6 +14,12 @@
 
       <import type="def"/>
 
+      <region name='Package' parent='def:Directive'/>
+      <region name='PackageOutline' parent='def:Outlined'/>
+      <region name='Import' parent='def:Directive'/>
+      <region name='ImportOutline' parent='def:Outlined'/>
+      <region name='Class' parent='def:Outlined'/>
+
       <scheme name="jComment">
          <keywords region="CommentContent">
             <word name="@cc_on"/>
@@ -48,7 +54,12 @@
 <!-- Linear Comments-->
          <block start="/\/\//" end="/\M(&lt;\/scr|$)/" scheme="jComment" region="Comment"/>
          <block start="/\/\*/" end="/\*\//" scheme="jComment" region="Comment" region00="PairStart" region10="PairEnd"/>
-         <regexp match="/(function \s+ ([\w_]+.)|([\w_]+.) \s+ = \s+ function) /x" region1="Function"/>
+
+         <regexp match="/(package)\s+\m(([\w\._]+))/" region1="Keyword" region2="Package" region3="PackageOutline"/>
+         <regexp match="/(import)\s+\m(([\w\._]+))/" region1="Keyword" region2="Import" region3="ImportOutline"/>
+         <regexp match="/(class)\s+\m([\w\._]+)/" region1="Keyword" region2="Class"/>
+         <regexp match="/(function)\s+\m([\w_]+)/" region1="Keyword" region2="Function"/>
+         <regexp match="/([\w_]+)\M\s*(\:.*)?\=\s*function/" region1="Function"/>
          <inherit scheme="PairedBrackets">
             <virtual scheme="PairedBrackets" subst-scheme="actionscript"/>
          </inherit>
@@ -61,7 +72,7 @@
          <block start="/( [\=\!]\~ |
                          [^&lt;\]\}\)\+\-\w\s\/] |
                          \bif | ~)
-                         \s* ((\/)) /x"
+                         \s* ((\/)) [^\/]?= /x"
                          end="/(\y2[cmiogxes]*)/x" scheme="RE"
                          region="String" region01="Symbol" region02="StringEdge"
                          region03="PairStart" region10="StringEdge" region11="PairEnd"/>
