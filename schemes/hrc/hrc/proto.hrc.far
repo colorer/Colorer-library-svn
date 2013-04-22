@@ -735,6 +735,10 @@
     <location link="rare/abap4.hrc"/>
     <filename>/\.(abap4|abap)$/i</filename>
   </prototype>
+  <prototype name="asasm" group="rare" description="ASASM">
+    <location link="rare/asasm.hrc"/>
+    <filename>/\.asasm$/i</filename>
+  </prototype>
   <prototype name="AutoIt" group="rare" description="AutoIt 2.x">
     <location link="rare/autoit.hrc"/>
     <filename>/\.aut$/i</filename>
@@ -942,6 +946,10 @@
       <param name="indent-with-non-tab" value="false" description="Mark 8 or more leading spaces as errors"/>
       <param name="indent-with-tab"     value="false" description="Mark leading tabs as errors"/>
     </parameters>
+  </prototype>
+  <prototype name="mediawiki" group="other" description="MediaWiki">
+    <location link="misc/mediawiki.hrc"/>
+    <filename>/\.(mw|mediawiki)$/i</filename>
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
