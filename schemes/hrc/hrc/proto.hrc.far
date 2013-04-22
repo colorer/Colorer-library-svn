@@ -322,7 +322,7 @@
   </prototype>
   <prototype name="actionscript" group="inet" description="ActionScript">
     <location link="inet/actionscript.hrc"/>
-    <filename>/\.(as)$/i</filename>
+    <filename>/\.(as|jsfl)$/i</filename>
   </prototype>
   <prototype name="vbScript" group="inet" description="VBScript">
     <location link="inet/vbscript.hrc"/>

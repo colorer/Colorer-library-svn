@@ -140,6 +140,7 @@
             <word name="catch"/>
             <word name="const"/>
             <word name="continue"/>
+            <word name="default"/>
             <word name="do"/>
             <word name="else"/>
             <word name="finally"/>
@@ -240,6 +241,7 @@
             <word name="true"/>
             <word name="false"/>
             <word name="null"/>
+            <word name="undefined"/>
          </keywords>
          <keywords region="Var">
 <!-- Objects -->

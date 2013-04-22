@@ -1,3 +1,7 @@
+2013-04-22
+  Fixed:
+    - jscript:  added keywords (Vladimir Panteleev) 
+ 
 2013-04-15
   Fixed:
     - d.hrc, ie-weidu/dialog.hrc, mako.hrc, ubasic.hrc, graphiz.hrc, reg.hrc, dtdcatalog.hrc - fix error in xml format
