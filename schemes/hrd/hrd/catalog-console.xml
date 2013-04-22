@@ -1,6 +1,3 @@
-
-  <hrd-sets>
-
     <hrd class="console" name="default" description="Aqua on blue">
       <location link="&hrd;/console/default.hrd"/>
     </hrd>
@@ -61,5 +58,3 @@
     <hrd class="console" name="mirror-conemu" description="Support ConEmu extends">
       <location link="&hrd;/console/emu/mirror.hrd"/>
     </hrd>
-
-  </hrd-sets>
