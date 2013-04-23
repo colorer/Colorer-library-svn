@@ -304,10 +304,10 @@
 	</block>
 	
 	<block scheme='nest.angular' region='string.delimited'>
-		<start match='/(q)("(\<))/' 
+		<start match='/(q)("(&lt;))/' 
 			region0='string.delim' region1='string.pref' region2='def:PairStart' region3='string.delimited.name'
 		/>
-		<end match='/((\>)")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
+		<end match='/((&gt;)")/' region0='string.delim' region1='def:PairEnd' region2='string.delimited.name'/>
 	</block>
 
 	<block scheme='def:empty' region='string.delimited'>
