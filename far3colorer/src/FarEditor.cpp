@@ -7,6 +7,8 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
   this->info = info;
   ei.StructSize = sizeof(EditorInfo);
   info->EditorControl(CurrentEditor, ECTL_GETINFO, NULL, &ei);
+  EditorSubscribeChangeEvent esce = { sizeof(EditorSubscribeChangeEvent), MainGuid };
+  info->EditorControl(CurrentEditor, ECTL_SUBSCRIBECHANGEEVENT, 0, &esce);
   cursorRegion = NULL;
   prevLinePosition = 0;
   blockTopPosition = -1;
@@ -36,6 +38,8 @@ FarEditor::FarEditor(PluginStartupInfo *info, ParserFactory *pf)
 
 FarEditor::~FarEditor()
 {
+  EditorSubscribeChangeEvent esce = { sizeof(EditorSubscribeChangeEvent), MainGuid };
+  info->EditorControl(ei.EditorID, ECTL_UNSUBSCRIBECHANGEEVENT, 0, &esce); //detroyed class might not be related to CurrentEditor
   delete cursorRegion;
   delete structOutliner;
   delete errorOutliner;

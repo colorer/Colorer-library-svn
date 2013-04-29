@@ -47,7 +47,7 @@ const wchar_t *GetMsg(int msg)
 void WINAPI GetGlobalInfoW(struct GlobalInfo *gInfo)
 {
   gInfo->StructSize = sizeof(GlobalInfo);
-  gInfo->MinFarVersion = MAKEFARVERSION(3,0,0,2927,VS_RELEASE);
+  gInfo->MinFarVersion = MAKEFARVERSION(3,0,0,3371,VS_RELEASE);
   gInfo->Version = MAKEFARVERSION(VER_FILEVERSION,VS_RELEASE);
   gInfo->Guid = MainGuid;
   gInfo->Title = L"FarColorer";
