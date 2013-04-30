@@ -1,3 +1,12 @@
+2013-04-22
+  New:
+    - ASASM (ActionScript 3 assembler, RABCDAsm variant) from Vladimir Panteleev
+    - MediaWiki syntax from Vladimir Panteleev
+    - Major update to D scheme (Vladimir Panteleev)
+  Fixed:
+    - jscript:  added keywords (Vladimir Panteleev)
+    - ActionScript: Fix/improve outlining, regexp/comments  (Vladimir Panteleev) 
+ 
 2013-04-15
   Fixed:
     - d.hrc, ie-weidu/dialog.hrc, mako.hrc, ubasic.hrc, graphiz.hrc, reg.hrc, dtdcatalog.hrc - fix error in xml format

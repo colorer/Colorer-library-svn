@@ -6645,6 +6645,7 @@ wddx_packet_end -- Ends a WDDX packet with the specified ID
 wddx_packet_start --  Starts a new WDDX packet with structure inside it 
 wddx_serialize_value -- Serialize a single value into a WDDX packet
 wddx_serialize_vars -- Serialize variables into a WDDX packet
+
      <!-- CXVI. XML Parser Functions -->
 utf8_decode --  Converts a string with ISO-8859-1 characters encoded with UTF-8 to single-byte ISO-8859-1. 
 utf8_encode -- encodes an ISO-8859-1 string to UTF-8

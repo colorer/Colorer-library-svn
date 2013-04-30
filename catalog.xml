@@ -23,11 +23,13 @@
 
   </hrc-sets>
 
-  &catalog-console;
+  <hrd-sets>
+    &catalog-console;
 
-  &catalog-rgb;
+    &catalog-rgb;
 
-  &catalog-text;
+    &catalog-text;
+  </hrd-sets>
 
 </catalog>
 <!-- ***** BEGIN LICENSE BLOCK *****

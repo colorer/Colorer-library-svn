@@ -68,6 +68,7 @@
   <prototype name="d" group="main" description="D">
     <location link="base/d.hrc"/>
     <filename>/\.(d|di)$/i</filename>
+    <firstline>/^\s*(module|import)\b/xi</firstline>
     <parameters>
       <param name="format-str" value="true" description="Highlight printf-like %format in strings"/>
       <param name="use_phobos" value="true" description="Use Phobos library keywords"/>
@@ -182,10 +183,10 @@
     <location link="inet/html.hrc"/>
     <filename>/\.[^ptr]??html?$/i</filename>
     <firstline>/^\s*&lt;((!DOCTYPE\s+)?HTML|!\-\-)/i</firstline>
-	<parameters>
-		<param name="conditional-comments" value="true" description="IE conditional comments"/>
-		<param name="html-pairs" value="true" description="Highlighting some known HTML Pair tags. Please, use &lt; /&gt; syntax for singles like p, td, tr etc.."/>
-	</parameters>
+    <parameters>
+      <param name="conditional-comments" value="true" description="IE conditional comments"/>
+      <param name="html-pairs" value="true" description="Highlighting some known HTML Pair tags. Please, use &lt; /&gt; syntax for singles like p, td, tr etc.."/>
+    </parameters>
   </prototype>
 
   <prototype name="css" group="inet" description="css">
@@ -223,10 +224,10 @@
 		<location link="inet/ss.hrc"/>
 		<filename weight="10">/\.(ss)$/</filename>
 	</prototype>
-	<prototype name="twig" group="inet" description="Twig PHP Templates">
-		<location link="inet/twig.hrc"/>
-		<filename weight="10">/\.(twig)$/</filename>
-	</prototype>
+  <prototype name="twig" group="inet" description="Twig PHP Templates">
+    <location link="inet/twig.hrc"/>
+    <filename weight="10">/\.(twig)$/</filename>
+  </prototype>
 	<prototype name="twig" group="inet" description="Twig PHP Templates">
 		<location link="inet/twig.hrc"/>
 		<filename weight="10">/\.(twig)$/</filename>
@@ -323,7 +324,7 @@
   </prototype>
   <prototype name="actionscript" group="inet" description="ActionScript">
     <location link="inet/actionscript.hrc"/>
-    <filename>/\.(as)$/i</filename>
+    <filename>/\.(as|jsfl)$/i</filename>
   </prototype>
   <prototype name="vbScript" group="inet" description="VBScript">
     <location link="inet/vbscript.hrc"/>
@@ -736,6 +737,10 @@
     <location link="rare/abap4.hrc"/>
     <filename>/\.(abap4|abap)$/i</filename>
   </prototype>
+  <prototype name="asasm" group="rare" description="ASASM">
+    <location link="rare/asasm.hrc"/>
+    <filename>/\.asasm$/i</filename>
+  </prototype>
   <prototype name="AutoIt" group="rare" description="AutoIt 2.x">
     <location link="rare/autoit.hrc"/>
     <filename>/\.aut$/i</filename>
@@ -927,6 +932,16 @@
     <location link="misc/cue.hrc"/>
     <filename>/\.cue$/</filename>
   </prototype>
+  <prototype name="ddoc" group="other" description="Ddoc">
+    <location link="misc/ddoc.hrc"/>
+    <filename>/\.(dd|ddoc)$/i</filename>
+    <firstline weight="3">/^Ddoc/x</firstline>
+    <parameters>
+      <!-- firstline -->
+      <param name='firstlines'     value='1' description="lines for 'firstline'"/>
+      <param name='firstlinebytes' value='5' description="bytes for 'firstline'"/>
+    </parameters>
+  </prototype>
   <prototype name="filesbbs" group="other" description="files.bbs">
     <location link="misc/filesbbs.hrc"/>
     <filename>/(files\.bbs|descript\.ion|file_id.diz)/i</filename>
@@ -943,6 +958,10 @@
       <param name="indent-with-non-tab" value="false" description="Mark 8 or more leading spaces as errors"/>
       <param name="indent-with-tab"     value="false" description="Mark leading tabs as errors"/>
     </parameters>
+  </prototype>
+  <prototype name="mediawiki" group="other" description="MediaWiki">
+    <location link="misc/mediawiki.hrc"/>
+    <filename>/\.(mw|mediawiki)$/i</filename>
   </prototype>
   <prototype name="text" group="other" description="plain text">
     <location link="misc/text.hrc"/>
