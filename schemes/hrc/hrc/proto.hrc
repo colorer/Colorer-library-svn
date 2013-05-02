@@ -924,6 +924,10 @@
     <filename>/\.(ssa|ass)$/</filename>
     <firstline weight='2'>/^(...)?\[Script Info\]/</firstline>
   </prototype>
+  <prototype name="srt" group="other" description="SRT subs">
+    <location link="misc/srt.hrc"/>
+    <filename weight="10">/\.srt$/</filename>
+  </prototype>
   <prototype name="cue" group="other" description="Cue sheet">
     <location link="misc/cue.hrc"/>
     <filename>/\.cue$/</filename>

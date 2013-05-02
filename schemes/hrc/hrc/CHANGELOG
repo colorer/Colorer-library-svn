@@ -1,3 +1,10 @@
+2013-05-02
+  New:
+    - srt scheme (Eugene Myronchuk)
+  Fixed:
+    - lua strings: added \[abfnrtv] modifiers and \ddd digit modifiers
+    - php: xsl extension keywords
+
 2013-04-22
   New:
     - ASASM (ActionScript 3 assembler, RABCDAsm variant) from Vladimir Panteleev
