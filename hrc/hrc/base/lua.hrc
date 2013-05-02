@@ -52,11 +52,13 @@
 
 <scheme name="CharDQuoted">
 <!-- Double quoted string some special characters -->
-    <regexp match='/\\[\\&apos;&quot;]/' region0="def:default"/>
+    <regexp match='/\\[\\&apos;&quot;abfnrtv\[\]]/' region0="def:SymbolStrong"/>
+    <regexp match='/\\\d{1,3}/' region0="def:SymbolStrong"/>
 </scheme>
 <scheme name="CharDQuotin">
 <!-- Double quoted string inner string characters -->
-    <regexp match='/\\\\[\\&apos;&quot;]/' region0="def:default"/>
+    <regexp match='/\\\\[\\&apos;&quot;abfnrtv\[\]]/' region0="def:SymbolStrong"/>
+    <regexp match='/\\\\\d{1,3}/' region0="def:SymbolStrong"/>
 </scheme>
 
 <scheme name="HexNumber">
