@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
     "http://colorer.sf.net/2003/hrc.dtd">
 <hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
@@ -6,18 +6,18 @@
     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
 
 
-	<type name="twig">
+	<type name="smarty">
 		<annotation>
 			<documentation>
-				Twig PHP Templates (http://twig.sensiolabs.org)
+				Smarty PHP Templates (http://www.smarty.net/)
 			</documentation>
 			<contributors>
 				Eugene Myronchuk
 			</contributors>
 			<appinfo>
-				<prototype name="twig" group="inet" description="Twig PHP Templates">
-					<location link="twig.hrc"/>
-					<filename weight="10">/\.(twig)$/</filename>
+				<prototype name="smarty" group="inet" description="Smarty PHP Templates">
+					<location link="inet/smarty.hrc"/>
+					<filename weight="10">/\.(smarty)$/</filename>
 				</prototype>
 			</appinfo>
 		</annotation>
@@ -28,24 +28,17 @@
 		<region name="OpenTag"   parent="asp:OpenTag"/>
 		<region name="CloseTag"  parent="asp:CloseTag"/>
 
-		<scheme name="twigComment">
-			<block start="/\{#/" end="/#\}/" scheme="Comment"
+		<scheme name="smartyEscape">
+			<regexp match="/\x20[\{\}]\x20/" region="def:Text"/>
+		</scheme>
+		<scheme name="smartyComment">
+			<block start="/\{\*/" end="/\*\}/" scheme="Comment"
 				region="def:Comment"
 			/>
 		</scheme>
 
 
 
-		<scheme name="Keywords">
-			<keywords region="def:Keyword">
-				<word name="and"/>
-				<word name="as"/>
-				<word name="import"/>
-				<word name="in"/>
-				<word name="not"/>
-				<word name="or"/>
-			</keywords>
-		</scheme>
 		<scheme name="Parenthes">
 			<block start="/(\()/" end="/(\))/" scheme="Expressions"
 				region00="PairStart" region10="PairEnd"
@@ -73,6 +66,10 @@
 			/>
 		</scheme>
 
+		<scheme name="smartyVars">
+			<regexp match="/\$(smarty)\b/" region="def:Var" region1="def:Constant"/>
+			<regexp match="/\$(\w+)/" region="def:Var"/>
+		</scheme>
 		<scheme name="Expressions">
 			<regexp match="/(-(\d|\.\d)?=)?\d*(\.\d+)?/" region="def:Number"/>
 			<inherit scheme="Strings" />
@@ -87,60 +84,73 @@
 				<symb name="?"/>
 				<symb name="+"/>
 				<symb name="="/>
+				<symb name="&amp;&amp;"/>
+				<symb name="||"/>
+				<symb name="-&gt;"/>
 			</keywords>
 			<keywords region="SymbolStrong">
 				<symb name="|"/>
 			</keywords>
-			<regexp match="/(attribute|block|convert_encoding|constant|cycle|date|dump|e|include|join|parent|random|range|template_from_string)(\s*\()?=/" region1="def:Keyword" />
-			<inherit scheme="Keywords" />
+			<regexp match="/\|?#1(capitalize|cat|count_characters|count_paragraphs|count_sentences|count_words|date_format|default|escape|from_charset|indent|lower|nl2br|regex_replace|replace|spacify|
+			                 string_format|strip|strip_tags|to_charset|truncate|unescape|upper|wordwrap)\b/x"
+			region1="def:Keyword" />
+			<inherit scheme="smartyVars"/>
 			<inherit scheme="Parenthes" />
 		</scheme>
+
 		<scheme name="Script">
-			<block start="/(\{%)?#2\s+((autoescape|block|filter|for|macro|spaceless))/" end="/(end\Y3)/"
-				region02="PairStart"   region10="PairEnd"
-				region03="def:Keyword" region11="def:Keyword"
+			<block start="/\s*((block|capture|function|for\b|literal|nocache|php|setfilter|strip|while))/" end="/(\/\Y2)/"
+				region01="PairStart"   region10="PairEnd"
+				region02="def:Keyword" region11="def:Keyword"
 				scheme="Script" priority="low"
 			/>
-			<block start="/(((\{%\s)?#3\s*if|(el)?#2se|(else)?#4if))/" end="/(\{%)?#2\s+((else(if)?=|el(se)?=|endif))/"
+			<block start="/(((\{)?#1\s*foreach|(foreach)?#7else))/" end="/(\{)?#1\s*((foreach(else)?=|\/foreach))/"
 				region01="PairStart" region12="PairEnd"
 				region02="def:Keyword" region13="def:Keyword"
 				scheme="Script" priority="low"
 			/>
-			<regexp match="/(\{%)?#2\s+ (extends|from|import|include|set)/x"
+			<block start="/(((\{)?#1\s*section|(section)?#7else))/" end="/(\{)?#1\s*((section(else)?=|\/section))/"
+				region01="PairStart" region12="PairEnd"
+				region02="def:Keyword" region13="def:Keyword"
+				scheme="Script" priority="low"
+			/>
+			<block start="/(((\{)?#1\s*if|(el)?#2se|(else)?#4if))/" end="/(\{)?#1\s*((else(if)?=|el(se)?=|\/if))/"
+				region01="PairStart" region12="PairEnd"
+				region02="def:Keyword" region13="def:Keyword"
+				scheme="Script" priority="low"
+			/>
+			<regexp match="/(\{)?#1 (append|assign|call|config_load|debug|extends|include|include_php|insert|[lr]delim)/x"
 				region2="def:Keyword"
 			/>
 			<inherit scheme="Expressions" />
-			<regexp match="/(\{%)?#2\s+ (endautoescape|else|elseif|endblock|endif|endfilter|endfor|endif|endmacro|endspaceless) /x" region2="def:Error" priority="low" />
+			<regexp match="/(\{\/)?#2(block|capture|function|for\b|if|literal|nocache|php|setfilter|strip|while)/x" region="def:Error" priority="low" />
+			<regexp match="/\{?#1\s*(else|elseif) /x" region="def:Error" priority="low" />
 		</scheme>
 
 
 		<scheme name="Insertion">
-			<inherit scheme="twigComment" />
-			<block start="/((\{\{))\s?=/" end="/\s?#1((\}\}))/"
-				region00="PairStart" region10="OpenTag" 
-				region01="OpenTag" region11="PairEnd" 
-				scheme="Expressions" region="def:Text"
-			/>
-			<block start="/(\{%)(\s+)?=/" end="/(\s)?#1(%\})/" 
+			<inherit scheme="smartyEscape" />
+			<inherit scheme="smartyComment" />
+			<block start="/(\{)/" end="/(\})/" 
 				priority="low" content-priority="low"
-				scheme="twigScript" region="Insertion" 
+				scheme="smartyScript" region="Insertion" 
 				region00="OpenTag" region10="OpenTag" 
 			/>
 		</scheme>
 
 
 		<scheme name="InverseInsertion">
-			<block start="/(\s)?#1((%\}))/" end="/((\{%(\s+)?=))/" scheme="html"
+			<block start="/(\})/" end="/(\{)/" scheme="html"
 				priority="low" region="Text" inner-region="yes"
 				region00="Insertion" region10="Insertion" 
-				region03="OpenTag"   region12="OpenTag" 
+				region01="OpenTag"   region11="OpenTag" 
 			/>
 		</scheme>
 
-		<scheme name="twigScript">
+		<scheme name="smartyScript">
 			<inherit scheme="InverseInsertion"/>
 			<inherit scheme="Script">
-				<virtual scheme="Script" subst-scheme="twigScript"/>
+				<virtual scheme="Script" subst-scheme="smartyScript"/>
 			</inherit>
 		</scheme>
 
@@ -149,11 +159,11 @@
 				<virtual scheme="asp:Insertion" subst-scheme="Insertion"/>
 			</inherit>
 		</scheme>
-		<scheme name="twig">
+		<scheme name="smarty">
 			<inherit scheme="asp:html">
 				<virtual scheme="asp:InverseInsertion" subst-scheme="InverseInsertion"/>
 				<virtual scheme="asp:Insertion" subst-scheme="Insertion"/>
-				<virtual scheme="asp:targetLanguage" subst-scheme="twigScript"/>
+				<virtual scheme="asp:targetLanguage" subst-scheme="smartyScript"/>
 				<virtual scheme="asp:html" subst-scheme="html"/>
 			</inherit>
 		</scheme>

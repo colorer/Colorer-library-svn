@@ -26,7 +26,9 @@
         {{ list|join(', ') }}
         {{ data|convert_encoding('UTF-8', 'iso-2022-jp') }}
 {% for i in range(low=1, high=10, step=2) %}
+	{% block %}
     {{ i ? 1 : 2 }},
+    {% endblock %}
 {% endfor %}
 
     </body>

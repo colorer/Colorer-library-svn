@@ -220,6 +220,10 @@
     <location link="inet/less.hrc"/>
     <filename>/\.(less)$/</filename>
   </prototype>
+  <prototype name="smarty" group="inet" description="Smarty PHP Templates">
+    <location link="inet/smarty.hrc"/>
+    <filename weight="10">/\.(smarty)$/</filename>
+  </prototype>
   <prototype name="ss" group="inet" description="SilverStripe">
     <location link="inet/ss.hrc"/>
     <filename weight="10">/\.(ss)$/</filename>

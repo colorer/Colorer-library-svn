@@ -1,3 +1,9 @@
+2013-05-06
+  New:
+    - smarty scheme
+  Fixed:
+    - twig nested tags, twig numbers
+
 2013-05-02
   New:
     - srt scheme (Eugene Myronchuk)
