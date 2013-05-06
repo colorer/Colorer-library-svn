@@ -34,6 +34,7 @@
 		<scheme name="smartyComment">
 			<block start="/\{\*/" end="/\*\}/" scheme="Comment"
 				region="def:Comment"
+				region00="PairStart" region10="PairEnd"
 			/>
 		</scheme>
 
